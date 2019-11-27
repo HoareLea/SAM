@@ -78,9 +78,9 @@ namespace SAM.Geometry.Planar
             return string.Format("{0};{1}", coordinates[0], coordinates[1]);
         }
 
-        public string ToString(int Decimals)
+        public string ToString(int decimals)
         {
-            return string.Format("{0};{1}", Math.Round(coordinates[0], Decimals), Math.Round(coordinates[1], Decimals));
+            return string.Format("{0};{1}", Math.Round(coordinates[0], decimals), Math.Round(coordinates[1], decimals));
         }
 
         public bool AlmostEqual(Point2D point2D, double tolerance = Tolerance.MicroDistance)
