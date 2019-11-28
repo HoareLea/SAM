@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    class Face
+    public class Face : IGeometry3D
     {
     }
 }

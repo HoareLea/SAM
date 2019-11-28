@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Core", "SAM.Core\SAM.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Geometry", "SAM.Geometry\SAM.Geometry.csproj", "{4CF184FD-B48A-41FC-ADBC-20218B44B03D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical", "SAM.Analytical\SAM.Analytical.csproj", "{B47BAD06-8523-455E-ACF8-4879D0286EC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4CF184FD-B48A-41FC-ADBC-20218B44B03D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CF184FD-B48A-41FC-ADBC-20218B44B03D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CF184FD-B48A-41FC-ADBC-20218B44B03D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B47BAD06-8523-455E-ACF8-4879D0286EC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B47BAD06-8523-455E-ACF8-4879D0286EC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B47BAD06-8523-455E-ACF8-4879D0286EC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B47BAD06-8523-455E-ACF8-4879D0286EC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

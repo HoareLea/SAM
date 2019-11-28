@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    class Polygon2D
+    class Polygon2D : IGeometry2D
     {
+        private List<Point2D> points;
     }
 }

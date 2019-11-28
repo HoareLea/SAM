@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    class Line2D : IGeometry2D
+    public class Segment2D : IGeometry2D
     {
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Vector2D
+    public class Vector2D : IGeometry2D
     {
         private double[] coordinates = new double[2] { 0, 0 };
 

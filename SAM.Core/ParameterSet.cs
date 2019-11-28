@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Geometry.Planar
+namespace SAM.Core
 {
-    class Line2D : IGeometry2D
+    public class ParameterSet
     {
+        private string name;
+        Dictionary<string, object> dictionary;
     }
 }

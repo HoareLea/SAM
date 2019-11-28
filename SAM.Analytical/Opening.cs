@@ -1,12 +1,13 @@
-﻿using System;
+﻿using SAM.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Geometry.Planar
+namespace SAM.Analytical
 {
-    class Line2D : IGeometry2D
+    public class Opening : SAMObject
     {
     }
 }

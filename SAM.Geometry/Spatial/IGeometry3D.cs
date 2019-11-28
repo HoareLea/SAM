@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Geometry.Planar
+namespace SAM.Geometry.Spatial
 {
-    class Line2D : IGeometry2D
+    interface IGeometry3D : IGeometry
     {
     }
 }
