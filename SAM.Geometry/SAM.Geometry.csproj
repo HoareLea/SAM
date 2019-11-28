@@ -42,12 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Planar\Point2D.cs" />
+    <Compile Include="Planar\Polygon2D.cs" />
     <Compile Include="Planar\Vector2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spatial\Face.cs" />
+    <Compile Include="Spatial\Point3D.cs" />
+    <Compile Include="Spatial\Polygon3D.cs" />
     <Compile Include="Tolerance.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Spatial\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

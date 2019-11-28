@@ -75,12 +75,12 @@ namespace SAM.Geometry.Planar
 
         public override string ToString()
         {
-            return string.Format("{0};{1}", coordinates[0], coordinates[1]);
+            return string.Format("Point2D(X={0},Y={1})", coordinates[0], coordinates[1]);
         }
 
         public string ToString(int decimals)
         {
-            return string.Format("{0};{1}", Math.Round(coordinates[0], decimals), Math.Round(coordinates[1], decimals));
+            return string.Format("Point2D(X={0},Y={1})", Math.Round(coordinates[0], decimals), Math.Round(coordinates[1], decimals));
         }
 
         public bool AlmostEqual(Point2D point2D, double tolerance = Tolerance.MicroDistance)
