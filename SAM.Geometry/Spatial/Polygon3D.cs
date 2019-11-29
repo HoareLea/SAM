@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Polygon3D : IGeometry3D
+    public class Polygon3D : IGeometry3D, IEnumerable
     {
         private List<Point3D> points;
 
@@ -22,6 +23,11 @@ namespace SAM.Geometry.Spatial
             {
                 return points;
             }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return points.GetEnumerator();
         }
     }
 }

@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
-    public class Panel: SAMObject
+    public class Panel : SAMObject
     {
         private List<Edge> edges;
+
+        public Panel(Guid guid, string name, IEnumerable<Edge> edges)
+            : base(guid, name)
+        {
+            this.edges = new List<Edge>(edges);
+        }
     }
 }

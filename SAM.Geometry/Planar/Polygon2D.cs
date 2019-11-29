@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    class Polygon2D : IGeometry2D
+    class Polygon2D : IGeometry2D, IEnumerable
     {
         private List<Point2D> points;
+
+        public IEnumerator GetEnumerator()
+        {
+            return points.GetEnumerator();
+        }
     }
 }

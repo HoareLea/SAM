@@ -10,5 +10,11 @@ namespace SAM.Analytical
     public class Space : SAMObject
     {
         private List<Panel> panels;
+
+        public Space(Guid guid, string name, IEnumerable<Panel> panels)
+            : base(guid, name)
+        {
+            this.panels = new List<Panel>(panels);
+        }
     }
 }

@@ -10,5 +10,11 @@ namespace SAM.Analytical
     public class Edge : SAMObject
     {
         private Geometry.Planar.Segment2D segment2D;
+
+        public Edge(Guid guid, string name, Geometry.Planar.Segment2D segment2D)
+            : base(guid, name)
+        {
+            this.segment2D = segment2D;
+        }
     }
 }

@@ -9,6 +9,14 @@ namespace SAM.Core
     public class ParameterSet
     {
         private string name;
-        Dictionary<string, object> dictionary;
+        private Dictionary<string, object> dictionary;
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+        }
     }
 }
