@@ -28,7 +28,7 @@ namespace SAM.Core
 
         public bool Add(string name, string value)
         {
-            if (dictionary == null || !dictionary.ContainsKey(name))
+            if (dictionary == null)
                 return false;
             
             dictionary[name] = value;
@@ -37,6 +37,23 @@ namespace SAM.Core
 
         public bool Add(string name, double value)
         {
+            if (dictionary == null)
+                return false;
+
+            dictionary[name] = value;
+            return true;
+        }
+
+        public bool Remove(string name)
+        {
+            if (dictionary == null || name == null)
+                return false;
+
+            return dictionary.Remove(name);
+        }
+
+        public bool Modify(string name, string value)
+        {
             if (dictionary == null || !dictionary.ContainsKey(name))
                 return false;
 
@@ -44,7 +61,24 @@ namespace SAM.Core
             return true;
         }
 
-        public string AsString(string name)
+        public bool Modify(string name, double value)
+        {
+            if (dictionary == null || !dictionary.ContainsKey(name))
+                return false;
+
+            dictionary[name] = value;
+            return true;
+        }
+
+        public bool Contains(string name)
+        {
+            if (dictionary == null)
+                return false;
+
+            return dictionary.ContainsKey(name);
+        }
+
+        public string ToString(string name)
         {
             string result;
             if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
@@ -53,7 +87,7 @@ namespace SAM.Core
             return result;
         }
 
-        public double AsDouble(string name)
+        public double ToDouble(string name)
         {
             double result;
             if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
@@ -62,7 +96,7 @@ namespace SAM.Core
             return result;
         }
 
-        public double AsInt(string name)
+        public double ToInt(string name)
         {
             int result;
             if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
@@ -71,13 +105,34 @@ namespace SAM.Core
             return result;
         }
 
-        public bool AsBool(string name)
+        public bool ToBool(string name)
         {
             bool result;
             if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
                 return false;
 
             return result;
+        }
+
+        public object ToObject(string name)
+        {
+            object result;
+            if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
+                return null;
+
+            return result;
+        }
+
+        public Type GetType(string name)
+        {
+            object result;
+            if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
+                return null;
+
+            if (result == null)
+                return null;
+
+            return result.GetType();
         }
 
         public IEnumerable<string> Names
