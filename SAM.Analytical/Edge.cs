@@ -11,8 +11,8 @@ namespace SAM.Analytical
     {
         private Geometry.Planar.Segment2D segment2D;
 
-        public Edge(Guid guid, string name, Geometry.Planar.Segment2D segment2D)
-            : base(guid, name)
+        public Edge(Geometry.Planar.Segment2D segment2D)
+            : base()
         {
             this.segment2D = segment2D;
         }

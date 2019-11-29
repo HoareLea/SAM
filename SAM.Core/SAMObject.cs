@@ -11,12 +11,28 @@ namespace SAM.Core
         private Guid guid;
         private string name;
 
-        private Dictionary<string, ParameterSet> parameters;
+        private List<ParameterSet> parameterSets;
 
         public SAMObject(Guid guid, string name)
         {
             this.guid = guid;
             this.name = name;
+        }
+
+        public SAMObject()
+        {
+            guid = Guid.NewGuid();
+        }
+
+        public SAMObject(Guid guid)
+        {
+            this.guid = guid;
+        }
+
+        public SAMObject(string name)
+        {
+            this.name = name;
+            guid = Guid.NewGuid();
         }
 
         public string Name
@@ -33,6 +49,14 @@ namespace SAM.Core
             {
                 return guid;
             }
+        }
+
+        public ParameterSet GetParameterSet(string name)
+        {
+            if (name == null || parameterSets == null)
+                return null;
+
+            return parameterSets.Find(x => name.Equals(x.Name));
         }
 
     }
