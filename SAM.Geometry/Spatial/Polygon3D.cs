@@ -25,6 +25,19 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        public Segment3D[] GetSegments()
+        {
+            int count = points.Count;
+
+            Segment3D[] result = new Segment3D[count];
+            for (int i = 0; i < count - 1; i++)
+                result[i] = new Segment3D(points[i], points[i + 1]);
+
+            result[count - 1] = new Segment3D(new Point3D(points[count - 1]), new Point3D(points[0]));
+
+            return result;
+        }
+
         public IEnumerator GetEnumerator()
         {
             return points.GetEnumerator();

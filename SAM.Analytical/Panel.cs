@@ -1,9 +1,8 @@
-﻿using SAM.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using SAM.Core;
+using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
@@ -11,10 +10,19 @@ namespace SAM.Analytical
     {
         private List<Edge> edges;
 
-        public Panel(Guid guid, PanelType PanelType, IEnumerable<Edge> edges)
-            : base(guid, PanelType)
+        public Panel(Guid guid, PanelType panelType, IEnumerable<Edge> edges)
+            : base(guid, panelType)
         {
             this.edges = new List<Edge>(edges);
+        }
+
+        public Panel(Guid guid, PanelType panelType, Polygon3D polygon3D)
+            : base(guid, panelType)
+        {
+            edges = new List<Edge>();
+
+            foreach (Segment3D segment3D in polygon3D.GetSegments())
+                edges.Add(new Edge(segment3D));
         }
     }
 }

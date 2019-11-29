@@ -20,6 +20,11 @@ namespace SAM.Geometry.Spatial
             coordinates = new double[3] { x, y, z };
         }
 
+        public Point3D(Point3D point3D)
+        {
+            coordinates = new double[3] { point3D[0], point3D[1], point3D[2] };
+        }
+
         public double this[int index]
         {
             get

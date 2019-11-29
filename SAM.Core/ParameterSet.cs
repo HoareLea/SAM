@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Core
 {
-    public class ParameterSet
+    public class ParameterSet : IEnumerable
     {
         private string name;
         private Dictionary<string, object> dictionary;
@@ -25,7 +26,7 @@ namespace SAM.Core
             }
         }
 
-        public bool Update(string name, string value)
+        public bool Add(string name, string value)
         {
             if (dictionary == null || !dictionary.ContainsKey(name))
                 return false;
@@ -34,7 +35,7 @@ namespace SAM.Core
             return true;
         }
 
-        public bool Update(string name, double value)
+        public bool Add(string name, double value)
         {
             if (dictionary == null || !dictionary.ContainsKey(name))
                 return false;
@@ -77,6 +78,19 @@ namespace SAM.Core
                 return false;
 
             return result;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return dictionary.GetEnumerator();
+        }
+
+        public IEnumerable<string> Names
+        {
+            get
+            {
+                return dictionary.Keys;
+            }
         }
     }
 }
