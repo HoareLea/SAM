@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Core
 {
-    public class ParameterSet : IEnumerable
+    public class ParameterSet
     {
         private string name;
         private Dictionary<string, object> dictionary;
@@ -78,11 +78,6 @@ namespace SAM.Core
                 return false;
 
             return result;
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return dictionary.GetEnumerator();
         }
 
         public IEnumerable<string> Names

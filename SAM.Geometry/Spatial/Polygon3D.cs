@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Polygon3D : IGeometry3D, IEnumerable
+    public class Polygon3D : IGeometry3D
     {
         private List<Point3D> points;
 
@@ -36,11 +36,6 @@ namespace SAM.Geometry.Spatial
             result[count - 1] = new Segment3D(new Point3D(points[count - 1]), new Point3D(points[0]));
 
             return result;
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return points.GetEnumerator();
         }
     }
 }
