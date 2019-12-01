@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    interface IGeometry2D : IGeometry
+    public interface IGeometry2D : IGeometry
     {
     }
 }

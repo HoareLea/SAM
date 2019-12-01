@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    interface IGeometry3D : IGeometry
+    public interface IGeometry3D : IGeometry
     {
     }
 }
