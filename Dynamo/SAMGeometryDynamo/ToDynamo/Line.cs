@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 using Autodesk.DesignScript.Runtime;
 
-namespace SAM.Geometry.Dynamo
+namespace SAMGeometryDynamo
 {
     public static partial class Convert
     {
         [IsVisibleInDynamoLibrary(false)]
-        public static Spatial.Polygon3D ToSAM(this Autodesk.DesignScript.Geometry.Polygon polygon)
+        public static Autodesk.DesignScript.Geometry.Line ToDynamo(this SAM.Geometry.Spatial.Segment3D segment3D)
         {
-            return new Spatial.Polygon3D(polygon.Points.ToList().ConvertAll(x => x.ToSAM()));
+            return Autodesk.DesignScript.Geometry.Line.ByStartPointEndPoint(segment3D[0].ToDynamo(), segment3D[1].ToDynamo());
         }
     }
 }

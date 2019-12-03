@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Geometry.Dynamo
+namespace SAMGeometryDynamo
 {
     /// <summary>
     /// SAM Polygon3D
@@ -19,9 +19,9 @@ namespace SAM.Geometry.Dynamo
         /// <search>
         /// Polygon3D, ByPoints
         /// </search>
-        public static Spatial.Polygon3D ByPoint3Ds(this IEnumerable<Spatial.Point3D> point3Ds)
+        public static SAM.Geometry.Spatial.Polygon3D ByPoint3Ds(this IEnumerable<SAM.Geometry.Spatial.Point3D> point3Ds)
         {
-            return new Spatial.Polygon3D(point3Ds);
+            return new SAM.Geometry.Spatial.Polygon3D(point3Ds);
         }
 
         /// <summary>
@@ -32,9 +32,9 @@ namespace SAM.Geometry.Dynamo
         /// <search>
         /// Polygon3D, ByPoints
         /// </search>
-        public static Spatial.Polygon3D ByPoints(this IEnumerable<Autodesk.DesignScript.Geometry.Point> points)
+        public static SAM.Geometry.Spatial.Polygon3D ByPoints(this IEnumerable<Autodesk.DesignScript.Geometry.Point> points)
         {
-            List<Spatial.Point3D> pointList = new List<Spatial.Point3D>();
+            List< SAM.Geometry.Spatial.Point3D > pointList = new List<SAM.Geometry.Spatial.Point3D>();
             foreach (Autodesk.DesignScript.Geometry.Point point in points)
                 pointList.Add(Point3D.ByPoint(point));
 
@@ -49,10 +49,10 @@ namespace SAM.Geometry.Dynamo
         /// <search>
         /// ToPolygon, Polygon
         /// </search>
-        public static Autodesk.DesignScript.Geometry.Polygon ToPolygon(this Spatial.Polygon3D polygon3D)
+        public static Autodesk.DesignScript.Geometry.Polygon ToPolygon(this SAM.Geometry.Spatial.Polygon3D polygon3D)
         {
             List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
-            foreach (Spatial.Point3D point3D in polygon3D.Points)
+            foreach (SAM.Geometry.Spatial.Point3D point3D in polygon3D.Points)
                 pointList.Add(Point3D.ToPoint(point3D));
 
             return Autodesk.DesignScript.Geometry.Polygon.ByPoints(pointList);

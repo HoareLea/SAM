@@ -5,15 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Autodesk.DesignScript.Runtime;
+using SAM.Geometry;
 
-namespace SAM.Geometry.Dynamo
+namespace SAMGeometryDynamo
 {
     public static partial class Convert
     {
         [IsVisibleInDynamoLibrary(false)]
-        public static Autodesk.DesignScript.Geometry.Line ToDynamo(this Spatial.Segment3D segment3D)
+        public static IGeometry ToSAM(this Autodesk.DesignScript.Geometry.Geometry geometry)
         {
-            return Autodesk.DesignScript.Geometry.Line.ByStartPointEndPoint(segment3D[0].ToDynamo(), segment3D[1].ToDynamo());
+            return Convert.ToSAM(geometry as dynamic);
         }
     }
 }

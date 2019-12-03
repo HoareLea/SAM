@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Autodesk.DesignScript.Runtime;
+using SAM.Geometry;
 
-namespace SAM.Geometry.Dynamo
+namespace SAMGeometryDynamo
 {
     public static partial class Convert
     {

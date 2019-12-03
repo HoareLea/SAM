@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 using Autodesk.DesignScript.Runtime;
 
-namespace SAM.Geometry.Dynamo
+namespace SAMGeometryDynamo
 {
     public static partial class Convert
     {
         [IsVisibleInDynamoLibrary(false)]
-        public static Spatial.Point3D ToSAM(this Autodesk.DesignScript.Geometry.Point point)
+        public static Autodesk.DesignScript.Geometry.Point ToDynamo(this SAM.Geometry.Spatial.Point3D point3D)
         {
-            return new Spatial.Point3D(point.X, point.Y, point.Z);
+            return Autodesk.DesignScript.Geometry.Point.ByCoordinates(point3D.X, point3D.Y, point3D.Z);
         }
     }
 }

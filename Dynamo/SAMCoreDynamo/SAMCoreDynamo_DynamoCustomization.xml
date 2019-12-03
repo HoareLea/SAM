@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <doc>
   <assembly>
-    <name>SAM.Analytical.Dynamo</name>
+    <name>SAMCoreDynamo</name>
   </assembly>
   <namespaces>
-    <namespace name="SAM.Analytical.Dynamo">
-      <category>SAM.Analytical</category>
+    <namespace name="SAMCoreDynamo">
+      <category>SAM.Core</category>
     </namespace>
   </namespaces>
 </doc>

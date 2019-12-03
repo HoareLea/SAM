@@ -7,8 +7,8 @@
     <ProjectGuid>{31847A71-1B4C-4E40-A202-391922B39876}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SAM.Geometry.Dynamo</RootNamespace>
-    <AssemblyName>SAM.Geometry.Dynamo</AssemblyName>
+    <RootNamespace>SAMGeometryDynamo</RootNamespace>
+    <AssemblyName>SAMGeometryDynamo</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\build\SAM.Geometry.Dynamo.xml</DocumentationFile>
+    <DocumentationFile>..\..\build\SAMGeometryDynamo.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\build\SAM.Geometry.Dynamo.xml</DocumentationFile>
+    <DocumentationFile>..\build\SAMGeometryDynamo.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DynamoServices, Version=2.4.0.6186, Culture=neutral, processorArchitecture=MSIL">
@@ -75,7 +75,7 @@
     <None Include="packages.config" />
     <None Include="Resources\SAMGeometryDynamo.Convert.ToDynamoGeometry.Large.png" />
     <None Include="Resources\SAMGeometryDynamo.Convert.ToDynamoGeometry.Small.png" />
-    <Content Include="SAM.Geometry.Dynamo_DynamoCustomization.xml">
+    <Content Include="SAMGeometryDynamo_DynamoCustomization.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

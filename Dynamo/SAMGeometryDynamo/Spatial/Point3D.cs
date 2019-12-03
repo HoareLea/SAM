@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Geometry.Dynamo
+namespace SAMGeometryDynamo
 {
     /// <summary>
     /// SAM Point3D
@@ -21,9 +21,9 @@ namespace SAM.Geometry.Dynamo
         /// <search>
         /// Point3D, ByCoordinates
         /// </search>
-        public static Spatial.Point3D ByCoordinates(double x = 0, double y = 0, double z = 0)
+        public static SAM.Geometry.Spatial.Point3D ByCoordinates(double x = 0, double y = 0, double z = 0)
         {
-            return new Spatial.Point3D(x, y, z);
+            return new SAM.Geometry.Spatial.Point3D(x, y, z);
         }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace SAM.Geometry.Dynamo
         /// <search>
         /// Point3D, ByPoint
         /// </search>
-        public static Spatial.Point3D ByPoint(this Autodesk.DesignScript.Geometry.Point point)
+        public static SAM.Geometry.Spatial.Point3D ByPoint(this Autodesk.DesignScript.Geometry.Point point)
         {
-            return new Spatial.Point3D(point.X, point.Y, point.Z);
+            return new SAM.Geometry.Spatial.Point3D(point.X, point.Y, point.Z);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace SAM.Geometry.Dynamo
         /// <search>
         /// Point, ToPoint
         /// </search>
-        public static Autodesk.DesignScript.Geometry.Point ToPoint(this Spatial.Point3D point3D)
+        public static Autodesk.DesignScript.Geometry.Point ToPoint(this SAM.Geometry.Spatial.Point3D point3D)
         {
             return Autodesk.DesignScript.Geometry.Point.ByCoordinates(point3D.X, point3D.Y, point3D.Z);
         }

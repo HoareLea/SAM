@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <doc>
   <assembly>
-    <name>SAM.Geometry.Dynamo</name>
+    <name>SAMGeometryDynamo</name>
   </assembly>
   <namespaces>
-    <namespace name="SAM.Geometry.Dynamo">
+    <namespace name="SAMGeometryDynamo">
       <category>SAM.Geometry</category>
     </namespace>
   </namespaces>

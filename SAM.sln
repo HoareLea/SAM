@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Geometry", "SAM\SAM.Geo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical", "SAM\SAM.Analytical\SAM.Analytical.csproj", "{B47BAD06-8523-455E-ACF8-4879D0286EC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical.Dynamo", "Dynamo\SAM.Analytical.Dynamo\SAM.Analytical.Dynamo.csproj", "{C0FC4B58-6EA4-47B0-B242-F4C053BB14C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAMAnalyticalDynamo", "Dynamo\SAMAnalyticalDynamo\SAMAnalyticalDynamo.csproj", "{C0FC4B58-6EA4-47B0-B242-F4C053BB14C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Core.Dynamo", "Dynamo\SAM.Core.Dynamo\SAM.Core.Dynamo.csproj", "{3072B7C0-BB80-4D75-9905-77CFAFA2047F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAMCoreDynamo", "Dynamo\SAMCoreDynamo\SAMCoreDynamo.csproj", "{3072B7C0-BB80-4D75-9905-77CFAFA2047F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Geometry.Dynamo", "Dynamo\SAM.Geometry.Dynamo\SAM.Geometry.Dynamo.csproj", "{31847A71-1B4C-4E40-A202-391922B39876}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAMGeometryDynamo", "Dynamo\SAMGeometryDynamo\SAMGeometryDynamo.csproj", "{31847A71-1B4C-4E40-A202-391922B39876}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SAM", "SAM", "{4FDEDAD6-FCEC-4426-9A3B-086BF3C99CC0}"
 EndProject

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Core.Dynamo
+namespace SAMCoreDynamo
 {
     public static class ParameterSet
     {
-        public static Core.ParameterSet ByName(string name)
+        public static SAM.Core.ParameterSet ByName(string name)
         {
-            return new Core.ParameterSet(name);
+            return new SAM.Core.ParameterSet(name);
         }
     }
 }

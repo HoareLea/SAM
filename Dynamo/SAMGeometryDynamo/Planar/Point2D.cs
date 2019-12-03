@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Geometry.Dynamo
+namespace SAMGeometryDynamo
 {
     /// <summary>
     /// SAM Point2D
@@ -20,9 +20,9 @@ namespace SAM.Geometry.Dynamo
         /// <search>
         /// Point2D, ByCoordinates
         /// </search>
-        public static Planar.Point2D ByCoordinates(double x = 0, double y = 0)
+        public static SAM.Geometry.Planar.Point2D ByCoordinates(double x = 0, double y = 0)
         {
-            return new Planar.Point2D(x, y);
+            return new SAM.Geometry.Planar.Point2D(x, y);
         }
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace SAM.Geometry.Dynamo
         /// <search>
         /// Point2D, ByPoint
         /// </search>
-        public static Planar.Point2D ByPoint(this Autodesk.DesignScript.Geometry.Point point)
+        public static SAM.Geometry.Planar.Point2D ByPoint(this Autodesk.DesignScript.Geometry.Point point)
         {
-            return new Planar.Point2D(point.X, point.Y);
+            return new SAM.Geometry.Planar.Point2D(point.X, point.Y);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace SAM.Geometry.Dynamo
         /// <search>
         /// Point, ToPoint
         /// </search>
-        public static Autodesk.DesignScript.Geometry.Point ToPoint(this Planar.Point2D point2D)
+        public static Autodesk.DesignScript.Geometry.Point ToPoint(this SAM.Geometry.Planar.Point2D point2D)
         {
             return Autodesk.DesignScript.Geometry.Point.ByCoordinates(point2D.X, point2D.Y, 0);
         }
