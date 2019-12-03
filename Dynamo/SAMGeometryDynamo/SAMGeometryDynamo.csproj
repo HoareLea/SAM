@@ -75,6 +75,10 @@
     <None Include="packages.config" />
     <None Include="Resources\SAMGeometryDynamo.Convert.ToDynamoGeometry.Large.png" />
     <None Include="Resources\SAMGeometryDynamo.Convert.ToDynamoGeometry.Small.png" />
+    <None Include="Resources\SAMGeometryDynamo.Convert.ToSAMGeometry.Large.png" />
+    <None Include="Resources\DefaultCustomNode.Small.png" />
+    <None Include="Resources\SAMGeometryDynamo.Convert.ToSAMGeometry.Small.png" />
+    <None Include="Resources\DefaultCustomNode.Large.png" />
     <Content Include="SAMGeometryDynamo_DynamoCustomization.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -95,7 +99,7 @@
   </PropertyGroup>
   <Target Name="AfterBuild">
     <!-- Get System.Drawing.dll -->
-    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v2.0">
+    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v4.7">
       <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
     </GetReferenceAssemblyPaths>
     <!-- Get assembly -->
@@ -104,6 +108,6 @@
     </GetAssemblyIdentity>
     <!-- Generate customization dll -->
     <GenerateResource SdkToolsPath="$(TargetFrameworkSDKToolsDirectory)" UseSourcePath="true" Sources="$(ProjectDir)SAMGeometryDynamoImages.resx" OutputResources="$(ProjectDir)SAMGeometryDynamoImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
-    <AL SdkToolsPath="$(TargetFrameworkSDKToolsDirectory)" TargetType="library" EmbedResources="$(ProjectDir)SAMGeometryDynamoImages.resources" OutputAssembly="$(OutDir)SAMGeometryDynamoImages.customization.dll" Version="%(AssemblyInfo.Version)" />
+    <AL SdkToolsPath="$(TargetFrameworkSDKToolsDirectory)" TargetType="library" EmbedResources="$(ProjectDir)SAMGeometryDynamoImages.resources" OutputAssembly="$(OutDir)SAMGeometryDynamo.customization.dll" Version="%(AssemblyInfo.Version)" />
   </Target>
 </Project>

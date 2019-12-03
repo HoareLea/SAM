@@ -22,6 +22,10 @@ namespace SAM.Geometry.Grasshopper
             {
                 List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
                 int count = polylineCurve.PointCount;
+
+                if (polylineCurve.IsClosed)
+                    count--;
+
                 for(int i =0; i < count; i++)
                     point3Ds.Add(polylineCurve.Point(i).ToSAM());
 
