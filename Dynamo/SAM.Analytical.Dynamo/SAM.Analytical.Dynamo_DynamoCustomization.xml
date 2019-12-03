@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+  <assembly>
+    <name>SAM.Analytical.Dynamo</name>
+  </assembly>
+  <namespaces>
+    <namespace name="SAM.Analytical.Dynamo">
+      <category>SAM.Analytical</category>
+    </namespace>
+  </namespaces>
+</doc>
