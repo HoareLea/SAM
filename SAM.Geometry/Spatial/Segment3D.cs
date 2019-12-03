@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Segment3D : IGeometry3D
+    public class Segment3D : ICurve3D
     {
         private Point3D[] points = new Point3D[2];
 

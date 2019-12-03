@@ -46,6 +46,7 @@
     <Compile Include="Planar\Line2D.cs" />
     <Compile Include="Planar\Point2D.cs" />
     <Compile Include="Planar\Polygon2D.cs" />
+    <Compile Include="Spatial\ICurve3D.cs" />
     <Compile Include="Spatial\Segment3D.cs" />
     <Compile Include="Planar\Vector2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
