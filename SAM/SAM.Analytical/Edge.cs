@@ -9,12 +9,12 @@ namespace SAM.Analytical
 {
     public class Edge : SAMObject
     {
-        private Geometry.Spatial.Segment3D segment3D;
+        private Geometry.Spatial.ICurve3D curve3D;
 
         public Edge(Geometry.Spatial.Segment3D segment3D)
             : base()
         {
-            this.segment3D = segment3D;
+            this.curve3D = segment3D;
         }
     }
 }

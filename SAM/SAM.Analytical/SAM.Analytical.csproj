@@ -42,10 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PlanarBoundary.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Opening.cs" />
     <Compile Include="Panel.cs" />
     <Compile Include="PanelType.cs" />
+    <Compile Include="PlanarEdge.cs" />
     <Compile Include="Space.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

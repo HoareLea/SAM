@@ -7,5 +7,10 @@ namespace SAM.Geometry.Planar
     class Polygon2D : IGeometry2D
     {
         private List<Point2D> points;
+
+        public Polygon2D(IEnumerable<Point2D> points)
+        {
+            this.points = new List<Point2D>(points);
+        }
     }
 }
