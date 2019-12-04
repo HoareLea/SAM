@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IGeometry.cs" />
+    <Compile Include="Planar\BoundingBox2D.cs" />
     <Compile Include="Planar\ICurve2D.cs" />
     <Compile Include="Planar\Segment2D.cs" />
     <Compile Include="Spatial\ICurve3D.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Spatial\Point3D.cs" />
     <Compile Include="Spatial\Polygon3D.cs" />
     <Compile Include="Tolerance.cs" />
+    <Compile Include="Utils\BoundingBox2DUtils.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
