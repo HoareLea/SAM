@@ -12,5 +12,10 @@ namespace SAM.Geometry.Planar
         {
             this.points = new List<Point2D>(points);
         }
+
+        public List<Segment2D> GetSegments()
+        {
+            return Point2D.GetSegmentList(points, true);
+        }
     }
 }
