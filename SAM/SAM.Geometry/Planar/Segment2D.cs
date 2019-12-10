@@ -172,6 +172,7 @@ namespace SAM.Geometry.Planar
             return aPoint_Intersection;
         }
 
+
         public static List<Segment2D> Create(Segment2D segment2D, Vector2D vector2D, int count)
         {
             List<Segment2D> aResult = new List<Segment2D>();

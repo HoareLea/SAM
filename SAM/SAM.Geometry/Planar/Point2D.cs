@@ -203,17 +203,17 @@ namespace SAM.Geometry.Planar
             return new Vector2D(coordinates[0], coordinates[1]);
         }
 
+        public Point2D GetMoved(Vector2D vector2D)
+        {
+            return new Point2D(vector2D[0] + coordinates[0], vector2D[1] + coordinates[1]);
+        }
+
 
         public static Point2D Move(Point2D point, Vector2D vector)
         {
             Point2D point_Temp = new Point2D(point);
             point_Temp.Move(vector);
             return point_Temp;
-        }
-
-        public Point2D GetMoved(Vector2D vector2D)
-        {
-            return new Point2D(vector2D[0] + coordinates[0], vector2D[1] + coordinates[1]);
         }
 
         public static Point2D Max(Point2D point2D_1, Point2D point2D_2)
