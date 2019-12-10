@@ -9,12 +9,12 @@ namespace SAM.Analytical
 {
     public class PlanarBoundary : SAMObject
     {
-        private List<PlanarBoundary> boundaries;
+        private List<PlanarEdge> edges;
 
-        public PlanarBoundary(IEnumerable<PlanarBoundary> boundaries)
+        public PlanarBoundary(IEnumerable<PlanarEdge> edges)
             : base()
         {
-            this.boundaries = new List<PlanarBoundary>(boundaries);
+            this.edges = new List<PlanarEdge>(edges);
         }
     }
 }
