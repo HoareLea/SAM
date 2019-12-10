@@ -83,5 +83,65 @@ namespace SAM.Geometry.Planar
                 return new Vector2D(coordinates[0] / aLength, coordinates[1] / aLength);
             }
         }
+
+        public static Vector2D operator +(Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            return new Vector2D(vector2D_1.coordinates[0] + vector2D_2.coordinates[0], vector2D_1.coordinates[1] + vector2D_2.coordinates[1]);
+        }
+
+        public static Vector2D operator -(Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            return new Vector2D(vector2D_1.coordinates[0] - vector2D_2.coordinates[0], vector2D_1.coordinates[1] - vector2D_2.coordinates[1]);
+        }
+
+        public static double operator *(Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            return vector2D_1.coordinates[0] * vector2D_2.coordinates[0] + vector2D_1.coordinates[1] * vector2D_2.coordinates[1];
+        }
+
+        public static Vector2D operator *(Vector2D vector2D_1, double factor)
+        {
+            return new Vector2D(vector2D_1.coordinates[0] * factor, vector2D_1.coordinates[1] * factor);
+        }
+
+        public static Vector2D operator *(double factor, Vector2D vector2D_1)
+        {
+            return new Vector2D(vector2D_1.coordinates[0] * factor, vector2D_1.coordinates[1] * factor);
+        }
+ 
+        public double X
+        {
+            get
+            {
+                return coordinates[0];
+            }
+            set
+            {
+                if (coordinates == null)
+                    coordinates = new double[2];
+
+                coordinates[0] = value;
+            }
+        }
+
+        public double Y
+        {
+            get
+            {
+                return coordinates[1];
+            }
+            set
+            {
+                if (coordinates == null)
+                    coordinates = new double[2];
+
+                coordinates[1] = value;
+            }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}(X={1},Y={2})", GetType().Name, coordinates[0], coordinates[1]);
+        }
     }
 }

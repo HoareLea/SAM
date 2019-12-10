@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="IGeometry.cs" />
     <Compile Include="Planar\BoundingBox2D.cs" />
     <Compile Include="Planar\ICurve2D.cs" />

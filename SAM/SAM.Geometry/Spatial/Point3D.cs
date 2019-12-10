@@ -81,5 +81,10 @@ namespace SAM.Geometry.Spatial
                 coordinates[2] = value;
             }
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}(X={1},Y={2},Z={3})", GetType().Name, coordinates[0], coordinates[1], coordinates[2]);
+        }
     }
 }
