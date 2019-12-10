@@ -66,5 +66,63 @@ namespace SAM.Geometry.Planar
             min = new Point2D(aX_Min - offset, aY_Min - offset);
             max = new Point2D(aX_Max + offset, aY_Max + offset);
         }
+        public Point2D Min
+        {
+            get
+            {
+                return new Point2D(min);
+            }
+            set
+            {
+                if (max == null)
+                {
+                    max = new Point2D(value);
+                    min = new Point2D(value);
+                }
+                else
+                {
+                    max = Point2D.Max(max, value);
+                    min = Point2D.Min(max, value);
+                }
+            }
+        }
+
+        public Point2D Max
+        {
+            get
+            {
+                return new Point2D(max);
+            }
+            set
+            {
+                if (min == null)
+                {
+                    max = new Point2D(value);
+                    min = new Point2D(value);
+                }
+                else
+                {
+                    max = Point2D.Max(min, value);
+                    min = Point2D.Min(min, value);
+                }
+            }
+        }
+
+        public double Width
+        {
+            get
+            {
+                return max.X - min.X;
+            }
+        }
+
+        public double Height
+        {
+            get
+            {
+                return max.Y - min.Y;
+            }
+        }
+
     }
 }
