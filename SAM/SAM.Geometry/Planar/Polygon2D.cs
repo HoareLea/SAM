@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
-    class Polygon2D : IGeometry2D
+    public class Polygon2D : IGeometry2D
     {
         private List<Point2D> points;
 
@@ -16,6 +16,14 @@ namespace SAM.Geometry.Planar
         public List<Segment2D> GetSegments()
         {
             return Point2D.GetSegmentList(points, true);
+        }
+
+        public List<Point2D> Points
+        {
+            get
+            {
+                return new List<Point2D>(points);
+            }
         }
     }
 }

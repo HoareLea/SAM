@@ -87,12 +87,12 @@ namespace SAM.Geometry.Spatial
             if (point3D == null)
                 return new Vector3D(coordinates);
             else
-                return new Vector3D(coordinates[0] - point3D[0], coordinates[1] - point3D[1]);
+                return new Vector3D(coordinates[0] - point3D[0], coordinates[1] - point3D[1], coordinates[2] - point3D[2]);
         }
 
         public double Distance(Point3D point3D)
         {
-            return Vector3D(point).Length;
+            return new Vector3D(this, point3D).Length;
         }
 
         public override string ToString()

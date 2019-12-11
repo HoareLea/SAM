@@ -21,7 +21,7 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                return points;
+                return new List<Point3D>(points);
             }
         }
 
