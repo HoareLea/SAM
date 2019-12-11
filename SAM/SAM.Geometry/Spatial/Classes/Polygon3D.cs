@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Polygon3D : IGeometry3D
+    public class Polygon3D : IClosed3D
     {
         private List<Point3D> points;
 

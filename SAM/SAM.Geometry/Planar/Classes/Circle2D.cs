@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Circle2D
+    public class Circle2D: IClosed2D
     {
         private Point2D center;
         private double radious;

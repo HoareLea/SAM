@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Triangle2D : IGeometry2D
+    public class Triangle2D : IClosed2D
     {
         private Point2D[] points = new Point2D[3];
 

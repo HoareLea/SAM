@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class BoundingBox2D
+    public class BoundingBox2D : IClosed2D
     {
         private Point2D min;
         private Point2D max;

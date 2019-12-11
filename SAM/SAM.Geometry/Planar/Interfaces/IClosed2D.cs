@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Geometry.Spatial
+namespace SAM.Geometry.Planar
 {
-    public class Face : IGeometry3D
+    public interface IClosed2D : IGeometry2D
     {
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Rectangle2D
+    public class Rectangle2D : IClosed2D
     {
         private Point2D origin;
         private double width;
