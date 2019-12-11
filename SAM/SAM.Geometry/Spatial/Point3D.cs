@@ -82,6 +82,19 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        public Vector3D ToVector3D(Point3D point3D = null)
+        {
+            if (point3D == null)
+                return new Vector3D(coordinates);
+            else
+                return new Vector3D(coordinates[0] - point3D[0], coordinates[1] - point3D[1]);
+        }
+
+        public double Distance(Point3D point3D)
+        {
+            return Vector3D(point).Length;
+        }
+
         public override string ToString()
         {
             return string.Format("{0}(X={1},Y={2},Z={3})", GetType().Name, coordinates[0], coordinates[1], coordinates[2]);

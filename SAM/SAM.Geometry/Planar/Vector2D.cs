@@ -108,7 +108,17 @@ namespace SAM.Geometry.Planar
         {
             return new Vector2D(vector2D_1.coordinates[0] * factor, vector2D_1.coordinates[1] * factor);
         }
- 
+
+        public static bool operator ==(Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            return vector2D_1?.coordinates[0] == vector2D_2?.coordinates[0] && vector2D_1?.coordinates[1] == vector2D_2?.coordinates[1];
+        }
+
+        public static bool operator !=(Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            return vector2D_1?.coordinates[0] != vector2D_2?.coordinates[0] || vector2D_1?.coordinates[1] != vector2D_2?.coordinates[1];
+        }
+
         public double X
         {
             get

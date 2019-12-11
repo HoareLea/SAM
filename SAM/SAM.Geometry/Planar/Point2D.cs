@@ -82,9 +82,9 @@ namespace SAM.Geometry.Planar
             coordinates[1] += vector2D[1];
         }
 
-        public double Distance(Point2D point)
+        public double Distance(Point2D point2D)
         {
-            return Vector2D(point).Length;
+            return Vector(point2D).Length;
         }
 
         public Vector2D Vector(Point2D point2D)
