@@ -133,6 +133,25 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        public Vector2D Direction
+        {
+            get
+            {
+                return vector.Unit;
+            }
+        }
+
+        public void MoveTo(Point2D point2D)
+        {
+            origin = point2D;
+        }
+
+        public void Flip()
+        {
+            origin = End;
+            vector.Negate();
+        }
+
         /// <summary>
         /// Project given Point2D onto Segment2D
         /// </summary>

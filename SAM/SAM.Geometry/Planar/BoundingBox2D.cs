@@ -66,6 +66,7 @@ namespace SAM.Geometry.Planar
             min = new Point2D(aX_Min - offset, aY_Min - offset);
             max = new Point2D(aX_Max + offset, aY_Max + offset);
         }
+
         public Point2D Min
         {
             get
@@ -122,6 +123,27 @@ namespace SAM.Geometry.Planar
             {
                 return max.Y - min.Y;
             }
+        }
+
+        public bool Inside(BoundingBox2D boundingBox2D)
+        {
+            return Inside(boundingBox2D.max) && Inside(boundingBox2D.min);
+        }
+
+        public bool Inside(Point2D point2D)
+        {
+            return point2D.X > min.X && point2D.X < max.X && point2D.Y < max.Y && point2D.Y > min.Y;
+        }
+
+        public bool Inside(Point2D point2D, bool acceptOnEdge = true, double tolerance = Tolerance.MicroDistance)
+        {
+            if (point2D == null)
+                return false;
+
+            if (acceptOnEdge)
+                return (point2D.X >= min.X - tolerance && point2D.X <= max.X + tolerance && point2D.Y >= min.Y - tolerance && point2D.Y <= max.Y + tolerance);
+
+            return (point2D.X > min.X + tolerance && point2D.X < max.X - tolerance && point2D.Y > min.Y + tolerance && point2D.Y < max.Y - tolerance);
         }
 
     }

@@ -8,6 +8,8 @@ namespace SAM.Geometry.Spatial
 {
     public class Point3D : IGeometry3D
     {
+        public static Point3D Zero { get; } = new Point3D(0, 0, 0);
+
         private double[] coordinates = new double[3] { 0, 0, 0 };
 
         public Point3D()

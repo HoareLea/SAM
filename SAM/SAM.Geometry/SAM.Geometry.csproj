@@ -47,7 +47,9 @@
     <Compile Include="IGeometry.cs" />
     <Compile Include="Planar\BoundingBox2D.cs" />
     <Compile Include="Planar\ICurve2D.cs" />
+    <Compile Include="Planar\Rectangle2D.cs" />
     <Compile Include="Planar\Segment2D.cs" />
+    <Compile Include="Planar\Triangle2D.cs" />
     <Compile Include="Spatial\Vector3D.cs" />
     <Compile Include="Spatial\ICurve3D.cs" />
     <Compile Include="Planar\IGeometry2D.cs" />
