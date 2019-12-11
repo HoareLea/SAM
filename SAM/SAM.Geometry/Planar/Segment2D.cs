@@ -6,29 +6,50 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
+    /// <summary>
+    /// Segment2D
+    /// </summary>
     public class Segment2D : ICurve2D
     {
         private Point2D origin;
         private Vector2D vector;
 
+        /// <summary>
+        /// Creates Segment2D by start and end Point2D 
+        /// </summary>
+        /// <param name="start">Segment2D start point.</param>
+        /// <param name="end">Segment2D end point.</param>
         public Segment2D(Point2D start, Point2D end)
         {
             origin = new Point2D(start);
             vector = new Vector2D(start, end);
         }
 
+        /// <summary>
+        /// Creates Segment2D by origin and Vector2D 
+        /// </summary>
+        /// <param name="origin">Segment2D origin point.</param>
+        /// <param name="vector2D">Segment2D direction.</param>
         public Segment2D(Point2D origin, Vector2D vector2D)
         {
             origin = new Point2D(origin);
             vector = new Vector2D(vector2D);
         }
 
+        /// <summary>
+        /// Duplicate Segment2D by Segment2D
+        /// </summary>
+        /// <param name="origin">Segment2D origin point.</param>
+        /// <param name="vector2D">Segment2D direction.</param>
         public Segment2D(Segment2D segment2D)
         {
             origin = new Point2D(segment2D.origin);
             vector = new Vector2D(segment2D.vector);
         }
 
+        /// <summary>
+        /// Point2D of serment by given index
+        /// </summary>
         public Point2D this[int Index]
         {
             get
@@ -63,6 +84,9 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        /// <summary>
+        /// Segment2D Start Point2D
+        /// </summary>
         public Point2D Start
         {
             get
@@ -77,6 +101,9 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        /// <summary>
+        /// Segment2D End Point2D
+        /// </summary>
         public Point2D End
         {
             get
@@ -91,6 +118,9 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        /// <summary>
+        /// Segment2D length
+        /// </summary>
         public double Length
         {
             get
@@ -103,6 +133,13 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        /// <summary>
+        /// Project given Point2D onto Segment2D
+        /// </summary>
+        /// <returns>
+        /// Point2D.
+        /// </returns>
+        /// <param name="point2D">Point2D to be projected.</param>
         public Point2D Project(Point2D point2D)
         {
             if (Start.X == End.X)
@@ -117,11 +154,25 @@ namespace SAM.Geometry.Planar
             return new Point2D(X, Y);
         }
 
-        public Segment2D GetMoved(Vector2D Vector)
+        /// <summary>
+        /// Move segment by Vector *was GetMoved
+        /// </summary>
+        /// <returns>
+        /// Segment2D
+        /// </returns>
+        /// <param name="vector2D">Vector tranformation.</param>
+        public Segment2D Move(Vector2D vector2D)
         {
-            return new Segment2D((Point2D)origin.GetMoved(Vector), vector);
+            return new Segment2D((Point2D)origin.GetMoved(vector2D), vector);
         }
 
+        /// <summary>
+        /// Find intersection Point2D by two segments2Ds.  Method will aslo return closest point2Ds on Segmnet2Ds to extended intersection Point2D 
+        /// </summary>
+        /// <returns>
+        /// Point2D
+        /// </returns>
+        /// <param name="segment2D">Segment2D for intersection.</param>
         public Point2D Intersection(Segment2D segment2D, out Point2D point2D_Closest1, out Point2D point2D_Closest2)
         {
 
@@ -172,15 +223,33 @@ namespace SAM.Geometry.Planar
             return aPoint_Intersection;
         }
 
-
-        public static List<Segment2D> Create(Segment2D segment2D, Vector2D vector2D, int count)
+        /// <summary>
+        /// Offset Segment2D by Vector2D and number count (default = 1) 
+        /// </summary>
+        /// <returns>
+        /// List Segment2D
+        /// </returns>
+        /// <param name="vector2D">Ofset Vector.</param>
+        /// <param name="count">Ofset count.</param>
+        public List<Segment2D> Offset(Vector2D vector2D, int count = 1)
         {
+            if (count < 1)
+                return null;
+            
             List<Segment2D> aResult = new List<Segment2D>();
             for (int i = 0; i < count; i++)
-                aResult.Add((Segment2D)segment2D.GetMoved(vector2D * i));
+                aResult.Add(Move(vector2D * i));
             return aResult;
         }
 
+        /// <summary>
+        /// Split Segment2Ds  
+        /// </summary>
+        /// <returns>
+        /// List Segment2D
+        /// </returns>
+        /// <param name="segment2Ds">Sermnets2Ds</param>
+        /// <param name="tolerance"> tolerance (default = 0) .</param>
         public static List<Segment2D> Split(IEnumerable<Segment2D> segment2Ds, double tolerance = 0)
         {
             if (segment2Ds == null)
