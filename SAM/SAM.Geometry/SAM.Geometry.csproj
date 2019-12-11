@@ -46,6 +46,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="IGeometry.cs" />
     <Compile Include="Planar\BoundingBox2D.cs" />
+    <Compile Include="Planar\Circle2D.cs" />
     <Compile Include="Planar\ICurve2D.cs" />
     <Compile Include="Planar\Rectangle2D.cs" />
     <Compile Include="Planar\Segment2D.cs" />
