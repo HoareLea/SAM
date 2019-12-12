@@ -2,21 +2,20 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class To2D : GH_Component
+    public class ConvertGeometry : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public To2D()
-          : base("To2D", "To2D",
-              "Convert SAM geometry to 2D",
+        public ConvertGeometry()
+          : base("ConvertGeometry", "Cgeo",
+              "Convert Geometry",
               "SAM", "Geometry")
         {
         }
@@ -26,15 +25,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            int index = -1;
-            Param_GenericObject genericObjectParameter = null;
-
-            inputParamManager.AddGenericParameter("SAMGeometry3D", "SAMgeo3D", "SAM Geometry 3D", GH_ParamAccess.item);
-
-            index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
-            genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(new Plane()));
-
+            inputParamManager.AddGenericParameter("Geometry", "geo", "Geometry", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,7 +33,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Geometry", "geo", "Geometry", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -59,34 +50,17 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            IGeometry3D geometry3D = objectWrapper.Value as IGeometry3D;
-            if (geometry3D == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            object obj = objectWrapper.Value;
 
-            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            if (obj is IGeometry)
+                obj = dataAccess.SetData(0, (obj as dynamic).ToGrasshopper());
 
-            Plane plane = objectWrapper.Value as Plane;
-            if (plane == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            if (obj is IGH_GeometricGoo)
+                obj = dataAccess.SetData(0, (obj as dynamic).ToSAM());
 
-            Planar.IGeometry2D geometry2D = plane.Convert(geometry3D);
-            if (geometry2D == null)
-            {
+            if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
-                return;
-            }
 
-            dataAccess.SetData(0, geometry2D);
         }
 
         /// <summary>
@@ -107,7 +81,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("50eb9b79-0a5f-4fb7-938d-451ff9432eee"); }
+            get { return new Guid("060a9d71-9c97-4502-9e30-e9a7d45d22db"); }
         }
     }
 }

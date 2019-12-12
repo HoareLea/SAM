@@ -13,7 +13,7 @@ namespace SAM.Geometry.Spatial
 
         public Face(Planar.Polygon2D polygon2D)
         {
-            plane = new Plane(Vector3D.BaseZ, Point3D.Zero);
+            plane = new Plane(Point3D.Zero, Vector3D.BaseZ);
             boundary = polygon2D;
         }
 

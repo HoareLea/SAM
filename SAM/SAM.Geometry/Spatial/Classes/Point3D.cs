@@ -113,5 +113,25 @@ namespace SAM.Geometry.Spatial
         {
             return string.Format("{0}(X={1},Y={2},Z={3})", GetType().Name, coordinates[0], coordinates[1], coordinates[2]);
         }
+
+        public static List<Segment3D> GetSegments(IEnumerable<Point3D> point3Ds, bool close = false)
+        {
+            if (point3Ds == null)
+                return null;
+
+            List<Segment3D> result = new List<Segment3D>();
+            if (point3Ds.Count() < 2)
+                return result;
+
+            int aCount = point3Ds.Count();
+
+            for (int i = 0; i < aCount - 1; i++)
+                result.Add(new Segment3D(point3Ds.ElementAt(i), point3Ds.ElementAt(i + 1)));
+
+            if (close)
+                result.Add(new Segment3D(point3Ds.Last(), point3Ds.First()));
+
+            return result;
+        }
     }
 }

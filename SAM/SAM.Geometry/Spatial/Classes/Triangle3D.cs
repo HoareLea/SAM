@@ -29,7 +29,7 @@ namespace SAM.Geometry.Spatial
 
         public Plane GetPlane()
         {
-            return new Plane(GetNormal(), points[0]);
+            return new Plane(points[0], GetNormal());
         }
     }
 }

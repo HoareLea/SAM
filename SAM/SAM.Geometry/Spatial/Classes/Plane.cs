@@ -19,7 +19,20 @@ namespace SAM.Geometry.Spatial
             baseX = GetBaseX();
         }
 
-        public Plane(Vector3D normal, Point3D origin)
+        public Plane(Plane plane)
+        {
+            normal = new Vector3D(plane.normal);
+            origin = new Point3D(plane.Origin);
+            baseX = GetBaseX();
+        }
+
+        public Plane(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
+        {
+            origin = point3D_1;
+            normal = new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3)).Unit;
+        }
+
+        public Plane(Point3D origin, Vector3D normal)
         {
             this.normal = normal.Unit;
             this.origin = origin;
@@ -51,6 +64,10 @@ namespace SAM.Geometry.Spatial
             {
                 return new Point3D(origin);
             }
+            set
+            {
+                origin = value;
+            }
         }
 
         public Vector3D BaseX
@@ -68,7 +85,6 @@ namespace SAM.Geometry.Spatial
                 return normal.CrossProduct(baseX);
             }
         }
-
 
         /// <summary>
         /// Scalar constant relating origin point to normal vector.
@@ -171,6 +187,14 @@ namespace SAM.Geometry.Spatial
             Point3D point3D = segment3D[0];
 
             return new Point3D(point3D.X + u * direction.X, point3D.Y + u * direction.Y, point3D.Z + u * direction.Z);
+        }
+
+        public Plane GetMoved(Vector3D vector3D)
+        {
+            Plane plane = new Plane(origin.GetMoved(vector3D), normal);
+            plane.baseX = baseX;
+
+            return plane;
         }
     }
 }

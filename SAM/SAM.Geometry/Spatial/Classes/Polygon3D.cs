@@ -9,6 +9,7 @@ namespace SAM.Geometry.Spatial
 {
     public class Polygon3D : IClosed3D
     {
+        //TODO: Convert to Plane and Point2Ds
         private List<Point3D> points;
 
         public Polygon3D(IEnumerable<Point3D> points)

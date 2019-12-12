@@ -86,6 +86,11 @@ namespace SAM.Geometry.Planar
             coordinates[1] += vector2D[1];
         }
 
+        public Point2D GetMoved(Vector2D vector2D)
+        {
+            return new Point2D(vector2D[0] + coordinates[0], vector2D[1] + coordinates[1]);
+        }
+
         public double Distance(Point2D point2D)
         {
             return Vector(point2D).Length;
@@ -169,7 +174,7 @@ namespace SAM.Geometry.Planar
                 return;
             }
 
-            Vector2D vector = Vector2D(point2D);
+            Vector2D vector = ToVector(point2D);
             vector.Length = vector.Length * factor;
 
             coordinates[0] = point2D.coordinates[0] + vector[0];
@@ -197,22 +202,13 @@ namespace SAM.Geometry.Planar
         {
             return double.IsNaN(coordinates[0]) || double.IsNaN(coordinates[1]);
         }
-
-        public Vector2D Vector2D(Point2D point2D)
+        public Vector2D ToVector(Point2D point2D = null)
         {
-            return new Vector2D(coordinates[0] - point2D[0], coordinates[1] - point2D[1]);
+            if (point2D == null)
+                return new Vector2D(coordinates);
+            else
+                return new Vector2D(coordinates[0] - point2D[0], coordinates[1] - point2D[1]);
         }
-
-        public Vector2D AsVector2D()
-        {
-            return new Vector2D(coordinates[0], coordinates[1]);
-        }
-
-        public Point2D GetMoved(Vector2D vector2D)
-        {
-            return new Point2D(vector2D[0] + coordinates[0], vector2D[1] + coordinates[1]);
-        }
-
 
         public static Point2D Move(Point2D point, Vector2D vector)
         {
@@ -419,7 +415,7 @@ namespace SAM.Geometry.Planar
             return true;
         }
 
-        public static List<Segment2D> GetSegmentList(IEnumerable<Point2D> point2Ds, bool close = false)
+        public static List<Segment2D> GetSegments(IEnumerable<Point2D> point2Ds, bool close = false)
         {
             if (point2Ds == null)
                 return null;

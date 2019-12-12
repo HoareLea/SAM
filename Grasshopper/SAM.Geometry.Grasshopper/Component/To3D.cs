@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
@@ -25,8 +26,14 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
+            int index = -1;
+            Param_GenericObject genericObjectParameter = null;
+
             inputParamManager.AddGenericParameter("SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
+
+            index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
+            genericObjectParameter = (Param_GenericObject)inputParamManager[index];
+            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(new Plane()));
         }
 
         /// <summary>

@@ -14,5 +14,10 @@ namespace SAM.Geometry.Grasshopper
         {
             return new Rhino.Geometry.Point3d(point3D.X, point3D.Y, point3D.Z);
         }
+
+        public static Rhino.Geometry.Point3d ToRhino(this Planar.Point2D point2D)
+        {
+            return new Rhino.Geometry.Point3d(point2D.X, point2D.Y, 0);
+        }
     }
 }

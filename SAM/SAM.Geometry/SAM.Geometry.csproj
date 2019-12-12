@@ -52,7 +52,9 @@
     <Compile Include="Planar\Classes\Rectangle2D.cs" />
     <Compile Include="Planar\Classes\Segment2D.cs" />
     <Compile Include="Planar\Classes\Triangle2D.cs" />
+    <Compile Include="Spatial\Classes\Circle3D.cs" />
     <Compile Include="Spatial\Classes\Extrusion.cs" />
+    <Compile Include="Spatial\Classes\Polyline3D.cs" />
     <Compile Include="Spatial\Classes\Sphere.cs" />
     <Compile Include="Spatial\Classes\Triangle3D.cs" />
     <Compile Include="Spatial\Classes\Vector3D.cs" />
