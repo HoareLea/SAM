@@ -97,6 +97,18 @@ namespace SAM.Geometry.Spatial
             return new Vector3D(this, point3D).Length;
         }
 
+        public Point3D GetMoved(Vector3D vector3D)
+        {
+            return new Point3D(coordinates[0] + vector3D[0], coordinates[1] + vector3D[1], coordinates[2] + vector3D[2]);
+        }
+
+        public void Move(Vector3D vector3D)
+        {
+            coordinates[0] = coordinates[0] + vector3D[0];
+            coordinates[1] = coordinates[1] + vector3D[1];
+            coordinates[2] = coordinates[2] + vector3D[2];
+        }
+
         public override string ToString()
         {
             return string.Format("{0}(X={1},Y={2},Z={3})", GetType().Name, coordinates[0], coordinates[1], coordinates[2]);

@@ -155,6 +155,23 @@ namespace SAM.Geometry.Spatial
             double factor = point3D.ToVector3D().DotProduct(normal) - K;
             return new Point3D(point3D.X - (normal.X * factor), point3D.Y - (normal.Y * factor), point3D.Z - (normal.Z * factor));
         }
+
+        public Point3D Intersection(Segment3D segment3D)
+        {
+            Vector3D direction = segment3D.Direction;
+
+            double d = normal.DotProduct(direction);
+            if (d == 0)
+                return null;
+
+            double u = (K - normal.DotProduct(segment3D.Start.ToVector3D())) / d;
+            if (u < 0 || u > 1)
+                return null;
+
+            Point3D point3D = segment3D[0];
+
+            return new Point3D(point3D.X + u * direction.X, point3D.Y + u * direction.Y, point3D.Z + u * direction.Z);
+        }
     }
 }
 

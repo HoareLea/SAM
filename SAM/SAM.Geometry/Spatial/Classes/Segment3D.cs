@@ -8,29 +8,38 @@ namespace SAM.Geometry.Spatial
 {
     public class Segment3D : ICurve3D
     {
-        private Point3D[] points = new Point3D[2];
+        private Point3D origin;
+        private Vector3D vector;
 
         public Segment3D(Point3D start, Point3D end)
         {
-            points[0] = start;
-            points[1] = end;
+            origin = start;
+            vector = new Vector3D(start, end);
         }
 
         public Segment3D(Segment3D segment3D)
         {
-            points[0] = new Point3D(segment3D.points[0]);
-            points[1] = new Point3D(segment3D.points[1]);
+            origin = new Point3D(segment3D.origin);
+            vector = new Vector3D(segment3D.vector);
         }
 
         public Point3D this[int index]
         {
             get
             {
-                return points[index];
+                if (index == 0)
+                    return origin;
+                if (index == 1)
+                    return origin.GetMoved(vector);
+
+                return null;
             }
             set
             {
-                points[index] = value;
+                if (index == 0)
+                    origin = value;
+                else if (index == 1)
+                    vector = new Vector3D(origin, value);
             }
         }
 
@@ -38,14 +47,11 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                return points[0];
+                return new Point3D(origin);
             }
             set
             {
-                if (points == null)
-                    points = new Point3D[2];
-
-                points[0] = value;
+                origin = value;
             }
         }
 
@@ -53,15 +59,25 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                return points[1];
+                return origin.GetMoved(vector);
             }
             set
             {
-                if (points == null)
-                    points = new Point3D[2];
-
-                points[1] = value;
+                vector = new Vector3D(origin, value);
             }
+        }
+
+        public Vector3D Direction
+        {
+            get
+            {
+                return vector.Unit;
+            }
+        }
+
+        public List<Point3D> GetPoints()
+        {
+            return new List<Point3D>() { origin, End };
         }
     }
 }

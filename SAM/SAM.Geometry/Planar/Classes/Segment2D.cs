@@ -84,6 +84,11 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        public List<Point2D> GetPoints()
+        {
+            return new List<Point2D>() {origin, End };
+        }
+
         /// <summary>
         /// Segment2D Start Point2D
         /// </summary>
