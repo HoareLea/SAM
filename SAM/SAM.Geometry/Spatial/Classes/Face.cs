@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Face : IGeometry3D
+    public class Face : IClosedPlanar3D
     {
         private Plane plane;
         private Planar.IClosed2D boundary;
@@ -28,5 +28,9 @@ namespace SAM.Geometry.Spatial
             plane = triangle3D.GetPlane();
         }
 
+        public Plane GetPlane()
+        {
+            return new Plane(plane);
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Circle3D: IClosed3D
+    public class Circle3D: IClosedPlanar3D
     {
         private Plane plane;
         private double radious;
@@ -76,6 +76,11 @@ namespace SAM.Geometry.Spatial
         public double GetPerimeter()
         {
             return 2 * Math.PI * radious;
+        }
+
+        public Plane GetPlane()
+        {
+            return new Plane(plane);
         }
     }
 }

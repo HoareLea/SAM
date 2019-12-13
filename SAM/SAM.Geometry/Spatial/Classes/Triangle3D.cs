@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Triangle3D : IClosed3D
+    public class Triangle3D : IClosedPlanar3D
     {
         private Point3D[] points = new Point3D[3];
 
@@ -24,7 +24,10 @@ namespace SAM.Geometry.Spatial
 
         public Vector3D GetNormal()
         {
-            return new Vector3D(points[0], points[1]).CrossProduct(new Vector3D(points[0], points[2]));
+            if (points.Length < 3)
+                return null;
+
+            return Point3D.GetNormal(points[0], points[1], points[2]);
         }
 
         public Plane GetPlane()

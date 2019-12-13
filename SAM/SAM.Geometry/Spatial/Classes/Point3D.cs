@@ -133,5 +133,10 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static Vector3D GetNormal(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
+        {
+            return new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
+        }
     }
 }

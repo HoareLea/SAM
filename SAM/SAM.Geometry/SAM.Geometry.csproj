@@ -59,6 +59,7 @@
     <Compile Include="Spatial\Classes\Triangle3D.cs" />
     <Compile Include="Spatial\Classes\Vector3D.cs" />
     <Compile Include="Spatial\Interfaces\IClosed3D.cs" />
+    <Compile Include="Spatial\Interfaces\IClosedPlanar3D.cs" />
     <Compile Include="Spatial\Interfaces\ICurve3D.cs" />
     <Compile Include="Planar\Interfaces\IGeometry2D.cs" />
     <Compile Include="Planar\Classes\Line2D.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Spatial\Interfaces\IGeometry3D.cs" />
     <Compile Include="Spatial\Classes\Point3D.cs" />
     <Compile Include="Spatial\Classes\Polygon3D.cs" />
+    <Compile Include="Spatial\Interfaces\IPlanar3D.cs" />
     <Compile Include="Tolerance.cs" />
     <Compile Include="Utils\BoundingBox2DUtils.cs" />
     <Compile Include="Utils\ConvexHullUtils.cs" />

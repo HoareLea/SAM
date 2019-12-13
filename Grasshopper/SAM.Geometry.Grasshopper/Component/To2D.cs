@@ -30,11 +30,11 @@ namespace SAM.Geometry.Grasshopper
             Param_GenericObject genericObjectParameter = null;
 
             inputParamManager.AddGenericParameter("SAMGeometry3D", "SAMgeo3D", "SAM Geometry 3D", GH_ParamAccess.item);
+            inputParamManager.AddBooleanParameter("OwnPlane", "OPlane", "Projection on own plane if possible", GH_ParamAccess.item, true);
 
             index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
             genericObjectParameter = (Param_GenericObject)inputParamManager[index];
             genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(new Plane()));
-
         }
 
         /// <summary>
@@ -72,7 +72,30 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            Plane plane = objectWrapper.Value as Plane;
+            GH_Boolean gHBoolean = objectWrapper.Value as GH_Boolean;
+            if (gHBoolean == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            Plane plane = null;
+
+            bool ownPlane = gHBoolean.Value;
+            if (ownPlane && geometry3D is IPlanar3D)
+                plane = (geometry3D as IPlanar3D).GetPlane();
+
+            if(plane == null)
+            {
+                if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper.Value == null)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
+
+                plane = objectWrapper.Value as Plane;
+            }
+
             if (plane == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

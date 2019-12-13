@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Plane : IGeometry3D
+    public class Plane : IPlanar3D
     {
         private Vector3D normal;
         private Point3D origin;
@@ -195,6 +195,11 @@ namespace SAM.Geometry.Spatial
             plane.baseX = baseX;
 
             return plane;
+        }
+
+        public Plane GetPlane()
+        {
+           return new Plane(this);
         }
     }
 }
