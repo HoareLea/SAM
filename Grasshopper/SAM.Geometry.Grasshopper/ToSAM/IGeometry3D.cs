@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Geometry.Grasshopper.ToSAM
+namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
@@ -20,7 +20,7 @@ namespace SAM.Geometry.Grasshopper.ToSAM
 
         public static Spatial.IGeometry3D ToSAM(this Curve curve)
         {
-            if (!curve.IsClosed || !curve.IsPlanar())
+            if (!curve.IsPlanar())
                 return null;
 
             PolylineCurve polylineCurve = curve as PolylineCurve;
@@ -58,5 +58,11 @@ namespace SAM.Geometry.Grasshopper.ToSAM
 
             return null;
         }
+
+        public static Spatial.IGeometry3D ToSAM(this PolylineCurve polylineCurve)
+        {
+            return (polylineCurve as Curve).ToSAM();
+        }
+             
     }
 }

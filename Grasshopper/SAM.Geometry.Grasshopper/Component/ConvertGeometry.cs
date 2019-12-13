@@ -53,10 +53,23 @@ namespace SAM.Geometry.Grasshopper
             object obj = objectWrapper.Value;
 
             if (obj is IGeometry)
-                obj = dataAccess.SetData(0, (obj as dynamic).ToGrasshopper());
+            {
+                if (obj is Polygon3D)
+                    obj = dataAccess.SetData(0, ((Polygon3D)obj).ToGrasshopper());
+                else
+                    obj = dataAccess.SetData(0, (obj as dynamic).ToGrasshopper());
+            }
+                
 
             if (obj is IGH_GeometricGoo)
-                obj = dataAccess.SetData(0, (obj as dynamic).ToSAM());
+            {
+                if (obj is GH_Curve)
+                    obj = dataAccess.SetData(0, ((GH_Curve)obj).ToSAM());
+                else
+                    obj = dataAccess.SetData(0, (obj as dynamic).ToSAM());
+            }
+                
+                
 
             if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
