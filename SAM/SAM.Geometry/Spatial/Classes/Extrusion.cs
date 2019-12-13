@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Extrusion
+    public class Extrusion : IGeometry3D
     {
         private Face face;
         private Vector3D vector;
 
         public Extrusion(Face face, double height)
         {
-            this.face = face;
+            this.face = new Face(face);
             vector = new Vector3D(0, 0, height);
         }
 
@@ -21,6 +21,17 @@ namespace SAM.Geometry.Spatial
         {
             this.face = face;
             this.vector = vector;
+        }
+
+        public Extrusion(Extrusion extrusion)
+        {
+            face = new Face(extrusion.face);
+            vector = new Vector3D(extrusion.vector);
+        }
+
+        public IGeometry Clone()
+        {
+            return new Extrusion(this);
         }
     }
 }

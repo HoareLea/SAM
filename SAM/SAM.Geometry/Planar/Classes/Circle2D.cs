@@ -17,6 +17,12 @@ namespace SAM.Geometry.Planar
             this.radious = radious;
         }
 
+        public Circle2D(Circle2D circle2D)
+        {
+            center = new Point2D(circle2D.center);
+            radious = circle2D.radious;
+        }
+
         public Point2D Center
         {
             get
@@ -86,6 +92,11 @@ namespace SAM.Geometry.Planar
         public double GetPerimeter()
         {
             return 2 * Math.PI * radious;
+        }
+
+        public IGeometry Clone()
+        {
+            return new Circle2D(this);
         }
     }
 }

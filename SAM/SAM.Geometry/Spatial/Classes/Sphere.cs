@@ -17,6 +17,17 @@ namespace SAM.Geometry.Spatial
             this.radious = radious;
         }
 
+        public Sphere(Sphere sphere)
+        {
+            origin = new Point3D(sphere.origin);
+            radious = sphere.radious;
+        }
+
+        public IGeometry Clone()
+        {
+            return new Sphere(this);
+        }
+
         public bool Inside(Point3D point3D)
         {
             return origin.Distance(point3D) < radious;

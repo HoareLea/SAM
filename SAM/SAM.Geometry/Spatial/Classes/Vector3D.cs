@@ -186,5 +186,10 @@ namespace SAM.Geometry.Spatial
         {
             return string.Format("{0}(X={1},Y={2},Z={2})", GetType().Name, coordinates[0], coordinates[1], coordinates[2]);
         }
+
+        public IGeometry Clone()
+        {
+            return new Vector3D(this);
+        }
     }
 }

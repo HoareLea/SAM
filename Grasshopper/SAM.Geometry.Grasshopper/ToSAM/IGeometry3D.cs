@@ -26,9 +26,11 @@ namespace SAM.Geometry.Grasshopper
             PolylineCurve polylineCurve = curve as PolylineCurve;
             if (polylineCurve != null)
             {
-                List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
                 int count = polylineCurve.PointCount;
+                if(count == 2)
+                    return new Spatial.Segment3D(polylineCurve.Point(0).ToSAM(), polylineCurve.Point(1).ToSAM());
 
+                List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
                 if (polylineCurve.IsClosed)
                     count--;
 

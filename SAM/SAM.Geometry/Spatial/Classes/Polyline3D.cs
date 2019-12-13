@@ -10,9 +10,14 @@ namespace SAM.Geometry.Spatial
     {
         private List<Point3D> points;
 
-        public Polyline3D(List<Point3D> point3Ds)
+        public Polyline3D(IEnumerable<Point3D> point3Ds)
         {
-            this.points = point3Ds;
+            this.points = Point3D.Clone(point3Ds);
+        }
+
+        public Polyline3D(Polyline3D polyline3D)
+        {
+            this.points = Point3D.Clone(polyline3D.points);
         }
 
         public List<Point3D> Points
@@ -59,6 +64,11 @@ namespace SAM.Geometry.Spatial
             
             
             return new Polygon3D(points);
+        }
+
+        public IGeometry Clone()
+        {
+            return new Polyline3D(this);
         }
     }
 }

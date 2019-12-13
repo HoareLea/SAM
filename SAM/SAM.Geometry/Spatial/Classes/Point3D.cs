@@ -138,5 +138,19 @@ namespace SAM.Geometry.Spatial
         {
             return new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
         }
+
+        public static List<Point3D> Clone(IEnumerable<Point3D> point3Ds)
+        {
+            List<Point3D> result = new List<Point3D>();
+            foreach (Point3D point3D in point3Ds)
+                result.Add(new Point3D(point3D));
+
+            return result;
+        }
+            
+        public IGeometry Clone()
+        {
+            return new Point3D(this);
+        }
     }
 }

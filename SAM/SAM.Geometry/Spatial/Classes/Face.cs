@@ -28,9 +28,20 @@ namespace SAM.Geometry.Spatial
             plane = triangle3D.GetPlane();
         }
 
+        public Face(Face face)
+        {
+            this.plane = new Plane(face.plane);
+            this.boundary = (Planar.IClosed2D)face.boundary.Clone();
+        }
+
         public Plane GetPlane()
         {
             return new Plane(plane);
+        }
+
+        public IGeometry Clone()
+        {
+            return new Face(this);
         }
     }
 }

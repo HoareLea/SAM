@@ -260,5 +260,10 @@ namespace SAM.Geometry.Planar
         {
             return string.Format("{0}(X={1},Y={2})", GetType().Name, coordinates[0], coordinates[1]);
         }
+
+        public IGeometry Clone()
+        {
+            return new Vector2D(this);
+        }
     }
 }

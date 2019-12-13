@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    class Line2D : ICurve2D
+    public class Line2D : ICurve2D
     {
+        public IGeometry Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace SAM.Geometry
 {
     public interface IGeometry
     {
+        IGeometry Clone();
     }
 }

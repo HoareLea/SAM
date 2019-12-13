@@ -14,5 +14,10 @@ namespace SAM.Geometry.Grasshopper
         {
             return new GH_Line(segment3D.ToRhino());
         }
+
+        public static GH_Line ToGrasshopper(this Planar.Segment2D segment2D)
+        {
+            return new GH_Line(segment2D.ToRhino());
+        }
     }
 }

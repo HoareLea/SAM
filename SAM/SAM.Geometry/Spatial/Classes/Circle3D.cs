@@ -17,6 +17,12 @@ namespace SAM.Geometry.Spatial
             this.radious = radious;
         }
 
+        public Circle3D(Circle3D circle3D)
+        {
+            this.plane = new Plane(circle3D.plane);
+            this.radious = circle3D.radious;
+        }
+
         public Point3D Center
         {
             get
@@ -81,6 +87,11 @@ namespace SAM.Geometry.Spatial
         public Plane GetPlane()
         {
             return new Plane(plane);
+        }
+
+        public IGeometry Clone()
+        {
+            return new Circle3D((Plane)plane.Clone(), radious);
         }
     }
 }

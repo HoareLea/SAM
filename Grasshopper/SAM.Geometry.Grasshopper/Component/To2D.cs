@@ -34,7 +34,7 @@ namespace SAM.Geometry.Grasshopper
 
             index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
             genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(new Plane()));
+            genericObjectParameter.PersistentData.Append(new GH_Plane(new Rhino.Geometry.Plane(new Rhino.Geometry.Point3d(0, 0, 0), new Rhino.Geometry.Vector3d(0, 0, 1))));
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            Plane plane = null;
+            Spatial.Plane plane = null;
 
             bool ownPlane = gHBoolean.Value;
             if (ownPlane && geometry3D is IPlanar3D)
@@ -93,7 +93,14 @@ namespace SAM.Geometry.Grasshopper
                     return;
                 }
 
-                plane = objectWrapper.Value as Plane;
+                GH_Plane gHPlane = objectWrapper.Value as GH_Plane;
+                if (gHPlane == null)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
+
+                plane = Convert.ToSAM(gHPlane);
             }
 
             if (plane == null)

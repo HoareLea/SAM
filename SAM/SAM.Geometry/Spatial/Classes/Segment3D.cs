@@ -79,5 +79,10 @@ namespace SAM.Geometry.Spatial
         {
             return new List<Point3D>() { origin, End };
         }
+
+        public IGeometry Clone()
+        {
+            return new Segment3D(this);
+        }
     }
 }

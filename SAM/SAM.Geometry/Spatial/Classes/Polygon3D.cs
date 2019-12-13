@@ -13,6 +13,11 @@ namespace SAM.Geometry.Spatial
                 this.points = new List<Point3D>(points);
         }
 
+        public Polygon3D(Polygon3D polygon3D)
+        {
+            points = Point3D.Clone(polygon3D.points);
+        }
+
         public List<Point3D> Points
         {
             get
@@ -47,7 +52,12 @@ namespace SAM.Geometry.Spatial
             if (points.Count < 3)
                 return null;
             
-            return new Plane(points[0], points[1], points[2]);
+            return new Plane(new Point3D(points[0]), new Point3D(points[1]), new Point3D(points[2]));
+        }
+
+        public IGeometry Clone()
+        {
+            return new Polygon3D(this);
         }
     }
 }

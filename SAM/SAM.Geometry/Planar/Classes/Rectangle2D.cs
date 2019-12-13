@@ -37,6 +37,14 @@ namespace SAM.Geometry.Planar
             this.heightDirection = heightDirection.Unit;
         }
 
+        public Rectangle2D(Rectangle2D rectangle2D)
+        {
+            this.origin = new Point2D(rectangle2D.origin);
+            this.width = rectangle2D.width;
+            this.height = rectangle2D.height;
+            this.heightDirection = new Vector2D(rectangle2D.heightDirection);
+        }
+
         public Point2D[] GetPoints()
         {
             Point2D[] points = new Point2D[4];
@@ -183,6 +191,11 @@ namespace SAM.Geometry.Planar
             Point2D[] points = GetPoints();
 
             return new Triangle2D[] { new Triangle2D(points[0], points[1], points[2]), new Triangle2D(points[2], points[3], points[0]) };
+        }
+
+        public IGeometry Clone()
+        {
+            return new Rectangle2D(this);
         }
     }
 }

@@ -17,6 +17,11 @@ namespace SAM.Geometry.Planar
             points[2] = point2D_3;
         }
 
+        public Triangle2D(Triangle2D triangle2D)
+        {
+            points = Point2D.Clone(triangle2D.points).ToArray();
+        }
+
         public bool Contains(Point2D point2D, double offset)
         {
             return Point2D.Contains(points, point2D, offset);
@@ -88,6 +93,11 @@ namespace SAM.Geometry.Planar
         public IEnumerable<Triangle2D> Triangulate()
         {
             return new Triangle2D[1] { new Triangle2D(new Point2D(points[0]), new Point2D(points[1]), new Point2D(points[2])) };
+        }
+
+        public IGeometry Clone()
+        {
+            return new Triangle2D(this);
         }
     }
 }

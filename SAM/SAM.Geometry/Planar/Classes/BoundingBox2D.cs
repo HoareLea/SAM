@@ -67,6 +67,12 @@ namespace SAM.Geometry.Planar
             max = new Point2D(aX_Max + offset, aY_Max + offset);
         }
 
+        public BoundingBox2D(BoundingBox2D boundingBox2D)
+        {
+            min = new Point2D(boundingBox2D.min);
+            max = new Point2D(boundingBox2D.max);
+        }
+
         public Point2D Min
         {
             get
@@ -146,5 +152,9 @@ namespace SAM.Geometry.Planar
             return (point2D.X > min.X + tolerance && point2D.X < max.X - tolerance && point2D.Y > min.Y + tolerance && point2D.Y < max.Y - tolerance);
         }
 
+        public IGeometry Clone()
+        {
+            return new BoundingBox2D(this);
+        }
     }
 }

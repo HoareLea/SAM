@@ -351,5 +351,10 @@ namespace SAM.Geometry.Planar
 
             return aResult;
         }
+
+        public IGeometry Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

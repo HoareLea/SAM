@@ -55,31 +55,36 @@ namespace SAM.Geometry.Grasshopper
             if (obj is IGeometry)
             {
                 if (obj is Polygon3D)
-                    obj = dataAccess.SetData(0, ((Polygon3D)obj).ToGrasshopper());
+                    obj = ((Polygon3D)obj).ToGrasshopper();
                 else if (obj is Polyline3D)
-                    obj = dataAccess.SetData(0, ((Polyline3D)obj).ToGrasshopper());
+                    obj = ((Polyline3D)obj).ToGrasshopper();
                 else if (obj is Point3D)
-                    obj = dataAccess.SetData(0, ((Point3D)obj).ToGrasshopper());
+                    obj = ((Point3D)obj).ToGrasshopper();
                 else if (obj is Segment3D)
-                    obj = dataAccess.SetData(0, ((Segment3D)obj).ToGrasshopper());
+                    obj = ((Segment3D)obj).ToGrasshopper();
+                else if (obj is Planar.Polygon2D)
+                    obj = ((Planar.Polygon2D)obj).ToGrasshopper();
+                else if (obj is Planar.Point2D)
+                    obj = ((Planar.Point2D)obj).ToGrasshopper();
+                else if (obj is Planar.Segment2D)
+                    obj = ((Planar.Segment2D)obj).ToGrasshopper();
                 else
-                    obj = dataAccess.SetData(0, (obj as dynamic).ToGrasshopper());
+                    obj = (obj as dynamic).ToGrasshopper();
             }
-                
-
-            if (obj is IGH_GeometricGoo)
+            else if (obj is IGH_GeometricGoo)
             {
                 if (obj is GH_Curve)
-                    obj = dataAccess.SetData(0, ((GH_Curve)obj).ToSAM());
+                    obj = ((GH_Curve)obj).ToSAM();
+                else if (obj is GH_Point)
+                    obj = ((GH_Point)obj).ToSAM();
                 else
-                    obj = dataAccess.SetData(0, (obj as dynamic).ToSAM());
+                    obj = (obj as dynamic).ToSAM();
             }
-                
-                
 
             if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
-
+            else
+                dataAccess.SetData(0, obj);
         }
 
         /// <summary>

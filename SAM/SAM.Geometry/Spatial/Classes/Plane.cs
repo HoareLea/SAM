@@ -23,19 +23,20 @@ namespace SAM.Geometry.Spatial
         {
             normal = new Vector3D(plane.normal);
             origin = new Point3D(plane.Origin);
-            baseX = GetBaseX();
+            baseX = new Vector3D(plane.baseX);
         }
 
         public Plane(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
         {
             origin = point3D_1;
             normal = new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3)).Unit;
+            baseX = GetBaseX();
         }
 
         public Plane(Point3D origin, Vector3D normal)
         {
             this.normal = normal.Unit;
-            this.origin = origin;
+            this.origin = new Point3D(origin);
             baseX = GetBaseX();
         }
 
@@ -200,6 +201,11 @@ namespace SAM.Geometry.Spatial
         public Plane GetPlane()
         {
            return new Plane(this);
+        }
+
+        public IGeometry Clone()
+        {
+            return new Plane(this);
         }
     }
 }
