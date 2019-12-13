@@ -10,9 +10,14 @@ namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
-        public static GH_Curve ToGrasshopper(this SAM.Geometry.Spatial.Polygon3D polygon3D)
+        public static GH_Curve ToGrasshopper(this Spatial.Polygon3D polygon3D)
         {
-            return new GH_Curve(polygon3D.ToRhino());
+            return new GH_Curve(polygon3D.ToRhino_PolylineCurve());
+        }
+
+        public static GH_Curve ToGrasshopper(this Spatial.Polyline3D polyline3D)
+        {
+            return new GH_Curve(polyline3D.ToRhino_PolylineCurve());
         }
     }
 }

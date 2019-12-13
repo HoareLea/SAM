@@ -56,6 +56,12 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (obj is Polygon3D)
                     obj = dataAccess.SetData(0, ((Polygon3D)obj).ToGrasshopper());
+                else if (obj is Polyline3D)
+                    obj = dataAccess.SetData(0, ((Polyline3D)obj).ToGrasshopper());
+                else if (obj is Point3D)
+                    obj = dataAccess.SetData(0, ((Point3D)obj).ToGrasshopper());
+                else if (obj is Segment3D)
+                    obj = dataAccess.SetData(0, ((Segment3D)obj).ToGrasshopper());
                 else
                     obj = dataAccess.SetData(0, (obj as dynamic).ToGrasshopper());
             }
