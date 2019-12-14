@@ -87,6 +87,38 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        public double A
+        {
+            get
+            {
+                return normal.X;
+            }
+        }
+
+        public double B
+        {
+            get
+            {
+                return normal.Y;
+            }
+        }
+
+        public double C
+        {
+            get
+            {
+                return normal.Z;
+            }
+        }
+
+        public double D
+        {
+            get
+            {
+                return normal.X * origin.X + normal.Y * origin.Y + normal.Z * origin.Z;
+            }
+        }
+
         /// <summary>
         /// Scalar constant relating origin point to normal vector.
         /// </summary>
