@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public interface IPlanar3D: IGeometry3D
+    public interface IBoundable3D : IGeometry3D
     {
-        Plane GetPlane();
+        BoundingBox3D GetBoundingBox(double offset = 0);
     }
 }

@@ -114,6 +114,11 @@ namespace SAM.Geometry.Spatial
             return string.Format("{0}(X={1},Y={2},Z={3})", GetType().Name, coordinates[0], coordinates[1], coordinates[2]);
         }
 
+        public IGeometry Clone()
+        {
+            return new Point3D(this);
+        }
+
         public static List<Segment3D> GetSegments(IEnumerable<Point3D> point3Ds, bool close = false)
         {
             if (point3Ds == null)
@@ -147,10 +152,109 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
-            
-        public IGeometry Clone()
+
+        public static Point3D Closest(IEnumerable<Point3D> point3Ds, Point3D point3D)
         {
-            return new Point3D(this);
+            if (point3Ds == null || point3Ds.Count() == 0 || point3D == null)
+                return null;
+
+            Point3D result = null;
+            double distance = double.MaxValue;
+            foreach(Point3D point3D_Temp in point3Ds)
+            {
+                double distance_Temp = point3D_Temp.Distance(point3D);
+                
+                if(distance > distance_Temp)
+                {
+                    distance = distance_Temp;
+                    result = point3D_Temp;
+                }
+
+                if (distance == 0)
+                    return result;
+            }
+
+            return result;
+        }
+
+        public static Point3D Max(Point3D point3D_1, Point3D point3D_2)
+        {
+            return new Point3D(Math.Max(point3D_1.X, point3D_2.X), Math.Max(point3D_1.Y, point3D_2.Y), Math.Max(point3D_1.Z, point3D_2.Z));
+        }
+
+        public static Point3D Max(IEnumerable<Point3D> point3Ds)
+        {
+            if (point3Ds == null || point3Ds.Count() == 0)
+                return null;
+
+            double aX = double.MinValue;
+            double aY = double.MinValue;
+            double aZ = double.MinValue;
+            foreach (Point3D point3D in point3Ds)
+            {
+                if (aX < point3D.X)
+                    aX = point3D.X;
+                if (aY < point3D.Y)
+                    aY = point3D.Y;
+                if (aZ < point3D.Y)
+                    aZ = point3D.Y;
+            }
+
+            return new Point3D(aX, aY, aZ);
+        }
+
+        public static Point3D Min(Point3D point3D_1, Point3D point3D_2)
+        {
+            return new Point3D(Math.Min(point3D_1.X, point3D_2.X), Math.Min(point3D_1.Y, point3D_2.Y), Math.Min(point3D_1.Z, point3D_2.Z));
+        }
+
+        public static Point3D Min(IEnumerable<Point3D> point3Ds)
+        {
+            if (point3Ds == null || point3Ds.Count() == 0)
+                return null;
+
+            double x = double.MaxValue;
+            double y = double.MaxValue;
+            double z = double.MaxValue;
+            foreach (Point3D point3D in point3Ds)
+            {
+                if (x > point3D.X)
+                    x = point3D.X;
+                if (y > point3D.Y)
+                    y = point3D.Y;
+                if (z > point3D.Z)
+                    z = point3D.Z;
+            }
+
+            return new Point3D(x, y, z);
+        }
+
+        public static List<Point3D> Generate(BoundingBox3D boundingBox3D, double offset)
+        {
+            List<Point3D> result = new List<Point3D>();
+
+            double width = boundingBox3D.Width;
+            double height = boundingBox3D.Height;
+            double depth = boundingBox3D.Depth;
+
+            double distance_Width = 0;
+            while (distance_Width < width)
+            {
+                double distance_Height = 0;
+                while (distance_Height < height)
+                {
+                    double distance_Depth = 0;
+                    while (distance_Depth < depth)
+                    {
+                        result.Add(new Point3D(boundingBox3D.Min.X + distance_Width, boundingBox3D.Min.Y + distance_Depth, boundingBox3D.Min.Z + distance_Height));
+                        distance_Depth += offset;
+                    }
+                    distance_Height += offset;
+                }
+                distance_Width += offset;
+            }
+
+            return result;    
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public interface ICurve3D : IGeometry3D
+    public interface ICurve3D : IBoundable3D
     {
     }
 }

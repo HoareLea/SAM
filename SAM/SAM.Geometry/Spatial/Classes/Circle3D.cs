@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Circle3D: IClosedPlanar3D
+    public class Circle3D: IClosedPlanar3D, IBoundable3D
     {
         private Plane plane;
         private double radious;
@@ -92,6 +92,11 @@ namespace SAM.Geometry.Spatial
         public IGeometry Clone()
         {
             return new Circle3D((Plane)plane.Clone(), radious);
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -52,14 +52,17 @@
     <Compile Include="Planar\Classes\Rectangle2D.cs" />
     <Compile Include="Planar\Classes\Segment2D.cs" />
     <Compile Include="Planar\Classes\Triangle2D.cs" />
+    <Compile Include="Spatial\Classes\BoundingBox3D.cs" />
     <Compile Include="Spatial\Classes\Circle3D.cs" />
     <Compile Include="Spatial\Classes\Extrusion.cs" />
     <Compile Include="Spatial\Classes\Polyline3D.cs" />
     <Compile Include="Spatial\Classes\Sphere.cs" />
     <Compile Include="Spatial\Classes\Triangle3D.cs" />
     <Compile Include="Spatial\Classes\Vector3D.cs" />
+    <Compile Include="Spatial\Interfaces\IBoundable3D.cs" />
     <Compile Include="Spatial\Interfaces\IClosed3D.cs" />
     <Compile Include="Spatial\Interfaces\IClosedPlanar3D.cs" />
+    <Compile Include="Spatial\Interfaces\ISegmentable3D.cs" />
     <Compile Include="Spatial\Interfaces\ICurve3D.cs" />
     <Compile Include="Planar\Interfaces\IGeometry2D.cs" />
     <Compile Include="Planar\Classes\Line2D.cs" />

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public interface IPlanar3D: IGeometry3D
+    public interface ISegmentable3D : IBoundable3D
     {
-        Plane GetPlane();
+        List<Segment3D> GetSegments();
     }
 }

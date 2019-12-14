@@ -8,17 +8,25 @@ namespace SAM.Core
 {
     public class SAMInstance : SAMObject
     {
-        private SAMType SAMType;
+        private SAMType sAMType;
         public SAMInstance(Guid guid, SAMType SAMType)
             : base(guid)
         {
-            this.SAMType = SAMType;
+            this.sAMType = SAMType;
         }
 
         public SAMInstance(string name, SAMType SAMType)
             : base(name)
         {
-            this.SAMType = SAMType;
+            this.sAMType = SAMType;
+        }
+
+        public SAMType SAMType
+        {
+            get
+            {
+                return sAMType;
+            }
         }
     }
 }

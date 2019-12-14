@@ -3,7 +3,7 @@ using System.Drawing;
 
 using Grasshopper.Kernel;
 
-namespace SAM.Geometry.Grasshopper
+namespace SAM.Analytical.Grasshopper
 {
     public class AssemblyInfo : GH_AssemblyInfo
     {

@@ -65,6 +65,17 @@ namespace SAM.Geometry.Grasshopper
         {
             return (polylineCurve as Curve).ToSAM();
         }
-             
+
+        public static Spatial.IGeometry3D ToSAM(this IGH_GeometricGoo geometricGoo)
+        {
+            if (geometricGoo is GH_Curve)
+                return ((GH_Curve)geometricGoo).ToSAM();
+
+            if (geometricGoo is GH_Point)
+                return ((GH_Point)geometricGoo).ToSAM();
+
+            return (geometricGoo as dynamic).ToSAM();
+        }
+
     }
 }

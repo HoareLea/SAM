@@ -1,23 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
-using SAM.Geometry.Grasshopper.Properties;
+
+using SAM.Analytical.Grasshopper.Properties;
+using SAM.Geometry;
+using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
 
-namespace SAM.Geometry.Grasshopper
+namespace SAM.Analytical.Grasshopper
 {
-    public class To3D : GH_Component
+    public class CreatePanel : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public To3D()
-          : base("To3D", "To3D",
-              "Convert SAM geometry to 3D",
-              "SAM", "Geometry")
+        public CreatePanel()
+          : base("CreatePanel", "CrPnl",
+              "CreatePanel",
+              "SAM", "Analytical")
         {
         }
 
@@ -26,14 +27,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            int index = -1;
-            Param_GenericObject genericObjectParameter = null;
-
-            inputParamManager.AddGenericParameter("SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
-
-            index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
-            genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(new Plane()));
+            inputParamManager.AddGenericParameter("Geometry", "geo", "Geometry", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -41,7 +35,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("SAMGeometry3D", "SAMgeo3D", "SAM Geometry 3D", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Panel", "pnl", "SAM Analytical Panel", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -58,34 +52,25 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            Planar.IGeometry2D geometry2D = objectWrapper.Value as Planar.IGeometry2D;
-            if (geometry2D == null)
+            object obj = objectWrapper.Value;
+
+            Polygon3D polygon3D = null;
+
+            if (obj is IGH_GeometricGoo)
+                obj = ((IGH_GeometricGoo)obj).ToSAM();
+
+            if (!(obj is IGeometry))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            polygon3D = obj as Polygon3D;
 
-            Plane plane = objectWrapper.Value as Plane;
-            if (plane == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            IBoundable3D geometry3D = plane.Convert(geometry2D);
-            if (geometry3D == null)
-            {
+            if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
-                return;
-            }
-
-            dataAccess.SetData(0, geometry3D);
+            else
+                dataAccess.SetData(0, new Panel(Guid.NewGuid(), null, polygon3D));
         }
 
         /// <summary>
@@ -106,7 +91,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("7d24437d-df27-4144-b66e-82d8a8491b2d"); }
+            get { return new Guid("35ef8f3e-1cf2-407d-b2ed-33bf371ea161"); }
         }
     }
 }

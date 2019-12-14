@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Extrusion : IGeometry3D
+    public class Extrusion : IBoundable3D
     {
         private Face face;
         private Vector3D vector;
@@ -32,6 +32,11 @@ namespace SAM.Geometry.Spatial
         public IGeometry Clone()
         {
             return new Extrusion(this);
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            throw new NotImplementedException();
         }
     }
 }

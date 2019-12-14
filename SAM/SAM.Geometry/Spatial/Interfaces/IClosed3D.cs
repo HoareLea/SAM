@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    interface IClosed3D : IGeometry3D
+    interface IClosed3D : IBoundable3D
     {
     }
 }

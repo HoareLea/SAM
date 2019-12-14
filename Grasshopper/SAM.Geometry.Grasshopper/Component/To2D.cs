@@ -59,7 +59,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            IGeometry3D geometry3D = objectWrapper.Value as IGeometry3D;
+            IBoundable3D geometry3D = objectWrapper.Value as IBoundable3D;
             if (geometry3D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

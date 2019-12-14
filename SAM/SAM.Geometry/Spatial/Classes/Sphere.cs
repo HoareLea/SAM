@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Sphere : IGeometry3D
+    public class Sphere : IBoundable3D
     {
         private Point3D origin;
         private double radious;
@@ -53,6 +53,11 @@ namespace SAM.Geometry.Spatial
                     return false;
 
             return true;
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            throw new NotImplementedException();
         }
     }
 }

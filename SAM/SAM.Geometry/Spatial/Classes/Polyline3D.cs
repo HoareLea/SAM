@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Polyline3D : IGeometry3D
+    public class Polyline3D : IBoundable3D, ISegmentable3D
     {
         private List<Point3D> points;
 
@@ -69,6 +69,11 @@ namespace SAM.Geometry.Spatial
         public IGeometry Clone()
         {
             return new Polyline3D(this);
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return new BoundingBox3D(points);
         }
     }
 }

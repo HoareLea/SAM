@@ -98,12 +98,12 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public Planar.IGeometry2D Convert(IGeometry3D geometry)
+        public Planar.IGeometry2D Convert(IBoundable3D geometry)
         {
             return Convert(geometry as dynamic);
         }
 
-        public IGeometry3D Convert(Planar.IGeometry2D geometry)
+        public IBoundable3D Convert(Planar.IGeometry2D geometry)
         {
             return Convert(geometry as dynamic);
         }

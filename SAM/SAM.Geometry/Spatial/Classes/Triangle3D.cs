@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Triangle3D : IClosedPlanar3D
+    public class Triangle3D : IClosedPlanar3D, ISegmentable3D, IBoundable3D
     {
         private Point3D[] points = new Point3D[3];
 
@@ -20,11 +20,6 @@ namespace SAM.Geometry.Spatial
         public Triangle3D(Triangle3D triangle3D)
         {
             points = Point3D.Clone(triangle3D.points).ToArray();
-        }
-
-        public Segment3D[] GetSegments()
-        {
-            return new Segment3D[] { new Segment3D(points[0], points[1]), new Segment3D(points[1], points[2]), new Segment3D(points[2], points[0]) };
         }
 
         public Vector3D GetNormal()
@@ -43,6 +38,16 @@ namespace SAM.Geometry.Spatial
         public IGeometry Clone()
         {
             throw new NotImplementedException();
+        }
+
+        public List<Segment3D> GetSegments()
+        {
+            return new List<Segment3D>() { new Segment3D(points[0], points[1]), new Segment3D(points[1], points[2]), new Segment3D(points[2], points[0]) };
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return new BoundingBox3D(points, offset);
         }
     }
 }

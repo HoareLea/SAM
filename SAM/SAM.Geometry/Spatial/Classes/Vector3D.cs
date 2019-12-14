@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Vector3D : IGeometry3D
+    public class Vector3D : IBoundable3D
     {
         public static Vector3D BaseX { get; } = new Vector3D(1, 0, 0);
         
@@ -111,32 +111,6 @@ namespace SAM.Geometry.Spatial
             return (coordinates[0] * vector3D.coordinates[0]) + (coordinates[1] * vector3D.coordinates[1]) + (coordinates[2] * vector3D.coordinates[2]);
         }
 
-        public static Vector3D operator +(Vector3D vector3D_1, Vector3D vector3D_2)
-        {
-            return new Vector3D(vector3D_1.coordinates[0] + vector3D_2.coordinates[0], vector3D_1.coordinates[1] + vector3D_2.coordinates[1], vector3D_1.coordinates[2] + vector3D_2.coordinates[2]);
-        }
-
-        public static Vector3D operator -(Vector3D vector3D_1, Vector3D vector3D_2)
-        {
-            return new Vector3D(vector3D_1.coordinates[0] - vector3D_2.coordinates[0], vector3D_1.coordinates[1] - vector3D_2.coordinates[1], vector3D_1.coordinates[2] - vector3D_2.coordinates[2]);
-        }
-
-        public static double operator *(Vector3D vector3D_1, Vector3D vector3D_2)
-        {
-            return vector3D_1.coordinates[0] * vector3D_2.coordinates[0] + vector3D_1.coordinates[1] * vector3D_2.coordinates[1] + vector3D_1.coordinates[2] * vector3D_2.coordinates[2];
-        }
-
-        public static Vector3D operator *(Vector3D vector3D_1, double factor)
-        {
-            return new Vector3D(vector3D_1.coordinates[0] * factor, vector3D_1.coordinates[1] * factor, vector3D_1.coordinates[2] * factor);
-        }
-
-        public static Vector3D operator *(double factor, Vector3D vector3D_1)
-        {
-            return new Vector3D(vector3D_1.coordinates[0] * factor, vector3D_1.coordinates[1] * factor, vector3D_1.coordinates[2] * factor);
-        }
-
-
         public double X
         {
             get
@@ -190,6 +164,36 @@ namespace SAM.Geometry.Spatial
         public IGeometry Clone()
         {
             return new Vector3D(this);
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return new BoundingBox3D(Point3D.Zero, new Point3D(coordinates[0], coordinates[1], coordinates[2]), offset);
+        }
+
+        public static Vector3D operator +(Vector3D vector3D_1, Vector3D vector3D_2)
+        {
+            return new Vector3D(vector3D_1.coordinates[0] + vector3D_2.coordinates[0], vector3D_1.coordinates[1] + vector3D_2.coordinates[1], vector3D_1.coordinates[2] + vector3D_2.coordinates[2]);
+        }
+
+        public static Vector3D operator -(Vector3D vector3D_1, Vector3D vector3D_2)
+        {
+            return new Vector3D(vector3D_1.coordinates[0] - vector3D_2.coordinates[0], vector3D_1.coordinates[1] - vector3D_2.coordinates[1], vector3D_1.coordinates[2] - vector3D_2.coordinates[2]);
+        }
+
+        public static double operator *(Vector3D vector3D_1, Vector3D vector3D_2)
+        {
+            return vector3D_1.coordinates[0] * vector3D_2.coordinates[0] + vector3D_1.coordinates[1] * vector3D_2.coordinates[1] + vector3D_1.coordinates[2] * vector3D_2.coordinates[2];
+        }
+
+        public static Vector3D operator *(Vector3D vector3D_1, double factor)
+        {
+            return new Vector3D(vector3D_1.coordinates[0] * factor, vector3D_1.coordinates[1] * factor, vector3D_1.coordinates[2] * factor);
+        }
+
+        public static Vector3D operator *(double factor, Vector3D vector3D_1)
+        {
+            return new Vector3D(vector3D_1.coordinates[0] * factor, vector3D_1.coordinates[1] * factor, vector3D_1.coordinates[2] * factor);
         }
     }
 }

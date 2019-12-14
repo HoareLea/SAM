@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Segment3D : ICurve3D
+    public class Segment3D : ICurve3D, ISegmentable3D
     {
         private Point3D origin;
         private Vector3D vector;
@@ -83,6 +83,16 @@ namespace SAM.Geometry.Spatial
         public IGeometry Clone()
         {
             return new Segment3D(this);
+        }
+
+        public List<Segment3D> GetSegments()
+        {
+            return new List<Segment3D>() { new Segment3D(this) };
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return new BoundingBox3D(Start, End, offset);
         }
     }
 }

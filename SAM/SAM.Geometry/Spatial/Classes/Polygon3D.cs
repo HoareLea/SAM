@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Polygon3D : IClosedPlanar3D
+    public class Polygon3D : IClosedPlanar3D, ISegmentable3D
     {
         //TODO: Convert to Plane and Point2Ds
         private List<Point3D> points;
@@ -26,19 +27,6 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public Segment3D[] GetSegments()
-        {
-            int count = points.Count;
-
-            Segment3D[] result = new Segment3D[count];
-            for (int i = 0; i < count - 1; i++)
-                result[i] = new Segment3D(points[i], points[i + 1]);
-
-            result[count - 1] = new Segment3D(new Point3D(points[count - 1]), new Point3D(points[0]));
-
-            return result;
-        }
-
         public Vector3D GetNormal()
         {
             if (points.Count < 3)
@@ -58,6 +46,24 @@ namespace SAM.Geometry.Spatial
         public IGeometry Clone()
         {
             return new Polygon3D(this);
+        }
+
+        public List<Segment3D> GetSegments()
+        {
+            int count = points.Count;
+
+            Segment3D[] result = new Segment3D[count];
+            for (int i = 0; i < count - 1; i++)
+                result[i] = new Segment3D(points[i], points[i + 1]);
+
+            result[count - 1] = new Segment3D(new Point3D(points[count - 1]), new Point3D(points[0]));
+
+            return result.ToList();
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return new BoundingBox3D(points);
         }
     }
 }

@@ -43,5 +43,10 @@ namespace SAM.Geometry.Spatial
         {
             return new Face(this);
         }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

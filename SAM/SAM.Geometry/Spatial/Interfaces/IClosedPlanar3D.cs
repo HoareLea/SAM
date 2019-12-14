@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    interface IClosedPlanar3D: IClosed3D, IPlanar3D
+    interface IClosedPlanar3D: IClosed3D, IPlanar3D, IBoundable3D
     {
     }
 }

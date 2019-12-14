@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+
 using SAM.Geometry.Grasshopper.Properties;
-using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -53,33 +52,9 @@ namespace SAM.Geometry.Grasshopper
             object obj = objectWrapper.Value;
 
             if (obj is IGeometry)
-            {
-                if (obj is Polygon3D)
-                    obj = ((Polygon3D)obj).ToGrasshopper();
-                else if (obj is Polyline3D)
-                    obj = ((Polyline3D)obj).ToGrasshopper();
-                else if (obj is Point3D)
-                    obj = ((Point3D)obj).ToGrasshopper();
-                else if (obj is Segment3D)
-                    obj = ((Segment3D)obj).ToGrasshopper();
-                else if (obj is Planar.Polygon2D)
-                    obj = ((Planar.Polygon2D)obj).ToGrasshopper();
-                else if (obj is Planar.Point2D)
-                    obj = ((Planar.Point2D)obj).ToGrasshopper();
-                else if (obj is Planar.Segment2D)
-                    obj = ((Planar.Segment2D)obj).ToGrasshopper();
-                else
-                    obj = (obj as dynamic).ToGrasshopper();
-            }
+                obj = ((IGeometry)obj).ToGrasshopper();
             else if (obj is IGH_GeometricGoo)
-            {
-                if (obj is GH_Curve)
-                    obj = ((GH_Curve)obj).ToSAM();
-                else if (obj is GH_Point)
-                    obj = ((GH_Point)obj).ToSAM();
-                else
-                    obj = (obj as dynamic).ToSAM();
-            }
+                obj = ((IGH_GeometricGoo)obj).ToSAM();
 
             if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
