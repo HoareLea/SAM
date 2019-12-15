@@ -35,6 +35,8 @@ namespace SAM.Analytical
         {
             get
             {
+                //TODO: Convert to ICurve3Ds
+
                 List<Segment3D> result = new List<Segment3D>();
                 foreach(Edge edge in edges)
                 {
@@ -46,6 +48,21 @@ namespace SAM.Analytical
                         result.AddRange(segment3Ds);
                 }
                 return result;
+            }
+        }
+
+        public Polygon3D Polygon
+        {
+            get
+            {
+                //TODO: Sort Segment3Ds to get valid order for points
+
+                List<Point3D> result = new List<Point3D>();
+
+                foreach(Segment3D segment3D in Segments)
+                    result.Add(segment3D[0]);
+
+                return new Polygon3D(result);
             }
         }
 
