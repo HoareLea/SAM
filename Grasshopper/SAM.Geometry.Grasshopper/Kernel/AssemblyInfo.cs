@@ -19,7 +19,16 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 //Return a 24x24 pixel bitmap to represent this GHA library.
-                return null;
+                return Properties.Resources.HL_Logo24; ;
+            }
+        }
+
+        public override Bitmap AssemblyIcon
+        {
+            get
+            {
+                //Return a 24x24 pixel bitmap to represent this GHA library.
+                return Properties.Resources.HL_Logo24; ;
             }
         }
         public override string Description
@@ -27,7 +36,7 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 //Return a short string describing the purpose of this GHA library.
-                return "SAM Grashopper Toolkit";
+                return "SAM Grashopper Toolkit, please explore";
             }
         }
         public override Guid Id
@@ -51,7 +60,7 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 //Return a string representing your preferred contact details.
-                return "Michal Dengusiak -> michaldengsiak@hoarelea.com and Jakub Ziolkowski -> jakubziolkowski@hoarelea.com";
+                return "Michal Dengusiak -> michaldengusiak@hoarelea.com and Jakub Ziolkowski -> jakubziolkowski@hoarelea.com";
             }
         }
     }

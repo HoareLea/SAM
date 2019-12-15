@@ -14,7 +14,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public ConvertGeometry()
           : base("ConvertGeometry", "Cgeo",
-              "Convert Geometry",
+              "Convert Geometry both direction between GH and SAM",
               "SAM", "Geometry")
         {
         }
@@ -71,7 +71,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return Resources.HL_Logo24;
+                return Resources.SAM_Small;
             }
         }
 
