@@ -26,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("Panels", "Pnl", "SAM Analytical Panels", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("Panels", "Pnl", "SAM Analytical Panels", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("Offset", "Offs", "Snap offset", GH_ParamAccess.item, 0.2);
         }
 
@@ -35,8 +35,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Panels", "Pnl", "SAM Analytical Panels", GH_ParamAccess.item);
-            outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Panels", "Pnl", "SAM Analytical Panels", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -85,8 +85,8 @@ namespace SAM.Analytical.Grasshopper
             panelList = panelList.ConvertAll(x => new Panel(x));
             panelList.ForEach(x => x.Snap(point3DList));
 
-            dataAccess.SetData(0, panelList);
-            dataAccess.SetData(1, point3DList);
+            dataAccess.SetDataList(0, panelList);
+            dataAccess.SetDataList(1, point3DList);
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
         }
