@@ -31,6 +31,24 @@ namespace SAM.Analytical
                 edges.Add(new Edge(segment3D));
         }
 
+        public List<Segment3D> Segments
+        {
+            get
+            {
+                List<Segment3D> result = new List<Segment3D>();
+                foreach(Edge edge in edges)
+                {
+                    if (edge == null)
+                        continue;
+
+                    List<Segment3D> segment3Ds = edge.Segments;
+                    if (segment3Ds != null)
+                        result.AddRange(segment3Ds);
+                }
+                return result;
+            }
+        }
+
         public void Snap(IEnumerable<Point3D> point3Ds)
         {
             foreach (Edge edge in edges)

@@ -23,6 +23,16 @@ namespace SAM.Analytical
             curve3D = (ICurve3D)edge.curve3D.Clone();
         }
 
+        public List<Segment3D> Segments
+        {
+            get
+            {
+                if (curve3D is ISegmentable3D)
+                    return ((ISegmentable3D)curve3D).GetSegments();
+                return null;
+            }
+        }
+
         public void Snap(IEnumerable<Point3D> point3Ds)
         {
             if (point3Ds == null)
