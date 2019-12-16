@@ -51,7 +51,7 @@ namespace SAM.Geometry.Spatial
             min = Point3D.Min(point3D_1, point3D_2);
 
             max = new Point3D(max.X + offset, max.Y + offset, max.Z + offset);
-            min = new Point3D(max.X - offset, max.Y - offset, max.Z - offset);
+            min = new Point3D(min.X - offset, min.Y - offset, min.Z - offset);
         }
 
         public BoundingBox3D(Point3D point3D, double offset)
