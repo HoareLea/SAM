@@ -275,13 +275,13 @@ namespace SAM.Geometry.Spatial
             double depth = boundingBox3D.Depth;
 
             double distance_Width = 0;
-            while (distance_Width < width)
+            while (distance_Width <= width)
             {
                 double distance_Height = 0;
-                while (distance_Height < height)
+                while (distance_Height <= height)
                 {
                     double distance_Depth = 0;
-                    while (distance_Depth < depth)
+                    while (distance_Depth <= depth)
                     {
                         result.Add(new Point3D(boundingBox3D.Min.X + distance_Width, boundingBox3D.Min.Y + distance_Depth, boundingBox3D.Min.Z + distance_Height));
                         distance_Depth += offset;

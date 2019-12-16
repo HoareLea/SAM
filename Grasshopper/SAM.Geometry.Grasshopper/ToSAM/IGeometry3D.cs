@@ -27,20 +27,6 @@ namespace SAM.Geometry.Grasshopper
             if (polylineCurve != null)
                 return polylineCurve.ToSAM(simplify);
 
-            PolyCurve polyCurve = curve as PolyCurve;
-            if (polyCurve != null)
-            {
-                List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
-                Curve[] curves = polyCurve.Explode();
-                foreach (Curve curve_Temp in curves)
-                    point3Ds.Add(curve_Temp.PointAtEnd.ToSAM());
-
-                if (curve.IsClosed)
-                    return new Spatial.Polygon3D(point3Ds);
-                else
-                    return new Spatial.Polyline3D(point3Ds);
-            }
-
             polylineCurve = ToRhino_PolylineCurve(curve);
             if (polylineCurve != null)
                 return polylineCurve.ToSAM(simplify);
