@@ -25,24 +25,7 @@ namespace SAM.Geometry.Grasshopper
 
             PolylineCurve polylineCurve = curve as PolylineCurve;
             if (polylineCurve != null)
-            {
-                int count = polylineCurve.PointCount;
-                if(count == 2)
-                    return new Spatial.Segment3D(polylineCurve.Point(0).ToSAM(), polylineCurve.Point(1).ToSAM());
-
-                List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
-                if (polylineCurve.IsClosed)
-                    count--;
-
-                for (int i = 0; i < count; i++)
-                    point3Ds.Add(polylineCurve.Point(i).ToSAM());
-
-                if (curve.IsClosed)
-                    return new Spatial.Polygon3D(point3Ds);
-                else
-                    return new Spatial.Polyline3D(point3Ds);
-
-            }
+                return polylineCurve.ToSAM();
 
             PolyCurve polyCurve = curve as PolyCurve;
             if (polyCurve != null)
@@ -58,12 +41,30 @@ namespace SAM.Geometry.Grasshopper
                     return new Spatial.Polyline3D(point3Ds);
             }
 
+            polylineCurve = ToRhino_PolylineCurve(curve);
+            if (polylineCurve != null)
+                return polylineCurve.ToSAM();
+
             return null;
         }
 
         public static Spatial.IGeometry3D ToSAM(this PolylineCurve polylineCurve)
         {
-            return (polylineCurve as Curve).ToSAM();
+            int count = polylineCurve.PointCount;
+            if (count == 2)
+                return new Spatial.Segment3D(polylineCurve.Point(0).ToSAM(), polylineCurve.Point(1).ToSAM());
+
+            List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
+            if (polylineCurve.IsClosed)
+                count--;
+
+            for (int i = 0; i < count; i++)
+                point3Ds.Add(polylineCurve.Point(i).ToSAM());
+
+            if (polylineCurve.IsClosed)
+                return new Spatial.Polygon3D(point3Ds);
+            else
+                return new Spatial.Polyline3D(point3Ds);
         }
 
         public static Spatial.IGeometry3D ToSAM(this IGH_GeometricGoo geometricGoo)
