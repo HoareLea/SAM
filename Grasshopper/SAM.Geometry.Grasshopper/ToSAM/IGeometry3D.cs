@@ -10,22 +10,22 @@ namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
-        public static Spatial.IGeometry3D ToSAM(this GH_Curve curve)
+        public static Spatial.IGeometry3D ToSAM(this GH_Curve curve, bool simplify = true)
         {
             if (curve.Value is LineCurve)
                 return ((LineCurve)curve.Value).Line.ToSAM();
             else
-                return ToSAM(curve.Value);
+                return ToSAM(curve.Value, simplify);
         }
 
-        public static Spatial.IGeometry3D ToSAM(this Curve curve)
+        public static Spatial.IGeometry3D ToSAM(this Curve curve, bool simplify = true)
         {
             if (!curve.IsPlanar())
                 return null;
 
             PolylineCurve polylineCurve = curve as PolylineCurve;
             if (polylineCurve != null)
-                return polylineCurve.ToSAM();
+                return polylineCurve.ToSAM(simplify);
 
             PolyCurve polyCurve = curve as PolyCurve;
             if (polyCurve != null)
@@ -43,12 +43,12 @@ namespace SAM.Geometry.Grasshopper
 
             polylineCurve = ToRhino_PolylineCurve(curve);
             if (polylineCurve != null)
-                return polylineCurve.ToSAM();
+                return polylineCurve.ToSAM(simplify);
 
             return null;
         }
 
-        public static Spatial.IGeometry3D ToSAM(this PolylineCurve polylineCurve)
+        public static Spatial.IGeometry3D ToSAM(this PolylineCurve polylineCurve, bool simplify = true)
         {
             int count = polylineCurve.PointCount;
             if (count == 2)
@@ -61,16 +61,19 @@ namespace SAM.Geometry.Grasshopper
             for (int i = 0; i < count; i++)
                 point3Ds.Add(polylineCurve.Point(i).ToSAM());
 
+            if (simplify)
+                point3Ds = Spatial.Point3D.Simplify(point3Ds, polylineCurve.IsClosed);
+
             if (polylineCurve.IsClosed)
                 return new Spatial.Polygon3D(point3Ds);
             else
                 return new Spatial.Polyline3D(point3Ds);
         }
 
-        public static Spatial.IGeometry3D ToSAM(this IGH_GeometricGoo geometricGoo)
+        public static Spatial.IGeometry3D ToSAM(this IGH_GeometricGoo geometricGoo, bool simplify = true)
         {
             if (geometricGoo is GH_Curve)
-                return ((GH_Curve)geometricGoo).ToSAM();
+                return ((GH_Curve)geometricGoo).ToSAM(simplify);
 
             if (geometricGoo is GH_Point)
                 return ((GH_Point)geometricGoo).ToSAM();

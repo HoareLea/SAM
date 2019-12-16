@@ -102,6 +102,14 @@ namespace SAM.Geometry.Spatial
             return new Point3D(coordinates[0] + vector3D[0], coordinates[1] + vector3D[1], coordinates[2] + vector3D[2]);
         }
 
+        public double Angle(Point3D point3D_1, Point3D point3D_2)
+        {
+            Vector3D aVector_1 = new Vector3D(this, point3D_1);
+            Vector3D aVector_2 = new Vector3D(this, point3D_2);
+
+            return Math.Acos(aVector_1.DotProduct(aVector_2) / (aVector_1.Length * aVector_2.Length));
+        }
+
         public void Move(Vector3D vector3D)
         {
             coordinates[0] = coordinates[0] + vector3D[0];
@@ -136,6 +144,35 @@ namespace SAM.Geometry.Spatial
             if (close)
                 result.Add(new Segment3D(point3Ds.Last(), point3Ds.First()));
 
+            return result;
+        }
+
+        public static List<Point3D> Simplify(IEnumerable<Point3D> point3Ds, bool close = false, double angleTolerane = Tolerance.Angle)
+        {
+            if (point3Ds == null)
+                return null;
+
+            List<Point3D> result = new List<Point3D>(point3Ds);
+
+            int startIndex = 0;
+            int maxIndex = close ? result.Count : result.Count - 2;
+            while (startIndex < maxIndex)
+            {
+                Point3D first = result[startIndex];
+                Point3D second = result[(startIndex + 1) % result.Count];
+                Point3D third = result[(startIndex + 2) % result.Count];
+
+                if (first.Angle(second, third) <= angleTolerane)
+                {
+                    result.RemoveAt((startIndex + 1) % result.Count);
+                    maxIndex--;
+                }
+                else
+                {
+                    startIndex++;
+                }
+
+            }
             return result;
         }
 

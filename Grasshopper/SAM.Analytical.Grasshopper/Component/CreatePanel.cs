@@ -28,6 +28,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("Geometry", "geo", "Geometry", GH_ParamAccess.item);
+            inputParamManager.AddBooleanParameter("Simplify", "Smfy", "Simplify", GH_ParamAccess.item, true);
         }
 
         /// <summary>
@@ -46,6 +47,19 @@ namespace SAM.Analytical.Grasshopper
         {
             GH_ObjectWrapper objectWrapper = null;
 
+            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            GH_Boolean gHBoolean = objectWrapper.Value as GH_Boolean;
+            if(gHBoolean == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -54,10 +68,8 @@ namespace SAM.Analytical.Grasshopper
 
             object obj = objectWrapper.Value;
 
-            Polygon3D polygon3D = null;
-
             if (obj is IGH_GeometricGoo)
-                obj = ((IGH_GeometricGoo)obj).ToSAM();
+                obj = ((IGH_GeometricGoo)obj).ToSAM(gHBoolean.Value);
 
             if (!(obj is IGeometry))
             {
@@ -65,7 +77,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            polygon3D = obj as Polygon3D;
+            Polygon3D polygon3D = obj as Polygon3D;
 
             if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");

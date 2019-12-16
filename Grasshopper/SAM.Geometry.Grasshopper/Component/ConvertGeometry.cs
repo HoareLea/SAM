@@ -54,7 +54,7 @@ namespace SAM.Geometry.Grasshopper
             if (obj is IGeometry)
                 obj = ((IGeometry)obj).ToGrasshopper();
             else if (obj is IGH_GeometricGoo)
-                obj = ((IGH_GeometricGoo)obj).ToSAM();
+                obj = ((IGH_GeometricGoo)obj).ToSAM(false);
 
             if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");

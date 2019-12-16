@@ -166,6 +166,11 @@ namespace SAM.Geometry.Spatial
             return new Vector3D(this);
         }
 
+        public double Angle(Vector3D Vector)
+        {
+            return Math.Acos(DotProduct(Vector) / (Length * Vector.Length));
+        }
+
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             return new BoundingBox3D(Point3D.Zero, new Point3D(coordinates[0], coordinates[1], coordinates[2]), offset);
