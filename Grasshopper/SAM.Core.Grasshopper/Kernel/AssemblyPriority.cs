@@ -1,9 +1,9 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper;
 
-using SAM.Geometry.Grasshopper.Properties;
+using SAM.Core.Grasshopper.Properties;
 
-namespace SAM.Geometry.Grasshopper
+namespace SAM.Core.Grasshopper
 {
     public class AssemblyPriority : GH_AssemblyPriority
     {
