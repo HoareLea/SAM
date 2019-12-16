@@ -35,5 +35,13 @@ namespace SAM.Analytical
         {
             this.location = location;
         }
+
+        public Geometry.Spatial.Point3D Location
+        {
+            get
+            {
+                return location;
+            }
+        }
     }
 }
