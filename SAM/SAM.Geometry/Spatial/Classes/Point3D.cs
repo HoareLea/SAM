@@ -132,6 +132,16 @@ namespace SAM.Geometry.Spatial
             return new Point3D(this);
         }
 
+        public static Point3D Snap(IEnumerable<Point3D> point3Ds, Point3D point3D, double maxDistance = double.NaN)
+        {
+            Point3D result = Point3D.Closest(point3Ds, point3D);
+
+            if (point3D.Distance(result) > maxDistance)
+                result = new Point3D(point3D);
+
+            return result;
+        }
+
         public static List<Segment3D> GetSegments(IEnumerable<Point3D> point3Ds, bool close = false)
         {
             if (point3Ds == null)

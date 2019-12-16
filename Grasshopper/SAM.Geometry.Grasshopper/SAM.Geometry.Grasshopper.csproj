@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component\ConvertGeometry.cs" />
+    <Compile Include="Component\Snap.cs" />
     <Compile Include="Component\To3D.cs" />
     <Compile Include="Component\To2D.cs" />
     <Compile Include="Component\Intersection.cs" />

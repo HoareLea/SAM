@@ -94,5 +94,13 @@ namespace SAM.Geometry.Spatial
         {
             return new BoundingBox3D(Start, End, offset);
         }
+
+        public static Segment3D Snap(IEnumerable<Point3D> point3Ds, Segment3D segment3D, double maxDistance = double.NaN)
+        {
+            Point3D point3D_1 = Point3D.Snap(point3Ds, segment3D.Start, maxDistance);
+            Point3D point3D_2 = Point3D.Snap(point3Ds, segment3D.End, maxDistance);
+
+            return new Segment3D(point3D_1, point3D_2);
+        }
     }
 }
