@@ -9,6 +9,7 @@ namespace SAM.Analytical
 {
     public class Space : SAMObject
     {
+        private Geometry.Spatial.Point3D location;
         private List<Panel> panels;
 
         public Space(Guid guid, string name, IEnumerable<Panel> panels)
@@ -18,9 +19,21 @@ namespace SAM.Analytical
         }
 
         public Space(string name, IEnumerable<Panel> panels)
-    : base(name)
+            : base(name)
         {
             this.panels = new List<Panel>(panels);
+        }
+
+        public Space(Guid guid, string name, Geometry.Spatial.Point3D location)
+            : base(guid, name)
+        {
+            this.location = location;
+        }
+
+        public Space(string name, Geometry.Spatial.Point3D location)
+            : base(name)
+        {
+            this.location = location;
         }
     }
 }

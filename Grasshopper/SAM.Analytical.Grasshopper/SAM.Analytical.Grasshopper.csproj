@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component\ConvertGeometry.cs" />
+    <Compile Include="Component\CreateSpace.cs" />
     <Compile Include="Component\CreatePanel.cs" />
     <Compile Include="Component\Snap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
