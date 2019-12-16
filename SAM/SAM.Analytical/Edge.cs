@@ -33,16 +33,26 @@ namespace SAM.Analytical
             }
         }
 
-        public void Snap(IEnumerable<Point3D> point3Ds)
+        public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
         {
             if (point3Ds == null)
                 return;
-            
-            if(curve3D is Segment3D)
+
+            if (curve3D is Segment3D)
             {
                 Segment3D segment3D = (Segment3D)curve3D;
                 Point3D point3D_1 = Point3D.Closest(point3Ds, segment3D.Start);
                 Point3D point3D_2 = Point3D.Closest(point3Ds, segment3D.End);
+
+                if(!double.IsNaN(maxDistance))
+                {
+                    if (point3D_1.Distance(segment3D.Start) > maxDistance)
+                        point3D_1 = new Point3D(segment3D.Start);
+
+                    if(point3D_2.Distance(segment3D.End) > maxDistance)
+                        point3D_2 = new Point3D(segment3D.End);
+                }
+
                 curve3D = new Segment3D(point3D_1, point3D_2);
             }
         }

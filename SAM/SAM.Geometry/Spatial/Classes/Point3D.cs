@@ -110,6 +110,11 @@ namespace SAM.Geometry.Spatial
             return Math.Acos(aVector_1.DotProduct(aVector_2) / (aVector_1.Length * aVector_2.Length));
         }
 
+        public double SmallestAngle(Point3D point3D_1, Point3D point3D_2)
+        {
+            return Math.PI - Math.Abs(Angle(point3D_1, point3D_2));
+        }
+
         public void Move(Vector3D vector3D)
         {
             coordinates[0] = coordinates[0] + vector3D[0];
@@ -154,22 +159,22 @@ namespace SAM.Geometry.Spatial
 
             List<Point3D> result = new List<Point3D>(point3Ds);
 
-            int startIndex = 0;
-            int maxIndex = close ? result.Count : result.Count - 2;
-            while (startIndex < maxIndex)
+            int start = 0;
+            int end = close ? result.Count : result.Count - 2;
+            while (start < end)
             {
-                Point3D first = result[startIndex];
-                Point3D second = result[(startIndex + 1) % result.Count];
-                Point3D third = result[(startIndex + 2) % result.Count];
+                Point3D first = result[start];
+                Point3D second = result[(start + 1) % result.Count];
+                Point3D third = result[(start + 2) % result.Count];
 
-                if (first.Angle(second, third) <= angleTolerane)
+                if (second.SmallestAngle(first, third) <= angleTolerane)
                 {
-                    result.RemoveAt((startIndex + 1) % result.Count);
-                    maxIndex--;
+                    result.RemoveAt((start + 1) % result.Count);
+                    end--;
                 }
                 else
                 {
-                    startIndex++;
+                    start++;
                 }
 
             }

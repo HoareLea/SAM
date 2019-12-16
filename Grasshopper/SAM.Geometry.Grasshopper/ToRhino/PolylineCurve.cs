@@ -35,7 +35,8 @@ namespace SAM.Geometry.Grasshopper
 
         public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this Rhino.Geometry.Curve curve)
         {
-            return curve.ToPolyline(0, 0, 0.2, 0);
+            Rhino.Geometry.PolylineCurve polylineCurve = curve.ToPolyline(0, 0, 0.2, 0);
+            return polylineCurve;
         }
     }
 }

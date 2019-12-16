@@ -66,10 +66,10 @@ namespace SAM.Analytical
             }
         }
 
-        public void Snap(IEnumerable<Point3D> point3Ds)
+        public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
         {
             foreach (Edge edge in edges)
-                edge.Snap(point3Ds);
+                edge.Snap(point3Ds, maxDistance);
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
