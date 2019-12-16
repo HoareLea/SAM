@@ -20,8 +20,8 @@ namespace SAM.Geometry.Grasshopper
 
         public static Spatial.IGeometry3D ToSAM(this Curve curve, bool simplify = true)
         {
-            if (!curve.IsPlanar())
-                return null;
+            //if (!curve.IsPlanar())
+            //    return null;
 
             PolylineCurve polylineCurve = curve as PolylineCurve;
             if (polylineCurve != null)
