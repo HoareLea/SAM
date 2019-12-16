@@ -73,20 +73,20 @@ namespace SAM.Geometry.Grasshopper
 
             GH_ObjectWrapper objectWrapper = null;
 
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
+            if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+
+            double maxDistance = double.NaN;
 
             GH_Number gHNumber = objectWrapper.Value as GH_Number;
-            if (gHNumber == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            if (gHNumber != null)
+                maxDistance = gHNumber.Value;
 
-            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
+            objectWrapper = null;
+            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -108,15 +108,15 @@ namespace SAM.Geometry.Grasshopper
 
             if(geometry3D is Spatial.Point3D)
             {
-                geometry3D = Spatial.Point3D.Snap(point3Ds,(Spatial.Point3D)geometry3D, gHNumber.Value);
+                geometry3D = Spatial.Point3D.Snap(point3Ds,(Spatial.Point3D)geometry3D, maxDistance);
             }
             else if(geometry3D is Spatial.Segment3D)
             {
-                geometry3D = Spatial.Segment3D.Snap(point3Ds, (Spatial.Segment3D)geometry3D, gHNumber.Value);
+                geometry3D = Spatial.Segment3D.Snap(point3Ds, (Spatial.Segment3D)geometry3D, maxDistance);
             }
             else if (geometry3D is Spatial.Polygon3D)
             {
-                geometry3D = Spatial.Polygon3D.Snap(point3Ds, (Spatial.Polygon3D)geometry3D, gHNumber.Value);
+                geometry3D = Spatial.Polygon3D.Snap(point3Ds, (Spatial.Polygon3D)geometry3D, maxDistance);
             }
             else
             {
