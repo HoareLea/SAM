@@ -48,7 +48,7 @@ namespace SAM.Geometry.Grasshopper
                 point3Ds.Add(polylineCurve.Point(i).ToSAM());
 
             if (simplify)
-                point3Ds = Spatial.Point3D.Simplify(point3Ds, polylineCurve.IsClosed, 0.01);
+                point3Ds = Spatial.Point3D.SimplifyByAngle(point3Ds, polylineCurve.IsClosed, 0.01);
 
             if (polylineCurve.IsClosed)
                 return new Spatial.Polygon3D(point3Ds);

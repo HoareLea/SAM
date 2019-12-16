@@ -152,7 +152,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static List<Point3D> Simplify(IEnumerable<Point3D> point3Ds, bool close = false, double angleTolerane = Tolerance.Angle)
+        public static List<Point3D> SimplifyByAngle(IEnumerable<Point3D> point3Ds, bool close = false, double angleTolerane = Tolerance.Angle)
         {
             if (point3Ds == null)
                 return null;
@@ -178,6 +178,48 @@ namespace SAM.Geometry.Spatial
                 }
 
             }
+            return result;
+        }
+
+        public static List<Point3D> SimplifyByDistance(IEnumerable<Point3D> point3Ds, bool close = false, double distanceTolerane = Tolerance.Distance)
+        {
+            if (point3Ds == null)
+                return null;
+            
+            List<Point3D> result = new List<Point3D>(point3Ds);
+            Point3D last = result.Last();
+
+            int start = 0;
+            int end = close ? result.Count : result.Count - 1;
+            while (start < end)
+            {
+                Point3D first = result[start];
+                Point3D second = result[(start + 1) % result.Count];
+
+                if (first.Distance(second) <= distanceTolerane)
+                {
+                    result.RemoveAt((start + 1) % result.Count);
+                    end--;
+                }
+                else
+                    start++; 
+            }
+
+            if (!close)
+            {
+                result.Remove(result.Last());
+                result.Add(last);
+            }
+            //else 
+            //{
+            //    result.Add(result.First());
+            //}
+
+            while (result.Last().Distance(result[result.Count() - 2]) < distanceTolerane)
+            {
+                result.RemoveAt(result.Count - 2);
+            }
+
             return result;
         }
 
