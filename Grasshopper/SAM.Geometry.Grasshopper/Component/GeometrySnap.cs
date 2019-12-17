@@ -8,13 +8,13 @@ using SAM.Geometry.Grasshopper.Properties;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class Snap : GH_Component
+    public class GeometrySnap : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public Snap()
-          : base("Snap", "Snp",
+        public GeometrySnap()
+          : base("GeometrySnap", "Snp",
               "Snap Geometry",
               "SAM", "Geometry")
         {

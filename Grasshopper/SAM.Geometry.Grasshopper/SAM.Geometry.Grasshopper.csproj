@@ -58,11 +58,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Component\ConvertGeometry.cs" />
-    <Compile Include="Component\Snap.cs" />
-    <Compile Include="Component\To3D.cs" />
-    <Compile Include="Component\To2D.cs" />
-    <Compile Include="Component\Intersection.cs" />
+    <Compile Include="Component\GeometryConvert.cs" />
+    <Compile Include="Component\GeometrySnap.cs" />
+    <Compile Include="Component\GeometryTo3D.cs" />
+    <Compile Include="Component\GeometryTo2D.cs" />
+    <Compile Include="Component\GeomentryIntersection.cs" />
     <Compile Include="Template\TemplateComponent.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

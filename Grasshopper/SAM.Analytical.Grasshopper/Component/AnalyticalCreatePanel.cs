@@ -10,13 +10,13 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class CreatePanel : GH_Component
+    public class AnalyticalCreatePanel : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public CreatePanel()
-          : base("CreatePanel", "CrPnl",
+        public AnalyticalCreatePanel()
+          : base("AnalyticalCreatePanel", "CrPnl",
               "CreatePanel",
               "SAM", "Analytical")
         {

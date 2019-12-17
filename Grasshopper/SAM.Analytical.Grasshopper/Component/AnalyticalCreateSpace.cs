@@ -1,24 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Geometry;
+using SAM.Geometry.Grasshopper;
+using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class Snap : GH_Component
+    public class AnalyticalCreateSpace : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public Snap()
-          : base("Snap", "Snp",
-              "Snap Panels",
+        public AnalyticalCreateSpace()
+          : base("AnalyticalCreateSpace", "CSp",
+              "CreateSpace",
               "SAM", "Analytical")
         {
-
         }
 
         /// <summary>
@@ -26,8 +27,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("Panels", "Pnl", "SAM Analytical Panels", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("Offset", "Offs", "Snap offset", GH_ParamAccess.item, 0.2);
+            inputParamManager.AddTextParameter("Name", "Nm", "Name", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("Location", "Loc", "Location", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -35,8 +36,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Panels", "Pnl", "SAM Analytical Panels", GH_ParamAccess.list);
-            outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("Space", "Spc", "SAM Analytical Space", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,15 +45,22 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
+            GH_ObjectWrapper objectWrapper = null;
 
-            if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
+            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            GH_ObjectWrapper objectWrapper = null;
+            GH_String gHString = objectWrapper.Value as GH_String;
+            if(gHString == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            string name = gHString.Value;
 
             if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
             {
@@ -61,34 +68,27 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            GH_Number number = objectWrapper.Value as GH_Number;
-            if(number == null)
+            object obj = objectWrapper.Value;
+
+            Point3D location = null;
+
+            if (obj is Point3D)
+                location = obj as Point3D;
+            else if (obj is GH_Point)
+                location = ((GH_Point)obj).ToSAM();
+
+            if (location == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            double offset = number.Value;
+            Space space = new Space(name, location);
 
-            List<Panel> panelList = new List<Panel>();
-            foreach (GH_ObjectWrapper objectWrapper_Temp in objectWrapperList)
-            {
-                Panel panel = objectWrapper_Temp.Value as Panel;
-                if (panel == null)
-                    continue;
-
-                panelList.Add(panel);
-            }
-
-            List<Geometry.Spatial.Point3D> point3DList = Geometry.Spatial.Point3D.Generate(new Geometry.Spatial.BoundingBox3D(panelList.ConvertAll(x => x.GetBoundingBox(offset))), offset);
-
-            panelList = panelList.ConvertAll(x => new Panel(x));
-            panelList.ForEach(x => x.Snap(point3DList, offset));
-
-            dataAccess.SetDataList(0, panelList);
-            dataAccess.SetDataList(1, point3DList);
-
-            //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
+            if (space == null)
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
+            else
+                dataAccess.SetData(0, space);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("6a7ac292-7b25-4211-878c-5012ea4e6dff"); }
+            get { return new Guid("c6eaf1ad-22bb-4a3f-8c3d-9d8ac483214d"); }
         }
     }
 }

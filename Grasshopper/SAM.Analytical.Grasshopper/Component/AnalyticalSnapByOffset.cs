@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
-using SAM.Geometry.Grasshopper.Properties;
-using SAM.Geometry.Spatial;
 
-namespace SAM.Geometry.Grasshopper
+using SAM.Analytical.Grasshopper.Properties;
+
+namespace SAM.Analytical.Grasshopper
 {
-    public class To3D : GH_Component
+    public class AnalyticalSnapByOffset : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public To3D()
-          : base("To3D", "To3D",
-              "Convert SAM geometry to 3D",
-              "SAM", "Geometry")
+        public AnalyticalSnapByOffset()
+          : base("AnalyticalSnapByOffset", "Snp",
+              "Snap Panels",
+              "SAM", "Analytical")
         {
+
         }
 
         /// <summary>
@@ -26,14 +26,8 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            int index = -1;
-            Param_GenericObject genericObjectParameter = null;
-
-            inputParamManager.AddGenericParameter("SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
-
-            index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
-            genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(new Plane()));
+            inputParamManager.AddGenericParameter("Analytical", "Anl", "SAM Analytical Object", GH_ParamAccess.list);
+            inputParamManager.AddNumberParameter("Offset", "Offs", "Snap offset", GH_ParamAccess.item, 0.2);
         }
 
         /// <summary>
@@ -41,7 +35,8 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("SAMGeometry3D", "SAMgeo3D", "SAM Geometry 3D", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Analytical", "Anl", "SAM Analytical Object", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -50,20 +45,15 @@ namespace SAM.Geometry.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
+
+            if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             GH_ObjectWrapper objectWrapper = null;
-
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            Planar.IGeometry2D geometry2D = objectWrapper.Value as Planar.IGeometry2D;
-            if (geometry2D == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
 
             if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
             {
@@ -71,21 +61,34 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            Plane plane = objectWrapper.Value as Plane;
-            if (plane == null)
+            GH_Number number = objectWrapper.Value as GH_Number;
+            if(number == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            IBoundable3D geometry3D = plane.Convert(geometry2D);
-            if (geometry3D == null)
+            double offset = number.Value;
+
+            List<Panel> panelList = new List<Panel>();
+            foreach (GH_ObjectWrapper objectWrapper_Temp in objectWrapperList)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
-                return;
+                Panel panel = objectWrapper_Temp.Value as Panel;
+                if (panel == null)
+                    continue;
+
+                panelList.Add(panel);
             }
 
-            dataAccess.SetData(0, geometry3D);
+            List<Geometry.Spatial.Point3D> point3DList = Geometry.Spatial.Point3D.Generate(new Geometry.Spatial.BoundingBox3D(panelList.ConvertAll(x => x.GetBoundingBox(offset))), offset);
+
+            panelList = panelList.ConvertAll(x => new Panel(x));
+            panelList.ForEach(x => x.Snap(point3DList, offset));
+
+            dataAccess.SetDataList(0, panelList);
+            dataAccess.SetDataList(1, point3DList);
+
+            //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
         }
 
         /// <summary>
@@ -97,7 +100,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return Resources.SAM_Small;
+                return Resources.HL_Logo24;
             }
         }
 
@@ -106,7 +109,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("7d24437d-df27-4144-b66e-82d8a8491b2d"); }
+            get { return new Guid("6a7ac292-7b25-4211-878c-5012ea4e6dff"); }
         }
     }
 }

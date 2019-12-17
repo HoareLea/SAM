@@ -9,13 +9,13 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class Intersection : GH_Component
+    public class GeomentryIntersection : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public Intersection()
-          : base("Intersection", "GHgeo",
+        public GeomentryIntersection()
+          : base("GeomentryIntersection", "GHgeo",
               "copy from Intersection",
               "SAM", "Geometry")
         {

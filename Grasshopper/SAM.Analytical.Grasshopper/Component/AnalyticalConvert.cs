@@ -3,19 +3,19 @@
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
-using SAM.Geometry.Grasshopper.Properties;
+using SAM.Analytical.Grasshopper.Properties;
 
-namespace SAM.Geometry.Grasshopper
+namespace SAM.Analytical.Grasshopper
 {
-    public class ConvertGeometry : GH_Component
+    public class AnalyticalConvert : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public ConvertGeometry()
-          : base("ConvertGeometry", "Cgeo",
-              "Convert Geometry both direction between GH and SAM",
-              "SAM", "Geometry")
+        public AnalyticalConvert()
+          : base("AnalyticalConvert", "Cgeo",
+              "Convert Analitical to GH",
+              "SAM", "Analytical")
         {
         }
 
@@ -24,7 +24,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("Geometry", "geo", "Geometry", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("Analytical", "ana", "Analytical", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -51,13 +51,11 @@ namespace SAM.Geometry.Grasshopper
 
             object obj = objectWrapper.Value;
 
-            if (obj is IGeometry)
-                obj = ((IGeometry)obj).ToGrasshopper();
-            else if (obj is IGH_GeometricGoo)
-                obj = ((IGH_GeometricGoo)obj).ToSAM(false);
+            if (obj is Panel)
+                obj = Geometry.Grasshopper.Convert.ToGrasshopper(((Panel)obj).Polygon);
 
             if (obj == null)
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert analytical object");
             else
                 dataAccess.SetData(0, obj);
         }
@@ -80,7 +78,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("060a9d71-9c97-4502-9e30-e9a7d45d22db"); }
+            get { return new Guid("6628ec6c-84ba-4f2b-97cf-f2ccdbe8599a"); }
         }
     }
 }
