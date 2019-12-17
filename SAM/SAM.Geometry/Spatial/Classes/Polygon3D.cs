@@ -34,10 +34,12 @@ namespace SAM.Geometry.Spatial
 
         public Plane GetPlane()
         {
-            if (points.Count < 3)
-                return null;
-            
-            return new Plane(new Point3D(points[0]), new Point3D(points[1]), new Point3D(points[2]));
+            return Point3D.GetPlane(points, Tolerance.MicroDistance);
+        }
+
+        public Plane GetPlane(double tolerance)
+        {
+            return Point3D.GetPlane(points, tolerance);
         }
 
         public IGeometry Clone()

@@ -142,6 +142,29 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        public static Plane GetPlane(IEnumerable<Point3D> point3Ds, double tolerance = Tolerance.MicroDistance)
+        {
+            if (point3Ds == null)
+                return null;
+
+            int aCount = point3Ds.Count();
+            if (aCount < 3)
+                return null;
+
+            for (int i = 3; i < aCount; i++)
+            {
+                Point3D point3D_1 = point3Ds.ElementAt(i - 2);
+                Point3D point3D_2 = point3Ds.ElementAt(i - 1);
+                Point3D point3D_3 = point3Ds.ElementAt(i);
+
+                if (point3D_2.SmallestAngle(point3D_1, point3D_3) > tolerance)
+                    return new Plane(point3D_1, point3D_2, point3D_3);
+            }
+
+            return null;
+        }
+        
+        
         public static List<Segment3D> GetSegments(IEnumerable<Point3D> point3Ds, bool close = false)
         {
             if (point3Ds == null)

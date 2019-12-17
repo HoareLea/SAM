@@ -19,8 +19,8 @@ namespace SAM.Geometry.Spatial
 
         public Face(Plane plane, Planar.IClosed2D boundary)
         {
-            this.plane = plane;
-            this.boundary = boundary;
+            this.plane = new Plane(plane);
+            this.boundary = (Planar.IClosed2D)boundary.Clone();
         }
 
         public Face(Triangle3D triangle3D)
