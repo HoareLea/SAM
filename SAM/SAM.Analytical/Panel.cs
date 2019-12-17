@@ -31,39 +31,38 @@ namespace SAM.Analytical
                 edges.Add(new Edge(segment3D));
         }
 
-        public List<Segment3D> Segments
+        public List<Segment3D> ToSegments()
         {
-            get
+            //TODO: Convert to ICurve3Ds
+
+            List<Segment3D> result = new List<Segment3D>();
+            foreach (Edge edge in edges)
             {
-                //TODO: Convert to ICurve3Ds
+                if (edge == null)
+                    continue;
 
-                List<Segment3D> result = new List<Segment3D>();
-                foreach(Edge edge in edges)
-                {
-                    if (edge == null)
-                        continue;
-
-                    List<Segment3D> segment3Ds = edge.Segments;
-                    if (segment3Ds != null)
-                        result.AddRange(segment3Ds);
-                }
-                return result;
+                List<Segment3D> segment3Ds = edge.ToSegments();
+                if (segment3Ds != null)
+                    result.AddRange(segment3Ds);
             }
+            return result;
         }
 
-        public Polygon3D Polygon
+        public Polygon3D ToPolygon()
         {
-            get
-            {
-                //TODO: Sort Segment3Ds to get valid order for points
+            //TODO: Sort Segment3Ds to get valid order for points
 
-                List<Point3D> result = new List<Point3D>();
+            List<Point3D> result = new List<Point3D>();
 
-                foreach(Segment3D segment3D in Segments)
-                    result.Add(segment3D[0]);
+            foreach (Segment3D segment3D in ToSegments())
+                result.Add(segment3D[0]);
 
-                return new Polygon3D(result);
-            }
+            return new Polygon3D(result);
+        }
+
+        public Face ToFace()
+        {
+            return new Face(ToPolygon());
         }
 
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)

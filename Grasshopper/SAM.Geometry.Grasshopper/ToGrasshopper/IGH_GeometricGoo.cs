@@ -24,7 +24,10 @@ namespace SAM.Geometry.Grasshopper
             
             if (geometry is Segment3D)
                 return ((Segment3D)geometry).ToGrasshopper();
-            
+
+            if (geometry is Face)
+                return ((Face)geometry).ToGrasshopper();
+
             if (geometry is Planar.Polygon2D)
                 return ((Planar.Polygon2D)geometry).ToGrasshopper();
             
@@ -32,7 +35,7 @@ namespace SAM.Geometry.Grasshopper
                 return ((Planar.Point2D)geometry).ToGrasshopper();
 
             if (geometry is Planar.Segment2D)
-                return ((Planar.Segment2D)geometry).ToGrasshopper(); 
+                return ((Planar.Segment2D)geometry).ToGrasshopper();
 
             return (geometry as dynamic).ToGrasshopper();
         }

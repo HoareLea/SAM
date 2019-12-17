@@ -70,10 +70,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToGrasshopper\GH_Surface.cs" />
     <Compile Include="ToGrasshopper\GH_Curve.cs" />
     <Compile Include="ToGrasshopper\GH_Line.cs" />
     <Compile Include="ToGrasshopper\IGH_GeometricGoo.cs" />
     <Compile Include="ToGrasshopper\GH_Point.cs" />
+    <Compile Include="ToRhino\Brep.cs" />
     <Compile Include="ToRhino\PolylineCurve.cs" />
     <Compile Include="ToRhino\Polyline.cs" />
     <Compile Include="ToRhino\Line.cs" />

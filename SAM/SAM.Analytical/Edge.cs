@@ -1,10 +1,7 @@
-﻿using SAM.Core;
+﻿using System.Collections.Generic;
+
+using SAM.Core;
 using SAM.Geometry.Spatial;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
@@ -23,14 +20,11 @@ namespace SAM.Analytical
             curve3D = (ICurve3D)edge.curve3D.Clone();
         }
 
-        public List<Segment3D> Segments
+        public List<Segment3D> ToSegments()
         {
-            get
-            {
-                if (curve3D is ISegmentable3D)
-                    return ((ISegmentable3D)curve3D).GetSegments();
-                return null;
-            }
+            if (curve3D is ISegmentable3D)
+                return ((ISegmentable3D)curve3D).GetSegments();
+            return null;
         }
 
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)

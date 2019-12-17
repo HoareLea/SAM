@@ -54,6 +54,12 @@ namespace SAM.Geometry.Spatial
             return new Face(this);
         }
 
+        public IClosed3D ToClosed3D()
+        {
+
+            return plane.Convert(boundary);
+        }
+
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             throw new NotImplementedException();

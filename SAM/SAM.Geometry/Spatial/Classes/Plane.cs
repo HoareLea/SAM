@@ -176,6 +176,16 @@ namespace SAM.Geometry.Spatial
             return new Segment3D(Convert(segment2D.Start), Convert(segment2D.End));
         }
 
+        public IClosed3D Convert(Planar.IClosed2D closed2D)
+        {
+            return Convert(closed2D as dynamic);
+        }
+
+        public Planar.IClosed2D Convert(IClosed3D closed3D)
+        {
+            return Convert(closed3D as dynamic);
+        }
+
         public List<Planar.Point2D> Convert(IEnumerable<Point3D> point3Ds)
         {
             List<Planar.Point2D> point2ds = new List<Planar.Point2D>();
