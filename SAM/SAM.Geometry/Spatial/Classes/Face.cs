@@ -26,6 +26,16 @@ namespace SAM.Geometry.Spatial
         public Face(Triangle3D triangle3D)
         {
             plane = triangle3D.GetPlane();
+
+            List<Spatial.Point3D> point3Ds = triangle3D.GetPoints();
+            boundary = new Planar.Triangle2D(plane.Convert(point3Ds[0]), plane.Convert(point3Ds[1]), plane.Convert(point3Ds[2]));
+        }
+
+        public Face(Polygon3D polygon3D)
+        {
+            plane = polygon3D.GetPlane();
+
+            boundary = new Planar.Polygon2D(polygon3D.GetPoints().ConvertAll(x => plane.Convert(x)));
         }
 
         public Face(Face face)

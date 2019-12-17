@@ -40,7 +40,7 @@ namespace SAM.Geometry.Spatial
 
         public bool Inside(Polygon3D polygon3D)
         {
-            return Inside(polygon3D.Points);
+            return Inside(polygon3D.GetPoints());
         }
 
         public bool Inside(IEnumerable<Point3D> point3Ds)

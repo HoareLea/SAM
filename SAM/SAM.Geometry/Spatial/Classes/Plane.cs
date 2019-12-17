@@ -163,7 +163,7 @@ namespace SAM.Geometry.Spatial
 
         public Planar.Polygon2D Convert(Polygon3D polygon3D)
         {
-            return new Planar.Polygon2D(Convert(polygon3D.Points));
+            return new Planar.Polygon2D(Convert(polygon3D.GetPoints()));
         }
 
         public Planar.Segment2D Convert(Segment3D segment3D)

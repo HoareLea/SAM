@@ -19,12 +19,9 @@ namespace SAM.Geometry.Spatial
             points = Point3D.Clone(polygon3D.points);
         }
 
-        public List<Point3D> Points
+        public List<Point3D> GetPoints()
         {
-            get
-            {
-                return new List<Point3D>(points);
-            }
+            return points.ConvertAll(x => new Point3D(x));
         }
 
         public Vector3D GetNormal()
@@ -66,11 +63,16 @@ namespace SAM.Geometry.Spatial
             return new BoundingBox3D(points);
         }
 
+        public Face ToFace()
+        {
+            return new Face(this);
+        }
+
         public static Polygon3D Snap(IEnumerable<Point3D> point3Ds, Polygon3D polygon3D, double maxDistance = double.NaN)
         {
             List<Point3D> point3Ds_Temp = new List<Point3D>();
 
-            foreach (Point3D point3D in polygon3D.Points)
+            foreach (Point3D point3D in polygon3D.GetPoints())
                 point3Ds_Temp.Add(new Point3D(Point3D.Snap(point3Ds, point3D, maxDistance)));
 
             return new Polygon3D(point3Ds_Temp);

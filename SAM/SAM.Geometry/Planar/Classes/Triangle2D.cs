@@ -52,9 +52,9 @@ namespace SAM.Geometry.Planar
             return points[0].Distance(points[1]) + points[1].Distance(points[2]) + points[2].Distance(points[0]);
         }
 
-        public Point2D[] GetPoints()
+        public List<Point2D> GetPoints()
         {
-            return new Point2D[3] { points[0], points[1], points[2] };
+            return new List<Point2D>() { new Point2D(points[0]), new Point2D(points[1]), new Point2D(points[2]) };
         }
 
         public Segment2D[] GetSegments()

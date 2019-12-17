@@ -52,7 +52,7 @@ namespace SAMGeometryDynamo
         public static Autodesk.DesignScript.Geometry.Polygon ToPolygon(this SAM.Geometry.Spatial.Polygon3D polygon3D)
         {
             List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
-            foreach (SAM.Geometry.Spatial.Point3D point3D in polygon3D.Points)
+            foreach (SAM.Geometry.Spatial.Point3D point3D in polygon3D.GetPoints())
                 pointList.Add(Point3D.ToPoint(point3D));
 
             return Autodesk.DesignScript.Geometry.Polygon.ByPoints(pointList);

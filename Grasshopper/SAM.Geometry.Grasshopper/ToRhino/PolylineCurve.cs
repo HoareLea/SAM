@@ -12,8 +12,8 @@ namespace SAM.Geometry.Grasshopper
     {
         public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this Spatial.Polygon3D polygon3D)
         {
-            List<Rhino.Geometry.Point3d> points = polygon3D.Points.ConvertAll(x => x.ToRhino());
-            points.Add(polygon3D.Points.First().ToRhino());
+            List<Rhino.Geometry.Point3d> points = polygon3D.GetPoints().ConvertAll(x => x.ToRhino());
+            points.Add(polygon3D.GetPoints().First().ToRhino());
 
             return new Rhino.Geometry.PolylineCurve(points);
         }

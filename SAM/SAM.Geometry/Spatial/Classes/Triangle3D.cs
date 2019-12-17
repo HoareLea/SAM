@@ -22,6 +22,11 @@ namespace SAM.Geometry.Spatial
             points = Point3D.Clone(triangle3D.points).ToArray();
         }
 
+        public List<Point3D> GetPoints()
+        {
+            return new List<Point3D>() { new Point3D(points[0]), new Point3D(points[1]), new Point3D(points[2]) };
+        }
+
         public Vector3D GetNormal()
         {
             if (points.Length < 3)
