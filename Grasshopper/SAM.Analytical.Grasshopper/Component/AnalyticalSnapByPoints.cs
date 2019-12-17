@@ -130,7 +130,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("6a7ac292-7b25-4211-878c-5012ea4e6dff"); }
+            get { return new Guid("e61f2f2e-f655-430a-9dfd-507929edef58"); }
         }
     }
 }
