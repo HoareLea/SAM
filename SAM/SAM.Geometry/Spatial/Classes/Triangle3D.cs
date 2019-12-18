@@ -55,9 +55,23 @@ namespace SAM.Geometry.Spatial
             return new List<Segment3D>() { new Segment3D(points[0], points[1]), new Segment3D(points[1], points[2]), new Segment3D(points[2], points[0]) };
         }
 
+        public Polygon3D ToPolygon()
+        {
+            return new Polygon3D(points);
+        }
+
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             return new BoundingBox3D(points, offset);
+        }
+    
+        public static List<Polygon3D> ToPolygons(IEnumerable<Triangle3D> triangle3Ds)
+        {
+            List<Polygon3D> result = new List<Polygon3D>();
+            foreach (Triangle3D triangle3D in triangle3Ds)
+                result.Add(triangle3D.ToPolygon());
+
+            return result;
         }
     }
 }

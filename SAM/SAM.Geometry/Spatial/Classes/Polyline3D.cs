@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Polyline3D : IBoundable3D, ISegmentable3D
+    public class Polyline3D : IBoundable3D, ISegmentable3D, ICurve3D
     {
         private List<Point3D> points;
 
