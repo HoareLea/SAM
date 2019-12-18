@@ -15,7 +15,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public GeometrySnap()
           : base("GeometrySnap", "Snp",
-              "Snap Geometry",
+              "Snap Geometry to points",
               "SAM", "Geometry")
         {
 
@@ -26,9 +26,9 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("Geometry", "Geo", "Geometry", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("Points", "Points", "Points", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("maxDistance", "mDis", "Max Distance to snap points", GH_ParamAccess.item, double.NaN);
+            inputParamManager.AddGenericParameter("_geometry", "Geo", "Geometry", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_points", "Points", "snapping Points", GH_ParamAccess.list);
+            inputParamManager.AddNumberParameter("_maxDistance_", "mDis", "Max Distance to snap Geometry points", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Geometry", "Geo", "SAM Geometry", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("Geometry", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
         }
 
         /// <summary>

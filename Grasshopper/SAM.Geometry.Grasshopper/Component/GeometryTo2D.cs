@@ -29,8 +29,8 @@ namespace SAM.Geometry.Grasshopper
             int index = -1;
             Param_GenericObject genericObjectParameter = null;
 
-            inputParamManager.AddGenericParameter("SAMGeometry3D", "SAMgeo3D", "SAM Geometry 3D", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("OwnPlane", "OPlane", "Projection on own plane if possible", GH_ParamAccess.item, true);
+            inputParamManager.AddGenericParameter("_SAMGeometry3D", "_SAMGeometry3D", "SAM Geometry 3D", GH_ParamAccess.item);
+            inputParamManager.AddBooleanParameter("_ownPlane", "_ownPlane", "Projection on own plane if possible", GH_ParamAccess.item, true);
 
             index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
             genericObjectParameter = (Param_GenericObject)inputParamManager[index];

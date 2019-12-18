@@ -26,8 +26,8 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("1stSegment2D", "seg2D1", "SAM Geometry segment2D", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("2ndSegment2D", "seg2D2", "SAM Geometry segment2D", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_1stSegment2D", "_1stSegment2D", "SAM Geometry segment2D", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_2ndSegment2D", "_2ndSegment2D", "SAM Geometry segment2D", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Point2D", "Pt2D", "Intersection SAM Point2D", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Point2D", "Pt2D", "Intersection between segment2Ds SAM Point2D", GH_ParamAccess.item);
             outputParamManager.AddGenericParameter("1stClosestPoint2D", "1stCPt2D", "First closest SAM Point2D", GH_ParamAccess.item);
             outputParamManager.AddGenericParameter("2ndClosestPoint2D", "2ndCPt2D", "Second closest SAM Point2D", GH_ParamAccess.item);
         }

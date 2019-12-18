@@ -26,8 +26,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("Analytical", "Anl", "SAM Analytical Object", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("Offset", "Offs", "Snap offset", GH_ParamAccess.item, 0.2);
+            inputParamManager.AddGenericParameter("_analytical", "_analytical", "SAM Analytical Object", GH_ParamAccess.list);
+            inputParamManager.AddNumberParameter("_offset_", "Offs", "Snap offset", GH_ParamAccess.item, 0.2);
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace SAM.Geometry.Grasshopper
             int index = -1;
             Param_GenericObject genericObjectParameter = null;
 
-            inputParamManager.AddGenericParameter("SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
 
             index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
             genericObjectParameter = (Param_GenericObject)inputParamManager[index];

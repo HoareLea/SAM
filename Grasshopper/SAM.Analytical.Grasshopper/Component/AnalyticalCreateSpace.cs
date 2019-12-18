@@ -27,8 +27,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddTextParameter("Name", "Nm", "Name", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("Location", "Loc", "Location", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_name", "_name", "Space Name", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point", GH_ParamAccess.item);
         }
 
         /// <summary>

@@ -27,8 +27,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("Geometry", "geo", "Geometry", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("Simplify", "Smfy", "Simplify", GH_ParamAccess.item, true);
+            inputParamManager.AddGenericParameter("_geometry", "geo", "Geometry", GH_ParamAccess.item);
+            inputParamManager.AddBooleanParameter("simplify_", "Smfy", "Simplify", GH_ParamAccess.item, true);
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public GeometryConvert()
-          : base("GeometryConvert", "Cgeo",
+          : base("GeometryConvert", "SAMGeo",
               "Convert Geometry both direction between GH and SAM",
               "SAM", "Geometry")
         {
@@ -24,7 +24,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("Geometry", "geo", "Geometry", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_geometry", "_geometry", "SAM or GH geometry", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Geometry", "geo", "Geometry", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Geometry", "Geo", "SAM or GH geometry", GH_ParamAccess.item);
         }
 
         /// <summary>

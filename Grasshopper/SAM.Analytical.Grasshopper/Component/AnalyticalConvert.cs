@@ -24,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("Analytical", "ana", "Analytical", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_SAMAnalytical", "_SAMAnalytical", "SAM Analytical ie. Panel", GH_ParamAccess.item);
         }
 
         /// <summary>
