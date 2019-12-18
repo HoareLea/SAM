@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 
 namespace SAM.Geometry.Spatial
 {
@@ -16,6 +13,12 @@ namespace SAM.Geometry.Spatial
 
         public PolycurveLoop3D(PolycurveLoop3D polycurveLoop3D)
             : base(polycurveLoop3D)
+        {
+
+        }
+
+        public PolycurveLoop3D(Triangle3D triangle3D)
+            : base(triangle3D.GetSegments())
         {
 
         }
