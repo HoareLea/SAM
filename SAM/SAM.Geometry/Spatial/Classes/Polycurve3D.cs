@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Curveloop3D : IClosed3D
+    public class Polycurve3D : ICurve3D
     {
         private List<ICurve3D> curves;
         
-        public Curveloop3D(IEnumerable<ICurve3D> curves)
+        public Polycurve3D(IEnumerable<ICurve3D> curves)
         {
             this.curves = new List<ICurve3D>();
             foreach (ICurve3D curve in curves)
@@ -18,19 +18,35 @@ namespace SAM.Geometry.Spatial
 
         }
 
-        public Curveloop3D(Curveloop3D curveloop3D)
+        public Polycurve3D(Polycurve3D polycurve3D)
         {
-            curves = curveloop3D.curves.ConvertAll(x => (ICurve3D)x.Clone());
+            curves = polycurve3D.curves.ConvertAll(x => (ICurve3D)x.Clone());
         }
 
-        public IGeometry Clone()
+        public virtual IGeometry Clone()
         {
-            return new Curveloop3D(this);
+            return new Polycurve3D(this);
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             return new BoundingBox3D(curves.ConvertAll(x => x.GetBoundingBox(offset)));
+        }
+
+        public Point3D GetStart()
+        {
+            return curves.First().GetStart();
+        }
+
+        public Point3D GetEnd()
+        {
+            return curves.Last().GetEnd();
+        }
+
+        public void Reverse()
+        {
+            curves.ForEach(x => x.Reverse());
+            curves.Reverse();
         }
 
         public List<ICurve3D> Curves

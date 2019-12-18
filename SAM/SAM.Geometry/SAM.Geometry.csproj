@@ -54,7 +54,8 @@
     <Compile Include="Planar\Classes\Triangle2D.cs" />
     <Compile Include="Spatial\Classes\BoundingBox3D.cs" />
     <Compile Include="Spatial\Classes\Circle3D.cs" />
-    <Compile Include="Spatial\Classes\Curveloop3D.cs" />
+    <Compile Include="Spatial\Classes\Polycurve3D.cs" />
+    <Compile Include="Spatial\Classes\Polycurveloop3D.cs" />
     <Compile Include="Spatial\Classes\Extrusion.cs" />
     <Compile Include="Spatial\Classes\Polyline3D.cs" />
     <Compile Include="Spatial\Classes\Sphere.cs" />
