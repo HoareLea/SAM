@@ -111,6 +111,13 @@ namespace SAM.Geometry.Spatial
             return (coordinates[0] * vector3D.coordinates[0]) + (coordinates[1] * vector3D.coordinates[1]) + (coordinates[2] * vector3D.coordinates[2]);
         }
 
+        public void Negate()
+        {
+            coordinates[0] = -coordinates[0];
+            coordinates[1] = -coordinates[1];
+            coordinates[2] = -coordinates[2];
+        }
+
         public double X
         {
             get

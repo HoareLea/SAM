@@ -35,16 +35,16 @@ namespace SAM.Analytical
             if (curve3D is Segment3D)
             {
                 Segment3D segment3D = (Segment3D)curve3D;
-                Point3D point3D_1 = Point3D.Closest(point3Ds, segment3D.Start);
-                Point3D point3D_2 = Point3D.Closest(point3Ds, segment3D.End);
+                Point3D point3D_1 = Point3D.Closest(point3Ds, segment3D[0]);
+                Point3D point3D_2 = Point3D.Closest(point3Ds, segment3D[1]);
 
                 if(!double.IsNaN(maxDistance))
                 {
-                    if (point3D_1.Distance(segment3D.Start) > maxDistance)
-                        point3D_1 = new Point3D(segment3D.Start);
+                    if (point3D_1.Distance(segment3D[0]) > maxDistance)
+                        point3D_1 = new Point3D(segment3D[0]);
 
-                    if(point3D_2.Distance(segment3D.End) > maxDistance)
-                        point3D_2 = new Point3D(segment3D.End);
+                    if(point3D_2.Distance(segment3D[1]) > maxDistance)
+                        point3D_2 = new Point3D(segment3D[1]);
                 }
 
                 curve3D = new Segment3D(point3D_1, point3D_2);

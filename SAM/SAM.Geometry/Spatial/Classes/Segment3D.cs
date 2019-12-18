@@ -43,28 +43,14 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public Point3D Start
+        public Point3D GetStart()
         {
-            get
-            {
-                return new Point3D(origin);
-            }
-            set
-            {
-                origin = value;
-            }
+            return new Point3D(origin);
         }
 
-        public Point3D End
+        public Point3D GetEnd()
         {
-            get
-            {
-                return origin.GetMoved(vector);
-            }
-            set
-            {
-                vector = new Vector3D(origin, value);
-            }
+            return origin.GetMoved(vector);
         }
 
         public Vector3D Direction
@@ -77,7 +63,7 @@ namespace SAM.Geometry.Spatial
 
         public List<Point3D> GetPoints()
         {
-            return new List<Point3D>() { origin, End };
+            return new List<Point3D>() { origin, this[1] };
         }
 
         public IGeometry Clone()
@@ -92,15 +78,21 @@ namespace SAM.Geometry.Spatial
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            return new BoundingBox3D(Start, End, offset);
+            return new BoundingBox3D(new Point3D(origin), this[1], offset);
         }
 
         public static Segment3D Snap(IEnumerable<Point3D> point3Ds, Segment3D segment3D, double maxDistance = double.NaN)
         {
-            Point3D point3D_1 = Point3D.Snap(point3Ds, segment3D.Start, maxDistance);
-            Point3D point3D_2 = Point3D.Snap(point3Ds, segment3D.End, maxDistance);
+            Point3D point3D_1 = Point3D.Snap(point3Ds, segment3D[0], maxDistance);
+            Point3D point3D_2 = Point3D.Snap(point3Ds, segment3D[1], maxDistance);
 
             return new Segment3D(point3D_1, point3D_2);
+        }
+
+        public void Reverse()
+        {
+            origin = GetEnd();
+            vector.Negate();
         }
     }
 }

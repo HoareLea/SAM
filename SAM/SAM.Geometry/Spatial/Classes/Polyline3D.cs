@@ -75,5 +75,20 @@ namespace SAM.Geometry.Spatial
         {
             return new BoundingBox3D(points);
         }
+
+        public Point3D GetStart()
+        {
+            return new Point3D(points.First());
+        }
+
+        public Point3D GetEnd()
+        {
+            return new Point3D(points.Last());
+        }
+
+        public void Reverse()
+        {
+            points.Reverse();
+        }
     }
 }

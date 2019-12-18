@@ -168,7 +168,7 @@ namespace SAM.Geometry.Spatial
 
         public Planar.Segment2D Convert(Segment3D segment3D)
         {
-            return new Planar.Segment2D(Convert(segment3D.Start), Convert(segment3D.End));
+            return new Planar.Segment2D(Convert(segment3D[0]), Convert(segment3D[1]));
         }
 
         public Segment3D Convert(Planar.Segment2D segment2D)
@@ -254,7 +254,7 @@ namespace SAM.Geometry.Spatial
             if (d == 0)
                 return null;
 
-            double u = (K - normal.DotProduct(segment3D.Start.ToVector3D())) / d;
+            double u = (K - normal.DotProduct(segment3D[0].ToVector3D())) / d;
             if (u < 0 || u > 1)
                 return null;
 
