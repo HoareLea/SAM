@@ -22,13 +22,16 @@ namespace SAM.Analytical
             edges = panel.edges.ConvertAll(x => new Edge(x));
         }
 
-        public Panel(Guid guid, PanelType panelType, Polygon3D polygon3D)
-            : base(guid, panelType)
+        public Panel(string name, PanelType panelType, IClosed3D profile)
+            : base(name, panelType)
         {
             edges = new List<Edge>();
 
-            foreach (Segment3D segment3D in polygon3D.GetSegments())
-                edges.Add(new Edge(segment3D));
+            if (profile is ISegmentable3D)
+            {
+                foreach (Segment3D segment3D in ((ISegmentable3D)profile).GetSegments())
+                    edges.Add(new Edge(segment3D));
+            }
         }
 
         public List<Segment3D> ToSegments()

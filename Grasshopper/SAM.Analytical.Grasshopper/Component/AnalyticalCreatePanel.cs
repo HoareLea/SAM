@@ -82,7 +82,7 @@ namespace SAM.Analytical.Grasshopper
             if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
             else
-                dataAccess.SetData(0, new Panel(Guid.NewGuid(), null, polygon3D));
+                dataAccess.SetData(0, new Panel(null, null, polygon3D));
         }
 
         /// <summary>
