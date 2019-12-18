@@ -8,7 +8,7 @@ namespace SAM.Units
 {   
     public static partial class Convert
     {
-        public static double ByUnitType(double Value, UnitType from, UnitType to)
+        public static double ByUnitType(double value, UnitType from, UnitType to)
         {
             switch(from)
             {
@@ -16,14 +16,18 @@ namespace SAM.Units
                     switch(to)
                     {
                         case UnitType.Feet:
-                            return Value * 3.280839895;
+                            return value * 3.280839895;
+                        case UnitType.Meter:
+                            return value;
                     }
                     break;
                 case UnitType.Feet:
                     switch (to)
                     {
+                        case UnitType.Meter:
+                            return value * 0.3048;
                         case UnitType.Feet:
-                            return Value * 0.3048;
+                            return value;
                     }
                     break;
             }

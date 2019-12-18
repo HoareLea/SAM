@@ -215,6 +215,37 @@ namespace SAM.Geometry.Spatial
             return new Point3D(point3D.X - (normal.X * factor), point3D.Y - (normal.Y * factor), point3D.Z - (normal.Z * factor));
         }
 
+        public Point3D Project(Point3D point3D)
+        {
+            return Closest(point3D);
+        }
+
+        public Segment3D Project(Segment3D segment3D)
+        {
+            return new Segment3D(Closest(segment3D[0]), Closest(segment3D[1]));
+        }
+
+        public Triangle3D Project(Triangle3D triangle3D)
+        {
+            List<Point3D> point3Ds = triangle3D.GetPoints();
+            return new Triangle3D(Closest(point3Ds[0]), point3Ds[1], point3Ds[2]);
+        }
+
+        public Polyline3D Project(Polyline3D polyline3D)
+        {
+            return new Polyline3D(polyline3D.Points.ConvertAll(x => Closest(x)));
+        }
+
+        public Polygon3D Project(Polygon3D polygon3D)
+        {
+            return new Polygon3D(polygon3D.GetPoints().ConvertAll(x => Closest(x)));
+        }
+
+        public ICurve3D Project(ICurve3D curve)
+        {
+            return Project(curve as dynamic);
+        }
+
         public Point3D Intersection(Segment3D segment3D)
         {
             Vector3D direction = segment3D.Direction;
