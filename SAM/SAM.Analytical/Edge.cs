@@ -9,10 +9,10 @@ namespace SAM.Analytical
     {
         private ICurve3D curve3D;
 
-        public Edge(Segment3D segment3D)
+        public Edge(ICurve3D curve)
             : base()
         {
-            this.curve3D = segment3D;
+            this.curve3D = curve;
         }
 
         public Edge(Edge edge)

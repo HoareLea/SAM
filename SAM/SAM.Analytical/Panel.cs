@@ -32,6 +32,11 @@ namespace SAM.Analytical
                 foreach (Segment3D segment3D in ((ISegmentable3D)profile).GetSegments())
                     edges.Add(new Edge(segment3D));
             }
+            else if(profile is PolycurveLoop3D)
+            {
+                foreach (ICurve3D curve3D in ((PolycurveLoop3D)profile).Curves)
+                    edges.Add(new Edge(curve3D));
+            }
         }
 
         public List<Segment3D> ToSegments()
