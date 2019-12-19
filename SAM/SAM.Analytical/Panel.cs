@@ -8,22 +8,25 @@ namespace SAM.Analytical
 {
     public class Panel : SAMInstance
     {
+        private PanelType panelType;
         private List<Edge> edges;
-
-        public Panel(Guid guid, PanelType panelType, IEnumerable<Edge> edges)
-            : base(guid, panelType)
-        {
-            this.edges = new List<Edge>(edges);
-        }
 
         public Panel(Panel panel)
             : base(Guid.NewGuid(), panel.SAMType)
         {
             edges = panel.edges.ConvertAll(x => new Edge(x));
+            this.panelType = panel.panelType;
         }
 
-        public Panel(string name, PanelType panelType, IClosed3D profile)
-            : base(name, panelType)
+        public Panel(Guid guid, Construction construction, IEnumerable<Edge> edges)
+            : base(guid, construction)
+        {
+            this.edges = new List<Edge>(edges);
+            this.panelType = PanelType.Undefined;
+        }
+
+        public Panel(string name, Construction construction, IClosed3D profile)
+            : base(name, construction)
         {
             edges = new List<Edge>();
 
@@ -37,6 +40,7 @@ namespace SAM.Analytical
                 foreach (ICurve3D curve3D in ((PolycurveLoop3D)profile).Curves)
                     edges.Add(new Edge(curve3D));
             }
+            this.panelType = PanelType.Undefined;
         }
 
         public List<Segment3D> ToSegments()

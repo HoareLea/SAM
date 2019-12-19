@@ -7,16 +7,24 @@ using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
-    public class PanelType : SAMType
+    public enum PanelType
     {
-        public PanelType(string name) 
-            : base(name)
-        {
-        }
-
-        public PanelType(Guid guid, string name) 
-            : base(guid, name)
-        {
-        }
+        Undefined,
+        Ceiling,
+        CurtainWall,
+        Floor,
+        FloorExposed,
+        FloorInternal,
+        FloorRaised,
+        Roof,
+        Shade,
+        SlabOnGrade,
+        SolarPanel,
+        UndergroundCeiling,
+        UndergroundSlab,
+        UndergroundWall,
+        Wall,
+        WallExternal,
+        WallInternal,
     }
 }

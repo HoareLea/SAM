@@ -40,9 +40,9 @@ namespace SAM.Geometry.Spatial
 
         public Vector3D(double[] coordinates)
         {
-            coordinates[0] = this.coordinates[0];
-            coordinates[1] = this.coordinates[1];
-            coordinates[2] = this.coordinates[2];
+            this.coordinates[0] = coordinates[0];
+            this.coordinates[1] = coordinates[1];
+            this.coordinates[2] = coordinates[2];
         }
 
         public double this[int index]
@@ -165,7 +165,7 @@ namespace SAM.Geometry.Spatial
 
         public override string ToString()
         {
-            return string.Format("{0}(X={1},Y={2},Z={2})", GetType().Name, coordinates[0], coordinates[1], coordinates[2]);
+            return string.Format("{0}(X={1},Y={2},Z={3})", GetType().Name, coordinates[0], coordinates[1], coordinates[2]);
         }
 
         public IGeometry Clone()
