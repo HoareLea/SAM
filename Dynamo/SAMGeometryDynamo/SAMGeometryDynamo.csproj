@@ -58,13 +58,13 @@
   <ItemGroup>
     <Compile Include="Convert\ToSAMGeometry.cs" />
     <Compile Include="Convert\ToDynamoGeometry.cs" />
-    <Compile Include="Planar\Point2D.cs" />
+    <Compile Include="Create\Planar\Point2D.cs" />
     <Compile Include="ToDynamo\Geometry.cs" />
     <Compile Include="ToDynamo\Polygon.cs" />
     <Compile Include="ToDynamo\Line.cs" />
     <Compile Include="ToDynamo\Point.cs" />
-    <Compile Include="Spatial\Point3D.cs" />
-    <Compile Include="Spatial\Polygon3D.cs" />
+    <Compile Include="Create\Spatial\Point3D.cs" />
+    <Compile Include="Create\Spatial\Polygon3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ToSAM\IGeometry.cs" />
     <Compile Include="ToSAM\Polygon3D.cs" />
