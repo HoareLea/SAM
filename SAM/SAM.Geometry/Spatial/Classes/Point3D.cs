@@ -151,7 +151,7 @@ namespace SAM.Geometry.Spatial
             if (aCount < 3)
                 return null;
 
-            for (int i = 3; i < aCount; i++)
+            for (int i = 2; i < aCount; i++)
             {
                 Point3D point3D_1 = point3Ds.ElementAt(i - 2);
                 Point3D point3D_2 = point3Ds.ElementAt(i - 1);
