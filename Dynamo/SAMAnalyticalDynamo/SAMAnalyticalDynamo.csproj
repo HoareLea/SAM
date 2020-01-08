@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Create\Construction.cs" />
-    <Compile Include="Create\Panel.cs" />
+    <Compile Include="Construction.cs" />
+    <Compile Include="Panel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +53,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Create\" />
     <Folder Include="ToDynamo\" />
     <Folder Include="ToSAM\" />
   </ItemGroup>
@@ -60,6 +61,10 @@
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">
       <Project>{b47bad06-8523-455e-acf8-4879d0286ec1}</Project>
       <Name>SAM.Analytical</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
+      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
+      <Name>SAM.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj">
       <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>

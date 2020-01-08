@@ -12,5 +12,10 @@ namespace SAMCoreDynamo
         {
             return new SAM.Core.ParameterSet(name);
         }
+
+        public static object Value(SAM.Core.ParameterSet parameterSet, string name)
+        {
+            return parameterSet.ToObject(name);
+        }
     }
 }

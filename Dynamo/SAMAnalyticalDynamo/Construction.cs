@@ -24,5 +24,18 @@ namespace SAMAnalyticalDynamo
         {
             return new SAM.Analytical.Construction(name);
         }
+
+        /// <summary>
+        /// Gets Construction Name
+        /// </summary>
+        /// <param name="name">Construction Name</param>
+        /// <returns name="construction">SAM Analytical Construction</returns>
+        /// <search>
+        /// SAM Analytical Construction, ByName
+        /// </search>
+        public static string Name(SAM.Analytical.Construction construction)
+        {
+            return construction.Name;
+        }
     }
 }
