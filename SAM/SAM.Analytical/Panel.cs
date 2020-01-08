@@ -91,5 +91,21 @@ namespace SAM.Analytical
 
             return new BoundingBox3D(boundingBox3ds);
         }
+
+        public Construction Construction
+        {
+            get
+            {
+                return SAMType as Construction;
+            }
+        }
+
+        public PanelType PanelType
+        {
+            get
+            {
+                return panelType;
+            }
+        }
     }
 }
