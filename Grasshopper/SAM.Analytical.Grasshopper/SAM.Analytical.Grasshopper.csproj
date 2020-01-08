@@ -50,8 +50,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="RhinoCommon">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Rhino 6\System\rhinocommon.dll</HintPath>
+      <HintPath>$(Rhino7InstallDir)RhinoCommon.dll</HintPath>
       <Private>False</Private>
     </Reference>
       <Reference Include="GH_IO">
