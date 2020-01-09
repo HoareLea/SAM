@@ -13,7 +13,7 @@
         /// <search>
         /// SAMObject, Convert
         /// </search>
-        public static Autodesk.DesignScript.Geometry.Geometry Convert(SAM.Core.SAMObject sAMObject)
+        public static Autodesk.DesignScript.Geometry.Geometry Convert(object sAMObject)
         {
             if (sAMObject is SAM.Analytical.Panel)
                 return SAMGeometryDynamo.Convert.ToDynamo(((SAM.Analytical.Panel)sAMObject).ToFace());
