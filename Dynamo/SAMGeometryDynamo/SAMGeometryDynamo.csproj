@@ -68,6 +68,7 @@
     <Compile Include="Component\Spatial\Polygon3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ToDynamo\Surface.cs" />
+    <Compile Include="ToSAM\Face.cs" />
     <Compile Include="ToSAM\IGeometry.cs" />
     <Compile Include="ToSAM\Polygon3D.cs" />
     <Compile Include="ToSAM\Point3D.cs" />
