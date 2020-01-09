@@ -26,8 +26,16 @@ namespace SAMAnalyticalDynamo
             return new SAM.Analytical.Panel(Guid.NewGuid(), construction, segment3Ds.ConvertAll(x => new SAM.Analytical.Edge(x)));
         }
 
-        public static SAM.Analytical.Panel ByGeometry(SAM.Analytical.Construction construction, object geometry)
-        {
+        /// <summary>
+        /// Creates SAM Analytical Panel by given geometry
+        /// </summary>
+        /// <param name="geometry">Geometry</param>
+        /// <returns name="panel">SAM Analytical Panel</returns>
+        /// <search>
+        /// ByGeometry, 
+        /// </search>
+        public static SAM.Analytical.Panel ByGeometry(object geometry)
+        { 
             IEnumerable<SAM.Analytical.Edge> edges = null;
             if (geometry is IEnumerable<Point3D>)
             {
@@ -46,7 +54,7 @@ namespace SAMAnalyticalDynamo
                 return null;
            
 
-            return new SAM.Analytical.Panel(Guid.NewGuid(), construction, edges);
+            return new SAM.Analytical.Panel(Guid.NewGuid(), null, edges);
         }
     }
 }
