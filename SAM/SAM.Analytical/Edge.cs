@@ -58,5 +58,10 @@ namespace SAM.Analytical
 
             return null;
         }
+
+        public ICurve3D GetCurve3D()
+        {
+                return curve3D.Clone() as ICurve3D;
+        }
     }
 }

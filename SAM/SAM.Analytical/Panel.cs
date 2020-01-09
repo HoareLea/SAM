@@ -107,5 +107,13 @@ namespace SAM.Analytical
                 return panelType;
             }
         }
+
+        public List<Edge> GetEdges()
+        {
+            if (edges == null)
+                return null;
+
+            return new List<Edge>(edges);
+        }
     }
 }

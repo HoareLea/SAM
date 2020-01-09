@@ -59,5 +59,13 @@ namespace SAM.Core
             return parameterSets.Find(x => name.Equals(x.Name));
         }
 
+        public List<ParameterSet> GetParamaterSets()
+        {
+            if (parameterSets == null)
+                return null;
+            else
+                return new List<ParameterSet>(parameterSets);
+        }
+
     }
 }
