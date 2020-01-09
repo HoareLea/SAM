@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using SAM.Geometry.Spatial;
 
 namespace SAMAnalyticalDynamo
@@ -26,9 +26,27 @@ namespace SAMAnalyticalDynamo
             return new SAM.Analytical.Panel(Guid.NewGuid(), construction, segment3Ds.ConvertAll(x => new SAM.Analytical.Edge(x)));
         }
 
-        //public static SAM.Analytical.Panel BySAMGeometry(SAM.Analytical.Construction construction, IGeometry3D geometry3D)
-        //{
+        public static SAM.Analytical.Panel ByGeometry(SAM.Analytical.Construction construction, object geometry)
+        {
+            IEnumerable<SAM.Analytical.Edge> edges = null;
+            if (geometry is IEnumerable<Point3D>)
+            {
+                edges = Point3D.GetSegments((IEnumerable<Point3D>)geometry, true).ConvertAll(x => new SAM.Analytical.Edge(x));
+            }
+            else if(geometry is IEnumerable<Segment3D>)
+            {
+                edges = ((IEnumerable<Segment3D>)geometry).ToList().ConvertAll(x => new SAM.Analytical.Edge(x));
+            }
+            else if(geometry is ISegmentable3D)
+            {
+                edges = ((ISegmentable3D)geometry).GetSegments().ConvertAll(x => new SAM.Analytical.Edge(x));
+            }
 
-        //}
+            if (edges == null)
+                return null;
+           
+
+            return new SAM.Analytical.Panel(Guid.NewGuid(), construction, edges);
+        }
     }
 }
