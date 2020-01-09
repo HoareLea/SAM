@@ -33,6 +33,15 @@
     <DocumentationFile>..\build\SAMAnalyticalDynamo.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DynamoServices, Version=2.5.0.7186, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DynamoVisualProgramming.DynamoServices.2.5.0.7186\lib\net47\DynamoServices.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoUnits, Version=2.5.0.7186, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.5.0.7186\lib\net47\DynamoUnits.dll</HintPath>
+    </Reference>
+    <Reference Include="ProtoGeometry, Version=2.5.0.5835, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.5.0.7186\lib\net47\ProtoGeometry.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,8 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Construction.cs" />
-    <Compile Include="Panel.cs" />
+    <Compile Include="Component\Construction.cs" />
+    <Compile Include="Component\Panel.cs" />
+    <Compile Include="Component\SAMObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -53,9 +63,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Create\" />
-    <Folder Include="ToDynamo\" />
-    <Folder Include="ToSAM\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">
@@ -69,6 +77,10 @@
     <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj">
       <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>
       <Name>SAM.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAMGeometryDynamo\SAMGeometryDynamo.csproj">
+      <Project>{31847a71-1b4c-4e40-a202-391922b39876}</Project>
+      <Name>SAMGeometryDynamo</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

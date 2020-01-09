@@ -195,7 +195,7 @@ namespace SAM.Geometry.Spatial
             return  point2ds;
         }
 
-        public List<Point3D> Convert(IEnumerable< Planar.Point2D> point2Ds)
+        public List<Point3D> Convert(IEnumerable<Planar.Point2D> point2Ds)
         {
             List<Point3D> point3ds = new List<Point3D>();
             foreach (Planar.Point2D point2D in point2Ds)
