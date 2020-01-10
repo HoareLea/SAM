@@ -79,5 +79,15 @@ namespace SAM.Geometry.Spatial
 
             return new Polygon3D(point3Ds_Temp);
         }
+
+        public IClosed3D GetBoundary()
+        {
+            return new Polygon3D(this);
+        }
+
+        public List<ICurve3D> GetCurves()
+        {
+            return GetSegments().ConvertAll(x => (ICurve3D)x);
+        }
     }
 }

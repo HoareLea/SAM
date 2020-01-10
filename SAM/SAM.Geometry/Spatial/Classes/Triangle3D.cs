@@ -55,6 +55,11 @@ namespace SAM.Geometry.Spatial
             return new List<Segment3D>() { new Segment3D(points[0], points[1]), new Segment3D(points[1], points[2]), new Segment3D(points[2], points[0]) };
         }
 
+        public List<ICurve3D> GetCurves()
+        {
+            return new List<ICurve3D>() { new Segment3D(points[0], points[1]), new Segment3D(points[1], points[2]), new Segment3D(points[2], points[0]) };
+        }
+
         public Polygon3D ToPolygon()
         {
             return new Polygon3D(points);
@@ -73,5 +78,12 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public IClosed3D GetBoundary()
+        {
+            return new Triangle3D(this);
+        }
+
+
     }
 }

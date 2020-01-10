@@ -33,6 +33,11 @@ namespace SAM.Geometry.Spatial
             return Point3D.GetSegments(points, false);
         }
 
+        public List<ICurve3D> GetCurves()
+        {
+            return GetSegments().ConvertAll(x => (ICurve3D)x);
+        }
+
         public bool IsClosed()
         {
             return points.First().Equals(points.Last());

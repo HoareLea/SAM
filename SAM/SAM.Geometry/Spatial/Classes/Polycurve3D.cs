@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Polycurve3D : ICurve3D
+    public class Polycurve3D : ICurve3D, ICurvable3D
     {
         private List<ICurve3D> curves;
         
@@ -49,12 +49,9 @@ namespace SAM.Geometry.Spatial
             curves.Reverse();
         }
 
-        public List<ICurve3D> Curves
+        public List<ICurve3D> GetCurves()
         {
-            get
-            {
-                return curves.ConvertAll(x => (ICurve3D)x.Clone());
-            }
+            return curves.ConvertAll(x => (ICurve3D)x.Clone());
         }
     }
 }

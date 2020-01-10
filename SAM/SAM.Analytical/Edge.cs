@@ -63,5 +63,18 @@ namespace SAM.Analytical
         {
                 return curve3D.Clone() as ICurve3D;
         }
+
+        public static IEnumerable<Edge> FromGeometry(IGeometry3D geometry3D)
+        {
+            IGeometry3D geometry3D_Temp = geometry3D;
+
+            if (geometry3D is IClosed3D)
+                geometry3D_Temp = ((IClosed3D)geometry3D).GetBoundary();
+
+            if (geometry3D_Temp is ICurvable3D)
+                return ((ICurvable3D)geometry3D_Temp).GetCurves().ConvertAll(x => new Edge(x));
+
+            return null;
+        }
     }
 }

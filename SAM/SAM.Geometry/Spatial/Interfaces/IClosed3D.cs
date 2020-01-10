@@ -8,6 +8,6 @@ namespace SAM.Geometry.Spatial
 {
     public interface IClosed3D : IBoundable3D
     {
-        PolycurveLoop3D GetBoundary();
+        IClosed3D GetBoundary();
     }
 }

@@ -52,7 +52,7 @@ namespace SAM.Analytical.Grasshopper
             object obj = objectWrapper.Value;
 
             if (obj is Panel)
-                obj = Geometry.Grasshopper.Convert.ToGrasshopper(((Panel)obj).ToFace());
+                obj = Geometry.Grasshopper.Convert.ToGrasshopper(((Panel)obj).ToSurface());
 
             if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert analytical object");

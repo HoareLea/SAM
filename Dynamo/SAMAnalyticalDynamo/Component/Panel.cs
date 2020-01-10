@@ -22,9 +22,7 @@ namespace SAMAnalyticalDynamo
         /// </search>
         public static SAM.Analytical.Panel ByPoint3Ds(SAM.Analytical.Construction construction,  IEnumerable<SAM.Geometry.Spatial.Point3D> point3Ds)
         {
-            List<Segment3D> segment3Ds = SAM.Geometry.Spatial.Point3D.GetSegments(point3Ds, true);
-
-            return new SAM.Analytical.Panel(Guid.NewGuid(), construction, segment3Ds.ConvertAll(x => new SAM.Analytical.Edge(x)));
+            return new SAM.Analytical.Panel(construction, new SAM.Geometry.Spatial.Polygon3D(point3Ds));
         }
 
         /// <summary>
@@ -47,29 +45,11 @@ namespace SAMAnalyticalDynamo
             if (geometry3D == null)
                 return null;
 
-
-            IEnumerable<SAM.Analytical.Edge> edges = null;
-            if (geometry3D is IEnumerable<SAM.Geometry.Spatial.Point3D>)
-            {
-                edges = SAM.Geometry.Spatial.Point3D.GetSegments((IEnumerable<SAM.Geometry.Spatial.Point3D>)geometry3D, true).ConvertAll(x => new SAM.Analytical.Edge(x));
-            }
-            else if(geometry3D is IEnumerable<Segment3D>)
-            {
-                edges = ((IEnumerable<Segment3D>)geometry3D).ToList().ConvertAll(x => new SAM.Analytical.Edge(x));
-            }
-            else if(geometry3D is ISegmentable3D)
-            {
-                edges = ((ISegmentable3D)geometry3D).GetSegments().ConvertAll(x => new SAM.Analytical.Edge(x));
-            }
-            else if(geometry3D is Face)
-            {
-                edges = (((Face)geometry3D).ToClosed3D() as SAM.Geometry.Spatial.Polygon3D).GetSegments().ConvertAll(x => new SAM.Analytical.Edge(x));
-            }
-
-            if (edges == null)
+            IClosed3D closed3D = geometry3D as IClosed3D;
+            if (closed3D == null)
                 return null;
            
-            return new SAM.Analytical.Panel(Guid.NewGuid(), null, edges);
+            return new SAM.Analytical.Panel(null, closed3D);
         }
     }
 }

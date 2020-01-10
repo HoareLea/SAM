@@ -76,6 +76,11 @@ namespace SAM.Geometry.Spatial
             return new List<Segment3D>() { new Segment3D(this) };
         }
 
+        public List<ICurve3D> GetCurves()
+        {
+            return new List<ICurve3D>() { new Segment3D(this) };
+        }
+
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             return new BoundingBox3D(new Point3D(origin), this[1], offset);
@@ -94,5 +99,7 @@ namespace SAM.Geometry.Spatial
             origin = GetEnd();
             vector.Negate();
         }
+
+
     }
 }

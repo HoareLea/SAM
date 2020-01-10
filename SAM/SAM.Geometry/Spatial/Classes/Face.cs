@@ -62,7 +62,7 @@ namespace SAM.Geometry.Spatial
             return plane.Convert(boundary).GetBoundingBox(offset);
         }
 
-        public PolycurveLoop3D GetBoundary()
+        public IClosed3D GetBoundary()
         {
             return plane.Convert(boundary).GetBoundary();
         }

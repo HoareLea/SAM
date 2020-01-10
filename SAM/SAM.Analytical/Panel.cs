@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
 
@@ -18,63 +18,42 @@ namespace SAM.Analytical
             this.panelType = panel.panelType;
         }
 
-        public Panel(Guid guid, Construction construction, IEnumerable<Edge> edges)
-            : base(guid, construction)
-        {
-            this.edges = new List<Edge>(edges);
-            this.panelType = PanelType.Undefined;
-        }
-
         public Panel(string name, Construction construction, IClosed3D profile)
             : base(name, construction)
         {
-            edges = new List<Edge>();
+            panelType = PanelType.Undefined;
 
-            if (profile is ISegmentable3D)
-            {
-                foreach (Segment3D segment3D in ((ISegmentable3D)profile).GetSegments())
-                    edges.Add(new Edge(segment3D));
-            }
-            else if(profile is PolycurveLoop3D)
-            {
-                foreach (ICurve3D curve3D in ((PolycurveLoop3D)profile).Curves)
-                    edges.Add(new Edge(curve3D));
-            }
-            this.panelType = PanelType.Undefined;
+            IEnumerable<Edge> edges_Temp = Edge.FromGeometry(profile);
+            if (edges_Temp != null)
+                edges = edges_Temp.ToList();
+            else
+                edges = new List<Edge>();
         }
 
-        public List<Segment3D> ToSegments()
+        public Panel(Construction construction, IClosed3D profile)
+            : base(construction == null ? null : construction.Name, construction)
         {
-            //TODO: Convert to ICurve3Ds
+            panelType = PanelType.Undefined;
 
-            List<Segment3D> result = new List<Segment3D>();
+            IEnumerable<Edge> edges_Temp = Edge.FromGeometry(profile);
+            if (edges_Temp != null)
+                edges = edges_Temp.ToList();
+            else
+                edges = new List<Edge>();
+        }
+
+        public PolycurveLoop3D ToPolycurveLoop()
+        {
+            List<ICurve3D> curve3Ds = new List<ICurve3D>();
             foreach (Edge edge in edges)
-            {
-                if (edge == null)
-                    continue;
+                curve3Ds.Add(edge.GetCurve3D());
 
-                List<Segment3D> segment3Ds = edge.ToSegments();
-                if (segment3Ds != null)
-                    result.AddRange(segment3Ds);
-            }
-            return result;
+            return new PolycurveLoop3D(curve3Ds);
         }
 
-        public Polygon3D ToPolygon()
+        public Surface ToSurface()
         {
-            //TODO: Sort Segment3Ds to get valid order for points
-
-            List<Point3D> result = new List<Point3D>();
-
-            foreach (Segment3D segment3D in ToSegments())
-                result.Add(segment3D[0]);
-
-            return new Polygon3D(result);
-        }
-
-        public Face ToFace()
-        {
-            return new Face(ToPolygon());
+            return new Surface(ToPolycurveLoop());
         }
 
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)

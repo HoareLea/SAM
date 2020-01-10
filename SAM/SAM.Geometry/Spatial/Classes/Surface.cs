@@ -37,5 +37,10 @@ namespace SAM.Geometry.Spatial
         {
             return boundary.GetBoundingBox(offset);
         }
+
+        public IClosed3D GetBoundary()
+        {
+            return boundary.Clone() as IClosed3D;
+        }
     }
 }

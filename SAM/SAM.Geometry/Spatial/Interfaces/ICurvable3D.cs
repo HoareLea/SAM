@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public interface ISegmentable3D : ICurvable3D
+    public interface ICurvable3D : IBoundable3D
     {
-        List<Segment3D> GetSegments();
+        List<ICurve3D> GetCurves();
     }
 }

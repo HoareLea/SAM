@@ -3,7 +3,7 @@
 
 namespace SAM.Geometry.Spatial
 {
-    public class PolycurveLoop3D : Polycurve3D, IClosed3D
+    public class PolycurveLoop3D : Polycurve3D, IClosed3D, ICurvable3D
     {
         public PolycurveLoop3D(IEnumerable<ICurve3D> curves)
             : base(curves)
@@ -24,6 +24,11 @@ namespace SAM.Geometry.Spatial
         }
 
         public override IGeometry Clone()
+        {
+            return new PolycurveLoop3D(this);
+        }
+
+        public IClosed3D GetBoundary()
         {
             return new PolycurveLoop3D(this);
         }
