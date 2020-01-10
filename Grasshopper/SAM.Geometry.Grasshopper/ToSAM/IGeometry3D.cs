@@ -61,6 +61,9 @@ namespace SAM.Geometry.Grasshopper
             if (geometricGoo is GH_Curve)
                 return ((GH_Curve)geometricGoo).ToSAM(simplify);
 
+            if (geometricGoo is GH_Surface)
+                return ((GH_Surface)geometricGoo).ToSAM(simplify);
+
             if (geometricGoo is GH_Point)
                 return ((GH_Point)geometricGoo).ToSAM();
 

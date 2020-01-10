@@ -77,12 +77,14 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Polygon3D polygon3D = obj as Polygon3D;
+
+
+            IClosed3D closed3D = obj as IClosed3D;
 
             if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
             else
-                dataAccess.SetData(0, new Panel(null, null, polygon3D));
+                dataAccess.SetData(0, new Panel(null, null, closed3D));
         }
 
         /// <summary>

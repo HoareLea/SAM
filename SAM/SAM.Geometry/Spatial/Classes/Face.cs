@@ -59,7 +59,12 @@ namespace SAM.Geometry.Spatial
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            throw new NotImplementedException();
+            return plane.Convert(boundary).GetBoundingBox(offset);
+        }
+
+        public PolycurveLoop3D GetBoundary()
+        {
+            return plane.Convert(boundary).GetBoundary();
         }
     }
 }

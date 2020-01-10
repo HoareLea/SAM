@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Surface : IGeometry3D
+    public class Surface : IClosed3D
     {
         private IClosed3D boundary;
 
@@ -14,6 +14,7 @@ namespace SAM.Geometry.Spatial
         {
             this.boundary = boundary.Clone() as IClosed3D;
         }
+        
         public Surface(Surface surface)
         {
             boundary = surface.boundary.Clone() as IClosed3D;
@@ -30,6 +31,11 @@ namespace SAM.Geometry.Spatial
         public IGeometry Clone()
         {
             return new Surface(this);
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return boundary.GetBoundingBox(offset);
         }
     }
 }
