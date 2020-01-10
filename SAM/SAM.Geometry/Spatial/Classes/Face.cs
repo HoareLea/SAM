@@ -23,19 +23,11 @@ namespace SAM.Geometry.Spatial
             this.boundary = (Planar.IClosed2D)boundary.Clone();
         }
 
-        public Face(Triangle3D triangle3D)
+        public Face(IClosedPlanar3D closedPlanar3D)
         {
-            plane = triangle3D.GetPlane();
+            plane = closedPlanar3D.GetPlane();
+            boundary = plane.Convert(closedPlanar3D);
 
-            List<Spatial.Point3D> point3Ds = triangle3D.GetPoints();
-            boundary = new Planar.Triangle2D(plane.Convert(point3Ds[0]), plane.Convert(point3Ds[1]), plane.Convert(point3Ds[2]));
-        }
-
-        public Face(Polygon3D polygon3D)
-        {
-            plane = polygon3D.GetPlane();
-
-            boundary = new Planar.Polygon2D(polygon3D.GetPoints().ConvertAll(x => plane.Convert(x)));
         }
 
         public Face(Face face)
@@ -58,6 +50,11 @@ namespace SAM.Geometry.Spatial
         {
 
             return plane.Convert(boundary);
+        }
+
+        public Surface ToSurface()
+        {
+            return new Surface(plane.Convert(boundary));
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)

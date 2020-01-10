@@ -59,6 +59,7 @@
     <Compile Include="Spatial\Classes\Extrusion.cs" />
     <Compile Include="Spatial\Classes\Polyline3D.cs" />
     <Compile Include="Spatial\Classes\Sphere.cs" />
+    <Compile Include="Spatial\Classes\Surface.cs" />
     <Compile Include="Spatial\Classes\Triangle3D.cs" />
     <Compile Include="Spatial\Classes\Vector3D.cs" />
     <Compile Include="Spatial\Interfaces\IBoundable3D.cs" />

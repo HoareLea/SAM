@@ -86,6 +86,7 @@
     <Compile Include="ToRhino\Line.cs" />
     <Compile Include="ToRhino\LineCurve.cs" />
     <Compile Include="ToRhino\Point3d.cs" />
+    <Compile Include="ToSAM\Face.cs" />
     <Compile Include="ToSAM\IGeometry3D.cs" />
     <Compile Include="ToSAM\Circle3D.cs" />
     <Compile Include="ToSAM\Vector3D.cs" />

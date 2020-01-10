@@ -166,6 +166,12 @@ namespace SAM.Geometry.Spatial
             return new Planar.Polygon2D(Convert(polygon3D.GetPoints()));
         }
 
+        public Planar.Triangle2D Convert(Triangle3D triangle3D)
+        {
+            List<Point3D> point3Ds = triangle3D.GetPoints();
+            return new Planar.Triangle2D(Convert(point3Ds[0]), Convert(point3Ds[1]), Convert(point3Ds[2]));
+        }
+
         public Planar.Segment2D Convert(Segment3D segment3D)
         {
             return new Planar.Segment2D(Convert(segment3D[0]), Convert(segment3D[1]));
