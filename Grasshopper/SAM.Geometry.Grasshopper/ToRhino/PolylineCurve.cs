@@ -10,6 +10,15 @@ namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
+        public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this IEnumerable<Spatial.ICurve3D> curve3Ds)
+        {
+            List<Rhino.Geometry.Point3d> points = curve3Ds.ToList().ConvertAll(x => x.GetEnd().ToRhino());
+            points.Add(curve3Ds.First().GetEnd().ToRhino());
+
+            return new Rhino.Geometry.PolylineCurve(points);
+        }
+
+
         public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this Spatial.Polygon3D polygon3D)
         {
             List<Rhino.Geometry.Point3d> points = polygon3D.GetPoints().ConvertAll(x => x.ToRhino());

@@ -81,6 +81,7 @@
     <Compile Include="ToGrasshopper\IGH_GeometricGoo.cs" />
     <Compile Include="ToGrasshopper\GH_Point.cs" />
     <Compile Include="ToRhino\Brep.cs" />
+    <Compile Include="ToRhino\Curve.cs" />
     <Compile Include="ToRhino\PolylineCurve.cs" />
     <Compile Include="ToRhino\Polyline.cs" />
     <Compile Include="ToRhino\Line.cs" />

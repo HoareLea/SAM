@@ -28,6 +28,9 @@ namespace SAM.Geometry.Grasshopper
             if (geometry is Face)
                 return ((Face)geometry).ToGrasshopper();
 
+            if (geometry is Surface)
+                return ((Surface)geometry).ToGrasshopper();
+
             if (geometry is Planar.Polygon2D)
                 return ((Planar.Polygon2D)geometry).ToGrasshopper();
             
