@@ -19,7 +19,7 @@ namespace SAM.Analytical
         }
 
         public Panel(string name, Construction construction, IClosed3D profile)
-            : base(name, construction)
+    : base(name, construction)
         {
             panelType = PanelType.Undefined;
 
@@ -28,6 +28,13 @@ namespace SAM.Analytical
                 edges = edges_Temp.ToList();
             else
                 edges = new List<Edge>();
+        }
+
+        public Panel(Guid guid, string name, Construction construction, PanelType PanelType, List<Edge> edges)
+            : base(guid, name, construction)
+        {
+            panelType = PanelType;
+            this.edges = edges;
         }
 
         public Panel(Construction construction, IClosed3D profile)

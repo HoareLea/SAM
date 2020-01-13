@@ -62,6 +62,14 @@ namespace SAM.Geometry.Spatial
             return plane.Convert(boundary).GetBoundingBox(offset);
         }
 
+        public Planar.IClosed2D Boundary
+        {
+            get
+            {
+                return boundary.Clone() as Planar.IClosed2D;
+            }
+        }
+
         public IClosed3D GetBoundary()
         {
             return plane.Convert(boundary).GetBoundary();

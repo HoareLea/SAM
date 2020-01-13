@@ -9,6 +9,12 @@ namespace SAM.Analytical
     {
         private ICurve3D curve3D;
 
+        public Edge(System.Guid guid, string name, ICurve3D curve3D)
+            : base(guid, name)
+        {
+            this.curve3D = curve3D;
+        }
+        
         public Edge(ICurve3D curve)
             : base()
         {

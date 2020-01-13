@@ -28,6 +28,22 @@ namespace SAM.Geometry.Spatial
             return new Sphere(this);
         }
 
+        public Point3D Origin
+        {
+            get
+            {
+                return origin;
+            }
+        }
+
+        public double Radious
+        {
+            get
+            {
+                return radious;
+            }
+        }
+
         public bool Inside(Point3D point3D)
         {
             return origin.Distance(point3D) < radious;

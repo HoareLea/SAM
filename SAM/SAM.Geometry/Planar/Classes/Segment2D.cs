@@ -356,5 +356,15 @@ namespace SAM.Geometry.Planar
         {
             throw new NotImplementedException();
         }
+
+        public Point2D GetStart()
+        {
+            return new Point2D(origin);
+        }
+
+        public Point2D GetEnd()
+        {
+            return origin.GetMoved(vector);
+        }
     }
 }

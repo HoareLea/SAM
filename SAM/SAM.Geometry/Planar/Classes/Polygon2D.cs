@@ -35,5 +35,10 @@ namespace SAM.Geometry.Planar
                 return Point2D.Clone(points);
             }
         }
+
+        public List<Point2D> GetPoints()
+        {
+            return points.ConvertAll(x => new Point2D(x));
+        }
     }
 }
