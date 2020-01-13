@@ -15,7 +15,7 @@ namespace SAM.Geometry.Planar
 
         public Polygon2D(Polygon2D polygon2D)
         {
-            this.points = new List<Point2D>(points);
+            this.points = polygon2D.GetPoints();
         }
 
         public List<Segment2D> GetSegments()
