@@ -1,9 +1,11 @@
 ﻿using System;
-
+using System.Collections;
+using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -51,13 +53,33 @@ namespace SAM.Analytical.Grasshopper
 
             object obj = objectWrapper.Value;
 
-            if (obj is Panel)
-                obj = Geometry.Grasshopper.Convert.ToGrasshopper(((Panel)obj).ToSurface());
+            List<SAMObject> sAMObjectList = null;
+            if(typeof(IEnumerable).IsAssignableFrom(obj.GetType()))
+            {
+                sAMObjectList = new List<SAMObject>();
+                foreach (object @object in obj as dynamic)
+                    if (@object is SAMObject)
+                        sAMObjectList.Add((SAMObject)@object);
+            }
+            else if(obj is SAMObject)
+            {
+                sAMObjectList = new List<SAMObject>() { (SAMObject)obj };
+            }
 
-            if (obj == null)
+            List<object> result = null;
+            if (sAMObjectList != null)
+            {
+                result = new List<object>();
+                foreach (SAMObject sAMObject in sAMObjectList)
+                    result.Add(Convert.ToGrasshopper(sAMObject as dynamic));
+            }
+
+            if (result == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert analytical object");
+            else if(result.Count == 1)
+                dataAccess.SetData(0, result[0]);
             else
-                dataAccess.SetData(0, obj);
+                dataAccess.SetData(0, result);   
         }
 
         /// <summary>
