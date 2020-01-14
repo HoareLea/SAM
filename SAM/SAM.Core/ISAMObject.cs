@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Core
 {
-    interface ISAMObject
+    public interface ISAMObject
     {
     }
 }
