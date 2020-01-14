@@ -16,7 +16,8 @@ namespace SAM.Analytical
             : base(guid, name)
         {
             this.location = location;
-            this.panels = new List<Panel>(panels);
+            if (panels != null)
+                this.panels = new List<Panel>(panels);
         }
 
         public Space(string name, IEnumerable<Panel> panels)
