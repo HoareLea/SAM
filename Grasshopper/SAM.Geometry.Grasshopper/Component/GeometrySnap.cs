@@ -29,6 +29,7 @@ namespace SAM.Geometry.Grasshopper
             inputParamManager.AddGenericParameter("_geometry", "Geo", "Geometry", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_points", "Points", "snapping Points", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_maxDistance_", "mDis", "Max Distance to snap Geometry points", GH_ParamAccess.item, 1);
+            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddGenericParameter("Geometry", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
+            outputParamManager.AddBooleanParameter("Sucessfull", "Sucessfull", "Correctly imported?", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,11 +47,22 @@ namespace SAM.Geometry.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            bool run = false;
+            if (!dataAccess.GetData<bool>(3, ref run))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(1, false);
+                return;
+            }
+            if (!run)
+                return;
+
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
             if (!dataAccess.GetDataList(1, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(1, false);
                 return;
             }
 
@@ -76,6 +89,7 @@ namespace SAM.Geometry.Grasshopper
             if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(1, false);
                 return;
             }
 
@@ -89,6 +103,7 @@ namespace SAM.Geometry.Grasshopper
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(1, false);
                 return;
             }
 
@@ -96,6 +111,7 @@ namespace SAM.Geometry.Grasshopper
             if(obj == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(1, false);
                 return;
             }
 
@@ -121,10 +137,12 @@ namespace SAM.Geometry.Grasshopper
             else
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(1, false);
                 return;
             }
 
             dataAccess.SetData(0, geometry3D);
+            dataAccess.SetData(1, true);
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
         }
