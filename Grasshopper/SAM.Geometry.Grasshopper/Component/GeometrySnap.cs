@@ -38,7 +38,7 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddGenericParameter("Geometry", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("Sucessfull", "Sucessfull", "Correctly imported?", GH_ParamAccess.item);
+            outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
         }
 
         /// <summary>
