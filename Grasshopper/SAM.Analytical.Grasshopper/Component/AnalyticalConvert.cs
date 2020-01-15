@@ -92,7 +92,7 @@ namespace SAM.Analytical.Grasshopper
             else if(result.Count == 1)
                 dataAccess.SetData(0, result[0]);
             else
-                dataAccess.SetData(0, result);   
+                dataAccess.SetDataList(0, result);   
         }
 
         /// <summary>
