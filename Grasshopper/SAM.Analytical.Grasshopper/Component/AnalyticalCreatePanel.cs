@@ -57,13 +57,17 @@ namespace SAM.Analytical.Grasshopper
             GH_ObjectWrapper objectWrapper = null;
 
             
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
+            if (!dataAccess.GetData(1, ref objectWrapper))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            PanelType panelType = Query.PanelType(objectWrapper.Value);
+            PanelType panelType = PanelType.Undefined;
+            if(objectWrapper.Value is GH_String)
+                panelType = Query.PanelType(((GH_String)objectWrapper.Value).Value);
+            else
+                panelType = Query.PanelType(objectWrapper.Value);
 
             Construction aConstruction = null;
             dataAccess.GetData(2, ref aConstruction);

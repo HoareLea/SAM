@@ -15,7 +15,7 @@ namespace SAM.Analytical
             : base(panel)
         {
             edges = panel.edges.ConvertAll(x => new Edge(x));
-            this.panelType = panel.panelType;
+            panelType = panel.panelType;
         }
 
         public Panel(string name, Construction construction, IClosed3D profile)
@@ -30,17 +30,17 @@ namespace SAM.Analytical
                 edges = new List<Edge>();
         }
 
-        public Panel(Guid guid, string name, Construction construction, PanelType PanelType, List<Edge> edges)
+        public Panel(Guid guid, string name, Construction construction, PanelType panelType, List<Edge> edges)
             : base(guid, name, construction)
         {
-            panelType = PanelType;
+            this.panelType = panelType;
             this.edges = edges;
         }
 
         public Panel(Construction construction, PanelType panelType, IClosed3D profile)
             : base(construction == null ? null : construction.Name, construction)
         {
-            panelType = PanelType.Undefined;
+            this.panelType = panelType;
 
             IEnumerable<Edge> edges_Temp = Edge.FromGeometry(profile);
             if (edges_Temp != null)
