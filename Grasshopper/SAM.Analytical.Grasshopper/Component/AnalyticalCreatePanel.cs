@@ -28,6 +28,8 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_geometry", "geo", "Geometry", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_panelType", "panelType", "PanelType", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_construction", "construction", "Construction", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("simplify_", "Smfy", "Simplify", GH_ParamAccess.item, true);
         }
 
@@ -45,20 +47,37 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            bool simplyfy = false;
+            if (!dataAccess.GetData<bool>(3, ref simplyfy))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             GH_ObjectWrapper objectWrapper = null;
 
-            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
+            PanelType panelType = PanelType.Undefined;
+            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            GH_Boolean gHBoolean = objectWrapper.Value as GH_Boolean;
-            if(gHBoolean == null)
+            if (objectWrapper.Value is PanelType)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                panelType = (PanelType)objectWrapper.Value;
             }
+            else if(objectWrapper.Value is string)
+            {
+                Enum.TryParse<PanelType>((string)objectWrapper.Value, out panelType);
+            }
+            else if (objectWrapper.Value is int)
+            {
+                panelType = (PanelType)(int)(objectWrapper.Value);
+            }
+
+                Construction aConstruction = null;
+            dataAccess.GetData(2, ref aConstruction);
 
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
             {
@@ -69,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
             object obj = objectWrapper.Value;
 
             if (obj is IGH_GeometricGoo)
-                obj = ((IGH_GeometricGoo)obj).ToSAM(gHBoolean.Value);
+                obj = ((IGH_GeometricGoo)obj).ToSAM(simplyfy);
 
             if (!(obj is IGeometry))
             {
@@ -77,14 +96,12 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-
-
             IClosed3D closed3D = obj as IClosed3D;
 
             if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
             else
-                dataAccess.SetData(0, new Panel(null, null, closed3D));
+                dataAccess.SetData(0, new Panel(aConstruction, panelType, closed3D));
         }
 
         /// <summary>

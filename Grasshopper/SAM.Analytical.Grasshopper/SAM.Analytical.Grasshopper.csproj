@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component\AnalyticalConvert.cs" />
+    <Compile Include="Component\AnalyticalCreateConstruction.cs" />
     <Compile Include="Component\AnalyticalCreateSpace.cs" />
     <Compile Include="Component\AnalyticalCreatePanel.cs" />
     <Compile Include="Component\AnalyticalSnapByPoints.cs" />
