@@ -56,27 +56,16 @@ namespace SAM.Analytical.Grasshopper
 
             GH_ObjectWrapper objectWrapper = null;
 
-            PanelType panelType = PanelType.Undefined;
+            
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            if (objectWrapper.Value is PanelType)
-            {
-                panelType = (PanelType)objectWrapper.Value;
-            }
-            else if(objectWrapper.Value is string)
-            {
-                Enum.TryParse<PanelType>((string)objectWrapper.Value, out panelType);
-            }
-            else if (objectWrapper.Value is int)
-            {
-                panelType = (PanelType)(int)(objectWrapper.Value);
-            }
+            PanelType panelType = Query.PanelType(objectWrapper.Value);
 
-                Construction aConstruction = null;
+            Construction aConstruction = null;
             dataAccess.GetData(2, ref aConstruction);
 
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)

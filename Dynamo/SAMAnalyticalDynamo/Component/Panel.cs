@@ -22,9 +22,9 @@ namespace SAMAnalyticalDynamo
         /// <search>
         /// SAM Analytical Panel, ByPoint3Ds
         /// </search>
-        public static SAM.Analytical.Panel ByPoint3Ds(IEnumerable<SAM.Geometry.Spatial.Point3D> point3Ds, SAM.Analytical.Construction construction, PanelType panelType = PanelType.Undefined)
+        public static SAM.Analytical.Panel ByPoint3Ds(IEnumerable<SAM.Geometry.Spatial.Point3D> point3Ds, SAM.Analytical.Construction construction, object panelType = null)
         {
-            return new SAM.Analytical.Panel(construction, panelType, new SAM.Geometry.Spatial.Polygon3D(point3Ds));
+            return new SAM.Analytical.Panel(construction, Query.PanelType(panelType), new SAM.Geometry.Spatial.Polygon3D(point3Ds));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SAMAnalyticalDynamo
         /// <search>
         /// ByGeometry, 
         /// </search>
-        public static SAM.Analytical.Panel ByGeometry(object geometry, SAM.Analytical.Construction construction, PanelType panelType  = PanelType.Undefined)
+        public static SAM.Analytical.Panel ByGeometry(object geometry, SAM.Analytical.Construction construction, object panelType  = null)
         {
             IGeometry3D geometry3D = geometry as IGeometry3D;
             if (geometry3D == null)
@@ -52,7 +52,7 @@ namespace SAMAnalyticalDynamo
             if (closed3D == null)
                 return null;
 
-            return new SAM.Analytical.Panel(construction, panelType, closed3D);
+            return new SAM.Analytical.Panel(construction, Query.PanelType(panelType), closed3D);
         }
     }
 }

@@ -49,6 +49,7 @@
     <Compile Include="Panel.cs" />
     <Compile Include="Construction.cs" />
     <Compile Include="PlanarEdge.cs" />
+    <Compile Include="Query\PanelType.cs" />
     <Compile Include="Space.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -62,5 +63,6 @@
       <Name>SAM.Geometry</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
