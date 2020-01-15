@@ -37,7 +37,7 @@ namespace SAM.Analytical
             this.edges = edges;
         }
 
-        public Panel(Construction construction, IClosed3D profile)
+        public Panel(Construction construction, PanelType panelType, IClosed3D profile)
             : base(construction == null ? null : construction.Name, construction)
         {
             panelType = PanelType.Undefined;
