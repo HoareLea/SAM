@@ -54,5 +54,26 @@ namespace SAMAnalyticalDynamo
 
             return new SAM.Analytical.Panel(construction, Query.PanelType(panelType), closed3D);
         }
+
+        public static SAM.Analytical.Panel SnapByPoints(SAM.Analytical.Panel panel, IEnumerable<object> points, double maxDistance = 0.2)
+        {
+            List<SAM.Geometry.Spatial.Point3D> point3Ds = new List<SAM.Geometry.Spatial.Point3D>();
+            foreach(object @object in points)
+            {
+                if (@object is SAM.Geometry.Spatial.Point3D)
+                {
+                    point3Ds.Add((SAM.Geometry.Spatial.Point3D)@object);
+                }
+                else if(@object is Autodesk.DesignScript.Geometry.Point)
+                {
+                    point3Ds.Add(((Autodesk.DesignScript.Geometry.Point)@object).ToSAM());
+                }
+            }
+
+            SAM.Analytical.Panel panel_New = new SAM.Analytical.Panel(panel);
+            panel_New.Snap(point3Ds, maxDistance);
+
+            return panel_New;
+        }
     }
 }
