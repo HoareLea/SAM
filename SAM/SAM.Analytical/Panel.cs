@@ -49,6 +49,18 @@ namespace SAM.Analytical
                 edges = new List<Edge>();
         }
 
+        public Panel(Guid guid, Panel panel, IClosed3D profile)
+            : base(guid, panel)
+        {
+            panelType = panel.panelType;
+
+            IEnumerable<Edge> edges_Temp = Edge.FromGeometry(profile);
+            if (edges_Temp != null)
+                edges = edges_Temp.ToList();
+            else
+                edges = new List<Edge>();
+        }
+
         public PolycurveLoop3D ToPolycurveLoop()
         {
             List<ICurve3D> curve3Ds = new List<ICurve3D>();
