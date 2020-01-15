@@ -12,6 +12,14 @@ namespace SAM.Analytical
         private Geometry.Spatial.Point3D location;
         private List<Panel> panels;
 
+
+        public Space(Space space)
+            : base(space)
+        {
+            this.location = space.Location;
+            this.panels = space.panels;
+        }
+
         public Space(Guid guid, string name, Geometry.Spatial.Point3D location, IEnumerable<Panel> panels)
             : base(guid, name)
         {

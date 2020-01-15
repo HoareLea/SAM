@@ -11,6 +11,12 @@ namespace SAM.Analytical
     {
         private List<PlanarEdge> edges;
 
+        public PlanarBoundary(PlanarBoundary planarBoundary)
+            : base(planarBoundary)
+        {
+            this.edges = planarBoundary.edges;
+        }
+
         public PlanarBoundary(IEnumerable<PlanarEdge> edges)
             : base()
         {

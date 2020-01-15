@@ -12,6 +12,12 @@ namespace SAM.Architectural
     {
         private double elevation;
 
+        public Level(Level level)
+            : base(level)
+        {
+            elevation = level.elevation;
+        }
+
         public Level(string name, double elevation)
             : base(name)
         {

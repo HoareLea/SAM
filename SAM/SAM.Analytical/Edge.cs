@@ -22,6 +22,7 @@ namespace SAM.Analytical
         }
 
         public Edge(Edge edge)
+            : base(edge)
         {
             curve3D = (ICurve3D)edge.curve3D.Clone();
         }

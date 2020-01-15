@@ -16,5 +16,11 @@ namespace SAM.Analytical
         {
             this.edges = new List<Edge>(edges);
         }
+
+        public Opening(Opening opening)
+            : base(opening)
+        {
+            this.edges = opening.edges;
+        }
     }
 }

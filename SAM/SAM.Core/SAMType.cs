@@ -14,6 +14,18 @@ namespace SAM.Core
 
         }
 
+        public SAMType(Guid guid, string name, IEnumerable<ParameterSet> parameterSets)
+            : base(guid, name, parameterSets)
+        {
+
+        }
+
+        public SAMType(SAMType sAMType)
+            : base(sAMType)
+        {
+
+        }
+
         public SAMType(string name)
             : base(name)
         {

@@ -13,6 +13,33 @@ namespace SAM.Core
 
         private List<ParameterSet> parameterSets;
 
+        
+        public SAMObject(SAMObject sAMObject)
+        {
+            this.guid = sAMObject.Guid;
+            this.name = sAMObject.Name;
+
+            if (sAMObject.parameterSets != null)
+            {
+                this.parameterSets = new List<ParameterSet>();
+                foreach (ParameterSet parameterSet in sAMObject.parameterSets)
+                    this.parameterSets.Add(parameterSet.Clone());
+            }
+        }
+
+        public SAMObject(Guid guid, string name, IEnumerable<ParameterSet> parameterSets)
+        {
+            this.guid = guid;
+            this.name = name;
+
+            if(parameterSets != null)
+            {
+                this.parameterSets = new List<ParameterSet>();
+                foreach (ParameterSet parameterSet in parameterSets)
+                    this.parameterSets.Add(parameterSet.Clone());
+            }
+        }
+
         public SAMObject(Guid guid, string name)
         {
             this.guid = guid;
@@ -66,6 +93,5 @@ namespace SAM.Core
             else
                 return new List<ParameterSet>(parameterSets);
         }
-
     }
 }

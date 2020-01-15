@@ -9,6 +9,13 @@ namespace SAM.Core
     public class SAMInstance : SAMObject
     {
         private SAMType sAMType;
+        
+        public SAMInstance(SAMInstance sAMInstance)
+            : base(sAMInstance)
+        {
+            this.sAMType = sAMInstance.sAMType;
+        }
+        
         public SAMInstance(Guid guid, SAMType SAMType)
             : base(guid)
         {

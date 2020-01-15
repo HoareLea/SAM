@@ -142,5 +142,14 @@ namespace SAM.Core
                 return dictionary.Keys;
             }
         }
+
+        public ParameterSet Clone()
+        {
+            ParameterSet parameterSet = new ParameterSet(name);
+            foreach (KeyValuePair<string, object> keyValuePair in dictionary)
+                dictionary[keyValuePair.Key] = keyValuePair.Value;
+
+            return parameterSet;
+        }
     }
 }

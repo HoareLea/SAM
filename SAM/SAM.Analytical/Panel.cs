@@ -12,7 +12,7 @@ namespace SAM.Analytical
         private List<Edge> edges;
 
         public Panel(Panel panel)
-            : base(Guid.NewGuid(), panel.SAMType)
+            : base(panel)
         {
             edges = panel.edges.ConvertAll(x => new Edge(x));
             this.panelType = panel.panelType;

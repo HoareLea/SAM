@@ -18,5 +18,10 @@ namespace SAM.Analytical
             : base(guid, name)
         {
         }
+
+        public Construction(Construction construction)
+            : base(construction)
+        {
+        }
     }
 }
