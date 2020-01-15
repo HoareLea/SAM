@@ -71,7 +71,20 @@ namespace SAM.Analytical.Grasshopper
             {
                 result = new List<object>();
                 foreach (SAMObject sAMObject in sAMObjectList)
-                    result.Add(Convert.ToGrasshopper(sAMObject as dynamic));
+                {
+                    object @object = Convert.ToGrasshopper(sAMObject as dynamic);
+                    if(@object is IEnumerable)
+                    {
+                        foreach (object @object_Temp in (IEnumerable)@object)
+                            result.Add(object_Temp);
+                    }
+                    else
+                    {
+                        result.Add(@object);
+                    }
+                        
+                }
+                    
             }
 
             if (result == null)

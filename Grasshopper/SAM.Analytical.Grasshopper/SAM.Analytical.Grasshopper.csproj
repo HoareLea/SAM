@@ -75,6 +75,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ToGrasshopper\IGH_Goos.cs" />
     <Compile Include="ToGrasshopper\GH_Surface.cs" />
   </ItemGroup>
   <ItemGroup>
