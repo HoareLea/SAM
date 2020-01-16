@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 
 using SAM.Geometry.Planar;
 
+
 namespace SAM.Geometry
 {
-    public static class ConvexHullUtils
+    public static partial class Query
     {
-        public static List<Point2D> GetConvexHull(this IEnumerable<Point2D> point2Ds)
+        public static List<Point2D> ConvexHull(this IEnumerable<Point2D> point2Ds)
         {
             if (point2Ds == null)
                 return null;
@@ -56,7 +58,7 @@ namespace SAM.Geometry
             return point2DList_UpperHull;
         }
 
-        public static List<Point2D> GetConvexHull(this IEnumerable<Segment2D> segment2Ds)
+        public static List<Point2D> ConvexHull(this IEnumerable<Segment2D> segment2Ds)
         {
             List<Point2D> aPointList = new List<Point2D>();
             foreach (Segment2D segment2D in segment2Ds)
@@ -65,8 +67,9 @@ namespace SAM.Geometry
                 aPointList.Add(segment2D[1]);
             }
 
-            return GetConvexHull(aPointList);
+            return ConvexHull(aPointList);
         }
+
 
         private class ConvexHullComparer : IComparer<Point2D>
         {

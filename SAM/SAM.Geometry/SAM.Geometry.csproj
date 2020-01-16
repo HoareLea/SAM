@@ -52,6 +52,7 @@
     <Compile Include="Planar\Classes\Rectangle2D.cs" />
     <Compile Include="Planar\Classes\Segment2D.cs" />
     <Compile Include="Planar\Classes\Triangle2D.cs" />
+    <Compile Include="Planar\Query\ConvexHull.cs" />
     <Compile Include="Spatial\Classes\BoundingBox3D.cs" />
     <Compile Include="Spatial\Classes\Circle3D.cs" />
     <Compile Include="Spatial\Classes\Polycurve3D.cs" />
@@ -82,8 +83,6 @@
     <Compile Include="Spatial\Classes\Polygon3D.cs" />
     <Compile Include="Spatial\Interfaces\IPlanar3D.cs" />
     <Compile Include="Tolerance.cs" />
-    <Compile Include="Utils\BoundingBox2DUtils.cs" />
-    <Compile Include="Utils\ConvexHullUtils.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

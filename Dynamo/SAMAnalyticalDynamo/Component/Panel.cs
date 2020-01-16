@@ -75,5 +75,26 @@ namespace SAMAnalyticalDynamo
 
             return panel_New;
         }
+
+        public static IEnumerable<SAM.Analytical.Panel> SnapByOffset(IEnumerable<SAM.Analytical.Panel> panels, double offset = 0.2, double maxDistance = 0)
+        {
+            return SAM.Analytical.Modify.SnapByOffset(panels, offset, maxDistance);
+        }
+
+        public static SAM.Analytical.Panel SetConstruction(SAM.Analytical.Panel panel, SAM.Analytical.Construction construction)
+        {
+            if (construction == null || panel == null)
+                return null;
+
+            return new SAM.Analytical.Panel(panel, construction);
+        }
+
+        public static SAM.Analytical.Panel SetPanelType(SAM.Analytical.Panel panel, PanelType panelType)
+        {
+            if (panel == null)
+                return null;
+
+            return new SAM.Analytical.Panel(panel, panelType);
+        }
     }
 }

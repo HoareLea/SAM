@@ -41,12 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParameterSet.cs" />
-    <Compile Include="ISAMObject.cs" />
+    <Compile Include="Classes\ParameterSet.cs" />
+    <Compile Include="Interfaces\ISAMObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SAMInstance.cs" />
-    <Compile Include="SAMObject.cs" />
-    <Compile Include="SAMType.cs" />
+    <Compile Include="Classes\SAMInstance.cs" />
+    <Compile Include="Classes\SAMObject.cs" />
+    <Compile Include="Classes\SAMType.cs" />
     <Compile Include="Utils\DictionaryUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

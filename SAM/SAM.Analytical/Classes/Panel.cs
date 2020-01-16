@@ -18,6 +18,20 @@ namespace SAM.Analytical
             panelType = panel.panelType;
         }
 
+        public Panel(Panel panel, Construction construction)
+            : base(panel)
+        {
+            edges = panel.edges.ConvertAll(x => new Edge(x));
+            panelType = panel.panelType;
+        }
+
+        public Panel(Panel panel, PanelType panelType)
+            :base(panel)
+        {
+            edges = panel.edges.ConvertAll(x => new Edge(x));
+            this.panelType = panelType;
+        }
+
         public Panel(string name, Construction construction, IClosed3D profile)
     : base(name, construction)
         {

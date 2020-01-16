@@ -625,7 +625,7 @@ namespace SAM.Geometry.Planar
             if (point2Ds == null || point2Ds.Count() < 2)
                 return null;
 
-            List<Point2D> point2DList = ConvexHullUtils.GetConvexHull(point2Ds);
+            List<Point2D> point2DList = Query.ConvexHull(point2Ds);
 
             double area = double.MaxValue;
             Rectangle2D rectangle = null;
