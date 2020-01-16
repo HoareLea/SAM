@@ -42,15 +42,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PanelType.cs" />
-    <Compile Include="PlanarBoundary.cs" />
-    <Compile Include="Edge.cs" />
-    <Compile Include="Opening.cs" />
-    <Compile Include="Panel.cs" />
-    <Compile Include="Construction.cs" />
-    <Compile Include="PlanarEdge.cs" />
+    <Compile Include="Classes\PanelType.cs" />
+    <Compile Include="Classes\PlanarBoundary.cs" />
+    <Compile Include="Classes\Edge.cs" />
+    <Compile Include="Classes\Opening.cs" />
+    <Compile Include="Classes\Panel.cs" />
+    <Compile Include="Classes\Construction.cs" />
+    <Compile Include="Classes\PlanarEdge.cs" />
     <Compile Include="Query\PanelType.cs" />
-    <Compile Include="Space.cs" />
+    <Compile Include="Classes\Space.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
