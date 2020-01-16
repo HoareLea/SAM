@@ -81,7 +81,7 @@ namespace SAM.Core
         public string ToString(string name)
         {
             string result;
-            if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
+            if (!Query.TryGetValue(dictionary, name, out result))
                 return null;
 
             return result;
@@ -90,7 +90,7 @@ namespace SAM.Core
         public double ToDouble(string name)
         {
             double result;
-            if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
+            if (!Query.TryGetValue(dictionary, name, out result))
                 return double.NaN;
 
             return result;
@@ -99,7 +99,7 @@ namespace SAM.Core
         public double ToInt(string name)
         {
             int result;
-            if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
+            if (!Query.TryGetValue(dictionary, name, out result))
                 return int.MinValue;
 
             return result;
@@ -108,7 +108,7 @@ namespace SAM.Core
         public bool ToBool(string name)
         {
             bool result;
-            if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
+            if (!Query.TryGetValue(dictionary, name, out result))
                 return false;
 
             return result;
@@ -117,7 +117,7 @@ namespace SAM.Core
         public object ToObject(string name)
         {
             object result;
-            if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
+            if (!Query.TryGetValue(dictionary, name, out result))
                 return null;
 
             return result;
@@ -126,7 +126,7 @@ namespace SAM.Core
         public Type GetType(string name)
         {
             object result;
-            if (!DictionaryUtils.TryGetValue(dictionary, name, out result))
+            if (!Query.TryGetValue(dictionary, name, out result))
                 return null;
 
             if (result == null)

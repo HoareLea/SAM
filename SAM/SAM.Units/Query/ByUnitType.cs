@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SAM.Units
 {   
-    public static partial class Convert
+    public static partial class Query
     {
-        public static double ByUnitType(double value, UnitType from, UnitType to)
+        public static double Convert(double value, UnitType from, UnitType to)
         {
             switch(from)
             {

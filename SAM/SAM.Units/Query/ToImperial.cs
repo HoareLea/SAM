@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace SAM.Units
 {
-    public static partial class Convert
+    public static partial class Query
     {
-        public static double ToSI(double value, UnitType from)
+        public static double ToImperial(double value, UnitType from)
         {
-            switch (from)
+            switch(from)
             {
-                case UnitType.Feet:
-                    return ByUnitType(value, from, UnitType.Meter);
+                case UnitType.Meter:
+                    return Convert(value, from, UnitType.Feet);
             }
 
             return double.NaN;
