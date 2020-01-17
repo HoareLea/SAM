@@ -127,5 +127,17 @@ namespace SAM.Analytical
 
             return new List<Edge>(edges);
         }
+
+        public double GetTilt()
+        {
+            PolycurveLoop3D polycurveLoop3D = ToPolycurveLoop();
+            List<Point3D> point3Ds = new List<Point3D>();
+            foreach(ICurve3D curve3D in polycurveLoop3D.GetCurves())
+                point3Ds.Add(curve3D.GetStart());
+
+            Plane plane = Point3D.GetPlane(point3Ds);
+
+            throw new NotImplementedException();
+        }
     }
 }

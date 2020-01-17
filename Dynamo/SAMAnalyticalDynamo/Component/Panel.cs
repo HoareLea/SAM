@@ -96,5 +96,10 @@ namespace SAMAnalyticalDynamo
 
             return new SAM.Analytical.Panel(panel, panelType);
         }
+
+        public static PanelType PanelType(SAM.Analytical.Panel panel)
+        {
+            return panel.PanelType;
+        }
     }
 }
