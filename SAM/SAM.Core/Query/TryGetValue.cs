@@ -18,7 +18,7 @@ namespace SAM.Core
             if (value == null)
                 return false;
 
-            if (value.GetType() != typeof(T))
+            if (!typeof(T).IsAssignableFrom(value.GetType()))
                 return false;
 
             result = (T)(object)(value);
