@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\PanelType.cs" />
+    <Compile Include="Enums\PanelType.cs" />
     <Compile Include="Classes\PlanarBoundary.cs" />
     <Compile Include="Classes\Edge.cs" />
     <Compile Include="Classes\Opening.cs" />
