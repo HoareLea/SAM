@@ -61,6 +61,8 @@
     <Compile Include="Component\Planar\Point2D.cs" />
     <Compile Include="Component\Spatial\Geometry3D.cs" />
     <Compile Include="ToDynamo\Geometry.cs" />
+    <Compile Include="ToDynamo\Curve.cs" />
+    <Compile Include="ToDynamo\PolyCurve.cs" />
     <Compile Include="ToDynamo\Polygon.cs" />
     <Compile Include="ToDynamo\Line.cs" />
     <Compile Include="ToDynamo\Point.cs" />

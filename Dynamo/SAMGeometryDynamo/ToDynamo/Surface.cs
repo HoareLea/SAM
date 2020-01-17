@@ -20,5 +20,11 @@ namespace SAMGeometryDynamo
 
             return Autodesk.DesignScript.Geometry.Surface.ByPatch(polygon3D.ToDynamo());
         }
+
+        public static Autodesk.DesignScript.Geometry.Surface ToDynamo(this SAM.Geometry.Spatial.Surface surface)
+        {
+            SAM.Geometry.Spatial.IClosed3D closed3D = surface.GetBoundary();
+            return Autodesk.DesignScript.Geometry.Surface.ByPatch(closed3D.ToDynamo());
+        }
     }
 }
