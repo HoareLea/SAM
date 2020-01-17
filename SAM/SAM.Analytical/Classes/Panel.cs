@@ -102,6 +102,7 @@ namespace SAM.Analytical
                 boundingBox3ds.Add(edge.GetBoundingBox(offset));
 
             return new BoundingBox3D(boundingBox3ds);
+
         }
 
         public Construction Construction

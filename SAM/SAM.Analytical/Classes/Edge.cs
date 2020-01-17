@@ -60,10 +60,7 @@ namespace SAM.Analytical
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            if (curve3D is Segment3D)
-                return ((Segment3D)curve3D).GetBoundingBox(offset);
-
-            return null;
+            return curve3D.GetBoundingBox(offset);
         }
 
         public ICurve3D GetCurve3D()

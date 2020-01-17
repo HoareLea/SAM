@@ -44,6 +44,15 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Add(string name, int value)
+        {
+            if (dictionary == null)
+                return false;
+
+            dictionary[name] = value;
+            return true;
+        }
+
         public bool Remove(string name)
         {
             if (dictionary == null || name == null)
