@@ -67,6 +67,9 @@ namespace SAM.Geometry.Grasshopper
             if (geometricGoo is GH_Point)
                 return ((GH_Point)geometricGoo).ToSAM();
 
+            if(geometricGoo is GH_Brep)
+                return ((GH_Brep)geometricGoo).ToSAM(simplify);
+
             return (geometricGoo as dynamic).ToSAM();
         }
 
