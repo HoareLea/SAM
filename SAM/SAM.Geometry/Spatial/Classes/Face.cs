@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Face : IClosedPlanar3D
+    public class Face : IClosedPlanar3D, IGeometry3D
     {
         private Plane plane;
         private Planar.IClosed2D boundary;
