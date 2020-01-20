@@ -49,7 +49,10 @@ namespace SAM.Core
             {
                 this.parameterSets = new List<ParameterSet>();
                 foreach (ParameterSet parameterSet in parameterSets)
-                    this.parameterSets.Add(parameterSet.Clone());
+                {
+                    ParameterSet parameterSet_Temp = parameterSet.Clone();
+                    this.parameterSets.Add(parameterSet_Temp);
+                }  
             }
         }
 

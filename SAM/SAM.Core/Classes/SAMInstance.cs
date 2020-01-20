@@ -40,8 +40,8 @@ namespace SAM.Core
             this.sAMType = SAMType;
         }
 
-        public SAMInstance(Guid guid, string name, SAMType SAMType)
-            : base(guid, name)
+        public SAMInstance(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, SAMType SAMType)
+            : base(guid, name, parameterSets)
         {
             this.sAMType = SAMType;
         }

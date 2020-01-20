@@ -53,6 +53,15 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Add(string name, bool value)
+        {
+            if (dictionary == null)
+                return false;
+
+            dictionary[name] = value;
+            return true;
+        }
+
         public bool Remove(string name)
         {
             if (dictionary == null || name == null)
@@ -156,7 +165,7 @@ namespace SAM.Core
         {
             ParameterSet parameterSet = new ParameterSet(name);
             foreach (KeyValuePair<string, object> keyValuePair in dictionary)
-                dictionary[keyValuePair.Key] = keyValuePair.Value;
+                parameterSet.dictionary[keyValuePair.Key] = keyValuePair.Value;
 
             return parameterSet;
         }

@@ -44,8 +44,8 @@ namespace SAM.Analytical
                 edges = new List<Edge>();
         }
 
-        public Panel(Guid guid, string name, Construction construction, PanelType panelType, List<Edge> edges)
-            : base(guid, name, construction)
+        public Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets,  Construction construction, PanelType panelType, List<Edge> edges)
+            : base(guid, name, parameterSets, construction)
         {
             this.panelType = panelType;
             this.edges = edges;

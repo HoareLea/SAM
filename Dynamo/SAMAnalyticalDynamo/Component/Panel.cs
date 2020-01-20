@@ -89,15 +89,15 @@ namespace SAMAnalyticalDynamo
             return new SAM.Analytical.Panel(panel, construction);
         }
 
-        public static SAM.Analytical.Panel SetPanelType(SAM.Analytical.Panel panel, PanelType panelType)
+        public static SAM.Analytical.Panel SetPanelType(SAM.Analytical.Panel panel, object panelType)
         {
             if (panel == null)
                 return null;
 
-            return new SAM.Analytical.Panel(panel, panelType);
+            return new SAM.Analytical.Panel(panel, Query.PanelType(panelType));
         }
 
-        public static PanelType PanelType(SAM.Analytical.Panel panel)
+        public static object PanelType(SAM.Analytical.Panel panel)
         {
             return panel.PanelType;
         }
