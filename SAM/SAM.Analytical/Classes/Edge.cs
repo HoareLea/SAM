@@ -75,8 +75,23 @@ namespace SAM.Analytical
             if (geometry3D is IClosed3D)
                 geometry3D_Temp = ((IClosed3D)geometry3D).GetBoundary();
 
+            if (geometry3D_Temp is Polycurve3D)
+                return ((Polycurve3D)geometry3D_Temp).Explode().ConvertAll(x => new Edge(x));
+
             if (geometry3D_Temp is ICurvable3D)
-                return ((ICurvable3D)geometry3D_Temp).GetCurves().ConvertAll(x => new Edge(x));
+            {
+                ICurvable3D curvable3D = (ICurvable3D)geometry3D_Temp;
+                List<Edge> result = new List<Edge>();
+                foreach (ICurve3D curve3D in curvable3D.GetCurves())
+                {
+                    if (curve3D is Polycurve3D)
+                        result.AddRange(FromGeometry(curve3D));
+                    else
+                        result.Add(new Edge(curve3D));
+                }
+                return result;
+
+            }
 
             return null;
         }

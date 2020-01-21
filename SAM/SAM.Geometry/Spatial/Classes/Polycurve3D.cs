@@ -53,5 +53,19 @@ namespace SAM.Geometry.Spatial
         {
             return curves.ConvertAll(x => (ICurve3D)x.Clone());
         }
+
+        public List<ICurve3D> Explode()
+        {
+            List<ICurve3D> result = new List<ICurve3D>();
+            foreach(ICurve3D curve3D in curves)
+            {
+                if (curve3D is ICurvable3D)
+                    result.AddRange(((ICurvable3D)curve3D).GetCurves());
+                else
+                    result.Add((ICurve3D)curve3D.Clone());
+                    
+            }
+            return result;
+        }
     }
 }
