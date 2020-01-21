@@ -14,7 +14,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public AnalyticalPanelType()
-          : base("AnalyticalSnapByPoints", "Snp",
+          : base("AnalyticalPanelType", "AnalyticalPanelType",
               "Snap Panels",
               "SAM", "Analytical")
         {
@@ -81,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("e61f2f2e-f655-430a-9dfd-507929edef58"); }
+            get { return new Guid("25a6b405-19ab-4ff1-9666-7760997ccfdd"); }
         }
     }
 }

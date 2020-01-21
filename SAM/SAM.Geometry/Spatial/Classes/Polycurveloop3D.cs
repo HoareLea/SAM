@@ -32,5 +32,10 @@ namespace SAM.Geometry.Spatial
         {
             return new PolycurveLoop3D(this);
         }
+
+        public override IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new PolycurveLoop3D(GetCurves().ConvertAll(x => (ICurve3D)x.GetMoved(vector3D)));
+        }
     }
 }
