@@ -42,9 +42,9 @@ namespace SAM.Analytical.Grasshopper
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
-                GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
-
-            base.AppendAdditionalComponentMenuItems(menu);
+                //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
+                //base.AppendAdditionalComponentMenuItems(menu);
+                GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged, true, panelType == this.panelType).Tag = panelType;
         }
 
         private void Menu_PanelTypeChanged(object sender, EventArgs e)
