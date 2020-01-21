@@ -95,5 +95,10 @@ namespace SAM.Geometry.Spatial
         {
             points.Reverse();
         }
+
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new Polyline3D(points.ConvertAll(x => (Point3D)x.GetMoved(vector3D)));
+        }
     }
 }

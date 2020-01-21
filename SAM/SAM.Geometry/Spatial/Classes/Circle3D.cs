@@ -69,14 +69,14 @@ namespace SAM.Geometry.Spatial
             return new Point3D(plane.Origin);
         }
 
-        public Circle3D GetMoved(Vector3D vector3D)
+        public IGeometry3D GetMoved(Vector3D vector3D)
         {
-            return new Circle3D(plane.GetMoved(vector3D), radious);
+            return new Circle3D((Plane)plane.GetMoved(vector3D), radious);
         }
 
         public void Move(Vector3D vector3D)
         {
-            plane = plane.GetMoved(vector3D);
+            plane = (Plane)plane.GetMoved(vector3D);
         }
 
         public double GetPerimeter()

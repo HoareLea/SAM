@@ -42,5 +42,10 @@ namespace SAM.Geometry.Spatial
         {
             return boundary.Clone() as IClosed3D;
         }
+
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new Surface((IClosed3D)boundary.GetMoved(vector3D));
+        }
     }
 }

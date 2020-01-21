@@ -23,6 +23,12 @@ namespace SAM.Geometry.Spatial
             vector = new Vector3D(segment3D.vector);
         }
 
+        public Segment3D(Point3D origin, Vector3D vector)
+        {
+            this.origin = origin;
+            this.vector = vector;
+        }
+
         public Point3D this[int index]
         {
             get
@@ -30,7 +36,7 @@ namespace SAM.Geometry.Spatial
                 if (index == 0)
                     return origin;
                 if (index == 1)
-                    return origin.GetMoved(vector);
+                    return (Point3D)origin.GetMoved(vector);
 
                 return null;
             }
@@ -50,7 +56,7 @@ namespace SAM.Geometry.Spatial
 
         public Point3D GetEnd()
         {
-            return origin.GetMoved(vector);
+            return (Point3D)origin.GetMoved(vector);
         }
 
         public Vector3D Direction
@@ -100,6 +106,9 @@ namespace SAM.Geometry.Spatial
             vector.Negate();
         }
 
-
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new Segment3D((Point3D)origin.GetMoved(vector3D), (Vector3D)vector.Clone());
+        }
     }
 }

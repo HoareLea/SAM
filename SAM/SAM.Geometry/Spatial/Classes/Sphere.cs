@@ -75,5 +75,10 @@ namespace SAM.Geometry.Spatial
         {
             throw new NotImplementedException();
         }
+
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new Sphere((Point3D)origin.GetMoved(vector3D), radious);
+        }
     }
 }

@@ -188,6 +188,11 @@ namespace SAM.Geometry.Spatial
             return new BoundingBox3D(Point3D.Zero, new Point3D(coordinates[0], coordinates[1], coordinates[2]), offset);
         }
 
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new Vector3D(coordinates[0] + vector3D.coordinates[0], coordinates[1] + vector3D.coordinates[1], coordinates[2] + vector3D.coordinates[2]);
+        }
+
         public static Vector3D operator +(Vector3D vector3D_1, Vector3D vector3D_2)
         {
             return new Vector3D(vector3D_1.coordinates[0] + vector3D_2.coordinates[0], vector3D_1.coordinates[1] + vector3D_2.coordinates[1], vector3D_1.coordinates[2] + vector3D_2.coordinates[2]);

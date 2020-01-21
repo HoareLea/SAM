@@ -84,6 +84,9 @@ namespace SAM.Geometry.Spatial
             return new Triangle3D(this);
         }
 
-
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new Triangle3D((Point3D)points[0].GetMoved(vector3D), (Point3D)points[1].GetMoved(vector3D), (Point3D)points[2].GetMoved(vector3D));
+        }
     }
 }

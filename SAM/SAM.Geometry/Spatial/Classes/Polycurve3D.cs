@@ -67,5 +67,10 @@ namespace SAM.Geometry.Spatial
             }
             return result;
         }
+
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new Polycurve3D(curves.ConvertAll(x => (ICurve3D)x.GetMoved(vector3D)));
+        }
     }
 }

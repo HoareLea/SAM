@@ -247,5 +247,10 @@ namespace SAM.Geometry.Spatial
         {
             return GetSegments().ConvertAll(x => (ICurve3D)x);
         }
+
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new BoundingBox3D((Point3D)min.GetMoved(vector3D), (Point3D)max.GetMoved(vector3D));
+        }
     }
 }

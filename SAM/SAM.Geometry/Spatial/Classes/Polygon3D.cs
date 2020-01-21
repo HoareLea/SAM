@@ -89,5 +89,10 @@ namespace SAM.Geometry.Spatial
         {
             return GetSegments().ConvertAll(x => (ICurve3D)x);
         }
+
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new Polygon3D(points.ConvertAll(x => (Point3D)x.GetMoved(vector3D)));
+        }
     }
 }

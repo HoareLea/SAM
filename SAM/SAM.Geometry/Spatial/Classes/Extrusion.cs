@@ -38,5 +38,10 @@ namespace SAM.Geometry.Spatial
         {
             throw new NotImplementedException();
         }
+
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new Extrusion((Face)face.GetMoved(vector3D), (Vector3D)vector.Clone());
+        }
     }
 }

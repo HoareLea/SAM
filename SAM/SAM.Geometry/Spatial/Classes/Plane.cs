@@ -269,9 +269,9 @@ namespace SAM.Geometry.Spatial
             return new Point3D(point3D.X + u * direction.X, point3D.Y + u * direction.Y, point3D.Z + u * direction.Z);
         }
 
-        public Plane GetMoved(Vector3D vector3D)
+        public IGeometry3D GetMoved(Vector3D vector3D)
         {
-            Plane plane = new Plane(origin.GetMoved(vector3D), normal);
+            Plane plane = new Plane((Point3D)origin.GetMoved(vector3D), (Vector3D)normal.Clone());
             plane.baseX = baseX;
 
             return plane;

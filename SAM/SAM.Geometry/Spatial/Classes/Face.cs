@@ -74,5 +74,10 @@ namespace SAM.Geometry.Spatial
         {
             return plane.Convert(boundary).GetBoundary();
         }
+
+        public IGeometry3D GetMoved(Vector3D vector3D)
+        {
+            return new Face((Plane)plane.GetMoved(vector3D), (Planar.IClosed2D)boundary.Clone());
+        }
     }
 }

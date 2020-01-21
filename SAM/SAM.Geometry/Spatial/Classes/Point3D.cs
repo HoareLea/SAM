@@ -97,7 +97,7 @@ namespace SAM.Geometry.Spatial
             return new Vector3D(this, point3D).Length;
         }
 
-        public Point3D GetMoved(Vector3D vector3D)
+        public IGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Point3D(coordinates[0] + vector3D[0], coordinates[1] + vector3D[1], coordinates[2] + vector3D[2]);
         }
