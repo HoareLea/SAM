@@ -15,6 +15,13 @@ namespace SAM.Geometry.Spatial
             this.points = Point3D.Clone(point3Ds);
         }
 
+        public Polyline3D(IEnumerable<Segment3D> segment3Ds, bool close = false)
+        {
+            points = new List<Point3D>() { segment3Ds.ElementAt(0).GetStart() };
+            foreach (Segment3D segment3D in segment3Ds)
+                points.Add(segment3D.GetEnd());
+        }
+
         public Polyline3D(Polyline3D polyline3D)
         {
             this.points = Point3D.Clone(polyline3D.points);
@@ -66,8 +73,6 @@ namespace SAM.Geometry.Spatial
 
         public Polygon3D ToPolygon3D()
         {
-            
-            
             return new Polygon3D(points);
         }
 
@@ -99,6 +104,11 @@ namespace SAM.Geometry.Spatial
         public IGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Polyline3D(points.ConvertAll(x => (Point3D)x.GetMoved(vector3D)));
+        }
+
+        public List<Point3D> GetPoints()
+        {
+            return points.ConvertAll(x => (Point3D)x.Clone());
         }
     }
 }

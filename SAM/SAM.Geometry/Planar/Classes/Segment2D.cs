@@ -9,7 +9,7 @@ namespace SAM.Geometry.Planar
     /// <summary>
     /// Segment2D
     /// </summary>
-    public class Segment2D : ICurve2D
+    public class Segment2D : ICurve2D, ISegmentable2D
     {
         private Point2D origin;
         private Vector2D vector;
@@ -354,7 +354,7 @@ namespace SAM.Geometry.Planar
 
         public IGeometry Clone()
         {
-            throw new NotImplementedException();
+            return new Segment2D(origin, vector);
         }
 
         public Point2D GetStart()
@@ -365,6 +365,11 @@ namespace SAM.Geometry.Planar
         public Point2D GetEnd()
         {
             return origin.GetMoved(vector);
+        }
+
+        public List<Segment2D> GetSegments()
+        {
+            return new List<Segment2D>() { new Segment2D(origin, vector) };
         }
     }
 }

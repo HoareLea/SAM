@@ -11,7 +11,14 @@ namespace SAM.Geometry.Spatial
         public Polygon3D(IEnumerable<Point3D> points)
         {
             if (points != null)
-                this.points = new List<Point3D>(points);
+            {
+                this.points = new List<Point3D>();
+                foreach (Point3D point3D in points)
+                    this.points. Add(point3D);
+
+                if (this.points.First().Distance(this.points.Last()) == 0)
+                    this.points.RemoveAt(this.points.Count - 1);
+            }
         }
 
         public Polygon3D(Polygon3D polygon3D)

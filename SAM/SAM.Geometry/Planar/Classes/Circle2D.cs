@@ -98,5 +98,13 @@ namespace SAM.Geometry.Planar
         {
             return new Circle2D(this);
         }
+
+        public bool Inside(IClosed2D closed2D)
+        {
+            if (closed2D is ISegmentable2D)
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+
+            throw new NotImplementedException();
+        }
     }
 }

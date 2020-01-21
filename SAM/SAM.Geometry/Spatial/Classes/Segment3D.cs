@@ -110,5 +110,21 @@ namespace SAM.Geometry.Spatial
         {
             return new Segment3D((Point3D)origin.GetMoved(vector3D), (Vector3D)vector.Clone());
         }
+
+
+        public static List<Point3D> GetPoints(IEnumerable<Segment3D> segment3Ds, bool close = false)
+        {
+            if (segment3Ds == null)
+                return null;
+
+            List<Point3D> result = new List<Point3D>() { segment3Ds.First().GetStart() };
+            foreach(Segment3D segment3D in segment3Ds)
+                result.Add(segment3D.GetEnd());
+
+            if (close && result.First().Distance(result.Last()) != 0)
+                result.Add(result.First());
+
+            return result;
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
-    public class Polygon2D : IClosed2D
+    public class Polygon2D : IClosed2D, ISegmentable2D
     {
         private List<Point2D> points;
 
@@ -39,6 +39,19 @@ namespace SAM.Geometry.Planar
         public List<Point2D> GetPoints()
         {
             return points.ConvertAll(x => new Point2D(x));
+        }
+
+        public bool Inside(Point2D point2D)
+        {
+            return Point2D.Inside(points, point2D);
+        }
+
+        public bool Inside(IClosed2D closed2D)
+        {
+            if (closed2D is ISegmentable2D)
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+
+            throw new NotImplementedException();
         }
     }
 }

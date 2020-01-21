@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class BoundingBox2D : IClosed2D
+    public class BoundingBox2D : IClosed2D, ISegmentable2D
     {
         private Point2D min;
         private Point2D max;
@@ -131,6 +131,18 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        
+        public bool Inside(IClosed2D closed2D)
+        {
+            if(closed2D is BoundingBox2D)
+                return Inside((BoundingBox2D)closed2D);
+            
+            if(closed2D is ISegmentable2D)
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+
+            throw new NotImplementedException();
+        }
+        
         public bool Inside(BoundingBox2D boundingBox2D)
         {
             return Inside(boundingBox2D.max) && Inside(boundingBox2D.min);
@@ -155,6 +167,21 @@ namespace SAM.Geometry.Planar
         public IGeometry Clone()
         {
             return new BoundingBox2D(this);
+        }
+
+        public List<Segment2D> GetSegments()
+        {
+            List<Point2D> points = GetPoints();
+
+            return new List<Segment2D>() {new Segment2D(points[0], points[1]), new Segment2D(points[1], points[2]), new Segment2D(points[2], points[3]), new Segment2D(points[3], points[0]) };
+        }
+
+        public List<Point2D> GetPoints()
+        {
+            double x = Width;
+            double y = Height;
+
+            return new List<Point2D>() { new Point2D(min), new Point2D(min.X, min.Y + y), new Point2D(max), new Point2D(max.X, max.Y - y) };
         }
     }
 }

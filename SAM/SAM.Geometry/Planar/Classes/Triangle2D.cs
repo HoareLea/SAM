@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Triangle2D : IClosed2D
+    public class Triangle2D : IClosed2D, ISegmentable2D
     {
         private Point2D[] points = new Point2D[3];
 
@@ -57,9 +57,9 @@ namespace SAM.Geometry.Planar
             return new List<Point2D>() { new Point2D(points[0]), new Point2D(points[1]), new Point2D(points[2]) };
         }
 
-        public Segment2D[] GetSegments()
+        public List<Segment2D> GetSegments()
         {
-            return new Segment2D[] { new Segment2D(points[0], points[1]), new Segment2D(points[1], points[2]), new Segment2D(points[2], points[0]) };
+            return new List<Segment2D> { new Segment2D(points[0], points[1]), new Segment2D(points[1], points[2]), new Segment2D(points[2], points[0]) };
         }
 
         public bool Inside(BoundingBox2D boundingBox2D)
@@ -98,6 +98,14 @@ namespace SAM.Geometry.Planar
         public IGeometry Clone()
         {
             return new Triangle2D(this);
+        }
+
+        public bool Inside(IClosed2D closed2D)
+        {
+            if (closed2D is ISegmentable2D)
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+
+            throw new NotImplementedException();
         }
     }
 }

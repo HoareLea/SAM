@@ -215,22 +215,42 @@ namespace SAM.Geometry.Spatial
             double y = Depth;
             
             List<Segment3D> result = new List<Segment3D>();
-            result.Add(new Segment3D(new Point3D(min), new Point3D(min.X + x, min.Y, Min.Z)));
-            result.Add(new Segment3D(new Point3D(min.X + x, min.Y, Min.Z), new Point3D(min.X + x, min.Y + y, Min.Z)));
-            result.Add(new Segment3D(new Point3D(min.X + x, min.Y + y, Min.Z), new Point3D(min.X, min.Y + y, Min.Z)));
-            result.Add(new Segment3D(new Point3D(min.X, min.Y + y, Min.Z), new Point3D(min)));
+            result.Add(new Segment3D(new Point3D(min), new Point3D(min.X + x, min.Y, min.Z)));
+            result.Add(new Segment3D(new Point3D(min.X + x, min.Y, min.Z), new Point3D(min.X + x, min.Y + y, min.Z)));
+            result.Add(new Segment3D(new Point3D(min.X + x, min.Y + y, min.Z), new Point3D(min.X, min.Y + y, min.Z)));
+            result.Add(new Segment3D(new Point3D(min.X, min.Y + y, min.Z), new Point3D(min)));
 
-            result.Add(new Segment3D(new Point3D(min.X, min.Y, min.Z + z), new Point3D(min.X + x, min.Y, Min.Z + z)));
-            result.Add(new Segment3D(new Point3D(min.X + x, min.Y, Min.Z + z), new Point3D(min.X + x, min.Y + y, Min.Z + z)));
-            result.Add(new Segment3D(new Point3D(min.X + x, min.Y + y, Min.Z + z), new Point3D(min.X, min.Y + y, Min.Z + z)));
-            result.Add(new Segment3D(new Point3D(min.X, min.Y + y, Min.Z + z), new Point3D(min.X, min.Y, min.Z + z)));
+            result.Add(new Segment3D(new Point3D(min.X, min.Y, min.Z + z), new Point3D(min.X + x, min.Y, min.Z + z)));
+            result.Add(new Segment3D(new Point3D(min.X + x, min.Y, min.Z + z), new Point3D(min.X + x, min.Y + y, min.Z + z)));
+            result.Add(new Segment3D(new Point3D(min.X + x, min.Y + y, min.Z + z), new Point3D(min.X, min.Y + y, min.Z + z)));
+            result.Add(new Segment3D(new Point3D(min.X, min.Y + y, min.Z + z), new Point3D(min.X, min.Y, min.Z + z)));
 
-            result.Add(new Segment3D(new Point3D(min), new Point3D(min.X, min.Y, Min.Z + z)));
-            result.Add(new Segment3D(new Point3D(min.X + x, min.Y, Min.Z), new Point3D(min.X + x, min.Y, Min.Z + z)));
-            result.Add(new Segment3D(new Point3D(min.X + x, min.Y + y, Min.Z), new Point3D(min.X + x, min.Y + y, Min.Z + z)));
-            result.Add(new Segment3D(new Point3D(min.X + x, min.Y + y, Min.Z), new Point3D(min.X + x, min.Y + y, Min.Z + z)));
-            result.Add(new Segment3D(new Point3D(min.X, min.Y + y, Min.Z), new Point3D(min.X, min.Y + y, Min.Z + z)));
+            result.Add(new Segment3D(new Point3D(min), new Point3D(min.X, min.Y, min.Z + z)));
+            result.Add(new Segment3D(new Point3D(min.X + x, min.Y, min.Z), new Point3D(min.X + x, min.Y, min.Z + z)));
+            result.Add(new Segment3D(new Point3D(min.X + x, min.Y + y, min.Z), new Point3D(min.X + x, min.Y + y, min.Z + z)));
+            result.Add(new Segment3D(new Point3D(min.X + x, min.Y + y, min.Z), new Point3D(min.X + x, min.Y + y, min.Z + z)));
+            result.Add(new Segment3D(new Point3D(min.X, min.Y + y, min.Z), new Point3D(min.X, min.Y + y, min.Z + z)));
             return result;
+        }
+
+        public List<Point3D> GetPoints()
+        {
+            double x = Width;
+            double z = Height;
+            double y = Depth;
+
+            List<Point3D> point3Ds = new List<Point3D>();
+            point3Ds.Add(new Point3D(min));
+            point3Ds.Add(new Point3D(min.X + x, min.Y, Min.Z));
+            point3Ds.Add(new Point3D(min.X + x, min.Y + y, Min.Z));
+            point3Ds.Add(new Point3D(min.X, min.Y + y, Min.Z));
+
+            point3Ds.Add(new Point3D(max));
+            point3Ds.Add(new Point3D(max.X + x, max.Y, max.Z));
+            point3Ds.Add(new Point3D(max.X + x, max.Y + y, max.Z));
+            point3Ds.Add(new Point3D(max.X, max.Y + y, max.Z));
+
+            return point3Ds;
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)

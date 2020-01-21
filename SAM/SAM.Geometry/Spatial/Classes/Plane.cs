@@ -286,6 +286,11 @@ namespace SAM.Geometry.Spatial
         {
             return new Plane(this);
         }
+
+        public bool IsCoplanar(Plane plane, double tolerance = Tolerance.Angle)
+        {
+            return normal.Angle(plane.normal) <= tolerance || -normal.Angle(plane.normal) <= tolerance;
+        }
     }
 }
 

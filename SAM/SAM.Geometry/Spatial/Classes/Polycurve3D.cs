@@ -72,5 +72,25 @@ namespace SAM.Geometry.Spatial
         {
             return new Polycurve3D(curves.ConvertAll(x => (ICurve3D)x.GetMoved(vector3D)));
         }
+
+        
+        public static bool TryGetPolyline3D(Polycurve3D polycurve3D, out Polyline3D polyline3D)
+        {
+            polyline3D = null;
+
+            if (polycurve3D == null)
+                return false;
+
+            List<ICurve3D> curve3Ds = polycurve3D.Explode();
+            if (curve3Ds == null || curve3Ds.Count == 0)
+                return false;
+
+
+            List<Point3D> point3Ds = new List<Point3D>() { curve3Ds[0].GetStart()};
+            curve3Ds.ForEach(x => point3Ds.Add(x.GetEnd()));
+
+            polyline3D = new Polyline3D(point3Ds);
+            return true;
+        }
     }
 }

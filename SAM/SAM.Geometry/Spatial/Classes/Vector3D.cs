@@ -203,6 +203,13 @@ namespace SAM.Geometry.Spatial
             return new Vector3D(vector3D_1.coordinates[0] - vector3D_2.coordinates[0], vector3D_1.coordinates[1] - vector3D_2.coordinates[1], vector3D_1.coordinates[2] - vector3D_2.coordinates[2]);
         }
 
+        public static Vector3D operator -(Vector3D vector3D)
+        {
+            Vector3D result = new Vector3D(vector3D);
+            result.Negate();
+            return result;
+        }
+
         public static double operator *(Vector3D vector3D_1, Vector3D vector3D_2)
         {
             return vector3D_1.coordinates[0] * vector3D_2.coordinates[0] + vector3D_1.coordinates[1] * vector3D_2.coordinates[1] + vector3D_1.coordinates[2] * vector3D_2.coordinates[2];

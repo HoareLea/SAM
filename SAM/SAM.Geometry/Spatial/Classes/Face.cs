@@ -79,5 +79,13 @@ namespace SAM.Geometry.Spatial
         {
             return new Face((Plane)plane.GetMoved(vector3D), (Planar.IClosed2D)boundary.Clone());
         }
+
+        public bool IsInside(Face face, double tolerance = Tolerance.MicroDistance)
+        {
+            if (!face.plane.IsCoplanar(plane))
+                return false;
+
+            return boundary.Inside(face.boundary);
+        }
     }
 }

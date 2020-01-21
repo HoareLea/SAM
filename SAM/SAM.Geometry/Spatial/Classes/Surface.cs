@@ -20,12 +20,27 @@ namespace SAM.Geometry.Spatial
             boundary = surface.boundary.Clone() as IClosed3D;
         }
 
-        public Face ToFace()
+        public Face ToFace(double tolerance = Tolerance.MicroDistance)
         {
             if (boundary is IClosedPlanar3D)
                 return new Face(boundary as IClosedPlanar3D);
 
-            return null;
+            List<ICurve3D> curve3Ds = null;
+            if (boundary is Polycurve3D)
+                curve3Ds = ((Polycurve3D)boundary).Explode();
+            else if (boundary is ICurvable3D)
+                curve3Ds = ((ICurvable3D)boundary).GetCurves();
+
+            IEnumerable<Segment3D> segment3Ds = curve3Ds.FindAll(x => x is Segment3D).Cast<Segment3D>();
+            if(segment3Ds.Count() == curve3Ds.Count)
+            {
+                List<Point3D> point3Ds = Segment3D.GetPoints(segment3Ds, false);
+                Plane plane = Point3D.GetPlane(point3Ds, tolerance);
+                if (plane != null)
+                    return new Face(new Polygon3D(point3Ds));
+            }
+
+            throw new NotImplementedException();
         }
 
         public IGeometry Clone()

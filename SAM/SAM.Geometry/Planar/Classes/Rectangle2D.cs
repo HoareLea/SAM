@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Rectangle2D : IClosed2D
+    public class Rectangle2D : IClosed2D, ISegmentable2D
     {
         private Point2D origin;
         private double width;
@@ -45,44 +45,44 @@ namespace SAM.Geometry.Planar
             this.heightDirection = new Vector2D(rectangle2D.heightDirection);
         }
 
-        public Point2D[] GetPoints()
+        public List<Point2D> GetPoints()
         {
-            Point2D[] points = new Point2D[4];
-            points[0] = origin;
-
+            List<Point2D> points = new List<Point2D>();
+            points.Add(new Point2D(origin));
+            
             Point2D point2D = null;
 
             Vector2D heightVector = height * heightDirection;
 
             point2D = new Point2D(origin);
             point2D.Move(heightVector);
-            points[1] = point2D;
+            points.Add(point2D);
 
             Vector2D widthDirection = WidthDirection;
             Vector2D widthVector = width * widthDirection;
 
             point2D = new Point2D(point2D);
             point2D.Move(widthVector);
-            points[2] = point2D;
+            points.Add(point2D);
 
             point2D = new Point2D(point2D);
             heightVector.Negate();
             point2D.Move(heightVector);
-            points[3] = point2D;
+            points.Add(point2D);
 
             return points;
         }
 
-        public Segment2D[] GetSegments()
+        public List<Segment2D> GetSegments()
         {
-            Point2D[] aPoints = GetPoints();
+            List<Point2D> points = GetPoints();
 
-            Segment2D[] aSegments = new Segment2D[4];
-            aSegments[0] = new Segment2D(aPoints[0], aPoints[1]);
-            aSegments[1] = new Segment2D(aPoints[1], aPoints[2]);
-            aSegments[2] = new Segment2D(aPoints[2], aPoints[3]);
-            aSegments[3] = new Segment2D(aPoints[3], aPoints[0]);
-            return aSegments;
+            List<Segment2D> segments = new List<Segment2D>();
+            segments.Add(new Segment2D(points[0], points[1]));
+            segments.Add(new Segment2D(points[1], points[2]));
+            segments.Add(new Segment2D(points[2], points[3]));
+            segments.Add(new Segment2D(points[3], points[0]));
+            return segments;
         }
 
         public bool Contains(Point2D point, double offset)
@@ -174,7 +174,7 @@ namespace SAM.Geometry.Planar
 
         public Segment2D[] GetDiagonals()
         {
-            Point2D[] points = GetPoints();
+            List<Point2D> points = GetPoints();
 
             return new Segment2D[] { new Segment2D(points[0], points[2]), new Segment2D(points[1], points[3]) };
         }
@@ -188,7 +188,7 @@ namespace SAM.Geometry.Planar
 
         public IEnumerable<Triangle2D> Triangulate()
         {
-            Point2D[] points = GetPoints();
+            List<Point2D> points = GetPoints();
 
             return new Triangle2D[] { new Triangle2D(points[0], points[1], points[2]), new Triangle2D(points[2], points[3], points[0]) };
         }
@@ -196,6 +196,19 @@ namespace SAM.Geometry.Planar
         public IGeometry Clone()
         {
             return new Rectangle2D(this);
+        }
+
+        public bool Inside(Point2D point2D)
+        {
+            return Point2D.Inside(GetPoints(), point2D);
+        }
+
+        public bool Inside(IClosed2D closed2D)
+        {
+            if (closed2D is ISegmentable2D)
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+
+            throw new NotImplementedException();
         }
     }
 }
