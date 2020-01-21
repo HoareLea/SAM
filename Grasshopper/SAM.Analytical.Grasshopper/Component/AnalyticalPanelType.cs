@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
@@ -10,8 +11,10 @@ namespace SAM.Analytical.Grasshopper
 {
     public class AnalyticalPanelType : GH_Component
     {
+        private PanelType panelType = PanelType.Undefined;
+        
         /// <summary>
-        /// Initializes a new instance of the SAM_point3D class.
+        /// Panel Type
         /// </summary>
         public AnalyticalPanelType()
           : base("AnalyticalPanelType", "AnalyticalPanelType",
@@ -21,19 +24,37 @@ namespace SAM.Analytical.Grasshopper
 
         }
 
-        public override bool AppendMenuItems(ToolStripDropDown menu)
+        public override bool Write(GH_IWriter writer)
         {
-            base.AppendMenuItems(menu);
+            writer.SetInt32("PanelType", (int)panelType);
+            return base.Write(writer);
+        }
 
-            ToolStripDropDown toolStripDropDown = new ToolStripDropDown();
+        public override bool Read(GH_IReader reader)
+        {
+            int aIndex = -1;
+            if (reader.TryGetInt32("PanelType", ref aIndex))
+                panelType = (PanelType)aIndex;
+            
+            return base.Read(reader);
+        }
 
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
             foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
-                toolStripDropDown.Items.Add(panelType.ToString());
+                GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
 
-            Control control = new Control();
-            global::Grasshopper.Kernel.GH_DocumentObject.Menu_AppendCustomItem(toolStripDropDown, control);
+            base.AppendAdditionalComponentMenuItems(menu);
+        }
 
-            return true;
+        private void Menu_PanelTypeChanged(object sender, EventArgs e)
+        {
+            if (sender is ToolStripMenuItem item && item.Tag is PanelType)
+            {
+                //Do something with panelType
+                this.panelType = (PanelType)item.Tag;
+                ExpireSolution(true);
+            }
         }
 
         /// <summary>
@@ -41,9 +62,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            //inputParamManager.AddGenericParameter("Analytical", "Anl", "SAM Analytical Object", GH_ParamAccess.item);
-            //inputParamManager.AddGenericParameter("Points", "Pnt", "Points", GH_ParamAccess.list);
-            //inputParamManager.AddNumberParameter("maxDistance", "mDis", "Max Distance to snap points", GH_ParamAccess.item, double.NaN);
+
         }
 
         /// <summary>
@@ -60,7 +79,7 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-
+            dataAccess.SetData(0, panelType);
         }
 
         /// <summary>
