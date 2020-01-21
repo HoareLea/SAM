@@ -67,6 +67,7 @@
     <Compile Include="Component\AnalyticalCreateConstruction.cs" />
     <Compile Include="Component\AnalyticalCreateSpace.cs" />
     <Compile Include="Component\AnalyticalCreatePanel.cs" />
+    <Compile Include="Component\AnalyticalPanelType.cs" />
     <Compile Include="Component\AnalyticalSnapByPoints.cs" />
     <Compile Include="Component\AnalyticalSnapByOffset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
