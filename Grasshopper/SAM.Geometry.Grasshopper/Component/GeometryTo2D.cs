@@ -128,7 +128,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return Resources.SAM_Small;
+                return Resources.SAM_Geometry;
             }
         }
 
