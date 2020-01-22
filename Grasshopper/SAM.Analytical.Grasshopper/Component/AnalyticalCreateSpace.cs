@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 
 using SAM.Analytical.Grasshopper.Properties;
@@ -17,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public AnalyticalCreateSpace()
           : base("AnalyticalCreateSpace", "CSp",
-              "CreateSpace",
+              "Create Space, if nothing connect default values:  _name = Space_Default, _locationPoint = (0,0,0.75) ",
               "SAM", "Analytical")
         {
         }
@@ -27,8 +28,12 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddTextParameter("_name", "_name", "Space Name", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_name", "_name", "Space Name, Default = Space_Default", GH_ParamAccess.item,"Space_Default");
+            //inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point", GH_ParamAccess.item);
+            //Default Input in GH
+            int index = inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
+            Param_GenericObject genericObjectParameter = (Param_GenericObject)inputParamManager[index];
+            genericObjectParameter.PersistentData.Append(new GH_Point(new Rhino.Geometry.Point3d(0, 0, 0.75)));
         }
 
         /// <summary>
