@@ -14,8 +14,8 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public AnalyticalSnapByPoints()
-          : base("AnalyticalSnapByPoints", "Snp",
-              "Snap Panels",
+          : base("SAMAnalytical.SnapByPoints", "SAMAnalytical.SnapByPoints",
+              "Snap Panels to Points",
               "SAM", "Analytical")
         {
 
@@ -26,9 +26,9 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("Analytical", "Anl", "SAM Analytical Object", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("Points", "Pnt", "Points", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("maxDistance", "mDis", "Max Distance to snap points", GH_ParamAccess.item, double.NaN);
+            inputParamManager.AddGenericParameter("_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Panel", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_points", "_points", "list of Points", GH_ParamAccess.list);
+            inputParamManager.AddNumberParameter("_maxDistance_", "_maxDistance_", "Max Distance to snap points default 1m", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Analytical", "Anl", "SAM Analytical Object", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("SAMAnalytical", "SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public GeometryTo2D()
-          : base("GeometryTo2D", "To2D",
+          : base("SAMGeometry.Geometry2D", "SAMGeometry.Geometry2D",
               "Convert SAM geometry to 2D",
               "SAM", "Geometry")
         {

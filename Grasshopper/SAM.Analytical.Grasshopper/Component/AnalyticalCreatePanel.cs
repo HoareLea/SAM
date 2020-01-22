@@ -12,12 +12,14 @@ namespace SAM.Analytical.Grasshopper
 {
     public class AnalyticalCreatePanel : GH_Component
     {
+        private Panel panel;
+        
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public AnalyticalCreatePanel()
-          : base("AnalyticalCreatePanel", "CrPnl",
-              "CreatePanel",
+          : base("SAMAnalytical.CreatePanel", "SAMAnalytical.CreatePanel",
+              "Create SAM Analytical Panel",
               "SAM", "Analytical")
         {
         }
@@ -39,6 +41,16 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddGenericParameter("Panel", "pnl", "SAM Analytical Panel", GH_ParamAccess.item);
+        }
+
+        public override void DrawViewportWires(IGH_PreviewArgs args)
+        {
+            base.DrawViewportWires(args);
+
+            if (panel == null)
+                return;
+
+            args.Display.DrawPolyline(panel.ToPolycurveLoop().GetCurves().ConvertAll(x => x.GetStart().ToRhino()), System.Drawing.Color.Blue);
         }
 
         /// <summary>
@@ -92,9 +104,16 @@ namespace SAM.Analytical.Grasshopper
             IClosed3D closed3D = obj as IClosed3D;
 
             if (obj == null)
+            {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
+            }
+                
             else
-                dataAccess.SetData(0, new Panel(aConstruction, panelType, closed3D));
+            {
+                panel = new Panel(aConstruction, panelType, closed3D);
+                dataAccess.SetData(0, panel);
+            }
+                
         }
 
         /// <summary>

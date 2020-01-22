@@ -14,8 +14,8 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public AnalyticalSnapByOffset()
-          : base("AnalyticalSnapByOffset", "Snp",
-              "Snap Panels",
+          : base("SAMAnalytical.SnapByOffset", "SAMAnalytical.SnapByOffset",
+              "Snap Panels by Offset from Panels default = 0.2m",
               "SAM", "Analytical")
         {
 

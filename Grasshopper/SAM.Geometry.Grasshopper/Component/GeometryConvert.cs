@@ -13,7 +13,7 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public GeometryConvert()
-          : base("GeometryConvert", "SAMGeo",
+          : base(".GeometryConvert", "SAMGeo",
               "Convert Geometry both direction between GH and SAM",
               "SAM", "Geometry")
         {

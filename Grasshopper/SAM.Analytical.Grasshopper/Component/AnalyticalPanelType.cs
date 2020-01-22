@@ -17,8 +17,8 @@ namespace SAM.Analytical.Grasshopper
         /// Panel Type
         /// </summary>
         public AnalyticalPanelType()
-          : base("AnalyticalPanelType", "AnalyticalPanelType",
-              "Snap Panels",
+          : base("SAMAnalytical.PanelType", "SAMAnalytical.PanelType",
+              "Select Panel Type",
               "SAM", "Analytical")
         {
 
@@ -79,7 +79,7 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, panelType);
+            dataAccess.SetData(0, panelType.ToString());
         }
 
         /// <summary>

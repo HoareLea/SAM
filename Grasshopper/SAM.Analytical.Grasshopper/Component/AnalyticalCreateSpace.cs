@@ -17,8 +17,8 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public AnalyticalCreateSpace()
-          : base("AnalyticalCreateSpace", "CSp",
-              "Create Space, if nothing connect default values:  _name = Space_Default, _locationPoint = (0,0,0.75) ",
+          : base("SAMAnalytical.CreateSpace", "SAMAnalytical.CreateSpace",
+              "Create SAM Space, if nothing connect default values: _name = Space_Default, _locationPoint = (0,0,0.75) ",
               "SAM", "Analytical")
         {
         }

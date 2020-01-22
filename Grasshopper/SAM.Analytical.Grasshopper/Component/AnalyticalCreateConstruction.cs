@@ -16,8 +16,8 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public AnalyticalCreateConstruction()
-          : base("AnalyticalCreateConstruction", "CrCon",
-              "CreateConstruction",
+          : base("SAMAnalytical.CreateConstruction", "SAMAnalyticalCreate.Construction",
+              "Create Construction, if nothing connect default values: _name = Basic Roof: SIM_EXT_SLD_Roof DA01 ",
               "SAM", "Analytical")
         {
         }
@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddTextParameter("_name", "nme", "Name", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_name", "_name", "Contruction Name", GH_ParamAccess.item, "Basic Roof: SIM_EXT_SLD_Roof DA01");
 
         }
 
@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Construction", "con", "SAM Analytical Construction", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Construction", "Construction", "SAM Analytical Construction", GH_ParamAccess.item);
         }
 
         /// <summary>

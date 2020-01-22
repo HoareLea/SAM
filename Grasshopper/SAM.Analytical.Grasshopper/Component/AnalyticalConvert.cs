@@ -15,8 +15,8 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public AnalyticalConvert()
-          : base("AnalyticalConvert", "Cgeo",
-              "Convert Analitical to GH",
+          : base("SAMAnalytical.Geometry", "Analytical.Geometry",
+              "Convert SAM Analitical to GH Geometry ie. Panel to Surface",
               "SAM", "Analytical")
         {
         }
@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Geometry", "geo", "Geometry", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Geometry", "geo", "Geometry in GH ie.Surface", GH_ParamAccess.item);
         }
 
         /// <summary>
