@@ -101,5 +101,12 @@ namespace SAM.Geometry.Spatial
         {
             return new Polygon3D(points.ConvertAll(x => (Point3D)x.GetMoved(vector3D)));
         }
+
+        public double GetArea()
+        {
+            Plane plane = GetPlane();
+
+            return Planar.Point2D.GetArea(points.ConvertAll(x => plane.Convert(x)));
+        }
     }
 }

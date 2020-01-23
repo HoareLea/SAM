@@ -183,5 +183,10 @@ namespace SAM.Geometry.Planar
 
             return new List<Point2D>() { new Point2D(min), new Point2D(min.X, min.Y + y), new Point2D(max), new Point2D(max.X, max.Y - y) };
         }
+
+        public double GetArea()
+        {
+            return Width * Height;
+        }
     }
 }

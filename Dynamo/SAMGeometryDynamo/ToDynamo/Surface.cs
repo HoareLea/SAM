@@ -13,7 +13,7 @@ namespace SAMGeometryDynamo
         [IsVisibleInDynamoLibrary(false)]
         public static Autodesk.DesignScript.Geometry.Surface ToDynamo(this SAM.Geometry.Spatial.Face face)
         {
-            SAM.Geometry.Spatial.Polygon3D polygon3D = face.ToClosed3D() as SAM.Geometry.Spatial.Polygon3D;
+            SAM.Geometry.Spatial.Polygon3D polygon3D = face.ToClosedPlanar3D() as SAM.Geometry.Spatial.Polygon3D;
 
             if (polygon3D == null)
                 return null;

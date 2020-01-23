@@ -88,5 +88,12 @@ namespace SAM.Geometry.Spatial
         {
             return new Triangle3D((Point3D)points[0].GetMoved(vector3D), (Point3D)points[1].GetMoved(vector3D), (Point3D)points[2].GetMoved(vector3D));
         }
+
+        public double GetArea()
+        {
+            Plane plane = GetPlane();
+
+            return Planar.Point2D.GetArea(points.ToList().ConvertAll(x => plane.Convert(x)));
+        }
     }
 }

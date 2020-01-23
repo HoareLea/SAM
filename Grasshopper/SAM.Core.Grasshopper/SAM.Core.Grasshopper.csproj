@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component\Explode.cs" />
+    <Compile Include="Component\SAMAbout.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Kernel\AssemblyPriority.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

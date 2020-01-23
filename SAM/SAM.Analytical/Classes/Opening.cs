@@ -9,12 +9,12 @@ namespace SAM.Analytical
 {
     public class Opening : SAMObject
     {
-        private List<Edge> edges;
+        private List<Edge3D> edges;
 
-        public Opening(IEnumerable<Edge> edges)
+        public Opening(IEnumerable<Edge3D> edges)
             :base()
         {
-            this.edges = new List<Edge>(edges);
+            this.edges = new List<Edge3D>(edges);
         }
 
         public Opening(Opening opening)

@@ -12,7 +12,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public static GH_Surface ToGrasshopper(this Panel Panel)
         {
-            return SAM.Geometry.Grasshopper.Convert.ToGrasshopper(Panel.ToSurface());
+            return SAM.Geometry.Grasshopper.Convert.ToGrasshopper(Panel.GetFace());
         }
     }
 }

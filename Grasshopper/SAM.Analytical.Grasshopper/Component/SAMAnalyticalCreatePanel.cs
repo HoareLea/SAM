@@ -50,7 +50,7 @@ namespace SAM.Analytical.Grasshopper
             if (panel == null)
                 return;
 
-            args.Display.DrawPolyline(panel.ToPolycurveLoop().GetCurves().ConvertAll(x => x.GetStart().ToRhino()), System.Drawing.Color.Blue);
+            args.Display.DrawBrepWires( panel.GetFace().ToRhino_Brep(), System.Drawing.Color.Blue);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            IClosed3D closed3D = obj as IClosed3D;
+            IClosedPlanar3D closedPlanar3D = obj as IClosedPlanar3D;
 
             if (obj == null)
             {
@@ -110,7 +110,7 @@ namespace SAM.Analytical.Grasshopper
                 
             else
             {
-                panel = new Panel(aConstruction, panelType, closed3D);
+                panel = new Panel(aConstruction, panelType, new Face(closedPlanar3D));
                 dataAccess.SetData(0, panel);
             }
                 

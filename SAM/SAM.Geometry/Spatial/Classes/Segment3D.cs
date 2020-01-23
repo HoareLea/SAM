@@ -111,6 +111,11 @@ namespace SAM.Geometry.Spatial
             return new Segment3D((Point3D)origin.GetMoved(vector3D), (Vector3D)vector.Clone());
         }
 
+        public Point3D GetCenter()
+        {
+            return (Point3D)origin.GetMoved(vector / 2);
+        }
+
 
         public static List<Point3D> GetPoints(IEnumerable<Segment3D> segment3Ds, bool close = false)
         {

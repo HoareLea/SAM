@@ -24,7 +24,9 @@ namespace SAMAnalyticalDynamo
         /// </search>
         public static SAM.Analytical.Panel ByPoint3Ds(IEnumerable<SAM.Geometry.Spatial.Point3D> point3Ds, SAM.Analytical.Construction construction, object panelType = null)
         {
-            return new SAM.Analytical.Panel(construction, Query.PanelType(panelType), new SAM.Geometry.Spatial.Polygon3D(point3Ds));
+            Plane plane = SAM.Geometry.Spatial.Point3D.GetPlane(point3Ds);
+
+            return new SAM.Analytical.Panel(construction, Query.PanelType(panelType), new Face(new SAM.Geometry.Spatial.Polygon3D(point3Ds.ToList().ConvertAll(x => plane.Project(x)))));
         }
 
         /// <summary>
@@ -48,11 +50,11 @@ namespace SAMAnalyticalDynamo
             if (geometry3D == null)
                 return null;
 
-            IClosed3D closed3D = geometry3D as IClosed3D;
-            if (closed3D == null)
+            IClosedPlanar3D closedPlanar3D = geometry3D as IClosedPlanar3D;
+            if (closedPlanar3D == null)
                 return null;
 
-            return new SAM.Analytical.Panel(construction, Query.PanelType(panelType), closed3D);
+            return new SAM.Analytical.Panel(construction, Query.PanelType(panelType), new Face(closedPlanar3D));
         }
 
         public static SAM.Analytical.Panel SnapByPoints(SAM.Analytical.Panel panel, IEnumerable<object> points, double maxDistance = 0.2)

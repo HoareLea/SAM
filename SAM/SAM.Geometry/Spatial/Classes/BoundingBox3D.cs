@@ -208,6 +208,16 @@ namespace SAM.Geometry.Spatial
             return new BoundingBox3D(this);
         }
 
+        public double GetArea()
+        {
+            return Width * Height;
+        }
+
+        public double GetVolume()
+        {
+            return Width * Height * Depth;
+        }
+
         public List<Segment3D> GetSegments()
         {
             double x = Width;
@@ -268,9 +278,60 @@ namespace SAM.Geometry.Spatial
             return GetSegments().ConvertAll(x => (ICurve3D)x);
         }
 
+        public Point3D GetCenter()
+        {
+            return Point3D.GetCenter(min, max);
+        }
+
         public IGeometry3D GetMoved(Vector3D vector3D)
         {
             return new BoundingBox3D((Point3D)min.GetMoved(vector3D), (Point3D)max.GetMoved(vector3D));
+        }
+
+
+        public static List<BoundingBox3D> GetExternal(IEnumerable<BoundingBox3D> boundingBox3Ds)
+        {
+            if (boundingBox3Ds == null)
+                return null;
+
+            int aCount = boundingBox3Ds.Count();
+            if (aCount == 0)
+                return new List<BoundingBox3D>();
+
+            if (aCount == 1)
+                return new List<BoundingBox3D>() { boundingBox3Ds.First() };
+
+            HashSet<int> indexes = new HashSet<int>();
+
+            for (int i = 0; i < aCount - 1; i++)
+            {
+                if (indexes.Contains(i))
+                    continue;
+
+                BoundingBox3D boundingBox3D_1 = boundingBox3Ds.ElementAt(i);
+
+                for (int j = 1; j < aCount; j++)
+                {
+                    if (i == j || indexes.Contains(j))
+                        continue;
+
+                    BoundingBox3D boundingBox3D_2 = boundingBox3Ds.ElementAt(j);
+
+                    if (boundingBox3D_1.Inside(boundingBox3D_2))
+                        indexes.Add(j);
+                }
+            }
+
+            List<BoundingBox3D> result = new List<BoundingBox3D>();
+            for (int i = 0; i < aCount; i++)
+            {
+                if (indexes.Contains(i))
+                    continue;
+
+                result.Add(boundingBox3Ds.ElementAt(i));
+            }
+
+            return result;
         }
     }
 }

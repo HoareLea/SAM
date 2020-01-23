@@ -46,7 +46,7 @@ namespace SAM.Geometry.Spatial
             return new Face(this);
         }
 
-        public IClosed3D ToClosed3D()
+        public IClosedPlanar3D ToClosedPlanar3D()
         {
 
             return plane.Convert(boundary);
@@ -80,9 +80,14 @@ namespace SAM.Geometry.Spatial
             return new Face((Plane)plane.GetMoved(vector3D), (Planar.IClosed2D)boundary.Clone());
         }
 
-        public bool IsInside(Face face, double tolerance = Tolerance.MicroDistance)
+        public double GetArea()
         {
-            if (!face.plane.IsCoplanar(plane))
+            return boundary.GetArea();
+        }
+
+        public bool Inside(Face face, double tolerance = Tolerance.MicroDistance)
+        {
+            if (!face.plane.Coplanar(plane, tolerance))
                 return false;
 
             return boundary.Inside(face.boundary);

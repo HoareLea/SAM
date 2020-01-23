@@ -10,5 +10,7 @@ namespace SAM.Geometry.Planar
     {
         //closed2D inside this
         bool Inside(IClosed2D closed2D);
+
+        double GetArea();
     }
 }

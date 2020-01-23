@@ -11,7 +11,7 @@ namespace SAM.Geometry.Grasshopper
     public static partial class Convert
     {
         //Create surfaace from planar polyline points
-        public static Rhino.Geometry.Brep ToBrep(this IEnumerable<Rhino.Geometry.Point3d> points)
+        public static Rhino.Geometry.Brep ToRihno_Brep(this IEnumerable<Rhino.Geometry.Point3d> points)
         {
             List<Rhino.Geometry.Point3d> pointList = new List<Rhino.Geometry.Point3d>(points);
 
@@ -32,9 +32,9 @@ namespace SAM.Geometry.Grasshopper
             return Rhino.Geometry.Brep.CreateEdgeSurface(lineCurves);
         }
 
-        public static Rhino.Geometry.Brep ToRhino(this Spatial.Face face)
+        public static Rhino.Geometry.Brep ToRhino_Brep(this Spatial.Face face)
         {
-            Spatial.IClosed3D closed3D = face.ToClosed3D();
+            Spatial.IClosed3D closed3D = face.ToClosedPlanar3D();
             if (closed3D is Spatial.Polygon3D)
             {
                 //return Rhino.Geometry.Brep.CreateEdgeSurface(((Spatial.Polygon3D)closed3D).GetSegments().ConvertAll(x => new Rhino.Geometry.LineCurve(x.ToRhino())));

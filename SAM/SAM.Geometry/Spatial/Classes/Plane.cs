@@ -182,7 +182,7 @@ namespace SAM.Geometry.Spatial
             return new Segment3D(Convert(segment2D.Start), Convert(segment2D.End));
         }
 
-        public IClosed3D Convert(Planar.IClosed2D closed2D)
+        public IClosedPlanar3D Convert(Planar.IClosed2D closed2D)
         {
             return Convert(closed2D as dynamic);
         }
@@ -287,7 +287,7 @@ namespace SAM.Geometry.Spatial
             return new Plane(this);
         }
 
-        public bool IsCoplanar(Plane plane, double tolerance = Tolerance.Angle)
+        public bool Coplanar(Plane plane, double tolerance = Tolerance.Angle)
         {
             return normal.Angle(plane.normal) <= tolerance || -normal.Angle(plane.normal) <= tolerance;
         }

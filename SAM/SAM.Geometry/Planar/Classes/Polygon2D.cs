@@ -53,5 +53,10 @@ namespace SAM.Geometry.Planar
 
             throw new NotImplementedException();
         }
+
+        public double GetArea()
+        {
+            return Point2D.GetArea(points);
+        }
     }
 }

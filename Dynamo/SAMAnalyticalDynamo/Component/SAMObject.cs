@@ -16,7 +16,7 @@
         public static Autodesk.DesignScript.Geometry.Geometry Convert(object sAMObject)
         {
             if (sAMObject is SAM.Analytical.Panel)
-                return SAMGeometryDynamo.Convert.ToDynamo(((SAM.Analytical.Panel)sAMObject).ToSurface());
+                return SAMGeometryDynamo.Convert.ToDynamo(((SAM.Analytical.Panel)sAMObject).GetFace());
 
             if (sAMObject is SAM.Analytical.Space)
                 return SAMGeometryDynamo.Convert.ToDynamo(((SAM.Analytical.Space)sAMObject).Location);

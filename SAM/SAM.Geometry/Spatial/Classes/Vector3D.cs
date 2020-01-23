@@ -220,6 +220,11 @@ namespace SAM.Geometry.Spatial
             return new Vector3D(vector3D_1.coordinates[0] * factor, vector3D_1.coordinates[1] * factor, vector3D_1.coordinates[2] * factor);
         }
 
+        public static Vector3D operator /(Vector3D vector3D_1, double factor)
+        {
+            return new Vector3D(vector3D_1.coordinates[0] / factor, vector3D_1.coordinates[1] / factor, vector3D_1.coordinates[2] / factor);
+        }
+
         public static Vector3D operator *(double factor, Vector3D vector3D_1)
         {
             return new Vector3D(vector3D_1.coordinates[0] * factor, vector3D_1.coordinates[1] * factor, vector3D_1.coordinates[2] * factor);

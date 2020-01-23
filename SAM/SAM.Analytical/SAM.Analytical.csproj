@@ -42,13 +42,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Edge3DLoop.cs" />
+    <Compile Include="Classes\Edge2DLoop.cs" />
     <Compile Include="Enums\PanelType.cs" />
-    <Compile Include="Classes\PlanarBoundary.cs" />
-    <Compile Include="Classes\Edge.cs" />
+    <Compile Include="Classes\Boundary3D.cs" />
+    <Compile Include="Classes\Edge3D.cs" />
     <Compile Include="Classes\Opening.cs" />
     <Compile Include="Classes\Panel.cs" />
     <Compile Include="Classes\Construction.cs" />
-    <Compile Include="Classes\PlanarEdge.cs" />
+    <Compile Include="Classes\Edge2D.cs" />
     <Compile Include="Modify\SnapByOffset.cs" />
     <Compile Include="Modify\SnapByPoints.cs" />
     <Compile Include="Query\PanelType.cs" />

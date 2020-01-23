@@ -9,99 +9,70 @@ namespace SAM.Analytical
     public class Panel : SAMInstance
     {
         private PanelType panelType;
-        private List<Edge> edges;
+        private Boundary3D boundary3D;
 
         public Panel(Panel panel)
             : base(panel)
         {
-            edges = panel.edges.ConvertAll(x => new Edge(x));
+            boundary3D = new Boundary3D(panel.boundary3D);
             panelType = panel.panelType;
         }
 
         public Panel(Panel panel, Construction construction)
-            : base(panel)
+            : base(panel, construction)
         {
-            edges = panel.edges.ConvertAll(x => new Edge(x));
+            boundary3D = new Boundary3D(panel.boundary3D);
             panelType = panel.panelType;
         }
 
         public Panel(Panel panel, PanelType panelType)
-            :base(panel)
+            : base(panel)
         {
-            edges = panel.edges.ConvertAll(x => new Edge(x));
+            boundary3D = new Boundary3D(panel.boundary3D);
             this.panelType = panelType;
         }
 
-        public Panel(string name, Construction construction, IClosed3D profile)
-    : base(name, construction)
-        {
-            panelType = PanelType.Undefined;
-
-            IEnumerable<Edge> edges_Temp = Edge.FromGeometry(profile);
-            if (edges_Temp != null)
-                edges = edges_Temp.ToList();
-            else
-                edges = new List<Edge>();
-        }
-
-        public Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets,  Construction construction, PanelType panelType, List<Edge> edges)
-            : base(guid, name, parameterSets, construction)
-        {
-            this.panelType = panelType;
-            this.edges = edges;
-        }
-
-        public Panel(Construction construction, PanelType panelType, IClosed3D profile)
+        public Panel(Construction construction, PanelType panelType, Face face)
             : base(construction == null ? null : construction.Name, construction)
         {
             this.panelType = panelType;
-
-            IEnumerable<Edge> edges_Temp = Edge.FromGeometry(profile);
-            if (edges_Temp != null)
-                edges = edges_Temp.ToList();
-            else
-                edges = new List<Edge>();
+            boundary3D = new Boundary3D(face);
         }
 
-        public Panel(Guid guid, Panel panel, IClosed3D profile)
+        public Panel(Construction construction, PanelType panelType, Boundary3D boundary3D)
+            : base(construction == null ? null : construction.Name, construction)
+        {
+            this.panelType = panelType;
+            this.boundary3D = boundary3D;
+        }
+
+        public Panel(Guid guid, Panel panel, Face face)
             : base(guid, panel)
         {
             panelType = panel.panelType;
-
-            IEnumerable<Edge> edges_Temp = Edge.FromGeometry(profile);
-            if (edges_Temp != null)
-                edges = edges_Temp.ToList();
-            else
-                edges = new List<Edge>();
+            boundary3D = new Boundary3D(face);
         }
 
-        public PolycurveLoop3D ToPolycurveLoop()
+        public Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Construction construction, PanelType panelType, Boundary3D boundary3D)
+            : base(guid, name, parameterSets, construction)
         {
-            List<ICurve3D> curve3Ds = new List<ICurve3D>();
-            foreach (Edge edge in edges)
-                curve3Ds.Add(edge.GetCurve3D());
-
-            return new PolycurveLoop3D(curve3Ds);
+            this.panelType = panelType;
+            this.boundary3D = new Boundary3D(boundary3D);
         }
-
-        public Surface ToSurface()
+        
+        public Face GetFace()
         {
-            return new Surface(ToPolycurveLoop());
+            return boundary3D.GetFace();
         }
 
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
         {
-            foreach (Edge edge in edges)
-                edge.Snap(point3Ds, maxDistance);
+            boundary3D.Snap(point3Ds, maxDistance);
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            List<BoundingBox3D> boundingBox3ds = new List<BoundingBox3D>();
-            foreach (Edge edge in edges)
-                boundingBox3ds.Add(edge.GetBoundingBox(offset));
-
-            return new BoundingBox3D(boundingBox3ds);
+            return GetFace().GetBoundingBox(offset);
 
         }
 
@@ -121,24 +92,22 @@ namespace SAM.Analytical
             }
         }
 
-        public List<Edge> GetEdges()
+        public List<Edge3D> GetEdge3Ds()
         {
-            if (edges == null)
-                return null;
-
-            return new List<Edge>(edges);
+            return boundary3D.GetEdge3DLoop().Edge3Ds;
         }
 
-        public double GetTilt()
+        public IClosedPlanar3D GetClosedPlanar3D()
         {
-            PolycurveLoop3D polycurveLoop3D = ToPolycurveLoop();
-            List<Point3D> point3Ds = new List<Point3D>();
-            foreach(ICurve3D curve3D in polycurveLoop3D.GetCurves())
-                point3Ds.Add(curve3D.GetStart());
+            return GetFace().ToClosedPlanar3D();
+        }
 
-            Plane plane = Point3D.GetPlane(point3Ds);
-
-            throw new NotImplementedException();
+        public Boundary3D Boundary3D
+        {
+            get
+            {
+                return new Boundary3D(boundary3D);
+            }
         }
     }
 }
