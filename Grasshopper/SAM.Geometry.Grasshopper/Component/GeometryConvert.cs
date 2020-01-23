@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
@@ -58,6 +58,8 @@ namespace SAM.Geometry.Grasshopper
 
             if (obj == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
+            else if(obj is IEnumerable)
+                dataAccess.SetDataList(0, (IEnumerable)obj);
             else
                 dataAccess.SetData(0, obj);
         }

@@ -266,6 +266,11 @@ namespace SAM.Geometry.Planar
             return aResult;
         }
 
+        public Segment2D Offset(double offset, Orientation orientation)
+        {
+            return Move(Direction.GetPerpendicular(orientation) * offset);
+        }
+
         /// <summary>
         /// Split Segment2Ds  
         /// </summary>
