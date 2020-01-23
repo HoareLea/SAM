@@ -9,14 +9,14 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryTo2D : GH_Component
+    public class SAMGeometry2DSAMGeometry : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public GeometryTo2D()
-          : base("SAMGeometry.Geometry2D", "SAMGeometry.Geometry2D",
-              "Convert SAM geometry to 2D",
+        public SAMGeometry2DSAMGeometry()
+          : base("SAMGeometry2D.SAMGeometry", "SAMGeometry2D.SAMGeometry3D",
+              "Convert SAM geometry 2D to SAM geometry 3D",
               "SAM", "Geometry")
         {
         }
@@ -29,12 +29,11 @@ namespace SAM.Geometry.Grasshopper
             int index = -1;
             Param_GenericObject genericObjectParameter = null;
 
-            inputParamManager.AddGenericParameter("_SAMGeometry3D", "_SAMGeometry3D", "SAM Geometry 3D", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_ownPlane", "_ownPlane", "Projection on own plane if possible", GH_ParamAccess.item, true);
+            inputParamManager.AddGenericParameter("_SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
 
             index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
             genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_Plane(new Rhino.Geometry.Plane(new Rhino.Geometry.Point3d(0, 0, 0), new Rhino.Geometry.Vector3d(0, 0, 1))));
+            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(new Plane()));
         }
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("SAMGeometry3D", "SAMgeo3D", "SAM Geometry 3D", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -59,8 +58,8 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            IBoundable3D geometry3D = objectWrapper.Value as IBoundable3D;
-            if (geometry3D == null)
+            Planar.IGeometry2D geometry2D = objectWrapper.Value as Planar.IGeometry2D;
+            if (geometry2D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -72,51 +71,21 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            GH_Boolean gHBoolean = objectWrapper.Value as GH_Boolean;
-            if (gHBoolean == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            Spatial.Plane plane = null;
-
-            bool ownPlane = gHBoolean.Value;
-            if (ownPlane && geometry3D is IPlanar3D)
-                plane = (geometry3D as IPlanar3D).GetPlane();
-
-            if(plane == null)
-            {
-                if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper.Value == null)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                    return;
-                }
-
-                GH_Plane gHPlane = objectWrapper.Value as GH_Plane;
-                if (gHPlane == null)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                    return;
-                }
-
-                plane = Convert.ToSAM(gHPlane);
-            }
-
+            Plane plane = objectWrapper.Value as Plane;
             if (plane == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            Planar.IGeometry2D geometry2D = plane.Convert(geometry3D);
-            if (geometry2D == null)
+            IBoundable3D geometry3D = plane.Convert(geometry2D);
+            if (geometry3D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
                 return;
             }
 
-            dataAccess.SetData(0, geometry2D);
+            dataAccess.SetData(0, geometry3D);
         }
 
         /// <summary>
@@ -137,7 +106,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("50eb9b79-0a5f-4fb7-938d-451ff9432eee"); }
+            get { return new Guid("7d24437d-df27-4144-b66e-82d8a8491b2d"); }
         }
     }
 }

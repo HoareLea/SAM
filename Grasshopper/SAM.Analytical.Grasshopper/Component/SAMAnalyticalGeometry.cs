@@ -9,12 +9,12 @@ using SAM.Core;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class AnalyticalConvert : GH_Component
+    public class SAMAnalyticalGeometry : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public AnalyticalConvert()
+        public SAMAnalyticalGeometry()
           : base("SAMAnalytical.Geometry", "Analytical.Geometry",
               "Convert SAM Analitical to GH Geometry ie. Panel to Surface",
               "SAM", "Analytical")

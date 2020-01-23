@@ -9,14 +9,14 @@ using SAM.Analytical.Grasshopper.Properties;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class AnalyticalPanelType : GH_Component
+    public class SAMAnalyticalPanelType : GH_Component
     {
         private PanelType panelType = PanelType.Undefined;
         
         /// <summary>
         /// Panel Type
         /// </summary>
-        public AnalyticalPanelType()
+        public SAMAnalyticalPanelType()
           : base("SAMAnalytical.PanelType", "SAMAnalytical.PanelType",
               "Select Panel Type",
               "SAM", "Analytical")

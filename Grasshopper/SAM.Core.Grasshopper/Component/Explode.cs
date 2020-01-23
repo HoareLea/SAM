@@ -15,8 +15,8 @@ namespace SAM.Core.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public Explode()
-          : base("Explode", "Expl",
-              "Explode SAM Object NOT IMPLEMENTED YET!",
+          : base("Explode", "Explode",
+              "Explode any SAM Object NOT IMPLEMENTED YET!",
               "SAM", "Core")
         {
 

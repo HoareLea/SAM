@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 
 using SAM.Analytical.Grasshopper.Properties;
@@ -10,16 +11,14 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class AnalyticalCreatePanel : GH_Component
+    public class SAMAnalyticalCreateSpace : GH_Component
     {
-        private Panel panel;
-        
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public AnalyticalCreatePanel()
-          : base("SAMAnalytical.CreatePanel", "SAMAnalytical.CreatePanel",
-              "Create SAM Analytical Panel",
+        public SAMAnalyticalCreateSpace()
+          : base("SAMAnalytical.CreateSpace", "SAMAnalytical.CreateSpace",
+              "Create SAM Space, if nothing connect default values: _name = Space_Default, _locationPoint = (0,0,0.75) ",
               "SAM", "Analytical")
         {
         }
@@ -29,10 +28,12 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_geometry", "geo", "Geometry", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_panelType", "panelType", "PanelType", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_construction", "construction", "Construction", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("simplify_", "Smfy", "Simplify", GH_ParamAccess.item, true);
+            inputParamManager.AddTextParameter("_name", "_name", "Space Name, Default = Space_Default", GH_ParamAccess.item,"Space_Default");
+            //inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point", GH_ParamAccess.item);
+            //Default Input in GH
+            int index = inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
+            Param_GenericObject genericObjectParameter = (Param_GenericObject)inputParamManager[index];
+            genericObjectParameter.PersistentData.Append(new GH_Point(new Rhino.Geometry.Point3d(0, 0, 0.75)));
         }
 
         /// <summary>
@@ -40,17 +41,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Panel", "pnl", "SAM Analytical Panel", GH_ParamAccess.item);
-        }
-
-        public override void DrawViewportWires(IGH_PreviewArgs args)
-        {
-            base.DrawViewportWires(args);
-
-            if (panel == null)
-                return;
-
-            args.Display.DrawPolyline(panel.ToPolycurveLoop().GetCurves().ConvertAll(x => x.GetStart().ToRhino()), System.Drawing.Color.Blue);
+            outputParamManager.AddGenericParameter("Space", "Spc", "SAM Analytical Space", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -59,30 +50,7 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            bool simplyfy = false;
-            if (!dataAccess.GetData<bool>(3, ref simplyfy))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             GH_ObjectWrapper objectWrapper = null;
-
-            
-            if (!dataAccess.GetData(1, ref objectWrapper))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            PanelType panelType = PanelType.Undefined;
-            if(objectWrapper.Value is GH_String)
-                panelType = Query.PanelType(((GH_String)objectWrapper.Value).Value);
-            else
-                panelType = Query.PanelType(objectWrapper.Value);
-
-            Construction aConstruction = null;
-            dataAccess.GetData(2, ref aConstruction);
 
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
             {
@@ -90,30 +58,42 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            object obj = objectWrapper.Value;
-
-            if (obj is IGH_GeometricGoo)
-                obj = ((IGH_GeometricGoo)obj).ToSAM(simplyfy);
-
-            if (!(obj is IGeometry))
+            GH_String gHString = objectWrapper.Value as GH_String;
+            if(gHString == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            IClosed3D closed3D = obj as IClosed3D;
+            string name = gHString.Value;
 
-            if (obj == null)
+            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
             {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            object obj = objectWrapper.Value;
+
+            Point3D location = null;
+
+            if (obj is Point3D)
+                location = obj as Point3D;
+            else if (obj is GH_Point)
+                location = ((GH_Point)obj).ToSAM();
+
+            if (location == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            Space space = new Space(name, location);
+
+            if (space == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
-            }
-                
             else
-            {
-                panel = new Panel(aConstruction, panelType, closed3D);
-                dataAccess.SetData(0, panel);
-            }
-                
+                dataAccess.SetData(0, space);
         }
 
         /// <summary>
@@ -134,7 +114,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("35ef8f3e-1cf2-407d-b2ed-33bf371ea161"); }
+            get { return new Guid("c6eaf1ad-22bb-4a3f-8c3d-9d8ac483214d"); }
         }
     }
 }

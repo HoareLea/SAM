@@ -8,12 +8,12 @@ using SAM.Analytical.Grasshopper.Properties;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class AnalyticalSnapByOffset : GH_Component
+    public class SAMAnalyticalSnapByOffset : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public AnalyticalSnapByOffset()
+        public SAMAnalyticalSnapByOffset()
           : base("SAMAnalytical.SnapByOffset", "SAMAnalytical.SnapByOffset",
               "Snap Panels by Offset from Panels default = 0.2m",
               "SAM", "Analytical")

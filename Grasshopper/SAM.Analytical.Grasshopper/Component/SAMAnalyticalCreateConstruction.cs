@@ -10,12 +10,12 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class AnalyticalCreateConstruction : GH_Component
+    public class SAMAnalyticalCreateConstruction : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public AnalyticalCreateConstruction()
+        public SAMAnalyticalCreateConstruction()
           : base("SAMAnalytical.CreateConstruction", "SAMAnalyticalCreate.Construction",
               "Create Construction, if nothing connect default values: _name = Basic Roof: SIM_EXT_SLD_Roof DA01 ",
               "SAM", "Analytical")

@@ -7,14 +7,14 @@ using SAM.Core;
 
 namespace SAM.About.Grasshopper
 {
-    public class About : GH_Component
+    public class SAMAbout : GH_Component
     {
-        private AboutInfoType aboutInfo = AboutInfoType.HoareLea;
+        private AboutInfoType aboutInfoType = AboutInfoType.HoareLea;
 
         /// <summary>
         /// AboutInfo
         /// </summary>
-        public About()
+        public SAMAbout()
           : base("SAM.About", "SAM.About",
               "Right click to find out more about our toolkit",
               "SAM", "About")
@@ -24,7 +24,7 @@ namespace SAM.About.Grasshopper
 
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetInt32("About Info", (int)aboutInfo);
+            writer.SetInt32("About Info", (int)aboutInfoType);
             return base.Write(writer);
         }
 
@@ -32,7 +32,7 @@ namespace SAM.About.Grasshopper
         {
             int aIndex = -1;
             if (reader.TryGetInt32("About Info", ref aIndex))
-                aboutInfo = (AboutInfoType)aIndex;
+                aboutInfoType = (AboutInfoType)aIndex;
             
             return base.Read(reader);
         }
@@ -42,7 +42,7 @@ namespace SAM.About.Grasshopper
             foreach (AboutInfoType aboutInfo in Enum.GetValues(typeof(AboutInfoType)))
                 //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
                 //base.AppendAdditionalComponentMenuItems(menu);
-                GH_Component.Menu_AppendItem(menu, aboutInfo.ToString(), Menu_PanelTypeChanged, true, aboutInfo == this.aboutInfo).Tag = aboutInfo;
+                GH_Component.Menu_AppendItem(menu, aboutInfo.ToString(), Menu_PanelTypeChanged, true, aboutInfo == this.aboutInfoType).Tag = aboutInfo;
         }
 
         private void Menu_PanelTypeChanged(object sender, EventArgs e)
@@ -50,7 +50,7 @@ namespace SAM.About.Grasshopper
             if (sender is ToolStripMenuItem item && item.Tag is AboutInfoType)
             {
                 //Do something with panelType
-                this.aboutInfo = (AboutInfoType)item.Tag;
+                this.aboutInfoType = (AboutInfoType)item.Tag;
                 ExpireSolution(true);
             }
         }
@@ -77,7 +77,7 @@ namespace SAM.About.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, Query.AboutInfoTypeText(aboutInfo));
+            dataAccess.SetData(0, Query.AboutInfoTypeText(aboutInfoType));
         }
 
         /// <summary>

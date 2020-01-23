@@ -63,13 +63,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Component\AnalyticalConvert.cs" />
-    <Compile Include="Component\AnalyticalCreateConstruction.cs" />
-    <Compile Include="Component\AnalyticalCreateSpace.cs" />
-    <Compile Include="Component\AnalyticalCreatePanel.cs" />
-    <Compile Include="Component\AnalyticalPanelType.cs" />
-    <Compile Include="Component\AnalyticalSnapByPoints.cs" />
-    <Compile Include="Component\AnalyticalSnapByOffset.cs" />
+    <Compile Include="Component\SAMAnalyticalGeometry.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateConstruction.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateSpace.cs" />
+    <Compile Include="Component\SAMAnalyticalCreatePanel.cs" />
+    <Compile Include="Component\SAMAnalyticalPanelType.cs" />
+    <Compile Include="Component\SAMAnalyticalSnapByPoints.cs" />
+    <Compile Include="Component\SAMAnalyticalSnapByOffset.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
