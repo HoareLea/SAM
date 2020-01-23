@@ -32,7 +32,7 @@ namespace SAM.Geometry.Planar
         /// <param name="vector2D">Segment2D direction.</param>
         public Segment2D(Point2D origin, Vector2D vector2D)
         {
-            origin = new Point2D(origin);
+            this.origin = new Point2D(origin);
             vector = new Vector2D(vector2D);
         }
 

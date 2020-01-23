@@ -12,7 +12,7 @@ namespace SAM.Analytical
         public Edge3D(System.Guid guid, string name, ICurve3D curve3D)
             : base(guid, name)
         {
-            this.curve3D = curve3D;
+            this.curve3D = (ICurve3D)curve3D.Clone();
         }
 
         public Edge3D(Plane plane, Edge2D edge2D)
@@ -24,7 +24,7 @@ namespace SAM.Analytical
         public Edge3D(ICurve3D curve)
             : base()
         {
-            this.curve3D = curve;
+            this.curve3D = (ICurve3D)curve3D.Clone(); ;
         }
 
         public Edge3D(Edge3D edge)
@@ -73,7 +73,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return curve3D.Clone() as ICurve3D;
+                return (ICurve3D)curve3D.Clone();
             }
         }
 

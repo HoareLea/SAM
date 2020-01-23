@@ -25,21 +25,21 @@ namespace SAM.Analytical
         public Edge2D(ICurve2D curve2D)
             : base()
         {
-            this.curve2D = curve2D;
+            this.curve2D = (ICurve2D)curve2D.Clone();
         }
 
 
         public Edge2D(System.Guid guid, string name, ICurve2D curve2D)
             : base(guid, name)
         {
-            this.curve2D = curve2D;
+            this.curve2D = (ICurve2D)curve2D.Clone();
         }
 
         public ICurve2D Curve2D
         {
             get
             {
-                return (ICurve2D)Curve2D.Clone();
+                return (ICurve2D)curve2D.Clone();
             }
         }
 
