@@ -31,8 +31,23 @@ namespace SAM.Geometry.Grasshopper
         public static List<Spatial.IGeometry3D> ToSAM(this Brep brep, bool simplify = true)
         {
             List<Spatial.IGeometry3D> result = new List<Spatial.IGeometry3D>();
-            foreach (Surface surface in brep.Surfaces)
-                result.Add(surface.ToSAM(simplify));
+            foreach (BrepLoop brepLoop in brep.Loops)
+                result.Add(brepLoop.ToSAM(simplify));
+
+            return result;
+        }
+
+        public static List<Spatial.IGeometry3D> ToSAM(this GH_Surface surface, bool simplify = true)
+        {
+            return ToSAM(surface.Value);
+        }
+
+        public static List<Spatial.IGeometry3D> ToSAM(this Surface surface, bool simplify = true)
+        {
+            List<Spatial.IGeometry3D> result = new List<Spatial.IGeometry3D>();
+            foreach (BrepLoop brepLoop in surface.ToBrep().Loops)
+                result.Add(brepLoop.ToSAM(simplify));
+
             return result;
         }
 

@@ -55,23 +55,5 @@ namespace SAM.Geometry.Grasshopper
             else
                 return new Spatial.Polyline3D(point3Ds);
         }
-
-        public static List<Spatial.IGeometry3D> ToSAM(this GH_Surface surface, bool simplify = true)
-        {
-            return ToSAM(surface.Value);
-        }
-
-        public static Spatial.IGeometry3D ToSAM(this Surface surface, bool simplify = true)
-        {
-            List<Spatial.ICurve3D> curve3Ds = new List<Spatial.ICurve3D>();
-            foreach (Curve curve in surface.ToBrep().Curves3D)
-                curve3Ds.Add(curve.ToSAM(simplify) as Spatial.ICurve3D);
-
-            if (surface.IsPlanar())
-                return new Spatial.Face(new Spatial.Polygon3D(curve3Ds.ConvertAll(x => x.GetStart())));
-
-            return new Spatial.Surface(new Spatial.PolycurveLoop3D(curve3Ds));
-        }
-
     }
 }
