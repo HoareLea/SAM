@@ -75,7 +75,7 @@ namespace SAM.Analytical.Grasshopper
 
                 IGH_GeometricGoo geometricGoo = objectWrapper_Temp.Value as IGH_GeometricGoo;
                 if (geometricGoo != null)
-                    point3D = Geometry.Grasshopper.Convert.ToSAM(geometricGoo) as Geometry.Spatial.Point3D;
+                    point3D = Geometry.Grasshopper.Convert.ToSAM(geometricGoo)[0] as Geometry.Spatial.Point3D;
 
                 if (point3D == null)
                     point3D = objectWrapper_Temp.Value as Geometry.Spatial.Point3D;

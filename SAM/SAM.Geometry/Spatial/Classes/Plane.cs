@@ -187,6 +187,11 @@ namespace SAM.Geometry.Spatial
             return Convert(closed2D as dynamic);
         }
 
+        public Planar.IClosed2D Convert(Face Face)
+        {
+            return Convert(Face.ToClosedPlanar3D());
+        }
+
         public Planar.IClosed2D Convert(IClosed3D closed3D)
         {
             return Convert(closed3D as dynamic);

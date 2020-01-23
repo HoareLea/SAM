@@ -12,7 +12,7 @@ namespace SAM.Analytical.Grasshopper
 {
     public class SAMAnalyticalCreatePanel : GH_Component
     {
-        private Panel panel;
+        private List<Panel> panels = null;
         
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -47,34 +47,37 @@ namespace SAM.Analytical.Grasshopper
         {
             base.DrawViewportWires(args);
 
-            if (panel == null)
+            if (panels == null || panels.Count == 0)
                 return;
 
-            Boundary3D boundary3D = panel.Boundary3D;
-            if (boundary3D == null)
-                return;
-
-            IEnumerable<Edge3DLoop> edge3DLoops = boundary3D.GetInternalEdge3DLoops();
-            if (edge3DLoops != null)
+            foreach(Panel panel in panels)
             {
-                foreach (Edge3DLoop edge3DLoop in edge3DLoops)
+                Boundary3D boundary3D = panel.Boundary3D;
+                if (boundary3D == null)
+                    return;
+
+                IEnumerable<Edge3DLoop> edge3DLoops = boundary3D.GetInternalEdge3DLoops();
+                if (edge3DLoops != null)
                 {
-                    List<Edge3D> edge3Ds = edge3DLoop.Edge3Ds;
-                    if (edge3Ds == null || edge3Ds.Count == 0)
-                        continue;
+                    foreach (Edge3DLoop edge3DLoop in edge3DLoops)
+                    {
+                        List<Edge3D> edge3Ds = edge3DLoop.Edge3Ds;
+                        if (edge3Ds == null || edge3Ds.Count == 0)
+                            continue;
 
-                    List<Rhino.Geometry.Point3d> point3ds = edge3Ds.ConvertAll(x => x.Curve3D.GetStart().ToRhino());
-                    if (point3ds.Count == 0)
-                        continue;
+                        List<Rhino.Geometry.Point3d> point3ds = edge3Ds.ConvertAll(x => x.Curve3D.GetStart().ToRhino());
+                        if (point3ds.Count == 0)
+                            continue;
 
-                    point3ds.Add(point3ds[0]);
+                        point3ds.Add(point3ds[0]);
 
-                    args.Display.DrawPolyline(point3ds, System.Drawing.Color.Green);
+                        args.Display.DrawPolyline(point3ds, System.Drawing.Color.Green);
+                    }
+
                 }
 
+                args.Display.DrawBrepWires(boundary3D.GetFace().ToRhino_Brep(), System.Drawing.Color.Blue);
             }
-
-            args.Display.DrawBrepWires(boundary3D.GetFace().ToRhino_Brep(), System.Drawing.Color.Blue);
         }
 
         /// <summary>
@@ -83,6 +86,8 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            panels = null;
+            
             bool simplyfy = false;
             if (!dataAccess.GetData<bool>(3, ref simplyfy))
             {
@@ -116,28 +121,40 @@ namespace SAM.Analytical.Grasshopper
 
             object obj = objectWrapper.Value;
 
-            if (obj is IGH_GeometricGoo)
-                obj = ((IGH_GeometricGoo)obj).ToSAM(simplyfy);
+            List<IGeometry3D> geometry3Ds = null;
 
-            if (!(obj is IGeometry))
+
+            if (obj is IGH_GeometricGoo)
+                geometry3Ds = ((IGH_GeometricGoo)obj).ToSAM(simplyfy);
+
+            if (obj is IGeometry3D)
+                geometry3Ds = new List<IGeometry3D>() { (IGeometry3D)obj };
+
+            if (geometry3Ds == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            IClosedPlanar3D closedPlanar3D = obj as IClosedPlanar3D;
 
-            if (obj == null)
+            panels = new List<Panel>();
+            foreach(IGeometry3D geometry3D in geometry3Ds)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
+                IClosedPlanar3D closedPlanar3D = geometry3D as IClosedPlanar3D;
+                if (closedPlanar3D == null)
+                    continue;
+
+                panels.Add(new Panel(aConstruction, panelType, new Face(closedPlanar3D)));
             }
-                
+
+            if(panels.Count == 1)
+            {
+                dataAccess.SetData(0, panels[0]);
+            }
             else
             {
-                panel = new Panel(aConstruction, panelType, new Face(closedPlanar3D));
-                dataAccess.SetData(0, panel);
-            }
-                
+                dataAccess.SetDataList(0, panels);
+            }     
         }
 
         /// <summary>

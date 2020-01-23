@@ -19,7 +19,7 @@ namespace SAM.Analytical
         public Edge3DLoop(Edge3DLoop edge3DLoop)
             : base(edge3DLoop)
         {
-            this.edge3Ds = edge3Ds.ConvertAll(x => new Edge3D(x));
+            this.edge3Ds = edge3DLoop.edge3Ds.ConvertAll(x => new Edge3D(x));
         }
 
         public List<Edge3D> Edge3Ds

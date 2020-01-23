@@ -44,7 +44,7 @@ namespace SAM.Analytical
         public Edge2DLoop(Edge2DLoop edge2DLoop)
             : base(edge2DLoop)
         {
-            this.edge2Ds = edge2Ds.ConvertAll(x => new Edge2D(x));
+            this.edge2Ds = edge2DLoop.edge2Ds.ConvertAll(x => new Edge2D(x));
         }
 
         public List<Edge2D> Edge2Ds

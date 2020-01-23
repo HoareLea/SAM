@@ -115,33 +115,30 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            Spatial.IGeometry3D geometry3D = null;
+            List<Spatial.IGeometry3D> geometry3Ds = null;
 
             if (obj is IGH_GeometricGoo)
-                geometry3D = Convert.ToSAM((IGH_GeometricGoo)obj);
+                geometry3Ds = Convert.ToSAM((IGH_GeometricGoo)obj);
             else if (obj is Spatial.IGeometry3D)
-                geometry3D = (Spatial.IGeometry3D)obj;
+                geometry3Ds = new List<Spatial.IGeometry3D>() { (Spatial.IGeometry3D)obj };
 
-            if(geometry3D is Spatial.Point3D)
+            for(int i=0; i < geometry3Ds.Count; i++)
             {
-                geometry3D = Spatial.Point3D.Snap(point3Ds,(Spatial.Point3D)geometry3D, maxDistance);
-            }
-            else if(geometry3D is Spatial.Segment3D)
-            {
-                geometry3D = Spatial.Segment3D.Snap(point3Ds, (Spatial.Segment3D)geometry3D, maxDistance);
-            }
-            else if (geometry3D is Spatial.Polygon3D)
-            {
-                geometry3D = Spatial.Polygon3D.Snap(point3Ds, (Spatial.Polygon3D)geometry3D, maxDistance);
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
-                return;
+                if (geometry3Ds[i] is Spatial.Point3D)
+                {
+                    geometry3Ds[i] = Spatial.Point3D.Snap(point3Ds, (Spatial.Point3D)geometry3Ds[i], maxDistance);
+                }
+                else if (geometry3Ds[i] is Spatial.Segment3D)
+                {
+                    geometry3Ds[i] = Spatial.Segment3D.Snap(point3Ds, (Spatial.Segment3D)geometry3Ds[i], maxDistance);
+                }
+                else if (geometry3Ds[i] is Spatial.Polygon3D)
+                {
+                    geometry3Ds[i] = Spatial.Polygon3D.Snap(point3Ds, (Spatial.Polygon3D)geometry3Ds[i], maxDistance);
+                }
             }
 
-            dataAccess.SetData(0, geometry3D);
+            dataAccess.SetData(0, geometry3Ds);
             dataAccess.SetData(1, true);
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");

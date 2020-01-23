@@ -56,21 +56,21 @@ namespace SAM.Geometry.Grasshopper
                 return new Spatial.Polyline3D(point3Ds);
         }
 
-        public static Spatial.IGeometry3D ToSAM(this IGH_GeometricGoo geometricGoo, bool simplify = true)
+        public static List<Spatial.IGeometry3D> ToSAM(this GH_Surface surface, bool simplify = true)
         {
-            if (geometricGoo is GH_Curve)
-                return ((GH_Curve)geometricGoo).ToSAM(simplify);
+            return ToSAM(surface.Value);
+        }
 
-            if (geometricGoo is GH_Surface)
-                return ((GH_Surface)geometricGoo).ToSAM(simplify);
+        public static Spatial.IGeometry3D ToSAM(this Surface surface, bool simplify = true)
+        {
+            List<Spatial.ICurve3D> curve3Ds = new List<Spatial.ICurve3D>();
+            foreach (Curve curve in surface.ToBrep().Curves3D)
+                curve3Ds.Add(curve.ToSAM(simplify) as Spatial.ICurve3D);
 
-            if (geometricGoo is GH_Point)
-                return ((GH_Point)geometricGoo).ToSAM();
+            if (surface.IsPlanar())
+                return new Spatial.Face(new Spatial.Polygon3D(curve3Ds.ConvertAll(x => x.GetStart())));
 
-            if(geometricGoo is GH_Brep)
-                return ((GH_Brep)geometricGoo).ToSAM(simplify);
-
-            return (geometricGoo as dynamic).ToSAM();
+            return new Spatial.Surface(new Spatial.PolycurveLoop3D(curve3Ds));
         }
 
     }
