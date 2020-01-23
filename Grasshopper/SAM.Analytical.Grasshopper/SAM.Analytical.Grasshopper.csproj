@@ -70,6 +70,7 @@
     <Compile Include="Component\AnalyticalPanelType.cs" />
     <Compile Include="Component\AnalyticalSnapByPoints.cs" />
     <Compile Include="Component\AnalyticalSnapByOffset.cs" />
+    <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -68,6 +68,7 @@
     <Compile Include="Component\GeometryTo3D.cs" />
     <Compile Include="Component\GeometryTo2D.cs" />
     <Compile Include="Component\GeomentryIntersection.cs" />
+    <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Template\TemplateComponent.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

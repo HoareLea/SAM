@@ -105,7 +105,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return Resources.HL_Logo24;
+                return Resources.SAM_Small;
             }
         }
 

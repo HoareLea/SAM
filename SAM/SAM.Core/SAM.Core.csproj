@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ParameterSet.cs" />
+    <Compile Include="Enums\AboutInfo.cs" />
     <Compile Include="Interfaces\ISAMObject.cs" />
     <Compile Include="Modify\Add.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
