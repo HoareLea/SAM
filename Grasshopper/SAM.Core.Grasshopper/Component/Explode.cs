@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public Explode()
           : base("Explode", "Expl",
-              "Explode SAM Object",
+              "Explode SAM Object NOT IMPLEMENTED YET!",
               "SAM", "Core")
         {
 
@@ -27,7 +27,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("SAMObject", "SAMO", "SAM Object", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_SAMObject", "SAMO", "SAM Object", GH_ParamAccess.item);
             //inputParamManager.AddNumberParameter("Offset", "Offs", "Snap offset", GH_ParamAccess.item, 0.2);
         }
 
