@@ -10,16 +10,16 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreatePanel : GH_Component
+    public class SAMAnalyticalBoundary3D : GH_Component
     {
-        private Panel panel;
+        private Boundary3D boundary3D;
         
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreatePanel()
-          : base("SAMAnalytical.CreatePanel", "SAMAnalytical.CreatePanel",
-              "Create SAM Analytical Panel",
+        public SAMAnalyticalBoundary3D()
+          : base("SAMAnalytical.Boundary3D", "SAMAnalytical.Boundary3D",
+              "Gets SAM Analytical Boundary3D",
               "SAM", "Analytical")
         {
         }
@@ -29,10 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_panelType", "panelType", "PanelType", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_construction", "construction", "Construction", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("simplify_", "simplify", "Simplify", GH_ParamAccess.item, true);
+            inputParamManager.AddGenericParameter("_panel", "pnl", "SAM Analytical Panel", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -40,22 +37,18 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Panel", "pnl", "SAM Analytical Panel", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Boundary3D", "bnd", "SAM Analytical Boundary3D", GH_ParamAccess.item);
         }
 
         public override void DrawViewportWires(IGH_PreviewArgs args)
         {
             base.DrawViewportWires(args);
 
-            if (panel == null)
-                return;
-
-            Boundary3D boundary3D = panel.Boundary3D;
             if (boundary3D == null)
                 return;
 
             IEnumerable<Edge3DLoop> edge3DLoops = boundary3D.GetInternalEdge3DLoops();
-            if (edge3DLoops != null)
+            if(edge3DLoops != null)
             {
                 foreach (Edge3DLoop edge3DLoop in edge3DLoops)
                 {
@@ -71,7 +64,7 @@ namespace SAM.Analytical.Grasshopper
 
                     args.Display.DrawPolyline(point3ds, System.Drawing.Color.Green);
                 }
-
+                    
             }
 
             args.Display.DrawBrepWires(boundary3D.GetFace().ToRhino_Brep(), System.Drawing.Color.Blue);
@@ -83,61 +76,15 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            bool simplyfy = false;
-            if (!dataAccess.GetData<bool>(3, ref simplyfy))
+            Panel panel = null;
+            if (!dataAccess.GetData(0, ref panel))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            GH_ObjectWrapper objectWrapper = null;
+            dataAccess.SetData(0, panel.Boundary3D);
 
-            
-            if (!dataAccess.GetData(1, ref objectWrapper))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            PanelType panelType = PanelType.Undefined;
-            if(objectWrapper.Value is GH_String)
-                panelType = Query.PanelType(((GH_String)objectWrapper.Value).Value);
-            else
-                panelType = Query.PanelType(objectWrapper.Value);
-
-            Construction aConstruction = null;
-            dataAccess.GetData(2, ref aConstruction);
-
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            object obj = objectWrapper.Value;
-
-            if (obj is IGH_GeometricGoo)
-                obj = ((IGH_GeometricGoo)obj).ToSAM(simplyfy);
-
-            if (!(obj is IGeometry))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            IClosedPlanar3D closedPlanar3D = obj as IClosedPlanar3D;
-
-            if (obj == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
-            }
-                
-            else
-            {
-                panel = new Panel(aConstruction, panelType, new Face(closedPlanar3D));
-                dataAccess.SetData(0, panel);
-            }
-                
         }
 
         /// <summary>
@@ -158,7 +105,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("35ef8f3e-1cf2-407d-b2ed-33bf371ea161"); }
+            get { return new Guid("7316ff6b-9688-4f82-8256-b3e27e4a958d"); }
         }
     }
 }

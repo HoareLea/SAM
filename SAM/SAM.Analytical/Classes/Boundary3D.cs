@@ -93,7 +93,7 @@ namespace SAM.Analytical
 
         public Face GetFace()
         {
-            return new Geometry.Spatial.Face(plane, edge2DLoop.GetClosed2D());
+            return new Face(plane, edge2DLoop.GetClosed2D());
         }
 
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
