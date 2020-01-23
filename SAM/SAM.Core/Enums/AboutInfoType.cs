@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SAM.Core
 {
-    public enum AboutInfo
+    public enum AboutInfoType
     {
         HoareLea,
         SAM,
-        other,
+        Other,
     }
 }

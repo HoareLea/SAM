@@ -9,7 +9,7 @@ namespace SAM.About.Grasshopper
 {
     public class About : GH_Component
     {
-        private AboutInfo aboutInfo = AboutInfo.HoareLea;
+        private AboutInfoType aboutInfo = AboutInfoType.HoareLea;
 
         /// <summary>
         /// AboutInfo
@@ -32,14 +32,14 @@ namespace SAM.About.Grasshopper
         {
             int aIndex = -1;
             if (reader.TryGetInt32("About Info", ref aIndex))
-                aboutInfo = (AboutInfo)aIndex;
+                aboutInfo = (AboutInfoType)aIndex;
             
             return base.Read(reader);
         }
 
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            foreach (AboutInfo aboutInfo in Enum.GetValues(typeof(AboutInfo)))
+            foreach (AboutInfoType aboutInfo in Enum.GetValues(typeof(AboutInfoType)))
                 //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
                 //base.AppendAdditionalComponentMenuItems(menu);
                 GH_Component.Menu_AppendItem(menu, aboutInfo.ToString(), Menu_PanelTypeChanged, true, aboutInfo == this.aboutInfo).Tag = aboutInfo;
@@ -47,10 +47,10 @@ namespace SAM.About.Grasshopper
 
         private void Menu_PanelTypeChanged(object sender, EventArgs e)
         {
-            if (sender is ToolStripMenuItem item && item.Tag is AboutInfo)
+            if (sender is ToolStripMenuItem item && item.Tag is AboutInfoType)
             {
                 //Do something with panelType
-                this.aboutInfo = (AboutInfo)item.Tag;
+                this.aboutInfo = (AboutInfoType)item.Tag;
                 ExpireSolution(true);
             }
         }
@@ -68,7 +68,7 @@ namespace SAM.About.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("AboutInfo", "AboutInfo", "About Info", GH_ParamAccess.item);
+            outputParamManager.AddTextParameter("AboutInfo", "AboutInfo", "About Info", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace SAM.About.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, aboutInfo.ToString());
+            dataAccess.SetData(0, Query.AboutInfoTypeText(aboutInfo));
         }
 
         /// <summary>

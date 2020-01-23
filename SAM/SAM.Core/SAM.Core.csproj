@@ -42,13 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ParameterSet.cs" />
-    <Compile Include="Enums\AboutInfo.cs" />
+    <Compile Include="Enums\AboutInfoType.cs" />
     <Compile Include="Interfaces\ISAMObject.cs" />
     <Compile Include="Modify\Add.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\SAMInstance.cs" />
     <Compile Include="Classes\SAMObject.cs" />
     <Compile Include="Classes\SAMType.cs" />
+    <Compile Include="Query\AboutInfoTypeText.cs" />
     <Compile Include="Query\TryGetValue.cs" />
     <Compile Include="Query\GetValue.cs" />
   </ItemGroup>

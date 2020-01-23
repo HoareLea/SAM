@@ -15,7 +15,7 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public GeomentryIntersection()
-          : base("GeometryEngine.Intersection", "GHgeo",
+          : base("SAMGeometry.Intersection", "GHgeo",
               "copy from Intersection",
               "SAM", "Geometry")
         {

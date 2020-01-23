@@ -14,8 +14,8 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public GeometrySnap()
-          : base("GeometryEngine.Snap", "GeometryEngine.Snap",
-              "Snap Geometry to points",
+          : base("Geometry.Snap", "GeometryEngine.Snap",
+              "Snap Geometry or SAM Geometry by points",
               "SAM", "Geometry")
         {
 
