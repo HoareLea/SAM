@@ -87,10 +87,12 @@ namespace SAM.Geometry.Spatial
 
         public bool Inside(Face face, double tolerance = Tolerance.MicroDistance)
         {
-            if (!face.plane.Coplanar(plane, tolerance))
+            if (!plane.Coplanar(face.plane, tolerance))
                 return false;
 
-            return boundary.Inside(face.boundary);
+            IClosed3D closed3D = face.plane.Convert(face.boundary);
+
+            return boundary.Inside(plane.Convert(closed3D));
         }
     }
 }

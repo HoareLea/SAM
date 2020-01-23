@@ -108,5 +108,19 @@ namespace SAM.Geometry.Spatial
 
             return Planar.Point2D.GetArea(points.ConvertAll(x => plane.Convert(x)));
         }
+
+        public bool Inside(Polygon3D polygon3D, double tolerance = Tolerance.MicroDistance)
+        {
+            Plane plane_1 = GetPlane();
+            Plane plane_2 = polygon3D.GetPlane();
+
+            if (!plane_1.Coplanar(plane_2, tolerance))
+                return false;
+
+            List<Planar.Point2D> point2Ds_1 = points.ConvertAll(x => plane_1.Convert(x));
+            List<Planar.Point2D> point2Ds_2 = polygon3D.points.ConvertAll(x => plane_1.Convert(x));
+
+            return point2Ds_2.TrueForAll(x => Planar.Point2D.Inside(point2Ds_1, x));
+        }
     }
 }
