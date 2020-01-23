@@ -162,7 +162,7 @@ namespace SAM.Analytical
             }
             
             List<Face> faceList = faces.ToList();
-            faceList.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
+            faceList.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
 
             while(faceList.Count > 0)
             {

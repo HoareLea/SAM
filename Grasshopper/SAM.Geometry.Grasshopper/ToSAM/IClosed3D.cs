@@ -12,14 +12,10 @@ namespace SAM.Geometry.Grasshopper
     {
         public static Spatial.IClosed3D ToSAM(this BrepLoop brepLoop, bool simplify = true)
         {
-            List<Spatial.ICurve3D> curve3Ds = new List<Spatial.ICurve3D>();
-            foreach (BrepTrim brepTrim in brepLoop.Trims)
-                curve3Ds.Add((Spatial.ICurve3D)ToSAM(brepTrim.TrimCurve, simplify));
-
             if (brepLoop.Face.IsPlanar(Tolerance.MicroDistance))
-                return new Spatial.Face(new Spatial.Polygon3D(curve3Ds.ConvertAll(x => x.GetStart())));
+                return new Spatial.Face(brepLoop.To3dCurve().ToSAM(simplify) as Spatial.IClosedPlanar3D);
 
-            return new Spatial.Surface(new Spatial.PolycurveLoop3D(curve3Ds));
+            return new Spatial.Surface(brepLoop.To3dCurve().ToSAM(simplify) as Spatial.IClosed3D);
         }
     }
 }

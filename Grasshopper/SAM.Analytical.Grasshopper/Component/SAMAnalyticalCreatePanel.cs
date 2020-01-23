@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
@@ -137,15 +138,15 @@ namespace SAM.Analytical.Grasshopper
             }
 
 
-            panels = new List<Panel>();
-            foreach(IGeometry3D geometry3D in geometry3Ds)
-            {
-                IClosedPlanar3D closedPlanar3D = geometry3D as IClosedPlanar3D;
-                if (closedPlanar3D == null)
-                    continue;
+            List<Boundary3D> boundary3Ds = null;
 
-                panels.Add(new Panel(aConstruction, panelType, new Face(closedPlanar3D)));
-            }
+            if (!Boundary3D.TryGetBoundary3Ds(geometry3Ds.FindAll(x => x is Face).Cast<Face>().ToList(), out boundary3Ds))
+                return;
+
+
+            panels = new List<Panel>();
+            foreach(Boundary3D boundary3D in boundary3Ds)
+                panels.Add(new Panel(aConstruction, panelType, boundary3D));
 
             if(panels.Count == 1)
             {
