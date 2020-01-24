@@ -152,8 +152,7 @@ namespace SAM.Geometry.Spatial
 
         public Planar.Point2D Convert(Point3D point3D)
         {
-            //TODO: CHECK if vector3D calculated correctly
-            Vector3D vector3D = new Vector3D(origin.X - point3D.X, origin.Y - point3D.Y , origin.Z - point3D.Z);
+            Vector3D vector3D = new Vector3D(point3D.X - origin.X, point3D.Y - origin.Y, point3D.Z - origin.Z);
             return new Planar.Point2D(baseX.DotProduct(vector3D), BaseY.DotProduct(vector3D));
         }
 
