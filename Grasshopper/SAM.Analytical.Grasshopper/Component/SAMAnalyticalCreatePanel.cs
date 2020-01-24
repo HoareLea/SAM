@@ -41,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Panel", "pnl", "SAM Analytical Panel", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.item);
         }
 
         public override void DrawViewportWires(IGH_PreviewArgs args)

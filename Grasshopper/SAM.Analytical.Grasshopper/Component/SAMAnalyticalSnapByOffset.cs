@@ -26,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_analytical", "_analytical", "SAM Analytical Object", GH_ParamAccess.list);
+            inputParamManager.AddGenericParameter("_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_offset_", "Offs", "Snap offset", GH_ParamAccess.item, 0.2);
         }
 
@@ -35,8 +35,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Analytical", "Anl", "SAM Analytical Object", GH_ParamAccess.list);
-            outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("SAMAnalytical", "SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("Points", "Points", "Snap points", GH_ParamAccess.list);
         }
 
         /// <summary>

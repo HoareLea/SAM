@@ -41,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Space", "Spc", "SAM Analytical Space", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Space", "Space", "SAM Analytical Space", GH_ParamAccess.item);
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_panel", "pnl", "SAM Analytical Panel", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_panel", "panel", "SAM Analytical Panel", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Boundary3D", "bnd", "SAM Analytical Boundary3D", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Boundary3D", "Boundary3D", "SAM Analytical Boundary3D", GH_ParamAccess.item);
         }
 
         public override void DrawViewportWires(IGH_PreviewArgs args)
