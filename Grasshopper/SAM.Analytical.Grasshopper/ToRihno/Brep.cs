@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Grasshopper.Kernel.Types;
+using Rhino;
 using SAM.Geometry;
 using SAM.Geometry.Grasshopper;
 
 namespace SAM.Analytical.Grasshopper
 {
+    // Add new class
+    //class GH_Panel : GH_Goo<Panel>
+    //{
+    //    //drawPeview
+    //}
+
     public static partial class Convert
     {
         public static Rhino.Geometry.Brep ToRhino(this Boundary3D boundary3D)
@@ -36,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 foreach (Rhino.Geometry.Brep brep_Internal in breps_Internal)
-                    breps = Rhino.Geometry.Brep.CreateBooleanDifference(breps[0], brep_Internal, Tolerance.MicroDistance, true);
+                    breps = Rhino.Geometry.Brep.CreateBooleanDifference(breps[0], brep_Internal, RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
 
 
                 //breps = Rhino.Geometry.Brep.CreateBooleanDifference(breps, breps_Internal, Tolerance.MacroDistance);
