@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1C86B9AC-81B3-41D8-BA48-321F28AB94F4}</ProjectGuid>
+    <ProjectGuid>{7C7E02CA-44E5-48F9-86B4-A07BB3C75283}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SAM.Graph</RootNamespace>
