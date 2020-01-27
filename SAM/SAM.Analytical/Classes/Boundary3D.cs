@@ -184,7 +184,9 @@ namespace SAM.Analytical
                     if (boundary3D.internalEdge2DLoops == null)
                         boundary3D.internalEdge2DLoops = new List<Edge2DLoop>();
 
-                    boundary3D.internalEdge2DLoops.Add(new Edge2DLoop(face_Internal));
+                    Geometry.Planar.IClosed2D closed2D = boundary3D.plane.Convert(face_Internal.ToClosedPlanar3D());
+
+                    boundary3D.internalEdge2DLoops.Add(new Edge2DLoop(new Face(boundary3D.plane, closed2D)));
                     faceList_ToRemove.Add(face_Internal);
                 }
 
