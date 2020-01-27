@@ -89,6 +89,12 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        /// <summary>
+        /// A factor for point-normal equation A(x−a)+B(y−b)+C(z−c) = 0 where origin(a,b,c), normal(A,B,C)
+        /// </summary>
+        /// <value>
+        /// A value for point-normal equation
+        /// </value>
         public double A
         {
             get
@@ -97,6 +103,12 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        /// <summary>
+        /// B factor for point-normal equation A(x−a)+B(y−b)+C(z−c) = 0 where origin(a,b,c), normal(A,B,C)
+        /// </summary>
+        /// <value>
+        /// B value for point-normal equation
+        /// </value>
         public double B
         {
             get
@@ -105,6 +117,12 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        /// <summary>
+        /// C factor for point-normal equation A(x−a)+B(y−b)+C(z−c) = 0 where origin(a,b,c), normal(A,B,C)
+        /// </summary>
+        /// <value>
+        /// C value for point-normal equation
+        /// </value>
         public double C
         {
             get
@@ -113,6 +131,12 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        /// <summary>
+        /// D factor for point-normal equation Ax+By+Cz = D where origin(a,b,c), normal(A,B,C)
+        /// </summary>
+        /// <value>
+        /// D value for point-normal equation
+        /// </value>
         public double D
         {
             get
@@ -231,6 +255,11 @@ namespace SAM.Geometry.Spatial
         public Point3D Project(Point3D point3D)
         {
             return Closest(point3D);
+        }
+
+        public bool On(Point3D point3D, double tolerance = Tolerance.MicroDistance)
+        {
+            return (normal.X * (point3D.X - origin.X)) + (normal.Y * (point3D.Y - origin.Y)) + (normal.Z * (point3D.Z - origin.Z)) < tolerance;
         }
 
         public Segment3D Project(Segment3D segment3D)

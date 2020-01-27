@@ -94,5 +94,25 @@ namespace SAM.Geometry.Spatial
 
             return boundary.Inside(plane.Convert(closed3D));
         }
+
+        public bool Inside(Point3D point3D, double tolerance = Tolerance.MicroDistance)
+        {
+            if (!plane.On(point3D, tolerance))
+                return false;
+
+            Planar.Point2D point2D = plane.Convert(point3D);
+            return boundary.Inside(point2D);
+        }
+
+        public IClosedPlanar3D Project(IClosed3D closed3D)
+        {
+            if(closed3D is ISegmentable3D)
+            {
+                List<Point3D> point3Ds = ((ISegmentable3D)closed3D).GetPoints().ConvertAll(x => plane.Project(x));
+                return new Polygon3D(point3Ds);
+            }
+
+            return null;
+        }
     }
 }
