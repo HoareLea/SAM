@@ -126,7 +126,7 @@ namespace SAM.Analytical.Grasshopper
 
 
             if (obj is IGH_GeometricGoo)
-                geometry3Ds = ((IGH_GeometricGoo)obj).ToSAM(simplyfy);
+                geometry3Ds = ((IGH_GeometricGoo)obj).ToSAM(simplyfy).Cast<IGeometry3D>().ToList();
 
             if (obj is IGeometry3D)
                 geometry3Ds = new List<IGeometry3D>() { (IGeometry3D)obj };
@@ -137,10 +137,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            List<Face> faces = Geometry.Query.Faces(geometry3Ds);
+            if (faces == null)
+                return;
 
             List<Boundary3D> boundary3Ds = null;
 
-            if (!Boundary3D.TryGetBoundary3Ds(geometry3Ds.FindAll(x => x is Face).Cast<Face>().ToList(), out boundary3Ds))
+            if (!Boundary3D.TryGetBoundary3Ds(faces, out boundary3Ds))
                 return;
 
 
