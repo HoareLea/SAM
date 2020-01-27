@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.list);
             inputParamManager.AddGenericParameter("_panelType", "panelType", "PanelType", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_construction", "construction", "Construction", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("simplify_", "simplify", "Simplify", GH_ParamAccess.item, true);
@@ -41,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.list);
         }
 
         public override void DrawViewportWires(IGH_PreviewArgs args)
@@ -114,24 +114,27 @@ namespace SAM.Analytical.Grasshopper
             Construction aConstruction = null;
             dataAccess.GetData(2, ref aConstruction);
 
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
+            List<object> objects = new List<object>();
+            if (!dataAccess.GetDataList<object>(0, objects) || objects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            object obj = objectWrapper.Value;
+            //object obj = objectWrapper.Value;
 
-            List<IGeometry3D> geometry3Ds = null;
+            List<IGeometry3D> geometry3Ds = new List<IGeometry3D>();
 
+            foreach(object @object in objects)
+            {
+                if (@object is IGH_GeometricGoo)
+                    geometry3Ds.AddRange(((IGH_GeometricGoo)@object).ToSAM(simplyfy).Cast<IGeometry3D>().ToList());
 
-            if (obj is IGH_GeometricGoo)
-                geometry3Ds = ((IGH_GeometricGoo)obj).ToSAM(simplyfy).Cast<IGeometry3D>().ToList();
+                if (@object is IGeometry3D)
+                    geometry3Ds.Add((IGeometry3D)@object);
+            }
 
-            if (obj is IGeometry3D)
-                geometry3Ds = new List<IGeometry3D>() { (IGeometry3D)obj };
-
-            if (geometry3Ds == null)
+            if (geometry3Ds == null || geometry3Ds.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
