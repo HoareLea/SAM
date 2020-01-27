@@ -8,6 +8,8 @@ namespace SAM.Geometry.Spatial
 {
     public class Plane : IPlanar3D
     {
+        public static Plane Base { get; } = new Plane(Point3D.Zero, Vector3D.BaseZ);
+
         private Vector3D normal;
         private Point3D origin;
         private Vector3D baseX;
@@ -115,7 +117,7 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                return normal.X * origin.X + normal.Y * origin.Y + normal.Z * origin.Z;
+                return -(normal.X * origin.X + normal.Y * origin.Y + normal.Z * origin.Z);
             }
         }
 
