@@ -151,7 +151,7 @@ namespace SAM.Geometry.Planar
             origin = point2D;
         }
 
-        public void Flip()
+        public void Reverse()
         {
             origin = End;
             vector.Negate();

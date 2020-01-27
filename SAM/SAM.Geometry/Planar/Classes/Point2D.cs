@@ -600,10 +600,10 @@ namespace SAM.Geometry.Planar
             Segment2D segment2D_Width = new Segment2D(point2D_1_Width, point2D_2_Width);
 
             if (!segment2D_Height.Direction.AlmostEqual(direction_Height))
-                segment2D_Height.Flip();
+                segment2D_Height.Reverse();
 
             if (!segment2D_Width.Direction.AlmostEqual(direction_Width))
-                segment2D_Width.Flip();
+                segment2D_Width.Reverse();
 
             Point2D point2D_Temp = segment2D_Height[0];
             segment2D_Height.MoveTo(segment2D_Width[0]);
