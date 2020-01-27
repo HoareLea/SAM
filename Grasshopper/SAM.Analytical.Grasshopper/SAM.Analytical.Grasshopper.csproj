@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="ToGrasshopper\IGH_Goos.cs" />
     <Compile Include="ToGrasshopper\GH_Surface.cs" />
+    <Compile Include="ToRihno\Brep.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">

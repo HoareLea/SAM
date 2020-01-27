@@ -86,6 +86,21 @@ namespace SAM.Analytical
             return internalEdge2DLoops.ConvertAll(x => new Edge3DLoop(plane, x));
         }
 
+        public List<IClosedPlanar3D> GetInternalClosedPlanar3Ds()
+        {
+            if (internalEdge2DLoops == null)
+                return null;
+
+            List<IClosedPlanar3D> result = new List<IClosedPlanar3D>();
+            foreach (Edge2DLoop edge2DLoop in internalEdge2DLoops)
+            {
+                Polygon3D polygon3D = new Polygon3D(edge2DLoop.Edge2Ds.ConvertAll(x => ((ICurve3D)plane.Convert(x.Curve2D)).GetStart()));
+                result.Add(polygon3D);
+            }
+
+            return result;
+        }
+
         public bool Coplanar(Boundary3D boundary3D, double tolerance = Geometry.Tolerance.Angle)
         {
             return plane.Coplanar(boundary3D.plane, tolerance);

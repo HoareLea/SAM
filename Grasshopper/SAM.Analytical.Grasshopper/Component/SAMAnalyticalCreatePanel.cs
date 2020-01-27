@@ -57,6 +57,14 @@ namespace SAM.Analytical.Grasshopper
                 if (boundary3D == null)
                     return;
 
+                Rhino.Display.DisplayMaterial displayMaterial = args.ShadeMaterial;
+                if (this.Attributes.Selected)
+                    displayMaterial = args.ShadeMaterial_Selected;
+
+                Rhino.Geometry.Brep brep = boundary3D.ToRhino();
+                if(brep != null)
+                    args.Display.DrawBrepShaded(brep, displayMaterial);
+
                 IEnumerable<Edge3DLoop> edge3DLoops = boundary3D.GetInternalEdge3DLoops();
                 if (edge3DLoops != null)
                 {
@@ -72,12 +80,13 @@ namespace SAM.Analytical.Grasshopper
 
                         point3ds.Add(point3ds[0]);
 
-                        args.Display.DrawPolyline(point3ds, System.Drawing.Color.Green);
+                        args.Display.DrawPolyline(point3ds, System.Drawing.Color.BlueViolet);
                     }
 
                 }
 
                 args.Display.DrawBrepWires(boundary3D.GetFace().ToRhino_Brep(), System.Drawing.Color.Blue);
+                //args.Display.DrawBrepShaded(boundary3D.GetFace().ToRhino_Brep(), args.ShadeMaterial);
             }
         }
 
