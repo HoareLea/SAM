@@ -43,12 +43,33 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool Write(GH_IWriter writer)
         {
-            return base.Write(writer);
+            SAM.Core.JSON.JSONParser jSONParser = AssemblyInfo.GetJSONParser();
+            if (jSONParser == null)
+                return false;
+
+            jSONParser.Clear();
+            jSONParser.Add(Value);
+
+
+            writer.SetString("GooPanel", jSONParser.ToString());
+            return true;
         }
 
         public override bool Read(GH_IReader reader)
         {
-            return base.Read(reader);
+            Core.JSON.JSONParser jSONParser = AssemblyInfo.GetJSONParser();
+            if (jSONParser == null)
+                return false;
+
+            string value = null;
+            if (!reader.TryGetString("GooPanel", ref value))
+                return false;
+
+            jSONParser.Clear();
+            jSONParser.Add(value);
+
+            Value = jSONParser.GetObjects<Panel>().First();
+            return true;
         }
     }
 }

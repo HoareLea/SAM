@@ -7,6 +7,8 @@ namespace SAM.Analytical.Grasshopper
 {
     public class AssemblyInfo : GH_AssemblyInfo
     {
+        private SAM.Core.JSON.JSONParser jSONParser;
+
         public override string Name
         {
             get

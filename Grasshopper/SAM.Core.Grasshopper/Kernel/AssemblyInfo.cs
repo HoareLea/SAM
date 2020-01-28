@@ -6,7 +6,7 @@ using Grasshopper.Kernel;
 namespace SAM.Core.Grasshopper
 {
     public class AssemblyInfo : GH_AssemblyInfo
-    {
+    {        
         public override string Name
         {
             get
