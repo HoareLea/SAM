@@ -151,15 +151,33 @@ namespace SAM.Geometry.Spatial
             if (aCount < 3)
                 return null;
 
+            Point3D point3D_1 = null;
+            Point3D point3D_2 = null;
+            Point3D point3D_3 = null;
+
             for (int i = 2; i < aCount; i++)
             {
-                Point3D point3D_1 = point3Ds.ElementAt(i - 2);
-                Point3D point3D_2 = point3Ds.ElementAt(i - 1);
-                Point3D point3D_3 = point3Ds.ElementAt(i);
+                point3D_1 = point3Ds.ElementAt(i - 2);
+                point3D_2 = point3Ds.ElementAt(i - 1);
+                point3D_3 = point3Ds.ElementAt(i);
 
                 if (point3D_2.SmallestAngle(point3D_1, point3D_3) > tolerance)
                     return new Plane(point3D_1, point3D_2, point3D_3);
             }
+
+            point3D_1 = point3Ds.ElementAt(aCount - 2);
+            point3D_2 = point3Ds.ElementAt(aCount - 1);
+            point3D_3 = point3Ds.ElementAt(0);
+
+            if (point3D_2.SmallestAngle(point3D_1, point3D_3) > tolerance)
+                return new Plane(point3D_1, point3D_2, point3D_3);
+
+            point3D_1 = point3Ds.ElementAt(aCount - 1);
+            point3D_2 = point3Ds.ElementAt(0);
+            point3D_3 = point3Ds.ElementAt(1);
+
+            if (point3D_2.SmallestAngle(point3D_1, point3D_3) > tolerance)
+                return new Plane(point3D_1, point3D_2, point3D_3);
 
             return null;
         }

@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GH_Panel.cs" />
     <Compile Include="Component\SAMAnalyticalBoundary3D.cs" />
     <Compile Include="Component\SAMAnalyticalGeometry.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstruction.cs" />
