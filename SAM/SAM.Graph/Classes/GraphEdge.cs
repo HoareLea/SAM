@@ -11,10 +11,6 @@ namespace SAM.Graph
         private object @object = null;
         private double weight = 1;
 
-        public double Weight => weight;
-
-        public object Object => @object;
-
         public GraphEdge(object @object, double weight)
         {
             this.@object = @object;
@@ -30,5 +26,15 @@ namespace SAM.Graph
         {
             this.@object = @object;
         }
+
+        public GraphEdge(GraphEdge graphEdge)
+        {
+            this.@object = graphEdge.@object;
+            this.weight = graphEdge.weight;
+        }
+
+        public double Weight => weight;
+
+        public object Object => @object;
     }
 }

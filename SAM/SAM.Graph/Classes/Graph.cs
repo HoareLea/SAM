@@ -88,6 +88,74 @@ namespace SAM.Graph
             return result;
         }
 
+        public HashSet<GraphEdge> GetGraphEdges(object object_From, object object_To)
+        {
+            if (object_From == null || object_To == null)
+                return null;
+
+            HashSet<GraphEdge> graphEdges_From = GetGraphEdges(object_From);
+            if (graphEdges_From == null || graphEdges_From.Count == 0)
+                return null;
+
+            HashSet<GraphEdge> graphEdges_To = GetGraphEdges(object_To);
+            if (graphEdges_To == null || graphEdges_To.Count == 0)
+                return null;
+
+            throw new NotImplementedException();
+        }
+
+        public bool Next(ref List<GraphPath> graphPaths)
+        {
+            bool result = false;
+            
+            List<GraphPath> graphPaths_New = new List<GraphPath>();
+            foreach (GraphPath graphPath in graphPaths)
+            {
+                if (graphPath.Count() > 0 && graphPath.First() == graphPath.Last())
+                    continue;
+                
+                GraphEdge graphEdge = graphPath.Last();
+                if(graphEdge is GraphNode)
+                {
+                    HashSet<GraphEdge> graphEdges = GetGraphEdges(graphEdge);
+                    if(graphEdges != null && graphEdges.Count > 0)
+                    {
+                        graphEdges.Remove(graphEdge);
+                        foreach(GraphEdge graphEdge_New in graphEdges)
+                        {
+                            GraphPath graphPath_New = new GraphPath(graphPath);
+                            if(graphPath_New.Add(graphEdge_New))
+                            {
+                                graphPaths_New.Add(graphPath_New);
+                                result = true;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    HashSet<GraphNode> graphNodes = GetGraphNodes(graphEdge);
+                    if (graphNodes != null && graphNodes.Count > 0)
+                    {
+                        foreach(GraphNode graphNode in graphNodes)
+                        {
+                            int index = graphPath.IndexOf(graphNode);
+                            if (index > 0)
+                                continue;
+
+                            if (graphPath.Add(graphNode))
+                                result = true;
+                        }
+                    }
+                }
+            }
+
+            if (graphPaths_New != null)
+                graphPaths.AddRange(graphPaths_New);
+
+            return result;
+        }
+
         public Graph GetGraph(object @object)
         {
             HashSet<GraphEdge> graphEdges = new HashSet<GraphEdge>();

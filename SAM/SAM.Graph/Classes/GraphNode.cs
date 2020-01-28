@@ -24,6 +24,13 @@ namespace SAM.Graph
                 this.graphEdges = new List<GraphEdge>(graphEdges);
         }
 
+        public GraphNode(GraphNode graphNode)
+            : base(graphNode)
+        {
+            if (graphNode.graphEdges != null)
+                graphEdges = new List<GraphEdge>(graphNode.graphEdges);
+        }
+
         public bool Contains(object @object)
         {
             if (graphEdges == null)
