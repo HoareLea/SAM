@@ -327,6 +327,12 @@ namespace SAM.Geometry.Spatial
         {
             return normal.Angle(plane.normal) <= tolerance || -normal.Angle(plane.normal) <= tolerance;
         }
+
+        public void Reverse()
+        {
+            normal.Negate();
+            baseX.Negate();
+        }
     }
 }
 

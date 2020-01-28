@@ -5,7 +5,6 @@ namespace SAM.Geometry.Spatial
 {
     public class Polygon3D : IClosedPlanar3D, ISegmentable3D
     {
-        //TODO: Convert to Plane and Point2Ds
         private List<Point3D> points;
 
         public Polygon3D(IEnumerable<Point3D> points)
@@ -121,6 +120,11 @@ namespace SAM.Geometry.Spatial
             List<Planar.Point2D> point2Ds_2 = polygon3D.points.ConvertAll(x => plane_1.Convert(x));
 
             return point2Ds_2.TrueForAll(x => Planar.Point2D.Inside(point2Ds_1, x));
+        }
+
+        public void Reverse()
+        {
+            points.Reverse();
         }
     }
 }

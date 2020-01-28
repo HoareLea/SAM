@@ -188,6 +188,10 @@ namespace SAM.Analytical
                 boundary3Ds.Add(boundary3D);
                 faceList_ToRemove.Add(face);
 
+                Geometry.Orientation orientation = Geometry.Orientation.Undefined;
+                if(face.Boundary is Geometry.Planar.Polygon2D)
+                    orientation = ((Geometry.Planar.Polygon2D)face.Boundary).GetOrientation();
+
                 foreach (Face face_Internal in faces)
                 {
                     if (face_Internal == face)
@@ -200,6 +204,16 @@ namespace SAM.Analytical
                         boundary3D.internalEdge2DLoops = new List<Edge2DLoop>();
 
                     Geometry.Planar.IClosed2D closed2D = boundary3D.plane.Convert(face_Internal.ToClosedPlanar3D());
+                    if(orientation != Geometry.Orientation.Undefined)
+                    {
+                        if (closed2D is Geometry.Planar.Polygon2D)
+                        {
+                            Geometry.Planar.Polygon2D polygon2D = (Geometry.Planar.Polygon2D)closed2D;
+                            Geometry.Orientation orientation_Internal = polygon2D.GetOrientation();
+                            if (orientation != orientation_Internal)
+                                polygon2D.Reverse();
+                        }
+                    }
 
                     boundary3D.internalEdge2DLoops.Add(new Edge2DLoop(new Face(boundary3D.plane, closed2D)));
                     faceList_ToRemove.Add(face_Internal);

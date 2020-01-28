@@ -287,6 +287,34 @@ namespace SAM.Geometry.Planar
                 return Geometry.Orientation.CounterClockwise;
         }
 
+        public static Orientation Orientation(IEnumerable<Point2D> point2Ds, bool convexHull = true)
+        {
+            if (point2Ds == null || point2Ds.Count() == 0)
+                return Geometry.Orientation.Undefined;
+
+            List<Point2D> point2Ds_Temp = null;
+
+            if (convexHull)
+                point2Ds_Temp = Query.ConvexHull(point2Ds);
+            else
+                point2Ds_Temp = new List<Point2D>(point2Ds);
+
+            if (point2Ds_Temp == null || point2Ds_Temp.Count < 3)
+                return Geometry.Orientation.Undefined;
+
+            point2Ds_Temp.Add(point2Ds_Temp[0]);
+            point2Ds_Temp.Add(point2Ds_Temp[1]);
+
+            for (int i=0; i < point2Ds_Temp.Count - 2; i++)
+            {
+                Orientation orientation = Orientation(point2Ds_Temp[i], point2Ds_Temp[i + 1], point2Ds_Temp[i + 2]);
+                if (orientation != Geometry.Orientation.Collinear && orientation != Geometry.Orientation.Undefined)
+                    return orientation;
+            }
+
+            return Geometry.Orientation.Undefined;
+        }
+
         public static List<Orientation> Orientations(IEnumerable<Point2D> point2Ds)
         {
             if (point2Ds == null)

@@ -60,6 +60,14 @@ namespace SAM.Analytical
             return ToGeometry(this);
         }
 
+        public void Reverse()
+        {
+            foreach (Edge2D edge2D in edge2Ds)
+                edge2D.Reverse();
+
+            edge2Ds.Reverse();
+        }
+
 
         public static Geometry.Planar.IClosed2D ToGeometry(Edge2DLoop edge2DLoop)
         {

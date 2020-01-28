@@ -95,5 +95,10 @@ namespace SAM.Geometry.Spatial
 
             return Planar.Point2D.GetArea(points.ToList().ConvertAll(x => plane.Convert(x)));
         }
+
+        public void Reverse()
+        {
+            points.Reverse();
+        }
     }
 }

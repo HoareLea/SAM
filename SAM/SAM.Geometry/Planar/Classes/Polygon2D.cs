@@ -23,6 +23,11 @@ namespace SAM.Geometry.Planar
             return Point2D.GetSegments(points, true);
         }
 
+        public Orientation GetOrientation()
+        {
+            return Point2D.Orientation(points, true);
+        }
+
         public IGeometry Clone()
         {
             return new Polygon2D(this);
@@ -52,6 +57,11 @@ namespace SAM.Geometry.Planar
                 return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
 
             throw new NotImplementedException();
+        }
+
+        public void Reverse()
+        {
+            points.Reverse();
         }
 
         public double GetArea()

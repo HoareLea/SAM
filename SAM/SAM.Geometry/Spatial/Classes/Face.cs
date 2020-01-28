@@ -41,6 +41,7 @@ namespace SAM.Geometry.Spatial
             return new Plane(plane);
         }
 
+
         public IGeometry Clone()
         {
             return new Face(this);

@@ -28,7 +28,6 @@ namespace SAM.Analytical
             this.curve2D = (ICurve2D)curve2D.Clone();
         }
 
-
         public Edge2D(System.Guid guid, string name, ICurve2D curve2D)
             : base(guid, name)
         {
@@ -41,6 +40,12 @@ namespace SAM.Analytical
             {
                 return (ICurve2D)curve2D.Clone();
             }
+        }
+
+        public void Reverse()
+        {
+            if(curve2D is Segment2D)
+                ((Segment2D)curve2D).Reverse();
         }
 
         public static IEnumerable<Edge2D> FromGeometry(IGeometry2D geometry2D)
