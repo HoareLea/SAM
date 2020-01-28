@@ -85,7 +85,7 @@ namespace SAM.Analytical.Grasshopper
 
                 }
 
-                args.Display.DrawBrepWires(boundary3D.GetFace().ToRhino_Brep(), System.Drawing.Color.Blue);
+                //args.Display.DrawBrepWires(boundary3D.GetFace().ToRhino_Brep(), System.Drawing.Color.Blue);
                 //args.Display.DrawBrepShaded(boundary3D.GetFace().ToRhino_Brep(), args.ShadeMaterial);
             }
         }

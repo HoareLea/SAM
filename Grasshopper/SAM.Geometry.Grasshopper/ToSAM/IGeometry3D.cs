@@ -22,7 +22,6 @@ namespace SAM.Geometry.Grasshopper
         {
             //if (!curve.IsPlanar())
             //    return null;
-
             PolylineCurve polylineCurve = curve as PolylineCurve;
             if (polylineCurve != null)
                 return polylineCurve.ToSAM(simplify);
@@ -49,11 +48,11 @@ namespace SAM.Geometry.Grasshopper
 
             if (simplify)
                 point3Ds = Spatial.Point3D.SimplifyByAngle(point3Ds, polylineCurve.IsClosed, 0.01);
-
-            if (polylineCurve.IsClosed)
+          
+            if (polylineCurve.IsClosed && polylineCurve.IsPlanar(Tolerance.MicroDistance))
                 return new Spatial.Polygon3D(point3Ds);
-            else
-                return new Spatial.Polyline3D(point3Ds);
+
+            return new Spatial.Polyline3D(point3Ds);
         }
     }
 }

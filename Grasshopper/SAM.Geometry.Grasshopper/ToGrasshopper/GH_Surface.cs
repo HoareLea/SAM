@@ -14,14 +14,27 @@ namespace SAM.Geometry.Grasshopper
         {
             Spatial.IClosed3D closed3D = surface.GetBoundary();
 
-            if (closed3D is Spatial.ICurvable3D)
+            if(closed3D is Spatial.ICurvable3D)
             {
                 List<Spatial.ICurve3D> curve3Ds = ((Spatial.ICurvable3D)(closed3D)).GetCurves();
 
-                Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(curve3Ds.ToRhino_PolylineCurve(), Tolerance.MicroDistance);
-                if (breps != null && breps.Length > 0)
+                Rhino.Geometry.Brep[] breps = null;
+
+                if (closed3D is Spatial.IClosedPlanar3D)
+                {
+                    breps = Rhino.Geometry.Brep.CreatePlanarBreps(curve3Ds.ToRhino_PolylineCurve(), Tolerance.MicroDistance);
+
+                }
+                else
+                {
+
+                }
+
+                if (breps != null && breps.Length == 0)
                     return new GH_Surface(breps[0]);
             }
+
+
 
             return null;
         }

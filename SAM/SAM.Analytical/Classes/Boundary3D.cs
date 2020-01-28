@@ -210,7 +210,7 @@ namespace SAM.Analytical
                         {
                             Geometry.Planar.Polygon2D polygon2D = (Geometry.Planar.Polygon2D)closed2D;
                             Geometry.Orientation orientation_Internal = polygon2D.GetOrientation();
-                            if (orientation != orientation_Internal)
+                            if (orientation == orientation_Internal)
                                 polygon2D.Reverse();
                         }
                     }
