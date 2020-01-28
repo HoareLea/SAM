@@ -47,7 +47,14 @@ namespace SAM.Geometry.Grasshopper
                         MinimumEdgeLength = 0.2,
                         Tolerance = 0.1
                     };
+
                     var surfaceMesh = Mesh.CreateFromSurface(brepFace.UnderlyingSurface(), meshingParameters);
+                    
+                    //var brepMesh = Mesh.CreateFromBrep(brep, meshingParameters);
+                    //var face= brepMesh[0].Faces;
+
+                    // TO DO Mesh.CreateFromBrep(brep, meshingParameters)
+                    // TO DO var surfaceMesh = Mesh.CreateFromSurface(brepFace.UnderlyingSurface(), meshingParameters);
 
                     foreach (var face in surfaceMesh.Faces)
                     {
