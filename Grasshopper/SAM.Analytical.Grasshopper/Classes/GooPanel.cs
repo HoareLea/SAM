@@ -24,11 +24,13 @@ namespace SAM.Analytical.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GooPanel(panel);
+            return new GooPanel(Value);
         }
 
         public override string ToString()
         {
+            Panel panel = Value;
+            
             if (!string.IsNullOrWhiteSpace(panel.Name))
                 return panel.Name;
 
