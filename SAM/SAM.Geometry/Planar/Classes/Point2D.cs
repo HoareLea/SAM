@@ -269,10 +269,10 @@ namespace SAM.Geometry.Planar
             return new Point2D(aX, aY);
         }
 
-        public static double Determinant(Point2D point2D_A, Point2D point2D_B, Point2D point2D_C)
+        public static double Determinant(Point2D point2D_1, Point2D point2D_2, Point2D point2D_3)
         {
-            //return (point2D_2.Y - point2D_1.Y) * (point2D_3.X - point2D_2.X) - (point2D_2.X - point2D_1.X) * (point2D_3.Y - point2D_2.Y);
-            return ((point2D_B.X * point2D_C.Y) + (point2D_A.X * point2D_B.Y) + (point2D_A.Y * point2D_C.X)) - ((point2D_A.Y * point2D_B.X) + (point2D_B.Y * point2D_C.X) + (point2D_A.X * point2D_C.Y));
+            return (point2D_2.Y - point2D_1.Y) * (point2D_3.X - point2D_2.X) - (point2D_2.X - point2D_1.X) * (point2D_3.Y - point2D_2.Y);
+            //return ((point2D_2.X * point2D_3.Y) + (point2D_1.X * point2D_2.Y) + (point2D_1.Y * point2D_3.X)) - ((point2D_1.Y * point2D_2.X) + (point2D_2.Y * point2D_3.X) + (point2D_1.X * point2D_3.Y));
         }
 
         public static Orientation Orientation(Point2D point2D_1, Point2D point2D_2, Point2D point2D_3)

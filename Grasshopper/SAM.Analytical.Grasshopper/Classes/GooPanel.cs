@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using GH_IO.Serialization;
+
+using Rhino.Geometry;
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooPanel : GH_Goo<Panel>
+    public class GooPanel : GH_Goo<Panel>, IGH_PreviewData
     {
         public GooPanel(Panel panel)
         {
@@ -21,6 +23,17 @@ namespace SAM.Analytical.Grasshopper
         public override string TypeName => "Panel";
 
         public override string TypeDescription => "SAM Analitycal Panel";
+
+        public BoundingBox ClippingBox
+        {
+            get
+            {
+                if (Value == null)
+                    return BoundingBox.Empty;
+
+                return Geometry.Grasshopper.Convert.ToRhino(Value.GetBoundingBox());
+            }
+        }
 
         public override IGH_Goo Duplicate()
         {
@@ -70,6 +83,16 @@ namespace SAM.Analytical.Grasshopper
 
             Value = jSONParser.GetObjects<Panel>().First();
             return true;
+        }
+
+        public void DrawViewportWires(GH_PreviewWireArgs args)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
+        {
+            throw new NotImplementedException();
         }
     }
 }
