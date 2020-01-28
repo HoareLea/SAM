@@ -132,36 +132,44 @@ namespace SAM.Analytical.Grasshopper
 
             //object obj = objectWrapper.Value;
 
-            List<IGeometry3D> geometry3Ds = new List<IGeometry3D>();
+            List<List<IGeometry3D>> geometry3DsList = new List<List<IGeometry3D>>();
 
             foreach(object @object in objects)
             {
                 if (@object is IGH_GeometricGoo)
-                    geometry3Ds.AddRange(((IGH_GeometricGoo)@object).ToSAM(simplyfy).Cast<IGeometry3D>().ToList());
+                {
+                    List<IGeometry3D> geometry3Ds = ((IGH_GeometricGoo)@object).ToSAM(simplyfy).Cast<IGeometry3D>().ToList();
+                    if(geometry3Ds != null && geometry3Ds.Count > 0)
+                        geometry3DsList.Add(geometry3Ds);
+                }
 
                 if (@object is IGeometry3D)
-                    geometry3Ds.Add((IGeometry3D)@object);
+                    geometry3DsList.Add(new List<IGeometry3D>() { (IGeometry3D)@object });
             }
 
-            if (geometry3Ds == null || geometry3Ds.Count == 0)
+            if (geometry3DsList == null || geometry3DsList.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            List<Face> faces = Geometry.Query.Faces(geometry3Ds);
-            if (faces == null)
-                return;
-
-            List<Boundary3D> boundary3Ds = null;
-
-            if (!Boundary3D.TryGetBoundary3Ds(faces, out boundary3Ds))
-                return;
-
-
             panels = new List<Panel>();
-            foreach(Boundary3D boundary3D in boundary3Ds)
-                panels.Add(new Panel(aConstruction, panelType, boundary3D));
+
+            foreach(List<IGeometry3D> geometry3Ds in geometry3DsList)
+            {
+                List<Face> faces = Geometry.Query.Faces(geometry3Ds);
+                if (faces == null)
+                    continue;
+
+                List<Boundary3D> boundary3Ds = null;
+
+                if (!Boundary3D.TryGetBoundary3Ds(faces, out boundary3Ds))
+                    continue;
+
+                foreach (Boundary3D boundary3D in boundary3Ds)
+                    panels.Add(new Panel(aConstruction, panelType, boundary3D));
+            }
+
 
             if(panels.Count == 1)
             {
