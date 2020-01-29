@@ -73,7 +73,6 @@ namespace SAM.Analytical
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             return GetFace().GetBoundingBox(offset);
-
         }
 
         public Construction Construction

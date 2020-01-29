@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Geometry;
 using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
     public class SAMAnalyticalCreatePanel : GH_Component
-    {
-        private List<Panel> panels = null;
-        
+    {      
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalCreatePanel()
-          : base("SAMAnalytical.CreatePanel", "SAMAnalytical.CreatePanel",
+          : base("SAMAnalytical.CreatePanel_TEST", "SAMAnalytical.CreatePanel",
               "Create SAM Analytical Panel",
               "SAM", "Analytical")
         {
@@ -44,60 +42,12 @@ namespace SAM.Analytical.Grasshopper
             outputParamManager.AddGenericParameter("Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.list);
         }
 
-        public override void DrawViewportWires(IGH_PreviewArgs args)
-        {
-            base.DrawViewportWires(args);
-
-            if (panels == null || panels.Count == 0)
-                return;
-
-            foreach(Panel panel in panels)
-            {
-                Boundary3D boundary3D = panel.Boundary3D;
-                if (boundary3D == null)
-                    return;
-
-                Rhino.Display.DisplayMaterial displayMaterial = args.ShadeMaterial;
-                if (this.Attributes.Selected)
-                    displayMaterial = args.ShadeMaterial_Selected;
-
-                Rhino.Geometry.Brep brep = boundary3D.ToRhino();
-                if(brep != null)
-                    args.Display.DrawBrepShaded(brep, displayMaterial);
-
-                IEnumerable<Edge3DLoop> edge3DLoops = boundary3D.GetInternalEdge3DLoops();
-                if (edge3DLoops != null)
-                {
-                    foreach (Edge3DLoop edge3DLoop in edge3DLoops)
-                    {
-                        List<Edge3D> edge3Ds = edge3DLoop.Edge3Ds;
-                        if (edge3Ds == null || edge3Ds.Count == 0)
-                            continue;
-
-                        List<Rhino.Geometry.Point3d> point3ds = edge3Ds.ConvertAll(x => x.Curve3D.GetStart().ToRhino());
-                        if (point3ds.Count == 0)
-                            continue;
-
-                        point3ds.Add(point3ds[0]);
-
-                        args.Display.DrawPolyline(point3ds, System.Drawing.Color.BlueViolet);
-                    }
-
-                }
-
-                //args.Display.DrawBrepWires(boundary3D.GetFace().ToRhino_Brep(), System.Drawing.Color.Blue);
-                //args.Display.DrawBrepShaded(boundary3D.GetFace().ToRhino_Brep(), args.ShadeMaterial);
-            }
-        }
-
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
-        {
-            panels = null;
-            
+        {        
             bool simplyfy = false;
             if (!dataAccess.GetData<bool>(3, ref simplyfy))
             {
@@ -106,8 +56,6 @@ namespace SAM.Analytical.Grasshopper
             }
 
             GH_ObjectWrapper objectWrapper = null;
-
-            
             if (!dataAccess.GetData(1, ref objectWrapper))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -158,7 +106,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            panels = new List<Panel>();
+            List<Panel> panels = new List<Panel>();
 
             foreach(List<IGeometry3D> geometry3Ds in geometry3DsList)
             {
@@ -178,11 +126,11 @@ namespace SAM.Analytical.Grasshopper
 
             if(panels.Count == 1)
             {
-                dataAccess.SetData(0, panels[0]);
+                dataAccess.SetData(0, new GooPanel(panels[0]));
             }
             else
             {
-                dataAccess.SetDataList(0, panels);
+                dataAccess.SetDataList(0, panels.ConvertAll(x => new GooPanel(x)));
             }     
         }
 
@@ -204,7 +152,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("35ef8f3e-1cf2-407d-b2ed-33bf371ea161"); }
+            get { return new Guid("a6d16e63-70dc-4c7f-9dbe-5394f669a3cc"); }
         }
     }
 }

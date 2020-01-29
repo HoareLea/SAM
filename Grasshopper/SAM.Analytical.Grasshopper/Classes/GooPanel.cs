@@ -87,43 +87,14 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            Boundary3D boundary3D = Value.Boundary3D;
-            if (boundary3D == null)
-                return;
-
-            Dictionary<Edge3DLoop, System.Drawing.Color> aDictionary = new Dictionary<Edge3DLoop, System.Drawing.Color>();
-
-            aDictionary[boundary3D.GetEdge3DLoop()] = System.Drawing.Color.DarkRed;
-
-            
-            IEnumerable<Edge3DLoop> edge3DLoops = boundary3D.GetInternalEdge3DLoops();
-            if (edge3DLoops != null)
-            {
-                foreach (Edge3DLoop edge3DLoop in edge3DLoops)
-                    aDictionary[edge3DLoop] = System.Drawing.Color.BlueViolet;
-            }
-
-            foreach (KeyValuePair<Edge3DLoop, System.Drawing.Color> keyValuePair in aDictionary)
-            {
-                List<Edge3D> edge3Ds = keyValuePair.Key.Edge3Ds;
-                if (edge3Ds == null || edge3Ds.Count == 0)
-                    continue;
-
-                List<Point3d> point3ds = edge3Ds.ConvertAll(x => x.Curve3D.GetStart().ToRhino());
-                if (point3ds.Count == 0)
-                    continue;
-
-                point3ds.Add(point3ds[0]);
-
-                args.Pipeline.DrawPolyline(point3ds, keyValuePair.Value);
-            }
+            GooBoundary3D gooBoundary3D = new GooBoundary3D(Value.Boundary3D);
+            gooBoundary3D.DrawViewportWires(args);
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            Brep brep = Value.Boundary3D.ToRhino();
-            if (brep != null)
-                args.Pipeline.DrawBrepShaded(brep, args.Material);
+            GooBoundary3D gooBoundary3D = new GooBoundary3D(Value.Boundary3D);
+            gooBoundary3D.DrawViewportMeshes(args);
         }
     }
 }

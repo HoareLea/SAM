@@ -65,6 +65,14 @@ namespace SAM.Analytical.Grasshopper
             {
                 sAMObjectList = new List<SAMObject>() { (SAMObject)obj };
             }
+            else if(obj is GooPanel)
+            {
+                sAMObjectList = new List<SAMObject>() { ((GooPanel)obj).Value };
+            }
+            else if (obj is GooBoundary3D)
+            {
+                sAMObjectList = new List<SAMObject>() { ((GooBoundary3D)obj).Value };
+            }
 
             List<object> result = null;
             if (sAMObjectList != null)

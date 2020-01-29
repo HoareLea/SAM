@@ -117,6 +117,11 @@ namespace SAM.Analytical
             edge3DLoop.Snap(point3Ds, maxDistance);
         }
 
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return GetFace().GetBoundingBox(offset);
+        }
+
 
 
         public static bool TryGetBoundary3D(List<Face> faces, out Boundary3D boundary3D)

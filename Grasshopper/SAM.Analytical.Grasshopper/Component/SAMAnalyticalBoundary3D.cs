@@ -12,8 +12,6 @@ namespace SAM.Analytical.Grasshopper
 {
     public class SAMAnalyticalBoundary3D : GH_Component
     {
-        private Boundary3D boundary3D;
-        
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
@@ -40,36 +38,6 @@ namespace SAM.Analytical.Grasshopper
             outputParamManager.AddGenericParameter("Boundary3D", "Boundary3D", "SAM Analytical Boundary3D", GH_ParamAccess.item);
         }
 
-        public override void DrawViewportWires(IGH_PreviewArgs args)
-        {
-            base.DrawViewportWires(args);
-
-            if (boundary3D == null)
-                return;
-
-            IEnumerable<Edge3DLoop> edge3DLoops = boundary3D.GetInternalEdge3DLoops();
-            if(edge3DLoops != null)
-            {
-                foreach (Edge3DLoop edge3DLoop in edge3DLoops)
-                {
-                    List<Edge3D> edge3Ds = edge3DLoop.Edge3Ds;
-                    if (edge3Ds == null || edge3Ds.Count == 0)
-                        continue;
-
-                    List<Rhino.Geometry.Point3d> point3ds = edge3Ds.ConvertAll(x => x.Curve3D.GetStart().ToRhino());
-                    if (point3ds.Count == 0)
-                        continue;
-
-                    point3ds.Add(point3ds[0]);
-
-                    args.Display.DrawPolyline(point3ds, System.Drawing.Color.Green);
-                }
-                    
-            }
-
-            args.Display.DrawBrepWires(boundary3D.GetFace().ToRhino_Brep(), System.Drawing.Color.Blue);
-        }
-
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -83,7 +51,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, panel.Boundary3D);
+            dataAccess.SetData(0, new GooBoundary3D(panel.Boundary3D));
 
         }
 

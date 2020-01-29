@@ -10,9 +10,14 @@ namespace SAM.Analytical.Grasshopper
 {
     public static partial class Convert
     {
-        public static GH_Surface ToGrasshopper(this Panel Panel)
+        public static GH_Surface ToGrasshopper(this Panel panel)
         {
-            return SAM.Geometry.Grasshopper.Convert.ToGrasshopper(Panel.GetFace());
+            return panel.Boundary3D.ToGrasshopper();
+        }
+
+        public static GH_Surface ToGrasshopper(this Boundary3D boundary3D)
+        {
+            return new GH_Surface(boundary3D.ToRhino());
         }
     }
 }

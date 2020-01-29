@@ -53,8 +53,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            object obj = objectWrapper.Value as object;
-            if(obj == null)
+            object @object = objectWrapper.Value;
+            if (@object == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -100,16 +100,21 @@ namespace SAM.Analytical.Grasshopper
             if (gHNumber != null)
                 maxDistance = gHNumber.Value;
 
-            Panel panel = obj as Panel;
-            if (panel != null)
-            {
-                panel = new Panel(panel);
-                panel.Snap(point3DList, maxDistance);
-                dataAccess.SetData(0, panel);
-                return;
-            }           
+            Panel panel = null;
+            if (@object is Panel)
+                panel = (Panel)@object;
+            else if (@object is GooPanel)
+                panel = ((GooPanel)@object).Value;
 
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot snap Analytical Object");
+            if (@object == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot snap Analytical Object");
+                return;
+            }
+
+            panel = new Panel(panel);
+            panel.Snap(point3DList, maxDistance);
+            dataAccess.SetData(0, panel);
         }
 
         /// <summary>

@@ -66,12 +66,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GooBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Component\SAMAnalyticalBoundary3D.cs" />
+    <Compile Include="Component\SAMAnalyticalCreatePanel.cs" />
     <Compile Include="Component\SAMAnalyticalGeometry.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalCreateSpace.cs" />
-    <Compile Include="Component\SAMAnalyticalCreatePanel.cs" />
     <Compile Include="Component\SAMAnalyticalPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByPoints.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByOffset.cs" />

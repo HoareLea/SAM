@@ -73,7 +73,14 @@ namespace SAM.Analytical.Grasshopper
             List<Panel> panelList = new List<Panel>();
             foreach (GH_ObjectWrapper objectWrapper_Temp in objectWrapperList)
             {
-                Panel panel = objectWrapper_Temp.Value as Panel;
+                object @object = objectWrapper_Temp.Value;
+
+                Panel panel = null;
+                if (@object is Panel)
+                    panel = (Panel)@object;
+                else if (@object is GooPanel)
+                    panel = ((GooPanel)@object).Value;
+
                 if (panel == null)
                     continue;
 
