@@ -123,5 +123,25 @@ namespace SAM.Analytical.Grasshopper
             if (brep != null)
                 args.Pipeline.DrawBrepShaded(brep, args.Material);
         }
+
+        public override bool CastFrom(object source)
+        {
+            if (source is Boundary3D)
+            {
+                Value = (Boundary3D)source;
+                return true;
+            }
+            return false;
+        }
+
+        public override bool CastTo<T>(ref T target)
+        {
+            if (typeof(T) == typeof(Boundary3D))
+            {
+                target = (T)(object)Value;
+                return true;
+            }
+            return false;
+        }
     }
 }

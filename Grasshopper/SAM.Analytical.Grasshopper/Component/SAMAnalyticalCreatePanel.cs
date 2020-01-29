@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalCreatePanel()
-          : base("SAMAnalytical.CreatePanel_TEST", "SAMAnalytical.CreatePanel",
+          : base("SAMAnalytical.CreatePanel", "SAMAnalytical.CreatePanel",
               "Create SAM Analytical Panel",
               "SAM", "Analytical")
         {

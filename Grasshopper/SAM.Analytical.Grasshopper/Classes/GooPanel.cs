@@ -99,12 +99,22 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool CastFrom(object source)
         {
-            return base.CastFrom(source);
+            if(source is Panel)
+            {
+                Value = (Panel)source;
+                return true;
+            }
+            return false;
         }
 
-        public override bool CastTo<Q>(ref Q target)
+        public override bool CastTo<T>(ref T target)
         {
-            return base.CastTo(ref target);
+            if (typeof(T) == typeof(Panel))
+            {
+                target = (T)(object)Value;
+                return true;
+            }
+            return false;
         }
     }
 }
