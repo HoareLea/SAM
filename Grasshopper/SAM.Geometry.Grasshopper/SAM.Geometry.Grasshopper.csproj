@@ -91,6 +91,7 @@
     <Compile Include="ToRhino\Point3d.cs" />
     <Compile Include="ToSAM\IClosed3D.cs" />
     <Compile Include="ToSAM\IGeometry3Ds.cs" />
+    <Compile Include="ToSAM\Polycurve3D.cs" />
     <Compile Include="ToSAM\Surface.cs" />
     <Compile Include="ToSAM\IGeometry3D.cs" />
     <Compile Include="ToSAM\Circle3D.cs" />

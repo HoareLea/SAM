@@ -19,7 +19,7 @@ namespace SAM.Geometry.Grasshopper
             }
             else
             {
-                Spatial.IGeometry3D geometry3D = brepLoop.To3dCurve().ToSAM();
+                Spatial.IGeometry3D geometry3D = brepLoop.To3dCurve().ToSAM(simplify);
                 if (geometry3D is Spatial.Polyline3D)
                 {
                     Spatial.PolycurveLoop3D polycurveLoop3D = new Spatial.PolycurveLoop3D(((Spatial.Polyline3D)geometry3D).GetSegments());

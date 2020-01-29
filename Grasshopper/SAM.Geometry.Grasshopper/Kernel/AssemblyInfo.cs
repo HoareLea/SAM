@@ -2,11 +2,14 @@
 using System.Drawing;
 
 using Grasshopper.Kernel;
+using Rhino.Geometry;
 
 namespace SAM.Geometry.Grasshopper
 {
     public class AssemblyInfo : GH_AssemblyInfo
     {
+        private static MeshingParameters meshingParameters;
+
         public override string Name
         {
             get
@@ -62,6 +65,21 @@ namespace SAM.Geometry.Grasshopper
                 //Return a string representing your preferred contact details.
                 return "Michal Dengusiak -> michaldengusiak@hoarelea.com and Jakub Ziolkowski -> jakubziolkowski@hoarelea.com";
             }
+        }
+
+        public static MeshingParameters GetMeshingParameters()
+        {
+            if (meshingParameters == null)
+            {
+                meshingParameters = new MeshingParameters
+                {
+                    SimplePlanes = true,
+                    MinimumEdgeLength = 0.2,
+                    Tolerance = 0.1
+                };
+            }
+
+            return meshingParameters;
         }
     }
 }

@@ -19,21 +19,31 @@ namespace SAM.Geometry.Grasshopper
         }
 
         public static Spatial.IGeometry3D ToSAM(this Curve curve, bool simplify = true)
-        {
-            //if (!curve.IsPlanar())
-            //    return null;
-            PolylineCurve polylineCurve = curve as PolylineCurve;
-            if (polylineCurve != null)
-                return polylineCurve.ToSAM(simplify);
+        { 
+            if(curve is PolylineCurve)
+                return ((PolylineCurve)curve).ToSAM();
 
-            polylineCurve = ToRhino_PolylineCurve(curve);
-            if (polylineCurve != null)
-                return polylineCurve.ToSAM(simplify);
+            if(curve is PolyCurve)
+                return ((PolyCurve)curve).ToSAM();
+
+            if (curve is LineCurve)
+                return ((LineCurve)curve).ToSAM();
+
+            if (simplify)
+            {
+                PolylineCurve polylineCurve_Temp = curve.ToPolyline(Tolerance.MicroDistance, Tolerance.Angle, 0.4, 1);
+                return polylineCurve_Temp.ToSAM();
+            }
+            else
+            {
+                PolylineCurve polylineCurve = ToRhino_PolylineCurve(curve);
+                return polylineCurve.ToSAM();
+            }
 
             return null;
         }
 
-        public static Spatial.IGeometry3D ToSAM(this PolylineCurve polylineCurve, bool simplify = true)
+        public static Spatial.IGeometry3D ToSAM(this PolylineCurve polylineCurve, double tolerance = Tolerance.MicroDistance)
         {
             int count = polylineCurve.PointCount;
             if (count == 2)
@@ -45,11 +55,8 @@ namespace SAM.Geometry.Grasshopper
 
             for (int i = 0; i < count; i++)
                 point3Ds.Add(polylineCurve.Point(i).ToSAM());
-
-            if (simplify)
-                point3Ds = Spatial.Point3D.SimplifyByAngle(point3Ds, polylineCurve.IsClosed, 0.01);
           
-            if (polylineCurve.IsClosed && polylineCurve.IsPlanar(Tolerance.MicroDistance))
+            if (polylineCurve.IsClosed && polylineCurve.IsPlanar(tolerance))
                 return new Spatial.Polygon3D(point3Ds);
 
             return new Spatial.Polyline3D(point3Ds);
