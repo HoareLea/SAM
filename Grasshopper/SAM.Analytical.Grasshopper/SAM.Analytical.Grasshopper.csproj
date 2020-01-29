@@ -100,6 +100,10 @@
       <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>
       <Name>SAM.Geometry</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj">
+      <Project>{ea20d57f-bb3e-447a-80a2-14c04baa665f}</Project>
+      <Name>SAM.Core.Grasshopper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SAM.Geometry.Grasshopper\SAM.Geometry.Grasshopper.csproj">
       <Project>{b8f0ee34-a776-4518-ada2-e047e468b47b}</Project>
       <Name>SAM.Geometry.Grasshopper</Name>

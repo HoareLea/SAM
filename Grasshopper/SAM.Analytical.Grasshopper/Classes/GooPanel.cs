@@ -96,5 +96,15 @@ namespace SAM.Analytical.Grasshopper
             GooBoundary3D gooBoundary3D = new GooBoundary3D(Value.Boundary3D);
             gooBoundary3D.DrawViewportMeshes(args);
         }
+
+        public override bool CastFrom(object source)
+        {
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Q>(ref Q target)
+        {
+            return base.CastTo(ref target);
+        }
     }
 }

@@ -8,12 +8,14 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 using SAM.Geometry.Grasshopper;
+using SAM.Core.Grasshopper;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooBoundary3D : GH_Goo<Boundary3D>, IGH_PreviewData
+    public class GooBoundary3D : GooSAMObject<Boundary3D>, IGH_PreviewData
     {
         public GooBoundary3D(Boundary3D boundary3D)
+            : base(boundary3D)
         {
             Value = boundary3D; 
         }
