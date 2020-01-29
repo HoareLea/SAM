@@ -66,6 +66,7 @@
     <Compile Include="Classes\GooSAMObject.cs" />
     <Compile Include="Component\Explode.cs" />
     <Compile Include="Component\SAMAbout.cs" />
+    <Compile Include="Interfaces\IGooSAMObject.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Kernel\AssemblyPriority.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,9 +98,7 @@
   <ItemGroup>
     <None Include="Resources\SAM_Explode.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

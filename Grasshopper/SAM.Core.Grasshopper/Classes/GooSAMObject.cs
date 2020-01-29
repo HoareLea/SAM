@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Grasshopper.Kernel.Types;
+﻿using Grasshopper.Kernel.Types;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooSAMObject<T> : GH_Goo<T> where T : SAMObject
+    public class GooSAMObject<T> : GH_Goo<T>, IGooSAMObject where T : SAMObject
     {
         public GooSAMObject(T sAMObject)
         {
@@ -24,6 +18,11 @@ namespace SAM.Core.Grasshopper
         public override IGH_Goo Duplicate()
         {
             return new GooSAMObject<T>(Value);
+        }
+
+        public SAMObject GetSAMObject()
+        {
+            return Value;
         }
 
         public override string ToString()

@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         public GooBoundary3D(Boundary3D boundary3D)
             : base(boundary3D)
         {
-            Value = boundary3D; 
+
         }
 
         public override bool IsValid => Value != null;
@@ -60,7 +60,6 @@ namespace SAM.Analytical.Grasshopper
 
             jSONParser.Clear();
             jSONParser.Add(Value);
-
 
             writer.SetString("GooBoundary3D", jSONParser.ToString());
             return true;

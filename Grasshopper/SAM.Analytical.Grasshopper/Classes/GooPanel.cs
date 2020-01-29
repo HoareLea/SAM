@@ -7,15 +7,16 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
-using SAM.Geometry.Grasshopper;
+using SAM.Core.Grasshopper;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooPanel : GH_Goo<Panel>, IGH_PreviewData
+    public class GooPanel : GooSAMObject<Panel>, IGH_PreviewData
     {
         public GooPanel(Panel panel)
+            : base(panel)
         {
-            Value = panel; 
+
         }
 
         public override bool IsValid => Value != null;
