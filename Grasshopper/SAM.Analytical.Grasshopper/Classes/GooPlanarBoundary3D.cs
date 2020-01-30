@@ -14,6 +14,12 @@ namespace SAM.Analytical.Grasshopper
 {
     public class GooPlanarBoundary3D : GooSAMObject<PlanarBoundary3D>, IGH_PreviewData
     {
+        public GooPlanarBoundary3D()
+            : base()
+        {
+
+        }
+
         public GooPlanarBoundary3D(PlanarBoundary3D planarBoundary3D)
             : base(planarBoundary3D)
         {

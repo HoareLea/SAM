@@ -14,7 +14,7 @@ namespace SAM.Analytical.Grasshopper
     public class GooPanel : GooSAMObject<Panel>, IGH_PreviewData
     {
         public GooPanel()
-            : base(null)
+            : base()
         {
 
         }

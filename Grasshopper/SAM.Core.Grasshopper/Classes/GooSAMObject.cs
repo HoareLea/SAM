@@ -10,6 +10,12 @@ namespace SAM.Core.Grasshopper
 {
     public class GooSAMObject<T> : GH_Goo<T>, IGooSAMObject where T : SAMObject
     {
+        public GooSAMObject()
+            : base()
+        {
+
+        }
+        
         public GooSAMObject(T sAMObject)
         {
             Value = sAMObject;
