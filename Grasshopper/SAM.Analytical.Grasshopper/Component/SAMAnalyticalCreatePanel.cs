@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.list);
+            inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_panelType", "panelType", "PanelType", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_construction", "construction", "Construction", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("simplify_", "simplify", "Simplify", GH_ParamAccess.item, true);
@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -55,6 +55,30 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            object @object = null;
+            if (!dataAccess.GetData(0, ref @object))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            List<IGeometry3D> geometry3Ds = null;
+            if (@object is IGH_GeometricGoo)
+                geometry3Ds = ((IGH_GeometricGoo)@object).ToSAM(simplyfy).Cast<IGeometry3D>().ToList();
+
+            if (@object is GH_ObjectWrapper)
+            {
+                GH_ObjectWrapper objectWrapper_Temp = ((GH_ObjectWrapper)@object);
+                if (objectWrapper_Temp.Value is IGeometry3D)
+                    geometry3Ds = new List<IGeometry3D>() { (IGeometry3D)objectWrapper_Temp.Value };
+            }
+
+            if(geometry3Ds == null || geometry3Ds.Count() == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             GH_ObjectWrapper objectWrapper = null;
             if (!dataAccess.GetData(1, ref objectWrapper))
             {
@@ -63,7 +87,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             PanelType panelType = PanelType.Undefined;
-            if(objectWrapper.Value is GH_String)
+            if (objectWrapper.Value is GH_String)
                 panelType = Query.PanelType(((GH_String)objectWrapper.Value).Value);
             else
                 panelType = Query.PanelType(objectWrapper.Value);
@@ -71,60 +95,28 @@ namespace SAM.Analytical.Grasshopper
             Construction aConstruction = null;
             dataAccess.GetData(2, ref aConstruction);
 
-            List<object> objects = new List<object>();
-            if (!dataAccess.GetDataList<object>(0, objects) || objects == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            //object obj = objectWrapper.Value;
-
-            List<List<IGeometry3D>> geometry3DsList = new List<List<IGeometry3D>>();
-
-            foreach (object @object in objects)
-            {
-                if (@object is IGH_GeometricGoo)
-                {
-                    List<IGeometry3D> geometry3Ds = ((IGH_GeometricGoo)@object).ToSAM(simplyfy).Cast<IGeometry3D>().ToList();
-                    if (geometry3Ds != null && geometry3Ds.Count > 0)
-                        geometry3DsList.Add(geometry3Ds);
-                }
-
-                if (@object is GH_ObjectWrapper)
-                {
-                   objectWrapper = ((GH_ObjectWrapper)@object);
-                    if (objectWrapper.Value is IGeometry3D)
-                        geometry3DsList.Add(new List<IGeometry3D>() { (IGeometry3D)objectWrapper.Value });
-
-                }
-            }
-
-            if (geometry3DsList == null || geometry3DsList.Count == 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             List<Panel> panels = new List<Panel>();
 
-            foreach(List<IGeometry3D> geometry3Ds in geometry3DsList)
+            List<Face> faces = Geometry.Query.Faces(geometry3Ds);
+            if (faces == null)
             {
-                List<Face> faces = Geometry.Query.Faces(geometry3Ds);
-                if (faces == null)
-                    continue;
-
-                List<Boundary3D> boundary3Ds = null;
-
-                if (!Boundary3D.TryGetBoundary3Ds(faces, out boundary3Ds))
-                    continue;
-
-                foreach (Boundary3D boundary3D in boundary3Ds)
-                    panels.Add(new Panel(aConstruction, panelType, boundary3D));
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
             }
 
+            List<Boundary3D> boundary3Ds = null;
 
-            if(panels.Count == 1)
+            if (!Boundary3D.TryGetBoundary3Ds(faces, out boundary3Ds))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            foreach (Boundary3D boundary3D in boundary3Ds)
+                panels.Add(new Panel(aConstruction, panelType, boundary3D));
+
+
+            if (panels.Count == 1)
             {
                 dataAccess.SetData(0, new GooPanel(panels[0]));
             }
