@@ -23,9 +23,9 @@ namespace SAM.Core.Grasshopper
 
         public override bool IsValid => Value != null;
 
-        public override string TypeName => Value.GetType().FullName;
+        public override string TypeName => Value.GetType().Name;
 
-        public override string TypeDescription => Value.GetType().FullName;
+        public override string TypeDescription => Value.GetType().FullName.Replace(".", " ");
 
         public override IGH_Goo Duplicate()
         {

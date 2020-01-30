@@ -25,12 +25,6 @@ namespace SAM.Analytical.Grasshopper
 
         }
 
-        public override bool IsValid => Value != null;
-
-        public override string TypeName => "Panel";
-
-        public override string TypeDescription => "SAM Analytical Panel";
-
         public BoundingBox ClippingBox
         {
             get

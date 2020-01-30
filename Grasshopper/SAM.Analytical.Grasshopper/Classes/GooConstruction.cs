@@ -25,12 +25,6 @@ namespace SAM.Analytical.Grasshopper
 
         }
 
-        public override bool IsValid => Value != null;
-
-        public override string TypeName => "Construction";
-
-        public override string TypeDescription => "SAM Analytical Construction";
-
         public override IGH_Goo Duplicate()
         {
             return new GooConstruction(Value);

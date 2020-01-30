@@ -26,12 +26,6 @@ namespace SAM.Analytical.Grasshopper
 
         }
 
-        public override bool IsValid => Value != null;
-
-        public override string TypeName => "PlanarBoundary3D";
-
-        public override string TypeDescription => "SAM Analitycal PlanarBoundary3D";
-
         public BoundingBox ClippingBox
         {
             get

@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\GooConstruction.cs" />
+    <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Component\SAMAnalyticalPlanarBoundary3D.cs" />
