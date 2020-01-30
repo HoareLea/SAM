@@ -14,6 +14,16 @@ namespace SAM.Analytical.Grasshopper
     public class SAMAnalyticalCreateSpace : GH_Component
     {
         /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("c6eaf1ad-22bb-4a3f-8c3d-9d8ac483214d");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalCreateSpace()
@@ -94,27 +104,6 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
             else
                 dataAccess.SetData(0, space);
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Small;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("c6eaf1ad-22bb-4a3f-8c3d-9d8ac483214d"); }
         }
     }
 }

@@ -10,14 +10,24 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalBoundary3D : GH_Component
+    public class SAMAnalyticalPlanarBoundary3D : GH_Component
     {
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("7316ff6b-9688-4f82-8256-b3e27e4a958d");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalBoundary3D()
-          : base("SAMAnalytical.Boundary3D", "SAMAnalytical.Boundary3D",
-              "Gets SAM Analytical Boundary3D",
+        public SAMAnalyticalPlanarBoundary3D()
+          : base("SAMAnalytical.PlanarBoundary3D", "SAMAnalytical.PlanarBoundary3D",
+              "Gets SAM Analytical PlanarBoundary3D",
               "SAM", "Analytical")
         {
         }
@@ -35,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Boundary3D", "Boundary3D", "SAM Analytical Boundary3D", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("PlanarBoundary3D", "PlanarBoundary3D", "SAM Analytical PlanarBoundary3D", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -51,29 +61,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, new GooBoundary3D(panel.Boundary3D));
+            dataAccess.SetData(0, new GooPlanarBoundary3D(panel.PlanarBoundary3D));
 
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Small;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("7316ff6b-9688-4f82-8256-b3e27e4a958d"); }
         }
     }
 }

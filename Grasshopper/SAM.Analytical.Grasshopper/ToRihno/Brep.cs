@@ -18,12 +18,12 @@ namespace SAM.Analytical.Grasshopper
 
     public static partial class Convert
     {
-        public static Rhino.Geometry.Brep ToRhino(this Boundary3D boundary3D)
+        public static Rhino.Geometry.Brep ToRhino(this PlanarBoundary3D planarBoundary3D)
         {
-            if (boundary3D == null)
+            if (planarBoundary3D == null)
                 return null;
             
-            Geometry.Spatial.Face face = boundary3D.GetFace();
+            Geometry.Spatial.Face face = planarBoundary3D.GetFace();
             if (face == null)
                 return null;
 
@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
             if (breps == null || breps.Length == 0)
                 return null;
 
-            List<Geometry.Spatial.IClosedPlanar3D> closedPlanar3Ds = boundary3D.GetInternalClosedPlanar3Ds();
+            List<Geometry.Spatial.IClosedPlanar3D> closedPlanar3Ds = planarBoundary3D.GetInternalClosedPlanar3Ds();
             if(closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
             {
                 List<Rhino.Geometry.Brep> breps_Internal = new List<Rhino.Geometry.Brep>();

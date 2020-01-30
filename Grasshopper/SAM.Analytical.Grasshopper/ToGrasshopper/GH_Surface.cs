@@ -12,12 +12,12 @@ namespace SAM.Analytical.Grasshopper
     {
         public static GH_Surface ToGrasshopper(this Panel panel)
         {
-            return panel.Boundary3D.ToGrasshopper();
+            return panel.PlanarBoundary3D.ToGrasshopper();
         }
 
-        public static GH_Surface ToGrasshopper(this Boundary3D boundary3D)
+        public static GH_Surface ToGrasshopper(this PlanarBoundary3D planarBoundary3D)
         {
-            return new GH_Surface(boundary3D.ToRhino());
+            return new GH_Surface(planarBoundary3D.ToRhino());
         }
     }
 }

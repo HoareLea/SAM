@@ -12,19 +12,19 @@ using SAM.Core.Grasshopper;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooBoundary3D : GooSAMObject<Boundary3D>, IGH_PreviewData
+    public class GooPlanarBoundary3D : GooSAMObject<PlanarBoundary3D>, IGH_PreviewData
     {
-        public GooBoundary3D(Boundary3D boundary3D)
-            : base(boundary3D)
+        public GooPlanarBoundary3D(PlanarBoundary3D planarBoundary3D)
+            : base(planarBoundary3D)
         {
 
         }
 
         public override bool IsValid => Value != null;
 
-        public override string TypeName => "Boundary3D";
+        public override string TypeName => "PlanarBoundary3D";
 
-        public override string TypeDescription => "SAM Analitycal Boundary3D";
+        public override string TypeDescription => "SAM Analitycal PlanarBoundary3D";
 
         public BoundingBox ClippingBox
         {
@@ -39,61 +39,31 @@ namespace SAM.Analytical.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GooBoundary3D(Value);
+            return new GooPlanarBoundary3D(Value);
         }
 
         public override string ToString()
         {
-            Boundary3D boundary3D = Value;
+            PlanarBoundary3D planarBoundary3D = Value;
             
-            if (!string.IsNullOrWhiteSpace(boundary3D.Name))
-                return boundary3D.Name;
+            if (!string.IsNullOrWhiteSpace(planarBoundary3D.Name))
+                return planarBoundary3D.Name;
 
             return GetType().FullName;
         }
 
-        public override bool Write(GH_IWriter writer)
-        {
-            SAM.Core.JSON.JSONParser jSONParser = AssemblyInfo.GetJSONParser();
-            if (jSONParser == null)
-                return false;
-
-            jSONParser.Clear();
-            jSONParser.Add(Value);
-
-            writer.SetString("GooBoundary3D", jSONParser.ToString());
-            return true;
-        }
-
-        public override bool Read(GH_IReader reader)
-        {
-            Core.JSON.JSONParser jSONParser = AssemblyInfo.GetJSONParser();
-            if (jSONParser == null)
-                return false;
-
-            string value = null;
-            if (!reader.TryGetString("GooBoundary3D", ref value))
-                return false;
-
-            jSONParser.Clear();
-            jSONParser.Add(value);
-
-            Value = jSONParser.GetObjects<Boundary3D>().First();
-            return true;
-        }
-
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            Boundary3D boundary3D = Value;
-            if (boundary3D == null)
+            PlanarBoundary3D planarBoundary3D = Value;
+            if (planarBoundary3D == null)
                 return;
 
             Dictionary<Edge3DLoop, System.Drawing.Color> aDictionary = new Dictionary<Edge3DLoop, System.Drawing.Color>();
 
-            aDictionary[boundary3D.GetEdge3DLoop()] = System.Drawing.Color.DarkRed;
+            aDictionary[planarBoundary3D.GetEdge3DLoop()] = System.Drawing.Color.DarkRed;
 
             
-            IEnumerable<Edge3DLoop> edge3DLoops = boundary3D.GetInternalEdge3DLoops();
+            IEnumerable<Edge3DLoop> edge3DLoops = planarBoundary3D.GetInternalEdge3DLoops();
             if (edge3DLoops != null)
             {
                 foreach (Edge3DLoop edge3DLoop in edge3DLoops)
@@ -125,9 +95,9 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool CastFrom(object source)
         {
-            if (source is Boundary3D)
+            if (source is PlanarBoundary3D)
             {
-                Value = (Boundary3D)source;
+                Value = (PlanarBoundary3D)source;
                 return true;
             }
             return false;
@@ -135,12 +105,32 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool CastTo<T>(ref T target)
         {
-            if (typeof(T) == typeof(Boundary3D))
+            if (typeof(T) == typeof(PlanarBoundary3D))
             {
                 target = (T)(object)Value;
                 return true;
             }
             return false;
+        }
+    }
+
+    public class GooPlanarBoundary3DParam : GH_PersistentParam<GooPlanarBoundary3D>
+    {
+        public override Guid ComponentGuid => new Guid("3b944b3c-bc94-46cc-aea3-b74385e138dc");
+
+        public GooPlanarBoundary3DParam()
+            : base(typeof(PlanarBoundary3D).Name, typeof(PlanarBoundary3D).Name, typeof(PlanarBoundary3D).FullName.Replace(".", " "), "SAM", "Parameters")
+        {
+        }
+
+        protected override GH_GetterResult Prompt_Plural(ref List<GooPlanarBoundary3D> values)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override GH_GetterResult Prompt_Singular(ref GooPlanarBoundary3D value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

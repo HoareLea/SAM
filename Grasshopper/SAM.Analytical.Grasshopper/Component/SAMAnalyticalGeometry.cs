@@ -12,6 +12,16 @@ namespace SAM.Analytical.Grasshopper
     public class SAMAnalyticalGeometry : GH_Component
     {
         /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("6628ec6c-84ba-4f2b-97cf-f2ccdbe8599a");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalGeometry()
@@ -26,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new PanelParam(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical ie. Panel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooPanelParam(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical ie. Panel", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -105,27 +115,6 @@ namespace SAM.Analytical.Grasshopper
             //    dataAccess.SetData(0, result[0]);
             //else
             //    dataAccess.SetDataList(0, result);   
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Small;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("6628ec6c-84ba-4f2b-97cf-f2ccdbe8599a"); }
         }
     }
 }

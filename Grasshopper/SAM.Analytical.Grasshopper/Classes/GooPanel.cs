@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
 
         public override string TypeName => "Panel";
 
-        public override string TypeDescription => "SAM Analitycal Panel";
+        public override string TypeDescription => "SAM Analytical Panel";
 
         public BoundingBox ClippingBox
         {
@@ -61,47 +61,16 @@ namespace SAM.Analytical.Grasshopper
             return GetType().FullName;
         }
 
-        public override bool Write(GH_IWriter writer)
-        {
-            SAM.Core.JSON.JSONParser jSONParser = AssemblyInfo.GetJSONParser();
-            if (jSONParser == null)
-                return false;
-
-            jSONParser.Clear();
-            jSONParser.Add(Value);
-
-
-            writer.SetString("GooPanel", jSONParser.ToString());
-            return true;
-        }
-
-        public override bool Read(GH_IReader reader)
-        {
-            Core.JSON.JSONParser jSONParser = AssemblyInfo.GetJSONParser();
-            if (jSONParser == null)
-                return false;
-
-            string value = null;
-            if (!reader.TryGetString("GooPanel", ref value))
-                return false;
-
-            jSONParser.Clear();
-            jSONParser.Add(value);
-
-            Value = jSONParser.GetObjects<Panel>().First();
-            return true;
-        }
-
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            GooBoundary3D gooBoundary3D = new GooBoundary3D(Value.Boundary3D);
-            gooBoundary3D.DrawViewportWires(args);
+            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
+            gooPlanarBoundary3D.DrawViewportWires(args);
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            GooBoundary3D gooBoundary3D = new GooBoundary3D(Value.Boundary3D);
-            gooBoundary3D.DrawViewportMeshes(args);
+            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
+            gooPlanarBoundary3D.DrawViewportMeshes(args);
         }
 
         public override bool CastFrom(object source)
@@ -125,12 +94,15 @@ namespace SAM.Analytical.Grasshopper
         }
     }
 
-    public class PanelParam : GH_PersistentParam<GooPanel>
+    public class GooPanelParam : GH_PersistentParam<GooPanel>
     {
         public override Guid ComponentGuid => new Guid("278B438C-43EA-4423-999F-B6A906870939");
-        public PanelParam() : base("Panel", "Panel", string.Empty, "SAM", "Parameters")
+        
+        public GooPanelParam()
+            : base(typeof(Panel).Name, typeof(Panel).Name, typeof(Panel).FullName.Replace(".", " "), "SAM", "Parameters")
         { 
         }
+        
         protected override GH_GetterResult Prompt_Plural(ref List<GooPanel> values)
         {
             throw new NotImplementedException();

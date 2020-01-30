@@ -45,7 +45,7 @@
     <Compile Include="Classes\Edge3DLoop.cs" />
     <Compile Include="Classes\Edge2DLoop.cs" />
     <Compile Include="Enums\PanelType.cs" />
-    <Compile Include="Classes\Boundary3D.cs" />
+    <Compile Include="Classes\PlanarBoundary3D.cs" />
     <Compile Include="Classes\Edge3D.cs" />
     <Compile Include="Classes\Opening.cs" />
     <Compile Include="Classes\Panel.cs" />

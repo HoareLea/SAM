@@ -11,8 +11,19 @@ namespace SAM.Analytical.Grasshopper
 {
     public class SAMAnalyticalPanelType : GH_Component
     {
-        private PanelType panelType = PanelType.Undefined;
         
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("25a6b405-19ab-4ff1-9666-7760997ccfdd");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        private PanelType panelType = PanelType.Undefined;
+
         /// <summary>
         /// Panel Type
         /// </summary>
@@ -82,25 +93,6 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.SetData(0, panelType.ToString());
         }
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Small;
-            }
-        }
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("25a6b405-19ab-4ff1-9666-7760997ccfdd"); }
-        }
     }
 }

@@ -11,6 +11,16 @@ namespace SAM.Analytical.Grasshopper
     public class SAMAnalyticalSnapByPoints : GH_Component
     {
         /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("e61f2f2e-f655-430a-9dfd-507929edef58");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalSnapByPoints()
@@ -115,27 +125,6 @@ namespace SAM.Analytical.Grasshopper
             panel = new Panel(panel);
             panel.Snap(point3DList, maxDistance);
             dataAccess.SetData(0, panel);
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Small;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("e61f2f2e-f655-430a-9dfd-507929edef58"); }
         }
     }
 }

@@ -11,6 +11,16 @@ namespace SAM.Analytical.Grasshopper
     public class SAMAnalyticalSnapByOffset : GH_Component
     {
         /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("6a7ac292-7b25-4211-878c-5012ea4e6dff");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalSnapByOffset()
@@ -96,27 +106,6 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.SetDataList(1, point3DList);
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Small;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("6a7ac292-7b25-4211-878c-5012ea4e6dff"); }
         }
     }
 }

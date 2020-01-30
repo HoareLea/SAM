@@ -12,7 +12,17 @@ using SAM.Geometry.Spatial;
 namespace SAM.Analytical.Grasshopper
 {
     public class SAMAnalyticalCreatePanel : GH_Component
-    {      
+    {
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("35ef8f3e-1cf2-407d-b2ed-33bf371ea161");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
@@ -39,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new PanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -104,16 +114,16 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Boundary3D> boundary3Ds = null;
+            List<PlanarBoundary3D> planarBoundary3Ds = null;
 
-            if (!Boundary3D.TryGetBoundary3Ds(faces, out boundary3Ds))
+            if (!PlanarBoundary3D.TryGetPlanarBoundary3Ds(faces, out planarBoundary3Ds))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            foreach (Boundary3D boundary3D in boundary3Ds)
-                panels.Add(new Panel(aConstruction, panelType, boundary3D));
+            foreach (PlanarBoundary3D planarBoundary3D in planarBoundary3Ds)
+                panels.Add(new Panel(aConstruction, panelType, planarBoundary3D));
 
 
             if (panels.Count == 1)
@@ -124,27 +134,6 @@ namespace SAM.Analytical.Grasshopper
             {
                 dataAccess.SetDataList(0, panels.ConvertAll(x => new GooPanel(x)));
             }     
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Small;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("35ef8f3e-1cf2-407d-b2ed-33bf371ea161"); }
         }
     }
 }
