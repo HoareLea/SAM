@@ -63,10 +63,32 @@ namespace SAM.Core.Grasshopper
 
         public override string ToString()
         {
-            if (string.IsNullOrEmpty(Value.Name))
-                return Value.Name;
+            string value = typeof(T).FullName;
 
-            return typeof(T).FullName;
+            if (string.IsNullOrEmpty(Value.Name))
+                value += string.Format(" [{0}]", Value.Name);
+
+            return value;
+        }
+
+        public override bool CastFrom(object source)
+        {
+            if (source is T)
+            {
+                Value = (T)source;
+                return true;
+            }
+            return false;
+        }
+
+        public override bool CastTo<Y>(ref Y target)
+        {
+            if (typeof(Y) == typeof(T))
+            {
+                target = (Y)(object)Value;
+                return true;
+            }
+            return false;
         }
     }
 

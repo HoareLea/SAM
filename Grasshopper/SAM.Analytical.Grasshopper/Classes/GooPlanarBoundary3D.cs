@@ -42,16 +42,6 @@ namespace SAM.Analytical.Grasshopper
             return new GooPlanarBoundary3D(Value);
         }
 
-        public override string ToString()
-        {
-            PlanarBoundary3D planarBoundary3D = Value;
-            
-            if (!string.IsNullOrWhiteSpace(planarBoundary3D.Name))
-                return planarBoundary3D.Name;
-
-            return GetType().FullName;
-        }
-
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
             PlanarBoundary3D planarBoundary3D = Value;
@@ -91,26 +81,6 @@ namespace SAM.Analytical.Grasshopper
             Brep brep = Value.ToRhino();
             if (brep != null)
                 args.Pipeline.DrawBrepShaded(brep, args.Material);
-        }
-
-        public override bool CastFrom(object source)
-        {
-            if (source is PlanarBoundary3D)
-            {
-                Value = (PlanarBoundary3D)source;
-                return true;
-            }
-            return false;
-        }
-
-        public override bool CastTo<T>(ref T target)
-        {
-            if (typeof(T) == typeof(PlanarBoundary3D))
-            {
-                target = (T)(object)Value;
-                return true;
-            }
-            return false;
         }
     }
 

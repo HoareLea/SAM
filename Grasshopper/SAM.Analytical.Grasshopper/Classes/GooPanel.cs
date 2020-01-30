@@ -72,26 +72,6 @@ namespace SAM.Analytical.Grasshopper
             GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
             gooPlanarBoundary3D.DrawViewportMeshes(args);
         }
-
-        public override bool CastFrom(object source)
-        {
-            if(source is Panel)
-            {
-                Value = (Panel)source;
-                return true;
-            }
-            return false;
-        }
-
-        public override bool CastTo<T>(ref T target)
-        {
-            if (typeof(T) == typeof(Panel))
-            {
-                target = (T)(object)Value;
-                return true;
-            }
-            return false;
-        }
     }
 
     public class GooPanelParam : GH_PersistentParam<GooPanel>

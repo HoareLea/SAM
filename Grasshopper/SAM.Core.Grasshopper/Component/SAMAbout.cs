@@ -9,6 +9,17 @@ namespace SAM.Core.Grasshopper
 {
     public class SAMAbout : GH_Component
     {
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("266c727d-0d2c-4592-a483-0761c03fcdb9");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.HL_Logo24;
+
+
         private AboutInfoType aboutInfoType = AboutInfoType.HoareLea;
 
         /// <summary>
@@ -78,27 +89,6 @@ namespace SAM.Core.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             dataAccess.SetData(0, Query.AboutInfoTypeText(aboutInfoType));
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.HL_Logo24;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("266c727d-0d2c-4592-a483-0761c03fcdb9"); }
         }
     }
 }
