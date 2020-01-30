@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooPanelParam(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical ie. Panel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Panel>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -53,68 +53,26 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Panel value = null;
-            dataAccess.GetData(0, ref value);
+            SAMObject sAMObject = null;
+            if(!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, value.Name?? "Null");
-            //GH_ObjectWrapper objectWrapper = null;
+            if(sAMObject is Panel)
+            {
+                dataAccess.SetData(0, new GooPlanarBoundary3D(((Panel)sAMObject).PlanarBoundary3D));
+                return;
+            }
 
-            //if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
-            //{
-            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-            //    return;
-            //}
+            if(sAMObject is PlanarBoundary3D)
+            {
+                dataAccess.SetData(0, new GooPlanarBoundary3D((PlanarBoundary3D)sAMObject));
+                return;
+            }
 
-            //object obj = objectWrapper.Value;
-
-            //List<SAMObject> sAMObjectList = null;
-            //if(typeof(IEnumerable).IsAssignableFrom(obj.GetType()))
-            //{
-            //    sAMObjectList = new List<SAMObject>();
-            //    foreach (object @object in obj as dynamic)
-            //        if (@object is SAMObject)
-            //            sAMObjectList.Add((SAMObject)@object);
-            //}
-            //else if(obj is SAMObject)
-            //{
-            //    sAMObjectList = new List<SAMObject>() { (SAMObject)obj };
-            //}
-            //else if(obj is GooPanel)
-            //{
-            //    sAMObjectList = new List<SAMObject>() { ((GooPanel)obj).Value };
-            //}
-            //else if (obj is GooBoundary3D)
-            //{
-            //    sAMObjectList = new List<SAMObject>() { ((GooBoundary3D)obj).Value };
-            //}
-
-            //List<object> result = null;
-            //if (sAMObjectList != null)
-            //{
-            //    result = new List<object>();
-            //    foreach (SAMObject sAMObject in sAMObjectList)
-            //    {
-            //        object @object = Convert.ToGrasshopper(sAMObject as dynamic);
-            //        if(@object is IEnumerable)
-            //        {
-            //            foreach (object @object_Temp in (IEnumerable)@object)
-            //                result.Add(object_Temp);
-            //        }
-            //        else
-            //        {
-            //            result.Add(@object);
-            //        }
-                        
-            //    }
-                    
-            //}
-
-            //if (result == null)
-            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert analytical object");
-            //else if(result.Count == 1)
-            //    dataAccess.SetData(0, result[0]);
-            //else
-            //    dataAccess.SetDataList(0, result);   
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Object");
         }
     }
 }

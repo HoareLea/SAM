@@ -47,20 +47,6 @@ namespace SAM.Analytical.Grasshopper
             return new GooPanel(Value);
         }
 
-        public override string ToString()
-        {
-            Panel panel = Value;
-            
-            if (!string.IsNullOrWhiteSpace(panel.Name))
-                return panel.Name;
-
-            if (panel.Construction != null)
-                if (!string.IsNullOrWhiteSpace(panel.Construction.Name))
-                    return panel.Construction.Name;
-
-            return GetType().FullName;
-        }
-
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
             GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);

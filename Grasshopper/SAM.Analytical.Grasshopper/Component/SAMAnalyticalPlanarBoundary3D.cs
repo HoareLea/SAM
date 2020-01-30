@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_panel", "panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Panel>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("PlanarBoundary3D", "PlanarBoundary3D", "SAM Analytical PlanarBoundary3D", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooPlanarBoundary3DParam(), "PlanarBoundary3D", "PlanarBoundary3D", "SAM Analytical PlanarBoundary3D", GH_ParamAccess.item);
         }
 
         /// <summary>

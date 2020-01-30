@@ -1,12 +1,8 @@
 ﻿using System;
 
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Geometry;
-using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -46,7 +42,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Construction", "Construction", "SAM Analytical Construction", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooConstructionParam(), "Construction", "Construction", "SAM Analytical Construction", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -62,7 +58,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, new Construction(name));
+            dataAccess.SetData(0, new GooConstruction(new Construction(name)));
         }
     }
 }

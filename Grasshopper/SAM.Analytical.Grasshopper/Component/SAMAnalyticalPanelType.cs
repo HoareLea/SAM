@@ -90,7 +90,7 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, panelType.ToString());
+            dataAccess.SetData(0, panelType);
         }
 
 

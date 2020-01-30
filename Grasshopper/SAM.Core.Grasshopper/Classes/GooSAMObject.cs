@@ -71,7 +71,7 @@ namespace SAM.Core.Grasshopper
         {
             string value = typeof(T).FullName;
 
-            if (string.IsNullOrEmpty(Value.Name))
+            if (!string.IsNullOrWhiteSpace(Value.Name))
                 value += string.Format(" [{0}]", Value.Name);
 
             return value;
