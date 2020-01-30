@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new PanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
         }
 
         /// <summary>

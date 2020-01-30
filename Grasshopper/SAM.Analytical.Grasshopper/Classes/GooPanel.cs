@@ -13,6 +13,12 @@ namespace SAM.Analytical.Grasshopper
 {
     public class GooPanel : GooSAMObject<Panel>, IGH_PreviewData
     {
+        public GooPanel()
+            : base(null)
+        {
+
+        }
+
         public GooPanel(Panel panel)
             : base(panel)
         {
@@ -116,6 +122,23 @@ namespace SAM.Analytical.Grasshopper
                 return true;
             }
             return false;
+        }
+    }
+
+    public class PanelParam : GH_PersistentParam<GooPanel>
+    {
+        public override Guid ComponentGuid => new Guid("278B438C-43EA-4423-999F-B6A906870939");
+        public PanelParam() : base("Panel", "Panel", string.Empty, "SAM", "Parameters")
+        { 
+        }
+        protected override GH_GetterResult Prompt_Plural(ref List<GooPanel> values)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override GH_GetterResult Prompt_Singular(ref GooPanel value)
+        {
+            throw new NotImplementedException();
         }
     }
 }
