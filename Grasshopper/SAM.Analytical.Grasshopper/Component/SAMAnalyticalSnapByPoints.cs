@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new Geometry.Grasshopper.GooGeometryParam<Geometry.Spatial.Point3D>(), "_points", "_points", "List of Points", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new Geometry.Grasshopper.GooGeometry3DParam<Geometry.Spatial.Point3D>(), "_points", "_points", "List of Points", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_maxDistance_", "_maxDistance_", "Max Distance to snap points default 1m", GH_ParamAccess.item, 1);
         }
 

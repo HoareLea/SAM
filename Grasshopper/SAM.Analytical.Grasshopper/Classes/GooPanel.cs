@@ -29,11 +29,10 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                throw new NotImplementedException();
-                //if (Value == null)
-                //    return BoundingBox.Empty;
+                if (Value == null)
+                    return BoundingBox.Empty;
 
-                //return Geometry.Grasshopper.Convert.ToRhino(Value.GetBoundingBox());
+                return Geometry.Grasshopper.Convert.ToRhino(Value.GetBoundingBox());
             }
         }
 

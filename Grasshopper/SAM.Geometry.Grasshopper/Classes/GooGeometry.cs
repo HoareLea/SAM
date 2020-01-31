@@ -24,9 +24,9 @@ namespace SAM.Geometry.Grasshopper
 
         public override bool IsValid => Value != null;
 
-        public override string TypeName => Value.GetType().Name;
+        public override string TypeName => typeof(T).Name;
 
-        public override string TypeDescription => Value.GetType().FullName.Replace(".", " ");
+        public override string TypeDescription => typeof(T).FullName.Replace(".", " ");
 
         public BoundingBox ClippingBox
         {
@@ -99,6 +99,12 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (source is GH_Curve)
+            {
+                Value = (T)(object)Convert.ToSAM((GH_Curve)source);
+                return true;
+            }
+
             return false;
         }
 
@@ -141,11 +147,11 @@ namespace SAM.Geometry.Grasshopper
         }
     }
 
-    public class GooGeometryParam<T> : GH_PersistentParam<GooGeometry<T>> where T : IGeometry
+    public class GooGeometry3DParam<T> : GH_PersistentParam<GooGeometry<T>> where T : IGeometry
     {
         public override Guid ComponentGuid => new Guid("b4f8eee5-8d45-4c52-b966-1be5efa7c1e6");
 
-        public GooGeometryParam()
+        public GooGeometry3DParam()
             : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "SAM", "Parameters")
         {
 

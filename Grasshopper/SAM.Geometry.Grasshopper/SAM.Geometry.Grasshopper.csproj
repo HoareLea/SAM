@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GooGeometry3D.cs" />
     <Compile Include="Classes\GooGeometry.cs" />
     <Compile Include="Component\GeometryConvert.cs" />
     <Compile Include="Component\GeometrySnap.cs" />

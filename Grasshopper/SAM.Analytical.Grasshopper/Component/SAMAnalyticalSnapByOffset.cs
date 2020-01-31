@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Panel>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new Geometry.Grasshopper.GooGeometryParam<Geometry.Spatial.Point3D>(), "Point3Ds", "Point3Ds", "Snap Point3Ds", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new Geometry.Grasshopper.GooGeometry3DParam<Geometry.Spatial.Point3D>(), "Point3Ds", "Point3Ds", "Snap Point3Ds", GH_ParamAccess.list);
         }
 
         /// <summary>
