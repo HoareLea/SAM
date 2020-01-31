@@ -105,6 +105,12 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (source is GH_Point)
+            {
+                Value = (T)(object)Convert.ToSAM((GH_Point)source);
+                return true;
+            }
+
             return false;
         }
 
@@ -132,6 +138,15 @@ namespace SAM.Geometry.Grasshopper
                     target = (Y)(object)(((Spatial.Point3D)(object)Value).ToRhino());
                 }
             }
+
+            if (typeof(Y) == typeof(GH_Point))
+            {
+                if (Value is Spatial.Point3D)
+                {
+                    target = (Y)(object)(((Spatial.Point3D)(object)Value).ToGrasshopper());
+                }
+            }
+
             return false;
         }
 
@@ -147,11 +162,11 @@ namespace SAM.Geometry.Grasshopper
         }
     }
 
-    public class GooGeometry3DParam<T> : GH_PersistentParam<GooGeometry<T>> where T : IGeometry
+    public class GooGeometryParam<T> : GH_PersistentParam<GooGeometry<T>> where T : IGeometry
     {
         public override Guid ComponentGuid => new Guid("b4f8eee5-8d45-4c52-b966-1be5efa7c1e6");
 
-        public GooGeometry3DParam()
+        public GooGeometryParam()
             : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "SAM", "Parameters")
         {
 

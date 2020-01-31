@@ -50,6 +50,7 @@ namespace SAM.Analytical.Grasshopper
 
             Dictionary<Edge3DLoop, System.Drawing.Color> aDictionary = new Dictionary<Edge3DLoop, System.Drawing.Color>();
 
+            //Assign Color for Edges
             aDictionary[planarBoundary3D.GetEdge3DLoop()] = System.Drawing.Color.DarkRed;
 
             

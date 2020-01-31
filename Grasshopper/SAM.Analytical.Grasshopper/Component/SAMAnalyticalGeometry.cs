@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Geometry", "Geometry", "Geometry in GH ie.Surface", GH_ParamAccess.item);
+            outputParamManager.AddGeometryParameter("Geometry", "Geometry", "Geometry in GH ie.Surface", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -60,15 +60,15 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if(sAMObject is Panel)
+            if (sAMObject is Panel)
             {
-                dataAccess.SetData(0, new GooPlanarBoundary3D(((Panel)sAMObject).PlanarBoundary3D));
+                dataAccess.SetData(0, ((Panel)sAMObject).PlanarBoundary3D.ToGrasshopper());
                 return;
             }
 
             if(sAMObject is PlanarBoundary3D)
             {
-                dataAccess.SetData(0, new GooPlanarBoundary3D((PlanarBoundary3D)sAMObject));
+                dataAccess.SetData(0, ((PlanarBoundary3D)sAMObject).ToGrasshopper());
                 return;
             }
 

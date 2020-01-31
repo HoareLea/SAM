@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
+
 
 using SAM.Analytical.Grasshopper.Properties;
 
@@ -37,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new Geometry.Grasshopper.GooGeometry3DParam<Geometry.Spatial.Point3D>(), "_points", "_points", "List of Points", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new Geometry.Grasshopper.GooGeometry3DParam(), "_points", "_points", "List of Points", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_maxDistance_", "_maxDistance_", "Max Distance to snap points default 1m", GH_ParamAccess.item, 1);
         }
 
@@ -62,9 +63,10 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Geometry.Spatial.Point3D> point3Ds = new List<Geometry.Spatial.Point3D>();
+            List<Geometry.Spatial.IGeometry3D> geometry3Ds = new List<Geometry.Spatial.IGeometry3D>();
 
-            if (!dataAccess.GetDataList(1, point3Ds) || point3Ds == null)
+            List<object> objects = new List<object>();
+            if (!dataAccess.GetDataList(1, geometry3Ds) || geometry3Ds == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -78,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             Panel panel = new Panel((Panel)sAMObject);
-            panel.Snap(point3Ds, maxDistance);
+            panel.Snap(geometry3Ds.Cast<Geometry.Spatial.Point3D>(), maxDistance);
 
             dataAccess.SetData(0, new GooPanel(panel));
         }

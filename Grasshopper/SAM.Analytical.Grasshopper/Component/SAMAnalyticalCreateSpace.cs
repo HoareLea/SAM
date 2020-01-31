@@ -40,7 +40,7 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddTextParameter("_name", "_name", "Space Name, Default = Space_Default", GH_ParamAccess.item,"Space_Default");
 
-            GooGeometry3DParam<Point3D> gooGeometryParam = new GooGeometry3DParam<Point3D>();
+            GooGeometryParam<Point3D> gooGeometryParam = new GooGeometryParam<Point3D>();
             gooGeometryParam.PersistentData.Append(new GooGeometry<Point3D>(new Point3D(0, 0, 0.75)));
             int index = inputParamManager.AddParameter(gooGeometryParam, "_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
             //int index = inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
