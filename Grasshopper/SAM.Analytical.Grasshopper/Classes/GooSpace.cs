@@ -11,6 +11,7 @@ using SAM.Core.Grasshopper;
 using Rhino;
 using Rhino.DocObjects;
 using SAM.Geometry.Grasshopper;
+using SAM.Analytical.Grasshopper.Properties;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -59,6 +60,8 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("bbb45545-17b3-49be-b177-db284b2087f3");
 
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
         bool IGH_PreviewObject.Hidden { get; set; }
 
         bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
@@ -70,7 +73,7 @@ namespace SAM.Analytical.Grasshopper
         void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
 
         public GooSpaceParam()
-            : base(typeof(Space).Name, typeof(Space).Name, typeof(Space).FullName.Replace(".", " "), "SAM", "Parameters")
+            : base(typeof(Space).Name, typeof(Space).Name, typeof(Space).FullName.Replace(".", " "), "Params", "SAM")
         { 
         }
         

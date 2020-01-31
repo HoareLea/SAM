@@ -9,7 +9,7 @@ using Grasshopper.Kernel.Types;
 
 using SAM.Geometry.Grasshopper;
 using SAM.Core.Grasshopper;
-
+using SAM.Analytical.Grasshopper.Properties;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -103,8 +103,10 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("3b944b3c-bc94-46cc-aea3-b74385e138dc");
 
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
         public GooPlanarBoundary3DParam()
-            : base(typeof(PlanarBoundary3D).Name, typeof(PlanarBoundary3D).Name, typeof(PlanarBoundary3D).FullName.Replace(".", " "), "SAM", "Parameters")
+            : base(typeof(PlanarBoundary3D).Name, typeof(PlanarBoundary3D).Name, typeof(PlanarBoundary3D).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 

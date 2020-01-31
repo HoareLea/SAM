@@ -8,6 +8,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 using SAM.Core.Grasshopper;
+using SAM.Analytical.Grasshopper.Properties;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -34,9 +35,11 @@ namespace SAM.Analytical.Grasshopper
     public class GooConstructionParam : GH_PersistentParam<GooConstruction>
     {
         public override Guid ComponentGuid => new Guid("3ea9345b-ddad-409d-9f9f-5103115123c0");
-        
+
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
         public GooConstructionParam()
-            : base(typeof(Construction).Name, typeof(Construction).Name, typeof(Construction).FullName.Replace(".", " "), "SAM", "Parameters")
+            : base(typeof(Construction).Name, typeof(Construction).Name, typeof(Construction).FullName.Replace(".", " "), "Params", "SAM")
         { 
         }
         
