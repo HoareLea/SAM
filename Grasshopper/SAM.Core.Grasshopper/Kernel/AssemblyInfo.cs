@@ -66,7 +66,7 @@ namespace SAM.Core.Grasshopper
             }
         }
 
-        public static Core.JSON.JSONParser GetJSONParser()
+        public static JSON.JSONParser GetJSONParser()
         {
             if (jSONParser == null)
                 jSONParser = new JSON.JSONParser();

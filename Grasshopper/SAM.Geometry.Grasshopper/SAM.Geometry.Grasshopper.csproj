@@ -42,6 +42,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SAM.Core.JSON, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SAM_JSON\build\SAM.Core.JSON.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -63,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GooGeometry.cs" />
     <Compile Include="Component\GeometryConvert.cs" />
     <Compile Include="Component\GeometrySnap.cs" />
     <Compile Include="Component\SAMGeometry2DSAMGeometry.cs" />
@@ -91,6 +96,7 @@
     <Compile Include="ToRhino\Point3d.cs" />
     <Compile Include="ToSAM\IClosed3D.cs" />
     <Compile Include="ToSAM\IGeometry3Ds.cs" />
+    <Compile Include="ToSAM\Polyline3D.cs" />
     <Compile Include="ToSAM\Polycurve3D.cs" />
     <Compile Include="ToSAM\Surface.cs" />
     <Compile Include="ToSAM\IGeometry3D.cs" />
@@ -111,9 +117,17 @@
     <None Include="Resources\SAM_Small.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
+      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
+      <Name>SAM.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj">
       <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>
       <Name>SAM.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj">
+      <Project>{ea20d57f-bb3e-447a-80a2-14c04baa665f}</Project>
+      <Name>SAM.Core.Grasshopper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
