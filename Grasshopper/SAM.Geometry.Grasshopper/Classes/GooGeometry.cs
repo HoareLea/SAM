@@ -86,9 +86,17 @@ namespace SAM.Geometry.Grasshopper
                 Value = (T)source;
                 return true;
             }
+            
             if(source is Polyline)
             {
                 Value = (T)(object)Convert.ToSAM(((Polyline)source));
+                return true;
+            }
+
+            if (source is Point3d)
+            {
+                Value = (T)(object)Convert.ToSAM(((Point3d)source));
+                return true;
             }
 
             return false;
@@ -102,14 +110,22 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            if(typeof(Y) == typeof(Polyline))
+            if (typeof(Y) == typeof(Polyline))
             {
-                if(Value is Spatial.ISegmentable3D)
+                if (Value is Spatial.ISegmentable3D)
                 {
                     target = (Y)(object)(new Polyline(((Spatial.ISegmentable3D)Value).GetPoints().ConvertAll(x => x.ToRhino())));
+                    return true;
                 }
             }
 
+            if (typeof(Y) == typeof(Point3d))
+            {
+                if (Value is Spatial.Point3D)
+                {
+                    target = (Y)(object)(((Spatial.Point3D)(object)Value).ToRhino());
+                }
+            }
             return false;
         }
 

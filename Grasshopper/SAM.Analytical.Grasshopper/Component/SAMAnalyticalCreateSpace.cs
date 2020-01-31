@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateSpace()
           : base("SAMAnalytical.CreateSpace", "SAMAnalytical.CreateSpace",
-              "Create SAM Space, if nothing connect default values: _name = Space_Default, _locationPoint = (0,0,0.75) ",
+              "Create SAM Space, if nothing connect default values: _name = Space_Default, _locationPoint = (0, 0, 0.75)",
               "SAM", "Analytical")
         {
         }
@@ -39,11 +39,13 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddTextParameter("_name", "_name", "Space Name, Default = Space_Default", GH_ParamAccess.item,"Space_Default");
-            //inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point", GH_ParamAccess.item);
-            //Default Input in GH
-            int index = inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
-            Param_GenericObject genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_Point(new Rhino.Geometry.Point3d(0, 0, 0.75)));
+
+            GooGeometryParam<Point3D> gooGeometryParam = new GooGeometryParam<Point3D>();
+            gooGeometryParam.PersistentData.Append(new GooGeometry<Point3D>(new Point3D(0, 0, 0.75)));
+            int index = inputParamManager.AddParameter(gooGeometryParam, "_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
+            //int index = inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
+            //Param_GenericObject genericObjectParameter = (Param_GenericObject)inputParamManager[index];
+            //genericObjectParameter.PersistentData.Append(new GH_Point(new Rhino.Geometry.Point3d(0, 0, 0.75)));
         }
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Space", "Space", "SAM Analytical Space", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooSpaceParam(), "Space", "Space", "SAM Analytical Space", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -60,50 +62,21 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            GH_ObjectWrapper objectWrapper = null;
-
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
+            string name = null;
+            if (!dataAccess.GetData(0, ref name) || name == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-
-            GH_String gHString = objectWrapper.Value as GH_String;
-            if(gHString == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            string name = gHString.Value;
-
-            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            object obj = objectWrapper.Value;
 
             Point3D location = null;
-
-            if (obj is Point3D)
-                location = obj as Point3D;
-            else if (obj is GH_Point)
-                location = ((GH_Point)obj).ToSAM();
-
-            if (location == null)
+            if (!dataAccess.GetData(1, ref location) || location == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            Space space = new Space(name, location);
-
-            if (space == null)
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
-            else
-                dataAccess.SetData(0, space);
+            dataAccess.SetData(0, new GooSpace(new Space(name, location)));
         }
     }
 }
