@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\Orientation.cs" />
-    <Compile Include="Classes\IGeometry.cs" />
+    <Compile Include="Interfaces\IGeometry.cs" />
     <Compile Include="Planar\Classes\BoundingBox2D.cs" />
     <Compile Include="Planar\Classes\Circle2D.cs" />
     <Compile Include="Planar\Interfaces\IClosed2D.cs" />

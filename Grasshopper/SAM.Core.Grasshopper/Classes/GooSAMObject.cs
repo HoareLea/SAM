@@ -23,9 +23,9 @@ namespace SAM.Core.Grasshopper
 
         public override bool IsValid => Value != null;
 
-        public override string TypeName => Value.GetType().Name;
+        public override string TypeName => typeof(T).Name;
 
-        public override string TypeDescription => Value.GetType().FullName.Replace(".", " ");
+        public override string TypeDescription => typeof(T).FullName.Replace(".", " ");
 
         public override IGH_Goo Duplicate()
         {
@@ -79,9 +79,18 @@ namespace SAM.Core.Grasshopper
 
         public override bool CastFrom(object source)
         {
-            if (source is T)
+            if(source is T)
             {
-                Value = (T)source;
+                Value = (T)(object)source;
+                return true;
+            }
+            
+            if (typeof(IGooSAMObject).IsAssignableFrom(source.GetType()))
+            {
+                SAMObject sAMObject = ((IGooSAMObject)source).GetSAMObject();
+                if (sAMObject is T)
+                    Value = (T)sAMObject;
+
                 return true;
             }
             return false;

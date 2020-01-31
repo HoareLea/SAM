@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Panel>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -54,14 +54,14 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Panel panel = null;
-            if (!dataAccess.GetData(0, ref panel))
+            Core.SAMObject sAMObject = null;
+            if (!dataAccess.GetData(0, ref sAMObject) || !(sAMObject is Panel))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, new GooPlanarBoundary3D(panel.PlanarBoundary3D));
+            dataAccess.SetData(0, new GooPlanarBoundary3D(((Panel)sAMObject).PlanarBoundary3D));
 
         }
     }
