@@ -6,6 +6,7 @@ using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+using SAM.Geometry.Grasshopper.Properties;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -165,6 +166,8 @@ namespace SAM.Geometry.Grasshopper
     public class GooGeometryParam<T> : GH_PersistentParam<GooGeometry<T>> where T : IGeometry
     {
         public override Guid ComponentGuid => new Guid("b4f8eee5-8d45-4c52-b966-1be5efa7c1e6");
+
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
 
         public GooGeometryParam()
             : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "Params", "SAM")

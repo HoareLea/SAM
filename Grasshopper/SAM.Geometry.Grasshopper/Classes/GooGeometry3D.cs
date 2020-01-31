@@ -43,7 +43,7 @@ namespace SAM.Geometry.Grasshopper
     public class GooGeometry3DParam : GH_PersistentParam<GooGeometry3D>
     {
         public override Guid ComponentGuid => new Guid("0baffeac-1d53-49e0-bb65-81d332483e42");
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
 
         public GooGeometry3DParam()
             : base(typeof(Spatial.IGeometry3D).Name, typeof(Spatial.IGeometry3D).Name, typeof(Spatial.IGeometry3D).FullName.Replace(".", " "), "Params", "SAM")
