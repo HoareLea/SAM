@@ -167,7 +167,7 @@ namespace SAM.Geometry.Grasshopper
         public override Guid ComponentGuid => new Guid("b4f8eee5-8d45-4c52-b966-1be5efa7c1e6");
 
         public GooGeometryParam()
-            : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "SAM", "Parameters")
+            : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "Params", "SAM")
         {
 
         }

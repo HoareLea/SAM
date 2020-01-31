@@ -5,6 +5,7 @@ using System.Linq;
 using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using SAM.Core.Grasshopper.Properties;
 
 namespace SAM.Core.Grasshopper
 {
@@ -110,9 +111,10 @@ namespace SAM.Core.Grasshopper
     public class GooSAMObjectParam<T> : GH_PersistentParam<GooSAMObject<T>> where T : SAMObject
     {
         public override Guid ComponentGuid => new Guid("5af7e0dc-8d0c-4d51-8c85-6f2795c2fc37");
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooSAMObjectParam()
-            : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "SAM", "Parameters")
+            : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "Params", "SAM")
         {
 
         }
