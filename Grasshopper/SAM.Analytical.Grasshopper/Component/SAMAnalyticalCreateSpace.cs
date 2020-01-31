@@ -42,7 +42,7 @@ namespace SAM.Analytical.Grasshopper
 
             GooGeometryParam<Point3D> gooGeometryParam = new GooGeometryParam<Point3D>();
             gooGeometryParam.PersistentData.Append(new GooGeometry<Point3D>(new Point3D(0, 0, 0.75)));
-            int index = inputParamManager.AddParameter(gooGeometryParam, "_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
+            inputParamManager.AddParameter(gooGeometryParam, "_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
             //int index = inputParamManager.AddGenericParameter("_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
             //Param_GenericObject genericObjectParameter = (Param_GenericObject)inputParamManager[index];
             //genericObjectParameter.PersistentData.Append(new GH_Point(new Rhino.Geometry.Point3d(0, 0, 0.75)));

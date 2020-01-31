@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 
-using GH_IO.Serialization;
+using Rhino;
+using Rhino.DocObjects;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 using SAM.Geometry.Grasshopper;
 using SAM.Core.Grasshopper;
-using Rhino;
-using Rhino.DocObjects;
+
 
 namespace SAM.Analytical.Grasshopper
 {

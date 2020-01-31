@@ -8,6 +8,9 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 using SAM.Core.Grasshopper;
+using Rhino;
+using Rhino.DocObjects;
+using SAM.Geometry.Grasshopper;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -52,10 +55,20 @@ namespace SAM.Analytical.Grasshopper
         }
     }
 
-    public class GooSpaceParam : GH_PersistentParam<GooSpace>
+    public class GooSpaceParam : GH_PersistentParam<GooSpace>, IGH_PreviewObject
     {
         public override Guid ComponentGuid => new Guid("bbb45545-17b3-49be-b177-db284b2087f3");
-        
+
+        bool IGH_PreviewObject.Hidden { get; set; }
+
+        bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
+
+        BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
+
+        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
+
+        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
+
         public GooSpaceParam()
             : base(typeof(Space).Name, typeof(Space).Name, typeof(Space).FullName.Replace(".", " "), "SAM", "Parameters")
         { 

@@ -64,7 +64,19 @@ namespace SAM.Analytical.Grasshopper
     public class GooPanelParam : GH_PersistentParam<GooPanel>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         public override Guid ComponentGuid => new Guid("278B438C-43EA-4423-999F-B6A906870939");
-        
+
+        bool IGH_PreviewObject.Hidden { get; set; }
+
+        bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
+
+        BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
+
+        public bool IsBakeCapable => true;
+
+        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
+
+        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
+
         public GooPanelParam()
             : base(typeof(Panel).Name, typeof(Panel).Name, typeof(Panel).FullName.Replace(".", " "), "SAM", "Parameters")
         { 
@@ -80,19 +92,9 @@ namespace SAM.Analytical.Grasshopper
             throw new NotImplementedException();
         }
 
-        #region IGH_PreviewObject
-        bool IGH_PreviewObject.Hidden { get; set; }
-        bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
-        BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
-
-        public bool IsBakeCapable => true;
-
-        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
-        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
-
         public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
         {
-
+             BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
         }
 
         public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
@@ -104,7 +106,6 @@ namespace SAM.Analytical.Grasshopper
                 obj_ids.Add(uuid);
             }
         }
-        #endregion
 
     }
 }
