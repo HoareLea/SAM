@@ -9,10 +9,12 @@ using Grasshopper.Kernel.Types;
 
 using SAM.Geometry.Grasshopper;
 using SAM.Core.Grasshopper;
+using Rhino;
+using Rhino.DocObjects;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooPlanarBoundary3D : GooSAMObject<PlanarBoundary3D>, IGH_PreviewData
+    public class GooPlanarBoundary3D : GooSAMObject<PlanarBoundary3D>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooPlanarBoundary3D()
             : base()
@@ -82,6 +84,19 @@ namespace SAM.Analytical.Grasshopper
             Brep brep = Value.ToRhino();
             if (brep != null)
                 args.Pipeline.DrawBrepShaded(brep, args.Material);
+        }
+
+        public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
+        {
+            GeometryBase geometryBase = Value.ToRhino();
+            if(geometryBase == null)
+            {
+                obj_guid = Guid.Empty;
+                return false;
+            }
+
+            obj_guid = doc.Objects.Add(geometryBase);
+            return true;
         }
     }
 

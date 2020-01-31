@@ -8,10 +8,12 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 using SAM.Core.Grasshopper;
+using Rhino;
+using Rhino.DocObjects;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooPanel : GooSAMObject<Panel>, IGH_PreviewData
+    public class GooPanel : GooSAMObject<Panel>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooPanel()
             : base()
@@ -52,9 +54,14 @@ namespace SAM.Analytical.Grasshopper
             GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
             gooPlanarBoundary3D.DrawViewportMeshes(args);
         }
+
+        public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
+        {
+            return new GooPlanarBoundary3D(Value.PlanarBoundary3D).BakeGeometry(doc, att, out obj_guid);
+        }
     }
 
-    public class GooPanelParam : GH_PersistentParam<GooPanel>, IGH_PreviewObject
+    public class GooPanelParam : GH_PersistentParam<GooPanel>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         public override Guid ComponentGuid => new Guid("278B438C-43EA-4423-999F-B6A906870939");
         
@@ -77,8 +84,26 @@ namespace SAM.Analytical.Grasshopper
         bool IGH_PreviewObject.Hidden { get; set; }
         bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
         BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
+
+        public bool IsBakeCapable => true;
+
         void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
         void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
+
+        public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
+        {
+
+        }
+
+        public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
+        {
+            foreach (var value in VolatileData.AllData(true))
+            {
+                Guid uuid = default;
+                (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
+                obj_ids.Add(uuid);
+            }
+        }
         #endregion
 
     }
