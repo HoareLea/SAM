@@ -72,6 +72,12 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            if (sAMObject is Space)
+            {
+                dataAccess.SetData(0, ((Space)sAMObject).ToGrasshopper());
+                return;
+            }
+
             AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Object");
         }
     }

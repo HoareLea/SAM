@@ -1,34 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
-using SAM.Analytical.Grasshopper.Properties;
-using SAM.Geometry;
-using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Spatial;
+using SAM.Geometry.Grasshopper.Properties;
 
-namespace SAM.Analytical.Grasshopper
+namespace SAM.Geometry.Grasshopper
 {
-    public class SAMAnalyticalPlanarBoundary3D : GH_Component
+    public class GeometrySAMGeometry : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("7316ff6b-9688-4f82-8256-b3e27e4a958d");
+        public override Guid ComponentGuid => new Guid("c82929ce-ada5-4e48-be04-9f024de4e6fc");
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalPlanarBoundary3D()
-          : base("SAMAnalytical.PlanarBoundary3D", "SAMAnalytical.PlanarBoundary3D",
-              "Gets SAM Analytical PlanarBoundary3D",
-              "SAM", "Analytical")
+        public GeometrySAMGeometry()
+          : base(".SAMGeometry", ".SAMGeometry",
+              "Convert Rhino geometry to SAM geometry",
+              "SAM", "Geometry")
         {
         }
 
@@ -37,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
+            inputParamManager.AddGeometryParameter("_geometry", "_geometry", "Rhino geometry", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,7 +42,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooPlanarBoundary3DParam(), "PlanarBoundary3D", "PlanarBoundary3D", "SAM Analytical PlanarBoundary3D", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooGeometryParam<IGeometry>(), "SAMGeometries", "SAMGeos", "SAM Geometries", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -54,14 +51,23 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Core.SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject) || !(sAMObject is Panel))
+            IGH_GeometricGoo geometricGoo = null;
+            if (!dataAccess.GetData(0, ref geometricGoo) || geometricGoo == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, new GooPlanarBoundary3D(((Panel)sAMObject).PlanarBoundary3D));
+            object @object = geometricGoo.ToSAM(false);
+
+            if (@object == null)
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
+            else if(@object is IEnumerable)
+                dataAccess.SetDataList(0, (IEnumerable)@object);
+            else
+                dataAccess.SetData(0, @object);
         }
+
+
     }
 }

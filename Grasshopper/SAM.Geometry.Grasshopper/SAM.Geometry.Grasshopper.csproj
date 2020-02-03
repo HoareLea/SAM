@@ -69,7 +69,8 @@
   <ItemGroup>
     <Compile Include="Classes\GooGeometry3D.cs" />
     <Compile Include="Classes\GooGeometry.cs" />
-    <Compile Include="Component\GeometryConvert.cs" />
+    <Compile Include="Component\SAMGeometryGeometry.cs" />
+    <Compile Include="Component\GeometrySAMGeometry.cs" />
     <Compile Include="Component\GeometrySnap.cs" />
     <Compile Include="Component\SAMGeometry2DSAMGeometry.cs" />
     <Compile Include="Component\SAMGeometrySAMGeometry2D.cs" />
