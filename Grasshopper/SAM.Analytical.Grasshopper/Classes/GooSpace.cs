@@ -15,7 +15,7 @@ using SAM.Analytical.Grasshopper.Properties;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooSpace : GooSAMObject<Space>, IGH_PreviewData
+    public class GooSpace : GooSAMObject<Space>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooSpace()
             : base()
@@ -54,9 +54,22 @@ namespace SAM.Analytical.Grasshopper
         {
             args.Pipeline.DrawPoint(Geometry.Grasshopper.Convert.ToRhino(Value.Location));
         }
+
+        public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
+        {
+            Point3d point3d = Value.Location.ToRhino();
+            if (point3d == null)
+            {
+                obj_guid = Guid.Empty;
+                return false;
+            }
+
+            obj_guid = doc.Objects.AddPoint(point3d);
+            return true;
+        }
     }
 
-    public class GooSpaceParam : GH_PersistentParam<GooSpace>, IGH_PreviewObject
+    public class GooSpaceParam : GH_PersistentParam<GooSpace>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         public override Guid ComponentGuid => new Guid("bbb45545-17b3-49be-b177-db284b2087f3");
 
@@ -67,6 +80,8 @@ namespace SAM.Analytical.Grasshopper
         bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
 
         BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
+
+        public bool IsBakeCapable => !VolatileData.IsEmpty;
 
         void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
 
@@ -85,6 +100,21 @@ namespace SAM.Analytical.Grasshopper
         protected override GH_GetterResult Prompt_Singular(ref GooSpace value)
         {
             throw new NotImplementedException();
+        }
+
+        public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
+        {
+            BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
+        }
+
+        public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
+        {
+            foreach (var value in VolatileData.AllData(true))
+            {
+                Guid uuid = default;
+                (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
+                obj_ids.Add(uuid);
+            }
         }
     }
 }

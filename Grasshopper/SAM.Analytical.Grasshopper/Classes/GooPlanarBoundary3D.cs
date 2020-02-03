@@ -99,11 +99,23 @@ namespace SAM.Analytical.Grasshopper
         }
     }
 
-    public class GooPlanarBoundary3DParam : GH_PersistentParam<GooPlanarBoundary3D>
+    public class GooPlanarBoundary3DParam : GH_PersistentParam<GooPlanarBoundary3D>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         public override Guid ComponentGuid => new Guid("3b944b3c-bc94-46cc-aea3-b74385e138dc");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        bool IGH_PreviewObject.Hidden { get; set; }
+
+        bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
+
+        BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
+
+        public bool IsBakeCapable => true;
+
+        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
+
+        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
 
         public GooPlanarBoundary3DParam()
             : base(typeof(PlanarBoundary3D).Name, typeof(PlanarBoundary3D).Name, typeof(PlanarBoundary3D).FullName.Replace(".", " "), "Params", "SAM")
@@ -118,6 +130,21 @@ namespace SAM.Analytical.Grasshopper
         protected override GH_GetterResult Prompt_Singular(ref GooPlanarBoundary3D value)
         {
             throw new NotImplementedException();
+        }
+
+        public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
+        {
+            BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
+        }
+
+        public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
+        {
+            foreach (var value in VolatileData.AllData(true))
+            {
+                Guid uuid = default;
+                (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
+                obj_ids.Add(uuid);
+            }
         }
     }
 }
