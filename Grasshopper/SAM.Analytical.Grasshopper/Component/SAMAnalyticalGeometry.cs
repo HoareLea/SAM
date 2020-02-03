@@ -74,7 +74,7 @@ namespace SAM.Analytical.Grasshopper
 
             if (sAMObject is Space)
             {
-                dataAccess.SetData(0, ((Space)sAMObject).ToGrasshopper());
+                dataAccess.SetData(0, ((Space)sAMObject).ToGrasshopper()[0]);
                 return;
             }
 
