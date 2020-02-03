@@ -70,6 +70,7 @@
     <Compile Include="Classes\GooSAMObject.cs" />
     <Compile Include="Component\Explode.cs" />
     <Compile Include="Component\SAMAbout.cs" />
+    <Compile Include="Component\GetValue.cs" />
     <Compile Include="Interfaces\IGooSAMObject.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Kernel\AssemblyPriority.cs" />

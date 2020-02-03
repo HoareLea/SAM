@@ -94,7 +94,8 @@ namespace SAM.Core.Grasshopper
 
                 return true;
             }
-            return false;
+
+            return base.CastFrom(source);
         }
 
         public override bool CastTo<Y>(ref Y target)
@@ -104,7 +105,14 @@ namespace SAM.Core.Grasshopper
                 target = (Y)(object)Value;
                 return true;
             }
-            return false;
+
+            if(typeof(Y) == typeof(object))
+            {
+                target = (Y)(object)Value;
+                return true;
+            }
+
+            return base.CastTo<Y>(ref target);
         }
     }
 
