@@ -112,6 +112,13 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (source is GooGeometry3D)
+            {
+                IGeometry geometry = ((GooGeometry3D)source).Value;
+                if (typeof(T).IsAssignableFrom(geometry.GetType()))
+                    Value = (T)(object)geometry;
+            }
+
             return false;
         }
 
@@ -137,6 +144,7 @@ namespace SAM.Geometry.Grasshopper
                 if (Value is Spatial.Point3D)
                 {
                     target = (Y)(object)(((Spatial.Point3D)(object)Value).ToRhino());
+                    return true;
                 }
             }
 
@@ -145,7 +153,14 @@ namespace SAM.Geometry.Grasshopper
                 if (Value is Spatial.Point3D)
                 {
                     target = (Y)(object)(((Spatial.Point3D)(object)Value).ToGrasshopper());
+                    return true;
                 }
+            }
+
+            if(typeof(Y).IsAssignableFrom(Value.GetType()))
+            {
+                target = (Y)(object)Value;
+                return true;
             }
 
             return false;
