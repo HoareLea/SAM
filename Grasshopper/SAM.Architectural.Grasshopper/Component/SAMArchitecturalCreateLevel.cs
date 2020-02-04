@@ -65,7 +65,7 @@ namespace SAM.Architectural.Grasshopper
 
 
             double elevation = double.NaN;
-            if (!dataAccess.GetData(0, ref elevation) || double.IsNaN(elevation))
+            if (!dataAccess.GetData(1, ref elevation) || double.IsNaN(elevation))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
