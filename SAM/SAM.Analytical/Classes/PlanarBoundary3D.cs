@@ -122,6 +122,11 @@ namespace SAM.Analytical
             return GetFace().GetBoundingBox(offset);
         }
 
+        public Vector3D GetNormal(double tolerance = Geometry.Tolerance.MicroDistance)
+        {
+            return GetEdge3DLoop().GetNormal(tolerance);
+        }
+
 
 
         public static bool TryGetPlanarBoundary3D(List<Face> faces, out PlanarBoundary3D planarBoundary3D)

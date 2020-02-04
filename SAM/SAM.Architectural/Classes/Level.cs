@@ -18,6 +18,12 @@ namespace SAM.Architectural
             elevation = level.elevation;
         }
 
+        public Level(double elevation)
+            : base()
+        {
+            this.elevation = elevation;
+        }
+
         public Level(string name, double elevation)
             : base(name)
         {
@@ -30,6 +36,11 @@ namespace SAM.Architectural
             {
                 return elevation;
             }
+        }
+
+        public Geometry.Spatial.Plane GetPlane()
+        {
+            return new Geometry.Spatial.Plane(new Geometry.Spatial.Point3D(0, 0, elevation), Geometry.Spatial.Vector3D.BaseZ);
         }
     }
 }

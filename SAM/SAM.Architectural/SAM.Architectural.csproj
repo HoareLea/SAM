@@ -50,6 +50,10 @@
       <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
       <Name>SAM.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SAM.Geometry\SAM.Geometry.csproj">
+      <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>
+      <Name>SAM.Geometry</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

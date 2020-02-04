@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="Classes\Edge3DLoop.cs" />
     <Compile Include="Classes\Edge2DLoop.cs" />
+    <Compile Include="Classes\PanelModel.cs" />
+    <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\PanelType.cs" />
     <Compile Include="Classes\PlanarBoundary3D.cs" />
     <Compile Include="Classes\Edge3D.cs" />
@@ -58,6 +60,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SAM.Architectural\SAM.Architectural.csproj">
+      <Project>{752ad1b6-fd09-4008-b7cc-5fd45fd2f9d9}</Project>
+      <Name>SAM.Architectural</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SAM.Core\SAM.Core.csproj">
       <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
       <Name>SAM.Core</Name>

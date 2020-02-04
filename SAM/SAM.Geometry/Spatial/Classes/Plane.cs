@@ -246,20 +246,26 @@ namespace SAM.Geometry.Spatial
             return Closest(point3D).Distance(point3D);
         }
 
+        public bool On(Point3D point3D, double tolerance = Tolerance.MicroDistance)
+        {
+            return (normal.X * (point3D.X - origin.X)) + (normal.Y * (point3D.Y - origin.Y)) + (normal.Z * (point3D.Z - origin.Z)) < tolerance;
+        }
+
         public Point3D Closest(Point3D point3D)
         {
             double factor = point3D.ToVector3D().DotProduct(normal) - K;
             return new Point3D(point3D.X - (normal.X * factor), point3D.Y - (normal.Y * factor), point3D.Z - (normal.Z * factor));
         }
 
+        public Vector3D Project(Vector3D vector3D)
+        {
+            double factor = vector3D.DotProduct(normal) - K;
+            return new Vector3D(vector3D.X - (normal.X * factor), vector3D.Y - (normal.Y * factor), vector3D.Z - (normal.Z * factor));
+        }
+
         public Point3D Project(Point3D point3D)
         {
             return Closest(point3D);
-        }
-
-        public bool On(Point3D point3D, double tolerance = Tolerance.MicroDistance)
-        {
-            return (normal.X * (point3D.X - origin.X)) + (normal.Y * (point3D.Y - origin.Y)) + (normal.Z * (point3D.Z - origin.Z)) < tolerance;
         }
 
         public Segment3D Project(Segment3D segment3D)

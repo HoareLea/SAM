@@ -102,38 +102,14 @@ namespace SAM.Analytical.Grasshopper
             else
                 panelType = Query.PanelType(objectWrapper.Value);
 
-            Construction aConstruction = null;
-            dataAccess.GetData(2, ref aConstruction);
+            Construction construction = null;
+            dataAccess.GetData(2, ref construction);
 
-            List<Panel> panels = new List<Panel>();
-
-            List<Face> faces = Geometry.Query.Faces(geometry3Ds);
-            if (faces == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            List<PlanarBoundary3D> planarBoundary3Ds = null;
-
-            if (!PlanarBoundary3D.TryGetPlanarBoundary3Ds(faces, out planarBoundary3Ds))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            foreach (PlanarBoundary3D planarBoundary3D in planarBoundary3Ds)
-                panels.Add(new Panel(aConstruction, panelType, planarBoundary3D));
-
-
+            List<Panel> panels = Create.Panels(geometry3Ds, panelType, construction);
             if (panels.Count == 1)
-            {
                 dataAccess.SetData(0, new GooPanel(panels[0]));
-            }
             else
-            {
                 dataAccess.SetDataList(0, panels.ConvertAll(x => new GooPanel(x)));
-            }     
         }
     }
 }

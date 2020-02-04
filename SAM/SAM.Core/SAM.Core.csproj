@@ -54,5 +54,8 @@
     <Compile Include="Query\TryGetValue.cs" />
     <Compile Include="Query\GetValue.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Create\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

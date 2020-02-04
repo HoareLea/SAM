@@ -1,0 +1,77 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
+
+using SAM.Architectural.Grasshopper.Properties;
+using SAM.Geometry.Grasshopper;
+using SAM.Geometry.Spatial;
+
+namespace SAM.Architectural.Grasshopper
+{
+    public class SAMArchitecturalCreateLevel : GH_Component
+    {
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("35ef8f3e-1cf2-407d-b2ed-33bf371ea161");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        /// <summary>
+        /// Initializes a new instance of the SAM_point3D class.
+        /// </summary>
+        public SAMArchitecturalCreateLevel()
+          : base("SAMArchitectural.CreateLevel", "SAMArchitectural.CreateLevel",
+              "Create SAM Architectural Level",
+              "SAM", "Architectural")
+        {
+        }
+
+        /// <summary>
+        /// Registers all the input parameters for this component.
+        /// </summary>
+        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        {
+            inputParamManager.AddTextParameter("_name", "name", "Name", GH_ParamAccess.item);
+            inputParamManager.AddNumberParameter("_elevation", "elevation", "Elevation", GH_ParamAccess.item);
+        }
+
+        /// <summary>
+        /// Registers all the output parameters for this component.
+        /// </summary>
+        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        {
+            outputParamManager.AddParameter(new GooLevelParam(), "Level", "Level", "SAM Architectural Level", GH_ParamAccess.list);
+        }
+
+        /// <summary>
+        /// This is the method that actually does the work.
+        /// </summary>
+        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        protected override void SolveInstance(IGH_DataAccess dataAccess)
+        {
+            string name = null;
+            if(!dataAccess.GetData(0, ref name) || string.IsNullOrEmpty(name))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+
+            double elevation = double.NaN;
+            if (!dataAccess.GetData(0, ref elevation) || double.IsNaN(elevation))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            dataAccess.SetData(0, new GooLevel(new Level(name, elevation)));
+        }
+    }
+}

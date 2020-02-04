@@ -13,11 +13,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B8F0EE34-A776-4518-ADA2-E047E468B47B}</ProjectGuid>
+    <ProjectGuid>{D8B37ABA-A2F9-4EB2-9BC6-717BB11F5F47}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SAM.Geometry.Grasshopper</RootNamespace>
-    <AssemblyName>SAM.Geometry.Grasshopper</AssemblyName>
+    <RootNamespace>SAM.Architectural.Grasshopper</RootNamespace>
+    <AssemblyName>SAM.Architectural.Grasshopper</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -42,10 +42,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="SAM.Core.JSON, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SAM_JSON\build\SAM.Core.JSON.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -67,49 +63,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\GooGeometry3D.cs" />
-    <Compile Include="Classes\GooGeometry.cs" />
-    <Compile Include="Component\SAMGeometryGeometry.cs" />
-    <Compile Include="Component\GeometrySAMGeometry.cs" />
-    <Compile Include="Component\GeometrySnap.cs" />
-    <Compile Include="Component\SAMGeometry2DSAMGeometry.cs" />
-    <Compile Include="Component\SAMGeometrySAMGeometry2D.cs" />
-    <Compile Include="Component\SAMGeometryIntersection.cs" />
+    <Compile Include="Classes\GooLevel.cs" />
+    <Compile Include="Component\SAMArchitecturalCreateLevel.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
-    <Compile Include="Template\TemplateComponent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ToGrasshopper\GH_Surface.cs" />
-    <Compile Include="ToGrasshopper\GH_Curve.cs" />
-    <Compile Include="ToGrasshopper\GH_Line.cs" />
-    <Compile Include="ToGrasshopper\IGH_GeometricGoo.cs" />
-    <Compile Include="ToGrasshopper\GH_Point.cs" />
-    <Compile Include="ToRhino\BoundingBox.cs" />
-    <Compile Include="ToRhino\Brep.cs" />
-    <Compile Include="ToRhino\Plane.cs" />
-    <Compile Include="ToRhino\Curve.cs" />
-    <Compile Include="ToRhino\Vector3d.cs" />
-    <Compile Include="ToRhino\PolylineCurve.cs" />
-    <Compile Include="ToRhino\Polyline.cs" />
-    <Compile Include="ToRhino\Line.cs" />
-    <Compile Include="ToRhino\LineCurve.cs" />
-    <Compile Include="ToRhino\Point3d.cs" />
-    <Compile Include="ToSAM\IClosed3D.cs" />
-    <Compile Include="ToSAM\IGeometry3Ds.cs" />
-    <Compile Include="ToSAM\Polyline3D.cs" />
-    <Compile Include="ToSAM\Polycurve3D.cs" />
-    <Compile Include="ToSAM\Surface.cs" />
-    <Compile Include="ToSAM\IGeometry3D.cs" />
-    <Compile Include="ToSAM\Circle3D.cs" />
-    <Compile Include="ToSAM\Vector3D.cs" />
-    <Compile Include="ToSAM\Plane.cs" />
-    <Compile Include="ToSAM\Polygon3D.cs" />
-    <Compile Include="ToSAM\Segment3D.cs" />
-    <Compile Include="ToSAM\Point3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -121,6 +83,21 @@
     <None Include="Resources\SAM_Small.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\HL_Logo24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Architectural.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ToGrasshopper\" />
+    <Folder Include="ToRhino\" />
+    <Folder Include="ToSAM\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SAM\SAM.Architectural\SAM.Architectural.csproj">
+      <Project>{752ad1b6-fd09-4008-b7cc-5fd45fd2f9d9}</Project>
+      <Name>SAM.Architectural</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
       <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
       <Name>SAM.Core</Name>
@@ -133,12 +110,10 @@
       <Project>{ea20d57f-bb3e-447a-80a2-14c04baa665f}</Project>
       <Name>SAM.Core.Grasshopper</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\HL_Logo24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Geometry.png" />
+    <ProjectReference Include="..\SAM.Geometry.Grasshopper\SAM.Geometry.Grasshopper.csproj">
+      <Project>{b8f0ee34-a776-4518-ada2-e047e468b47b}</Project>
+      <Name>SAM.Geometry.Grasshopper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
