@@ -42,5 +42,18 @@ namespace SAM.Analytical
         {
             return true;
         }
+
+        public Geometry.Spatial.Vector3D GetNormal(double tolerance = Geometry.Tolerance.MicroDistance)
+        {
+            List<Geometry.Spatial.Point3D> point3Ds = new List<Geometry.Spatial.Point3D>();
+            foreach(Edge3D edge3D in Edge3Ds)
+            {
+                Geometry.Spatial.ICurve3D curve3D = edge3D.Curve3D;
+                point3Ds.Add(curve3D.GetStart());
+                point3Ds.Add(curve3D.GetEnd());
+            }
+
+            return Geometry.Spatial.Point3D.GetNormal(point3Ds, tolerance);
+        }
     }
 }
