@@ -30,7 +30,7 @@ namespace SAM.Geometry.Spatial
 
         public Plane(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
         {
-            origin = point3D_1;
+            origin = new Point3D(point3D_1);
             normal = new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3)).Unit;
             baseX = GetBaseX();
         }

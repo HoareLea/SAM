@@ -35,15 +35,16 @@ namespace SAM.Geometry.Spatial
             return Point3D.GetNormal(points[0], points[1], points[2]);
         }
 
+        public Plane GetPlane(double tolerance)
+        {
+            return Point3D.GetPlane(points, tolerance);
+        }
+
         public Plane GetPlane()
         {
             return Point3D.GetPlane(points, Tolerance.MicroDistance);
         }
 
-        public Plane GetPlane(double tolerance)
-        {
-            return Point3D.GetPlane(points, tolerance);
-        }
 
         public IGeometry Clone()
         {

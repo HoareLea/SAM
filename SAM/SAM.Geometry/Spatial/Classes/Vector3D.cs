@@ -180,7 +180,11 @@ namespace SAM.Geometry.Spatial
 
         public double SmallestAngle(Vector3D Vector)
         {
-            return Math.PI - Math.Abs(Angle(Vector));
+            double value = Math.Abs(Angle(Vector));
+            if (value == 0)
+                return value;
+
+            return Math.PI - value;
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)

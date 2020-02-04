@@ -132,6 +132,11 @@ namespace SAM.Geometry.Spatial
             return new Point3D(this);
         }
 
+        public BoundingBox3D GetBoundingBox(double offset)
+        {
+            return new BoundingBox3D(this, offset);
+        }
+
         public static Point3D Snap(IEnumerable<Point3D> point3Ds, Point3D point3D, double maxDistance = double.NaN)
         {
             Point3D result = Point3D.Closest(point3Ds, point3D);
@@ -142,7 +147,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static Plane GetPlane(IEnumerable<Point3D> point3Ds, double tolerance = Tolerance.MicroDistance)
+        public static Plane GetPlane(IEnumerable<Point3D> point3Ds, double tolerance)
         {
             if (point3Ds == null)
                 return null;
@@ -155,29 +160,52 @@ namespace SAM.Geometry.Spatial
             Point3D point3D_2 = null;
             Point3D point3D_3 = null;
 
+            Vector3D normal = null;
+
             for (int i = 2; i < aCount; i++)
             {
                 point3D_1 = point3Ds.ElementAt(i - 2);
                 point3D_2 = point3Ds.ElementAt(i - 1);
                 point3D_3 = point3Ds.ElementAt(i);
 
-                if (point3D_2.SmallestAngle(point3D_1, point3D_3) > tolerance)
-                    return new Plane(point3D_1, point3D_2, point3D_3);
+                normal = new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
+                if (normal.Length < tolerance)
+                    continue;
+
+                return new Plane(point3D_1, normal.Unit);
+
+                //if (!Point3D.Colinear(point3D_1, point3D_2, point3D_3, tolerance))
+                //{
+                //    Vector3D normal = new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
+                //    if (normal.Length == 0)
+                //        continue;
+
+                //    return new Plane(point3D_1, normal.Unit);
+                //}
+
             }
 
             point3D_1 = point3Ds.ElementAt(aCount - 2);
             point3D_2 = point3Ds.ElementAt(aCount - 1);
             point3D_3 = point3Ds.ElementAt(0);
 
-            if (point3D_2.SmallestAngle(point3D_1, point3D_3) > tolerance)
-                return new Plane(point3D_1, point3D_2, point3D_3);
+            normal = new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
+            if (normal.Length > tolerance)
+                return new Plane(point3D_1, normal.Unit);
+
+            //if (!Point3D.Colinear(point3D_1, point3D_2, point3D_3, tolerance))
+            //    return new Plane(point3D_1, point3D_2, point3D_3);
 
             point3D_1 = point3Ds.ElementAt(aCount - 1);
             point3D_2 = point3Ds.ElementAt(0);
             point3D_3 = point3Ds.ElementAt(1);
 
-            if (point3D_2.SmallestAngle(point3D_1, point3D_3) > tolerance)
-                return new Plane(point3D_1, point3D_2, point3D_3);
+            //if (!Point3D.Colinear(point3D_1, point3D_2, point3D_3, tolerance))
+            //    return new Plane(point3D_1, point3D_2, point3D_3);
+
+            normal = new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
+            if (normal.Length > tolerance)
+                return new Plane(point3D_1, normal.Unit);
 
             return null;
         }
@@ -397,9 +425,10 @@ namespace SAM.Geometry.Spatial
             return new Point3D((point3D_1.X + point3D_2.X) / 2, (point3D_1.Y + point3D_2.Y) / 2, (point3D_1.Z + point3D_2.Z) / 2);
         }
 
-        public BoundingBox3D GetBoundingBox(double offset)
+        public static bool Colinear(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3, double tolerance = Tolerance.Angle)
         {
-            return new BoundingBox3D(this, offset);
+            return new Vector3D(point3D_1, point3D_2).SmallestAngle(new Vector3D(point3D_1, point3D_3)) < tolerance;
         }
+
     }
 }

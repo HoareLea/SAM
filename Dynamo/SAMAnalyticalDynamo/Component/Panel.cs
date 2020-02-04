@@ -24,7 +24,7 @@ namespace SAMAnalyticalDynamo
         /// </search>
         public static SAM.Analytical.Panel ByPoint3Ds(IEnumerable<SAM.Geometry.Spatial.Point3D> point3Ds, SAM.Analytical.Construction construction, object panelType = null)
         {
-            Plane plane = SAM.Geometry.Spatial.Point3D.GetPlane(point3Ds);
+            Plane plane = SAM.Geometry.Spatial.Point3D.GetPlane(point3Ds, SAM.Geometry.Tolerance.MicroDistance);
 
             return new SAM.Analytical.Panel(construction, Query.PanelType(panelType), new Face(new SAM.Geometry.Spatial.Polygon3D(point3Ds.ToList().ConvertAll(x => plane.Project(x)))));
         }
