@@ -43,7 +43,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooPanelModelParam(), "PanelModel", "PanelMOdel", "SAM Analytical PanelModel", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooPanelModelParam(), "PanelModel", "PanelModel", "SAM Analytical PanelModel", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -58,8 +59,12 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+            PanelModel panelModel = new PanelModel(panels);
+            panelModel.AssignPanelTypes();
 
-            dataAccess.SetData(0, new GooPanelModel(new PanelModel(panels)));
+
+            dataAccess.SetData(0, new GooPanelModel(panelModel));
+            dataAccess.SetData(1, panelModel.GetPanels().ConvertAll(x => new GooPanel(x)));
         }
     }
 }
