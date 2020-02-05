@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
-using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+
 using SAM.Geometry.Grasshopper.Properties;
 
 namespace SAM.Geometry.Grasshopper
@@ -19,8 +18,9 @@ namespace SAM.Geometry.Grasshopper
         }
         
         public GooGeometry3D(Spatial.IGeometry3D geometry)
+            : base(geometry)
         {
-            Value = geometry;
+
         }
 
         public override IGH_Goo Duplicate()
@@ -40,6 +40,10 @@ namespace SAM.Geometry.Grasshopper
 
         BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
 
+        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
+
+        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
+
         public GooGeometry3DParam()
             : base(typeof(Spatial.IGeometry3D).Name, typeof(Spatial.IGeometry3D).Name, typeof(Spatial.IGeometry3D).FullName.Replace(".", " "), "Params", "SAM")
         {
@@ -55,9 +59,5 @@ namespace SAM.Geometry.Grasshopper
         {
             throw new NotImplementedException();
         }
-
-        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
-
-        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
     }
 }

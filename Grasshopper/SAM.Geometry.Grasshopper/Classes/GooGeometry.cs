@@ -25,9 +25,41 @@ namespace SAM.Geometry.Grasshopper
 
         public override bool IsValid => Value != null;
 
-        public override string TypeName => typeof(T).Name;
+        public override string TypeName
+        {
+            get
+            {
+                Type type = null;
+                
+                if (Value == null)
+                    type = typeof(T);
+                else
+                    type = Value.GetType();
 
-        public override string TypeDescription => typeof(T).FullName.Replace(".", " ");
+                if (type == null)
+                    return null;
+
+                return type.Name;
+            }
+        }
+
+        public override string TypeDescription
+        {
+            get
+            {
+                Type type = null;
+
+                if (Value == null)
+                    type = typeof(T);
+                else
+                    type = Value.GetType();
+
+                if (type == null)
+                    return null;
+
+                return type.FullName.Replace(".", " ");
+            }
+        }
 
         public virtual BoundingBox ClippingBox
         {
@@ -139,8 +171,6 @@ namespace SAM.Geometry.Grasshopper
                     Value = (T)(object)geometry;
             }
 
-
-
             return base.CastFrom(source);
         }
 
@@ -245,6 +275,10 @@ namespace SAM.Geometry.Grasshopper
 
         BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
 
+        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
+
+        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
+
         public GooGeometryParam()
             : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "Params", "SAM")
         {
@@ -260,9 +294,5 @@ namespace SAM.Geometry.Grasshopper
         {
             throw new NotImplementedException();
         }
-
-        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
-
-        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
     }
 }
