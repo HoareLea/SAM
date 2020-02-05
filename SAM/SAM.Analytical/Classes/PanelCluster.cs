@@ -7,11 +7,12 @@ using SAM.Core;
 
 namespace SAM.Analytical
 {
-    public class PanelModel : SAMObject
+    public class PanelCluster : SAMObject
     {
+        private Dictionary<PanelType, Construction> dictionary_Constructions;
         private Dictionary<PanelType, Dictionary<Guid, Panel>> dictionary_Panels;
 
-        public PanelModel(IEnumerable<Panel> panels)
+        public PanelCluster(IEnumerable<Panel> panels)
         {
             dictionary_Panels = new Dictionary<PanelType, Dictionary<Guid, Panel>>();
 
@@ -37,20 +38,32 @@ namespace SAM.Analytical
             return true;
         }
 
+        public Panel GetPanel(Guid guid, PanelType? panelType = null)
+        {
+            if(panelType == null || !panelType.HasValue)
+            {
+                foreach(KeyValuePair<PanelType, Dictionary<Guid, Panel>> keyValuePair in dictionary_Panels)
+                {
+                    Panel panel;
+                    if (keyValuePair.Value.TryGetValue(guid, out panel))
+                        return panel;
+                }
+            }
+            else
+            {
+                Dictionary<Guid, Panel> dictionary;
+                if (!dictionary_Panels.TryGetValue(panelType.Value, out dictionary))
+                    return null;
+
+                return dictionary[guid];
+            }
+
+            return null;
+        }
+
         public List<Panel> GetPanels(params PanelType[] panelTypes)
         {
-            List<PanelType> panelTypeList = null;
-            if (panelTypes != null)
-                panelTypeList = new List<PanelType>(panelTypes);
-
-
-            if (panelTypeList == null)
-            {
-                panelTypeList = new List<PanelType>();
-
-                foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
-                    panelTypeList.Add(panelType);
-            }
+            List<PanelType> panelTypeList = GetPanelTypes(panelTypes);
 
             List<Panel> result = new List<Panel>();
             if (panelTypeList.Count == 0)
@@ -152,6 +165,77 @@ namespace SAM.Analytical
                 guidList.AddRange(guidList_Temp);
 
             return guidList_Temp;
+        }
+
+        public List<Guid> AssignDefaultConstruction(params PanelType[] panelTypes)
+        {
+            List<PanelType> panelTypeList = GetPanelTypes(panelTypes);
+
+            List<Guid> result = new List<Guid>();
+            if (panelTypeList.Count == 0)
+                return result;
+
+            foreach(PanelType panelType in panelTypeList)
+            {
+                Construction construction;
+                if (!dictionary_Constructions.TryGetValue(panelType, out construction) || construction == null)
+                    continue;
+
+                Dictionary<Guid, Panel> dictionary;
+                if (!dictionary_Panels.TryGetValue(panelType, out dictionary))
+                    continue;
+
+                foreach(Panel panel in dictionary.Values)
+                {
+                    dictionary[panel.Guid] = new Panel(panel, construction);
+                    result.Add(panel.Guid);
+                }
+                    
+            }
+
+            return result;
+        }
+
+        public Construction GetDefaultConstruction(PanelType panelType)
+        {
+            if (dictionary_Constructions == null)
+                return null;
+
+            Construction construction;
+            dictionary_Constructions.TryGetValue(panelType, out construction);
+
+            return construction;
+        }
+
+        public bool SetDefaultConstruction(PanelType panelType, Construction construction = null)
+        {
+            if (dictionary_Constructions == null)
+                dictionary_Constructions = new Dictionary<PanelType, Construction>();
+
+            if (construction == null)
+                dictionary_Constructions.Remove(panelType);
+            else
+                dictionary_Constructions[panelType] = construction;
+
+            return true;
+        }
+
+
+        private static List<PanelType> GetPanelTypes(params PanelType[] panelTypes)
+        {
+            List<PanelType> result = null;
+            if (panelTypes != null)
+                result = new List<PanelType>(panelTypes);
+
+            if (result == null)
+            {
+                result = new List<PanelType>();
+
+                foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
+                    result.Add(panelType);
+            }
+
+            return result;
         }
     }
 }

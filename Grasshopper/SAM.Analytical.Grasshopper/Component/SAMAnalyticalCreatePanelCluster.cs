@@ -8,7 +8,7 @@ using SAM.Analytical.Grasshopper.Properties;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreatePanelModel : GH_Component
+    public class SAMAnalyticalCreatePanelCluster : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -23,9 +23,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreatePanelModel()
-          : base("SAMAnalytical.CreatePanelModel", "SAMAnalytical.CreatePanelModel",
-              "Creates SAM Panel Model",
+        public SAMAnalyticalCreatePanelCluster()
+          : base("SAMAnalytical.CreatePanelCluster", "SAMAnalytical.CreatePanelCluster",
+              "Creates SAM Panel Cluster",
               "SAM", "Analytical")
         {
         }
@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooPanelModelParam(), "PanelModel", "PanelModel", "SAM Analytical PanelModel", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooPanelClusterParam(), "PanelCluster", "PanelCluster", "SAM Analytical PanelCluster", GH_ParamAccess.item);
             outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
         }
 
@@ -59,12 +59,12 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            PanelModel panelModel = new PanelModel(panels);
-            panelModel.AssignPanelTypes();
+            PanelCluster panelCluster = new PanelCluster(panels);
+            panelCluster.AssignPanelTypes();
 
 
-            dataAccess.SetData(0, new GooPanelModel(panelModel));
-            dataAccess.SetData(1, panelModel.GetPanels().ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetData(0, new GooPanelCluster(panelCluster));
+            dataAccess.SetData(1, panelCluster.GetPanels().ConvertAll(x => new GooPanel(x)));
         }
     }
 }

@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="Classes\Edge3DLoop.cs" />
     <Compile Include="Classes\Edge2DLoop.cs" />
-    <Compile Include="Classes\PanelModel.cs" />
+    <Compile Include="Classes\PanelCluster.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\PanelType.cs" />
     <Compile Include="Classes\PlanarBoundary3D.cs" />
