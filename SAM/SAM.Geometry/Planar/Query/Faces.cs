@@ -25,6 +25,12 @@ namespace SAM.Geometry
                     faces.Add(new Spatial.Face((Spatial.IClosedPlanar3D)geometry3D));
                     continue;
                 }
+
+                if(geometry3D is Spatial.ICurvable3D)
+                {
+                    List<Spatial.Point3D> point3Ds = ((Spatial.ICurvable3D)geometry3D).GetCurves().ConvertAll(x => x.GetStart());
+                    faces.Add(new Spatial.Face(new Spatial.Polygon3D(point3Ds)));
+                }
             }
 
             return faces;
