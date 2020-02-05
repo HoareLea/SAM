@@ -23,7 +23,7 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public GeometrySAMGeometry()
-          : base(".SAMGeometry", ".SAMGeometry",
+          : base("Geometry.SAMGeometry", "Geometry.SAMGeometry",
               "Convert Rhino geometry to SAM geometry",
               "SAM", "Geometry")
         {
@@ -34,7 +34,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGeometryParameter("_geometry", "_geometry", "Rhino geometry", GH_ParamAccess.item);
+            inputParamManager.AddGeometryParameter("_geometry", "_geometry", "Rhino/GH geometry", GH_ParamAccess.item);
         }
 
         /// <summary>

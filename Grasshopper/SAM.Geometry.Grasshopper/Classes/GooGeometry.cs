@@ -29,12 +29,15 @@ namespace SAM.Geometry.Grasshopper
 
         public override string TypeDescription => typeof(T).FullName.Replace(".", " ");
 
-        public BoundingBox ClippingBox
+        public virtual BoundingBox ClippingBox
         {
             get
             {
                 if (Value is Spatial.IBoundable3D)
                     return ((Spatial.IBoundable3D)Value).GetBoundingBox().ToRhino();
+
+                if(Value is Spatial.Point3D)
+                    return ((Spatial.Point3D)(object)Value).GetBoundingBox(1).ToRhino();
 
                 throw new NotImplementedException();
             }
@@ -87,8 +90,25 @@ namespace SAM.Geometry.Grasshopper
                 Value = (T)source;
                 return true;
             }
-            
-            if(source is Polyline)
+
+            if (typeof(IGH_Goo).IsAssignableFrom(source.GetType()))
+            {
+                try
+                {
+                    source = (source as dynamic).Value;
+                }
+                catch
+                {
+                }
+
+                if(source is IGeometry)
+                {
+                    Value = (T)(object)source;
+                    return true;
+                }
+            }
+
+            if (source is Polyline)
             {
                 Value = (T)(object)Convert.ToSAM(((Polyline)source));
                 return true;
@@ -119,7 +139,9 @@ namespace SAM.Geometry.Grasshopper
                     Value = (T)(object)geometry;
             }
 
-            return false;
+
+
+            return base.CastFrom(source);
         }
 
         public override bool CastTo<Y>(ref Y target)
@@ -163,26 +185,65 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            return false;
+            return base.CastTo<Y>(ref target);
         }
 
-        public void DrawViewportWires(GH_PreviewWireArgs args)
+        public virtual void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            if(Value is Spatial.Polygon3D)
-                args.Pipeline.DrawPolyline(Convert.ToRhino((Spatial.Polygon3D)(object)Value), args.Color);
+            List<Spatial.ICurve3D> curve3Ds = null;
+            if (Value is Spatial.Face)
+            {
+                Spatial.IClosedPlanar3D closedPlanar3D = (Value as Spatial.Face).ToClosedPlanar3D();
+                if(closedPlanar3D is Spatial.ICurvable3D)
+                    curve3Ds = ((Spatial.ICurvable3D)Value).GetCurves();
+            }
+            else if (Value is Spatial.ICurvable3D)
+            {
+                curve3Ds = ((Spatial.ICurvable3D)Value).GetCurves();
+            }
+
+            if(curve3Ds != null && curve3Ds.Count > 0)
+            {
+                curve3Ds.ForEach(x => args.Pipeline.DrawCurve(x.ToRhino(), args.Color));
+                return;
+            }
+
+            if(Value is Spatial.Point3D)
+            {
+                args.Pipeline.DrawPoint((Value as Spatial.Point3D).ToRhino());
+                return;
+            }
+            
         }
 
-        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
+        public virtual void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            throw new NotImplementedException();
+            Brep brep = null;
+
+            if (Value is Spatial.Face)
+            {
+                brep = Convert.ToRhino_Brep(Value as Spatial.Face);
+            }
+
+            if (brep != null)
+            {
+                args.Pipeline.DrawBrepShaded(brep, args.Material);
+            }
+                
         }
     }
 
-    public class GooGeometryParam<T> : GH_PersistentParam<GooGeometry<T>> where T : IGeometry
+    public class GooGeometryParam<T> : GH_PersistentParam<GooGeometry<T>>, IGH_PreviewObject where T : IGeometry
     {
         public override Guid ComponentGuid => new Guid("b4f8eee5-8d45-4c52-b966-1be5efa7c1e6");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
+
+        bool IGH_PreviewObject.Hidden { get; set; }
+
+        bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
+
+        BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
 
         public GooGeometryParam()
             : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "Params", "SAM")
@@ -199,5 +260,9 @@ namespace SAM.Geometry.Grasshopper
         {
             throw new NotImplementedException();
         }
+
+        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
+
+        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
     }
 }

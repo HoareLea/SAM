@@ -23,27 +23,22 @@ namespace SAM.Geometry.Grasshopper
             Value = geometry;
         }
 
-        public BoundingBox ClippingBox
-        {
-            get
-            {
-                if (Value is Spatial.IBoundable3D)
-                    return ((Spatial.IBoundable3D)Value).GetBoundingBox().ToRhino();
-
-                throw new NotImplementedException();
-            }
-        }
-
         public override IGH_Goo Duplicate()
         {
             return new GooGeometry3D(Value);
         }
     }
 
-    public class GooGeometry3DParam : GH_PersistentParam<GooGeometry3D>
+    public class GooGeometry3DParam : GH_PersistentParam<GooGeometry3D>, IGH_PreviewObject
     {
         public override Guid ComponentGuid => new Guid("0baffeac-1d53-49e0-bb65-81d332483e42");
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
+
+        bool IGH_PreviewObject.Hidden { get; set; }
+
+        bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
+
+        BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
 
         public GooGeometry3DParam()
             : base(typeof(Spatial.IGeometry3D).Name, typeof(Spatial.IGeometry3D).Name, typeof(Spatial.IGeometry3D).FullName.Replace(".", " "), "Params", "SAM")
@@ -60,5 +55,9 @@ namespace SAM.Geometry.Grasshopper
         {
             throw new NotImplementedException();
         }
+
+        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
+
+        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
     }
 }

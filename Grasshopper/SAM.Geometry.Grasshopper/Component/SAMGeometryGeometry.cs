@@ -4,6 +4,7 @@ using System.Collections;
 using Grasshopper.Kernel;
 
 using SAM.Geometry.Grasshopper.Properties;
+using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -13,8 +14,8 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMGeometryGeometry()
-          : base(".Geometry", ".Geometry",
-              "Convert Geometry from SAM geometry to Rhino geometry",
+          : base("SAMGeometry.Geometry", "SAMGeometry.Geometry",
+              "Convert SAM geometry to Rhino geometry",
               "SAM", "Geometry")
         {
         }
@@ -41,14 +42,14 @@ namespace SAM.Geometry.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            IGeometry geometry = null;
-            if (!dataAccess.GetData(0, ref geometry) || geometry == null)
+            IGeometry3D geometry3D = null;
+            if (!dataAccess.GetData(0, ref geometry3D) || geometry3D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            object @object = (geometry).ToGrasshopper();
+            object @object = (geometry3D).ToGrasshopper();
 
             if (@object == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");

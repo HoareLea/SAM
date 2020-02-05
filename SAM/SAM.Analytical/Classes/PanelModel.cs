@@ -13,6 +13,9 @@ namespace SAM.Analytical
 
         public PanelModel(IEnumerable<Panel> panels)
         {
+            dictionary_Panels = new Dictionary<PanelType, Dictionary<Guid, Panel>>();
+
+
             if (panels != null)
                 foreach (Panel panel in panels)
                     Add(panel);
