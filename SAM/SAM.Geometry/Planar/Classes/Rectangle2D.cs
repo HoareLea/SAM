@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Rectangle2D : IClosed2D, ISegmentable2D
+    public class Rectangle2D : SAMGeometry, IClosed2D, ISegmentable2D
     {
         private Point2D origin;
         private double width;
@@ -43,6 +41,12 @@ namespace SAM.Geometry.Planar
             this.width = rectangle2D.width;
             this.height = rectangle2D.height;
             this.heightDirection = new Vector2D(rectangle2D.heightDirection);
+        }
+
+        public Rectangle2D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public List<Point2D> GetPoints()
@@ -200,7 +204,7 @@ namespace SAM.Geometry.Planar
             return new Triangle2D[] { new Triangle2D(points[0], points[1], points[2]), new Triangle2D(points[2], points[3], points[0]) };
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Rectangle2D(this);
         }
@@ -216,6 +220,28 @@ namespace SAM.Geometry.Planar
                 return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
 
             throw new NotImplementedException();
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            origin = new Point2D(jObject.Value<JObject>("Origin"));
+            width = jObject.Value<double>("Width");
+            height = jObject.Value<double>("Height");
+            heightDirection = new Vector2D(jObject.Value<JObject>("HeightDirection"));
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Origin", origin.ToJObject());
+            jObject.Add("Width", width);
+            jObject.Add("Height", height);
+            jObject.Add("HeightDirection", heightDirection.ToJObject());
+
+            return jObject;
         }
     }
 }

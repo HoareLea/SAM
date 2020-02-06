@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Core
 {
@@ -26,10 +25,25 @@ namespace SAM.Core
 
         }
 
+        public SAMType(JObject jObject)
+        {
+            FromJObject(jObject);
+        }
+
         public SAMType(string name)
             : base(name)
         {
 
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            return base.FromJObject(jObject);
+        }
+
+        public override JObject ToJObject()
+        {
+            return base.ToJObject();
         }
     }
 }

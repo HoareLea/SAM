@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Vector3D : IBoundable3D
+    public class Vector3D : SAMGeometry, IBoundable3D
     {
         public static Vector3D BaseX { get; } = new Vector3D(1, 0, 0);
         
@@ -29,6 +30,11 @@ namespace SAM.Geometry.Spatial
         public Vector3D()
         {
             coordinates = new double[] { 0, 0, 0 };
+        }
+
+        public Vector3D(JObject jObject)
+        {
+            FromJObject(jObject);
         }
 
         public Vector3D(Vector3D vector3D)
@@ -168,7 +174,7 @@ namespace SAM.Geometry.Spatial
             return string.Format("{0}(X={1},Y={2},Z={3})", GetType().Name, coordinates[0], coordinates[1], coordinates[2]);
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Vector3D(this);
         }
@@ -192,9 +198,28 @@ namespace SAM.Geometry.Spatial
             return new BoundingBox3D(Point3D.Zero, new Point3D(coordinates[0], coordinates[1], coordinates[2]), offset);
         }
 
-        public IGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Vector3D(coordinates[0] + vector3D.coordinates[0], coordinates[1] + vector3D.coordinates[1], coordinates[2] + vector3D.coordinates[2]);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            coordinates[0] = jObject.Value<double>("X");
+            coordinates[1] = jObject.Value<double>("Y");
+            coordinates[2] = jObject.Value<double>("Z");
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("X", coordinates[0]);
+            jObject.Add("Y", coordinates[1]);
+            jObject.Add("Z", coordinates[2]);
+            return jObject;
         }
 
         public static Vector3D operator +(Vector3D vector3D_1, Vector3D vector3D_2)
@@ -219,19 +244,19 @@ namespace SAM.Geometry.Spatial
             return vector3D_1.coordinates[0] * vector3D_2.coordinates[0] + vector3D_1.coordinates[1] * vector3D_2.coordinates[1] + vector3D_1.coordinates[2] * vector3D_2.coordinates[2];
         }
 
-        public static Vector3D operator *(Vector3D vector3D_1, double factor)
+        public static Vector3D operator *(Vector3D vector3D, double factor)
         {
-            return new Vector3D(vector3D_1.coordinates[0] * factor, vector3D_1.coordinates[1] * factor, vector3D_1.coordinates[2] * factor);
+            return new Vector3D(vector3D.coordinates[0] * factor, vector3D.coordinates[1] * factor, vector3D.coordinates[2] * factor);
         }
 
-        public static Vector3D operator /(Vector3D vector3D_1, double factor)
+        public static Vector3D operator /(Vector3D vector3D, double factor)
         {
-            return new Vector3D(vector3D_1.coordinates[0] / factor, vector3D_1.coordinates[1] / factor, vector3D_1.coordinates[2] / factor);
+            return new Vector3D(vector3D.coordinates[0] / factor, vector3D.coordinates[1] / factor, vector3D.coordinates[2] / factor);
         }
 
-        public static Vector3D operator *(double factor, Vector3D vector3D_1)
+        public static Vector3D operator *(double factor, Vector3D vector3D)
         {
-            return new Vector3D(vector3D_1.coordinates[0] * factor, vector3D_1.coordinates[1] * factor, vector3D_1.coordinates[2] * factor);
+            return new Vector3D(vector3D.coordinates[0] * factor, vector3D.coordinates[1] * factor, vector3D.coordinates[2] * factor);
         }
     }
 }

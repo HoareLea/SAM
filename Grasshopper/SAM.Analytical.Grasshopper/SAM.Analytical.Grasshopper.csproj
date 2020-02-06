@@ -42,6 +42,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SAM.Core.JSON, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SAM_JSON\build\SAM.Core.JSON.dll</HintPath>
@@ -88,9 +91,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ToGrasshopper\IGH_Goos.cs" />
-    <Compile Include="ToGrasshopper\GH_Surface.cs" />
-    <Compile Include="ToRihno\Brep.cs" />
+    <Compile Include="Convert\ToGrasshopper\IGH_Goos.cs" />
+    <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
+    <Compile Include="Convert\ToRihno\Brep.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">
@@ -121,14 +124,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\SAM_Small.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\HL_Logo24.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ToSAM\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

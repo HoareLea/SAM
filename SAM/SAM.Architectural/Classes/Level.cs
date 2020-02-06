@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
 
 using SAM.Core;
 
@@ -30,6 +26,12 @@ namespace SAM.Architectural
             this.elevation = elevation;
         }
 
+        public Level(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
         public double Elevation
         {
             get
@@ -41,6 +43,28 @@ namespace SAM.Architectural
         public Geometry.Spatial.Plane GetPlane()
         {
             return new Geometry.Spatial.Plane(new Geometry.Spatial.Point3D(0, 0, elevation), Geometry.Spatial.Vector3D.BaseZ);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+                return false;
+
+            elevation = jObject.Value<double>("Elevation");
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+
+            if (jObject == null)
+                return jObject;
+
+
+            jObject.Add("Elevation", elevation);
+
+            return jObject;
         }
     }
 }

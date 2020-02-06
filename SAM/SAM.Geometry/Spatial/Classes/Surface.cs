@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Surface : IClosed3D
+    public class Surface : SAMGeometry, IClosed3D
     {
         private IClosed3D boundary;
 
@@ -18,6 +19,12 @@ namespace SAM.Geometry.Spatial
         public Surface(Surface surface)
         {
             boundary = surface.boundary.Clone() as IClosed3D;
+        }
+
+        public Surface(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public Face ToFace(double tolerance = Tolerance.MicroDistance)
@@ -43,7 +50,7 @@ namespace SAM.Geometry.Spatial
             throw new NotImplementedException();
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Surface(this);
         }
@@ -58,9 +65,24 @@ namespace SAM.Geometry.Spatial
             return boundary.Clone() as IClosed3D;
         }
 
-        public IGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Surface((IClosed3D)boundary.GetMoved(vector3D));
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            boundary = Geometry.Create.ISAMGeometry<IClosed3D>(jObject);
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Boundary", boundary.ToJObject());
+
+            return jObject;
         }
     }
 }

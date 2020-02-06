@@ -1,9 +1,8 @@
-﻿using SAM.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+
+using Newtonsoft.Json.Linq;
+
+using SAM.Core;
 
 namespace SAM.Analytical
 {
@@ -41,12 +40,37 @@ namespace SAM.Analytical
             this.location = location;
         }
 
+        public Space(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
         public Geometry.Spatial.Point3D Location
         {
             get
             {
                 return location;
             }
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+                return false;
+
+            location = new Geometry.Spatial.Point3D(jObject.Value<JObject>("Location"));
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return jObject;
+
+            jObject.Add("Location", location.ToJObject());
+            return jObject;
         }
     }
 }

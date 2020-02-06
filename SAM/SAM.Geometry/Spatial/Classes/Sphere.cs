@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Sphere : IBoundable3D
+    public class Sphere : SAMGeometry, IBoundable3D
     {
         private Point3D origin;
         private double radious;
@@ -23,7 +24,13 @@ namespace SAM.Geometry.Spatial
             radious = sphere.radious;
         }
 
-        public IGeometry Clone()
+        public Sphere(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
+        public override ISAMGeometry Clone()
         {
             return new Sphere(this);
         }
@@ -76,9 +83,27 @@ namespace SAM.Geometry.Spatial
             throw new NotImplementedException();
         }
 
-        public IGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Sphere((Point3D)origin.GetMoved(vector3D), radious);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            origin = new Point3D(jObject.Value<JObject>("Origin"));
+            radious = jObject.Value<double>("Radious");
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Origin", origin.ToJObject());
+            jObject.Add("Radious", radious);
+
+            return jObject;
         }
     }
 }

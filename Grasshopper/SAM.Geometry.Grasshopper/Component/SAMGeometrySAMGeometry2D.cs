@@ -109,7 +109,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            Planar.IGeometry2D geometry2D = plane.Convert(geometry3D);
+            Planar.ISAMGeometry2D geometry2D = plane.Convert(geometry3D);
             if (geometry2D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");

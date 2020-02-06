@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class BoundingBox2D : IClosed2D, ISegmentable2D
+    public class BoundingBox2D : SAMGeometry, IClosed2D, ISegmentable2D
     {
         private Point2D min;
         private Point2D max;
@@ -71,6 +72,12 @@ namespace SAM.Geometry.Planar
         {
             min = new Point2D(boundingBox2D.min);
             max = new Point2D(boundingBox2D.max);
+        }
+
+        public BoundingBox2D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public Point2D Min
@@ -164,7 +171,7 @@ namespace SAM.Geometry.Planar
             return (point2D.X > min.X + tolerance && point2D.X < max.X - tolerance && point2D.Y > min.Y + tolerance && point2D.Y < max.Y - tolerance);
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new BoundingBox2D(this);
         }
@@ -187,6 +194,23 @@ namespace SAM.Geometry.Planar
         public double GetArea()
         {
             return Width * Height;
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            max = new Point2D(jObject.Value<JObject>("Max"));
+            min = new Point2D(jObject.Value<JObject>("Min"));
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Max", max.ToJObject());
+            jObject.Add("Min", min.ToJObject());
+
+            return jObject;
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using SAM.Core;
+﻿using System.Collections.Generic;
 
-using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+
+using SAM.Core;
 
 
 namespace SAM.Analytical
@@ -19,6 +21,12 @@ namespace SAM.Analytical
             : base(edge3DLoop)
         {
             this.edge3Ds = edge3DLoop.edge3Ds.ConvertAll(x => new Edge3D(x));
+        }
+
+        public Edge3DLoop(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public List<Edge3D> Edge3Ds
@@ -49,6 +57,25 @@ namespace SAM.Analytical
                 point3Ds.Add(edge3D.Curve3D.GetStart());
 
             return Geometry.Spatial.Point3D.GetNormal(point3Ds, tolerance);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+                return false;
+
+            edge3Ds = Core.Create.IJSAMObjects<Edge3D>(jObject.Value<JArray>("Edge3Ds"));
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
+            jObject.Add("Edge3Ds", Core.Create.JArray(edge3Ds));
+            return jObject;
         }
     }
 }

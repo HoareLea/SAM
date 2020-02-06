@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Newtonsoft.Json.Linq;
+
 using SAM.Architectural;
 using SAM.Core;
 
@@ -20,6 +22,12 @@ namespace SAM.Analytical
             if (panels != null)
                 foreach (Panel panel in panels)
                     Add(panel);
+        }
+
+        public PanelCluster(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public bool Add(Panel panel)
@@ -218,6 +226,68 @@ namespace SAM.Analytical
                 dictionary_Constructions[panelType] = construction;
 
             return true;
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+                return false;
+
+            if (jObject.ContainsKey("Constructions"))
+            {
+                dictionary_Constructions = new Dictionary<PanelType, Construction>();
+                JArray jArray_Constructions = jObject.Value<JArray>("Constructions");
+                foreach(JObject jObject_Construction in jArray_Constructions)
+                {
+                    PanelType panelType;
+                    if (!Enum.TryParse(jObject_Construction.Value<string>("PanelType"), out panelType))
+                        continue;
+
+                    dictionary_Constructions[panelType] = new Construction(jObject_Construction.Value<JObject>("Construction"));
+                }
+
+            }
+
+            if (jObject.ContainsKey("Panels"))
+            {
+                dictionary_Panels = new Dictionary<PanelType, Dictionary<Guid, Panel>>();
+                JArray jArray_Panels = jObject.Value<JArray>("Panels");
+                foreach (JObject jObject_Panel in jArray_Panels)
+                    Add(new Panel(jObject_Panel));
+            }
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return jObject;
+
+            if (dictionary_Constructions != null)
+            {
+                JArray JArray_Constructions = new JArray();
+                foreach (KeyValuePair<PanelType, Construction> keyValuePair in dictionary_Constructions)
+                {
+                    JObject jObject_Construction = new JObject();
+                    jObject_Construction.Add("PanelType", keyValuePair.Key.ToString());
+                    jObject_Construction.Add("Construction", keyValuePair.Value.ToJObject());
+                    JArray_Constructions.Add(jObject_Construction);
+                }
+                jObject.Add("Constructions", JArray_Constructions);
+            }
+
+            if (dictionary_Panels != null)
+            {
+                JArray JArray_Panels = new JArray();
+                foreach (Panel panel in GetPanels())
+                    JArray_Panels.Add(panel.ToJObject());
+
+                jObject.Add("Panels", JArray_Panels);
+            }
+
+            return jObject;
         }
 
 

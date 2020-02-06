@@ -6,9 +6,9 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static List<Panel> Panels(this List<IGeometry3D> geometry3Ds, PanelType panelType, Construction construction)
+        public static List<Panel> Panels(this List<ISAMGeometry3D> geometry3Ds, PanelType panelType, Construction construction)
         {
-            List<Face> faces = Geometry.Query.Faces(geometry3Ds);
+            List<Face> faces = Geometry.Spatial.Query.Faces(geometry3Ds);
             if (faces == null)
                 return null;
 

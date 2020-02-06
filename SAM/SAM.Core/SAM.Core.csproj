@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,19 +46,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ParameterSet.cs" />
+    <Compile Include="Classes\SAMJsonCollection.cs" />
+    <Compile Include="Convert\ToJson\Json.cs" />
+    <Compile Include="Convert\ToSAM\IJSAMObjects.cs" />
+    <Compile Include="Create\IJSAMObject.cs" />
+    <Compile Include="Create\IJSAMObjects.cs" />
+    <Compile Include="Create\JArray.cs" />
+    <Compile Include="Create\ParameterSets.cs" />
     <Compile Include="Enums\AboutInfoType.cs" />
+    <Compile Include="Interfaces\IJSAMObject.cs" />
     <Compile Include="Interfaces\ISAMObject.cs" />
-    <Compile Include="Modify\Add.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\SAMInstance.cs" />
     <Compile Include="Classes\SAMObject.cs" />
     <Compile Include="Classes\SAMType.cs" />
     <Compile Include="Query\AboutInfoTypeText.cs" />
+    <Compile Include="Query\TypeName.cs" />
+    <Compile Include="Query\Name.cs" />
     <Compile Include="Query\TryGetValue.cs" />
     <Compile Include="Query\GetValue.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Create\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

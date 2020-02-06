@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Triangle3D : IClosedPlanar3D, ISegmentable3D, IBoundable3D
+    public class Triangle3D : SAMGeometry, IClosedPlanar3D, ISegmentable3D, IBoundable3D
     {
         private Point3D[] points = new Point3D[3];
 
@@ -20,6 +21,12 @@ namespace SAM.Geometry.Spatial
         public Triangle3D(Triangle3D triangle3D)
         {
             points = Point3D.Clone(triangle3D.points).ToArray();
+        }
+
+        public Triangle3D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public List<Point3D> GetPoints()
@@ -46,7 +53,7 @@ namespace SAM.Geometry.Spatial
         }
 
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             throw new NotImplementedException();
         }
@@ -85,7 +92,7 @@ namespace SAM.Geometry.Spatial
             return new Triangle3D(this);
         }
 
-        public IGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Triangle3D((Point3D)points[0].GetMoved(vector3D), (Point3D)points[1].GetMoved(vector3D), (Point3D)points[2].GetMoved(vector3D));
         }
@@ -100,6 +107,21 @@ namespace SAM.Geometry.Spatial
         public void Reverse()
         {
             points.Reverse();
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            points = Geometry.Create.ISAMGeometries<Point3D>(jObject.Value<JArray>("Points")).ToArray();
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Points", Geometry.Create.JArray(points));
+
+            return jObject;
         }
     }
 }

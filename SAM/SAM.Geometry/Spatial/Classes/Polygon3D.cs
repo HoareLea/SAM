@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Polygon3D : IClosedPlanar3D, ISegmentable3D
+    public class Polygon3D : SAMGeometry, IClosedPlanar3D, ISegmentable3D
     {
         private List<Point3D> points;
 
@@ -23,6 +24,12 @@ namespace SAM.Geometry.Spatial
         public Polygon3D(Polygon3D polygon3D)
         {
             points = Point3D.Clone(polygon3D.points);
+        }
+
+        public Polygon3D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public List<Point3D> GetPoints()
@@ -48,7 +55,7 @@ namespace SAM.Geometry.Spatial
             return Point3D.GetPlane(points, Tolerance.MicroDistance);
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Polygon3D(this);
         }
@@ -96,7 +103,7 @@ namespace SAM.Geometry.Spatial
             return GetSegments().ConvertAll(x => (ICurve3D)x);
         }
 
-        public IGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Polygon3D(points.ConvertAll(x => (Point3D)x.GetMoved(vector3D)));
         }
@@ -125,6 +132,21 @@ namespace SAM.Geometry.Spatial
         public void Reverse()
         {
             points.Reverse();
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            points = Create.Point3Ds(jObject.Value<JArray>("Points"));
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Points", Geometry.Create.JArray(points));
+
+            return jObject;
         }
     }
 }

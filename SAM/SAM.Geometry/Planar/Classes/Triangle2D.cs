@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Triangle2D : IClosed2D, ISegmentable2D
+    public class Triangle2D : SAMGeometry, IClosed2D, ISegmentable2D
     {
         private Point2D[] points = new Point2D[3];
 
@@ -20,6 +21,12 @@ namespace SAM.Geometry.Planar
         public Triangle2D(Triangle2D triangle2D)
         {
             points = Point2D.Clone(triangle2D.points).ToArray();
+        }
+
+        public Triangle2D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public bool Contains(Point2D point2D, double offset)
@@ -95,7 +102,7 @@ namespace SAM.Geometry.Planar
             return new Triangle2D[1] { new Triangle2D(new Point2D(points[0]), new Point2D(points[1]), new Point2D(points[2])) };
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Triangle2D(this);
         }
@@ -118,6 +125,22 @@ namespace SAM.Geometry.Planar
             List<Point2D> point2Ds = GetPoints();
 
             return Point2D.Orientation(point2Ds[0], point2Ds[1], point2Ds[2]);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            points = Geometry.Create.ISAMGeometries<Point2D>(jObject.Value<JArray>("Points")).ToArray();
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Points", Geometry.Create.JArray(points));
+
+            return jObject;
         }
     }
 }

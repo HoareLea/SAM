@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -67,6 +68,11 @@ namespace SAM.Core
             guid = Guid.NewGuid();
         }
 
+        public SAMObject(JObject jObject)
+        {
+            FromJObject(jObject);
+        }
+
         public SAMObject(Guid guid)
         {
             this.guid = guid;
@@ -121,6 +127,26 @@ namespace SAM.Core
                 return null;
             else
                 return new List<ParameterSet>(parameterSets);
+        }
+
+        public virtual bool FromJObject(JObject jObject)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            if (name != null)
+                jObject.Add("Name", name);
+
+            jObject.Add("Guid", guid);
+
+            if (parameterSets != null)
+                jObject.Add("ParameterSets", Create.JArray(parameterSets));
+
+            return jObject;
         }
     }
 }

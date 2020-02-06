@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <Private>False</Private>
@@ -44,10 +47,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Create\ISAMGeometries.cs" />
+    <Compile Include="Create\JArray.cs" />
+    <Compile Include="Create\ISAMGeometry.cs" />
     <Compile Include="Enums\Orientation.cs" />
-    <Compile Include="Interfaces\IGeometry.cs" />
+    <Compile Include="Classes\SAMGeometry.cs" />
+    <Compile Include="Interfaces\ISAMGeometry.cs" />
     <Compile Include="Planar\Classes\BoundingBox2D.cs" />
     <Compile Include="Planar\Classes\Circle2D.cs" />
+    <Compile Include="Planar\Create\ICurve2D.cs" />
+    <Compile Include="Planar\Create\IClosed2D.cs" />
     <Compile Include="Planar\Interfaces\IClosed2D.cs" />
     <Compile Include="Planar\Interfaces\ICurve2D.cs" />
     <Compile Include="Planar\Classes\Rectangle2D.cs" />
@@ -55,7 +64,11 @@
     <Compile Include="Planar\Classes\Triangle2D.cs" />
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
     <Compile Include="Planar\Query\ConvexHull.cs" />
-    <Compile Include="Planar\Query\Faces.cs" />
+    <Compile Include="Spatial\Create\Point3Ds.cs" />
+    <Compile Include="Spatial\Create\JArray.cs" />
+    <Compile Include="Spatial\Create\ICurve3Ds.cs" />
+    <Compile Include="Spatial\Create\ICurve3D.cs" />
+    <Compile Include="Spatial\Query\Faces.cs" />
     <Compile Include="Spatial\Classes\BoundingBox3D.cs" />
     <Compile Include="Spatial\Classes\Circle3D.cs" />
     <Compile Include="Spatial\Classes\Polycurve3D.cs" />
@@ -72,7 +85,7 @@
     <Compile Include="Spatial\Interfaces\ICurvable3D.cs" />
     <Compile Include="Spatial\Interfaces\ISegmentable3D.cs" />
     <Compile Include="Spatial\Interfaces\ICurve3D.cs" />
-    <Compile Include="Planar\Interfaces\IGeometry2D.cs" />
+    <Compile Include="Planar\Interfaces\ISAMGeometry2D.cs" />
     <Compile Include="Planar\Classes\Line2D.cs" />
     <Compile Include="Planar\Classes\Point2D.cs" />
     <Compile Include="Planar\Classes\Polygon2D.cs" />
@@ -81,7 +94,7 @@
     <Compile Include="Planar\Classes\Vector2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spatial\Classes\Face.cs" />
-    <Compile Include="Spatial\Interfaces\IGeometry3D.cs" />
+    <Compile Include="Spatial\Interfaces\ISAMGeometry3D.cs" />
     <Compile Include="Spatial\Classes\Point3D.cs" />
     <Compile Include="Spatial\Classes\Polygon3D.cs" />
     <Compile Include="Spatial\Interfaces\IPlanar3D.cs" />
@@ -89,6 +102,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Planar\Modify\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAM.Core\SAM.Core.csproj">
+      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
+      <Name>SAM.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

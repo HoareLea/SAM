@@ -1,9 +1,8 @@
-﻿using SAM.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+
+using Newtonsoft.Json.Linq;
+
+using SAM.Core;
 
 namespace SAM.Analytical
 {
@@ -22,6 +21,22 @@ namespace SAM.Analytical
         public Construction(Construction construction)
             : base(construction)
         {
+        }
+
+        public Construction(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            return base.FromJObject(jObject);
+        }
+
+        public override JObject ToJObject()
+        {
+            return base.ToJObject();
         }
     }
 }

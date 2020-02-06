@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Plane : IPlanar3D
+    public class Plane : SAMGeometry, IPlanar3D
     {
         public static Plane Base { get; } = new Plane(Point3D.Zero, Vector3D.BaseZ);
 
@@ -19,6 +20,12 @@ namespace SAM.Geometry.Spatial
             normal = new Vector3D(0, 0, 1);
             origin = new Point3D(0, 0, 0);
             baseX = GetBaseX();
+        }
+
+        public Plane(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public Plane(Plane plane)
@@ -156,12 +163,12 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public Planar.IGeometry2D Convert(IBoundable3D geometry)
+        public Planar.ISAMGeometry2D Convert(IBoundable3D geometry)
         {
             return Convert(geometry as dynamic);
         }
 
-        public IBoundable3D Convert(Planar.IGeometry2D geometry)
+        public IBoundable3D Convert(Planar.ISAMGeometry2D geometry)
         {
             return Convert(geometry as dynamic);
         }
@@ -311,7 +318,7 @@ namespace SAM.Geometry.Spatial
             return new Point3D(point3D.X + u * direction.X, point3D.Y + u * direction.Y, point3D.Z + u * direction.Z);
         }
 
-        public IGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             Plane plane = new Plane((Point3D)origin.GetMoved(vector3D), (Vector3D)normal.Clone());
             plane.baseX = baseX;
@@ -324,7 +331,7 @@ namespace SAM.Geometry.Spatial
            return new Plane(this);
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Plane(this);
         }
@@ -338,6 +345,24 @@ namespace SAM.Geometry.Spatial
         {
             normal.Negate();
             baseX.Negate();
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            origin = new Point3D(jObject.Value<JObject>("Origin"));
+            normal = new Vector3D(jObject.Value<JObject>("Normal"));
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Origin", origin.ToJObject());
+            jObject.Add("Normal", normal.ToJObject());
+
+            return jObject;
         }
     }
 }

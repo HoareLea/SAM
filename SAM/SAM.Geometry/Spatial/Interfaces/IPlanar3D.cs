@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public interface IPlanar3D: IGeometry3D
+    public interface IPlanar3D: ISAMGeometry3D
     {
         Plane GetPlane();
     }

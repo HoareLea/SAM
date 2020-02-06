@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
 
@@ -31,6 +31,12 @@ namespace SAM.Analytical
             : base(edge)
         {
             curve3D = (ICurve3D)edge.curve3D.Clone();
+        }
+
+        public Edge3D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public List<Segment3D> ToSegments()
@@ -77,9 +83,29 @@ namespace SAM.Analytical
             }
         }
 
-        public static IEnumerable<Edge3D> FromGeometry(IGeometry3D geometry3D)
+        public override bool FromJObject(JObject jObject)
         {
-            IGeometry3D geometry3D_Temp = geometry3D;
+            if (!base.FromJObject(jObject))
+                return false;
+
+            curve3D = Geometry.Spatial.Create.ICurve3D(jObject.Value<JObject>("Curve3D"));
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return jObject;
+
+            jObject.Add("Curve3D", curve3D.ToJObject());
+            return jObject;
+        }
+
+
+        public static IEnumerable<Edge3D> FromGeometry(ISAMGeometry3D geometry3D)
+        {
+            ISAMGeometry3D geometry3D_Temp = geometry3D;
 
             if (geometry3D is IClosed3D)
                 geometry3D_Temp = ((IClosed3D)geometry3D).GetBoundary();

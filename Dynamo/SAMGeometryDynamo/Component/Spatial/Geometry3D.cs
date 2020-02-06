@@ -39,12 +39,12 @@ namespace SAMGeometryDynamo
 
         public static object Snap(object geometry, IEnumerable<object> points, double maxDistance)
         {
-            IGeometry3D geometry3D = null;
+            ISAMGeometry3D geometry3D = null;
 
-            if (geometry is IGeometry3D)
-                geometry3D = (IGeometry3D)geometry;
+            if (geometry is ISAMGeometry3D)
+                geometry3D = (ISAMGeometry3D)geometry;
             else if (geometry is Autodesk.DesignScript.Geometry.Geometry)
-                geometry3D = ((Autodesk.DesignScript.Geometry.Geometry)geometry).ToSAM() as IGeometry3D;
+                geometry3D = ((Autodesk.DesignScript.Geometry.Geometry)geometry).ToSAM() as ISAMGeometry3D;
 
             if (geometry3D == null)
                 return null;
@@ -71,7 +71,7 @@ namespace SAMGeometryDynamo
             if (point3Ds == null)
                 return null;
 
-            IGeometry3D geometry3D_Snapped = null;
+            ISAMGeometry3D geometry3D_Snapped = null;
 
             if (geometry3D is SAM.Geometry.Spatial.Point3D)
                 geometry3D_Snapped = SAM.Geometry.Spatial.Point3D.Snap(point3Ds, (SAM.Geometry.Spatial.Point3D)geometry3D, maxDistance);
@@ -88,7 +88,7 @@ namespace SAMGeometryDynamo
             if (geometry3D_Snapped == null)
                 return null;
 
-            if (geometry is IGeometry3D)
+            if (geometry is ISAMGeometry3D)
                 return geometry3D_Snapped;
 
             if (geometry is Autodesk.DesignScript.Geometry.Surface && geometry3D_Snapped is SAM.Geometry.Spatial.Polygon3D)

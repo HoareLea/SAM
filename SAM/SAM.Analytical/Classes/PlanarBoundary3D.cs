@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
 
@@ -44,6 +44,12 @@ namespace SAM.Analytical
             this.edge2DLoop = new Edge2DLoop(edge2DLoop);
             if (internalEdge2DLoop != null)
                 this.internalEdge2DLoops = internalEdge2DLoop.ToList().ConvertAll(x => new Edge2DLoop(x));
+        }
+
+        public PlanarBoundary3D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public Plane Plane
@@ -125,6 +131,29 @@ namespace SAM.Analytical
         public Vector3D GetNormal(double tolerance = Geometry.Tolerance.MicroDistance)
         {
             return GetEdge3DLoop().GetNormal(tolerance);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+                return false;
+
+            plane = new Plane(jObject.Value<JObject>("Plane"));
+            edge2DLoop = new Edge2DLoop(jObject.Value<JObject>("Edge2DLoop"));
+            if (jObject.ContainsKey("InternalEdge2DLoops"))
+                internalEdge2DLoops = Core.Create.IJSAMObjects<Edge2DLoop>(jObject.Value<JArray>("InternalEdge2DLoops"));
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            jObject.Add("Plane", plane.ToJObject());
+            jObject.Add("Edge2DLoop", edge2DLoop.ToJObject());
+            if (internalEdge2DLoops != null)
+                jObject.Add("InternalEdge2DLoops", Core.Create.JArray(internalEdge2DLoops));
+            
+            return jObject;
         }
 
 

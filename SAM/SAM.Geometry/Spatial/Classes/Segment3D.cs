@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Segment3D : ICurve3D, ISegmentable3D
+    public class Segment3D : SAMGeometry, ICurve3D, ISegmentable3D
     {
         private Point3D origin;
         private Vector3D vector;
@@ -27,6 +26,12 @@ namespace SAM.Geometry.Spatial
         {
             this.origin = origin;
             this.vector = vector;
+        }
+
+        public Segment3D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public Point3D this[int index]
@@ -72,7 +77,7 @@ namespace SAM.Geometry.Spatial
             return new List<Point3D>() { origin, this[1] };
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Segment3D(this);
         }
@@ -106,7 +111,7 @@ namespace SAM.Geometry.Spatial
             vector.Negate();
         }
 
-        public IGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Segment3D((Point3D)origin.GetMoved(vector3D), (Vector3D)vector.Clone());
         }
@@ -130,6 +135,24 @@ namespace SAM.Geometry.Spatial
                 result.Add(result.First());
 
             return result;
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            origin = new Point3D(jObject.Value<JObject>("Origin"));
+            vector = new Vector3D(jObject.Value<JObject>("Vector"));
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Origin", origin.ToJObject());
+            jObject.Add("Vector", vector.ToJObject());
+
+            return jObject;
         }
     }
 }

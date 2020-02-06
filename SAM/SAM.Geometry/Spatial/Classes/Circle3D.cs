@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Circle3D: IClosedPlanar3D, IBoundable3D
+    public class Circle3D: SAMGeometry, IClosedPlanar3D, IBoundable3D
     {
         private Plane plane;
         private double radious;
@@ -21,6 +22,12 @@ namespace SAM.Geometry.Spatial
         {
             this.plane = new Plane(circle3D.plane);
             this.radious = circle3D.radious;
+        }
+
+        public Circle3D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public Point3D Center
@@ -69,7 +76,7 @@ namespace SAM.Geometry.Spatial
             return new Point3D(plane.Origin);
         }
 
-        public IGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Circle3D((Plane)plane.GetMoved(vector3D), radious);
         }
@@ -89,7 +96,7 @@ namespace SAM.Geometry.Spatial
             return new Plane(plane);
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Circle3D((Plane)plane.Clone(), radious);
         }
@@ -102,6 +109,24 @@ namespace SAM.Geometry.Spatial
         public IClosed3D GetBoundary()
         {
             return new Circle3D(this);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            plane = new Plane(jObject.Value<JObject>("Plane"));
+            radious = jObject.Value<double>("Radious");
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Plane", plane.ToJObject());
+            jObject.Add("Radious", radious);
+
+            return jObject;
         }
     }
 }

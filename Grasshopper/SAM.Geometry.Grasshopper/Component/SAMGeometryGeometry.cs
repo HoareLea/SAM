@@ -42,7 +42,7 @@ namespace SAM.Geometry.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            IGeometry3D geometry3D = null;
+            ISAMGeometry3D geometry3D = null;
             if (!dataAccess.GetData(0, ref geometry3D) || geometry3D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

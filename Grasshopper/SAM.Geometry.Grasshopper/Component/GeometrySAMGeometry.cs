@@ -42,7 +42,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooGeometryParam<IGeometry>(), "SAMGeometries", "SAMGeos", "SAM Geometries", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMGeometryParam<ISAMGeometry>(), "SAMGeometries", "SAMGeos", "SAM Geometries", GH_ParamAccess.list);
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace SAMGeometryDynamo
     {
         public static Autodesk.DesignScript.Geometry.Geometry ToDynamoGeometry(object geometry)
         {
-            return ((IGeometry)geometry).ToDynamo();
+            return ((ISAMGeometry)geometry).ToDynamo();
         }
     }
 }

@@ -115,12 +115,12 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            List<Spatial.IGeometry3D> geometry3Ds = null;
+            List<Spatial.ISAMGeometry3D> geometry3Ds = null;
 
             if (obj is IGH_GeometricGoo)
                 geometry3Ds = Convert.ToSAM((IGH_GeometricGoo)obj);
-            else if (obj is Spatial.IGeometry3D)
-                geometry3Ds = new List<Spatial.IGeometry3D>() { (Spatial.IGeometry3D)obj };
+            else if (obj is Spatial.ISAMGeometry3D)
+                geometry3Ds = new List<Spatial.ISAMGeometry3D>() { (Spatial.ISAMGeometry3D)obj };
 
             for(int i=0; i < geometry3Ds.Count; i++)
             {

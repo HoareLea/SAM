@@ -89,9 +89,9 @@
     <None Include="Resources\SAM_Architectural.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ToGrasshopper\" />
-    <Folder Include="ToRhino\" />
-    <Folder Include="ToSAM\" />
+    <Folder Include="Convert\ToGrasshopper\" />
+    <Folder Include="Convert\ToRhino\" />
+    <Folder Include="Convert\ToSAM\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Architectural\SAM.Architectural.csproj">

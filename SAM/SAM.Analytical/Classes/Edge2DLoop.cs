@@ -1,4 +1,5 @@
-﻿using SAM.Core;
+﻿using Newtonsoft.Json.Linq;
+using SAM.Core;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,12 @@ namespace SAM.Analytical
             this.edge2Ds = edge2DLoop.edge2Ds.ConvertAll(x => new Edge2D(x));
         }
 
+        public Edge2DLoop(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
         public List<Edge2D> Edge2Ds
         {
             get
@@ -66,6 +73,25 @@ namespace SAM.Analytical
                 edge2D.Reverse();
 
             edge2Ds.Reverse();
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+                return false;
+
+            edge2Ds = Core.Create.IJSAMObjects<Edge2D>(jObject.Value<JArray>("Edge2Ds"));
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return jObject;
+
+            jObject.Add("Edge2Ds", Core.Create.JArray(edge2Ds));
+            return jObject;
         }
 
 

@@ -63,7 +63,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Geometry.Spatial.IGeometry3D> geometry3Ds = new List<Geometry.Spatial.IGeometry3D>();
+            List<Geometry.Spatial.ISAMGeometry3D> geometry3Ds = new List<Geometry.Spatial.ISAMGeometry3D>();
 
             List<object> objects = new List<object>();
             if (!dataAccess.GetDataList(1, geometry3Ds) || geometry3Ds == null)

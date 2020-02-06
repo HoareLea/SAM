@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Polycurve3D : ICurve3D, ICurvable3D
+    public class Polycurve3D : SAMGeometry, ICurve3D, ICurvable3D
     {
         private List<ICurve3D> curves;
         
@@ -23,7 +23,13 @@ namespace SAM.Geometry.Spatial
             curves = polycurve3D.curves.ConvertAll(x => (ICurve3D)x.Clone());
         }
 
-        public virtual IGeometry Clone()
+        public Polycurve3D(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
+        public override ISAMGeometry Clone()
         {
             return new Polycurve3D(this);
         }
@@ -68,7 +74,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public virtual IGeometry3D GetMoved(Vector3D vector3D)
+        public virtual ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Polycurve3D(curves.ConvertAll(x => (ICurve3D)x.GetMoved(vector3D)));
         }
@@ -91,6 +97,23 @@ namespace SAM.Geometry.Spatial
 
             polyline3D = new Polyline3D(point3Ds);
             return true;
+        }
+
+
+        public override bool FromJObject(JObject jObject)
+        {
+            curves = Create.ICurve3Ds(jObject.Value<JArray>("Origin"));
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Curves", Create.JArray(curves));
+
+            return jObject;
         }
     }
 }

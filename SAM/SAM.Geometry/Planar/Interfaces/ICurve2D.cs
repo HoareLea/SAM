@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public interface ICurve2D : IGeometry2D
+    public interface ICurve2D : ISAMGeometry2D
     {
     }
 }

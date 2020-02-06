@@ -26,7 +26,7 @@ namespace SAMAnalyticalDynamo
         {
             Plane plane = SAM.Geometry.Spatial.Point3D.GetPlane(point3Ds, SAM.Geometry.Tolerance.MicroDistance);
 
-            return new SAM.Analytical.Panel(construction, Query.PanelType(panelType), new Face(new SAM.Geometry.Spatial.Polygon3D(point3Ds.ToList().ConvertAll(x => plane.Project(x)))));
+            return new SAM.Analytical.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face(new SAM.Geometry.Spatial.Polygon3D(point3Ds.ToList().ConvertAll(x => plane.Project(x)))));
         }
 
         /// <summary>
@@ -40,11 +40,11 @@ namespace SAMAnalyticalDynamo
         /// </search>
         public static SAM.Analytical.Panel ByGeometry(object geometry, SAM.Analytical.Construction construction, object panelType  = null)
         {
-            IGeometry3D geometry3D = geometry as IGeometry3D;
+            ISAMGeometry3D geometry3D = geometry as ISAMGeometry3D;
             if (geometry3D == null)
             {
                 if (geometry is Autodesk.DesignScript.Geometry.Geometry)
-                    geometry3D = ((Autodesk.DesignScript.Geometry.Geometry)geometry).ToSAM() as IGeometry3D;
+                    geometry3D = ((Autodesk.DesignScript.Geometry.Geometry)geometry).ToSAM() as ISAMGeometry3D;
             }
 
             if (geometry3D == null)
@@ -54,7 +54,7 @@ namespace SAMAnalyticalDynamo
             if (closedPlanar3D == null)
                 return null;
 
-            return new SAM.Analytical.Panel(construction, Query.PanelType(panelType), new Face(closedPlanar3D));
+            return new SAM.Analytical.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face(closedPlanar3D));
         }
 
         public static SAM.Analytical.Panel SnapByPoints(SAM.Analytical.Panel panel, IEnumerable<object> points, double maxDistance = 0.2)
@@ -96,7 +96,7 @@ namespace SAMAnalyticalDynamo
             if (panel == null)
                 return null;
 
-            return new SAM.Analytical.Panel(panel, Query.PanelType(panelType));
+            return new SAM.Analytical.Panel(panel, SAM.Analytical.Query.PanelType(panelType));
         }
 
         public static object PanelType(SAM.Analytical.Panel panel)

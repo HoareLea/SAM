@@ -9,7 +9,7 @@ using SAM.Geometry.Grasshopper.Properties;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GooGeometry3D : GooGeometry<Spatial.IGeometry3D>, IGH_PreviewData
+    public class GooGeometry3D : GooSAMGeometry<Spatial.ISAMGeometry3D>, IGH_PreviewData
     {
         public GooGeometry3D()
             : base()
@@ -17,7 +17,7 @@ namespace SAM.Geometry.Grasshopper
 
         }
         
-        public GooGeometry3D(Spatial.IGeometry3D geometry)
+        public GooGeometry3D(Spatial.ISAMGeometry3D geometry)
             : base(geometry)
         {
 
@@ -45,7 +45,7 @@ namespace SAM.Geometry.Grasshopper
         void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
 
         public GooGeometry3DParam()
-            : base(typeof(Spatial.IGeometry3D).Name, typeof(Spatial.IGeometry3D).Name, typeof(Spatial.IGeometry3D).FullName.Replace(".", " "), "Params", "SAM")
+            : base(typeof(Spatial.ISAMGeometry3D).Name, typeof(Spatial.ISAMGeometry3D).Name, typeof(Spatial.ISAMGeometry3D).FullName.Replace(".", " "), "Params", "SAM")
         {
 
         }

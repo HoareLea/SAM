@@ -58,7 +58,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            Planar.IGeometry2D geometry2D = objectWrapper.Value as Planar.IGeometry2D;
+            Planar.ISAMGeometry2D geometry2D = objectWrapper.Value as Planar.ISAMGeometry2D;
             if (geometry2D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

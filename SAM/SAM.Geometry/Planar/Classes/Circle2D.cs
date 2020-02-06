@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Circle2D: IClosed2D
+    public class Circle2D: SAMGeometry, IClosed2D
     {
         private Point2D center;
         private double radious;
@@ -22,6 +23,13 @@ namespace SAM.Geometry.Planar
             center = new Point2D(circle2D.center);
             radious = circle2D.radious;
         }
+
+        public Circle2D(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
 
         public Point2D Center
         {
@@ -94,7 +102,7 @@ namespace SAM.Geometry.Planar
             return 2 * Math.PI * radious;
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Circle2D(this);
         }
@@ -105,6 +113,23 @@ namespace SAM.Geometry.Planar
                 return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
 
             throw new NotImplementedException();
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            center = new Point2D(jObject.Value<JObject>("Center"));
+            radious = jObject.Value<double>("Radious");
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Center", center.ToJObject());
+            jObject.Add("Radious", radious);
+
+            return jObject;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace SAM.Geometry.Planar
     /// <summary>
     /// Segment2D
     /// </summary>
-    public class Segment2D : ICurve2D, ISegmentable2D
+    public class Segment2D : SAMGeometry, ICurve2D, ISegmentable2D
     {
         private Point2D origin;
         private Vector2D vector;
@@ -45,6 +46,12 @@ namespace SAM.Geometry.Planar
         {
             origin = new Point2D(segment2D.origin);
             vector = new Vector2D(segment2D.vector);
+        }
+
+        public Segment2D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         /// <summary>
@@ -357,7 +364,7 @@ namespace SAM.Geometry.Planar
             return aResult;
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Segment2D(origin, vector);
         }
@@ -375,6 +382,24 @@ namespace SAM.Geometry.Planar
         public List<Segment2D> GetSegments()
         {
             return new List<Segment2D>() { new Segment2D(origin, vector) };
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            origin = new Point2D(jObject.Value<JObject>("Origin"));
+            vector = new Vector2D(jObject.Value<JObject>("Vector"));
+            
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Origin", origin.ToJObject());
+            jObject.Add("Vector", vector.ToJObject());
+
+            return jObject;
         }
     }
 }

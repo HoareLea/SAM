@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
-    public class Polygon2D : IClosed2D, ISegmentable2D
+    public class Polygon2D : SAMGeometry, IClosed2D, ISegmentable2D
     {
         private List<Point2D> points;
 
@@ -18,6 +19,12 @@ namespace SAM.Geometry.Planar
             this.points = polygon2D.GetPoints();
         }
 
+        public Polygon2D(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
         public List<Segment2D> GetSegments()
         {
             return Point2D.GetSegments(points, true);
@@ -28,7 +35,7 @@ namespace SAM.Geometry.Planar
             return Point2D.Orientation(points, true);
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Polygon2D(this);
         }
@@ -67,6 +74,16 @@ namespace SAM.Geometry.Planar
         public double GetArea()
         {
             return Point2D.GetArea(points);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override JObject ToJObject()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace SAM.Geometry.Planar
     /// <summary>
     /// Planar Point
     /// </summary>
-    public class Point2D : IGeometry2D
+    public class Point2D : SAMGeometry, ISAMGeometry2D
     {
         public static Point2D Invalid { get; } = new Point2D(double.NaN, double.NaN);
 
@@ -20,6 +21,11 @@ namespace SAM.Geometry.Planar
         public Point2D()
         {
             coordinates = new double[2] { 0, 0 };
+        }
+
+        public Point2D(JObject jObject)
+        {
+            FromJObject(jObject);
         }
 
         public Point2D(double x, double y)
@@ -203,7 +209,7 @@ namespace SAM.Geometry.Planar
             return double.IsNaN(coordinates[0]) || double.IsNaN(coordinates[1]);
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Point2D(this);
         }
@@ -280,18 +286,18 @@ namespace SAM.Geometry.Planar
             double aDeterminant = Determinant(point2D_1, point2D_2, point2D_3);
 
             if (aDeterminant == 0)
-                return Geometry.Orientation.Collinear;
+                return SAM.Geometry.Orientation.Collinear;
 
             if (aDeterminant > 0)
-                return Geometry.Orientation.Clockwise;
+                return SAM.Geometry.Orientation.Clockwise;
             else
-                return Geometry.Orientation.CounterClockwise;
+                return SAM.Geometry.Orientation.CounterClockwise;
         }
 
         public static Orientation Orientation(IEnumerable<Point2D> point2Ds, bool convexHull = true)
         {
             if (point2Ds == null || point2Ds.Count() == 0)
-                return Geometry.Orientation.Undefined;
+                return SAM.Geometry.Orientation.Undefined;
 
             List<Point2D> point2Ds_Temp = null;
 
@@ -301,7 +307,7 @@ namespace SAM.Geometry.Planar
                 point2Ds_Temp = new List<Point2D>(point2Ds);
 
             if (point2Ds_Temp == null || point2Ds_Temp.Count < 3)
-                return Geometry.Orientation.Undefined;
+                return SAM.Geometry.Orientation.Undefined;
 
             point2Ds_Temp.Add(point2Ds_Temp[0]);
             point2Ds_Temp.Add(point2Ds_Temp[1]);
@@ -309,11 +315,11 @@ namespace SAM.Geometry.Planar
             for (int i=0; i < point2Ds_Temp.Count - 2; i++)
             {
                 Orientation orientation = Orientation(point2Ds_Temp[i], point2Ds_Temp[i + 1], point2Ds_Temp[i + 2]);
-                if (orientation != Geometry.Orientation.Collinear && orientation != Geometry.Orientation.Undefined)
+                if (orientation != SAM.Geometry.Orientation.Collinear && orientation != SAM.Geometry.Orientation.Undefined)
                     return orientation;
             }
 
-            return Geometry.Orientation.Undefined;
+            return SAM.Geometry.Orientation.Undefined;
         }
 
         public static List<Orientation> Orientations(IEnumerable<Point2D> point2Ds)
@@ -340,12 +346,12 @@ namespace SAM.Geometry.Planar
 
         public static List<Point2D> Orient(IEnumerable<Point2D> point2Ds, Orientation orientation)
         {
-            if (point2Ds == null || point2Ds.Count() < 3 || orientation == Geometry.Orientation.Collinear)
+            if (point2Ds == null || point2Ds.Count() < 3 || orientation == SAM.Geometry.Orientation.Collinear)
                 return null;
 
             List<Point2D> aResult = new List<Point2D>(point2Ds);
 
-            if (orientation == Geometry.Orientation.Undefined)
+            if (orientation == SAM.Geometry.Orientation.Undefined)
                 return aResult;
 
             List<Orientation> aOrienationList = Orientations(point2Ds);
@@ -689,6 +695,23 @@ namespace SAM.Geometry.Planar
                 result.Add(new Point2D(point2D));
 
             return result;
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            coordinates[0] = jObject.Value<double>("X");
+            coordinates[1] = jObject.Value<double>("Y");
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("X", coordinates[0]);
+            jObject.Add("Y", coordinates[1]);
+            return jObject;
         }
     }
 }

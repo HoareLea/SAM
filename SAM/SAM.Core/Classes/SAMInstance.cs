@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Core
 {
@@ -46,12 +45,41 @@ namespace SAM.Core
             this.sAMType = SAMType;
         }
 
+        public SAMInstance(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
         public SAMType SAMType
         {
             get
             {
                 return sAMType;
             }
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+                return false;
+
+            if (jObject.ContainsKey("SAMType"))
+                sAMType = new SAMType(jObject.Value<JObject>("SAMType"));
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return jObject;
+
+            if (sAMType != null)
+                jObject.Add("SAMType", sAMType.ToJObject());
+
+            return jObject;
         }
     }
 }

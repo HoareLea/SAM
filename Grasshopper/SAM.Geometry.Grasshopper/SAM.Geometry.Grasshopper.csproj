@@ -42,6 +42,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SAM.Core.JSON, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SAM_JSON\build\SAM.Core.JSON.dll</HintPath>
@@ -68,7 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\GooGeometry3D.cs" />
-    <Compile Include="Classes\GooGeometry.cs" />
+    <Compile Include="Classes\GooSAMGeometry.cs" />
     <Compile Include="Component\SAMGeometryGeometry.cs" />
     <Compile Include="Component\GeometrySAMGeometry.cs" />
     <Compile Include="Component\GeometrySnap.cs" />
@@ -83,33 +86,33 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ToGrasshopper\GH_Surface.cs" />
-    <Compile Include="ToGrasshopper\GH_Curve.cs" />
-    <Compile Include="ToGrasshopper\GH_Line.cs" />
-    <Compile Include="ToGrasshopper\IGH_GeometricGoo.cs" />
-    <Compile Include="ToGrasshopper\GH_Point.cs" />
-    <Compile Include="ToRhino\BoundingBox.cs" />
-    <Compile Include="ToRhino\Brep.cs" />
-    <Compile Include="ToRhino\Plane.cs" />
-    <Compile Include="ToRhino\Curve.cs" />
-    <Compile Include="ToRhino\Vector3d.cs" />
-    <Compile Include="ToRhino\PolylineCurve.cs" />
-    <Compile Include="ToRhino\Polyline.cs" />
-    <Compile Include="ToRhino\Line.cs" />
-    <Compile Include="ToRhino\LineCurve.cs" />
-    <Compile Include="ToRhino\Point3d.cs" />
-    <Compile Include="ToSAM\IClosed3D.cs" />
-    <Compile Include="ToSAM\IGeometry3Ds.cs" />
-    <Compile Include="ToSAM\Polyline3D.cs" />
-    <Compile Include="ToSAM\Polycurve3D.cs" />
-    <Compile Include="ToSAM\Surface.cs" />
-    <Compile Include="ToSAM\IGeometry3D.cs" />
-    <Compile Include="ToSAM\Circle3D.cs" />
-    <Compile Include="ToSAM\Vector3D.cs" />
-    <Compile Include="ToSAM\Plane.cs" />
-    <Compile Include="ToSAM\Polygon3D.cs" />
-    <Compile Include="ToSAM\Segment3D.cs" />
-    <Compile Include="ToSAM\Point3D.cs" />
+    <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
+    <Compile Include="Convert\ToGrasshopper\GH_Curve.cs" />
+    <Compile Include="Convert\ToGrasshopper\GH_Line.cs" />
+    <Compile Include="Convert\ToGrasshopper\IGH_GeometricGoo.cs" />
+    <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
+    <Compile Include="Convert\ToRhino\BoundingBox.cs" />
+    <Compile Include="Convert\ToRhino\Brep.cs" />
+    <Compile Include="Convert\ToRhino\Plane.cs" />
+    <Compile Include="Convert\ToRhino\Curve.cs" />
+    <Compile Include="Convert\ToRhino\Vector3d.cs" />
+    <Compile Include="Convert\ToRhino\PolylineCurve.cs" />
+    <Compile Include="Convert\ToRhino\Polyline.cs" />
+    <Compile Include="Convert\ToRhino\Line.cs" />
+    <Compile Include="Convert\ToRhino\LineCurve.cs" />
+    <Compile Include="Convert\ToRhino\Point3d.cs" />
+    <Compile Include="Convert\ToSAM\IClosed3D.cs" />
+    <Compile Include="Convert\ToSAM\IGeometry3Ds.cs" />
+    <Compile Include="Convert\ToSAM\Polyline3D.cs" />
+    <Compile Include="Convert\ToSAM\Polycurve3D.cs" />
+    <Compile Include="Convert\ToSAM\Surface.cs" />
+    <Compile Include="Convert\ToSAM\IGeometry3D.cs" />
+    <Compile Include="Convert\ToSAM\Circle3D.cs" />
+    <Compile Include="Convert\ToSAM\Vector3D.cs" />
+    <Compile Include="Convert\ToSAM\Plane.cs" />
+    <Compile Include="Convert\ToSAM\Polygon3D.cs" />
+    <Compile Include="Convert\ToSAM\Segment3D.cs" />
+    <Compile Include="Convert\ToSAM\Point3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -118,6 +121,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\SAM_Small.png" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class BoundingBox3D : IClosed3D, ISegmentable3D
+    public class BoundingBox3D : SAMGeometry, IClosed3D, ISegmentable3D
     {
         private Point3D min;
         private Point3D max;
@@ -116,6 +117,12 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        public BoundingBox3D(JObject jObject)
+            :base(jObject)
+        {
+
+        }
+
         public Point3D Min
         {
             get
@@ -203,7 +210,7 @@ namespace SAM.Geometry.Spatial
             return (point3D.X > min.X + tolerance && point3D.X < max.X - tolerance && point3D.Y > min.Y + tolerance && point3D.Y < max.Y - tolerance && point3D.Z > min.Z + tolerance && point3D.Z < max.Z - tolerance);
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new BoundingBox3D(this);
         }
@@ -283,7 +290,7 @@ namespace SAM.Geometry.Spatial
             return Point3D.GetCenter(min, max);
         }
 
-        public IGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new BoundingBox3D((Point3D)min.GetMoved(vector3D), (Point3D)max.GetMoved(vector3D));
         }
@@ -332,6 +339,24 @@ namespace SAM.Geometry.Spatial
             }
 
             return result;
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            max = new Point3D(jObject.Value<JObject>("Max"));
+            min = new Point3D(jObject.Value<JObject>("Min"));
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Max", max.ToJObject());
+            jObject.Add("Min", min.ToJObject());
+
+            return jObject;
         }
     }
 }

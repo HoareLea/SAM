@@ -72,15 +72,15 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<IGeometry3D> geometry3Ds = null;
+            List<ISAMGeometry3D> geometry3Ds = null;
             if (@object is IGH_GeometricGoo)
-                geometry3Ds = ((IGH_GeometricGoo)@object).ToSAM(simplyfy).Cast<IGeometry3D>().ToList();
+                geometry3Ds = ((IGH_GeometricGoo)@object).ToSAM(simplyfy).Cast<ISAMGeometry3D>().ToList();
 
             if (@object is GH_ObjectWrapper)
             {
                 GH_ObjectWrapper objectWrapper_Temp = ((GH_ObjectWrapper)@object);
-                if (objectWrapper_Temp.Value is IGeometry3D)
-                    geometry3Ds = new List<IGeometry3D>() { (IGeometry3D)objectWrapper_Temp.Value };
+                if (objectWrapper_Temp.Value is ISAMGeometry3D)
+                    geometry3Ds = new List<ISAMGeometry3D>() { (ISAMGeometry3D)objectWrapper_Temp.Value };
             }
 
             if(geometry3Ds == null || geometry3Ds.Count() == 0)

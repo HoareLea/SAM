@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Vector2D : IGeometry2D
+    public class Vector2D : SAMGeometry, ISAMGeometry2D
     {
         public static Vector2D BaseX { get; } = new Vector2D(1, 0);
         public static Vector2D BaseY { get; } = new Vector2D(0, 1);
@@ -38,6 +39,12 @@ namespace SAM.Geometry.Planar
         {
             coordinates[0] = this.coordinates[0];
             coordinates[1] = this.coordinates[1];
+        }
+
+        public Vector2D(JObject jObject)
+            : base(jObject)
+        {
+
         }
 
         public double this[int index]
@@ -261,9 +268,26 @@ namespace SAM.Geometry.Planar
             return string.Format("{0}(X={1},Y={2})", GetType().Name, coordinates[0], coordinates[1]);
         }
 
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Vector2D(this);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            coordinates[0] = jObject.Value<double>("X");
+            coordinates[1] = jObject.Value<double>("Y");
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("X", coordinates[0]);
+            jObject.Add("Y", coordinates[1]);
+            return jObject;
         }
     }
 }

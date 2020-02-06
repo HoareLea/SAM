@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+
+using Newtonsoft.Json.Linq;
+
 using SAM.Core;
 using SAM.Geometry.Spatial;
 
@@ -59,7 +61,13 @@ namespace SAM.Analytical
             this.panelType = panelType;
             this.planarBoundary3D = new PlanarBoundary3D(planarBoundary3D);
         }
-        
+
+        public Panel(JObject jObject)
+             : base(jObject)
+        {
+
+        }
+
         public Face GetFace()
         {
             return planarBoundary3D.GetFace();
@@ -107,6 +115,29 @@ namespace SAM.Analytical
             {
                 return new PlanarBoundary3D(planarBoundary3D);
             }
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+                return false;
+
+            Enum.TryParse(jObject.Value<string>("PanelType"), out this.panelType);
+
+            planarBoundary3D = new PlanarBoundary3D(jObject.Value<JObject>("PlanarBoundary3D"));
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return jObject;
+
+            jObject.Add("PanelType", panelType.ToString());
+            jObject.Add("PlanarBoundary3D", planarBoundary3D.ToJObject());
+            return jObject;
         }
     }
 }

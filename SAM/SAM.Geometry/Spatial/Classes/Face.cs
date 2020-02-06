@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Face : IClosedPlanar3D, IGeometry3D
+    public class Face : SAMGeometry, IClosedPlanar3D, ISAMGeometry3D
     {
         private Plane plane;
         private Planar.IClosed2D boundary;
@@ -36,13 +37,18 @@ namespace SAM.Geometry.Spatial
             this.boundary = (Planar.IClosed2D)face.boundary.Clone();
         }
 
+        public Face(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
         public Plane GetPlane()
         {
             return new Plane(plane);
         }
 
-
-        public IGeometry Clone()
+        public override ISAMGeometry Clone()
         {
             return new Face(this);
         }
@@ -76,7 +82,7 @@ namespace SAM.Geometry.Spatial
             return plane.Convert(boundary).GetBoundary();
         }
 
-        public IGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Face((Plane)plane.GetMoved(vector3D), (Planar.IClosed2D)boundary.Clone());
         }
@@ -114,6 +120,24 @@ namespace SAM.Geometry.Spatial
             }
 
             return null;
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            plane = new Plane(jObject.Value<JObject>("Plane"));
+            boundary = Planar.Create.IClosed2D(jObject.Value<JObject>("Boundary"));
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", GetType().FullName);
+            jObject.Add("Plane", plane.ToJObject());
+            jObject.Add("Boundary", boundary.ToJObject());
+
+            return jObject;
         }
     }
 }
