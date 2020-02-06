@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+
+using Newtonsoft.Json.Linq;
 
 using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-using Newtonsoft.Json.Linq;
+
+using Rhino;
+using Rhino.DocObjects;
 using Rhino.Geometry;
+
 using SAM.Geometry.Grasshopper.Properties;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GooSAMGeometry<T> : GH_Goo<T>, IGH_PreviewData where T : ISAMGeometry
+    public class GooSAMGeometry<T> : GH_Goo<T>, IGH_PreviewData, IGH_BakeAwareData where T : ISAMGeometry
     {
         public GooSAMGeometry()
             : base()
@@ -218,6 +222,8 @@ namespace SAM.Geometry.Grasshopper
 
         public virtual void DrawViewportWires(GH_PreviewWireArgs args)
         {
+            //TODO: Display Spatial.Surface as Rhino.Geometry.Surface
+            
             List<Spatial.ICurve3D> curve3Ds = null;
             if (Value is Spatial.Face)
             {
@@ -258,6 +264,23 @@ namespace SAM.Geometry.Grasshopper
                 args.Pipeline.DrawBrepShaded(brep, args.Material);
             }
                 
+        }
+
+        public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
+        {
+            //TODO: Implement BakeGeometry
+            obj_guid = Guid.Empty;
+            return false;
+
+            //GeometryBase geometryBase = Value.ToRhino();
+            //if (geometryBase == null)
+            //{
+            //    obj_guid = Guid.Empty;
+            //    return false;
+            //}
+
+            //obj_guid = doc.Objects.Add(geometryBase);
+            //return true;
         }
     }
 
