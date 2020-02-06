@@ -74,26 +74,5 @@ namespace SAM.Core
 
             return true;
         }
-
-
-        public static JArray GetJArray(string json)
-        {
-            if (json == null)
-                return null;
-
-            if (string.IsNullOrWhiteSpace(json))
-                return new JArray();
-
-            JToken jToken = JToken.Parse(json);
-            if (jToken == null)
-                return null;
-
-            if (jToken is JObject)
-                return new JArray() { jToken };
-            else if (jToken is JArray)
-                return (JArray)jToken;
-
-            return null;
-        }
     }
 }

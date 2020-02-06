@@ -5,6 +5,7 @@ using System.Linq;
 using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Newtonsoft.Json.Linq;
 using Rhino.Geometry;
 using SAM.Geometry.Grasshopper.Properties;
 
@@ -82,31 +83,28 @@ namespace SAM.Geometry.Grasshopper
 
         public override bool Write(GH_IWriter writer)
         {
-            Core.JSON.JSONParser jSONParser = Core.Grasshopper.AssemblyInfo.GetJSONParser();
-            if (jSONParser == null)
+            if (Value == null)
                 return false;
 
-            jSONParser.Clear();
-            jSONParser.Add(Value);
+            JObject jObject = Value.ToJObject();
+            if (jObject == null)
+                return false;
 
-            writer.SetString(typeof(T).FullName, jSONParser.ToString());
+
+            writer.SetString(typeof(T).FullName, jObject.ToString());
             return true;
         }
 
         public override bool Read(GH_IReader reader)
         {
-            Core.JSON.JSONParser jSONParser = Core.Grasshopper.AssemblyInfo.GetJSONParser();
-            if (jSONParser == null)
-                return false;
-
             string value = null;
             if (!reader.TryGetString(typeof(T).FullName, ref value))
                 return false;
 
-            jSONParser.Clear();
-            jSONParser.Add(value);
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
 
-            Value = jSONParser.GetObjects<T>().First();
+            Value = Core.Create.IJSAMObject<T>(value);
             return true;
         }
 

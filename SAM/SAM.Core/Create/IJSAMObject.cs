@@ -24,6 +24,20 @@ namespace SAM.Core
             return constructorInfo.Invoke(new object[] { jObject }) as IJSAMObject;
         }
 
+        public static T IJSAMObject<T>(this string json) where T : IJSAMObject
+        {
+            if (string.IsNullOrWhiteSpace(json))
+                return default;
+
+            JToken jToken = JToken.Parse(json);
+
+            JObject jObject = jToken as JObject;
+            if (jObject == null)
+                return default;
+
+            return IJSAMObject<T>(jObject);
+        }
+
         public static T IJSAMObject<T>(this JObject jObject) where T : IJSAMObject
         {
             string typeName = Query.TypeName(jObject);

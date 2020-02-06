@@ -18,5 +18,17 @@ namespace SAM.Core
 
             return result;
         }
+
+        public static List<T> IJSAMObjects<T>(this string json) where T : IJSAMObject
+        {
+            if (string.IsNullOrEmpty(json))
+                return default;
+            
+            JArray jArray = Query.JArray(json);
+            if (jArray == null)
+                return default;
+
+            return IJSAMObjects<T>(jArray);
+        }
     }
 }

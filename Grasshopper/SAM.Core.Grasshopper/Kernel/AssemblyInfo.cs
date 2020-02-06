@@ -7,8 +7,6 @@ namespace SAM.Core.Grasshopper
 {
     public class AssemblyInfo : GH_AssemblyInfo
     {
-        private static JSON.JSONParser jSONParser;
-
         public override string Name
         {
             get
@@ -64,14 +62,6 @@ namespace SAM.Core.Grasshopper
                 //Return a string representing your preferred contact details.
                 return "Michal Dengusiak -> michaldengusiak@hoarelea.com and Jakub Ziolkowski -> jakubziolkowski@hoarelea.com";
             }
-        }
-
-        public static JSON.JSONParser GetJSONParser()
-        {
-            if (jSONParser == null)
-                jSONParser = new JSON.JSONParser();
-
-            return jSONParser;
         }
     }
 }
