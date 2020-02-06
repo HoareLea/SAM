@@ -1,16 +1,22 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace SAM.Core
 {
     public static partial class Query
     {
-        public static JArray JArray(this string json)
+        public static JArray JArray(this string pathOrJson)
         {
-            if (json == null)
+            if (pathOrJson == null)
                 return null;
 
-            if (string.IsNullOrWhiteSpace(json))
+            if (string.IsNullOrWhiteSpace(pathOrJson))
                 return new JArray();
+
+            string json = pathOrJson;
+            if (File.Exists(pathOrJson))
+                json = File.ReadAllText(pathOrJson);
 
             JToken jToken = JToken.Parse(json);
             if (jToken == null)

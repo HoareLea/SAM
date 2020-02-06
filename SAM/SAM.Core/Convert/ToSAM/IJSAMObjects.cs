@@ -1,21 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Core
 {
     public static partial class Convert
     {
-        public static IEnumerable<T> ToJson<T>(string path) where T : IJSAMObject
+        public static List<T> ToSAM<T>(string pathOrJson) where T : IJSAMObject
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(pathOrJson))
                 return null;
 
-            return new SAMJsonCollection<T>(path);
+            JArray jArray = Query.JArray(pathOrJson);
+            if (jArray == null)
+                return null;
+
+            return Create.IJSAMObjects<T>(jArray);
         }
 
-        public static IEnumerable<IJSAMObject> ToJson(string path)
+        public static List<IJSAMObject> ToSAM(string pathOrJson)
         {
-            return ToJson<IJSAMObject>(path);
+            return ToSAM<IJSAMObject>(pathOrJson);
         }
     }
 }
