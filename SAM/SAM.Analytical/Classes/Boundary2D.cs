@@ -13,10 +13,10 @@ namespace SAM.Analytical
         private Edge2DLoop edge2DLoop;
         private List<Edge2DLoop> internalEdge2DLoops;
 
-        public Boundary2D(Face face)
+        public Boundary2D(Edge2DLoop edge2DLoop)
             : base()
         {
-            edge2DLoop = new Edge2DLoop(face.Boundary);
+            this.edge2DLoop = new Edge2DLoop(edge2DLoop);
         }
 
         public Boundary2D(IClosedPlanar3D closedPlanar3D)
@@ -104,115 +104,79 @@ namespace SAM.Analytical
         }
 
 
-        public static bool TryGetBoundary2D(List<Edge2DLoop> faces, out PlanarBoundary3D planarBoundary3D)
+        public static Boundary2D Create(List<Edge2DLoop> edge2DLoops, out List<Edge2DLoop> edge2DLoops_Outside)
         {
+            edge2DLoops_Outside = null;
 
-            throw new NotImplementedException();
-            //planarBoundary3D = null;
+            if (edge2DLoops == null || edge2DLoops.Count() == 0)
+                return null;
 
-            //if (faces == null || faces.Count() == 0)
-            //    return false;
+            Edge2DLoop edge2DLoop_Max = null;
+            double area_Max = double.MinValue;
 
-            //Face face_Max = null;
-            //double area_Max = double.MinValue;
-            //foreach (Face face in faces)
-            //{
-            //    double area = face.GetArea();
-            //    if (area > area_Max)
-            //    {
-            //        area_Max = area;
-            //        face_Max = face;
-            //    }
+            Dictionary<Edge2DLoop, Geometry.Planar.IClosed2D> dictionary = new Dictionary<Edge2DLoop, Geometry.Planar.IClosed2D>();
+            foreach (Edge2DLoop edge2DLoop in edge2DLoops)
+            {
+                Geometry.Planar.IClosed2D closed2D = edge2DLoop.GetClosed2D();
+                double area = edge2DLoop.GetArea();
+                if (area > area_Max)
+                {
+                    area_Max = area;
+                    edge2DLoop_Max = edge2DLoop;
+                }
+                dictionary[edge2DLoop] = closed2D;
+            }
 
-            //}
+            if (edge2DLoop_Max == null)
+                return null;
 
-            //if (face_Max == null)
-            //    return false;
+            Boundary2D boundary2D = new Boundary2D(edge2DLoop_Max);
 
-            //planarBoundary3D = new PlanarBoundary3D(face_Max);
-            //foreach (Face face in faces)
-            //{
-            //    if (face == face_Max)
-            //        continue;
+            Geometry.Planar.IClosed2D closed2D_Max = dictionary[edge2DLoop_Max];
+            dictionary.Remove(edge2DLoop_Max);
 
-            //    if (face_Max.Inside(face))
-            //    {
-            //        if (planarBoundary3D.internalEdge2DLoops == null)
-            //            planarBoundary3D.internalEdge2DLoops = new List<Edge2DLoop>();
+            foreach (KeyValuePair<Edge2DLoop, Geometry.Planar.IClosed2D> keyValuePair in dictionary)
+            {
+                if (!closed2D_Max.Inside(keyValuePair.Value))
+                {
+                    if (edge2DLoops_Outside == null)
+                        edge2DLoops_Outside = new List<Edge2DLoop>();
 
-            //        planarBoundary3D.internalEdge2DLoops.Add(new Edge2DLoop(face));
-            //    }
-            //}
+                    edge2DLoops_Outside.Add(keyValuePair.Key);
 
-            //return true;
+                    continue;
+                }
+
+                if (boundary2D.internalEdge2DLoops == null)
+                    boundary2D.internalEdge2DLoops = new List<Edge2DLoop>();
+
+                boundary2D.internalEdge2DLoops.Add(new Edge2DLoop(keyValuePair.Key));
+            }
+
+            return boundary2D;
         }
 
-        public static bool TryGetBoundary2Ds(List<Edge2DLoop> faces, out List<PlanarBoundary3D> planarBoundary3Ds)
+        public static List<Boundary2D> Create(List<Edge2DLoop> edge2DLoops)
         {
-            throw new NotImplementedException();
+            if (edge2DLoops == null)
+                return null;
 
+            List<Boundary2D> result = new List<Boundary2D>();
+            if (edge2DLoops.Count == 0)
+                return result;
 
-            //planarBoundary3Ds = null;
+            List<Edge2DLoop> edge2DLoops_All = new List<Edge2DLoop>(edge2DLoops);
+            while(edge2DLoops_All.Count > 0)
+            {
+                List<Edge2DLoop> edge2DLoops_Outside = null;
+                Boundary2D boundary2D = Create(edge2DLoops_All, out edge2DLoops_Outside);
+                if (boundary2D != null)
+                    result.Add(boundary2D);
 
-            //if (faces == null || faces.Count() == 0)
-            //    return false;
+                edge2DLoops_All = edge2DLoops_Outside;
+            }
 
-            //planarBoundary3Ds = new List<PlanarBoundary3D>();
-
-
-            //if (faces.Count() == 1)
-            //{
-            //    planarBoundary3Ds.Add(new PlanarBoundary3D(faces.First()));
-            //    return true;
-            //}
-
-            //List<Face> faceList = faces.ToList();
-            //faceList.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
-
-            //while(faceList.Count > 0)
-            //{
-            //    List<Face> faceList_ToRemove = new List<Face>();
-
-            //    Face face = faceList.First();
-            //    PlanarBoundary3D planarBoundary3D = new PlanarBoundary3D(face);
-            //    planarBoundary3Ds.Add(planarBoundary3D);
-            //    faceList_ToRemove.Add(face);
-
-            //    Geometry.Orientation orientation = Geometry.Orientation.Undefined;
-            //    if(face.Boundary is Geometry.Planar.Polygon2D)
-            //        orientation = ((Geometry.Planar.Polygon2D)face.Boundary).GetOrientation();
-
-            //    foreach (Face face_Internal in faces)
-            //    {
-            //        if (face_Internal == face)
-            //            continue;
-
-            //        if (!face.Inside(face_Internal))
-            //            continue;
-
-            //        if (planarBoundary3D.internalEdge2DLoops == null)
-            //            planarBoundary3D.internalEdge2DLoops = new List<Edge2DLoop>();
-
-            //        Geometry.Planar.IClosed2D closed2D = planarBoundary3D.plane.Convert(face_Internal.ToClosedPlanar3D());
-            //        if(orientation != Geometry.Orientation.Undefined)
-            //        {
-            //            if (closed2D is Geometry.Planar.Polygon2D)
-            //            {
-            //                Geometry.Planar.Polygon2D polygon2D = (Geometry.Planar.Polygon2D)closed2D;
-            //                Geometry.Orientation orientation_Internal = polygon2D.GetOrientation();
-            //                if (orientation == orientation_Internal)
-            //                    polygon2D.Reverse();
-            //            }
-            //        }
-
-            //        planarBoundary3D.internalEdge2DLoops.Add(new Edge2DLoop(new Face(planarBoundary3D.plane, closed2D)));
-            //        faceList_ToRemove.Add(face_Internal);
-            //    }
-
-            //    faceList_ToRemove.ForEach(x => faceList.Remove(x));
-            //}
-
-            //return true;
+            return result;
         }
     }
 }

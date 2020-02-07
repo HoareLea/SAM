@@ -67,6 +67,11 @@ namespace SAM.Analytical
             return ToGeometry(this);
         }
 
+        public double GetArea()
+        {
+            return GetClosed2D().GetArea();
+        }
+
         public void Reverse()
         {
             foreach (Edge2D edge2D in edge2Ds)
