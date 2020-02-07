@@ -83,6 +83,16 @@ namespace SAM.Core.Grasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SAM_JSON {
+            get {
+                object obj = ResourceManager.GetObject("SAM_JSON", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SAM_Small {
             get {
                 object obj = ResourceManager.GetObject("SAM_Small", resourceCulture);
