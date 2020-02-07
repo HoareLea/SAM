@@ -12,6 +12,7 @@ namespace SAM.Analytical
     {
         private PanelType panelType;
         private PlanarBoundary3D planarBoundary3D;
+        private List<Aperture> apertures;
 
         public Panel(Panel panel)
             : base(panel)
@@ -126,6 +127,9 @@ namespace SAM.Analytical
 
             planarBoundary3D = new PlanarBoundary3D(jObject.Value<JObject>("PlanarBoundary3D"));
 
+            if (jObject.ContainsKey("Apertures"))
+                apertures = Core.Create.IJSAMObjects<Aperture>(jObject.Value<JArray>("Apertures"));
+
             return true;
         }
 
@@ -137,6 +141,10 @@ namespace SAM.Analytical
 
             jObject.Add("PanelType", panelType.ToString());
             jObject.Add("PlanarBoundary3D", planarBoundary3D.ToJObject());
+
+            if (apertures != null)
+                jObject.Add("Apertures", Core.Create.JArray(apertures));
+            
             return jObject;
         }
     }

@@ -23,9 +23,9 @@ namespace SAM.Geometry.Grasshopper
 
         }
         
-        public GooSAMGeometry(T geometry)
+        public GooSAMGeometry(T sAMGeometry)
         {
-            Value = geometry;
+            Value = sAMGeometry;
         }
 
         public override bool IsValid => Value != null;
@@ -269,22 +269,11 @@ namespace SAM.Geometry.Grasshopper
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
             //TODO: Implement BakeGeometry
-            obj_guid = Guid.Empty;
-            return false;
-
-            //GeometryBase geometryBase = Value.ToRhino();
-            //if (geometryBase == null)
-            //{
-            //    obj_guid = Guid.Empty;
-            //    return false;
-            //}
-
-            //obj_guid = doc.Objects.Add(geometryBase);
-            //return true;
+            return Modify.BakeGeometry(Value, doc, att, out obj_guid);
         }
     }
 
-    public class GooSAMGeometryParam<T> : GH_PersistentParam<GooSAMGeometry<T>>, IGH_PreviewObject where T : ISAMGeometry
+    public class GooSAMGeometryParam<T> : GH_PersistentParam<GooSAMGeometry<T>>, IGH_BakeAwareObject, IGH_PreviewObject where T : ISAMGeometry
     {
         public override Guid ComponentGuid => new Guid("b4f8eee5-8d45-4c52-b966-1be5efa7c1e6");
 
@@ -295,6 +284,8 @@ namespace SAM.Geometry.Grasshopper
         bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
 
         BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
+
+        public bool IsBakeCapable => true;
 
         void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
 
@@ -314,6 +305,21 @@ namespace SAM.Geometry.Grasshopper
         protected override GH_GetterResult Prompt_Singular(ref GooSAMGeometry<T> value)
         {
             throw new NotImplementedException();
+        }
+
+        public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
+        {
+            BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
+        }
+
+        public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
+        {
+            foreach (var value in VolatileData.AllData(true))
+            {
+                Guid uuid = default;
+                (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
+                obj_ids.Add(uuid);
+            }
         }
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="Component\SAMGeometrySAMGeometry2D.cs" />
     <Compile Include="Component\SAMGeometryIntersection.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
+    <Compile Include="Modify\BakeGeometry.cs" />
     <Compile Include="Template\TemplateComponent.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

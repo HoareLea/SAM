@@ -57,15 +57,7 @@ namespace SAM.Analytical.Grasshopper
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            Point3d point3d = Value.Location.ToRhino();
-            if (point3d == null)
-            {
-                obj_guid = Guid.Empty;
-                return false;
-            }
-
-            obj_guid = doc.Objects.AddPoint(point3d);
-            return true;
+            return Geometry.Grasshopper.Modify.BakeGeometry(Value.Location, doc, att, out obj_guid);
         }
     }
 

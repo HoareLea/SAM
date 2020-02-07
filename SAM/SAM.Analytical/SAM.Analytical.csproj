@@ -45,14 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ApertureType.cs" />
     <Compile Include="Classes\Edge3DLoop.cs" />
     <Compile Include="Classes\Edge2DLoop.cs" />
     <Compile Include="Classes\PanelCluster.cs" />
+    <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\PanelType.cs" />
     <Compile Include="Classes\PlanarBoundary3D.cs" />
     <Compile Include="Classes\Edge3D.cs" />
-    <Compile Include="Classes\Opening.cs" />
+    <Compile Include="Classes\Aperture.cs" />
     <Compile Include="Classes\Panel.cs" />
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\Edge2D.cs" />
