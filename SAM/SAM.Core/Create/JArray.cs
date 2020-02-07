@@ -18,13 +18,13 @@ namespace SAM.Core
             return jArray;
         }
 
-        public static JArray JArray<T>(this IEnumerable<T> sAMObjects) where T : IJSAMObject
+        public static JArray JArray<T>(this IEnumerable<T> jSAMObjects) where T : IJSAMObject
         {
-            if (sAMObjects == null)
+            if (jSAMObjects == null)
                 return null;
 
             JArray jArray = new JArray();
-            foreach (T t in sAMObjects)
+            foreach (T t in jSAMObjects)
                 jArray.Add(t.ToJObject());
 
             return jArray;

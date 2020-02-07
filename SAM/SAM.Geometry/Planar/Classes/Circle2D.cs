@@ -124,8 +124,10 @@ namespace SAM.Geometry.Planar
 
         public override JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", GetType().FullName);
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
             jObject.Add("Center", center.ToJObject());
             jObject.Add("Radious", radious);
 

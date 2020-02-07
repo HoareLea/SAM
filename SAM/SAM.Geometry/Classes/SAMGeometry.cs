@@ -23,6 +23,11 @@ namespace SAM.Geometry
 
         public abstract bool FromJObject(JObject jObject);
 
-        public abstract JObject ToJObject();
+        public virtual JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", Core.Query.TypeName(this));
+            return jObject;
+        }
     }
 }

@@ -62,6 +62,7 @@
     <Compile Include="Classes\SAMType.cs" />
     <Compile Include="Query\AboutInfoTypeText.cs" />
     <Compile Include="Query\JArray.cs" />
+    <Compile Include="Query\Guid.cs" />
     <Compile Include="Query\TypeName.cs" />
     <Compile Include="Query\Name.cs" />
     <Compile Include="Query\TryGetValue.cs" />

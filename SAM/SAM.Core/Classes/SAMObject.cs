@@ -131,13 +131,19 @@ namespace SAM.Core
 
         public virtual bool FromJObject(JObject jObject)
         {
-            throw new NotImplementedException();
+            if (jObject == null)
+                return false;
+
+            name = Query.Name(jObject);
+            guid = Query.Guid(jObject);
+            parameterSets = Create.ParameterSets(jObject.Value<JArray>("ParameterSets"));
+            return true;
         }
 
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
-            jObject.Add("_type", GetType().FullName);
+            jObject.Add("_type", Query.TypeName(this));
             if (name != null)
                 jObject.Add("Name", name);
 

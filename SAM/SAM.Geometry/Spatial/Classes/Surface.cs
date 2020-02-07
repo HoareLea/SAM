@@ -78,10 +78,11 @@ namespace SAM.Geometry.Spatial
 
         public override JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", GetType().FullName);
-            jObject.Add("Boundary", boundary.ToJObject());
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
 
+            jObject.Add("Boundary", boundary.ToJObject());
             return jObject;
         }
     }

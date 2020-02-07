@@ -351,14 +351,16 @@ namespace SAM.Geometry.Spatial
         {
             origin = new Point3D(jObject.Value<JObject>("Origin"));
             normal = new Vector3D(jObject.Value<JObject>("Normal"));
-
+            baseX = GetBaseX();
             return true;
         }
 
         public override JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", GetType().FullName);
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
             jObject.Add("Origin", origin.ToJObject());
             jObject.Add("Normal", normal.ToJObject());
 

@@ -78,12 +78,21 @@ namespace SAM.Geometry.Planar
 
         public override bool FromJObject(JObject jObject)
         {
-            throw new NotImplementedException();
+            if (jObject == null)
+                return false;
+
+            points = Geometry.Create.ISAMGeometries<Point2D>(jObject.Value<JArray>("Points"));
+            return true;
         }
 
         public override JObject ToJObject()
         {
-            throw new NotImplementedException();
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
+            jObject.Add("Points", Core.Create.JArray(points));
+            return jObject;
         }
     }
 }

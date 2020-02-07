@@ -81,10 +81,19 @@ namespace SAM.Core.Grasshopper
             }
 
             List<IJSAMObject> jSAMObjects = Convert.ToSAM(pathOrJson);
+            if(jSAMObjects == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(1, false);
+                return;
+            }
 
+            if (jSAMObjects.Count == 1)
+                dataAccess.SetData(0, jSAMObjects[0]);
+            else
+                dataAccess.SetDataList(0, jSAMObjects);
 
-            dataAccess.SetData(1, jSAMObjects);
-
+            dataAccess.SetData(1, true);
         }
 
     }

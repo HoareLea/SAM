@@ -126,10 +126,11 @@ namespace SAM.Geometry.Spatial
 
         public override JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", GetType().FullName);
-            jObject.Add("Points", Geometry.Create.JArray(points));
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
 
+            jObject.Add("Points", Geometry.Create.JArray(points));
             return jObject;
         }
     }
