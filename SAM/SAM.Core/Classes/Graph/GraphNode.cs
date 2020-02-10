@@ -1,42 +1,46 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SAM.Core
 {
-    public class GraphNode<Node, Edge> : GraphEdge<Node>, IEnumerable<GraphEdge<Edge>>, IGraphNode
+    public class GraphNode : GraphEdge, IEnumerable<GraphEdge>
     {
-        private List<GraphEdge<Edge>> graphEdges;
+        private List<GraphEdge> graphEdges;
 
-        public GraphNode(Node @object, double weight)
+        public GraphNode(object @object, double weight)
             : base(@object, weight)
         {
 
         }
 
-        public GraphNode(Node @object, double weight, IEnumerable<GraphEdge<Edge>> graphEdges)
+        public GraphNode(object @object, double weight, IEnumerable<GraphEdge> graphEdges)
             : base(@object, weight)
         {
             if (graphEdges != null)
-                this.graphEdges = new List<GraphEdge<Edge>>(graphEdges);
+                this.graphEdges = new List<GraphEdge>(graphEdges);
         }
 
-        public GraphNode(GraphNode<Node, Edge> graphNode)
+        public GraphNode(GraphNode graphNode)
             : base(graphNode)
         {
             if (graphNode.graphEdges != null)
-                graphEdges = new List<GraphEdge<Edge>>(graphNode.graphEdges);
+                graphEdges = new List<GraphEdge>(graphNode.graphEdges);
         }
 
-        public bool Contains(Edge @object)
+        public bool Contains(object @object)
         {
             if (graphEdges == null)
                 return false;
 
-            if (@object is GraphEdge<Edge>)
-                return graphEdges.Contains((GraphEdge<Edge>)(object)@object);
+            if (@object is GraphEdge)
+                return graphEdges.Contains((GraphEdge)@object);
 
-            foreach (GraphEdge<Edge> graphEdge in graphEdges)
-                if (ReferenceEquals(graphEdge.Object, @object))
+            foreach (GraphEdge graphEdge in graphEdges)
+                if (graphEdge.Object == @object)
                     return true;
 
             return false;
@@ -44,13 +48,13 @@ namespace SAM.Core
 
         public bool Remove(object @object)
         {
-            if (@object is GraphEdge<Edge>)
-                return graphEdges.Remove((GraphEdge<Edge>)@object);
+            if (@object is GraphEdge)
+                return graphEdges.Remove((GraphEdge)@object);
 
-            return graphEdges.RemoveAll(x => ReferenceEquals(x.Object,@object)) > 0;
+            return graphEdges.RemoveAll(x => x.Object == @object) > 0;
         }
 
-        public IEnumerator<GraphEdge<Edge>> GetEnumerator()
+        public IEnumerator<GraphEdge> GetEnumerator()
         {
             return graphEdges.GetEnumerator();
         }
@@ -58,21 +62,6 @@ namespace SAM.Core
         IEnumerator IEnumerable.GetEnumerator()
         {
             return graphEdges.GetEnumerator();
-        }
-
-        public bool Contains(IGraphEdge graphEdge)
-        {
-            if (graphEdges == null)
-                return false;
-
-            if (graphEdge is GraphEdge<Edge>)
-                return graphEdges.Contains((GraphEdge<Edge>)graphEdge);
-
-            foreach (GraphEdge<Edge> graphEdge_Temp in graphEdges)
-                if (ReferenceEquals(graphEdge_Temp.Object, graphEdge.GetObject()))
-                    return true;
-
-            return false;
         }
     }
 }

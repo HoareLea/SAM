@@ -1,11 +1,17 @@
-﻿namespace SAM.Core
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SAM.Core
 {
-    public class GraphEdge<Edge> : IGraphEdge
+    public class GraphEdge
     {
-        private Edge @object;
+        private object @object = null;
         private double weight = 1;
 
-        public GraphEdge(Edge @object, double weight)
+        public GraphEdge(object @object, double weight)
         {
             this.@object = @object;
             this.weight = weight;
@@ -16,43 +22,30 @@
 
         }
 
-        public GraphEdge(Edge @object)
+        public GraphEdge(object @object)
         {
             this.@object = @object;
         }
 
-        public GraphEdge(IGraphEdge graphEdge)
+        public GraphEdge(GraphEdge graphEdge)
         {
-            object @object = graphEdge.GetObject();
-            if(@object != null)
-            {
-                if(typeof(Edge).IsAssignableFrom(@object.GetType()))
-                    this.@object = (Edge)(object)graphEdge.GetObject();
-            }
-
-            this.weight = graphEdge.Weight;
+            this.@object = graphEdge.@object;
+            this.weight = graphEdge.weight;
         }
 
-        public Z GetObject<Z>()
+        public T GetObject<T>()
         {
             if (@object == null)
                 return default;
 
-            if (typeof(Z).IsAssignableFrom(@object.GetType()))
-                return (Z)(object)@object;
+            if (typeof(T).IsAssignableFrom(@object.GetType()))
+                return (T)(object)@object;
 
             return default;
         }
 
-        public object GetObject()
-        {
-            return @object;
-        }
-
         public double Weight => weight;
 
-        public Edge Object => @object;
-
-
+        public object Object => @object;
     }
 }
