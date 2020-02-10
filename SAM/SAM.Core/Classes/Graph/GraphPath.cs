@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace SAM.Core
 {
-    public class GraphPath : IEnumerable<GraphEdge>
+    public class GraphPath<Node, Edge> : IEnumerable<IGraphEdge>
     {
-        private List<GraphEdge> graphEdges;
+        private List<IGraphEdge> graphEdges;
 
         public GraphPath()
         {
-            graphEdges = new List<GraphEdge>();
+            graphEdges = new List<IGraphEdge>();
         }
 
-        public GraphPath(GraphPath graphPath)
+        public GraphPath(GraphPath<Node, Edge> graphPath)
         {
-            graphEdges = new List<GraphEdge>(graphPath.graphEdges);
+            graphEdges = new List<IGraphEdge>(graphPath.graphEdges);
         }
 
         public double GetWeight()
@@ -29,10 +29,10 @@ namespace SAM.Core
             return weight;
         }
 
-        public bool Add(GraphEdge graphEdge)
+        public bool Add(IGraphEdge graphEdge)
         {
             if (graphEdges == null)
-                graphEdges = new List<GraphEdge>();
+                graphEdges = new List<IGraphEdge>();
             
             if(graphEdges.Count == 0)
             {
@@ -40,14 +40,14 @@ namespace SAM.Core
                 return true;
             }
 
-            GraphEdge graphEdge_Last = graphEdges.Last();
+            IGraphEdge graphEdge_Last = graphEdges.Last();
 
-            if (graphEdge is GraphNode)
+            if (graphEdge is IGraphNode)
             {
-                if (graphEdge_Last is GraphNode)
+                if (graphEdge_Last is IGraphNode)
                     return false;
 
-                GraphNode graphNode = (GraphNode)graphEdge;
+                IGraphNode graphNode = (IGraphNode)(object)graphEdge;
                 if(graphNode.Contains(graphEdge_Last))
                 {
                     graphEdges.Add(graphNode);
@@ -57,9 +57,9 @@ namespace SAM.Core
                 return false;
             }
 
-            if (graphEdge_Last is GraphNode)
+            if (graphEdge_Last is GraphNode<Node, Edge>)
             {
-                GraphNode graphNode = (GraphNode)graphEdge_Last;
+                GraphNode<Node, Edge> graphNode = (GraphNode<Node, Edge>)(object)graphEdge_Last;
                 if (graphNode.Contains(graphEdge))
                 {
                     graphEdges.Add(graphNode);
@@ -70,7 +70,7 @@ namespace SAM.Core
             return false;
         }
 
-        public IEnumerator<GraphEdge> GetEnumerator()
+        public IEnumerator<IGraphEdge> GetEnumerator()
         {
             if (graphEdges == null)
                 return null;
@@ -86,7 +86,7 @@ namespace SAM.Core
             return graphEdges.GetEnumerator();
         }
 
-        public int IndexOf(GraphEdge graphEdge)
+        public int IndexOf(IGraphEdge graphEdge)
         {
             if (graphEdge == null)
                 return -1;

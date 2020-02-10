@@ -60,6 +60,8 @@
     <Compile Include="Create\JArray.cs" />
     <Compile Include="Create\ParameterSets.cs" />
     <Compile Include="Enums\AboutInfoType.cs" />
+    <Compile Include="Interfaces\IGraphNode.cs" />
+    <Compile Include="Interfaces\IGraphEdge.cs" />
     <Compile Include="Interfaces\IJSAMObject.cs" />
     <Compile Include="Interfaces\ISAMObject.cs" />
     <Compile Include="Interfaces\ISAMRelation.cs" />
