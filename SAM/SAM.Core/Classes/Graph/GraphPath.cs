@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SAM.Graph
+namespace SAM.Core
 {
     public class GraphPath : IEnumerable<GraphEdge>
     {

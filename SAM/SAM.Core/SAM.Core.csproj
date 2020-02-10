@@ -45,10 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\ParameterSet.cs" />
-    <Compile Include="Classes\SAMJsonCollection.cs" />
-    <Compile Include="Classes\SAMRelationCluster.cs" />
-    <Compile Include="Classes\SAMRelation.cs" />
+    <Compile Include="Classes\Base\ParameterSet.cs" />
+    <Compile Include="Classes\Graph\Graph.cs" />
+    <Compile Include="Classes\Graph\GraphEdge.cs" />
+    <Compile Include="Classes\Graph\GraphNode.cs" />
+    <Compile Include="Classes\Graph\GraphPath.cs" />
+    <Compile Include="Classes\Json\SAMJsonCollection.cs" />
+    <Compile Include="Classes\Relation\SAMRelationCluster.cs" />
+    <Compile Include="Classes\Relation\SAMRelation.cs" />
     <Compile Include="Convert\ToJson\Json.cs" />
     <Compile Include="Convert\ToSAM\IJSAMObjects.cs" />
     <Compile Include="Create\IJSAMObject.cs" />
@@ -60,9 +64,9 @@
     <Compile Include="Interfaces\ISAMObject.cs" />
     <Compile Include="Interfaces\ISAMRelation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Classes\SAMInstance.cs" />
-    <Compile Include="Classes\SAMObject.cs" />
-    <Compile Include="Classes\SAMType.cs" />
+    <Compile Include="Classes\Base\SAMInstance.cs" />
+    <Compile Include="Classes\Base\SAMObject.cs" />
+    <Compile Include="Classes\Base\SAMType.cs" />
     <Compile Include="Query\AboutInfoTypeText.cs" />
     <Compile Include="Query\JArray.cs" />
     <Compile Include="Query\Guid.cs" />

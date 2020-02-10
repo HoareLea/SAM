@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Graph
+namespace SAM.Core
 {
     public class GraphNode : GraphEdge, IEnumerable<GraphEdge>
     {

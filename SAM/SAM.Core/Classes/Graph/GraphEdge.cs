@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAM.Graph
+namespace SAM.Core
 {
     public class GraphEdge
     {
@@ -31,6 +31,17 @@ namespace SAM.Graph
         {
             this.@object = graphEdge.@object;
             this.weight = graphEdge.weight;
+        }
+
+        public T GetObject<T>()
+        {
+            if (@object == null)
+                return default;
+
+            if (typeof(T).IsAssignableFrom(@object.GetType()))
+                return (T)(object)@object;
+
+            return default;
         }
 
         public double Weight => weight;
