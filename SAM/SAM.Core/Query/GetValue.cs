@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -11,17 +7,17 @@ namespace SAM.Core
         public static T GetValue<T>(this Dictionary<string, object> dictionary, string key)
         {
             if (dictionary == null || key == null)
-                return default(T);
+                return default;
 
             object value;
             if (!dictionary.TryGetValue(key, out value))
-                return default(T);
+                return default;
 
             if (value == null)
-                return default(T);
+                return default;
 
             if (value.GetType() != typeof(T))
-                return default(T);
+                return default;
 
             return (T)(object)(value);
         }

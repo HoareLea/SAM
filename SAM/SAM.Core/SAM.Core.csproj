@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="Classes\ParameterSet.cs" />
     <Compile Include="Classes\SAMJsonCollection.cs" />
+    <Compile Include="Classes\SAMRelationCluster.cs" />
+    <Compile Include="Classes\SAMRelation.cs" />
     <Compile Include="Convert\ToJson\Json.cs" />
     <Compile Include="Convert\ToSAM\IJSAMObjects.cs" />
     <Compile Include="Create\IJSAMObject.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="Enums\AboutInfoType.cs" />
     <Compile Include="Interfaces\IJSAMObject.cs" />
     <Compile Include="Interfaces\ISAMObject.cs" />
+    <Compile Include="Interfaces\ISAMRelation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\SAMInstance.cs" />
     <Compile Include="Classes\SAMObject.cs" />
