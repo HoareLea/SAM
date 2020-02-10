@@ -43,7 +43,12 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 foreach (Rhino.Geometry.Brep brep_Internal in breps_Internal)
+                {
                     breps = Rhino.Geometry.Brep.CreateBooleanDifference(breps[0], brep_Internal, RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
+                    if (breps == null)
+                        break;
+                }
+                    
 
 
                 //RhinoDoc.ActiveDoc.ModelAbsoluteTolerance = Tolerance.MicroDistance;
