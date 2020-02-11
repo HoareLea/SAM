@@ -15,7 +15,7 @@ using SAM.Geometry.Grasshopper.Properties;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GooSAMGeometry<T> : GH_Goo<T>, IGH_PreviewData, IGH_BakeAwareData where T : ISAMGeometry
+    public class GooSAMGeometry : GH_Goo<ISAMGeometry>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooSAMGeometry()
             : base()
@@ -23,7 +23,7 @@ namespace SAM.Geometry.Grasshopper
 
         }
         
-        public GooSAMGeometry(T sAMGeometry)
+        public GooSAMGeometry(ISAMGeometry sAMGeometry)
         {
             Value = sAMGeometry;
         }
@@ -37,7 +37,7 @@ namespace SAM.Geometry.Grasshopper
                 Type type = null;
                 
                 if (Value == null)
-                    type = typeof(T);
+                    type = typeof(ISAMGeometry);
                 else
                     type = Value.GetType();
 
@@ -55,7 +55,7 @@ namespace SAM.Geometry.Grasshopper
                 Type type = null;
 
                 if (Value == null)
-                    type = typeof(T);
+                    type = typeof(ISAMGeometry);
                 else
                     type = Value.GetType();
 
@@ -82,7 +82,7 @@ namespace SAM.Geometry.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GooSAMGeometry<T>(Value);
+            return new GooSAMGeometry(Value);
         }
 
         public override bool Write(GH_IWriter writer)
@@ -95,33 +95,33 @@ namespace SAM.Geometry.Grasshopper
                 return false;
 
 
-            writer.SetString(typeof(T).FullName, jObject.ToString());
+            writer.SetString(typeof(ISAMGeometry).FullName, jObject.ToString());
             return true;
         }
 
         public override bool Read(GH_IReader reader)
         {
             string value = null;
-            if (!reader.TryGetString(typeof(T).FullName, ref value))
+            if (!reader.TryGetString(typeof(ISAMGeometry).FullName, ref value))
                 return false;
 
             if (string.IsNullOrWhiteSpace(value))
                 return false;
 
-            Value = Core.Create.IJSAMObject<T>(value);
+            Value = Core.Create.IJSAMObject<ISAMGeometry>(value);
             return true;
         }
 
         public override string ToString()
         {
-            return typeof(T).FullName;
+            return typeof(ISAMGeometry).FullName;
         }
 
         public override bool CastFrom(object source)
         {
-            if (source is T)
+            if (source is ISAMGeometry)
             {
-                Value = (T)source;
+                Value = (ISAMGeometry)source;
                 return true;
             }
 
@@ -137,40 +137,33 @@ namespace SAM.Geometry.Grasshopper
 
                 if(source is ISAMGeometry)
                 {
-                    Value = (T)(object)source;
+                    Value = (ISAMGeometry)source;
                     return true;
                 }
             }
 
             if (source is Polyline)
             {
-                Value = (T)(object)Convert.ToSAM(((Polyline)source));
+                Value = Convert.ToSAM(((Polyline)source));
                 return true;
             }
 
             if (source is Point3d)
             {
-                Value = (T)(object)Convert.ToSAM(((Point3d)source));
+                Value = Convert.ToSAM(((Point3d)source));
                 return true;
             }
 
             if (source is GH_Curve)
             {
-                Value = (T)(object)Convert.ToSAM((GH_Curve)source);
+                Value = Convert.ToSAM((GH_Curve)source);
                 return true;
             }
 
             if (source is GH_Point)
             {
-                Value = (T)(object)Convert.ToSAM((GH_Point)source);
+                Value = Convert.ToSAM((GH_Point)source);
                 return true;
-            }
-
-            if (source is GooGeometry3D)
-            {
-                ISAMGeometry geometry = ((GooGeometry3D)source).Value;
-                if (typeof(T).IsAssignableFrom(geometry.GetType()))
-                    Value = (T)(object)geometry;
             }
 
             return base.CastFrom(source);
@@ -178,7 +171,7 @@ namespace SAM.Geometry.Grasshopper
 
         public override bool CastTo<Y>(ref Y target)
         {
-            if (typeof(Y) == typeof(T))
+            if (typeof(Y) is ISAMGeometry)
             {
                 target = (Y)(object)Value;
                 return true;
@@ -273,7 +266,7 @@ namespace SAM.Geometry.Grasshopper
         }
     }
 
-    public class GooSAMGeometryParam<T> : GH_PersistentParam<GooSAMGeometry<T>>, IGH_BakeAwareObject, IGH_PreviewObject where T : ISAMGeometry
+    public class GooSAMGeometryParam : GH_PersistentParam<GooSAMGeometry>, IGH_BakeAwareObject, IGH_PreviewObject
     {
         public override Guid ComponentGuid => new Guid("b4f8eee5-8d45-4c52-b966-1be5efa7c1e6");
 
@@ -292,17 +285,17 @@ namespace SAM.Geometry.Grasshopper
         void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
 
         public GooSAMGeometryParam()
-            : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "Params", "SAM")
+            : base(typeof(ISAMGeometry).Name, typeof(ISAMGeometry).Name, typeof(ISAMGeometry).FullName.Replace(".", " "), "Params", "SAM")
         {
 
         }
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GooSAMGeometry<T>> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GooSAMGeometry> values)
         {
             throw new NotImplementedException();
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GooSAMGeometry<T> value)
+        protected override GH_GetterResult Prompt_Singular(ref GooSAMGeometry value)
         {
             throw new NotImplementedException();
         }

@@ -25,7 +25,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooGeometry3DParam(), "_SAMGeometry", "_SAMGeometry", "SAM Geometry", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSAMGeometryParam(), "_SAMGeometry", "_SAMGeometry", "SAM Geometry", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,14 +42,14 @@ namespace SAM.Geometry.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            ISAMGeometry3D geometry3D = null;
-            if (!dataAccess.GetData(0, ref geometry3D) || geometry3D == null)
+            ISAMGeometry geometry = null;
+            if (!dataAccess.GetData(0, ref geometry) || geometry == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            object @object = (geometry3D).ToGrasshopper();
+            object @object = geometry.ToGrasshopper();
 
             if (@object == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");

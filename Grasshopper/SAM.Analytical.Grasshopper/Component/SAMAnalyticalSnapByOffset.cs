@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Panel>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new Geometry.Grasshopper.GooSAMGeometryParam<Geometry.Spatial.Point3D>(), "Point3Ds", "Point3Ds", "Snap Point3Ds", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new Geometry.Grasshopper.GooSAMGeometryParam(), "Point3Ds", "Point3Ds", "Snap Point3Ds", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace SAM.Analytical.Grasshopper
             panelList.ForEach(x => x.Snap(point3DList, offset));
 
             dataAccess.SetDataList(0, panelList.ConvertAll(x => new GooPanel(x)));
-            dataAccess.SetDataList(1, point3DList.ConvertAll(x => new Geometry.Grasshopper.GooSAMGeometry<Geometry.Spatial.Point3D>(x)));
+            dataAccess.SetDataList(1, point3DList.ConvertAll(x => new Geometry.Grasshopper.GooSAMGeometry(x)));
         }
     }
 }

@@ -40,8 +40,8 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddTextParameter("_name", "_name", "Space Name, Default = Space_Default", GH_ParamAccess.item,"Space_Default");
 
-            GooSAMGeometryParam<Point3D> gooGeometryParam = new GooSAMGeometryParam<Point3D>();
-            gooGeometryParam.PersistentData.Append(new GooSAMGeometry<Point3D>(new Point3D(0, 0, 0.75)));
+            GooSAMGeometryParam gooGeometryParam = new GooSAMGeometryParam();
+            gooGeometryParam.PersistentData.Append(new GooSAMGeometry(new Point3D(0, 0, 0.75)));
             inputParamManager.AddParameter(gooGeometryParam, "_locationPoint", "_locationPoint", "Space Location Point, Default = (0,0,0.75)", GH_ParamAccess.item);
         }
 
@@ -66,14 +66,14 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Point3D location = null;
-            if (!dataAccess.GetData(1, ref location) || location == null)
+            ISAMGeometry location = null;
+            if (!dataAccess.GetData(1, ref location) || !(location is Point3D))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, new GooSpace(new Space(name, location)));
+            dataAccess.SetData(0, new GooSpace(new Space(name, (Point3D)location)));
         }
     }
 }
