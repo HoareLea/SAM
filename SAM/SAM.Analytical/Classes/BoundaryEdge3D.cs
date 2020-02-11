@@ -5,35 +5,35 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
-    public class Edge3D : SAMObject
+    public class BoundaryEdge3D : SAMObject
     {
         private ICurve3D curve3D;
 
-        public Edge3D(System.Guid guid, string name, ICurve3D curve3D)
+        public BoundaryEdge3D(System.Guid guid, string name, ICurve3D curve3D)
             : base(guid, name)
         {
             this.curve3D = (ICurve3D)curve3D.Clone();
         }
 
-        public Edge3D(Plane plane, Edge2D edge2D)
-            : base(System.Guid.NewGuid(), edge2D)
+        public BoundaryEdge3D(Plane plane, BoundaryEdge2D boundaryEdge2D)
+            : base(System.Guid.NewGuid(), boundaryEdge2D)
         {
-            curve3D = (ICurve3D)plane.Convert(edge2D.Curve2D);
+            curve3D = (ICurve3D)plane.Convert(boundaryEdge2D.Curve2D);
         }
         
-        public Edge3D(ICurve3D curve)
+        public BoundaryEdge3D(ICurve3D curve3D)
             : base()
         {
             this.curve3D = (ICurve3D)curve3D.Clone(); ;
         }
 
-        public Edge3D(Edge3D edge)
-            : base(edge)
+        public BoundaryEdge3D(BoundaryEdge3D boundaryEdge3D)
+            : base(boundaryEdge3D)
         {
-            curve3D = (ICurve3D)edge.curve3D.Clone();
+            curve3D = (ICurve3D)boundaryEdge3D.curve3D.Clone();
         }
 
-        public Edge3D(JObject jObject)
+        public BoundaryEdge3D(JObject jObject)
             : base(jObject)
         {
 
@@ -103,26 +103,26 @@ namespace SAM.Analytical
         }
 
 
-        public static IEnumerable<Edge3D> FromGeometry(ISAMGeometry3D geometry3D)
+        public static IEnumerable<BoundaryEdge3D> FromGeometry(ISAMGeometry3D geometry3D)
         {
             ISAMGeometry3D geometry3D_Temp = geometry3D;
 
             if (geometry3D is IClosed3D)
-                geometry3D_Temp = ((IClosed3D)geometry3D).GetExternalBoundary();
+                geometry3D_Temp = ((IClosed3D)geometry3D).GetExternalEdges();
 
             if (geometry3D_Temp is Polycurve3D)
-                return ((Polycurve3D)geometry3D_Temp).Explode().ConvertAll(x => new Edge3D(x));
+                return ((Polycurve3D)geometry3D_Temp).Explode().ConvertAll(x => new BoundaryEdge3D(x));
 
             if (geometry3D_Temp is ICurvable3D)
             {
                 ICurvable3D curvable3D = (ICurvable3D)geometry3D_Temp;
-                List<Edge3D> result = new List<Edge3D>();
+                List<BoundaryEdge3D> result = new List<BoundaryEdge3D>();
                 foreach (ICurve3D curve3D in curvable3D.GetCurves())
                 {
                     if (curve3D is Polycurve3D)
                         result.AddRange(FromGeometry(curve3D));
                     else
-                        result.Add(new Edge3D(curve3D));
+                        result.Add(new BoundaryEdge3D(curve3D));
                 }
                 return result;
 

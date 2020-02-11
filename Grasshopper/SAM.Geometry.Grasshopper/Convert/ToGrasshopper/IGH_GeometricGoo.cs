@@ -25,8 +25,8 @@ namespace SAM.Geometry.Grasshopper
             if (geometry is Segment3D)
                 return ((Segment3D)geometry).ToGrasshopper();
 
-            if (geometry is Face)
-                return ((Face)geometry).ToGrasshopper();
+            if (geometry is Face3D)
+                return ((Face3D)geometry).ToGrasshopper();
 
             if (geometry is Surface)
                 return ((Surface)geometry).ToGrasshopper();

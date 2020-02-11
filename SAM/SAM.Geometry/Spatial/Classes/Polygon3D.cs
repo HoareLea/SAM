@@ -78,9 +78,9 @@ namespace SAM.Geometry.Spatial
             return new BoundingBox3D(points);
         }
 
-        public Face ToFace()
+        public Face3D ToFace()
         {
-            return new Face(this);
+            return new Face3D(this);
         }
 
         public static Polygon3D Snap(IEnumerable<Point3D> point3Ds, Polygon3D polygon3D, double maxDistance = double.NaN)
@@ -93,7 +93,7 @@ namespace SAM.Geometry.Spatial
             return new Polygon3D(point3Ds_Temp);
         }
 
-        public IClosed3D GetExternalBoundary()
+        public IClosed3D GetExternalEdges()
         {
             return new Polygon3D(this);
         }

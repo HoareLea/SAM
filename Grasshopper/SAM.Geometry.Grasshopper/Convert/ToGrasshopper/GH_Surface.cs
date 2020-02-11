@@ -12,7 +12,7 @@ namespace SAM.Geometry.Grasshopper
     {
         public static GH_Surface ToGrasshopper(this Spatial.Surface surface)
         {
-            Spatial.IClosed3D closed3D = surface.GetExternalBoundary();
+            Spatial.IClosed3D closed3D = surface.GetExternalEdges();
 
             if(closed3D is Spatial.ICurvable3D)
             {
@@ -39,9 +39,9 @@ namespace SAM.Geometry.Grasshopper
             return null;
         }
 
-        public static GH_Surface ToGrasshopper(this Spatial.Face face)
+        public static GH_Surface ToGrasshopper(this Spatial.Face3D face)
         {
-            Spatial.IClosed3D closed3D = face.GetExternalBoundary();
+            Spatial.IClosed3D closed3D = face.GetExternalEdges();
 
             if (closed3D is Spatial.ICurvable3D)
             {

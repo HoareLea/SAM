@@ -9,16 +9,16 @@ namespace SAM.Geometry.Spatial
 {
     public class Extrusion : SAMGeometry, IBoundable3D
     {
-        private Face face;
+        private Face3D face;
         private Vector3D vector;
 
-        public Extrusion(Face face, double height)
+        public Extrusion(Face3D face, double height)
         {
-            this.face = new Face(face);
+            this.face = new Face3D(face);
             vector = new Vector3D(0, 0, height);
         }
 
-        public Extrusion(Face face, Vector3D vector)
+        public Extrusion(Face3D face, Vector3D vector)
         {
             this.face = face;
             this.vector = vector;
@@ -26,7 +26,7 @@ namespace SAM.Geometry.Spatial
 
         public Extrusion(Extrusion extrusion)
         {
-            face = new Face(extrusion.face);
+            face = new Face3D(extrusion.face);
             vector = new Vector3D(extrusion.vector);
         }
 
@@ -43,7 +43,7 @@ namespace SAM.Geometry.Spatial
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
-            return new Extrusion((Face)face.GetMoved(vector3D), (Vector3D)vector.Clone());
+            return new Extrusion((Face3D)face.GetMoved(vector3D), (Vector3D)vector.Clone());
         }
 
         public Vector3D Vector
@@ -61,7 +61,7 @@ namespace SAM.Geometry.Spatial
 
         public override bool FromJObject(JObject jObject)
         {
-            face = new Face(jObject.Value<JObject>("Face"));
+            face = new Face3D(jObject.Value<JObject>("Face"));
             vector = new Vector3D(jObject.Value<JObject>("Vector"));
             return true;
         }

@@ -93,7 +93,7 @@
     <Compile Include="Spatial\Classes\Segment3D.cs" />
     <Compile Include="Planar\Classes\Vector2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Spatial\Classes\Face.cs" />
+    <Compile Include="Spatial\Classes\Face3D.cs" />
     <Compile Include="Spatial\Interfaces\ISAMGeometry3D.cs" />
     <Compile Include="Spatial\Classes\Point3D.cs" />
     <Compile Include="Spatial\Classes\Polygon3D.cs" />

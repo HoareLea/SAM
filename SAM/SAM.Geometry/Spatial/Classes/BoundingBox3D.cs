@@ -275,7 +275,7 @@ namespace SAM.Geometry.Spatial
             return new BoundingBox3D(this, offset);
         }
 
-        public IClosed3D GetExternalBoundary()
+        public IClosed3D GetExternalEdges()
         {
             return new BoundingBox3D(this);
         }

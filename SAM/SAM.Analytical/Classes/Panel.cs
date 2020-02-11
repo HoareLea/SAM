@@ -35,7 +35,7 @@ namespace SAM.Analytical
             this.panelType = panelType;
         }
 
-        public Panel(Construction construction, PanelType panelType, Face face)
+        public Panel(Construction construction, PanelType panelType, Face3D face)
             : base(construction == null ? null : construction.Name, construction)
         {
             this.panelType = panelType;
@@ -49,7 +49,7 @@ namespace SAM.Analytical
             this.planarBoundary3D = planarBoundary3D;
         }
 
-        public Panel(Guid guid, Panel panel, Face face)
+        public Panel(Guid guid, Panel panel, Face3D face)
             : base(guid, panel)
         {
             panelType = panel.panelType;
@@ -69,7 +69,7 @@ namespace SAM.Analytical
 
         }
 
-        public Face GetFace()
+        public Face3D GetFace()
         {
             return planarBoundary3D.GetFace();
         }
@@ -100,9 +100,9 @@ namespace SAM.Analytical
             }
         }
 
-        public List<Edge3D> GetEdge3Ds()
+        public List<BoundaryEdge3D> GetEdge3Ds()
         {
-            return planarBoundary3D.GetEdge3DLoop().Edge3Ds;
+            return planarBoundary3D.GetEdge3DLoop().BoundaryEdge3Ds;
         }
 
         public IClosedPlanar3D GetClosedPlanar3D()

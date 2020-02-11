@@ -27,10 +27,10 @@ namespace SAM.Geometry.Spatial
 
         }
 
-        public Face ToFace(double tolerance = Tolerance.MicroDistance)
+        public Face3D ToFace(double tolerance = Tolerance.MicroDistance)
         {
             if (boundary is IClosedPlanar3D)
-                return new Face(boundary as IClosedPlanar3D);
+                return new Face3D(boundary as IClosedPlanar3D);
 
             List<ICurve3D> curve3Ds = null;
             if (boundary is Polycurve3D)
@@ -44,7 +44,7 @@ namespace SAM.Geometry.Spatial
                 List<Point3D> point3Ds = Segment3D.GetPoints(segment3Ds, false);
                 Plane plane = Point3D.GetPlane(point3Ds, tolerance);
                 if (plane != null)
-                    return new Face(new Polygon3D(point3Ds));
+                    return new Face3D(new Polygon3D(point3Ds));
             }
 
             throw new NotImplementedException();
@@ -60,7 +60,7 @@ namespace SAM.Geometry.Spatial
             return boundary.GetBoundingBox(offset);
         }
 
-        public IClosed3D GetExternalBoundary()
+        public IClosed3D GetExternalEdges()
         {
             return boundary.Clone() as IClosed3D;
         }

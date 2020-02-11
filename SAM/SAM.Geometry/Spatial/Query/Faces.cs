@@ -6,30 +6,30 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static List<Face> Faces(this IEnumerable<ISAMGeometry3D> geometry3Ds)
+        public static List<Face3D> Faces(this IEnumerable<ISAMGeometry3D> geometry3Ds)
         {
             if (geometry3Ds == null)
                 return null;
 
-            List<Face> faces = new List<Face>();
+            List<Face3D> faces = new List<Face3D>();
             foreach (ISAMGeometry3D geometry3D in geometry3Ds)
             {
-                if (geometry3D is Face)
+                if (geometry3D is Face3D)
                 {
-                    faces.Add((Face)geometry3D);
+                    faces.Add((Face3D)geometry3D);
                     continue;
                 }
 
                 if (geometry3D is IClosedPlanar3D)
                 {
-                    faces.Add(new Face((IClosedPlanar3D)geometry3D));
+                    faces.Add(new Face3D((IClosedPlanar3D)geometry3D));
                     continue;
                 }
 
                 if(geometry3D is ICurvable3D)
                 {
                     List<Point3D> point3Ds = ((ICurvable3D)geometry3D).GetCurves().ConvertAll(x => x.GetStart());
-                    faces.Add(new Face(new Polygon3D(point3Ds)));
+                    faces.Add(new Face3D(new Polygon3D(point3Ds)));
                 }
             }
 

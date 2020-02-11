@@ -23,7 +23,7 @@ namespace SAM.Analytical.Grasshopper
             if (planarBoundary3D == null)
                 return null;
             
-            Geometry.Spatial.Face face = planarBoundary3D.GetFace();
+            Geometry.Spatial.Face3D face = planarBoundary3D.GetFace();
             if (face == null)
                 return null;
 

@@ -11,47 +11,47 @@ namespace SAM.Analytical
     public class PlanarBoundary3D : SAMObject
     {
         private Plane plane;
-        private Edge2DLoop edge2DLoop;
-        private List<Edge2DLoop> internalEdge2DLoops;
+        private BoundaryEdge2DLoop edge2DLoop;
+        private List<BoundaryEdge2DLoop> internalEdge2DLoops;
 
-        public PlanarBoundary3D(Face face)
+        public PlanarBoundary3D(Face3D face)
             : base()
         {
             plane = face.GetPlane();
-            edge2DLoop = new Edge2DLoop(face.ExternalBoundary);
+            edge2DLoop = new BoundaryEdge2DLoop(face.ExternalEdge);
 
-            List<Geometry.Planar.IClosed2D> internalBoundaries = face.InternalBoundaries;
+            List<Geometry.Planar.IClosed2D> internalBoundaries = face.InternalEdges;
             if(internalBoundaries != null)
             {
-                internalEdge2DLoops = new List<Edge2DLoop>();
+                internalEdge2DLoops = new List<BoundaryEdge2DLoop>();
                 foreach(Geometry.Planar.IClosed2D closed2D in internalBoundaries)
-                    internalEdge2DLoops.Add(new Edge2DLoop(closed2D));
+                    internalEdge2DLoops.Add(new BoundaryEdge2DLoop(closed2D));
             }
         }
 
         public PlanarBoundary3D(IClosedPlanar3D closedPlanar3D)
         {
             plane = closedPlanar3D.GetPlane();
-            edge2DLoop = new Edge2DLoop(closedPlanar3D);
+            edge2DLoop = new BoundaryEdge2DLoop(closedPlanar3D);
         }
 
         public PlanarBoundary3D(PlanarBoundary3D planarBoundary3D)
             : base(planarBoundary3D)
         {
             plane = (Geometry.Spatial.Plane)planarBoundary3D.plane.Clone();
-            edge2DLoop = new Edge2DLoop(planarBoundary3D.edge2DLoop);
+            edge2DLoop = new BoundaryEdge2DLoop(planarBoundary3D.edge2DLoop);
 
             if (planarBoundary3D.internalEdge2DLoops != null)
-                internalEdge2DLoops = planarBoundary3D.internalEdge2DLoops.ConvertAll(x => new Edge2DLoop(x));
+                internalEdge2DLoops = planarBoundary3D.internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
         }
 
-        public PlanarBoundary3D(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Plane plane, Edge2DLoop edge2DLoop, IEnumerable<Edge2DLoop> internalEdge2DLoop)
+        public PlanarBoundary3D(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Plane plane, BoundaryEdge2DLoop edge2DLoop, IEnumerable<BoundaryEdge2DLoop> internalEdge2DLoop)
             : base(guid, name, parameterSets)
         {
             this.plane = new Plane(plane);
-            this.edge2DLoop = new Edge2DLoop(edge2DLoop);
+            this.edge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
             if (internalEdge2DLoop != null)
-                this.internalEdge2DLoops = internalEdge2DLoop.ToList().ConvertAll(x => new Edge2DLoop(x));
+                this.internalEdge2DLoops = internalEdge2DLoop.ToList().ConvertAll(x => new BoundaryEdge2DLoop(x));
         }
 
         public PlanarBoundary3D(JObject jObject)
@@ -68,36 +68,36 @@ namespace SAM.Analytical
             }
         }
 
-        public Edge2DLoop Edge2DLoop
+        public BoundaryEdge2DLoop Edge2DLoop
         {
             get
             {
-                return new Edge2DLoop(edge2DLoop);
+                return new BoundaryEdge2DLoop(edge2DLoop);
             }
         }
 
-        public List<Edge2DLoop> InternalEdge2DLoops
+        public List<BoundaryEdge2DLoop> InternalEdge2DLoops
         {
             get
             {
                 if (internalEdge2DLoops == null)
                     return null;
 
-                return internalEdge2DLoops.ConvertAll(x => new Edge2DLoop(x));
+                return internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
             }
         }
 
-        public Edge3DLoop GetEdge3DLoop()
+        public BoundaryEdge3DLoop GetEdge3DLoop()
         {
-            return new Edge3DLoop(plane, edge2DLoop);
+            return new BoundaryEdge3DLoop(plane, edge2DLoop);
         }
 
-        public List<Edge3DLoop> GetInternalEdge3DLoops()
+        public List<BoundaryEdge3DLoop> GetInternalEdge3DLoops()
         {
             if (internalEdge2DLoops == null)
                 return null;
 
-            return internalEdge2DLoops.ConvertAll(x => new Edge3DLoop(plane, x));
+            return internalEdge2DLoops.ConvertAll(x => new BoundaryEdge3DLoop(plane, x));
         }
 
         public List<IClosedPlanar3D> GetInternalClosedPlanar3Ds()
@@ -106,9 +106,9 @@ namespace SAM.Analytical
                 return null;
 
             List<IClosedPlanar3D> result = new List<IClosedPlanar3D>();
-            foreach (Edge2DLoop edge2DLoop in internalEdge2DLoops)
+            foreach (BoundaryEdge2DLoop edge2DLoop in internalEdge2DLoops)
             {
-                Polygon3D polygon3D = new Polygon3D(edge2DLoop.Edge2Ds.ConvertAll(x => ((ICurve3D)plane.Convert(x.Curve2D)).GetStart()));
+                Polygon3D polygon3D = new Polygon3D(edge2DLoop.BoundaryEdge2Ds.ConvertAll(x => ((ICurve3D)plane.Convert(x.Curve2D)).GetStart()));
                 result.Add(polygon3D);
             }
 
@@ -120,14 +120,14 @@ namespace SAM.Analytical
             return plane.Coplanar(planarBoundary3D.plane, tolerance);
         }
 
-        public Face GetFace()
+        public Face3D GetFace()
         {
-            return new Face(plane, edge2DLoop.GetClosed2D());
+            return new Face3D(plane, edge2DLoop.GetClosed2D());
         }
 
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
         {
-            Edge3DLoop edge3DLoop = GetEdge3DLoop();
+            BoundaryEdge3DLoop edge3DLoop = GetEdge3DLoop();
             edge3DLoop.Snap(point3Ds, maxDistance);
         }
 
@@ -147,9 +147,9 @@ namespace SAM.Analytical
                 return false;
 
             plane = new Plane(jObject.Value<JObject>("Plane"));
-            edge2DLoop = new Edge2DLoop(jObject.Value<JObject>("Edge2DLoop"));
+            edge2DLoop = new BoundaryEdge2DLoop(jObject.Value<JObject>("Edge2DLoop"));
             if (jObject.ContainsKey("InternalEdge2DLoops"))
-                internalEdge2DLoops = Core.Create.IJSAMObjects<Edge2DLoop>(jObject.Value<JArray>("InternalEdge2DLoops"));
+                internalEdge2DLoops = Core.Create.IJSAMObjects<BoundaryEdge2DLoop>(jObject.Value<JArray>("InternalEdge2DLoops"));
             return true;
         }
 

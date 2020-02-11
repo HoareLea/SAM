@@ -26,7 +26,7 @@ namespace SAMAnalyticalDynamo
         {
             Plane plane = SAM.Geometry.Spatial.Point3D.GetPlane(point3Ds, SAM.Geometry.Tolerance.MicroDistance);
 
-            return new SAM.Analytical.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face(new SAM.Geometry.Spatial.Polygon3D(point3Ds.ToList().ConvertAll(x => plane.Project(x)))));
+            return new SAM.Analytical.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face3D(new SAM.Geometry.Spatial.Polygon3D(point3Ds.ToList().ConvertAll(x => plane.Project(x)))));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace SAMAnalyticalDynamo
             if (closedPlanar3D == null)
                 return null;
 
-            return new SAM.Analytical.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face(closedPlanar3D));
+            return new SAM.Analytical.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face3D(closedPlanar3D));
         }
 
         public static SAM.Analytical.Panel SnapByPoints(SAM.Analytical.Panel panel, IEnumerable<object> points, double maxDistance = 0.2)

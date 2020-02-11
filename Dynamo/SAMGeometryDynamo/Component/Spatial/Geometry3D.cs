@@ -79,8 +79,8 @@ namespace SAMGeometryDynamo
             if (geometry3D is Segment3D)
                 geometry3D_Snapped = Segment3D.Snap(point3Ds, (Segment3D)geometry3D, maxDistance);
 
-            if (geometry3D is Face)
-                geometry3D = ((Face)geometry3D).ToClosedPlanar3D() as SAM.Geometry.Spatial.Polygon3D;
+            if (geometry3D is Face3D)
+                geometry3D = ((Face3D)geometry3D).ToClosedPlanar3D() as SAM.Geometry.Spatial.Polygon3D;
 
             if (geometry3D is SAM.Geometry.Spatial.Polygon3D)
                 geometry3D_Snapped = SAM.Geometry.Spatial.Polygon3D.Snap(point3Ds, (SAM.Geometry.Spatial.Polygon3D)geometry3D, maxDistance);
@@ -92,7 +92,7 @@ namespace SAMGeometryDynamo
                 return geometry3D_Snapped;
 
             if (geometry is Autodesk.DesignScript.Geometry.Surface && geometry3D_Snapped is SAM.Geometry.Spatial.Polygon3D)
-                geometry3D_Snapped = new Face((SAM.Geometry.Spatial.Polygon3D)geometry3D_Snapped);
+                geometry3D_Snapped = new Face3D((SAM.Geometry.Spatial.Polygon3D)geometry3D_Snapped);
 
             if (geometry is Autodesk.DesignScript.Geometry.Geometry)
                 return geometry3D_Snapped.ToDynamo();

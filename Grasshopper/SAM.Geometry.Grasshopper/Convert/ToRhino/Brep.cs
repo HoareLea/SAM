@@ -32,7 +32,7 @@ namespace SAM.Geometry.Grasshopper
             return Rhino.Geometry.Brep.CreateEdgeSurface(lineCurves);
         }
 
-        public static Rhino.Geometry.Brep ToRhino_Brep(this Spatial.Face face)
+        public static Rhino.Geometry.Brep ToRhino_Brep(this Spatial.Face3D face)
         {
             Spatial.IClosed3D closed3D = face.ToClosedPlanar3D();
             if (closed3D is Spatial.Polygon3D)

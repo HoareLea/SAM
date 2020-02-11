@@ -225,9 +225,9 @@ namespace SAM.Geometry.Grasshopper
             //TODO: Display Spatial.Surface as Rhino.Geometry.Surface
             
             List<Spatial.ICurve3D> curve3Ds = null;
-            if (Value is Spatial.Face)
+            if (Value is Spatial.Face3D)
             {
-                Spatial.IClosedPlanar3D closedPlanar3D = (Value as Spatial.Face).ToClosedPlanar3D();
+                Spatial.IClosedPlanar3D closedPlanar3D = (Value as Spatial.Face3D).ToClosedPlanar3D();
                 if(closedPlanar3D is Spatial.ICurvable3D)
                     curve3Ds = ((Spatial.ICurvable3D)Value).GetCurves();
             }
@@ -254,9 +254,9 @@ namespace SAM.Geometry.Grasshopper
         {
             Brep brep = null;
 
-            if (Value is Spatial.Face)
+            if (Value is Spatial.Face3D)
             {
-                brep = Convert.ToRhino_Brep(Value as Spatial.Face);
+                brep = Convert.ToRhino_Brep(Value as Spatial.Face3D);
             }
 
             if (brep != null)
