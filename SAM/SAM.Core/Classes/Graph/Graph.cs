@@ -11,6 +11,11 @@ namespace SAM.Core
     {
         private List<GraphNode> graphNodes;
 
+        public Graph()
+        {
+            graphNodes = new List<GraphNode>();
+        }
+        
         public Graph(IEnumerable<GraphNode> graphNodes)
         {
             if (graphNodes != null)
@@ -102,6 +107,62 @@ namespace SAM.Core
                 return null;
 
             throw new NotImplementedException();
+        }
+
+        public bool Connect(object object_1, object object_2)
+        {
+            GraphNode graphNode_1 = null;
+
+            if (object_1 is GraphNode)
+            {
+
+            }
+            else if(object_1 is GraphEdge)
+            {
+
+            }
+            else
+            {
+                graphNode_1 = graphNodes.Find(x => ReferenceEquals(x.Object, object_1));
+                if (graphNode_1 == null)
+                {
+                    graphNode_1 = new GraphNode(object_1);
+                    graphNodes.Add(graphNode_1);
+                }
+                    
+            }
+
+            if (graphNode_1 == null)
+                return false;
+
+            GraphNode graphNode_2 = null;
+
+            if (object_2 is GraphNode)
+            {
+
+            }
+            else if (object_2 is GraphEdge)
+            {
+
+            }
+            else
+            {
+                graphNode_2 = graphNodes.Find(x => ReferenceEquals(x.Object, object_2));
+                if (graphNode_2 == null)
+                {
+                    graphNode_2 = new GraphNode(object_2);
+                    graphNodes.Add(graphNode_2);
+                }
+                    
+            }
+
+            if (graphNode_2 == null)
+                return false;
+
+            GraphEdge graphEdge = new GraphEdge();
+            graphNode_1.Add(graphEdge);
+            graphNode_2.Add(graphEdge);
+            return true;
         }
 
         public bool Next(ref List<GraphPath> graphPaths)

@@ -14,7 +14,13 @@ namespace SAM.Core
         public GraphNode(object @object, double weight)
             : base(@object, weight)
         {
+            graphEdges = new List<GraphEdge>();
+        }
 
+        public GraphNode(object @object)
+            : base(@object)
+        {
+            graphEdges = new List<GraphEdge>();
         }
 
         public GraphNode(object @object, double weight, IEnumerable<GraphEdge> graphEdges)
@@ -22,6 +28,12 @@ namespace SAM.Core
         {
             if (graphEdges != null)
                 this.graphEdges = new List<GraphEdge>(graphEdges);
+        }
+
+        public bool Add(GraphEdge graphEdge)
+        {
+            graphEdges.Add(graphEdge);
+            return true;
         }
 
         public GraphNode(GraphNode graphNode)
