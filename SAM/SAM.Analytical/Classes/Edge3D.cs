@@ -108,7 +108,7 @@ namespace SAM.Analytical
             ISAMGeometry3D geometry3D_Temp = geometry3D;
 
             if (geometry3D is IClosed3D)
-                geometry3D_Temp = ((IClosed3D)geometry3D).GetBoundary();
+                geometry3D_Temp = ((IClosed3D)geometry3D).GetExternalBoundary();
 
             if (geometry3D_Temp is Polycurve3D)
                 return ((Polycurve3D)geometry3D_Temp).Explode().ConvertAll(x => new Edge3D(x));

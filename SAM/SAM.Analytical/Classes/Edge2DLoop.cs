@@ -39,7 +39,7 @@ namespace SAM.Analytical
 
         public Edge2DLoop(Geometry.Spatial.Face face)
         {
-            edge2Ds = Edge2D.FromGeometry(face.Boundary).ToList();
+            edge2Ds = Edge2D.FromGeometry(face.ExternalBoundary).ToList();
         }
 
         public Edge2DLoop(Edge2DLoop edge2DLoop)

@@ -18,7 +18,15 @@ namespace SAM.Analytical
             : base()
         {
             plane = face.GetPlane();
-            edge2DLoop = new Edge2DLoop(face.Boundary);
+            edge2DLoop = new Edge2DLoop(face.ExternalBoundary);
+
+            List<Geometry.Planar.IClosed2D> internalBoundaries = face.InternalBoundaries;
+            if(internalBoundaries != null)
+            {
+                internalEdge2DLoops = new List<Edge2DLoop>();
+                foreach(Geometry.Planar.IClosed2D closed2D in internalBoundaries)
+                    internalEdge2DLoops.Add(new Edge2DLoop(closed2D));
+            }
         }
 
         public PlanarBoundary3D(IClosedPlanar3D closedPlanar3D)
@@ -154,114 +162,6 @@ namespace SAM.Analytical
                 jObject.Add("InternalEdge2DLoops", Core.Create.JArray(internalEdge2DLoops));
             
             return jObject;
-        }
-
-
-
-        public static bool TryGetPlanarBoundary3D(List<Face> faces, out PlanarBoundary3D planarBoundary3D)
-        {
-            planarBoundary3D = null;
-
-            if (faces == null || faces.Count() == 0)
-                return false;
-
-            Face face_Max = null;
-            double area_Max = double.MinValue;
-            foreach (Face face in faces)
-            {
-                double area = face.GetArea();
-                if (area > area_Max)
-                {
-                    area_Max = area;
-                    face_Max = face;
-                }
-
-            }
-
-            if (face_Max == null)
-                return false;
-
-            planarBoundary3D = new PlanarBoundary3D(face_Max);
-            foreach (Face face in faces)
-            {
-                if (face == face_Max)
-                    continue;
-
-                if (face_Max.Inside(face))
-                {
-                    if (planarBoundary3D.internalEdge2DLoops == null)
-                        planarBoundary3D.internalEdge2DLoops = new List<Edge2DLoop>();
-
-                    planarBoundary3D.internalEdge2DLoops.Add(new Edge2DLoop(face));
-                }
-            }
-
-            return true;
-        }
-
-        public static bool TryGetPlanarBoundary3Ds(List<Face> faces, out List<PlanarBoundary3D> planarBoundary3Ds)
-        {
-            planarBoundary3Ds = null;
-
-            if (faces == null || faces.Count() == 0)
-                return false;
-
-            planarBoundary3Ds = new List<PlanarBoundary3D>();
-
-
-            if (faces.Count() == 1)
-            {
-                planarBoundary3Ds.Add(new PlanarBoundary3D(faces.First()));
-                return true;
-            }
-            
-            List<Face> faceList = faces.ToList();
-            faceList.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
-
-            while(faceList.Count > 0)
-            {
-                List<Face> faceList_ToRemove = new List<Face>();
-
-                Face face = faceList.First();
-                PlanarBoundary3D planarBoundary3D = new PlanarBoundary3D(face);
-                planarBoundary3Ds.Add(planarBoundary3D);
-                faceList_ToRemove.Add(face);
-
-                Geometry.Orientation orientation = Geometry.Orientation.Undefined;
-                if(face.Boundary is Geometry.Planar.Polygon2D)
-                    orientation = ((Geometry.Planar.Polygon2D)face.Boundary).GetOrientation();
-
-                foreach (Face face_Internal in faces)
-                {
-                    if (face_Internal == face)
-                        continue;
-
-                    if (!face.Inside(face_Internal))
-                        continue;
-
-                    if (planarBoundary3D.internalEdge2DLoops == null)
-                        planarBoundary3D.internalEdge2DLoops = new List<Edge2DLoop>();
-
-                    Geometry.Planar.IClosed2D closed2D = planarBoundary3D.plane.Convert(face_Internal.ToClosedPlanar3D());
-                    if(orientation != Geometry.Orientation.Undefined)
-                    {
-                        if (closed2D is Geometry.Planar.Polygon2D)
-                        {
-                            Geometry.Planar.Polygon2D polygon2D = (Geometry.Planar.Polygon2D)closed2D;
-                            Geometry.Orientation orientation_Internal = polygon2D.GetOrientation();
-                            if (orientation == orientation_Internal)
-                                polygon2D.Reverse();
-                        }
-                    }
-
-                    planarBoundary3D.internalEdge2DLoops.Add(new Edge2DLoop(new Face(planarBoundary3D.plane, closed2D)));
-                    faceList_ToRemove.Add(face_Internal);
-                }
-
-                faceList_ToRemove.ForEach(x => faceList.Remove(x));
-            }
-
-            return true;
         }
     }
 }

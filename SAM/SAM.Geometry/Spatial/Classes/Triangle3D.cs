@@ -87,7 +87,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public IClosed3D GetBoundary()
+        public IClosed3D GetExternalBoundary()
         {
             return new Triangle3D(this);
         }

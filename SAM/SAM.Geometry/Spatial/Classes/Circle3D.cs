@@ -106,7 +106,7 @@ namespace SAM.Geometry.Spatial
             throw new NotImplementedException();
         }
 
-        public IClosed3D GetBoundary()
+        public IClosed3D GetExternalBoundary()
         {
             return new Circle3D(this);
         }

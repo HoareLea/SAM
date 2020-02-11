@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Core
 {
-    public class Graph: IEnumerable<GraphNode>
+    public class Graph : IEnumerable<GraphNode>
     {
         private List<GraphNode> graphNodes;
 
@@ -15,28 +15,28 @@ namespace SAM.Core
         {
             graphNodes = new List<GraphNode>();
         }
-        
+
         public Graph(IEnumerable<GraphNode> graphNodes)
         {
             if (graphNodes != null)
-                this.graphNodes = new List<GraphNode>(graphNodes); 
+                this.graphNodes = new List<GraphNode>(graphNodes);
         }
 
         public HashSet<GraphNode> GetGraphNodes(object @object)
-        {            
+        {
             HashSet<GraphNode> result = new HashSet<GraphNode>();
             if (@object is GraphNode)
             {
                 GraphNode graphNode = graphNodes.Find(x => x == (GraphNode)@object);
                 if (graphNode == null)
                     return result;
-                
+
                 result.Add(graphNode);
 
                 return result;
             }
 
-            if(@object is GraphEdge)
+            if (@object is GraphEdge)
             {
                 foreach (GraphNode graphNode in this)
                     if (graphNode.Contains((GraphEdge)@object))
@@ -83,7 +83,7 @@ namespace SAM.Core
 
             foreach (GraphNode graphNode in this)
             {
-                foreach(GraphEdge graphEdge in graphNode)
+                foreach (GraphEdge graphEdge in graphNode)
                 {
                     if (graphEdge.Object == @object && !result.Contains(graphEdge))
                         result.Add(graphEdge);
@@ -117,7 +117,7 @@ namespace SAM.Core
             {
 
             }
-            else if(object_1 is GraphEdge)
+            else if (object_1 is GraphEdge)
             {
 
             }
@@ -129,7 +129,7 @@ namespace SAM.Core
                     graphNode_1 = new GraphNode(object_1);
                     graphNodes.Add(graphNode_1);
                 }
-                    
+
             }
 
             if (graphNode_1 == null)
@@ -153,7 +153,7 @@ namespace SAM.Core
                     graphNode_2 = new GraphNode(object_2);
                     graphNodes.Add(graphNode_2);
                 }
-                    
+
             }
 
             if (graphNode_2 == null)
@@ -168,24 +168,24 @@ namespace SAM.Core
         public bool Next(ref List<GraphPath> graphPaths)
         {
             bool result = false;
-            
+
             List<GraphPath> graphPaths_New = new List<GraphPath>();
             foreach (GraphPath graphPath in graphPaths)
             {
                 if (graphPath.Count() > 0 && graphPath.First() == graphPath.Last())
                     continue;
-                
+
                 GraphEdge graphEdge = graphPath.Last();
-                if(graphEdge is GraphNode)
+                if (graphEdge is GraphNode)
                 {
                     HashSet<GraphEdge> graphEdges = GetGraphEdges(graphEdge);
-                    if(graphEdges != null && graphEdges.Count > 0)
+                    if (graphEdges != null && graphEdges.Count > 0)
                     {
                         graphEdges.Remove(graphEdge);
-                        foreach(GraphEdge graphEdge_New in graphEdges)
+                        foreach (GraphEdge graphEdge_New in graphEdges)
                         {
                             GraphPath graphPath_New = new GraphPath(graphPath);
-                            if(graphPath_New.Add(graphEdge_New))
+                            if (graphPath_New.Add(graphEdge_New))
                             {
                                 graphPaths_New.Add(graphPath_New);
                                 result = true;
@@ -198,7 +198,7 @@ namespace SAM.Core
                     HashSet<GraphNode> graphNodes = GetGraphNodes(graphEdge);
                     if (graphNodes != null && graphNodes.Count > 0)
                     {
-                        foreach(GraphNode graphNode in graphNodes)
+                        foreach (GraphNode graphNode in graphNodes)
                         {
                             int index = graphPath.IndexOf(graphNode);
                             if (index > 0)
@@ -224,7 +224,7 @@ namespace SAM.Core
                 AppendGraphEdges(graphEdge, ref graphEdges);
 
             HashSet<GraphNode> graphNodes = new HashSet<GraphNode>();
-            foreach(GraphEdge graphEdge in graphEdges)
+            foreach (GraphEdge graphEdge in graphEdges)
             {
                 HashSet<GraphNode> graphNodes_Temp = GetGraphNodes(graphEdge);
                 if (graphNodes_Temp == null || graphNodes_Temp.Count == 0)
@@ -265,7 +265,7 @@ namespace SAM.Core
             if (@object == null)
                 return false;
 
-            if(@object is GraphNode)
+            if (@object is GraphNode)
                 return graphNodes.Remove((GraphNode)@object);
 
             HashSet<GraphNode> graphNodes_Temp = GetGraphNodes(@object);
@@ -288,6 +288,10 @@ namespace SAM.Core
         {
             return graphNodes.GetEnumerator();
         }
+
+        //public SAMRelationCluster<T, Y> GetSAMRelationCluster<T, Y>()
+        //{
+        //}
 
 
         private void AppendGraphEdges(GraphEdge graphEdge, ref HashSet<GraphEdge> graphEdges)

@@ -12,13 +12,9 @@ namespace SAM.Analytical
             if (faces == null)
                 return null;
 
-            List<PlanarBoundary3D> planarBoundary3Ds = null;
-            if (!PlanarBoundary3D.TryGetPlanarBoundary3Ds(faces, out planarBoundary3Ds))
-                return null;
-
             List<Panel> result = new List<Panel>();
-            foreach (PlanarBoundary3D planarBoundary3D in planarBoundary3Ds)
-                result.Add(new Panel(construction, panelType, planarBoundary3D));
+            foreach (Face face in faces)
+                result.Add(new Panel(construction, panelType, face));
 
             return result;
         }

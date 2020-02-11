@@ -35,7 +35,7 @@ namespace SAM.Geometry.Spatial
             return new PolycurveLoop3D(this);
         }
 
-        public IClosed3D GetBoundary()
+        public IClosed3D GetExternalBoundary()
         {
             return new PolycurveLoop3D(this);
         }
