@@ -14,7 +14,10 @@ namespace SAM.Geometry.Grasshopper
         public static List<Spatial.ISAMGeometry3D> ToSAM(this IGH_GeometricGoo geometricGoo, bool simplify = true)
         {
             if (geometricGoo is GH_Curve)
-                return new List<Spatial.ISAMGeometry3D>() { ((GH_Curve)geometricGoo).ToSAM(simplify)};
+            {
+                return new List<Spatial.ISAMGeometry3D>() { ((GH_Curve)geometricGoo).ToSAM(simplify) };
+            }
+                
 
             if (geometricGoo is GH_Surface)
                 return ((GH_Surface)geometricGoo).ToSAM(simplify);

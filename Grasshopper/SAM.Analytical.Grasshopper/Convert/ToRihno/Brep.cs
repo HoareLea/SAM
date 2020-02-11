@@ -23,11 +23,11 @@ namespace SAM.Analytical.Grasshopper
             if (planarBoundary3D == null)
                 return null;
             
-            Geometry.Spatial.Face3D face = planarBoundary3D.GetFace();
-            if (face == null)
+            Geometry.Spatial.Face3D face3D = planarBoundary3D.GetFace();
+            if (face3D == null)
                 return null;
 
-            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(((Geometry.Spatial.ICurvable3D)face.ToClosedPlanar3D()).GetCurves().ToRhino_PolylineCurve(), Tolerance.MicroDistance);
+            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(((Geometry.Spatial.ICurvable3D)face3D.ToClosedPlanar3D()).GetCurves().ToRhino_PolylineCurve(), Tolerance.MicroDistance);
             if (breps == null || breps.Length == 0)
                 return null;
 

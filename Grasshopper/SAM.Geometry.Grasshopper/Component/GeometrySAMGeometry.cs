@@ -58,7 +58,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            object @object = geometricGoo.ToSAM(false);
+            object @object = geometricGoo.ToSAM(true);
 
             if (@object == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");

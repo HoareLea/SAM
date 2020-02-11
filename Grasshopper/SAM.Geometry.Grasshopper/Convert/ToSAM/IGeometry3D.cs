@@ -39,8 +39,6 @@ namespace SAM.Geometry.Grasshopper
                 PolylineCurve polylineCurve = ToRhino_PolylineCurve(curve);
                 return polylineCurve.ToSAM();
             }
-
-            return null;
         }
 
         public static Spatial.ISAMGeometry3D ToSAM(this PolylineCurve polylineCurve, bool simplify = true, double tolerance = Tolerance.MicroDistance)

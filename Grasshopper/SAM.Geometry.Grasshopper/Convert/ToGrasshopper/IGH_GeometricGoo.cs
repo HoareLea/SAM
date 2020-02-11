@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 using Grasshopper.Kernel.Types;
+
 using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Grasshopper
@@ -39,6 +35,10 @@ namespace SAM.Geometry.Grasshopper
 
             if (geometry is Planar.Segment2D)
                 return ((Planar.Segment2D)geometry).ToGrasshopper();
+
+            if(geometry is Polycurve3D)
+                return ((Polycurve3D)geometry).ToGrasshopper();
+
 
             return (geometry as dynamic).ToGrasshopper();
         }
