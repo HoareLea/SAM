@@ -70,6 +70,7 @@
     <Compile Include="Spatial\Create\JArray.cs" />
     <Compile Include="Spatial\Create\ICurve3Ds.cs" />
     <Compile Include="Spatial\Create\ICurve3D.cs" />
+    <Compile Include="Spatial\Query\Explode.cs" />
     <Compile Include="Spatial\Query\Faces.cs" />
     <Compile Include="Spatial\Classes\BoundingBox3D.cs" />
     <Compile Include="Spatial\Classes\Circle3D.cs" />
