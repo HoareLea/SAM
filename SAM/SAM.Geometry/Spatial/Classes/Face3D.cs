@@ -175,10 +175,10 @@ namespace SAM.Geometry.Spatial
             List<IClosedPlanar3D> internalEdges = edges.ToList();
             internalEdges.Remove(externalEdge);
 
-            return GetFace(plane, plane.Convert(externalEdge), internalEdges.ConvertAll(x => plane.Convert(x)));
+            return Create(plane, plane.Convert(externalEdge), internalEdges.ConvertAll(x => plane.Convert(x)));
         }
         
-        public static Face3D GetFace(Plane plane, Planar.IClosed2D externalEdge, IEnumerable<Planar.IClosed2D> internalEdges)
+        public static Face3D Create(Plane plane, Planar.IClosed2D externalEdge, IEnumerable<Planar.IClosed2D> internalEdges)
         {
             if (plane == null || externalEdge == null)
                 return null;
@@ -190,40 +190,23 @@ namespace SAM.Geometry.Spatial
             return new Face3D(plane, face2D);
         }
 
-        public static Face3D GetFace(Plane plane, IEnumerable<Planar.IClosed2D> edges, out List<Planar.IClosed2D> edges_Excluded)
+        public static Face3D Create(Plane plane, IEnumerable<Planar.IClosed2D> edges, out List<Planar.IClosed2D> edges_Excluded)
         {
             edges_Excluded = null;
 
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            Planar.Face2D face2D = Planar.Face2D.GetFace(edges, out edges_Excluded);
+            Planar.Face2D face2D = Planar.Face2D.Create(edges, out edges_Excluded);
             return new Face3D(plane, face2D);
         }
         
-        public static Face3D GetFace(Plane plane, IEnumerable<Planar.IClosed2D> edges)
+        public static Face3D Create(Plane plane, IEnumerable<Planar.IClosed2D> edges)
         {
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
             
-            return new Face3D(plane, Planar.Face2D.GetFace(edges));
-        }
-
-        public static List<Face3D> GetFaces(Plane plane, IEnumerable<Planar.IClosed2D> edges)
-        {
-            if (plane == null || edges == null || edges.Count() == 0)
-                return null;
-
-            List<Planar.Face2D> face2Ds = Planar.Face2D.GetFaces(edges);
-            if (face2Ds == null)
-                return null;
-
-            List<Face3D> result = new List<Face3D>();
-            if (face2Ds.Count == 0)
-                return result;
-
-
-            return face2Ds.ConvertAll(x => new Face3D(plane, x));
+            return new Face3D(plane, Planar.Face2D.Create(edges));
         }
     }
 }

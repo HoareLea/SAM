@@ -47,7 +47,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
         
-        public static Face2D GetFace(IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded)
+        public static Face2D Create(IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded)
         {
             edges_Excluded = null;
 
@@ -92,35 +92,10 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static Face2D GetFace(IEnumerable<IClosed2D> edges)
+        public static Face2D Create(IEnumerable<IClosed2D> edges)
         {
             List<Planar.IClosed2D> edges_Excluded = null;
-            return GetFace(edges, out edges_Excluded);
-        }
-
-        public static List<Face2D> GetFaces(IEnumerable<IClosed2D> edges)
-        {
-            if (edges == null)
-                return null;
-
-            List<Face2D> result = new List<Face2D>();
-            if (edges.Count() == 0)
-                return result;
-
-            List<Planar.IClosed2D> edges_Current = new List<IClosed2D>(edges);
-            while (edges_Current.Count > 0)
-            {
-                List<IClosed2D> edges_Excluded = null;
-                Face2D face = GetFace(edges_Current, out edges_Excluded);
-                if (face == null)
-                    break;
-
-                result.Add(face);
-
-                edges_Current = edges_Excluded;
-            }
-
-            return result;
+            return Create(edges, out edges_Excluded);
         }
     }
 }

@@ -137,7 +137,7 @@ namespace SAM.Analytical
             if(internalEdge2DLoops != null && internalEdge2DLoops.Count > 0)
                 internalClosed2Ds = InternalEdge2DLoops.ConvertAll(x => x.GetClosed2D());
 
-            return Face3D.GetFace(plane, externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
+            return Face3D.Create(plane, externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
         }
 
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)

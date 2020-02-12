@@ -100,11 +100,6 @@ namespace SAM.Analytical
             }
         }
 
-        public List<BoundaryEdge3D> GetEdge3Ds()
-        {
-            return planarBoundary3D.GetEdge3DLoop().BoundaryEdge3Ds;
-        }
-
         public PlanarBoundary3D PlanarBoundary3D
         {
             get
