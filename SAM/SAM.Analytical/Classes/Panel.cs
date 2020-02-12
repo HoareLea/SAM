@@ -69,7 +69,7 @@ namespace SAM.Analytical
 
         }
 
-        public Face3D GetFace()
+        public Face3D GetFace3D()
         {
             return planarBoundary3D.GetFace();
         }
@@ -81,7 +81,7 @@ namespace SAM.Analytical
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            return GetFace().GetBoundingBox(offset);
+            return GetFace3D().GetBoundingBox(offset);
         }
 
         public Construction Construction
