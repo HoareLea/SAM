@@ -149,7 +149,7 @@ namespace SAM.Geometry.Spatial
         }
 
 
-        public static Face3D GetFace(IEnumerable<IClosedPlanar3D> edges)
+        public static Face3D Create(IEnumerable<IClosedPlanar3D> edges)
         {
             if (edges == null)
                 return null;
