@@ -220,9 +220,22 @@ namespace SAM.Geometry.Spatial
             return Convert(closed2D as dynamic);
         }
 
-        public Planar.IClosed2D Convert(Face3D Face)
+        public Planar.Face2D Convert(Face3D face3D)
         {
-            return Convert(Face.ToClosedPlanar3D());
+            IClosedPlanar3D  closedPlanar3D_External = face3D.GetExternalEdge();
+            Planar.IClosed2D closed2D_external = Convert(closedPlanar3D_External);
+
+            List<Planar.IClosed2D> closed2Ds_internal = new List<Planar.IClosed2D>();
+            List<IClosedPlanar3D> closedPlanar3Ds_Internal = face3D.GetInternalEdges();
+            if(closedPlanar3Ds_Internal != null && closedPlanar3Ds_Internal.Count > 0)
+                closedPlanar3Ds_Internal.ForEach(x => closed2Ds_internal.Add(Convert(x)));
+
+            return Planar.Face2D.GetFace(closed2D_external, closed2Ds_internal);
+        }
+
+        public Face3D Convert(Planar.Face2D face2D)
+        {
+            return new Face3D(this, face2D);
         }
 
         public Planar.IClosed2D Convert(IClosed3D closed3D)

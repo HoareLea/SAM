@@ -93,7 +93,7 @@ namespace SAM.Geometry.Spatial
             return new Polygon3D(point3Ds_Temp);
         }
 
-        public IClosed3D GetExternalEdges()
+        public IClosed3D GetExternalEdge()
         {
             return new Polygon3D(this);
         }

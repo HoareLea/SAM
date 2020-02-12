@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Face.cs" />
     <Compile Include="Create\ISAMGeometries.cs" />
     <Compile Include="Create\JArray.cs" />
     <Compile Include="Create\ISAMGeometry.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Interfaces\ISAMGeometry.cs" />
     <Compile Include="Planar\Classes\BoundingBox2D.cs" />
     <Compile Include="Planar\Classes\Circle2D.cs" />
+    <Compile Include="Planar\Classes\Face2D.cs" />
     <Compile Include="Planar\Create\ICurve2D.cs" />
     <Compile Include="Planar\Create\IClosed2D.cs" />
     <Compile Include="Planar\Interfaces\IClosed2D.cs" />

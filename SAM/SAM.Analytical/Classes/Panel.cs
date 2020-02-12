@@ -105,11 +105,6 @@ namespace SAM.Analytical
             return planarBoundary3D.GetEdge3DLoop().BoundaryEdge3Ds;
         }
 
-        public IClosedPlanar3D GetClosedPlanar3D()
-        {
-            return GetFace().ToClosedPlanar3D();
-        }
-
         public PlanarBoundary3D PlanarBoundary3D
         {
             get

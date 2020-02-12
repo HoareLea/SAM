@@ -32,32 +32,36 @@ namespace SAM.Geometry.Grasshopper
             return Rhino.Geometry.Brep.CreateEdgeSurface(lineCurves);
         }
 
-        public static Rhino.Geometry.Brep ToRhino_Brep(this Spatial.Face3D face)
+        public static Rhino.Geometry.Brep ToRhino_Brep(this Spatial.Face3D face3D, double tolerance = Tolerance.MicroDistance)
         {
-            Spatial.IClosed3D closed3D = face.ToClosedPlanar3D();
-            if (closed3D is Spatial.Polygon3D)
+            if (face3D == null)
+                return null;
+
+            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(((Spatial.ICurvable3D)face3D.GetExternalEdge()).GetCurves().ToRhino_PolylineCurve(), tolerance);
+            if (breps == null || breps.Length == 0)
+                return null;
+
+            List<Spatial.IClosedPlanar3D> closedPlanar3Ds = face3D.GetInternalEdges();
+            if (closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
             {
-                //return Rhino.Geometry.Brep.CreateEdgeSurface(((Spatial.Polygon3D)closed3D).GetSegments().ConvertAll(x => new Rhino.Geometry.LineCurve(x.ToRhino())));
+                List<Rhino.Geometry.Brep> breps_Internal = new List<Rhino.Geometry.Brep>();
+                foreach (Spatial.IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+                {
+                    Rhino.Geometry.Brep[] breps_Temp = Rhino.Geometry.Brep.CreatePlanarBreps(((Spatial.ICurvable3D)closedPlanar3D).GetCurves().ToRhino_PolylineCurve(), tolerance);
+                    if (breps_Temp != null && breps_Temp.Length > 0)
+                        breps_Internal.AddRange(breps_Temp);
+                }
 
-                Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(((Spatial.Polygon3D)closed3D).ToRhino_PolylineCurve(), Tolerance.MicroDistance);
-                if (breps != null && breps.Length > 0)
-                    return breps[0];
-
-                //List<Rhino.Geometry.LineCurve> lineCurves = new List<Rhino.Geometry.LineCurve>();
-
-                //List<Rhino.Geometry.Point3d> points = ((Spatial.Polygon3D)closed3D).GetPoints().ConvertAll(x => x.ToRhino());
-
-                //Rhino.Geometry.Plane plane = new Rhino.Geometry.Plane(points[0], points[1], points[2]);
-                //points = points.ConvertAll(x => plane.ClosestPoint(x));
-
-                //for(int i=1; i < points.Count; i++)
-                //    lineCurves.Add(new Rhino.Geometry.LineCurve(points[i - 1], points[i]));
-
-                //lineCurves.Add(new Rhino.Geometry.LineCurve(points.Last(), points.First()));
-
-                //return Rhino.Geometry.Brep.CreateEdgeSurface(lineCurves);
+                foreach (Rhino.Geometry.Brep brep_Internal in breps_Internal)
+                {
+                    breps = Rhino.Geometry.Brep.CreateBooleanDifference(breps[0], brep_Internal, tolerance);
+                    if (breps == null)
+                        break;
+                }
             }
-                
+
+            if (breps != null && breps.Length > 0)
+                return breps[0];
 
             return null;
         }

@@ -21,6 +21,25 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if(sAMGeometry is Spatial.ICurve3D)
+            {
+                guid = rhinoDoc.Objects.AddCurve(((Spatial.ICurve3D)sAMGeometry).ToRhino());
+                return true;
+            }
+
+            if(sAMGeometry is Spatial.Face3D)
+            {
+                guid = rhinoDoc.Objects.AddBrep(((Spatial.Face3D)sAMGeometry).ToRhino_Brep());
+                return true;
+            }
+
+            GeometryBase geometryBase = (sAMGeometry as dynamic).ToRhino() as GeometryBase;
+            if(geometryBase != null)
+            {
+                guid = rhinoDoc.Objects.Add(geometryBase);
+                return true;
+            }
+
             return false;
 
         }

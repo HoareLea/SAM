@@ -60,7 +60,7 @@ namespace SAM.Geometry.Spatial
             return boundary.GetBoundingBox(offset);
         }
 
-        public IClosed3D GetExternalEdges()
+        public IClosed3D GetExternalEdge()
         {
             return boundary.Clone() as IClosed3D;
         }

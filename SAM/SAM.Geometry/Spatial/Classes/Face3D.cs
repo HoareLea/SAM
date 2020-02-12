@@ -7,35 +7,38 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Face3D : SAMGeometry, IClosedPlanar3D, ISAMGeometry3D
+    public class Face3D : Face, IClosedPlanar3D, ISAMGeometry3D
     {
         private Plane plane;
-        private Planar.IClosed2D externalEdge;
-        private List<Planar.IClosed2D> internalEdges;
 
-        public Face3D(Planar.Polygon2D polygon2D)
+        public Face3D(Planar.IClosed2D externalEdge)
+            : base(externalEdge)
         {
             plane = new Plane(Point3D.Zero, Vector3D.BaseZ);
-            externalEdge = polygon2D;
         }
 
         public Face3D(Plane plane, Planar.IClosed2D externalEdge)
+            : base(externalEdge)
         {
             this.plane = new Plane(plane);
-            this.externalEdge = (Planar.IClosed2D)externalEdge.Clone();
+        }
+
+        public Face3D(Plane plane, Planar.Face2D face2D)
+            : base(face2D)
+        {
+            this.plane = new Plane(plane);
         }
 
         public Face3D(IClosedPlanar3D closedPlanar3D)
+            : base(closedPlanar3D.GetPlane().Convert(closedPlanar3D))
         {
             plane = closedPlanar3D.GetPlane();
-            externalEdge = plane.Convert(closedPlanar3D);
-
         }
 
         public Face3D(Face3D face3D)
+            : base(face3D)
         {
             this.plane = new Plane(face3D.plane);
-            this.externalEdge = (Planar.IClosed2D)face3D.externalEdge.Clone();
         }
 
         public Face3D(JObject jObject)
@@ -54,77 +57,45 @@ namespace SAM.Geometry.Spatial
             return new Face3D(this);
         }
 
-        public IClosedPlanar3D ToClosedPlanar3D()
-        {
-
-            return plane.Convert(externalEdge);
-        }
-
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             return plane.Convert(externalEdge).GetBoundingBox(offset);
         }
 
-        public Planar.IClosed2D ExternalEdge
+        IClosed3D IClosed3D.GetExternalEdge()
         {
-            get
-            {
-                return externalEdge.Clone() as Planar.IClosed2D;
-            }
+            return this.GetExternalEdge();
         }
 
-        public List<Planar.IClosed2D> InternalEdges
+        public IClosedPlanar3D GetExternalEdge()
         {
-            get
-            {
-                if (internalEdges == null)
-                    return null;
-
-                return internalEdges.ConvertAll(x => x.Clone() as Planar.IClosed2D);
-            }
+            return plane.Convert(externalEdge);//.GetExternalEdge();
         }
 
-        public List<Planar.IClosed2D> Edges
-        {
-            get
-            {
-                List<Planar.IClosed2D> result = new List<Planar.IClosed2D>() { externalEdge };
-                if (internalEdges != null && internalEdges.Count > 0)
-                    result.AddRange(internalEdges);
-                return result;
-            }
-        }
-
-        public IClosed3D GetExternalEdges()
-        {
-            return plane.Convert(externalEdge).GetExternalEdges();
-        }
-
-        public List<IClosed3D> GetInternalEdges()
+        public List<IClosedPlanar3D> GetInternalEdges()
         {
             if (internalEdges == null)
                 return null;
 
-            List<IClosed3D> result = new List<IClosed3D>();
+            List<IClosedPlanar3D> result = new List<IClosedPlanar3D>();
             foreach (Planar.IClosed2D closed2D in internalEdges)
-                result.Add(plane.Convert(closed2D).GetExternalEdges());
+                result.Add(plane.Convert(closed2D));//.GetExternalEdge());
 
+            return result;
+        }
+
+        public List<IClosedPlanar3D> GetEdges()
+        {
+            List<IClosedPlanar3D> result = new List<IClosedPlanar3D>() { GetExternalEdge() };
+            List<IClosedPlanar3D> closedPlanar3Ds = GetInternalEdges();
+            if (closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
+                result.AddRange(closedPlanar3Ds);
             return result;
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Face3D((Plane)plane.GetMoved(vector3D), (Planar.IClosed2D)externalEdge.Clone());
-        }
-
-        public double GetArea()
-        {
-            double area = externalEdge.GetArea();
-            if (internalEdges != null && internalEdges.Count > 0)
-                foreach (Planar.IClosed2D closed2D in internalEdges)
-                    area -= closed2D.GetArea();
-
-            return area;
         }
 
         public bool Inside(Face3D face3D, double tolerance = Tolerance.MicroDistance)
@@ -159,12 +130,10 @@ namespace SAM.Geometry.Spatial
 
         public override bool FromJObject(JObject jObject)
         {
+            if (!base.FromJObject(jObject))
+                return false;
+
             plane = new Plane(jObject.Value<JObject>("Plane"));
-            externalEdge = Planar.Create.IClosed2D(jObject.Value<JObject>("ExternalEdge"));
-
-            if (jObject.ContainsKey("InternalEdges"))
-                internalEdges = Core.Create.IJSAMObjects<Planar.IClosed2D>(jObject.Value<JArray>("InternalEdges"));
-
             return true;
         }
 
@@ -175,88 +144,57 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             jObject.Add("Plane", plane.ToJObject());
-            jObject.Add("ExternalEdge", externalEdge.ToJObject());
-            if (internalEdges != null)
-                jObject.Add("InternalEdges", Core.Create.JArray(internalEdges));
 
             return jObject;
         }
 
-        
+
+        public static Face3D GetFace(Plane plane, Planar.IClosed2D externalEdge, IEnumerable<Planar.IClosed2D> internalEdges)
+        {
+            if (plane == null || externalEdge == null)
+                return null;
+
+            Planar.Face2D face2D = Planar.Face2D.GetFace(externalEdge, internalEdges);
+            if (face2D == null)
+                return null;
+
+            return new Face3D(plane, face2D);
+        }
+
         public static Face3D GetFace(Plane plane, IEnumerable<Planar.IClosed2D> edges, out List<Planar.IClosed2D> edges_Excluded)
         {
             edges_Excluded = null;
 
-            if (edges == null || edges.Count() == 0 || plane == null)
+            if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            Planar.IClosed2D closed2D_Max = null;
-            double area_Max = double.MinValue;
-            foreach (Planar.IClosed2D closed2D in edges)
-            {
-                double area = closed2D.GetArea();
-                if (area > area_Max)
-                {
-                    area_Max = area;
-                    closed2D_Max = closed2D;
-                }
-
-            }
-
-            if (closed2D_Max == null)
-                return null;
-
-            Face3D result = new Face3D(plane, closed2D_Max);
-            edges_Excluded = new List<Planar.IClosed2D>();
-            foreach (Planar.IClosed2D closed2D in edges)
-            {
-                if (result == closed2D_Max)
-                    continue;
-
-                if (!closed2D_Max.Inside(closed2D))
-                {
-                    edges_Excluded.Add(closed2D);
-                    continue;
-                }
-
-                if (result.internalEdges == null)
-                    result.internalEdges = new List<Planar.IClosed2D>();
-
-                result.internalEdges.Add((Planar.IClosed2D)closed2D.Clone());
-            }
-
-            return result;
+            Planar.Face2D face2D = Planar.Face2D.GetFace(edges, out edges_Excluded);
+            return new Face3D(plane, face2D);
         }
         
         public static Face3D GetFace(Plane plane, IEnumerable<Planar.IClosed2D> edges)
         {
-            List<Planar.IClosed2D> edges_Excluded = null;
-            return GetFace(plane, edges, out edges_Excluded);
+            if (plane == null || edges == null || edges.Count() == 0)
+                return null;
+            
+            return new Face3D(plane, Planar.Face2D.GetFace(edges));
         }
 
         public static List<Face3D> GetFaces(Plane plane, IEnumerable<Planar.IClosed2D> edges)
         {
-            if (plane == null || edges == null)
+            if (plane == null || edges == null || edges.Count() == 0)
+                return null;
+
+            List<Planar.Face2D> face2Ds = Planar.Face2D.GetFaces(edges);
+            if (face2Ds == null)
                 return null;
 
             List<Face3D> result = new List<Face3D>();
-            if (edges.Count() == 0)
+            if (face2Ds.Count == 0)
                 return result;
 
-            List<Planar.IClosed2D> edges_Current = new List<Planar.IClosed2D>(edges);
-            while (edges_Current.Count > 0)
-            {
-                List<Planar.IClosed2D> edges_Excluded = null;
-                Face3D face = GetFace(plane, edges_Current, out edges_Excluded);
-                if (face == null)
-                    break;
 
-                result.Add(face);
-
-                edges_Current = edges_Excluded;
-            }
-
-            return result;
+            return face2Ds.ConvertAll(x => new Face3D(plane, x));
         }
     }
 }
