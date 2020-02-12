@@ -37,33 +37,39 @@ namespace SAM.Geometry.Grasshopper
             if (face3D == null)
                 return null;
 
-            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(((Spatial.ICurvable3D)face3D.GetExternalEdge()).GetCurves().ToRhino_PolylineCurve(), tolerance);
-            if (breps == null || breps.Length == 0)
-                return null;
-
-            List<Spatial.IClosedPlanar3D> closedPlanar3Ds = face3D.GetInternalEdges();
-            if (closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
-            {
-                List<Rhino.Geometry.Brep> breps_Internal = new List<Rhino.Geometry.Brep>();
-                foreach (Spatial.IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
-                {
-                    Rhino.Geometry.Brep[] breps_Temp = Rhino.Geometry.Brep.CreatePlanarBreps(((Spatial.ICurvable3D)closedPlanar3D).GetCurves().ToRhino_PolylineCurve(), tolerance);
-                    if (breps_Temp != null && breps_Temp.Length > 0)
-                        breps_Internal.AddRange(breps_Temp);
-                }
-
-                foreach (Rhino.Geometry.Brep brep_Internal in breps_Internal)
-                {
-                    breps = Rhino.Geometry.Brep.CreateBooleanDifference(breps[0], brep_Internal, tolerance);
-                    if (breps == null)
-                        break;
-                }
-            }
-
+            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(face3D.GetEdges().ConvertAll(x => ((Spatial.ICurvable3D)x).GetCurves().ToRhino_PolylineCurve()), tolerance);
             if (breps != null && breps.Length > 0)
                 return breps[0];
 
             return null;
+
+            //Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(((Spatial.ICurvable3D)face3D.GetExternalEdge()).GetCurves().ToRhino_PolylineCurve(), tolerance);
+            //if (breps == null || breps.Length == 0)
+            //    return null;
+
+            //List<Spatial.IClosedPlanar3D> closedPlanar3Ds = face3D.GetInternalEdges();
+            //if (closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
+            //{
+            //    List<Rhino.Geometry.Brep> breps_Internal = new List<Rhino.Geometry.Brep>();
+            //    foreach (Spatial.IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+            //    {
+            //        Rhino.Geometry.Brep[] breps_Temp = Rhino.Geometry.Brep.CreatePlanarBreps(((Spatial.ICurvable3D)closedPlanar3D).GetCurves().ToRhino_PolylineCurve(), tolerance);
+            //        if (breps_Temp != null && breps_Temp.Length > 0)
+            //            breps_Internal.AddRange(breps_Temp);
+            //    }
+
+            //    foreach (Rhino.Geometry.Brep brep_Internal in breps_Internal)
+            //    {
+            //        breps = Rhino.Geometry.Brep.CreateBooleanDifference(breps[0], brep_Internal, tolerance);
+            //        if (breps == null)
+            //            break;
+            //    }
+            //}
+
+            //if (breps != null && breps.Length > 0)
+            //    return breps[0];
+
+            //return null;
         }
     }
 }

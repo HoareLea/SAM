@@ -8,7 +8,7 @@ namespace SAM.Analytical
     {
         public static List<Panel> Panels(this List<ISAMGeometry3D> geometry3Ds, PanelType panelType, Construction construction)
         {
-            List<Face3D> faces = Geometry.Spatial.Query.Faces(geometry3Ds);
+            List<Face3D> faces = Geometry.Spatial.Query.Face3Ds(geometry3Ds);
             if (faces == null)
                 return null;
 

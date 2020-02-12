@@ -113,6 +113,12 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.GetData(2, ref construction);
 
             List<Panel> panels = Create.Panels(geometry3Ds, panelType, construction);
+            if(panels == null || panels.Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid geometry for panel");
+                return;
+            }
+
             if (panels.Count == 1)
                 dataAccess.SetData(0, new GooPanel(panels[0]));
             else
