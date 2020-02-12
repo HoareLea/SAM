@@ -33,8 +33,6 @@ namespace SAM.Geometry.Grasshopper
 
         public static List<Spatial.ISAMGeometry3D> ToSAM(this Brep brep, bool simplify = true)
         {
-            List<Spatial.ISAMGeometry3D> result = new List<Spatial.ISAMGeometry3D>();
-
             List<Brep> breps = new List<Brep>();
             List<BrepFace> brepFaces = new List<BrepFace>();
             foreach (BrepFace brepFace in brep.Faces)
@@ -60,60 +58,27 @@ namespace SAM.Geometry.Grasshopper
                     brepFaces.Add(brepFace);
             }
 
+            List<Spatial.ISAMGeometry3D> result = new List<Spatial.ISAMGeometry3D>();
+
             foreach (BrepFace brepFace in brepFaces)
+            {
+                List<Spatial.IClosedPlanar3D> closedPlanar3Ds = new List<Spatial.IClosedPlanar3D>();
                 foreach (BrepLoop brepLoop in brepFace.Loops)
                 {
                     Spatial.ISAMGeometry3D geometry3D = brepLoop.To3dCurve().ToSAM(simplify);
-                    if(geometry3D is Spatial.Polycurve3D)
+                    if (geometry3D is Spatial.Polycurve3D)
                     {
                         Spatial.Polycurve3D polycurve3D = (Spatial.Polycurve3D)geometry3D;
-                        geometry3D = new Spatial.Polygon3D(polycurve3D.Explode().ConvertAll(x=> x.GetStart()));
+                        geometry3D = new Spatial.Polygon3D(polycurve3D.Explode().ConvertAll(x => x.GetStart()));
                     }
-                    result.Add(geometry3D);
+                    if (geometry3D is Spatial.IClosedPlanar3D)
+                        closedPlanar3Ds.Add((Spatial.IClosedPlanar3D)geometry3D);
                 }
+                if (closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
+                    result.Add(Spatial.Face3D.GetFace(closedPlanar3Ds));
+            }
+
             return result;
-
-
-            //List<Brep> breps_Mesh = new List<Brep>();
-
-            //foreach (Brep brep_Temp in breps)
-            //{
-                
-            //    Mesh all = new Mesh();
-            //    all.Append(meshes);
-            //    Brep all_brep = Brep.CreateFromMesh(all, true);
-            //    all_brep.MergeCoplanarFaces(tol);
-
-            //    all_brep.Faces[0].IsPlanar(); // true
-
-            //    foreach (Mesh mesh in meshes)
-            //    {
-            //        Brep brep_Mesh = Brep.CreateFromMesh(mesh, true);
-            //        breps_Mesh.Add(brep_Mesh);
-
-            //        foreach (MeshFace meshFace in mesh.Faces)
-            //        {
-
-            //            List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
-            //            //Split to triangle and Quad
-            //            point3Ds.Add(new Spatial.Point3D(Convert.ToSAM(mesh.Vertices[meshFace.A])));
-            //            point3Ds.Add(new Spatial.Point3D(Convert.ToSAM(mesh.Vertices[meshFace.B])));
-            //            point3Ds.Add(new Spatial.Point3D(Convert.ToSAM(mesh.Vertices[meshFace.C])));
-
-            //            if (meshFace.IsQuad)
-            //                point3Ds.Add(new Spatial.Point3D(Convert.ToSAM(mesh.Vertices[meshFace.D])));
-
-            //            result.Add(new Spatial.Polygon3D(point3Ds));
-            //        }
-            //    }
-
-            //}
-
-            ////RhinoDoc.ActiveDoc.ModelAbsoluteTolerance = Tolerance.MicroDistance;
-            ////breps.MergeCoplanarFaces(Tolerance.MicroDistance);
-
-
-
         }
 
         public static List<Spatial.ISAMGeometry3D> ToSAM(this GH_Surface surface, bool simplify = true)

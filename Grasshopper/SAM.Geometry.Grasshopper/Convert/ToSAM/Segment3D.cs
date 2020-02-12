@@ -18,7 +18,7 @@ namespace SAM.Geometry.Grasshopper
 
         public static Spatial.Segment3D ToSAM(this Rhino.Geometry.LineCurve lineCurve)
         {
-            return new Spatial.Segment3D(lineCurve.PointAtStart.ToSAM(), lineCurve.PointAtStart.ToSAM());
+            return new Spatial.Segment3D(lineCurve.PointAtStart.ToSAM(), lineCurve.PointAtEnd.ToSAM());
         }
 
 

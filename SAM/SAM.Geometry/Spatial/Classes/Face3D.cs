@@ -149,6 +149,35 @@ namespace SAM.Geometry.Spatial
         }
 
 
+        public static Face3D GetFace(IEnumerable<IClosedPlanar3D> edges)
+        {
+            if (edges == null)
+                return null;
+
+            IClosedPlanar3D externalEdge = null;
+            double area_Max = double.MinValue;
+            foreach (IClosedPlanar3D closedPlanar3D in edges)
+            {
+                double area = closedPlanar3D.GetArea();
+                if (area > area_Max)
+                {
+                    area_Max = area;
+                    externalEdge = closedPlanar3D;
+                }
+
+            }
+
+            if (externalEdge == null)
+                return null;
+
+            Plane plane = externalEdge.GetPlane();
+
+            List<IClosedPlanar3D> internalEdges = edges.ToList();
+            internalEdges.Remove(externalEdge);
+
+            return GetFace(plane, plane.Convert(externalEdge), internalEdges.ConvertAll(x => plane.Convert(x)));
+        }
+        
         public static Face3D GetFace(Plane plane, Planar.IClosed2D externalEdge, IEnumerable<Planar.IClosed2D> internalEdges)
         {
             if (plane == null || externalEdge == null)

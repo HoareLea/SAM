@@ -11,9 +11,11 @@ namespace SAM.Geometry.Spatial
     {
         private List<Point3D> points;
 
-        public Polyline3D(IEnumerable<Point3D> point3Ds)
+        public Polyline3D(IEnumerable<Point3D> point3Ds, bool close = false)
         {
             this.points = Point3D.Clone(point3Ds);
+            if (close && !IsClosed())
+                points.Add(points.First());
         }
 
         public Polyline3D(IEnumerable<Segment3D> segment3Ds, bool close = false)

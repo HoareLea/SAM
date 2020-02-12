@@ -60,7 +60,7 @@ namespace SAM.Geometry.Grasshopper
             if (polylineCurve.IsClosed && polylineCurve.IsPlanar(tolerance))
                 return new Spatial.Polygon3D(point3Ds);
 
-            return new Spatial.Polyline3D(point3Ds);
+            return new Spatial.Polyline3D(point3Ds, polylineCurve.IsClosed);
         }
     }
 }
