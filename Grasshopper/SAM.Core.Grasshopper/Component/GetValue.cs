@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
@@ -38,7 +37,7 @@ namespace SAM.Core.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_object", "_object", "Object", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_name", "name", "Name", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_name", "name", "Name", GH_ParamAccess.item, "Name");
         }
 
         /// <summary>

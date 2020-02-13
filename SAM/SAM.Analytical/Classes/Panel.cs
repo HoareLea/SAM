@@ -137,5 +137,33 @@ namespace SAM.Analytical
             
             return jObject;
         }
+
+        public Aperture AddAperture(ApertureType apertureType, Point3D location)
+        {
+            if (apertureType == null || location == null)
+                return null;
+
+            Plane plane = planarBoundary3D.Plane;
+
+
+            Point3D point3D = plane.Project(location);
+            if (apertures == null)
+                apertures = new List<Aperture>();
+
+            Aperture Aperture = new Aperture(apertureType, new Plane(location, plane.Normal));
+
+            apertures.Add(Aperture);
+            return Aperture;
+        }
+
+        public List<Aperture> Apertures
+        {
+            get
+            {
+                if (apertures == null)
+                    return null;
+                return apertures.ConvertAll(x => x.Clone());
+            }
+        }
     }
 }

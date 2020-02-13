@@ -8,13 +8,19 @@ namespace SAM.Analytical
 {
     public class ApertureType : SAMType
     {
-        private PlanarBoundary3D planarBoundary3D;
+        private Boundary2D boundary2D;
         private Construction frameConstruction;
         private Construction paneConstruction;
 
         public ApertureType(string name) 
             : base(name)
         {
+        }
+
+        public ApertureType(string name, Geometry.Planar.IClosed2D edge)
+            : base(name)
+        {
+            boundary2D = new Boundary2D(edge);
         }
 
         public ApertureType(Guid guid, string name) 
@@ -33,11 +39,11 @@ namespace SAM.Analytical
 
         }
 
-        public PlanarBoundary3D PlanarBoundary3D
+        public Boundary2D Boundary2D
         {
             get
             {
-                return new PlanarBoundary3D(planarBoundary3D);
+                return new Boundary2D(boundary2D);
             }
         }
 
@@ -62,7 +68,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            planarBoundary3D = new PlanarBoundary3D(jObject.Value<JObject>("PlanarBoundary3D"));
+            boundary2D = new Boundary2D(jObject.Value<JObject>("Boundary2D"));
             frameConstruction = new Construction(jObject.Value<JObject>("FrameConstruction"));
             paneConstruction = new Construction(jObject.Value<JObject>("PaneConstruction"));
             return true;
@@ -74,7 +80,7 @@ namespace SAM.Analytical
             if (jObject == null)
                 return jObject;
 
-            jObject.Add("PlanarBoundary3D", planarBoundary3D.ToJObject());
+            jObject.Add("Boundary2D", boundary2D.ToJObject());
             jObject.Add("FrameConstruction", frameConstruction.ToJObject());
             jObject.Add("PaneConstruction", paneConstruction.ToJObject());
             return jObject;

@@ -8,12 +8,12 @@ namespace SAM.Analytical
 {
     public class Aperture : SAMInstance
     {
-        private Point3D location;
+        private Plane plane;
 
         public Aperture(Aperture aperture)
             : base(aperture)
         {
-            this.location = aperture.location;
+            this.plane = aperture.plane;
         }
 
         public Aperture(JObject jObject)
@@ -22,10 +22,10 @@ namespace SAM.Analytical
 
         }
 
-        public Aperture(ApertureType apertureType, Point3D location)
+        public Aperture(ApertureType apertureType, Plane plane)
             : base(System.Guid.NewGuid(), apertureType)
         {
-            this.location = location;
+            this.plane = plane;
         }
 
         public override bool FromJObject(JObject jObject)
@@ -33,7 +33,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            location = new Point3D(jObject.Value<JObject>("Location"));
+            plane = new Plane(jObject.Value<JObject>("Plane"));
             return true;
         }
 
@@ -43,9 +43,14 @@ namespace SAM.Analytical
             if (jObject == null)
                 return jObject;
 
-            jObject.Add("Location", location.ToJObject());
+            jObject.Add("Plane", plane.ToJObject());
 
             return jObject;
+        }
+
+        public Aperture Clone()
+        {
+            return new Aperture(this);
         }
     }
 }

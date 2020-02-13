@@ -183,7 +183,7 @@ namespace SAM.Geometry.Spatial
             if (plane == null || externalEdge == null)
                 return null;
 
-            Planar.Face2D face2D = Planar.Face2D.GetFace(externalEdge, internalEdges);
+            Planar.Face2D face2D = Planar.Face2D.Create(externalEdge, internalEdges);
             if (face2D == null)
                 return null;
 

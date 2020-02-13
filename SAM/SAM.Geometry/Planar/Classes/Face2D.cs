@@ -30,7 +30,7 @@ namespace SAM.Geometry.Planar
         }
 
 
-        public static Face2D GetFace(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges)
+        public static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges)
         {
             Face2D result = new Face2D(externalEdge);
             if(internalEdges != null && internalEdges.Count() > 0)

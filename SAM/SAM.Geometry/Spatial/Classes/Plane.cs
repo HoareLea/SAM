@@ -230,7 +230,7 @@ namespace SAM.Geometry.Spatial
             if(closedPlanar3Ds_Internal != null && closedPlanar3Ds_Internal.Count > 0)
                 closedPlanar3Ds_Internal.ForEach(x => closed2Ds_internal.Add(Convert(x)));
 
-            return Planar.Face2D.GetFace(closed2D_external, closed2Ds_internal);
+            return Planar.Face2D.Create(closed2D_external, closed2Ds_internal);
         }
 
         public Face3D Convert(Planar.Face2D face2D)

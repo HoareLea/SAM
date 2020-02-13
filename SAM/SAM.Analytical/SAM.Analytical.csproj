@@ -59,6 +59,7 @@
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Modify\SnapByOffset.cs" />
+    <Compile Include="Modify\AddAperture.cs" />
     <Compile Include="Modify\SnapByPoints.cs" />
     <Compile Include="Query\PanelType.cs" />
     <Compile Include="Classes\Space.cs" />
