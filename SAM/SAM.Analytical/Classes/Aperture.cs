@@ -48,9 +48,29 @@ namespace SAM.Analytical
             return jObject;
         }
 
+        public Face3D GetFace3D()
+        {
+            if (plane == null)
+                return null;
+
+            ApertureType apertureType = ApertureType;
+            if (apertureType == null)
+                return null;
+
+            return ApertureType.Boundary2D.GetFace3D(plane);
+        }
+
         public Aperture Clone()
         {
             return new Aperture(this);
+        }
+
+        public ApertureType ApertureType
+        {
+            get
+            {
+                return SAMType as ApertureType;
+            }
         }
     }
 }

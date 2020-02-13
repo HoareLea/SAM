@@ -91,12 +91,12 @@ namespace SAM.Analytical
             return result;
         }
 
-        public Face3D GetFace(Plane plane)
+        public Face3D GetFace3D(Plane plane)
         {
-            return new Face3D(plane, GetFace());
+            return new Face3D(plane, GetFace2D());
         }
 
-        public Geometry.Planar.Face2D GetFace()
+        public Geometry.Planar.Face2D GetFace2D()
         {
             List<Geometry.Planar.IClosed2D> internalClosed2Ds = null;
             if (internalEdge2DLoops != null && internalEdge2DLoops.Count > 0)

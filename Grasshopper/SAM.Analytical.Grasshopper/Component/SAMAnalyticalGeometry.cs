@@ -66,7 +66,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if(sAMObject is PlanarBoundary3D)
+            if(sAMObject is Aperture)
+            {
+                dataAccess.SetData(0, ((Aperture)sAMObject).ToGrasshopper());
+                return;
+            }
+
+            if (sAMObject is PlanarBoundary3D)
             {
                 dataAccess.SetData(0, ((PlanarBoundary3D)sAMObject).ToGrasshopper());
                 return;
