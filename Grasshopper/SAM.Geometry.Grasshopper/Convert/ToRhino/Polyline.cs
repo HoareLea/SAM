@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -6,7 +7,13 @@ namespace SAM.Geometry.Grasshopper
     {
         public static Rhino.Geometry.Polyline ToRhino(this Spatial.Polygon3D polygon3D)
         {
-            return new Rhino.Geometry.Polyline(polygon3D.GetPoints().ConvertAll(x => x.ToRhino()));
+            List<Spatial.Point3D> point3Ds = polygon3D.GetPoints();
+            if (point3Ds == null || point3Ds.Count < 2)
+                return null;
+
+            point3Ds.Add(point3Ds.Last());
+
+            return new Rhino.Geometry.Polyline(point3Ds.ConvertAll(x => x.ToRhino()));
         }
         public static Rhino.Geometry.Polyline ToRhino_Polyline(this Spatial.Polyline3D polyline3D)
         {
