@@ -33,6 +33,12 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (sAMGeometry is Spatial.Polygon3D)
+            {
+                guid = rhinoDoc.Objects.AddPolyline(((Spatial.Polygon3D)sAMGeometry).ToRhino());
+                return true;
+            }
+
             GeometryBase geometryBase = (sAMGeometry as dynamic).ToRhino() as GeometryBase;
             if(geometryBase != null)
             {
