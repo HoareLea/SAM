@@ -124,6 +124,9 @@
   <data name="SAM_Explode" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SAM_Explode.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SAM_Get" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SAM_Get.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="SAM_JSON" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SAM_JSON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

@@ -17,7 +17,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Explode;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Get;
 
         private GH_OutputParamManager outputParamManager;
         /// <summary>
