@@ -145,15 +145,13 @@ namespace SAM.Analytical
 
             Plane plane = planarBoundary3D.Plane;
 
-
-            Point3D point3D = plane.Project(location);
             if (apertures == null)
                 apertures = new List<Aperture>();
 
-            Aperture Aperture = new Aperture(apertureType, new Plane(location, plane.Normal));
+            Aperture aperture = new Aperture(apertureType, plane);
 
-            apertures.Add(Aperture);
-            return Aperture;
+            apertures.Add(aperture);
+            return aperture;
         }
 
         public List<Aperture> Apertures

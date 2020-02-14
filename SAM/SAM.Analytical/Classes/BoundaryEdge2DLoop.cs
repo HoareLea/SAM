@@ -72,6 +72,16 @@ namespace SAM.Analytical
             return GetClosed2D().GetArea();
         }
 
+        public bool Move(Geometry.Planar.Vector2D vector2D)
+        {
+            if (boundaryEdge2Ds == null || vector2D == null)
+                return false;
+
+
+            boundaryEdge2Ds.ForEach(x => x.Move(vector2D));
+            return true;
+        }
+
         public void Reverse()
         {
             foreach (BoundaryEdge2D boundaryEdge2D in boundaryEdge2Ds)

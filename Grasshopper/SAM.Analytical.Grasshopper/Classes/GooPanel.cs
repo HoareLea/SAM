@@ -47,12 +47,34 @@ namespace SAM.Analytical.Grasshopper
         {
             GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
             gooPlanarBoundary3D.DrawViewportWires(args);
+
+            List<Aperture> apertures = Value.Apertures;
+            if(apertures != null)
+            {
+                foreach(Aperture aperture in apertures)
+                    foreach (Geometry.Spatial.IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdges())
+                    {
+                        Geometry.Grasshopper.GooSAMGeometry gooSAMGeometry = new Geometry.Grasshopper.GooSAMGeometry(closedPlanar3D);
+                        gooSAMGeometry.DrawViewportWires(args);
+                    }
+            }
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
             GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
             gooPlanarBoundary3D.DrawViewportMeshes(args);
+
+            List<Aperture> apertures = Value.Apertures;
+            if (apertures != null)
+            {
+                foreach (Aperture aperture in apertures)
+                    foreach (Geometry.Spatial.IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdges())
+                    {
+                        Geometry.Grasshopper.GooSAMGeometry gooSAMGeometry = new Geometry.Grasshopper.GooSAMGeometry(closedPlanar3D);
+                        gooSAMGeometry.DrawViewportMeshes(args);
+                    }
+            }
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)

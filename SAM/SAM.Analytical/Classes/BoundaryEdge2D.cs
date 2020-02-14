@@ -56,6 +56,20 @@ namespace SAM.Analytical
                 ((Segment2D)curve2D).Reverse();
         }
 
+        public bool Move(Vector2D vector2D)
+        {
+            if (vector2D == null || curve2D == null)
+                return false;
+
+            if(curve2D is Segment2D)
+            {
+                curve2D = ((Segment2D)curve2D).Move(vector2D);
+                return true;
+            }
+
+            return false;
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

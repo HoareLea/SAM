@@ -52,7 +52,11 @@ namespace SAM.Analytical
 
             List<BoundaryEdge2DLoop> internalEdge2DLoops = boundary2D.InternalEdge2DLoops;
             if (internalEdge2DLoops != null)
-                this.internalEdge2DLoops = internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
+            {
+                this.internalEdge2DLoops = new List<BoundaryEdge2DLoop>();
+                foreach (BoundaryEdge2DLoop internalEdge2DLoop in internalEdge2DLoops)
+                    this.internalEdge2DLoops.Add(new BoundaryEdge2DLoop(internalEdge2DLoop));
+            }
         }
 
         public PlanarBoundary3D(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Plane plane, BoundaryEdge2DLoop edge2DLoop, IEnumerable<BoundaryEdge2DLoop> internalEdge2DLoop)

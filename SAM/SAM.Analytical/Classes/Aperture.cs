@@ -13,7 +13,7 @@ namespace SAM.Analytical
         public Aperture(Aperture aperture)
             : base(aperture)
         {
-            this.plane = aperture.plane;
+            plane = new Plane(aperture.plane);
         }
 
         public Aperture(JObject jObject)
@@ -25,7 +25,7 @@ namespace SAM.Analytical
         public Aperture(ApertureType apertureType, Plane plane)
             : base(System.Guid.NewGuid(), apertureType)
         {
-            this.plane = plane;
+            this.plane = new Plane(plane);
         }
 
         public override bool FromJObject(JObject jObject)

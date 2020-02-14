@@ -43,6 +43,8 @@ namespace SAM.Analytical
             if (point3D_Projected.Distance(origin_Edges) > maxDistance)
                 return null;
 
+
+
             ApertureType apertureType = new ApertureType(Guid.NewGuid().ToString(), plane_Panel.Convert(edges));
 
             return AddAperture(panel, apertureType, point3D_Projected, maxDistance);
