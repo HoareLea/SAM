@@ -13,7 +13,8 @@ namespace SAM.Geometry.Grasshopper
         public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this IEnumerable<Spatial.ICurve3D> curve3Ds)
         {
             List<Rhino.Geometry.Point3d> points = curve3Ds.ToList().ConvertAll(x => x.GetEnd().ToRhino());
-            points.Add(curve3Ds.First().GetEnd().ToRhino());
+            //TODO: Double Check if this is necessary
+            //points.Add(curve3Ds.First().GetEnd().ToRhino());
 
             return new Rhino.Geometry.PolylineCurve(points);
         }

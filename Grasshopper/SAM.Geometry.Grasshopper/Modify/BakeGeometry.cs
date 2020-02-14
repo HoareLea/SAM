@@ -35,7 +35,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (sAMGeometry is Spatial.Polygon3D)
             {
-                guid = rhinoDoc.Objects.AddPolyline(((Spatial.Polygon3D)sAMGeometry).ToRhino());
+                guid = rhinoDoc.Objects.AddCurve(((Spatial.Polygon3D)sAMGeometry).ToRhino_PolylineCurve());
                 return true;
             }
 
