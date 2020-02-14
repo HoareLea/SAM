@@ -67,7 +67,7 @@ namespace SAM.Architectural.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("6604b8ee-9225-4568-8ce3-f4c60d521be9");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Architectural;
 
         bool IGH_PreviewObject.Hidden { get; set; }
 
