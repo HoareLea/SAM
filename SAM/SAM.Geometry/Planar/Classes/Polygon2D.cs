@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json.Linq;
 
+
 namespace SAM.Geometry.Planar
 {
     public class Polygon2D : SAMGeometry, IClosed2D, ISegmentable2D
