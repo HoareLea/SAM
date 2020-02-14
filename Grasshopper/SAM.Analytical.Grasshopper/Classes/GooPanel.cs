@@ -49,9 +49,9 @@ namespace SAM.Analytical.Grasshopper
             gooPlanarBoundary3D.DrawViewportWires(args);
 
             List<Aperture> apertures = Value.Apertures;
-            if(apertures != null)
+            if (apertures != null)
             {
-                foreach(Aperture aperture in apertures)
+                foreach (Aperture aperture in apertures)
                     foreach (Geometry.Spatial.IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdges())
                     {
                         Geometry.Grasshopper.GooSAMGeometry gooSAMGeometry = new Geometry.Grasshopper.GooSAMGeometry(closedPlanar3D);

@@ -48,6 +48,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
+            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
             outputParamManager.AddParameter(new GooApertureParam(), "Apertures", "Apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
         }
 
@@ -90,11 +91,13 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(1, panels))
+            if (!dataAccess.GetDataList(1, panels) || panels == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+
+            panels = panels.ConvertAll(x => new Panel(x));
 
             double maxDistance = Geometry.Tolerance.MacroDistance;
             dataAccess.GetData(2, ref maxDistance);
@@ -107,10 +110,15 @@ namespace SAM.Analytical.Grasshopper
                     apertures.Add(aperture);
             }
 
-            if (apertures.Count == 1)
-                dataAccess.SetData(0, new GooAperture(apertures[0]));
+            if (panels.Count == 1)
+                dataAccess.SetData(0, new GooPanel(panels[0]));
             else
-                dataAccess.SetDataList(0, apertures.ConvertAll(x => new GooAperture(x)));
+                dataAccess.SetDataList(0, panels.ConvertAll(x => new GooPanel(x)));
+
+            if (apertures.Count == 1)
+                dataAccess.SetData(1, new GooAperture(apertures[0]));
+            else
+                dataAccess.SetDataList(1, apertures.ConvertAll(x => new GooAperture(x)));
         }
     }
 }

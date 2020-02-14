@@ -148,7 +148,7 @@ namespace SAM.Analytical
             if (apertures == null)
                 apertures = new List<Aperture>();
 
-            Aperture aperture = new Aperture(apertureType, plane);
+            Aperture aperture = new Aperture(apertureType, plane, location);
 
             apertures.Add(aperture);
             return aperture;

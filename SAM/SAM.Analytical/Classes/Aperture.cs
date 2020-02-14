@@ -22,10 +22,10 @@ namespace SAM.Analytical
 
         }
 
-        public Aperture(ApertureType apertureType, Plane plane)
+        public Aperture(ApertureType apertureType, Plane plane, Point3D location)
             : base(System.Guid.NewGuid(), apertureType)
         {
-            this.plane = new Plane(plane);
+            this.plane = new Plane(plane.Project(location), plane.Normal);
         }
 
         public override bool FromJObject(JObject jObject)

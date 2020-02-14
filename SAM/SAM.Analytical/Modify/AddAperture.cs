@@ -20,34 +20,38 @@ namespace SAM.Analytical
             if (point3D_Projected.Distance(point3D) > maxDistance)
                 return null;
 
-
             return panel.AddAperture(apertureType, point3D_Projected);
         }
 
-        public static Aperture AddAperture(this Panel panel, IClosedPlanar3D edges, double maxDistance = Geometry.Tolerance.MacroDistance)
+        public static Aperture AddAperture(this Panel panel, IClosedPlanar3D edge, double maxDistance = Geometry.Tolerance.MacroDistance)
         {
-            if (panel == null || edges == null)
+            if (panel == null || edge == null)
                 return null;
 
             Plane plane_Panel = panel.PlanarBoundary3D.Plane;
             if (plane_Panel == null)
                 return null;
-
-            Plane plane_Edges = edges.GetPlane();
-            if (plane_Edges == null)
+                
+            Plane plane_Edge = edge.GetPlane();
+            if (plane_Edge == null)
                 return null;
 
-            Point3D origin_Edges = plane_Edges.Origin;
+            Point3D origin_Edge = plane_Edge.Origin;
 
-            Point3D point3D_Projected = plane_Panel.Project(origin_Edges);
-            if (point3D_Projected.Distance(origin_Edges) > maxDistance)
+            Point3D origin_Projected = plane_Panel.Project(origin_Edge);
+            if (origin_Projected.Distance(origin_Edge) > maxDistance)
                 return null;
 
+            IClosedPlanar3D edge_Projected = plane_Panel.Project(edge);
+            Plane plane_Edge_Projected = edge_Projected.GetPlane();
+            origin_Projected = plane_Edge_Projected.Origin;
 
+            Vector3D vector3D = new Vector3D(plane_Panel.Origin.X - origin_Projected.X, plane_Panel.Origin.Y - origin_Projected.Y, plane_Panel.Origin.Z - origin_Projected.Z);
+            edge_Projected = (IClosedPlanar3D)edge_Projected.GetMoved(vector3D);
 
-            ApertureType apertureType = new ApertureType(Guid.NewGuid().ToString(), plane_Panel.Convert(edges));
+            ApertureType apertureType = new ApertureType(Guid.NewGuid().ToString(), plane_Panel.Convert(edge_Projected));
 
-            return AddAperture(panel, apertureType, point3D_Projected, maxDistance);
+            return AddAperture(panel, apertureType, origin_Projected, maxDistance);
         }
 
         public static Aperture AddAperture(this IEnumerable<Panel> panels, IClosedPlanar3D edges, double maxDistance = Geometry.Tolerance.MacroDistance)

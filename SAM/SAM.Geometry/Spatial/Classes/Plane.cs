@@ -314,6 +314,14 @@ namespace SAM.Geometry.Spatial
             return Project(curve as dynamic);
         }
 
+        public IClosedPlanar3D Project(IClosedPlanar3D closedPlanar3D)
+        {
+            if (closedPlanar3D == null)
+                return null;
+
+            return Project(closedPlanar3D as dynamic);
+        }
+
         public Point3D Intersection(Segment3D segment3D)
         {
             Vector3D direction = segment3D.Direction;
