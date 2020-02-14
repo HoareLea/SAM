@@ -66,6 +66,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GooAperture.cs" />
     <Compile Include="Classes\GooPanelCluster.cs" />
     <Compile Include="Classes\GooConstruction.cs" />
     <Compile Include="Classes\GooSpace.cs" />

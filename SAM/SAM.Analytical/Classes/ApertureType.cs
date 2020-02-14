@@ -85,5 +85,13 @@ namespace SAM.Analytical
             jObject.Add("PaneConstruction", paneConstruction.ToJObject());
             return jObject;
         }
+
+        public PlanarBoundary3D GetPlanarBoundary3D(Geometry.Spatial.Plane plane)
+        {
+            if (boundary2D == null)
+                return null;
+
+            return boundary2D.GetPlanarBoundary3D(plane);
+        }
     }
 }

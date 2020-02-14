@@ -48,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Aperture>(), "Apertures", "Apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooApertureParam(), "Apertures", "Apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -108,9 +108,9 @@ namespace SAM.Analytical.Grasshopper
             }
 
             if (apertures.Count == 1)
-                dataAccess.SetData(0, new Core.Grasshopper.GooSAMObject<Aperture>(apertures[0]));
+                dataAccess.SetData(0, new GooAperture(apertures[0]));
             else
-                dataAccess.SetDataList(0, apertures.ConvertAll(x => new Core.Grasshopper.GooSAMObject<Aperture>(x)));
+                dataAccess.SetDataList(0, apertures.ConvertAll(x => new GooAperture(x)));
         }
     }
 }

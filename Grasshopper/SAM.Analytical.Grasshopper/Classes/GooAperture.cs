@@ -13,16 +13,16 @@ using SAM.Analytical.Grasshopper.Properties;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooPanel : GooSAMObject<Panel>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooAperture : GooSAMObject<Aperture>, IGH_PreviewData, IGH_BakeAwareData
     {
-        public GooPanel()
+        public GooAperture()
             : base()
         {
 
         }
 
-        public GooPanel(Panel panel)
-            : base(panel)
+        public GooAperture(Aperture aperture)
+            : base(aperture)
         {
 
         }
@@ -40,18 +40,18 @@ namespace SAM.Analytical.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GooPanel(Value);
+            return new GooAperture(Value);
         }
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
+            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.GetPlanarBoundary3D());
             gooPlanarBoundary3D.DrawViewportWires(args);
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
+            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.GetPlanarBoundary3D());
             gooPlanarBoundary3D.DrawViewportMeshes(args);
         }
 
@@ -61,9 +61,9 @@ namespace SAM.Analytical.Grasshopper
         }
     }
 
-    public class GooPanelParam : GH_PersistentParam<GooPanel>, IGH_PreviewObject, IGH_BakeAwareObject
+    public class GooApertureParam : GH_PersistentParam<GooAperture>, IGH_PreviewObject, IGH_BakeAwareObject
     {
-        public override Guid ComponentGuid => new Guid("278B438C-43EA-4423-999F-B6A906870939");
+        public override Guid ComponentGuid => new Guid("d5f56261-608b-4cec-baa4-ca2fb29ab5be");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
@@ -79,17 +79,17 @@ namespace SAM.Analytical.Grasshopper
 
         void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
 
-        public GooPanelParam()
-            : base(typeof(Panel).Name, typeof(Panel).Name, typeof(Panel).FullName.Replace(".", " "), "Params", "SAM")
+        public GooApertureParam()
+            : base(typeof(Aperture).Name, typeof(Aperture).Name, typeof(Panel).FullName.Replace(".", " "), "Params", "SAM")
         { 
         }
         
-        protected override GH_GetterResult Prompt_Plural(ref List<GooPanel> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GooAperture> values)
         {
             throw new NotImplementedException();
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GooPanel value)
+        protected override GH_GetterResult Prompt_Singular(ref GooAperture value)
         {
             throw new NotImplementedException();
         }

@@ -71,7 +71,7 @@ namespace SAM.Analytical
 
         public Face3D GetFace3D()
         {
-            return planarBoundary3D.GetFace();
+            return planarBoundary3D.GetFace3D();
         }
 
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)

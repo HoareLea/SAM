@@ -72,5 +72,22 @@ namespace SAM.Analytical
                 return SAMType as ApertureType;
             }
         }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return GetFace3D().GetBoundingBox(offset);
+        }
+
+        public PlanarBoundary3D GetPlanarBoundary3D()
+        {
+            if (plane == null)
+                return null;
+
+            ApertureType apertureType = ApertureType;
+            if (apertureType == null)
+                return null;
+
+            return apertureType.GetPlanarBoundary3D(plane);
+        }
     }
 }

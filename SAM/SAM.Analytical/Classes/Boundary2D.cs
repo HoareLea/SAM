@@ -126,6 +126,14 @@ namespace SAM.Analytical
             return jObject;
         }
 
+        public PlanarBoundary3D GetPlanarBoundary3D(Plane plane)
+        {
+            if (plane == null)
+                return null;
+
+            return new PlanarBoundary3D(plane, this);
+        }
+
 
         public static Boundary2D Create(List<BoundaryEdge2DLoop> edge2DLoops, out List<BoundaryEdge2DLoop> edge2DLoops_Outside)
         {

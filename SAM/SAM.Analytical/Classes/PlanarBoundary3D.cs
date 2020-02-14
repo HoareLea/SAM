@@ -45,6 +45,16 @@ namespace SAM.Analytical
                 internalEdge2DLoops = planarBoundary3D.internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
         }
 
+        public PlanarBoundary3D(Plane plane, Boundary2D boundary2D)
+        {
+            this.plane = new Plane(plane);
+            externalEdge2DLoop = new BoundaryEdge2DLoop(boundary2D.ExternalEdge2DLoop);
+
+            List<BoundaryEdge2DLoop> internalEdge2DLoops = boundary2D.InternalEdge2DLoops;
+            if (internalEdge2DLoops != null)
+                this.internalEdge2DLoops = internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
+        }
+
         public PlanarBoundary3D(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Plane plane, BoundaryEdge2DLoop edge2DLoop, IEnumerable<BoundaryEdge2DLoop> internalEdge2DLoop)
             : base(guid, name, parameterSets)
         {
@@ -131,7 +141,7 @@ namespace SAM.Analytical
             return plane.Coplanar(planarBoundary3D.plane, tolerance);
         }
 
-        public Face3D GetFace()
+        public Face3D GetFace3D()
         {
             List<Geometry.Planar.IClosed2D> internalClosed2Ds = null;
             if(internalEdge2DLoops != null && internalEdge2DLoops.Count > 0)
@@ -148,7 +158,7 @@ namespace SAM.Analytical
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            return GetFace().GetBoundingBox(offset);
+            return GetFace3D().GetBoundingBox(offset);
         }
 
         public Vector3D GetNormal(double tolerance = Geometry.Tolerance.MicroDistance)
