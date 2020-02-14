@@ -38,7 +38,7 @@ namespace SAM.Analytical
         public PlanarBoundary3D(PlanarBoundary3D planarBoundary3D)
             : base(planarBoundary3D)
         {
-            plane = (Geometry.Spatial.Plane)planarBoundary3D.plane.Clone();
+            plane = new Plane(planarBoundary3D.plane);
             externalEdge2DLoop = new BoundaryEdge2DLoop(planarBoundary3D.externalEdge2DLoop);
 
             if (planarBoundary3D.internalEdge2DLoops != null)
