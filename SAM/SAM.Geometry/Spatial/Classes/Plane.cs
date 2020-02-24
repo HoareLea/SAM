@@ -194,6 +194,11 @@ namespace SAM.Geometry.Spatial
             return new Polygon3D(Convert(polygon2D.Points));
         }
 
+        public Polygon3D Convert(Planar.Rectangle2D rectangle2D)
+        {
+            return new Polygon3D(Convert(rectangle2D.GetPoints()));
+        }
+
         public Planar.Polygon2D Convert(Polygon3D polygon3D)
         {
             return new Planar.Polygon2D(Convert(polygon3D.GetPoints()));

@@ -51,7 +51,7 @@ namespace SAM.Geometry.Planar
 
         public Rectangle2D GetMinRectangle()
         {
-            return Point2D.GetMinRectangle(points);
+            return Point2D.GetRectangle2D(points);
         }
 
         public double GetPerimeter()

@@ -601,7 +601,7 @@ namespace SAM.Geometry.Planar
             return aResult;
         }
         
-        public static Rectangle2D GetRectangle(IEnumerable<Point2D> point2Ds, Vector2D direction)
+        public static Rectangle2D GetRectangle2D(IEnumerable<Point2D> point2Ds, Vector2D direction)
         {
             if (point2Ds == null || direction == null || point2Ds.Count() < 2)
                 return null;
@@ -655,12 +655,12 @@ namespace SAM.Geometry.Planar
 
         }
         
-        public static Rectangle2D GetMinRectangle(IEnumerable<Point2D> point2Ds)
+        public static Rectangle2D GetRectangle2D(IEnumerable<Point2D> point2Ds)
         {
             if (point2Ds == null || point2Ds.Count() < 2)
                 return null;
 
-            List<Point2D> point2DList = Query.ConvexHull(point2Ds);
+            List<Point2D> point2Ds_ConvexHull = Query.ConvexHull(point2Ds);
 
             double area = double.MaxValue;
             Rectangle2D rectangle = null;
@@ -668,14 +668,14 @@ namespace SAM.Geometry.Planar
             Vector2D vector2D_Base = new Vector2D(0, 1);
 
             HashSet<double> angleHashSet = new HashSet<double>();
-            for (int i = 0; i < point2DList.Count - 1; i++)
+            for (int i = 0; i < point2Ds_ConvexHull.Count - 1; i++)
             {
-                Vector2D direction = new Vector2D(point2DList[i], point2DList[i + 1]);
+                Vector2D direction = new Vector2D(point2Ds_ConvexHull[i], point2Ds_ConvexHull[i + 1]);
                 double angle = direction.Angle(vector2D_Base);
                 if (!angleHashSet.Contains(angle))
                 {
                     angleHashSet.Add(angle);
-                    Rectangle2D rectangle_Temp = GetRectangle(point2DList, direction);
+                    Rectangle2D rectangle_Temp = GetRectangle2D(point2Ds_ConvexHull, direction);
                     double aArea_Temp = rectangle_Temp.GetArea();
                     if (aArea_Temp < area)
                     {
