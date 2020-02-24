@@ -1,31 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SAM.Core
+﻿namespace SAM.Core
 {
-    public class SAMRelation<T, Y> : ISAMRelation
+    public class SAMRelation : ISAMRelation
     {
-        private T @object;
-        private Y relatedObject;
+        private object @object;
+        private object relatedObject;
 
-        public SAMRelation(T @object, Y relatedObject)
+        public SAMRelation(object @object, object relatedObject)
         {
             this.@object = @object;
             this.relatedObject = relatedObject;
 
         }
 
-        public SAMRelation(ISAMRelation sAMRelation)
+        public SAMRelation(SAMRelation sAMRelation)
         {
-            this.@object = sAMRelation.GetObject<T>();
-            this.relatedObject = sAMRelation.GetRelatedObject<Y>();
+            this.@object = sAMRelation.@object;
+            this.relatedObject = sAMRelation.relatedObject;
 
         }
 
-        public T Object
+        public object Object
         {
             get
             {
@@ -33,7 +27,7 @@ namespace SAM.Core
             }
         }
 
-        public Y RelatedObject
+        public object RelatedObject
         {
             get
             {
@@ -48,10 +42,10 @@ namespace SAM.Core
             {
                 return false;
             }
-            else if (@object is ISAMRelation)
+            else if (@object is SAMRelation)
             {
-                ISAMRelation sAMRelation = (ISAMRelation)@object;
-                return ReferenceEquals(this.@object, sAMRelation.GetObject<T>()) && ReferenceEquals(this.relatedObject, sAMRelation.GetRelatedObject<Y>());
+                SAMRelation sAMRelation = (SAMRelation)@object;
+                return ReferenceEquals(this.@object, sAMRelation.@object) && ReferenceEquals(this.relatedObject, sAMRelation.relatedObject);
             }
 
             return false;
@@ -65,18 +59,24 @@ namespace SAM.Core
             return hash;
         }
 
-        public Z GetObject<Z>()
+        public T GetObject<T>()
         {
-            if (typeof(T).IsAssignableFrom(typeof(Z)))
-                return (Z)(object)@object;
+            if (@object == null)
+                return default;
+            
+            if (typeof(T).IsAssignableFrom(@object.GetType()))
+                return (T)(object)@object;
 
             return default;
         }
 
-        public Z GetRelatedObject<Z>()
+        public T GetRelatedObject<T>()
         {
-            if (typeof(Y).IsAssignableFrom(typeof(Z)))
-                return (Z)(object)relatedObject;
+            if (relatedObject == null)
+                return default;
+
+            if (typeof(T).IsAssignableFrom(relatedObject.GetType()))
+                return (T)(object)relatedObject;
 
             return default;
         }

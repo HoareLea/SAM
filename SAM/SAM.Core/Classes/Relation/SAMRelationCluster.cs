@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 
 namespace SAM.Core
 {
-    public class SAMRelationCluster<T, Y>
+    public class SAMRelationCluster
     {
-        private Dictionary<Type, Dictionary<Type, HashSet<ISAMRelation>>> dictionary;
+        private Dictionary<Type, Dictionary<Type, HashSet<SAMRelation>>> dictionary;
 
-        public SAMRelationCluster(IEnumerable<ISAMRelation> sAMRelations)
+        public SAMRelationCluster(IEnumerable<SAMRelation> sAMRelations)
         {
-            dictionary = new Dictionary<Type, Dictionary<Type, HashSet<ISAMRelation>>>();
+            dictionary = new Dictionary<Type, Dictionary<Type, HashSet<SAMRelation>>>();
 
             if (sAMRelations != null)
             {
-                foreach (ISAMRelation sAMRelation in sAMRelations)
+                foreach (SAMRelation sAMRelation in sAMRelations)
                     Add(sAMRelation);
             }
         }
 
-        public bool Add(ISAMRelation sAMRelation)
+        public bool Add(SAMRelation sAMRelation)
         {
             object @object = sAMRelation.GetObject<object>();
             if (@object == null)
@@ -31,18 +31,18 @@ namespace SAM.Core
             if (relatedObject == null)
                 return false;
 
-            Dictionary<Type, HashSet<ISAMRelation>> dictionary_Temp;
+            Dictionary<Type, HashSet<SAMRelation>> dictionary_Temp;
 
             if (!dictionary.TryGetValue(@object.GetType(), out dictionary_Temp))
             {
-                dictionary_Temp = new Dictionary<Type, HashSet<ISAMRelation>>();
+                dictionary_Temp = new Dictionary<Type, HashSet<SAMRelation>>();
                 dictionary[@object.GetType()] = dictionary_Temp;
             }
 
-            HashSet<ISAMRelation> sAMRelations_Temp;
+            HashSet<SAMRelation> sAMRelations_Temp;
             if (!dictionary_Temp.TryGetValue(relatedObject.GetType(), out sAMRelations_Temp))
             {
-                sAMRelations_Temp = new HashSet<ISAMRelation>();
+                sAMRelations_Temp = new HashSet<SAMRelation>();
                 dictionary_Temp[relatedObject.GetType()] = sAMRelations_Temp;
             }
 
@@ -50,39 +50,39 @@ namespace SAM.Core
             return true;
         }
 
-        public List<SAMRelation<X, Z>> GetSAMRelations<X, Z>() where X : T where Z : Y
+        public List<SAMRelation> GetSAMRelations<X, Z>()
         {
             if (dictionary == null)
                 return null;
 
-            List<SAMRelation<X, Z>> result = new List<SAMRelation<X, Z>>();
-            foreach (KeyValuePair<Type, Dictionary<Type, HashSet<ISAMRelation>>> keyValuePair_1 in dictionary)
+            List<SAMRelation> result = new List<SAMRelation>();
+            foreach (KeyValuePair<Type, Dictionary<Type, HashSet<SAMRelation>>> keyValuePair_1 in dictionary)
             {
                 if (!keyValuePair_1.Key.IsAssignableFrom(typeof(X)))
                     continue;
 
-                foreach (KeyValuePair<Type, HashSet<ISAMRelation>> keyValuePair_2 in keyValuePair_1.Value)
+                foreach (KeyValuePair<Type, HashSet<SAMRelation>> keyValuePair_2 in keyValuePair_1.Value)
                 {
-                    if (!keyValuePair_2.Key.IsAssignableFrom(typeof(Y)))
+                    if (!keyValuePair_2.Key.IsAssignableFrom(typeof(Z)))
                         continue;
 
-                    foreach (ISAMRelation sAMRelation in keyValuePair_2.Value)
-                        result.Add(new SAMRelation<X, Z>(sAMRelation));
+                    foreach (SAMRelation sAMRelation in keyValuePair_2.Value)
+                        result.Add(new SAMRelation(sAMRelation));
                 }
 
             }
             return result;
         }
 
-        public List<ISAMRelation> GetSAMRelations()
+        public List<SAMRelation> GetSAMRelations()
         {
             if (dictionary == null)
                 return null;
 
-            List<ISAMRelation> result = new List<ISAMRelation>();
-            foreach (KeyValuePair<Type, Dictionary<Type, HashSet<ISAMRelation>>> keyValuePair_1 in dictionary)
+            List<SAMRelation> result = new List<SAMRelation>();
+            foreach (KeyValuePair<Type, Dictionary<Type, HashSet<SAMRelation>>> keyValuePair_1 in dictionary)
             {
-                foreach (KeyValuePair<Type, HashSet<ISAMRelation>> keyValuePair_2 in keyValuePair_1.Value)
+                foreach (KeyValuePair<Type, HashSet<SAMRelation>> keyValuePair_2 in keyValuePair_1.Value)
                     result.AddRange(keyValuePair_2.Value);
             }
             return result;
