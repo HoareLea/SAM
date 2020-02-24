@@ -118,7 +118,7 @@ namespace SAM.Core.Grasshopper
                 value = new GooSAMObject<SAMObject>((SAMObject)value);
             }
 
-            if (value is IEnumerable)
+            if (value is IEnumerable && !(value is string))
                 dataAccess.SetDataList(0, (IEnumerable)value);
             else
                 dataAccess.SetData(0, value);

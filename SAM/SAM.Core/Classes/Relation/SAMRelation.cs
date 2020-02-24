@@ -31,24 +31,18 @@
         {
             get
             {
-                return RelatedObject;
+                return relatedObject;
             }
         }
 
         public override bool Equals(object @object)
         {
-            //Check for null and compare run-time types.
-            if ((@object == null) || !this.GetType().Equals(@object.GetType()))
-            {
-                return false;
-            }
-            else if (@object is SAMRelation)
-            {
-                SAMRelation sAMRelation = (SAMRelation)@object;
-                return ReferenceEquals(this.@object, sAMRelation.@object) && ReferenceEquals(this.relatedObject, sAMRelation.relatedObject);
-            }
+            SAMRelation sAMRelation = @object as SAMRelation;
 
-            return false;
+            if (sAMRelation == null)
+                return false;
+
+            return ReferenceEquals(this.@object, sAMRelation.@object) && ReferenceEquals(this.relatedObject, sAMRelation.relatedObject);
         }
 
         public override int GetHashCode()

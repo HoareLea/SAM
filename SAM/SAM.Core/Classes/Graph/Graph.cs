@@ -295,7 +295,7 @@ namespace SAM.Core
                             continue;
 
                         if (graphNode_Temp != graphNode)
-                            sAMRelations.Add(new SAMRelation(graphNode, graphNode_Temp));
+                            sAMRelations.Add(new SAMRelation(graphNode.Object, graphNode_Temp.Object));
                     }
                 }
             }
