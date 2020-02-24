@@ -260,5 +260,14 @@ namespace SAM.Geometry.Spatial
         {
             return new Vector3D(vector3D.coordinates[0] * factor, vector3D.coordinates[1] * factor, vector3D.coordinates[2] * factor);
         }
+
+        public override bool Equals(object @object)
+        {
+            if ((@object == null) || !(@object is Vector3D))
+                return false;
+
+            Vector3D vector3D = (Vector3D)@object;
+            return coordinates[0] == vector3D.coordinates[0] && coordinates[1] == vector3D.coordinates[1] && coordinates[2] == vector3D.coordinates[2];
+        }
     }
 }

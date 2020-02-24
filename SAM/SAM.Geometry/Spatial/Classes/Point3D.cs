@@ -450,5 +450,25 @@ namespace SAM.Geometry.Spatial
             jObject.Add("Z", coordinates[2]);
             return jObject;
         }
+
+        public override bool Equals(object @object)
+        {
+            if ((@object == null) || !(@object is Point3D))
+                return false;
+
+            Point3D point3D = (Point3D)@object;
+            return coordinates[0] == point3D.coordinates[0] && coordinates[1] == point3D.coordinates[1] && coordinates[2] == point3D.coordinates[2];
+        }
+
+
+        public static bool operator ==(Point3D point3D_1, Point3D point3D_2)
+        {
+            return point3D_1?.coordinates[0] == point3D_2?.coordinates[0] && point3D_1?.coordinates[1] == point3D_2?.coordinates[1] && point3D_1?.coordinates[2] == point3D_2?.coordinates[2];
+        }
+
+        public static bool operator !=(Point3D point3D_1, Point3D point3D_2)
+        {
+            return point3D_1?.coordinates[0] != point3D_2?.coordinates[0] || point3D_1?.coordinates[1] != point3D_2?.coordinates[1] || point3D_1?.coordinates[2] != point3D_2?.coordinates[2];
+        }
     }
 }

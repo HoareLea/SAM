@@ -192,8 +192,8 @@ namespace SAM.Geometry.Planar
             if (!(obj is Point2D))
                 return false;
 
-            Point2D aPoint2D = (Point2D)obj;
-            return aPoint2D.coordinates[0].Equals(coordinates[0]) && aPoint2D.coordinates[1].Equals(coordinates[1]);
+            Point2D point2D = (Point2D)obj;
+            return point2D.coordinates[0].Equals(coordinates[0]) && point2D.coordinates[1].Equals(coordinates[1]);
         }
 
         public bool Equals(Point2D point2D, double tolerance)

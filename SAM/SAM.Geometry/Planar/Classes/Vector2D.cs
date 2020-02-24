@@ -105,6 +105,15 @@ namespace SAM.Geometry.Planar
             return ((Math.Abs(coordinates[0] - vector2D.coordinates[0]) <= tolerance) && (Math.Abs(coordinates[1] - vector2D.coordinates[1]) <= tolerance));
         }
 
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Vector2D))
+                return false;
+
+            Vector2D point2D = (Vector2D)obj;
+            return point2D.coordinates[0].Equals(coordinates[0]) && point2D.coordinates[1].Equals(coordinates[1]);
+        }
+
         public bool IsPerpedicular(Vector2D vector2D, double tolerance = Tolerance.MicroDistance)
         {
             return (vector2D.coordinates[0] * coordinates[0]) + (vector2D.coordinates[1] * coordinates[1]) <= tolerance;
