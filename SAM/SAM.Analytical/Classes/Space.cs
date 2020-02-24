@@ -69,7 +69,9 @@ namespace SAM.Analytical
             if (jObject == null)
                 return jObject;
 
-            jObject.Add("Location", location.ToJObject());
+            if (location != null)
+                jObject.Add("Location", location.ToJObject());
+
             return jObject;
         }
     }
