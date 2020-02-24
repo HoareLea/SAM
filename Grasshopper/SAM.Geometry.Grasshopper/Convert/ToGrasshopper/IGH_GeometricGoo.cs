@@ -13,7 +13,11 @@ namespace SAM.Geometry.Grasshopper
                 return ((Polygon3D)geometry).ToGrasshopper();
             
             if (geometry is Polyline3D)
-                return ((Polyline3D)geometry).ToGrasshopper();
+            {
+                Polyline3D polyline3D = (Polyline3D)geometry;
+                return polyline3D.ToGrasshopper(polyline3D.GetStart() == polyline3D.GetEnd());
+            }
+                
             
             if (geometry is Point3D)
                 return ((Point3D)geometry).ToGrasshopper();
