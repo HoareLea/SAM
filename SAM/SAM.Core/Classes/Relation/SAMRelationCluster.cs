@@ -6,9 +6,23 @@ using System.Threading.Tasks;
 
 namespace SAM.Core
 {
-    public class SAMRelationCluster
+    public class SAMRelationCluster : SAMObject
     {
         private Dictionary<Type, Dictionary<Type, HashSet<SAMRelation>>> dictionary;
+
+        public SAMRelationCluster(SAMRelationCluster sAMRelationCluster)
+            : base(sAMRelationCluster)
+        {
+            if (sAMRelationCluster == null || sAMRelationCluster.dictionary == null)
+                return;
+
+            dictionary = new Dictionary<Type, Dictionary<Type, HashSet<SAMRelation>>>();
+
+            foreach(KeyValuePair<Type, Dictionary<Type, HashSet<SAMRelation>>> keyValuePair in sAMRelationCluster.dictionary)
+            {
+                dictionary[keyValuePair.Key] = new Dictionary<Type, HashSet<SAMRelation>>();
+            }
+        }
 
         public SAMRelationCluster(IEnumerable<SAMRelation> sAMRelations)
         {
@@ -21,7 +35,7 @@ namespace SAM.Core
             }
         }
 
-        public bool Add(SAMRelation sAMRelation)
+        public virtual bool Add(SAMRelation sAMRelation)
         {
             object @object = sAMRelation.GetObject<object>();
             if (@object == null)

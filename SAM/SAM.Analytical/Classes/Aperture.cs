@@ -22,8 +22,8 @@ namespace SAM.Analytical
 
         }
 
-        public Aperture(ApertureType apertureType, Plane plane, Point3D location)
-            : base(System.Guid.NewGuid(), apertureType)
+        public Aperture(ApertureConstruction apertureConstruction, Plane plane, Point3D location)
+            : base(System.Guid.NewGuid(), apertureConstruction)
         {
             this.plane = new Plane(plane.Project(location), plane.Normal);
         }
@@ -53,11 +53,11 @@ namespace SAM.Analytical
             if (plane == null)
                 return null;
 
-            ApertureType apertureType = ApertureType;
-            if (apertureType == null)
+            ApertureConstruction apertureConstruction = ApertureConstruction;
+            if (apertureConstruction == null)
                 return null;
 
-            return ApertureType.Boundary2D.GetFace3D(plane);
+            return ApertureConstruction.Boundary2D.GetFace3D(plane);
         }
 
         public Aperture Clone()
@@ -73,11 +73,11 @@ namespace SAM.Analytical
             }
         }
 
-        public ApertureType ApertureType
+        public ApertureConstruction ApertureConstruction
         {
             get
             {
-                return SAMType as ApertureType;
+                return SAMType as ApertureConstruction;
             }
         }
 
@@ -91,11 +91,11 @@ namespace SAM.Analytical
             if (plane == null)
                 return null;
 
-            ApertureType apertureType = ApertureType;
-            if (apertureType == null)
+            ApertureConstruction apertureConstruction = ApertureConstruction;
+            if (apertureConstruction == null)
                 return null;
 
-            return apertureType.GetPlanarBoundary3D(plane);
+            return apertureConstruction.GetPlanarBoundary3D(plane);
         }
     }
 }

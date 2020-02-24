@@ -113,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
             List<Aperture> apertures = new List<Aperture>();
             foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
             {
-                Aperture aperture = Modify.AddAperture(panel, closedPlanar3D, maxDistance);
+                Aperture aperture = Modify.AddAperture(panel, ApertureType.Undefined, closedPlanar3D, maxDistance);
                 if (aperture != null)
                     apertures.Add(aperture);
             }

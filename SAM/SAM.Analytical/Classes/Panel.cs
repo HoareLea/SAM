@@ -67,7 +67,7 @@ namespace SAM.Analytical
             if (panel.apertures != null)
             {
                 foreach(Aperture aperture in panel.apertures)
-                    Modify.AddAperture(this, aperture.ApertureType, aperture.Plane.Origin, maxDistance);
+                    Modify.AddAperture(this, aperture.ApertureConstruction, aperture.Plane.Origin, maxDistance);
             }
         }
 
@@ -153,9 +153,9 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public Aperture AddAperture(ApertureType apertureType, Point3D location)
+        public Aperture AddAperture(ApertureConstruction apertureConstruction, Point3D location)
         {
-            if (apertureType == null || location == null)
+            if (apertureConstruction == null || location == null)
                 return null;
 
             Plane plane = planarBoundary3D.Plane;
@@ -163,7 +163,7 @@ namespace SAM.Analytical
             if (apertures == null)
                 apertures = new List<Aperture>();
 
-            Aperture aperture = new Aperture(apertureType, plane, location);
+            Aperture aperture = new Aperture(apertureConstruction, plane, location);
 
             apertures.Add(aperture);
             return aperture;

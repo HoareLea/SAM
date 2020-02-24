@@ -6,37 +6,45 @@ using SAM.Core;
 
 namespace SAM.Analytical
 {
-    public class ApertureType : SAMType
+    public class ApertureConstruction : SAMType
     {
+        private ApertureType apertureType;
         private Boundary2D boundary2D;
         private Construction frameConstruction;
         private Construction paneConstruction;
 
-        public ApertureType(string name) 
+        public ApertureConstruction(string name, ApertureType apertureType)
             : base(name)
         {
+            this.apertureType = apertureType;
         }
 
-        public ApertureType(string name, Geometry.Planar.IClosed2D edge)
+        public ApertureConstruction(string name, Geometry.Planar.IClosed2D edge, ApertureType apertureType)
             : base(name)
         {
             boundary2D = new Boundary2D(edge);
+            this.apertureType = apertureType;
         }
 
-        public ApertureType(Guid guid, string name) 
+        public ApertureConstruction(Guid guid, string name, ApertureType apertureType)
             : base(guid, name)
         {
+            this.apertureType = apertureType;
         }
 
-        public ApertureType(ApertureType apertureType)
-            : base(apertureType)
+        public ApertureConstruction(ApertureConstruction apertureConstruction)
+            : base(apertureConstruction)
         {
+            apertureType = apertureConstruction.apertureType;
+            boundary2D = new Boundary2D(apertureConstruction.boundary2D);
+            frameConstruction = apertureConstruction.frameConstruction;
+            paneConstruction = apertureConstruction.paneConstruction;
         }
 
-        public ApertureType(JObject jObject)
+        public ApertureConstruction(JObject jObject)
             : base(jObject)
         {
-
+            FromJObject(jObject);
         }
 
         public Boundary2D Boundary2D
@@ -70,8 +78,8 @@ namespace SAM.Analytical
 
             boundary2D = new Boundary2D(jObject.Value<JObject>("Boundary2D"));
 
-            if(jObject.ContainsKey("FrameConstruction"))
-            frameConstruction = new Construction(jObject.Value<JObject>("FrameConstruction"));
+            if (jObject.ContainsKey("FrameConstruction"))
+                frameConstruction = new Construction(jObject.Value<JObject>("FrameConstruction"));
 
             if (jObject.ContainsKey("PaneConstruction"))
                 paneConstruction = new Construction(jObject.Value<JObject>("PaneConstruction"));
