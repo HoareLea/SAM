@@ -65,6 +65,14 @@ namespace SAM.Analytical
             return new Aperture(this);
         }
 
+        public Plane Plane
+        {
+            get
+            {
+                return new Plane(plane);
+            }
+        }
+
         public ApertureType ApertureType
         {
             get

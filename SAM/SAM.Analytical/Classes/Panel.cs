@@ -19,6 +19,9 @@ namespace SAM.Analytical
         {
             planarBoundary3D = new PlanarBoundary3D(panel.planarBoundary3D);
             panelType = panel.panelType;
+
+            if (panel.apertures != null)
+                apertures = new List<Aperture>(panel.apertures);
         }
 
         public Panel(Panel panel, Construction construction)
@@ -26,6 +29,9 @@ namespace SAM.Analytical
         {
             planarBoundary3D = new PlanarBoundary3D(panel.planarBoundary3D);
             panelType = panel.panelType;
+
+            if (panel.apertures != null)
+                apertures = new List<Aperture>(panel.apertures);
         }
 
         public Panel(Panel panel, PanelType panelType)
@@ -33,6 +39,9 @@ namespace SAM.Analytical
         {
             planarBoundary3D = new PlanarBoundary3D(panel.planarBoundary3D);
             this.panelType = panelType;
+
+            if (panel.apertures != null)
+                apertures = new List<Aperture>(panel.apertures);
         }
 
         public Panel(Construction construction, PanelType panelType, Face3D face)
@@ -49,11 +58,17 @@ namespace SAM.Analytical
             this.planarBoundary3D = planarBoundary3D;
         }
 
-        public Panel(Guid guid, Panel panel, Face3D face)
+        public Panel(Guid guid, Panel panel, Face3D face, double maxDistance = Geometry.Tolerance.MacroDistance)
             : base(guid, panel)
         {
             panelType = panel.panelType;
             planarBoundary3D = new PlanarBoundary3D(face);
+
+            if (panel.apertures != null)
+            {
+                foreach(Aperture aperture in panel.apertures)
+                    Modify.AddAperture(this, aperture.ApertureType, aperture.Plane.Origin, maxDistance);
+            }
         }
 
         public Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)

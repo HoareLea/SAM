@@ -93,22 +93,6 @@ namespace SAM.Core
             return result;
         }
 
-        //public HashSet<GraphEdge> GetGraphEdges(object object_From, object object_To)
-        //{
-        //    if (object_From == null || object_To == null)
-        //        return null;
-
-        //    HashSet<GraphEdge> graphEdges_From = GetGraphEdges(object_From);
-        //    if (graphEdges_From == null || graphEdges_From.Count == 0)
-        //        return null;
-
-        //    HashSet<GraphEdge> graphEdges_To = GetGraphEdges(object_To);
-        //    if (graphEdges_To == null || graphEdges_To.Count == 0)
-        //        return null;
-
-        //    throw new NotImplementedException();
-        //}
-
         public bool Connect(object object_1, object object_2)
         {
             GraphNode graphNode_1 = null;
@@ -289,19 +273,38 @@ namespace SAM.Core
             return graphNodes.GetEnumerator();
         }
 
-        //public SAMRelationCluster GetSAMRelationCluster()
-        //{
-        //    foreach(GraphNode graphNode in graphNodes)
-        //    {
-        //        foreach(GraphEdge graphEdge in graphNode)
-        //        {
+        public SAMRelationCluster GetSAMRelationCluster()
+        {
+            return GetSAMRelationCluster<object, object>();
+        }
 
-        //        }
-        //    }
+        public SAMRelationCluster GetSAMRelationCluster<X, Z>()
+        {
+            List<SAMRelation> sAMRelations = new List<SAMRelation>();
+            foreach (GraphNode graphNode in graphNodes)
+            {
+                if (!(graphNode.Object is X))
+                    continue;
+                
+                foreach (GraphEdge graphEdge in graphNode)
+                {
+                    HashSet<GraphNode> graphNodes_Temp = GetGraphNodes(graphEdge);
+                    foreach (GraphNode graphNode_Temp in graphNodes_Temp)
+                    {
+                        if (!(graphNode.Object is Z))
+                            continue;
 
-        //    return null;
-        //}
+                        if (graphNode_Temp != graphNode)
+                            sAMRelations.Add(new SAMRelation(graphNode, graphNode_Temp));
+                    }
+                }
+            }
 
+            if (sAMRelations != null)
+                return new SAMRelationCluster(sAMRelations);
+
+            return null;
+        }
 
         private void AppendGraphEdges(GraphEdge graphEdge, ref HashSet<GraphEdge> graphEdges)
         {

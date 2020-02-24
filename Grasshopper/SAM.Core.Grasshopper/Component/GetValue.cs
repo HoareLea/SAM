@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
@@ -72,20 +72,20 @@ namespace SAM.Core.Grasshopper
 
             object @object = objectWrapper.Value;
 
-            if(@object is IGH_Goo)
+            if (@object is IGH_Goo)
             {
                 try
                 {
                     @object = (@object as dynamic).Value;
                 }
-                catch(Exception exception)
+                catch (Exception exception)
                 {
                     @object = null;
                 }
             }
 
 
-            if(@object == null)
+            if (@object == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -96,16 +96,16 @@ namespace SAM.Core.Grasshopper
             System.Reflection.PropertyInfo propertyInfo = null;
 
             System.Reflection.PropertyInfo[] propertyInfos = type.GetProperties();
-            foreach(System.Reflection.PropertyInfo propertyInfo_Temp in propertyInfos)
+            foreach (System.Reflection.PropertyInfo propertyInfo_Temp in propertyInfos)
             {
-                if(propertyInfo_Temp.Name.Equals(name))
+                if (propertyInfo_Temp.Name.Equals(name))
                 {
                     propertyInfo = propertyInfo_Temp;
                     break;
                 }
             }
 
-            if(propertyInfo == null)
+            if (propertyInfo == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Missing property with provided name");
                 return;
@@ -113,12 +113,15 @@ namespace SAM.Core.Grasshopper
 
             object value = propertyInfo.GetValue(@object);
 
-            if(value is SAMObject)
+            if (value is SAMObject)
             {
                 value = new GooSAMObject<SAMObject>((SAMObject)value);
             }
 
-            dataAccess.SetData(0, value);
+            if (value is IEnumerable)
+                dataAccess.SetDataList(0, (IEnumerable)value);
+            else
+                dataAccess.SetData(0, value);
 
         }
 
