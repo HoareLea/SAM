@@ -37,7 +37,10 @@ namespace SAM.Geometry.Grasshopper
             if (face3D == null)
                 return null;
 
-            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(face3D.GetEdges().ConvertAll(x => ((Spatial.ICurvable3D)x).GetCurves().ToRhino_PolylineCurve()), tolerance);
+            List<Spatial.IClosedPlanar3D> edges = face3D.GetEdges();
+            List<Rhino.Geometry.PolylineCurve> polylineCurves = edges.ConvertAll(x => ((Spatial.ICurvable3D)x).GetCurves().ToRhino_PolylineCurve(true));
+
+            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(polylineCurves, tolerance);
             if (breps != null && breps.Length > 0)
                 return breps[0];
 

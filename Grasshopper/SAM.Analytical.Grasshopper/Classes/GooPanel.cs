@@ -62,8 +62,8 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
-            gooPlanarBoundary3D.DrawViewportMeshes(args);
+            Geometry.Grasshopper.GooSAMGeometry gooSAMGeometry = new Geometry.Grasshopper.GooSAMGeometry(Value.GetFace3D());
+            gooSAMGeometry.DrawViewportMeshes(args);
 
             List<Aperture> apertures = Value.Apertures;
             if (apertures != null)
@@ -71,8 +71,8 @@ namespace SAM.Analytical.Grasshopper
                 foreach (Aperture aperture in apertures)
                     foreach (Geometry.Spatial.IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdges())
                     {
-                        Geometry.Grasshopper.GooSAMGeometry gooSAMGeometry = new Geometry.Grasshopper.GooSAMGeometry(closedPlanar3D);
-                        gooSAMGeometry.DrawViewportMeshes(args);
+                        Geometry.Grasshopper.GooSAMGeometry gooSAMGeometry_Aperture = new Geometry.Grasshopper.GooSAMGeometry(closedPlanar3D);
+                        gooSAMGeometry_Aperture.DrawViewportMeshes(args);
                     }
             }
         }

@@ -22,8 +22,7 @@ namespace SAM.Geometry.Grasshopper
 
                 if (closed3D is Spatial.IClosedPlanar3D)
                 {
-                    breps = Rhino.Geometry.Brep.CreatePlanarBreps(curve3Ds.ToRhino_PolylineCurve(), Tolerance.MicroDistance);
-
+                    breps = Rhino.Geometry.Brep.CreatePlanarBreps(curve3Ds.ToRhino_PolylineCurve(true), Tolerance.MicroDistance);
                 }
                 else
                 {

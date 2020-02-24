@@ -20,9 +20,9 @@ namespace SAM.Geometry.Grasshopper
             return new GH_Curve(polygon2D.ToRhino_PolylineCurve());
         }
 
-        public static GH_Curve ToGrasshopper(this Spatial.Polyline3D polyline3D)
+        public static GH_Curve ToGrasshopper(this Spatial.Polyline3D polyline3D, bool close)
         {
-            return new GH_Curve(polyline3D.ToRhino_PolylineCurve());
+            return new GH_Curve(polyline3D.ToRhino_PolylineCurve(close));
         }
 
         public static GH_Curve ToGrasshopper(this Spatial.Polycurve3D polycurve3D)

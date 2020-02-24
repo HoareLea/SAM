@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Grasshopper.Kernel.Types;
 
 namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
-        public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this IEnumerable<Spatial.ICurve3D> curve3Ds)
+        public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this IEnumerable<Spatial.ICurve3D> curve3Ds, bool close)
         {
             List<Rhino.Geometry.Point3d> points = curve3Ds.ToList().ConvertAll(x => x.GetEnd().ToRhino());
             //TODO: Double Check if this is necessary
-            //points.Add(curve3Ds.First().GetEnd().ToRhino());
+            if(close)
+                points.Add(curve3Ds.First().GetEnd().ToRhino());
 
             return new Rhino.Geometry.PolylineCurve(points);
         }
@@ -28,9 +25,12 @@ namespace SAM.Geometry.Grasshopper
             return new Rhino.Geometry.PolylineCurve(points);
         }
 
-        public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this Spatial.Polyline3D polyline3D)
+        public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this Spatial.Polyline3D polyline3D, bool close)
         {
             List<Rhino.Geometry.Point3d> points = polyline3D.Points.ConvertAll(x => x.ToRhino());
+
+            if (close)
+                points.Add(polyline3D.Points.First().ToRhino());
 
             return new Rhino.Geometry.PolylineCurve(points);
         }
