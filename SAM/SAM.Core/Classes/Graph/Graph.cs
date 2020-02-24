@@ -93,21 +93,21 @@ namespace SAM.Core
             return result;
         }
 
-        public HashSet<GraphEdge> GetGraphEdges(object object_From, object object_To)
-        {
-            if (object_From == null || object_To == null)
-                return null;
+        //public HashSet<GraphEdge> GetGraphEdges(object object_From, object object_To)
+        //{
+        //    if (object_From == null || object_To == null)
+        //        return null;
 
-            HashSet<GraphEdge> graphEdges_From = GetGraphEdges(object_From);
-            if (graphEdges_From == null || graphEdges_From.Count == 0)
-                return null;
+        //    HashSet<GraphEdge> graphEdges_From = GetGraphEdges(object_From);
+        //    if (graphEdges_From == null || graphEdges_From.Count == 0)
+        //        return null;
 
-            HashSet<GraphEdge> graphEdges_To = GetGraphEdges(object_To);
-            if (graphEdges_To == null || graphEdges_To.Count == 0)
-                return null;
+        //    HashSet<GraphEdge> graphEdges_To = GetGraphEdges(object_To);
+        //    if (graphEdges_To == null || graphEdges_To.Count == 0)
+        //        return null;
 
-            throw new NotImplementedException();
-        }
+        //    throw new NotImplementedException();
+        //}
 
         public bool Connect(object object_1, object object_2)
         {
@@ -289,8 +289,17 @@ namespace SAM.Core
             return graphNodes.GetEnumerator();
         }
 
-        //public SAMRelationCluster<T, Y> GetSAMRelationCluster<T, Y>()
+        //public SAMRelationCluster GetSAMRelationCluster()
         //{
+        //    foreach(GraphNode graphNode in graphNodes)
+        //    {
+        //        foreach(GraphEdge graphEdge in graphNode)
+        //        {
+
+        //        }
+        //    }
+
+        //    return null;
         //}
 
 
