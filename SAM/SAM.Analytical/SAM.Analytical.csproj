@@ -50,6 +50,7 @@
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\PanelCluster.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
+    <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\ApertureType.cs" />
     <Compile Include="Enums\PanelType.cs" />

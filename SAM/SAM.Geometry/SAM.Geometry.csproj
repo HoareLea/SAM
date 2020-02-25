@@ -74,6 +74,7 @@
     <Compile Include="Spatial\Create\ICurve3D.cs" />
     <Compile Include="Spatial\Query\Explode.cs" />
     <Compile Include="Spatial\Query\ClosedPlanar3Ds.cs" />
+    <Compile Include="Spatial\Query\Location.cs" />
     <Compile Include="Spatial\Query\Face3Ds.cs" />
     <Compile Include="Spatial\Classes\BoundingBox3D.cs" />
     <Compile Include="Spatial\Classes\Circle3D.cs" />

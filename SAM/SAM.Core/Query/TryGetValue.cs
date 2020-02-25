@@ -80,7 +80,7 @@ namespace SAM.Core
                 if (parameterInfos != null && parameterInfos.Length > 0)
                     continue;
 
-                if (methodInfo.Name.Equals(name) || methodInfo.Name.Equals(string.Format("Get{0}", name)))
+                if (methodInfo.Name.Equals(name) || (!name.StartsWith("Get") && methodInfo.Name.Equals(string.Format("Get{0}", name))))
                 {
                     value = methodInfo.Invoke(@object, new object[] { });
                     return true;
