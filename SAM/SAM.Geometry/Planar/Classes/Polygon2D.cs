@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Newtonsoft.Json.Linq;
 
@@ -94,6 +95,53 @@ namespace SAM.Geometry.Planar
 
             jObject.Add("Points", Core.Create.JArray(points));
             return jObject;
+        }
+
+        public Polygon2D Offset(double offset, Orientation orientation)
+        {
+            return Offset(new double[] { offset }, orientation);
+        }
+        
+        public Polygon2D Offset(IEnumerable<double> offsets, Orientation orientation)
+        {
+            if (points == null || points.Count < 3 || offsets == null)
+                return null;
+
+            int aCount = offsets.Count();
+
+            if (aCount == 0)
+                return new Polygon2D(this);
+
+            double offset = offsets.Last();
+
+            List<Segment2D> segment2Ds = new List<Segment2D>();
+            for(int i=0; i < points.Count; i++)
+            {
+                if (aCount < i)
+                    offset = offsets.ElementAt(i);
+
+                Segment2D segment2D = new Segment2D(points[i], points[i + 1]).Offset(offset, orientation);
+                if(segment2Ds.Count > 0)
+                {
+                    Segment2D segment2D_Previous = segment2Ds[segment2Ds.Count - 1];
+
+                    Point2D point2D_1;
+                    Point2D point2D_2;
+                    Point2D point2D_Intersection = segment2D_Previous.Intersection(segment2D, out point2D_1, out point2D_2);
+                    if (point2D_Intersection != null)
+                    {
+                        segment2Ds[segment2Ds.Count - 1] = new Segment2D(segment2D_Previous[0], point2D_Intersection);
+                        segment2D = new Segment2D(point2D_Intersection, segment2D[1]);
+                    }
+                }
+
+                segment2Ds.Add(segment2D);
+            }
+
+            if (segment2Ds == null || segment2Ds.Count < 3)
+                return null;
+
+            return new Polygon2D(segment2Ds.ConvertAll(x => x.Start));
         }
     }
 }
