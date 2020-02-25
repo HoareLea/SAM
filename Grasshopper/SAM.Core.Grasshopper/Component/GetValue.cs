@@ -161,7 +161,5 @@ namespace SAM.Core.Grasshopper
             return false;
         }
 
-        private bool
-
     }
 }
