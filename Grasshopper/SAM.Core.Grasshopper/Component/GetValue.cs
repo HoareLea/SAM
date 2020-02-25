@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
@@ -98,8 +101,30 @@ namespace SAM.Core.Grasshopper
             {
                 if(!TryGetValue_Method(type, name, @object, out value))
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Property or Method not found");
-                    return;
+                    bool hasValue = false;
+                    if(@object is SAMObject)
+                    {
+                        SAMObject sAMObject = (SAMObject)@object;
+                        IEnumerable<ParameterSet> parameterSets = sAMObject.GetParamaterSets();
+                        if(parameterSets != null && parameterSets.Count() > 0)
+                        {
+                            foreach(ParameterSet parameterSet in parameterSets)
+                            {
+                                if(parameterSet.Contains(name))
+                                {
+                                    value = parameterSet.ToObject(name);
+                                    hasValue = true;
+                                }
+                            }
+                        }
+                    }
+                    
+                    if(!hasValue)
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Property or Method not found");
+                        return;
+                    }
+
                 }
             }
 
