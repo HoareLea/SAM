@@ -39,7 +39,7 @@ namespace SAM.Geometry.Spatial
 
         public Vector3D GetNormal()
         {
-            if (points.Count < 3)
+            if (points == null || points.Count < 3)
                 return null;
 
             return Point3D.GetNormal(points[0], points[1], points[2]);
@@ -52,6 +52,9 @@ namespace SAM.Geometry.Spatial
 
         public Plane GetPlane()
         {
+            if (points == null || points.Count < 3)
+                return null;
+            
             return Point3D.GetPlane(points, Tolerance.MicroDistance);
         }
 
@@ -110,7 +113,12 @@ namespace SAM.Geometry.Spatial
 
         public double GetArea()
         {
+            if (points == null || points.Count < 3)
+                return 0;
+
             Plane plane = GetPlane();
+            if (plane == null)
+                return 0;
 
             return Planar.Point2D.GetArea(points.ConvertAll(x => plane.Convert(x)));
         }
