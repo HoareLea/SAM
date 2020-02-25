@@ -21,7 +21,7 @@ namespace SAM.Analytical
             panelType = panel.panelType;
 
             if (panel.apertures != null)
-                apertures = new List<Aperture>(panel.apertures);
+                apertures = new List<Aperture>(panel.apertures.ConvertAll(x => new Aperture(x)));
         }
 
         public Panel(Panel panel, Construction construction)
@@ -31,7 +31,7 @@ namespace SAM.Analytical
             panelType = panel.panelType;
 
             if (panel.apertures != null)
-                apertures = new List<Aperture>(panel.apertures);
+                apertures = new List<Aperture>(panel.apertures.ConvertAll(x => new Aperture(x)));
         }
 
         public Panel(Panel panel, PanelType panelType)
@@ -41,7 +41,7 @@ namespace SAM.Analytical
             this.panelType = panelType;
 
             if (panel.apertures != null)
-                apertures = new List<Aperture>(panel.apertures);
+                apertures = new List<Aperture>(panel.apertures.ConvertAll(x => new Aperture(x)));
         }
 
         public Panel(Construction construction, PanelType panelType, Face3D face)
@@ -67,7 +67,7 @@ namespace SAM.Analytical
             if (panel.apertures != null)
             {
                 foreach(Aperture aperture in panel.apertures)
-                    Modify.AddAperture(this, aperture.ApertureConstruction, aperture.Plane.Origin, maxDistance);
+                    Modify.AddAperture(this, aperture.ApertureConstruction.Name, aperture.ApertureConstruction.ApertureType, aperture.GetFace3D(), maxDistance);
             }
         }
 
