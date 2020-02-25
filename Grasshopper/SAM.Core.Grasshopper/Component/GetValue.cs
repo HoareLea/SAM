@@ -94,38 +94,11 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            Type type = @object.GetType();
-
             object value = null;
-            if(!TryGetValue_Property(type, name, @object, out value))
+            if(!Query.TryGetValue(@object, name, out value))
             {
-                if(!TryGetValue_Method(type, name, @object, out value))
-                {
-                    bool hasValue = false;
-                    if(@object is SAMObject)
-                    {
-                        SAMObject sAMObject = (SAMObject)@object;
-                        IEnumerable<ParameterSet> parameterSets = sAMObject.GetParamaterSets();
-                        if(parameterSets != null && parameterSets.Count() > 0)
-                        {
-                            foreach(ParameterSet parameterSet in parameterSets)
-                            {
-                                if(parameterSet.Contains(name))
-                                {
-                                    value = parameterSet.ToObject(name);
-                                    hasValue = true;
-                                }
-                            }
-                        }
-                    }
-                    
-                    if(!hasValue)
-                    {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Property or Method not found");
-                        return;
-                    }
-
-                }
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Property or Method not found");
+                return;
             }
 
             if (value is SAMObject)
@@ -139,52 +112,5 @@ namespace SAM.Core.Grasshopper
                 dataAccess.SetData(0, value);
 
         }
-
-        private bool TryGetValue_Property(Type type, string name, object @object, out object value)
-        {
-            value = null;
-
-            if (type == null || string.IsNullOrWhiteSpace(name) || @object == null)
-                return false;
-            
-            System.Reflection.PropertyInfo[] propertyInfos = type.GetProperties();
-            foreach (System.Reflection.PropertyInfo propertyInfo in propertyInfos)
-            {
-                if (propertyInfo.Name.Equals(name))
-                { 
-                    value = propertyInfo.GetValue(@object);
-                    return true;
-                }
-                    
-            }
-
-            return false;
-        }
-
-        private bool TryGetValue_Method(Type type, string name, object @object, out object value)
-        {
-            value = null;
-
-            if (type == null || string.IsNullOrWhiteSpace(name) || @object == null)
-                return false;
-
-            System.Reflection.MethodInfo[] methodInfos= type.GetMethods();
-            foreach (System.Reflection.MethodInfo methodInfo in methodInfos)
-            {
-                System.Reflection.ParameterInfo[] parameterInfos = methodInfo.GetParameters();
-                if (parameterInfos != null && parameterInfos.Length > 0)
-                    continue;
-                
-                if (methodInfo.Name.Equals(name) || methodInfo.Name.Equals(string.Format("Get{0}", name)))
-                {
-                    value = methodInfo.Invoke(@object, new object[] { });
-                    return true;
-                }
-
-            }
-
-            return false;
-        }
-
     }
 }
