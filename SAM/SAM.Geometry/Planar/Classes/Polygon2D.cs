@@ -107,9 +107,9 @@ namespace SAM.Geometry.Planar
             if (points == null || points.Count < 3 || offsets == null)
                 return null;
 
-            int aCount = offsets.Count();
+            int count = offsets.Count();
 
-            if (aCount == 0)
+            if (count == 0)
                 return new Polygon2D(this);
 
             double offset = offsets.Last();
@@ -117,11 +117,16 @@ namespace SAM.Geometry.Planar
             List<Segment2D> segment2Ds = new List<Segment2D>();
             for(int i=0; i < points.Count; i++)
             {
-                if (aCount < i)
+                if (i < count)
                     offset = offsets.ElementAt(i);
 
-                Segment2D segment2D = new Segment2D(points[i], points[i + 1]).Offset(offset, orientation);
-                if(segment2Ds.Count > 0)
+                Segment2D segment2D = null;
+                if(i < points.Count - 1)
+                    segment2D = new Segment2D(points[i], points[i + 1]).Offset(offset, orientation);
+                else
+                    segment2D = new Segment2D(points[i], points[0]).Offset(offset, orientation);
+
+                if (segment2Ds.Count > 0)
                 {
                     Segment2D segment2D_Previous = segment2Ds[segment2Ds.Count - 1];
 
