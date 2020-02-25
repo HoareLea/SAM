@@ -93,25 +93,15 @@ namespace SAM.Core.Grasshopper
 
             Type type = @object.GetType();
 
-            System.Reflection.PropertyInfo propertyInfo = null;
-
-            System.Reflection.PropertyInfo[] propertyInfos = type.GetProperties();
-            foreach (System.Reflection.PropertyInfo propertyInfo_Temp in propertyInfos)
+            object value = null;
+            if(!TryGetValue_Property(type, name, @object, out value))
             {
-                if (propertyInfo_Temp.Name.Equals(name))
+                if(!TryGetValue_Method(type, name, @object, out value))
                 {
-                    propertyInfo = propertyInfo_Temp;
-                    break;
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Property or Method not found");
+                    return;
                 }
             }
-
-            if (propertyInfo == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Missing property with provided name");
-                return;
-            }
-
-            object value = propertyInfo.GetValue(@object);
 
             if (value is SAMObject)
             {
@@ -124,6 +114,54 @@ namespace SAM.Core.Grasshopper
                 dataAccess.SetData(0, value);
 
         }
+
+        private bool TryGetValue_Property(Type type, string name, object @object, out object value)
+        {
+            value = null;
+
+            if (type == null || string.IsNullOrWhiteSpace(name) || @object == null)
+                return false;
+            
+            System.Reflection.PropertyInfo[] propertyInfos = type.GetProperties();
+            foreach (System.Reflection.PropertyInfo propertyInfo in propertyInfos)
+            {
+                if (propertyInfo.Name.Equals(name))
+                { 
+                    value = propertyInfo.GetValue(@object);
+                    return true;
+                }
+                    
+            }
+
+            return false;
+        }
+
+        private bool TryGetValue_Method(Type type, string name, object @object, out object value)
+        {
+            value = null;
+
+            if (type == null || string.IsNullOrWhiteSpace(name) || @object == null)
+                return false;
+
+            System.Reflection.MethodInfo[] methodInfos= type.GetMethods();
+            foreach (System.Reflection.MethodInfo methodInfo in methodInfos)
+            {
+                System.Reflection.ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+                if (parameterInfos != null && parameterInfos.Length > 0)
+                    continue;
+                
+                if (methodInfo.Name.Equals(name) || methodInfo.Name.Equals(string.Format("Get{0}", name)))
+                {
+                    value = methodInfo.Invoke(@object, new object[] { });
+                    return true;
+                }
+
+            }
+
+            return false;
+        }
+
+        private bool
 
     }
 }
