@@ -77,6 +77,14 @@ namespace SAM.Analytical
             }
         }
 
+        public ApertureType ApertureType
+        {
+            get
+            {
+                return apertureType;
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
