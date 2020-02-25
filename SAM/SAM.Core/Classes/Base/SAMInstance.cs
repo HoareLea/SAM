@@ -65,7 +65,7 @@ namespace SAM.Core
                 return false;
 
             if (jObject.ContainsKey("SAMType"))
-                sAMType = new SAMType(jObject.Value<JObject>("SAMType"));
+                sAMType = Create.IJSAMObject<SAMType>(jObject.Value<JObject>("SAMType"));
 
             return true;
         }

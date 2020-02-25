@@ -59,6 +59,9 @@ namespace SAM.Analytical
         {
             get
             {
+                if(frameConstruction == null)
+                    return null;
+                
                 return new Construction(frameConstruction);
             }
         }
@@ -67,6 +70,9 @@ namespace SAM.Analytical
         {
             get
             {
+                if (paneConstruction == null)
+                    return null;
+                
                 return new Construction(paneConstruction);
             }
         }
@@ -76,7 +82,8 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            boundary2D = new Boundary2D(jObject.Value<JObject>("Boundary2D"));
+            if (jObject.ContainsKey("Boundary2D"))
+                boundary2D = new Boundary2D(jObject.Value<JObject>("Boundary2D"));
 
             if (jObject.ContainsKey("FrameConstruction"))
                 frameConstruction = new Construction(jObject.Value<JObject>("FrameConstruction"));
@@ -93,10 +100,12 @@ namespace SAM.Analytical
             if (jObject == null)
                 return jObject;
 
-            jObject.Add("Boundary2D", boundary2D.ToJObject());
+            if (boundary2D != null)
+                jObject.Add("Boundary2D", boundary2D.ToJObject());
+            
             if (frameConstruction != null)
-
                 jObject.Add("FrameConstruction", frameConstruction.ToJObject());
+
             if (paneConstruction != null)
                 jObject.Add("PaneConstruction", paneConstruction.ToJObject());
 
