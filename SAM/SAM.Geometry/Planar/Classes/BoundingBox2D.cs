@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class BoundingBox2D : SAMGeometry, IClosed2D, ISegmentable2D
+    public class BoundingBox2D : SAMGeometry, IClosed2D, ISegmentable2D, IBoundable2D
     {
         private Point2D min;
         private Point2D max;
@@ -38,6 +38,15 @@ namespace SAM.Geometry.Planar
         {
             max = Point2D.Max(point2D_1, point2D_2);
             min = Point2D.Min(point2D_1, point2D_2);
+        }
+
+        public BoundingBox2D(Point2D point2D_1, Point2D point2D_2, double offset)
+        {
+            max = Point2D.Max(point2D_1, point2D_2);
+            min = Point2D.Min(point2D_1, point2D_2);
+
+            min = new Point2D(min.X - offset, min.Y - offset);
+            max = new Point2D(max.X + offset, max.Y + offset);
         }
 
         public BoundingBox2D(Point2D point2D, double offset)
@@ -213,6 +222,11 @@ namespace SAM.Geometry.Planar
             jObject.Add("Min", min.ToJObject());
 
             return jObject;
+        }
+
+        public BoundingBox2D GetBoundingBox(double offset = 0)
+        {
+            return new BoundingBox2D(min, max, offset);
         }
     }
 }

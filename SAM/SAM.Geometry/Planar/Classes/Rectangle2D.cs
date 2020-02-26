@@ -163,9 +163,9 @@ namespace SAM.Geometry.Planar
             return Point2D.GetCentroid(GetPoints());
         }
 
-        public BoundingBox2D GetBoundingBox()
+        public BoundingBox2D GetBoundingBox(double offset = 0)
         {
-            return new BoundingBox2D(GetPoints());
+            return new BoundingBox2D(GetPoints(), offset);
         }
 
         public void Move(Vector2D vector2D)

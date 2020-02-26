@@ -39,9 +39,9 @@ namespace SAM.Geometry.Planar
             return Point2D.GetArea(points);
         }
 
-        public BoundingBox2D GetBoundingBox()
+        public BoundingBox2D GetBoundingBox(double offset = 0)
         {
-            return new BoundingBox2D(points);
+            return new BoundingBox2D(points, offset);
         }
 
         public Point2D GetCentroid()

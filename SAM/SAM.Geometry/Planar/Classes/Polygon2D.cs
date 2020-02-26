@@ -148,5 +148,10 @@ namespace SAM.Geometry.Planar
 
             return new Polygon2D(segment2Ds.ConvertAll(x => x.Start));
         }
+
+        public BoundingBox2D GetBoundingBox(double offset = 0)
+        {
+           return new BoundingBox2D(points, offset);
+        }
     }
 }

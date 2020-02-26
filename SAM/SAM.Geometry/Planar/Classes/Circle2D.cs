@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Circle2D: SAMGeometry, IClosed2D
+    public class Circle2D: SAMGeometry, IClosed2D, IBoundable2D
     {
         private Point2D center;
         private double radious;
@@ -72,9 +72,9 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public BoundingBox2D GetBoundingBox()
+        public BoundingBox2D GetBoundingBox(double offset = 0)
         {
-            return new BoundingBox2D(new Point2D(center[0] - radious, center[1] - radious), new Point2D(center[0] + radious, center[1] + radious));
+            return new BoundingBox2D(new Point2D(center[0] - radious, center[1] - radious), new Point2D(center[0] + radious, center[1] + radious), offset);
         }
 
         public Point2D GetCentroid()

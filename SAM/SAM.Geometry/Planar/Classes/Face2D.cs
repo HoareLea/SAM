@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public class Face2D : Face, IClosed2D, ISAMGeometry2D
+    public class Face2D : Face, IClosed2D, ISAMGeometry2D, IBoundable2D
     {
 
         public Face2D(IClosed2D closed2D)
@@ -101,6 +101,11 @@ namespace SAM.Geometry.Planar
         public bool Inside(Point2D point2D)
         {
             throw new System.NotImplementedException();
+        }
+
+        public BoundingBox2D GetBoundingBox(double offset = 0)
+        {
+            return externalEdge.GetBoundingBox(offset);
         }
     }
 }
