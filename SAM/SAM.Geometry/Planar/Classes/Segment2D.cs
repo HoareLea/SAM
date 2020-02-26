@@ -365,6 +365,21 @@ namespace SAM.Geometry.Planar
                 return start;
         }
 
+        public Point2D Mid()
+        {
+            return Point2D.Move(origin, vector.GetScaled(0.5));
+        }
+
+        public void Adjust(Point2D point2D)
+        {
+            Point2D point2D_Projected = Project(point2D);
+
+            if (point2D_Projected.Distance(origin) < point2D_Projected.Distance(End))
+                Start = point2D_Projected;
+            else
+                End = point2D_Projected;
+        }
+
 
         /// <summary>
         /// Split Segment2Ds  
