@@ -33,18 +33,13 @@ namespace SAM.Geometry.Spatial
             plane = closedPlanar3D.GetPlane();
         }
 
-        //public Face3D(Face3D face3D)
-        //    : base(face3D)
-        //{
-        //    this.plane = new Plane(face3D.plane);
-        //}
-
         public Face3D(JObject jObject)
             : base(jObject)
         {
 
         }
 
+        
         public Plane GetPlane()
         {
             return new Plane(plane);
@@ -94,6 +89,18 @@ namespace SAM.Geometry.Spatial
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Face3D((Plane)plane.GetMoved(vector3D), (Planar.IClosed2D)externalEdge.Clone());
+        }
+
+        public bool RemoveInternalEdge(int index)
+        {
+            if (index < 0 || internalEdges == null || internalEdges.Count == 0)
+                return false;
+
+            if (index >= internalEdges.Count)
+                return false;
+
+            internalEdges.RemoveAt(index);
+            return true;
         }
 
         public bool Inside(Face3D face3D, double tolerance = Tolerance.MicroDistance)
