@@ -23,16 +23,16 @@ namespace SAM.Analytical
             return panel.AddAperture(apertureConstruction, point3D_Projected);
         }
 
-        public static Aperture AddAperture(this Panel panel, string name, ApertureType apertureType, IClosedPlanar3D edge, double maxDistance = Geometry.Tolerance.MacroDistance)
+        public static Aperture AddAperture(this Panel panel, string name, ApertureType apertureType, IClosedPlanar3D closedPlanar3D, double maxDistance = Geometry.Tolerance.MacroDistance)
         {
-            if (panel == null || edge == null)
+            if (panel == null || closedPlanar3D == null)
                 return null;
 
             Plane plane_Panel = panel.PlanarBoundary3D.Plane;
             if (plane_Panel == null)
                 return null;
 
-            Plane plane_Edge = edge.GetPlane();
+            Plane plane_Edge = closedPlanar3D.GetPlane();
             if (plane_Edge == null)
                 return null;
 
@@ -42,7 +42,7 @@ namespace SAM.Analytical
             if (origin_Projected.Distance(origin_Edge) > maxDistance)
                 return null;
 
-            ApertureConstruction apertureConstruction = Create.ApertureConstruction(plane_Panel, name, apertureType, edge, maxDistance);
+            ApertureConstruction apertureConstruction = Create.ApertureConstruction(plane_Panel, name, apertureType, closedPlanar3D, maxDistance);
             if (apertureConstruction == null)
                 return null;
 

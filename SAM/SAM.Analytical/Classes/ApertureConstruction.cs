@@ -26,6 +26,13 @@ namespace SAM.Analytical
             this.apertureType = apertureType;
         }
 
+        public ApertureConstruction(string name, Boundary2D boundary2D, ApertureType apertureType)
+            : base(name)
+        {
+            this.boundary2D = new Boundary2D(boundary2D);
+            this.apertureType = apertureType;
+        }
+
         public ApertureConstruction(Guid guid, string name, ApertureType apertureType)
             : base(guid, name)
         {
