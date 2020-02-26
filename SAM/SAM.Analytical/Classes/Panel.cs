@@ -67,7 +67,7 @@ namespace SAM.Analytical
             if (panel.apertures != null)
             {
                 foreach(Aperture aperture in panel.apertures)
-                    Modify.AddAperture(this, aperture.ApertureConstruction.Name, aperture.ApertureConstruction.ApertureType, aperture.GetFace3D(), maxDistance);
+                    Modify.AddAperture(this, aperture.ApertureConstruction.Name, aperture.ApertureConstruction.ApertureType, aperture.GetFace3D().GetExternalEdge(), maxDistance);
             }
         }
 

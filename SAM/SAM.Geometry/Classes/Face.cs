@@ -13,16 +13,19 @@ namespace SAM.Geometry
         protected IClosed2D externalEdge;
         protected List<IClosed2D> internalEdges;
 
-        public Face(Face face)
+        public Face(IClosed2D closed2D)
         {
-            externalEdge = (IClosed2D)face.externalEdge.Clone();
-            if (face.internalEdges != null)
-                internalEdges = face.internalEdges.ConvertAll(x => (IClosed2D)x.Clone());
-        }
-
-        public Face(IClosed2D externalEdge)
-        {
-            this.externalEdge = externalEdge;
+            if(closed2D is Face)
+            {
+                Face face = (Face)closed2D;
+                externalEdge = (IClosed2D)face.externalEdge.Clone();
+                if (face.internalEdges != null)
+                    internalEdges = face.internalEdges.ConvertAll(x => (IClosed2D)x.Clone());
+            }
+            else
+            {
+                externalEdge = (IClosed2D)closed2D.Clone();
+            }
         }
 
         public Face(JObject jObject)

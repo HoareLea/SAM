@@ -33,11 +33,11 @@ namespace SAM.Geometry.Spatial
             plane = closedPlanar3D.GetPlane();
         }
 
-        public Face3D(Face3D face3D)
-            : base(face3D)
-        {
-            this.plane = new Plane(face3D.plane);
-        }
+        //public Face3D(Face3D face3D)
+        //    : base(face3D)
+        //{
+        //    this.plane = new Plane(face3D.plane);
+        //}
 
         public Face3D(JObject jObject)
             : base(jObject)

@@ -4,16 +4,11 @@ using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public class Face2D : Face, ISAMGeometry2D
+    public class Face2D : Face, IClosed2D, ISAMGeometry2D
     {
-        public Face2D(Face2D face2D)
-            : base(face2D)
-        {
 
-        }
-
-        public Face2D(IClosed2D externalEdge)
-            : base(externalEdge)
+        public Face2D(IClosed2D closed2D)
+            : base(closed2D)
         {
 
         }
@@ -96,6 +91,16 @@ namespace SAM.Geometry.Planar
         {
             List<Planar.IClosed2D> edges_Excluded = null;
             return Create(edges, out edges_Excluded);
+        }
+
+        public bool Inside(IClosed2D closed2D)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool Inside(Point2D point2D)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -28,14 +28,40 @@ namespace SAM.Analytical
             this.externalEdge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
         }
 
+        //replace geometry closedPlanar3D for Analytical Boundary2D including internal and external
         public Boundary2D(IClosedPlanar3D closedPlanar3D)
         {
-            externalEdge2DLoop = new BoundaryEdge2DLoop(closedPlanar3D);
+            if (closedPlanar3D is Face3D)
+            {
+                Face3D face3D = (Face3D)closedPlanar3D;
+                
+                externalEdge2DLoop = new BoundaryEdge2DLoop(face3D.GetExternalEdge());
+                List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdges();
+                if (internalEdges != null)
+                    internalEdge2DLoops = internalEdges.ConvertAll(x => new BoundaryEdge2DLoop(x));
+            }
+            else
+            {
+                externalEdge2DLoop = new BoundaryEdge2DLoop(closedPlanar3D);
+            }
         }
 
+        //replace geometry closed2D for Analytical Boundary2D including internal and external
         public Boundary2D(Geometry.Planar.IClosed2D closed2D)
         {
-            externalEdge2DLoop = new BoundaryEdge2DLoop(closed2D);
+            if(closed2D is Geometry.Planar.Face2D)
+            {
+                Geometry.Planar.Face2D face2D = (Geometry.Planar.Face2D)closed2D;
+
+                externalEdge2DLoop = new BoundaryEdge2DLoop(face2D.ExternalEdge);
+                List<Geometry.Planar.IClosed2D> internalEdges = face2D.InternalEdges;
+                if (internalEdges != null)
+                    internalEdge2DLoops = internalEdges.ConvertAll(x => new BoundaryEdge2DLoop(x));
+            }
+            else
+            {
+                externalEdge2DLoop = new BoundaryEdge2DLoop(closed2D);
+            }
         }
 
         public Boundary2D(JObject jObject)

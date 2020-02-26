@@ -470,5 +470,10 @@ namespace SAM.Geometry.Spatial
         {
             return point3D_1?.coordinates[0] != point3D_2?.coordinates[0] || point3D_1?.coordinates[1] != point3D_2?.coordinates[1] || point3D_1?.coordinates[2] != point3D_2?.coordinates[2];
         }
+
+        public static Vector3D operator -(Point3D point3D_1, Point3D point3D_2)
+        {
+            return new Vector3D(point3D_1.coordinates[0] - point3D_2.coordinates[0], point3D_1.coordinates[1] - point3D_2.coordinates[1], point3D_1.coordinates[2] - point3D_2.coordinates[2]);
+        }
     }
 }

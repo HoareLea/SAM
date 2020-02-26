@@ -319,6 +319,17 @@ namespace SAM.Geometry.Spatial
             return Project(curve as dynamic);
         }
 
+        public Face3D Project(Face3D face3D)
+        {
+            Planar.IClosed2D externalEdge = Convert(Project(face3D.GetExternalEdge()));
+
+            List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdges();
+            if (internalEdges != null && internalEdges.Count > 0)
+                internalEdges = internalEdges.ConvertAll(x => Project(x));
+
+            return Face3D.Create(this, externalEdge, internalEdges?.ConvertAll(x => Convert(x)));
+        }
+
         public IClosedPlanar3D Project(IClosedPlanar3D closedPlanar3D)
         {
             if (closedPlanar3D == null)
