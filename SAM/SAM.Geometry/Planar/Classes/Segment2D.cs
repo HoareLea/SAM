@@ -173,11 +173,15 @@ namespace SAM.Geometry.Planar
         /// <param name="point2D">Point2D to be projected.</param>
         public Point2D Project(Point2D point2D)
         {
-            if (Start.X == End.X)
-                return new Point2D(Start.X, point2D.Y);
+            Point2D start = Start;
+            Point2D end = End;
 
-            double m = (End.Y - Start.Y) / (End.X - Start.X);
-            double b = Start.Y - (m * Start.X);
+
+            if (start.X == end.X)
+                return new Point2D(start.X, point2D.Y);
+
+            double m = (end.Y - start.Y) / (end.X - start.X);
+            double b = start.Y - (m * start.X);
 
             double X = (m * point2D.Y + point2D.X - m * b) / (m * m + 1);
             double Y = (m * m * point2D.Y + m * point2D.X + b) / (m * m + 1);
@@ -195,6 +199,14 @@ namespace SAM.Geometry.Planar
         public Segment2D Move(Vector2D vector2D)
         {
             return new Segment2D((Point2D)origin.GetMoved(vector2D), vector);
+        }
+
+        public double Distance(Point2D point2D)
+        {
+            if (point2D == null)
+                return double.NaN;
+
+            return point2D.Distance(Closest(point2D));
         }
 
         /// <summary>
@@ -277,6 +289,82 @@ namespace SAM.Geometry.Planar
         {
             return Move(Direction.GetPerpendicular(orientation) * offset);
         }
+
+        public override ISAMGeometry Clone()
+        {
+            return new Segment2D(origin, vector);
+        }
+
+        public Point2D GetStart()
+        {
+            return new Point2D(origin);
+        }
+
+        public Point2D GetEnd()
+        {
+            return origin.GetMoved(vector);
+        }
+
+        public List<Segment2D> GetSegments()
+        {
+            return new List<Segment2D>() { new Segment2D(origin, vector) };
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            origin = new Point2D(jObject.Value<JObject>("Origin"));
+            vector = new Vector2D(jObject.Value<JObject>("Vector"));
+            
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
+            jObject.Add("Origin", origin.ToJObject());
+            jObject.Add("Vector", vector.ToJObject());
+
+            return jObject;
+        }
+
+        public Point2D Closest(Point2D point2D)
+        {
+            Point2D start = Start;
+            Point2D end = End;
+
+            double A = point2D.X - start.X;
+            double B = point2D.Y - start.Y;
+            double C = end.X - start.X;
+            double D = end.Y - start.Y;
+
+            double aDot = A * C + B * D;
+            double aLen_sq = C * C + D * D;
+            double aParameter = -1;
+            if (aLen_sq != 0)
+                aParameter = aDot / aLen_sq;
+
+            if (aParameter < 0)
+                return start;
+            else if (aParameter > 1)
+                return end;
+            else
+                return new Point2D(start.X + aParameter * C, start.Y + aParameter * D);
+        }
+
+        public Point2D ClosestEnd(Point2D point2D)
+        {
+            Point2D end = End;
+            Point2D start = Start;
+
+            if (end.Distance(point2D) < start.Distance(point2D))
+                return end;
+            else
+                return start;
+        }
+
 
         /// <summary>
         /// Split Segment2Ds  
@@ -362,46 +450,6 @@ namespace SAM.Geometry.Planar
             }
 
             return aResult;
-        }
-
-        public override ISAMGeometry Clone()
-        {
-            return new Segment2D(origin, vector);
-        }
-
-        public Point2D GetStart()
-        {
-            return new Point2D(origin);
-        }
-
-        public Point2D GetEnd()
-        {
-            return origin.GetMoved(vector);
-        }
-
-        public List<Segment2D> GetSegments()
-        {
-            return new List<Segment2D>() { new Segment2D(origin, vector) };
-        }
-
-        public override bool FromJObject(JObject jObject)
-        {
-            origin = new Point2D(jObject.Value<JObject>("Origin"));
-            vector = new Vector2D(jObject.Value<JObject>("Vector"));
-            
-            return true;
-        }
-
-        public override JObject ToJObject()
-        {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
-                return null;
-
-            jObject.Add("Origin", origin.ToJObject());
-            jObject.Add("Vector", vector.ToJObject());
-
-            return jObject;
         }
     }
 }

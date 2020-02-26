@@ -66,6 +66,7 @@
     <Compile Include="Planar\Classes\Segment2D.cs" />
     <Compile Include="Planar\Classes\Triangle2D.cs" />
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
+    <Compile Include="Planar\Query\Closest.cs" />
     <Compile Include="Planar\Query\ConvexHull.cs" />
     <Compile Include="Spatial\Create\Face3Ds.cs" />
     <Compile Include="Spatial\Create\Point3Ds.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Spatial\Create\ICurve3D.cs" />
     <Compile Include="Spatial\Query\Explode.cs" />
     <Compile Include="Spatial\Query\ClosedPlanar3Ds.cs" />
+    <Compile Include="Spatial\Query\Closest.cs" />
     <Compile Include="Spatial\Query\Location.cs" />
     <Compile Include="Spatial\Query\Face3Ds.cs" />
     <Compile Include="Spatial\Classes\BoundingBox3D.cs" />
