@@ -109,8 +109,15 @@ namespace SAM.Geometry.Spatial
                 return false;
 
             IClosed3D closed3D = face3D.plane.Convert(face3D.externalEdge);
+            if (closed3D == null)
+                return false;
 
-            return externalEdge.Inside(plane.Convert(closed3D));
+            Planar.IClosed2D closed2D = plane.Convert(closed3D);
+
+            if (internalEdges == null || internalEdges.Count == 0)
+                return externalEdge.Inside(closed2D);
+
+            return externalEdge.Inside(closed2D) && internalEdges.TrueForAll(x => !x.Inside(closed2D));
         }
 
         public bool Inside(Point3D point3D, double tolerance = Tolerance.MicroDistance)
@@ -119,7 +126,11 @@ namespace SAM.Geometry.Spatial
                 return false;
 
             Planar.Point2D point2D = plane.Convert(point3D);
-            return externalEdge.Inside(point2D);
+            
+            if (internalEdges == null || internalEdges.Count == 0)
+                return externalEdge.Inside(point2D);
+
+            return externalEdge.Inside(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D));
         }
 
         public IClosedPlanar3D Project(IClosed3D closed3D)

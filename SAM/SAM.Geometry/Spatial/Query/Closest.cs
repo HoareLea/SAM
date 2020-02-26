@@ -41,5 +41,29 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static Point3D Closest(this IClosedPlanar3D closedPlanar3D, Point3D point3D)
+        {
+            if (closedPlanar3D == null || point3D == null)
+                return null;
+
+            Plane plane = closedPlanar3D.GetPlane();
+
+            Planar.Point2D point2D_Converted = plane.Convert(plane.Project(point3D));
+
+            Planar.IClosed2D externalEdge = null;
+            if (closedPlanar3D is Face3D)
+                externalEdge = plane.Convert(((Face3D)closedPlanar3D).GetExternalEdge());
+            else
+                externalEdge = plane.Convert(closedPlanar3D);
+
+            if (externalEdge.Inside(point2D_Converted))
+                return plane.Convert(point2D_Converted);
+
+            if (externalEdge is Planar.ISegmentable2D)
+                return plane.Convert(Planar.Query.Closest((Planar.ISegmentable2D)externalEdge, point2D_Converted));
+
+            return null;
+        }
     }
 }

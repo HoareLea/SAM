@@ -32,20 +32,21 @@ namespace SAM.Analytical
             if (plane_Panel == null)
                 return null;
 
-            Plane plane_Edge = closedPlanar3D.GetPlane();
-            if (plane_Edge == null)
+            Plane plane_ClosedPlanar3D = closedPlanar3D.GetPlane();
+            if (plane_ClosedPlanar3D == null)
                 return null;
 
-            Point3D origin_Edge = plane_Edge.Origin;
+            Point3D origin_ClosedPlanar3D = plane_ClosedPlanar3D.Origin;
 
-            Point3D origin_Projected = plane_Panel.Project(origin_Edge);
-            if (origin_Projected.Distance(origin_Edge) > maxDistance)
+            Point3D point3D_Closest = Geometry.Spatial.Query.Closest(panel.GetFace3D(), origin_ClosedPlanar3D);
+            if (point3D_Closest.Distance(origin_ClosedPlanar3D) > maxDistance)
                 return null;
 
             ApertureConstruction apertureConstruction = Create.ApertureConstruction(plane_Panel, name, apertureType, closedPlanar3D, maxDistance);
             if (apertureConstruction == null)
                 return null;
 
+            Point3D origin_Projected = plane_Panel.Project(origin_ClosedPlanar3D);
             return AddAperture(panel, apertureConstruction, origin_Projected, maxDistance);
         }
 
