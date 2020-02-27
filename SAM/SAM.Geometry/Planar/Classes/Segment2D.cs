@@ -153,6 +153,14 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        public Vector2D Vector
+        {
+            get
+            {
+                return new Vector2D(vector);
+            }
+        }
+
         public void MoveTo(Point2D point2D)
         {
             origin = point2D;

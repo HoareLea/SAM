@@ -68,6 +68,7 @@
     <Compile Include="Planar\Classes\Triangle2D.cs" />
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
     <Compile Include="Planar\Modify\Split.cs" />
+    <Compile Include="Planar\Query\Directions.cs" />
     <Compile Include="Planar\Query\Closest.cs" />
     <Compile Include="Planar\Query\ConvexHull.cs" />
     <Compile Include="Spatial\Create\Face3Ds.cs" />
