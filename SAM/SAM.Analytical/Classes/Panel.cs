@@ -156,8 +156,14 @@ namespace SAM.Analytical
                 return null;
 
             IClosedPlanar3D closedPlanar3D_Projected = planarBoundary3D.Plane.Project(closedPlanar3D);
+            if (closedPlanar3D_Projected == null)
+                return null;
 
-            if (closedPlanar3D_Projected.GetPlane().Origin.Distance(closedPlanar3D.GetPlane().Origin) > maxDistance)
+            Plane plane = closedPlanar3D_Projected.GetPlane();
+            if (plane == null)
+                return null;
+
+            if (plane.Origin.Distance(closedPlanar3D.GetPlane().Origin) > maxDistance)
                 return null;
 
             Aperture aperture = new Aperture(apertureConstruction, closedPlanar3D_Projected);
