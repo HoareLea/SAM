@@ -65,10 +65,7 @@ namespace SAM.Analytical
             planarBoundary3D = new PlanarBoundary3D(face);
 
             if (panel.apertures != null)
-            {
-                foreach(Aperture aperture in panel.apertures)
-                    Modify.AddAperture(this, aperture.ApertureConstruction.Name, aperture.ApertureConstruction.ApertureType, aperture.GetFace3D(), maxDistance);
-            }
+                apertures = panel.apertures.FindAll(x => Query.IsValid(this, x)).ConvertAll(x => new Aperture(x));
         }
 
         public Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
@@ -153,20 +150,37 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public Aperture AddAperture(ApertureConstruction apertureConstruction, Point3D location)
+        public Aperture AddAperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, double maxDistance = Geometry.Tolerance.MacroDistance)
         {
-            if (apertureConstruction == null || location == null)
+            if (apertureConstruction == null || closedPlanar3D == null)
                 return null;
 
-            Plane plane = planarBoundary3D.Plane;
+            IClosedPlanar3D closedPlanar3D_Projected = planarBoundary3D.Plane.Project(closedPlanar3D);
+
+            if (closedPlanar3D_Projected.GetPlane().Origin.Distance(closedPlanar3D.GetPlane().Origin) > maxDistance)
+                return null;
+
+            Aperture aperture = new Aperture(apertureConstruction, closedPlanar3D_Projected);
+            if (!Query.IsValid(this, aperture))
+                return null;
 
             if (apertures == null)
                 apertures = new List<Aperture>();
 
-            Aperture aperture = new Aperture(apertureConstruction, plane, location);
-
             apertures.Add(aperture);
             return aperture;
+        }
+
+        public bool AddAperture(Aperture aperture)
+        {
+            if (!Query.IsValid(this, aperture))
+                return false;
+
+            if (apertures == null)
+                apertures = new List<Aperture>();
+
+            apertures.Add(aperture);
+            return true;
         }
 
         public List<Aperture> Apertures

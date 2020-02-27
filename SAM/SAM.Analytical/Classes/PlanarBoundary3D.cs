@@ -14,25 +14,29 @@ namespace SAM.Analytical
         private BoundaryEdge2DLoop externalEdge2DLoop;
         private List<BoundaryEdge2DLoop> internalEdge2DLoops;
 
-        public PlanarBoundary3D(Face3D face)
+        public PlanarBoundary3D(IClosedPlanar3D closedPlanar3D)
             : base()
         {
-            plane = face.GetPlane();
-            externalEdge2DLoop = new BoundaryEdge2DLoop(face.ExternalEdge);
-
-            List<Geometry.Planar.IClosed2D> internalBoundaries = face.InternalEdges;
-            if(internalBoundaries != null)
+            if(closedPlanar3D is Face3D)
             {
-                internalEdge2DLoops = new List<BoundaryEdge2DLoop>();
-                foreach(Geometry.Planar.IClosed2D closed2D in internalBoundaries)
-                    internalEdge2DLoops.Add(new BoundaryEdge2DLoop(closed2D));
-            }
-        }
+                Face3D face3D = (Face3D)closedPlanar3D;
 
-        public PlanarBoundary3D(IClosedPlanar3D closedPlanar3D)
-        {
-            plane = closedPlanar3D.GetPlane();
-            externalEdge2DLoop = new BoundaryEdge2DLoop(closedPlanar3D);
+                plane = face3D.GetPlane();
+                externalEdge2DLoop = new BoundaryEdge2DLoop(face3D.ExternalEdge);
+
+                List<Geometry.Planar.IClosed2D> internalBoundaries = face3D.InternalEdges;
+                if (internalBoundaries != null)
+                {
+                    internalEdge2DLoops = new List<BoundaryEdge2DLoop>();
+                    foreach (Geometry.Planar.IClosed2D closed2D in internalBoundaries)
+                        internalEdge2DLoops.Add(new BoundaryEdge2DLoop(closed2D));
+                }
+            }
+            else
+            {
+                plane = closedPlanar3D.GetPlane();
+                externalEdge2DLoop = new BoundaryEdge2DLoop(closedPlanar3D);
+            }
         }
 
         public PlanarBoundary3D(PlanarBoundary3D planarBoundary3D)

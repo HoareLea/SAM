@@ -45,13 +45,13 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.GetPlanarBoundary3D());
+            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
             gooPlanarBoundary3D.DrawViewportWires(args);
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.GetPlanarBoundary3D());
+            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
             gooPlanarBoundary3D.DrawViewportMeshes(args);
         }
 

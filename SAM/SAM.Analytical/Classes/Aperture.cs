@@ -8,12 +8,12 @@ namespace SAM.Analytical
 {
     public class Aperture : SAMInstance
     {
-        private Plane plane;
+        private PlanarBoundary3D planarBoundary3D;
 
         public Aperture(Aperture aperture)
-            : base(aperture)
+            : base(aperture, aperture?.SAMType)
         {
-            plane = new Plane(aperture.plane);
+            planarBoundary3D = new PlanarBoundary3D(aperture.planarBoundary3D);
         }
 
         public Aperture(JObject jObject)
@@ -22,10 +22,11 @@ namespace SAM.Analytical
 
         }
 
-        public Aperture(ApertureConstruction apertureConstruction, Plane plane, Point3D location)
+        public Aperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D)
             : base(System.Guid.NewGuid(), apertureConstruction)
         {
-            this.plane = new Plane(plane.Project(location), plane.Normal);
+            if (closedPlanar3D != null)
+                planarBoundary3D = new PlanarBoundary3D(closedPlanar3D);
         }
 
         public override bool FromJObject(JObject jObject)
@@ -33,7 +34,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            plane = new Plane(jObject.Value<JObject>("Plane"));
+            planarBoundary3D = new PlanarBoundary3D(jObject.Value<JObject>("PlanarBoundary3D"));
             return true;
         }
 
@@ -43,21 +44,17 @@ namespace SAM.Analytical
             if (jObject == null)
                 return jObject;
 
-            jObject.Add("Plane", plane.ToJObject());
+            jObject.Add("PlanarBoundary3D", planarBoundary3D.ToJObject());
 
             return jObject;
         }
 
         public Face3D GetFace3D()
         {
-            if (plane == null)
+            if (planarBoundary3D == null)
                 return null;
 
-            ApertureConstruction apertureConstruction = ApertureConstruction;
-            if (apertureConstruction == null)
-                return null;
-
-            return ApertureConstruction.Boundary2D.GetFace3D(plane);
+            return planarBoundary3D.GetFace3D();
         }
 
         public Aperture Clone()
@@ -69,7 +66,10 @@ namespace SAM.Analytical
         {
             get
             {
-                return new Plane(plane);
+                if (planarBoundary3D == null)
+                    return null;
+
+                return planarBoundary3D.Plane;
             }
         }
 
@@ -86,16 +86,12 @@ namespace SAM.Analytical
             return GetFace3D().GetBoundingBox(offset);
         }
 
-        public PlanarBoundary3D GetPlanarBoundary3D()
+        public PlanarBoundary3D PlanarBoundary3D
         {
-            if (plane == null)
-                return null;
-
-            ApertureConstruction apertureConstruction = ApertureConstruction;
-            if (apertureConstruction == null)
-                return null;
-
-            return apertureConstruction.GetPlanarBoundary3D(plane);
+            get
+            {
+                return planarBoundary3D;
+            }
         }
     }
 }

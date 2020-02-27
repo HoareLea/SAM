@@ -50,7 +50,6 @@
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\PanelCluster.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
-    <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\ApertureType.cs" />
     <Compile Include="Enums\PanelType.cs" />
@@ -61,8 +60,8 @@
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Modify\SnapByOffset.cs" />
-    <Compile Include="Modify\AddAperture.cs" />
     <Compile Include="Modify\SnapByPoints.cs" />
+    <Compile Include="Query\IsValid.cs" />
     <Compile Include="Query\PanelType.cs" />
     <Compile Include="Classes\Space.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
