@@ -69,7 +69,7 @@
     <Compile Include="Classes\GooSAMObject.cs" />
     <Compile Include="Component\Explode.cs" />
     <Compile Include="Component\ToJson.cs" />
-    <Compile Include="Component\ToSAM.cs" />
+    <Compile Include="Component\FromJson.cs" />
     <Compile Include="Component\SAMAbout.cs" />
     <Compile Include="Component\GetValue.cs" />
     <Compile Include="Interfaces\IGooSAMObject.cs" />

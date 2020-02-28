@@ -8,7 +8,7 @@ using SAM.Core.Grasshopper.Properties;
 
 namespace SAM.Core.Grasshopper
 {
-    public class ToSAM : GH_Component
+    public class FromJson : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -23,8 +23,8 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public ToSAM()
-          : base("ToJson", "ToJson",
+        public FromJson()
+          : base("FormJson", "FromJson",
               "Reads SAM Objects from Json",
               "SAM", "Core")
         {

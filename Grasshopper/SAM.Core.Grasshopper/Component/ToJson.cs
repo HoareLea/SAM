@@ -38,7 +38,7 @@ namespace SAM.Core.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_SAMObjects", "_SAMObjects", "any SAM Objects", GH_ParamAccess.list);
-            inputParamManager.AddGenericParameter("_path", "_path", "JSON file path including extension .json", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_path", "_path", "JSON file path including extension .json", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run, set to True to export JSON to given path", GH_ParamAccess.item, false);
 
         }

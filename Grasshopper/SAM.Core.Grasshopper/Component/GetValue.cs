@@ -87,7 +87,6 @@ namespace SAM.Core.Grasshopper
                 }
             }
 
-
             if (@object == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
