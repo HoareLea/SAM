@@ -45,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Base\IntegerId.cs" />
     <Compile Include="Classes\Base\ParameterSet.cs" />
+    <Compile Include="Classes\Base\SAMObjectWrapper.cs" />
     <Compile Include="Classes\Graph\Graph.cs" />
     <Compile Include="Classes\Graph\GraphEdge.cs" />
     <Compile Include="Classes\Graph\GraphNode.cs" />
@@ -70,8 +72,9 @@
     <Compile Include="Query\AboutInfoTypeText.cs" />
     <Compile Include="Query\JArray.cs" />
     <Compile Include="Query\Guid.cs" />
-    <Compile Include="Query\TypeName.cs" />
+    <Compile Include="Query\FullTypeName.cs" />
     <Compile Include="Query\Name.cs" />
+    <Compile Include="Query\TryGetTypeNameAndAssemblyName.cs" />
     <Compile Include="Query\TryGetValue.cs" />
     <Compile Include="Query\GetValue.cs" />
   </ItemGroup>

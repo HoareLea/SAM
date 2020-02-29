@@ -1,21 +1,36 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using Newtonsoft.Json.Linq;
+
 
 namespace SAM.Core
 {
-    public class ParameterSet : IJSAMObject
+    public class ParameterSet : ISAMObject
     {
         private string name;
+        private Guid guid;
         private Dictionary<string, object> dictionary;
 
         public ParameterSet(string name)
         {
             this.name = name;
+            dictionary = new Dictionary<string, object>();
+        }
+
+        public ParameterSet(Guid guid, string name)
+        {
+            this.name = name;
+            this.guid = guid;
+            dictionary = new Dictionary<string, object>();
+        }
+
+        public ParameterSet(Assembly assembly)
+        {
+            name = assembly.FullName;
+            guid = Query.Guid(assembly);
             dictionary = new Dictionary<string, object>();
         }
 
@@ -32,9 +47,17 @@ namespace SAM.Core
             }
         }
 
+        public Guid Guid
+        {
+            get
+            {
+                return guid;
+            }
+        }
+
         public bool Add(string name, string value)
         {
-            if (dictionary == null)
+            if (dictionary == null || name == null)
                 return false;
             
             dictionary[name] = value;
@@ -43,7 +66,7 @@ namespace SAM.Core
 
         public bool Add(string name, double value)
         {
-            if (dictionary == null)
+            if (dictionary == null || name == null)
                 return false;
 
             dictionary[name] = value;
@@ -52,7 +75,7 @@ namespace SAM.Core
 
         public bool Add(string name, int value)
         {
-            if (dictionary == null)
+            if (dictionary == null || name == null)
                 return false;
 
             dictionary[name] = value;
@@ -61,7 +84,16 @@ namespace SAM.Core
 
         public bool Add(string name, bool value)
         {
-            if (dictionary == null)
+            if (dictionary == null || name == null)
+                return false;
+
+            dictionary[name] = value;
+            return true;
+        }
+
+        public bool Add(string name, IJSAMObject value)
+        {
+            if (dictionary == null || name == null)
                 return false;
 
             dictionary[name] = value;
@@ -78,7 +110,7 @@ namespace SAM.Core
 
         public bool Modify(string name, string value)
         {
-            if (dictionary == null || !dictionary.ContainsKey(name))
+            if (dictionary == null || name == null ||!dictionary.ContainsKey(name))
                 return false;
 
             dictionary[name] = value;
@@ -87,7 +119,7 @@ namespace SAM.Core
 
         public bool Modify(string name, double value)
         {
-            if (dictionary == null || !dictionary.ContainsKey(name))
+            if (dictionary == null || name == null || !dictionary.ContainsKey(name))
                 return false;
 
             dictionary[name] = value;
@@ -96,7 +128,7 @@ namespace SAM.Core
 
         public bool Contains(string name)
         {
-            if (dictionary == null)
+            if (dictionary == null || name == null)
                 return false;
 
             return dictionary.ContainsKey(name);
@@ -136,6 +168,18 @@ namespace SAM.Core
                 return false;
 
             return result;
+        }
+
+        public IJSAMObject ToSAMObject<T>(string name) where T: IJSAMObject
+        {
+            IJSAMObject result;
+            if (!Query.TryGetValue(dictionary, name, out result))
+                return null;
+
+            if (!(result is T))
+                return null;
+
+            return (T)(object)result;
         }
 
         public object ToObject(string name)
@@ -184,6 +228,7 @@ namespace SAM.Core
             dictionary = new Dictionary<string, object>();
             
             name = Query.Name(jObject);
+            guid = Query.Guid(jObject);
 
             JArray jArray = jObject.Value<JArray>("Parameters");
             if (jArray == null)
@@ -209,6 +254,9 @@ namespace SAM.Core
                     case JTokenType.Boolean:
                         dictionary[jObject_Temp.Value<string>("Name")] = jToken.Value<bool>();
                         break;
+                    case JTokenType.Object:
+                        dictionary[jObject_Temp.Value<string>("Name")] = Create.IJSAMObject((JObject)jToken);
+                        break;
                 }
             }
 
@@ -221,6 +269,8 @@ namespace SAM.Core
             jObject.Add("_type", GetType().FullName);
             if (name != null)
                 jObject.Add("Name", name);
+            
+            jObject.Add("Guid", guid);
 
             JArray jArray = new JArray();
             foreach (KeyValuePair <string, object> keyValuePair in dictionary)
@@ -228,7 +278,13 @@ namespace SAM.Core
                 JObject jObject_Temp = new JObject();
                 jObject_Temp.Add("Name", keyValuePair.Key);
                 if (keyValuePair.Value != null)
-                    jObject_Temp.Add("Value", keyValuePair.Value as dynamic);
+                {
+                    if (keyValuePair.Value is IJSAMObject)
+                        jObject_Temp.Add("Value", ((IJSAMObject)keyValuePair.Value).ToJObject());
+                    else
+                        jObject_Temp.Add("Value", keyValuePair.Value as dynamic);
+                }
+                    
 
                 jArray.Add(jObject_Temp);
             }

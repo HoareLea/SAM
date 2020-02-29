@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +12,6 @@ namespace SAM.Core
     {
         private Guid guid;
         private string name;
-
         private List<ParameterSet> parameterSets;
 
         
@@ -108,6 +108,16 @@ namespace SAM.Core
             return parameterSets.Find(x => name.Equals(x.Name));
         }
 
+        public ParameterSet GetParameterSet(Assembly assembly)
+        {
+            if (parameterSets == null || parameterSets.Count == 0)
+                return null;
+
+            Guid guid = Query.Guid(assembly);
+
+            return parameterSets.Find(x => x.Guid == guid);
+        }
+
         public bool Add(ParameterSet parameterSet)
         {
             if (parameterSet == null)
@@ -143,7 +153,7 @@ namespace SAM.Core
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
-            jObject.Add("_type", Query.TypeName(this));
+            jObject.Add("_type", Query.FullTypeName(this));
             if (name != null)
                 jObject.Add("Name", name);
 

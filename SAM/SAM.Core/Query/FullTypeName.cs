@@ -5,7 +5,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static string TypeName(this JObject jObject)
+        public static string FullTypeName(this JObject jObject)
         {
             if (jObject == null)
                 return null;
@@ -13,7 +13,7 @@ namespace SAM.Core
             return jObject.Value<string>("_type");
         }
 
-        public static string TypeName(Type type)
+        public static string FullTypeName(Type type)
         {
             if (type == null)
                 return null;
@@ -21,12 +21,12 @@ namespace SAM.Core
             return string.Format("{0},{1}", type.FullName, type.Assembly.GetName().Name);
         }
 
-        public static string TypeName(IJSAMObject jSAMObject)
+        public static string FullTypeName(IJSAMObject jSAMObject)
         {
             if (jSAMObject == null)
                 return null;
 
-            return TypeName(jSAMObject.GetType());
+            return FullTypeName(jSAMObject.GetType());
         }
     }
 }

@@ -134,7 +134,7 @@ namespace SAM.Core
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
-            jObject.Add("_type", Query.TypeName(this));
+            jObject.Add("_type", Query.FullTypeName(this));
 
             if (@object != null)
             {

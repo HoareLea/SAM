@@ -1,5 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace SAM.Core
 {
@@ -21,6 +24,19 @@ namespace SAM.Core
             }
 
             return guid;
+        }
+
+        public static Guid Guid(Assembly assembly)
+        {
+            Guid guid = System.Guid.Empty;
+
+            object[] customAttributes = assembly.GetCustomAttributes(typeof(GuidAttribute), false);
+            if (customAttributes != null || customAttributes.Length > 0)
+                System.Guid.TryParse(((GuidAttribute)customAttributes.First()).Value, out guid);
+
+            return guid;
+
+
         }
     }
 }

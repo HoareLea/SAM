@@ -26,7 +26,7 @@ namespace SAM.Geometry
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
-            jObject.Add("_type", Core.Query.TypeName(this));
+            jObject.Add("_type", Core.Query.FullTypeName(this));
             return jObject;
         }
     }

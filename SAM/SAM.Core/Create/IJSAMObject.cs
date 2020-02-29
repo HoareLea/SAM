@@ -9,36 +9,34 @@ namespace SAM.Core
     {
         public static IJSAMObject IJSAMObject(this JObject jObject)
         {
-            string typeName = Query.TypeName(jObject);
-            if (string.IsNullOrWhiteSpace(typeName))
+            if (jObject == null)
                 return null;
+            
+            string typeName = Query.FullTypeName(jObject);
+            if (string.IsNullOrWhiteSpace(typeName))
+                return new JSAMObjectWrapper(jObject);
 
             Type type = Type.GetType(typeName);
             if (type == null)
-                return null;
+                return new JSAMObjectWrapper(jObject);
 
             ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(JObject) });
             if (constructorInfo == null)
-                return null;
+                return new JSAMObjectWrapper(jObject);
 
             return constructorInfo.Invoke(new object[] { jObject }) as IJSAMObject;
         }
 
         public static T IJSAMObject<T>(this JObject jObject) where T : IJSAMObject
         {
-            string typeName = Query.TypeName(jObject);
-            if (string.IsNullOrWhiteSpace(typeName))
+            IJSAMObject jSAMObject = IJSAMObject(jObject);
+            if (jSAMObject == null)
                 return default;
 
-            Type type = Type.GetType(typeName);
-            if (type == null)
-                return default;
+            if (jSAMObject is T)
+                return (T)jSAMObject;
 
-            ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(JObject) });
-            if (constructorInfo == null)
-                return default;
-
-            return (T)constructorInfo.Invoke(new object[] { jObject });
+            return default;
         }
 
         public static T IJSAMObject<T>(this string json) where T : IJSAMObject
