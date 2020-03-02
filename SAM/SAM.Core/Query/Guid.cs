@@ -31,7 +31,7 @@ namespace SAM.Core
             Guid guid = System.Guid.Empty;
 
             object[] customAttributes = assembly.GetCustomAttributes(typeof(GuidAttribute), false);
-            if (customAttributes != null || customAttributes.Length > 0)
+            if (customAttributes != null && customAttributes.Length > 0)
                 System.Guid.TryParse(((GuidAttribute)customAttributes.First()).Value, out guid);
 
             return guid;
