@@ -19,7 +19,7 @@ namespace SAM.Core
         {
             get
             {
-                return Id;
+                return id;
             }
         }
 

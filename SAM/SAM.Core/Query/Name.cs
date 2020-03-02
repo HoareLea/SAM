@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using Newtonsoft.Json.Linq;
+
 
 namespace SAM.Core
 {
@@ -10,6 +14,20 @@ namespace SAM.Core
                 return null;
             
             return jObject.Value<string>("Name");
+        }
+
+        public static string Name(this Assembly assembly)
+        {
+            string name = null;
+
+            object[] customAttributes = assembly.GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+            if (customAttributes != null && customAttributes.Length > 0)
+                name = ((AssemblyTitleAttribute)customAttributes.First()).Title;
+
+            if (name == null)
+                name = assembly.ManifestModule.Name;
+
+            return name;
         }
     }
 }

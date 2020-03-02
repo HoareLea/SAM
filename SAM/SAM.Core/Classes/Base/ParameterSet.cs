@@ -14,6 +14,19 @@ namespace SAM.Core
         private Guid guid;
         private Dictionary<string, object> dictionary;
 
+        public ParameterSet(ParameterSet parameterSet)
+        {
+            name = parameterSet.name;
+            guid = parameterSet.guid;
+
+            if(parameterSet.dictionary != null)
+            {
+                dictionary = new Dictionary<string, object>();
+                foreach (KeyValuePair<string, object> keyValuePair in parameterSet.dictionary)
+                    dictionary[keyValuePair.Key] = keyValuePair.Value;
+            }
+        }
+        
         public ParameterSet(string name)
         {
             this.name = name;
@@ -29,7 +42,7 @@ namespace SAM.Core
 
         public ParameterSet(Assembly assembly)
         {
-            name = assembly.FullName;
+            name = Query.Name(assembly);
             guid = Query.Guid(assembly);
             dictionary = new Dictionary<string, object>();
         }
@@ -221,17 +234,16 @@ namespace SAM.Core
         {
             get
             {
+                if (dictionary == null)
+                    return null;
+                
                 return dictionary.Keys;
             }
         }
 
         public ParameterSet Clone()
         {
-            ParameterSet parameterSet = new ParameterSet(name);
-            foreach (KeyValuePair<string, object> keyValuePair in dictionary)
-                parameterSet.dictionary[keyValuePair.Key] = keyValuePair.Value;
-
-            return parameterSet;
+            return new ParameterSet(this);
         }
 
         public bool FromJObject(JObject jObject)

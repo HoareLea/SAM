@@ -34,9 +34,10 @@ namespace SAM.Core
             if (customAttributes != null && customAttributes.Length > 0)
                 System.Guid.TryParse(((GuidAttribute)customAttributes.First()).Value, out guid);
 
+            if (guid.Equals(System.Guid.Empty))
+                guid = assembly.ManifestModule.ModuleVersionId;
+
             return guid;
-
-
         }
     }
 }
