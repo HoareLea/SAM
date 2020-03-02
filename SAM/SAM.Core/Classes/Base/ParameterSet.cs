@@ -100,6 +100,20 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Copy(ParameterSet parameterSet)
+        {
+            if (parameterSet == null)
+                return false;
+
+            if (dictionary == null)
+                dictionary = new Dictionary<string, object>();
+
+            foreach(KeyValuePair<string, object> keyValuePair in parameterSet.dictionary)
+                dictionary[keyValuePair.Key] = keyValuePair.Value;
+
+            return true;
+        }
+
         public bool Remove(string name)
         {
             if (dictionary == null || name == null)

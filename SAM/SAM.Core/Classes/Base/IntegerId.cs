@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SAM.Core
 {
@@ -20,6 +21,35 @@ namespace SAM.Core
             {
                 return Id;
             }
+        }
+
+        public ParameterSet GetParameterSet(string name)
+        {
+            return Query.ParameterSet(parameterSets, name);
+        }
+
+        public ParameterSet GetParameterSet(Assembly assembly)
+        {
+            return Query.ParameterSet(parameterSets, assembly);
+        }
+
+        public bool Add(ParameterSet parameterSet)
+        {
+            if (parameterSet == null)
+                return false;
+
+            if (parameterSets == null)
+                parameterSets = new List<ParameterSet>();
+
+            return Modify.Add(parameterSets, parameterSet);
+        }
+
+        public List<ParameterSet> GetParamaterSets()
+        {
+            if (parameterSets == null)
+                return null;
+            else
+                return new List<ParameterSet>(parameterSets);
         }
 
         public bool FromJObject(JObject jObject)

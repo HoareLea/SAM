@@ -102,20 +102,12 @@ namespace SAM.Core
 
         public ParameterSet GetParameterSet(string name)
         {
-            if (name == null || parameterSets == null)
-                return null;
-
-            return parameterSets.Find(x => name.Equals(x.Name));
+            return Query.ParameterSet(parameterSets, name);
         }
 
         public ParameterSet GetParameterSet(Assembly assembly)
         {
-            if (parameterSets == null || parameterSets.Count == 0)
-                return null;
-
-            Guid guid = Query.Guid(assembly);
-
-            return parameterSets.Find(x => x.Guid == guid);
+            return Query.ParameterSet(parameterSets, assembly);
         }
 
         public bool Add(ParameterSet parameterSet)
@@ -126,9 +118,7 @@ namespace SAM.Core
             if (parameterSets == null)
                 parameterSets = new List<ParameterSet>();
 
-            parameterSets.Add(parameterSet);
-            return true;
-
+            return Modify.Add(parameterSets, parameterSet);
         }
 
         public List<ParameterSet> GetParamaterSets()
