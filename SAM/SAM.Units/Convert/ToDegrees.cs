@@ -1,6 +1,6 @@
 ﻿namespace SAM.Units
 {
-    public static partial class Query
+    public static partial class Convert
     {
         public static double ToDegrees(double value)
         {

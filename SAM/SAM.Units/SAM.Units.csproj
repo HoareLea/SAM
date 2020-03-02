@@ -42,12 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Query\ByUnitType.cs" />
+    <Compile Include="Convert\ByUnitType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query\ToImperial.cs" />
-    <Compile Include="Query\ToDegrees.cs" />
-    <Compile Include="Query\ToRadians.cs" />
-    <Compile Include="Query\ToSI.cs" />
+    <Compile Include="Convert\ToImperial.cs" />
+    <Compile Include="Convert\ToDegrees.cs" />
+    <Compile Include="Convert\ToRadians.cs" />
+    <Compile Include="Convert\ToSI.cs" />
     <Compile Include="Enums\UnitType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

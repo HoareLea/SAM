@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SAM.Units
+﻿namespace SAM.Units
 {   
-    public static partial class Query
+    public static partial class Convert
     {
-        public static double Convert(double value, UnitType from, UnitType to)
+        public static double ByUnitType(double value, UnitType from, UnitType to)
         {
             switch(from)
             {
