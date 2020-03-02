@@ -65,7 +65,7 @@
     <Compile Include="Interfaces\IJSAMObject.cs" />
     <Compile Include="Interfaces\ISAMObject.cs" />
     <Compile Include="Interfaces\ISAMRelation.cs" />
-    <Compile Include="Mofify\Add.cs" />
+    <Compile Include="Modify\Add.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Base\SAMInstance.cs" />
     <Compile Include="Classes\Base\SAMObject.cs" />
