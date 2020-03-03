@@ -26,6 +26,11 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
 
+        public double GetLength()
+        {
+            return double.MaxValue;
+        }
+
         public override JObject ToJObject()
         {
             throw new NotImplementedException();

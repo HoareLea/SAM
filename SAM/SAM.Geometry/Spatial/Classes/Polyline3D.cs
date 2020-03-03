@@ -135,5 +135,17 @@ namespace SAM.Geometry.Spatial
             jObject.Add("Points", Geometry.Create.JArray(points));
             return jObject;
         }
+
+        public double GetLength()
+        {
+            List<Segment3D> segments3D = GetSegments();
+
+            if (segments3D == null)
+                return double.NaN;
+
+            double length = 0;
+            segments3D.ForEach(x => length += x.GetLength());
+            return length;
+        }
     }
 }

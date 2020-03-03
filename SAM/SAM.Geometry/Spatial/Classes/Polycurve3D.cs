@@ -117,5 +117,15 @@ namespace SAM.Geometry.Spatial
 
             return jObject;
         }
+
+        public double GetLength()
+        {
+            if (curves == null)
+                return double.NaN;
+
+            double length = 0;
+            curves.ForEach(x => length += x.GetLength());
+            return length;
+        }
     }
 }

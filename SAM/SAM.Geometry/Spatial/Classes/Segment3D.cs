@@ -97,14 +97,6 @@ namespace SAM.Geometry.Spatial
             return new BoundingBox3D(new Point3D(origin), this[1], offset);
         }
 
-        public static Segment3D Snap(IEnumerable<Point3D> point3Ds, Segment3D segment3D, double maxDistance = double.NaN)
-        {
-            Point3D point3D_1 = Point3D.Snap(point3Ds, segment3D[0], maxDistance);
-            Point3D point3D_2 = Point3D.Snap(point3Ds, segment3D[1], maxDistance);
-
-            return new Segment3D(point3D_1, point3D_2);
-        }
-
         public void Reverse()
         {
             origin = GetEnd();
@@ -119,22 +111,6 @@ namespace SAM.Geometry.Spatial
         public Point3D GetCenter()
         {
             return (Point3D)origin.GetMoved(vector / 2);
-        }
-
-
-        public static List<Point3D> GetPoints(IEnumerable<Segment3D> segment3Ds, bool close = false)
-        {
-            if (segment3Ds == null)
-                return null;
-
-            List<Point3D> result = new List<Point3D>() { segment3Ds.First().GetStart() };
-            foreach(Segment3D segment3D in segment3Ds)
-                result.Add(segment3D.GetEnd());
-
-            if (close && result.First().Distance(result.Last()) != 0)
-                result.Add(result.First());
-
-            return result;
         }
 
         public override bool FromJObject(JObject jObject)
@@ -155,6 +131,35 @@ namespace SAM.Geometry.Spatial
             jObject.Add("Vector", vector.ToJObject());
 
             return jObject;
+        }
+
+        public double GetLength()
+        {
+            return vector.Length;
+        }
+
+
+        public static List<Point3D> GetPoints(IEnumerable<Segment3D> segment3Ds, bool close = false)
+        {
+            if (segment3Ds == null)
+                return null;
+
+            List<Point3D> result = new List<Point3D>() { segment3Ds.First().GetStart() };
+            foreach (Segment3D segment3D in segment3Ds)
+                result.Add(segment3D.GetEnd());
+
+            if (close && result.First().Distance(result.Last()) != 0)
+                result.Add(result.First());
+
+            return result;
+        }
+
+        public static Segment3D Snap(IEnumerable<Point3D> point3Ds, Segment3D segment3D, double maxDistance = double.NaN)
+        {
+            Point3D point3D_1 = Point3D.Snap(point3Ds, segment3D[0], maxDistance);
+            Point3D point3D_2 = Point3D.Snap(point3Ds, segment3D[1], maxDistance);
+
+            return new Segment3D(point3D_1, point3D_2);
         }
     }
 }

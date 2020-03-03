@@ -12,6 +12,8 @@ namespace SAM.Geometry.Spatial
     
         Point3D GetEnd();
 
+        double GetLength();
+
         void Reverse();
     }
 }

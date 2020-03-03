@@ -408,5 +408,10 @@ namespace SAM.Geometry.Planar
         {
             return new BoundingBox2D(origin, End);
         }
+
+        public double GetLength()
+        {
+            return vector.Length;
+        }
     }
 }
