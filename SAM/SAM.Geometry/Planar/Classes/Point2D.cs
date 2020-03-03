@@ -715,5 +715,29 @@ namespace SAM.Geometry.Planar
             jObject.Add("Y", coordinates[1]);
             return jObject;
         }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash = (hash * 7) + coordinates[0].GetHashCode();
+            hash = (hash * 7) + coordinates[1].GetHashCode();
+            return hash;
+        }
+
+
+        public static bool operator ==(Point2D point2D_1, Point2D point2D_2)
+        {
+            return point2D_1?.coordinates[0] == point2D_2?.coordinates[0] && point2D_1?.coordinates[1] == point2D_2?.coordinates[1];
+        }
+
+        public static bool operator !=(Point2D point2D_1, Point2D point2D_2)
+        {
+            return point2D_1?.coordinates[0] != point2D_2?.coordinates[0] || point2D_1?.coordinates[1] != point2D_2?.coordinates[1];
+        }
+
+        public static Vector2D operator -(Point2D point2D_1, Point2D point2D_2)
+        {
+            return new Vector2D(point2D_1.coordinates[0] - point2D_2.coordinates[0], point2D_1.coordinates[1] - point2D_2.coordinates[1]);
+        }
     }
 }

@@ -413,5 +413,15 @@ namespace SAM.Geometry.Planar
         {
             return vector.Length;
         }
+
+        public List<ICurve2D> GetCurves()
+        {
+            return new List<ICurve2D>() { new Segment2D(this) };
+        }
+
+        public BoundingBox2D GetBoundingBox(double offset = 0)
+        {
+            return new BoundingBox2D(origin, GetEnd(), offset);
+        }
     }
 }

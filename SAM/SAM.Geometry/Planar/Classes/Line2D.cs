@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+
+using Newtonsoft.Json.Linq;
+
 
 namespace SAM.Geometry.Planar
 {
@@ -26,9 +24,24 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
 
+        public Point2D GetEnd()
+        {
+            return new Point2D(double.MaxValue, double.MaxValue);
+        }
+
         public double GetLength()
         {
             return double.MaxValue;
+        }
+
+        public Point2D GetStart()
+        {
+            return new Point2D(double.MinValue, double.MinValue);
+        }
+
+        public void Reverse()
+        {
+            throw new NotImplementedException();
         }
 
         public override JObject ToJObject()

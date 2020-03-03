@@ -69,6 +69,11 @@ namespace SAM.Geometry.Planar
             return new List<Segment2D> { new Segment2D(points[0], points[1]), new Segment2D(points[1], points[2]), new Segment2D(points[2], points[0]) };
         }
 
+        public List<ICurve2D> GetCurves()
+        {
+            return GetSegments().ConvertAll(x => (ICurve2D)x);
+        }
+
         public bool Inside(BoundingBox2D boundingBox2D)
         {
             return this.GetBoundingBox().Inside(boundingBox2D);

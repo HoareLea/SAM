@@ -57,6 +57,7 @@
     <Compile Include="Planar\Classes\BoundingBox2D.cs" />
     <Compile Include="Planar\Classes\Circle2D.cs" />
     <Compile Include="Planar\Classes\Face2D.cs" />
+    <Compile Include="Planar\Classes\CurveGraph2D.cs" />
     <Compile Include="Planar\Create\Face2Ds.cs" />
     <Compile Include="Planar\Create\ICurve2D.cs" />
     <Compile Include="Planar\Create\IClosed2D.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Planar\Classes\Rectangle2D.cs" />
     <Compile Include="Planar\Classes\Segment2D.cs" />
     <Compile Include="Planar\Classes\Triangle2D.cs" />
+    <Compile Include="Planar\Interfaces\ICurvable2D.cs" />
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
     <Compile Include="Planar\Modify\Split.cs" />
     <Compile Include="Planar\Query\Directions.cs" />

@@ -192,6 +192,11 @@ namespace SAM.Geometry.Planar
             return new List<Segment2D>() {new Segment2D(points[0], points[1]), new Segment2D(points[1], points[2]), new Segment2D(points[2], points[3]), new Segment2D(points[3], points[0]) };
         }
 
+        public List<ICurve2D> GetCurves()
+        {
+            return GetSegments().ConvertAll(x => (ICurve2D)x);
+        }
+
         public List<Point2D> GetPoints()
         {
             double x = Width;

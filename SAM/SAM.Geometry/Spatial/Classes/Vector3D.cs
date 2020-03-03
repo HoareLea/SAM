@@ -224,6 +224,25 @@ namespace SAM.Geometry.Spatial
             return jObject;
         }
 
+        public override bool Equals(object @object)
+        {
+            if ((@object == null) || !(@object is Vector3D))
+                return false;
+
+            Vector3D vector3D = (Vector3D)@object;
+            return coordinates[0] == vector3D.coordinates[0] && coordinates[1] == vector3D.coordinates[1] && coordinates[2] == vector3D.coordinates[2];
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash = (hash * 7) + coordinates[0].GetHashCode();
+            hash = (hash * 7) + coordinates[1].GetHashCode();
+            hash = (hash * 7) + coordinates[2].GetHashCode();
+            return hash;
+        }
+
+
         public static Vector3D operator +(Vector3D vector3D_1, Vector3D vector3D_2)
         {
             return new Vector3D(vector3D_1.coordinates[0] + vector3D_2.coordinates[0], vector3D_1.coordinates[1] + vector3D_2.coordinates[1], vector3D_1.coordinates[2] + vector3D_2.coordinates[2]);
@@ -259,15 +278,6 @@ namespace SAM.Geometry.Spatial
         public static Vector3D operator *(double factor, Vector3D vector3D)
         {
             return new Vector3D(vector3D.coordinates[0] * factor, vector3D.coordinates[1] * factor, vector3D.coordinates[2] * factor);
-        }
-
-        public override bool Equals(object @object)
-        {
-            if ((@object == null) || !(@object is Vector3D))
-                return false;
-
-            Vector3D vector3D = (Vector3D)@object;
-            return coordinates[0] == vector3D.coordinates[0] && coordinates[1] == vector3D.coordinates[1] && coordinates[2] == vector3D.coordinates[2];
         }
     }
 }

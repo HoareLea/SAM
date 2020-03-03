@@ -114,6 +114,14 @@ namespace SAM.Geometry.Planar
             return point2D.coordinates[0].Equals(coordinates[0]) && point2D.coordinates[1].Equals(coordinates[1]);
         }
 
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash = (hash * 7) + coordinates[0].GetHashCode();
+            hash = (hash * 7) + coordinates[1].GetHashCode();
+            return hash;
+        }
+
         public bool IsPerpedicular(Vector2D vector2D, double tolerance = Tolerance.MicroDistance)
         {
             return (vector2D.coordinates[0] * coordinates[0]) + (vector2D.coordinates[1] * coordinates[1]) <= tolerance;

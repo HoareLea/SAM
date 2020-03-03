@@ -32,6 +32,11 @@ namespace SAM.Geometry.Planar
             return Point2D.GetSegments(points, true);
         }
 
+        public List<ICurve2D> GetCurves()
+        {
+            return GetSegments().ConvertAll(x => (ICurve2D)x);
+        }
+
         public Orientation GetOrientation()
         {
             return Point2D.Orientation(points, true);

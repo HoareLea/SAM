@@ -143,6 +143,46 @@ namespace SAM.Geometry.Spatial
             return new BoundingBox3D(this, offset);
         }
 
+        public override bool FromJObject(JObject jObject)
+        {
+            coordinates[0] = jObject.Value<double>("X");
+            coordinates[1] = jObject.Value<double>("Y");
+            coordinates[2] = jObject.Value<double>("Z");
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
+            jObject.Add("X", coordinates[0]);
+            jObject.Add("Y", coordinates[1]);
+            jObject.Add("Z", coordinates[2]);
+            return jObject;
+        }
+
+        public override bool Equals(object @object)
+        {
+            if ((@object == null) || !(@object is Point3D))
+                return false;
+
+            Point3D point3D = (Point3D)@object;
+            return coordinates[0] == point3D.coordinates[0] && coordinates[1] == point3D.coordinates[1] && coordinates[2] == point3D.coordinates[2];
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash = (hash * 7) + coordinates[0].GetHashCode();
+            hash = (hash * 7) + coordinates[1].GetHashCode();
+            hash = (hash * 7) + coordinates[2].GetHashCode();
+            return hash;
+        }
+
+
         public static Point3D Snap(IEnumerable<Point3D> point3Ds, Point3D point3D, double maxDistance = double.NaN)
         {
             Point3D result = Point3D.Closest(point3Ds, point3D);
@@ -161,7 +201,6 @@ namespace SAM.Geometry.Spatial
 
             return new Plane(point3Ds.ElementAt(0), normal.Unit);
         }
-        
         
         public static List<Segment3D> GetSegments(IEnumerable<Point3D> point3Ds, bool close = false)
         {
@@ -429,37 +468,6 @@ namespace SAM.Geometry.Spatial
         {
             return new Vector3D(point3D_1, point3D_2).SmallestAngle(new Vector3D(point3D_1, point3D_3)) < tolerance;
         }
-
-        public override bool FromJObject(JObject jObject)
-        {
-            coordinates[0] = jObject.Value<double>("X");
-            coordinates[1] = jObject.Value<double>("Y");
-            coordinates[2] = jObject.Value<double>("Z");
-
-            return true;
-        }
-
-        public override JObject ToJObject()
-        {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
-                return null;
-
-            jObject.Add("X", coordinates[0]);
-            jObject.Add("Y", coordinates[1]);
-            jObject.Add("Z", coordinates[2]);
-            return jObject;
-        }
-
-        public override bool Equals(object @object)
-        {
-            if ((@object == null) || !(@object is Point3D))
-                return false;
-
-            Point3D point3D = (Point3D)@object;
-            return coordinates[0] == point3D.coordinates[0] && coordinates[1] == point3D.coordinates[1] && coordinates[2] == point3D.coordinates[2];
-        }
-
 
         public static bool operator ==(Point3D point3D_1, Point3D point3D_2)
         {
