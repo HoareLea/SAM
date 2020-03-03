@@ -11,6 +11,16 @@ namespace SAM.Geometry.Grasshopper
     public class GeometryPolycurveLoop2D : GH_Component
     {
         /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("27be7da1-8492-4400-9984-ffa70f3b5c69");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
+
+        /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public GeometryPolycurveLoop2D()
@@ -26,7 +36,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_geometry", "Geo", "Geometry", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_geometry", "Geo", "Geometry", GH_ParamAccess.list);
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
 
@@ -35,7 +45,8 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Geometry", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Geometry", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Center", "Center", "Center Point", GH_ParamAccess.list);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
         }
 
@@ -46,10 +57,10 @@ namespace SAM.Geometry.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
-            if (!dataAccess.GetData<bool>(3, ref run))
+            if (!dataAccess.GetData<bool>(1, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                dataAccess.SetData(2, false);
                 return;
             }
             if (!run)
@@ -57,10 +68,10 @@ namespace SAM.Geometry.Grasshopper
 
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
-            if (!dataAccess.GetDataList(1, objectWrapperList) || objectWrapperList == null)
+            if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                dataAccess.SetData(2, false);
                 return;
             }
 
@@ -79,18 +90,25 @@ namespace SAM.Geometry.Grasshopper
                     List<Spatial.ISAMGeometry3D> sAMGeometry3Ds = Convert.ToSAM((IGH_GeometricGoo)gHObjectWrapper.Value);
                     foreach (Spatial.ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
                     {
-                        if (sAMGeometry3D is Spatial.ICurve3D)
+                        List<Spatial.ICurve3D> curve3Ds = new List<Spatial.ICurve3D>();
+                        if (sAMGeometry3D is Spatial.ICurvable3D)
+                            curve3Ds.AddRange(((Spatial.ICurvable3D)sAMGeometry3D).GetCurves().ConvertAll(x => Spatial.Plane.Base.Project(x)));
+                        else if (sAMGeometry3D is Spatial.ICurve3D)
+                            curve3Ds.Add(Spatial.Plane.Base.Project((Spatial.ICurve3D)sAMGeometry3D));
+
+                        if (curve3Ds == null || curve3Ds.Count == 0)
+                            continue;
+
+                        foreach (Spatial.ICurve3D curve3D in curve3Ds)
                         {
-                            Spatial.ICurve3D curve3D = Spatial.Plane.Base.Project((Spatial.ICurve3D)sAMGeometry3D);
-                            if (curve3D != null)
-                            {
-                                Planar.ICurvable2D curvable2D = Spatial.Plane.Base.Convert(curve3D) as Planar.ICurvable2D;
-                                if (curvable2D != null)
-                                    curvable2D.GetCurves().ForEach(x => segment2Ds.Add(new Planar.Segment2D(x.GetStart(), x.GetEnd())));
-                            }
+                            if (curve3D == null)
+                                continue;
+
+                            Planar.ICurvable2D curvable2D = Spatial.Plane.Base.Convert(curve3D) as Planar.ICurvable2D;
+                            if (curvable2D != null)
+                                curvable2D.GetCurves().ForEach(x => segment2Ds.Add(new Planar.Segment2D(x.GetStart(), x.GetEnd())));
                         }
                     }
-
                 }
             }
 
@@ -100,34 +118,15 @@ namespace SAM.Geometry.Grasshopper
                 dataAccess.SetData(1, false);
             }
 
+            segment2Ds = Planar.Modify.Split(segment2Ds);
+
             Planar.CurveGraph2D curveGraph2D = new Planar.CurveGraph2D(segment2Ds);
             List<Planar.PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds();
-
-            dataAccess.SetData(0, polycurveLoop2Ds.ConvertAll(x => new GooSAMGeometry(x)));
-            dataAccess.SetData(1, true);
+            dataAccess.SetDataList(0, polycurveLoop2Ds.ConvertAll(x => new GooSAMGeometry(x)));
+            dataAccess.SetDataList(1, polycurveLoop2Ds.ConvertAll(x => new GooSAMGeometry(x.GetCentroid())));
+            dataAccess.SetData(2, true);
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Geometry;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("1165eb14-9f8a-460e-a3e7-e9b3d7f08ddc"); }
         }
     }
 }

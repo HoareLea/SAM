@@ -173,6 +173,19 @@ namespace SAM.Geometry.Spatial
             return Convert(geometry as dynamic);
         }
 
+        public PolycurveLoop3D Convert(Planar.PolycurveLoop2D polycurveLoop2D)
+        {
+            if (polycurveLoop2D != null && polycurveLoop2D.GetCurves().TrueForAll(x => x is Segment3D))
+                return new PolycurveLoop3D(polycurveLoop2D.GetCurves().ConvertAll(x => Convert((Planar.Segment2D)x)));
+
+            throw new NotImplementedException();
+        }
+
+        public ICurve3D Convert(Planar.ICurve2D curve2D)
+        {
+            return Convert(curve2D as dynamic);
+        }
+
         public Point3D Convert(Planar.Point2D point2D)
         {
             Vector3D baseY = BaseY;

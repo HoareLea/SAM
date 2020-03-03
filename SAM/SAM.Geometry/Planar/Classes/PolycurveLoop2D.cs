@@ -31,6 +31,18 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
 
+        public Point2D GetCentroid()
+        {
+            List<ICurve2D> curves = GetCurves();
+            if (curves == null)
+                return null;
+
+            if (curves.TrueForAll(x => x is Segment2D))
+                return Point2D.GetCentroid(curves.ConvertAll(x => x.GetStart()));
+
+            throw new NotImplementedException();
+        }
+
         public bool Inside(IClosed2D closed2D)
         {
             if (closed2D is ISegmentable2D)

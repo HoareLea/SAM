@@ -76,6 +76,18 @@ namespace SAM.Geometry.Grasshopper
                 if(Value is Spatial.Point3D)
                     return ((Spatial.Point3D)(object)Value).GetBoundingBox(1).ToRhino();
 
+                if (Value is Planar.IBoundable2D)
+                {
+                    Planar.BoundingBox2D boundingBox2D = ((Planar.IBoundable2D)Value).GetBoundingBox();
+                    return new Spatial.BoundingBox3D(new Spatial.Point3D(boundingBox2D.Min.X, boundingBox2D.Min.Y, -1), new Spatial.Point3D(boundingBox2D.Max.X, boundingBox2D.Max.Y, 1)).ToRhino();
+                }
+
+                if (Value is Planar.Point2D)
+                {
+                    Planar.Point2D point2D = (Planar.Point2D)Value;
+                    return new Spatial.BoundingBox3D(new Spatial.Point3D(point2D.X, point2D.Y, -1), new Spatial.Point3D(point2D.X, point2D.Y, 1)).ToRhino();
+                }
+
                 throw new NotImplementedException();
             }
         }
@@ -230,11 +242,15 @@ namespace SAM.Geometry.Grasshopper
             {
                 curve3Ds = ((Spatial.ICurvable3D)Value).GetCurves();
             }
+            else if(Value is Planar.ICurvable2D)
+            {
+                curve3Ds = ((Planar.ICurvable2D)Value).GetCurves().ConvertAll(x => Spatial.Plane.Base.Convert(x));
+            }
 
             if(curve3Ds != null && curve3Ds.Count > 0)
             {
                 curve3Ds.ForEach(x => args.Pipeline.DrawCurve(x.ToRhino(), args.Color));
-                return;
+                //return;
             }
 
             if(Value is Spatial.Point3D)
@@ -242,7 +258,13 @@ namespace SAM.Geometry.Grasshopper
                 args.Pipeline.DrawPoint((Value as Spatial.Point3D).ToRhino());
                 return;
             }
-            
+
+            if (Value is Planar.Point2D)
+            {
+                args.Pipeline.DrawPoint((Value as Planar.Point2D).ToRhino());
+                return;
+            }
+
         }
 
         public virtual void DrawViewportMeshes(GH_PreviewMeshArgs args)

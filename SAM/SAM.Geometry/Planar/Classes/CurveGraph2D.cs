@@ -35,7 +35,7 @@ namespace SAM.Geometry.Planar
                     {
                         ICurve2D curve2D = curveGraph2D.curve2Ds[i][j];
                         if (curve2D != null)
-                            curve2Ds_Temp[j] = (ICurve2D)curveGraph2D.curve2Ds[i][j].Clone();
+                            curve2Ds_Temp[j] = (ICurve2D)curve2D.Clone();
                     }
                     curve2Ds[i] = curve2Ds_Temp;
                 }
@@ -73,7 +73,7 @@ namespace SAM.Geometry.Planar
                     {
                         ICurve2D curve2D = curveGraph2D[point2Ds[i], point2Ds[j]];
                         if (curve2D != null)
-                            curve2Ds_Temp[j] = (ICurve2D)curveGraph2D.curve2Ds[i][j].Clone();
+                            curve2Ds_Temp[j] = (ICurve2D)curve2D.Clone();
                     }
                     curve2Ds[i] = curve2Ds_Temp;
                 }
@@ -452,8 +452,16 @@ namespace SAM.Geometry.Planar
             for (int i=0; i < count - 1; i++)
             {
                 ICurve2D curve2D = this[indexes_Temp[i], indexes_Temp[i + 1]];
-                if (curve2D.GetStart() != point2Ds[i])
-                    curve2D.Reverse();
+                if(curve2D != null)
+                {
+                    if (curve2D.GetStart() != point2Ds[i])
+                        curve2D.Reverse();
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+
 
                 result.Add(curve2D);
             }
@@ -518,7 +526,7 @@ namespace SAM.Geometry.Planar
                     polycurveLoop2D_Temp.Add(polycurveLoop2D);
                 }
 
-                if (index > 0)
+                if (index >= 0)
                     polycurveLoop2D_Temp.RemoveAt(index);
 
                 result.AddRange(polycurveLoop2D_Temp);
