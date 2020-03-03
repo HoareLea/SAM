@@ -87,12 +87,8 @@ namespace SAM.Geometry.Grasshopper
                                 Planar.ICurvable2D curvable2D = Spatial.Plane.Base.Convert(curve3D) as Planar.ICurvable2D;
                                 if (curvable2D != null)
                                     curvable2D.GetCurves().ForEach(x => segment2Ds.Add(new Planar.Segment2D(x.GetStart(), x.GetEnd())));
-
                             }
-
                         }
-
-
                     }
 
                 }
