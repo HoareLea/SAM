@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Newtonsoft.Json.Linq;
@@ -79,7 +78,38 @@ namespace SAM.Geometry.Spatial
             return new Polycurve3D(curves.ConvertAll(x => (ICurve3D)x.GetMoved(vector3D)));
         }
 
-        
+        public override bool FromJObject(JObject jObject)
+        {
+            if (jObject == null)
+                return false;
+            
+            curves = Create.ICurve3Ds(jObject.Value<JArray>("Curves"));
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
+            jObject.Add("Curves", Geometry.Create.JArray(curves));
+
+            return jObject;
+        }
+
+        public double GetLength()
+        {
+            if (curves == null)
+                return double.NaN;
+
+            double length = 0;
+            curves.ForEach(x => length += x.GetLength());
+            return length;
+        }
+
+
         public static bool TryGetPolyline3D(Polycurve3D polycurve3D, out Polyline3D polyline3D)
         {
             polyline3D = null;
@@ -97,35 +127,6 @@ namespace SAM.Geometry.Spatial
 
             polyline3D = new Polyline3D(point3Ds);
             return true;
-        }
-
-
-        public override bool FromJObject(JObject jObject)
-        {
-            curves = Create.ICurve3Ds(jObject.Value<JArray>("Origin"));
-
-            return true;
-        }
-
-        public override JObject ToJObject()
-        {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
-                return null;
-
-            jObject.Add("Curves", Create.JArray(curves));
-
-            return jObject;
-        }
-
-        public double GetLength()
-        {
-            if (curves == null)
-                return double.NaN;
-
-            double length = 0;
-            curves.ForEach(x => length += x.GetLength());
-            return length;
         }
     }
 }

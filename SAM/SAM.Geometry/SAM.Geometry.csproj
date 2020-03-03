@@ -58,6 +58,8 @@
     <Compile Include="Planar\Classes\Circle2D.cs" />
     <Compile Include="Planar\Classes\Face2D.cs" />
     <Compile Include="Planar\Classes\CurveGraph2D.cs" />
+    <Compile Include="Planar\Classes\Polycurve2D.cs" />
+    <Compile Include="Planar\Classes\PolycurveLoop2D.cs" />
     <Compile Include="Planar\Create\Face2Ds.cs" />
     <Compile Include="Planar\Create\ICurve2D.cs" />
     <Compile Include="Planar\Create\IClosed2D.cs" />
@@ -75,7 +77,6 @@
     <Compile Include="Planar\Query\ConvexHull.cs" />
     <Compile Include="Spatial\Create\Face3Ds.cs" />
     <Compile Include="Spatial\Create\Point3Ds.cs" />
-    <Compile Include="Spatial\Create\JArray.cs" />
     <Compile Include="Spatial\Create\ICurve3Ds.cs" />
     <Compile Include="Spatial\Create\ICurve3D.cs" />
     <Compile Include="Spatial\Query\Explode.cs" />

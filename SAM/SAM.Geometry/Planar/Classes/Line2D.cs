@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public class Line2D : SAMGeometry, ICurve2D
+    public class Line2D : SAMGeometry
     {
         
         public Line2D(JObject jObject)
@@ -20,26 +20,6 @@ namespace SAM.Geometry.Planar
         }
 
         public override bool FromJObject(JObject jObject)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Point2D GetEnd()
-        {
-            return new Point2D(double.MaxValue, double.MaxValue);
-        }
-
-        public double GetLength()
-        {
-            return double.MaxValue;
-        }
-
-        public Point2D GetStart()
-        {
-            return new Point2D(double.MinValue, double.MinValue);
-        }
-
-        public void Reverse()
         {
             throw new NotImplementedException();
         }

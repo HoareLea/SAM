@@ -83,6 +83,23 @@ namespace SAM.Geometry.Planar
             max = new Point2D(boundingBox2D.max);
         }
 
+        public BoundingBox2D(IEnumerable<BoundingBox2D> boundingBox2Ds)
+        {
+            if(boundingBox2Ds != null)
+            {
+                HashSet<Point2D> point2Ds_Min = new HashSet<Point2D>();
+                HashSet<Point2D> point2Ds_Max = new HashSet<Point2D>();
+                foreach (BoundingBox2D boundingBox2D in boundingBox2Ds)
+                {
+                    point2Ds_Min.Add(boundingBox2D.min);
+                    point2Ds_Max.Add(boundingBox2D.max);
+                }
+
+                min = Point2D.Min(point2Ds_Min);
+                max = Point2D.Max(point2Ds_Max);
+            }
+        }
+
         public BoundingBox2D(JObject jObject)
             : base(jObject)
         {

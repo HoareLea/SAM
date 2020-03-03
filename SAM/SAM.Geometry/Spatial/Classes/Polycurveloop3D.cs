@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
-    public class PolycurveLoop3D : Polycurve3D, IClosed3D, ICurvable3D
+    public class PolycurveLoop3D : Polycurve3D, IClosed3D
     {
         public PolycurveLoop3D(IEnumerable<ICurve3D> curves)
             : base(curves)
