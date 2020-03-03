@@ -8,19 +8,19 @@ namespace SAMCoreDynamo
 {
     public static class SAMObject
     {
-        public static string Name(SAM.Core.SAMObject sAMObject)
+        public static string Name(object sAMObject)
         {
-            return sAMObject.Name;
+            return (sAMObject as dynamic).Name;
         }
 
-        public static Guid Guid(SAM.Core.SAMObject sAMObject)
+        public static Guid Guid(object sAMObject)
         {
-            return sAMObject.Guid;
+            return (sAMObject as dynamic).Guid;
         }
 
-        public static SAM.Core.ParameterSet ParameterSet(SAM.Core.SAMObject sAMObject, string name)
+        public static SAM.Core.ParameterSet ParameterSet(object sAMObject, string name)
         {
-            return sAMObject.GetParameterSet(name);
+            return (sAMObject as dynamic).GetParameterSet(name);
         }
     }
 }
