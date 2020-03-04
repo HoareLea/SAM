@@ -7,6 +7,8 @@
 
         bool Inside(Point2D point2D);
 
+        Point2D GetInternalPoint2D();
+
         double GetArea();
     }
 }

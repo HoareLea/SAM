@@ -133,5 +133,10 @@ namespace SAM.Geometry.Planar
 
             return jObject;
         }
+
+        public Point2D GetInternalPoint2D()
+        {
+            return new Point2D(center);
+        }
     }
 }

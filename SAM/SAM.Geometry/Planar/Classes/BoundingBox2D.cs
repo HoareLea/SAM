@@ -227,6 +227,16 @@ namespace SAM.Geometry.Planar
             return Width * Height;
         }
 
+        public Point2D GetCenter()
+        {
+            return Point2D.Mid(min, max);
+        }
+
+        public Point2D GetInternalPoint2D()
+        {
+            return Point2D.Mid(min, max);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             max = new Point2D(jObject.Value<JObject>("Max"));

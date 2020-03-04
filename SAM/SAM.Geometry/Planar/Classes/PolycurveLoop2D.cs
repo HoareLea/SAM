@@ -43,6 +43,18 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
 
+        public Point2D GetInternalPoint2D()
+        {
+            List<ICurve2D> curves = GetCurves();
+            if (curves == null)
+                return null;
+
+            if (!curves.TrueForAll(x => x is Segment2D))
+                throw new NotImplementedException();
+
+            return Point2D.GetInternalPoint2D(curves.ConvertAll(x => x.GetStart()));
+        }
+
         public bool Inside(IClosed2D closed2D)
         {
             if (closed2D is ISegmentable2D)

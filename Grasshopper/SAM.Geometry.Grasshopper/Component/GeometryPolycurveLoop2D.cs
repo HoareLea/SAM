@@ -123,7 +123,7 @@ namespace SAM.Geometry.Grasshopper
             Planar.CurveGraph2D curveGraph2D = new Planar.CurveGraph2D(segment2Ds);
             List<Planar.PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds();
             dataAccess.SetDataList(0, polycurveLoop2Ds.ConvertAll(x => new GooSAMGeometry(x)));
-            dataAccess.SetDataList(1, polycurveLoop2Ds.ConvertAll(x => new GooSAMGeometry(x.GetCentroid())));
+            dataAccess.SetDataList(1, polycurveLoop2Ds.ConvertAll(x => new GooSAMGeometry(x.GetInternalPoint2D())));
             dataAccess.SetData(2, true);
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");

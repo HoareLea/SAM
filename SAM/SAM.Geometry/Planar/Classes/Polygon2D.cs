@@ -158,5 +158,10 @@ namespace SAM.Geometry.Planar
         {
            return new BoundingBox2D(points, offset);
         }
+
+        public Point2D GetInternalPoint2D()
+        {
+            return Point2D.GetInternalPoint2D(points);
+        }
     }
 }

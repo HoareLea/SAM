@@ -49,6 +49,11 @@ namespace SAM.Geometry.Planar
             return Point2D.GetCentroid(points);
         }
 
+        public Point2D GetInternalPoint2D()
+        {
+            return GetCentroid();
+        }
+
         public Rectangle2D GetMinRectangle()
         {
             return Point2D.GetRectangle2D(points);

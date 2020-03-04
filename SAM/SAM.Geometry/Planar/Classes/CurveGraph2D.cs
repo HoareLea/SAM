@@ -80,7 +80,7 @@ namespace SAM.Geometry.Planar
             }
         }        
 
-        public CurveGraph2D(IEnumerable<ICurve2D> curve2Ds)
+        public CurveGraph2D(IEnumerable<ICurve2D> curve2Ds, int decimals = 9)
         {
             if (curve2Ds == null)
                 return;
@@ -99,6 +99,9 @@ namespace SAM.Geometry.Planar
                 Point2D point2D_End = curve2D.GetEnd();
                 if (point2D_End == null)
                     continue;
+
+                point2D_Start.Round(decimals);
+                point2D_End.Round(decimals);
 
                 point2Ds_HashSet.Add(point2D_Start);
                 point2Ds_HashSet.Add(point2D_End);
@@ -500,36 +503,73 @@ namespace SAM.Geometry.Planar
             List<CurveGraph2D> curveGraph2Ds = curveGraph2D.Split();
 
             List<PolycurveLoop2D> result = new List<PolycurveLoop2D>();
-            foreach(CurveGraph2D CurveGraph2D in curveGraph2Ds)
+            foreach (CurveGraph2D CurveGraph2D in curveGraph2Ds)
             {
                 List<List<int>> loops = CurveGraph2D.GetLoops();
                 if (loops == null || loops.Count == 0)
                     continue;
 
-                int index = -1;
-                double area_Max = 0;
-
-                List<PolycurveLoop2D> polycurveLoop2D_Temp = new List<PolycurveLoop2D>();
+                List<Tuple<PolycurveLoop2D, BoundingBox2D, Point2D>> tuples = new List<Tuple<PolycurveLoop2D, BoundingBox2D, Point2D>>();
                 foreach (List<int> loop in loops)
                 {
                     PolycurveLoop2D polycurveLoop2D = new PolycurveLoop2D(GetCurves(loop, true));
                     if (polycurveLoop2D == null)
                         continue;
 
-                    double area = polycurveLoop2D.GetArea();
-                    if (area > area_Max)
-                    {
-                        index = polycurveLoop2D_Temp.Count;
-                        area_Max = area;
-                    }
+                    Point2D point2D = polycurveLoop2D.GetInternalPoint2D();
+                    if (point2D == null)
+                        continue;
 
-                    polycurveLoop2D_Temp.Add(polycurveLoop2D);
+                    BoundingBox2D boundingBox2D = polycurveLoop2D.GetBoundingBox();
+                    if (boundingBox2D == null)
+                        continue;
+
+                    tuples.Add(new Tuple<PolycurveLoop2D, BoundingBox2D, Point2D>(polycurveLoop2D, boundingBox2D, point2D));
                 }
 
-                if (index >= 0)
-                    polycurveLoop2D_Temp.RemoveAt(index);
+                int count = tuples.Count;
 
-                result.AddRange(polycurveLoop2D_Temp);
+                HashSet<int> redundantLoopIndexes = new HashSet<int>();
+                for (int i = 0; i < count - 1; i++)
+                {
+                    if (redundantLoopIndexes.Contains(i))
+                        continue;
+
+                    Tuple<PolycurveLoop2D, BoundingBox2D, Point2D> tuple_1 = tuples[i];
+
+                    for (int j = i + 1; j < count; j++)
+                    {
+                        if (redundantLoopIndexes.Contains(j))
+                            continue;
+
+                        Tuple<PolycurveLoop2D, BoundingBox2D, Point2D> tuple_2 = tuples[j];
+
+                        if (tuple_1.Item2.Inside(tuple_2.Item3))
+                        {
+                            if(tuple_1.Item1.Inside(tuple_2.Item3))
+                            {
+                                redundantLoopIndexes.Add(i);
+                                break;
+                            }
+                        }
+
+                        if (tuple_2.Item2.Inside(tuple_1.Item3))
+                        {
+                            if (tuple_2.Item1.Inside(tuple_1.Item3))
+                            {
+                                redundantLoopIndexes.Add(j);
+                            }
+                        }
+                    }
+                }
+
+                for(int i=0; i < tuples.Count(); i++)
+                {
+                    if (redundantLoopIndexes != null && redundantLoopIndexes.Contains(i))
+                        continue;
+
+                    result.Add(tuples[i].Item1);
+                }
             }
 
             return result;

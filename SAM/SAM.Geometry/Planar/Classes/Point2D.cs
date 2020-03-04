@@ -155,6 +155,12 @@ namespace SAM.Geometry.Planar
             return new Point2D(this);
         }
 
+        public void Round(int decimals)
+        {
+            coordinates[0] = Math.Round(coordinates[0], decimals);
+            coordinates[1] = Math.Round(coordinates[1], decimals);
+        }
+
         public void Mirror(Point2D point2D)
         {
             this.Move(new Vector2D(point2D, this));
@@ -297,7 +303,7 @@ namespace SAM.Geometry.Planar
         public static Orientation Orientation(IEnumerable<Point2D> point2Ds, bool convexHull = true)
         {
             if (point2Ds == null || point2Ds.Count() == 0)
-                return SAM.Geometry.Orientation.Undefined;
+                return Geometry.Orientation.Undefined;
 
             List<Point2D> point2Ds_Temp = null;
 
@@ -307,7 +313,7 @@ namespace SAM.Geometry.Planar
                 point2Ds_Temp = new List<Point2D>(point2Ds);
 
             if (point2Ds_Temp == null || point2Ds_Temp.Count < 3)
-                return SAM.Geometry.Orientation.Undefined;
+                return Geometry.Orientation.Undefined;
 
             point2Ds_Temp.Add(point2Ds_Temp[0]);
             point2Ds_Temp.Add(point2Ds_Temp[1]);
@@ -315,11 +321,11 @@ namespace SAM.Geometry.Planar
             for (int i=0; i < point2Ds_Temp.Count - 2; i++)
             {
                 Orientation orientation = Orientation(point2Ds_Temp[i], point2Ds_Temp[i + 1], point2Ds_Temp[i + 2]);
-                if (orientation != SAM.Geometry.Orientation.Collinear && orientation != SAM.Geometry.Orientation.Undefined)
+                if (orientation != Geometry.Orientation.Collinear && orientation != Geometry.Orientation.Undefined)
                     return orientation;
             }
 
-            return SAM.Geometry.Orientation.Undefined;
+            return Geometry.Orientation.Undefined;
         }
 
         public static List<Orientation> Orientations(IEnumerable<Point2D> point2Ds)
@@ -407,6 +413,36 @@ namespace SAM.Geometry.Planar
             return new Point2D(aX / aArea, aY / aArea);
         }
 
+        public static Point2D GetInternalPoint2D(IEnumerable<Point2D> point2Ds)
+        {
+            if (point2Ds == null || point2Ds.Count() < 3)
+                return null;
+
+            Point2D result = GetCentroid(point2Ds);
+            if (Inside(point2Ds, result))
+                return result;
+
+            List<Point2D> point2Ds_List = new List<Point2D>(point2Ds);
+            point2Ds_List.Add(point2Ds_List[0]);
+            point2Ds_List.Add(point2Ds_List[1]);
+
+            int count = point2Ds_List.Count;
+
+            for(int i=0; i < count - 2; i++)
+            {
+                result = Mid(point2Ds_List[i], point2Ds_List[1 + 2]);
+                if (Inside(point2Ds, result))
+                    return result;
+            }
+
+            return null;
+        }
+
+        public static Point2D Mid(Point2D point2D_1, Point2D point2D_2)
+        {
+            return new Point2D((point2D_1.X + point2D_2.X)/2, (point2D_1.Y + point2D_2.Y) / 2);
+        }
+
         public static double GetMaxDistance(IEnumerable<Point2D> point2Ds, out Point2D point2D_1, out Point2D point2D_2)
         {
             int aCount = point2Ds.Count();
@@ -488,7 +524,7 @@ namespace SAM.Geometry.Planar
             if (!point2DList[point2DList.Count - 1].Equals(point2DList[0]))
                 point2DList.Add(point2DList[0]);
 
-            return System.Math.Abs(point2Ds.Take(point2DList.Count - 1).Select((p, i) => (point2DList[i + 1].X - p.X) * (point2DList[i + 1].Y + p.Y)).Sum() / 2);
+            return Math.Abs(point2Ds.Take(point2DList.Count - 1).Select((p, i) => (point2DList[i + 1].X - p.X) * (point2DList[i + 1].Y + p.Y)).Sum() / 2);
         }
 
         public static bool Contains(IEnumerable<Point2D> point2Ds, Point2D point2D, double tolerance = 0)

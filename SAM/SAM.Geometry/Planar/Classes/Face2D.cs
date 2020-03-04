@@ -25,10 +25,31 @@ namespace SAM.Geometry.Planar
         }
 
 
+        public bool Inside(IClosed2D closed2D)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool Inside(Point2D point2D)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public BoundingBox2D GetBoundingBox(double offset = 0)
+        {
+            return externalEdge.GetBoundingBox(offset);
+        }
+
+        public Point2D GetInternalPoint2D()
+        {
+            throw new System.NotImplementedException();
+        }
+
+
         public static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges)
         {
             Face2D result = new Face2D(externalEdge);
-            if(internalEdges != null && internalEdges.Count() > 0)
+            if (internalEdges != null && internalEdges.Count() > 0)
             {
                 result.internalEdges = new List<IClosed2D>();
                 foreach (IClosed2D closed2D in internalEdges)
@@ -41,7 +62,7 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-        
+
         public static Face2D Create(IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded)
         {
             edges_Excluded = null;
@@ -91,21 +112,6 @@ namespace SAM.Geometry.Planar
         {
             List<Planar.IClosed2D> edges_Excluded = null;
             return Create(edges, out edges_Excluded);
-        }
-
-        public bool Inside(IClosed2D closed2D)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool Inside(Point2D point2D)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public BoundingBox2D GetBoundingBox(double offset = 0)
-        {
-            return externalEdge.GetBoundingBox(offset);
         }
     }
 }

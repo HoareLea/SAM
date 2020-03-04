@@ -250,6 +250,16 @@ namespace SAM.Geometry.Planar
 
             return jObject;
         }
+
+        public Point2D GetInternalPoint2D()
+        {
+            Point2D result = new Point2D(origin);
+
+            result.Move((height / 2) * heightDirection);
+            result.Move((width / 2) * WidthDirection);
+
+            return result;
+        }
     }
 }
 
