@@ -419,6 +419,10 @@ namespace SAM.Geometry.Planar
                 return null;
 
             Point2D result = GetCentroid(point2Ds);
+            if(result == null)
+            {
+                result = GetCentroid(point2Ds);
+            }
             if (Inside(point2Ds, result))
                 return result;
 

@@ -2,80 +2,85 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Newtonsoft.Json.Linq;
+
+using SAM.Core;
+
+
 namespace SAM.Geometry.Planar
 {
-    public class CurveGraph2D
+    public class CurveGraph2D : IJSAMObject
     {
-        private ICurve2D[][] curve2Ds;
-        private Point2D[] point2Ds;
+        private ICurve2D[][] curves;
+        private Point2D[] points;
 
         public CurveGraph2D(CurveGraph2D curveGraph2D)
         {
-            if (curveGraph2D.point2Ds != null)
+            if (curveGraph2D.points != null)
             {
-                int count = curveGraph2D.point2Ds.Length;
-                point2Ds = new Point2D[count];
+                int count = curveGraph2D.points.Length;
+                points = new Point2D[count];
                 for (int i = 0; i < count; i++)
                 {
-                    Point2D point2D = curveGraph2D.point2Ds[i];
+                    Point2D point2D = curveGraph2D.points[i];
                     if (point2D != null)
-                        point2Ds[i] = new Point2D(point2D);
+                        points[i] = new Point2D(point2D);
                 }
             }
 
-            if(curveGraph2D.curve2Ds != null)
+            if(curveGraph2D.curves != null)
             {
-                int count_1 = curveGraph2D.curve2Ds.Length;
-                curve2Ds = new ICurve2D[count_1][];
+                int count_1 = curveGraph2D.curves.Length;
+                curves = new ICurve2D[count_1][];
                 for(int i = 0; i < count_1; i++)
                 {
-                    int count_2 = curveGraph2D.curve2Ds[i].Length;
+                    int count_2 = curveGraph2D.curves[i].Length;
                     ICurve2D[] curve2Ds_Temp = new ICurve2D[count_2];
                     for (int j = 0; j < count_2; j++)
                     {
-                        ICurve2D curve2D = curveGraph2D.curve2Ds[i][j];
+                        ICurve2D curve2D = curveGraph2D.curves[i][j];
                         if (curve2D != null)
                             curve2Ds_Temp[j] = (ICurve2D)curve2D.Clone();
                     }
-                    curve2Ds[i] = curve2Ds_Temp;
+                    curves[i] = curve2Ds_Temp;
                 }
             }
         }
 
         public CurveGraph2D(CurveGraph2D curveGraph2D, IEnumerable<int> indexes)
         {
-            if (curveGraph2D.point2Ds != null)
+            if (curveGraph2D.points != null)
             {
-                int count = curveGraph2D.point2Ds.Length;
+                int count = curveGraph2D.points.Length;
 
                 List<Point2D> point2Ds_Temp = new List<Point2D>();
                 for (int i = 0; i < count; i++)
                     if (indexes == null || indexes.Contains(i))
                     {
-                        Point2D point2D = curveGraph2D.point2Ds[i];
+                        Point2D point2D = curveGraph2D.points[i];
                         if (point2D != null)
                             point2D = new Point2D(point2D);
 
                         point2Ds_Temp.Add(point2D);
                     }
 
-                point2Ds = point2Ds_Temp.ToArray();
+                points = point2Ds_Temp.ToArray();
             }
 
-            if (curveGraph2D.curve2Ds != null)
+            if (curveGraph2D.curves != null)
             {
-                int count_1 = point2Ds.Length;
-                curve2Ds = new ICurve2D[count_1][];
+                int count_1 = points.Length;
+                curves = new ICurve2D[count_1][];
                 for (int i = 0; i < count_1; i++)
                 {
                     ICurve2D[] curve2Ds_Temp = new ICurve2D[i];
                     for (int j = 0; j < i; j++)
                     {
-                        ICurve2D curve2D = curveGraph2D[point2Ds[i], point2Ds[j]];
+                        ICurve2D curve2D = curveGraph2D[points[i], points[j]];
                         if (curve2D != null)
                             curve2Ds_Temp[j] = (ICurve2D)curve2D.Clone();
                     }
-                    curve2Ds[i] = curve2Ds_Temp;
+                    curves[i] = curve2Ds_Temp;
                 }
             }
         }        
@@ -109,13 +114,13 @@ namespace SAM.Geometry.Planar
                 tuples.Add(new Tuple<Point2D, Point2D, ICurve2D>(point2D_Start, point2D_End, curve2D));
             }
 
-            point2Ds = point2Ds_HashSet.ToArray();
+            points = point2Ds_HashSet.ToArray();
 
-            int count = point2Ds.Length;
+            int count = points.Length;
 
-            this.curve2Ds = new ICurve2D[count][];
+            this.curves = new ICurve2D[count][];
             for (int i = 0; i < count; i++)
-                this.curve2Ds[i] = new ICurve2D[i];
+                this.curves[i] = new ICurve2D[i];
 
             foreach(Tuple<Point2D, Point2D, ICurve2D> tuple in tuples)
             {
@@ -133,7 +138,7 @@ namespace SAM.Geometry.Planar
                 int Max = Math.Max(index_Start, index_End);
                 int Min = Math.Min(index_Start, index_End);
 
-                this.curve2Ds[Max][Min] = tuple.Item3;
+                this.curves[Max][Min] = tuple.Item3;
             }
         }
 
@@ -145,7 +150,7 @@ namespace SAM.Geometry.Planar
 
             bool result = false;
 
-            int count = point2Ds.Length;
+            int count = points.Length;
             for (int i = 0; i < count; i++)
             {
                 List<int> connections = Connections(i);
@@ -164,10 +169,10 @@ namespace SAM.Geometry.Planar
 
         public bool Disconnect(int index_1, int index_2)
         {
-            if (index_1 < 0 || index_2 < 0 || index_1 >= point2Ds.Length || index_2 >= point2Ds.Length)
+            if (index_1 < 0 || index_2 < 0 || index_1 >= points.Length || index_2 >= points.Length)
                 return false;
 
-            curve2Ds[Math.Max(index_1, index_2)][Math.Min(index_1, index_2)] = null;
+            curves[Math.Max(index_1, index_2)][Math.Min(index_1, index_2)] = null;
             return true;
         }
 
@@ -187,15 +192,15 @@ namespace SAM.Geometry.Planar
 
             int count;
 
-            count = point2Ds.Length;
+            count = points.Length;
 
             if (index >= count)
                 return false;
 
             for (int i = index + 1; i < count; i++)
-                curve2Ds[i][index] = null;
+                curves[i][index] = null;
 
-            ICurve2D[] curve2D_Temp = curve2Ds[index];
+            ICurve2D[] curve2D_Temp = curves[index];
             count = curve2D_Temp.Length;
             for (int i = 0; i < count; i++)
                 curve2D_Temp[i] = null;
@@ -223,7 +228,7 @@ namespace SAM.Geometry.Planar
 
         public bool DisconnectAll()
         {
-            int count = point2Ds.Length;
+            int count = points.Length;
 
             bool result = false;
             for (int i = 0; i < count; i++)
@@ -256,7 +261,7 @@ namespace SAM.Geometry.Planar
 
             int count;
 
-            count = point2Ds.Length;
+            count = points.Length;
 
             if (index >= count)
                 return null;
@@ -264,10 +269,10 @@ namespace SAM.Geometry.Planar
             List<int> result = new List<int>();
 
             for (int i = index + 1; i < count; i++)
-                if (curve2Ds[i][index] != null)
+                if (curves[i][index] != null)
                     result.Add(i);
 
-            ICurve2D[] curve2D_Temp = curve2Ds[index];
+            ICurve2D[] curve2D_Temp = curves[index];
             count = curve2D_Temp.Length;
             for (int i = 0; i < count; i++)
                 if (curve2D_Temp[i] != null)
@@ -292,12 +297,12 @@ namespace SAM.Geometry.Planar
         
         public int IndexOf(Point2D point2D)
         {
-            if (point2Ds == null)
+            if (points == null)
                 return -1;
 
-            int count = point2Ds.Length;
+            int count = points.Length;
             for (int i = 0; i < count; i++)
-                if (point2Ds[i].Equals(point2D))
+                if (points[i].Equals(point2D))
                     return i;
 
             return -1;
@@ -308,7 +313,27 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                return curve2Ds[Math.Max(i, j)][Math.Min(i, j)];
+                if (curves == null)
+                    return null;
+                
+                if (i < 0 || j < 0)
+                    return null;
+
+                int row = Math.Max(i, j);
+
+                if (curves.Length <= row)
+                    return null;
+
+                int column = Math.Min(i, j);
+
+                if (curves[row].Length <= column)
+                    return null;
+
+                ICurve2D curve2D = curves[row][column];
+                if (curve2D == null)
+                    return null;
+
+                return (ICurve2D)curve2D.Clone();
             }
         }
 
@@ -324,7 +349,7 @@ namespace SAM.Geometry.Planar
                 if (index_2 == -1)
                     return null;
 
-                return curve2Ds[Math.Max(index_1, index_2)][Math.Min(index_1, index_2)];
+                return curves[Math.Max(index_1, index_2)][Math.Min(index_1, index_2)];
             }
         }
 
@@ -332,7 +357,7 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                return point2Ds[i];
+                return new Point2D(points[i]);
             }
         }
 
@@ -341,7 +366,7 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                return point2Ds.Length;
+                return points.Length;
             }
         }
 
@@ -351,15 +376,15 @@ namespace SAM.Geometry.Planar
             if (index < 0)
                 return false;
 
-            int count = point2Ds.Length;
+            int count = points.Length;
             if (index >= count)
                 return false;
 
             for (int i = index + 1; i < count; i++)
-                if (curve2Ds[i][index] != null)
+                if (curves[i][index] != null)
                     return true;
 
-            ICurve2D[] curve2D_Temp = curve2Ds[index];
+            ICurve2D[] curve2D_Temp = curves[index];
             count = curve2D_Temp.Length;
             for (int i = 0; i < count; i++)
                 if (curve2D_Temp[i] != null)
@@ -381,23 +406,15 @@ namespace SAM.Geometry.Planar
         }
 
         
-        public int GetFirstConnected(int index)
+        public int GetFirstConnected(int connectionsCount)
         {
-            if (index < 0)
+            if (connectionsCount < 0 || points == null)
                 return -1;
 
-            int count = point2Ds.Length;
-            if (index >= count)
-                return -1;
+            int count = points.Length;
 
-            for (int i = index + 1; i < count; i++)
-                if (curve2Ds[i][index] != null)
-                    return i;
-
-            ICurve2D[] curve2D_Temp = curve2Ds[index];
-            count = curve2D_Temp.Length;
             for (int i = 0; i < count; i++)
-                if (curve2D_Temp[i] != null)
+                if (ConnectionsCount(i) == connectionsCount)
                     return i;
 
             return -1;
@@ -405,7 +422,7 @@ namespace SAM.Geometry.Planar
 
         public int GetFirstConnected()
         {
-            int count = point2Ds.Length;
+            int count = points.Length;
 
             for (int i = 0; i < count; i++)
                 if (ConnectionsCount(i) > 0)
@@ -417,13 +434,13 @@ namespace SAM.Geometry.Planar
 
         public bool HasConnections()
         {
-            int count_1 = curve2Ds.Length;
+            int count_1 = curves.Length;
 
             for (int i = 1; i < count_1; i++)
             {
-                int count_2 = curve2Ds[i].Length;
+                int count_2 = curves[i].Length;
                 for (int j = 0; j < count_2; j++)
-                    if (curve2Ds[i][j] != null)
+                    if (curves[i][j] != null)
                         return true;
             }
 
@@ -455,16 +472,57 @@ namespace SAM.Geometry.Planar
             for (int i=0; i < count - 1; i++)
             {
                 ICurve2D curve2D = this[indexes_Temp[i], indexes_Temp[i + 1]];
-                if(curve2D != null)
-                {
-                    if (curve2D.GetStart() != point2Ds[i])
-                        curve2D.Reverse();
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+                if (curve2D == null)
+                    return null;
+                    //throw new NotImplementedException();
 
+                if(result.Count == 1)
+                {
+                    int index = result.Count - 1;
+                    ICurve2D curve2D_Previous = result[index];
+                    if(curve2D_Previous != null)
+                    {
+                        Point2D point2D_Previous_Start = curve2D_Previous.GetStart();
+                        Point2D point2D_Previous_End = curve2D_Previous.GetEnd();
+                        Point2D point2D_Start = curve2D.GetStart();
+                        Point2D point2D_End = curve2D.GetEnd();
+
+                        List<double> distances = new List<double>();
+                        distances.Add(point2D_Previous_Start.Distance(point2D_End));
+                        distances.Add(point2D_Previous_Start.Distance(point2D_Start));
+                        distances.Add(point2D_Previous_End.Distance(point2D_End));
+                        distances.Add(point2D_Previous_End.Distance(point2D_Start));
+
+                        double distance = distances.Min();
+                        if (distance == distances[0])
+                        {
+                            curve2D_Previous.Reverse();
+                            curve2D.Reverse();
+                        }
+                        else if (distance == distances[1])
+                        {
+                            curve2D_Previous.Reverse();
+                        }
+                        else if (distance == distances[2])
+                        {
+                            curve2D.Reverse();
+                        }
+                        else if (distance == distances[3])
+                        {
+                            //Do nothing
+                        }
+                    }
+                }
+                else if(result.Count > 1)
+                {
+                    Point2D point2D_Previous = result.Last()?.GetEnd();
+                    if(point2D_Previous != null)
+                    {
+                        if(point2D_Previous.Distance(curve2D.GetStart()) > point2D_Previous.Distance(curve2D.GetEnd()))
+                            curve2D.Reverse();
+                    }
+
+                }
 
                 result.Add(curve2D);
             }
@@ -503,16 +561,20 @@ namespace SAM.Geometry.Planar
             List<CurveGraph2D> curveGraph2Ds = curveGraph2D.Split();
 
             List<PolycurveLoop2D> result = new List<PolycurveLoop2D>();
-            foreach (CurveGraph2D CurveGraph2D in curveGraph2Ds)
+            foreach (CurveGraph2D curveGraph2D_Temp in curveGraph2Ds)
             {
-                List<List<int>> loops = CurveGraph2D.GetLoops();
+                List<List<int>> loops = curveGraph2D_Temp.GetLoops();
                 if (loops == null || loops.Count == 0)
                     continue;
 
                 List<Tuple<PolycurveLoop2D, BoundingBox2D, Point2D>> tuples = new List<Tuple<PolycurveLoop2D, BoundingBox2D, Point2D>>();
                 foreach (List<int> loop in loops)
                 {
-                    PolycurveLoop2D polycurveLoop2D = new PolycurveLoop2D(GetCurves(loop, true));
+                    List<ICurve2D> curve2Ds = curveGraph2D_Temp.GetCurves(loop, true);
+                    if (curve2Ds == null)
+                        continue;
+
+                    PolycurveLoop2D polycurveLoop2D = new PolycurveLoop2D(curve2Ds);
                     if (polycurveLoop2D == null)
                         continue;
 
@@ -548,8 +610,16 @@ namespace SAM.Geometry.Planar
                         {
                             if(tuple_1.Item1.Inside(tuple_2.Item3))
                             {
-                                redundantLoopIndexes.Add(i);
-                                break;
+                                if(tuple_1.Item2.GetArea() > tuple_2.Item2.GetArea())
+                                {
+                                    redundantLoopIndexes.Add(i);
+                                    break;
+                                }
+                                else
+                                {
+                                    redundantLoopIndexes.Add(j);
+                                    continue;
+                                }
                             }
                         }
 
@@ -557,7 +627,16 @@ namespace SAM.Geometry.Planar
                         {
                             if (tuple_2.Item1.Inside(tuple_1.Item3))
                             {
-                                redundantLoopIndexes.Add(j);
+                                if (tuple_1.Item2.GetArea() > tuple_2.Item2.GetArea())
+                                {
+                                    redundantLoopIndexes.Add(i);
+                                    break;
+                                }
+                                else
+                                {
+                                    redundantLoopIndexes.Add(j);
+                                    continue;
+                                }
                             }
                         }
                     }
@@ -573,6 +652,75 @@ namespace SAM.Geometry.Planar
             }
 
             return result;
+        }
+
+        public bool FromJObject(JObject jObject)
+        {
+            if (jObject == null)
+                return false;
+
+            if (jObject.ContainsKey("Points"))
+                points = Geometry.Create.ISAMGeometries<Point2D>(jObject.Value<JArray>("Points"))?.ToArray();
+
+            if (points != null && jObject.ContainsKey("Curves"))
+            {
+                JArray jArray = jObject.Value<JArray>("Curves");
+                if (jArray != null)
+                {
+                    int count = points.Length;
+
+                    curves = new ICurve2D[count][];
+                    for (int i = 0; i < count; i++)
+                        curves[i] = new ICurve2D[i];
+
+                    foreach(JObject jObject_Curve in jArray)
+                    {
+                        int index_1 = jObject_Curve.Value<int>("Index_1");
+                        int index_2 = jObject_Curve.Value<int>("Index_2");
+
+                        ICurve2D curve2D = Geometry.Create.ISAMGeometry<ICurve2D>(jObject_Curve.Value<JObject>("Curve"));
+
+                        int min = Math.Min(index_1, index_2);
+                        int max = Math.Max(index_1, index_2);
+                        curves[max][min] = curve2D;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public JObject ToJObject()
+        {
+            JObject jObject = new JObject();
+            jObject.Add("_type", Core.Query.FullTypeName(this));
+
+            if (points != null)
+                jObject.Add("Points", Geometry.Create.JArray(points));
+
+            if(curves != null)
+            {
+                JArray jArray = new JArray();
+                int count_1 = curves.Length;
+                for(int i =0; i < count_1; i++)
+                {
+                    int count_2 = curves[i].Length;
+                    for(int j =0; j < count_2; j++)
+                    {
+                        if(curves[i][j] != null)
+                        {
+                            jObject = new JObject();
+                            jObject.Add("Index_1", i);
+                            jObject.Add("Index_2", j);
+                            jObject.Add("Curve", curves[i][j].ToJObject());
+                            jArray.Add(jObject);
+                        }
+                    }
+                }
+
+                jObject.Add("Curves", jArray);
+            }
+
+            return jObject;
         }
 
 
@@ -689,10 +837,8 @@ namespace SAM.Geometry.Planar
         private List<int> GetSortedConnections(int index_1, int index_2, Orientation orientation = Orientation.Undefined)
         {
             Dictionary<int, Tuple<double, Orientation>> aDictionary = GetSortedConnectionDataDictionary(index_1, index_2, orientation);
-            if (aDictionary == null)
-                return null;
 
-            return aDictionary.Keys.ToList();
+            return aDictionary?.Keys.ToList();
         }
 
         //First and last index shall be the same
@@ -701,46 +847,50 @@ namespace SAM.Geometry.Planar
             if (index_1 < 0 || index_2 < 0)
                 return null;
 
-            int aIndex_1 = index_1;
-            int aIndex_2 = index_2;
+            int index_Temp_1 = index_1;
+            int index_Temp_2 = index_2;
 
-            List<int> aIndexList = Connections(aIndex_1);
-            if (aIndexList == null || aIndexList.Count() == 0)
+            List<int> indexes = Connections(index_Temp_1);
+            if (indexes == null || indexes.Count() == 0)
                 return null;
 
-            if (!aIndexList.Contains(index_2))
+            if (!indexes.Contains(index_2))
                 return null;
 
-            List<int> aResult = new List<int>();
-            aResult.Add(aIndex_1);
-            aResult.Add(aIndex_2);
+            List<int> result = new List<int>();
+            result.Add(index_Temp_1);
+            result.Add(index_Temp_2);
 
             bool aContinue = true;
 
             while (aContinue)
             {
-                aIndexList = GetSortedConnections(aIndex_1, aIndex_2, orientation);
-                if (aIndexList == null)
+                indexes = GetSortedConnections(index_Temp_1, index_Temp_2, orientation);
+                if (indexes == null || indexes.Count == 0)
                 {
                     aContinue = false;
                     continue;
                 }
 
-                int aIndex_3 = aIndexList[0];
+                int index_Temp_3 = indexes[0];
 
-                if (aResult.Contains(aIndex_3))
+                if (result.Contains(index_Temp_3))
                 {
-                    aResult.Add(aIndex_3);
+                    result.Add(index_Temp_3);
                     aContinue = false;
                     continue;
                 }
 
-                aResult.Add(aIndex_3);
-                aIndex_1 = aIndex_2;
-                aIndex_2 = aIndex_3;
+                result.Add(index_Temp_3);
+                index_Temp_1 = index_Temp_2;
+                index_Temp_2 = index_Temp_3;
             }
 
-            return aResult;
+            if (result.Count < 3)
+                return null;
+
+
+            return result;
         }
 
         private void AddAllConnections(int index, HashSet<int> indexes)
@@ -769,7 +919,7 @@ namespace SAM.Geometry.Planar
             List<List<int>> result = new List<List<int>>();
             foreach (CurveGraph2D curveGraph2D_Temp in curveGraph2Ds)
             {
-                int index_1 = curveGraph2D_Temp.GetFirstConnected(2);
+                int index_1 = curveGraph2D_Temp.GetFirstConnected(); //index_1 = curveGraph2D_Temp.GetFirstConnected(2);
                 while (index_1 >= 0)
                 {
                     List<int> connections = curveGraph2D_Temp.Connections(index_1);
@@ -783,9 +933,10 @@ namespace SAM.Geometry.Planar
                             continue;
 
                         aLoop = Trim(aLoop);
-                        if (aLoop == null || aLoop.Count == 0)
+                        if (aLoop == null || aLoop.Count < 2)
                             continue;
 
+                        aLoop = aLoop.ConvertAll(x => points[x]).ConvertAll(x => curveGraph2D.IndexOf(x));
 
                         if (!HasSimilar(result, aLoop))
                             result.Add(aLoop);
@@ -793,7 +944,7 @@ namespace SAM.Geometry.Planar
 
                     curveGraph2D_Temp.DisconnectAll(index_1);
                     curveGraph2D_Temp.Disconnect(1);
-                    index_1 = curveGraph2D_Temp.GetFirstConnected(2);
+                    index_1 = curveGraph2D_Temp.GetFirstConnected(); //index_1 = curveGraph2D_Temp.GetFirstConnected(2);
                 }
             }
 
