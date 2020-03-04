@@ -14,6 +14,11 @@ namespace SAM.Geometry.Grasshopper
 
             if (sAMGeometry == null || rhinoDoc == null || objectAttributes == null)
                 return false;
+
+            if(sAMGeometry is Planar.ICurve2D)
+            {
+                sAMGeometry = Spatial.Plane.Base.Convert((Planar.ICurve2D)sAMGeometry);
+            }
             
             if(sAMGeometry is Spatial.Point3D)
             {
@@ -37,6 +42,11 @@ namespace SAM.Geometry.Grasshopper
             {
                 guid = rhinoDoc.Objects.AddCurve(((Spatial.Polygon3D)sAMGeometry).ToRhino_PolylineCurve());
                 return true;
+            }
+
+            if (sAMGeometry is Planar.Point2D)
+            {
+                guid = rhinoDoc.Objects.AddPoint(((Planar.Point2D)sAMGeometry).ToRhino());
             }
 
             GeometryBase geometryBase = (sAMGeometry as dynamic).ToRhino() as GeometryBase;
