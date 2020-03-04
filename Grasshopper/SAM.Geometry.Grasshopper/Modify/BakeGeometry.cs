@@ -47,6 +47,7 @@ namespace SAM.Geometry.Grasshopper
             if (sAMGeometry is Planar.Point2D)
             {
                 guid = rhinoDoc.Objects.AddPoint(((Planar.Point2D)sAMGeometry).ToRhino());
+                return true;
             }
 
             GeometryBase geometryBase = (sAMGeometry as dynamic).ToRhino() as GeometryBase;

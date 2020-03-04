@@ -175,8 +175,13 @@ namespace SAM.Geometry.Spatial
 
         public PolycurveLoop3D Convert(Planar.PolycurveLoop2D polycurveLoop2D)
         {
-            if (polycurveLoop2D != null && polycurveLoop2D.GetCurves().TrueForAll(x => x is Segment3D))
-                return new PolycurveLoop3D(polycurveLoop2D.GetCurves().ConvertAll(x => Convert((Planar.Segment2D)x)));
+            if (polycurveLoop2D == null)
+                return null;
+
+            List<Planar.ICurve2D> curve2Ds = polycurveLoop2D.GetCurves();
+
+            if (curve2Ds.TrueForAll(x => x is Planar.Segment2D))
+                return new PolycurveLoop3D(curve2Ds.ConvertAll(x => Convert((Planar.Segment2D)x)));
 
             throw new NotImplementedException();
         }
