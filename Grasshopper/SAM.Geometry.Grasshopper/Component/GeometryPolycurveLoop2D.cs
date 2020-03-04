@@ -45,8 +45,9 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Geometry", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Center", "Center", "Center Point", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Loops", "Lps", "SAM PolycurveLoop2Ds", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "InternalPoint", "IntrPt", "Internal Point", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "ExternalLoops", "ExtLps", "SAM External PolycurveLoop2Ds", GH_ParamAccess.list);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
         }
 
@@ -60,7 +61,7 @@ namespace SAM.Geometry.Grasshopper
             if (!dataAccess.GetData<bool>(1, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(2, false);
+                dataAccess.SetData(3, false);
                 return;
             }
             if (!run)
@@ -71,7 +72,7 @@ namespace SAM.Geometry.Grasshopper
             if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(2, false);
+                dataAccess.SetData(3, false);
                 return;
             }
 
@@ -124,7 +125,11 @@ namespace SAM.Geometry.Grasshopper
             List<Planar.PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds();
             dataAccess.SetDataList(0, polycurveLoop2Ds.ConvertAll(x => new GooSAMGeometry(x)));
             dataAccess.SetDataList(1, polycurveLoop2Ds.ConvertAll(x => new GooSAMGeometry(x.GetInternalPoint2D())));
-            dataAccess.SetData(2, true);
+
+            List<Planar.PolycurveLoop2D> polycurveLoop2Ds_External = curveGraph2D.GetPolycurveLoop2Ds_External();
+            dataAccess.SetDataList(2, polycurveLoop2Ds_External.ConvertAll(x => new GooSAMGeometry(x)));
+
+            dataAccess.SetData(3, true);
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
         }

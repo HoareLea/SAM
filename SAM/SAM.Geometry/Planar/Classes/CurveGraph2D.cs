@@ -654,6 +654,47 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public List<PolycurveLoop2D> GetPolycurveLoop2Ds_External()
+        {
+            CurveGraph2D curveGraph2D = new CurveGraph2D(this);
+            curveGraph2D.Disconnect(1);
+
+            List<CurveGraph2D> curveGraph2Ds = curveGraph2D.Split();
+
+            List<PolycurveLoop2D> result = new List<PolycurveLoop2D>();
+            foreach (CurveGraph2D curveGraph2D_Temp in curveGraph2Ds)
+            {
+                List<List<int>> loops = curveGraph2D_Temp.GetLoops();
+                if (loops == null || loops.Count == 0)
+                    continue;
+
+                PolycurveLoop2D polycurveLoop2D = null;
+                double area_Max = 0;
+                foreach (List<int> loop in loops)
+                {
+                    List<ICurve2D> curve2Ds = curveGraph2D_Temp.GetCurves(loop, true);
+                    if (curve2Ds == null)
+                        continue;
+
+                    PolycurveLoop2D polycurveLoop2D_Temp = new PolycurveLoop2D(curve2Ds);
+                    if (polycurveLoop2D_Temp == null)
+                        continue;
+
+                    double area = polycurveLoop2D_Temp.GetBoundingBox().GetArea();
+                    if(area > area_Max)
+                    {
+                        polycurveLoop2D = polycurveLoop2D_Temp;
+                        area_Max = area;
+                    }
+                }
+
+                if (polycurveLoop2D != null)
+                    result.Add(polycurveLoop2D);
+            }
+
+            return result;
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)
@@ -723,31 +764,6 @@ namespace SAM.Geometry.Planar
             return jObject;
         }
 
-
-        private bool DisconnectEnd(IEnumerable<int> indexes, int connectionsCount_Min = 2)
-        {
-            if (indexes == null || indexes.Count() == 0)
-                return false;
-
-            List<int> indexes_Temp = indexes.ToList();
-
-            int count = indexes_Temp.Count;
-            bool result = false;
-
-            for (int i = count - 1; i > 0; i--)
-                if (ConnectionsCount(indexes_Temp[i]) < connectionsCount_Min)
-                {
-                    if (Disconnect(indexes_Temp[i], indexes_Temp[i - 1]))
-                        result = true;
-                }
-                else
-                {
-                    break;
-                }
-                    
-
-            return result;
-        }
 
         private Dictionary<int, Tuple<double, Orientation>> GetSortedConnectionDataDictionary(int index_1, int index_2, Orientation orientation = Orientation.Undefined)
         {
