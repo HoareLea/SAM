@@ -17,6 +17,11 @@ namespace SAM.Geometry.Planar
                 curves = new List<ICurve2D>(polycurve2D.curves);
         }
 
+        public Polycurve2D(ICurvable2D curvable2D)
+        {
+            curves = curvable2D.GetCurves();
+        }
+
         public Polycurve2D(IEnumerable<ICurve2D> curves)
         {
             if (curves != null)
@@ -83,6 +88,14 @@ namespace SAM.Geometry.Planar
         public Point2D GetStart()
         {
             return curves.First().GetStart();
+        }
+
+        public Polygon2D ToPolygon2D()
+        {
+            if (curves == null)
+                return null;
+
+            return new Polygon2D(curves.ConvertAll(x => x.GetStart()));
         }
 
         public void Reverse()

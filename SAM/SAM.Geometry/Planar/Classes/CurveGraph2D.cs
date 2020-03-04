@@ -87,12 +87,47 @@ namespace SAM.Geometry.Planar
 
         public CurveGraph2D(IEnumerable<ICurve2D> curve2Ds, int decimals = 9)
         {
+            Load(curve2Ds, decimals);
+        }
+
+        public CurveGraph2D(Polygon2D polygon2D, int decimals = 9)
+        {
+            Load(polygon2D?.GetSegments(), decimals);
+        }
+
+        public CurveGraph2D(IEnumerable<Polygon2D> polygon2Ds, int decimals = 9)
+        {
+            if(polygon2Ds != null)
+            {
+                List<Segment2D> segment2Ds = new List<Segment2D>();
+                foreach(Polygon2D polygon2D in polygon2Ds)
+                {
+                    if (polygon2D == null)
+                        continue;
+
+                    List<Segment2D> segment2Ds_Temp = polygon2D.GetSegments();
+                    if (segment2Ds_Temp == null)
+                        continue;
+
+                    segment2Ds.AddRange(segment2Ds_Temp);
+                }
+
+                Load(segment2Ds, decimals);
+            }
+        }
+
+
+        public bool Load(IEnumerable<ICurve2D> curve2Ds, int decimals = 9)
+        {
             if (curve2Ds == null)
-                return;
+                return false;
+
+            curves = null;
+            points = null;
 
             HashSet<Point2D> point2Ds_HashSet = new HashSet<Point2D>();
             List<Tuple<Point2D, Point2D, ICurve2D>> tuples = new List<Tuple<Point2D, Point2D, ICurve2D>>();
-            foreach(ICurve2D curve2D in curve2Ds)
+            foreach (ICurve2D curve2D in curve2Ds)
             {
                 if (curve2D == null)
                     continue;
@@ -122,7 +157,7 @@ namespace SAM.Geometry.Planar
             for (int i = 0; i < count; i++)
                 this.curves[i] = new ICurve2D[i];
 
-            foreach(Tuple<Point2D, Point2D, ICurve2D> tuple in tuples)
+            foreach (Tuple<Point2D, Point2D, ICurve2D> tuple in tuples)
             {
                 int index_Start = IndexOf(tuple.Item1);
                 if (index_Start < 0)
@@ -140,6 +175,8 @@ namespace SAM.Geometry.Planar
 
                 this.curves[Max][Min] = tuple.Item3;
             }
+
+            return true;
         }
 
 

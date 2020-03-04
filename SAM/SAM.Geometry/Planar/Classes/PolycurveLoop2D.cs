@@ -13,6 +13,12 @@ namespace SAM.Geometry.Planar
 
         }
 
+        public PolycurveLoop2D(Polygon2D polygon2D)
+            : base(polygon2D.GetSegments())
+        {
+
+        }
+
         public PolycurveLoop2D(IEnumerable<ICurve2D> curves)
             : base(curves)
         {
