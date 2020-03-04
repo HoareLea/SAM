@@ -158,7 +158,20 @@ namespace SAM.Geometry.Planar
 
         public double Angle(Vector2D vector2D)
         {
-            return Math.Acos(DotProduct(vector2D) / (Length * vector2D.Length));
+            double result = Math.Acos(DotProduct(vector2D) / (Length * vector2D.Length));
+            if (double.IsNaN(result))
+                result = 0;
+
+            return result;
+        }
+
+        public double SmallestAngle(Vector2D vector2D)
+        {
+            double value = Math.Abs(Angle(vector2D));
+            if (value == 0)
+                return value;
+
+            return Math.PI - value;
         }
 
         public double DotProduct(Vector2D vector2D)

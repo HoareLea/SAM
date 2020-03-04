@@ -413,16 +413,12 @@ namespace SAM.Geometry.Planar
             return new Point2D(aX / aArea, aY / aArea);
         }
 
-        public static Point2D GetInternalPoint2D(IEnumerable<Point2D> point2Ds)
+        public static Point2D GetInternalPoint2D(IEnumerable<Point2D> point2Ds, double tolerance = Tolerance.Angle)
         {
             if (point2Ds == null || point2Ds.Count() < 3)
                 return null;
 
             Point2D result = GetCentroid(point2Ds);
-            if(result == null)
-            {
-                result = GetCentroid(point2Ds);
-            }
             if (Inside(point2Ds, result))
                 return result;
 
@@ -434,9 +430,25 @@ namespace SAM.Geometry.Planar
 
             for(int i=0; i < count - 2; i++)
             {
-                result = Mid(point2Ds_List[i], point2Ds_List[1 + 2]);
-                if (Inside(point2Ds, result))
-                    return result;
+                for (int j = i + 1; j <count - 1; j++)
+                {
+                    for (int k = j + 1; k < count; k++)
+                    {
+                        Point2D point2D_1 = point2Ds_List[i];
+                        Point2D point2D_2 = point2Ds_List[j];
+                        Point2D point2D_3 = point2Ds_List[k];
+
+                        Vector2D vector2D_1 = new Vector2D(point2D_1, point2D_2);
+                        Vector2D vector2D_2 = new Vector2D(point2D_2, point2D_3);
+
+                        if (vector2D_1.SmallestAngle(vector2D_2) < tolerance)
+                            continue;
+
+                        result = Mid(point2D_1, point2D_3);
+                        if (Inside(point2Ds, result))
+                            return result;
+                    }
+                }
             }
 
             return null;

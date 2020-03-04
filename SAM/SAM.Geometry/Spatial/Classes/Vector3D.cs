@@ -179,14 +179,14 @@ namespace SAM.Geometry.Spatial
             return new Vector3D(this);
         }
 
-        public double Angle(Vector3D Vector)
+        public double Angle(Vector3D vector3D)
         {
-            return Math.Acos(DotProduct(Vector) / (Length * Vector.Length));
+            return Math.Acos(DotProduct(vector3D) / (Length * vector3D.Length));
         }
 
-        public double SmallestAngle(Vector3D Vector)
+        public double SmallestAngle(Vector3D vector3D)
         {
-            double value = Math.Abs(Angle(Vector));
+            double value = Math.Abs(Angle(vector3D));
             if (value == 0)
                 return value;
 
