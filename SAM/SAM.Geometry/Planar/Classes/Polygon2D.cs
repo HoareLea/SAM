@@ -62,7 +62,7 @@ namespace SAM.Geometry.Planar
 
         public double Distance(ISegmentable2D segmentable2D)
         {
-            return Segment2D.Distance(this, segmentable2D);
+            return Query.Distance(this, segmentable2D);
         }
 
         public bool Inside(Point2D point2D)

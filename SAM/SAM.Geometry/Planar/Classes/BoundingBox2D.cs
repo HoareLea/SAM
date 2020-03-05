@@ -293,5 +293,10 @@ namespace SAM.Geometry.Planar
         {
             return new BoundingBox2D(min, max, offset);
         }
+
+        public double Distance(ISegmentable2D segmentable2D)
+        {
+            return Query.Distance(this, segmentable2D);
+        }
     }
 }

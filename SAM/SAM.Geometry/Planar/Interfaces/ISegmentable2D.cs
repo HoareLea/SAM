@@ -11,5 +11,7 @@ namespace SAM.Geometry.Planar
         List<Segment2D> GetSegments();
 
         List<Point2D> GetPoints();
+
+        double Distance(ISegmentable2D segmentable2D);
     }
 }

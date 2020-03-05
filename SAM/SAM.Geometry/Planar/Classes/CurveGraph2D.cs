@@ -511,60 +511,14 @@ namespace SAM.Geometry.Planar
                 ICurve2D curve2D = this[indexes_Temp[i], indexes_Temp[i + 1]];
                 if (curve2D == null)
                     return null;
-                    //throw new NotImplementedException();
+                //throw new NotImplementedException();
 
-                if(result.Count == 1)
-                {
-                    int index = result.Count - 1;
-                    ICurve2D curve2D_Previous = result[index];
-                    if(curve2D_Previous != null)
-                    {
-                        Point2D point2D_Previous_Start = curve2D_Previous.GetStart();
-                        Point2D point2D_Previous_End = curve2D_Previous.GetEnd();
-                        Point2D point2D_Start = curve2D.GetStart();
-                        Point2D point2D_End = curve2D.GetEnd();
+                int count_Result = result.Count;
 
-                        List<double> distances = new List<double>();
-                        distances.Add(point2D_Previous_Start.Distance(point2D_End));
-                        distances.Add(point2D_Previous_Start.Distance(point2D_Start));
-                        distances.Add(point2D_Previous_End.Distance(point2D_End));
-                        distances.Add(point2D_Previous_End.Distance(point2D_Start));
-
-                        double distance = distances.Min();
-                        if (distance == distances[0])
-                        {
-                            curve2D_Previous.Reverse();
-                            curve2D.Reverse();
-                        }
-                        else if (distance == distances[1])
-                        {
-                            curve2D_Previous.Reverse();
-                        }
-                        else if (distance == distances[2])
-                        {
-                            curve2D.Reverse();
-                        }
-                        else if (distance == distances[3])
-                        {
-                            //Do nothing
-                        }
-                    }
-                }
-                else if(result.Count > 1)
-                {
-                    Point2D point2D_Previous = result.Last()?.GetEnd();
-                    if(point2D_Previous != null)
-                    {
-                        if(point2D_Previous.Distance(curve2D.GetStart()) > point2D_Previous.Distance(curve2D.GetEnd()))
-                            curve2D.Reverse();
-                    }
-
-                }
+                Modify.OrientByEnds(curve2D, result[count_Result - 1], count_Result == 1, true);
 
                 result.Add(curve2D);
             }
-                
-
             return result;
         }
 
