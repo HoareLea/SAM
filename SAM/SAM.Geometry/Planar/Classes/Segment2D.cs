@@ -217,6 +217,26 @@ namespace SAM.Geometry.Planar
             return point2D.Distance(Closest(point2D));
         }
 
+        public double Distance(Segment2D segment2D)
+        {
+            Point2D point2D_Closest_1 = null;
+            Point2D point2D_Closest_2 = null;
+
+            Point2D point2D_Intersection = Intersection(segment2D, out point2D_Closest_1, out point2D_Closest_2);
+
+            if (point2D_Intersection == null)
+            {
+                point2D_Closest_1 = Project(segment2D.origin);
+                point2D_Closest_2 = segment2D.Project(point2D_Closest_1);
+            }
+            else if (point2D_Closest_1 == null || point2D_Closest_2 == null)
+            {
+                return 0;
+            }
+
+            return point2D_Closest_1.Distance(point2D_Closest_2);
+        }
+
         /// <summary>
         /// Find intersection Point2D by two segments2Ds.  Method will aslo return closest point2Ds on Segmnet2Ds to extended intersection Point2D 
         /// </summary>
@@ -422,6 +442,37 @@ namespace SAM.Geometry.Planar
         public BoundingBox2D GetBoundingBox(double offset = 0)
         {
             return new BoundingBox2D(origin, GetEnd(), offset);
+        }
+
+
+        public static double Distance(ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2)
+        {
+            if (segmentable2D_1 == null || segmentable2D_2 == null)
+                return double.NaN;
+
+            List<Segment2D> segment2Ds_1 = segmentable2D_1.GetSegments();
+            if (segment2Ds_1 == null || segment2Ds_1.Count == 0)
+                return double.NaN;
+
+            List<Segment2D> segment2Ds_2 = segmentable2D_2.GetSegments();
+            if (segment2Ds_2 == null || segment2Ds_2.Count == 0)
+                return double.NaN;
+
+            double result = double.MaxValue;
+            foreach (Segment2D segment2D_1 in segment2Ds_1)
+            {
+                foreach (Segment2D segment2D_2 in segment2Ds_2)
+                {
+                    double distance = segment2D_1.Distance(segment2D_2);
+                    if (distance == 0)
+                        return 0;
+
+                    if (distance < result)
+                        result = distance;
+                }
+            }
+
+            return result;
         }
     }
 }

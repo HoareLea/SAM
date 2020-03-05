@@ -197,6 +197,39 @@ namespace SAM.Geometry.Planar
             return (point2D.X > min.X + tolerance && point2D.X < max.X - tolerance && point2D.Y > min.Y + tolerance && point2D.Y < max.Y - tolerance);
         }
 
+        public Segment2D GetSegment(Point2D point2D, Vector2D direction)
+        {
+            if (point2D == null || direction == null)
+                return null;
+
+            List<Segment2D> segment2Ds = GetSegments();
+            if (segment2Ds == null)
+                return null;
+
+            Segment2D segment2D = new Segment2D(point2D, direction);
+
+            List<Point2D> point2Ds = new List<Point2D>();
+            foreach(Segment2D segment2D_Temp in segment2Ds)
+            {
+                Point2D point2D_Closest_1 = null;
+                Point2D point2D_Closest_2 = null;
+                Point2D point2D_Intersection = segment2D_Temp.Intersection(segment2D, out point2D_Closest_1, out point2D_Closest_2);
+                if (point2D_Intersection == null)
+                    continue;
+
+                point2Ds.Add(point2D_Intersection);
+            }
+
+            if (point2Ds == null)
+                return null;
+
+            Point2D point2D_Closest =  Point2D.Closest(point2Ds, point2D);
+            if (point2D_Closest == null)
+                return null;
+
+            return new Segment2D(point2D, point2D_Closest);
+        }
+
         public override ISAMGeometry Clone()
         {
             return new BoundingBox2D(this);

@@ -215,6 +215,11 @@ namespace SAM.Geometry.Planar
             return double.IsNaN(coordinates[0]) || double.IsNaN(coordinates[1]);
         }
 
+        public Point2D Closest(IEnumerable<Point2D> point2Ds)
+        {
+            return Closest(point2Ds, this);
+        }
+
         public override ISAMGeometry Clone()
         {
             return new Point2D(this);
@@ -227,6 +232,34 @@ namespace SAM.Geometry.Planar
             else
                 return new Vector2D(coordinates[0] - point2D[0], coordinates[1] - point2D[1]);
         }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            coordinates[0] = jObject.Value<double>("X");
+            coordinates[1] = jObject.Value<double>("Y");
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
+            jObject.Add("X", coordinates[0]);
+            jObject.Add("Y", coordinates[1]);
+            return jObject;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash = (hash * 7) + coordinates[0].GetHashCode();
+            hash = (hash * 7) + coordinates[1].GetHashCode();
+            return hash;
+        }
+
 
         public static Point2D Move(Point2D point, Vector2D vector)
         {
@@ -749,31 +782,30 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public override bool FromJObject(JObject jObject)
+        public static Point2D Closest(IEnumerable<Point2D> point2Ds, Point2D point2D)
         {
-            coordinates[0] = jObject.Value<double>("X");
-            coordinates[1] = jObject.Value<double>("Y");
-
-            return true;
-        }
-
-        public override JObject ToJObject()
-        {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
+            if (point2Ds == null || point2D == null)
                 return null;
 
-            jObject.Add("X", coordinates[0]);
-            jObject.Add("Y", coordinates[1]);
-            return jObject;
-        }
+            Point2D result = null;
+            double distance_Min = double.MaxValue;
+            foreach (Point2D point2D_Temp in point2Ds)
+            {
+                if (point2D_Temp == null)
+                    continue;
 
-        public override int GetHashCode()
-        {
-            int hash = 13;
-            hash = (hash * 7) + coordinates[0].GetHashCode();
-            hash = (hash * 7) + coordinates[1].GetHashCode();
-            return hash;
+                double distance = point2D.Distance(point2D_Temp);
+                if (distance == 0)
+                    return point2D_Temp;
+
+                if(distance < distance_Min)
+                {
+                    result = point2D_Temp;
+                    distance_Min = distance;
+                }
+            }
+
+            return result;
         }
 
 
