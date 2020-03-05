@@ -82,7 +82,7 @@ namespace SAM.Geometry.Spatial
             if (direction == null || double.IsNaN(angleDifference))
                 return false;
 
-            return SmallestAngle(direction) < angleDifference;
+            return Angle(direction) < angleDifference;
         }
 
         public double Length
