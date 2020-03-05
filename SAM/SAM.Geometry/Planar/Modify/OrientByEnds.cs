@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
     public static partial class Modify
     {
         /// <summary>
-        /// Orients two curves by its ends  
+        /// Orients two curves by its ends (end point of first curve become the closest to start point of second curve)  
         /// </summary>
         /// <returns>
         /// Returns true if at least one curve orientation changed
@@ -76,6 +76,5 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-
     }
 }

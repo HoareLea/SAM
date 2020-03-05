@@ -73,6 +73,7 @@
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
     <Compile Include="Planar\Modify\OrientByEnds.cs" />
     <Compile Include="Planar\Modify\Split.cs" />
+    <Compile Include="Planar\Query\MidDirection.cs" />
     <Compile Include="Planar\Query\Distance.cs" />
     <Compile Include="Planar\Query\Directions.cs" />
     <Compile Include="Planar\Query\Closest.cs" />

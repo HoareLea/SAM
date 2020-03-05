@@ -77,6 +77,14 @@ namespace SAM.Geometry.Spatial
             coordinates[2] = coordinates[2] * value;
         }
 
+        public bool InRange(Vector3D direction, double angleDifference)
+        {
+            if (direction == null || double.IsNaN(angleDifference))
+                return false;
+
+            return SmallestAngle(direction) < angleDifference;
+        }
+
         public double Length
         {
             get
