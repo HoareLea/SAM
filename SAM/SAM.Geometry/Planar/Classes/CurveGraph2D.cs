@@ -506,7 +506,7 @@ namespace SAM.Geometry.Planar
             int count = indexes_Temp.Count();
 
             List<ICurve2D> result = new List<ICurve2D>();
-            for (int i=0; i < count - 1; i++)
+            for (int i = 0; i < count - 1; i++)
             {
                 ICurve2D curve2D = this[indexes_Temp[i], indexes_Temp[i + 1]];
                 if (curve2D == null)
@@ -515,7 +515,8 @@ namespace SAM.Geometry.Planar
 
                 int count_Result = result.Count;
 
-                Modify.OrientByEnds(curve2D, result[count_Result - 1], count_Result == 1, true);
+                if (count_Result > 0)
+                    Modify.OrientByEnds(curve2D, result[count_Result - 1], count_Result == 1, true);
 
                 result.Add(curve2D);
             }
