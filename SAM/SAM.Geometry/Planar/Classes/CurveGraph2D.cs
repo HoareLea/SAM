@@ -559,7 +559,11 @@ namespace SAM.Geometry.Planar
             if (curve2Ds == null)
                 return null;
 
-            return new PolycurveLoop2D(curve2Ds);
+            PolycurveLoop2D polycurveLoop2D = new PolycurveLoop2D(curve2Ds);
+            if (!polycurveLoop2D.Inside(point2D))
+                return null;
+
+            return polycurveLoop2D;
         }
         
         public List<PolycurveLoop2D> GetPolycurveLoop2Ds()

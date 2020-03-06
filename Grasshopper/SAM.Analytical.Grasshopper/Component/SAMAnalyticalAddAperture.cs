@@ -40,6 +40,7 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.list);
             inputParamManager.AddParameter(new GooPanelParam(), "_panel;", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction;", "_apertureConstruction", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("maxDistance_", "maxDistance", "Maximal Distance", GH_ParamAccess.item, Geometry.Tolerance.MacroDistance);
             inputParamManager.AddBooleanParameter("_trimGeometry_", "trimGeometry", "Trim Aperture Geometry", GH_ParamAccess.item, true);
         }
@@ -100,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             bool trimGeometry = true;
-            if (!dataAccess.GetData(3, ref trimGeometry))
+            if (!dataAccess.GetData(4, ref trimGeometry))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -115,11 +116,15 @@ namespace SAM.Analytical.Grasshopper
 
             panel = new Panel(panel);
 
-            double maxDistance = Geometry.Tolerance.MacroDistance;
-            dataAccess.GetData(2, ref maxDistance);
+            ApertureConstruction apertureConstruction = null;
+            if (!dataAccess.GetData(2, ref apertureConstruction))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            Guid guid = Guid.NewGuid();
-            ApertureConstruction apertureConstruction = new ApertureConstruction(guid, "WinInst: SIM_EXT_GLZ", ApertureType.Undefined);
+            double maxDistance = Geometry.Tolerance.MacroDistance;
+            dataAccess.GetData(3, ref maxDistance);
 
             List<Aperture> apertures = new List<Aperture>();
             foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)

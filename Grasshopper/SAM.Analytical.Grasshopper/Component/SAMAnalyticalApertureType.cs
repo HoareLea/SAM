@@ -80,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("PanelType", "PanelType", "SAM Analytical PanelType", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("ApertureType", "ApertureType", "SAM Analytical ApertureType", GH_ParamAccess.item);
         }
 
         /// <summary>
