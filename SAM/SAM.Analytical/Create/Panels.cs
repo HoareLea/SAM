@@ -14,8 +14,23 @@ namespace SAM.Analytical
 
             List<Panel> result = new List<Panel>();
             foreach (Face3D face in faces)
-                result.Add(new Panel(construction, panelType, face));
+            {
+                Panel panel = new Panel(construction, panelType, face);
 
+                if(panelType == PanelType.Undefined)
+                {
+                    Vector3D normal = panel.PlanarBoundary3D?.GetNormal();
+                    if (normal == null)
+                        continue;
+
+                    PanelType panelType_New = Query.PanelType(normal);
+                    if (panelType_New != panelType)
+                        panel = new Panel(panel, panelType_New);
+                }
+
+                result.Add(panel);
+            }
+                
             return result;
         }
     }

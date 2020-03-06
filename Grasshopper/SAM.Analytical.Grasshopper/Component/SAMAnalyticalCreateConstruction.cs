@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddTextParameter("_name", "_name", "Contruction Name", GH_ParamAccess.item, "Basic Roof: SIM_EXT_SLD_Roof DA01");
+            inputParamManager.AddTextParameter("_name_", "_name_", "Contruction Name", GH_ParamAccess.item, "Basic Roof: SIM_EXT_SLD_Roof DA01");
 
         }
 

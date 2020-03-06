@@ -38,13 +38,16 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            int aIndex = inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_panelType", "panelType", "PanelType", GH_ParamAccess.item);
+            int aIndex;
+
+            aIndex = inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.item);
+            inputParamManager[aIndex].DataMapping = GH_DataMapping.Flatten;
+
+            aIndex = inputParamManager.AddGenericParameter("_panelType", "panelType", "PanelType", GH_ParamAccess.item);
+            inputParamManager[aIndex].Optional = true;
+
             inputParamManager.AddParameter(new GooConstructionParam(), "_construction", "_construction", "SAM Analytical Construction", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("simplify_", "simplify", "Simplify", GH_ParamAccess.item, true);
-
-            inputParamManager[aIndex].DataMapping = GH_DataMapping.Flatten;
-            //GH_ParamAccess.tree and iterate for each to get fixed flatten
         }
 
         /// <summary>
@@ -99,18 +102,17 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            GH_ObjectWrapper objectWrapper = null;
-            if (!dataAccess.GetData(1, ref objectWrapper))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             PanelType panelType = PanelType.Undefined;
-            if (objectWrapper.Value is GH_String)
-                panelType = Query.PanelType(((GH_String)objectWrapper.Value).Value);
-            else
-                panelType = Query.PanelType(objectWrapper.Value);
+
+            GH_ObjectWrapper objectWrapper = null;
+            dataAccess.GetData(1, ref objectWrapper);
+            if (objectWrapper != null)
+            {
+                if (objectWrapper.Value is GH_String)
+                    panelType = Query.PanelType(((GH_String)objectWrapper.Value).Value);
+                else
+                    panelType = Query.PanelType(objectWrapper.Value);
+            }
 
             Construction construction = null;
             dataAccess.GetData(2, ref construction);
