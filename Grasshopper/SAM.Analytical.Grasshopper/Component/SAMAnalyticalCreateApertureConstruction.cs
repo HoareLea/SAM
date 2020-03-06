@@ -38,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
             int index = inputParamManager.AddGenericParameter("_apertureType", "_apertureType", "Aperture Type", GH_ParamAccess.item);
             
             Param_GenericObject genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(ApertureType.Window));
+            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(ApertureType.Window.ToString()));
         }
 
         /// <summary>
