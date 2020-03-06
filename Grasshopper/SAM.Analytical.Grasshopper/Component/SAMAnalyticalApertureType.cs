@@ -59,7 +59,7 @@ namespace SAM.Analytical.Grasshopper
 
         private void Menu_PanelTypeChanged(object sender, EventArgs e)
         {
-            if (sender is ToolStripMenuItem item && item.Tag is PanelType)
+            if (sender is ToolStripMenuItem item && item.Tag is ApertureType)
             {
                 //Do something with panelType
                 this.apertureType = (ApertureType)item.Tag;
