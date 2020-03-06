@@ -246,6 +246,11 @@ namespace SAM.Geometry.Planar
         /// <param name="segment2D">Segment2D for intersection.</param>
         public Point2D Intersection(Segment2D segment2D, out Point2D point2D_Closest1, out Point2D point2D_Closest2)
         {
+            point2D_Closest1 = null;
+            point2D_Closest2 = null;
+
+            if (segment2D == null)
+                return null;
 
             // Get the segments' parameters.
             double aDx12 = End.X - Start.X;
@@ -257,13 +262,10 @@ namespace SAM.Geometry.Planar
             double aDenominator = (aDy12 * aDx34 - aDx12 * aDy34);
 
             double aT1 = ((Start.X - segment2D.Start.X) * aDy34 + (segment2D.Start.Y - Start.Y) * aDx34) / aDenominator;
-            if (double.IsInfinity(aT1))
-            {
-                // The lines are parallel (or close enough to it).
-                point2D_Closest1 = null;
-                point2D_Closest2 = null;
+            
+            // The lines are parallel (or close enough to it).
+            if (double.IsInfinity(aT1)) 
                 return null;
-            }
 
             double aT2 = ((segment2D.Start.X - Start.X) * aDy12 + (Start.Y - segment2D.Start.Y) * aDx12) / -aDenominator;
 
@@ -272,11 +274,7 @@ namespace SAM.Geometry.Planar
 
             // The segments intersect if t1 and t2 are between 0 and 1.
             if (((aT1 >= 0) && (aT1 <= 1) && (aT2 >= 0) && (aT2 <= 1)))
-            {
-                point2D_Closest1 = null;
-                point2D_Closest2 = null;
                 return aPoint_Intersection;
-            }
 
             // Find the closest points on the segments.
             if (aT1 < 0)
@@ -304,6 +302,27 @@ namespace SAM.Geometry.Planar
                 return null;
 
             return point2D_Intersection;
+        }
+
+        public List<Point2D> Intersections(IEnumerable<Segment2D> segment2Ds)
+        {
+            if (segment2Ds == null)
+                return null;
+
+            List<Point2D> point2Ds = new List<Point2D>();
+            foreach(Segment2D segment2D in segment2Ds)
+            {
+                Point2D point2D = Intersection(segment2D, true);
+                if (point2D != null)
+                    point2Ds.Add(point2D);
+            }
+
+            return point2Ds;
+        }
+
+        public List<Point2D> Intersections(ISegmentable2D segmentable2D)
+        {
+            return Intersections(segmentable2D?.GetSegments());
         }
 
         /// <summary>

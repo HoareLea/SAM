@@ -511,12 +511,13 @@ namespace SAM.Geometry.Planar
                 ICurve2D curve2D = this[indexes_Temp[i], indexes_Temp[i + 1]];
                 if (curve2D == null)
                     return null;
-                //throw new NotImplementedException();
+
+                curve2D = (ICurve2D)curve2D.Clone();
 
                 int count_Result = result.Count;
 
                 if (count_Result > 0)
-                    Modify.OrientByEnds(curve2D, result[count_Result - 1], count_Result == 1, true);
+                    Modify.OrientByEnds(result[count_Result - 1], curve2D, count_Result == 1, true);
 
                 result.Add(curve2D);
             }
@@ -545,6 +546,22 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public PolycurveLoop2D GetPolycurveLoop2D(Point2D point2D)
+        {
+            if (point2D == null)
+                return null;
+
+            List<int> loop = GetLoop(point2D);
+            if (loop == null || loop.Count == 0)
+                return null;
+
+            List<ICurve2D> curve2Ds = GetCurves(loop, true);
+            if (curve2Ds == null)
+                return null;
+
+            return new PolycurveLoop2D(curve2Ds);
+        }
+        
         public List<PolycurveLoop2D> GetPolycurveLoop2Ds()
         {
             CurveGraph2D curveGraph2D = new CurveGraph2D(this);
@@ -757,18 +774,15 @@ namespace SAM.Geometry.Planar
         }
 
 
-        private Dictionary<int, Tuple<double, Orientation>> GetSortedConnectionDataDictionary(int index_1, int index_2, Orientation orientation = Orientation.Undefined)
+        private Dictionary<int, Tuple<double, Orientation>> GetSortedConnectionDataDictionary(Point2D point2D, int index, Orientation orientation = Orientation.Undefined)
         {
-            List<int> connections_2 = Connections(index_2);
+            List<int> connections_2 = Connections(index);
             if (connections_2 == null || connections_2.Count() == 0)
                 return null;
 
-            Point2D point2D_1 = this[index_1];
-            Point2D point2D_2 = this[index_2];
+            Point2D point2D_2 = this[index];
 
-            connections_2.Remove(index_1);
-
-            Vector2D vector2D_1 = new Vector2D(point2D_1, point2D_2);
+            Vector2D vector2D_1 = new Vector2D(point2D, point2D_2);
 
             List<Tuple<int, Orientation, double>> tuples = new List<Tuple<int, Orientation, double>>();
             foreach (int index_3 in connections_2)
@@ -776,7 +790,7 @@ namespace SAM.Geometry.Planar
                 Point2D point2D_3 = this[index_3];
                 Vector2D vector2D_2 = new Vector2D(point2D_2, point2D_3);
 
-                tuples.Add(new Tuple<int, Orientation, double>(index_3, Point2D.Orientation(point2D_1, point2D_2, point2D_3), vector2D_1.Angle(vector2D_2)));
+                tuples.Add(new Tuple<int, Orientation, double>(index_3, Point2D.Orientation(point2D, point2D_2, point2D_3), vector2D_1.Angle(vector2D_2)));
             }
 
             List<Tuple<int, Orientation, double>> tuples_Temp;
@@ -840,6 +854,15 @@ namespace SAM.Geometry.Planar
             }
 
             return result;
+        }
+
+        private Dictionary<int, Tuple<double, Orientation>> GetSortedConnectionDataDictionary(int index_1, int index_2, Orientation orientation = Orientation.Undefined)
+        {
+            Dictionary<int, Tuple<double, Orientation>> dictionary = GetSortedConnectionDataDictionary(this[index_1], index_2, orientation);
+            if(dictionary != null)
+                dictionary.Remove(index_1);
+
+            return dictionary;
         }
 
         private List<int> GetSortedConnections(int index_1, int index_2, Orientation orientation = Orientation.Undefined)
@@ -917,6 +940,36 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        public List<int> GetLoop(Point2D point2D)
+        {
+            Point2D point2D_Closest = Query.Closest(points, point2D);
+            if (point2D_Closest == null)
+                return null;
+
+            int index = IndexOf(point2D_Closest);
+            if (index == -1)
+                return null;
+
+            Dictionary<int, Tuple<double, Orientation>> dictionary = GetSortedConnectionDataDictionary(point2D, index, Orientation.Clockwise);
+            if (dictionary == null || dictionary.Count == 0)
+                return null;
+
+            foreach (KeyValuePair<int, Tuple<double, Orientation>> keyValuePair in dictionary)
+            {
+                List<int> loop = GetLoop(index, keyValuePair.Key, keyValuePair.Value.Item2);
+                if (loop == null || loop.Count < 3)
+                    continue;
+
+                loop = Trim(loop);
+                if (loop == null || loop.Count < 2)
+                    continue;
+
+                return loop;
+            }
+
+            return null;
+        }
+
         private List<List<int>> GetLoops()
         {
             CurveGraph2D curveGraph2D = new CurveGraph2D(this);
@@ -936,18 +989,18 @@ namespace SAM.Geometry.Planar
 
                     foreach (int index_2 in connections)
                     {
-                        List<int> aLoop = curveGraph2D_Temp.GetLoop(index_1, index_2);
-                        if (aLoop == null)
+                        List<int> loop = curveGraph2D_Temp.GetLoop(index_1, index_2);
+                        if (loop == null)
                             continue;
 
-                        aLoop = Trim(aLoop);
-                        if (aLoop == null || aLoop.Count < 2)
+                        loop = Trim(loop);
+                        if (loop == null || loop.Count < 2)
                             continue;
 
-                        aLoop = aLoop.ConvertAll(x => points[x]).ConvertAll(x => curveGraph2D.IndexOf(x));
+                        loop = loop.ConvertAll(x => points[x]).ConvertAll(x => curveGraph2D.IndexOf(x));
 
-                        if (!HasSimilar(result, aLoop))
-                            result.Add(aLoop);
+                        if (!HasSimilar(result, loop))
+                            result.Add(loop);
                     }
 
                     curveGraph2D_Temp.DisconnectAll(index_1);

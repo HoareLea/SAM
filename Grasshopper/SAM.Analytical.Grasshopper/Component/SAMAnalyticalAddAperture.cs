@@ -110,11 +110,13 @@ namespace SAM.Analytical.Grasshopper
             double maxDistance = Geometry.Tolerance.MacroDistance;
             dataAccess.GetData(2, ref maxDistance);
 
+            Guid guid = System.Guid.NewGuid();
+            ApertureConstruction apertureConstruction = new ApertureConstruction(guid, "WinInst: SIM_EXT_GLZ", ApertureType.Undefined);
+
             List<Aperture> apertures = new List<Aperture>();
             foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
             {
-                Guid guid = System.Guid.NewGuid();
-                Aperture aperture =panel.AddAperture(new ApertureConstruction(guid, guid.ToString(), ApertureType.Undefined), closedPlanar3D, maxDistance);
+                Aperture aperture =panel.AddAperture(apertureConstruction, closedPlanar3D, maxDistance);
                 if (aperture != null)
                     apertures.Add(aperture);
             }
