@@ -91,5 +91,26 @@ namespace SAM.Geometry.Planar
             return aResult;
         }
 
+        public static List<Segment2D> Split(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = 0)
+        {
+            if (segmentable2Ds == null)
+                return null;
+
+            List<Segment2D> segment2Ds = new List<Segment2D>();
+            foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+            {
+                if (segmentable2D == null)
+                    continue;
+
+                List<Segment2D> segment2Ds_Temp = segmentable2D.GetSegments();
+                if (segment2Ds_Temp == null)
+                    continue;
+
+                segment2Ds.AddRange(segment2Ds_Temp);
+            }
+
+            return Split(segment2Ds, tolerance);
+        }
+
     }
 }

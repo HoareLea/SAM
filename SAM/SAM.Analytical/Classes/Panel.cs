@@ -150,7 +150,7 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public Aperture AddAperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, double maxDistance = Geometry.Tolerance.MacroDistance)
+        public Aperture AddAperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, bool trimGeometry = true, double maxDistance = Geometry.Tolerance.MacroDistance)
         {
             if (apertureConstruction == null || closedPlanar3D == null)
                 return null;
@@ -165,6 +165,33 @@ namespace SAM.Analytical
 
             if (plane.Origin.Distance(closedPlanar3D.GetPlane().Origin) > maxDistance)
                 return null;
+
+            if(trimGeometry)
+            {
+                Geometry.Planar.IClosed2D closed2D = planarBoundary3D.Edge2DLoop.GetClosed2D();
+                if(closed2D is Geometry.Planar.ISegmentable2D)
+                {
+                    Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
+                    if (closed2D_Aperture is Geometry.Planar.ISegmentable2D)
+                    {
+                        List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
+                        Geometry.Planar.CurveGraph2D curveGraph2D = new Geometry.Planar.CurveGraph2D(segment2Ds);
+                        List<Geometry.Planar.PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds();
+                        if(polycurveLoop2Ds != null && polycurveLoop2Ds.Count > 0)
+                        {
+                            foreach(Geometry.Planar.PolycurveLoop2D polycurveLoop2D in polycurveLoop2Ds)
+                            {
+                                Geometry.Planar.Point2D point2D = polycurveLoop2D.GetInternalPoint2D();
+                                if (closed2D_Aperture.Inside(point2D) && closed2D.Inside(point2D))
+                                {
+                                    closedPlanar3D_Projected = plane.Convert(polycurveLoop2D.ToPolygon2D());
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             Aperture aperture = new Aperture(apertureConstruction, closedPlanar3D_Projected);
             if (!Query.IsValid(this, aperture))

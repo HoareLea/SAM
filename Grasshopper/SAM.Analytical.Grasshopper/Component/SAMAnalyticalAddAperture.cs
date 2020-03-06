@@ -41,6 +41,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.list);
             inputParamManager.AddParameter(new GooPanelParam(), "_panel;", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("maxDistance_", "maxDistance", "Maximal Distance", GH_ParamAccess.item, Geometry.Tolerance.MacroDistance);
+            inputParamManager.AddBooleanParameter("_trimGeometry_", "trimGeometry", "Trim Aperture Geometry", GH_ParamAccess.item, true);
         }
 
         /// <summary>
@@ -98,6 +99,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            bool trimGeometry = true;
+            if (!dataAccess.GetData(3, ref trimGeometry))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             Panel panel = null;
             if (!dataAccess.GetData(1, ref panel))
             {
@@ -110,13 +118,13 @@ namespace SAM.Analytical.Grasshopper
             double maxDistance = Geometry.Tolerance.MacroDistance;
             dataAccess.GetData(2, ref maxDistance);
 
-            Guid guid = System.Guid.NewGuid();
+            Guid guid = Guid.NewGuid();
             ApertureConstruction apertureConstruction = new ApertureConstruction(guid, "WinInst: SIM_EXT_GLZ", ApertureType.Undefined);
 
             List<Aperture> apertures = new List<Aperture>();
             foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
             {
-                Aperture aperture =panel.AddAperture(apertureConstruction, closedPlanar3D, maxDistance);
+                Aperture aperture = panel.AddAperture(apertureConstruction, closedPlanar3D, trimGeometry, maxDistance);
                 if (aperture != null)
                     apertures.Add(aperture);
             }
