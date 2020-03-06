@@ -8,27 +8,27 @@ using SAM.Analytical.Grasshopper.Properties;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalPanelType : GH_Component
+    public class SAMAnalyticalApertureType : GH_Component
     {
         
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("25a6b405-19ab-4ff1-9666-7760997ccfdd");
+        public override Guid ComponentGuid => new Guid("6398c87e-ec05-44ab-a35b-09f09f08ff38");
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        private PanelType panelType = PanelType.Undefined;
+        private ApertureType apertureType = ApertureType.Undefined;
 
         /// <summary>
         /// Panel Type
         /// </summary>
-        public SAMAnalyticalPanelType()
-          : base("SAMAnalytical.PanelType", "SAMAnalytical.PanelType",
-              "Select Panel Type",
+        public SAMAnalyticalApertureType()
+          : base("SAMAnalytical.ApertureType", "SAMAnalytical.ApertureType",
+              "Select Aperture Type",
               "SAM", "Analytical")
         {
 
@@ -36,25 +36,25 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetInt32("PanelType", (int)panelType);
+            writer.SetInt32("ApertureType", (int)apertureType);
             return base.Write(writer);
         }
 
         public override bool Read(GH_IReader reader)
         {
             int aIndex = -1;
-            if (reader.TryGetInt32("PanelType", ref aIndex))
-                panelType = (PanelType)aIndex;
+            if (reader.TryGetInt32("ApertureType", ref aIndex))
+                apertureType = (ApertureType)aIndex;
             
             return base.Read(reader);
         }
 
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
+            foreach (ApertureType apertureType in Enum.GetValues(typeof(ApertureType)))
                 //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
                 //base.AppendAdditionalComponentMenuItems(menu);
-                GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged, true, panelType == this.panelType).Tag = panelType;
+                GH_Component.Menu_AppendItem(menu, apertureType.ToString(), Menu_PanelTypeChanged, true, apertureType == this.apertureType).Tag = apertureType;
         }
 
         private void Menu_PanelTypeChanged(object sender, EventArgs e)
@@ -62,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
             if (sender is ToolStripMenuItem item && item.Tag is PanelType)
             {
                 //Do something with panelType
-                this.panelType = (PanelType)item.Tag;
+                this.apertureType = (ApertureType)item.Tag;
                 ExpireSolution(true);
             }
         }
@@ -89,7 +89,7 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, panelType);
+            dataAccess.SetData(0, apertureType);
         }
 
 
