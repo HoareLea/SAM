@@ -155,20 +155,24 @@ namespace SAM.Analytical
             if (apertureConstruction == null || closedPlanar3D == null)
                 return null;
 
-            IClosedPlanar3D closedPlanar3D_Projected = planarBoundary3D.Plane.Project(closedPlanar3D);
-            if (closedPlanar3D_Projected == null)
-                return null;
-
-            Plane plane = closedPlanar3D_Projected.GetPlane();
+            Plane plane = planarBoundary3D?.Plane;
             if (plane == null)
                 return null;
 
-            if (plane.Origin.Distance(closedPlanar3D.GetPlane().Origin) > maxDistance)
+            IClosedPlanar3D closedPlanar3D_Projected = plane.Project(closedPlanar3D);
+            if (closedPlanar3D_Projected == null)
+                return null;
+
+            Plane plane_ClosedPlanar3D_Projected = closedPlanar3D_Projected.GetPlane();
+            if (plane_ClosedPlanar3D_Projected == null)
+                return null;
+
+            if (plane_ClosedPlanar3D_Projected.Origin.Distance(closedPlanar3D.GetPlane().Origin) > maxDistance)
                 return null;
 
             if(trimGeometry)
             {
-                Geometry.Planar.IClosed2D closed2D = planarBoundary3D.Edge2DLoop.GetClosed2D();
+                Geometry.Planar.IClosed2D closed2D = plane.Convert(planarBoundary3D.GetFace3D().GetExternalEdge());
                 if(closed2D is Geometry.Planar.ISegmentable2D)
                 {
                     Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
