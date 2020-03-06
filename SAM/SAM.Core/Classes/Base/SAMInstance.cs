@@ -21,6 +21,12 @@ namespace SAM.Core
             this.sAMType = sAMType;
         }
 
+        public SAMInstance(string name, SAMInstance sAMInstance, SAMType sAMType)
+            : base(name, sAMInstance)
+        {
+            this.sAMType = sAMType;
+        }
+
         public SAMInstance(Guid guid, SAMInstance sAMInstance)
             : base(guid, sAMInstance)
         {

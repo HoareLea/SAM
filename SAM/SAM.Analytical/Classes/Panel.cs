@@ -25,7 +25,7 @@ namespace SAM.Analytical
         }
 
         public Panel(Panel panel, Construction construction)
-            : base(panel, construction)
+            : base(construction == null ? null : construction.Name, panel, construction)
         {
             planarBoundary3D = new PlanarBoundary3D(panel.planarBoundary3D);
             panelType = panel.panelType;

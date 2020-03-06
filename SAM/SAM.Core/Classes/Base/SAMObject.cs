@@ -28,6 +28,19 @@ namespace SAM.Core
             }
         }
 
+        public SAMObject(string name, SAMObject sAMObject)
+        {
+            this.guid = sAMObject.Guid;
+            this.name = name;
+
+            if (sAMObject.parameterSets != null)
+            {
+                this.parameterSets = new List<ParameterSet>();
+                foreach (ParameterSet parameterSet in sAMObject.parameterSets)
+                    this.parameterSets.Add(parameterSet.Clone());
+            }
+        }
+
         public SAMObject(Guid guid, SAMObject sAMObject)
         {
             this.guid = guid;
