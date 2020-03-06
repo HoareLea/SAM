@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
             aIndex = inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.item);
             inputParamManager[aIndex].DataMapping = GH_DataMapping.Flatten;
 
-            aIndex = inputParamManager.AddGenericParameter("_panelType", "panelType", "PanelType", GH_ParamAccess.item);
+            aIndex = inputParamManager.AddGenericParameter("panelType_", "panelType", "PanelType", GH_ParamAccess.item);
             inputParamManager[aIndex].Optional = true;
 
             inputParamManager.AddParameter(new GooConstructionParam(), "_construction", "_construction", "SAM Analytical Construction", GH_ParamAccess.item);
