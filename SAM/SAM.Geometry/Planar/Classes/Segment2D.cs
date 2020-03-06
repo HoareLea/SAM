@@ -294,6 +294,18 @@ namespace SAM.Geometry.Planar
             return aPoint_Intersection;
         }
 
+        public Point2D Intersection(Segment2D segment2D, bool bounded = true)
+        {
+            Point2D point2D_Closest1 = null;
+            Point2D point2D_Closest2 = null;
+
+            Point2D point2D_Intersection = Intersection(segment2D, out point2D_Closest1, out point2D_Closest2);
+            if (bounded && (point2D_Closest1 != null || point2D_Closest2 != null))
+                return null;
+
+            return point2D_Intersection;
+        }
+
         /// <summary>
         /// Offset Segment2D by Vector2D and number count (default = 1) 
         /// </summary>

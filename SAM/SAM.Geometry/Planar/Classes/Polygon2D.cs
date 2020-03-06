@@ -111,70 +111,61 @@ namespace SAM.Geometry.Planar
         {
             return Offset(new double[] { offset }, orientation);
         }
-        
-        public Polygon2D Offset(IEnumerable<double> offsets, Orientation orientation, double tolerance = Tolerance.MicroDistance)
+
+        public Polygon2D Offset(IEnumerable<double> offsets, Orientation orientation)
         {
-            throw new NotImplementedException();
+            if (points == null || points.Count < 3 || offsets == null)
+                return null;
 
-            //if (points == null || points.Count < 3 || offsets == null)
-            //    return null;
+            int count = offsets.Count();
 
-            //int count = offsets.Count();
+            if (count == 0)
+                return new Polygon2D(this);
 
-            //if (count == 0)
-            //    return new Polygon2D(this);
+            List<Segment2D> segment2Ds = GetSegments();
+            if (segment2Ds == null || segment2Ds.Count() < 3)
+                return null;
 
-            //List<Segment2D> segment2Ds = GetSegments();
-            //if (segment2Ds == null)
-            //    return null;
+            segment2Ds.Insert(0, segment2Ds.Last());
+            segment2Ds.Add(segment2Ds[1]);
 
-            //double offset_Max = offsets.Max() + 1;
+            double offset = offsets.Last();
 
-            //double offset = offsets.Last();
+            List<Segment2D[]> segments2Ds = new List<Segment2D[]>();
+            for (int i = 1; i < segment2Ds.Count - 1; i++)
+            {
+                if (i < count)
+                    offset = offsets.ElementAt(i);
 
-            //BoundingBox2D boundingBox2D = GetBoundingBox(offset_Max);
+                Segment2D segment2D_Previous = segment2Ds[i - 1];
+                Segment2D segment2D = segment2Ds[i];
+                Segment2D segment2D_Next = segment2Ds[i + 1];
 
-            //for(int i=0; i < segment2Ds.Count; i++)
-            //{
-            //    if (i < count)
-            //        offset = offsets.ElementAt(i);
+                Segment2D segment2D_Offset = segment2D.Offset(offset, orientation);
 
-            //    Segment2D segment2D = segment2Ds[i].Offset(offset, orientation);
+                Vector2D Vector2D_Previous = Query.MidVector(segment2D_Previous, segment2D);
+                Vector2D Vector2D_Next = Query.MidVector(segment2D, segment2D_Next);
 
-            //    Vector2D direction = segment2Ds[i].Direction;
+                Segment2D segment2D_Vector_Previous = new Segment2D(segment2D_Previous.End, Vector2D_Previous);
+                Segment2D segment2D_Vector_Next = new Segment2D(segment2D_Next.Start, Vector2D_Next);
 
-            //    Segment2D segment2D_1 = boundingBox2D.GetSegment(segment2D.Start, direction);
-                
-            //    direction.Negate();
-            //    Segment2D segment2D_2 = boundingBox2D.GetSegment(segment2D.End, direction);
+                Point2D point2D_Intersection_Previous = segment2D_Offset.Intersection(segment2D_Vector_Previous, false);
+                if (point2D_Intersection_Previous == null)
+                    continue;
 
-            //    segment2Ds[i] = new Segment2D(segment2D_1.Start, segment2D_2.End);
-            //}
+                Point2D point2D_Intersection_Next = segment2D_Offset.Intersection(segment2D_Vector_Next, false);
+                if (point2D_Intersection_Next == null)
+                    continue;
 
-            //segment2Ds = Modify.Split(segment2Ds);
+                Segment2D segment2D_Offset_New = new Segment2D(point2D_Intersection_Previous, point2D_Intersection_Next);
 
-            //CurveGraph2D curveGraph2D = null;
+                if (!segment2D_Offset_New.Direction.AlmostEqual(segment2D.Direction))
+                    continue;
 
-            //curveGraph2D = new CurveGraph2D(segment2Ds);
-            //List<PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds();
-            //if (polycurveLoop2Ds == null)
-            //    return null;
+                segments2Ds.Add(new Segment2D[] { segment2D_Offset_New, new Segment2D(segment2D.Start, point2D_Intersection_Previous), new Segment2D(segment2D.Start, point2D_Intersection_Previous) });
+            }
 
-            //List<Polygon2D> polygon2Ds = new List<Polygon2D>();
-            //foreach(PolycurveLoop2D polycurveLoop2D in polycurveLoop2Ds)
-            //{
-            //    Polygon2D polygon2D = polycurveLoop2D.ToPolygon2D();
-            //    if (polygon2D.Distance(this) > tolerance)
-            //        continue;
-
-            //    polygon2Ds.Add(polygon2D);
-            //}
-
-            //if (polygon2Ds == null || polygon2Ds.Count == 0)
-            //    return null;
-
-            //curveGraph2D = new CurveGraph2D(polygon2Ds);
-            //List<PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds_External();
+            return new Polygon2D(segments2Ds.ConvertAll(x => x[0].Start));
         }
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
