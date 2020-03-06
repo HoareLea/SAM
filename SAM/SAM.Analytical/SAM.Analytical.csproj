@@ -64,6 +64,7 @@
     <Compile Include="Query\IsValid.cs" />
     <Compile Include="Query\MinElevation.cs" />
     <Compile Include="Query\MaxElevation.cs" />
+    <Compile Include="Query\ApertureType.cs" />
     <Compile Include="Query\PanelType.cs" />
     <Compile Include="Classes\Space.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
