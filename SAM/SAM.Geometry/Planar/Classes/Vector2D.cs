@@ -75,7 +75,7 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                return Math.Sqrt((coordinates[0] * coordinates[0]) + (coordinates[1] * coordinates[1]));
+                return System.Math.Sqrt((coordinates[0] * coordinates[0]) + (coordinates[1] * coordinates[1]));
             }
             set
             {
@@ -102,7 +102,7 @@ namespace SAM.Geometry.Planar
 
         public bool AlmostEqual(Vector2D vector2D, double tolerance = Tolerance.MicroDistance)
         {
-            return ((Math.Abs(coordinates[0] - vector2D.coordinates[0]) <= tolerance) && (Math.Abs(coordinates[1] - vector2D.coordinates[1]) <= tolerance));
+            return ((System.Math.Abs(coordinates[0] - vector2D.coordinates[0]) <= tolerance) && (System.Math.Abs(coordinates[1] - vector2D.coordinates[1]) <= tolerance));
         }
 
         public override bool Equals(object obj)
@@ -158,7 +158,7 @@ namespace SAM.Geometry.Planar
 
         public double Angle(Vector2D vector2D)
         {
-            double result = Math.Acos(DotProduct(vector2D) / (Length * vector2D.Length));
+            double result = System.Math.Acos(DotProduct(vector2D) / (Length * vector2D.Length));
             if (double.IsNaN(result))
                 result = 0;
 
@@ -167,11 +167,11 @@ namespace SAM.Geometry.Planar
 
         public double SmallestAngle(Vector2D vector2D)
         {
-            double value = Math.Abs(Angle(vector2D));
+            double value = System.Math.Abs(Angle(vector2D));
             if (value == 0)
                 return value;
 
-            return Math.PI - value;
+            return System.Math.PI - value;
         }
 
         public double DotProduct(Vector2D vector2D)

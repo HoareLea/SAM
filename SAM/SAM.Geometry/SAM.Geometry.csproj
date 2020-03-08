@@ -73,8 +73,10 @@
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
     <Compile Include="Planar\Modify\OrientByEnds.cs" />
     <Compile Include="Planar\Modify\Split.cs" />
+    <Compile Include="Planar\Modify\RemoveAngle.cs" />
     <Compile Include="Planar\Query\BottomLeft.cs" />
     <Compile Include="Planar\Query\Intersections.cs" />
+    <Compile Include="Planar\Query\Angle.cs" />
     <Compile Include="Planar\Query\On.cs" />
     <Compile Include="Planar\Query\MidVector2D.cs" />
     <Compile Include="Planar\Query\Distance.cs" />
@@ -129,6 +131,10 @@
     <ProjectReference Include="..\SAM.Core\SAM.Core.csproj">
       <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
       <Name>SAM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Math\SAM.Math.csproj">
+      <Project>{255e428d-6969-4542-9846-67b7de87501b}</Project>
+      <Name>SAM.Math</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

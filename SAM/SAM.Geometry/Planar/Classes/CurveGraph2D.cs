@@ -170,8 +170,8 @@ namespace SAM.Geometry.Planar
                 if (index_Start == index_End)
                     continue;
 
-                int Max = Math.Max(index_Start, index_End);
-                int Min = Math.Min(index_Start, index_End);
+                int Max = System.Math.Max(index_Start, index_End);
+                int Min = System.Math.Min(index_Start, index_End);
 
                 this.curves[Max][Min] = tuple.Item3;
             }
@@ -209,7 +209,7 @@ namespace SAM.Geometry.Planar
             if (index_1 < 0 || index_2 < 0 || index_1 >= points.Length || index_2 >= points.Length)
                 return false;
 
-            curves[Math.Max(index_1, index_2)][Math.Min(index_1, index_2)] = null;
+            curves[System.Math.Max(index_1, index_2)][System.Math.Min(index_1, index_2)] = null;
             return true;
         }
 
@@ -356,12 +356,12 @@ namespace SAM.Geometry.Planar
                 if (i < 0 || j < 0)
                     return null;
 
-                int row = Math.Max(i, j);
+                int row = System.Math.Max(i, j);
 
                 if (curves.Length <= row)
                     return null;
 
-                int column = Math.Min(i, j);
+                int column = System.Math.Min(i, j);
 
                 if (curves[row].Length <= column)
                     return null;
@@ -386,7 +386,7 @@ namespace SAM.Geometry.Planar
                 if (index_2 == -1)
                     return null;
 
-                return curves[Math.Max(index_1, index_2)][Math.Min(index_1, index_2)];
+                return curves[System.Math.Max(index_1, index_2)][System.Math.Min(index_1, index_2)];
             }
         }
 
@@ -734,8 +734,8 @@ namespace SAM.Geometry.Planar
 
                         ICurve2D curve2D = Geometry.Create.ISAMGeometry<ICurve2D>(jObject_Curve.Value<JObject>("Curve"));
 
-                        int min = Math.Min(index_1, index_2);
-                        int max = Math.Max(index_1, index_2);
+                        int min = System.Math.Min(index_1, index_2);
+                        int max = System.Math.Max(index_1, index_2);
                         curves[max][min] = curve2D;
                     }
                 }

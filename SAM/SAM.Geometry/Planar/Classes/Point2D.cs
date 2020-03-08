@@ -119,19 +119,19 @@ namespace SAM.Geometry.Planar
 
         public string ToString(int decimals)
         {
-            return string.Format("Point2D(X={0},Y={1})", Math.Round(coordinates[0], decimals), Math.Round(coordinates[1], decimals));
+            return string.Format("Point2D(X={0},Y={1})", System.Math.Round(coordinates[0], decimals), System.Math.Round(coordinates[1], decimals));
         }
 
         public bool AlmostEqual(Point2D point2D, double tolerance = Tolerance.MicroDistance)
         {
-            return ((Math.Abs(coordinates[0] - point2D.coordinates[0]) < tolerance) && (Math.Abs(coordinates[1] - point2D.coordinates[1]) < tolerance));
+            return ((System.Math.Abs(coordinates[0] - point2D.coordinates[0]) < tolerance) && (System.Math.Abs(coordinates[1] - point2D.coordinates[1]) < tolerance));
         }
         
         public bool AlmostOnSegment(Segment2D segment2D, double tolerance = Tolerance.MicroDistance)
         {
             Segment2D segment2D_temp = new Segment2D(new Point2D(0, 0), new Point2D(segment2D[1].X - segment2D[0].X, segment2D[1].Y - segment2D[0].Y));
             Point2D aPoint2D = new Point2D(coordinates[0] - segment2D[0].X, coordinates[1] - segment2D[0].Y);
-            return Math.Abs(segment2D_temp[1].X * aPoint2D.Y - aPoint2D.X * segment2D_temp[1].Y) < tolerance;
+            return System.Math.Abs(segment2D_temp[1].X * aPoint2D.Y - aPoint2D.X * segment2D_temp[1].Y) < tolerance;
         }
 
         public bool IsValid
@@ -157,8 +157,8 @@ namespace SAM.Geometry.Planar
 
         public void Round(int decimals)
         {
-            coordinates[0] = Math.Round(coordinates[0], decimals);
-            coordinates[1] = Math.Round(coordinates[1], decimals);
+            coordinates[0] = System.Math.Round(coordinates[0], decimals);
+            coordinates[1] = System.Math.Round(coordinates[1], decimals);
         }
 
         public void Mirror(Point2D point2D)
@@ -270,7 +270,7 @@ namespace SAM.Geometry.Planar
 
         public static Point2D Max(Point2D point2D_1, Point2D point2D_2)
         {
-            return new Point2D(Math.Max(point2D_1.X, point2D_2.X), Math.Max(point2D_1.Y, point2D_2.Y));
+            return new Point2D(System.Math.Max(point2D_1.X, point2D_2.X), System.Math.Max(point2D_1.Y, point2D_2.Y));
         }
 
         public static Point2D Max(IEnumerable<Point2D> point2Ds)
@@ -293,7 +293,7 @@ namespace SAM.Geometry.Planar
 
         public static Point2D Min(Point2D point2D_1, Point2D point2D_2)
         {
-            return new Point2D(Math.Min(point2D_1.X, point2D_2.X), Math.Min(point2D_1.Y, point2D_2.Y));
+            return new Point2D(System.Math.Min(point2D_1.X, point2D_2.X), System.Math.Min(point2D_1.Y, point2D_2.Y));
         }
 
         public static Point2D Min(IEnumerable<Point2D> point2Ds)
@@ -573,7 +573,7 @@ namespace SAM.Geometry.Planar
             if (!point2DList[point2DList.Count - 1].Equals(point2DList[0]))
                 point2DList.Add(point2DList[0]);
 
-            return Math.Abs(point2Ds.Take(point2DList.Count - 1).Select((p, i) => (point2DList[i + 1].X - p.X) * (point2DList[i + 1].Y + p.Y)).Sum() / 2);
+            return System.Math.Abs(point2Ds.Take(point2DList.Count - 1).Select((p, i) => (point2DList[i + 1].X - p.X) * (point2DList[i + 1].Y + p.Y)).Sum() / 2);
         }
 
         public static bool Contains(IEnumerable<Point2D> point2Ds, Point2D point2D, double tolerance = 0)

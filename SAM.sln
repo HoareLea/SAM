@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Units", "SAM\SAM.Units\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Architectural.Grasshopper", "Grasshopper\SAM.Architectural.Grasshopper\SAM.Architectural.Grasshopper.csproj", "{D8B37ABA-A2F9-4EB2-9BC6-717BB11F5F47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Math", "SAM\SAM.Math\SAM.Math.csproj", "{255E428D-6969-4542-9846-67B7DE87501B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{D8B37ABA-A2F9-4EB2-9BC6-717BB11F5F47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8B37ABA-A2F9-4EB2-9BC6-717BB11F5F47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8B37ABA-A2F9-4EB2-9BC6-717BB11F5F47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{255E428D-6969-4542-9846-67B7DE87501B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{255E428D-6969-4542-9846-67B7DE87501B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{255E428D-6969-4542-9846-67B7DE87501B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{255E428D-6969-4542-9846-67B7DE87501B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{EA20D57F-BB3E-447A-80A2-14C04BAA665F} = {B365D5A7-F4F1-4C45-9565-5F6CFC1134A4}
 		{CCE71A0C-1303-4330-AB5E-44998C94F802} = {4FDEDAD6-FCEC-4426-9A3B-086BF3C99CC0}
 		{D8B37ABA-A2F9-4EB2-9BC6-717BB11F5F47} = {B365D5A7-F4F1-4C45-9565-5F6CFC1134A4}
+		{255E428D-6969-4542-9846-67B7DE87501B} = {4FDEDAD6-FCEC-4426-9A3B-086BF3C99CC0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E0308FF-C8D5-4700-951A-859CB9D4FD09}

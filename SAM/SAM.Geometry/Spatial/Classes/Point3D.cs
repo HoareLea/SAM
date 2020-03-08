@@ -113,12 +113,12 @@ namespace SAM.Geometry.Spatial
             Vector3D aVector_1 = new Vector3D(this, point3D_1);
             Vector3D aVector_2 = new Vector3D(this, point3D_2);
 
-            return Math.Acos(aVector_1.DotProduct(aVector_2) / (aVector_1.Length * aVector_2.Length));
+            return System.Math.Acos(aVector_1.DotProduct(aVector_2) / (aVector_1.Length * aVector_2.Length));
         }
 
         public double SmallestAngle(Point3D point3D_1, Point3D point3D_2)
         {
-            return Math.PI - Math.Abs(Angle(point3D_1, point3D_2));
+            return System.Math.PI - System.Math.Abs(Angle(point3D_1, point3D_2));
         }
 
         public void Move(Vector3D vector3D)
@@ -381,7 +381,7 @@ namespace SAM.Geometry.Spatial
 
         public static Point3D Max(Point3D point3D_1, Point3D point3D_2)
         {
-            return new Point3D(Math.Max(point3D_1.X, point3D_2.X), Math.Max(point3D_1.Y, point3D_2.Y), Math.Max(point3D_1.Z, point3D_2.Z));
+            return new Point3D(System.Math.Max(point3D_1.X, point3D_2.X), System.Math.Max(point3D_1.Y, point3D_2.Y), System.Math.Max(point3D_1.Z, point3D_2.Z));
         }
 
         public static Point3D Max(IEnumerable<Point3D> point3Ds)
@@ -407,7 +407,7 @@ namespace SAM.Geometry.Spatial
 
         public static Point3D Min(Point3D point3D_1, Point3D point3D_2)
         {
-            return new Point3D(Math.Min(point3D_1.X, point3D_2.X), Math.Min(point3D_1.Y, point3D_2.Y), Math.Min(point3D_1.Z, point3D_2.Z));
+            return new Point3D(System.Math.Min(point3D_1.X, point3D_2.X), System.Math.Min(point3D_1.Y, point3D_2.Y), System.Math.Min(point3D_1.Z, point3D_2.Z));
         }
 
         public static Point3D Min(IEnumerable<Point3D> point3Ds)

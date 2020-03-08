@@ -57,7 +57,7 @@ namespace SAM.Geometry.Planar
 
         public double GetArea()
         {
-            return Math.PI * radious * radious;
+            return System.Math.PI * radious * radious;
         }
 
         public double Diameter
@@ -99,7 +99,7 @@ namespace SAM.Geometry.Planar
 
         public double GetPerimeter()
         {
-            return 2 * Math.PI * radious;
+            return 2 * System.Math.PI * radious;
         }
 
         public override ISAMGeometry Clone()
@@ -141,7 +141,7 @@ namespace SAM.Geometry.Planar
 
         public bool On(Point2D point2D, double tolerance = 1E-09)
         {
-            return Math.Abs(center.Distance(point2D) - radious) < tolerance;
+            return System.Math.Abs(center.Distance(point2D) - radious) < tolerance;
         }
     }
 }

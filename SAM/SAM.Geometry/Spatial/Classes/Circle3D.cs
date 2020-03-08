@@ -56,7 +56,7 @@ namespace SAM.Geometry.Spatial
 
         public double GetArea()
         {
-            return Math.PI * radious * radious;
+            return System.Math.PI * radious * radious;
         }
 
         public double Diameter
@@ -88,7 +88,7 @@ namespace SAM.Geometry.Spatial
 
         public double GetPerimeter()
         {
-            return 2 * Math.PI * radious;
+            return 2 * System.Math.PI * radious;
         }
 
         public Plane GetPlane()

@@ -89,7 +89,7 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                return Math.Sqrt((coordinates[0] * coordinates[0]) + (coordinates[1] * coordinates[1]) + (coordinates[2] * coordinates[2]));
+                return System.Math.Sqrt((coordinates[0] * coordinates[0]) + (coordinates[1] * coordinates[1]) + (coordinates[2] * coordinates[2]));
             }
             set
             {
@@ -189,16 +189,16 @@ namespace SAM.Geometry.Spatial
 
         public double Angle(Vector3D vector3D)
         {
-            return Math.Acos(DotProduct(vector3D) / (Length * vector3D.Length));
+            return System.Math.Acos(DotProduct(vector3D) / (Length * vector3D.Length));
         }
 
         public double SmallestAngle(Vector3D vector3D)
         {
-            double value = Math.Abs(Angle(vector3D));
+            double value = System.Math.Abs(Angle(vector3D));
             if (value == 0)
                 return value;
 
-            return Math.PI - value;
+            return System.Math.PI - value;
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
