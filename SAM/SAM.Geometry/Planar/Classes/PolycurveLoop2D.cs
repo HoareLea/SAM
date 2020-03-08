@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+
 using Newtonsoft.Json.Linq;
 
 
@@ -98,6 +100,18 @@ namespace SAM.Geometry.Planar
                 return null;
 
             return jObject;
+        }
+
+        public bool On(Point2D point2D, double tolerance = 1E-09)
+        {
+            List<ICurve2D> curves = GetCurves();
+            if (curves == null)
+                return false;
+
+            if (!curves.TrueForAll(x => x is Segment2D))
+                throw new NotImplementedException();
+
+            return Query.On(curves.Cast<Segment2D>(), point2D, tolerance);
         }
     }
 }

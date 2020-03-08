@@ -78,6 +78,11 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
 
+        public Point2D Closest(Point2D point2D)
+        {
+            return Query.Closest(points, point2D);
+        }
+
         public void Reverse()
         {
             points.Reverse();
@@ -176,6 +181,11 @@ namespace SAM.Geometry.Planar
         public Point2D GetInternalPoint2D()
         {
             return Point2D.GetInternalPoint2D(points);
+        }
+
+        public bool On(Point2D point2D, double tolerance = 1E-09)
+        {
+            return Query.On(GetSegments(), point2D, tolerance);
         }
     }
 }

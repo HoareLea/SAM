@@ -37,10 +37,13 @@ namespace SAM.Analytical
             if (face3D_Aperture == null)
                 return false;
 
-            //if (!face3D_Panel.Inside(plane_Aperture.Origin, Geometry.Tolerance.Distance))
-            //    return false;
+            if (face3D_Panel.On(plane_Aperture.Origin, Geometry.Tolerance.Distance))
+                return true;
 
-            return true;
+            if (face3D_Panel.Inside(plane_Aperture.Origin, Geometry.Tolerance.Distance))
+                return true;
+
+            return false;
         }
 
         public static bool IsValid(this Panel panel, Aperture aperture, double maxDistance)

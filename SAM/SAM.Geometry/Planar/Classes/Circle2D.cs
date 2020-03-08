@@ -138,5 +138,10 @@ namespace SAM.Geometry.Planar
         {
             return new Point2D(center);
         }
+
+        public bool On(Point2D point2D, double tolerance = 1E-09)
+        {
+            return Math.Abs(center.Distance(point2D) - radious) < tolerance;
+        }
     }
 }

@@ -159,5 +159,10 @@ namespace SAM.Geometry.Planar
         {
             return Query.Distance(this, segmentable2D);
         }
+
+        public bool On(Point2D point2D, double tolerance = 1E-09)
+        {
+            return Query.On(GetSegments(), point2D, tolerance);
+        }
     }
 }

@@ -197,6 +197,11 @@ namespace SAM.Geometry.Planar
             return (point2D.X > min.X + tolerance && point2D.X < max.X - tolerance && point2D.Y > min.Y + tolerance && point2D.Y < max.Y - tolerance);
         }
 
+        public bool On(Point2D point2D, double tolerance = 1E-09)
+        {
+            return Query.On(GetSegments(), point2D, tolerance);
+        }
+
         public Segment2D GetSegment(Point2D point2D, Vector2D direction)
         {
             if (point2D == null || direction == null)

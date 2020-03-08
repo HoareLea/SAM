@@ -56,7 +56,7 @@ namespace SAM.Geometry
             return jObject;
         }
 
-        public Planar.IClosed2D ExternalEdge
+        public IClosed2D ExternalEdge
         {
             get
             {
@@ -64,7 +64,7 @@ namespace SAM.Geometry
             }
         }
 
-        public List<Planar.IClosed2D> InternalEdges
+        public List<IClosed2D> InternalEdges
         {
             get
             {

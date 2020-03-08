@@ -219,6 +219,9 @@ namespace SAM.Geometry.Planar
 
         public double Distance(Segment2D segment2D)
         {
+            if (segment2D == null)
+                return double.NaN;
+            
             Point2D point2D_Closest_1 = null;
             Point2D point2D_Closest_2 = null;
 
@@ -323,6 +326,11 @@ namespace SAM.Geometry.Planar
         public List<Point2D> Intersections(ISegmentable2D segmentable2D)
         {
             return Intersections(segmentable2D?.GetSegments());
+        }
+
+        public bool On(Point2D point2D, double tolerance = Tolerance.MicroDistance)
+        {
+            return Distance(point2D) < tolerance;
         }
 
         /// <summary>

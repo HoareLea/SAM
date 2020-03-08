@@ -7,6 +7,8 @@
 
         bool Inside(Point2D point2D);
 
+        bool On(Point2D point2D, double tolerance = Tolerance.MicroDistance);
+
         Point2D GetInternalPoint2D();
 
         double GetArea();

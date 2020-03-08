@@ -178,6 +178,8 @@ namespace SAM.Analytical
                     Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
                     if (closed2D_Aperture is Geometry.Planar.ISegmentable2D)
                     {
+                        //TODO: Skip process if aperture inside panel
+                        
                         List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
                         Geometry.Planar.CurveGraph2D curveGraph2D = new Geometry.Planar.CurveGraph2D(segment2Ds);
                         List<Geometry.Planar.PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds();
@@ -196,6 +198,8 @@ namespace SAM.Analytical
                     }
                 }
             }
+
+            //TODO: Update geometry (closedPlanar3D_Projected) to set origin to BottomLeft corner
 
             Aperture aperture = new Aperture(apertureConstruction, closedPlanar3D_Projected);
             if (!Query.IsValid(this, aperture))

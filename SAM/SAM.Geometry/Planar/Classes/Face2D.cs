@@ -35,6 +35,22 @@ namespace SAM.Geometry.Planar
             throw new System.NotImplementedException();
         }
 
+        public bool On(Point2D point2D, double tolerance = Tolerance.MicroDistance)
+        {
+            if (point2D == null)
+                return false;
+            
+            List<IClosed2D> closed2Ds = Edges;
+            if (closed2Ds == null)
+                return false;
+
+            foreach(IClosed2D closed2D in closed2Ds)
+                if (closed2D.On(point2D, tolerance))
+                    return true;
+
+            return false;
+        }
+
         public BoundingBox2D GetBoundingBox(double offset = 0)
         {
             return externalEdge.GetBoundingBox(offset);
