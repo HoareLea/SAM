@@ -136,7 +136,7 @@ namespace SAM.Geometry.Planar
 
             double offset = offsets.Last();
 
-            List<Segment2D[]> segments2Ds = new List<Segment2D[]>();
+            List<Segment2D> segments2Ds = new List<Segment2D>();
             for (int i = 1; i < segment2Ds.Count - 1; i++)
             {
                 if (i < count)
@@ -164,13 +164,14 @@ namespace SAM.Geometry.Planar
 
                 Segment2D segment2D_Offset_New = new Segment2D(point2D_Intersection_Previous, point2D_Intersection_Next);
 
-                if (!segment2D_Offset_New.Direction.AlmostEqual(segment2D.Direction))
-                    continue;
-
-                segments2Ds.Add(new Segment2D[] { segment2D_Offset_New, new Segment2D(segment2D.Start, point2D_Intersection_Previous), new Segment2D(segment2D.Start, point2D_Intersection_Previous) });
+                //if (!segment2D_Offset_New.Direction.AlmostEqual(segment2D.Direction))
+                //    continue;
+                //segments2Ds.Add(new Segment2D[] { segment2D_Offset_New, new Segment2D(segment2D.Start, point2D_Intersection_Previous), new Segment2D(segment2D.Start, point2D_Intersection_Previous) });
+                
+                segment2Ds.Add(segment2D_Offset_New);
             }
 
-            return new Polygon2D(segments2Ds.ConvertAll(x => x[0].Start));
+            return new Polygon2D(segments2Ds.ConvertAll(x => x.Start));
         }
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
@@ -186,6 +187,21 @@ namespace SAM.Geometry.Planar
         public bool On(Point2D point2D, double tolerance = 1E-09)
         {
             return Query.On(GetSegments(), point2D, tolerance);
+        }
+
+        public int IndexOf(Point2D point2D)
+        {
+            return points.IndexOf(point2D);
+        }
+
+        public bool Reorder(int startIndex)
+        {
+            List<Point2D> points_New = Core.Modify.Reorder(points, startIndex);
+            if (points_New == null)
+                return false;
+
+            points = points_New;
+            return true;
         }
     }
 }

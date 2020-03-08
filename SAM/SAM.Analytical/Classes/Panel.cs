@@ -190,7 +190,14 @@ namespace SAM.Analytical
                                 Geometry.Planar.Point2D point2D = polycurveLoop2D.GetInternalPoint2D();
                                 if (closed2D_Aperture.Inside(point2D) && closed2D.Inside(point2D))
                                 {
-                                    closedPlanar3D_Projected = plane.Convert(polycurveLoop2D.ToPolygon2D());
+                                    Geometry.Planar.Polygon2D polygon2D = polycurveLoop2D.ToPolygon2D();
+                                    Geometry.Planar.Point2D point2D_BottomLeft = Geometry.Planar.Query.BottomLeft(polygon2D);
+                                    if (point2D_BottomLeft == null)
+                                        continue;
+
+                                    polygon2D.Reorder(polygon2D.IndexOf(point2D_BottomLeft));
+
+                                    closedPlanar3D_Projected = plane.Convert(polygon2D);
                                     break;
                                 }
                             }
