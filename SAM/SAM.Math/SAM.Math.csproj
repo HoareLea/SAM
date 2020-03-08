@@ -50,6 +50,7 @@
     <Compile Include="Query\Arcsin.cs" />
     <Compile Include="Query\Cosecant.cs" />
     <Compile Include="Query\Secant.cs" />
+    <Compile Include="Query\TODO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

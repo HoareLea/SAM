@@ -28,10 +28,30 @@ namespace SAM.Geometry.Planar
                 Point2D point2D = point2Ds[i];
                 Point2D point2D_Next = point2Ds[i + 1];
 
-
+                List<Point2D> point2Ds_Temp = RemoveAngle(point2D_Previous, point2D, point2D_Next, length, minAngle, tolerance);
+                if(point2Ds_Temp == null)
+                {
+                    point2Ds_New.Add(point2D);
+                }
+                else if(point2Ds_Temp.Count == 3)
+                {
+                    point2Ds_New.Add(point2D);
+                }
+                else if(point2Ds_Temp.Count == 4)
+                {
+                    point2Ds_New.Add(point2Ds_Temp[1]);
+                    point2Ds_New.Add(point2Ds_Temp[2]);
+                }
+                else
+                {
+                    point2Ds_New.Add(point2D);
+                }
             }
 
-            throw new NotImplementedException();
+            if (point2Ds_New == null || point2Ds_New.Count < 3)
+                return null;
+
+            return new Polygon2D(point2Ds_New);
         }
 
         public static List<Point2D> RemoveAngle(Point2D point2D_Previous, Point2D point2D, Point2D point2D_Next, double length, double minAngle = 1.5708, double tolerance = Tolerance.Angle)
@@ -56,7 +76,7 @@ namespace SAM.Geometry.Planar
             vector2D_b = vector2D_b.Unit * b;
             vector2D_c = vector2D_c.Unit * c;
 
-            return new List<Point2D>() { point2D_Previous, point2D.GetMoved(vector2D_b), point2D.GetMoved(vector2D_c), point2D_Previous};
+            return new List<Point2D>() { point2D_Previous, point2D.GetMoved(vector2D_b), point2D.GetMoved(vector2D_c), point2D_Next};
         }
     }
 }
