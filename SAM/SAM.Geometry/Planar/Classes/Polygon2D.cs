@@ -112,12 +112,12 @@ namespace SAM.Geometry.Planar
             return jObject;
         }
 
-        public Polygon2D Offset(double offset, Orientation orientation)
+        public List<Polygon2D> Offset(double offset, Orientation orientation)
         {
             return Offset(new double[] { offset }, orientation);
         }
 
-        public Polygon2D Offset(IEnumerable<double> offsets, Orientation orientation)
+        public List<Polygon2D> Offset(IEnumerable<double> offsets, Orientation orientation)
         {
             if (points == null || points.Count < 3 || offsets == null)
                 return null;
@@ -125,7 +125,7 @@ namespace SAM.Geometry.Planar
             int count = offsets.Count();
 
             if (count == 0)
-                return new Polygon2D(this);
+                return new List<Polygon2D>() { new Polygon2D(this)};
 
             List<Segment2D> segment2Ds = GetSegments();
             if (segment2Ds == null || segment2Ds.Count() < 3)
@@ -136,7 +136,7 @@ namespace SAM.Geometry.Planar
 
             double offset = offsets.Last();
 
-            List<Segment2D> segments2Ds = new List<Segment2D>();
+            Dictionary<Segment2D, List<Polygon2D>> segment2Ds_Offset = new Dictionary<Segment2D, List<Polygon2D>>();
             for (int i = 1; i < segment2Ds.Count - 1; i++)
             {
                 if (i < count)
@@ -164,14 +164,82 @@ namespace SAM.Geometry.Planar
 
                 Segment2D segment2D_Offset_New = new Segment2D(point2D_Intersection_Previous, point2D_Intersection_Next);
 
+                Point2D point2D_Intersection = segment2D_Vector_Previous.Intersection(segment2D_Vector_Next);
+
+                List<Polygon2D> polygon2Ds = new List<Polygon2D>();
+                if (point2D_Intersection == null)
+                {
+                    polygon2Ds.Add(new Polygon2D(new Point2D[] { segment2D.Start, segment2D.End, segment2D_Offset_New.Start, segment2D_Offset_New.End }));
+                }
+                else
+                {
+                    polygon2Ds.Add(new Polygon2D(new Point2D[] { segment2D.Start, segment2D.End, point2D_Intersection }));
+                    polygon2Ds.Add(new Polygon2D(new Point2D[] { segment2D_Offset_New.Start, segment2D_Offset_New.End, point2D_Intersection }));
+                }
+
                 //if (!segment2D_Offset_New.Direction.AlmostEqual(segment2D.Direction))
                 //    continue;
                 //segments2Ds.Add(new Segment2D[] { segment2D_Offset_New, new Segment2D(segment2D.Start, point2D_Intersection_Previous), new Segment2D(segment2D.Start, point2D_Intersection_Previous) });
-                
-                segment2Ds.Add(segment2D_Offset_New);
+
+                segment2Ds_Offset[segment2D_Offset_New] = polygon2Ds;
             }
 
-            return new Polygon2D(segments2Ds.ConvertAll(x => x.Start));
+            List<Segment2D> segment2Ds_Split = Modify.Split(segment2Ds_Offset.Keys, Tolerance.MicroDistance);
+
+            List<Polygon2D> polygon2Ds_All = new List<Polygon2D>();
+            foreach(KeyValuePair<Segment2D, List<Polygon2D>> keyValuePair in segment2Ds_Offset)
+                polygon2Ds_All.AddRange(keyValuePair.Value);
+
+            List<int> indexes = new List<int>();
+            for(int i=0; i < segment2Ds_Split.Count; i++)
+            {
+                Segment2D segment2D = segment2Ds_Split[i];
+
+                Point2D point2D_1 = segment2D[0];
+                Point2D point2D_2 = segment2D[1];
+
+                foreach (Polygon2D polygon2D in polygon2Ds_All)
+                {
+                    List<Point2D> point2Ds_Intersections = polygon2D.Intersections(segment2D);
+                    if(point2Ds_Intersections != null)
+                    {
+                        point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_1) < Tolerance.MicroDistance);
+                        point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_2) < Tolerance.MicroDistance);
+
+                        if (point2Ds_Intersections.Count > 0)
+                        {
+                            indexes.Add(i);
+                            break;
+                        }
+
+                    }
+                    
+                    if(polygon2D.Inside(point2D_1) && !polygon2D.On(point2D_1))
+                    {
+                        indexes.Add(i);
+                        break;
+                    }
+
+                    if (polygon2D.Inside(point2D_1) && !polygon2D.On(point2D_1))
+                    {
+                        indexes.Add(i);
+                        break;
+                    }
+                }
+            }
+
+            if(indexes.Count > 0)
+            {
+                indexes.Reverse();
+                indexes.ForEach(x => segment2Ds_Split.RemoveAt(x));
+            }
+
+            CurveGraph2D curveGraph2D = new CurveGraph2D(segment2Ds_Split);
+            List<PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds();
+            if (polycurveLoop2Ds == null)
+                return null;
+
+            return polycurveLoop2Ds.ConvertAll(x => x.ToPolygon2D());
         }
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
@@ -182,6 +250,11 @@ namespace SAM.Geometry.Planar
         public Point2D GetInternalPoint2D()
         {
             return Point2D.GetInternalPoint2D(points);
+        }
+
+        public List<Point2D> Intersections(ISegmentable2D segmentable2D)
+        {
+            return Query.Intersections(this, segmentable2D);
         }
 
         public bool On(Point2D point2D, double tolerance = 1E-09)

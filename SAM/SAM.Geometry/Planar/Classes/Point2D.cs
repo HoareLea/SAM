@@ -811,7 +811,13 @@ namespace SAM.Geometry.Planar
 
         public static bool operator ==(Point2D point2D_1, Point2D point2D_2)
         {
-            return point2D_1?.coordinates[0] == point2D_2?.coordinates[0] && point2D_1?.coordinates[1] == point2D_2?.coordinates[1];
+            if (object.ReferenceEquals(point2D_1, null) && object.ReferenceEquals(point2D_2, null))
+                return true;
+
+            if (object.ReferenceEquals(point2D_1, null) || object.ReferenceEquals(point2D_2, null))
+                return false;
+
+            return point2D_1.coordinates[0] == point2D_2.coordinates[0] && point2D_1.coordinates[1] == point2D_2.coordinates[1];
         }
 
         public static bool operator !=(Point2D point2D_1, Point2D point2D_2)

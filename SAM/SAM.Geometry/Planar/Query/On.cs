@@ -23,7 +23,7 @@ namespace SAM.Geometry.Planar
                 if (segment2D == null)
                     continue;
                 
-                if (segment2Ds.On(point2D, tolerance))
+                if (segment2D.On(point2D, tolerance))
                     return true;
             }
 
