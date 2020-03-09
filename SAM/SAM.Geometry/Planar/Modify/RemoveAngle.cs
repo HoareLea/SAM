@@ -63,12 +63,12 @@ namespace SAM.Geometry.Planar
             if (angle - minAngle + tolerance >= 0)
                 return new List<Point2D>() { point2D_Previous, point2D, point2D_Next };
 
-            double b = Math.Query.Cotangent(angle) * length;
+            double b = Math.Query.Cotan(angle) * length;
             Vector2D vector2D_b = new Vector2D(point2D, point2D_Previous);
             if (vector2D_b.Length <= length)
                 return null;
 
-            double c = Math.Query.Cosecant(angle) * length;
+            double c = Math.Query.Cosec(angle) * length;
             Vector2D vector2D_c = new Vector2D(point2D, point2D_Next);
             if (vector2D_c.Length <= length)
                 return null;

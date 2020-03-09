@@ -194,9 +194,15 @@ namespace SAM.Analytical
                                 {
                                     Geometry.Planar.Polygon2D polygon2D = polycurveLoop2D.ToPolygon2D();
                                     Geometry.Planar.Point2D point2D_Centroid = Geometry.Planar.Point2D.GetCentroid(polygon2D.Points);
+                                    point2D_Centroid = new Geometry.Planar.Point2D(point2D_Centroid.X, polygon2D.GetBoundingBox().Min.Y);
 
                                     closedPlanar3D_Projected = plane.Convert(polygon2D);
                                     point3D_Location = plane.Convert(point2D_Centroid);
+
+                                    point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
+
+
+
                                     break;
                                 }
                             }
