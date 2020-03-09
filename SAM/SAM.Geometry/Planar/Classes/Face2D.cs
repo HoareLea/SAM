@@ -61,6 +61,11 @@ namespace SAM.Geometry.Planar
             throw new System.NotImplementedException();
         }
 
+        public Point2D GetCentroid()
+        {
+            return externalEdge.GetCentroid();
+        }
+
 
         public static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges)
         {

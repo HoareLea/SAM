@@ -11,6 +11,8 @@
 
         Point2D GetInternalPoint2D();
 
+        Point2D GetCentroid();
+
         double GetArea();
     }
 }

@@ -31,7 +31,14 @@ namespace SAM.Geometry.Spatial
         public Plane(Plane plane)
         {
             normal = new Vector3D(plane.normal);
-            origin = new Point3D(plane.Origin);
+            origin = new Point3D(plane.origin);
+            baseX = new Vector3D(plane.baseX);
+        }
+
+        public Plane(Plane plane, Point3D origin)
+        {
+            normal = new Vector3D(plane.normal);
+            this.origin = new Point3D(origin);
             baseX = new Vector3D(plane.baseX);
         }
 

@@ -170,45 +170,45 @@ namespace SAM.Analytical
             if (plane_ClosedPlanar3D_Projected.Origin.Distance(closedPlanar3D.GetPlane().Origin) > maxDistance)
                 return null;
 
-            if(trimGeometry)
+            Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
+            Point3D point3D_Location = plane.Convert(closed2D_Aperture.GetCentroid());
+
+            if (trimGeometry)
             {
-                Geometry.Planar.IClosed2D closed2D = plane.Convert(planarBoundary3D.GetFace3D().GetExternalEdge());
-                if(closed2D is Geometry.Planar.ISegmentable2D)
+                if (closed2D_Aperture is Geometry.Planar.ISegmentable2D)
                 {
-                    Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
-                    if (closed2D_Aperture is Geometry.Planar.ISegmentable2D)
+                    Geometry.Planar.IClosed2D closed2D = plane.Convert(planarBoundary3D.GetFace3D().GetExternalEdge());
+                    if (closed2D is Geometry.Planar.ISegmentable2D)
                     {
                         //TODO: Skip process if aperture inside panel
-                        
+
                         List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
                         Geometry.Planar.CurveGraph2D curveGraph2D = new Geometry.Planar.CurveGraph2D(segment2Ds);
                         List<Geometry.Planar.PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds();
-                        if(polycurveLoop2Ds != null && polycurveLoop2Ds.Count > 0)
+                        if (polycurveLoop2Ds != null && polycurveLoop2Ds.Count > 0)
                         {
-                            foreach(Geometry.Planar.PolycurveLoop2D polycurveLoop2D in polycurveLoop2Ds)
+                            foreach (Geometry.Planar.PolycurveLoop2D polycurveLoop2D in polycurveLoop2Ds)
                             {
                                 Geometry.Planar.Point2D point2D = polycurveLoop2D.GetInternalPoint2D();
                                 if (closed2D_Aperture.Inside(point2D) && closed2D.Inside(point2D))
                                 {
                                     Geometry.Planar.Polygon2D polygon2D = polycurveLoop2D.ToPolygon2D();
-                                    Geometry.Planar.Point2D point2D_BottomLeft = Geometry.Planar.Query.BottomLeft(polygon2D);
-                                    if (point2D_BottomLeft == null)
-                                        continue;
-
-                                    polygon2D.Reorder(polygon2D.IndexOf(point2D_BottomLeft));
+                                    Geometry.Planar.Point2D point2D_Centroid = Geometry.Planar.Point2D.GetCentroid(polygon2D.Points);
 
                                     closedPlanar3D_Projected = plane.Convert(polygon2D);
+                                    point3D_Location = plane.Convert(point2D_Centroid);
                                     break;
                                 }
                             }
                         }
+
                     }
                 }
             }
 
             //TODO: Update geometry (closedPlanar3D_Projected) to set origin to BottomLeft corner
 
-            Aperture aperture = new Aperture(apertureConstruction, closedPlanar3D_Projected);
+            Aperture aperture = new Aperture(apertureConstruction, closedPlanar3D_Projected, point3D_Location);
             if (!Query.IsValid(this, aperture))
                 return null;
 

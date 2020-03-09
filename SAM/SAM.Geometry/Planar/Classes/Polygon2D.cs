@@ -277,6 +277,11 @@ namespace SAM.Geometry.Planar
             return Point2D.GetInternalPoint2D(points);
         }
 
+        public Point2D GetCentroid()
+        {
+            return Point2D.GetCentroid(points);
+        }
+
         public List<Point2D> Intersections(ISegmentable2D segmentable2D)
         {
             return Query.Intersections(this, segmentable2D);

@@ -17,25 +17,50 @@ namespace SAM.Analytical
         public PlanarBoundary3D(IClosedPlanar3D closedPlanar3D)
             : base()
         {
-            if(closedPlanar3D is Face3D)
+            if (closedPlanar3D is Face3D)
             {
                 Face3D face3D = (Face3D)closedPlanar3D;
 
                 plane = face3D.GetPlane();
                 externalEdge2DLoop = new BoundaryEdge2DLoop(face3D.ExternalEdge);
 
-                List<Geometry.Planar.IClosed2D> internalBoundaries = face3D.InternalEdges;
-                if (internalBoundaries != null)
+                List<Geometry.Planar.IClosed2D> internalEdges = face3D.InternalEdges;
+                if (internalEdges != null)
                 {
                     internalEdge2DLoops = new List<BoundaryEdge2DLoop>();
-                    foreach (Geometry.Planar.IClosed2D closed2D in internalBoundaries)
-                        internalEdge2DLoops.Add(new BoundaryEdge2DLoop(closed2D));
+                    foreach (Geometry.Planar.IClosed2D internalEdge in internalEdges)
+                        internalEdge2DLoops.Add(new BoundaryEdge2DLoop(internalEdge));
                 }
             }
             else
             {
                 plane = closedPlanar3D.GetPlane();
                 externalEdge2DLoop = new BoundaryEdge2DLoop(closedPlanar3D);
+            }
+        }
+
+        public PlanarBoundary3D(IClosedPlanar3D closedPlanar3D, Point3D location)
+            : base()
+        {
+            plane = closedPlanar3D.GetPlane();
+            plane = new Plane(plane, plane.Project(location));
+
+            if (closedPlanar3D is Face3D)
+            {
+                Face3D face3D = (Face3D)closedPlanar3D;
+                externalEdge2DLoop = new BoundaryEdge2DLoop(plane.Convert(face3D.GetExternalEdge()));
+
+                List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdges();
+                if (internalEdges != null)
+                {
+                    internalEdge2DLoops = new List<BoundaryEdge2DLoop>();
+                    foreach (IClosedPlanar3D internalEdge in internalEdges)
+                        internalEdge2DLoops.Add(new BoundaryEdge2DLoop(plane.Convert(internalEdge)));
+                }
+            }
+            else
+            {
+                externalEdge2DLoop = new BoundaryEdge2DLoop(plane.Convert(closedPlanar3D));
             }
         }
 
