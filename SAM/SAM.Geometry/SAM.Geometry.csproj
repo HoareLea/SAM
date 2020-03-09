@@ -51,6 +51,8 @@
     <Compile Include="Create\ISAMGeometries.cs" />
     <Compile Include="Create\JArray.cs" />
     <Compile Include="Create\ISAMGeometry.cs" />
+    <Compile Include="Enums\Alignment.cs" />
+    <Compile Include="Enums\Corner.cs" />
     <Compile Include="Enums\Orientation.cs" />
     <Compile Include="Classes\SAMGeometry.cs" />
     <Compile Include="Interfaces\ISAMGeometry.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="Planar\Classes\CurveGraph2D.cs" />
     <Compile Include="Planar\Classes\Polycurve2D.cs" />
     <Compile Include="Planar\Classes\PolycurveLoop2D.cs" />
+    <Compile Include="Planar\Create\Segment2Ds.cs" />
     <Compile Include="Planar\Create\Face2Ds.cs" />
     <Compile Include="Planar\Create\ICurve2D.cs" />
     <Compile Include="Planar\Create\IClosed2D.cs" />
