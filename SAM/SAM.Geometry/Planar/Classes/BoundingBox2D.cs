@@ -265,7 +265,7 @@ namespace SAM.Geometry.Planar
             return Width * Height;
         }
 
-        public Point2D GetCenter()
+        public Point2D GetCentroid()
         {
             return Point2D.Mid(min, max);
         }
