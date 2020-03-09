@@ -183,20 +183,19 @@ namespace SAM.Analytical
                         //TODO: Skip process if aperture inside panel
 
                         List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
-                        Geometry.Planar.CurveGraph2D curveGraph2D = new Geometry.Planar.CurveGraph2D(segment2Ds);
-                        List<Geometry.Planar.PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds();
+                        Geometry.Planar.PointGraph2D pointGraph2D = new Geometry.Planar.PointGraph2D(segment2Ds);
+                        List<Geometry.Planar.Polygon2D> polycurveLoop2Ds = pointGraph2D.GetPolygon2Ds();
                         if (polycurveLoop2Ds != null && polycurveLoop2Ds.Count > 0)
                         {
-                            foreach (Geometry.Planar.PolycurveLoop2D polycurveLoop2D in polycurveLoop2Ds)
+                            foreach (Geometry.Planar.Polygon2D polygon2D_Temp in polycurveLoop2Ds)
                             {
-                                Geometry.Planar.Point2D point2D = polycurveLoop2D.GetInternalPoint2D();
+                                Geometry.Planar.Point2D point2D = polygon2D_Temp.GetInternalPoint2D();
                                 if (closed2D_Aperture.Inside(point2D) && closed2D.Inside(point2D))
                                 {
-                                    Geometry.Planar.Polygon2D polygon2D = polycurveLoop2D.ToPolygon2D();
-                                    Geometry.Planar.Point2D point2D_Centroid = Geometry.Planar.Point2D.GetCentroid(polygon2D.Points);
-                                    point2D_Centroid = new Geometry.Planar.Point2D(point2D_Centroid.X, polygon2D.GetBoundingBox().Min.Y);
+                                    Geometry.Planar.Point2D point2D_Centroid = Geometry.Planar.Point2D.GetCentroid(polygon2D_Temp.Points);
+                                    point2D_Centroid = new Geometry.Planar.Point2D(point2D_Centroid.X, polygon2D_Temp.GetBoundingBox().Min.Y);
 
-                                    closedPlanar3D_Projected = plane.Convert(polygon2D);
+                                    closedPlanar3D_Projected = plane.Convert(polygon2D_Temp);
                                     point3D_Location = plane.Convert(point2D_Centroid);
 
                                     point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);

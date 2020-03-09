@@ -59,7 +59,7 @@
     <Compile Include="Planar\Classes\BoundingBox2D.cs" />
     <Compile Include="Planar\Classes\Circle2D.cs" />
     <Compile Include="Planar\Classes\Face2D.cs" />
-    <Compile Include="Planar\Classes\CurveGraph2D.cs" />
+    <Compile Include="Planar\Classes\PointGraph2D.cs" />
     <Compile Include="Planar\Classes\Polycurve2D.cs" />
     <Compile Include="Planar\Classes\PolycurveLoop2D.cs" />
     <Compile Include="Planar\Create\Segment2Ds.cs" />

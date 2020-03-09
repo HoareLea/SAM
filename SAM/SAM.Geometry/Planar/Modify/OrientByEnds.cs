@@ -76,5 +76,37 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
+
+        public static bool OrientByEnds(List<ICurve2D> curves2D, bool close = false)
+        {
+            if (curves2D == null)
+                return false;
+
+            if (curves2D.Count == 0)
+                return false;
+
+            if (curves2D.Count == 1)
+                return false;
+
+            List<ICurve2D> curves2D_Temp = curves2D.ConvertAll(x => (ICurve2D)x.Clone());
+            if (close)
+                curves2D_Temp.Add(curves2D_Temp.First());
+
+            int count = curves2D_Temp.Count();
+
+            curves2D.Clear();
+            for (int i = 0; i < count - 1; i++)
+            {
+                int count_Result = curves2D.Count;
+
+                ICurve2D curve2D = (ICurve2D)curves2D_Temp[i].Clone();
+
+                if (count_Result > 0)
+                    Modify.OrientByEnds(curves2D[count_Result - 1], curve2D, count_Result == 1, true);
+
+                curves2D.Add(curves2D_Temp[i]);
+            }
+            return true;
+        }
     }
 }

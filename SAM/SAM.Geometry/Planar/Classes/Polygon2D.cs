@@ -234,12 +234,8 @@ namespace SAM.Geometry.Planar
                 indexes.ForEach(x => segment2Ds_Split.RemoveAt(x));
             }
 
-            CurveGraph2D curveGraph2D = new CurveGraph2D(segment2Ds_Split);
-            List<PolycurveLoop2D> polycurveLoop2Ds = curveGraph2D.GetPolycurveLoop2Ds();
-            if (polycurveLoop2Ds == null)
-                return null;
-
-            return polycurveLoop2Ds.ConvertAll(x => x.ToPolygon2D());
+            PointGraph2D pointGraph2D = new PointGraph2D(segment2Ds_Split);
+            return pointGraph2D.GetPolygon2Ds();
         }
 
         public List<Polygon2D> Offset(IEnumerable<double> offsets, bool inside)
