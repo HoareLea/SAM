@@ -487,7 +487,5 @@ namespace SAM.Geometry.Planar
         {
             return Query.Distance(this, segmentable2D);
         }
-
-
     }
 }

@@ -19,7 +19,7 @@ namespace SAM.Geometry.Planar
             point2Ds.Insert(0, point2Ds.Last());
             point2Ds.Add(point2Ds[1]);
 
-            int count = point2Ds.Count;
+            int count = point2Ds.Count;           
 
             List<Point2D> point2Ds_New = new List<Point2D>();
             for (int i = 1; i < count - 1; i++)

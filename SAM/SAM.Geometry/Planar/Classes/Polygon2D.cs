@@ -242,6 +242,31 @@ namespace SAM.Geometry.Planar
             return polycurveLoop2Ds.ConvertAll(x => x.ToPolygon2D());
         }
 
+        public List<Polygon2D> Offset(IEnumerable<double> offsets, bool inside)
+        {
+            if (offsets == null || offsets.Count() == 0)
+                return null;
+            
+            Orientation orientation = GetOrientation();
+            if(inside)
+            {
+                switch (orientation)
+                {
+                    case Orientation.Clockwise:
+                        orientation = Orientation.CounterClockwise;
+                        break;
+                    case Orientation.CounterClockwise:
+                        orientation = Orientation.Clockwise;
+                        break;
+                }
+            }
+
+            if (orientation == Orientation.Collinear || orientation == Orientation.Undefined)
+                return null;
+
+            return Offset(offsets, orientation);
+        }
+
         public BoundingBox2D GetBoundingBox(double offset = 0)
         {
            return new BoundingBox2D(points, offset);

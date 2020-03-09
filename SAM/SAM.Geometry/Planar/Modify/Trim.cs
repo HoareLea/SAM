@@ -21,7 +21,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static Segment2D Trim(Segment2D segment2D, double distance, bool trim_Start = true, bool trim_End = true)
+        public static Segment2D Trim(this Segment2D segment2D, double distance, bool trim_Start = true, bool trim_End = true)
         {
             if (segment2D == null)
                 return null;
@@ -47,6 +47,76 @@ namespace SAM.Geometry.Planar
             Segment2D result = new Segment2D(point2D_Start, point2D_End);
             if (!result.Direction.AlmostEqual(segment2D.Direction))
                 return null;
+
+            return result;
+        }
+
+        public static Segment2D Trim(this Segment2D segment2D, Polygon2D polygon2D, bool inside, double tolerance = Tolerance.MicroDistance)
+        {
+            if (segment2D == null || polygon2D == null)
+                return null;
+
+            Point2D point2D_Start = segment2D.Start;
+            Point2D point2D_End = segment2D.End;
+
+            Vector2D vector2D = segment2D.Direction;
+
+            bool inside_Start = polygon2D.Inside(point2D_Start);
+            bool inside_End = polygon2D.Inside(point2D_End);
+
+            if (inside_Start != inside_End)
+            {
+                Point2D point2D = point2D_Start;
+                if (inside_End == inside)
+                {
+                    point2D = point2D_End;
+                    vector2D.Negate();
+                }
+
+                List<Point2D> point2Ds = Query.Intersections(point2D, vector2D, polygon2D, tolerance);
+                if (point2Ds == null && point2Ds.Count == 0)
+                    return new Segment2D(point2D_Start, point2D_End);
+
+                Modify.SortByDistance(point2Ds, point2D);
+                if (inside_End == inside)
+                    point2D_End = point2Ds[0];
+                else
+                    point2D_Start = point2Ds[0];
+            }
+            else
+            {
+                List<Point2D> point2Ds;
+
+                point2Ds = Query.Intersections(point2D_End, vector2D, polygon2D, tolerance);
+                if (point2Ds != null && point2Ds.Count > 0)
+                {
+                    Modify.SortByDistance(point2Ds, point2D_End);
+                    point2D_End = point2Ds[0];
+                }
+
+                vector2D.Negate();
+                point2Ds = Query.Intersections(point2D_Start, vector2D, polygon2D, tolerance);
+                if (point2Ds != null && point2Ds.Count > 0)
+                {
+                    Modify.SortByDistance(point2Ds, point2D_Start);
+                    point2D_Start = point2Ds[0];
+                }
+            }
+
+            return new Segment2D(point2D_Start, point2D_End);
+        }
+
+        public static List<Segment2D> Trim(IEnumerable<Segment2D> segment2Ds, Polygon2D polygon2D, bool inside, double tolerance = Tolerance.MicroDistance)
+        {
+            if (segment2Ds == null || polygon2D == null)
+                return null;
+
+            List<Segment2D> result = new List<Segment2D>();
+            foreach (Segment2D segment2D_Temp in segment2Ds)
+            {
+                Segment2D segment2D = Trim(segment2D_Temp, polygon2D, inside, tolerance);
+                result.Add(segment2D);
+            }
 
             return result;
         }
