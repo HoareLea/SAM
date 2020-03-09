@@ -46,11 +46,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query\Cotangent.cs" />
+    <Compile Include="Query\Arccotan.cs" />
+    <Compile Include="Query\Arccosec.cs" />
+    <Compile Include="Query\Arcsec.cs" />
+    <Compile Include="Query\Arccos.cs" />
+    <Compile Include="Query\Cotan.cs" />
     <Compile Include="Query\Arcsin.cs" />
-    <Compile Include="Query\Cosecant.cs" />
-    <Compile Include="Query\Secant.cs" />
-    <Compile Include="Query\TODO.cs" />
+    <Compile Include="Query\Cosec.cs" />
+    <Compile Include="Query\Cosh.cs" />
+    <Compile Include="Query\Cosech.cs" />
+    <Compile Include="Query\Coth.cs" />
+    <Compile Include="Query\Arsinh.cs" />
+    <Compile Include="Query\Arcosh.cs" />
+    <Compile Include="Query\Artanh.cs" />
+    <Compile Include="Query\Arsech.cs" />
+    <Compile Include="Query\Arcsch.cs" />
+    <Compile Include="Query\Arcoth.cs" />
+    <Compile Include="Query\Sech.cs" />
+    <Compile Include="Query\Tanh.cs" />
+    <Compile Include="Query\Sinh.cs" />
+    <Compile Include="Query\Sec.cs" />
+    <Compile Include="Query\LogN.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
