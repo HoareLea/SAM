@@ -4,7 +4,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Create
     {
-        public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, double? offset_Height, double? offset_Width, Corner corner = Corner.TopLeft)
+        public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, double? offset_Height, double? offset_Width, Corner corner = Corner.TopLeft, bool includeEdge = true)
         {
             if (boundingBox2D == null)
                 return null;
@@ -37,10 +37,19 @@ namespace SAM.Geometry.Planar
 
                 double offset = offset_Height.Value;
                 int count = System.Convert.ToInt32(boundingBox2D.Height / offset);
+                if (includeEdge)
+                    count++;
+                else
+                    count--;
+
                 offset = offset * factor_direction;
                 for (int i= 0; i < count; i++)
                 {
-                    double y = y_Start + offset * (i + 1);
+                    int index = i;
+                    if (!includeEdge)
+                        index++;
+
+                    double y = y_Start + offset * index;
                     result.Add(new Segment2D(new Point2D(x_Start, y), new Point2D(x_End, y)));
                 }
             }
@@ -72,10 +81,19 @@ namespace SAM.Geometry.Planar
 
                 double offset = offset_Width.Value * factor_direction;
                 int count = System.Convert.ToInt32(boundingBox2D.Width / offset);
+                if (includeEdge)
+                    count++;
+                else
+                    count--;
+
                 offset = offset * factor_direction;
                 for (int i = 0; i < count; i++)
                 {
-                    double x = x_Start + offset * (i + 1);
+                    int index = i;
+                    if (!includeEdge)
+                        index++;
+
+                    double x = x_Start + offset * index;
                     result.Add(new Segment2D(new Point2D(x, y_Start), new Point2D(x, y_End)));
                 }
             }
