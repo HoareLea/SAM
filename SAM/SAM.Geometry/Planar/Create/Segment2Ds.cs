@@ -79,7 +79,7 @@ namespace SAM.Geometry.Planar
                         break;
                 }
 
-                double offset = offset_Width.Value * factor_direction;
+                double offset = offset_Width.Value;
                 int count = System.Convert.ToInt32(boundingBox2D.Width / offset);
                 if (includeEdge)
                     count++;

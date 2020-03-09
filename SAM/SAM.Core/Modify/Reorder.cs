@@ -15,7 +15,7 @@ namespace SAM.Core
 
             int count = objects.Count();
 
-            if (count >= startIndex)
+            if (startIndex >= count)
                 return null;
 
             List <T> result = new List<T>();

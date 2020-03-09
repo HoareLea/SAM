@@ -78,8 +78,11 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
 
-        public Point2D Closest(Point2D point2D)
+        public Point2D Closest(Point2D point2D, bool includeEdges)
         {
+            if (includeEdges)
+                return Query.Closest(this, point2D);
+
             return Query.Closest(points, point2D);
         }
 

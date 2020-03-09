@@ -77,7 +77,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static bool OrientByEnds(List<ICurve2D> curves2D, bool close = false)
+        public static bool OrientByEnds(List<ICurve2D> curves2D)
         {
             if (curves2D == null)
                 return false;
@@ -89,8 +89,6 @@ namespace SAM.Geometry.Planar
                 return false;
 
             List<ICurve2D> curves2D_Temp = curves2D.ConvertAll(x => (ICurve2D)x.Clone());
-            if (close)
-                curves2D_Temp.Add(curves2D_Temp.First());
 
             int count = curves2D_Temp.Count();
 
