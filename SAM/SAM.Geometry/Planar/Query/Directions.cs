@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Vector2D> Directions(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Tolerance.Angle)
+        public static List<Vector2D> Directions(this IEnumerable<ISegmentable2D> segmentable2Ds)
         {
             if (segmentable2Ds == null)
                 return null;
@@ -33,14 +33,7 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            if (tolerance == 0)
-                dictionary.Values.ToList();
-
-            List<KeyValuePair<double, Vector2D>> keyValuePairs = dictionary.AsEnumerable().ToList();
-            keyValuePairs.Sort((x, y) => x.Value.Length.CompareTo(y.Value.Length));
-
-            //TODO: Implement Direction method for tolerance different than 0
-            throw new System.NotImplementedException();
+            return dictionary.Values.ToList();
         }
 
     }

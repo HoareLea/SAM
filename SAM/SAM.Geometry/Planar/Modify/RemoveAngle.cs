@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static Polygon2D RemoveAngle(this Polygon2D polygon2D, double length, double minAngle = 1.5708, double tolerance = Tolerance.Angle)
+        public static Polygon2D RemoveAngle(this Polygon2D polygon2D, double length, double minAngle = 1.5708, double tolerance = Tolerance.MacroDistance)
         {
             List<Point2D> point2Ds = polygon2D?.Points;
 
@@ -19,7 +19,9 @@ namespace SAM.Geometry.Planar
             point2Ds.Insert(0, point2Ds.Last());
             point2Ds.Add(point2Ds[1]);
 
-            int count = point2Ds.Count;           
+            int count = point2Ds.Count;
+
+            List<Vector2D> directions = Query.Directions(polygon2D.GetSegments());
 
             List<Point2D> point2Ds_New = new List<Point2D>();
             for (int i = 1; i < count - 1; i++)
@@ -39,8 +41,32 @@ namespace SAM.Geometry.Planar
                 }
                 else if(point2Ds_Temp.Count == 4)
                 {
-                    point2Ds_New.Add(point2Ds_Temp[1]);
-                    point2Ds_New.Add(point2Ds_Temp[2]);
+                    //TODO: Find better way to determine which points to choose
+                    List<Point2D> point2Ds_Temp_2 = RemoveAngle(point2D_Next, point2D, point2D_Previous, length, minAngle, tolerance);
+                    if(point2Ds_Temp_2 != null && point2Ds_Temp_2.Count == 4)
+                    {
+                        Vector2D vector2D_1 = new Vector2D(point2Ds_Temp[1], point2Ds_Temp[2]);
+                        Vector2D vector2D_2 = new Vector2D(point2Ds_Temp_2[1], point2Ds_Temp_2[2]);
+
+                        Vector2D vector2D_direction_1 = Query.SmallestAngleVector(directions, vector2D_1);
+                        Vector2D vector2D_direction_2 = Query.SmallestAngleVector(directions, vector2D_2);
+
+                        if(vector2D_direction_1.SmallestAngle(vector2D_1) < vector2D_direction_2.SmallestAngle(vector2D_2))
+                        {
+                            point2Ds_New.Add(point2Ds_Temp[1]);
+                            point2Ds_New.Add(point2Ds_Temp[2]);
+                        }
+                        else
+                        {
+                            point2Ds_New.Add(point2Ds_Temp_2[2]);
+                            point2Ds_New.Add(point2Ds_Temp_2[1]);
+                        }
+                    }
+                    else
+                    {
+                        point2Ds_New.Add(point2Ds_Temp[1]);
+                        point2Ds_New.Add(point2Ds_Temp[2]);
+                    }
                 }
                 else
                 {
@@ -54,13 +80,13 @@ namespace SAM.Geometry.Planar
             return new Polygon2D(point2Ds_New);
         }
 
-        public static List<Point2D> RemoveAngle(Point2D point2D_Previous, Point2D point2D, Point2D point2D_Next, double length, double minAngle = 1.5708, double tolerance = Tolerance.Angle)
+        public static List<Point2D> RemoveAngle(Point2D point2D_Previous, Point2D point2D, Point2D point2D_Next, double length, double minAngle = 1.5708, double tolerance = Tolerance.MacroDistance)
         {
             if (point2D_Previous == null || point2D == null || point2D_Next == null)
                 return null;
 
             double angle = Query.Angle(point2D_Previous, point2D, point2D_Next);
-            if (angle - minAngle + tolerance >= 0)
+            if (angle - minAngle + tolerance > 0)
                 return new List<Point2D>() { point2D_Previous, point2D, point2D_Next };
 
             double b = Math.Query.Cotan(angle) * length;

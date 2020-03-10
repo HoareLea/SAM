@@ -192,7 +192,7 @@ namespace SAM.Geometry.Planar
             List<Polygon2D> polygon2Ds_All = new List<Polygon2D>();
             foreach(KeyValuePair<Segment2D, List<Polygon2D>> keyValuePair in segment2Ds_Offset)
                 polygon2Ds_All.AddRange(keyValuePair.Value);
-
+             
             List<int> indexes = new List<int>();
             for(int i=0; i < segment2Ds_Split.Count; i++)
             {
@@ -247,7 +247,7 @@ namespace SAM.Geometry.Planar
                 return null;
             
             Orientation orientation = GetOrientation();
-            if(inside)
+            if(!inside)
             {
                 switch (orientation)
                 {

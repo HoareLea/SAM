@@ -62,7 +62,7 @@ namespace SAM.Geometry.Planar
             return point2Ds.ToList();
         }
 
-        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, double tolerance = Tolerance.MicroDistance)
+        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, double tolerance = Tolerance.MicroDistance)
         {
             if (point2D == null || vector2D == null)
                 return null;
@@ -89,10 +89,13 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                if(point2D_closest_2 != null && segment2D_Temp.Distance(point2D_closest_2) < tolerance)
+                if(point2D_closest_2 != null && segment2D_Temp.Distance(point2D_Intersection) < tolerance)
                 {
-                    point2Ds.Add(point2D_Intersection);
-                    continue;
+                    if (keepDirection)
+                        if (!vector2D.Unit.AlmostEqual(new Vector2D(point2D_closest_1, point2D_closest_2).Unit, tolerance))
+                            continue;
+
+                        point2Ds.Add(point2D_Intersection);
                 }
                     
             }

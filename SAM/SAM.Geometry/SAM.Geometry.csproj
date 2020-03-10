@@ -79,6 +79,8 @@
     <Compile Include="Planar\Modify\Split.cs" />
     <Compile Include="Planar\Modify\RemoveAngle.cs" />
     <Compile Include="Planar\Modify\SortByDistance.cs" />
+    <Compile Include="Planar\Query\SmallestAngleVector.cs" />
+    <Compile Include="Planar\Query\ExtremePoints.cs" />
     <Compile Include="Planar\Query\BottomLeft.cs" />
     <Compile Include="Planar\Query\Intersections.cs" />
     <Compile Include="Planar\Query\Angle.cs" />
