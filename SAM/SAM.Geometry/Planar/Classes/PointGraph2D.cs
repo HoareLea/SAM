@@ -198,6 +198,7 @@ namespace SAM.Geometry.Planar
                     continue;
 
                 DisconnectAll(i);
+                Disconnect(connectionsCount);
                 result = true;
             }
 
