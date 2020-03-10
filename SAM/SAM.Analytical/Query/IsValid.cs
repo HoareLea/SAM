@@ -40,7 +40,7 @@ namespace SAM.Analytical
             if (face3D_Panel.On(plane_Aperture.Origin, Geometry.Tolerance.Distance))
                 return true;
 
-            if (face3D_Panel.Inside(plane_Aperture.Origin, Geometry.Tolerance.Distance))
+            if (face3D_Panel.Inside(face3D_Aperture, Geometry.Tolerance.Distance))
                 return true;
 
             return false;
