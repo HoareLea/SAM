@@ -470,9 +470,10 @@ namespace SAM.Geometry.Planar
 
             int count = point2Ds_List.Count;
 
-            for(int i=0; i < count - 2; i++)
+            List<Segment2D> segments = Point2D.GetSegments(point2Ds, true);
+            for (int i = 0; i < count - 2; i++)
             {
-                for (int j = i + 1; j <count - 1; j++)
+                for (int j = i + 1; j < count - 1; j++)
                 {
                     for (int k = j + 1; k < count; k++)
                     {
@@ -487,7 +488,7 @@ namespace SAM.Geometry.Planar
                             continue;
 
                         result = Mid(point2D_1, point2D_3);
-                        if (Inside(point2Ds, result))
+                        if (Inside(point2Ds, result) && !Query.On(segments, result))
                             return result;
                     }
                 }

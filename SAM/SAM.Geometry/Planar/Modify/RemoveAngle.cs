@@ -41,7 +41,7 @@ namespace SAM.Geometry.Planar
                 }
                 else if(point2Ds_Temp.Count == 4)
                 {
-                    //TODO: Find better way to determine which points to choose
+                    //TODO: To find better way to determine which points to choose
                     List<Point2D> point2Ds_Temp_2 = RemoveAngle(point2D_Next, point2D, point2D_Previous, length, minAngle, tolerance);
                     if(point2Ds_Temp_2 != null && point2Ds_Temp_2.Count == 4)
                     {
