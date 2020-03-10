@@ -247,7 +247,7 @@ namespace SAM.Geometry.Planar
                 return null;
             
             Orientation orientation = GetOrientation();
-            if(!inside)
+            if(inside)
             {
                 switch (orientation)
                 {

@@ -102,6 +102,14 @@ namespace SAM.Geometry.Planar
             vector2D_b = vector2D_b.Unit * b;
             vector2D_c = vector2D_c.Unit * c;
 
+            Point2D point2D_b = point2D.GetMoved(vector2D_b);
+            if (point2D_b.Distance(point2D_Previous) < tolerance)
+                return new List<Point2D>() { point2D_Previous, point2D, point2D_Next };
+
+            Point2D point2D_c = point2D.GetMoved(vector2D_c);
+            if (point2D_c.Distance(point2D_Next) < tolerance)
+                return new List<Point2D>() { point2D_Previous, point2D, point2D_Next };
+
             return new List<Point2D>() { point2D_Previous, point2D.GetMoved(vector2D_b), point2D.GetMoved(vector2D_c), point2D_Next};
         }
     }

@@ -341,7 +341,13 @@ namespace SAM.Geometry.Planar
             List<Point2D> point2Ds_Temp = null;
 
             if (convexHull)
-                point2Ds_Temp = Query.ConvexHull(point2Ds);
+            {
+                point2Ds_Temp = Query.ConvexHull(point2Ds);//TODO: Fix issue with changing order of points
+
+                List<Point2D> point2Ds_Temp_1 = new List<Point2D>(point2Ds);
+                point2Ds_Temp_1.RemoveAll(x => point2Ds_Temp.Contains(x));
+                point2Ds_Temp.RemoveAll(x => point2Ds_Temp_1.Contains(x));
+            }
             else
                 point2Ds_Temp = new List<Point2D>(point2Ds);
 

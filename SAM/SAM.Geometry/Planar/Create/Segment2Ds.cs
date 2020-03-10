@@ -67,7 +67,7 @@ namespace SAM.Geometry.Planar
                     if (!includeEdge)
                         index++;
 
-                    double y = y_Start + offset * index;
+                    double y = y_Start + (offset * index);
                     result.Add(new Segment2D(new Point2D(x_Start, y), new Point2D(x_End, y)));
                 }
             }
@@ -86,13 +86,13 @@ namespace SAM.Geometry.Planar
                 {
                     case Corner.TopLeft:
                     case Corner.BottomLeft:
-                        x_Start = boundingBox2D.Min.Y;
+                        x_Start = boundingBox2D.Min.X;
                         factor_direction = 1;
                         break;
 
                     case Corner.TopRight:
                     case Corner.BottomRight:
-                        x_Start = boundingBox2D.Max.Y;
+                        x_Start = boundingBox2D.Max.X;
                         factor_direction = -1;
                         break;
                 }
@@ -109,7 +109,7 @@ namespace SAM.Geometry.Planar
                     if (!includeEdge)
                         index++;
 
-                    double x = x_Start + offset * index;
+                    double x = x_Start + (offset * index);
                     result.Add(new Segment2D(new Point2D(x, y_Start), new Point2D(x, y_End)));
                 }
             }
