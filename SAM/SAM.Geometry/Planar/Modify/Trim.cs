@@ -102,7 +102,11 @@ namespace SAM.Geometry.Planar
             {
                 List<Segment2D> segment2Ds_Temp = Trim(segment2D_Temp, polygon2D, tolerance);
                 if (segment2Ds_Temp != null)
+                {
+                    segment2Ds_Temp.RemoveAll(x => x == null);
                     result.AddRange(segment2Ds_Temp);
+                }
+                    
             }
 
             return result;
