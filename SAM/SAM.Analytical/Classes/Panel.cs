@@ -189,30 +189,45 @@ namespace SAM.Analytical
                     Geometry.Planar.IClosed2D closed2D = plane.Convert(planarBoundary3D.GetFace3D().GetExternalEdge());
                     if (closed2D is Geometry.Planar.ISegmentable2D)
                     {
-                        //TODO: Skip process if aperture inside panel
+                        //if(!closed2D.Inside(closed2D_Aperture))
+                        //{
+
+                        //}
+
+                        double area_Aperture = closed2D_Aperture.GetArea();
 
                         List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
-                        Geometry.Planar.PointGraph2D pointGraph2D = new Geometry.Planar.PointGraph2D(segment2Ds);
-                        List<Geometry.Planar.Polygon2D> polycurveLoop2Ds = pointGraph2D.GetPolygon2Ds();
-                        if (polycurveLoop2Ds != null && polycurveLoop2Ds.Count > 0)
+                        List<Geometry.Planar.Polygon2D> polygon2Ds = new Geometry.Planar.PointGraph2D(segment2Ds).GetPolygon2Ds();
+                        if (polygon2Ds != null && polygon2Ds.Count > 0)
                         {
-                            foreach (Geometry.Planar.Polygon2D polygon2D_Temp in polycurveLoop2Ds)
+                            double area_Difference_Min = double.MaxValue;
+                            Geometry.Planar.Polygon2D polygon2D_Min = null;
+                            Geometry.Planar.Point2D point2D_Centroid = null;
+                            foreach (Geometry.Planar.Polygon2D polygon2D_Temp in polygon2Ds)
                             {
+                                double area_Temp = polygon2D_Temp.GetArea();
+
+                                double area_Difference = Math.Abs(area_Aperture - area_Temp);
+
+                                if (area_Difference > area_Difference_Min)
+                                    continue;
+
                                 Geometry.Planar.Point2D point2D = polygon2D_Temp.GetInternalPoint2D();
                                 if (closed2D_Aperture.Inside(point2D) && closed2D.Inside(point2D))
                                 {
-                                    Geometry.Planar.Point2D point2D_Centroid = Geometry.Planar.Point2D.GetCentroid(polygon2D_Temp.Points);
-                                    point2D_Centroid = new Geometry.Planar.Point2D(point2D_Centroid.X, polygon2D_Temp.GetBoundingBox().Min.Y);
-
-                                    closedPlanar3D_Projected = plane.Convert(polygon2D_Temp);
-                                    point3D_Location = plane.Convert(point2D_Centroid);
-
-                                    point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
-
-
-
-                                    break;
+                                    point2D_Centroid = Geometry.Planar.Point2D.GetCentroid(polygon2D_Temp.Points);
+                                    polygon2D_Min = polygon2D_Temp;
                                 }
+                            }
+
+                            if(polygon2D_Min != null && point2D_Centroid != null)
+                            {
+                                point2D_Centroid = new Geometry.Planar.Point2D(point2D_Centroid.X, polygon2D_Min.GetBoundingBox().Min.Y);
+
+                                closedPlanar3D_Projected = plane.Convert(polygon2D_Min);
+                                point3D_Location = plane.Convert(point2D_Centroid);
+
+                                point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
                             }
                         }
 
