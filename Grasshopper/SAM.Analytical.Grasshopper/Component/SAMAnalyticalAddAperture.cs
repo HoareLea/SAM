@@ -80,12 +80,16 @@ namespace SAM.Analytical.Grasshopper
                     GH_ObjectWrapper objectWrapper_Temp = ((GH_ObjectWrapper)@object);
                     if (objectWrapper_Temp.Value is ISAMGeometry3D)
                         geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)objectWrapper_Temp.Value };
+                    else if(objectWrapper_Temp.Value is Geometry.Planar.ISAMGeometry2D)
+                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { Plane.Base.Convert(objectWrapper_Temp.Value as dynamic) };
                 }
                 else if (@object is IGH_Goo)
                 {
-                    ISAMGeometry3D sAMGeometry3D = (@object as dynamic).Value as ISAMGeometry3D;
-                    if (sAMGeometry3D != null)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { sAMGeometry3D };
+                    Geometry.ISAMGeometry sAMGeometry = (@object as dynamic).Value as Geometry.ISAMGeometry;
+                    if (sAMGeometry is ISAMGeometry3D)
+                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)sAMGeometry };
+                    else if (sAMGeometry is Geometry.Planar.ISAMGeometry2D)
+                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { Plane.Base.Convert(sAMGeometry as dynamic) };
                 }
 
                 if (geometry3Ds_Temp != null && geometry3Ds_Temp.Count > 0)
