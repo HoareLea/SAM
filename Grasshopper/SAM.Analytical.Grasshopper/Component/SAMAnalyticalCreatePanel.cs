@@ -91,9 +91,11 @@ namespace SAM.Analytical.Grasshopper
             }
             else if (@object is IGH_Goo)
             {
-                ISAMGeometry3D sAMGeometry3D = (@object as dynamic).Value as ISAMGeometry3D;
-                if (sAMGeometry3D != null)
-                    geometry3Ds = new List<ISAMGeometry3D>() { sAMGeometry3D };
+                Geometry.ISAMGeometry sAMGeometry = (@object as dynamic).Value as Geometry.ISAMGeometry;
+                if (sAMGeometry is ISAMGeometry3D)
+                    geometry3Ds = new List<ISAMGeometry3D>() { (ISAMGeometry3D)sAMGeometry };
+                else if (sAMGeometry is Geometry.Planar.ISAMGeometry2D)
+                    geometry3Ds = new List<ISAMGeometry3D>() { Plane.Base.Convert(sAMGeometry as dynamic)};
             }
 
             if(geometry3Ds == null || geometry3Ds.Count() == 0)
