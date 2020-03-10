@@ -338,21 +338,24 @@ namespace SAM.Geometry.Planar
             if (point2Ds == null || point2Ds.Count() == 0)
                 return Geometry.Orientation.Undefined;
 
-            List<Point2D> point2Ds_Temp = null;
+            List<Point2D> point2Ds_Temp = new List<Point2D>(point2Ds);
+            if (point2Ds_Temp == null || point2Ds_Temp.Count < 3)
+                return Geometry.Orientation.Undefined;
+
 
             if (convexHull)
             {
-                point2Ds_Temp = Query.ConvexHull(point2Ds);//TODO: Fix issue with changing order of points
+                List<Point2D> point2Ds_ConvexHull = Query.ConvexHull(point2Ds);
 
-                List<Point2D> point2Ds_Temp_1 = new List<Point2D>(point2Ds);
-                point2Ds_Temp_1.RemoveAll(x => point2Ds_Temp.Contains(x));
-                point2Ds_Temp.RemoveAll(x => point2Ds_Temp_1.Contains(x));
+                //ConvexHull may have different orientation so needs to remove unnecessary points from existing point2Ds
+                if(point2Ds_ConvexHull != null  && point2Ds_ConvexHull.Count > 0)
+                {
+                    List<Point2D> point2Ds_ConvexHull_Temp = new List<Point2D>(point2Ds);
+                    point2Ds_ConvexHull_Temp.RemoveAll(x => point2Ds_ConvexHull.Contains(x));
+                    point2Ds_Temp.RemoveAll(x => point2Ds_ConvexHull_Temp.Contains(x));
+                }
+
             }
-            else
-                point2Ds_Temp = new List<Point2D>(point2Ds);
-
-            if (point2Ds_Temp == null || point2Ds_Temp.Count < 3)
-                return Geometry.Orientation.Undefined;
 
             point2Ds_Temp.Add(point2Ds_Temp[0]);
             point2Ds_Temp.Add(point2Ds_Temp[1]);
