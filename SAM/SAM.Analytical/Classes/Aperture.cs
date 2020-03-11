@@ -64,6 +64,15 @@ namespace SAM.Analytical
             return planarBoundary3D.GetFace3D();
         }
 
+        public double GetArea()
+        {
+            Face3D face3D = GetFace3D();
+            if (face3D == null)
+                return double.NaN;
+
+            return face3D.GetArea();
+        }
+
         public Aperture Clone()
         {
             return new Aperture(this);
