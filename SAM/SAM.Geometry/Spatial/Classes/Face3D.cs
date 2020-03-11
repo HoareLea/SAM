@@ -177,6 +177,11 @@ namespace SAM.Geometry.Spatial
             return jObject;
         }
 
+        public Point3D GetInternaPoint3D()
+        {
+            return plane.Convert(GetInternalPoint2D());
+        }
+
 
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges)
         {

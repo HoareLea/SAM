@@ -25,16 +25,6 @@ namespace SAM.Geometry.Planar
         }
 
 
-        public bool Inside(IClosed2D closed2D)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool Inside(Point2D point2D)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public bool On(Point2D point2D, double tolerance = Tolerance.MicroDistance)
         {
             if (point2D == null)
@@ -56,10 +46,6 @@ namespace SAM.Geometry.Planar
             return externalEdge.GetBoundingBox(offset);
         }
 
-        public Point2D GetInternalPoint2D()
-        {
-            throw new System.NotImplementedException();
-        }
 
         public Point2D GetCentroid()
         {

@@ -78,6 +78,7 @@
     <Compile Include="Query\FullTypeName.cs" />
     <Compile Include="Query\Name.cs" />
     <Compile Include="Query\TryGetTypeNameAndAssemblyName.cs" />
+    <Compile Include="Query\Tolerance.cs" />
     <Compile Include="Query\TryGetValue.cs" />
     <Compile Include="Query\GetValue.cs" />
   </ItemGroup>

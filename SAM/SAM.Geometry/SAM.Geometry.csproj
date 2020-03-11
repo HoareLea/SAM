@@ -80,6 +80,7 @@
     <Compile Include="Planar\Modify\Split.cs" />
     <Compile Include="Planar\Modify\RemoveAngle.cs" />
     <Compile Include="Planar\Modify\SortByDistance.cs" />
+    <Compile Include="Planar\Query\Union.cs" />
     <Compile Include="Planar\Query\Colinear.cs" />
     <Compile Include="Planar\Query\Segment2Ds.cs" />
     <Compile Include="Planar\Query\IndexOf.cs" />

@@ -85,17 +85,17 @@ namespace SAM.Geometry.Planar
             }
         }        
 
-        public PointGraph2D(IEnumerable<Segment2D> segment2Ds, int decimals = 9)
+        public PointGraph2D(IEnumerable<Segment2D> segment2Ds, bool split = true, int decimals = 9)
         {
-            Load(segment2Ds, decimals);
+            Load(segment2Ds, split, decimals);
         }
 
-        public PointGraph2D(Polygon2D polygon2D, int decimals = 9)
+        public PointGraph2D(Polygon2D polygon2D, bool split = true, int decimals = 9)
         {
-            Load(polygon2D?.GetSegments(), decimals);
+            Load(polygon2D?.GetSegments(), split, decimals);
         }
 
-        public PointGraph2D(IEnumerable<Polygon2D> polygon2Ds, int decimals = 9)
+        public PointGraph2D(IEnumerable<Polygon2D> polygon2Ds, bool split = true, int decimals = 9)
         {
             if(polygon2Ds != null)
             {
@@ -112,12 +112,12 @@ namespace SAM.Geometry.Planar
                     segment2Ds.AddRange(segment2Ds_Temp);
                 }
 
-                Load(segment2Ds, decimals);
+                Load(segment2Ds, split, decimals);
             }
         }
 
 
-        public bool Load(IEnumerable<Segment2D> segment2Ds, int decimals = 9)
+        public bool Load(IEnumerable<Segment2D> segment2Ds, bool split = false, int decimals = 9)
         {
             if (segment2Ds == null)
                 return false;
@@ -125,9 +125,17 @@ namespace SAM.Geometry.Planar
             objects = null;
             points = null;
 
+            if (segment2Ds.Count() == 0)
+                return true;
+
+            IEnumerable<Segment2D> segments_Temp = segment2Ds;
+            if (split)
+                segments_Temp = Modify.Split(segment2Ds, Core.Query.Tolerance(decimals));
+                
+
             HashSet<Point2D> point2Ds_HashSet = new HashSet<Point2D>();
             List<Tuple<Point2D, Point2D, Segment2D>> tuples = new List<Tuple<Point2D, Point2D, Segment2D>>();
-            foreach (Segment2D segment2D in segment2Ds)
+            foreach (Segment2D segment2D in segments_Temp)
             {
                 if (segment2D == null)
                     continue;

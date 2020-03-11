@@ -95,5 +95,64 @@ namespace SAM.Geometry
 
             return area;
         }
+
+        public Point2D GetInternalPoint2D()
+        {
+            if (externalEdge == null)
+                return null;
+
+            if (internalEdges == null || internalEdges.Count == 0)
+                return externalEdge.GetInternalPoint2D();
+
+            Point2D result = externalEdge.GetCentroid();
+            if (Inside(result))
+                return result;
+
+            if(externalEdge is ISegmentable2D)
+            {
+                List<Point2D> point2Ds = ((ISegmentable2D)externalEdge).GetPoints();
+                if (point2Ds == null || point2Ds.Count == 0)
+                    return null;
+
+                foreach(IClosed2D closed2D in internalEdges)
+                {
+                    if(closed2D is ISegmentable2D)
+                    {
+                        List<Point2D> point2Ds_Internal = ((ISegmentable2D)closed2D).GetPoints();
+                        if (point2Ds_Internal != null && point2Ds_Internal.Count > 0)
+                            point2Ds.AddRange(point2Ds_Internal);
+                    }
+                }
+
+                int count = point2Ds.Count;
+                for(int i=0; i < count - 2; i++)
+                {
+                    for (int j = 1; j < count - 1; j++)
+                    {
+                        Point2D point2D = Point2D.Mid(point2Ds[i], point2Ds[j]);
+                        if (Inside(point2D))
+                            return point2D;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public bool Inside(Point2D point2D)
+        {
+            if (internalEdges == null || internalEdges.Count == 0)
+                return externalEdge.Inside(point2D);
+
+            return externalEdge.Inside(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D));
+        }
+
+        public bool Inside(IClosed2D closed2D)
+        {
+            if (internalEdges == null || internalEdges.Count == 0)
+                return externalEdge.Inside(closed2D);
+
+            return externalEdge.Inside(closed2D) && internalEdges.TrueForAll(x => !x.Inside(closed2D));
+        }
     }
 }
