@@ -432,6 +432,17 @@ namespace SAM.Geometry.Planar
                 return start;
         }
 
+        public int GetIndex(Point2D point2D)
+        {
+            Point2D end = End;
+            Point2D start = Start;
+
+            if (end.Distance(point2D) < start.Distance(point2D))
+                return 1;
+            else
+                return 0;
+        }
+
         public Point2D Mid()
         {
             return Point2D.Move(origin, vector.GetScaled(0.5));

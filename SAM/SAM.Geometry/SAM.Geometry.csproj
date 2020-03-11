@@ -62,6 +62,9 @@
     <Compile Include="Planar\Classes\PointGraph2D.cs" />
     <Compile Include="Planar\Classes\Polycurve2D.cs" />
     <Compile Include="Planar\Classes\PolycurveLoop2D.cs" />
+    <Compile Include="Planar\Classes\Polyline2D.cs" />
+    <Compile Include="Planar\Create\Polyline2D.cs" />
+    <Compile Include="Planar\Create\Point2Ds.cs" />
     <Compile Include="Planar\Create\Segment2Ds.cs" />
     <Compile Include="Planar\Create\Face2Ds.cs" />
     <Compile Include="Planar\Create\ICurve2D.cs" />
@@ -80,6 +83,7 @@
     <Compile Include="Planar\Modify\Split.cs" />
     <Compile Include="Planar\Modify\RemoveAngle.cs" />
     <Compile Include="Planar\Modify\SortByDistance.cs" />
+    <Compile Include="Planar\Query\IndexesOf.cs" />
     <Compile Include="Planar\Query\Union.cs" />
     <Compile Include="Planar\Query\Colinear.cs" />
     <Compile Include="Planar\Query\Segment2Ds.cs" />
@@ -95,6 +99,7 @@
     <Compile Include="Planar\Query\Directions.cs" />
     <Compile Include="Planar\Query\Closest.cs" />
     <Compile Include="Planar\Query\ConvexHull.cs" />
+    <Compile Include="Query\Opposite.cs" />
     <Compile Include="Spatial\Create\Plane.cs" />
     <Compile Include="Spatial\Create\Face3Ds.cs" />
     <Compile Include="Spatial\Create\Polygon3D.cs" />

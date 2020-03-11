@@ -248,6 +248,11 @@ namespace SAM.Geometry.Planar
             return vector2D_1.coordinates[0] * vector2D_2.coordinates[0] + vector2D_1.coordinates[1] * vector2D_2.coordinates[1];
         }
 
+        public static Vector2D operator /(Vector2D vector2D, double factor)
+        {
+            return new Vector2D(vector2D.X / factor, vector2D.Y / factor);
+        }
+
         public static Vector2D operator *(Vector2D vector2D_1, double factor)
         {
             return new Vector2D(vector2D_1.coordinates[0] * factor, vector2D_1.coordinates[1] * factor);

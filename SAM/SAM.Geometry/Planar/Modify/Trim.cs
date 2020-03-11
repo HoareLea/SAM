@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static List<Segment2D> Trim(this IEnumerable<Segment2D> segment2Ds, double distance, bool trim_Start = true, bool trim_End = true)
+        public static List<Segment2D> Trim(this IEnumerable<Segment2D> segment2Ds, double length, bool trim_Start = true, bool trim_End = true)
         {
             if (segment2Ds == null)
                 return null;
@@ -13,13 +13,30 @@ namespace SAM.Geometry.Planar
             List<Segment2D> result = new List<Segment2D>();
             foreach(Segment2D segment2D in segment2Ds)
             {
-                Segment2D segment2D_Temp = Trim(segment2D, distance, trim_Start, trim_End);
+                Segment2D segment2D_Temp = Trim(segment2D, length, trim_Start, trim_End);
                 if (segment2D_Temp != null)
                     result.Add(segment2D_Temp);
             }
 
             return result;
         }
+
+        public static List<Segment2D> Trim(this IEnumerable<Segment2D> segment2Ds, double length, int index)
+        {
+            if (segment2Ds == null || (index != 0 && index != 1))
+                return null;
+
+            List<Segment2D> result = new List<Segment2D>();
+            foreach (Segment2D segment2D in segment2Ds)
+            {
+                Segment2D segment2D_Temp = Trim(segment2D, length, index);
+                if (segment2D_Temp != null)
+                    result.Add(segment2D_Temp);
+            }
+
+            return result;
+        }
+
 
         public static Segment2D Trim(this Segment2D segment2D, double distance, bool trim_Start = true, bool trim_End = true)
         {
@@ -43,6 +60,35 @@ namespace SAM.Geometry.Planar
             Point2D point2D_End = segment2D.End;
             if (trim_End)
                 point2D_End.Move(vector2D);
+
+            Segment2D result = new Segment2D(point2D_Start, point2D_End);
+            if (!result.Direction.AlmostEqual(segment2D.Direction))
+                return null;
+
+            return result;
+        }
+
+        public static Segment2D Trim(this Segment2D segment2D, double distance, int index)
+        {
+            if (segment2D == null || (index != 0 && index != 1))
+                return null;
+
+            if (distance == 0)
+                return new Segment2D(segment2D);
+
+            Vector2D vector2D = segment2D.Direction * distance;
+
+            Point2D point2D_Start = segment2D.Start;
+            Point2D point2D_End = segment2D.End;
+            if (index == 0)
+            {
+                point2D_Start.Move(vector2D);
+            }
+            else if (index == 1)
+            {
+                vector2D.Negate();
+                point2D_End.Move(vector2D);
+            }
 
             Segment2D result = new Segment2D(point2D_Start, point2D_End);
             if (!result.Direction.AlmostEqual(segment2D.Direction))

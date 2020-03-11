@@ -718,6 +718,23 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public Polyline2D GetPolyline2D()
+        {
+            int index = GetFirstConnected(1);
+            if (index < 0)
+                return null;
+
+            List<int> connections = Connections(index);
+            if (connections == null || connections.Count == 0)
+                return null;
+
+            List<int> loop = GetLoop(index, connections[0]);
+            if (loop == null || loop.Count < 2)
+                return null;
+
+            return new Polyline2D(GetPoint2Ds(loop));
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)
