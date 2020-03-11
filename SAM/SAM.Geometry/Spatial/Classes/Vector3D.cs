@@ -189,7 +189,11 @@ namespace SAM.Geometry.Spatial
 
         public double Angle(Vector3D vector3D)
         {
-            return System.Math.Acos(DotProduct(vector3D) / (Length * vector3D.Length));
+            double value = System.Math.Acos(DotProduct(vector3D) / (Length * vector3D.Length));
+            if (double.IsNaN(value))
+                return 0;
+
+            return value;
         }
 
         public double SmallestAngle(Vector3D vector3D)
