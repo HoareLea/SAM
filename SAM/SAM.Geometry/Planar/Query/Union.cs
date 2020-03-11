@@ -10,16 +10,16 @@ namespace SAM.Geometry.Planar
             if (polygon2D_1 == null || polygon2D_2 == null)
                 return null;
 
-            BoundingBox2D boundingBox2D_1 = polygon2D_1.GetBoundingBox();
-            BoundingBox2D boundingBox2D_2 = polygon2D_1.GetBoundingBox();
-
             List<Polygon2D> result = new List<Polygon2D>();
 
             List<Polygon2D> polygon2Ds = new PointGraph2D(new List<Polygon2D>() { polygon2D_1, polygon2D_2 }, true).GetPolygon2Ds();
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return result;
-            
-            foreach(Polygon2D polygon2D in polygon2Ds)
+
+            BoundingBox2D boundingBox2D_1 = polygon2D_1.GetBoundingBox();
+            BoundingBox2D boundingBox2D_2 = polygon2D_1.GetBoundingBox();
+
+            foreach (Polygon2D polygon2D in polygon2Ds)
             {
                 Point2D point2D = polygon2D.GetInternalPoint2D();
 
