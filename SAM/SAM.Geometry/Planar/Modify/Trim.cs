@@ -79,14 +79,15 @@ namespace SAM.Geometry.Planar
             Modify.SortByDistance(point2Ds, point2D);
 
             List<Segment2D> result = new List<Segment2D>();
-            for (int i = 0; i < point2Ds.Count; i = i + 2)
+            for (int i = 0; i < point2Ds.Count - 1; i++)
             {
-                if (i >= point2Ds.Count - 1)
-                    continue;
-                
                 Segment2D segment2D_Temp = new Segment2D(point2Ds[i], point2Ds[i + 1]);
                 if (segment2D_Temp.Length > tolerance)
-                    result.Add(segment2D_Temp);
+                {
+                    if (!polygon2D.On(segment2D_Temp.Mid(), tolerance))
+                        result.Add(segment2D_Temp);
+                }
+
             }
 
             return result;
