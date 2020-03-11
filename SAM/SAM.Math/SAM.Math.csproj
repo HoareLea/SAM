@@ -62,6 +62,7 @@
     <Compile Include="Query\Arsech.cs" />
     <Compile Include="Query\Arcsch.cs" />
     <Compile Include="Query\Arcoth.cs" />
+    <Compile Include="Query\Median.cs" />
     <Compile Include="Query\Sech.cs" />
     <Compile Include="Query\Modal.cs" />
     <Compile Include="Query\Tanh.cs" />
