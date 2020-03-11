@@ -86,8 +86,18 @@ namespace SAM.Geometry.Planar
             return Query.Closest(points, point2D);
         }
 
-        public void Reverse()
+        public void Reverse(bool keepFirstPoint = true)
         {
+            if (points == null || points.Count < 2)
+                return;
+
+            if(keepFirstPoint)
+            {
+                Point2D point2D = points[0];
+                points.RemoveAt(0);
+                points.Add(point2D);
+            }
+
             points.Reverse();
         }
 

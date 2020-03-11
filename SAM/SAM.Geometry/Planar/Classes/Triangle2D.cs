@@ -37,6 +37,7 @@ namespace SAM.Geometry.Planar
         public double GetArea()
         {
             return Point2D.GetArea(points);
+            //0.5 * [x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)]
         }
 
         public BoundingBox2D GetBoundingBox(double offset = 0)

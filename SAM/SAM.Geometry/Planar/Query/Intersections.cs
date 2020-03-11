@@ -62,7 +62,7 @@ namespace SAM.Geometry.Planar
             return point2Ds.ToList();
         }
 
-        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, double tolerance = Tolerance.MicroDistance)
+        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, double tolerance = Tolerance.MicroDistance)
         {
             if (point2D == null || vector2D == null)
                 return null;
@@ -78,6 +78,9 @@ namespace SAM.Geometry.Planar
             {
                 Point2D point2D_closest_1;
                 Point2D point2D_closest_2;
+
+                if (removeColinear && segment2D.Colinear(segment2D_Temp))
+                    continue;
 
                 Point2D point2D_Intersection = segment2D.Intersection(segment2D_Temp, out point2D_closest_1, out point2D_closest_2);
                 if (point2D_Intersection == null)

@@ -478,6 +478,11 @@ namespace SAM.Geometry.Planar
             return new List<ICurve2D>() { new Segment2D(this) };
         }
 
+        public bool Colinear(Segment2D segment2D, double tolerance = Tolerance.Angle)
+        {
+            return vector.Colinear(segment2D.vector, tolerance);
+        }
+
         public BoundingBox2D GetBoundingBox(double offset = 0)
         {
             return new BoundingBox2D(origin, GetEnd(), offset);

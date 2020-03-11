@@ -165,6 +165,11 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public bool Colinear(Vector2D vector2D, double tolerance = Tolerance.Angle)
+        {
+            return SmallestAngle(vector2D) <= tolerance;
+        }
+
         public double SmallestAngle(Vector2D vector2D)
         {
             double value = System.Math.Abs(Angle(vector2D));

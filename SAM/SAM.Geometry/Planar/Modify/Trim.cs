@@ -56,7 +56,7 @@ namespace SAM.Geometry.Planar
             if (segment2D == null || polygon2D == null)
                 return null;
 
-            List<Point2D> point2Ds = Query.Intersections(segment2D.End, segment2D.Direction, polygon2D, false, tolerance);
+            List<Point2D> point2Ds = Query.Intersections(segment2D.End, segment2D.Direction, polygon2D, false, true, tolerance);
             if (point2Ds == null || point2Ds.Count <= 1)
                 return null;
 
