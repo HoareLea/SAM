@@ -42,7 +42,7 @@ namespace SAM.Geometry.Spatial
             if(segment3Ds.Count() == curve3Ds.Count)
             {
                 List<Point3D> point3Ds = Segment3D.GetPoints(segment3Ds, false);
-                Plane plane = Point3D.GetPlane(point3Ds, tolerance);
+                Plane plane = Create.Plane(point3Ds, tolerance);
                 if (plane != null)
                     return new Face3D(new Polygon3D(point3Ds));
             }

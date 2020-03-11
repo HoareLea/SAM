@@ -191,15 +191,6 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
-
-        public static Plane GetPlane(IEnumerable<Point3D> point3Ds, double tolerance = Tolerance.Distance)
-        {
-            Vector3D normal = GetNormal(point3Ds, tolerance);
-            if (normal == null)
-                return null;
-
-            return new Plane(point3Ds.ElementAt(0), normal.Unit);
-        }
         
         public static List<Segment3D> GetSegments(IEnumerable<Point3D> point3Ds, bool close = false)
         {
@@ -290,59 +281,6 @@ namespace SAM.Geometry.Spatial
             }
 
             return result;
-        }
-
-        public static Vector3D GetNormal(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
-        {
-            return new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
-        }
-
-        public static Vector3D GetNormal(IEnumerable<Point3D> point3Ds, double tolerance)
-        {
-            if (point3Ds == null)
-                return null;
-
-            int aCount = point3Ds.Count();
-            if (aCount < 3)
-                return null;
-
-            Point3D point3D_1 = null;
-            Point3D point3D_2 = null;
-            Point3D point3D_3 = null;
-
-            Vector3D normal = null;
-
-            for (int i = 2; i < aCount; i++)
-            {
-                point3D_1 = point3Ds.ElementAt(i - 2);
-                point3D_2 = point3Ds.ElementAt(i - 1);
-                point3D_3 = point3Ds.ElementAt(i);
-
-                normal = GetNormal(point3D_1, point3D_2, point3D_3);
-                if (normal.Length < tolerance)
-                    continue;
-
-                return normal.Unit;
-            }
-
-            point3D_1 = point3Ds.ElementAt(aCount - 2);
-            point3D_2 = point3Ds.ElementAt(aCount - 1);
-            point3D_3 = point3Ds.ElementAt(0);
-
-            normal = GetNormal(point3D_1, point3D_2, point3D_3);
-            if (normal.Length > tolerance)
-                return normal.Unit;
-
-
-            point3D_1 = point3Ds.ElementAt(aCount - 1);
-            point3D_2 = point3Ds.ElementAt(0);
-            point3D_3 = point3Ds.ElementAt(1);
-
-            normal = GetNormal(point3D_1, point3D_2, point3D_3);
-            if (normal.Length > tolerance)
-                return normal.Unit;
-
-            return null;
         }
 
         public static List<Point3D> Clone(IEnumerable<Point3D> point3Ds)

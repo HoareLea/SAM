@@ -63,6 +63,7 @@
     <Compile Include="Query\Arcsch.cs" />
     <Compile Include="Query\Arcoth.cs" />
     <Compile Include="Query\Sech.cs" />
+    <Compile Include="Query\Modal.cs" />
     <Compile Include="Query\Tanh.cs" />
     <Compile Include="Query\Sinh.cs" />
     <Compile Include="Query\Sec.cs" />

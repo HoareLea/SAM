@@ -56,7 +56,7 @@ namespace SAM.Analytical
             foreach(BoundaryEdge3D boundaryEdge3D in BoundaryEdge3Ds)
                 point3Ds.Add(boundaryEdge3D.Curve3D.GetStart());
 
-            return Geometry.Spatial.Point3D.GetNormal(point3Ds, tolerance);
+            return Geometry.Spatial.Query.Normal(point3Ds, tolerance);
         }
 
         public override bool FromJObject(JObject jObject)

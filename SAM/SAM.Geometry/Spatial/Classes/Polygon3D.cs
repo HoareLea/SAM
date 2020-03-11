@@ -42,12 +42,12 @@ namespace SAM.Geometry.Spatial
             if (points == null || points.Count < 3)
                 return null;
 
-            return Point3D.GetNormal(points[0], points[1], points[2]);
+            return Query.Normal(points[0], points[1], points[2]);
         }
 
         public Plane GetPlane(double tolerance)
         {
-            return Point3D.GetPlane(points, tolerance);
+            return Create.Plane(points, tolerance);
         }
 
         public Plane GetPlane()
@@ -55,7 +55,7 @@ namespace SAM.Geometry.Spatial
             if (points == null || points.Count < 3)
                 return null;
             
-            return Point3D.GetPlane(points, Tolerance.MicroDistance);
+            return Create.Plane(points, Tolerance.MicroDistance);
         }
 
         public override ISAMGeometry Clone()
