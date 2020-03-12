@@ -63,39 +63,16 @@ namespace SAM.Analytical.Grasshopper
             }
 
             GH_ObjectWrapper objectWrapper = null;
-            if (!dataAccess.GetData(0, ref objectWrapper))
+            if (!dataAccess.GetData(1, ref objectWrapper))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            PanelType? panelType = null;
+            PanelType panelType = Query.PanelType(objectWrapper.Value);
+ 
 
-            if(objectWrapper.Value is PanelType)
-            {
-                panelType = (PanelType)objectWrapper.Value;
-            }
-            else if(objectWrapper.Value is int)
-            {
-
-                int aIndex = (int)objectWrapper.Value;
-                if (Enum.IsDefined(typeof(PanelType), aIndex))
-                    panelType = (PanelType)aIndex;
-            }
-            else if(objectWrapper.Value is string)
-            {
-                PanelType panelType_Temp;
-                if (Enum.TryParse((string)objectWrapper.Value, out panelType_Temp))
-                    panelType = panelType_Temp;
-            }
-
-            if(panelType == null || !panelType.HasValue)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }     
-
-            dataAccess.SetData(0, new GooPanel(new Panel(panel, panelType.Value)));
+            dataAccess.SetData(0, new GooPanel(new Panel(panel, panelType)));
         }
     }
 }
