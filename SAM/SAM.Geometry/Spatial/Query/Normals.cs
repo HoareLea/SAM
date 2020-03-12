@@ -31,7 +31,7 @@ namespace SAM.Geometry.Spatial
                 if (SAM.Geometry.Spatial.Query.IsValid(vector3D))
                     vector3D = vector3D.Unit;
                 else
-                    vector3D == null;
+                    vector3D = null;
 
                 result.Add(vector3D);
             }
