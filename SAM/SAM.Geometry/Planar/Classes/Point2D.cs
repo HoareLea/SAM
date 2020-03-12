@@ -117,7 +117,7 @@ namespace SAM.Geometry.Planar
             return string.Format("{0}(X={1},Y={2})", GetType().Name, coordinates[0], coordinates[1]);
         }
 
-        public string ToString(int decimals)
+        public string ToString(int decimals = Rounding.Distance)
         {
             return string.Format("Point2D(X={0},Y={1})", System.Math.Round(coordinates[0], decimals), System.Math.Round(coordinates[1], decimals));
         }
@@ -155,7 +155,7 @@ namespace SAM.Geometry.Planar
             return new Point2D(this);
         }
 
-        public void Round(int decimals)
+        public void Round(int decimals = Rounding.Distance)
         {
             coordinates[0] = System.Math.Round(coordinates[0], decimals);
             coordinates[1] = System.Math.Round(coordinates[1], decimals);

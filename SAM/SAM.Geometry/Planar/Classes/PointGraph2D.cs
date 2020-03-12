@@ -85,17 +85,17 @@ namespace SAM.Geometry.Planar
             }
         }        
 
-        public PointGraph2D(IEnumerable<Segment2D> segment2Ds, bool split = true, int decimals = 9)
+        public PointGraph2D(IEnumerable<Segment2D> segment2Ds, bool split = true, int decimals = Rounding.MicroDistance)
         {
             Load(segment2Ds, split, decimals);
         }
 
-        public PointGraph2D(Polygon2D polygon2D, bool split = true, int decimals = 9)
+        public PointGraph2D(Polygon2D polygon2D, bool split = true, int decimals = Rounding.MicroDistance)
         {
             Load(polygon2D?.GetSegments(), split, decimals);
         }
 
-        public PointGraph2D(IEnumerable<Polygon2D> polygon2Ds, bool split = true, int decimals = 9)
+        public PointGraph2D(IEnumerable<Polygon2D> polygon2Ds, bool split = true, int decimals = Rounding.MicroDistance)
         {
             if(polygon2Ds != null)
             {
@@ -117,7 +117,7 @@ namespace SAM.Geometry.Planar
         }
 
 
-        public bool Load(IEnumerable<Segment2D> segment2Ds, bool split = false, int decimals = 9)
+        public bool Load(IEnumerable<Segment2D> segment2Ds, bool split = false, int decimals = Rounding.MicroDistance)
         {
             if (segment2Ds == null)
                 return false;
