@@ -23,9 +23,9 @@ namespace SAM.Geometry.Spatial
             List<Vector3D> result = new List<Vector3D>();
             for (int i = 1; i < aCount - 1; i++)
             {
-                Point3D point3D_1 = point3Ds.ElementAt(i - 1);
-                Point3D point3D_2 = point3Ds.ElementAt(i);
-                Point3D point3D_3 = point3Ds.ElementAt(i + 1);
+                Point3D point3D_1 = point3Ds_Temp.ElementAt(i - 1);
+                Point3D point3D_2 = point3Ds_Temp.ElementAt(i);
+                Point3D point3D_3 = point3Ds_Temp.ElementAt(i + 1);
 
                 Vector3D vector3D = Normal(point3D_1, point3D_2, point3D_3);
                 if (vector3D != null)

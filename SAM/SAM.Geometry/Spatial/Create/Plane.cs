@@ -20,6 +20,8 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             int count = vector3Ds.Count;
+            if (count == 0)
+                return null;
 
             Dictionary<int, Tuple<Vector3D, Point3D>> dictionary = new Dictionary<int, Tuple<Vector3D, Point3D>>();
             for (int i=0; i < count; i++)
