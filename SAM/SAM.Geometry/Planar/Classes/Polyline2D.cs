@@ -58,9 +58,17 @@ namespace SAM.Geometry.Planar
             return points.First().Equals(points.Last());
         }
 
-        public bool IsClosed(double tolerance)
+        public bool IsClosed(double tolerance = Tolerance.MicroDistance)
         {
             return points.First().Distance(points.Last()) < tolerance;
+        }
+
+        public Point2D Closest(Point2D point2D, bool includeEdges)
+        {
+            if (includeEdges)
+                return Query.Closest(this, point2D);
+
+            return Query.Closest(points, point2D);
         }
 
         public void Close()
