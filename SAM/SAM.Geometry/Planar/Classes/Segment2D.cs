@@ -503,5 +503,29 @@ namespace SAM.Geometry.Planar
         {
             return Query.Distance(this, segmentable2D);
         }
+
+        public double GetParameter(Point2D point2D, double tolerance = Tolerance.MicroDistance)
+        {
+            if (point2D == null)
+                return double.NaN;
+
+            Point2D point2D_Closest = Closest(point2D);
+            if (point2D_Closest == null)
+                return double.NaN;
+
+            double length = vector.Length;
+
+            double distance = new Vector2D(origin, point2D_Closest).Length;
+
+            if (distance == 0)
+                return 0;
+
+            return length / distance;
+        }
+
+        public Point2D GetPoint(double parameter)
+        {
+            return origin.GetMoved(vector * parameter);
+        }
     }
 }
