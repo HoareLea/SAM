@@ -143,6 +143,7 @@
     <Compile Include="Spatial\Classes\Point3D.cs" />
     <Compile Include="Spatial\Classes\Polygon3D.cs" />
     <Compile Include="Spatial\Interfaces\IPlanar3D.cs" />
+    <Compile Include="Rounding.cs" />
     <Compile Include="Tolerance.cs" />
   </ItemGroup>
   <ItemGroup />
