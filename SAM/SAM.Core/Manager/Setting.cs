@@ -7,26 +7,26 @@ using Newtonsoft.Json.Linq;
 
 namespace SAM.Core
 {
-    public class SAMSettings : SAMObject
+    public class Setting : SAMObject
     {
         private DateTime created;
         private DateTime updated;
        
-        public SAMSettings()
+        public Setting()
             : base()
         {
             created = DateTime.Now;
             updated = DateTime.Now;
         }
 
-        public SAMSettings(Assembly assembly)
+        public Setting(Assembly assembly)
             : base(Query.Guid(assembly), Query.Name(assembly))
         {
             created = DateTime.Now;
             updated = DateTime.Now;
         }
 
-        public SAMSettings(JObject jObject)
+        public Setting(JObject jObject)
         {
             FromJObject(jObject);
         }
@@ -45,6 +45,11 @@ namespace SAM.Core
             {
                 return updated;
             }
+        }
+
+        public void Clear()
+        {
+
         }
 
         public override bool FromJObject(JObject jObject)

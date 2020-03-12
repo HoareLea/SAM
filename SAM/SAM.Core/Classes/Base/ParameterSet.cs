@@ -113,6 +113,15 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Add(string name, DateTime value)
+        {
+            if (dictionary == null || name == null)
+                return false;
+
+            dictionary[name] = value;
+            return true;
+        }
+
         public bool Copy(ParameterSet parameterSet)
         {
             if (parameterSet == null)
@@ -127,6 +136,12 @@ namespace SAM.Core
             return true;
         }
 
+        public void Clear()
+        {
+            if (dictionary != null)
+                dictionary.Clear();
+        }
+
         public bool Remove(string name)
         {
             if (dictionary == null || name == null)
@@ -137,7 +152,7 @@ namespace SAM.Core
 
         public bool Modify(string name, string value)
         {
-            if (dictionary == null || name == null ||!dictionary.ContainsKey(name))
+            if (dictionary == null || name == null || !dictionary.ContainsKey(name))
                 return false;
 
             dictionary[name] = value;
@@ -195,6 +210,15 @@ namespace SAM.Core
                 return false;
 
             return result;
+        }
+
+        public bool ToDateTime(string name)
+        {
+            DateTime result;
+            if (!Query.TryGetValue(dictionary, name, out result))
+                return false;
+
+            return true;
         }
 
         public IJSAMObject ToSAMObject<T>(string name) where T: IJSAMObject
@@ -279,6 +303,9 @@ namespace SAM.Core
                         break;
                     case JTokenType.Boolean:
                         dictionary[jObject_Temp.Value<string>("Name")] = jToken.Value<bool>();
+                        break;
+                    case JTokenType.Date:
+                        dictionary[jObject_Temp.Value<string>("Name")] = jToken.Value<DateTime>();
                         break;
                     case JTokenType.Object:
                         dictionary[jObject_Temp.Value<string>("Name")] = Create.IJSAMObject((JObject)jToken);

@@ -45,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Base\SAMSettings.cs" />
+    <Compile Include="Manager\ActiveManager.cs" />
+    <Compile Include="Manager\Manager.cs" />
+    <Compile Include="Manager\Setting.cs" />
     <Compile Include="Classes\Base\IntegerId.cs" />
     <Compile Include="Classes\Base\ParameterSet.cs" />
     <Compile Include="Classes\Base\SAMObjectWrapper.cs" />
