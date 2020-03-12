@@ -28,8 +28,10 @@ namespace SAM.Geometry.Spatial
                 Point3D point3D_3 = point3Ds_Temp.ElementAt(i + 1);
 
                 Vector3D vector3D = Normal(point3D_1, point3D_2, point3D_3);
-                if (vector3D != null)
+                if (SAM.Geometry.Spatial.Query.IsValid(vector3D))
                     vector3D = vector3D.Unit;
+                else
+                    vector3D == null;
 
                 result.Add(vector3D);
             }
