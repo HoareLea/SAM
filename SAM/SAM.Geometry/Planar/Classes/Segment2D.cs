@@ -57,14 +57,14 @@ namespace SAM.Geometry.Planar
         /// <summary>
         /// Point2D of serment by given index
         /// </summary>
-        public Point2D this[int Index]
+        public Point2D this[int index]
         {
             get
             {
-                if (Index == 0)
+                if (index == 0)
                     return new Point2D(origin);
 
-                if (Index == 1)
+                if (index == 1)
                 {
                     Point2D point2D = new Point2D(origin);
                     point2D.Move(vector);
@@ -75,14 +75,14 @@ namespace SAM.Geometry.Planar
             }
             set
             {
-                if (Index == 0)
+                if (index == 0)
                 {
                     Point2D point = this[1];
                     origin = value;
                     vector = new Vector2D(origin, point);
                 }
 
-                if (Index == 1)
+                if (index == 1)
                 {
                     vector = new Vector2D(origin, new Point2D(value));
                 }
@@ -432,7 +432,7 @@ namespace SAM.Geometry.Planar
                 return start;
         }
 
-        public int GetIndex(Point2D point2D)
+        public int GetEndIndex(Point2D point2D)
         {
             Point2D end = End;
             Point2D start = Start;

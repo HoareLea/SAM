@@ -123,6 +123,14 @@ namespace SAM.Geometry.Planar
             return points.ConvertAll(x => (Point2D)x.Clone());
         }
 
+        public Point2D this[int index]
+        {
+            get
+            {
+                return points[index];
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             points = Create.Point2Ds(jObject.Value<JArray>("Points"));
@@ -154,6 +162,83 @@ namespace SAM.Geometry.Planar
         public double Distance(ISegmentable2D segmentable2D)
         {
             return Query.Distance(this, segmentable2D);
+        }
+
+        public bool Add(Segment2D segment2D, double tolerance = Tolerance.MicroDistance)
+        {
+            if (segment2D == null || segment2D.Length < tolerance)
+                return false;
+
+            if(points == null)
+                points = new List<Point2D>();
+
+            Point2D point2D_Start = segment2D.Start;
+            Point2D point2D_End = segment2D.End;
+
+            if (points.Count == 0)
+            {
+                points.Add(point2D_Start);
+                points.Add(point2D_End);
+                return true;
+            }
+
+            Point2D point2D;
+
+           point2D = points[0];
+
+            if (point2D.Distance(point2D_Start) < tolerance)
+            {
+                points.Insert(0, point2D_Start);
+                points.Insert(0, point2D_End);
+                return true;
+            }
+
+            if (point2D.Distance(point2D_End) < tolerance)
+            {
+                points.Insert(0, point2D_End);
+                points.Insert(0, point2D_Start);
+                return true;
+            }
+
+            point2D = points.Last();
+
+            if (point2D.Distance(point2D_End) < tolerance)
+            {
+                points.Add(point2D_End);
+                points.Add(point2D_Start);
+                return true;
+            }
+
+            if (point2D.Distance(point2D_Start) < tolerance)
+            {
+                points.Add(point2D_Start);
+                points.Add(point2D_End);
+                return true;
+            }
+
+            return false;
+        }
+
+        public Point2D ClosestEnd(Point2D point2D)
+        {
+            Point2D end = GetEnd();
+            Point2D start = GetStart();
+
+            if (end.Distance(point2D) < start.Distance(point2D))
+                return end;
+            else
+                return start;
+        }
+
+        public int GetEndIndex(Point2D point2D)
+        {
+            Point2D end = GetEnd();
+            Point2D start = GetStart();
+
+            if (end.Distance(point2D) < start.Distance(point2D))
+                return points.Count - 1;
+            else
+                return 0;
         }
     }
 }
