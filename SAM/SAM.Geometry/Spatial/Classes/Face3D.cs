@@ -185,13 +185,16 @@ namespace SAM.Geometry.Spatial
 
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges)
         {
-            if (edges == null)
+            if (edges == null || edges.Count() == 0)
                 return null;
 
             IClosedPlanar3D externalEdge = null;
             double area_Max = double.MinValue;
             foreach (IClosedPlanar3D closedPlanar3D in edges)
             {
+                if (closedPlanar3D == null)
+                    continue;
+                
                 double area = closedPlanar3D.GetArea();
                 if (area > area_Max)
                 {
@@ -207,9 +210,10 @@ namespace SAM.Geometry.Spatial
             Plane plane = externalEdge.GetPlane();
 
             List<IClosedPlanar3D> internalEdges = edges.ToList();
+            internalEdges.RemoveAll(x => x == null);
             internalEdges.Remove(externalEdge);
 
-            return Create(plane, plane.Convert(externalEdge), internalEdges.ConvertAll(x => plane.Convert(x)));
+            return Create(plane, plane?.Convert(externalEdge), internalEdges.ConvertAll(x => plane.Convert(x)));
         }
         
         public static Face3D Create(Plane plane, Planar.IClosed2D externalEdge, IEnumerable<Planar.IClosed2D> internalEdges)
