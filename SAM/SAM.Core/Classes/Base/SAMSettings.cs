@@ -13,6 +13,14 @@ namespace SAM.Core
         private DateTime updated;
        
         public SAMSettings()
+            : base()
+        {
+            created = DateTime.Now;
+            updated = DateTime.Now;
+        }
+
+        public SAMSettings(Assembly assembly)
+            : base(Query.Guid(assembly), Query.Name(assembly))
         {
             created = DateTime.Now;
             updated = DateTime.Now;
