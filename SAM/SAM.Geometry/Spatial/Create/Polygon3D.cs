@@ -7,6 +7,9 @@ namespace SAM.Geometry.Spatial
     {
         public static Polygon3D Polygon3D(this IEnumerable<Point3D> point3Ds, double tolerace = Tolerance.MicroDistance)
         {
+            if (point3Ds == null)
+                return null;
+            
             Plane plane = Create.Plane(point3Ds, true, tolerace);
             if (plane == null)
                 return null;
