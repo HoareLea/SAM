@@ -292,7 +292,48 @@ namespace SAM.Geometry.Planar
 
         public Point2D GetPoint(double parameter)
         {
+            if (parameter < 0 || parameter > 1)
+                return null;
 
+            if (parameter == 0)
+                return GetStart();
+
+            if (parameter == 1)
+                return GetEnd();
+
+            double length = GetLength();
+            if (double.IsNaN(length))
+                return null;
+
+            length = length * parameter;
+            
+            if (length == 0)
+                return GetStart();
+
+            List<Segment2D> segment2Ds = GetSegments();
+            if (segment2Ds == null || segment2Ds.Count == 0)
+                return null;
+
+            foreach(Segment2D segment2D in segment2Ds)
+            {
+                if (segment2D == null)
+                    continue;
+
+                double length_Segment = segment2D.Length;
+                if (length_Segment == 0)
+                    continue;
+
+                double length_Temp = length - length_Segment;
+                if(length_Temp == 0)
+                    return segment2D.End;
+
+                if (length_Temp < 0)
+                    return segment2D.GetPoint(length);
+
+                length = length_Temp;
+            }
+
+            return GetEnd();
         }
     }
 }
