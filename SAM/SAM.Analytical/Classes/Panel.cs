@@ -58,14 +58,24 @@ namespace SAM.Analytical
             this.planarBoundary3D = planarBoundary3D;
         }
 
-        public Panel(Guid guid, Panel panel, Face3D face)
+        public Panel(Guid guid, Panel panel, Face3D face, bool trimGeometry = true, double maxDistance = Tolerance.MacroDistance)
             : base(guid, panel)
         {
             panelType = panel.panelType;
             planarBoundary3D = new PlanarBoundary3D(face);
 
             if (panel.apertures != null)
-                apertures = panel.apertures.FindAll(x => Query.IsValid(this, x)).ConvertAll(x => new Aperture(x));
+            {
+                foreach(Aperture aperture in panel.apertures)
+                {
+                    if (aperture == null)
+                        continue;
+
+                    //TODO: Update ExternalEdge with PlanarBoundary3D
+                    AddAperture(aperture.ApertureConstruction, aperture.GetFace3D()?.GetExternalEdge(), trimGeometry, maxDistance);
+                }
+            }
+            //apertures = panel.apertures.FindAll(x => Query.IsValid(this, x, Core.Tolerance.MacroDistance)).ConvertAll(x => new Aperture(x));
         }
 
         public Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
@@ -176,7 +186,7 @@ namespace SAM.Analytical
             if (plane_ClosedPlanar3D_Projected == null)
                 return null;
 
-            if (plane_ClosedPlanar3D_Projected.Origin.Distance(closedPlanar3D.GetPlane().Origin) > maxDistance)
+            if (plane_ClosedPlanar3D_Projected.Origin.Distance(closedPlanar3D.GetPlane().Origin) >= maxDistance)
                 return null;
 
             Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
