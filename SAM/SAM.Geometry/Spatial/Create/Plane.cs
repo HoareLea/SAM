@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,24 +23,35 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             Dictionary<int, Tuple<Vector3D, Point3D>> dictionary = new Dictionary<int, Tuple<Vector3D, Point3D>>();
-            for (int i=0; i < count; i++)
+            List<int> hashSets = new List<int>();
+            for (int i = 0; i < count; i++)
             {
                 Vector3D vector3D = vector3Ds[i];
-                if (vector3D == null)
+                if (!Query.IsValid(vector3D))
                     continue;
 
-                dictionary[vector3D.GetHashCode()] = new Tuple<Vector3D, Point3D>(vector3D, point3Ds.ElementAt(i));
+                int hashSet = vector3D.GetHashCode();
+
+                hashSets.Add(hashSet);
+
+                if (!dictionary.ContainsKey(hashSet))
+                    dictionary[hashSet] = new Tuple<Vector3D, Point3D>(vector3D, point3Ds.ElementAt(i));
             }
 
             if (dictionary == null || dictionary.Count() == 0)
                 return null;
 
-            int hashSet = Math.Query.Modal(dictionary.Keys);
-            
-            if (!dictionary.ContainsKey(hashSet))
-                return null;
+            Tuple<Vector3D, Point3D> tuple = null;
+            if (dictionary.Count != 1)
+            {
+                int hashSet_Modal = Math.Query.Modal(hashSets);
+                tuple = dictionary[hashSet_Modal];
+            }
+            else
+            {
+                tuple = dictionary.First().Value;
+            }
 
-            Tuple<Vector3D, Point3D> tuple = dictionary[hashSet];
             return new Plane(tuple.Item2, tuple.Item1);
         }
 
