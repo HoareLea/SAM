@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static Polygon2D RemoveAngle(this Polygon2D polygon2D, double length, double minAngle = 1.5708, double tolerance = Tolerance.MacroDistance)
+        public static Polygon2D RemoveAngle(this Polygon2D polygon2D, double length, double minAngle = 1.5708, double tolerance = Core.Tolerance.MacroDistance)
         {
             List<Point2D> point2Ds = polygon2D?.Points;
 
@@ -80,7 +80,7 @@ namespace SAM.Geometry.Planar
             return new Polygon2D(point2Ds_New);
         }
 
-        public static List<Point2D> RemoveAngle(Point2D point2D_Previous, Point2D point2D, Point2D point2D_Next, double length, double minAngle = 1.5708, double tolerance = Tolerance.MacroDistance)
+        public static List<Point2D> RemoveAngle(Point2D point2D_Previous, Point2D point2D, Point2D point2D_Next, double length, double minAngle = 1.5708, double tolerance = Core.Tolerance.MacroDistance)
         {
             if (point2D_Previous == null || point2D == null || point2D_Next == null)
                 return null;

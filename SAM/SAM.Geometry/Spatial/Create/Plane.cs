@@ -7,7 +7,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Create
     {
-        public static Plane Plane(this IEnumerable<Point3D> point3Ds, bool useMode, double tolerance = Tolerance.MicroDistance)
+        public static Plane Plane(this IEnumerable<Point3D> point3Ds, bool useMode, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point3Ds == null)
                 return null;
@@ -45,7 +45,7 @@ namespace SAM.Geometry.Spatial
             return new Plane(tuple.Item2, tuple.Item1);
         }
 
-        public static Plane Plane(this IEnumerable<Point3D> point3Ds, double tolerance = Tolerance.MicroDistance)
+        public static Plane Plane(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             Vector3D normal = Query.Normal(point3Ds, tolerance);
             if (normal == null)

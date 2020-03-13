@@ -212,7 +212,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static List<Point3D> SimplifyByAngle(IEnumerable<Point3D> point3Ds, bool close = false, double tolerane = Tolerance.Angle)
+        public static List<Point3D> SimplifyByAngle(IEnumerable<Point3D> point3Ds, bool close = false, double tolerane = Core.Tolerance.Angle)
         {
             if (point3Ds == null)
                 return null;
@@ -241,7 +241,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static List<Point3D> SimplifyByDistance(IEnumerable<Point3D> point3Ds, bool close = false, double tolerane = Tolerance.Distance)
+        public static List<Point3D> SimplifyByDistance(IEnumerable<Point3D> point3Ds, bool close = false, double tolerane = Core.Tolerance.Distance)
         {
             if (point3Ds == null)
                 return null;
@@ -401,7 +401,7 @@ namespace SAM.Geometry.Spatial
             return new Point3D((point3D_1.X + point3D_2.X) / 2, (point3D_1.Y + point3D_2.Y) / 2, (point3D_1.Z + point3D_2.Z) / 2);
         }
 
-        public static bool Colinear(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3, double tolerance = Tolerance.Angle)
+        public static bool Colinear(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3, double tolerance = Core.Tolerance.Angle)
         {
             return new Vector3D(point3D_1, point3D_2).SmallestAngle(new Vector3D(point3D_1, point3D_3)) < tolerance;
         }

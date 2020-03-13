@@ -127,7 +127,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            double maxDistance = Geometry.Tolerance.MacroDistance;
+            double maxDistance = Core.Tolerance.MacroDistance;
             dataAccess.GetData(3, ref maxDistance);
 
             List<Aperture> apertures = new List<Aperture>();

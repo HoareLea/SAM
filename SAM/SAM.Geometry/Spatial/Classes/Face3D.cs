@@ -103,7 +103,7 @@ namespace SAM.Geometry.Spatial
             return true;
         }
 
-        public bool Inside(Face3D face3D, double tolerance = Tolerance.MicroDistance)
+        public bool Inside(Face3D face3D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (!plane.Coplanar(face3D.plane, tolerance))
                 return false;
@@ -120,7 +120,7 @@ namespace SAM.Geometry.Spatial
             return externalEdge.Inside(closed2D) && internalEdges.TrueForAll(x => !x.Inside(closed2D));
         }
 
-        public bool Inside(Point3D point3D, double tolerance = Tolerance.MicroDistance)
+        public bool Inside(Point3D point3D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (!plane.On(point3D, tolerance))
                 return false;
@@ -133,7 +133,7 @@ namespace SAM.Geometry.Spatial
             return externalEdge.Inside(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D));
         }
 
-        public bool On(Point3D point3D, double tolerance = Tolerance.MicroDistance)
+        public bool On(Point3D point3D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (!plane.On(point3D, tolerance))
                 return false;

@@ -55,7 +55,7 @@ namespace SAM.Geometry.Spatial
             if (points == null || points.Count < 3)
                 return null;
             
-            return Create.Plane(points, Tolerance.MicroDistance);
+            return Create.Plane(points, Core.Tolerance.MicroDistance);
         }
 
         public override ISAMGeometry Clone()
@@ -123,7 +123,7 @@ namespace SAM.Geometry.Spatial
             return Planar.Point2D.GetArea(points.ConvertAll(x => plane.Convert(x)));
         }
 
-        public bool Inside(Polygon3D polygon3D, double tolerance = Tolerance.MicroDistance)
+        public bool Inside(Polygon3D polygon3D, double tolerance = Core.Tolerance.MicroDistance)
         {
             Plane plane_1 = GetPlane();
             Plane plane_2 = polygon3D.GetPlane();

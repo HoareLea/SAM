@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Segment2D> Segment2Ds(this IEnumerable<Segment2D> segment2Ds, Point2D point2D, double tolerance = Tolerance.MicroDistance)
+        public static List<Segment2D> Segment2Ds(this IEnumerable<Segment2D> segment2Ds, Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segment2Ds == null || point2D == null)
                 return null;

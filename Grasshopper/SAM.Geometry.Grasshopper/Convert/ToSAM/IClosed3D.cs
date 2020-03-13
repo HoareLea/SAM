@@ -13,7 +13,7 @@ namespace SAM.Geometry.Grasshopper
         public static Spatial.IClosed3D ToSAM(this BrepLoop brepLoop, bool simplify = true)
         {
 
-            if (brepLoop.Face.IsPlanar(Tolerance.MicroDistance))
+            if (brepLoop.Face.IsPlanar(Core.Tolerance.MicroDistance))
             {
                 return new Spatial.Face3D(brepLoop.To3dCurve().ToSAM(simplify) as Spatial.IClosedPlanar3D);
             }

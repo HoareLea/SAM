@@ -199,7 +199,7 @@ namespace SAM.Geometry.Spatial
             return point3D.X > min.X && point3D.X < max.X && point3D.Y < max.Y && point3D.Y > min.Y && point3D.Z < max.Z && point3D.Z > min.Z;
         }
 
-        public bool Inside(Point3D point3D, bool acceptOnEdge = true, double tolerance = Tolerance.MicroDistance)
+        public bool Inside(Point3D point3D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point3D == null)
                 return false;

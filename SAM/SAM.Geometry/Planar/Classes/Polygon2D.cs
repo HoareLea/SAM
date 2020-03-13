@@ -197,7 +197,7 @@ namespace SAM.Geometry.Planar
                 segment2Ds_Offset[segment2D_Offset_New] = polygon2Ds;
             }
 
-            List<Segment2D> segment2Ds_Split = Modify.Split(segment2Ds_Offset.Keys, Tolerance.MicroDistance);
+            List<Segment2D> segment2Ds_Split = Modify.Split(segment2Ds_Offset.Keys, Core.Tolerance.MicroDistance);
 
             List<Polygon2D> polygon2Ds_All = new List<Polygon2D>();
             foreach(KeyValuePair<Segment2D, List<Polygon2D>> keyValuePair in segment2Ds_Offset)
@@ -216,8 +216,8 @@ namespace SAM.Geometry.Planar
                     List<Point2D> point2Ds_Intersections = polygon2D.Intersections(segment2D);
                     if(point2Ds_Intersections != null)
                     {
-                        point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_1) < Tolerance.MicroDistance);
-                        point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_2) < Tolerance.MicroDistance);
+                        point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_1) < Core.Tolerance.MicroDistance);
+                        point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_2) < Core.Tolerance.MicroDistance);
 
                         if (point2Ds_Intersections.Count > 0)
                         {

@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static List<Polygon2D> Join(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Tolerance.MicroDistance)
+        public static List<Polygon2D> Join(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segmentable2Ds == null)
                 return null;

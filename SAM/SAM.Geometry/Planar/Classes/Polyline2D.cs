@@ -58,7 +58,7 @@ namespace SAM.Geometry.Planar
             return points.First().Equals(points.Last());
         }
 
-        public bool IsClosed(double tolerance = Tolerance.MicroDistance)
+        public bool IsClosed(double tolerance = Core.Tolerance.MicroDistance)
         {
             return points.First().Distance(points.Last()) < tolerance;
         }
@@ -172,7 +172,7 @@ namespace SAM.Geometry.Planar
             return Query.Distance(this, segmentable2D);
         }
 
-        public bool Add(Segment2D segment2D, double tolerance = Tolerance.MicroDistance)
+        public bool Add(Segment2D segment2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segment2D == null || segment2D.GetLength() < tolerance)
                 return false;

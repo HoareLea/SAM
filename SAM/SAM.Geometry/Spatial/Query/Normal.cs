@@ -5,7 +5,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static Vector3D Normal(this IEnumerable<Point3D> point3Ds, double tolerance = Tolerance.MicroDistance)
+        public static Vector3D Normal(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point3Ds == null)
                 return null;

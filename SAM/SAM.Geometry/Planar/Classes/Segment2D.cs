@@ -313,7 +313,7 @@ namespace SAM.Geometry.Planar
             return Intersections(segmentable2D?.GetSegments());
         }
 
-        public bool On(Point2D point2D, double tolerance = Tolerance.MicroDistance)
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             return Distance(point2D) < tolerance;
         }
@@ -482,7 +482,7 @@ namespace SAM.Geometry.Planar
             return new List<ICurve2D>() { new Segment2D(this) };
         }
 
-        public bool Colinear(Segment2D segment2D, double tolerance = Tolerance.Angle)
+        public bool Colinear(Segment2D segment2D, double tolerance = Core.Tolerance.Angle)
         {
             return vector.Colinear(segment2D.vector, tolerance);
         }

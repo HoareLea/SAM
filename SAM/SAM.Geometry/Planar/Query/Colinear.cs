@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        public static bool Colinear(this Point2D point2D_1, Point2D point2D_2, Point2D point2D_3, double tolerance = Tolerance.MicroDistance)
+        public static bool Colinear(this Point2D point2D_1, Point2D point2D_2, Point2D point2D_3, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point2D_1 == null || point2D_2 == null || point2D_3 == null)
                 return false;

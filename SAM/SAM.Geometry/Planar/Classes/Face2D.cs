@@ -25,7 +25,7 @@ namespace SAM.Geometry.Planar
         }
 
 
-        public bool On(Point2D point2D, double tolerance = Tolerance.MicroDistance)
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point2D == null)
                 return false;

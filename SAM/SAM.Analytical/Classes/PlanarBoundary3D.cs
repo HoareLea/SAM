@@ -169,7 +169,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public bool Coplanar(PlanarBoundary3D planarBoundary3D, double tolerance = Geometry.Tolerance.Angle)
+        public bool Coplanar(PlanarBoundary3D planarBoundary3D, double tolerance = Tolerance.Angle)
         {
             return plane.Coplanar(planarBoundary3D.plane, tolerance);
         }
@@ -194,7 +194,7 @@ namespace SAM.Analytical
             return GetFace3D().GetBoundingBox(offset);
         }
 
-        public Vector3D GetNormal(double tolerance = Geometry.Tolerance.MicroDistance)
+        public Vector3D GetNormal(double tolerance = Tolerance.MicroDistance)
         {
             return GetEdge3DLoop().GetNormal(tolerance);
         }

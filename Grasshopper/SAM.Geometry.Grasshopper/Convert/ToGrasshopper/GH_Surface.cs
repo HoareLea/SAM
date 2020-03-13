@@ -22,7 +22,7 @@ namespace SAM.Geometry.Grasshopper
 
                 if (closed3D is Spatial.IClosedPlanar3D)
                 {
-                    breps = Rhino.Geometry.Brep.CreatePlanarBreps(curve3Ds.ToRhino_PolylineCurve(true), Tolerance.MicroDistance);
+                    breps = Rhino.Geometry.Brep.CreatePlanarBreps(curve3Ds.ToRhino_PolylineCurve(true), Core.Tolerance.MicroDistance);
                 }
                 else
                 {
@@ -38,7 +38,7 @@ namespace SAM.Geometry.Grasshopper
             return null;
         }
 
-        public static GH_Surface ToGrasshopper(this Spatial.Face3D face, double tolerance = Tolerance.MicroDistance)
+        public static GH_Surface ToGrasshopper(this Spatial.Face3D face, double tolerance = Core.Tolerance.MicroDistance)
         {
             return new GH_Surface(ToRhino_Brep(face, tolerance));
         }

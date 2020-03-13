@@ -5,7 +5,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Create
     {
-        public static Polygon3D Polygon3D(this IEnumerable<Point3D> point3Ds, double tolerace = Tolerance.MicroDistance)
+        public static Polygon3D Polygon3D(this IEnumerable<Point3D> point3Ds, double tolerace = Core.Tolerance.MicroDistance)
         {
             if (point3Ds == null)
                 return null;

@@ -58,7 +58,7 @@ namespace SAM.Analytical
             this.planarBoundary3D = planarBoundary3D;
         }
 
-        public Panel(Guid guid, Panel panel, Face3D face, double maxDistance = Geometry.Tolerance.MacroDistance)
+        public Panel(Guid guid, Panel panel, Face3D face)
             : base(guid, panel)
         {
             panelType = panel.panelType;
@@ -159,7 +159,7 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public Aperture AddAperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, bool trimGeometry = true, double maxDistance = Geometry.Tolerance.MacroDistance)
+        public Aperture AddAperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, bool trimGeometry = true, double maxDistance = Tolerance.MacroDistance)
         {
             if (apertureConstruction == null || closedPlanar3D == null)
                 return null;

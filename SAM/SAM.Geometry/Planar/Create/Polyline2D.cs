@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Create
     {
-        public static Polyline2D Polyline2D(this IEnumerable<Segment2D> segment2Ds, bool split = true, double tolerance = Tolerance.MicroDistance)
+        public static Polyline2D Polyline2D(this IEnumerable<Segment2D> segment2Ds, bool split = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segment2Ds == null || segment2Ds.Count() == 0)
                 return null;

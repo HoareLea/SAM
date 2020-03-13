@@ -117,17 +117,17 @@ namespace SAM.Geometry.Planar
             return string.Format("{0}(X={1},Y={2})", GetType().Name, coordinates[0], coordinates[1]);
         }
 
-        public string ToString(int decimals = Rounding.Distance)
+        public string ToString(int decimals = Core.Rounding.Distance)
         {
             return string.Format("Point2D(X={0},Y={1})", System.Math.Round(coordinates[0], decimals), System.Math.Round(coordinates[1], decimals));
         }
 
-        public bool AlmostEqual(Point2D point2D, double tolerance = Tolerance.MicroDistance)
+        public bool AlmostEqual(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             return ((System.Math.Abs(coordinates[0] - point2D.coordinates[0]) < tolerance) && (System.Math.Abs(coordinates[1] - point2D.coordinates[1]) < tolerance));
         }
         
-        public bool AlmostOnSegment(Segment2D segment2D, double tolerance = Tolerance.MicroDistance)
+        public bool AlmostOnSegment(Segment2D segment2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             Segment2D segment2D_temp = new Segment2D(new Point2D(0, 0), new Point2D(segment2D[1].X - segment2D[0].X, segment2D[1].Y - segment2D[0].Y));
             Point2D aPoint2D = new Point2D(coordinates[0] - segment2D[0].X, coordinates[1] - segment2D[0].Y);
@@ -155,7 +155,7 @@ namespace SAM.Geometry.Planar
             return new Point2D(this);
         }
 
-        public void Round(int decimals = Rounding.Distance)
+        public void Round(int decimals = Core.Rounding.Distance)
         {
             coordinates[0] = System.Math.Round(coordinates[0], decimals);
             coordinates[1] = System.Math.Round(coordinates[1], decimals);
@@ -455,7 +455,7 @@ namespace SAM.Geometry.Planar
             return new Point2D(aX / aArea, aY / aArea);
         }
 
-        public static Point2D GetInternalPoint2D(IEnumerable<Point2D> point2Ds, double tolerance = Tolerance.Angle)
+        public static Point2D GetInternalPoint2D(IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.Angle)
         {
             if (point2Ds == null || point2Ds.Count() < 3)
                 return null;

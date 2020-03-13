@@ -176,7 +176,7 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
         
-        public bool Inside(BoundingBox2D boundingBox2D, bool acceptOnEdge = true, double tolerance = Tolerance.MicroDistance)
+        public bool Inside(BoundingBox2D boundingBox2D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             return Inside(boundingBox2D.max, acceptOnEdge, tolerance) && Inside(boundingBox2D.min, acceptOnEdge, tolerance);
         }
@@ -189,7 +189,7 @@ namespace SAM.Geometry.Planar
             return point2D.X > min.X && point2D.X < max.X && point2D.Y < max.Y && point2D.Y > min.Y;
         }
 
-        public bool Inside(Point2D point2D, bool acceptOnEdge = true, double tolerance = Tolerance.MicroDistance)
+        public bool Inside(Point2D point2D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point2D == null)
                 return false;

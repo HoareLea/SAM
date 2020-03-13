@@ -37,7 +37,7 @@ namespace SAM.Analytical
             if (face3D_Aperture == null)
                 return false;
 
-            if (face3D_Panel.Inside(face3D_Aperture.GetInternaPoint3D(), Geometry.Tolerance.Distance))
+            if (face3D_Panel.Inside(face3D_Aperture.GetInternaPoint3D(), Core.Tolerance.Distance))
                 return true;
 
             return false;

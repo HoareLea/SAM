@@ -100,7 +100,7 @@ namespace SAM.Geometry.Planar
             coordinates[1] = -coordinates[1];
         }
 
-        public bool AlmostEqual(Vector2D vector2D, double tolerance = Tolerance.MicroDistance)
+        public bool AlmostEqual(Vector2D vector2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             return ((System.Math.Abs(coordinates[0] - vector2D.coordinates[0]) <= tolerance) && (System.Math.Abs(coordinates[1] - vector2D.coordinates[1]) <= tolerance));
         }
@@ -122,12 +122,12 @@ namespace SAM.Geometry.Planar
             return hash;
         }
 
-        public bool IsPerpedicular(Vector2D vector2D, double tolerance = Tolerance.MicroDistance)
+        public bool IsPerpedicular(Vector2D vector2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             return (vector2D.coordinates[0] * coordinates[0]) + (vector2D.coordinates[1] * coordinates[1]) <= tolerance;
         }
 
-        public bool IsParallel(Vector2D vector2D, double tolerance = Tolerance.MicroDistance)
+        public bool IsParallel(Vector2D vector2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             Vector2D vector2D_1 = vector2D.Unit;
             Vector2D vector2D_2 = Unit;
@@ -165,7 +165,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public bool Colinear(Vector2D vector2D, double tolerance = Tolerance.Angle)
+        public bool Colinear(Vector2D vector2D, double tolerance = Core.Tolerance.Angle)
         {
             return SmallestAngle(vector2D) <= tolerance;
         }

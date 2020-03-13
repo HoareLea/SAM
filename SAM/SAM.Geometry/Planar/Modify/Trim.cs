@@ -97,7 +97,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Segment2D> Trim(this Segment2D segment2D, Polygon2D polygon2D, double tolerance = Tolerance.MicroDistance)
+        public static List<Segment2D> Trim(this Segment2D segment2D, Polygon2D polygon2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segment2D == null || polygon2D == null)
                 return null;
@@ -139,7 +139,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Segment2D> Trim(IEnumerable<Segment2D> segment2Ds, Polygon2D polygon2D, double tolerance = Tolerance.MicroDistance)
+        public static List<Segment2D> Trim(IEnumerable<Segment2D> segment2Ds, Polygon2D polygon2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segment2Ds == null || polygon2D == null)
                 return null;

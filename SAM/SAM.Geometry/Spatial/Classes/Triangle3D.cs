@@ -49,7 +49,7 @@ namespace SAM.Geometry.Spatial
 
         public Plane GetPlane()
         {
-            return Create.Plane(points, Tolerance.MicroDistance);
+            return Create.Plane(points, Core.Tolerance.MicroDistance);
         }
 
 
