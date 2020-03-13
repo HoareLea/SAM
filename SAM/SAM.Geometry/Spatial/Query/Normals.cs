@@ -5,7 +5,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static List<Vector3D> Normals(this IEnumerable<Point3D> point3Ds)
+        public static List<Vector3D> Normals(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Angle)
         {
             if (point3Ds == null)
                 return null;
@@ -27,11 +27,15 @@ namespace SAM.Geometry.Spatial
                 Point3D point3D_2 = point3Ds_Temp.ElementAt(i);
                 Point3D point3D_3 = point3Ds_Temp.ElementAt(i + 1);
 
-                Vector3D vector3D = Normal(point3D_1, point3D_2, point3D_3);
-                if (SAM.Geometry.Spatial.Query.IsValid(vector3D))
-                    vector3D = vector3D.Unit;
-                else
-                    vector3D = null;
+                Vector3D vector3D = null;
+                if (!Colinear(point3D_1, point3D_2, point3D_3, tolerance))
+                {
+                    vector3D = Normal(point3D_1, point3D_2, point3D_3);
+                    if (Query.IsValid(vector3D))
+                        vector3D = vector3D.Unit;
+                    else
+                        vector3D = null;
+                }
 
                 result.Add(vector3D);
             }
