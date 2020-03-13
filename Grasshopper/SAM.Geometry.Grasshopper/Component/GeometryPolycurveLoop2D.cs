@@ -86,9 +86,22 @@ namespace SAM.Geometry.Grasshopper
                     continue;
                 }
 
-                if (gHObjectWrapper.Value is IGH_GeometricGoo)
+                List<Spatial.ISAMGeometry3D> sAMGeometry3Ds = null;
+                if (gHObjectWrapper.Value is GooSAMGeometry)
                 {
-                    List<Spatial.ISAMGeometry3D> sAMGeometry3Ds = Convert.ToSAM((IGH_GeometricGoo)gHObjectWrapper.Value);
+                    ISAMGeometry sAMGeometry = ((GooSAMGeometry)gHObjectWrapper.Value).Value;
+                    if(sAMGeometry is Spatial.ISAMGeometry3D)
+                        sAMGeometry3Ds.Add((Spatial.ISAMGeometry3D)sAMGeometry);
+                    else if(sAMGeometry is Planar.ISAMGeometry2D)
+                        sAMGeometry3Ds.Add(Spatial.Plane.Base.Convert((Planar.ISAMGeometry2D)sAMGeometry));
+                }
+                else if (gHObjectWrapper.Value is IGH_GeometricGoo)
+                {
+                    sAMGeometry3Ds = Convert.ToSAM((IGH_GeometricGoo)gHObjectWrapper.Value);
+                }
+
+                if(sAMGeometry3Ds != null && sAMGeometry3Ds.Count > 0)
+                {
                     foreach (Spatial.ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
                     {
                         List<Spatial.ICurve3D> curve3Ds = new List<Spatial.ICurve3D>();

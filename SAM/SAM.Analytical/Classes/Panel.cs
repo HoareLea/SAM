@@ -204,7 +204,19 @@ namespace SAM.Analytical
                             double area_Aperture = closed2D_Aperture.GetArea();
 
                             List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
-                            List<Geometry.Planar.Polygon2D> polygon2Ds = new Geometry.Planar.PointGraph2D(segment2Ds).GetPolygon2Ds();
+
+                            List<Geometry.Planar.Polygon2D> polygon2Ds = null;
+                            
+                            //TODO: Remove try catch
+                            try
+                            {
+                                polygon2Ds = new Geometry.Planar.PointGraph2D(segment2Ds).GetPolygon2Ds();
+                            }
+                            catch(Exception exception)
+                            {
+                                System.IO.File.WriteAllText(@"C:\Users\DengusiakM\Desktop\logSAMcrush.txt", Core.Convert.ToJson(segment2Ds));
+                            }
+                            
                             if (polygon2Ds != null && polygon2Ds.Count > 0)
                             {
                                 double area_Difference_Min = double.MaxValue;
