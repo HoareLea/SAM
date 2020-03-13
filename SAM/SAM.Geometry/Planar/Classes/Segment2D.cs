@@ -497,15 +497,61 @@ namespace SAM.Geometry.Planar
             return Query.Distance(this, segmentable2D);
         }
 
-        public Point2D GetPoint(double parameter)
+        public Point2D GetPoint(double parameter, bool inverted = false)
         {
+            if (parameter < 0 || parameter > 1)
+                return null;
+
+            if (inverted)
+            {
+                Segment2D segment2D = new Segment2D(this);
+                segment2D.Reverse();
+                return segment2D.GetPoint(parameter, false);
+            }
+
+            if (parameter == 0)
+                return Start;
+
+            if (parameter == 1)
+                return End;
+
             return origin.GetMoved(vector * parameter);
         }
 
-        public double GetParameter(Point2D point2D)
+        public ISegmentable2D Trim(double parameter, bool inverted = false)
+        {
+            if (parameter <= 0 || parameter > 1)
+                return null;
+
+            if(inverted)
+            {
+                Segment2D segment2D = new Segment2D(this);
+                segment2D.Reverse();
+                return segment2D.Trim(parameter, false);
+            }
+
+            if (parameter == 1)
+                return new Segment2D(this);
+
+            Point2D point2D = GetPoint(parameter, false);
+            if (point2D == null)
+                return null;
+
+
+            return new Segment2D(Start, point2D);
+        }
+
+        public double GetParameter(Point2D point2D, bool inverted = false)
         {
             if (point2D == null)
                 return double.NaN;
+
+            if(inverted)
+            {
+                Segment2D segment2D = new Segment2D(this);
+                segment2D.Reverse();
+                return segment2D.GetParameter(point2D, false);
+            }
 
             Point2D point2D_Closest = Closest(point2D);
             if (point2D_Closest == null)
@@ -519,11 +565,6 @@ namespace SAM.Geometry.Planar
                 return 0;
 
             return length / distance;
-        }
-
-        public ISegmentable2D Trim(double parameter, bool inverted = false)
-        {
-            return Modify.Trim(this, parameter);
         }
     }
 }

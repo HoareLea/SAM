@@ -278,24 +278,24 @@ namespace SAM.Geometry.Planar
             return Query.Distance(this, point2D);
         }
 
-        public double GetParameter(Point2D point2D)
+        public double GetParameter(Point2D point2D, bool inverted = false)
         {
-            return Query.Parameter(this, point2D);
+            return Query.Parameter(this, point2D, inverted);
         }
 
-        public Point2D GetPoint(double parameter)
+        public Point2D GetPoint(double parameter, bool inverted = false)
         {
-            return Query.Point2D(this, parameter);
+            return Query.Point2D(this, parameter, inverted);
+        }
+
+        public ISegmentable2D Trim(double parameter, bool inverted = false)
+        {
+            return Modify.Trim(this, parameter, inverted);
         }
 
         public double GetLength()
         {
             return GetSegments().ConvertAll(x => x.GetLength()).Sum();
-        }
-
-        public ISegmentable2D Trim(double parameter, bool inverted = false)
-        {
-            return Modify.Trim(this, parameter);
         }
     }
 }

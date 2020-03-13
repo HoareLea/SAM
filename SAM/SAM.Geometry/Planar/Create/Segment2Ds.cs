@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -113,6 +114,26 @@ namespace SAM.Geometry.Planar
                     result.Add(new Segment2D(new Point2D(x, y_Start), new Point2D(x, y_End)));
                 }
             }
+
+            return result;
+        }
+
+        public static List<Segment2D> Segment2Ds(IEnumerable<Point2D> point2Ds, bool close = false)
+        {
+            if (point2Ds == null)
+                return null;
+
+            List<Segment2D> result = new List<Segment2D>();
+            if (point2Ds.Count() < 2)
+                return result;
+
+            int aCount = point2Ds.Count();
+
+            for (int i = 0; i < aCount - 1; i++)
+                result.Add(new Segment2D(point2Ds.ElementAt(i), point2Ds.ElementAt(i + 1)));
+
+            if (close)
+                result.Add(new Segment2D(point2Ds.Last(), point2Ds.First()));
 
             return result;
         }

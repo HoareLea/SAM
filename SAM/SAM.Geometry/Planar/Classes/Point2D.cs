@@ -470,7 +470,7 @@ namespace SAM.Geometry.Planar
 
             int count = point2Ds_List.Count;
 
-            List<Segment2D> segments = Point2D.GetSegments(point2Ds, true);
+            List<Segment2D> segments = Create.Segment2Ds(point2Ds, true);
             for (int i = 0; i < count - 2; i++)
             {
                 for (int j = i + 1; j < count - 1; j++)
@@ -549,26 +549,6 @@ namespace SAM.Geometry.Planar
 
             point2Ds.Add(point2D);
             return true;
-        }
-
-        public static List<Segment2D> GetSegments(IEnumerable<Point2D> point2Ds, bool close = false)
-        {
-            if (point2Ds == null)
-                return null;
-
-            List<Segment2D> result = new List<Segment2D>();
-            if (point2Ds.Count() < 2)
-                return result;
-
-            int aCount = point2Ds.Count();
-
-            for (int i = 0; i < aCount - 1; i++)
-                result.Add(new Segment2D(point2Ds.ElementAt(i), point2Ds.ElementAt(i + 1)));
-
-            if (close)
-                result.Add(new Segment2D(point2Ds.Last(), point2Ds.First()));
-
-            return result;
         }
 
         public static double GetArea(IEnumerable<Point2D> point2Ds)

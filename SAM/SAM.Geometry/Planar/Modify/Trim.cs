@@ -164,17 +164,18 @@ namespace SAM.Geometry.Planar
             if (segmentable2D == null || parameter <= 0 || parameter > 1)
                 return null;
 
-            List<Segment2D> segment2Ds = segmentable2D.GetSegments();
-            if (segment2Ds == null || segment2Ds.Count() == 0)
+            List<Point2D> point2Ds = segmentable2D.GetPoints();
+            if (point2Ds == null || point2Ds.Count < 2)
                 return null;
 
-            if (parameter == 1)
-            {
-                if (inverted)
-                    return null;
-                
-                return (ISegmentable2D)segmentable2D.Clone();
-            }
+            bool closed = segmentable2D is IClosed2D;
+
+            if (inverted)
+                Reverse(point2Ds, closed);
+
+            List<Segment2D> segment2Ds = Create.Segment2Ds(point2Ds, closed);
+            if (segment2Ds == null || segment2Ds.Count() == 0)
+                return null;
                 
             double length = segment2Ds.ConvertAll(x => x.GetLength()).Sum();
             if (double.IsNaN(length))
@@ -183,21 +184,7 @@ namespace SAM.Geometry.Planar
             if (length == 0)
                 return null;
 
-            if(inverted)
-            {
-                Segment2D segment2D = segment2Ds[0];
-                segment2Ds.Reverse();
-                segment2Ds.Remove(segment2D);
-                segment2Ds.Insert(0, segment2D);
-
-                segment2Ds.ForEach(x => x.Reverse());
-
-                length = length * (1 - parameter);
-            }
-            else
-            {
-                length = length * parameter;
-            }
+            length = length * parameter;
 
             List<Segment2D> result = new List<Segment2D>();
             foreach (Segment2D segment2D in segment2Ds)
@@ -231,61 +218,6 @@ namespace SAM.Geometry.Planar
             }
 
             return new Polyline2D(result);
-        }
-
-        public static ISegmentable2D Trim(ISegmentable2D segmentable2D, double parameter)
-        {
-            if (segmentable2D == null || parameter <= 0 || parameter > 1)
-                return null;
-
-            if (parameter == 1)
-                return (ISegmentable2D)segmentable2D.Clone();
-
-            List<Segment2D> segment2Ds = segmentable2D.GetSegments();
-            if (segment2Ds == null || segment2Ds.Count() == 0)
-                return null;
-
-            double length = segment2Ds.ConvertAll(x => x.GetLength()).Sum();
-            if (double.IsNaN(length))
-                return null;
-
-            length = length * parameter;
-
-            if (length == 0)
-                return null;
-
-            List<Segment2D> result = new List<Segment2D>();
-            foreach (Segment2D segment2D in segment2Ds)
-            {
-                if (segment2D == null)
-                    continue;
-
-                double length_Segment = segment2D.GetLength();
-                if (length_Segment == 0)
-                    continue;
-
-                double length_Temp = length - length_Segment;
-                if (length_Temp == 0)
-                {
-                    result.Add(segment2D);
-                    return new Polyline2D(result);
-                }
-
-                if (length_Temp < 0)
-                {
-                    Point2D point2D = segment2D.GetPoint(length / segment2D.GetLength());
-                    if (point2D == null)
-                        return null;
-
-                    result.Add(new Segment2D(segment2D[0], point2D));
-                    return new Polyline2D(result);
-                }
-
-                result.Add(segment2D);
-                length = length_Temp;
-            }
-
-            return (ISegmentable2D)segmentable2D.Clone();
         }
 
     }
