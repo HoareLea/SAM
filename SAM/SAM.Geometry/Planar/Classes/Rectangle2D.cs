@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -266,9 +268,29 @@ namespace SAM.Geometry.Planar
             return Query.Distance(this, segmentable2D);
         }
 
-        public bool On(Point2D point2D, double tolerance = 1E-09)
+        public bool On(Point2D point2D, double tolerance = Tolerance.MicroDistance)
         {
             return Query.On(GetSegments(), point2D, tolerance);
+        }
+
+        public double Distance(Point2D point2D)
+        {
+            return Query.Distance(this, point2D);
+        }
+
+        public double GetParameter(Point2D point2D)
+        {
+            return Query.Parameter(this, point2D);
+        }
+
+        public Point2D GetPoint(double parameter)
+        {
+            return Query.Point2D(this, parameter);
+        }
+
+        public double GetLength()
+        {
+            return GetSegments().ConvertAll(x => x.GetLength()).Sum();
         }
     }
 }

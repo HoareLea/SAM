@@ -130,21 +130,6 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        /// <summary>
-        /// Segment2D length
-        /// </summary>
-        public double Length
-        {
-            get
-            {
-                return vector.Length;
-            }
-            set
-            {
-                vector.Length = value;
-            }
-        }
-
         public Vector2D Direction
         {
             get
@@ -479,9 +464,17 @@ namespace SAM.Geometry.Planar
             return new BoundingBox2D(origin, End);
         }
 
+        /// <summary>
+        /// Segment2D length
+        /// </summary>
         public double GetLength()
         {
             return vector.Length;
+        }
+
+        public void SetLength(double value)
+        {
+            vector.Length = value;
         }
 
         public List<ICurve2D> GetCurves()
@@ -504,7 +497,12 @@ namespace SAM.Geometry.Planar
             return Query.Distance(this, segmentable2D);
         }
 
-        public double GetParameter(Point2D point2D, double tolerance = Tolerance.MicroDistance)
+        public Point2D GetPoint(double parameter)
+        {
+            return origin.GetMoved(vector * parameter);
+        }
+
+        public double GetParameter(Point2D point2D)
         {
             if (point2D == null)
                 return double.NaN;
@@ -521,11 +519,6 @@ namespace SAM.Geometry.Planar
                 return 0;
 
             return length / distance;
-        }
-
-        public Point2D GetPoint(double parameter)
-        {
-            return origin.GetMoved(vector * parameter);
         }
     }
 }

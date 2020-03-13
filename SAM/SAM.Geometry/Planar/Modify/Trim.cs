@@ -128,7 +128,7 @@ namespace SAM.Geometry.Planar
             for (int i = 0; i < point2Ds.Count - 1; i++)
             {
                 Segment2D segment2D_Temp = new Segment2D(point2Ds[i], point2Ds[i + 1]);
-                if (segment2D_Temp.Length > tolerance)
+                if (segment2D_Temp.GetLength() > tolerance)
                 {
                     if (!polygon2D.On(segment2D_Temp.Mid(), tolerance))
                         result.Add(segment2D_Temp);

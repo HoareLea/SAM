@@ -174,7 +174,7 @@ namespace SAM.Geometry.Planar
 
         public bool Add(Segment2D segment2D, double tolerance = Tolerance.MicroDistance)
         {
-            if (segment2D == null || segment2D.Length < tolerance)
+            if (segment2D == null || segment2D.GetLength() < tolerance)
                 return false;
 
             if(points == null)
@@ -251,89 +251,17 @@ namespace SAM.Geometry.Planar
 
         public double GetParameter(Point2D point2D)
         {
-            if (point2D == null)
-                return double.NaN;
-
-            List<Segment2D> segment2Ds = GetSegments();
-            List<double> lengths = new List<double>();
-            int index = -1;
-            double distance_Min = 0;
-            for(int i =0; i < segment2Ds.Count; i++)
-            {
-                Segment2D segment2D_Temp = segment2Ds[i];
-
-                if(segment2D_Temp == null)
-                {
-                    lengths.Add(0);
-                    continue;
-                }
-
-                lengths.Add(segment2D_Temp.Length);
-
-                double distance_Temp = segment2D_Temp.Distance(point2D);
-                if(distance_Temp < distance_Min)
-                {
-                    index = i;
-                    distance_Min = distance_Temp;
-                }
-            }
-
-            if (index == -1)
-                return double.NaN;
-
-            double length = lengths.Sum();
-            double distance = lengths.GetRange(0, index).Sum();
-
-            Segment2D segment2D = segment2Ds[index];
-            distance += segment2D.Start.Distance(segment2D.Closest(point2D));
-
-            return length / distance;
+            return Query.Parameter(this, point2D);
         }
 
         public Point2D GetPoint(double parameter)
         {
-            if (parameter < 0 || parameter > 1)
-                return null;
+            return Query.Point2D(this, parameter);
+        }
 
-            if (parameter == 0)
-                return GetStart();
-
-            if (parameter == 1)
-                return GetEnd();
-
-            double length = GetLength();
-            if (double.IsNaN(length))
-                return null;
-
-            length = length * parameter;
-            
-            if (length == 0)
-                return GetStart();
-
-            List<Segment2D> segment2Ds = GetSegments();
-            if (segment2Ds == null || segment2Ds.Count == 0)
-                return null;
-
-            foreach(Segment2D segment2D in segment2Ds)
-            {
-                if (segment2D == null)
-                    continue;
-
-                double length_Segment = segment2D.Length;
-                if (length_Segment == 0)
-                    continue;
-
-                double length_Temp = length - length_Segment;
-                if(length_Temp == 0)
-                    return segment2D.End;
-
-                if (length_Temp < 0)
-                    return segment2D.GetPoint(length);
-
-                length = length_Temp;
-            }
-
-            return GetEnd();
+        public double Distance(Point2D point2D)
+        {
+            return Query.Distance(this, point2D);
         }
     }
 }

@@ -315,5 +315,25 @@ namespace SAM.Geometry.Planar
             points = points_New;
             return true;
         }
+
+        public double Distance(Point2D point2D)
+        {
+            return Query.Distance(this, point2D);
+        }
+
+        public double GetParameter(Point2D point2D)
+        {
+            return Query.Parameter(this, point2D);
+        }
+
+        public Point2D GetPoint(double parameter)
+        {
+            return Query.Point2D(this, parameter);
+        }
+
+        public double GetLength()
+        {
+            return GetSegments().ConvertAll(x => x.GetLength()).Sum();
+        }
     }
 }

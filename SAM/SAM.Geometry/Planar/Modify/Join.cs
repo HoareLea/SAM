@@ -21,7 +21,7 @@ namespace SAM.Geometry.Planar
                     segment2Ds.AddRange(segment2Ds_Temp);
             }
 
-            segment2Ds.RemoveAll(x => x == null || x.Length < tolerance);
+            segment2Ds.RemoveAll(x => x == null || x.GetLength() < tolerance);
             segment2Ds = Modify.Split(segment2Ds, tolerance);
 
             PointGraph2D pointGraph2D = new PointGraph2D(segment2Ds);

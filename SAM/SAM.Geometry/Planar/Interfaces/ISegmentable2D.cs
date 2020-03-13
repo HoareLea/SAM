@@ -13,5 +13,13 @@ namespace SAM.Geometry.Planar
         List<Point2D> GetPoints();
 
         double Distance(ISegmentable2D segmentable2D);
+
+        double Distance(Point2D point2D);
+
+        double GetParameter(Point2D point2D);
+
+        Point2D GetPoint(double parameter);
+
+        double GetLength();
     }
 }
