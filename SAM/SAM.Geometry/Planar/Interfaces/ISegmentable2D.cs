@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SAM.Geometry.Planar
 {
@@ -19,6 +17,8 @@ namespace SAM.Geometry.Planar
         double GetParameter(Point2D point2D);
 
         Point2D GetPoint(double parameter);
+
+        ISegmentable2D Trim(double parameter);
 
         double GetLength();
     }

@@ -335,5 +335,10 @@ namespace SAM.Geometry.Planar
         {
             return GetSegments().ConvertAll(x => x.GetLength()).Sum();
         }
+
+        public ISegmentable2D Trim(double parameter)
+        {
+            return Modify.Trim(this, parameter);
+        }
     }
 }

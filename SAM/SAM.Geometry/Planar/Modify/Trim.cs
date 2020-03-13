@@ -159,5 +159,60 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public static ISegmentable2D Trim(ISegmentable2D segmentable2D, double parameter)
+        {
+            if (segmentable2D == null || parameter <= 0 || parameter > 1)
+                return null;
+
+            if (parameter == 1)
+                return (ISegmentable2D)segmentable2D.Clone();
+
+            List<Segment2D> segment2Ds = segmentable2D.GetSegments();
+            if (segment2Ds == null || segment2Ds.Count() == 0)
+                return null;
+
+            double length = segment2Ds.ConvertAll(x => x.GetLength()).Sum();
+            if (double.IsNaN(length))
+                return null;
+
+            length = length * parameter;
+
+            if (length == 0)
+                return null;
+
+            List<Segment2D> result = new List<Segment2D>();
+            foreach (Segment2D segment2D in segment2Ds)
+            {
+                if (segment2D == null)
+                    continue;
+
+                double length_Segment = segment2D.GetLength();
+                if (length_Segment == 0)
+                    continue;
+
+                double length_Temp = length - length_Segment;
+                if (length_Temp == 0)
+                {
+                    result.Add(segment2D);
+                    return new Polyline2D(result);
+                }
+                    
+                if (length_Temp < 0)
+                {
+                    Point2D point2D = segment2D.GetPoint(length);
+                    if (point2D == null)
+                        return null;
+
+                    result.Add(new Segment2D(segment2D[0], point2D));
+                    return new Polyline2D(result);
+                }
+
+                result.Add(segment2D);
+                length = length_Temp;
+            }
+
+            return (ISegmentable2D)segmentable2D.Clone();
+        }
+
     }
 }

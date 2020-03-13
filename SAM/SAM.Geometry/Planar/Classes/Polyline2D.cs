@@ -263,5 +263,10 @@ namespace SAM.Geometry.Planar
         {
             return Query.Distance(this, point2D);
         }
+
+        public ISegmentable2D Trim(double parameter)
+        {
+            return Modify.Trim(this, parameter);
+        }
     }
 }
