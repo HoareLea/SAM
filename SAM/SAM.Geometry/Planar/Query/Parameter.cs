@@ -13,7 +13,7 @@ namespace SAM.Geometry.Planar
             List<Segment2D> segment2Ds = segmentable2D.GetSegments();
             List<double> lengths = new List<double>();
             int index = -1;
-            double distance_Min = 0;
+            double distance_Min = double.MaxValue;
             for (int i = 0; i < segment2Ds.Count; i++)
             {
                 Segment2D segment2D_Temp = segment2Ds[i];

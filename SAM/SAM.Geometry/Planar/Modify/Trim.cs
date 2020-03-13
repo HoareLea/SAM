@@ -159,6 +159,80 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public static ISegmentable2D Trim(ISegmentable2D segmentable2D, double parameter, bool inverted = false)
+        {
+            if (segmentable2D == null || parameter <= 0 || parameter > 1)
+                return null;
+
+            List<Segment2D> segment2Ds = segmentable2D.GetSegments();
+            if (segment2Ds == null || segment2Ds.Count() == 0)
+                return null;
+
+            if (parameter == 1)
+            {
+                if (inverted)
+                    return null;
+                
+                return (ISegmentable2D)segmentable2D.Clone();
+            }
+                
+            double length = segment2Ds.ConvertAll(x => x.GetLength()).Sum();
+            if (double.IsNaN(length))
+                return null;
+
+            if (length == 0)
+                return null;
+
+            if(inverted)
+            {
+                Segment2D segment2D = segment2Ds[0];
+                segment2Ds.Reverse();
+                segment2Ds.Remove(segment2D);
+                segment2Ds.Insert(0, segment2D);
+
+                segment2Ds.ForEach(x => x.Reverse());
+
+                length = length * (1 - parameter);
+            }
+            else
+            {
+                length = length * parameter;
+            }
+
+            List<Segment2D> result = new List<Segment2D>();
+            foreach (Segment2D segment2D in segment2Ds)
+            {
+                if (segment2D == null)
+                    continue;
+
+                double length_Segment = segment2D.GetLength();
+                if (length_Segment == 0)
+                    continue;
+
+                double length_Temp = length - length_Segment;
+                if (length_Temp == 0)
+                {
+                    result.Add(segment2D);
+                    return new Polyline2D(result);
+                }
+                    
+                if (length_Temp < 0)
+                {
+                    Point2D point2D = segment2D.GetPoint(length / segment2D.GetLength());
+                    if (point2D == null)
+                        return null;
+
+                    result.Add(new Segment2D(segment2D[0], point2D));
+                    return new Polyline2D(result);
+                }
+
+                result.Add(segment2D);
+                length = length_Temp;
+            }
+
+            return new Polyline2D(result);
+        }
+
         public static ISegmentable2D Trim(ISegmentable2D segmentable2D, double parameter)
         {
             if (segmentable2D == null || parameter <= 0 || parameter > 1)
@@ -196,10 +270,10 @@ namespace SAM.Geometry.Planar
                     result.Add(segment2D);
                     return new Polyline2D(result);
                 }
-                    
+
                 if (length_Temp < 0)
                 {
-                    Point2D point2D = segment2D.GetPoint(length);
+                    Point2D point2D = segment2D.GetPoint(length / segment2D.GetLength());
                     if (point2D == null)
                         return null;
 

@@ -249,6 +249,22 @@ namespace SAM.Geometry.Planar
                 return 0;
         }
 
+        public int GetSegmentIndex(Point2D point2D)
+        {
+            Point2D end = GetEnd();
+            Point2D start = GetStart();
+
+            if (end.Distance(point2D) < start.Distance(point2D))
+                return points.Count - 2;
+            else
+                return 0;
+        }
+
+        public Segment2D GetSegment(int index)
+        {
+            return GetSegments()[index];
+        }
+
         public double GetParameter(Point2D point2D)
         {
             return Query.Parameter(this, point2D);
@@ -264,7 +280,7 @@ namespace SAM.Geometry.Planar
             return Query.Distance(this, point2D);
         }
 
-        public ISegmentable2D Trim(double parameter)
+        public ISegmentable2D Trim(double parameter, bool inverted = false)
         {
             return Modify.Trim(this, parameter);
         }

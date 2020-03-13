@@ -43,7 +43,8 @@ namespace SAM.Geometry.Planar
                     return segment2D.End;
 
                 if (length_Temp < 0)
-                    return segment2D.GetPoint(length);
+                    return segment2D.GetPoint(length / segment2D.GetLength());
+                    
 
                 length = length_Temp;
             }

@@ -521,7 +521,7 @@ namespace SAM.Geometry.Planar
             return length / distance;
         }
 
-        public ISegmentable2D Trim(double parameter)
+        public ISegmentable2D Trim(double parameter, bool inverted = false)
         {
             return Modify.Trim(this, parameter);
         }

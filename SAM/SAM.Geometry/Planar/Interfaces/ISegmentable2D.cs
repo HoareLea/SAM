@@ -18,7 +18,7 @@ namespace SAM.Geometry.Planar
 
         Point2D GetPoint(double parameter);
 
-        ISegmentable2D Trim(double parameter);
+        ISegmentable2D Trim(double parameter, bool inverted = false);
 
         double GetLength();
     }
