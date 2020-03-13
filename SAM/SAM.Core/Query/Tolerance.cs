@@ -1,4 +1,6 @@
-﻿namespace SAM.Core
+﻿using System.Globalization;
+
+namespace SAM.Core
 {
     public static partial class Query
     {
@@ -10,7 +12,7 @@
             if (decimals == 0)
                 return 0;
 
-            string value = "0.";
+            string value = "0" + CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator;
             for (int i = 0; i < decimals; i++)
                 value += "0";
 
