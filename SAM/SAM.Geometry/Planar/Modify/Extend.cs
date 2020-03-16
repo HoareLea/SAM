@@ -64,25 +64,37 @@ namespace SAM.Geometry.Planar
             int index_Start = point2Ds.IndexOf(point2D_Start);
             int index_End = point2Ds.IndexOf(point2D_End);
 
+            bool changed;
+
+            changed = false;
             for(int i = index_Start - 1; i >= 0; i--)
             {
                 point2D = Query.Mid(point2Ds[i], point2Ds[i + 1]);
                 if(!polygon2D.Inside(point2D))
                 {
                     index_Start = i + 1;
+                    changed = true;
                     break;
                 }
             }
 
+            if (!changed)
+                index_Start = 0;
+
+            changed = false;
             for (int i = index_End + 1; i < point2Ds.Count - 1; i++)
             {
                 point2D = Query.Mid(point2Ds[i], point2Ds[i + 1]);
                 if (!polygon2D.Inside(point2D))
                 {
                     index_Start = i - 1;
+                    changed = true;
                     break;
                 }
             }
+
+            if (!changed)
+                index_End = point2Ds.Count - 1;
 
             return new Segment2D(point2Ds[index_Start], point2Ds[index_End]);
         }
