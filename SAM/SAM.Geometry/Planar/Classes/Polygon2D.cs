@@ -341,5 +341,10 @@ namespace SAM.Geometry.Planar
         {
             return GetSegments().ConvertAll(x => x.GetLength()).Sum();
         }
+
+        public bool SimplifyByAngle(double maxAngle = Core.Tolerance.Angle)
+        {
+            return Modify.SimplifyByAngle(points, true, maxAngle);
+        }
     }
 }
