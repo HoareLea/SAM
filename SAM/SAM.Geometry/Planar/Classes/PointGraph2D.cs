@@ -607,7 +607,7 @@ namespace SAM.Geometry.Planar
                 if (loops == null || loops.Count == 0)
                     continue;
 
-                List<Tuple<Polygon2D, BoundingBox2D, Point2D>> tuples = new List<Tuple<Polygon2D, BoundingBox2D, Point2D>>();
+                List<Tuple<Polygon2D, BoundingBox2D, Point2D, double>> tuples = new List<Tuple<Polygon2D, BoundingBox2D, Point2D, double>>();
                 foreach (List<int> loop in loops)
                 {
                     List<Point2D> point2Ds = pointGraph2D_Temp.GetPoint2Ds(loop);
@@ -618,6 +618,10 @@ namespace SAM.Geometry.Planar
                     if (polygon2D == null)
                         continue;
 
+                    double area = polygon2D.GetArea();
+                    if (area == 0)
+                        continue;
+
                     Point2D point2D = polygon2D.GetInternalPoint2D();
                     if (point2D == null)
                         continue;
@@ -626,7 +630,7 @@ namespace SAM.Geometry.Planar
                     if (boundingBox2D == null)
                         continue;
 
-                    tuples.Add(new Tuple<Polygon2D, BoundingBox2D, Point2D>(polygon2D, boundingBox2D, point2D));
+                    tuples.Add(new Tuple<Polygon2D, BoundingBox2D, Point2D, double>(polygon2D, boundingBox2D, point2D, area));
                 }
 
                 int count = tuples.Count;
@@ -637,20 +641,20 @@ namespace SAM.Geometry.Planar
                     if (redundantLoopIndexes.Contains(i))
                         continue;
 
-                    Tuple<Polygon2D, BoundingBox2D, Point2D> tuple_1 = tuples[i];
+                    Tuple<Polygon2D, BoundingBox2D, Point2D, double> tuple_1 = tuples[i];
 
                     for (int j = i + 1; j < count; j++)
                     {
                         if (redundantLoopIndexes.Contains(j))
                             continue;
 
-                        Tuple<Polygon2D, BoundingBox2D, Point2D> tuple_2 = tuples[j];
+                        Tuple<Polygon2D, BoundingBox2D, Point2D, double> tuple_2 = tuples[j];
 
                         if (tuple_1.Item2.Inside(tuple_2.Item3))
                         {
                             if(tuple_1.Item1.Inside(tuple_2.Item3))
                             {
-                                if(tuple_1.Item2.GetArea() > tuple_2.Item2.GetArea())
+                                if(tuple_1.Item4 > tuple_2.Item4)
                                 {
                                     redundantLoopIndexes.Add(i);
                                     break;
