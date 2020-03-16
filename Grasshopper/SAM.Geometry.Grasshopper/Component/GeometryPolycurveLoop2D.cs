@@ -89,7 +89,9 @@ namespace SAM.Geometry.Grasshopper
                 List<Spatial.ISAMGeometry3D> sAMGeometry3Ds = null;
                 if (gHObjectWrapper.Value is GooSAMGeometry)
                 {
-                    ISAMGeometry sAMGeometry = ((GooSAMGeometry)gHObjectWrapper.Value).Value;
+                    sAMGeometry3Ds = new List<Spatial.ISAMGeometry3D>();
+
+                     ISAMGeometry sAMGeometry = ((GooSAMGeometry)gHObjectWrapper.Value).Value;
                     if(sAMGeometry is Spatial.ISAMGeometry3D)
                         sAMGeometry3Ds.Add((Spatial.ISAMGeometry3D)sAMGeometry);
                     else if(sAMGeometry is Planar.ISAMGeometry2D)
