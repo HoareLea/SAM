@@ -285,7 +285,6 @@ namespace SAM.Geometry.Grasshopper
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            //TODO: Implement BakeGeometry
             return Modify.BakeGeometry(Value, doc, att, out obj_guid);
         }
     }

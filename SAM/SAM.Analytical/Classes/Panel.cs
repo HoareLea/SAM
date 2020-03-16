@@ -205,17 +205,7 @@ namespace SAM.Analytical
 
                             List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
 
-                            List<Geometry.Planar.Polygon2D> polygon2Ds = null;
-                            
-                            //TODO: Remove try catch
-                            try
-                            {
-                                polygon2Ds = new Geometry.Planar.PointGraph2D(segment2Ds).GetPolygon2Ds();
-                            }
-                            catch(Exception exception)
-                            {
-                                System.IO.File.WriteAllText(@"C:\Users\DengusiakM\Desktop\logSAMcrush.txt", Core.Convert.ToJson(segment2Ds));
-                            }
+                            List<Geometry.Planar.Polygon2D> polygon2Ds = new Geometry.Planar.PointGraph2D(segment2Ds).GetPolygon2Ds();
                             
                             if (polygon2Ds != null && polygon2Ds.Count > 0)
                             {
@@ -253,8 +243,6 @@ namespace SAM.Analytical
                     }
                 }
             }
-
-            //TODO: Update geometry (closedPlanar3D_Projected) to set origin to BottomLeft corner
 
             Aperture aperture = new Aperture(apertureConstruction, closedPlanar3D_Projected, point3D_Location);
             if (!Query.IsValid(this, aperture))

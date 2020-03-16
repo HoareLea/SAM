@@ -16,7 +16,6 @@ namespace SAM.Geometry.Grasshopper
             if (curve3D is Spatial.Segment3D)
                 return Convert.ToRhino_LineCurve((Spatial.Segment3D)curve3D);
 
-            //TODO: check if closed schape
             if (curve3D is Spatial.ICurvable3D)
             {
                 List<Spatial.ICurve3D> curve3Ds = ((Spatial.ICurvable3D)curve3D).GetCurves();
