@@ -21,6 +21,11 @@ namespace SAM.Core
 
         }
 
+        public SAMRelation(JObject jObject)
+        {
+            FromJObject(jObject);
+        }
+
         public object Object
         {
             get
@@ -102,6 +107,9 @@ namespace SAM.Core
                     case JTokenType.Float:
                         @object = jToken.Value<double>();
                         break;
+                    case JTokenType.Date:
+                        @object = jToken.Value<System.DateTime>();
+                        break;
                 }
             }
 
@@ -124,6 +132,9 @@ namespace SAM.Core
                         break;
                     case JTokenType.Float:
                         relatedObject = jToken.Value<double>();
+                        break;
+                    case JTokenType.Date:
+                        relatedObject = jToken.Value<System.DateTime>();
                         break;
                 }
             }

@@ -12,11 +12,11 @@ namespace SAM.Core
             if (jObject == null)
                 return null;
             
-            string typeName = Query.FullTypeName(jObject);
-            if (string.IsNullOrWhiteSpace(typeName))
+            string fullTypeName = Query.FullTypeName(jObject);
+            if (string.IsNullOrWhiteSpace(fullTypeName))
                 return new JSAMObjectWrapper(jObject);
 
-            Type type = Type.GetType(typeName);
+            Type type = Type.GetType(fullTypeName);
             if (type == null)
                 return new JSAMObjectWrapper(jObject);
 

@@ -15,14 +15,25 @@ namespace SAM.Core
 
             Guid guid = System.Guid.NewGuid();
 
-            string guidString = jObject.Value<string>("Guid");
-            if (!string.IsNullOrWhiteSpace(guidString))
-            {
-                Guid guid_Temp;
-                if (System.Guid.TryParse(guidString, out guid_Temp))
-                    guid = guid_Temp;
-            }
+            if (!jObject.ContainsKey("Guid"))
+                return guid;
 
+            JToken jToken = jObject.Value<JToken>("Guid");
+            switch(jToken.Type)
+            {
+                case JTokenType.String:
+                    string guidString = jToken.Value<string>();
+                    if (!string.IsNullOrWhiteSpace(guidString))
+                    {
+                        Guid guid_Temp;
+                        if (System.Guid.TryParse(guidString, out guid_Temp))
+                            guid = guid_Temp;
+                    }
+                    break;
+                case JTokenType.Guid:
+                    guid = jToken.Value<Guid>();
+                    break;
+            }
             return guid;
         }
 
