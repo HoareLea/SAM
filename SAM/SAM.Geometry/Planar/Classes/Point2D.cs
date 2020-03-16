@@ -459,7 +459,8 @@ namespace SAM.Geometry.Planar
                 return null;
 
             Point2D result = GetCentroid(point2Ds);
-            if (Inside(point2Ds, result))
+
+            if (result != null && Inside(point2Ds, result))
                 return result;
 
             List<Point2D> point2Ds_List = new List<Point2D>(point2Ds);
