@@ -37,7 +37,6 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-
         public static Segment2D Trim(this Segment2D segment2D, double distance, bool trim_Start = true, bool trim_End = true)
         {
             if (segment2D == null)
@@ -97,7 +96,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Segment2D> Trim(this Segment2D segment2D, Polygon2D polygon2D, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> Trim(this Segment2D segment2D, Polygon2D polygon2D, bool includeOnEdge = false, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segment2D == null || polygon2D == null)
                 return null;
@@ -130,7 +129,10 @@ namespace SAM.Geometry.Planar
                 Segment2D segment2D_Temp = new Segment2D(point2Ds[i], point2Ds[i + 1]);
                 if (segment2D_Temp.GetLength() > tolerance)
                 {
-                    if (!polygon2D.On(segment2D_Temp.Mid(), tolerance))
+                    Point2D point2D_Mid = segment2D_Temp.Mid();
+                    if (!includeOnEdge && !polygon2D.On(point2D_Mid, tolerance) && polygon2D.Inside(point2D_Mid))
+                        result.Add(segment2D_Temp);
+                    else if (includeOnEdge && (polygon2D.On(point2D_Mid, tolerance) || polygon2D.Inside(point2D_Mid)))
                         result.Add(segment2D_Temp);
                 }
 
@@ -147,7 +149,7 @@ namespace SAM.Geometry.Planar
             List<Segment2D> result = new List<Segment2D>();
             foreach (Segment2D segment2D_Temp in segment2Ds)
             {
-                List<Segment2D> segment2Ds_Temp = Trim(segment2D_Temp, polygon2D, tolerance);
+                List<Segment2D> segment2Ds_Temp = Trim(segment2D_Temp, polygon2D, true, tolerance);
                 if (segment2Ds_Temp != null)
                 {
                     segment2Ds_Temp.RemoveAll(x => x == null);

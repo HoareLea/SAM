@@ -78,7 +78,7 @@ namespace SAM.Geometry.Planar
                     {
                         object @object = pointGraph2D[points[i], points[j]];
                         if (@object != null)
-                            curve2Ds_Temp[j] = @object; ;
+                            curve2Ds_Temp[j] = @object;
                     }
                     objects[i] = curve2Ds_Temp;
                 }
@@ -128,16 +128,18 @@ namespace SAM.Geometry.Planar
             if (segment2Ds.Count() == 0)
                 return true;
 
+            double tolerance = Core.Query.Tolerance(decimals);
+
             IEnumerable<Segment2D> segments_Temp = segment2Ds;
             if (split)
-                segments_Temp = Modify.Split(segment2Ds, Core.Query.Tolerance(decimals));
+                segments_Temp = Modify.Split(segment2Ds, tolerance);
                 
 
             HashSet<Point2D> point2Ds_HashSet = new HashSet<Point2D>();
             List<Tuple<Point2D, Point2D, Segment2D>> tuples = new List<Tuple<Point2D, Point2D, Segment2D>>();
             foreach (Segment2D segment2D in segments_Temp)
             {
-                if (segment2D == null)
+                if (!Query.IsValid(segment2D))
                     continue;
 
                 Point2D point2D_Start = segment2D.Start;
@@ -146,6 +148,9 @@ namespace SAM.Geometry.Planar
 
                 Point2D point2D_End = segment2D.End;
                 if (point2D_End == null)
+                    continue;
+
+                if (point2D_End.AlmostEqual(point2D_Start, tolerance))
                     continue;
 
                 point2D_Start.Round(decimals);
@@ -534,6 +539,18 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public List<Point2D> GetConnectedPoint2Ds()
+        {
+            if (points == null)
+                return null;
+
+            List<Point2D> result = new List<Point2D>();
+            for(int i =0; i < points.Length; i++)
+                if (IsConnected(i))
+                    result.Add(this[i]);
+            return result;
+        }
+
 
         public List<PointGraph2D> Split()
         {
@@ -730,9 +747,26 @@ namespace SAM.Geometry.Planar
 
             List<int> loop = GetLoop(index, connections[0]);
             if (loop == null || loop.Count < 2)
-                return null;
+                loop = new List<int>() { index, connections[0] };
 
             return new Polyline2D(GetPoint2Ds(loop));
+        }
+
+        public List<Polyline2D> GetPolyline2Ds()
+        {
+            List<PointGraph2D> pointGraph2Ds = Split();
+            if (pointGraph2Ds == null || pointGraph2Ds.Count == 0)
+                return null;
+
+            List<Polyline2D> result = new List<Polyline2D>();
+            foreach(PointGraph2D pointGraph2D in pointGraph2Ds)
+            {
+                Polyline2D polyline2D = pointGraph2D.GetPolyline2D();
+                if (polyline2D != null)
+                    result.Add(polyline2D);
+            }
+
+            return result;
         }
 
         public bool FromJObject(JObject jObject)

@@ -150,13 +150,11 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public Point2D Duplicate()
-        {
-            return new Point2D(this);
-        }
-
         public void Round(int decimals = Core.Rounding.Distance)
         {
+            if (decimals == -1)
+                return;
+            
             coordinates[0] = System.Math.Round(coordinates[0], decimals);
             coordinates[1] = System.Math.Round(coordinates[1], decimals);
         }

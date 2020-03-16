@@ -60,6 +60,8 @@ namespace SAM.Geometry.Planar
                 int count = System.Convert.ToInt32(boundingBox2D.Height / offset);
                 if (!includeEdge)
                     count--;
+                else
+                    count++;
 
                 offset = offset * factor_direction;
                 for (int i= 0; i < count; i++)
@@ -100,8 +102,11 @@ namespace SAM.Geometry.Planar
 
                 double offset = offset_Vertical.Value;
                 int count = System.Convert.ToInt32(boundingBox2D.Width / offset);
+
                 if (!includeEdge)
                     count--;
+                else
+                    count++;
 
                 offset = offset * factor_direction;
                 for (int i = 0; i < count; i++)

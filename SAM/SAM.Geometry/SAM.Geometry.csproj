@@ -77,6 +77,7 @@
     <Compile Include="Planar\Classes\Triangle2D.cs" />
     <Compile Include="Planar\Interfaces\ICurvable2D.cs" />
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
+    <Compile Include="Planar\Modify\SimplifyByAngle.cs" />
     <Compile Include="Planar\Modify\OrientByEnds.cs" />
     <Compile Include="Planar\Modify\Join.cs" />
     <Compile Include="Planar\Modify\Trim.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="Planar\Modify\RemoveAngle.cs" />
     <Compile Include="Planar\Modify\SortByDistance.cs" />
     <Compile Include="Planar\Modify\Reverse.cs" />
+    <Compile Include="Planar\Query\SmallestAngle.cs" />
+    <Compile Include="Planar\Query\IsValid.cs" />
     <Compile Include="Planar\Query\Point2D.cs" />
     <Compile Include="Planar\Query\Parameter.cs" />
     <Compile Include="Planar\Query\IndexesOf.cs" />
