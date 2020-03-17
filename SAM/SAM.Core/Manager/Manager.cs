@@ -161,12 +161,6 @@ namespace SAM.Core
             if (setting == null)
                 setting = settings.Find(x => x.Name.Equals(name));
 
-            if(setting == null)
-            {
-                setting = new Setting(assembly);
-                settings.Add(setting);
-            }
-
             return setting;
         }
 

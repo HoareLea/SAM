@@ -82,9 +82,10 @@ namespace SAM.Core
             if (parameterSet == null)
                 return false;
 
-            object @object;
-            if (!parameterSet.TryGetValue(name, out @object))
+            if (!parameterSet.Contains(name))
                 return false;
+
+            object @object = parameterSet.ToObject(name);
 
             if (@object == null && value == null)
                 return true;

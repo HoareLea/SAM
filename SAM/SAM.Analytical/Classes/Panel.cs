@@ -191,6 +191,7 @@ namespace SAM.Analytical
 
             Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
             Point3D point3D_Location = plane.Convert(closed2D_Aperture.GetCentroid());
+            point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
 
             if (trimGeometry)
             {
