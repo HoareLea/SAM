@@ -26,22 +26,10 @@ namespace SAM.Core
             }
         }
 
-        public SAMRelationCluster(string name)
-            : base(name)
+        public SAMRelationCluster()
+            : base()
         {
             dictionary = new Dictionary<string, Dictionary<string, HashSet<SAMRelation>>>();
-        }
-        
-        public SAMRelationCluster(string name, IEnumerable<SAMRelation> sAMRelations)
-            : base(name)
-        {
-            dictionary = new Dictionary<string, Dictionary<string, HashSet<SAMRelation>>>();
-
-            if (sAMRelations != null)
-            {
-                foreach (SAMRelation sAMRelation in sAMRelations)
-                    Add(sAMRelation);
-            }
         }
 
         public SAMRelationCluster(IEnumerable<SAMRelation> sAMRelations)

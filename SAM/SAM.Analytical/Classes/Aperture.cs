@@ -89,6 +89,16 @@ namespace SAM.Analytical
             }
         }
 
+        public double GetWidth()
+        {
+            return Query.Width(planarBoundary3D);
+        }
+
+        public double GetHeight()
+        {
+            return Query.Height(planarBoundary3D);
+        }
+
         public ApertureConstruction ApertureConstruction
         {
             get

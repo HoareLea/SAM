@@ -52,6 +52,11 @@ namespace SAM.Core
 
         }
 
+        public bool Add(string name, IJSAMObject jSAMObject)
+        {
+            return Add(name, (object)jSAMObject);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!FromJObject(jObject))
@@ -71,6 +76,25 @@ namespace SAM.Core
             jObject.Add("Created", created);
             jObject.Add("Updated", DateTime.Now);
             return jObject;
+        }
+
+
+        private bool Add(string name, object @object)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            Assembly assembly = Assembly.GetAssembly(this.GetType());
+
+            ParameterSet parameterSet = GetParameterSet(assembly);
+
+            if (parameterSet == null)
+            {
+                parameterSet = new ParameterSet(assembly);
+                Add(parameterSet);
+            }
+
+            return parameterSet.Add(name, @object as dynamic);
         }
     }
 }

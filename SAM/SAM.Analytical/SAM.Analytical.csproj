@@ -62,6 +62,8 @@
     <Compile Include="Modify\SnapByOffset.cs" />
     <Compile Include="Modify\SnapByPoints.cs" />
     <Compile Include="Query\IsValid.cs" />
+    <Compile Include="Query\Height.cs" />
+    <Compile Include="Query\Width.cs" />
     <Compile Include="Query\MinElevation.cs" />
     <Compile Include="Query\MaxElevation.cs" />
     <Compile Include="Query\ApertureType.cs" />
