@@ -119,6 +119,35 @@ namespace SAM.Core
             return sAMRelations.ToList();
         }
 
+        public List<SAMRelation> GetSAMRelations(string typeName_Object, string typeName_RelatedObject)
+        {
+            if (dictionary == null || string.IsNullOrWhiteSpace(typeName_Object) || string.IsNullOrWhiteSpace(typeName_RelatedObject))
+                return null;
+
+            List<SAMRelation> result = new List<SAMRelation>();
+
+            Dictionary<string, HashSet<SAMRelation>> dictionary_Type = null;
+            if (!dictionary.TryGetValue(typeName_Object, out dictionary_Type))
+                return result;
+
+            HashSet<SAMRelation> sAMRelations = null;
+            if (!dictionary_Type.TryGetValue(typeName_RelatedObject, out sAMRelations))
+                return result;
+
+            if (sAMRelations == null)
+                return result;
+
+            return sAMRelations.ToList();
+        }
+
+        public List<SAMRelation> GetSAMRelations(System.Type type_Object, System.Type type_RelatedObject)
+        {
+            if (type_Object == null || type_RelatedObject == null)
+                return null;
+
+            return GetSAMRelations(type_Object.FullName, type_RelatedObject.FullName);
+        }
+
         public List<SAMRelation> GetSAMRelations()
         {
             if (dictionary == null)

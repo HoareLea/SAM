@@ -12,7 +12,7 @@ namespace SAM.Core
     {
         private string mainDirectoryPath;
         private string sAMDirectoryName;
-        private string settingsFileName;
+        private string settingsDirectoryName;
 
         private List<Setting> settings;
 
@@ -20,21 +20,21 @@ namespace SAM.Core
         {
             mainDirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             sAMDirectoryName = "SAM";
-            settingsFileName = "settings";
+            settingsDirectoryName = "settings";
         }
 
-        public Manager(string mainDirectoryPath, string sAMDirectoryName, string settingsFileName)
+        public Manager(string mainDirectoryPath, string sAMDirectoryName, string settingsDirectoryName)
         {
             this.mainDirectoryPath = mainDirectoryPath;
             this.sAMDirectoryName = sAMDirectoryName;
-            this.settingsFileName = settingsFileName;
+            this.settingsDirectoryName = settingsDirectoryName;
         }
 
-        public string SettingsFilePath
+        public string SettingsDirectoryPath
         {
             get
             {
-                return System.IO.Path.Combine(SAMDirectoryPath, settingsFileName);
+                return System.IO.Path.Combine(SAMDirectoryPath, settingsDirectoryName);
             }
         }
 
@@ -170,11 +170,6 @@ namespace SAM.Core
             return setting;
         }
 
-        public Setting GetSetting()
-        {
-            return GetSetting(GetType().Assembly);
-        }
-
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)
@@ -226,17 +221,36 @@ namespace SAM.Core
         {
             try
             {
+                string settingsDirectoryName = SettingsDirectoryPath;
+                if (System.IO.File.Exists(settingsDirectoryName))
+                {
+                    string[] filePaths = System.IO.Directory.GetFiles(SettingsDirectoryPath);
+                    if (filePaths != null && filePaths.Length > 0)
+                    {
+                        settings = new List<Setting>();
+                        foreach (string filePath in filePaths)
+                        {
+                            IEnumerable<Setting> settings_Temp = new SAMJsonCollection<Setting>(filePath);
+                            if (settings_Temp != null && settings_Temp.Count() > 0)
+                            {
+                                foreach (Setting setting in settings_Temp)
+                                {
+                                    if (setting == null)
+                                        continue;
 
-
-                string settingsFilePath = SettingsFilePath;
-                if(System.IO.File.Exists(settingsFilePath))
-                    settings = new SAMJsonCollection<Setting>(settingsFilePath).ToList();
+                                    if (settings.Find(x => x.Guid == setting.Guid) == null)
+                                        settings.Add(setting);
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return false;
             }
-            
+
             return true;
         }
 
@@ -245,16 +259,30 @@ namespace SAM.Core
             if (!System.IO.Directory.Exists(mainDirectoryPath))
                 return false;
 
-            string sAMDirectoryPath = SAMDirectoryPath;
-
             try
             {
+                string sAMDirectoryPath = SAMDirectoryPath;
+
                 if (!System.IO.Directory.Exists(sAMDirectoryPath))
                     System.IO.Directory.CreateDirectory(sAMDirectoryPath);
 
-                if(settings != null)
+                string settingsDirectoryPath = SettingsDirectoryPath;
+
+                if (!System.IO.Directory.Exists(settingsDirectoryPath))
+                    System.IO.Directory.CreateDirectory(settingsDirectoryPath);
+
+                if (settings != null)
                 {
-                    new SAMJsonCollection<Setting>(settings).ToJson(SettingsFilePath);
+                    Dictionary<string, List<Setting>> dictionary = Query.Dictionary<string, Setting>(settings, "Name");
+                    if(dictionary != null)
+                    {
+                        foreach(KeyValuePair<string, List<Setting>> keyValuePair in dictionary)
+                        {
+                            string settingsFilePath = System.IO.Path.Combine(settingsDirectoryPath, keyValuePair.Key);
+                            new SAMJsonCollection<Setting>(settings).ToJson(settingsFilePath);
+                        }
+                    }
+                   
                 }
 
 

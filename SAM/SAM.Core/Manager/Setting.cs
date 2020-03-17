@@ -57,6 +57,47 @@ namespace SAM.Core
             return Add(name, (object)jSAMObject);
         }
 
+        public bool Contains(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return false;
+
+            ParameterSet parameterSet = GetParameterSet(Assembly.GetAssembly(this.GetType()));
+            if (parameterSet == null)
+                return false;
+
+            return parameterSet.Contains(name);
+        }
+
+        public bool TryGetValue<T>(string name, out T value)
+        {
+            value = default;
+
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            Assembly assembly = Assembly.GetAssembly(this.GetType());
+
+            ParameterSet parameterSet = GetParameterSet(assembly);
+            if (parameterSet == null)
+                return false;
+
+            object @object;
+            if (!parameterSet.TryGetValue(name, out @object))
+                return false;
+
+            if (@object == null && value == null)
+                return true;
+
+            if(@object is T)
+            {
+                value = (T)@object;
+                return true;
+            }
+
+            return false;
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!FromJObject(jObject))

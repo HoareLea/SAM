@@ -48,6 +48,7 @@
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
     <Compile Include="Manager\ActiveManager.cs" />
+    <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Manager\Manager.cs" />
     <Compile Include="Manager\Setting.cs" />
     <Compile Include="Classes\Base\IntegerId.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Classes\Base\SAMObject.cs" />
     <Compile Include="Classes\Base\SAMType.cs" />
     <Compile Include="Query\AboutInfoTypeText.cs" />
+    <Compile Include="Query\Dictionary.cs" />
     <Compile Include="Query\ParameterSet.cs" />
     <Compile Include="Query\JArray.cs" />
     <Compile Include="Query\Guid.cs" />
@@ -85,7 +87,7 @@
     <Compile Include="Query\TryGetTypeNameAndAssemblyName.cs" />
     <Compile Include="Query\Tolerance.cs" />
     <Compile Include="Query\TryGetValue.cs" />
-    <Compile Include="Query\GetValue.cs" />
+    <Compile Include="Query\Value.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

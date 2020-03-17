@@ -4,7 +4,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static T GetValue<T>(this Dictionary<string, object> dictionary, string key)
+        public static T Value<T>(this Dictionary<string, object> dictionary, string key)
         {
             if (dictionary == null || key == null)
                 return default;

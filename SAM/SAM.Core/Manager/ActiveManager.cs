@@ -18,6 +18,11 @@ namespace SAM.Core
             return manager;
         }
 
+        public static Setting GetSetting(Assembly assembly)
+        {
+            return manager.GetSetting(assembly);
+        }
+
         public static bool SetValue(Assembly assembly, string name, string value)
         {
             return manager.SetValue(assembly, name, value);
