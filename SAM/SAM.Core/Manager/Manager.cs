@@ -228,13 +228,7 @@ namespace SAM.Core
                             if (settings_Temp != null && settings_Temp.Count() > 0)
                             {
                                 foreach (Setting setting in settings_Temp)
-                                {
-                                    if (setting == null)
-                                        continue;
-
-                                    if (settings.Find(x => x.Guid == setting.Guid) == null)
-                                        settings.Add(setting);
-                                }
+                                    Add(setting);
                             }
                         }
                     }
@@ -245,6 +239,21 @@ namespace SAM.Core
                 return false;
             }
 
+            return true;
+        }
+
+        public bool Add(Setting setting)
+        {
+            if (setting == null)
+                return false;
+
+            if (settings == null)
+                settings = new List<Setting>();
+
+            if (settings.Find(x => x.Guid == setting.Guid) != null)
+                return false;
+
+            settings.Add(setting);
             return true;
         }
 
