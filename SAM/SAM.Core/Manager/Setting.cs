@@ -59,7 +59,7 @@ namespace SAM.Core
 
         public bool Add(string name, string value)
         {
-            return Add(name, value);
+            return Add(name, (object)value);
         }
 
         public bool Contains(string name)
