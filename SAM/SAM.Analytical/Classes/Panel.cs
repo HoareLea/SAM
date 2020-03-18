@@ -190,8 +190,11 @@ namespace SAM.Analytical
                 return null;
 
             Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
-            Point3D point3D_Location = plane.Convert(closed2D_Aperture.GetCentroid());
-            //TO DO: temp test for triangle TO BE DELETED
+            Geometry.Planar.Point2D point2D_Centroid = closed2D_Aperture.GetCentroid();
+            if (Geometry.Spatial.Query.Horizontal(plane))
+                point2D_Centroid = new Geometry.Planar.Point2D(point2D_Centroid.X, closed2D_Aperture.GetBoundingBox().Min.Y);
+
+            Point3D point3D_Location = plane.Convert(point2D_Centroid);
             //point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
 
             if (trimGeometry)
@@ -213,7 +216,6 @@ namespace SAM.Analytical
                             {
                                 double area_Difference_Min = double.MaxValue;
                                 Geometry.Planar.Polygon2D polygon2D_Min = null;
-                                Geometry.Planar.Point2D point2D_Centroid = null;
                                 foreach (Geometry.Planar.Polygon2D polygon2D_Temp in polygon2Ds)
                                 {
                                     double area_Temp = polygon2D_Temp.GetArea();

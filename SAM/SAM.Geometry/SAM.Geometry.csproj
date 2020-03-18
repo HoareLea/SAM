@@ -120,6 +120,7 @@
     <Compile Include="Spatial\Query\Explode.cs" />
     <Compile Include="Spatial\Query\ClosedPlanar3Ds.cs" />
     <Compile Include="Spatial\Query\Closest.cs" />
+    <Compile Include="Spatial\Query\Horizontal.cs" />
     <Compile Include="Spatial\Query\IsValid.cs" />
     <Compile Include="Spatial\Query\Normals.cs" />
     <Compile Include="Spatial\Query\Normal.cs" />

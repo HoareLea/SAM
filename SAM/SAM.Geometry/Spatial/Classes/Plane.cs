@@ -103,6 +103,14 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        public Vector3D BaseZ
+        {
+            get
+            {
+                return new Vector3D(normal);
+            }
+        }
+
         /// <summary>
         /// A factor for point-normal equation A(x−a)+B(y−b)+C(z−c) = 0 where origin(a,b,c), normal(A,B,C)
         /// </summary>
