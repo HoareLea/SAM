@@ -1,7 +1,5 @@
-﻿namespace SAM.Math.TODO
+﻿namespace SAM.Math
 {
-
-
     public  static partial class Query
     {
 
