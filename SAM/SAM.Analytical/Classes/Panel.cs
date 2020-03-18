@@ -190,13 +190,13 @@ namespace SAM.Analytical
                 return null;
 
             Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
+            
+            Point3D point3D_Location;
             Geometry.Planar.Point2D point2D_Centroid = closed2D_Aperture.GetCentroid();
-            if (Geometry.Spatial.Query.Horizontal(plane))
-                point2D_Centroid = new Geometry.Planar.Point2D(point2D_Centroid.X, closed2D_Aperture.GetBoundingBox().Min.Y);
-
-            Point3D point3D_Location = plane.Convert(point2D_Centroid);
-            //point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
-
+            point3D_Location = plane.Convert(point2D_Centroid);
+            if (Geometry.Spatial.Query.Vertical(plane))
+                point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
+                
             if (trimGeometry)
             {
                 if (closed2D_Aperture is Geometry.Planar.ISegmentable2D)
@@ -235,12 +235,12 @@ namespace SAM.Analytical
 
                                 if (polygon2D_Min != null && point2D_Centroid != null)
                                 {
-                                    point2D_Centroid = new Geometry.Planar.Point2D(point2D_Centroid.X, polygon2D_Min.GetBoundingBox().Min.Y);
+                                    //point2D_Centroid = new Geometry.Planar.Point2D(point2D_Centroid.X, polygon2D_Min.GetBoundingBox().Min.Y);
 
                                     closedPlanar3D_Projected = plane.Convert(polygon2D_Min);
                                     point3D_Location = plane.Convert(point2D_Centroid);
-
-                                    //point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
+                                    if (Geometry.Spatial.Query.Vertical(plane))
+                                        point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
                                 }
                             }
                         }

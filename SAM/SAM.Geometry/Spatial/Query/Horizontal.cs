@@ -3,12 +3,12 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static bool Horizontal(this Plane plane, double tolerance = Core.Tolerance.Angle)
+        public static bool Horizontal(this Plane plane, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (plane == null)
                 return false;
 
-            return plane.BaseZ.SmallestAngle(Plane.Base.BaseZ) < tolerance;
+            return System.Math.Abs(System.Math.Abs(plane.Normal.DotProduct(Plane.Base.BaseZ)) - 1) < tolerance;
         }
     }
 }
