@@ -226,10 +226,8 @@ namespace SAM.Core
                         {
                             IEnumerable<Setting> settings_Temp = new SAMJsonCollection<Setting>(filePath);
                             if (settings_Temp != null && settings_Temp.Count() > 0)
-                            {
                                 foreach (Setting setting in settings_Temp)
                                     Add(setting);
-                            }
                         }
                     }
                 }
