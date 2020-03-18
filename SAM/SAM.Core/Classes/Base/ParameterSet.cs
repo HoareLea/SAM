@@ -113,6 +113,15 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Add(string name, JObject value)
+        {
+            if (dictionary == null || name == null)
+                return false;
+
+            dictionary[name] = value;
+            return true;
+        }
+
         public bool Add(string name, DateTime value)
         {
             if (dictionary == null || name == null)
@@ -212,13 +221,22 @@ namespace SAM.Core
             return result;
         }
 
-        public bool ToDateTime(string name)
+        public DateTime ToDateTime(string name)
         {
             DateTime result;
             if (!Query.TryGetValue(dictionary, name, out result))
-                return false;
+                return result;
 
-            return true;
+            return DateTime.MinValue;
+        }
+
+        public JObject ToJObject(string name)
+        {
+            JObject result;
+            if (!Query.TryGetValue(dictionary, name, out result))
+                return result;
+
+            return null;
         }
 
         public IJSAMObject ToSAMObject<T>(string name) where T: IJSAMObject
@@ -308,7 +326,12 @@ namespace SAM.Core
                         dictionary[jObject_Temp.Value<string>("Name")] = jToken.Value<DateTime>();
                         break;
                     case JTokenType.Object:
-                        dictionary[jObject_Temp.Value<string>("Name")] = Create.IJSAMObject((JObject)jToken);
+                        JSAMObjectWrapper jSAMObjectWrapper = new JSAMObjectWrapper((JObject)jToken);
+                        IJSAMObject jSAMObject = jSAMObjectWrapper.ToIJSAMObject();
+                        if (jSAMObject == null)
+                            dictionary[jObject_Temp.Value<string>("Name")] = jSAMObjectWrapper.ToJObject();
+                        else
+                            dictionary[jObject_Temp.Value<string>("Name")] = jSAMObject;
                         break;
                 }
             }
@@ -338,7 +361,6 @@ namespace SAM.Core
                         jObject_Temp.Add("Value", keyValuePair.Value as dynamic);
                 }
                     
-
                 jArray.Add(jObject_Temp);
             }
 

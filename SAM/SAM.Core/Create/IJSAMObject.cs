@@ -11,20 +11,13 @@ namespace SAM.Core
         {
             if (jObject == null)
                 return null;
-            
-            string fullTypeName = Query.FullTypeName(jObject);
-            if (string.IsNullOrWhiteSpace(fullTypeName))
-                return new JSAMObjectWrapper(jObject);
 
-            Type type = Type.GetType(fullTypeName);
-            if (type == null)
-                return new JSAMObjectWrapper(jObject);
+            JSAMObjectWrapper jSAMObjectWrapper = new JSAMObjectWrapper(jObject);
+            IJSAMObject jSAMObject = jSAMObjectWrapper.ToIJSAMObject();
+            if (jSAMObject == null)
+                return jSAMObjectWrapper;
 
-            ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(JObject) });
-            if (constructorInfo == null)
-                return new JSAMObjectWrapper(jObject);
-
-            return constructorInfo.Invoke(new object[] { jObject }) as IJSAMObject;
+            return jSAMObject;
         }
 
         public static T IJSAMObject<T>(this JObject jObject) where T : IJSAMObject
