@@ -52,9 +52,14 @@ namespace SAM.Core
 
         }
 
-        public bool Add(string name, IJSAMObject jSAMObject)
+        public bool Add(string name, IJSAMObject value)
         {
-            return Add(name, (object)jSAMObject);
+            return Add(name, (object)value);
+        }
+
+        public bool Add(string name, string value)
+        {
+            return Add(name, value);
         }
 
         public bool Contains(string name)

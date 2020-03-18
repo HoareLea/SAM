@@ -26,7 +26,9 @@ namespace SAM.Core
 
         public static Setting GetDefault()
         {
-            return new Setting(Assembly.GetExecutingAssembly());
+            Setting result =  new Setting(Assembly.GetExecutingAssembly());
+
+            return result;
         }
     }
 }
