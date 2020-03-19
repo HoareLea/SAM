@@ -48,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
 
             GooConstructionParam gooConstructionParam = new GooConstructionParam();
             gooConstructionParam.PersistentData.Append(new GooConstruction(Query.Construction(PanelType.Roof)));
-            inputParamManager.AddParameter(gooConstructionParam, "_construction", "_construction", "SAM Analytical Construction", GH_ParamAccess.item);
+            inputParamManager.AddParameter(gooConstructionParam, "_construction_", "_construction", "SAM Analytical Construction", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("simplify_", "simplify", "Simplify", GH_ParamAccess.item, true);
         }
 
