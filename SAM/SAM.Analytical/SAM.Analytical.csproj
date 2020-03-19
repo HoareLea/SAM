@@ -62,6 +62,8 @@
     <Compile Include="Manager\ActiveSettings.cs" />
     <Compile Include="Modify\SnapByOffset.cs" />
     <Compile Include="Modify\SnapByPoints.cs" />
+    <Compile Include="Query\ApertureConstruction.cs" />
+    <Compile Include="Query\ApertureConstructionName.cs" />
     <Compile Include="Query\ConstructionName.cs" />
     <Compile Include="Query\Construction.cs" />
     <Compile Include="Query\IsValid.cs" />

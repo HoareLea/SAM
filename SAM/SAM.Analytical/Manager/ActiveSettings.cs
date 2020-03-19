@@ -31,6 +31,7 @@ namespace SAM.Analytical
             public const string ApertureConstruction_InternalWindows = "ApertureConstruction_InternalWindows";
             public const string ApertureConstruction_ExternalDoors = "ApertureConstruction_ExternalDoors";
             public const string ApertureConstruction_InternalDoors = "ApertureConstruction_InternalDoors";
+            public const string ApertureConstruction_Skylight = "ApertureConstruction_Skylight";
         }
 
         private static Setting setting = Load();
@@ -75,6 +76,13 @@ namespace SAM.Analytical
             result.Add(Name.Construction_Wall, new Construction(new System.Guid("5c3039ff-c4af-4953-bbf0-5c84bdd8044c"), "Basic Wall: SIM_EXT_SLD"));
             result.Add(Name.Construction_WallExternal, new Construction(new System.Guid("8f424c58-6570-4b9b-b753-e7584b7b4494"), "Basic Wall: SIM_EXT_SLD"));
             result.Add(Name.Construction_WallInternal, new Construction(new System.Guid("625d9ed6-64fa-4877-bb56-b84ba118c900"), "Basic Wall: SIM_INT_SLD_Partition"));
+
+            //Default Aperture Constructions
+            result.Add(Name.ApertureConstruction_ExternalDoors, new ApertureConstruction(new System.Guid("5ad2e36d-6a2b-4cf1-af02-1ce62e7d2288"), "Doors: SIM_EXT_SLD", ApertureType.Door));
+            result.Add(Name.ApertureConstruction_ExternalWindows, new ApertureConstruction(new System.Guid("f70c4ec7-931b-47ed-a95b-1b3df1b9d885"), "Windows: SIM_EXT_GLZ", ApertureType.Window));
+            result.Add(Name.ApertureConstruction_InternalDoors, new ApertureConstruction(new System.Guid("1dcdad32-63ec-4a01-945d-39548be20491"), "Doors: SIM_INT_SLD", ApertureType.Door));
+            result.Add(Name.ApertureConstruction_InternalWindows, new ApertureConstruction(new System.Guid("3e43ecb2-638b-4d8b-9046-ba3d8455cd3f"), "Windows: SIM_INT_GLZ", ApertureType.Window)); 
+            result.Add(Name.ApertureConstruction_Skylight, new ApertureConstruction(new System.Guid("6f6dc032-6fa5-43fa-bfef-de5937e95599"), "Skylight: SIM_EXT_GLZ_SKY DF01", ApertureType.Window));
 
             return result;
         }

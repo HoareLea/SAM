@@ -40,7 +40,10 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.list);
             inputParamManager.AddParameter(new GooPanelParam(), "_panel;", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction;", "_apertureConstruction", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
+
+            GooApertureConstructionParam gooApertureConstructionParam = new GooApertureConstructionParam();
+            gooApertureConstructionParam.PersistentData.Append(new GooApertureConstruction(Query.ApertureConstruction(ApertureType.Window, true)));
+            inputParamManager.AddParameter(gooApertureConstructionParam, "_apertureConstruction;", "_apertureConstruction", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("maxDistance_", "maxDistance", "Maximal Distance", GH_ParamAccess.item, 0.1);
             inputParamManager.AddBooleanParameter("_trimGeometry_", "trimGeometry", "Trim Aperture Geometry", GH_ParamAccess.item, true);
         }

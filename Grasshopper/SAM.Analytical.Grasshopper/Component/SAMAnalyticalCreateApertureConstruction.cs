@@ -24,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateApertureConstruction()
           : base("SAMAnalytical.CreateApertureConstruction", "SAMAnalyticalCreate.ApertureConstruction",
-              "Create Aperture Construction, if nothing connect default values: _name = WinInst: SIM_EXT_GLZ ",
+              "Create Aperture Construction",
               "SAM", "Analytical")
         {
         }
@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, "WinInst: SIM_EXT_GLZ");
+            inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, Query.ApertureConstructionName(ApertureType.Window, true));
             int index = inputParamManager.AddGenericParameter("_apertureType", "_apertureType", "Aperture Type", GH_ParamAccess.item);
             
             Param_GenericObject genericObjectParameter = (Param_GenericObject)inputParamManager[index];
