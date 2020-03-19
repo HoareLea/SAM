@@ -31,5 +31,28 @@ namespace SAM.Analytical
 
             return apertureConstruction;
         }
+
+        public static ApertureConstruction ApertureConstruction(this Panel panel, ApertureType apertureType)
+        {
+            if (panel == null)
+                return null;
+
+            bool external = false;
+            switch (panel.PanelType)
+            {
+                case Analytical.PanelType.CurtainWall:
+                case Analytical.PanelType.Wall:
+                case Analytical.PanelType.WallExternal:
+                    external = true;
+                    break;
+                case Analytical.PanelType.WallInternal:
+                    external = false;
+                    break;
+                default:
+                    return null;
+            }
+
+            return ApertureConstruction(apertureType, external);
+        }
     }
 }

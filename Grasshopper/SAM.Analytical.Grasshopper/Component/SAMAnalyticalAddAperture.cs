@@ -41,9 +41,9 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.list);
             inputParamManager.AddParameter(new GooPanelParam(), "_panel;", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
 
-            GooApertureConstructionParam gooApertureConstructionParam = new GooApertureConstructionParam();
-            gooApertureConstructionParam.PersistentData.Append(new GooApertureConstruction(Query.ApertureConstruction(ApertureType.Window, true)));
-            inputParamManager.AddParameter(gooApertureConstructionParam, "_apertureConstruction;", "_apertureConstruction", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
+            int index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "apertureConstruction;", "_apertureConstruction", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
             inputParamManager.AddNumberParameter("maxDistance_", "maxDistance", "Maximal Distance", GH_ParamAccess.item, 0.1);
             inputParamManager.AddBooleanParameter("_trimGeometry_", "trimGeometry", "Trim Aperture Geometry", GH_ParamAccess.item, true);
         }
@@ -124,11 +124,7 @@ namespace SAM.Analytical.Grasshopper
             panel = new Panel(panel);
 
             ApertureConstruction apertureConstruction = null;
-            if (!dataAccess.GetData(2, ref apertureConstruction))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            dataAccess.GetData(2, ref apertureConstruction);
 
             double maxDistance = Core.Tolerance.MacroDistance;
             dataAccess.GetData(3, ref maxDistance);
@@ -136,7 +132,11 @@ namespace SAM.Analytical.Grasshopper
             List<Aperture> apertures = new List<Aperture>();
             foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
             {
-                Aperture aperture = panel.AddAperture(apertureConstruction, closedPlanar3D, trimGeometry, maxDistance);
+                ApertureConstruction apertureConstruction_Temp = apertureConstruction;
+                if (apertureConstruction_Temp == null)
+                    apertureConstruction_Temp = Query.ApertureConstruction(panel, ApertureType.Window);
+
+                Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, maxDistance);
                 if (aperture != null)
                     apertures.Add(aperture);
             }
