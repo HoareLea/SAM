@@ -32,7 +32,7 @@ namespace SAM.Analytical
                 {
                     Construction construction_Temp = Query.Construction(panel.PanelType);
                     if(construction_Temp != null)
-                        panel = new Panel(panel, construction);
+                        panel = new Panel(panel, construction_Temp);
                 }
 
                 result.Add(panel);
