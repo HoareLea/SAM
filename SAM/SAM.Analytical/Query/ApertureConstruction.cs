@@ -37,9 +37,17 @@ namespace SAM.Analytical
             if (panel == null)
                 return null;
 
-            bool external = false;
+            ApertureType apertureType_Temp = apertureType;
+
+            bool external = true;
             switch (panel.PanelType)
             {
+                case Analytical.PanelType.Undefined:
+                case Analytical.PanelType.Roof:
+                    ApertureConstruction apertureConstruction;
+                    if (!ActiveSetting.Setting.TryGetValue(ActiveSetting.Name.ApertureConstruction_Skylight, out apertureConstruction))
+                        return null;
+                    return apertureConstruction;
                 case Analytical.PanelType.CurtainWall:
                 case Analytical.PanelType.Wall:
                 case Analytical.PanelType.WallExternal:
@@ -52,7 +60,7 @@ namespace SAM.Analytical
                     return null;
             }
 
-            return ApertureConstruction(apertureType, external);
+            return ApertureConstruction(apertureType_Temp, external);
         }
     }
 }

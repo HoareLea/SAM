@@ -59,7 +59,7 @@ namespace SAM.Analytical
             Setting result = new Setting(Assembly.GetExecutingAssembly());
 
             //Default Constructions
-            result.Add(Name.Construction_Ceiling, new Construction(new System.Guid("6ff47aad-ec17-4806-8e81-e84b10d5756a"), "Basic Wall: SIM_INT_SLD_Partition"));
+            result.Add(Name.Construction_Ceiling, new Construction(new System.Guid("6ff47aad-ec17-4806-8e81-e84b10d5756a"), "Floor: SIM_INT_SLD_FLR FLR02"));
             result.Add(Name.Construction_CurtainWall, new Construction(new System.Guid("9ab5d49f-4db4-4930-8293-3945d430e572"), "Curtain Wall: SIM_EXT_GLZ"));
             result.Add(Name.Construction_Floor, new Construction(new System.Guid("6b5cbfab-bc87-4d2c-98e0-d940c75295fa"), "Floor: SIM_EXT_GRD_FLR FLR01"));
             result.Add(Name.Construction_FloorExposed, new Construction(new System.Guid("18da6398-75b3-4e39-8505-cf26e1f7f875"), "Floor: SIM_EXT_SLD_FLR Exposed"));

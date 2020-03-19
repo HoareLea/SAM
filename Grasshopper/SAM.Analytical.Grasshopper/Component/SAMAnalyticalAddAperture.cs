@@ -136,6 +136,9 @@ namespace SAM.Analytical.Grasshopper
                 if (apertureConstruction_Temp == null)
                     apertureConstruction_Temp = Query.ApertureConstruction(panel, ApertureType.Window);
 
+                if (apertureConstruction_Temp == null)
+                    continue;
+                
                 Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, maxDistance);
                 if (aperture != null)
                     apertures.Add(aperture);
