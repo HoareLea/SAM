@@ -59,8 +59,11 @@
     <Compile Include="Classes\Panel.cs" />
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
+    <Compile Include="Manager\ActiveSettings.cs" />
     <Compile Include="Modify\SnapByOffset.cs" />
     <Compile Include="Modify\SnapByPoints.cs" />
+    <Compile Include="Query\ConstructionName.cs" />
+    <Compile Include="Query\Construction.cs" />
     <Compile Include="Query\IsValid.cs" />
     <Compile Include="Query\Height.cs" />
     <Compile Include="Query\Width.cs" />
@@ -88,5 +91,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
