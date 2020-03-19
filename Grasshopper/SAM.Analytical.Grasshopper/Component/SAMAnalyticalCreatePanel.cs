@@ -46,9 +46,11 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddGenericParameter("panelType_", "panelType", "PanelType", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
-            GooConstructionParam gooConstructionParam = new GooConstructionParam();
-            gooConstructionParam.PersistentData.Append(new GooConstruction(Query.Construction(PanelType.Roof)));
-            inputParamManager.AddParameter(gooConstructionParam, "_construction_", "_construction", "SAM Analytical Construction", GH_ParamAccess.item);
+            //GooConstructionParam gooConstructionParam = new GooConstructionParam();
+            //gooConstructionParam.PersistentData.Append(new GooConstruction(Query.Construction(PanelType.Roof)));
+            index = inputParamManager.AddParameter(new GooConstructionParam(), "construction", "construction", "SAM Analytical Construction", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
             inputParamManager.AddBooleanParameter("simplify_", "simplify", "Simplify", GH_ParamAccess.item, true);
         }
 
