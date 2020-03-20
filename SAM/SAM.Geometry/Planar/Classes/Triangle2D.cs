@@ -47,7 +47,7 @@ namespace SAM.Geometry.Planar
 
         public Point2D GetCentroid()
         {
-            return Point2D.GetCentroid(points);
+            return Query.Centroid(points);
         }
 
         public Point2D GetInternalPoint2D()

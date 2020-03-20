@@ -58,6 +58,17 @@ namespace SAM.Geometry.Spatial
             return new Plane(tuple.Item2, tuple.Item1);
         }
 
+        //public static Plane Plane(this IEnumerable<Point3D> point3Ds, bool fit, double tolerance = Core.Tolerance.MicroDistance)
+        //{
+        //    if (point3Ds == null)
+        //        return null;
+
+        //    if (!fit)
+        //        return Plane(point3Ds, tolerance);
+
+        //    SAM.Geometry.Spatial.Point3D.G()
+        //}
+
         public static Plane Plane(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             Vector3D normal = Query.Normal(point3Ds, tolerance);

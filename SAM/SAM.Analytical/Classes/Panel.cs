@@ -228,7 +228,7 @@ namespace SAM.Analytical
                                     Geometry.Planar.Point2D point2D = polygon2D_Temp.GetInternalPoint2D();
                                     if (closed2D_Aperture.Inside(point2D) && closed2D.Inside(point2D))
                                     {
-                                        point2D_Centroid = Geometry.Planar.Point2D.GetCentroid(polygon2D_Temp.Points);
+                                        point2D_Centroid = Geometry.Planar.Query.Centroid(polygon2D_Temp.Points);
                                         polygon2D_Min = polygon2D_Temp;
                                     }
                                 }

@@ -46,7 +46,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             if (curves.TrueForAll(x => x is Segment2D))
-                return Point2D.GetCentroid(curves.ConvertAll(x => x.GetStart()));
+                return Query.Centroid(curves.ConvertAll(x => x.GetStart()));
 
             throw new NotImplementedException();
         }

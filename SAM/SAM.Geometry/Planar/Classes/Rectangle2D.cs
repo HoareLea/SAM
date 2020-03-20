@@ -167,7 +167,7 @@ namespace SAM.Geometry.Planar
 
         public Point2D GetCentroid()
         {
-            return Point2D.GetCentroid(GetPoints());
+            return Query.Centroid(GetPoints());
         }
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
