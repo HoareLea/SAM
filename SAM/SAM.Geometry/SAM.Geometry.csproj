@@ -116,10 +116,12 @@
     <Compile Include="Spatial\Create\Point3Ds.cs" />
     <Compile Include="Spatial\Create\ICurve3Ds.cs" />
     <Compile Include="Spatial\Create\ICurve3D.cs" />
+    <Compile Include="Spatial\Modify\SimplifyByAngle.cs" />
     <Compile Include="Spatial\Query\Colinear.cs" />
     <Compile Include="Spatial\Query\Explode.cs" />
     <Compile Include="Spatial\Query\ClosedPlanar3Ds.cs" />
     <Compile Include="Spatial\Query\Closest.cs" />
+    <Compile Include="Spatial\Query\SmallestAngle.cs" />
     <Compile Include="Spatial\Query\Vertical.cs" />
     <Compile Include="Spatial\Query\Horizontal.cs" />
     <Compile Include="Spatial\Query\IsValid.cs" />
