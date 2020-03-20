@@ -5,6 +5,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Create
     {
+        // Constructs a plane from a collection of points so that the summed squared distance to all points is minimzized
         public static Plane Plane(this IEnumerable<Point3D> point3Ds, bool fit, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point3Ds == null || point3Ds.Count() < 3)

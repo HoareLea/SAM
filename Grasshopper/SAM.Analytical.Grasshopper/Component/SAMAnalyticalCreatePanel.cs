@@ -52,6 +52,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].Optional = true;
 
             inputParamManager.AddBooleanParameter("simplify_", "simplify", "Simplify", GH_ParamAccess.item, true);
+            inputParamManager.AddNumberParameter("minArea_", "minArea", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
         }
 
         /// <summary>
@@ -122,6 +123,9 @@ namespace SAM.Analytical.Grasshopper
 
             Construction construction = null;
             dataAccess.GetData(2, ref construction);
+
+            double minArea = Core.Tolerance.MacroDistance;
+            dataAccess.GetData(4, ref minArea);
 
             List<Panel> panels = Create.Panels(geometry3Ds, panelType, construction);
             if(panels == null || panels.Count == 0)

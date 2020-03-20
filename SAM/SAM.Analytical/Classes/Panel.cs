@@ -58,7 +58,7 @@ namespace SAM.Analytical
             this.planarBoundary3D = planarBoundary3D;
         }
 
-        public Panel(Guid guid, Panel panel, Face3D face, bool trimGeometry = true, double maxDistance = Tolerance.MacroDistance)
+        public Panel(Guid guid, Panel panel, Face3D face, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)
             : base(guid, panel)
         {
             panelType = panel.panelType;
@@ -72,7 +72,7 @@ namespace SAM.Analytical
                         continue;
 
                     //TODO: Update ExternalEdge with PlanarBoundary3D
-                    AddAperture(aperture.ApertureConstruction, aperture.GetFace3D()?.GetExternalEdge(), trimGeometry, maxDistance);
+                    AddAperture(aperture.ApertureConstruction, aperture.GetFace3D()?.GetExternalEdge(), trimGeometry, minArea, maxDistance);
                 }
             }
             //apertures = panel.apertures.FindAll(x => Query.IsValid(this, x, Core.Tolerance.MacroDistance)).ConvertAll(x => new Aperture(x));
@@ -169,7 +169,7 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public Aperture AddAperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, bool trimGeometry = true, double maxDistance = Tolerance.MacroDistance)
+        public Aperture AddAperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)
         {
             if (apertureConstruction == null || closedPlanar3D == null)
                 return null;
@@ -190,6 +190,9 @@ namespace SAM.Analytical
                 return null;
 
             Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
+
+            if (minArea != 0 && closed2D_Aperture.GetArea() <= minArea)
+                return null;
             
             Point3D point3D_Location;
             Geometry.Planar.Point2D point2D_Centroid = closed2D_Aperture.GetCentroid();
@@ -219,6 +222,8 @@ namespace SAM.Analytical
                                 foreach (Geometry.Planar.Polygon2D polygon2D_Temp in polygon2Ds)
                                 {
                                     double area_Temp = polygon2D_Temp.GetArea();
+                                    if (minArea != 0 && area_Temp <= minArea)
+                                        continue;
 
                                     double area_Difference = Math.Abs(area_Aperture - area_Temp);
 

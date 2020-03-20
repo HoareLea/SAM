@@ -46,6 +46,7 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddNumberParameter("maxDistance_", "maxDistance", "Maximal Distance", GH_ParamAccess.item, 0.1);
             inputParamManager.AddBooleanParameter("_trimGeometry_", "trimGeometry", "Trim Aperture Geometry", GH_ParamAccess.item, true);
+            inputParamManager.AddNumberParameter("minArea_", "minArea", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
         }
 
         /// <summary>
@@ -129,6 +130,9 @@ namespace SAM.Analytical.Grasshopper
             double maxDistance = Core.Tolerance.MacroDistance;
             dataAccess.GetData(3, ref maxDistance);
 
+            double minArea = Core.Tolerance.MacroDistance;
+            dataAccess.GetData(5, ref minArea);
+
             List<Aperture> apertures = new List<Aperture>();
             foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
             {
@@ -139,7 +143,7 @@ namespace SAM.Analytical.Grasshopper
                 if (apertureConstruction_Temp == null)
                     continue;
                 
-                Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, maxDistance);
+                Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
                 if (aperture != null)
                     apertures.Add(aperture);
             }
