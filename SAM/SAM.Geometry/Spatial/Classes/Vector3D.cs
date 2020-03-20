@@ -245,6 +245,11 @@ namespace SAM.Geometry.Spatial
             return coordinates[0] == vector3D.coordinates[0] && coordinates[1] == vector3D.coordinates[1] && coordinates[2] == vector3D.coordinates[2];
         }
 
+        public bool AlmostEqual(Vector3D vector3D, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            return ((System.Math.Abs(coordinates[0] - vector3D.coordinates[0]) < tolerance) && (System.Math.Abs(coordinates[1] - vector3D.coordinates[1]) < tolerance && (System.Math.Abs(coordinates[2] - vector3D.coordinates[2]) < tolerance)));
+        }
+
         public override int GetHashCode()
         {
             int hash = 13;

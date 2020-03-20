@@ -406,9 +406,9 @@ namespace SAM.Geometry.Spatial
             return new Plane(this);
         }
 
-        public bool Coplanar(Plane plane, double tolerance = Core.Tolerance.Angle)
+        public bool Coplanar(Plane plane, double tolerance = Core.Tolerance.MicroDistance)
         {
-            return normal.Angle(plane.normal) <= tolerance || -normal.Angle(plane.normal) <= tolerance;
+            return normal.AlmostEqual(plane.normal, tolerance) || normal.AlmostEqual(-plane.normal, tolerance);
         }
 
         public void Reverse()
