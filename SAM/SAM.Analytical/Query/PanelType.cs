@@ -40,13 +40,16 @@ namespace SAM.Analytical
             if (normal == null)
                 return Analytical.PanelType.Undefined;
 
-            if (normal.InRange(Geometry.Spatial.Vector3D.BaseZ, 0.261799))
-                return Analytical.PanelType.Roof;
+            double tolerance = 0.1;
 
-            if (normal.InRange(new Geometry.Spatial.Vector3D(0,0,-1), 0.261799))
+            double value = normal.Unit.DotProduct(Geometry.Spatial.Vector3D.BaseZ);
+            if (value < tolerance && value > -tolerance)
+                return Analytical.PanelType.Wall;
+
+            if (value < 0)
                 return Analytical.PanelType.Floor;
 
-            return Analytical.PanelType.Wall;
+            return Analytical.PanelType.Roof;
         }
     }
 }
