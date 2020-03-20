@@ -37,10 +37,15 @@ namespace SAM.Analytical
             if (panel == null)
                 return null;
 
+            return ApertureConstruction(panel.PanelType, apertureType);
+        }
+
+        public static ApertureConstruction ApertureConstruction(this PanelType panelType, ApertureType apertureType)
+        {
             ApertureType apertureType_Temp = apertureType;
 
             bool external = true;
-            switch (panel.PanelType)
+            switch (panelType)
             {
                 case Analytical.PanelType.Undefined:
                 case Analytical.PanelType.Roof:
