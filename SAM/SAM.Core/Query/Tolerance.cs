@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿using System.Threading;
 
 namespace SAM.Core
 {
@@ -12,7 +12,7 @@ namespace SAM.Core
             if (decimals == 0)
                 return 0;
 
-            string value = "0" + CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator;
+            string value = "0" + Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
             for (int i = 0; i < decimals; i++)
                 value += "0";
 
