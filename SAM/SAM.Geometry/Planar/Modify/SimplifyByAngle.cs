@@ -37,6 +37,8 @@ namespace SAM.Geometry.Planar
 
                 if(closed)
                 {
+                    count = point2Ds_Temp.Count;
+
                     Point2D point2D_1;
                     Point2D point2D_2;
                     Point2D point2D_3;
@@ -51,7 +53,7 @@ namespace SAM.Geometry.Planar
                             return false;
 
                         removed = true;
-                        break;
+                        continue;
                     }
 
                     point2D_1 = point2Ds_Temp[count - 1];
@@ -64,7 +66,7 @@ namespace SAM.Geometry.Planar
                             return false;
 
                         removed = true;
-                        break;
+                        continue;
                     }
                 }
 

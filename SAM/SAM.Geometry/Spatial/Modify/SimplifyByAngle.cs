@@ -37,6 +37,8 @@ namespace SAM.Geometry.Spatial
 
                 if(closed)
                 {
+                    count = point3Ds_Temp.Count;
+
                     Point3D point3D_1;
                     Point3D point3D_2;
                     Point3D point3D_3;
@@ -51,7 +53,7 @@ namespace SAM.Geometry.Spatial
                             return false;
 
                         removed = true;
-                        break;
+                        continue;
                     }
 
                     point3D_1 = point3Ds_Temp[count - 1];
@@ -64,7 +66,7 @@ namespace SAM.Geometry.Spatial
                             return false;
 
                         removed = true;
-                        break;
+                        continue;
                     }
                 }
 
