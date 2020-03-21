@@ -29,7 +29,12 @@ namespace SAM.Geometry.Planar
         {
             return Segment2Ds(boundingBox2D, offset_Horizontal, offset_Vertical, boundingBox2D.GetCorner(point2D), true);
         }
-        
+
+        public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, Alignment alignment, double offset, Point2D point2D, bool includeEdge = true)
+        {
+            return Segment2Ds(boundingBox2D, alignment, offset, boundingBox2D.GetCorner(point2D), true);
+        }
+
         public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, double? offset_Horizontal, double? offset_Vertical, Corner corner = Corner.TopLeft, bool includeEdge = true)
         {
             if (boundingBox2D == null || corner == Corner.Undefined)
