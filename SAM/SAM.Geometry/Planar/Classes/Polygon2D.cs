@@ -42,6 +42,17 @@ namespace SAM.Geometry.Planar
             return Point2D.Orientation(points, true);
         }
 
+        public bool SetOrientation(Orientation orientation)
+        {
+            if (points == null || points.Count < 3 || orientation == Orientation.Undefined || orientation == Orientation.Collinear)
+                return false;
+
+            if (GetOrientation() != orientation)
+                Modify.Reverse(points, true);
+
+            return true;
+        }
+
         public override ISAMGeometry Clone()
         {
             return new Polygon2D(this);
