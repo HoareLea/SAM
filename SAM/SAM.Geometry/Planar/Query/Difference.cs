@@ -4,6 +4,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
+        //Difference of U and A, denoted U \ A, is the set of all members of U that are not members of A. The set difference {1, 2, 3} \ {2, 3, 4} is {1} , while, conversely, the set difference
         public static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2)
         {
             if (polygon2D_1 == null || polygon2D_2 == null)
