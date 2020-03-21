@@ -297,7 +297,7 @@ namespace SAM.Geometry.Planar
             return Query.Intersections(this, segmentable2D);
         }
 
-        public bool On(Point2D point2D, double tolerance = 1E-09)
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             return Query.On(GetSegments(), point2D, tolerance);
         }
