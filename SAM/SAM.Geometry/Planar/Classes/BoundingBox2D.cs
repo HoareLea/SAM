@@ -257,10 +257,54 @@ namespace SAM.Geometry.Planar
 
         public List<Point2D> GetPoints()
         {
-            double x = Width;
             double y = Height;
 
             return new List<Point2D>() { new Point2D(min), new Point2D(min.X, min.Y + y), new Point2D(max), new Point2D(max.X, max.Y - y) };
+        }
+
+        public Point2D GetPoint(Corner corner)
+        {
+            if (corner == Corner.Undefined)
+                return null;
+
+            switch(corner)
+            {
+                case Corner.BottomLeft:
+                    return new Point2D(min);
+                case Corner.BottomRight:
+                    return new Point2D(max.X, max.Y - Height);
+                case Corner.TopLeft:
+                    return new Point2D(min.X, min.Y + Height);
+                case Corner.TopRight:
+                    return new Point2D(max);
+            }
+
+            return null;
+        }
+
+        public Corner GetCorner(Point2D point2D)
+        {
+            if (point2D == null)
+                return Corner.Undefined;
+
+            Corner result = Corner.Undefined;
+            double distance_Min = double.MaxValue;
+
+            foreach(Corner corner in Enum.GetValues(typeof(Corner)))
+            {
+                Point2D point2D_Temp = GetPoint(corner);
+                if (point2D_Temp == null)
+                    continue;
+
+                double distance = point2D.Distance(point2D_Temp);
+                if(distance < distance_Min)
+                {
+                    result = corner;
+                    distance_Min = distance;
+                }
+            }
+
+            return result;
         }
 
         public double GetArea()

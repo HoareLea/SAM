@@ -25,12 +25,17 @@ namespace SAM.Geometry.Planar
             return Segment2Ds(boundingBox2D, offset_Horizontal, offset_Vertical, corner, includeEdge);
         }
         
+        public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, double? offset_Horizontal, double? offset_Vertical, Point2D point2D, bool includeEdge = true)
+        {
+            return Segment2Ds(boundingBox2D, offset_Horizontal, offset_Vertical, boundingBox2D.GetCorner(point2D), true);
+        }
+        
         public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, double? offset_Horizontal, double? offset_Vertical, Corner corner = Corner.TopLeft, bool includeEdge = true)
         {
-            if (boundingBox2D == null)
+            if (boundingBox2D == null || corner == Corner.Undefined)
                 return null;
 
-            List<Segment2D> result = null; 
+            List<Segment2D> result = null;
 
             if (offset_Horizontal != null && offset_Horizontal.HasValue && offset_Horizontal.Value != 0)
             {
@@ -41,7 +46,7 @@ namespace SAM.Geometry.Planar
 
                 double y_Start = double.NaN;
                 double factor_direction = 1;
-                switch(corner)
+                switch (corner)
                 {
                     case Corner.TopLeft:
                     case Corner.TopRight:
@@ -64,7 +69,7 @@ namespace SAM.Geometry.Planar
                     count++;
 
                 offset = offset * factor_direction;
-                for (int i= 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     int index = i;
                     if (!includeEdge)
@@ -75,7 +80,7 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            if(offset_Vertical != null && offset_Vertical.HasValue && offset_Vertical.Value != 0)
+            if (offset_Vertical != null && offset_Vertical.HasValue && offset_Vertical.Value != 0)
             {
                 if (result == null)
                     result = new List<Segment2D>();
