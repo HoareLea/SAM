@@ -302,6 +302,17 @@ namespace SAM.Geometry.Planar
             return Query.Centroid(points);
         }
 
+        public bool Move(Vector2D vector2D)
+        {
+            if (points == null || vector2D == null)
+                return false;
+
+            for (int i = 0; i < points.Count; i++)
+                points[i] = points[i].GetMoved(vector2D);
+
+            return true;
+        }
+
 
         public List<Point2D> Intersections(ISegmentable2D segmentable2D)
         {
