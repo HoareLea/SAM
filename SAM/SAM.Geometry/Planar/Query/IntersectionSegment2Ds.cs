@@ -6,15 +6,15 @@ namespace SAM.Geometry.Planar
     public static partial class Query
     {
         //Union of the sets A and B, denoted A ∪ B, is the set of all objects that are a member of A, or B, or both. The union of {1, 2, 3} and {2, 3, 4} is the set {1, 2, 3, 4}
-        public static List<Segment2D> IntersectionSegment2Ds(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> IntersectionSegment2Ds(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (polygon2D_1 == null || polygon2D_2 == null)
                 return null;
 
-            return IntersectionSegment2Ds(polygon2D_1, new Polygon2D[] { polygon2D_2 }, tolerance);
+            return IntersectionSegment2Ds(polygon2D_1, new Polygon2D[] { polygon2D_2 }, sort, tolerance);
         }
 
-        public static List<Segment2D> IntersectionSegment2Ds(this Polygon2D polygon2D, IEnumerable<Polygon2D> polygon2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> IntersectionSegment2Ds(this Polygon2D polygon2D, IEnumerable<Polygon2D> polygon2Ds, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (polygon2D == null || polygon2Ds == null)
                 return null;
@@ -61,6 +61,41 @@ namespace SAM.Geometry.Planar
 
                 if (on)
                     result.Add(segment2D_2);
+            }
+
+            if(sort)
+            {
+                Dictionary<int, List<Segment2D>> dictionary = new Dictionary<int, List<Segment2D>>();
+
+                List<Segment2D> segment2Ds = polygon2D.GetSegments();
+                foreach (Segment2D segment2D in result)
+                {
+                    Point2D point2D = segment2D.Mid();
+
+                    int index = Query.IndexOfClosest(segment2Ds, point2D);
+                    if (index == -1)
+                        continue;
+
+                    List<Segment2D> segment2Ds_Temp;
+                    if (!dictionary.TryGetValue(index, out segment2Ds_Temp))
+                    {
+                        segment2Ds_Temp = new List<Segment2D>();
+                        dictionary[index] = segment2Ds_Temp;
+                    }
+
+                    segment2Ds_Temp.Add(segment2D);
+                }
+
+                List<int> indexes = dictionary.Keys.ToList();
+                indexes.Sort();
+
+                result = new List<Segment2D>();
+                foreach (int index in indexes)
+                {
+                    List<Segment2D> segment2Ds_Temp = dictionary[index];
+                    Modify.SortByDistance(segment2Ds_Temp, segment2Ds[index].Start);
+                    result.AddRange(segment2Ds_Temp);
+                }
             }
 
             return result;

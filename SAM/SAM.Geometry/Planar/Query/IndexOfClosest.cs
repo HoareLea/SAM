@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static int IndexOf(this IEnumerable<Segment2D> segment2Ds, Point2D point2D)
+        public static int IndexOfClosest(this IEnumerable<Segment2D> segment2Ds, Point2D point2D)
         {
             if (segment2Ds == null || point2D == null)
                 return -1;

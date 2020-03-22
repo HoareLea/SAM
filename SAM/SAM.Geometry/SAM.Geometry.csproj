@@ -105,7 +105,7 @@
     <Compile Include="Planar\Query\Union.cs" />
     <Compile Include="Planar\Query\Colinear.cs" />
     <Compile Include="Planar\Query\Segment2Ds.cs" />
-    <Compile Include="Planar\Query\IndexOf.cs" />
+    <Compile Include="Planar\Query\IndexOfClosest.cs" />
     <Compile Include="Planar\Query\SmallestAngleVector.cs" />
     <Compile Include="Planar\Query\ExtremePoints.cs" />
     <Compile Include="Planar\Query\BottomLeft.cs" />
