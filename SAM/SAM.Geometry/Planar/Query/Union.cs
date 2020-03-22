@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -11,6 +12,27 @@ namespace SAM.Geometry.Planar
                 return null;
 
             return new PointGraph2D(new List<Polygon2D>() { polygon2D_1, polygon2D_2 }, true).GetPolygon2Ds_External();
+        }
+
+        public static List<Polygon2D> Union(this IEnumerable<Polygon2D> polygon2Ds)
+        {
+            if (polygon2Ds == null)
+                return null;
+
+            int count = polygon2Ds.Count();
+
+            List<Polygon2D> result = new List<Polygon2D>();
+
+            if (count == 0)
+                return result;
+
+            if (count == 1)
+            {
+                result.Add(new Polygon2D(polygon2Ds.First()));
+                return result;
+            }
+
+            return new PointGraph2D(polygon2Ds, true).GetPolygon2Ds_External();
         }
     }
 }
