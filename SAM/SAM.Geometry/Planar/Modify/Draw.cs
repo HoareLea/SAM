@@ -37,6 +37,17 @@ namespace SAM.Geometry.Planar
             if (graphics == null || segment2D == null)
                 return false;
 
+            Point2D point2D_1 = segment2D[0];
+            if (!Query.IsValid(point2D_1))
+                return false;
+
+            Point2D point2D_2 = segment2D[1];
+            if (!Query.IsValid(point2D_2))
+                return false;
+
+            if (point2D_1.Distance(point2D_2) < Core.Tolerance.MacroDistance)
+                return false;
+
             graphics.DrawLine(pen, Convert.ToSingle(segment2D[0].X), Convert.ToSingle(segment2D[0].Y), Convert.ToSingle(segment2D[1].X), Convert.ToSingle(segment2D[1].Y));
             return true;
         }

@@ -122,7 +122,7 @@ namespace SAM.Geometry.Planar
             return string.Format("Point2D(X={0},Y={1})", System.Math.Round(coordinates[0], decimals), System.Math.Round(coordinates[1], decimals));
         }
 
-        public bool AlmostEqual(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool AlmostEquals(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             return ((System.Math.Abs(coordinates[0] - point2D.coordinates[0]) < tolerance) && (System.Math.Abs(coordinates[1] - point2D.coordinates[1]) < tolerance));
         }

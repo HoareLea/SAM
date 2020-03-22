@@ -313,7 +313,6 @@ namespace SAM.Geometry.Planar
             return true;
         }
 
-
         public List<Point2D> Intersections(ISegmentable2D segmentable2D)
         {
             return Query.Intersections(this, segmentable2D);

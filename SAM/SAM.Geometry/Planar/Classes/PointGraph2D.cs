@@ -150,7 +150,7 @@ namespace SAM.Geometry.Planar
                 if (point2D_End == null)
                     continue;
 
-                if (point2D_End.AlmostEqual(point2D_Start, tolerance))
+                if (point2D_End.AlmostEquals(point2D_Start, tolerance))
                     continue;
 
                 point2D_Start.Round(decimals);
