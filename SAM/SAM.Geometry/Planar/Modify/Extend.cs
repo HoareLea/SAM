@@ -98,5 +98,31 @@ namespace SAM.Geometry.Planar
 
             return new Segment2D(point2Ds[index_Start], point2Ds[index_End]);
         }
+
+        public static Segment2D Extend(this Segment2D segment2D, double distance, bool extend_Start = true, bool extend_End = true)
+        {
+            if (segment2D == null)
+                return null;
+
+            if (!extend_Start && !extend_End)
+                return new Segment2D(segment2D);
+
+            if (distance == 0)
+                return new Segment2D(segment2D);
+
+            Vector2D vector2D = segment2D.Direction * distance;
+
+            Point2D point2D_End = segment2D.End;
+            if (extend_End)
+                point2D_End.Move(vector2D);
+
+            vector2D.Negate();
+
+            Point2D point2D_Start = segment2D.Start;
+            if (extend_Start)
+                point2D_Start.Move(vector2D);
+
+            return new Segment2D(point2D_Start, point2D_End);
+        }
     }
 }
