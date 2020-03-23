@@ -90,6 +90,7 @@
     <Compile Include="Planar\Modify\SortByDistance.cs" />
     <Compile Include="Planar\Modify\Reverse.cs" />
     <Compile Include="Planar\Query\AlmostSimilar.cs" />
+    <Compile Include="Planar\Query\Trace.cs" />
     <Compile Include="Planar\Query\Similar.cs" />
     <Compile Include="Planar\Query\Centroid.cs" />
     <Compile Include="Planar\Query\Difference.cs" />
