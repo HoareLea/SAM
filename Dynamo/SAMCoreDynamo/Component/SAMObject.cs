@@ -22,5 +22,10 @@ namespace SAMCoreDynamo
         {
             return (sAMObject as dynamic).GetParameterSet(name);
         }
+
+        public static List<SAM.Core.IJSAMObject> FromJson(string pathOrJson)
+        {
+            return SAM.Core.Convert.ToSAM(pathOrJson);
+        }
     }
 }

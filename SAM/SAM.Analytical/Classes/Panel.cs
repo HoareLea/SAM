@@ -192,11 +192,10 @@ namespace SAM.Analytical
             if (closedPlanar3D_Projected == null)
                 return null;
 
-            Plane plane_ClosedPlanar3D_Projected = closedPlanar3D_Projected.GetPlane();
-            if (plane_ClosedPlanar3D_Projected == null)
-                return null;
+            Point3D point3D_ClosedPlanar3D = plane_closedPlanar3D.Origin;
+            Point3D point3D_ClosedPlanar3D_Projected = plane.Project(plane_closedPlanar3D.Origin);
 
-            if (plane_ClosedPlanar3D_Projected.Origin.Distance(closedPlanar3D.GetPlane().Origin) >= maxDistance)
+            if (point3D_ClosedPlanar3D.Distance(point3D_ClosedPlanar3D_Projected) >= maxDistance)
                 return null;
 
             Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
