@@ -179,6 +179,17 @@ namespace SAM.Geometry.Planar
             return System.Math.PI - value;
         }
 
+        public bool SameHalf(Vector2D vector2D)
+        {
+            if (vector2D == null)
+                return false;
+
+            Vector2D vector2D_Temp = new Vector2D(vector2D);
+            vector2D_Temp.Negate();
+
+            return Angle(vector2D) < Angle(vector2D_Temp);
+        }
+
         public double DotProduct(Vector2D vector2D)
         {
             return (coordinates[0] * vector2D.coordinates[0]) + (coordinates[1] * vector2D.coordinates[1]);
