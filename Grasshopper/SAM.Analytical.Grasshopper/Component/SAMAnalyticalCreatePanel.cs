@@ -40,19 +40,19 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            index = inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.item);
+            index = inputParamManager.AddGenericParameter("_geometry", "_geometry", "Geometry", GH_ParamAccess.item);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
-            index = inputParamManager.AddGenericParameter("panelType_", "panelType", "PanelType", GH_ParamAccess.item);
+            index = inputParamManager.AddGenericParameter("panelType_", "panelType_", "PanelType", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
             //GooConstructionParam gooConstructionParam = new GooConstructionParam();
             //gooConstructionParam.PersistentData.Append(new GooConstruction(Query.Construction(PanelType.Roof)));
-            index = inputParamManager.AddParameter(new GooConstructionParam(), "construction", "construction", "SAM Analytical Construction", GH_ParamAccess.item);
+            index = inputParamManager.AddParameter(new GooConstructionParam(), "construction_", "construction_", "SAM Analytical Construction", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
-            inputParamManager.AddBooleanParameter("simplify_", "simplify", "Simplify", GH_ParamAccess.item, true);
-            inputParamManager.AddNumberParameter("minArea_", "minArea", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
+            inputParamManager.AddBooleanParameter("simplify_", "simplify_", "Simplify", GH_ParamAccess.item, true);
+            inputParamManager.AddNumberParameter("minArea_", "minArea_", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
         }
 
         /// <summary>

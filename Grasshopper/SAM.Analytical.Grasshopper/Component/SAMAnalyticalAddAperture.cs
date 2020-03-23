@@ -38,15 +38,15 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_geometry", "geometry", "Geometry", GH_ParamAccess.list);
+            inputParamManager.AddGenericParameter("_geometry", "_geometry", "Geometry", GH_ParamAccess.list);
             inputParamManager.AddParameter(new GooPanelParam(), "_panel;", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
 
-            int index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "apertureConstruction", "apertureConstruction", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
+            int index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
-            inputParamManager.AddNumberParameter("maxDistance_", "maxDistance", "Maximal Distance", GH_ParamAccess.item, 0.1);
-            inputParamManager.AddBooleanParameter("_trimGeometry_", "trimGeometry", "Trim Aperture Geometry", GH_ParamAccess.item, true);
-            inputParamManager.AddNumberParameter("minArea_", "minArea", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
+            inputParamManager.AddNumberParameter("maxDistance_", "maxDistance_", "Maximal Distance", GH_ParamAccess.item, 0.1);
+            inputParamManager.AddBooleanParameter("trimGeometry_", "trimGeometry_", "Trim Aperture Geometry", GH_ParamAccess.item, true);
+            inputParamManager.AddNumberParameter("minArea_", "minArea_", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
         }
 
         /// <summary>
