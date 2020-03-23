@@ -9,6 +9,14 @@ namespace SAM.Geometry.Spatial
         private List<Planar.Point2D> points;
         private Plane plane;
 
+       public Polygon3D(Plane plane, IEnumerable<Planar.Point2D> points)
+        {
+            this.plane = plane;
+
+            if (points != null)
+                this.points = new List<Planar.Point2D>(points);
+        }
+        
         public Polygon3D(IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point3Ds != null)
@@ -18,16 +26,8 @@ namespace SAM.Geometry.Spatial
                     point3Ds_Temp.RemoveAt(point3Ds_Temp.Count - 1);
 
                 plane = Create.Plane(point3Ds_Temp, true, tolerance);
-
-                points = point3Ds_Temp.ConvertAll(x => plane.Convert(x));
-
-                Orientation orientation = Planar.Query.Orientation(points, true);
-                if(orientation == Orientation.CounterClockwise)
-                {
-                    Vector3D vector3D = plane.Normal;
-                    vector3D.Negate();
-                    plane = new Plane(plane.Origin, vector3D);
-                }
+                if (plane != null)
+                    points = point3Ds_Temp.ConvertAll(x => plane.Convert(x));
             }
         }
 

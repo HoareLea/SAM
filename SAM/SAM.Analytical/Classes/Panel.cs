@@ -169,13 +169,23 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public Aperture AddAperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)
+        public Aperture AddAperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
         {
             if (apertureConstruction == null || closedPlanar3D == null)
                 return null;
 
             Plane plane = planarBoundary3D?.Plane;
             if (plane == null)
+                return null;
+
+            Plane plane_closedPlanar3D = closedPlanar3D.GetPlane();
+            if (plane_closedPlanar3D == null)
+                return null;
+
+            Vector3D normal = plane.Normal;
+            Vector3D normal_closedPlanar3D = plane_closedPlanar3D.Normal;
+
+            if (!normal.AlmostSimilar(normal_closedPlanar3D, tolerance))
                 return null;
 
             IClosedPlanar3D closedPlanar3D_Projected = plane.Project(closedPlanar3D);

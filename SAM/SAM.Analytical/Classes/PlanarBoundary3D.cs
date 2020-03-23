@@ -194,9 +194,12 @@ namespace SAM.Analytical
             return GetFace3D().GetBoundingBox(offset);
         }
 
-        public Vector3D GetNormal(double tolerance = Tolerance.MicroDistance)
+        public Vector3D Normal
         {
-            return GetEdge3DLoop().GetNormal(tolerance);
+            get
+            {
+                return plane.Normal;
+            }
         }
 
         public override bool FromJObject(JObject jObject)

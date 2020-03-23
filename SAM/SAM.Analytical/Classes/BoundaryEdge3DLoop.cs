@@ -50,15 +50,6 @@ namespace SAM.Analytical
             return true;
         }
 
-        public Geometry.Spatial.Vector3D GetNormal(double tolerance = Tolerance.MicroDistance)
-        {
-            List<Geometry.Spatial.Point3D> point3Ds = new List<Geometry.Spatial.Point3D>();
-            foreach(BoundaryEdge3D boundaryEdge3D in BoundaryEdge3Ds)
-                point3Ds.Add(boundaryEdge3D.Curve3D.GetStart());
-
-            return Geometry.Spatial.Query.Normal(point3Ds, tolerance);
-        }
-
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

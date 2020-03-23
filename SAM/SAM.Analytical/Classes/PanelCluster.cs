@@ -134,7 +134,7 @@ namespace SAM.Analytical
                 foreach(KeyValuePair<Guid, Panel> keyValuePair_Panel in keyValuePair_PanelType.Value)
                 {
                     Panel panel = keyValuePair_Panel.Value;
-                    Geometry.Spatial.Vector3D vector3D = panel.PlanarBoundary3D.GetNormal();
+                    Geometry.Spatial.Vector3D vector3D = panel.PlanarBoundary3D.Normal;
 
                     Geometry.Spatial.Vector3D vector3D_Projected = plane.Project(vector3D);
                     double angle = vector3D_Projected.Angle(vector3D);

@@ -344,7 +344,13 @@ namespace SAM.Geometry.Spatial
 
         public Polygon3D Project(Polygon3D polygon3D)
         {
-            return new Polygon3D(polygon3D.GetPoints().ConvertAll(x => Closest(x)));
+            List<Point3D> point3Ds = polygon3D.GetPoints();
+            if (point3Ds == null)
+                return null;
+
+            List<Planar.Point2D> point2Ds = point3Ds.ConvertAll(x => Convert(x));
+            
+            return new Polygon3D(this, point2Ds);
         }
 
         public ICurve3D Project(ICurve3D curve)

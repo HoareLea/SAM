@@ -77,6 +77,17 @@ namespace SAM.Geometry.Spatial
             coordinates[2] = coordinates[2] * value;
         }
 
+        public bool SameHalf(Vector3D vector3D)
+        {
+            if (vector3D == null)
+                return false;
+
+            Vector3D vector3D_Temp = new Vector3D(vector3D);
+            vector3D_Temp.Negate();
+
+            return Angle(vector3D) < Angle(vector3D_Temp);
+        }
+
         public bool InRange(Vector3D direction, double angleDifference)
         {
             if (direction == null || double.IsNaN(angleDifference))
