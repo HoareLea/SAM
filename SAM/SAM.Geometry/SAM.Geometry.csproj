@@ -90,6 +90,10 @@
     <Compile Include="Planar\Modify\SortByDistance.cs" />
     <Compile Include="Planar\Modify\Reverse.cs" />
     <Compile Include="Planar\Query\AlmostSimilar.cs" />
+    <Compile Include="Planar\Query\Determinant.cs" />
+    <Compile Include="Planar\Query\Orientation.cs" />
+    <Compile Include="Planar\Query\Bounce.cs" />
+    <Compile Include="Planar\Query\IntersectionDictionary.cs" />
     <Compile Include="Planar\Query\Trace.cs" />
     <Compile Include="Planar\Query\Similar.cs" />
     <Compile Include="Planar\Query\Centroid.cs" />
@@ -126,6 +130,7 @@
     <Compile Include="Spatial\Create\ICurve3Ds.cs" />
     <Compile Include="Spatial\Create\ICurve3D.cs" />
     <Compile Include="Spatial\Modify\SimplifyByAngle.cs" />
+    <Compile Include="Spatial\Modify\SortByDistance.cs" />
     <Compile Include="Spatial\Query\Centroid.cs" />
     <Compile Include="Spatial\Query\Colinear.cs" />
     <Compile Include="Spatial\Query\Explode.cs" />

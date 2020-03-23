@@ -11,7 +11,7 @@ namespace SAM.Geometry.Spatial
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            List<Planar.Face2D> face2Ds = Planar.Create.Face3Ds(edges);
+            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(edges);
             if (face2Ds == null)
                 return null;
 

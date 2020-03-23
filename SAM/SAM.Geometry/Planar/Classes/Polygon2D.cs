@@ -39,7 +39,7 @@ namespace SAM.Geometry.Planar
 
         public Orientation GetOrientation()
         {
-            return Point2D.Orientation(points, true);
+            return Query.Orientation(points, true);
         }
 
         public bool SetOrientation(Orientation orientation)

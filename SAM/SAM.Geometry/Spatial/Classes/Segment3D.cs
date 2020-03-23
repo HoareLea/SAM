@@ -138,6 +138,32 @@ namespace SAM.Geometry.Spatial
             return vector.Length;
         }
 
+        public Point3D Closest(Point3D point3D)
+        {
+            Point3D start = GetStart();
+            Point3D end = GetEnd();
+
+            double A = point3D.X - start.X;
+            double B = point3D.Y - start.Y;
+            double E = point3D.Z - start.Z;
+            double C = end.X - start.X;
+            double D = end.Y - start.Y;
+            double F = end.Z - start.Z;
+
+            double aDot = A * C + B * D + E * F;
+            double aLen_sq = C * C + D * D + F * F;
+            double aParameter = -1;
+            if (aLen_sq != 0)
+                aParameter = aDot / aLen_sq;
+
+            if (aParameter < 0)
+                return start;
+            else if (aParameter > 1)
+                return end;
+            else
+                return new Point3D(start.X + aParameter * C, start.Y + aParameter * D, start.Z + aParameter * F);
+        }
+
 
         public static List<Point3D> GetPoints(IEnumerable<Segment3D> segment3Ds, bool close = false)
         {

@@ -100,7 +100,7 @@ namespace SAM.Geometry.Planar
         {
             List<Point2D> point2Ds = GetPoints();
 
-            return Point2D.Orientation(point2Ds[0], point2Ds[1], point2Ds[2]);
+            return Query.Orientation(point2Ds[0], point2Ds[1], point2Ds[2]);
         }
 
         public bool Contains(Point2D point, double offset)

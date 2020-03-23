@@ -884,7 +884,7 @@ namespace SAM.Geometry.Planar
                 Point2D point2D_3 = this[index_3];
                 Vector2D vector2D_2 = new Vector2D(point2D_2, point2D_3);
 
-                tuples.Add(new Tuple<int, Orientation, double>(index_3, Point2D.Orientation(point2D, point2D_2, point2D_3), vector2D_1.Angle(vector2D_2)));
+                tuples.Add(new Tuple<int, Orientation, double>(index_3, Query.Orientation(point2D, point2D_2, point2D_3), vector2D_1.Angle(vector2D_2)));
             }
 
             List<Tuple<int, Orientation, double>> tuples_Temp;

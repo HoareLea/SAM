@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Create
     {
-        public static List<Face2D> Face3Ds(this IEnumerable<IClosed2D> edges)
+        public static List<Face2D> Face2Ds(this IEnumerable<IClosed2D> edges)
         {
             if (edges == null)
                 return null;

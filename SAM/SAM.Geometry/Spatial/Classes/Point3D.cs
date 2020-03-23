@@ -181,7 +181,6 @@ namespace SAM.Geometry.Spatial
             return hash;
         }
 
-
         public static Point3D Snap(IEnumerable<Point3D> point3Ds, Point3D point3D, double maxDistance = double.NaN)
         {
             Point3D result = Point3D.Closest(point3Ds, point3D);

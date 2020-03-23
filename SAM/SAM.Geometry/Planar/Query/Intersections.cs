@@ -67,43 +67,9 @@ namespace SAM.Geometry.Planar
             if (point2D == null || vector2D == null)
                 return null;
 
-            List<Segment2D> segment2Ds = segmentable2D?.GetSegments();
-            if (segment2Ds == null)
-                return null;
+            Dictionary<Point2D, Segment2D> dictionary = IntersectionDictionary(point2D, vector2D, segmentable2D, keepDirection, removeColinear, tolerance);
 
-            HashSet<Point2D> point2Ds = new HashSet<Point2D>();
-
-            Segment2D segment2D = new Segment2D(point2D, vector2D);
-            foreach(Segment2D segment2D_Temp in segment2Ds)
-            {
-                Point2D point2D_closest_1;
-                Point2D point2D_closest_2;
-
-                if (removeColinear && segment2D.Colinear(segment2D_Temp))
-                    continue;
-
-                Point2D point2D_Intersection = segment2D.Intersection(segment2D_Temp, out point2D_closest_1, out point2D_closest_2);
-                if (point2D_Intersection == null)
-                    continue;
-
-                if (point2D_closest_1 == null || point2D_closest_2 == null)
-                {
-                    point2Ds.Add(point2D_Intersection);
-                    continue;
-                }
-
-                if(point2D_closest_2 != null && segment2D_Temp.Distance(point2D_Intersection) < tolerance)
-                {
-                    if (keepDirection)
-                        if (!vector2D.Unit.AlmostEqual(new Vector2D(point2D_closest_1, point2D_closest_2).Unit, tolerance))
-                            continue;
-
-                        point2Ds.Add(point2D_Intersection);
-                }
-                    
-            }
-
-            return point2Ds.ToList();
+            return dictionary?.Keys?.ToList();
         }
 
     }

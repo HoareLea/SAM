@@ -6,24 +6,35 @@ namespace SAM.Geometry.Spatial
 {
     public class Polygon3D : SAMGeometry, IClosedPlanar3D, ISegmentable3D
     {
-        private List<Point3D> points;
+        private List<Planar.Point2D> points;
+        private Plane plane;
 
-        public Polygon3D(IEnumerable<Point3D> points)
+        public Polygon3D(IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if (points != null)
+            if (point3Ds != null)
             {
-                this.points = new List<Point3D>();
-                foreach (Point3D point3D in points)
-                    this.points. Add(point3D);
+                List<Point3D> point3Ds_Temp = new List<Point3D>(point3Ds);
+                if (point3Ds_Temp.First().Distance(point3Ds_Temp.Last()) == 0)
+                    point3Ds_Temp.RemoveAt(point3Ds_Temp.Count - 1);
 
-                if (this.points.First().Distance(this.points.Last()) == 0)
-                    this.points.RemoveAt(this.points.Count - 1);
+                plane = Create.Plane(point3Ds_Temp, true, tolerance);
+
+                points = point3Ds_Temp.ConvertAll(x => plane.Convert(x));
+
+                Orientation orientation = Planar.Query.Orientation(points, true);
+                if(orientation == Orientation.CounterClockwise)
+                {
+                    Vector3D vector3D = plane.Normal;
+                    vector3D.Negate();
+                    plane = new Plane(plane.Origin, vector3D);
+                }
             }
         }
 
         public Polygon3D(Polygon3D polygon3D)
         {
-            points = Point3D.Clone(polygon3D.points);
+            points = polygon3D.points.ConvertAll(x => new Planar.Point2D(x));
+            plane = new Plane(polygon3D.plane);
         }
 
         public Polygon3D(JObject jObject)
@@ -34,28 +45,12 @@ namespace SAM.Geometry.Spatial
 
         public List<Point3D> GetPoints()
         {
-            return points.ConvertAll(x => new Point3D(x));
-        }
-
-        public Vector3D GetNormal()
-        {
-            if (points == null || points.Count < 3)
-                return null;
-
-            return Query.Normal(points[0], points[1], points[2]);
-        }
-
-        public Plane GetPlane(double tolerance)
-        {
-            return Create.Plane(points, tolerance);
+            return points.ConvertAll(x => plane.Convert(x));
         }
 
         public Plane GetPlane()
         {
-            if (points == null || points.Count < 3)
-                return null;
-            
-            return Create.Plane(points, Core.Tolerance.MicroDistance);
+            return new Plane(plane);
         }
 
         public override ISAMGeometry Clone()
@@ -65,20 +60,22 @@ namespace SAM.Geometry.Spatial
 
         public List<Segment3D> GetSegments()
         {
-            int count = points.Count;
+            List<Point3D> point3Ds = GetPoints();
+            
+            int count = point3Ds.Count;
 
             Segment3D[] result = new Segment3D[count];
             for (int i = 0; i < count - 1; i++)
-                result[i] = new Segment3D(points[i], points[i + 1]);
+                result[i] = new Segment3D(point3Ds[i], point3Ds[i + 1]);
 
-            result[count - 1] = new Segment3D(new Point3D(points[count - 1]), new Point3D(points[0]));
+            result[count - 1] = new Segment3D(new Point3D(point3Ds[count - 1]), new Point3D(point3Ds[0]));
 
             return result.ToList();
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            return new BoundingBox3D(points);
+            return new BoundingBox3D(GetPoints());
         }
 
         public Face3D ToFace()
@@ -108,7 +105,9 @@ namespace SAM.Geometry.Spatial
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
-            return new Polygon3D(points.ConvertAll(x => (Point3D)x.GetMoved(vector3D)));
+            List<Point3D> point3Ds = GetPoints();
+            
+            return new Polygon3D(point3Ds.ConvertAll(x => (Point3D)x.GetMoved(vector3D)));
         }
 
         public double GetArea()
@@ -116,25 +115,18 @@ namespace SAM.Geometry.Spatial
             if (points == null || points.Count < 3)
                 return 0;
 
-            Plane plane = GetPlane();
-            if (plane == null)
-                return 0;
-
-            return Planar.Point2D.GetArea(points.ConvertAll(x => plane.Convert(x)));
+            return Planar.Point2D.GetArea(points);
         }
 
         public bool Inside(Polygon3D polygon3D, double tolerance = Core.Tolerance.MicroDistance)
         {
-            Plane plane_1 = GetPlane();
-            Plane plane_2 = polygon3D.GetPlane();
+            Plane plane_1 = plane;
+            Plane plane_2 = polygon3D.plane;
 
             if (!plane_1.Coplanar(plane_2, tolerance))
                 return false;
 
-            List<Planar.Point2D> point2Ds_1 = points.ConvertAll(x => plane_1.Convert(x));
-            List<Planar.Point2D> point2Ds_2 = polygon3D.points.ConvertAll(x => plane_1.Convert(x));
-
-            return point2Ds_2.TrueForAll(x => Planar.Point2D.Inside(point2Ds_1, x));
+            return polygon3D.points.TrueForAll(x => Planar.Point2D.Inside(points, x));
         }
 
         public void Reverse()
@@ -144,7 +136,8 @@ namespace SAM.Geometry.Spatial
 
         public override bool FromJObject(JObject jObject)
         {
-            points = Create.Point3Ds(jObject.Value<JArray>("Points"));
+            plane = Geometry.Create.ISAMGeometry<Plane>(jObject.Value<JObject>("Plane"));
+            points = Geometry.Create.ISAMGeometries<Planar.Point2D>(jObject.Value<JArray>("Points"));
             return true;
         }
 
@@ -155,6 +148,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             jObject.Add("Points", Geometry.Create.JArray(points));
+            jObject.Add("Plane", plane.ToJObject());
             return jObject;
         }
     }
