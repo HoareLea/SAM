@@ -68,7 +68,7 @@
   <ItemGroup>
     <Compile Include="Classes\GooSAMGeometry.cs" />
     <Compile Include="Component\GeometryPolycurveLoop2D.cs" />
-    <Compile Include="Component\CreateSAMPlane.cs" />
+    <Compile Include="Component\GeometryCreatePlane.cs" />
     <Compile Include="Component\SAMGeometryGeometry.cs" />
     <Compile Include="Component\GeometrySAMGeometry.cs" />
     <Compile Include="Component\GeometrySnap.cs" />
