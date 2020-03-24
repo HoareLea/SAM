@@ -40,7 +40,9 @@ namespace SAM.Core.Grasshopper
             string path = null;
             
             inputParamManager.AddGenericParameter("_SAMObjects", "_SAMObjects", "any SAM Objects", GH_ParamAccess.list);
-            inputParamManager.AddTextParameter("_path_", "_path_", "JSON file path including extension .json", GH_ParamAccess.item, path);
+            int index = inputParamManager.AddTextParameter("path_", "path_", "JSON file path including extension .json", GH_ParamAccess.item, path);
+            inputParamManager[index].Optional = true;
+
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run, set to True to export JSON to given path", GH_ParamAccess.item, false);
 
         }
@@ -71,12 +73,7 @@ namespace SAM.Core.Grasshopper
                 return;
 
             string path = null;
-            if (!dataAccess.GetData<string>(1, ref path))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
-                return;
-            }
+            dataAccess.GetData<string>(1, ref path);
 
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
