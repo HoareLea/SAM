@@ -52,8 +52,8 @@ namespace SAM.Geometry.Spatial
             else
                 vector3D_Normal = new Vector3D(xy * yz - xz * yy, xy * xz - yz * xx, det_Max);
 
-            if (!Query.Normal(point3Ds).SameHalf(vector3D_Normal))
-                vector3D_Normal.Negate();
+            //if (!Query.Normal(point3Ds).SameHalf(vector3D_Normal))
+            //    vector3D_Normal.Negate();
 
             return new Plane(point3D_Centroid, vector3D_Normal);
         }
