@@ -73,7 +73,7 @@ namespace SAM.Geometry.Grasshopper
             Spatial.Plane plane = Spatial.Create.Plane(point3Ds, true);
 
             dataAccess.SetData(0, new GooSAMGeometry(plane));
-            dataAccess.SetData(0, new GooSAMGeometry(plane.Normal));
+            dataAccess.SetData(1, new GooSAMGeometry(plane.Normal));
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
         }
