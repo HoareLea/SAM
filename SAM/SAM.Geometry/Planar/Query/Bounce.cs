@@ -2,12 +2,12 @@
 {
     public static partial class Query
     {
-        public static Vector2D Bounce(this Vector2D vector2D_ToBeBounced, Segment2D segment2D)
+        public static Vector2D Bounce(this Vector2D vector2D_ToBeBounced, Segment2D segment2D, double friction = 1, double restitution = 1)
         {
             if (vector2D_ToBeBounced == null || segment2D == null)
                 return null;
 
-            return Bounce(vector2D_ToBeBounced, segment2D.Direction.GetPerpendicular());
+            return Bounce(vector2D_ToBeBounced, segment2D.Direction.GetPerpendicular(), friction, restitution);
         }
 
         public static Vector2D Bounce(this Vector2D vector2D_ToBeBounced, Vector2D vector2D, double friction = 1, double restitution = 1)

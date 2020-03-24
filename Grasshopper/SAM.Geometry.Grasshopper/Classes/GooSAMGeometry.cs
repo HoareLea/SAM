@@ -178,6 +178,18 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (source is GH_Vector)
+            {
+                Value = Convert.ToSAM((GH_Vector)source);
+                return true;
+            }
+
+            if (source is Vector3d)
+            {
+                Value = Convert.ToSAM((Vector3d)source);
+                return true;
+            }
+
             return base.CastFrom(source);
         }
 
@@ -216,7 +228,37 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            if(typeof(Y).IsAssignableFrom(Value.GetType()))
+            if (typeof(Y) == typeof(Vector3d))
+            {
+                if (Value is Spatial.Vector3D)
+                {
+                    target = (Y)(object)(((Spatial.Vector3D)(object)Value).ToRhino());
+                    return true;
+                }
+
+                if (Value is Planar.Vector2D)
+                {
+                    target = (Y)(object)(((Planar.Vector2D)(object)Value).ToRhino());
+                    return true;
+                }
+            }
+
+            if (typeof(Y) == typeof(GH_Vector))
+            {
+                if (Value is Spatial.Vector3D)
+                {
+                    target = (Y)(object)(((Spatial.Vector3D)(object)Value).ToGrasshopper());
+                    return true;
+                }
+
+                if (Value is Planar.Vector2D)
+                {
+                    target = (Y)(object)(((Planar.Vector2D)(object)Value).ToGrasshopper());
+                    return true;
+                }
+            }
+
+            if (typeof(Y).IsAssignableFrom(Value.GetType()))
             {
                 target = (Y)(object)Value;
                 return true;

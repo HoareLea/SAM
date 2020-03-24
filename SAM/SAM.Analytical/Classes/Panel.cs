@@ -105,6 +105,14 @@ namespace SAM.Analytical
             return face3D.GetArea();
         }
 
+        public Vector3D Normal
+        {
+            get
+            {
+                return planarBoundary3D.Plane.Normal;
+            }
+        }
+
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
         {
             planarBoundary3D.Snap(point3Ds, maxDistance);

@@ -22,7 +22,7 @@ namespace SAM.Analytical
 
                 if(panelType == PanelType.Undefined)
                 {
-                    Vector3D normal = panel.PlanarBoundary3D?.Normal;
+                    Vector3D normal = panel.Normal;
                     if (normal == null)
                         continue;
 

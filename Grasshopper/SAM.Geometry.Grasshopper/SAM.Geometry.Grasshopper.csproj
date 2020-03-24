@@ -74,6 +74,7 @@
     <Compile Include="Component\SAMGeometry2DSAMGeometry.cs" />
     <Compile Include="Component\SAMGeometrySAMGeometry2D.cs" />
     <Compile Include="Component\SAMGeometryIntersection.cs" />
+    <Compile Include="Convert\ToGrasshopper\GH_Vector.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Modify\BakeGeometry.cs" />
     <Compile Include="Template\TemplateComponent.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Curve.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Line.cs" />
-    <Compile Include="Convert\ToGrasshopper\IGH_GeometricGoo.cs" />
+    <Compile Include="Convert\ToGrasshopper\IGH_Goo.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToRhino\BoundingBox.cs" />
     <Compile Include="Convert\ToRhino\Brep.cs" />

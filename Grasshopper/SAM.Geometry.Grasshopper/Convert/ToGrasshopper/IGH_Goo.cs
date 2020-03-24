@@ -7,7 +7,7 @@ namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
-        public static IGH_GeometricGoo ToGrasshopper(this ISAMGeometry geometry)
+        public static IGH_Goo ToGrasshopper(this ISAMGeometry geometry)
         {
             if (geometry is Polygon3D)
                 return ((Polygon3D)geometry).ToGrasshopper();
@@ -18,10 +18,12 @@ namespace SAM.Geometry.Grasshopper
                 return polyline3D.ToGrasshopper(polyline3D.GetStart() == polyline3D.GetEnd());
             }
                 
-            
             if (geometry is Point3D)
                 return ((Point3D)geometry).ToGrasshopper();
-            
+
+            if (geometry is Vector3D)
+                return ((Vector3D)geometry).ToGrasshopper();
+
             if (geometry is Segment3D)
                 return ((Segment3D)geometry).ToGrasshopper();
 
