@@ -8,7 +8,7 @@ using SAM.Geometry.Grasshopper.Properties;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class CreateSAMPlane : GH_Component
+    public class GeometryCreatePlane : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -24,8 +24,8 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public CreateSAMPlane()
-          : base("Plane.Create", "Plane.Create",
+        public GeometryCreatePlane()
+          : base("Geometry.CreatePlane", "Geometry.CreatePlane",
               "Creates Plane by points",
               "SAM", "Geometry")
         {
@@ -38,9 +38,9 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_points", "Points", "snapping Points", GH_ParamAccess.list);
-            inputParamManager.AddBooleanParameter("_fit_", "Fit", "Fit", GH_ParamAccess.item, true);
-            inputParamManager.AddBooleanParameter("_orientNormal_", "orientNormal", "Orient Normal", GH_ParamAccess.item, true);
-            inputParamManager.AddNumberParameter("_tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.MicroDistance);
+            inputParamManager.AddBooleanParameter("fit_", "fit", "fit", GH_ParamAccess.item, true);
+            inputParamManager.AddBooleanParameter("orientNormal_", "orientNormal", "Orient Normal", GH_ParamAccess.item, true);
+            inputParamManager.AddNumberParameter("tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.MicroDistance);
         }
 
         /// <summary>
