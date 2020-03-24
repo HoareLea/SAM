@@ -11,6 +11,17 @@ namespace SAM.Geometry.Grasshopper
     public class CreateSAMPlane : GH_Component
     {
         /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("d146aa94-8faa-43f0-a55b-d9472cde3cce");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
+
+
+        /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public CreateSAMPlane()
@@ -27,6 +38,9 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_points", "Points", "snapping Points", GH_ParamAccess.list);
+            inputParamManager.AddBooleanParameter("_fit_", "Fit", "Fit", GH_ParamAccess.item, true);
+            inputParamManager.AddBooleanParameter("_orientNormal_", "orientNormal", "Orient Normal", GH_ParamAccess.item, true);
+            inputParamManager.AddNumberParameter("_tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.MicroDistance);
         }
 
         /// <summary>
@@ -49,9 +63,30 @@ namespace SAM.Geometry.Grasshopper
             if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
+
+            bool fit = true;
+            if (!dataAccess.GetData(1, ref fit))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            bool orientNormal = true;
+            if (!dataAccess.GetData(2, ref orientNormal))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            double tolerance = SAM.Core.Tolerance.MicroDistance;
+            if (!dataAccess.GetData(3, ref tolerance))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
 
             List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
             foreach(GH_ObjectWrapper gHObjectWrapper in objectWrapperList)
@@ -70,33 +105,12 @@ namespace SAM.Geometry.Grasshopper
                 point3Ds.Add(Convert.ToSAM(gHPoint));
             }
 
-            Spatial.Plane plane = Spatial.Create.Plane(point3Ds, true);
+            Spatial.Plane plane = Spatial.Create.Plane(point3Ds, fit, orientNormal, tolerance);
 
             dataAccess.SetData(0, new GooSAMGeometry(plane));
             dataAccess.SetData(0, new GooSAMGeometry(plane.Normal));
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Geometry;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("d146aa94-8faa-43f0-a55b-d9472cde3cce"); }
         }
     }
 }

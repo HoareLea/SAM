@@ -6,7 +6,7 @@ namespace SAM.Geometry.Spatial
     public static partial class Create
     {
         // Constructs a plane from a collection of points so that the summed squared distance to all points is minimzized
-        public static Plane Plane(this IEnumerable<Point3D> point3Ds, bool fit, double tolerance = Core.Tolerance.MicroDistance)
+        public static Plane Plane(this IEnumerable<Point3D> point3Ds, bool fit, bool orientNormal = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point3Ds == null || point3Ds.Count() < 3)
                 return null;
@@ -52,10 +52,19 @@ namespace SAM.Geometry.Spatial
             else
                 vector3D_Normal = new Vector3D(xy * yz - xz * yy, xy * xz - yz * xx, det_Max);
 
-            //if (!Query.Normal(point3Ds).SameHalf(vector3D_Normal))
-            //    vector3D_Normal.Negate();
+            Plane plane = new Plane(point3D_Centroid, vector3D_Normal);
 
-            return new Plane(point3D_Centroid, vector3D_Normal);
+            if (orientNormal)
+            {
+                List<Point3D> point3Ds_Temp = new List<Point3D>();
+                foreach (Point3D point3D in point3Ds)
+                    point3Ds_Temp.Add(plane.Project(point3D));
+
+                Vector3D normal = Query.Normal(point3Ds_Temp);
+                plane = new Plane(point3D_Centroid, normal);
+            }
+
+            return plane;
         }
 
         public static Plane Plane(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)

@@ -25,11 +25,6 @@ namespace SAM.Geometry.Grasshopper
             {
                 sAMGeometry = Spatial.Plane.Base.Convert(sAMGeometry as dynamic);
             }
-
-            //if(sAMGeometry is Planar.ICurve2D)
-            //{
-            //    sAMGeometry = Spatial.Plane.Base.Convert((Planar.ICurve2D)sAMGeometry);
-            //}
             
             if(sAMGeometry is Spatial.Point3D)
             {

@@ -10,7 +10,7 @@ namespace SAM.Geometry.Spatial
             if (point3Ds == null)
                 return null;
             
-            Plane plane = Create.Plane(point3Ds, true, tolerace);
+            Plane plane = Create.Plane(point3Ds, true, true, tolerace);
             if (plane == null)
                 return null;
 

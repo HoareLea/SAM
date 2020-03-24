@@ -25,7 +25,7 @@ namespace SAM.Geometry.Spatial
                 if (point3Ds_Temp.First().Distance(point3Ds_Temp.Last()) == 0)
                     point3Ds_Temp.RemoveAt(point3Ds_Temp.Count - 1);
 
-                plane = Create.Plane(point3Ds_Temp, true, tolerance);
+                plane = Create.Plane(point3Ds_Temp, true, true, tolerance);
                 if (plane != null)
                     points = point3Ds_Temp.ConvertAll(x => plane.Convert(x));
             }
