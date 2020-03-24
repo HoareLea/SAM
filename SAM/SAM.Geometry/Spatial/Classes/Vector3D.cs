@@ -258,7 +258,36 @@ namespace SAM.Geometry.Spatial
 
         public bool AlmostEqual(Vector3D vector3D, double tolerance = Core.Tolerance.MicroDistance)
         {
-            return ((System.Math.Abs(coordinates[0] - vector3D.coordinates[0]) < tolerance) && (System.Math.Abs(coordinates[1] - vector3D.coordinates[1]) < tolerance && (System.Math.Abs(coordinates[2] - vector3D.coordinates[2]) < tolerance)));
+            if (vector3D == null)
+                return false;
+
+            double x_1 = vector3D.coordinates[0];
+            double y_1 = vector3D.coordinates[1];
+            double z_1 = vector3D.coordinates[2];
+
+            if (x_1 < tolerance)
+                x_1 = 0;
+
+            if (y_1 < tolerance)
+                y_1 = 0;
+
+            if (z_1 < tolerance)
+                z_1 = 0;
+
+            double x_2 = coordinates[0];
+            double y_2 = coordinates[1];
+            double z_2 = coordinates[2];
+
+            if (x_2 < tolerance)
+                x_2 = 0;
+
+            if (y_2 < tolerance)
+                y_2 = 0;
+
+            if (z_2 < tolerance)
+                z_2 = 0;
+
+            return System.Math.Abs(x_1 - x_2) < tolerance && System.Math.Abs(y_1 - y_2) < tolerance && (System.Math.Abs(z_1 - z_2) < tolerance);
         }
 
         public override int GetHashCode()
