@@ -126,7 +126,10 @@ namespace SAM.Geometry.Grasshopper
 
         public override string ToString()
         {
-            return typeof(ISAMGeometry).FullName;
+            if (Value == null)
+                return typeof(ISAMGeometry).Name;
+
+            return Value.GetType().Name;
         }
 
         public override bool CastFrom(object source)
@@ -190,17 +193,17 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            if (source is GH_Plane)
-            {
-                Value = Convert.ToSAM((GH_Plane)source);
-                return true;
-            }
+            //if (source is GH_Plane)
+            //{
+            //    Value = Convert.ToSAM((GH_Plane)source);
+            //    return true;
+            //}
 
-            if (source is Plane)
-            {
-                Value = Convert.ToSAM((Plane)source);
-                return true;
-            }
+            //if (source is Plane)
+            //{
+            //    Value = Convert.ToSAM((Plane)source);
+            //    return true;
+            //}
 
             return base.CastFrom(source);
         }
@@ -240,23 +243,23 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            if (typeof(Y) == typeof(GH_Plane))
-            {
-                if (Value is Spatial.Plane)
-                {
-                    target = (Y)(object)(((Spatial.Plane)(object)Value).ToGrasshopper());
-                    return true;
-                }
-            }
+            //if (typeof(Y) == typeof(GH_Plane))
+            //{
+            //    if (Value is Spatial.Plane)
+            //    {
+            //        target = (Y)(object)(((Spatial.Plane)(object)Value).ToGrasshopper());
+            //        return true;
+            //    }
+            //}
 
-            if (typeof(Y) == typeof(Plane))
-            {
-                if (Value is Spatial.Plane)
-                {
-                    target = (Y)(object)(((Spatial.Plane)(object)Value).ToRhino());
-                    return true;
-                }
-            }
+            //if (typeof(Y) == typeof(Plane))
+            //{
+            //    if (Value is Spatial.Plane)
+            //    {
+            //        target = (Y)(object)(((Spatial.Plane)(object)Value).ToRhino());
+            //        return true;
+            //    }
+            //}
 
             if (typeof(Y) == typeof(Vector3d))
             {

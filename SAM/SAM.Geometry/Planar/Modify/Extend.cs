@@ -139,11 +139,30 @@ namespace SAM.Geometry.Planar
 
             if(extend_Start)
             {
-                Point2D point2D = segment2Ds[0].Start;
+                Segment2D segment2D = segment2Ds[0];
+
+                Point2D point2D = segment2D.Start;
+                Vector2D vector2D = segment2D.Direction;
+                vector2D.Negate();
+
+                List<Vector2D> vector2Ds = Query.Trace(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, 0);
+                if (vector2Ds != null && vector2Ds.Count > 0)
+                    segment2Ds[0] = new Segment2D(point2D.GetMoved(vector2Ds[0]), segment2D.End);
             }
 
-            //TODO: implement Extend method
-            throw new System.Exception();
+            if (extend_End)
+            {
+                Segment2D segment2D = segment2Ds[segment2Ds.Count - 1];
+
+                Point2D point2D = segment2D.End;
+                Vector2D vector2D = segment2D.Direction;
+
+                List<Vector2D> vector2Ds = Query.Trace(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, 0);
+                if (vector2Ds != null && vector2Ds.Count > 0)
+                    segment2Ds[segment2Ds.Count - 1] = new Segment2D(segment2D.End, point2D.GetMoved(vector2Ds[0]));
+            }
+
+            return new Polyline2D();
         }
     }
 }
