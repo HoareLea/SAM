@@ -162,7 +162,7 @@ namespace SAM.Geometry.Planar
                     segment2Ds[segment2Ds.Count - 1] = new Segment2D(segment2D.End, point2D.GetMoved(vector2Ds[0]));
             }
 
-            return new Polyline2D();
+            return new Polyline2D(segment2Ds);
         }
     }
 }
