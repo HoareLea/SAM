@@ -100,6 +100,11 @@ namespace SAM.Geometry.Planar
             coordinates[1] = -coordinates[1];
         }
 
+        public Vector2D GetNegated()
+        {
+            return new Vector2D(-coordinates[0], -coordinates[1]);
+        }
+
         public bool AlmostEqual(Vector2D vector2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             return ((System.Math.Abs(coordinates[0] - vector2D.coordinates[0]) <= tolerance) && (System.Math.Abs(coordinates[1] - vector2D.coordinates[1]) <= tolerance));
