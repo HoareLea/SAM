@@ -90,20 +90,10 @@ namespace SAM.Geometry.Grasshopper
 
                 if(Value is Spatial.Plane)
                 {
-                    return ((Spatial.Point3D)(object)Value).GetBoundingBox(1).ToRhino();
+                    return (((Spatial.Plane)Value).Origin).GetBoundingBox(1).ToRhino();
                 }
 
-                if (Value is Spatial.Vector3D)
-                {
-                    return new BoundingBox();
-                }
-
-                if (Value is Planar.Vector2D)
-                {
-                    return new BoundingBox();
-                }
-
-                throw new NotImplementedException();
+                return new BoundingBox();
             }
         }
 
@@ -208,17 +198,17 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            //if (source is GH_Plane)
-            //{
-            //    Value = Convert.ToSAM((GH_Plane)source);
-            //    return true;
-            //}
+            if (source is GH_Plane)
+            {
+                Value = Convert.ToSAM((GH_Plane)source);
+                return true;
+            }
 
-            //if (source is Plane)
-            //{
-            //    Value = Convert.ToSAM((Plane)source);
-            //    return true;
-            //}
+            if (source is Plane)
+            {
+                Value = Convert.ToSAM((Plane)source);
+                return true;
+            }
 
             return base.CastFrom(source);
         }
@@ -258,23 +248,23 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            //if (typeof(Y) == typeof(GH_Plane))
-            //{
-            //    if (Value is Spatial.Plane)
-            //    {
-            //        target = (Y)(object)(((Spatial.Plane)(object)Value).ToGrasshopper());
-            //        return true;
-            //    }
-            //}
+            if (typeof(Y) == typeof(GH_Plane))
+            {
+                if (Value is Spatial.Plane)
+                {
+                    target = (Y)(object)(((Spatial.Plane)(object)Value).ToGrasshopper());
+                    return true;
+                }
+            }
 
-            //if (typeof(Y) == typeof(Plane))
-            //{
-            //    if (Value is Spatial.Plane)
-            //    {
-            //        target = (Y)(object)(((Spatial.Plane)(object)Value).ToRhino());
-            //        return true;
-            //    }
-            //}
+            if (typeof(Y) == typeof(Plane))
+            {
+                if (Value is Spatial.Plane)
+                {
+                    target = (Y)(object)(((Spatial.Plane)(object)Value).ToRhino());
+                    return true;
+                }
+            }
 
             if (typeof(Y) == typeof(Vector3d))
             {
