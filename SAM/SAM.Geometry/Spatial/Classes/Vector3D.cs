@@ -143,6 +143,11 @@ namespace SAM.Geometry.Spatial
             coordinates[2] = -coordinates[2];
         }
 
+        public Vector3D GetNegated()
+        {
+            return new Vector3D(-coordinates[0], -coordinates[0], -coordinates[0]);
+        }
+
         public double X
         {
             get
