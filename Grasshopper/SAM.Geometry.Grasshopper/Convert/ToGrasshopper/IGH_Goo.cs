@@ -45,6 +45,9 @@ namespace SAM.Geometry.Grasshopper
             if(geometry is Polycurve3D)
                 return ((Polycurve3D)geometry).ToGrasshopper();
 
+            if (geometry is Plane)
+                return ((Plane)geometry).ToGrasshopper();
+
 
             return (geometry as dynamic).ToGrasshopper();
         }

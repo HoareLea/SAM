@@ -37,7 +37,7 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            if(sAMGeometry is Spatial.ICurve3D)
+            if (sAMGeometry is Spatial.ICurve3D)
             {
                 guid = rhinoDoc.Objects.AddCurve(((Spatial.ICurve3D)sAMGeometry).ToRhino());
                 return true;

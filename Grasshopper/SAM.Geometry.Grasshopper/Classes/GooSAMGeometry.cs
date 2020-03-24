@@ -190,6 +190,18 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (source is GH_Plane)
+            {
+                Value = Convert.ToSAM((GH_Plane)source);
+                return true;
+            }
+
+            if (source is Plane)
+            {
+                Value = Convert.ToSAM((Plane)source);
+                return true;
+            }
+
             return base.CastFrom(source);
         }
 
@@ -224,6 +236,24 @@ namespace SAM.Geometry.Grasshopper
                 if (Value is Spatial.Point3D)
                 {
                     target = (Y)(object)(((Spatial.Point3D)(object)Value).ToGrasshopper());
+                    return true;
+                }
+            }
+
+            if (typeof(Y) == typeof(GH_Plane))
+            {
+                if (Value is Spatial.Plane)
+                {
+                    target = (Y)(object)(((Spatial.Plane)(object)Value).ToGrasshopper());
+                    return true;
+                }
+            }
+
+            if (typeof(Y) == typeof(Plane))
+            {
+                if (Value is Spatial.Plane)
+                {
+                    target = (Y)(object)(((Spatial.Plane)(object)Value).ToRhino());
                     return true;
                 }
             }
