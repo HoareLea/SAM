@@ -88,6 +88,21 @@ namespace SAM.Geometry.Grasshopper
                     return new Spatial.BoundingBox3D(new Spatial.Point3D(point2D.X, point2D.Y, -1), new Spatial.Point3D(point2D.X, point2D.Y, 1)).ToRhino();
                 }
 
+                if(Value is Spatial.Plane)
+                {
+                    return ((Spatial.Point3D)(object)Value).GetBoundingBox(1).ToRhino();
+                }
+
+                if (Value is Spatial.Vector3D)
+                {
+                    return new BoundingBox();
+                }
+
+                if (Value is Planar.Vector2D)
+                {
+                    return new BoundingBox();
+                }
+
                 throw new NotImplementedException();
             }
         }
