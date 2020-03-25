@@ -469,6 +469,9 @@ namespace SAM.Geometry.Planar
 
         public int GetFirstConnected()
         {
+            if (points == null)
+                return -1;
+            
             int count = points.Length;
 
             for (int i = 0; i < count; i++)
