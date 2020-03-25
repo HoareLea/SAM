@@ -72,5 +72,12 @@ namespace SAM.Geometry.Planar
             return dictionary?.Keys?.ToList();
         }
 
+        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (point2D == null || vector2D == null)
+                return null;
+
+            return Intersections(point2D, vector2D, Query.Segment2Ds(segmentable2Ds), keepDirection, removeColinear, tolerance);
+        }
     }
 }
