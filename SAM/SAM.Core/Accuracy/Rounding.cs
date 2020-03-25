@@ -6,5 +6,6 @@
         public const int Distance = 6;
         public const int MacroDistance = 3;
         public const int Angle = 6;
+        public const int NoRounding = -1;
     }
 }

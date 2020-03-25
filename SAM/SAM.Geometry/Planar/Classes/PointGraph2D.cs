@@ -85,17 +85,17 @@ namespace SAM.Geometry.Planar
             }
         }        
 
-        public PointGraph2D(IEnumerable<Segment2D> segment2Ds, bool split = true, int decimals = Rounding.MicroDistance)
+        public PointGraph2D(IEnumerable<Segment2D> segment2Ds, bool split = true, double tolerance = Tolerance.MicroDistance)
         {
-            Load(segment2Ds, split, decimals);
+            Load(segment2Ds, split, tolerance);
         }
 
-        public PointGraph2D(Polygon2D polygon2D, bool split = true, int decimals = Rounding.MicroDistance)
+        public PointGraph2D(Polygon2D polygon2D, bool split = true, double tolerance = Tolerance.MicroDistance)
         {
-            Load(polygon2D?.GetSegments(), split, decimals);
+            Load(polygon2D?.GetSegments(), split, tolerance);
         }
 
-        public PointGraph2D(IEnumerable<Polygon2D> polygon2Ds, bool split = true, int decimals = Rounding.MicroDistance)
+        public PointGraph2D(IEnumerable<Polygon2D> polygon2Ds, bool split = true, double tolerance = Tolerance.MicroDistance)
         {
             if(polygon2Ds != null)
             {
@@ -112,12 +112,12 @@ namespace SAM.Geometry.Planar
                     segment2Ds.AddRange(segment2Ds_Temp);
                 }
 
-                Load(segment2Ds, split, decimals);
+                Load(segment2Ds, split, tolerance);
             }
         }
 
 
-        public bool Load(IEnumerable<Segment2D> segment2Ds, bool split = false, int decimals = Rounding.MicroDistance)
+        public bool Load(IEnumerable<Segment2D> segment2Ds, bool split = false, double tolerance = Tolerance.MicroDistance)
         {
             if (segment2Ds == null)
                 return false;
@@ -127,8 +127,6 @@ namespace SAM.Geometry.Planar
 
             if (segment2Ds.Count() == 0)
                 return true;
-
-            double tolerance = Core.Query.Tolerance(decimals);
 
             IEnumerable<Segment2D> segments_Temp = segment2Ds;
             if (split)
@@ -153,8 +151,8 @@ namespace SAM.Geometry.Planar
                 if (point2D_End.AlmostEquals(point2D_Start, tolerance))
                     continue;
 
-                point2D_Start.Round(decimals);
-                point2D_End.Round(decimals);
+                point2D_Start.Round(tolerance);
+                point2D_End.Round(tolerance);
 
                 point2Ds_HashSet.Add(point2D_Start);
                 point2Ds_HashSet.Add(point2D_End);

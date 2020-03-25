@@ -306,12 +306,19 @@ namespace SAM.Geometry.Spatial
 
         public void Round(int decimals = Core.Rounding.Distance)
         {
-            if (decimals == -1)
+            if (decimals == Core.Rounding.NoRounding)
                 return;
 
             coordinates[0] = System.Math.Round(coordinates[0], decimals);
             coordinates[1] = System.Math.Round(coordinates[1], decimals);
             coordinates[2] = System.Math.Round(coordinates[2], decimals);
+        }
+
+        public void Round(double tolerance = Core.Tolerance.MicroDistance)
+        {
+            coordinates[0] = Core.Modify.Round(coordinates[0], tolerance);
+            coordinates[1] = Core.Modify.Round(coordinates[1], tolerance);
+            coordinates[2] = Core.Modify.Round(coordinates[2], tolerance);
         }
 
 

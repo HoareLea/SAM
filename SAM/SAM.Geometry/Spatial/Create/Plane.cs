@@ -6,7 +6,7 @@ namespace SAM.Geometry.Spatial
     public static partial class Create
     {
         // Constructs a plane from a collection of points so that the summed squared distance to all points is minimzized
-        public static Plane Plane(this IEnumerable<Point3D> point3Ds, bool fit, bool orientNormal = true, double tolerance = Core.Tolerance.MicroDistance, int decimals = Core.Rounding.MicroDistance)
+        public static Plane Plane(this IEnumerable<Point3D> point3Ds, bool fit, bool orientNormal = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point3Ds == null || point3Ds.Count() < 3)
                 return null;
@@ -14,7 +14,10 @@ namespace SAM.Geometry.Spatial
             if (!fit)
                 return Plane(point3Ds, tolerance);
 
-            Point3D point3D_Centroid = Query.Centroid(point3Ds);
+            List<Point3D> point3Ds_Temp = new List<Point3D>(point3Ds).ConvertAll(x => new Point3D(x));
+            Modify.Round(point3Ds_Temp, tolerance);
+
+            Point3D point3D_Centroid = Query.Centroid(point3Ds_Temp);
 
             double xx = 0;
             double yy = 0;
@@ -23,7 +26,7 @@ namespace SAM.Geometry.Spatial
             double xz = 0;
             double zz = 0;
 
-            foreach(Point3D point3D in point3Ds)
+            foreach(Point3D point3D in point3Ds_Temp)
             {
                 if (point3D == null)
                     continue;
@@ -51,28 +54,16 @@ namespace SAM.Geometry.Spatial
                 vector3D_Normal = new Vector3D(xz * yz - xy * zz, det_Max, xy * xz - yz * xx);
             else
                 vector3D_Normal = new Vector3D(xy * yz - xz * yy, xy * xz - yz * xx, det_Max);
-
-            if(decimals != 1)
-            {
-                point3D_Centroid.Round(decimals);
-                vector3D_Normal.Round(decimals);
-            }
             
             Plane plane = new Plane(point3D_Centroid, vector3D_Normal);
 
             if (orientNormal)
             {
-                List<Point3D> point3Ds_Temp = new List<Point3D>();
-                foreach (Point3D point3D in point3Ds)
-                    point3Ds_Temp.Add(plane.Project(point3D));
+                List<Point3D> point3Ds_Result = new List<Point3D>();
+                foreach (Point3D point3D in point3Ds_Temp)
+                    point3Ds_Result.Add(plane.Project(point3D));
 
-                if (decimals != -1)
-                    point3Ds_Temp.ForEach(x => x.Round(decimals));
-
-                Vector3D normal = Query.Normal(point3Ds_Temp);
-
-                if (decimals != -1)
-                    normal.Round(decimals);
+                Vector3D normal = Query.Normal(point3Ds_Result);
 
                 plane = new Plane(point3D_Centroid, normal);
             }
@@ -89,13 +80,13 @@ namespace SAM.Geometry.Spatial
             return new Plane(point3Ds.ElementAt(0), normal.Unit);
         }
 
-        public static Plane Plane(Point3D origin, Vector3D normal, int decimals = Core.Rounding.MicroDistance)
+        public static Plane Plane(Point3D origin, Vector3D normal, double tolerance = Core.Tolerance.MicroDistance)
         {
             Point3D origin_New = new Point3D(origin);
-            origin_New.Round(decimals);
-
             Vector3D normal_New = new Vector3D(normal);
-            normal_New.Round(decimals);
+
+            origin_New.Round(tolerance);
+            normal_New.Round(tolerance);
 
             return new Plane(origin_New, normal_New);
         }

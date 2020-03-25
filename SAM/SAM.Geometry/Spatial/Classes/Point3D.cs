@@ -191,6 +191,13 @@ namespace SAM.Geometry.Spatial
             coordinates[2] = System.Math.Round(coordinates[2], decimals);
         }
 
+        public void Round(double tolerance = Core.Tolerance.MicroDistance)
+        {
+            coordinates[0] = Core.Modify.Round(coordinates[0], tolerance);
+            coordinates[1] = Core.Modify.Round(coordinates[1], tolerance);
+            coordinates[2] = Core.Modify.Round(coordinates[2], tolerance);
+        }
+
         public static Point3D Snap(IEnumerable<Point3D> point3Ds, Point3D point3D, double maxDistance = double.NaN)
         {
             Point3D result = Point3D.Closest(point3Ds, point3D);

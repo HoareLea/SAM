@@ -71,6 +71,7 @@
     <Compile Include="Interfaces\IJSAMObject.cs" />
     <Compile Include="Interfaces\ISAMObject.cs" />
     <Compile Include="Interfaces\ISAMRelation.cs" />
+    <Compile Include="Modify\Round.cs" />
     <Compile Include="Modify\Reorder.cs" />
     <Compile Include="Modify\Add.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

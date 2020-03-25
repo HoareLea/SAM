@@ -133,6 +133,7 @@
     <Compile Include="Spatial\Create\ICurve3Ds.cs" />
     <Compile Include="Spatial\Create\ICurve3D.cs" />
     <Compile Include="Spatial\Modify\SimplifyByAngle.cs" />
+    <Compile Include="Spatial\Modify\Round.cs" />
     <Compile Include="Spatial\Modify\SortByDistance.cs" />
     <Compile Include="Spatial\Query\AlmostSimilar.cs" />
     <Compile Include="Spatial\Query\Centroid.cs" />

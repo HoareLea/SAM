@@ -117,9 +117,9 @@ namespace SAM.Geometry.Planar
             return string.Format("{0}(X={1},Y={2})", GetType().Name, coordinates[0], coordinates[1]);
         }
 
-        public string ToString(int decimals = Core.Rounding.Distance)
+        public string ToString(double tolerance = Core.Tolerance.Distance)
         {
-            return string.Format("Point2D(X={0},Y={1})", System.Math.Round(coordinates[0], decimals), System.Math.Round(coordinates[1], decimals));
+            return string.Format("Point2D(X={0},Y={1})", Core.Modify.Round(coordinates[0], tolerance), Core.Modify.Round(coordinates[1], tolerance));
         }
 
         public bool AlmostEquals(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
@@ -152,11 +152,17 @@ namespace SAM.Geometry.Planar
 
         public void Round(int decimals = Core.Rounding.Distance)
         {
-            if (decimals == -1)
+            if (decimals == Core.Rounding.NoRounding)
                 return;
             
             coordinates[0] = System.Math.Round(coordinates[0], decimals);
             coordinates[1] = System.Math.Round(coordinates[1], decimals);
+        }
+
+        public void Round(double tolerance = Core.Tolerance.MicroDistance)
+        {
+            coordinates[0] = Core.Modify.Round(coordinates[0], tolerance);
+            coordinates[1] = Core.Modify.Round(coordinates[1], tolerance);
         }
 
         public void Mirror(Point2D point2D)
