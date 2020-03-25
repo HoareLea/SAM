@@ -214,7 +214,7 @@ namespace SAM.Analytical
             Point3D point3D_Location;
             Geometry.Planar.Point2D point2D_Centroid = closed2D_Aperture.GetCentroid();
             point3D_Location = plane.Convert(point2D_Centroid);
-            if (Geometry.Spatial.Query.Vertical(plane, Core.Tolerance.Distance))
+            if (Geometry.Spatial.Query.Vertical(plane, Tolerance.Distance))
                 point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
                 
             if (trimGeometry)
@@ -261,7 +261,7 @@ namespace SAM.Analytical
 
                                     closedPlanar3D_Projected = plane.Convert(polygon2D_Min);
                                     point3D_Location = plane.Convert(point2D_Centroid);
-                                    if (Geometry.Spatial.Query.Vertical(plane))
+                                    if (Geometry.Spatial.Query.Vertical(plane, Tolerance.Distance))
                                         point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
                                 }
                             }
