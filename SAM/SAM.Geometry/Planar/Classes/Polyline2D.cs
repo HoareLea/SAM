@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 
 using Newtonsoft.Json.Linq;
-
+using System.Collections;
 
 namespace SAM.Geometry.Planar
 {
-    public class Polyline2D : SAMGeometry, IBoundable2D, ISegmentable2D
+    public class Polyline2D : SAMGeometry, IBoundable2D, ISegmentable2D, IEnumerable<Segment2D>
     {
         private List<Point2D> points;
 
@@ -121,6 +121,27 @@ namespace SAM.Geometry.Planar
             points.Reverse();
         }
 
+        public Segment2D First()
+        {
+            if (points == null || points.Count < 2)
+                return null;
+
+            return new Segment2D(points[0], points[1]);
+        }
+
+        public Segment2D Last()
+        {
+            if (points == null)
+                return null;
+
+            int count = points.Count;
+
+            if (count < 2)
+                return null;
+
+            return new Segment2D(points[count - 2], points[count - 1]);
+        }
+
         public ISAMGeometry2D GetMoved(Vector2D vector2D)
         {
             return new Polyline2D(points.ConvertAll(x => (Point2D)x.GetMoved(vector2D)));
@@ -129,6 +150,16 @@ namespace SAM.Geometry.Planar
         public List<Point2D> GetPoints()
         {
             return points.ConvertAll(x => (Point2D)x.Clone());
+        }
+
+        public int CountPoints()
+        {
+            return points.Count;
+        }
+
+        public int CountSegments()
+        {
+            return points.Count - 1;
         }
 
         public Point2D this[int index]
@@ -283,6 +314,16 @@ namespace SAM.Geometry.Planar
         public double Distance(Point2D point2D)
         {
             return Query.Distance(this, point2D);
+        }
+
+        public IEnumerator<Segment2D> GetEnumerator()
+        {
+            return GetSegments().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
     }
 }
