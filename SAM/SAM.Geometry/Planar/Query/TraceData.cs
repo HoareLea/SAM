@@ -28,8 +28,6 @@ namespace SAM.Geometry.Planar
                     point2Ds.Add(segment2D.GetStart());
                     point2Ds.Add(segment2D.GetEnd());
                 }
-
-                segment2Ds.AddRange(segment2Ds);
             }
 
             BoundingBox2D boundingBox2D = new BoundingBox2D(point2Ds, 1);

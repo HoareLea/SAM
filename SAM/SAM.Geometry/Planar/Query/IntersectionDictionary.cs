@@ -22,7 +22,7 @@ namespace SAM.Geometry.Planar
                 if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
                     continue;
 
-                segment2Ds.AddRange(segment2Ds);
+                segment2Ds.AddRange(segment2Ds_Temp);
             }
 
             Dictionary<Point2D, Segment2D> result = new Dictionary<Point2D, Segment2D>();
