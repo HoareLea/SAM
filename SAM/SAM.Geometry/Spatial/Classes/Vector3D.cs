@@ -304,6 +304,16 @@ namespace SAM.Geometry.Spatial
             return hash;
         }
 
+        public void Round(int decimals = Core.Rounding.Distance)
+        {
+            if (decimals == -1)
+                return;
+
+            coordinates[0] = System.Math.Round(coordinates[0], decimals);
+            coordinates[1] = System.Math.Round(coordinates[1], decimals);
+            coordinates[2] = System.Math.Round(coordinates[2], decimals);
+        }
+
 
         public static Vector3D operator +(Vector3D vector3D_1, Vector3D vector3D_2)
         {

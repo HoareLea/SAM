@@ -181,6 +181,16 @@ namespace SAM.Geometry.Spatial
             return hash;
         }
 
+        public void Round(int decimals = Core.Rounding.Distance)
+        {
+            if (decimals == -1)
+                return;
+
+            coordinates[0] = System.Math.Round(coordinates[0], decimals);
+            coordinates[1] = System.Math.Round(coordinates[1], decimals);
+            coordinates[2] = System.Math.Round(coordinates[2], decimals);
+        }
+
         public static Point3D Snap(IEnumerable<Point3D> point3Ds, Point3D point3D, double maxDistance = double.NaN)
         {
             Point3D result = Point3D.Closest(point3Ds, point3D);

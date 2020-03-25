@@ -75,5 +75,16 @@ namespace SAM.Geometry.Spatial
 
             return new Plane(point3Ds.ElementAt(0), normal.Unit);
         }
+
+        public static Plane Plane(Point3D origin, Vector3D normal, int decimals = Core.Rounding.MicroDistance)
+        {
+            Point3D origin_New = new Point3D(origin);
+            origin_New.Round(decimals);
+
+            Vector3D normal_New = new Vector3D(normal);
+            normal_New.Round(decimals);
+
+            return new Plane(origin_New, normal_New);
+        }
     }
 }
