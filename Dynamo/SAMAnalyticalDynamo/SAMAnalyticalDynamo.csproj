@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component\Construction.cs" />
+    <Compile Include="Component\Space.cs" />
     <Compile Include="Component\Panel.cs" />
     <Compile Include="Component\SAMObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

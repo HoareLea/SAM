@@ -5,12 +5,12 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     { 
-        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
         {
-            return IntersectionDictionary(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, keepDirection, removeColinear, tolerance);
+            return IntersectionDictionary(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, keepDirection, removeColinear, sort, tolerance);
         }
 
-        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point2D == null || vector2D == null || segmentable2Ds == null)
                 return null;
@@ -54,7 +54,18 @@ namespace SAM.Geometry.Planar
 
                     result[point2D_Intersection] = segment2D_Temp;
                 }
+            }
 
+            if(sort)
+            {
+                List<Point2D> point2Ds = result.Keys.ToList();
+                Modify.SortByDistance(point2Ds, point2D);
+
+                Dictionary<Point2D, Segment2D> dictionary_Temp = new Dictionary<Point2D, Segment2D>();
+                foreach(Point2D point2D_Temp in point2Ds)
+                    dictionary_Temp[point2D_Temp] = result[point2D_Temp];
+
+                result = dictionary_Temp;
             }
 
             return result;

@@ -359,7 +359,7 @@ namespace SAM.Geometry.Planar
 
         public List<Segment2D> GetSegments()
         {
-            return new List<Segment2D>() { new Segment2D(origin, vector) };
+            return new List<Segment2D>() { new Segment2D(this) };
         }
 
         public override bool FromJObject(JObject jObject)

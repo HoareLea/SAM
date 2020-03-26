@@ -62,22 +62,20 @@ namespace SAM.Geometry.Planar
             return point2Ds.ToList();
         }
 
-        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point2D == null || vector2D == null)
                 return null;
 
-            Dictionary<Point2D, Segment2D> dictionary = IntersectionDictionary(point2D, vector2D, segmentable2D, keepDirection, removeColinear, tolerance);
-
-            return dictionary?.Keys?.ToList();
+            return IntersectionDictionary(point2D, vector2D, segmentable2D, keepDirection, removeColinear, sort, tolerance)?.Keys?.ToList();
         }
 
-        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point2D == null || vector2D == null)
                 return null;
 
-            return Intersections(point2D, vector2D, Query.Segment2Ds(segmentable2Ds), keepDirection, removeColinear, tolerance);
+            return IntersectionDictionary(point2D, vector2D, Query.Segment2Ds(segmentable2Ds), keepDirection, removeColinear, sort, tolerance)?.Keys?.ToList();
         }
     }
 }
