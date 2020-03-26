@@ -1,5 +1,7 @@
 ﻿
 
+using SAM.Geometry.Spatial;
+
 namespace SAMAnalyticalDynamo
 {
     /// <summary>
@@ -16,9 +18,17 @@ namespace SAMAnalyticalDynamo
         /// <search>
         /// SAM Analytical Space, ByPoint
         /// </search>
-        public static SAM.Analytical.Space ByPoint(string name, SAM.Geometry.Spatial.Point3D location)
+        public static SAM.Analytical.Space ByPoint(string name, object location)
         {
-            return new SAM.Analytical.Space(name, location);
+            Point3D point3D = location as Point3D;
+            if (location == null && location is Autodesk.DesignScript.Geometry.Point)
+                point3D = SAMGeometryDynamo.Convert.ToSAM((Autodesk.DesignScript.Geometry.Point)location);
+
+            if (point3D == null)
+                return null;
+
+
+            return new SAM.Analytical.Space(name, point3D);
         }
     }
 }

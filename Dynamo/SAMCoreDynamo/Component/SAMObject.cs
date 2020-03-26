@@ -27,5 +27,14 @@ namespace SAMCoreDynamo
         {
             return SAM.Core.Convert.ToSAM(pathOrJson);
         }
+
+        public static object GetValue(object sAMObject, string name)
+        {
+            object value = null;
+            if (!SAM.Core.Query.TryGetValue(sAMObject, name, out value))
+                return null;
+
+            return value;
+        }
     }
 }
