@@ -49,7 +49,16 @@ namespace SAM.Geometry.Planar
 
                 Point2D point2D = point2D_1;
                 point2D_1 = point2D_2;
-                point2D_2 = point2D_1;
+                point2D_2 = point2D;
+            }
+            else if(index_1 == index_2)
+            {
+                if(point2D_1.Distance(segment2Ds[index_1].Start) > point2D_2.Distance(segment2Ds[index_1].Start))
+                {
+                    Point2D point2D = point2D_1;
+                    point2D_1 = point2D_2;
+                    point2D_2 = point2D;
+                }
             }
 
             List<Polyline2D> polyline2Ds = new List<Polyline2D>();
