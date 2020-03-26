@@ -28,9 +28,12 @@ namespace SAMCoreDynamo
             return SAM.Core.Convert.ToSAM(pathOrJson);
         }
 
-        public static object ToJson(IEnumerable<SAM.Core.IJSAMObject> sAMObjects, string path = null)
+        public static object ToJson(IEnumerable<object> sAMObjects, string path = null)
         {
-            string json = SAM.Core.Convert.ToJson(sAMObjects);
+            List<SAM.Core.IJSAMObject> sAMObjects_Temp = sAMObjects.ToList().ConvertAll(x => x as SAM.Core.IJSAMObject);
+            sAMObjects_Temp.RemoveAll(x => x == null);
+
+            string json = SAM.Core.Convert.ToJson(sAMObjects_Temp);
 
             if (!string.IsNullOrWhiteSpace(path))
                 System.IO.File.WriteAllText(path, json);
