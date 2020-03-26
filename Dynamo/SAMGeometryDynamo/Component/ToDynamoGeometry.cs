@@ -9,7 +9,7 @@ namespace SAMGeometryDynamo
 {
     public static partial class Convert
     {
-        public static Autodesk.DesignScript.Geometry.Geometry ToDynamoGeometry(object geometry)
+        public static object ToDynamoGeometry(object geometry)
         {
             return ((ISAMGeometry)geometry).ToDynamo();
         }

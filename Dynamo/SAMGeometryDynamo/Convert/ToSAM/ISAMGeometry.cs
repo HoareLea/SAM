@@ -12,9 +12,9 @@ namespace SAMGeometryDynamo
     public static partial class Convert
     {
         [IsVisibleInDynamoLibrary(false)]
-        public static Autodesk.DesignScript.Geometry.Geometry ToDynamo(this ISAMGeometry geometry)
+        public static ISAMGeometry ToSAM(this Autodesk.DesignScript.Geometry.DesignScriptEntity geometry)
         {
-            return Convert.ToDynamo(geometry as dynamic);
+            return Convert.ToSAM(geometry as dynamic);
         }
     }
 }

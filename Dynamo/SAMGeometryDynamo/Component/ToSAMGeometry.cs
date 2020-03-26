@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace SAMGeometryDynamo
 {
     public static partial class Convert
     {
-        public static object ToSAMGeometry(Autodesk.DesignScript.Geometry.Geometry geometry)
+        public static object ToSAMGeometry(object geometry)
         {
-            return geometry.ToSAM();
+            return (geometry as Autodesk.DesignScript.Geometry.DesignScriptEntity)?.ToSAM();
         }
     }
 }
