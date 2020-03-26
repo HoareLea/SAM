@@ -21,7 +21,7 @@ namespace SAMAnalyticalDynamo
         public static SAM.Analytical.Space ByPoint(string name, object location)
         {
             Point3D point3D = location as Point3D;
-            if (location == null && location is Autodesk.DesignScript.Geometry.Point)
+            if (point3D == null && location is Autodesk.DesignScript.Geometry.Point)
                 point3D = SAMGeometryDynamo.Convert.ToSAM((Autodesk.DesignScript.Geometry.Point)location);
 
             if (point3D == null)
