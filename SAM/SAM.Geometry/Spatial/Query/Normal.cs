@@ -5,16 +5,18 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static Vector3D Normal(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static Vector3D Normal(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if (point3Ds == null || point3Ds.Count() < 3 || point3Ds.Collinear(tolerance))
+            if (point3Ds == null || point3Ds.Collinear(tolerance))
+                return null;
+
+            int count = point3Ds.Count();
+
+            if (count < 3)
                 return null;
 
             Point3D origin = point3Ds.Average();
             Vector3D normal = new Vector3D();
-
-            int count = point3Ds.Count();
-
             if (point3Ds.Coplanar(tolerance))
             {
                 for (int i = 0; i < count - 1; i++)

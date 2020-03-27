@@ -176,7 +176,7 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
         
-        public bool Inside(BoundingBox2D boundingBox2D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.MicroDistance)
+        public bool Inside(BoundingBox2D boundingBox2D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
         {
             return Inside(boundingBox2D.max, acceptOnEdge, tolerance) && Inside(boundingBox2D.min, acceptOnEdge, tolerance);
         }
@@ -189,7 +189,7 @@ namespace SAM.Geometry.Planar
             return point2D.X > min.X && point2D.X < max.X && point2D.Y < max.Y && point2D.Y > min.Y;
         }
 
-        public bool Inside(Point2D point2D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.MicroDistance)
+        public bool Inside(Point2D point2D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null)
                 return false;
@@ -200,7 +200,7 @@ namespace SAM.Geometry.Planar
             return (point2D.X > min.X + tolerance && point2D.X < max.X - tolerance && point2D.Y > min.Y + tolerance && point2D.Y < max.Y - tolerance);
         }
 
-        public bool On(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             return Query.On(GetSegments(), point2D, tolerance);
         }

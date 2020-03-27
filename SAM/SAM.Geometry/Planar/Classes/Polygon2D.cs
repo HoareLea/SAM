@@ -141,7 +141,7 @@ namespace SAM.Geometry.Planar
             return Offset(new double[] { offset }, orientation);
         }
 
-        public List<Polygon2D> Offset(IEnumerable<double> offsets, Orientation orientation, double tolerance = Core.Tolerance.MicroDistance)
+        public List<Polygon2D> Offset(IEnumerable<double> offsets, Orientation orientation, double tolerance = Core.Tolerance.Distance)
         {
             if (points == null || points.Count < 3 || offsets == null)
                 return null;
@@ -314,7 +314,7 @@ namespace SAM.Geometry.Planar
             return Query.Intersections(this, segmentable2D);
         }
 
-        public bool On(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             return Query.On(GetSegments(), point2D, tolerance);
         }

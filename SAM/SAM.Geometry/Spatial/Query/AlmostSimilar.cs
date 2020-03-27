@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        public static bool AlmostSimilar(this Vector3D vector3D_1, Vector3D vector3D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static bool AlmostSimilar(this Vector3D vector3D_1, Vector3D vector3D_2, double tolerance = Core.Tolerance.Distance)
         {
             if (vector3D_1 == vector3D_2)
                 return true;

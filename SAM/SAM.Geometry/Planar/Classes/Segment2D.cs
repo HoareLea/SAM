@@ -232,7 +232,7 @@ namespace SAM.Geometry.Planar
         /// Point2D
         /// </returns>
         /// <param name="segment2D">Segment2D for intersection.</param>
-        public Point2D Intersection(Segment2D segment2D, out Point2D point2D_Closest1, out Point2D point2D_Closest2, double tolerance = Core.Tolerance.MicroDistance)
+        public Point2D Intersection(Segment2D segment2D, out Point2D point2D_Closest1, out Point2D point2D_Closest2, double tolerance = Core.Tolerance.Distance)
         {
             point2D_Closest1 = null;
             point2D_Closest2 = null;
@@ -283,7 +283,7 @@ namespace SAM.Geometry.Planar
             return aPoint_Intersection;
         }
 
-        public Point2D Intersection(Segment2D segment2D, bool bounded = true, double tolerance = Core.Tolerance.MicroDistance)
+        public Point2D Intersection(Segment2D segment2D, bool bounded = true, double tolerance = Core.Tolerance.Distance)
         {
             Point2D point2D_Closest1 = null;
             Point2D point2D_Closest2 = null;
@@ -295,7 +295,7 @@ namespace SAM.Geometry.Planar
             return point2D_Intersection;
         }
 
-        public List<Point2D> Intersections(IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public List<Point2D> Intersections(IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segment2Ds == null)
                 return null;
@@ -316,7 +316,7 @@ namespace SAM.Geometry.Planar
             return Intersections(segmentable2D?.GetSegments());
         }
 
-        public bool On(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             return Distance(point2D) < tolerance;
         }

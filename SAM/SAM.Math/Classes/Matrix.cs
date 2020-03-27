@@ -72,7 +72,7 @@ namespace SAM.Math
             return values.GetLength(1);
         }
 
-        public double REFTolerance(double tolerance = Core.Tolerance.MicroDistance)
+        public double REFTolerance(double tolerance = Core.Tolerance.Distance)
         {
             int length_1 = values.GetLength(0);
             int length_2 = values.GetLength(1);
@@ -94,7 +94,7 @@ namespace SAM.Math
             return result;
         }
 
-        public Matrix RowEchelonForm(bool reduced = true, double tolerance = Core.Tolerance.MicroDistance)
+        public Matrix RowEchelonForm(bool reduced = true, double tolerance = Core.Tolerance.Distance)
         {
             // Strongly inspired by https://rosettacode.org/wiki/Reduced_row_echelon_form
 
@@ -154,7 +154,7 @@ namespace SAM.Math
             return matrix;
         }
 
-        public int CountNonZeroRows(double tolerance = Core.Tolerance.MicroDistance)
+        public int CountNonZeroRows(double tolerance = Core.Tolerance.Distance)
         {
             int rowCount = RowCount();
             int columnCount = ColumnCount();
@@ -175,7 +175,7 @@ namespace SAM.Math
             return count;
         }
 
-        public double[] Eigenvalues(double tolerance = Core.Tolerance.MicroDistance)
+        public double[] Eigenvalues(double tolerance = Core.Tolerance.Distance)
         {
             int rowCount = RowCount();
             int columnCount = ColumnCount();

@@ -13,7 +13,7 @@ namespace SAM.Geometry.Planar
         /// </returns>
         /// <param name="segment2Ds">Sermnets2Ds</param>
         /// <param name="tolerance"> tolerance (default = 0) .</param>
-        public static List<Segment2D> Split(this IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> Split(this IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segment2Ds == null)
                 return null;

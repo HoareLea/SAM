@@ -122,12 +122,12 @@ namespace SAM.Geometry.Planar
             return string.Format("Point2D(X={0},Y={1})", Core.Modify.Round(coordinates[0], tolerance), Core.Modify.Round(coordinates[1], tolerance));
         }
 
-        public bool AlmostEquals(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool AlmostEquals(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             return ((System.Math.Abs(coordinates[0] - point2D.coordinates[0]) < tolerance) && (System.Math.Abs(coordinates[1] - point2D.coordinates[1]) < tolerance));
         }
         
-        public bool AlmostOnSegment(Segment2D segment2D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool AlmostOnSegment(Segment2D segment2D, double tolerance = Core.Tolerance.Distance)
         {
             Segment2D segment2D_temp = new Segment2D(new Point2D(0, 0), new Point2D(segment2D[1].X - segment2D[0].X, segment2D[1].Y - segment2D[0].Y));
             Point2D aPoint2D = new Point2D(coordinates[0] - segment2D[0].X, coordinates[1] - segment2D[0].Y);
@@ -159,7 +159,7 @@ namespace SAM.Geometry.Planar
             coordinates[1] = System.Math.Round(coordinates[1], decimals);
         }
 
-        public void Round(double tolerance = Core.Tolerance.MicroDistance)
+        public void Round(double tolerance = Core.Tolerance.Distance)
         {
             coordinates[0] = Core.Modify.Round(coordinates[0], tolerance);
             coordinates[1] = Core.Modify.Round(coordinates[1], tolerance);

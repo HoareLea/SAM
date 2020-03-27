@@ -27,7 +27,7 @@ namespace SAM.Geometry.Spatial
 
         }
 
-        public Face3D ToFace(double tolerance = Core.Tolerance.MicroDistance)
+        public Face3D ToFace(double tolerance = Core.Tolerance.Distance)
         {
             if (boundary is IClosedPlanar3D)
                 return new Face3D(boundary as IClosedPlanar3D);

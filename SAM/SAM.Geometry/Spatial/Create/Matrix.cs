@@ -14,7 +14,7 @@ namespace SAM.Geometry.Spatial
             int count = vector3Ds.Count();
 
             Math.Matrix matrix = new Math.Matrix(count, 3);
-            for (int i = 0; i < count - 1; i++)
+            for (int i = 0; i < count; i++)
             {
                 Vector3D vector3D = vector3Ds.ElementAt(i);
                 matrix[i, 0] = vector3D[0];

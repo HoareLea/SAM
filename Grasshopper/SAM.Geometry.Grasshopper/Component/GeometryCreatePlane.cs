@@ -38,7 +38,7 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_points", "Points", "snapping Points", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.MicroDistance);
+            inputParamManager.AddNumberParameter("tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            double tolerance = Core.Tolerance.MicroDistance;
+            double tolerance = Core.Tolerance.Distance;
             if (!dataAccess.GetData(1, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

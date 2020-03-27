@@ -5,7 +5,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static bool Coplanar(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static bool Coplanar(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds == null)
                 return false;

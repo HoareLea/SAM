@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static List<Polygon2D> Join(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon2D> Join(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segmentable2Ds == null)
                 return null;
@@ -29,7 +29,7 @@ namespace SAM.Geometry.Planar
         }
         
         
-        public static Polyline2D Join(this Polyline2D polyline2D_1, Polyline2D polyline2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static Polyline2D Join(this Polyline2D polyline2D_1, Polyline2D polyline2D_2, double tolerance = Core.Tolerance.Distance)
         {
             if (polyline2D_1 == null || polyline2D_2 == null)
                 return null;

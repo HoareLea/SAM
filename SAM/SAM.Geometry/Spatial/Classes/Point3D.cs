@@ -191,7 +191,7 @@ namespace SAM.Geometry.Spatial
             coordinates[2] = System.Math.Round(coordinates[2], decimals);
         }
 
-        public void Round(double tolerance = Core.Tolerance.MicroDistance)
+        public void Round(double tolerance = Core.Tolerance.Distance)
         {
             coordinates[0] = Core.Modify.Round(coordinates[0], tolerance);
             coordinates[1] = Core.Modify.Round(coordinates[1], tolerance);

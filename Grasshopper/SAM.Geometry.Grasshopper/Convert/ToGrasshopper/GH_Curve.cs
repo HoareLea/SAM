@@ -27,7 +27,7 @@ namespace SAM.Geometry.Grasshopper
 
         public static GH_Curve ToGrasshopper(this Spatial.Polycurve3D polycurve3D)
         {
-            return new GH_Curve(Rhino.Geometry.PolyCurve.JoinCurves(polycurve3D.GetCurves().ConvertAll(x => x.ToRhino()), Core.Tolerance.MicroDistance, false)[0]);
+            return new GH_Curve(Rhino.Geometry.PolyCurve.JoinCurves(polycurve3D.GetCurves().ConvertAll(x => x.ToRhino()), Core.Tolerance.Distance, false)[0]);
         }
     }
 }

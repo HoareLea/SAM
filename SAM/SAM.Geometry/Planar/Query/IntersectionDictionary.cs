@@ -5,12 +5,12 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     { 
-        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.Distance)
         {
             return IntersectionDictionary(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, keepDirection, removeColinear, sort, tolerance);
         }
 
-        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null || vector2D == null || segmentable2Ds == null)
                 return null;

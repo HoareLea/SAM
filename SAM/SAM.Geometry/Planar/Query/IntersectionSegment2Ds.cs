@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
     public static partial class Query
     {
         //Union of the sets A and B, denoted A ∪ B, is the set of all objects that are a member of A, or B, or both. The union of {1, 2, 3} and {2, 3, 4} is the set {1, 2, 3, 4}
-        public static List<Segment2D> IntersectionSegment2Ds(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> IntersectionSegment2Ds(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, bool sort = true, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon2D_1 == null || polygon2D_2 == null)
                 return null;
@@ -14,7 +14,7 @@ namespace SAM.Geometry.Planar
             return IntersectionSegment2Ds(polygon2D_1, new Polygon2D[] { polygon2D_2 }, sort, tolerance);
         }
 
-        public static List<Segment2D> IntersectionSegment2Ds(this Polygon2D polygon2D, IEnumerable<Polygon2D> polygon2Ds, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> IntersectionSegment2Ds(this Polygon2D polygon2D, IEnumerable<Polygon2D> polygon2Ds, bool sort = true, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon2D == null || polygon2Ds == null)
                 return null;

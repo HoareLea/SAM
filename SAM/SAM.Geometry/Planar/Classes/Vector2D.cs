@@ -105,7 +105,7 @@ namespace SAM.Geometry.Planar
             return new Vector2D(-coordinates[0], -coordinates[1]);
         }
 
-        public bool AlmostEqual(Vector2D vector2D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool AlmostEqual(Vector2D vector2D, double tolerance = Core.Tolerance.Distance)
         {
             return ((System.Math.Abs(coordinates[0] - vector2D.coordinates[0]) <= tolerance) && (System.Math.Abs(coordinates[1] - vector2D.coordinates[1]) <= tolerance));
         }
@@ -127,12 +127,12 @@ namespace SAM.Geometry.Planar
             return hash;
         }
 
-        public bool IsPerpedicular(Vector2D vector2D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool IsPerpedicular(Vector2D vector2D, double tolerance = Core.Tolerance.Distance)
         {
             return (vector2D.coordinates[0] * coordinates[0]) + (vector2D.coordinates[1] * coordinates[1]) <= tolerance;
         }
 
-        public bool IsParallel(Vector2D vector2D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool IsParallel(Vector2D vector2D, double tolerance = Core.Tolerance.Distance)
         {
             Vector2D vector2D_1 = vector2D.Unit;
             Vector2D vector2D_2 = Unit;

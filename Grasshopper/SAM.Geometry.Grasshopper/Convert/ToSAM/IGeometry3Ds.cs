@@ -37,7 +37,7 @@ namespace SAM.Geometry.Grasshopper
             List<BrepFace> brepFaces = new List<BrepFace>();
             foreach (BrepFace brepFace in brep.Faces)
             {
-                if (!brepFace.IsPlanar(Core.Tolerance.MicroDistance))
+                if (!brepFace.IsPlanar(Core.Tolerance.Distance))
                     breps.Add(brepFace.Brep);
                 else
                     brepFaces.Add(brepFace);

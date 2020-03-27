@@ -5,7 +5,7 @@ namespace SAM.Core
 {
     public static partial class Modify
     {
-        public static double Round(this double value, double tolerance = Tolerance.MicroDistance)
+        public static double Round(this double value, double tolerance = Tolerance.Distance)
         {
             if (double.IsNaN(value))
                 return double.NaN;

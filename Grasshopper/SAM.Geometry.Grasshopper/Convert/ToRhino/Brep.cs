@@ -32,7 +32,7 @@ namespace SAM.Geometry.Grasshopper
             return Rhino.Geometry.Brep.CreateEdgeSurface(lineCurves);
         }
 
-        public static Rhino.Geometry.Brep ToRhino_Brep(this Spatial.Face3D face3D, double tolerance = Core.Tolerance.MicroDistance)
+        public static Rhino.Geometry.Brep ToRhino_Brep(this Spatial.Face3D face3D, double tolerance = Core.Tolerance.Distance)
         {
             if (face3D == null)
                 return null;

@@ -85,17 +85,17 @@ namespace SAM.Geometry.Planar
             }
         }        
 
-        public PointGraph2D(IEnumerable<Segment2D> segment2Ds, bool split = true, double tolerance = Tolerance.MicroDistance)
+        public PointGraph2D(IEnumerable<Segment2D> segment2Ds, bool split = true, double tolerance = Tolerance.Distance)
         {
             Load(segment2Ds, split, tolerance);
         }
 
-        public PointGraph2D(Polygon2D polygon2D, bool split = true, double tolerance = Tolerance.MicroDistance)
+        public PointGraph2D(Polygon2D polygon2D, bool split = true, double tolerance = Tolerance.Distance)
         {
             Load(polygon2D?.GetSegments(), split, tolerance);
         }
 
-        public PointGraph2D(IEnumerable<Polygon2D> polygon2Ds, bool split = true, double tolerance = Tolerance.MicroDistance)
+        public PointGraph2D(IEnumerable<Polygon2D> polygon2Ds, bool split = true, double tolerance = Tolerance.Distance)
         {
             if(polygon2Ds != null)
             {
@@ -117,7 +117,7 @@ namespace SAM.Geometry.Planar
         }
 
 
-        public bool Load(IEnumerable<Segment2D> segment2Ds, bool split = false, double tolerance = Tolerance.MicroDistance)
+        public bool Load(IEnumerable<Segment2D> segment2Ds, bool split = false, double tolerance = Tolerance.Distance)
         {
             if (segment2Ds == null)
                 return false;

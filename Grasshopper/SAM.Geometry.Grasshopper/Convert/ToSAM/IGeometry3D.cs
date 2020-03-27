@@ -31,7 +31,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (simplify)
             {
-                PolylineCurve polylineCurve_Temp = curve.ToPolyline(Core.Tolerance.MicroDistance, Core.Tolerance.Angle, 0.4, 1);
+                PolylineCurve polylineCurve_Temp = curve.ToPolyline(Core.Tolerance.Distance, Core.Tolerance.Angle, 0.4, 1);
                 return polylineCurve_Temp.ToSAM();
             }
             else
@@ -41,7 +41,7 @@ namespace SAM.Geometry.Grasshopper
             }
         }
 
-        public static Spatial.ISAMGeometry3D ToSAM(this PolylineCurve polylineCurve, bool simplify = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Spatial.ISAMGeometry3D ToSAM(this PolylineCurve polylineCurve, bool simplify = true, double tolerance = Core.Tolerance.Distance)
         {
             int count = polylineCurve.PointCount;
             if (count == 2)

@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static Vector2D MidVector(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static Vector2D MidVector(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.Distance)
         {
             if (segment2D_1 == null || segment2D_2 == null)
                 return null;

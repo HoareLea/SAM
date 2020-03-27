@@ -261,7 +261,7 @@ namespace SAM.Geometry.Spatial
             return coordinates[0] == vector3D.coordinates[0] && coordinates[1] == vector3D.coordinates[1] && coordinates[2] == vector3D.coordinates[2];
         }
 
-        public bool AlmostEqual(Vector3D vector3D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool AlmostEqual(Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
         {
             if (vector3D == null)
                 return false;
@@ -314,7 +314,7 @@ namespace SAM.Geometry.Spatial
             coordinates[2] = System.Math.Round(coordinates[2], decimals);
         }
 
-        public void Round(double tolerance = Core.Tolerance.MicroDistance)
+        public void Round(double tolerance = Core.Tolerance.Distance)
         {
             coordinates[0] = Core.Modify.Round(coordinates[0], tolerance);
             coordinates[1] = Core.Modify.Round(coordinates[1], tolerance);

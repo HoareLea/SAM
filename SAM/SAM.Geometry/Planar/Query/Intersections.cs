@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Point2D> Intersections(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Point2D> Intersections(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2, double tolerance = Core.Tolerance.Distance)
         {
             if (segmentable2D_1 == null || segmentable2D_2 == null)
                 return null;
@@ -62,7 +62,7 @@ namespace SAM.Geometry.Planar
             return point2Ds.ToList();
         }
 
-        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null || vector2D == null)
                 return null;
@@ -70,7 +70,7 @@ namespace SAM.Geometry.Planar
             return IntersectionDictionary(point2D, vector2D, segmentable2D, keepDirection, removeColinear, sort, tolerance)?.Keys?.ToList();
         }
 
-        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, bool sort = true, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null || vector2D == null)
                 return null;

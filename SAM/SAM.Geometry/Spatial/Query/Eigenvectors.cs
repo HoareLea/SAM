@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        private static Vector3D[] Eigenvectors(this Math.Matrix matrix, double tolerance = Core.Tolerance.MicroDistance)
+        private static Vector3D[] Eigenvectors(this Math.Matrix matrix, double tolerance = Core.Tolerance.Distance)
         {
             double[] eigenvalues = matrix.Eigenvalues(tolerance);
             if (eigenvalues == null)

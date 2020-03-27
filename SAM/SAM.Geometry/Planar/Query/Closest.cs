@@ -48,12 +48,12 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Segment2D> Closest(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> Closest(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2, double tolerance = Core.Tolerance.Distance)
         {
             return ClosestDictionary(segmentable2D_1, segmentable2D_2, tolerance)?.Keys?.ToList();
         }
 
-        public static T Closest<T>(this ISegmentable2D segmentable2D, IEnumerable<T> segmentable2Ds, double tolerance = Core.Tolerance.MicroDistance) where T: ISegmentable2D
+        public static T Closest<T>(this ISegmentable2D segmentable2D, IEnumerable<T> segmentable2Ds, double tolerance = Core.Tolerance.Distance) where T: ISegmentable2D
         {
             if (segmentable2D == null || segmentable2Ds == null)
                 return default;

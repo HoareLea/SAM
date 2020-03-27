@@ -303,7 +303,7 @@ namespace SAM.Geometry.Spatial
             return Closest(point3D).Distance(point3D);
         }
 
-        public bool On(Point3D point3D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
             return (normal.X * (point3D.X - origin.X)) + (normal.Y * (point3D.Y - origin.Y)) + (normal.Z * (point3D.Z - origin.Z)) < tolerance;
         }
@@ -411,7 +411,7 @@ namespace SAM.Geometry.Spatial
             return new Plane(this);
         }
 
-        public bool Coplanar(Plane plane, double tolerance = Core.Tolerance.MicroDistance)
+        public bool Coplanar(Plane plane, double tolerance = Core.Tolerance.Distance)
         {
             return normal.AlmostEqual(plane.normal, tolerance) || normal.AlmostEqual(-plane.normal, tolerance);
         }

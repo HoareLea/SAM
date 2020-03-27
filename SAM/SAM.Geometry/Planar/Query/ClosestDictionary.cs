@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static Dictionary<Segment2D, double> ClosestDictionary(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static Dictionary<Segment2D, double> ClosestDictionary(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2, double tolerance = Core.Tolerance.Distance)
         {
             List<Segment2D> segment2Ds = segmentable2D_2?.GetSegments();
             if (segment2Ds == null || segment2Ds.Count == 0)

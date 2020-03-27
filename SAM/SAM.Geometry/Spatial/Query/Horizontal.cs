@@ -3,7 +3,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static bool Horizontal(this Plane plane, double tolerance = Core.Tolerance.MicroDistance)
+        public static bool Horizontal(this Plane plane, double tolerance = Core.Tolerance.Distance)
         {
             if (plane == null)
                 return false;

@@ -17,7 +17,7 @@ namespace SAM.Geometry.Spatial
                 this.points = new List<Planar.Point2D>(points);
         }
         
-        public Polygon3D(IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public Polygon3D(IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds != null)
             {
@@ -118,7 +118,7 @@ namespace SAM.Geometry.Spatial
             return Planar.Point2D.GetArea(points);
         }
 
-        public bool Inside(Polygon3D polygon3D, double tolerance = Core.Tolerance.MicroDistance)
+        public bool Inside(Polygon3D polygon3D, double tolerance = Core.Tolerance.Distance)
         {
             Plane plane_1 = plane;
             Plane plane_2 = polygon3D.plane;

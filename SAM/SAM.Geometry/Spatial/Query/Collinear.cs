@@ -13,7 +13,7 @@ namespace SAM.Geometry.Spatial
             return new Vector3D(point2D_2, point2D_1).SmallestAngle(new Vector3D(point2D_2, point2D_3)) < tolerance;
         }
 
-        public static bool Collinear(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static bool Collinear(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds == null)
                 return false;
