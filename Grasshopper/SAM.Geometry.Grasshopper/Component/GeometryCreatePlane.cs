@@ -64,8 +64,8 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            double tolerance = SAM.Core.Tolerance.MicroDistance;
-            if (!dataAccess.GetData(3, ref tolerance))
+            double tolerance = Core.Tolerance.MicroDistance;
+            if (!dataAccess.GetData(1, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
