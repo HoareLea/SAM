@@ -38,8 +38,6 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_points", "Points", "snapping Points", GH_ParamAccess.list);
-            inputParamManager.AddBooleanParameter("fit_", "fit", "fit", GH_ParamAccess.item, true);
-            inputParamManager.AddBooleanParameter("orientNormal_", "orientNormal", "Orient Normal", GH_ParamAccess.item, true);
             inputParamManager.AddNumberParameter("tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.MicroDistance);
         }
 
@@ -61,20 +59,6 @@ namespace SAM.Geometry.Grasshopper
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
             if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            bool fit = true;
-            if (!dataAccess.GetData(1, ref fit))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            bool orientNormal = true;
-            if (!dataAccess.GetData(2, ref orientNormal))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -105,7 +89,7 @@ namespace SAM.Geometry.Grasshopper
                 point3Ds.Add(Convert.ToSAM(gHPoint));
             }
 
-            Spatial.Plane plane = Spatial.Create.Plane(point3Ds, fit, orientNormal, tolerance);
+            Spatial.Plane plane = Spatial.Create.Plane(point3Ds, tolerance);
 
             dataAccess.SetData(0, new GooSAMGeometry(plane));
             dataAccess.SetData(1, new GooSAMGeometry(plane.Normal));

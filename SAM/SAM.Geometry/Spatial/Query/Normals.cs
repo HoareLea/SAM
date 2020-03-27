@@ -28,7 +28,7 @@ namespace SAM.Geometry.Spatial
                 Point3D point3D_3 = point3Ds_Temp.ElementAt(i + 1);
 
                 Vector3D vector3D = null;
-                if (!Colinear(point3D_1, point3D_2, point3D_3, tolerance))
+                if (!Collinear(point3D_1, point3D_2, point3D_3, tolerance))
                 {
                     vector3D = Normal(point3D_1, point3D_2, point3D_3);
                     if (Query.IsValid(vector3D))

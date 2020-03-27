@@ -126,6 +126,7 @@
     <Compile Include="Planar\Query\Closest.cs" />
     <Compile Include="Planar\Query\ConvexHull.cs" />
     <Compile Include="Query\Opposite.cs" />
+    <Compile Include="Spatial\Create\Matrix.cs" />
     <Compile Include="Spatial\Create\Plane.cs" />
     <Compile Include="Spatial\Create\Face3Ds.cs" />
     <Compile Include="Spatial\Create\Polygon3D.cs" />
@@ -135,9 +136,12 @@
     <Compile Include="Spatial\Modify\SimplifyByAngle.cs" />
     <Compile Include="Spatial\Modify\Round.cs" />
     <Compile Include="Spatial\Modify\SortByDistance.cs" />
+    <Compile Include="Spatial\Query\Average.cs" />
+    <Compile Include="Spatial\Query\Eigenvectors.cs" />
     <Compile Include="Spatial\Query\AlmostSimilar.cs" />
     <Compile Include="Spatial\Query\Centroid.cs" />
-    <Compile Include="Spatial\Query\Colinear.cs" />
+    <Compile Include="Spatial\Query\Coplanar.cs" />
+    <Compile Include="Spatial\Query\Collinear.cs" />
     <Compile Include="Spatial\Query\Explode.cs" />
     <Compile Include="Spatial\Query\ClosedPlanar3Ds.cs" />
     <Compile Include="Spatial\Query\Closest.cs" />

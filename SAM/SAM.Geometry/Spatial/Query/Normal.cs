@@ -7,48 +7,71 @@ namespace SAM.Geometry.Spatial
     {
         public static Vector3D Normal(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if (point3Ds == null)
+            if (point3Ds == null || point3Ds.Count() < 3 || point3Ds.Collinear(tolerance))
                 return null;
+
+            Point3D origin = point3Ds.Average();
+            Vector3D normal = new Vector3D();
 
             int count = point3Ds.Count();
-            if (count < 3)
-                return null;
 
-            List<Point3D> point3Ds_Temp = new List<Point3D>(point3Ds);
-            point3Ds_Temp.Insert(0, point3Ds_Temp.Last());
-            point3Ds_Temp.Add(point3Ds_Temp[1]);
-
-            count = point3Ds_Temp.Count;
-
-            //for (int i = 1; i < aCount - 1; i++)
-            //{
-            //    Point3D point3D_1 = point3Ds_Temp.ElementAt(i - 1);
-            //    Point3D point3D_2 = point3Ds_Temp.ElementAt(i);
-            //    Point3D point3D_3 = point3Ds_Temp.ElementAt(i + 1);
-
-            //    Vector3D normal = Normal(point3D_1, point3D_2, point3D_3);
-            //    if (normal.Length < tolerance)
-            //        continue;
-
-            //    return normal.Unit;
-            //}
-
-            //return null;
-
-            Vector3D normal = new Vector3D(0, 0 ,0);
-
-            for (int i = 0; i < count - 1; i++)
+            if (point3Ds.Coplanar(tolerance))
             {
-                Point3D point3D_1 = point3Ds_Temp[i];
-                Point3D point3D_2 = point3Ds_Temp[i + 1];
-                Point3D point3D_3 = point3Ds_Temp[(i + 2) % count];
-
-                normal += new Vector3D(point3D_2, point3D_1).CrossProduct(new Vector3D(point3D_3, point3D_2)); // CrossProduct(point3D_2 - point3D_1, point3D_3 - point3D_2);
+                for (int i = 0; i < count - 1; i++)
+                    normal += (point3Ds.ElementAt(i) - origin).CrossProduct(point3Ds.ElementAt(i + 1) - origin);
+                return normal.Unit;
             }
 
-            return normal.Unit;
-        }
+            Math.Matrix matrix = new Math.Matrix(3, 3);
+            double[,] normalizedPoints = new double[count, 3];
 
+            for (int i = 0; i < count; i++)
+            {
+                normalizedPoints[i, 0] = point3Ds.ElementAt(i).X - origin.X;
+                normalizedPoints[i, 1] = point3Ds.ElementAt(i).Y - origin.Y;
+                normalizedPoints[i, 2] = point3Ds.ElementAt(i).Z - origin.Z;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    double value = 0;
+                    for (int k = 0; k < count; k++)
+                    {
+                        value += normalizedPoints[k, i] * normalizedPoints[k, j];
+                    }
+                    matrix[i, j] = value;
+                }
+            }
+
+            Vector3D[] eigenvectors = Query.Eigenvectors(matrix, tolerance);
+            if (eigenvectors == null)
+                return null;
+
+            Vector3D result = null;
+            double leastSquares = double.PositiveInfinity;
+            foreach (Vector3D eigenvector in eigenvectors)
+            {
+                double squares = 0;
+                for (int i = 0; i < count; i++)
+                {
+                    squares += System.Math.Pow(eigenvector.X * normalizedPoints[i, 0] + eigenvector.Y * normalizedPoints[i, 1] + eigenvector.Z * normalizedPoints[i, 2], 2);
+                }
+
+                if (squares <= leastSquares)
+                {
+                    leastSquares = squares;
+                    result = eigenvector;
+                }
+            }
+
+            if (result != null)
+                result = result.Unit;
+
+            return result;
+        }
+        
         public static Vector3D Normal(this Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
         {
             return new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
