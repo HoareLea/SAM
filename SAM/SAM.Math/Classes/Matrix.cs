@@ -207,6 +207,14 @@ namespace SAM.Math
             return RealCubicRoots(A, B, C, D);
         }
 
+        //public static Matrix Identity
+        //{
+        //    get
+        //    {
+        //        return new Matrix(new double[3,3] {(0, 0, 0)});
+        //    }
+        //}
+
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)
