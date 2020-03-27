@@ -192,7 +192,7 @@ namespace SAM.Geometry.Planar
             Vector2D vector2D_Temp = new Vector2D(vector2D);
             vector2D_Temp.Negate();
 
-            return Angle(vector2D) < Angle(vector2D_Temp);
+            return Angle(vector2D) <= Angle(vector2D_Temp);
         }
 
         public double DotProduct(Vector2D vector2D)

@@ -13,7 +13,7 @@ namespace SAM.Geometry.Planar
         /// </returns>
         /// <param name="segment2Ds">Sermnets2Ds</param>
         /// <param name="tolerance"> tolerance (default = 0) .</param>
-        public static List<Segment2D> Split(this IEnumerable<Segment2D> segment2Ds, double tolerance = 0)
+        public static List<Segment2D> Split(this IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segment2Ds == null)
                 return null;
@@ -32,7 +32,7 @@ namespace SAM.Geometry.Planar
                     Point2D point2D_Closest1;
                     Point2D point2D_Closest2;
 
-                    Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, out point2D_Closest1, out point2D_Closest2);
+                    Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, out point2D_Closest1, out point2D_Closest2, tolerance);
                     if (point2D_Intersection == null || point2D_Intersection.IsNaN())
                         continue;
 

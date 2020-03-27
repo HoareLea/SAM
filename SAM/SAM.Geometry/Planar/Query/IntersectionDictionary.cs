@@ -36,7 +36,7 @@ namespace SAM.Geometry.Planar
                 if (removeColinear && segment2D.Colinear(segment2D_Temp))
                     continue;
 
-                Point2D point2D_Intersection = segment2D.Intersection(segment2D_Temp, out point2D_closest_1, out point2D_closest_2);
+                Point2D point2D_Intersection = segment2D.Intersection(segment2D_Temp, out point2D_closest_1, out point2D_closest_2, tolerance);
                 if (point2D_Intersection == null)
                     continue;
 

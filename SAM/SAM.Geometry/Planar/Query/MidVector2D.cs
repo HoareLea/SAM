@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static Vector2D MidVector(this Segment2D segment2D_1, Segment2D segment2D_2)
+        public static Vector2D MidVector(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segment2D_1 == null || segment2D_2 == null)
                 return null;
@@ -13,7 +13,7 @@ namespace SAM.Geometry.Planar
             Point2D point2D_Closets_1 = null;
             Point2D point2D_Closets_2 = null;
 
-            Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, out point2D_Closets_1, out point2D_Closets_2);
+            Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, out point2D_Closets_1, out point2D_Closets_2, tolerance);
             if (point2D_Intersection == null)
                 return null;
 

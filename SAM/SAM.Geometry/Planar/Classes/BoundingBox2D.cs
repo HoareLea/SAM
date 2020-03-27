@@ -200,7 +200,7 @@ namespace SAM.Geometry.Planar
             return (point2D.X > min.X + tolerance && point2D.X < max.X - tolerance && point2D.Y > min.Y + tolerance && point2D.Y < max.Y - tolerance);
         }
 
-        public bool On(Point2D point2D, double tolerance = 1E-09)
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             return Query.On(GetSegments(), point2D, tolerance);
         }

@@ -141,7 +141,7 @@ namespace SAM.Geometry.Planar
             return Offset(new double[] { offset }, orientation);
         }
 
-        public List<Polygon2D> Offset(IEnumerable<double> offsets, Orientation orientation)
+        public List<Polygon2D> Offset(IEnumerable<double> offsets, Orientation orientation, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (points == null || points.Count < 3 || offsets == null)
                 return null;
@@ -178,17 +178,17 @@ namespace SAM.Geometry.Planar
                 Segment2D segment2D_Vector_Previous = new Segment2D(segment2D_Previous.End, Vector2D_Previous);
                 Segment2D segment2D_Vector_Next = new Segment2D(segment2D_Next.Start, Vector2D_Next);
 
-                Point2D point2D_Intersection_Previous = segment2D_Offset.Intersection(segment2D_Vector_Previous, false);
+                Point2D point2D_Intersection_Previous = segment2D_Offset.Intersection(segment2D_Vector_Previous, false, tolerance);
                 if (point2D_Intersection_Previous == null)
                     continue;
 
-                Point2D point2D_Intersection_Next = segment2D_Offset.Intersection(segment2D_Vector_Next, false);
+                Point2D point2D_Intersection_Next = segment2D_Offset.Intersection(segment2D_Vector_Next, false, tolerance);
                 if (point2D_Intersection_Next == null)
                     continue;
 
                 Segment2D segment2D_Offset_New = new Segment2D(point2D_Intersection_Previous, point2D_Intersection_Next);
 
-                Point2D point2D_Intersection = segment2D_Vector_Previous.Intersection(segment2D_Vector_Next);
+                Point2D point2D_Intersection = segment2D_Vector_Previous.Intersection(segment2D_Vector_Next, true, tolerance);
 
                 List<Polygon2D> polygon2Ds = new List<Polygon2D>();
                 if (point2D_Intersection == null)
@@ -201,14 +201,10 @@ namespace SAM.Geometry.Planar
                     polygon2Ds.Add(new Polygon2D(new Point2D[] { segment2D_Offset_New.Start, segment2D_Offset_New.End, point2D_Intersection }));
                 }
 
-                //if (!segment2D_Offset_New.Direction.AlmostEqual(segment2D.Direction))
-                //    continue;
-                //segments2Ds.Add(new Segment2D[] { segment2D_Offset_New, new Segment2D(segment2D.Start, point2D_Intersection_Previous), new Segment2D(segment2D.Start, point2D_Intersection_Previous) });
-
                 segment2Ds_Offset[segment2D_Offset_New] = polygon2Ds;
             }
 
-            List<Segment2D> segment2Ds_Split = Modify.Split(segment2Ds_Offset.Keys, Core.Tolerance.MicroDistance);
+            List<Segment2D> segment2Ds_Split = Modify.Split(segment2Ds_Offset.Keys, tolerance);
 
             List<Polygon2D> polygon2Ds_All = new List<Polygon2D>();
             foreach(KeyValuePair<Segment2D, List<Polygon2D>> keyValuePair in segment2Ds_Offset)
@@ -227,8 +223,8 @@ namespace SAM.Geometry.Planar
                     List<Point2D> point2Ds_Intersections = polygon2D.Intersections(segment2D);
                     if(point2Ds_Intersections != null)
                     {
-                        point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_1) < Core.Tolerance.MicroDistance);
-                        point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_2) < Core.Tolerance.MicroDistance);
+                        point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_1) < tolerance);
+                        point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_2) < tolerance);
 
                         if (point2Ds_Intersections.Count > 0)
                         {

@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Point2D> Intersections(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2)
+        public static List<Point2D> Intersections(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segmentable2D_1 == null || segmentable2D_2 == null)
                 return null;
@@ -29,7 +29,7 @@ namespace SAM.Geometry.Planar
                     if (segment2D_2 == null)
                         continue;
 
-                    Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, true);
+                    Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, true, tolerance);
                     if (point2D_Intersection == null)
                         continue;
 

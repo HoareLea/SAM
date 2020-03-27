@@ -232,7 +232,7 @@ namespace SAM.Geometry.Planar
         /// Point2D
         /// </returns>
         /// <param name="segment2D">Segment2D for intersection.</param>
-        public Point2D Intersection(Segment2D segment2D, out Point2D point2D_Closest1, out Point2D point2D_Closest2)
+        public Point2D Intersection(Segment2D segment2D, out Point2D point2D_Closest1, out Point2D point2D_Closest2, double tolerance = Core.Tolerance.MicroDistance)
         {
             point2D_Closest1 = null;
             point2D_Closest2 = null;
@@ -260,8 +260,11 @@ namespace SAM.Geometry.Planar
             // Find the point of intersection.
             Point2D aPoint_Intersection = new Point2D(Start.X + aDx12 * aT1, Start.Y + aDy12 * aT1);
 
+            double aT1_Temp = Core.Modify.Round(aT1, tolerance);
+            double aT2_Temp = Core.Modify.Round(aT2, tolerance);
+
             // The segments intersect if t1 and t2 are between 0 and 1.
-            if (((aT1 >= 0) && (aT1 <= 1) && (aT2 >= 0) && (aT2 <= 1)))
+            if (((aT1_Temp >= 0) && (aT1_Temp <= 1) && (aT2_Temp >= 0) && (aT2_Temp <= 1)))
                 return aPoint_Intersection;
 
             // Find the closest points on the segments.
@@ -280,19 +283,19 @@ namespace SAM.Geometry.Planar
             return aPoint_Intersection;
         }
 
-        public Point2D Intersection(Segment2D segment2D, bool bounded = true)
+        public Point2D Intersection(Segment2D segment2D, bool bounded = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             Point2D point2D_Closest1 = null;
             Point2D point2D_Closest2 = null;
 
-            Point2D point2D_Intersection = Intersection(segment2D, out point2D_Closest1, out point2D_Closest2);
+            Point2D point2D_Intersection = Intersection(segment2D, out point2D_Closest1, out point2D_Closest2, tolerance);
             if (bounded && (point2D_Closest1 != null || point2D_Closest2 != null))
                 return null;
 
             return point2D_Intersection;
         }
 
-        public List<Point2D> Intersections(IEnumerable<Segment2D> segment2Ds)
+        public List<Point2D> Intersections(IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segment2Ds == null)
                 return null;
@@ -300,7 +303,7 @@ namespace SAM.Geometry.Planar
             List<Point2D> point2Ds = new List<Point2D>();
             foreach(Segment2D segment2D in segment2Ds)
             {
-                Point2D point2D = Intersection(segment2D, true);
+                Point2D point2D = Intersection(segment2D, true, tolerance);
                 if (point2D != null)
                     point2Ds.Add(point2D);
             }

@@ -196,6 +196,9 @@ namespace SAM.Geometry.Planar
             if (connectionsCount < 0)
                 return false;
 
+            if (points == null || points.Length == 0)
+                return false;
+
             bool result = false;
 
             int count = points.Length;
