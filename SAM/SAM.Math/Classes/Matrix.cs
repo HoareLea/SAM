@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Math
 {
@@ -74,6 +76,8 @@ namespace SAM.Math
 
         public double REFTolerance(double tolerance = Core.Tolerance.Distance)
         {
+            // Inspired by BHoM
+
             int length_1 = values.GetLength(0);
             int length_2 = values.GetLength(1);
             double maxRowSum = 0;
@@ -96,6 +100,7 @@ namespace SAM.Math
 
         public Matrix RowEchelonForm(bool reduced = true, double tolerance = Core.Tolerance.Distance)
         {
+            // Inspired by BHoM
             // Strongly inspired by https://rosettacode.org/wiki/Reduced_row_echelon_form
 
             Matrix matrix = this.Clone();
@@ -156,6 +161,8 @@ namespace SAM.Math
 
         public int CountNonZeroRows(double tolerance = Core.Tolerance.Distance)
         {
+            // Inspired by BHoM
+
             int rowCount = RowCount();
             int columnCount = ColumnCount();
             int count = 0;
@@ -177,6 +184,8 @@ namespace SAM.Math
 
         public double[] Eigenvalues(double tolerance = Core.Tolerance.Distance)
         {
+            // Inspired by BHoM
+
             int rowCount = RowCount();
             int columnCount = ColumnCount();
 
@@ -206,14 +215,6 @@ namespace SAM.Math
 
             return RealCubicRoots(A, B, C, D);
         }
-
-        //public static Matrix Identity
-        //{
-        //    get
-        //    {
-        //        return new Matrix(new double[3,3] {(0, 0, 0)});
-        //    }
-        //}
 
         public bool FromJObject(JObject jObject)
         {
@@ -267,6 +268,66 @@ namespace SAM.Math
             }
             else
                 return null;
+        }
+
+        public static Matrix GetIdentity(int count = 3)
+        {
+            Matrix matrix = new Matrix(new double[count, count]);
+            for (int i = 0; i < 3; i++)
+                matrix[i, i] = 1;
+
+            return matrix;
+        }
+
+        public static Matrix GetScale(IEnumerable<double> values)
+        {
+            if (values == null)
+                return null;
+
+            int count = values.Count();
+
+            Matrix matrix = GetIdentity(count + 1);
+
+            for (int i = 0; i < count; i++)
+                matrix[i, i] = values.ElementAt(i);
+
+            return matrix;
+        }
+
+        public static Matrix GetScale(int count, double factor)
+        {
+            Matrix matrix = GetIdentity(count + 1);
+
+            for (int i = 0; i < count; i++)
+                matrix[i, i] = factor;
+
+            return matrix;
+        }
+
+        public static Matrix operator *(Matrix matrix_1, Matrix matrix_2)
+        {
+            if (matrix_1 == null || matrix_2 == null)
+                return null;
+
+            int columnCount_1 = matrix_1.ColumnCount();
+
+            if (columnCount_1 != matrix_2.RowCount())
+                return null;
+
+            int rowCount_1 = matrix_1.RowCount();
+
+            int columnCount_2 = matrix_2.ColumnCount();
+
+            Matrix result = new Matrix(rowCount_1, columnCount_1);
+            for (int i = 0; i < rowCount_1; i++)
+                for (int j = 0; j < columnCount_2; j++)
+                {
+                    result[i, j] = 0;
+                    for (int k = 0; k < columnCount_1; k++)
+                        result[i, j] += matrix_1[i, k] * matrix_2[k, j];
+                }
+
+            return result;
         }
     }
 }

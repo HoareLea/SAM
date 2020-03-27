@@ -15,6 +15,8 @@ namespace SAM.Geometry.Spatial
 
         public static bool Collinear(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
+            // Inspired by BHoM
+
             if (point3Ds == null)
                 return false;
 
