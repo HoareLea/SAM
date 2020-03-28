@@ -48,6 +48,34 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public static Point2D Closest(this ISegmentable2D segmentable2D, IEnumerable<Point2D> point2Ds)
+        {
+            if (segmentable2D == null || point2Ds == null)
+                return null;
+
+            List<Segment2D> segment2Ds = segmentable2D.GetSegments();
+            if (segment2Ds == null)
+                return null;
+
+            double min = double.MaxValue;
+            Point2D result = null;
+            foreach (Segment2D segment2D in segment2Ds)
+            {
+                foreach (Point2D point2D in point2Ds)
+                {
+                    Point2D point2D_Closest = segment2D.Closest(point2D);
+                    double distance = point2D.Distance(point2D_Closest);
+                    if (distance < min)
+                    {
+                        result = point2D_Closest;
+                        min = distance;
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public static List<Segment2D> Closest(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2, double tolerance = Core.Tolerance.Distance)
         {
             return ClosestDictionary(segmentable2D_1, segmentable2D_2, tolerance)?.Keys?.ToList();

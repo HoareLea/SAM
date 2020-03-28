@@ -163,7 +163,7 @@ namespace SAM.Geometry.Planar
 
         public static ISegmentable2D Trim(ISegmentable2D segmentable2D, double parameter, bool inverted = false)
         {
-            if (segmentable2D == null || parameter <= 0 || parameter > 1)
+            if (segmentable2D == null || parameter < 0 || parameter > 1)
                 return null;
 
             List<Point2D> point2Ds = segmentable2D.GetPoints();
