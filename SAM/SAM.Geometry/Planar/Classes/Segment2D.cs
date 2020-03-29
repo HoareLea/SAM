@@ -202,7 +202,7 @@ namespace SAM.Geometry.Planar
             return point2D.Distance(Closest(point2D));
         }
 
-        public double Distance(Segment2D segment2D)
+        public double Distance(Segment2D segment2D, double tolerance = Core.Tolerance.Distance)
         {
             if (segment2D == null)
                 return double.NaN;
@@ -214,8 +214,26 @@ namespace SAM.Geometry.Planar
 
             if (point2D_Intersection == null)
             {
+                //Paraller segments
+                Segment2D segment2D_Temp = segment2D;
                 point2D_Closest_1 = Project(segment2D.origin);
-                point2D_Closest_2 = segment2D.Project(point2D_Closest_1);
+                if(!On(point2D_Closest_1, tolerance))
+                {
+                    point2D_Closest_1 = Project(segment2D.End);
+                    if (!segment2D.On(point2D_Closest_1, tolerance))
+                    {
+                        segment2D_Temp = this;
+                        point2D_Closest_1 = segment2D.Project(origin);
+                        if (!segment2D.On(point2D_Closest_1, tolerance))
+                        {
+                            point2D_Closest_1 = segment2D.Project(End);
+                            if (!segment2D.On(point2D_Closest_1, tolerance))
+                                return (new double[] { segment2D.origin.Distance(origin), segment2D.End.Distance(End), segment2D.origin.Distance(End), segment2D.End.Distance(origin) }).Min();
+                        }
+                    }
+                }
+
+                point2D_Closest_2 = segment2D_Temp.Project(point2D_Closest_1);
             }
             else if (point2D_Closest_1 == null || point2D_Closest_2 == null)
             {

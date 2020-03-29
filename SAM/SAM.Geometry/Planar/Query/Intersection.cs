@@ -26,10 +26,8 @@ namespace SAM.Geometry.Planar
                 if (!boundingBox2D_1.Inside(point2D) && !boundingBox2D_2.Inside(point2D))
                     continue;
 
-                if (!polygon2D_1.Inside(point2D) && !polygon2D_2.Inside(point2D))
-                    continue;
-
-                result.Add(polygon2D);
+                if (polygon2D_1.Inside(point2D) && polygon2D_2.Inside(point2D))
+                    result.Add(polygon2D);
             }
 
             return result;
