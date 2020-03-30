@@ -31,13 +31,18 @@ namespace SAM.Geometry.Grasshopper
             return (geometricGoo as dynamic).ToSAM();
         }
 
+        //In case of Non planar brep we mesh it and then convert to brep then merge cooplanar  and then create ISAMGeometry
         public static List<Spatial.ISAMGeometry3D> ToSAM(this Brep brep, bool simplify = true)
         {
+            //Has to be common for whole method
+            double tolerance = Core.Tolerance.Distance;
+
+
             List<Brep> breps = new List<Brep>();
             List<BrepFace> brepFaces = new List<BrepFace>();
             foreach (BrepFace brepFace in brep.Faces)
             {
-                if (!brepFace.IsPlanar(Core.Tolerance.Distance))
+                if (!brepFace.IsPlanar(tolerance))
                     breps.Add(brepFace.Brep);
                 else
                     brepFaces.Add(brepFace);
@@ -46,16 +51,29 @@ namespace SAM.Geometry.Grasshopper
             if(breps != null && breps.Count > 0)
             {
                 Mesh mesh = new Mesh();
-                foreach(Brep brep_Temp in breps)
+                foreach (Brep brep_Temp in breps)
                 {
                     Mesh[] meshes = Mesh.CreateFromBrep(brep_Temp, AssemblyInfo.GetMeshingParameters());
                     mesh.Append(meshes);
                 }
                 Brep brep_Mesh = Brep.CreateFromMesh(mesh, true);
-                brep_Mesh.MergeCoplanarFaces(Core.Tolerance.MacroDistance);
+                brep_Mesh.MergeCoplanarFaces(tolerance);
+                
 
-                foreach(BrepFace brepFace in brep_Mesh.Faces)
+                foreach (BrepFace brepFace in brep_Mesh.Faces)
                     brepFaces.Add(brepFace);
+
+                //foreach (Brep brep_Temp in breps)
+                //{
+                //    Mesh[] meshes = Mesh.CreateFromBrep(brep_Temp, AssemblyInfo.GetMeshingParameters());
+                //    foreach(Mesh mesh in meshes)
+                //    {
+                //        Brep brep_Mesh = Brep.CreateFromMesh(mesh, true);
+
+                //        foreach (BrepFace brepFace in brep_Mesh.Faces)
+                //            brepFaces.Add(brepFace);
+                //    }
+                //}
             }
 
             List<Spatial.ISAMGeometry3D> result = new List<Spatial.ISAMGeometry3D>();

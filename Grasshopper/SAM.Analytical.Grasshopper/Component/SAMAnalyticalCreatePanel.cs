@@ -127,7 +127,7 @@ namespace SAM.Analytical.Grasshopper
             double minArea = Core.Tolerance.MacroDistance;
             dataAccess.GetData(4, ref minArea);
 
-            List<Panel> panels = Create.Panels(geometry3Ds, panelType, construction);
+            List<Panel> panels = Create.Panels(geometry3Ds, panelType, construction, minArea);
             if(panels == null || panels.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid geometry for panel");

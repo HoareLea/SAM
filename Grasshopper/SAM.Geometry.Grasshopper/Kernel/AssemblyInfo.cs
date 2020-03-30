@@ -73,9 +73,18 @@ namespace SAM.Geometry.Grasshopper
             {
                 meshingParameters = new MeshingParameters
                 {
-                    SimplePlanes = true,
-                    MinimumEdgeLength = 0.6,
-                    Tolerance = 0.2
+                    SimplePlanes = false,
+                    RefineGrid = true,
+                    GridMinCount = 16,
+                    GridMaxCount = 400,
+                    GridAspectRatio = 20,
+                    MaximumEdgeLength = 0,
+                    RefineAngle = 20,
+                    MinimumEdgeLength = 0,
+                    //SimplePlanes = true,
+                    //MinimumEdgeLength = 0.6,
+                    //Tolerance = 0.2
+                   
                 };
             }
 
