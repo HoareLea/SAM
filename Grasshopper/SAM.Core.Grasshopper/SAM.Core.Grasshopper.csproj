@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Classes\GooSAMObject.cs" />
     <Compile Include="Component\Explode.cs" />
+    <Compile Include="Component\Filter.cs" />
     <Compile Include="Component\ToJson.cs" />
     <Compile Include="Component\FromJson.cs" />
     <Compile Include="Component\SAMAbout.cs" />
