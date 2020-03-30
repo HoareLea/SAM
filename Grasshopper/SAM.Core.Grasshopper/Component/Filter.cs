@@ -67,7 +67,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            List<GH_ObjectWrapper> objectWrappers = null;
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
             if (!dataAccess.GetDataList(0, objectWrappers))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -117,13 +117,12 @@ namespace SAM.Core.Grasshopper
                 object value_Temp;
                 if (Query.TryGetValue(@object, name, out value_Temp))
                 {
-                    if (value.Equals(value_Temp))
+                    if (value == value_Temp || (value != null && value.Equals(value_Temp)))
                         result.Add(@object);
                 }
             }
 
-            dataAccess.SetDataList(0, objects);
-
+            dataAccess.SetDataList(0, result);
         }
     }
 }
