@@ -55,6 +55,9 @@ namespace SAM.Geometry.Planar
             if (vector2D != null)
                 point2D_End = point2D_Segment2D_End.GetMoved(vector2D);
 
+            if (point2D_End == null && polygon2D.On(point2D_Segment2D_End, tolerance))
+                point2D_End = point2D_Segment2D_End;
+
             if (point2D_Start == null && point2D_End == null)
                 return null;
 

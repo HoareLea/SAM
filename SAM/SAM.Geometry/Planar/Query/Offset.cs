@@ -45,7 +45,7 @@ namespace SAM.Geometry.Planar
                 Segment2D segment2D = segment2Ds[i];
 
                 Segment2D segment2D_Offset = segment2D.Offset(offsets[i], orientation);
-                segment2D_Offset = segment2D_Offset.Extend(polygon2D, tolerance);
+                segment2D_Offset = segment2D_Offset.ExtendOrTrim(polygon2D, tolerance);
 
                 if (segment2D_Offset != null && segment2D_Offset.GetLength() >= tolerance)
                     segment2Ds_Offset.Add(segment2D_Offset);

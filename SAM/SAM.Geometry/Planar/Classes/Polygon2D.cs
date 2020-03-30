@@ -80,6 +80,55 @@ namespace SAM.Geometry.Planar
             return points.ConvertAll(x => new Point2D(x));
         }
 
+        //Inserts new point on one of the edges (closest to point2D)
+        public Point2D Insert(Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        {
+            List<Segment2D> segment2Ds = GetSegments();
+            if (segment2Ds == null || segment2Ds.Count == 0)
+                return null;
+
+            int index = -1;
+            Point2D point2D_Closest = null;
+            double distance_Min = double.MaxValue;
+
+            for (int i = 0; i < segment2Ds.Count; i++)
+            {
+                Segment2D segment2D = segment2Ds[i];
+
+                Point2D point2D_Closest_Temp = segment2D.Closest(point2D);
+                if (point2D_Closest_Temp.AlmostEquals(segment2D[0], tolerance) || point2D_Closest_Temp.AlmostEquals(segment2D[1], tolerance))
+                    continue;
+
+                double distance = point2D.Distance(point2D_Closest_Temp);
+                if (distance < distance_Min)
+                {
+                    distance_Min = distance;
+                    point2D_Closest = point2D_Closest_Temp;
+                    index = i;
+                }
+            }
+
+            if (index == -1)
+                return null;
+
+            Segment2D segment2D_Temp = segment2Ds[index];
+            segment2Ds[index] = new Segment2D(segment2D_Temp[0], point2D_Closest);
+            segment2Ds.Insert(index + 1, new Segment2D(point2D_Closest, segment2D_Temp[1]));
+
+            points = segment2Ds.ConvertAll(x => x.Start);
+            return point2D_Closest;
+        }
+
+        public Polyline2D GetPolyline(int index_Start, int count)
+        {
+            return new Polyline2D(points.GetRange(index_Start, count), false);
+        }
+
+        public Polyline2D GetPolyline()
+        {
+            return new Polyline2D(points, true);
+        }
+
         public double Distance(ISegmentable2D segmentable2D)
         {
             return Query.Distance(this, segmentable2D);
@@ -144,153 +193,6 @@ namespace SAM.Geometry.Planar
             jObject.Add("Points", Core.Create.JArray(points));
             return jObject;
         }
-
-        //public List<Polygon2D> Offset(double offset, Orientation orientation)
-        //{
-        //    return Offset(new double[] { offset }, orientation);
-        //}
-
-        //public List<Polygon2D> Offset(IEnumerable<double> offsets, Orientation orientation, double tolerance = Core.Tolerance.Distance)
-        //{
-        //    if (points == null || points.Count < 3 || offsets == null)
-        //        return null;
-
-        //    int count = offsets.Count();
-
-        //    if (count == 0)
-        //        return new List<Polygon2D>() { new Polygon2D(this)};
-
-        //    List<Segment2D> segment2Ds = GetSegments();
-        //    if (segment2Ds == null || segment2Ds.Count() < 3)
-        //        return null;
-
-        //    segment2Ds.Insert(0, segment2Ds.Last());
-        //    segment2Ds.Add(segment2Ds[1]);
-
-        //    double offset = offsets.Last();
-
-        //    Dictionary<Segment2D, List<Polygon2D>> segment2Ds_Offset = new Dictionary<Segment2D, List<Polygon2D>>();
-        //    for (int i = 1; i < segment2Ds.Count - 1; i++)
-        //    {
-        //        if (i < count)
-        //            offset = offsets.ElementAt(i);
-
-        //        Segment2D segment2D_Previous = segment2Ds[i - 1];
-        //        Segment2D segment2D = segment2Ds[i];
-        //        Segment2D segment2D_Next = segment2Ds[i + 1];
-
-        //        Segment2D segment2D_Offset = segment2D.Offset(offset, orientation);
-
-        //        Vector2D Vector2D_Previous = Query.MidVector(segment2D_Previous, segment2D);
-        //        Vector2D Vector2D_Next = Query.MidVector(segment2D, segment2D_Next);
-
-        //        Segment2D segment2D_Vector_Previous = new Segment2D(segment2D_Previous.End, Vector2D_Previous);
-        //        Segment2D segment2D_Vector_Next = new Segment2D(segment2D_Next.Start, Vector2D_Next);
-
-        //        Point2D point2D_Intersection_Previous = segment2D_Offset.Intersection(segment2D_Vector_Previous, false, tolerance);
-        //        if (point2D_Intersection_Previous == null)
-        //            continue;
-
-        //        Point2D point2D_Intersection_Next = segment2D_Offset.Intersection(segment2D_Vector_Next, false, tolerance);
-        //        if (point2D_Intersection_Next == null)
-        //            continue;
-
-        //        Segment2D segment2D_Offset_New = new Segment2D(point2D_Intersection_Previous, point2D_Intersection_Next);
-
-        //        Point2D point2D_Intersection = segment2D_Vector_Previous.Intersection(segment2D_Vector_Next, true, tolerance);
-
-        //        List<Polygon2D> polygon2Ds = new List<Polygon2D>();
-        //        if (point2D_Intersection == null)
-        //        {
-        //            polygon2Ds.Add(new Polygon2D(new Point2D[] { segment2D.Start, segment2D.End, segment2D_Offset_New.Start, segment2D_Offset_New.End }));
-        //        }
-        //        else
-        //        {
-        //            polygon2Ds.Add(new Polygon2D(new Point2D[] { segment2D.Start, segment2D.End, point2D_Intersection }));
-        //            polygon2Ds.Add(new Polygon2D(new Point2D[] { segment2D_Offset_New.Start, segment2D_Offset_New.End, point2D_Intersection }));
-        //        }
-
-        //        segment2Ds_Offset[segment2D_Offset_New] = polygon2Ds;
-        //    }
-
-        //    List<Segment2D> segment2Ds_Split = Modify.Split(segment2Ds_Offset.Keys, tolerance);
-
-        //    List<Polygon2D> polygon2Ds_All = new List<Polygon2D>();
-        //    foreach(KeyValuePair<Segment2D, List<Polygon2D>> keyValuePair in segment2Ds_Offset)
-        //        polygon2Ds_All.AddRange(keyValuePair.Value);
-             
-        //    List<int> indexes = new List<int>();
-        //    for(int i=0; i < segment2Ds_Split.Count; i++)
-        //    {
-        //        Segment2D segment2D = segment2Ds_Split[i];
-
-        //        Point2D point2D_1 = segment2D[0];
-        //        Point2D point2D_2 = segment2D[1];
-
-        //        foreach (Polygon2D polygon2D in polygon2Ds_All)
-        //        {
-        //            List<Point2D> point2Ds_Intersections = polygon2D.Intersections(segment2D);
-        //            if(point2Ds_Intersections != null)
-        //            {
-        //                point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_1) < tolerance);
-        //                point2Ds_Intersections.RemoveAll(x => x.Distance(point2D_2) < tolerance);
-
-        //                if (point2Ds_Intersections.Count > 0)
-        //                {
-        //                    indexes.Add(i);
-        //                    break;
-        //                }
-
-        //            }
-                    
-        //            if(polygon2D.Inside(point2D_1) && !polygon2D.On(point2D_1))
-        //            {
-        //                indexes.Add(i);
-        //                break;
-        //            }
-
-        //            if (polygon2D.Inside(point2D_1) && !polygon2D.On(point2D_1))
-        //            {
-        //                indexes.Add(i);
-        //                break;
-        //            }
-        //        }
-        //    }
-
-        //    if(indexes.Count > 0)
-        //    {
-        //        indexes.Reverse();
-        //        indexes.ForEach(x => segment2Ds_Split.RemoveAt(x));
-        //    }
-
-        //    PointGraph2D pointGraph2D = new PointGraph2D(segment2Ds_Split);
-        //    return pointGraph2D.GetPolygon2Ds();
-        //}
-
-        //public List<Polygon2D> Offset(IEnumerable<double> offsets, bool inside)
-        //{
-        //    if (offsets == null || offsets.Count() == 0)
-        //        return null;
-            
-        //    Orientation orientation = GetOrientation();
-        //    if(!inside)
-        //    {
-        //        switch (orientation)
-        //        {
-        //            case Orientation.Clockwise:
-        //                orientation = Orientation.CounterClockwise;
-        //                break;
-        //            case Orientation.CounterClockwise:
-        //                orientation = Orientation.Clockwise;
-        //                break;
-        //        }
-        //    }
-
-        //    if (orientation == Orientation.Collinear || orientation == Orientation.Undefined)
-        //        return null;
-
-        //    return Offset(offsets, orientation);
-        //}
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
         {

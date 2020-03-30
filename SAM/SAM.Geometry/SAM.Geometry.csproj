@@ -79,6 +79,7 @@
     <Compile Include="Planar\Interfaces\ICurvable2D.cs" />
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
     <Compile Include="Planar\Modify\Draw.cs" />
+    <Compile Include="Planar\Modify\ExtendOrTrim.cs" />
     <Compile Include="Planar\Modify\Extend.cs" />
     <Compile Include="Planar\Modify\SimplifyByAngle.cs" />
     <Compile Include="Planar\Modify\OrientByEnds.cs" />
