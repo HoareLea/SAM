@@ -20,15 +20,15 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Get;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Get_Filterpng;
 
         private GH_OutputParamManager outputParamManager;
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public Filter()
-          : base("GetValue", "GetValue",
-              "Get Value of object property",
+          : base("GetValueFilter", "GetValueFilter",
+              "Get Value of object property and Filter by Name",
               "SAM", "Core")
         {
 
@@ -40,8 +40,8 @@ namespace SAM.Core.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_objects", "_objects", "Objects", GH_ParamAccess.list);
-            inputParamManager.AddTextParameter("_name", "name", "Name", GH_ParamAccess.item, "Name");
-            inputParamManager.AddGenericParameter("_value", "_value", "Value", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item, "Name");
+            inputParamManager.AddGenericParameter("_value", "_value", "Value to Filter elements", GH_ParamAccess.item);
         }
 
         /// <summary>

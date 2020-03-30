@@ -39,8 +39,8 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_object", "_object", "Object", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_name", "name", "Name", GH_ParamAccess.item, "Name");
+            inputParamManager.AddGenericParameter("_object", "_object", "SAM Object", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, "Name");
         }
 
         /// <summary>
