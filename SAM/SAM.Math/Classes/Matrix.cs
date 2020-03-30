@@ -213,7 +213,7 @@ namespace SAM.Math
             double C = a * d + a * f + d * f - b * b - c * c - e * e;
             double D = -(a * d * f + 2 * b * c * e - a * e * e - d * c * c - f * b * b);
 
-            return RealCubicRoots(A, B, C, D);
+            return RealCubicRoots(A, B, C, D, tolerance);
         }
 
         public bool FromJObject(JObject jObject)
@@ -246,11 +246,11 @@ namespace SAM.Math
 
 
         // Solve Ax^3 + Bx^2 + Cx + D = 0 following http://www.code-kings.com/2013/11/cubic-equation-roots-in-csharp-code.html
-        private static double[] RealCubicRoots(double A, double B, double C, double D)
+        private static double[] RealCubicRoots(double A, double B, double C, double D, double tolerance = Core.Tolerance.Distance)
         {
-            double f = (3 * C / A - B * B / (A * A)) / 3;
-            double g = (2 * System.Math.Pow(B, 3) / System.Math.Pow(A, 3) - (9 * B * C) / System.Math.Pow(A, 2) + 27 * D / A) / 27;
-            double h = System.Math.Pow(g, 2) * 0.25 + System.Math.Pow(f, 3) / 27;
+            double f = Core.Modify.Round((3 * C / A - B * B / (A * A)) / 3, tolerance);
+            double g = Core.Modify.Round((2 * System.Math.Pow(B, 3) / System.Math.Pow(A, 3) - (9 * B * C) / System.Math.Pow(A, 2) + 27 * D / A) / 27, tolerance);
+            double h = Core.Modify.Round(System.Math.Pow(g, 2) * 0.25 + System.Math.Pow(f, 3) / 27, tolerance);
 
             if (h <= 0)
             {
