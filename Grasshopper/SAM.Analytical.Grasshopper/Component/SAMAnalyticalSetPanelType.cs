@@ -69,7 +69,12 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            PanelType panelType = Query.PanelType(objectWrapper.Value);
+            object value = objectWrapper.Value;
+
+            if (value is GH_String)
+                value = ((GH_String)value).Value;
+
+            PanelType panelType = Query.PanelType(value);
  
 
             dataAccess.SetData(0, new GooPanel(new Panel(panel, panelType)));
