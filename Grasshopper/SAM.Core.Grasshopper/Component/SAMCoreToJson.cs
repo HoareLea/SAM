@@ -8,24 +8,25 @@ using SAM.Core.Grasshopper.Properties;
 
 namespace SAM.Core.Grasshopper
 {
-    public class FromJson : GH_Component
+    public class SAMCoreToJson : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("6d595ec1-d617-424c-92fa-6332250d94e1");
+        public override Guid ComponentGuid => new Guid("cf66796d-f08e-480b-9a1d-e6b6d500f7a9");
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_JSON;
 
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public FromJson()
-          : base("FormJson", "FromJson",
-              "Reads SAM Objects from Json",
+        public SAMCoreToJson()
+          : base("ToJson", "ToJson",
+              "Writes SAM objects to Json ",
               "SAM", "Core")
         {
 
@@ -36,8 +37,19 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_pathJSON", "_pathJSON", "JSON file path including extension .json", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
+            string path = null;
+
+            int index = -1;
+
+
+            index = inputParamManager.AddGenericParameter("_SAMObjects", "_SAMObjects", "any SAM Objects", GH_ParamAccess.list);
+            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+
+            index = inputParamManager.AddTextParameter("path_", "path_", "JSON file path including extension .json", GH_ParamAccess.item, path);
+            inputParamManager[index].Optional = true;
+
+            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run, set to True to export JSON to given path", GH_ParamAccess.item, false);
+
         }
 
         /// <summary>
@@ -45,7 +57,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("SAMObjects", "SAMObjects", "SAM Objects", GH_ParamAccess.list);
+            outputParamManager.AddTextParameter("Json", "Json", "Json", GH_ParamAccess.list);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
         }
 
@@ -56,7 +68,7 @@ namespace SAM.Core.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
-            if (!dataAccess.GetData<bool>(1, ref run))
+            if (!dataAccess.GetData<bool>(2, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(1, false);
@@ -65,35 +77,40 @@ namespace SAM.Core.Grasshopper
             if (!run)
                 return;
 
-            string pathOrJson = null;
-            if (!dataAccess.GetData<string>(0, ref pathOrJson))
+            string path = null;
+            dataAccess.GetData<string>(1, ref path);
+
+            List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
+
+            if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(1, false);
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(pathOrJson))
+            List<IJSAMObject> jSAMObjects = new List<IJSAMObject>();
+            foreach (GH_ObjectWrapper gH_ObjectWrapper in objectWrapperList)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
-                return;
+                object @object = null;
+
+                if (gH_ObjectWrapper.Value is IGooSAMObject)
+                    @object = ((IGooSAMObject)gH_ObjectWrapper.Value).GetSAMObject();
+                else
+                    @object = gH_ObjectWrapper.Value;
+
+                if (@object is IJSAMObject)
+                    jSAMObjects.Add((IJSAMObject)@object);
             }
 
-            List<IJSAMObject> jSAMObjects = Convert.ToSAM(pathOrJson);
-            if(jSAMObjects == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
-                return;
-            }
+            string json = Convert.ToJson(jSAMObjects);
 
-            if (jSAMObjects.Count == 1)
-                dataAccess.SetData(0, jSAMObjects[0]);
-            else
-                dataAccess.SetDataList(0, jSAMObjects);
+            if (!string.IsNullOrWhiteSpace(path))
+                System.IO.File.WriteAllText(path, json);
 
+            dataAccess.SetData(0, json);
             dataAccess.SetData(1, true);
+
         }
 
     }

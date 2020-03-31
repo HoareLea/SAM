@@ -8,7 +8,7 @@ using SAM.Core.Grasshopper.Properties;
 
 namespace SAM.Core.Grasshopper
 {
-    public class Explode : GH_Component
+    public class SAMCoreExplode : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -24,7 +24,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public Explode()
+        public SAMCoreExplode()
           : base("Explode", "Explode",
               "Explode any SAM Object NOT IMPLEMENTED YET!",
               "SAM", "Core")

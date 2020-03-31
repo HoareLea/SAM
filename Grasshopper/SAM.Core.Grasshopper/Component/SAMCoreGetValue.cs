@@ -10,25 +10,25 @@ using SAM.Core.Grasshopper.Properties;
 
 namespace SAM.Core.Grasshopper
 {
-    public class Filter : GH_Component
+    public class SAMCoreGetValue : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("215ed8be-b96c-4fc7-a806-36fddccbb735");
+        public override Guid ComponentGuid => new Guid("f111f564-06a8-48bb-8db2-6cf50d07a3f7");
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Get_Filterpng;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Get;
 
         private GH_OutputParamManager outputParamManager;
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public Filter()
-          : base("GetValueFilter", "GetValueFilter",
-              "Get Value of object property and Filter by Name",
+        public SAMCoreGetValue()
+          : base("GetValue", "GetValue",
+              "Get Value of object property",
               "SAM", "Core")
         {
 
@@ -39,9 +39,8 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_objects", "_objects", "Objects", GH_ParamAccess.list);
-            inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item, "Name");
-            inputParamManager.AddGenericParameter("_value", "_value", "Value to Filter elements", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_object", "_object", "SAM Object", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, "Name");
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace SAM.Core.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             this.outputParamManager = outputParamManager;
-            outputParamManager.AddGenericParameter("Objects", "Objects", "Objects", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Value", "Value", "Property Value", GH_ParamAccess.item);
             //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
         }
 
@@ -67,62 +66,50 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            if (!dataAccess.GetDataList(0, objectWrappers))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            List<object> objects = new List<object>();
-            foreach(GH_ObjectWrapper gH_ObjectWrapper in objectWrappers)
-            {
-                object @object = gH_ObjectWrapper.Value;
-
-                if (@object is IGH_Goo)
-                {
-                    try
-                    {
-                        @object = (@object as dynamic).Value;
-                    }
-                    catch (Exception exception)
-                    {
-                        @object = null;
-                    }
-                }
-
-                if (@object != null)
-                    objects.Add(@object);
-            }
-
-            if (@objects == null || @objects.Count == 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             GH_ObjectWrapper objectWrapper = null;
-            if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper == null)
+            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            object value = objectWrapper.Value;
+            object @object = objectWrapper.Value;
 
-
-            List<object> result = new List<object>();
-            foreach(object @object in objects)
+            if (@object is IGH_Goo)
             {
-                object value_Temp;
-                if (Query.TryGetValue(@object, name, out value_Temp))
+                try
                 {
-                    if (value == value_Temp || (value != null && value.Equals(value_Temp)))
-                        result.Add(@object);
+                    @object = (@object as dynamic).Value;
+                }
+                catch (Exception exception)
+                {
+                    @object = null;
                 }
             }
 
-            dataAccess.SetDataList(0, result);
+            if (@object == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            object value = null;
+            if(!Query.TryGetValue(@object, name, out value))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Property or Method not found");
+                return;
+            }
+
+            if (value is SAMObject)
+            {
+                value = new GooSAMObject<SAMObject>((SAMObject)value);
+            }
+
+            if (value is IEnumerable && !(value is string))
+                dataAccess.SetDataList(0, (IEnumerable)value);
+            else
+                dataAccess.SetData(0, value);
+
         }
     }
 }

@@ -1,67 +1,68 @@
 ﻿using System;
+using System.Windows.Forms;
+
 using GH_IO.Serialization;
 using Grasshopper.Kernel;
-using System.Windows.Forms;
 
 using SAM.Core.Grasshopper.Properties;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMAbout : GH_Component
+    public class SAMCoreConvertType : GH_Component
     {
+        
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("266c727d-0d2c-4592-a483-0761c03fcdb9");
+        public override Guid ComponentGuid => new Guid("3ef0de2e-79dc-4e13-a23d-45ba2b41ce2f");
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.HL_Logo24;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-
-        private AboutInfoType aboutInfoType = AboutInfoType.HoareLea;
+        private ConvertType convertType = ConvertType.Undefined;
 
         /// <summary>
-        /// AboutInfo
+        /// Panel Type
         /// </summary>
-        public SAMAbout()
-          : base("SAM.About", "SAM.About",
-              "Right click to find out more about our toolkit",
-              "SAM", "About")
+        public SAMCoreConvertType()
+          : base("SAMCore.ConvertType", "SAMCore.ConvertType",
+              "Select Convert Type",
+              "SAM", "Core")
         {
 
         }
 
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetInt32("About Info", (int)aboutInfoType);
+            writer.SetInt32("ConvertType", (int)convertType);
             return base.Write(writer);
         }
 
         public override bool Read(GH_IReader reader)
         {
             int aIndex = -1;
-            if (reader.TryGetInt32("About Info", ref aIndex))
-                aboutInfoType = (AboutInfoType)aIndex;
+            if (reader.TryGetInt32("ConvertType", ref aIndex))
+                convertType = (ConvertType)aIndex;
             
             return base.Read(reader);
         }
 
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            foreach (AboutInfoType aboutInfo in Enum.GetValues(typeof(AboutInfoType)))
+            foreach (ConvertType panelType in Enum.GetValues(typeof(ConvertType)))
                 //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
                 //base.AppendAdditionalComponentMenuItems(menu);
-                GH_Component.Menu_AppendItem(menu, aboutInfo.ToString(), Menu_PanelTypeChanged, true, aboutInfo == this.aboutInfoType).Tag = aboutInfo;
+                GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged, true, panelType == this.convertType).Tag = panelType;
         }
 
         private void Menu_PanelTypeChanged(object sender, EventArgs e)
         {
-            if (sender is ToolStripMenuItem item && item.Tag is AboutInfoType)
+            if (sender is ToolStripMenuItem item && item.Tag is ConvertType)
             {
                 //Do something with panelType
-                this.aboutInfoType = (AboutInfoType)item.Tag;
+                this.convertType = (ConvertType)item.Tag;
                 ExpireSolution(true);
             }
         }
@@ -79,7 +80,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddTextParameter("AboutInfo", "AboutInfo", "About Info", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("ConvertType", "ConvertType", "SAM Core ConvertType", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -88,7 +89,9 @@ namespace SAM.Core.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, Query.AboutInfoTypeText(aboutInfoType));
+            dataAccess.SetData(0, convertType);
         }
+
+
     }
 }
