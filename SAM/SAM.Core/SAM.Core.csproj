@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Enums\ConvertType.cs" />
     <Compile Include="Manager\ActiveManager.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Manager\Manager.cs" />
