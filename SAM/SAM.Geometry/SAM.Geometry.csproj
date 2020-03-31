@@ -91,6 +91,7 @@
     <Compile Include="Planar\Modify\SortByDistance.cs" />
     <Compile Include="Planar\Modify\Reverse.cs" />
     <Compile Include="Planar\Query\AlmostSimilar.cs" />
+    <Compile Include="Planar\Query\ClosestSegment2Ds.cs" />
     <Compile Include="Planar\Query\MinDistance.cs" />
     <Compile Include="Planar\Query\Offset.cs" />
     <Compile Include="Planar\Query\ClosestDictionary.cs" />
@@ -110,7 +111,7 @@
     <Compile Include="Planar\Query\IsValid.cs" />
     <Compile Include="Planar\Query\Point2D.cs" />
     <Compile Include="Planar\Query\Parameter.cs" />
-    <Compile Include="Planar\Query\IndexesOf.cs" />
+    <Compile Include="Planar\Query\IndexesOfClosest.cs" />
     <Compile Include="Planar\Query\Intersection.cs" />
     <Compile Include="Planar\Query\IntersectionSegment2Ds.cs" />
     <Compile Include="Planar\Query\Union.cs" />
