@@ -203,7 +203,7 @@ namespace SAM.Core
             return result;
         }
 
-        public double ToInt(string name)
+        public int ToInt(string name)
         {
             int result;
             if (!Query.TryGetValue(dictionary, name, out result))
