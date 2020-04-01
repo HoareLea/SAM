@@ -7,13 +7,12 @@ assignees: ZiolkowskiJakub, michaldengusiak
 
 ---
 
-**Describe the bug**+
+**Describe the bug**
 <!-- A clear and concise description of what the bug is. -->
 
 
-**To Reproduce**
-<!-- Steps to reproduce the behavior: -->
-<!-- Click on..Scroll down to..See error  -->
+**Steps to recreate the bug**
+<!-- Steps to duplicate the behavior: -->
 Versions: Revit , Rhino
 
 **Screenshots**
