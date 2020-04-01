@@ -6,7 +6,7 @@ labels: Question
 
 ---
 
-**As question if this is not fall under other category**
+**Question**
 <!-- A clear and concise description.-->
 
 **Test file**
