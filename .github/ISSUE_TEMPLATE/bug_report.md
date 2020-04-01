@@ -2,7 +2,7 @@
 name: Bug report
 about: Report bug, error or unexpected behavior.
 title: ''
-labels: Issue Type - bug
+labels: bug
 assignees: ZiolkowskiJakub, michaldengusiak
 
 ---

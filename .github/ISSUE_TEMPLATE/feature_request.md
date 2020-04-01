@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea for this project, feature
 title: ''
-labels: Issue Type - feature request
+labels: feature request
 assignees: ZiolkowskiJakub, michaldengusiak
 
 ---

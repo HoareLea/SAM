@@ -2,7 +2,6 @@
 name: Test Script
 about: Test Script
 title: ''
-labels: Test Script
 
 ---
 

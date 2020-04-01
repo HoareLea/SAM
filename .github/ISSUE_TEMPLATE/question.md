@@ -2,7 +2,7 @@
 name: Question
 about: Ask Question if this is not Bug, Feature request or test file. 
 title: ''
-labels: Question
+labels: question
 
 ---
 
