@@ -1,0 +1,28 @@
+# Lines starting with '#' are comments.
+# Each line is a file pattern followed by one or more owners.
+# https://github.blog/2017-07-06-introducing-code-owners/
+
+# SAM REPO CODEOWNERS
+
+# default global
+# These owners will be the default owners for everything in the repo
+
+* @michaldengusiak @ZiolkowskiJakub
+
+
+# project owners 
+# Order is important. The last matching pattern has the most precedence.
+# So if a pull request only touches javascript files, only these owners
+# will be requested to review.
+
+/SAM @michaldengusiak @ZiolkowskiJakub
+/SAM_BHoM @michaldengusiak @ZiolkowskiJakub
+/SAM_Excel @michaldengusiak @ZiolkowskiJakub
+/SAM_LadybugTools @michaldengusiak @ZiolkowskiJakub
+/SAM_Revit @michaldengusiak @ZiolkowskiJakub
+/SAM_Tas @michaldengusiak @ZiolkowskiJakub
+/SAM_Topologic @michaldengusiak @ZiolkowskiJakub
+/SAM_UI @michaldengusiak @ZiolkowskiJakub
+
+
+# You can also use email addresses if you prefer.
