@@ -50,7 +50,8 @@ namespace SAM.Core.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             this.outputParamManager = outputParamManager;
-            outputParamManager.AddGenericParameter("Objects", "Objects", "Objects", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("In", "In", "Objects In", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("Out", "Out", "Objects Out", GH_ParamAccess.list);
             //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
         }
 
@@ -111,18 +112,25 @@ namespace SAM.Core.Grasshopper
             object value = objectWrapper.Value;
 
 
-            List<object> result = new List<object>();
-            foreach(object @object in objects)
+            List<object> result_in = new List<object>();
+            List<object> result_out = new List<object>();
+            foreach (object @object in objects)
             {
                 object value_Temp;
                 if (Query.TryGetValue(@object, name, out value_Temp))
                 {
                     if (value == value_Temp || (value != null && value.Equals(value_Temp)))
-                        result.Add(@object);
+                    {
+                        result_in.Add(@object);
+                        continue;
+                    }
                 }
+
+                result_out.Add(@object);
             }
 
-            dataAccess.SetDataList(0, result);
+            dataAccess.SetDataList(0, result_in);
+            dataAccess.SetDataList(1, result_out);
         }
     }
 }
