@@ -80,6 +80,7 @@
     <Compile Include="Classes\Base\SAMType.cs" />
     <Compile Include="Query\AboutInfoTypeText.cs" />
     <Compile Include="Query\Dictionary.cs" />
+    <Compile Include="Query\IsNumeric.cs" />
     <Compile Include="Query\ParameterSet.cs" />
     <Compile Include="Query\JArray.cs" />
     <Compile Include="Query\Guid.cs" />

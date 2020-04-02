@@ -109,21 +109,57 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
+            object test = null;
+            dataAccess.GetData(2, ref test);
+
             object value = objectWrapper.Value;
+            if (value is IGH_Goo)
+                value = (objectWrapper.Value as dynamic).Value;
 
 
             List<object> result_in = new List<object>();
             List<object> result_out = new List<object>();
             foreach (object @object in objects)
-            {
+            {                
                 object value_Temp;
                 if (Query.TryGetValue(@object, name, out value_Temp))
                 {
-                    if (value == value_Temp || (value != null && value.Equals(value_Temp)))
+                    if (value == null && value_Temp == null)
                     {
                         result_in.Add(@object);
                         continue;
                     }
+
+                    if(value == null || value_Temp == null)
+                    {
+                        result_out.Add(@object);
+                        continue;
+                    }
+
+                    if(value.GetType().IsPrimitive)
+                    {
+                        if(value.IsNumeric() && value_Temp.IsNumeric())
+                        {
+                            double value_1 = System.Convert.ToDouble(value);
+                            double value_2 = System.Convert.ToDouble(value_Temp);
+                            if(value_1.Equals(value_2))
+                            {
+                                result_in.Add(@object);
+                                continue;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (value == value_Temp || (value != null && value.Equals(value_Temp)))
+                        {
+                            result_in.Add(@object);
+                            continue;
+                        }
+                    }
+
+
+
                 }
 
                 result_out.Add(@object);
