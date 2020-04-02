@@ -31,6 +31,7 @@ namespace SAM.Geometry.Planar
                 return Offset_Outside(polygon2D, offsets_Temp, simplify, orient, tolerance);
         }
 
+        
         private static List<Polygon2D> Offset_Inside(this Polygon2D polygon2D, List<double> offsets, bool simplify = true, bool orient = true, double tolerance = Core.Tolerance.Distance)
         {
             Orientation orientation = polygon2D.GetOrientation();

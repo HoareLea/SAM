@@ -760,6 +760,82 @@ namespace SAM.Geometry.Planar
             return new Polyline2D(GetPoint2Ds(loop));
         }
 
+        public Polyline2D GetPolyline2D(Point2D point2D_1, Point2D point2D_2)
+        {
+            throw new NotImplementedException();
+            
+            if (point2D_1 == null || point2D_2 == null)
+                return null;
+            
+            List<PointGraph2D> pointGraph2Ds = Split();
+            if (pointGraph2Ds == null || pointGraph2Ds.Count == 0)
+                return null;
+
+            PointGraph2D pointGraph2D = null;
+            int index_1 = -1;
+            int index_2 = -2;
+
+            foreach (PointGraph2D pointGraph2D_Temp in pointGraph2Ds)
+            {
+                index_1 = pointGraph2D_Temp.IndexOf(point2D_1);
+                if (index_1 == -1)
+                    continue;
+
+                index_2 = pointGraph2D_Temp.IndexOf(point2D_2);
+                if (index_2 == -1)
+                    continue;
+
+                if (!IsConnected(index_1) || !IsConnected(index_2))
+                    continue;
+
+                pointGraph2D = pointGraph2D_Temp;
+                break;
+            }
+
+            if (pointGraph2D == null)
+                return null;
+
+            bool @continue = true;
+            while(@continue)
+            {
+                List<int> connections = pointGraph2D.Connections(index_1);
+                if (connections == null || connections.Count == 0)
+                    break;
+
+                List<int> loop = pointGraph2D.GetLoop(index_1, connections[0]);
+                if (loop == null || loop.Count == 0)
+                    break;
+
+                List<int> loop_Temp = Trim(loop);
+                if (loop_Temp == null || loop_Temp.Count == 0)
+                    break;
+
+                List<int> indexes_ToRemove = new List<int>();
+                if(!loop_Temp.Contains(index_1) && !loop_Temp.Contains(index_2))
+                {
+                    foreach(int index in loop_Temp)
+                    {
+                        //pointGraph2D
+                    }
+                    
+                    indexes_ToRemove.AddRange(loop_Temp);
+                }
+                else
+                {
+
+                }
+
+                if(indexes_ToRemove.Count > 0)
+                {
+                    pointGraph2D.DisconnectAll();
+                }
+
+
+            }
+            return null;
+
+        }
+
         public List<Polyline2D> GetPolyline2Ds()
         {
             List<PointGraph2D> pointGraph2Ds = Split();
@@ -990,14 +1066,14 @@ namespace SAM.Geometry.Planar
             result.Add(index_Temp_1);
             result.Add(index_Temp_2);
 
-            bool aContinue = true;
+            bool @continue = true;
 
-            while (aContinue)
+            while (@continue)
             {
                 indexes = GetSortedConnections(index_Temp_1, index_Temp_2, orientation);
                 if (indexes == null || indexes.Count == 0)
                 {
-                    aContinue = false;
+                    @continue = false;
                     continue;
                 }
 
@@ -1006,7 +1082,7 @@ namespace SAM.Geometry.Planar
                 if (result.Contains(index_Temp_3))
                 {
                     result.Add(index_Temp_3);
-                    aContinue = false;
+                    @continue = false;
                     continue;
                 }
 

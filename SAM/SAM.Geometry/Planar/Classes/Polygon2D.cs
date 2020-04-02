@@ -96,9 +96,6 @@ namespace SAM.Geometry.Planar
                 Segment2D segment2D = segment2Ds[i];
 
                 Point2D point2D_Closest_Temp = segment2D.Closest(point2D);
-                if (point2D_Closest_Temp.AlmostEquals(segment2D[0], tolerance) || point2D_Closest_Temp.AlmostEquals(segment2D[1], tolerance))
-                    continue;
-
                 double distance = point2D.Distance(point2D_Closest_Temp);
                 if (distance < distance_Min)
                 {
@@ -112,6 +109,9 @@ namespace SAM.Geometry.Planar
                 return null;
 
             Segment2D segment2D_Temp = segment2Ds[index];
+            if (point2D_Closest.AlmostEquals(segment2D_Temp[0], tolerance) || point2D_Closest.AlmostEquals(segment2D_Temp[1], tolerance))
+                return point2D_Closest;
+
             segment2Ds[index] = new Segment2D(segment2D_Temp[0], point2D_Closest);
             segment2Ds.Insert(index + 1, new Segment2D(point2D_Closest, segment2D_Temp[1]));
 

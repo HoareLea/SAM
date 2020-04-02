@@ -99,6 +99,7 @@
     <Compile Include="Planar\Query\Orientation.cs" />
     <Compile Include="Planar\Query\Bounce.cs" />
     <Compile Include="Planar\Query\IntersectionDictionary.cs" />
+    <Compile Include="Planar\Query\TraceDataFirst.cs" />
     <Compile Include="Planar\Query\TraceFirst.cs" />
     <Compile Include="Planar\Query\TraceData.cs" />
     <Compile Include="Planar\Query\Trace.cs" />

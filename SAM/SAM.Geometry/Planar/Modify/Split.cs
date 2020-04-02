@@ -25,7 +25,7 @@ namespace SAM.Geometry.Planar
             for (int i = 0; i < aCount - 1; i++)
             {
                 Segment2D segment2D_1 = segment2Ds.ElementAt(i);
-                for (int j = 1; j < aCount; j++)
+                for (int j = i + 1; j < aCount; j++)
                 {
                     Segment2D segment2D_2 = segment2Ds.ElementAt(j);
 

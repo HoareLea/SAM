@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -11,11 +9,7 @@ namespace SAM.Geometry.Planar
             if (point2D == null || vector2D == null || segmentable2Ds == null)
                 return null;
 
-            List<Tuple<Point2D, Segment2D, Vector2D>> tuples = TraceData(point2D, vector2D, segmentable2Ds, 0);
-            if (tuples == null || tuples.Count == 0)
-                return null;
-
-            return tuples.First()?.Item3;
+            return TraceDataFirst(point2D, vector2D, segmentable2Ds)?.Item3;
         }
 
         public static Vector2D TraceFirst(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D)
