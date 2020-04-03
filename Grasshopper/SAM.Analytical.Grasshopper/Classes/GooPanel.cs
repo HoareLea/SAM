@@ -123,6 +123,7 @@ namespace SAM.Analytical.Grasshopper
             getObject.SubObjectSelect = true;
             getObject.DeselectAllBeforePostSelect = false;
             getObject.OneByOnePostSelect = true;
+            getObject.Get();
 
             if (getObject.CommandResult() != Result.Success)
                 return GH_GetterResult.cancel;

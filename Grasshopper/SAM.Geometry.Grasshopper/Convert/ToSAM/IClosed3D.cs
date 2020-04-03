@@ -15,7 +15,16 @@ namespace SAM.Geometry.Grasshopper
 
             if (brepLoop.Face.IsPlanar(Core.Tolerance.Distance))
             {
-                return new Spatial.Face3D(brepLoop.To3dCurve().ToSAM(simplify) as Spatial.IClosedPlanar3D);
+                Spatial.ISAMGeometry3D sAMGeometry3D = brepLoop.To3dCurve().ToSAM(simplify);
+                if (sAMGeometry3D is Spatial.IClosedPlanar3D)
+                    return new Spatial.Face3D(sAMGeometry3D as Spatial.IClosedPlanar3D);
+
+                if(sAMGeometry3D is Spatial.ICurvable3D)
+                {
+                    List<Spatial.ICurve3D> curves = ((Spatial.ICurvable3D)sAMGeometry3D).GetCurves();
+                    if(curves.TrueForAll(x => x is Spatial.Segment3D))
+                        return new Spatial.Face3D(new Spatial.Polygon3D(curves.ConvertAll(x => x.GetStart())));
+                }
             }
             else
             {
