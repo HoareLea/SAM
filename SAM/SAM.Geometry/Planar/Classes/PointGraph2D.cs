@@ -729,10 +729,14 @@ namespace SAM.Geometry.Planar
                         continue;
 
                     double area = polygon2D_Temp.GetBoundingBox().GetArea();
-                    if(area > area_Max)
+                    if(area >= area_Max)
                     {
-                        polygon2D = polygon2D_Temp;
-                        area_Max = area;
+                        area = polygon2D_Temp.GetArea();
+                        if (area > area_Max)
+                        {
+                            polygon2D = polygon2D_Temp;
+                            area_Max = area;
+                        }
                     }
                 }
 

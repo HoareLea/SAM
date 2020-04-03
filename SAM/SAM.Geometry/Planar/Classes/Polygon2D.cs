@@ -136,7 +136,8 @@ namespace SAM.Geometry.Planar
 
         public bool Inside(Point2D point2D)
         {
-            return Point2D.Inside(points, point2D);
+            //TODO: Safe to change for Inside
+            return Point2D.Inside_2(points, point2D);
         }
 
         public bool Inside(IClosed2D closed2D)

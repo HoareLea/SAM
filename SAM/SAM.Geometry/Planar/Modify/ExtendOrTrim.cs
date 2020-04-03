@@ -69,7 +69,7 @@ namespace SAM.Geometry.Planar
             for(int i=0; i < point2Ds.Count - 1; i++)
             {
                 Point2D point2D_Mid = point2Ds[i].Mid(point2Ds[i + 1]);
-                if (polygon2D.Inside(point2D_Mid))
+                if (polygon2D.Inside(point2D_Mid) || polygon2D.On(point2D_Mid))
                     break;
 
                 index = i;
@@ -87,7 +87,7 @@ namespace SAM.Geometry.Planar
             for (int i = 0; i < point2Ds.Count - 1; i++)
             {
                 Point2D point2D_Mid = point2Ds[i].Mid(point2Ds[i + 1]);
-                if (polygon2D.Inside(point2D_Mid))
+                if (polygon2D.Inside(point2D_Mid) || polygon2D.On(point2D_Mid))
                     break;
 
                 index = i;

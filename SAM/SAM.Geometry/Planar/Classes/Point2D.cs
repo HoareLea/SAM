@@ -526,6 +526,31 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public static bool Inside_2(IEnumerable<Point2D> point2Ds, Point2D point2D)
+        {
+            if (point2Ds == null || point2Ds.Count() < 3)
+                return false;
+
+            bool result = false;
+            Point2D point2D_1 = point2Ds.Last();
+            foreach (Point2D point2D_2 in point2Ds)
+            {
+                if ((point2D_2.X == point2D.X) && (point2D_2.Y == point2D.Y))
+                    return true;
+
+                if ((point2D_2.Y == point2D_1.Y) && (point2D.Y == point2D_1.Y) && (point2D_1.X <= point2D.X) && (point2D.X <= point2D_2.X))
+                    return true;
+
+                if ((point2D_2.Y < point2D.Y) && (point2D_1.Y >= point2D.Y) || (point2D_1.Y < point2D.Y) && (point2D_2.Y >= point2D.Y))
+                {
+                    if (point2D_2.X + (point2D.Y - point2D_2.Y) / (point2D_1.Y - point2D_2.Y) * (point2D_1.X - point2D_2.X) <= point2D.X)
+                        result = !result;
+                }
+                point2D_1 = point2D_2;
+            }
+            return result;
+        }
+
         public static void Scale(List<Point2D> point2Ds, Point2D point2D, double factor)
         {
             if (point2Ds == null)

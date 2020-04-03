@@ -54,6 +54,8 @@ namespace SAM.Geometry.Planar
 
             segment2Ds_Offset = Modify.Split(segment2Ds_Offset, tolerance);
 
+            segment2Ds_Offset.RemoveAll(x => !polygon2D.Inside(x.Mid()) && !polygon2D.On(x.Mid()));
+
             for (int i = 0; i < segment2Ds.Count; i++)
             {
                 Segment2D segment2D = segment2Ds[i];
@@ -69,11 +71,27 @@ namespace SAM.Geometry.Planar
             {
                 Polygon2D polygon2D_Temp = polygon2Ds_Temp[i];
 
-                List<Segment2D> segment2Ds_Temp = Query.IntersectionSegment2Ds(polygon2D, polygon2Ds_Temp, false, tolerance);
-                if (segment2Ds_Temp != null && segment2Ds_Temp.Count > 0)
+                List<Segment2D> segment2Ds_Temp = Query.IntersectionSegment2Ds(polygon2D, polygon2D_Temp, false, tolerance);
+                if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
+                {
+                    polygon2Ds.Add(polygon2D_Temp);
                     continue;
+                }
 
-                polygon2Ds.Add(polygon2D_Temp);
+                bool remove = false;
+                foreach(Segment2D Segment2Ds in segment2Ds_Temp)
+                {
+                    Point2D point2D = Segment2Ds.Mid();
+                    int index = segment2Ds.FindIndex(x => x.On(point2D));
+                    if(index == -1 || offsets[index] != 0)
+                    {
+                        remove = true;
+                        break;
+                    }
+                }
+
+                if(!remove)
+                    polygon2Ds.Add(polygon2D_Temp);
             }
 
             polygon2Ds = new PointGraph2D(polygon2Ds, false, tolerance).GetPolygon2Ds_External();
