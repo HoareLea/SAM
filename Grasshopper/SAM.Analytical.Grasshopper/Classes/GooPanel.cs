@@ -9,7 +9,9 @@ using Grasshopper.Kernel.Types;
 
 using SAM.Core.Grasshopper;
 using SAM.Analytical.Grasshopper.Properties;
-
+using Rhino.Commands;
+using Rhino.Input;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -113,7 +115,34 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Singular(ref GooPanel value)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+
+            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
+            getObject.SetCommandPrompt("Pick Surface to create panel");
+            getObject.GeometryFilter = ObjectType.Surface;
+            getObject.SubObjectSelect = true;
+            getObject.DeselectAllBeforePostSelect = false;
+            getObject.OneByOnePostSelect = true;
+
+            if (getObject.CommandResult() != Result.Success)
+                return GH_GetterResult.cancel;
+
+            ObjRef objRef = getObject.Object(0);
+
+            RhinoObject rhinoObject = objRef.Object();
+            if (rhinoObject == null)
+                return GH_GetterResult.cancel;
+
+            Surface surface = objRef.Surface();
+            if (surface == null)
+                return GH_GetterResult.cancel;
+
+            List<Panel> panels = Create.Panels(Geometry.Grasshopper.Convert.ToSAM(surface), PanelType.WallExternal, Query.Construction(PanelType.WallExternal), Core.Tolerance.MacroDistance);
+            if (panels == null || panels.Count == 0)
+                return GH_GetterResult.cancel;
+
+            value = new GooPanel(panels.First());
+            return GH_GetterResult.success;
         }
 
         public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
