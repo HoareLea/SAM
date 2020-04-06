@@ -13,7 +13,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("cf66796d-f08e-480b-9a1d-e6b6d500f7a9");
+        public override Guid ComponentGuid => new Guid("2746ba21-b9ba-4b8b-9dc2-5f0f345170f1");
 
         /// <summary>
         /// Provides an Icon for the component.
