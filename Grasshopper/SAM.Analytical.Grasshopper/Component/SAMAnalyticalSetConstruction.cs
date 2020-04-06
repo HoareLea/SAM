@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooConstructionParam(), "Construction", "Construction", "SAM Analytical Construction", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace SAM.Analytical.Grasshopper
                     break;
                 }
 
-                if(name_destination == null)
+                if(string.IsNullOrWhiteSpace(name_destination))
                 {
                     //result.Add(construction);
                     continue;

@@ -62,6 +62,9 @@ namespace SAM.Core.Grasshopper
 
         public override string ToString()
         {
+            if (Value == null)
+                return null;
+            
             string value = typeof(T).FullName;
 
             if (!string.IsNullOrWhiteSpace(Value.Name))
