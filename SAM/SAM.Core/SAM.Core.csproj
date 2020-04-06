@@ -47,6 +47,14 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Classes\DelimitedFile\DelimitedFileReader.cs" />
+    <Compile Include="Classes\DelimitedFile\DelimitedFileRow.cs" />
+    <Compile Include="Classes\DelimitedFile\DelimitedFileTable.cs" />
+    <Compile Include="Classes\DelimitedFile\DelimitedFileWriter.cs" />
+    <Compile Include="Convert\ToCsv\ToCsv.cs" />
+    <Compile Include="Enums\DelimitedFileType.cs" />
+    <Compile Include="Interfaces\DelimitedFile\IDelimitedFileReader.cs" />
+    <Compile Include="Interfaces\DelimitedFile\IDelimitedFileWriter.cs" />
     <Compile Include="Manager\ActiveManager.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Manager\Manager.cs" />
@@ -68,9 +76,9 @@
     <Compile Include="Create\JArray.cs" />
     <Compile Include="Create\ParameterSets.cs" />
     <Compile Include="Enums\AboutInfoType.cs" />
-    <Compile Include="Interfaces\IJSAMObject.cs" />
-    <Compile Include="Interfaces\ISAMObject.cs" />
-    <Compile Include="Interfaces\ISAMRelation.cs" />
+    <Compile Include="Interfaces\Base\IJSAMObject.cs" />
+    <Compile Include="Interfaces\Base\ISAMObject.cs" />
+    <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\Round.cs" />
     <Compile Include="Modify\Reorder.cs" />
     <Compile Include="Modify\Add.cs" />
@@ -78,6 +86,7 @@
     <Compile Include="Classes\Base\SAMInstance.cs" />
     <Compile Include="Classes\Base\SAMObject.cs" />
     <Compile Include="Classes\Base\SAMType.cs" />
+    <Compile Include="Query\Separator.cs" />
     <Compile Include="Query\AboutInfoTypeText.cs" />
     <Compile Include="Query\Dictionary.cs" />
     <Compile Include="Query\IsNumeric.cs" />

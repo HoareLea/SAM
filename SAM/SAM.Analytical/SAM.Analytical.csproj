@@ -61,6 +61,7 @@
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Manager\ActiveSettings.cs" />
     <Compile Include="Modify\SnapByOffset.cs" />
+    <Compile Include="Modify\Duplicate.cs" />
     <Compile Include="Modify\SnapByPoints.cs" />
     <Compile Include="Query\ApertureConstruction.cs" />
     <Compile Include="Query\ApertureConstructionName.cs" />

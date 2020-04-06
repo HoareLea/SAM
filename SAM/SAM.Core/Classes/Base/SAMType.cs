@@ -25,6 +25,12 @@ namespace SAM.Core
 
         }
 
+        public SAMType(SAMType sAMType, string name)
+            : base(name, Guid.NewGuid(), sAMType)
+        {
+
+        }
+
         public SAMType(JObject jObject)
         {
             FromJObject(jObject);

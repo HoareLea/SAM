@@ -71,7 +71,77 @@ namespace SAM.Geometry.Planar
                 return polygon2D.GetPolyline();
             }
 
-            throw new System.NotImplementedException();
+            List<Segment2D> segment2Ds = polyline2D.GetSegments();
+            if (segment2Ds == null || segment2Ds.Count == 0)
+                return null;
+
+            List<Segment2D> segment2s_Result = new List<Segment2D>();
+
+            while(segment2Ds.Count > 0)
+            {
+                Segment2D segment2D = segment2Ds[0];
+
+                Point2D point2D_1 = segment2D.GetStart();
+                Vector2D vector2D_1 = segment2D.Direction.GetNegated();
+
+                Vector2D vector2D_Intersection_1 = Query.TraceFirst(point2D_1, vector2D_1, (ISegmentable2D)polyline2D);
+                if (vector2D_Intersection_1 != null && vector2D_Intersection_1.Length > maxLength)
+                    vector2D_Intersection_1 = null;
+
+                Point2D point2D_2 = segment2D.GetEnd();
+                Vector2D vector2D_2 = segment2D.Direction;
+
+                Vector2D vector2D_Intersection_2 = Query.TraceFirst(point2D_2, vector2D_2, (ISegmentable2D)polyline2D);
+                if (vector2D_Intersection_2 != null && vector2D_Intersection_2.Length > maxLength)
+                    vector2D_Intersection_2 = null;
+
+                if (vector2D_Intersection_1 != null || vector2D_Intersection_2 != null)
+                {
+                    if(vector2D_Intersection_1 != null)
+                    {
+
+                    }
+
+                    if (vector2D_Intersection_2 != null)
+                    {
+
+                    }
+                }
+                else
+                {
+                    segment2s_Result.Add(segment2D);
+
+                }
+
+                segment2Ds.RemoveAt(0);
+            }
+
+            for (int i = 1; i < segment2Ds.Count - 1; i++)
+            {
+                
+                
+
+
+
+
+                //point2D = segment2D.GetEnd();
+                //vector2D = segment2D.Direction;
+
+                //vector2D_Intersection = Query.TraceFirst(point2D, vector2D, (ISegmentable2D)polyline2D);
+                //if (vector2D_Intersection != null && vector2D_Intersection.Length > 0)
+                //{
+                //    Segment2D segment2D_Intersection = new Segment2D(point2D.GetMoved(vector2D_Intersection), point2D);
+                //    if (segment2D_Intersection.GetLength() > maxLength)
+                //        continue;
+
+                //    List<Point2D> point2Ds_Intersections = polygon2D.Intersections(segment2D_Intersection, tolerance);
+                //    if (point2Ds_Intersections != null && point2Ds_Intersections.Count == 2)
+                //        if (result.Find(x => x.AlmostSimilar(segment2D_Intersection, tolerance)) == null)
+                //            result.Add(segment2D_Intersection);
+                //}
+            }
+
+            throw new System.Exception();
         }
     }
 }

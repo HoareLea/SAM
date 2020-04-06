@@ -69,6 +69,7 @@
     <Compile Include="Classes\GooSAMObject.cs" />
     <Compile Include="Component\SAMCoreExplode.cs" />
     <Compile Include="Component\SAMCoreFilter.cs" />
+    <Compile Include="Component\SAMCoreToCsv.cs" />
     <Compile Include="Component\SAMCoreToJson.cs" />
     <Compile Include="Component\SAMCoreFromJson.cs" />
     <Compile Include="Component\SAMCoreAbout.cs" />

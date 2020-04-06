@@ -23,6 +23,12 @@ namespace SAM.Analytical
         {
         }
 
+        public Construction(Construction construction, string name)
+            : base(construction, name)
+        {
+
+        }
+
         public Construction(JObject jObject)
             : base(jObject)
         {

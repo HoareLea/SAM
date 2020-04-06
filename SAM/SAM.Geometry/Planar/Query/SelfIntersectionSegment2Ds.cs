@@ -4,7 +4,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Segment2D> SelfIntersectionSegment2Ds(Polygon2D polygon2D, double maxlength, double tolerance = Core.Tolerance.Distance)
+        public static List<Segment2D> SelfIntersectionSegment2Ds(Polygon2D polygon2D, double maxLength, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon2D == null)
                 return null;
@@ -21,7 +21,7 @@ namespace SAM.Geometry.Planar
                 if (vector2D_Intersection != null && vector2D_Intersection.Length > 0)
                 {
                     Segment2D segment2D_Intersection = new Segment2D(point2D.GetMoved(vector2D_Intersection), point2D);
-                    if (segment2D_Intersection.GetLength() > maxlength)
+                    if (segment2D_Intersection.GetLength() > maxLength)
                         continue;
 
                     List<Point2D> point2Ds_Intersections = polygon2D.Intersections(segment2D_Intersection, tolerance);
@@ -37,7 +37,7 @@ namespace SAM.Geometry.Planar
                 if (vector2D_Intersection != null && vector2D_Intersection.Length > 0)
                 {
                     Segment2D segment2D_Intersection = new Segment2D(point2D.GetMoved(vector2D_Intersection), point2D);
-                    if (segment2D_Intersection.GetLength() > maxlength)
+                    if (segment2D_Intersection.GetLength() > maxLength)
                         continue;
 
                     List<Point2D> point2Ds_Intersections = polygon2D.Intersections(segment2D_Intersection, tolerance);
