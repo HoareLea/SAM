@@ -96,7 +96,17 @@ namespace SAM.Core.Grasshopper
             object value = null;
             if(!Query.TryGetValue(@object, name, out value))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Property or Method not found");
+                if(@object is SAMObject)
+                {
+                    SAMObject sAMObject = (SAMObject)@object;
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Property or Method for: {3} not found. {0}:{1} Guid: {2}", sAMObject.GetType().Name, sAMObject.Name, sAMObject.Guid.ToString(), name));
+                }
+                else
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Property or Method {0} not found", name));
+                }
+                
+                
                 return;
             }
 
