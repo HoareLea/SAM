@@ -40,7 +40,8 @@ namespace SAM.Core.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_object", "_object", "SAM Object", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, "Name");
+            int index = inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, "Name");
+            inputParamManager[index].DataMapping = GH_DataMapping.Graft;
         }
 
         /// <summary>

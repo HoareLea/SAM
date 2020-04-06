@@ -75,6 +75,7 @@
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperture.cs" />
     <Compile Include="Component\SAMAnalyticalCreateApertureConstruction.cs" />
+    <Compile Include="Component\SAMAnalyticalRenameConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByElevation.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelCluster.cs" />
     <Compile Include="Component\SAMAnalyticalApertureType.cs" />

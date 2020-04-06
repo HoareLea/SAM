@@ -86,6 +86,7 @@
     <Compile Include="Classes\Base\SAMInstance.cs" />
     <Compile Include="Classes\Base\SAMObject.cs" />
     <Compile Include="Classes\Base\SAMType.cs" />
+    <Compile Include="Query\MemoryStream.cs" />
     <Compile Include="Query\Separator.cs" />
     <Compile Include="Query\AboutInfoTypeText.cs" />
     <Compile Include="Query\Dictionary.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Query\TryGetTypeNameAndAssemblyName.cs" />
     <Compile Include="Query\Tolerance.cs" />
     <Compile Include="Query\TryGetValue.cs" />
+    <Compile Include="Query\ValidFilePath.cs" />
     <Compile Include="Query\Value.cs" />
   </ItemGroup>
   <ItemGroup />

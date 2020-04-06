@@ -7,6 +7,8 @@ namespace SAM.Core
     /// </summary>
     public class DelimitedFileRow : List<string>
     {
+        public string LineText { get; set; }
+
         public DelimitedFileRow()
         {
 
@@ -16,7 +18,5 @@ namespace SAM.Core
         {
             AddRange(Values);
         }
-
-        public string LineText { get; set; }
     }
 }

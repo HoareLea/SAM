@@ -9,31 +9,43 @@ namespace SAM.Core
 {
     public class DelimitedFileReader : StreamReader, IDelimitedFileReader
     {
-        private char pSeparator;
+        private char separator;
 
-        public DelimitedFileReader(char Separator, Stream Stream)
-            : base(Stream)
+        public DelimitedFileReader(char separator, Stream stream)
+            : base(stream)
         {
-            pSeparator = Separator;
+            this.separator = separator;
         }
 
-        public DelimitedFileReader(char Separator, string Path)
-            : base(new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        public DelimitedFileReader(char separator, string path)
+            : base(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
         {
-            pSeparator = Separator;
+            this.separator = separator;
+        }
+
+        public DelimitedFileReader(char separator, IEnumerable<string> lines)
+            : base(Query.MemoryStream(lines))
+        {
+            this.separator = separator;
+        }
+
+        public DelimitedFileReader(DelimitedFileType DelimitedFileType, IEnumerable<string> lines)
+            : base(Query.MemoryStream(lines))
+        {
+            this.separator = Query.Separator(DelimitedFileType);
         }
 
         public DelimitedFileReader(DelimitedFileType DelimitedFileType, string Path)
             : base(new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
         {
-            pSeparator = Query.Separator(DelimitedFileType);
+            separator = Query.Separator(DelimitedFileType);
         }
 
         public char Separator
         {
             get
             {
-                return pSeparator;
+                return separator;
             }
         }
 
