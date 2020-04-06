@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.IO;
 
 namespace SAM.Core
 {
@@ -10,7 +10,15 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(filePath))
                 return false;
 
-            return Uri.IsWellFormedUriString(filePath, UriKind.RelativeOrAbsolute);
+            try
+            {
+                File.Exists(filePath);
+            }
+            catch (Exception exception)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

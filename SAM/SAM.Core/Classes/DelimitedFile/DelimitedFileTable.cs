@@ -11,8 +11,8 @@ namespace SAM.Core
         private bool pDisposed = false;
 
         private string[] pNames;
-        private List<object[]> pHeader;
-        private List<object[]> pValues;
+        private List<object[]> header;
+        private List<object[]> values;
 
         private DelimitedFileTable()
         {
@@ -26,27 +26,27 @@ namespace SAM.Core
             if (DelimitedFileTable.pNames != null)
                 pNames = new List<string>(DelimitedFileTable.pNames).ToArray();
 
-            if (DelimitedFileTable.pHeader != null)
+            if (DelimitedFileTable.header != null)
             {
-                pHeader = new List<object[]>();
-                foreach (object[] aObjects in DelimitedFileTable.pHeader)
+                header = new List<object[]>();
+                foreach (object[] aObjects in DelimitedFileTable.header)
                 {
                     if (aObjects == null)
-                        pHeader.Add(null);
+                        header.Add(null);
                     else
-                        pHeader.Add(new List<object>(aObjects).ToArray());
+                        header.Add(new List<object>(aObjects).ToArray());
                 }
             }
 
-            if (DelimitedFileTable.pValues != null)
+            if (DelimitedFileTable.values != null)
             {
-                pValues = new List<object[]>();
-                foreach (object[] aObjects in DelimitedFileTable.pValues)
+                values = new List<object[]>();
+                foreach (object[] aObjects in DelimitedFileTable.values)
                 {
                     if (aObjects == null)
-                        pValues.Add(null);
+                        values.Add(null);
                     else
-                        pValues.Add(new List<object>(aObjects).ToArray());
+                        values.Add(new List<object>(aObjects).ToArray());
                 }
             }
 
@@ -91,7 +91,7 @@ namespace SAM.Core
             if (aRowsCount == 1)
                 return true;
 
-            pHeader = new List<object[]>();
+            header = new List<object[]>();
             if (HeaderCount > 0)
             {
                 int aMin = Math.Min(HeaderCount + aRowsStart + 1, aRowsEnd);
@@ -100,46 +100,46 @@ namespace SAM.Core
                     object[] aValues = new object[aColumnsCount];
                     for (int j = aColumnsStart; j < aColumnsCount + aColumnsStart; j++)
                         aValues[j - aColumnsStart] = Data[i, j];
-                    pHeader.Add(aValues);
+                    header.Add(aValues);
                 }
             }
 
 
-            pValues = new List<object[]>();
+            values = new List<object[]>();
             for (int i = HeaderCount + aRowsStart + 1; i < aRowsCount + aRowsStart; i++)
             {
                 object[] aValues = new object[aColumnsCount];
                 for (int j = aColumnsStart; j < aColumnsCount + aColumnsStart; j++)
                     aValues[j - aColumnsStart] = Data[i, j];
-                pValues.Add(aValues);
+                values.Add(aValues);
             }
 
             return true;
         }
 
-        public bool Read(List<DelimitedFileRow> DelimitedFileRowList, int HeaderCount = 0)
+        public bool Read(List<DelimitedFileRow> delimitedFileRows, int headerCount = 0)
         {
-            int aCount = DelimitedFileRowList.Count;
+            int count = delimitedFileRows.Count;
 
-            if (aCount == 0)
+            if (count == 0)
                 return true;
 
-            if (DelimitedFileRowList[0] != null)
-                pNames = DelimitedFileRowList[0].ToArray();
+            if (delimitedFileRows[0] != null)
+                pNames = delimitedFileRows[0].ToArray();
 
-            if (aCount == 1)
+            if (count == 1)
                 return true;
 
-            pHeader = new List<object[]>();
-            int aMin = Math.Min(HeaderCount + 1, aCount);
-            for (int i = 1; i < aMin; i++)
-                if (DelimitedFileRowList[i] != null)
-                    pHeader.Add(DelimitedFileRowList[i].ToArray());
+            header = new List<object[]>();
+            int min = Math.Min(headerCount + 1, count);
+            for (int i = 1; i < min; i++)
+                if (delimitedFileRows[i] != null)
+                    header.Add(delimitedFileRows[i].ToArray());
 
-            pValues = new List<object[]>();
-            for (int i = aMin; i < aCount; i++)
-                if (DelimitedFileRowList[i] != null)
-                    pValues.Add(DelimitedFileRowList[i].ToArray());
+            values = new List<object[]>();
+            for (int i = min; i < count; i++)
+                if (delimitedFileRows[i] != null)
+                    values.Add(delimitedFileRows[i].ToArray());
 
             return true;
         }
@@ -163,11 +163,11 @@ namespace SAM.Core
 
             DelimitedFileWriter.Write(new DelimitedFileRow(Extract<string>(pNames)));
 
-            if (pHeader != null && pHeader.Count > 0)
-                pHeader.ForEach(x => DelimitedFileWriter.Write(new DelimitedFileRow(Extract(x))));
+            if (header != null && header.Count > 0)
+                header.ForEach(x => DelimitedFileWriter.Write(new DelimitedFileRow(Extract(x))));
 
-            if (pValues != null && pValues.Count > 0)
-                pValues.ForEach(x => DelimitedFileWriter.Write(new DelimitedFileRow(Extract(x))));
+            if (values != null && values.Count > 0)
+                values.ForEach(x => DelimitedFileWriter.Write(new DelimitedFileRow(Extract(x))));
 
             return true;
         }
@@ -176,13 +176,13 @@ namespace SAM.Core
         {
             get
             {
-                if (i >= pValues.Count)
+                if (i >= values.Count)
                     return null;
 
-                if (j >= pValues[i].Length)
+                if (j >= values[i].Length)
                     return null;
 
-                return pValues[i][j] as string;
+                return values[i][j] as string;
             }
         }
 
@@ -190,14 +190,14 @@ namespace SAM.Core
         {
             get
             {
-                if (i >= pValues.Count)
+                if (i >= values.Count)
                     return null;
 
                 int aIndex = GetIndex(Name);
                 if (aIndex == -1)
                     return null;
 
-                if (aIndex >= pValues[i].Length)
+                if (aIndex >= values[i].Length)
                     return null;
 
                 return this[i, aIndex];
@@ -208,7 +208,7 @@ namespace SAM.Core
         {
             get
             {
-                return pValues[i];
+                return values[i];
             }
         }
 
@@ -228,25 +228,25 @@ namespace SAM.Core
         {
             Value = default(T);
 
-            if (i >= pValues.Count)
+            if (i >= values.Count)
                 return false;
 
-            if (j >= pValues[i].Length)
+            if (j >= values[i].Length)
                 return false;
 
-            Value = (T)pValues[i][j];
+            Value = (T)values[i][j];
             return true;
         }
 
         public string ToString(int i, int j)
         {
-            if (i >= pValues.Count)
+            if (i >= values.Count)
                 return null;
 
-            if (j >= pValues[i].Length)
+            if (j >= values[i].Length)
                 return null;
 
-            object aValue = pValues[i][j];
+            object aValue = values[i][j];
             if (aValue == null)
                 return null;
 
@@ -257,10 +257,10 @@ namespace SAM.Core
         {
             get
             {
-                if (pValues == null)
+                if (values == null)
                     return -1;
 
-                return pValues.Count;
+                return values.Count;
             }
         }
 
@@ -269,7 +269,7 @@ namespace SAM.Core
             if (pNames == null)
                 return null;
 
-            if (i >= pValues.Count)
+            if (i >= values.Count)
                 return null;
 
             if (i < 0)
@@ -277,8 +277,8 @@ namespace SAM.Core
 
             List<Tuple<string, object>> aTupleList = new List<Tuple<string, object>>();
             for (int j = 0; j < pNames.Length; j++)
-                if (j < pValues[i].Length)
-                    aTupleList.Add(new Tuple<string, object>(pNames[j], pValues[i][j]));
+                if (j < values[i].Length)
+                    aTupleList.Add(new Tuple<string, object>(pNames[j], values[i][j]));
                 else
                     aTupleList.Add(new Tuple<string, object>(pNames[j], null));
 
@@ -300,7 +300,7 @@ namespace SAM.Core
                 return null;
 
             HashSet<object> aResult = new HashSet<object>();
-            foreach (object[] aValues_Row in pValues)
+            foreach (object[] aValues_Row in values)
                 aResult.Add(aValues_Row[aIndex]);
 
             return aResult;
@@ -314,17 +314,17 @@ namespace SAM.Core
             DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
             aDelimitedFileTable.pNames = Names;
 
-            if (pValues == null)
+            if (values == null)
                 return aDelimitedFileTable;
 
-            aDelimitedFileTable.pValues = new List<object[]>();
+            aDelimitedFileTable.values = new List<object[]>();
 
-            if (pValues.Count == 0 || Names.Length == 0)
+            if (values.Count == 0 || Names.Length == 0)
                 return aDelimitedFileTable;
 
             List<int> aIndexList = Names.ToList().ConvertAll(x => GetIndex(x));
 
-            foreach (object[] aValues_Row_Old in pValues)
+            foreach (object[] aValues_Row_Old in values)
             {
                 object[] aValues_Row_New = new object[aIndexList.Count];
                 for (int i = 0; i < aIndexList.Count; i++)
@@ -335,7 +335,7 @@ namespace SAM.Core
                     else
                         aValues_Row_New[i] = aValues_Row_Old[aIndex];
                 }
-                aDelimitedFileTable.pValues.Add(aValues_Row_New);
+                aDelimitedFileTable.values.Add(aValues_Row_New);
             }
 
             return aDelimitedFileTable;
@@ -349,19 +349,19 @@ namespace SAM.Core
             DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
             aDelimitedFileTable.pNames = pNames;
 
-            if (pValues == null)
+            if (values == null)
                 return aDelimitedFileTable;
 
-            aDelimitedFileTable.pValues = new List<object[]>();
+            aDelimitedFileTable.values = new List<object[]>();
 
-            if (pValues.Count == 0)
+            if (values.Count == 0)
                 return aDelimitedFileTable;
 
             int aIndex = GetIndex(Name);
             if (aIndex == -1)
                 return aDelimitedFileTable;
 
-            foreach (object[] aValues_Row in pValues)
+            foreach (object[] aValues_Row in values)
             {
                 if (aValues_Row == null || aValues_Row.Length <= aIndex)
                     continue;
@@ -370,7 +370,7 @@ namespace SAM.Core
 
                 if (Value == null && aValue == null)
                 {
-                    aDelimitedFileTable.pValues.Add(aValues_Row);
+                    aDelimitedFileTable.values.Add(aValues_Row);
                     continue;
                 }
 
@@ -379,7 +379,7 @@ namespace SAM.Core
 
                 if (Value.Equals(aValue))
                 {
-                    aDelimitedFileTable.pValues.Add(aValues_Row);
+                    aDelimitedFileTable.values.Add(aValues_Row);
                     continue;
                 }
             }
@@ -395,19 +395,19 @@ namespace SAM.Core
             DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
             aDelimitedFileTable.pNames = pNames;
 
-            if (pValues == null)
+            if (values == null)
                 return aDelimitedFileTable;
 
-            aDelimitedFileTable.pValues = new List<object[]>();
+            aDelimitedFileTable.values = new List<object[]>();
 
-            if (pValues.Count == 0)
+            if (values.Count == 0)
                 return aDelimitedFileTable;
 
             int aIndex = GetIndex(Name);
             if (aIndex == -1)
                 return aDelimitedFileTable;
 
-            foreach (object[] aValues_Row in pValues)
+            foreach (object[] aValues_Row in values)
             {
                 if (aValues_Row == null || aValues_Row.Length <= aIndex)
                     continue;
@@ -416,7 +416,7 @@ namespace SAM.Core
 
                 if (Value == null && aValue == null)
                 {
-                    aDelimitedFileTable.pValues.Add(aValues_Row);
+                    aDelimitedFileTable.values.Add(aValues_Row);
                     continue;
                 }
 
@@ -425,7 +425,7 @@ namespace SAM.Core
 
                 if (Value.Equals(aValue))
                 {
-                    aDelimitedFileTable.pValues.Add(aValues_Row);
+                    aDelimitedFileTable.values.Add(aValues_Row);
                     continue;
                 }
 
@@ -451,11 +451,11 @@ namespace SAM.Core
         {
             DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
             aDelimitedFileTable.pNames = pNames;
-            aDelimitedFileTable.pHeader = pHeader;
-            aDelimitedFileTable.pValues = new List<object[]>();
+            aDelimitedFileTable.header = header;
+            aDelimitedFileTable.values = new List<object[]>();
 
             foreach (int aIndex in RowIndexes)
-                aDelimitedFileTable.pValues.Add(pValues[aIndex]);
+                aDelimitedFileTable.values.Add(values[aIndex]);
 
             return aDelimitedFileTable;
         }
@@ -473,7 +473,7 @@ namespace SAM.Core
                 // TODO: set large fields to null.
 
                 pNames = null;
-                pValues = null;
+                values = null;
 
                 pDisposed = true;
             }
@@ -486,12 +486,12 @@ namespace SAM.Core
 
         public IEnumerator<object[]> GetEnumerator()
         {
-            return ((IEnumerable<object[]>)pValues).GetEnumerator();
+            return ((IEnumerable<object[]>)values).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<object[]>)pValues).GetEnumerator();
+            return ((IEnumerable<object[]>)values).GetEnumerator();
         }
 
 

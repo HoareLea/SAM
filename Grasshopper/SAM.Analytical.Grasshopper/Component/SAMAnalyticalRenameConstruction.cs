@@ -119,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
                 string name = construction.Name;
                 if (name == null)
                 {
-                    result.Add(construction);
+                    //result.Add(construction);
                     continue;
                 }
 
@@ -133,7 +133,7 @@ namespace SAM.Analytical.Grasshopper
                     if (!name.Equals(name_source))
                         continue;
 
-                    if (!delimitedFileTable.TryGetValue(i, index_Source, out name_destination))
+                    if (!delimitedFileTable.TryGetValue(i, index_Destination, out name_destination))
                     {
                         name_destination = null;
                         continue;
@@ -144,7 +144,7 @@ namespace SAM.Analytical.Grasshopper
 
                 if(name_destination == null)
                 {
-                    result.Add(construction);
+                    //result.Add(construction);
                     continue;
                 }
                 else
