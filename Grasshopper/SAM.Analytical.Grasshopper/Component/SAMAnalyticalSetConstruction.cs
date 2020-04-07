@@ -33,8 +33,12 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
+            int index;
+
             inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_construction", "SAM Analytical Panels", GH_ParamAccess.list);
-            inputParamManager.AddParameter(new GooConstructionParam(), "_constructions", "_constructions", "SAM Analytical Contructions", GH_ParamAccess.list);
+            index = inputParamManager.AddParameter(new GooConstructionParam(), "constructions_", "constructions_", "SAM Analytical Contructions", GH_ParamAccess.list);
+            inputParamManager[index].Optional = true; 
+
             inputParamManager.AddTextParameter("_csv", "_csv", "csv", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_sourceColumn", "_sourceColumn", "Source Column Name", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_destinationColumn", "_destinationColumn", "Destination Column Name", GH_ParamAccess.item);
@@ -63,11 +67,9 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Construction> constructions = new List<Construction>();
-            if (!dataAccess.GetDataList(1, constructions))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            dataAccess.GetDataList(1, constructions);
+            if (constructions == null)
+                constructions = new List<Construction>();
 
             string csvOrPath = null;
             if (!dataAccess.GetData(2, ref csvOrPath) || string.IsNullOrWhiteSpace(csvOrPath))
@@ -163,7 +165,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     Construction construction_New = constructions.Find(x => x.Name == name_destination);
                     if (construction_New == null)
-                        continue;
+                        construction_New = new Construction(construction, name_destination);
                     
                     result.Add(new Panel(panel, construction_New));
                 }
