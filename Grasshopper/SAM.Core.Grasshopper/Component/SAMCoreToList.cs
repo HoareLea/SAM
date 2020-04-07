@@ -37,7 +37,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddTextParameter("_text", "_text", "csv Text", GH_ParamAccess.list);
+            inputParamManager.AddTextParameter("_text", "_text", "csv Text", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, Query.DataTree(text, DelimitedFileType.Csv));
+            dataAccess.SetDataTree(0, Query.DataTree(text, DelimitedFileType.Csv));
         }
 
     }
