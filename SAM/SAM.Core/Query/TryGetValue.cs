@@ -55,7 +55,7 @@ namespace SAM.Core
             System.Reflection.PropertyInfo[] propertyInfos = @object.GetType().GetProperties();
             foreach (System.Reflection.PropertyInfo propertyInfo in propertyInfos)
             {
-                if (propertyInfo.Name.Equals(name))
+                if (propertyInfo.Name.Equals(name) && propertyInfo.GetMethod != null)
                 {
                     value = propertyInfo.GetValue(@object);
                     return true;
