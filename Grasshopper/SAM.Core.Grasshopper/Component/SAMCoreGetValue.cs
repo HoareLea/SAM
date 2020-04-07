@@ -95,7 +95,7 @@ namespace SAM.Core.Grasshopper
             }
 
             object value = null;
-            if(!Query.TryGetValue(@object, name, out value))
+            if(!SAM.Core.Query.TryGetValue(@object, name, out value))
             {
                 if(@object is SAMObject)
                 {

@@ -8,9 +8,9 @@ namespace SAM.Core
 {
     public class DelimitedFileTable : IDisposable, IEnumerable<object[]>
     {
-        private bool pDisposed = false;
+        private bool disposed = false;
 
-        private string[] pNames;
+        private string[] names;
         private List<object[]> header;
         private List<object[]> values;
 
@@ -19,17 +19,17 @@ namespace SAM.Core
 
         }
 
-        public DelimitedFileTable(DelimitedFileTable DelimitedFileTable)
+        public DelimitedFileTable(DelimitedFileTable delimitedFileTable)
         {
-            if (DelimitedFileTable == null)
+            if (delimitedFileTable == null)
                 return;
-            if (DelimitedFileTable.pNames != null)
-                pNames = new List<string>(DelimitedFileTable.pNames).ToArray();
+            if (delimitedFileTable.names != null)
+                names = new List<string>(delimitedFileTable.names).ToArray();
 
-            if (DelimitedFileTable.header != null)
+            if (delimitedFileTable.header != null)
             {
                 header = new List<object[]>();
-                foreach (object[] aObjects in DelimitedFileTable.header)
+                foreach (object[] aObjects in delimitedFileTable.header)
                 {
                     if (aObjects == null)
                         header.Add(null);
@@ -38,10 +38,10 @@ namespace SAM.Core
                 }
             }
 
-            if (DelimitedFileTable.values != null)
+            if (delimitedFileTable.values != null)
             {
                 values = new List<object[]>();
-                foreach (object[] aObjects in DelimitedFileTable.values)
+                foreach (object[] aObjects in delimitedFileTable.values)
                 {
                     if (aObjects == null)
                         values.Add(null);
@@ -52,9 +52,9 @@ namespace SAM.Core
 
         }
 
-        public DelimitedFileTable(IDelimitedFileReader DelimitedFileReader, int HeaderCount = 0)
+        public DelimitedFileTable(IDelimitedFileReader delimitedFileReader, int headerCount = 0)
         {
-            Read(DelimitedFileReader, HeaderCount);
+            Read(delimitedFileReader, headerCount);
         }
 
         public DelimitedFileTable(List<DelimitedFileRow> DelimitedFileRowList, int HeaderCount = 0)
@@ -62,55 +62,55 @@ namespace SAM.Core
             Read(DelimitedFileRowList, HeaderCount);
         }
 
-        public DelimitedFileTable(object[,] Data, int HeaderCount = 0)
+        public DelimitedFileTable(object[,] data, int headerCount = 0)
         {
-            Read(Data, HeaderCount);
+            Read(data, headerCount);
         }
 
-        public bool Read(object[,] Data, int HeaderCount = 0)
+        public bool Read(object[,] data, int headerCount = 0)
         {
-            if (Data == null)
+            if (data == null)
                 return false;
 
-            int aRowsStart = Data.GetLowerBound(0);
-            int aRowsEnd = Data.GetUpperBound(0);
+            int aRowsStart = data.GetLowerBound(0);
+            int aRowsEnd = data.GetUpperBound(0);
             int aRowsCount = aRowsEnd - aRowsStart + 1;
             if (aRowsCount <= 0)
                 return true;
 
-            int aColumnsStart = Data.GetLowerBound(1);
-            int aColumnsEnd = Data.GetUpperBound(1);
+            int aColumnsStart = data.GetLowerBound(1);
+            int aColumnsEnd = data.GetUpperBound(1);
             int aColumnsCount = aColumnsEnd - aColumnsStart + 1;
             if (aColumnsCount <= 0)
                 return true;
 
-            pNames = new string[aColumnsCount];
+            names = new string[aColumnsCount];
             for (int i = aColumnsStart; i < aColumnsCount + aColumnsStart; i++)
-                pNames[i - aColumnsStart] = Data[aRowsStart, i] as string;
+                names[i - aColumnsStart] = data[aRowsStart, i] as string;
 
             if (aRowsCount == 1)
                 return true;
 
             header = new List<object[]>();
-            if (HeaderCount > 0)
+            if (headerCount > 0)
             {
-                int aMin = Math.Min(HeaderCount + aRowsStart + 1, aRowsEnd);
+                int aMin = Math.Min(headerCount + aRowsStart + 1, aRowsEnd);
                 for (int i = aRowsStart + 1; i < aMin + aRowsStart; i++)
                 {
                     object[] aValues = new object[aColumnsCount];
                     for (int j = aColumnsStart; j < aColumnsCount + aColumnsStart; j++)
-                        aValues[j - aColumnsStart] = Data[i, j];
+                        aValues[j - aColumnsStart] = data[i, j];
                     header.Add(aValues);
                 }
             }
 
 
             values = new List<object[]>();
-            for (int i = HeaderCount + aRowsStart + 1; i < aRowsCount + aRowsStart; i++)
+            for (int i = headerCount + aRowsStart + 1; i < aRowsCount + aRowsStart; i++)
             {
                 object[] aValues = new object[aColumnsCount];
                 for (int j = aColumnsStart; j < aColumnsCount + aColumnsStart; j++)
-                    aValues[j - aColumnsStart] = Data[i, j];
+                    aValues[j - aColumnsStart] = data[i, j];
                 values.Add(aValues);
             }
 
@@ -125,7 +125,7 @@ namespace SAM.Core
                 return true;
 
             if (delimitedFileRows[0] != null)
-                pNames = delimitedFileRows[0].ToArray();
+                names = delimitedFileRows[0].ToArray();
 
             if (count == 1)
                 return true;
@@ -144,109 +144,109 @@ namespace SAM.Core
             return true;
         }
 
-        public bool Read(IDelimitedFileReader DelimitedFileReader, int HeaderCount = 0)
+        public bool Read(IDelimitedFileReader delimitedFileReader, int headerCount = 0)
         {
-            if (DelimitedFileReader == null)
+            if (delimitedFileReader == null)
                 return false;
 
-            List<DelimitedFileRow> aDelimitedFileRowList = DelimitedFileReader.Read();
+            List<DelimitedFileRow> aDelimitedFileRowList = delimitedFileReader.Read();
             if (aDelimitedFileRowList == null)
                 return false;
 
-            return Read(aDelimitedFileRowList, HeaderCount);
+            return Read(aDelimitedFileRowList, headerCount);
         }
 
-        public bool Write(IDelimitedFileWriter DelimitedFileWriter)
+        public bool Write(IDelimitedFileWriter delimitedFileWriter)
         {
-            if (pNames == null || pNames.Length == 0 || DelimitedFileWriter == null)
+            if (names == null || names.Length == 0 || delimitedFileWriter == null)
                 return false;
 
-            DelimitedFileWriter.Write(new DelimitedFileRow(Extract<string>(pNames)));
+            delimitedFileWriter.Write(new DelimitedFileRow(Extract<string>(names)));
 
             if (header != null && header.Count > 0)
-                header.ForEach(x => DelimitedFileWriter.Write(new DelimitedFileRow(Extract(x))));
+                header.ForEach(x => delimitedFileWriter.Write(new DelimitedFileRow(Extract(x))));
 
             if (values != null && values.Count > 0)
-                values.ForEach(x => DelimitedFileWriter.Write(new DelimitedFileRow(Extract(x))));
+                values.ForEach(x => delimitedFileWriter.Write(new DelimitedFileRow(Extract(x))));
 
             return true;
         }
 
-        public object this[int i, int j]
+        public object this[int row, int column]
         {
             get
             {
-                if (i >= values.Count)
+                if (row >= values.Count)
                     return null;
 
-                if (j >= values[i].Length)
+                if (column >= values[row].Length)
                     return null;
 
-                return values[i][j] as string;
+                return values[row][column] as string;
             }
         }
 
-        public object this[int i, string Name]
+        public object this[int row, string columnName]
         {
             get
             {
-                if (i >= values.Count)
+                if (row >= values.Count)
                     return null;
 
-                int aIndex = GetIndex(Name);
+                int aIndex = GetIndex(columnName);
                 if (aIndex == -1)
                     return null;
 
-                if (aIndex >= values[i].Length)
+                if (aIndex >= values[row].Length)
                     return null;
 
-                return this[i, aIndex];
+                return this[row, aIndex];
             }
         }
 
-        public object[] this[int i]
+        public object[] this[int row]
         {
             get
             {
-                return values[i];
+                return values[row];
             }
         }
 
-        public int GetIndex(string Name)
+        public int GetIndex(string columnName)
         {
-            if (pNames == null || Name == null)
+            if (names == null || columnName == null)
                 return -1;
 
-            for (int i = 0; i < pNames.Length; i++)
-                if (pNames[i] == Name)
+            for (int i = 0; i < names.Length; i++)
+                if (names[i] == columnName)
                     return i;
 
             return -1;
         }
 
-        public bool TryGetValue<T>(int i, int j, out T Value)
+        public bool TryGetValue<T>(int row, int column, out T value)
         {
-            Value = default(T);
+            value = default(T);
 
-            if (i >= values.Count)
+            if (row >= values.Count)
                 return false;
 
-            if (j >= values[i].Length)
+            if (column >= values[row].Length)
                 return false;
 
-            Value = (T)values[i][j];
+            value = (T)values[row][column];
             return true;
         }
 
-        public string ToString(int i, int j)
+        public string ToString(int row, int column)
         {
-            if (i >= values.Count)
+            if (row >= values.Count)
                 return null;
 
-            if (j >= values[i].Length)
+            if (column >= values[row].Length)
                 return null;
 
-            object aValue = values[i][j];
+            object aValue = values[row][column];
             if (aValue == null)
                 return null;
 
@@ -264,38 +264,38 @@ namespace SAM.Core
             }
         }
 
-        public List<Tuple<string, object>> GetTupleList(int i)
+        public List<Tuple<string, object>> GetTupleList(int row)
         {
-            if (pNames == null)
+            if (names == null)
                 return null;
 
-            if (i >= values.Count)
+            if (row >= values.Count)
                 return null;
 
-            if (i < 0)
+            if (row < 0)
                 return null;
 
             List<Tuple<string, object>> aTupleList = new List<Tuple<string, object>>();
-            for (int j = 0; j < pNames.Length; j++)
-                if (j < values[i].Length)
-                    aTupleList.Add(new Tuple<string, object>(pNames[j], values[i][j]));
+            for (int j = 0; j < names.Length; j++)
+                if (j < values[row].Length)
+                    aTupleList.Add(new Tuple<string, object>(names[j], values[row][j]));
                 else
-                    aTupleList.Add(new Tuple<string, object>(pNames[j], null));
+                    aTupleList.Add(new Tuple<string, object>(names[j], null));
 
             return aTupleList;
         }
 
-        public List<string> GetNameList()
+        public List<string> GetColumnNames()
         {
-            if (pNames == null)
+            if (names == null)
                 return null;
 
-            return pNames.ToList();
+            return names.ToList();
         }
 
-        public IEnumerable<object> GetUnqueValues(string Name)
+        public IEnumerable<object> GetUnqueValues(string columnName)
         {
-            int aIndex = GetIndex(Name);
+            int aIndex = GetIndex(columnName);
             if (aIndex == -1)
                 return null;
 
@@ -306,23 +306,23 @@ namespace SAM.Core
             return aResult;
         }
 
-        public DelimitedFileTable Extract(params string[] Names)
+        public DelimitedFileTable Extract(params string[] columnNames)
         {
-            if (pNames == null)
+            if (names == null)
                 return null;
 
             DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
-            aDelimitedFileTable.pNames = Names;
+            aDelimitedFileTable.names = columnNames;
 
             if (values == null)
                 return aDelimitedFileTable;
 
             aDelimitedFileTable.values = new List<object[]>();
 
-            if (values.Count == 0 || Names.Length == 0)
+            if (values.Count == 0 || columnNames.Length == 0)
                 return aDelimitedFileTable;
 
-            List<int> aIndexList = Names.ToList().ConvertAll(x => GetIndex(x));
+            List<int> aIndexList = columnNames.ToList().ConvertAll(x => GetIndex(x));
 
             foreach (object[] aValues_Row_Old in values)
             {
@@ -341,13 +341,13 @@ namespace SAM.Core
             return aDelimitedFileTable;
         }
 
-        public DelimitedFileTable Filter(string Name, object Value)
+        public DelimitedFileTable Filter(string columnName, object value)
         {
-            if (pNames == null)
+            if (names == null)
                 return null;
 
             DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
-            aDelimitedFileTable.pNames = pNames;
+            aDelimitedFileTable.names = names;
 
             if (values == null)
                 return aDelimitedFileTable;
@@ -357,7 +357,7 @@ namespace SAM.Core
             if (values.Count == 0)
                 return aDelimitedFileTable;
 
-            int aIndex = GetIndex(Name);
+            int aIndex = GetIndex(columnName);
             if (aIndex == -1)
                 return aDelimitedFileTable;
 
@@ -368,16 +368,16 @@ namespace SAM.Core
 
                 object aValue = aValues_Row[aIndex];
 
-                if (Value == null && aValue == null)
+                if (value == null && aValue == null)
                 {
                     aDelimitedFileTable.values.Add(aValues_Row);
                     continue;
                 }
 
-                if (Value == null || aValue == null)
+                if (value == null || aValue == null)
                     continue;
 
-                if (Value.Equals(aValue))
+                if (value.Equals(aValue))
                 {
                     aDelimitedFileTable.values.Add(aValues_Row);
                     continue;
@@ -387,13 +387,13 @@ namespace SAM.Core
             return aDelimitedFileTable;
         }
 
-        public DelimitedFileTable Filter(string Name, object Value, bool TryToConvert)
+        public DelimitedFileTable Filter(string columnName, object value, bool tryToConvert)
         {
-            if (pNames == null)
+            if (names == null)
                 return null;
 
             DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
-            aDelimitedFileTable.pNames = pNames;
+            aDelimitedFileTable.names = names;
 
             if (values == null)
                 return aDelimitedFileTable;
@@ -403,7 +403,7 @@ namespace SAM.Core
             if (values.Count == 0)
                 return aDelimitedFileTable;
 
-            int aIndex = GetIndex(Name);
+            int aIndex = GetIndex(columnName);
             if (aIndex == -1)
                 return aDelimitedFileTable;
 
@@ -414,25 +414,25 @@ namespace SAM.Core
 
                 object aValue = aValues_Row[aIndex];
 
-                if (Value == null && aValue == null)
+                if (value == null && aValue == null)
                 {
                     aDelimitedFileTable.values.Add(aValues_Row);
                     continue;
                 }
 
-                if (Value == null || aValue == null)
+                if (value == null || aValue == null)
                     continue;
 
-                if (Value.Equals(aValue))
+                if (value.Equals(aValue))
                 {
                     aDelimitedFileTable.values.Add(aValues_Row);
                     continue;
                 }
 
-                if (!TryToConvert)
+                if (!tryToConvert)
                     continue;
 
-                Type aType_1 = Value.GetType();
+                Type aType_1 = value.GetType();
                 Type aType_2 = aValue.GetType();
 
                 if (aType_1 == aType_2)
@@ -447,24 +447,24 @@ namespace SAM.Core
             return aDelimitedFileTable;
         }
 
-        public DelimitedFileTable Filter(IEnumerable<int> RowIndexes)
+        public DelimitedFileTable Filter(IEnumerable<int> rowIndexes)
         {
             DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
-            aDelimitedFileTable.pNames = pNames;
+            aDelimitedFileTable.names = names;
             aDelimitedFileTable.header = header;
             aDelimitedFileTable.values = new List<object[]>();
 
-            foreach (int aIndex in RowIndexes)
+            foreach (int aIndex in rowIndexes)
                 aDelimitedFileTable.values.Add(values[aIndex]);
 
             return aDelimitedFileTable;
         }
 
-        protected virtual void Dispose(bool Disposing)
+        protected virtual void Dispose(bool disposing)
         {
-            if (!pDisposed)
+            if (!disposed)
             {
-                if (Disposing)
+                if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
                 }
@@ -472,10 +472,10 @@ namespace SAM.Core
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
-                pNames = null;
+                names = null;
                 values = null;
 
-                pDisposed = true;
+                disposed = true;
             }
         }
 
@@ -495,18 +495,18 @@ namespace SAM.Core
         }
 
 
-        private static string[] Extract<T>(T[] Values)
+        private static string[] Extract<T>(T[] values)
         {
-            if (Values == null)
+            if (values == null)
                 return null;
 
-            string[] aResult = new string[Values.Length];
-            for (int i = 0; i < Values.Length; i++)
+            string[] aResult = new string[values.Length];
+            for (int i = 0; i < values.Length; i++)
             {
-                if (Values[i] == null)
+                if (values[i] == null)
                     aResult[i] = string.Empty;
                 else
-                    aResult[i] = Values[i].ToString();
+                    aResult[i] = values[i].ToString();
             }
             return aResult;
         }

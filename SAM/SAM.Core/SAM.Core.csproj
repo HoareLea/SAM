@@ -52,6 +52,7 @@
     <Compile Include="Classes\DelimitedFile\DelimitedFileTable.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileWriter.cs" />
     <Compile Include="Convert\ToCsv\ToCsv.cs" />
+    <Compile Include="Convert\ToList\ToList.cs" />
     <Compile Include="Enums\DelimitedFileType.cs" />
     <Compile Include="Interfaces\DelimitedFile\IDelimitedFileReader.cs" />
     <Compile Include="Interfaces\DelimitedFile\IDelimitedFileWriter.cs" />

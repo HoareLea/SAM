@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -62,7 +63,7 @@ namespace SAM.Geometry.Planar
             if (polyline2D == null || double.IsNaN(maxLength))
                 return null;
 
-            if(polyline2D.IsClosed())
+            if (polyline2D.IsClosed())
             {
                 Polygon2D polygon2D = SimplifyByLength(new Polygon2D(polyline2D.Points), maxLength, tolerance);
                 if (polygon2D == null)
@@ -75,73 +76,109 @@ namespace SAM.Geometry.Planar
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
-            List<Segment2D> segment2s_Result = new List<Segment2D>();
-
-            while(segment2Ds.Count > 0)
+            //Collecting Intersections
+            Dictionary<int, HashSet<Point2D>> dictionary = new Dictionary<int, HashSet<Point2D>>();
+            for(int i =0; i < segment2Ds.Count; i++)
             {
-                Segment2D segment2D = segment2Ds[0];
+                Segment2D segment2D = segment2Ds[i];
+
+                HashSet<Point2D> point2Ds_Temp;
+                if (!dictionary.TryGetValue(i, out point2Ds_Temp))
+                {
+                    point2Ds_Temp = new HashSet<Point2D>();
+                    point2Ds_Temp.Add(segment2D.GetStart());
+                    //point2Ds_Temp.Add(segment2D.GetEnd());
+                    dictionary[i] = point2Ds_Temp;
+                }
+
+                Tuple<Point2D, Segment2D, Vector2D> aTuple;
 
                 Point2D point2D_1 = segment2D.GetStart();
                 Vector2D vector2D_1 = segment2D.Direction.GetNegated();
 
-                Vector2D vector2D_Intersection_1 = Query.TraceFirst(point2D_1, vector2D_1, (ISegmentable2D)polyline2D);
-                if (vector2D_Intersection_1 != null && vector2D_Intersection_1.Length > maxLength)
-                    vector2D_Intersection_1 = null;
+                aTuple = Query.TraceDataFirst(point2D_1, vector2D_1, segment2Ds);
+                if(aTuple != null && aTuple.Item3.Length < maxLength)
+                {
+                    int index_Temp = Query.IndexOfClosest(segment2Ds, aTuple.Item1);
+
+                    Segment2D segment2D_Temp = segment2Ds[index_Temp];
+
+                    if(!dictionary.TryGetValue(index_Temp, out point2Ds_Temp))
+                    {
+                        point2Ds_Temp = new HashSet<Point2D>();
+                        point2Ds_Temp.Add(segment2D.GetStart());
+                        //point2Ds_Temp.Add(segment2D.GetEnd());
+                        dictionary[i] = point2Ds_Temp;
+                    }
+                    point2Ds_Temp.Add(aTuple.Item1);
+                }
+
 
                 Point2D point2D_2 = segment2D.GetEnd();
                 Vector2D vector2D_2 = segment2D.Direction;
 
-                Vector2D vector2D_Intersection_2 = Query.TraceFirst(point2D_2, vector2D_2, (ISegmentable2D)polyline2D);
-                if (vector2D_Intersection_2 != null && vector2D_Intersection_2.Length > maxLength)
-                    vector2D_Intersection_2 = null;
-
-                if (vector2D_Intersection_1 != null || vector2D_Intersection_2 != null)
+                aTuple = Query.TraceDataFirst(point2D_2, vector2D_2, segment2Ds);
+                if (aTuple != null && aTuple.Item3.Length < maxLength)
                 {
-                    if(vector2D_Intersection_1 != null)
+                    int index_Temp = Query.IndexOfClosest(segment2Ds, aTuple.Item1);
+
+                    Segment2D segment2D_Temp = segment2Ds[index_Temp];
+
+                    if (!dictionary.TryGetValue(index_Temp, out point2Ds_Temp))
                     {
-
+                        point2Ds_Temp = new HashSet<Point2D>();
+                        point2Ds_Temp.Add(segment2D.GetStart());
+                        //point2Ds_Temp.Add(segment2D.GetEnd());
+                        dictionary[i] = point2Ds_Temp;
                     }
-
-                    if (vector2D_Intersection_2 != null)
-                    {
-
-                    }
-                }
-                else
-                {
-                    segment2s_Result.Add(segment2D);
-
+                    point2Ds_Temp.Add(aTuple.Item1);
                 }
 
-                segment2Ds.RemoveAt(0);
+
             }
 
-            for (int i = 1; i < segment2Ds.Count - 1; i++)
+
+            //Sorting
+            List<Point2D> point2Ds = new List<Point2D>();
+            foreach(KeyValuePair<int, HashSet<Point2D>> keyValuePair in dictionary)
             {
-                
-                
+                List<Point2D> point2Ds_Temp = keyValuePair.Value.ToList();
+                Point2D point2D = point2Ds_Temp.First();
 
+                Modify.SortByDistance(point2Ds_Temp, point2D);
 
-
-
-                //point2D = segment2D.GetEnd();
-                //vector2D = segment2D.Direction;
-
-                //vector2D_Intersection = Query.TraceFirst(point2D, vector2D, (ISegmentable2D)polyline2D);
-                //if (vector2D_Intersection != null && vector2D_Intersection.Length > 0)
-                //{
-                //    Segment2D segment2D_Intersection = new Segment2D(point2D.GetMoved(vector2D_Intersection), point2D);
-                //    if (segment2D_Intersection.GetLength() > maxLength)
-                //        continue;
-
-                //    List<Point2D> point2Ds_Intersections = polygon2D.Intersections(segment2D_Intersection, tolerance);
-                //    if (point2Ds_Intersections != null && point2Ds_Intersections.Count == 2)
-                //        if (result.Find(x => x.AlmostSimilar(segment2D_Intersection, tolerance)) == null)
-                //            result.Add(segment2D_Intersection);
-                //}
+                point2Ds.AddRange(point2Ds_Temp);
             }
 
-            throw new System.Exception();
+            point2Ds.Add(segment2Ds.Last().GetEnd());
+
+
+            //Reorganizing
+            List<Point2D> point2Ds_Result = new List<Point2D>();
+            int index = 0;
+            while(index < point2Ds.Count)
+            {
+                Point2D point2D = point2Ds[index];
+
+                point2Ds_Result.Add(point2D);
+
+                int index_Last = point2Ds.LastIndexOf(point2D);
+
+                if(index != index_Last)
+                {
+                    if (index_Last == point2Ds.Count - 1)
+                        break;
+
+                    index = index_Last + 1;
+                }
+                
+                index++;
+            }
+
+            if (point2Ds_Result == null || point2Ds_Result.Count == 0)
+                return null;
+
+            return new Polyline2D(point2Ds_Result);
         }
     }
 }

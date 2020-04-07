@@ -122,7 +122,7 @@ namespace SAM.Core.Grasshopper
             foreach (object @object in objects)
             {                
                 object value_Temp;
-                if (Query.TryGetValue(@object, name, out value_Temp))
+                if (Core.Query.TryGetValue(@object, name, out value_Temp))
                 {
                     if (value == null && value_Temp == null)
                     {
