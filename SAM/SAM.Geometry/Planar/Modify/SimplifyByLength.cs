@@ -166,7 +166,7 @@ namespace SAM.Geometry.Planar
                 int index_Next = -1;
                 Point2D point2D_Next = null;
 
-                GetNext(point2Ds, index, out index_Next, out point2D_Next);
+                GetNext(point2Ds, index, out index_Next, out point2D_Next, tolerance);
                 if (index_Next == -1 || index_Next == index)
                     break;
 
@@ -179,7 +179,7 @@ namespace SAM.Geometry.Planar
             return new Polyline2D(point2Ds_Result);
         }
 
-        private static void GetNext(List<List<Point2D>> point2Ds, int index, out int index_Next, out Point2D point2D_Next)
+        private static void GetNext(List<List<Point2D>> point2Ds, int index, out int index_Next, out Point2D point2D_Next, double tolerance = Core.Tolerance.Distance)
         {
             index_Next = -1;
             point2D_Next = null;
@@ -189,7 +189,7 @@ namespace SAM.Geometry.Planar
 
             for(int i = 0; i < point2Ds.Count; i++)
                 for (int j = 0; j < point2Ds_Current.Count; j++)
-                    if(point2Ds[i].Contains(point2Ds_Current[j]))
+                    if(point2Ds[i].Contains(point2Ds_Current[j], tolerance))
                         indexes[j] = i;
 
             for (int i = 0; i < point2Ds_Current.Count; i++)
