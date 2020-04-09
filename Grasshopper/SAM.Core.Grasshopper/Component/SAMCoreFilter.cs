@@ -149,6 +149,14 @@ namespace SAM.Core.Grasshopper
                             }
                         }
                     }
+                    if((value_Temp is Enum && value is string) || (value is Enum && value_Temp is string))
+                    {
+                        if (value_Temp.ToString().Equals(value.ToString()))
+                        {
+                            result_in.Add(@object);
+                            continue;
+                        }
+                    }
                     else
                     {
                         if (value == value_Temp || (value != null && value.Equals(value_Temp)))
