@@ -75,7 +75,8 @@ namespace SAM.Core.Grasshopper
 
             if (string.IsNullOrWhiteSpace(pathOrJson))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Null or Empty value for Json");
+                dataAccess.SetData(0, null);
                 dataAccess.SetData(1, false);
                 return;
             }
@@ -83,7 +84,8 @@ namespace SAM.Core.Grasshopper
             List<IJSAMObject> jSAMObjects = Convert.ToSAM(pathOrJson);
             if(jSAMObjects == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Could not parse Json to SAM");
+                dataAccess.SetData(0, null);
                 dataAccess.SetData(1, false);
                 return;
             }

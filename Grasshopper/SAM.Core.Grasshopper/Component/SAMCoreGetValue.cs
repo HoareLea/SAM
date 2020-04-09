@@ -90,7 +90,8 @@ namespace SAM.Core.Grasshopper
 
             if (@object == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(0, null);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Null object provided");
                 return;
             }
 

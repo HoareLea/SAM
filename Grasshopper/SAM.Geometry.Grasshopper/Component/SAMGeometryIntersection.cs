@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Planar;
-using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Grasshopper
 {

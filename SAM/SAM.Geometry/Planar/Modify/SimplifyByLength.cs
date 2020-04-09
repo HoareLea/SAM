@@ -57,8 +57,152 @@ namespace SAM.Geometry.Planar
 
             return new Polygon2D(point2Ds);
         }
-    
+
         public static Polyline2D SimplifyByLength(this Polyline2D polyline2D, double maxLength, double tolerance = Core.Tolerance.Distance)
+        {
+            if (polyline2D == null || double.IsNaN(maxLength))
+                return null;
+
+            if (polyline2D.IsClosed())
+            {
+                Polygon2D polygon2D = SimplifyByLength(new Polygon2D(polyline2D.Points), maxLength, tolerance);
+                if (polygon2D == null)
+                    return null;
+
+                return polygon2D.GetPolyline();
+            }
+
+            List<Segment2D> segment2Ds = polyline2D.GetSegments();
+            if (segment2Ds == null || segment2Ds.Count == 0)
+                return null;
+
+            //Collecting Intersections
+            Dictionary<int, HashSet<Point2D>> dictionary = new Dictionary<int, HashSet<Point2D>>();
+            for (int i = 0; i < segment2Ds.Count; i++)
+            {
+                Segment2D segment2D = segment2Ds[i];
+
+                HashSet<Point2D> point2Ds_Temp;
+                if (!dictionary.TryGetValue(i, out point2Ds_Temp))
+                {
+                    point2Ds_Temp = new HashSet<Point2D>();
+                    point2Ds_Temp.Add(segment2D.GetStart());
+                    point2Ds_Temp.Add(segment2D.GetEnd());
+                    dictionary[i] = point2Ds_Temp;
+                }
+
+                Tuple<Point2D, Segment2D, Vector2D> aTuple;
+
+                Point2D point2D_1 = segment2D.GetStart();
+                Vector2D vector2D_1 = segment2D.Direction.GetNegated();
+
+                aTuple = Query.TraceDataFirst(point2D_1, vector2D_1, segment2Ds);
+                if (aTuple != null && aTuple.Item3.Length < maxLength)
+                {
+                    int index_Temp = Query.IndexOfClosest(segment2Ds, aTuple.Item1);
+
+                    Segment2D segment2D_Temp = segment2Ds[index_Temp];
+
+                    if (!dictionary.TryGetValue(index_Temp, out point2Ds_Temp))
+                    {
+                        point2Ds_Temp = new HashSet<Point2D>();
+                        point2Ds_Temp.Add(segment2D_Temp.GetStart());
+                        point2Ds_Temp.Add(segment2D_Temp.GetEnd());
+                        dictionary[index_Temp] = point2Ds_Temp;
+                    }
+                    point2Ds_Temp.Add(aTuple.Item1);
+                    dictionary[i].Add(aTuple.Item1);
+                }
+
+
+                Point2D point2D_2 = segment2D.GetEnd();
+                Vector2D vector2D_2 = segment2D.Direction;
+
+                aTuple = Query.TraceDataFirst(point2D_2, vector2D_2, segment2Ds);
+                if (aTuple != null && aTuple.Item3.Length < maxLength)
+                {
+                    int index_Temp = Query.IndexOfClosest(segment2Ds, aTuple.Item1);
+
+                    Segment2D segment2D_Temp = segment2Ds[index_Temp];
+
+                    if (!dictionary.TryGetValue(index_Temp, out point2Ds_Temp))
+                    {
+                        point2Ds_Temp = new HashSet<Point2D>();
+                        point2Ds_Temp.Add(segment2D_Temp.GetStart());
+                        point2Ds_Temp.Add(segment2D_Temp.GetEnd());
+                        dictionary[index_Temp] = point2Ds_Temp;
+                    }
+                    point2Ds_Temp.Add(aTuple.Item1);
+                    dictionary[i].Add(aTuple.Item1);
+                }
+
+
+            }
+
+
+            //Sorting
+            List<int> indexes = dictionary.Keys.ToList();
+            indexes.Sort();
+
+            Point2D point2D_Start = dictionary[indexes.First()].ToList().First();
+
+            List<List<Point2D>> point2Ds = new List<List<Point2D>>();
+            foreach (int index_Temp in indexes)
+            {
+                List<Point2D> point2Ds_Temp = dictionary[index_Temp].ToList();
+                Modify.SortByDistance(point2Ds_Temp, point2D_Start);
+
+                point2Ds.Add(point2Ds_Temp);
+                point2D_Start = point2Ds_Temp.Last();
+            }
+
+            //Reorganizing
+            int index = 0;
+
+            List<Point2D> point2Ds_Result = new List<Point2D>();
+            point2Ds_Result.Add(point2Ds.First().First());
+            while (index < point2Ds.Count)
+            {
+                int index_Next = -1;
+                Point2D point2D_Next = null;
+
+                GetNext(point2Ds, index, out index_Next, out point2D_Next);
+                if (index_Next == -1 || index_Next == index)
+                    break;
+
+                point2Ds_Result.Add(point2D_Next);
+                index = index_Next;
+            }
+
+            point2Ds_Result.Add(point2Ds.Last().Last());
+
+            return new Polyline2D(point2Ds_Result);
+        }
+
+        private static void GetNext(List<List<Point2D>> point2Ds, int index, out int index_Next, out Point2D point2D_Next)
+        {
+            index_Next = -1;
+            point2D_Next = null;
+
+            List<Point2D> point2Ds_Current = point2Ds[index];
+            List<int> indexes = point2Ds_Current.ConvertAll(x => -1);
+
+            for(int i = 0; i < point2Ds.Count; i++)
+                for (int j = 0; j < point2Ds_Current.Count; j++)
+                    if(point2Ds[i].Contains(point2Ds_Current[j]))
+                        indexes[j] = i;
+
+            for (int i = 0; i < point2Ds_Current.Count; i++)
+            {
+                if(indexes[i] > index_Next)
+                {
+                    index_Next = indexes[i];
+                    point2D_Next = point2Ds_Current[i];
+                }
+            }
+        }
+
+        public static Polyline2D SimplifyByLength_Old(this Polyline2D polyline2D, double maxLength, double tolerance = Core.Tolerance.Distance)
         {
             if (polyline2D == null || double.IsNaN(maxLength))
                 return null;
@@ -87,7 +231,7 @@ namespace SAM.Geometry.Planar
                 {
                     point2Ds_Temp = new HashSet<Point2D>();
                     point2Ds_Temp.Add(segment2D.GetStart());
-                    //point2Ds_Temp.Add(segment2D.GetEnd());
+                    point2Ds_Temp.Add(segment2D.GetEnd());
                     dictionary[i] = point2Ds_Temp;
                 }
 
@@ -106,11 +250,12 @@ namespace SAM.Geometry.Planar
                     if(!dictionary.TryGetValue(index_Temp, out point2Ds_Temp))
                     {
                         point2Ds_Temp = new HashSet<Point2D>();
-                        point2Ds_Temp.Add(segment2D.GetStart());
-                        //point2Ds_Temp.Add(segment2D.GetEnd());
-                        dictionary[i] = point2Ds_Temp;
+                        point2Ds_Temp.Add(segment2D_Temp.GetStart());
+                        point2Ds_Temp.Add(segment2D_Temp.GetEnd());
+                        dictionary[index_Temp] = point2Ds_Temp;
                     }
                     point2Ds_Temp.Add(aTuple.Item1);
+                    dictionary[i].Add(aTuple.Item1);
                 }
 
 
@@ -127,11 +272,12 @@ namespace SAM.Geometry.Planar
                     if (!dictionary.TryGetValue(index_Temp, out point2Ds_Temp))
                     {
                         point2Ds_Temp = new HashSet<Point2D>();
-                        point2Ds_Temp.Add(segment2D.GetStart());
-                        //point2Ds_Temp.Add(segment2D.GetEnd());
-                        dictionary[i] = point2Ds_Temp;
+                        point2Ds_Temp.Add(segment2D_Temp.GetStart());
+                        point2Ds_Temp.Add(segment2D_Temp.GetEnd());
+                        dictionary[index_Temp] = point2Ds_Temp;
                     }
                     point2Ds_Temp.Add(aTuple.Item1);
+                    dictionary[i].Add(aTuple.Item1);
                 }
 
 
@@ -139,37 +285,35 @@ namespace SAM.Geometry.Planar
 
 
             //Sorting
-            List<Point2D> point2Ds = new List<Point2D>();
-            foreach(KeyValuePair<int, HashSet<Point2D>> keyValuePair in dictionary)
+            List<int> indexes = dictionary.Keys.ToList();
+            indexes.Sort();
+
+            Point2D point2D_Start = dictionary[indexes.First()].ToList().First();
+
+            Dictionary<int, HashSet<Point2D>> dictionary_Temp = new Dictionary<int, HashSet<Point2D>>();
+            foreach (int index_Temp in indexes)
             {
-                List<Point2D> point2Ds_Temp = keyValuePair.Value.ToList();
+                List<Point2D> point2Ds_Temp = dictionary[index_Temp].ToList();
                 Point2D point2D = point2Ds_Temp.First();
 
                 Modify.SortByDistance(point2Ds_Temp, point2D);
 
-                point2Ds.AddRange(point2Ds_Temp);
+                dictionary_Temp[index_Temp] = new HashSet<Point2D>(point2Ds_Temp);
             }
-
-            point2Ds.Add(segment2Ds.Last().GetEnd());
-
 
             //Reorganizing
             List<Point2D> point2Ds_Result = new List<Point2D>();
             int index = 0;
-            while(index < point2Ds.Count)
+            point2Ds_Result.Add(dictionary_Temp[index].ToList().First());
+            while (index < dictionary_Temp.Count)
             {
-                Point2D point2D = point2Ds[index];
+                List<Point2D> point2Ds = dictionary_Temp[index].ToList();
+                point2Ds_Result.Add(point2Ds.Last());
 
-                point2Ds_Result.Add(point2D);
-
-                int index_Last = point2Ds.LastIndexOf(point2D);
-
-                if(index != index_Last)
+                for(int i = index + 1; i < indexes.Count; i++)
                 {
-                    if (index_Last == point2Ds.Count - 1)
-                        break;
-
-                    index = index_Last + 1;
+                    if(dictionary_Temp[i].Contains(point2Ds_Result.Last()))
+                        index = i - 1;
                 }
                 
                 index++;
