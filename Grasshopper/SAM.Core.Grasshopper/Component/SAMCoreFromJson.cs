@@ -68,7 +68,8 @@ namespace SAM.Core.Grasshopper
             string pathOrJson = null;
             if (!dataAccess.GetData<string>(0, ref pathOrJson))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Null or Empty value for Json");
+                dataAccess.SetData(0, null);
                 dataAccess.SetData(1, false);
                 return;
             }

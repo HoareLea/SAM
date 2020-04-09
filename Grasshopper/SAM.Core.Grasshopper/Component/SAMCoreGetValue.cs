@@ -70,7 +70,8 @@ namespace SAM.Core.Grasshopper
             GH_ObjectWrapper objectWrapper = null;
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(0, null);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Null object provided");
                 return;
             }
 
