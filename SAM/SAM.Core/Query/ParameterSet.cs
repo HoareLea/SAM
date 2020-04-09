@@ -22,7 +22,11 @@ namespace SAM.Core
 
         public static ParameterSet ParameterSet(this IEnumerable<ParameterSet> parameterSets, Assembly assembly)
         {
-            return ParameterSet(parameterSets, Query.Guid(assembly));
+            ParameterSet parameterSet = ParameterSet(parameterSets, Guid(assembly));
+            if (parameterSet == null)
+                parameterSet = ParameterSet(parameterSets, Name(assembly));
+
+            return parameterSet;
         }
 
         public static ParameterSet ParameterSet(this IEnumerable<ParameterSet> parameterSets, Guid guid)
