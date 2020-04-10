@@ -26,7 +26,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreToList()
           : base("ToList", "ToList",
-              "Converts csv string to list ",
+              "Converts csv string to list",
               "SAM", "Core")
         {
 
@@ -37,7 +37,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddTextParameter("_text", "_text", "csv Text", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_csvtext", "_csvtext", "csv string", GH_ParamAccess.item);
         }
 
         /// <summary>

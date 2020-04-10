@@ -98,7 +98,7 @@
     </Compile>
     <Compile Include="Convert\ToGrasshopper\IGH_Goos.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
-    <Compile Include="Convert\ToRihno\Brep.cs" />
+    <Compile Include="Convert\ToRhino\Brep.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">
