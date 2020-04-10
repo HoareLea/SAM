@@ -76,6 +76,8 @@ namespace SAM.Geometry.Planar
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
+            segment2Ds = Modify.Split(segment2Ds, tolerance);
+
             //Collecting Intersections
             Dictionary<int, HashSet<Point2D>> dictionary = new Dictionary<int, HashSet<Point2D>>();
             for (int i = 0; i < segment2Ds.Count; i++)
