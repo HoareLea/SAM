@@ -31,7 +31,47 @@ namespace SAM.Geometry.Planar
                 return Offset_Outside(polygon2D, offsets_Temp, simplify, orient, tolerance);
         }
 
-        
+        public static List<Polyline2D> Offset(this Polyline2D polyline2D, IEnumerable<double> offsets, Orientation orientation, double tolerance = Core.Tolerance.Distance)
+        {
+            if (polyline2D == null || polyline2D.CountPoints() <= 1 || offsets == null || orientation == Geometry.Orientation.Collinear || orientation == Geometry.Orientation.Undefined)
+                return null;
+
+            int count = offsets.Count();
+            if (count == 0)
+                return null;
+
+            List<Segment2D> segment2Ds_Polyline2D = polyline2D.GetSegments();
+            if (segment2Ds_Polyline2D.Count == 0)
+                return null;
+
+            List<double> offsets_Temp = new List<double>(offsets);
+            double offset_Temp = offsets.Last();
+            while (offsets_Temp.Count < count)
+                offsets_Temp.Add(offset_Temp);
+
+            List<Segment2D> segment2Ds = new List<Segment2D>();
+            for (int i = 0; i < segment2Ds_Polyline2D.Count; i++)
+            {
+                Segment2D segment2D = segment2Ds_Polyline2D[i];
+
+                Vector2D vector2D = segment2D.Direction.GetPerpendicular(orientation).Unit * offsets_Temp[i];
+                segment2Ds.Add(segment2D.Move(vector2D));
+            }
+
+            Modify.Join(segment2Ds, tolerance);
+
+            List<Polyline2D> result = new List<Polyline2D>() { new Polyline2D(segment2Ds)  };
+
+            return result;
+        }
+
+        public static List<Polyline2D> Offset(this Polyline2D polyline2D, double offset, Orientation orientation, double tolerance = Core.Tolerance.Distance)
+        {
+            return Offset(polyline2D, new double[] { offset }, orientation, tolerance);
+        }
+
+
+
         private static List<Polygon2D> Offset_Inside(this Polygon2D polygon2D, List<double> offsets, bool simplify = true, bool orient = true, double tolerance = Core.Tolerance.Distance)
         {
             Orientation orientation = polygon2D.GetOrientation();

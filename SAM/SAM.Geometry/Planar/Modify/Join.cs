@@ -1,31 +1,39 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static List<Polygon2D> Join(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
+        public static bool Join(this List<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if (segmentable2Ds == null)
-                return null;
-
-            List<Segment2D> segment2Ds = new List<Segment2D>();
-            foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+            if (segment2Ds == null || segment2Ds.Count < 2)
+                return false;
+            
+            List<Segment2D> result = new List<Segment2D>();
+            result.Add(segment2Ds[0]);
+            for (int i = 1; i < segment2Ds.Count; i++)
             {
-                if (segmentable2D == null)
-                    continue;
+                Segment2D segment_Previous = result.Last();
+                Segment2D segment = segment2Ds[i];
 
-                List<Segment2D> segment2Ds_Temp = segmentable2D.GetSegments();
-                if (segment2Ds_Temp != null && segment2Ds_Temp.Count > 0)
-                    segment2Ds.AddRange(segment2Ds_Temp);
+                Point2D point2D_Intersection = segment_Previous.Intersection(segment, false, tolerance);
+                if (point2D_Intersection == null)
+                {
+                    result.Add(new Segment2D(segment_Previous[0], segment[0]));
+                    result.Add(new Segment2D(segment[0], segment[1]));
+                }
+                else
+                {
+                    result[result.Count - 1] = new Segment2D(segment_Previous[0], point2D_Intersection);
+                    result.Add(new Segment2D(point2D_Intersection, segment[1]));
+                }
             }
 
-            segment2Ds.RemoveAll(x => x == null || x.GetLength() < tolerance);
-            segment2Ds = Modify.Split(segment2Ds, tolerance);
+            segment2Ds.Clear();
+            segment2Ds.AddRange(result);
 
-            PointGraph2D pointGraph2D = new PointGraph2D(segment2Ds);
-            return pointGraph2D.GetPolygon2Ds_External();
+            return true;
         }
         
         

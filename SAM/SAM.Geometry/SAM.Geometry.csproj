@@ -66,6 +66,7 @@
     <Compile Include="Planar\Classes\Polyline2D.cs" />
     <Compile Include="Planar\Create\Polyline2D.cs" />
     <Compile Include="Planar\Create\Point2Ds.cs" />
+    <Compile Include="Planar\Create\Polygon2Ds.cs" />
     <Compile Include="Planar\Create\Segment2Ds.cs" />
     <Compile Include="Planar\Create\Face2Ds.cs" />
     <Compile Include="Planar\Create\ICurve2D.cs" />

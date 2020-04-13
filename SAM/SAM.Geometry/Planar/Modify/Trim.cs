@@ -166,6 +166,12 @@ namespace SAM.Geometry.Planar
             if (segmentable2D == null || parameter < 0 || parameter > 1)
                 return null;
 
+            if (parameter == 0)
+                return null;
+
+            if (parameter == 1)
+                return segmentable2D.Clone() as ISegmentable2D;
+
             List<Point2D> point2Ds = segmentable2D.GetPoints();
             if (point2Ds == null || point2Ds.Count < 2)
                 return null;
