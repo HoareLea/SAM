@@ -12,7 +12,7 @@ namespace SAM.Geometry.Spatial
 
         public Segment3D(Point3D start, Point3D end)
         {
-            origin = start;
+            origin = new Point3D(start);
             vector = new Vector3D(start, end);
         }
 
@@ -24,8 +24,8 @@ namespace SAM.Geometry.Spatial
 
         public Segment3D(Point3D origin, Vector3D vector)
         {
-            this.origin = origin;
-            this.vector = vector;
+            this.origin = new Point3D(origin);
+            this.vector = new Vector3D(vector);
         }
 
         public Segment3D(JObject jObject)
@@ -162,6 +162,19 @@ namespace SAM.Geometry.Spatial
                 return end;
             else
                 return new Point3D(start.X + aParameter * C, start.Y + aParameter * D, start.Z + aParameter * F);
+        }
+
+        public Line3D GetLine3D()
+        {
+            return new Line3D(origin, vector);
+        }
+
+        public static explicit operator Segment3D(Line3D line3D)
+        {
+            if (line3D == null)
+                return null;
+
+            return new Segment3D(line3D.Origin, line3D.Direction);
         }
 
 

@@ -109,10 +109,10 @@ namespace SAM.Geometry.Spatial
 
         public double Angle(Point3D point3D_1, Point3D point3D_2)
         {
-            Vector3D aVector_1 = new Vector3D(this, point3D_1);
-            Vector3D aVector_2 = new Vector3D(this, point3D_2);
+            Vector3D vector3D_1 = new Vector3D(this, point3D_1);
+            Vector3D vector3D_2 = new Vector3D(this, point3D_2);
 
-            return System.Math.Acos(aVector_1.DotProduct(aVector_2) / (aVector_1.Length * aVector_2.Length));
+            return System.Math.Acos(vector3D_1.DotProduct(vector3D_2) / (vector3D_1.Length * vector3D_2.Length));
         }
 
         public double SmallestAngle(Point3D point3D_1, Point3D point3D_2)

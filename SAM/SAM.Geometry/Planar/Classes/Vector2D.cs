@@ -161,13 +161,27 @@ namespace SAM.Geometry.Planar
             return new BoundingBox2D(Point2D.Zero, new Point2D(coordinates[0], coordinates[1]));
         }
 
+        //Calculate the dot product as an angle
+        //Source: https://wiki.unity3d.com/index.php/3d_Math_functions
         public double Angle(Vector2D vector2D)
         {
-            double result = System.Math.Acos(DotProduct(vector2D) / (Length * vector2D.Length));
-            if (double.IsNaN(result))
-                result = 0;
+            //Get the dot product
+            double dotProduct = DotProduct(vector2D);
 
-            return result;
+            //Clamp to prevent NaN error. Shouldn't need this in the first place, but there could be a rounding error issue.
+            if (dotProduct < -1)
+                dotProduct = -1;
+            else if (dotProduct > 1)
+                dotProduct = 1;
+
+            //Calculate the angle. The output is in radians
+            return System.Math.Acos(dotProduct);
+
+            //double result = System.Math.Acos(DotProduct(vector2D) / (Length * vector2D.Length));
+            //if (double.IsNaN(result))
+            //    result = 0;
+
+            //return result;
         }
 
         public bool Colinear(Vector2D vector2D, double tolerance = Core.Tolerance.Angle)

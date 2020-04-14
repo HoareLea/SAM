@@ -135,6 +135,7 @@
     <Compile Include="Planar\Query\Closest.cs" />
     <Compile Include="Planar\Query\ConvexHull.cs" />
     <Compile Include="Query\Opposite.cs" />
+    <Compile Include="Spatial\Classes\Line3D.cs" />
     <Compile Include="Spatial\Create\Matrix.cs" />
     <Compile Include="Spatial\Create\Plane.cs" />
     <Compile Include="Spatial\Create\Face3Ds.cs" />

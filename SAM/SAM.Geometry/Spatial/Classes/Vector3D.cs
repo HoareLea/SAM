@@ -203,13 +203,34 @@ namespace SAM.Geometry.Spatial
             return new Vector3D(this);
         }
 
+        //Calculate the dot product as an angle
+        //Source: https://wiki.unity3d.com/index.php/3d_Math_functions
         public double Angle(Vector3D vector3D)
         {
-            double value = System.Math.Acos(DotProduct(vector3D) / (Length * vector3D.Length));
-            if (double.IsNaN(value))
-                return 0;
+            //get the dot product
+            double dotProduct = DotProduct(vector3D);
 
-            return value;
+            //Clamp to prevent NaN error. Shouldn't need this in the first place, but there could be a rounding error issue.
+            if (dotProduct < -1)
+                dotProduct = -1;
+            else if (dotProduct > 1)
+                dotProduct = 1;
+
+            //Calculate the angle. The output is in radians
+            return System.Math.Acos(dotProduct);
+
+            //double value = System.Math.Acos(DotProduct(vector3D) / (Length * vector3D.Length));
+            //if (double.IsNaN(value))
+            //    return 0;
+
+            //return value;
+        }
+
+        //Calculate the dot product of plane normal as an angle
+        //Source: https://wiki.unity3d.com/index.php/3d_Math_functions
+        public double Angle(Plane plane)
+        {
+            return (System.Math.PI / 2) - Angle(plane.Normal);
         }
 
         public double SmallestAngle(Vector3D vector3D)
