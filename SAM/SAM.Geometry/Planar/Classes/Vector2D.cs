@@ -137,7 +137,7 @@ namespace SAM.Geometry.Planar
             Vector2D vector2D_1 = vector2D.Unit;
             Vector2D vector2D_2 = Unit;
 
-            return vector2D_1.AlmostEqual(vector2D_2, tolerance);
+            return vector2D_1.AlmostEqual(vector2D_2, tolerance) || vector2D_1.AlmostEqual(vector2D_2.GetNegated(), tolerance);
         }
 
         public bool IsValid

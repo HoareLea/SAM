@@ -213,7 +213,7 @@ namespace SAM.Math
             double C = a * d + a * f + d * f - b * b - c * c - e * e;
             double D = -(a * d * f + 2 * b * c * e - a * e * e - d * c * c - f * b * b);
 
-            return RealCubicRoots(A, B, C, D, tolerance);
+            return Query.RealCubicRoots_ThreeRootsOnly(A, B, C, D, tolerance);
         }
 
         public bool FromJObject(JObject jObject)
@@ -245,30 +245,30 @@ namespace SAM.Math
         }
 
 
-        // Solve Ax^3 + Bx^2 + Cx + D = 0 following http://www.code-kings.com/2013/11/cubic-equation-roots-in-csharp-code.html
-        private static double[] RealCubicRoots(double A, double B, double C, double D, double tolerance = Core.Tolerance.Distance)
-        {
-            double f = (3 * C / A - B * B / (A * A)) / 3;
-            double g = (2 * System.Math.Pow(B, 3) / System.Math.Pow(A, 3) - (9 * B * C) / System.Math.Pow(A, 2) + 27 * D / A) / 27;
-            double h = Core.Modify.Round(System.Math.Pow(g, 2) * 0.25 + System.Math.Pow(f, 3) / 27, tolerance);
+        //// Solve Ax^3 + Bx^2 + Cx + D = 0 following http://www.code-kings.com/2013/11/cubic-equation-roots-in-csharp-code.html
+        //private static double[] RealCubicRoots(double A, double B, double C, double D, double tolerance = Core.Tolerance.Distance)
+        //{
+        //    double f = (3 * C / A - B * B / (A * A)) / 3;
+        //    double g = (2 * System.Math.Pow(B, 3) / System.Math.Pow(A, 3) - (9 * B * C) / System.Math.Pow(A, 2) + 27 * D / A) / 27;
+        //    double h = Core.Modify.Round(System.Math.Pow(g, 2) * 0.25 + System.Math.Pow(f, 3) / 27, tolerance);
 
-            if (h <= 0)
-            {
-                double i = System.Math.Pow(System.Math.Pow(g, 2) * 0.25 - h, 0.5);
-                double j = System.Math.Pow(i, 0.333333333333333333333333);
-                double k = System.Math.Acos(-g / (2 * i));
-                double l = -j;
-                double m = System.Math.Cos(k / 3);
-                double n = System.Math.Pow(3, 0.5) * System.Math.Sin(k / 3);
-                double p = -B / (3 * A);
-                double x = 2 * j * System.Math.Cos(k / 3) - B / (3 * A);
-                double y = l * (m + n) + p;
-                double z = l * (m - n) + p;
-                return new double[] { x, y, z };
-            }
-            else
-                return null;
-        }
+        //    if (h <= 0)
+        //    {
+        //        double i = System.Math.Pow(System.Math.Pow(g, 2) * 0.25 - h, 0.5);
+        //        double j = System.Math.Pow(i, 0.333333333333333333333333);
+        //        double k = System.Math.Acos(-g / (2 * i));
+        //        double l = -j;
+        //        double m = System.Math.Cos(k / 3);
+        //        double n = System.Math.Pow(3, 0.5) * System.Math.Sin(k / 3);
+        //        double p = -B / (3 * A);
+        //        double x = 2 * j * System.Math.Cos(k / 3) - B / (3 * A);
+        //        double y = l * (m + n) + p;
+        //        double z = l * (m - n) + p;
+        //        return new double[] { x, y, z };
+        //    }
+        //    else
+        //        return null;
+        //}
 
         public static Matrix GetIdentity(int count = 3)
         {

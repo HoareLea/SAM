@@ -371,9 +371,26 @@ namespace SAM.Geometry.Planar
             return Modify.Trim(this, parameter, inverted);
         }
 
+        public bool Include(BoundingBox2D boundingBox2D)
+        {
+            if (boundingBox2D == null)
+                return false;
+
+            max = Point2D.Max(max, boundingBox2D.Max);
+            min = Point2D.Min(min, boundingBox2D.Min);
+            return true;
+        }
+
         public double GetLength()
         {
             return GetSegments().ConvertAll(x => x.GetLength()).Sum();
+        }
+
+        public Segment2D[] GetDiagonals()
+        {
+            List<Point2D> point2Ds = GetPoints();
+
+            return new Segment2D[] { new Segment2D(point2Ds[0], point2Ds[2]), new Segment2D(point2Ds[1], point2Ds[3]) };
         }
     }
 }
