@@ -94,6 +94,7 @@
     <Compile Include="Planar\Modify\Reverse.cs" />
     <Compile Include="Planar\Query\AlmostSimilar.cs" />
     <Compile Include="Planar\Query\Contains.cs" />
+    <Compile Include="Planar\Query\IndexOfClosestPoint2D.cs" />
     <Compile Include="Planar\Query\SelfIntersectionSegment2Ds.cs" />
     <Compile Include="Planar\Query\ClosestSegment2Ds.cs" />
     <Compile Include="Planar\Query\MinDistance.cs" />
@@ -116,13 +117,13 @@
     <Compile Include="Planar\Query\IsValid.cs" />
     <Compile Include="Planar\Query\Point2D.cs" />
     <Compile Include="Planar\Query\Parameter.cs" />
-    <Compile Include="Planar\Query\IndexesOfClosest.cs" />
+    <Compile Include="Planar\Query\IndexesOfClosestSegment2D.cs" />
     <Compile Include="Planar\Query\Intersection.cs" />
     <Compile Include="Planar\Query\IntersectionSegment2Ds.cs" />
     <Compile Include="Planar\Query\Union.cs" />
     <Compile Include="Planar\Query\Colinear.cs" />
     <Compile Include="Planar\Query\Segment2Ds.cs" />
-    <Compile Include="Planar\Query\IndexOfClosest.cs" />
+    <Compile Include="Planar\Query\IndexOfClosestSegment2D.cs" />
     <Compile Include="Planar\Query\SmallestAngleVector.cs" />
     <Compile Include="Planar\Query\ExtremePoints.cs" />
     <Compile Include="Planar\Query\BottomLeft.cs" />

@@ -101,7 +101,7 @@ namespace SAM.Geometry.Planar
                 aTuple = Query.TraceDataFirst(point2D_1, vector2D_1, segment2Ds);
                 if (aTuple != null && aTuple.Item3.Length < maxLength)
                 {
-                    int index_Temp = Query.IndexOfClosest(segment2Ds, aTuple.Item1);
+                    int index_Temp = Query.IndexOfClosestSegment2D(segment2Ds, aTuple.Item1);
 
                     Segment2D segment2D_Temp = segment2Ds[index_Temp];
 
@@ -123,7 +123,7 @@ namespace SAM.Geometry.Planar
                 aTuple = Query.TraceDataFirst(point2D_2, vector2D_2, segment2Ds);
                 if (aTuple != null && aTuple.Item3.Length < maxLength)
                 {
-                    int index_Temp = Query.IndexOfClosest(segment2Ds, aTuple.Item1);
+                    int index_Temp = Query.IndexOfClosestSegment2D(segment2Ds, aTuple.Item1);
 
                     Segment2D segment2D_Temp = segment2Ds[index_Temp];
 
@@ -245,7 +245,7 @@ namespace SAM.Geometry.Planar
                 aTuple = Query.TraceDataFirst(point2D_1, vector2D_1, segment2Ds);
                 if(aTuple != null && aTuple.Item3.Length < maxLength)
                 {
-                    int index_Temp = Query.IndexOfClosest(segment2Ds, aTuple.Item1);
+                    int index_Temp = Query.IndexOfClosestSegment2D(segment2Ds, aTuple.Item1);
 
                     Segment2D segment2D_Temp = segment2Ds[index_Temp];
 
@@ -267,7 +267,7 @@ namespace SAM.Geometry.Planar
                 aTuple = Query.TraceDataFirst(point2D_2, vector2D_2, segment2Ds);
                 if (aTuple != null && aTuple.Item3.Length < maxLength)
                 {
-                    int index_Temp = Query.IndexOfClosest(segment2Ds, aTuple.Item1);
+                    int index_Temp = Query.IndexOfClosestSegment2D(segment2Ds, aTuple.Item1);
 
                     Segment2D segment2D_Temp = segment2Ds[index_Temp];
 

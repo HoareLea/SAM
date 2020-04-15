@@ -6,20 +6,23 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static int IndexOfClosest(this IEnumerable<Segment2D> segment2Ds, Point2D point2D)
+        public static int IndexOfClosestPoint2D(this ISegmentable2D segmentable2D, Point2D point2D)
         {
-            if (segment2Ds == null || point2D == null)
+            if (segmentable2D == null || point2D == null)
+                return -1;
+
+            List<Point2D> point2Ds = segmentable2D.GetPoints();
+            if (point2Ds == null || point2Ds.Count == 0)
                 return -1;
 
             int index = -1;
             double distance_Min = double.MaxValue;
-            for(int i=0; i < segment2Ds.Count(); i++)
+            for(int i=0; i < point2Ds.Count(); i++)
             {
-                Segment2D segment2D = segment2Ds.ElementAt(i);
-                if (segment2D == null)
+                if (point2Ds[i] == null)
                     continue;
 
-                double distance = segment2D.Closest(point2D).Distance(point2D);
+                double distance = point2D.Distance(point2Ds[i]);
                 if(distance < distance_Min)
                 {
                     distance_Min = distance;

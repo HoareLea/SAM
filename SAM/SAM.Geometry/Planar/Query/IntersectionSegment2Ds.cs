@@ -72,7 +72,7 @@ namespace SAM.Geometry.Planar
                 {
                     Point2D point2D = segment2D.Mid();
 
-                    int index = Query.IndexOfClosest(segment2Ds, point2D);
+                    int index = Query.IndexOfClosestSegment2D(segment2Ds, point2D);
                     if (index == -1)
                         continue;
 

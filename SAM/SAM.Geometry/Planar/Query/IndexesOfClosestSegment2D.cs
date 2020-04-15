@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<int> IndexesOfClosest(this IEnumerable<Segment2D> segment2Ds, Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        public static List<int> IndexesOfClosestSegment2D(this IEnumerable<Segment2D> segment2Ds, Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if (segment2Ds == null || point2D == null)
                 return null;
@@ -28,7 +28,7 @@ namespace SAM.Geometry.Planar
 
         public static List<int> IndexesOfClosest(this ISegmentable2D segmentable2D, Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            return IndexesOfClosest(segmentable2D?.GetSegments(), point2D, tolerance);
+            return IndexesOfClosestSegment2D(segmentable2D?.GetSegments(), point2D, tolerance);
         }
     }
 }

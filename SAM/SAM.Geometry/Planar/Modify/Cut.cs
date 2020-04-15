@@ -29,11 +29,11 @@ namespace SAM.Geometry.Planar
             if (polyline2D == null || point2D_1 == null || point2D_2 == null)
                 return null;
 
-            int index_1 = Query.IndexOfClosest(polyline2D, point2D_1);
+            int index_1 = Query.IndexOfClosestSegment2D(polyline2D, point2D_1);
             if (index_1 == -1)
                 return null;
 
-            int index_2 = Query.IndexOfClosest(polyline2D, point2D_2);
+            int index_2 = Query.IndexOfClosestSegment2D(polyline2D, point2D_2);
             if (index_2 == -1)
                 return null;
 
