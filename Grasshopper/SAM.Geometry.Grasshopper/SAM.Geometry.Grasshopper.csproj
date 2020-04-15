@@ -115,7 +115,6 @@
     <Compile Include="Convert\ToSAM\Circle3D.cs" />
     <Compile Include="Convert\ToSAM\Vector3D.cs" />
     <Compile Include="Convert\ToSAM\Plane.cs" />
-    <Compile Include="Convert\ToSAM\Polygon3D.cs" />
     <Compile Include="Convert\ToSAM\Segment3D.cs" />
     <Compile Include="Convert\ToSAM\Point3D.cs" />
   </ItemGroup>
