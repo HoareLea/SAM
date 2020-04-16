@@ -301,6 +301,12 @@ namespace SAM.Geometry.Planar
             return Query.Parameter(this, point2D, inverted);
         }
 
+        //Inserts new point on one of the edges (closest to given point2D)
+        public Point2D InsertClosest(Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        {
+            return Modify.InsertClosest(points, point2D, false, tolerance);
+        }
+
         public Point2D GetPoint(double parameter, bool inverted = false)
         {
             return Query.Point2D(this, parameter, inverted);

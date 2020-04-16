@@ -41,9 +41,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="clipper_library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\com.angusj.Clipper.6.4.2\lib\net40\clipper_library.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -78,8 +75,6 @@
     <Compile Include="Component\SAMGeometry2DSAMGeometry.cs" />
     <Compile Include="Component\SAMGeometrySAMGeometry2D.cs" />
     <Compile Include="Component\SAMGeometryIntersection.cs" />
-    <Compile Include="Convert\ToClipper\IntPoints.cs" />
-    <Compile Include="Convert\ToClipper\IntPoint.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Plane.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Vector.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SAM.Core;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -29,58 +30,60 @@ namespace SAM.Geometry.Planar
             if (polyline2D == null || point2D_1 == null || point2D_2 == null)
                 return null;
 
-            int index_1 = Query.IndexOfClosestSegment2D(polyline2D, point2D_1);
-            if (index_1 == -1)
-                return null;
-
-            int index_2 = Query.IndexOfClosestSegment2D(polyline2D, point2D_2);
-            if (index_2 == -1)
-                return null;
-
-            List<Segment2D> segment2Ds = polyline2D.GetSegments();
-            if (segment2Ds == null || segment2Ds.Count == 0)
-                return null;            
-            
-            if (index_1 > index_2)
+            Point2D point2D_1_Closest = polyline2D.Closest(point2D_1, true);
+            Point2D point2D_2_Closest = polyline2D.Closest(point2D_2, true);
+            if(point2D_1_Closest.Equals(point2D_2_Closest))
             {
-                int index = index_1;
-                index_1 = index_2;
-                index_2 = index;
+                Polyline2D polyline2D_Temp = new Polyline2D(polyline2D);
+                polyline2D_Temp.InsertClosest(point2D_1_Closest);
+                int index = polyline2D_Temp.IndexOfClosestPoint2D(point2D_1);
+                polyline2D_Temp.Reorder(index);
 
-                Point2D point2D = point2D_1;
-                point2D_1 = point2D_2;
-                point2D_2 = point2D;
+                return new List<Polyline2D>() { polyline2D_Temp };
             }
-            else if(index_1 == index_2)
+
+            double parameter_1 = polyline2D.GetParameter(point2D_1_Closest);
+            double parameter_2 = polyline2D.GetParameter(point2D_2_Closest);
+
+            if(parameter_1 > parameter_2)
             {
-                if(point2D_1.Distance(segment2Ds[index_1].Start) > point2D_2.Distance(segment2Ds[index_1].Start))
+                Point2D point2D = point2D_1_Closest;
+                point2D_1_Closest = point2D_2_Closest;
+                point2D_2_Closest = point2D;
+
+                double parameter = parameter_1;
+                parameter_1 = parameter_2;
+                parameter_2 = parameter;
+            }
+
+            List<Polyline2D> result = new List<Polyline2D>();
+
+            if (parameter_1 == 0)
+            {
+                if (1 - parameter_2 < parameter_2)
                 {
-                    Point2D point2D = point2D_1;
-                    point2D_1 = point2D_2;
-                    point2D_2 = point2D;
+                    result.Add(polyline2D.Trim(parameter_2) as Polyline2D);
+                    return result;
                 }
+
+                Polyline2D polyline2D_Temp = new Polyline2D(polyline2D);
+                polyline2D_Temp.Reverse();
+                polyline2D_Temp = polyline2D_Temp.Trim(1 - parameter_2) as Polyline2D;
+                polyline2D_Temp.Reverse();
+
+                result.Add(polyline2D_Temp);
+                return result;
             }
+                
+            result.Add(polyline2D.Trim(parameter_1) as Polyline2D);
 
-            List<Polyline2D> polyline2Ds = new List<Polyline2D>();
+            Polyline2D polyline2D_Reversed = new Polyline2D(polyline2D);
+            polyline2D_Reversed.Reverse();
 
-            List<Segment2D> segment2Ds_Temp = null;
+            if (parameter_2 != 1)
+                result.Add(polyline2D_Reversed.Trim(1 - parameter_2) as Polyline2D);
 
-            segment2Ds_Temp = new List<Segment2D>();
-            for (int i = 0; i < index_1; i++)
-                segment2Ds_Temp.Add(segment2Ds[i]);
-
-            segment2Ds_Temp.Add(new Segment2D(segment2Ds[index_1].Start, point2D_1));
-
-            polyline2Ds.Add(new Polyline2D(segment2Ds_Temp));
-
-            segment2Ds_Temp = new List<Segment2D>();
-            segment2Ds_Temp.Add(new Segment2D(point2D_2, segment2Ds[index_2].End));
-            for (int i = index_2 + 1; i < segment2Ds.Count; i++)
-                segment2Ds_Temp.Add(segment2Ds[i]);
-
-            polyline2Ds.Add(new Polyline2D(segment2Ds_Temp));
-
-            return polyline2Ds;
+            return result;
         }
     }
 }

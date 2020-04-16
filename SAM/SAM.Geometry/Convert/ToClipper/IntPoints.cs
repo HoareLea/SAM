@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using ClipperLib;
 using SAM.Geometry.Planar;
 
-namespace SAM.Geometry.Grasshopper
+namespace SAM.Geometry
 {
     public static partial class Convert
     {

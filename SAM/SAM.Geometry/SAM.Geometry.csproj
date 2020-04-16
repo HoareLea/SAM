@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="clipper_library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\com.angusj.Clipper.6.4.2\lib\net40\clipper_library.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -49,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Face.cs" />
+    <Compile Include="Convert\ToClipper\IntPoint.cs" />
+    <Compile Include="Convert\ToClipper\IntPoints.cs" />
     <Compile Include="Create\ISAMGeometries.cs" />
     <Compile Include="Create\JArray.cs" />
     <Compile Include="Create\ISAMGeometry.cs" />
@@ -79,6 +84,7 @@
     <Compile Include="Planar\Classes\Triangle2D.cs" />
     <Compile Include="Planar\Interfaces\ICurvable2D.cs" />
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
+    <Compile Include="Planar\Modify\InsertClosest.cs" />
     <Compile Include="Planar\Modify\Draw.cs" />
     <Compile Include="Planar\Modify\ExtendOrTrim.cs" />
     <Compile Include="Planar\Modify\Extend.cs" />
@@ -93,6 +99,10 @@
     <Compile Include="Planar\Modify\SortByDistance.cs" />
     <Compile Include="Planar\Modify\Reverse.cs" />
     <Compile Include="Planar\Query\AlmostSimilar.cs" />
+    <Compile Include="Planar\Query\SelfIntersectionPoint3D.cs" />
+    <Compile Include="Planar\Query\SelfIntersectionPoint3Ds.cs" />
+    <Compile Include="Planar\Query\SelfIntersectionPolygon2Ds.cs" />
+    <Compile Include="Planar\Query\SelfIntersect.cs" />
     <Compile Include="Planar\Query\Contains.cs" />
     <Compile Include="Planar\Query\IndexOfClosestPoint2D.cs" />
     <Compile Include="Planar\Query\SelfIntersectionSegment2Ds.cs" />

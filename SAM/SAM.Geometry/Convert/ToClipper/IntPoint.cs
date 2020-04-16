@@ -1,6 +1,6 @@
 ﻿using ClipperLib;
 
-namespace SAM.Geometry.Grasshopper
+namespace SAM.Geometry
 {
     public static partial class Convert
     {

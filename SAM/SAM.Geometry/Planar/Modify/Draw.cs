@@ -18,7 +18,7 @@ namespace SAM.Geometry.Planar
             if (close && point2Ds.Count() < 3)
                 return false;
 
-            Pen pen = new Pen(color, Convert.ToSingle(thickness));
+            Pen pen = new Pen(color, System.Convert.ToSingle(thickness));
 
             List<Segment2D> segment2Ds = Create.Segment2Ds(point2Ds, close);
             foreach (Segment2D segment2D in segment2Ds)
@@ -29,7 +29,7 @@ namespace SAM.Geometry.Planar
 
         public static bool Draw(this Graphics graphics, Color color, double thickness, Segment2D segment2D)
         {
-            return Draw(graphics, new Pen(color, Convert.ToSingle(thickness)), segment2D);
+            return Draw(graphics, new Pen(color, System.Convert.ToSingle(thickness)), segment2D);
         }
 
         public static bool Draw(this Graphics graphics, Pen pen, Segment2D segment2D)
@@ -48,7 +48,7 @@ namespace SAM.Geometry.Planar
             if (point2D_1.Distance(point2D_2) < Core.Tolerance.MacroDistance)
                 return false;
 
-            graphics.DrawLine(pen, Convert.ToSingle(segment2D[0].X), Convert.ToSingle(segment2D[0].Y), Convert.ToSingle(segment2D[1].X), Convert.ToSingle(segment2D[1].Y));
+            graphics.DrawLine(pen, System.Convert.ToSingle(segment2D[0].X), System.Convert.ToSingle(segment2D[0].Y), System.Convert.ToSingle(segment2D[1].X), System.Convert.ToSingle(segment2D[1].Y));
             return true;
         }
 
@@ -65,7 +65,7 @@ namespace SAM.Geometry.Planar
 
         public static bool Draw(this Graphics graphics, Color color, double thickness, ISegmentable2D segmentable2D)
         {
-            return Draw(graphics, new Pen(color, Convert.ToSingle(thickness)), segmentable2D);
+            return Draw(graphics, new Pen(color, System.Convert.ToSingle(thickness)), segmentable2D);
         }
 
         public static bool Draw(this Graphics graphics, Pen pen, ISegmentable2D segmentable2D)

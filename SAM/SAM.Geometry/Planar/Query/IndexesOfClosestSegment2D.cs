@@ -26,7 +26,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<int> IndexesOfClosest(this ISegmentable2D segmentable2D, Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        public static List<int> IndexesOfClosestSegment2D(this ISegmentable2D segmentable2D, Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             return IndexesOfClosestSegment2D(segmentable2D?.GetSegments(), point2D, tolerance);
         }
