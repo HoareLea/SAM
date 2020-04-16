@@ -166,6 +166,8 @@
     <Compile Include="Spatial\Query\Explode.cs" />
     <Compile Include="Spatial\Query\ClosedPlanar3Ds.cs" />
     <Compile Include="Spatial\Query\Closest.cs" />
+    <Compile Include="Spatial\Query\SelfIntersect.cs" />
+    <Compile Include="Spatial\Query\SelfIntersectionPolygon3Ds.cs" />
     <Compile Include="Spatial\Query\SmallestAngle.cs" />
     <Compile Include="Spatial\Query\Vertical.cs" />
     <Compile Include="Spatial\Query\Horizontal.cs" />
