@@ -5,10 +5,12 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static double Parameter(this ISegmentable2D segmentable2D, Point2D point2D, bool inverted = false)
+        public static double Parameter(this ISegmentable2D segmentable2D, Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null || segmentable2D == null)
                 return double.NaN;
+
+            Point2D point2D_Closest = segmentable2D.Closest(point2D);
 
             List<Segment2D> segment2Ds = segmentable2D.GetSegments();
             if (segment2Ds == null || segment2Ds.Count == 0)
@@ -38,8 +40,11 @@ namespace SAM.Geometry.Planar
                 }
 
                 lengths.Add(segment2D_Temp.GetLength());
+                
+                if (distance_Min < tolerance)
+                    continue;
 
-                double distance_Temp = segment2D_Temp.Distance(point2D);
+                double distance_Temp = segment2D_Temp.Distance(point2D_Closest);
                 if (distance_Temp < distance_Min)
                 {
                     index = i;
@@ -57,7 +62,7 @@ namespace SAM.Geometry.Planar
             double distance = lengths.GetRange(0, index).Sum();
 
             Segment2D segment2D = segment2Ds[index];
-            distance += segment2D.Start.Distance(segment2D.Closest(point2D));
+            distance += segment2D.Start.Distance(segment2D.Closest(point2D_Closest));
 
             double result = distance / length;
             if (inverted)

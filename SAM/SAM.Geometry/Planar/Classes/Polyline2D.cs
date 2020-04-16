@@ -296,9 +296,9 @@ namespace SAM.Geometry.Planar
             return GetSegments()[index];
         }
 
-        public double GetParameter(Point2D point2D, bool inverted = false)
+        public double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
         {
-            return Query.Parameter(this, point2D, inverted);
+            return Query.Parameter(this, point2D, inverted, tolerance);
         }
 
         //Inserts new point on one of the edges (closest to given point2D)

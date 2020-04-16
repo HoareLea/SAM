@@ -356,9 +356,9 @@ namespace SAM.Geometry.Planar
             return Query.Distance(this, point2D);
         }
 
-        public double GetParameter(Point2D point2D, bool inverted = false)
+        public double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
         {
-            return Query.Parameter(this, point2D, inverted);
+            return Query.Parameter(this, point2D, inverted, tolerance);
         }
 
         public Point2D GetPoint(double parameter, bool inverted = false)

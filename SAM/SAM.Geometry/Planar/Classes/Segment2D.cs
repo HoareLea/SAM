@@ -562,7 +562,7 @@ namespace SAM.Geometry.Planar
             return new Segment2D(Start, point2D);
         }
 
-        public double GetParameter(Point2D point2D, bool inverted = false)
+        public double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null)
                 return double.NaN;
@@ -571,7 +571,7 @@ namespace SAM.Geometry.Planar
             {
                 Segment2D segment2D = new Segment2D(this);
                 segment2D.Reverse();
-                return segment2D.GetParameter(point2D, false);
+                return segment2D.GetParameter(point2D, false, tolerance);
             }
 
             Point2D point2D_Closest = Closest(point2D);
@@ -582,8 +582,11 @@ namespace SAM.Geometry.Planar
 
             double distance = new Vector2D(origin, point2D_Closest).Length;
 
-            if (distance == 0)
+            if (distance < tolerance)
                 return 0;
+
+            if (distance + tolerance > length)
+                return 1;
 
             return length / distance;
         }

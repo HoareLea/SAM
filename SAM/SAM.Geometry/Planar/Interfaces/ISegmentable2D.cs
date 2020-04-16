@@ -14,7 +14,7 @@ namespace SAM.Geometry.Planar
 
         double Distance(Point2D point2D);
 
-        double GetParameter(Point2D point2D, bool inverted = false);
+        double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance);
 
         Point2D GetPoint(double parameter, bool inverted = false);
 
