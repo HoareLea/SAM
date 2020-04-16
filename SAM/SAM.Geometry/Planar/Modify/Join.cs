@@ -30,6 +30,24 @@ namespace SAM.Geometry.Planar
                 }
             }
 
+            //if(close)
+            //{
+            //    Segment2D segment_Previous = result[result.Count - 1];
+            //    Segment2D segment = result[0];
+
+            //    Point2D point2D_Intersection = segment.Intersection(segment_Previous, false, tolerance);
+            //    if (point2D_Intersection == null)
+            //    {
+            //        result.Add(new Segment2D(segment_Previous[1], segment[0]));
+            //    }
+            //    else
+            //    {
+            //        result[result.Count - 1] = new Segment2D(segment_Previous[0], point2D_Intersection);
+            //        result[0] = new Segment2D(point2D_Intersection, segment[1]);
+            //    }
+
+            //}
+
             segment2Ds.Clear();
             segment2Ds.AddRange(result);
 

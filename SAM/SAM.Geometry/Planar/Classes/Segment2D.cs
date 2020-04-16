@@ -259,46 +259,48 @@ namespace SAM.Geometry.Planar
                 return null;
 
             // Get the segments' parameters.
-            double aDx12 = End.X - Start.X;
-            double aDy12 = End.Y - Start.Y;
-            double aDx34 = segment2D.End.X - segment2D.Start.X;
-            double aDy34 = segment2D.End.Y - segment2D.Start.Y;
+            double dx12 = End.X - Start.X;
+            double dy12 = End.Y - Start.Y;
+            double dx34 = segment2D.End.X - segment2D.Start.X;
+            double dy34 = segment2D.End.Y - segment2D.Start.Y;
 
             // Solve for t1 and t2
-            double aDenominator = (aDy12 * aDx34 - aDx12 * aDy34);
-
-            double aT1 = ((Start.X - segment2D.Start.X) * aDy34 + (segment2D.Start.Y - Start.Y) * aDx34) / aDenominator;
-            
-            // The lines are parallel (or close enough to it).
-            if (double.IsInfinity(aT1)) 
+            double denominator = (dy12 * dx34 - dx12 * dy34);
+            if (double.IsNaN(denominator))
                 return null;
 
-            double aT2 = ((segment2D.Start.X - Start.X) * aDy12 + (Start.Y - segment2D.Start.Y) * aDx12) / -aDenominator;
+            double t1 = ((Start.X - segment2D.Start.X) * dy34 + (segment2D.Start.Y - Start.Y) * dx34) / denominator;
+            
+            // The lines are parallel (or close enough to it).
+            if (double.IsInfinity(t1) || double.IsNaN(t1)) 
+                return null;
+
+            double t2 = ((segment2D.Start.X - Start.X) * dy12 + (Start.Y - segment2D.Start.Y) * dx12) / -denominator;
 
             // Find the point of intersection.
-            Point2D aPoint_Intersection = new Point2D(Start.X + aDx12 * aT1, Start.Y + aDy12 * aT1);
+            Point2D point2D_Intersection = new Point2D(Start.X + dx12 * t1, Start.Y + dy12 * t1);
 
-            double aT1_Temp = Core.Modify.Round(aT1, tolerance);
-            double aT2_Temp = Core.Modify.Round(aT2, tolerance);
+            double t1_Temp = Core.Modify.Round(t1, tolerance);
+            double aT2_Temp = Core.Modify.Round(t2, tolerance);
 
             // The segments intersect if t1 and t2 are between 0 and 1.
-            if (((aT1_Temp >= 0) && (aT1_Temp <= 1) && (aT2_Temp >= 0) && (aT2_Temp <= 1)))
-                return aPoint_Intersection;
+            if (((t1_Temp >= 0) && (t1_Temp <= 1) && (aT2_Temp >= 0) && (aT2_Temp <= 1)))
+                return point2D_Intersection;
 
             // Find the closest points on the segments.
-            if (aT1 < 0)
-                aT1 = 0;
-            else if (aT1 > 1)
-                aT1 = 1;
+            if (t1 < 0)
+                t1 = 0;
+            else if (t1 > 1)
+                t1 = 1;
 
-            if (aT2 < 0)
-                aT2 = 0;
-            else if (aT2 > 1)
-                aT2 = 1;
+            if (t2 < 0)
+                t2 = 0;
+            else if (t2 > 1)
+                t2 = 1;
 
-            point2D_Closest1 = new Point2D(Start.X + aDx12 * aT1, Start.Y + aDy12 * aT1);
-            point2D_Closest2 = new Point2D(segment2D.Start.X + aDx34 * aT2, segment2D.Start.Y + aDy34 * aT2);
-            return aPoint_Intersection;
+            point2D_Closest1 = new Point2D(Start.X + dx12 * t1, Start.Y + dy12 * t1);
+            point2D_Closest2 = new Point2D(segment2D.Start.X + dx34 * t2, segment2D.Start.Y + dy34 * t2);
+            return point2D_Intersection;
         }
 
         public Point2D Intersection(Segment2D segment2D, bool bounded = true, double tolerance = Core.Tolerance.Distance)
