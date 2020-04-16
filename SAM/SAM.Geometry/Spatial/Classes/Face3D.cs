@@ -183,12 +183,12 @@ namespace SAM.Geometry.Spatial
         }
 
 
-        public static Face3D Create(IEnumerable<IClosedPlanar3D> edges)
+        public static Face3D Create(IEnumerable<IClosedPlanar3D> edges, bool orientInternalEdges = true)
         {
             if (edges == null || edges.Count() == 0)
                 return null;
 
-            IClosedPlanar3D externalEdge = null;
+            IClosedPlanar3D externalEdge_3D = null;
             double area_Max = double.MinValue;
             foreach (IClosedPlanar3D closedPlanar3D in edges)
             {
@@ -199,52 +199,71 @@ namespace SAM.Geometry.Spatial
                 if (area > area_Max)
                 {
                     area_Max = area;
-                    externalEdge = closedPlanar3D;
+                    externalEdge_3D = closedPlanar3D;
                 }
 
             }
 
-            if (externalEdge == null)
+            if (externalEdge_3D == null)
                 return null;
 
-            Plane plane = externalEdge.GetPlane();
+            Plane plane = externalEdge_3D.GetPlane();
 
-            List<IClosedPlanar3D> internalEdges = edges.ToList();
-            internalEdges.RemoveAll(x => x == null);
-            internalEdges.Remove(externalEdge);
+            Planar.IClosed2D externalEdge_2D = plane?.Convert(externalEdge_3D);
 
-            return Create(plane, plane?.Convert(externalEdge), internalEdges.ConvertAll(x => plane.Convert(x)));
+            List<IClosedPlanar3D> internalEdges_3D = edges.ToList();
+            internalEdges_3D.RemoveAll(x => x == null);
+            internalEdges_3D.Remove(externalEdge_3D);
+
+            List<Planar.IClosed2D> internalEdges_2D = internalEdges_3D.ConvertAll(x => plane.Convert(x));
+
+            if (orientInternalEdges)
+            {
+                for (int i = 0; i < internalEdges_2D.Count; i++)
+                {
+                    Planar.IClosed2D internalEdge_2D = internalEdges_2D[i];
+
+                    if (internalEdge_2D is Planar.Polygon2D && externalEdge_2D is Planar.Polygon2D)
+                    {
+                        Planar.Polygon2D polygon2D = (Planar.Polygon2D)internalEdge_2D;
+                        polygon2D.SetOrientation(Geometry.Query.Opposite(((Planar.Polygon2D)externalEdge_2D).GetOrientation()));
+                        internalEdges_2D[i] = polygon2D;
+                    }
+                }
+            }
+
+            return Create(plane, externalEdge_2D, internalEdges_2D);
         }
         
-        public static Face3D Create(Plane plane, Planar.IClosed2D externalEdge, IEnumerable<Planar.IClosed2D> internalEdges)
+        public static Face3D Create(Plane plane, Planar.IClosed2D externalEdge, IEnumerable<Planar.IClosed2D> internalEdges, bool orientInternalEdges = true)
         {
             if (plane == null || externalEdge == null)
                 return null;
 
-            Planar.Face2D face2D = Planar.Face2D.Create(externalEdge, internalEdges);
+            Planar.Face2D face2D = Planar.Face2D.Create(externalEdge, internalEdges, orientInternalEdges);
             if (face2D == null)
                 return null;
 
             return new Face3D(plane, face2D);
         }
 
-        public static Face3D Create(Plane plane, IEnumerable<Planar.IClosed2D> edges, out List<Planar.IClosed2D> edges_Excluded)
+        public static Face3D Create(Plane plane, IEnumerable<Planar.IClosed2D> edges, out List<Planar.IClosed2D> edges_Excluded, bool orientInternalEdges = true)
         {
             edges_Excluded = null;
 
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            Planar.Face2D face2D = Planar.Face2D.Create(edges, out edges_Excluded);
+            Planar.Face2D face2D = Planar.Face2D.Create(edges, out edges_Excluded, orientInternalEdges);
             return new Face3D(plane, face2D);
         }
         
-        public static Face3D Create(Plane plane, IEnumerable<Planar.IClosed2D> edges)
+        public static Face3D Create(Plane plane, IEnumerable<Planar.IClosed2D> edges, bool orientInternalEdges = true)
         {
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
             
-            return new Face3D(plane, Planar.Face2D.Create(edges));
+            return new Face3D(plane, Planar.Face2D.Create(edges, orientInternalEdges));
         }
     }
 }
