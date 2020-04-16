@@ -54,6 +54,8 @@
     <Compile Include="Classes\Face.cs" />
     <Compile Include="Convert\ToClipper\IntPoint.cs" />
     <Compile Include="Convert\ToClipper\IntPoints.cs" />
+    <Compile Include="Convert\ToSAM\Point2D.cs" />
+    <Compile Include="Convert\ToSAM\Point2Ds.cs" />
     <Compile Include="Create\ISAMGeometries.cs" />
     <Compile Include="Create\JArray.cs" />
     <Compile Include="Create\ISAMGeometry.cs" />
