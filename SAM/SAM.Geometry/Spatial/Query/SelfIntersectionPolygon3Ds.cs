@@ -5,7 +5,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static List<Polygon3D> SelfIntersectionPolygon2Ds(this Polygon3D polygon3D, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon3D> SelfIntersectionPolygon3Ds(this Polygon3D polygon3D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (polygon3D == null)
                 return null;

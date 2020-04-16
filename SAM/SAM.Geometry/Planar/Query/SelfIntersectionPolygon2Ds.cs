@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -16,32 +17,42 @@ namespace SAM.Geometry.Planar
             List<Polygon2D> result = new List<Polygon2D>();
 
             Point2D point2D_Intersection = SelfIntersectionPoint2D(polygon2D, tolerance);
+            if (point2D_Intersection == null)
+                return null;
 
-            Polygon2D polygon2D_Reversed = new Polygon2D(polygon2D);
-            polygon2D_Reversed.Reverse();
+            Polygon2D polygon2D_Temp = new Polygon2D(polygon2D);
+            double parameter = polygon2D_Temp.GetParameter(point2D_Intersection);
 
-            //TODO: Implementation for the case where parameter is equal to 0 or 1
-            double parameter = polygon2D.GetParameter(point2D_Intersection);
-            double parameter_Reversed = polygon2D_Reversed.GetParameter(point2D_Intersection);
+            //TODO: Check implementation for the case where parameter is equal to 0 or 1
+            while (parameter == 1 || parameter == 0)
+                polygon2D_Temp.Reorder(1);
+            
+            Polygon2D polygon2D_Temp_Reversed = new Polygon2D(polygon2D_Temp);
+            polygon2D_Temp_Reversed.Reverse();
+            
+            double parameter_Reversed = polygon2D_Temp_Reversed.GetParameter(point2D_Intersection);
 
-            Polyline2D polyline2D = polygon2D.Trim(parameter) as Polyline2D;
-            Polyline2D polyline2D_Reversed = polygon2D.Trim(parameter_Reversed) as Polyline2D;
+            Polyline2D polyline2D = polygon2D_Temp.Trim(parameter) as Polyline2D;
+            Polyline2D polyline2D_Reversed = polygon2D_Temp_Reversed.Trim(parameter_Reversed) as Polyline2D;
 
-            List<Point2D> point2Ds = polyline2D.GetPoints();
             List<Point2D> point2Ds_Reversed = polyline2D_Reversed.GetPoints();
 
             point2Ds_Reversed.RemoveAt(0);
             point2Ds_Reversed.Reverse();
             point2Ds_Reversed.RemoveAt(0);
 
+            List<Point2D> point2Ds = polygon2D.GetPoints();
             point2Ds.AddRange(point2Ds_Reversed);
 
             result.Add(new Polygon2D(point2Ds));
 
             List<Point2D> point2Ds_New = polygon2D.GetPoints();
             point2Ds_New.RemoveAll(x => point2Ds.Contains(x));
-            if (!point2Ds_New.Contains(point2D_Intersection))
+            if(!point2Ds_New[0].AlmostEquals(point2D_Intersection, tolerance))
                 point2Ds_New.Insert(0, point2D_Intersection);
+
+            if (point2Ds_New.Last().AlmostEquals(point2D_Intersection, tolerance))
+                point2Ds_New.RemoveAt(point2Ds_New.Count - 1);
 
             List<Polygon2D> polygon2Ds = SelfIntersectionPolygon2Ds(new Polygon2D(point2Ds_New), tolerance);
             if (polygon2Ds != null && polygon2Ds.Count > 0)
