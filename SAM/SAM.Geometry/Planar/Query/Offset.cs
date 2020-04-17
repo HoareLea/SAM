@@ -55,7 +55,7 @@ namespace SAM.Geometry.Planar
                 Segment2D segment2D = segment2Ds_Polyline2D[i];
 
                 Vector2D vector2D = segment2D.Direction.GetPerpendicular(orientation).Unit * offsets_Temp[i];
-                segment2Ds.Add(segment2D.Move(vector2D));
+                segment2Ds.Add(segment2D.GetMoved(vector2D));
             }
 
             Modify.Join(segment2Ds, tolerance);

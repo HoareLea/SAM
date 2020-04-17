@@ -157,6 +157,11 @@ namespace SAM.Geometry.Planar
             vector.Negate();
         }
 
+        public Segment2D GetReversed()
+        {
+           return new Segment2D(End, vector.GetNegated());
+        }
+
         /// <summary>
         /// Project given Point2D onto Segment2D
         /// </summary>
@@ -189,7 +194,7 @@ namespace SAM.Geometry.Planar
         /// Segment2D
         /// </returns>
         /// <param name="vector2D">Vector tranformation.</param>
-        public Segment2D Move(Vector2D vector2D)
+        public Segment2D GetMoved(Vector2D vector2D)
         {
             return new Segment2D((Point2D)origin.GetMoved(vector2D), vector);
         }
@@ -356,13 +361,13 @@ namespace SAM.Geometry.Planar
             
             List<Segment2D> aResult = new List<Segment2D>();
             for (int i = 0; i < count; i++)
-                aResult.Add(Move(vector2D * i));
+                aResult.Add(GetMoved(vector2D * i));
             return aResult;
         }
 
         public Segment2D Offset(double offset, Orientation orientation)
         {
-            return Move(Direction.GetPerpendicular(orientation) * offset);
+            return GetMoved(Direction.GetPerpendicular(orientation) * offset);
         }
 
         public override ISAMGeometry Clone()

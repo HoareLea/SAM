@@ -63,7 +63,7 @@ namespace SAM.Analytical
 
             if(curve2D is Segment2D)
             {
-                curve2D = ((Segment2D)curve2D).Move(vector2D);
+                curve2D = ((Segment2D)curve2D).GetMoved(vector2D);
                 return true;
             }
 
