@@ -166,7 +166,7 @@ namespace SAM.Geometry.Planar
         public double Angle(Vector2D vector2D)
         {
             //Get the dot product
-            double dotProduct = DotProduct(vector2D);
+            double dotProduct = Unit.DotProduct(vector2D.Unit);
 
             //Clamp to prevent NaN error. Shouldn't need this in the first place, but there could be a rounding error issue.
             if (dotProduct < -1)
