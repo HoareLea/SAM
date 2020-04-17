@@ -52,6 +52,7 @@
     <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\ApertureType.cs" />
+    <Compile Include="Enums\PanelGroup.cs" />
     <Compile Include="Enums\PanelType.cs" />
     <Compile Include="Classes\PlanarBoundary3D.cs" />
     <Compile Include="Classes\BoundaryEdge3D.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Modify\SnapByPoints.cs" />
     <Compile Include="Query\ApertureConstruction.cs" />
     <Compile Include="Query\ApertureConstructionName.cs" />
+    <Compile Include="Query\PanelGroup.cs" />
     <Compile Include="Query\ConstructionName.cs" />
     <Compile Include="Query\Construction.cs" />
     <Compile Include="Query\IsValid.cs" />
