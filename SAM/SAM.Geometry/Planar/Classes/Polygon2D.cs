@@ -5,10 +5,12 @@ using System.Linq;
 
 using Newtonsoft.Json.Linq;
 
+using SAM.Geometry.Interfaces;
+
 
 namespace SAM.Geometry.Planar
 {
-    public class Polygon2D : SAMGeometry, IClosed2D, ISegmentable2D, IEnumerable<Point2D>
+    public class Polygon2D : SAMGeometry, IClosed2D, ISegmentable2D, IEnumerable<Point2D>, IReversible
     {
         private List<Point2D> points;
 
@@ -123,19 +125,14 @@ namespace SAM.Geometry.Planar
             return Query.Closest(points, point2D);
         }
 
-        public void Reverse(bool keepFirstPoint = true)
+        public void Reverse(bool keepFirstPoint)
         {
-            if (points == null || points.Count < 2)
-                return;
+            Modify.Reverse(points, keepFirstPoint);
+        }
 
-            if(keepFirstPoint)
-            {
-                Point2D point2D = points[0];
-                points.RemoveAt(0);
-                points.Add(point2D);
-            }
-
-            points.Reverse();
+        public void Reverse()
+        {
+            Reverse(true);
         }
 
         public double GetArea()

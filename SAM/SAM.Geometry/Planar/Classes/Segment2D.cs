@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace SAM.Geometry.Planar
     /// <summary>
     /// Segment2D
     /// </summary>
-    public class Segment2D : SAMGeometry, ICurve2D, ISegmentable2D
+    public class Segment2D : SAMGeometry, ICurve2D, ISegmentable2D, IReversible
     {
         private Point2D origin;
         private Vector2D vector;

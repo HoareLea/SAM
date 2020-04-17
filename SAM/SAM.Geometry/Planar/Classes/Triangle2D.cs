@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Triangle2D : SAMGeometry, IClosed2D, ISegmentable2D
+    public class Triangle2D : SAMGeometry, IClosed2D, ISegmentable2D, IReversible
     {
         private Point2D[] points = new Point2D[3];
 

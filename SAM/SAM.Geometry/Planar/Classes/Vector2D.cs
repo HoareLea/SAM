@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using SAM.Geometry.Interfaces;
+
 
 namespace SAM.Geometry.Planar
 {
-    public class Vector2D : SAMGeometry, ISAMGeometry2D
+    public class Vector2D : SAMGeometry, ISAMGeometry2D, IReversible
     {
         public static Vector2D BaseX { get; } = new Vector2D(1, 0);
         public static Vector2D BaseY { get; } = new Vector2D(0, 1);
@@ -92,6 +90,11 @@ namespace SAM.Geometry.Planar
                 double aLength = Length;
                 return new Vector2D(coordinates[0] / aLength, coordinates[1] / aLength);
             }
+        }
+
+        public void Reverse()
+        {
+            Negate();
         }
 
         public void Negate()

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Newtonsoft.Json.Linq;
+using SAM.Geometry.Interfaces;
 
 namespace SAM.Geometry.Planar
 {
-    public class Polycurve2D : SAMGeometry, ICurve2D, ICurvable2D
+    public class Polycurve2D : SAMGeometry, ICurve2D, ICurvable2D, IReversible
     {
         private List<ICurve2D> curves;
 

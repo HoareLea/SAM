@@ -63,6 +63,7 @@
     <Compile Include="Enums\Corner.cs" />
     <Compile Include="Enums\Orientation.cs" />
     <Compile Include="Classes\SAMGeometry.cs" />
+    <Compile Include="Interfaces\IReversible.cs" />
     <Compile Include="Interfaces\ISAMGeometry.cs" />
     <Compile Include="Planar\Classes\BoundingBox2D.cs" />
     <Compile Include="Planar\Classes\Circle2D.cs" />

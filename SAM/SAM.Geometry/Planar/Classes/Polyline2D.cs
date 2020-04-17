@@ -3,10 +3,11 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json.Linq;
 using System.Collections;
+using SAM.Geometry.Interfaces;
 
 namespace SAM.Geometry.Planar
 {
-    public class Polyline2D : SAMGeometry, IBoundable2D, ISegmentable2D, IEnumerable<Segment2D>
+    public class Polyline2D : SAMGeometry, IBoundable2D, ISegmentable2D, IEnumerable<Segment2D>, IReversible
     {
         private List<Point2D> points;
 

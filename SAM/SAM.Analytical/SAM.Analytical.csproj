@@ -66,6 +66,7 @@
     <Compile Include="Modify\SnapByPoints.cs" />
     <Compile Include="Query\ApertureConstruction.cs" />
     <Compile Include="Query\ApertureConstructionName.cs" />
+    <Compile Include="Query\MergePanels.cs" />
     <Compile Include="Query\PanelGroup.cs" />
     <Compile Include="Query\ConstructionName.cs" />
     <Compile Include="Query\Construction.cs" />
