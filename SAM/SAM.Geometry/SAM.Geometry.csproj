@@ -77,6 +77,7 @@
     <Compile Include="Convert\ToNetTopologySuite\Polygon.cs" />
     <Compile Include="Convert\ToNetTopologySuite\LineString.cs" />
     <Compile Include="Convert\ToSAM\ISAMGeometry2D.cs" />
+    <Compile Include="Convert\ToSAM\Polygon2Ds.cs" />
     <Compile Include="Convert\ToSAM\Polyline2D.cs" />
     <Compile Include="Convert\ToSAM\Polygon2D.cs" />
     <Compile Include="Convert\ToSAM\Point2D.cs" />

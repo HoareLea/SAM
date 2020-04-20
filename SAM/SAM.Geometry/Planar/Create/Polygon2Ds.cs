@@ -38,7 +38,17 @@ namespace SAM.Geometry.Planar
             if (polygons == null)
                 return null;
 
-            return polygons.ToList().FindAll(x => x is Polygon).Cast<Polygon>().ToList().ConvertAll(x => x.ToSAM());
+            List<Polygon2D> result = new List<Polygon2D>();
+            foreach (Polygon polygon in polygons)
+            {
+                List<Polygon2D> polygon2Ds = polygon.ToSAM();
+                if (polygon2Ds == null)
+                    continue;
+
+                result.AddRange(polygon2Ds);
+            }
+
+            return result;
         }
     }
 }
