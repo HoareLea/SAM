@@ -15,7 +15,7 @@ namespace SAM.Geometry
             if (point2Ds == null || point2Ds.Count == 0)
                 return null;
 
-            return new LineString(point2Ds.ToNetTopologySuite().ToArray());
+            return new LineString(point2Ds.ToNetTopologySuite(tolerance).ToArray());
         }
     }
 }

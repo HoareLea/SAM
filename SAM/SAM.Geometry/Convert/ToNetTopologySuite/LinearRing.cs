@@ -12,13 +12,13 @@ namespace SAM.Geometry
 {
     public static partial class Convert
     {
-        public static LinearRing ToNetTopologySuite(this Polygon2D polygon2D)
+        public static LinearRing ToNetTopologySuite(this Polygon2D polygon2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             List<Point2D> point2Ds = polygon2D?.GetPoints();
             if (point2Ds == null || point2Ds.Count == 0)
                 return null;
 
-            return new LinearRing(point2Ds.ToNetTopologySuite().ToArray());
+            return new LinearRing(point2Ds.ToNetTopologySuite(tolerance).ToArray());
         }
     }
 }

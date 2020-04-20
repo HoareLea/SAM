@@ -12,12 +12,12 @@ namespace SAM.Geometry
 {
     public static partial class Convert
     {
-        public static Coordinate ToNetTopologySuite(this Point2D point2D)
+        public static Coordinate ToNetTopologySuite(this Point2D point2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (point2D == null)
                 return null;
-            
-            return new Coordinate(point2D.X, point2D.Y);
+
+            return new Coordinate(Core.Modify.Round(point2D.X), Core.Modify.Round(point2D.Y));
         }
     }
 }
