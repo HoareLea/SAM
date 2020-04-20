@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Grasshopper.Kernel.Types;
+using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -32,47 +33,54 @@ namespace SAM.Geometry.Grasshopper
             return Rhino.Geometry.Brep.CreateEdgeSurface(lineCurves);
         }
 
-        public static Rhino.Geometry.Brep ToRhino_Brep(this Spatial.Face3D face3D, double tolerance = Core.Tolerance.Distance)
+        public static Rhino.Geometry.Brep ToRhino_Brep(this Face3D face3D, double tolerance = Core.Tolerance.Distance)
         {
             if (face3D == null)
                 return null;
 
             List<Spatial.IClosedPlanar3D> edges = face3D.GetEdges();
-            List<Rhino.Geometry.PolylineCurve> polylineCurves = edges.ConvertAll(x => ((Spatial.ICurvable3D)x).GetCurves().ToRhino_PolylineCurve(true));
+            if (edges == null || edges.Count == 0)
+                return null;
 
-            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(polylineCurves, tolerance);
-            if (breps != null && breps.Length > 0)
-                return breps[0];
+            return ToRhino_Brep(edges, tolerance);
+        }
 
-            return null;
+        public static Rhino.Geometry.Brep ToRhino_Brep(this IEnumerable<IClosed3D> closed3Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if (closed3Ds == null || closed3Ds.Count() == 0)
+                return null;
 
-            //Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(((Spatial.ICurvable3D)face3D.GetExternalEdge()).GetCurves().ToRhino_PolylineCurve(), tolerance);
-            //if (breps == null || breps.Length == 0)
-            //    return null;
+            List<ICurve3D> curve3Ds = new List<ICurve3D>();
+            foreach (IClosed3D closed3D in closed3Ds)
+            {
+                if (closed3D is Polygon3D)
+                {
 
-            //List<Spatial.IClosedPlanar3D> closedPlanar3Ds = face3D.GetInternalEdges();
-            //if (closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
-            //{
-            //    List<Rhino.Geometry.Brep> breps_Internal = new List<Rhino.Geometry.Brep>();
-            //    foreach (Spatial.IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
-            //    {
-            //        Rhino.Geometry.Brep[] breps_Temp = Rhino.Geometry.Brep.CreatePlanarBreps(((Spatial.ICurvable3D)closedPlanar3D).GetCurves().ToRhino_PolylineCurve(), tolerance);
-            //        if (breps_Temp != null && breps_Temp.Length > 0)
-            //            breps_Internal.AddRange(breps_Temp);
-            //    }
+                    Polygon3D polygon3D = (Polygon3D)closed3D;
 
-            //    foreach (Rhino.Geometry.Brep brep_Internal in breps_Internal)
-            //    {
-            //        breps = Rhino.Geometry.Brep.CreateBooleanDifference(breps[0], brep_Internal, tolerance);
-            //        if (breps == null)
-            //            break;
-            //    }
-            //}
+                    Plane plane = polygon3D.GetPlane();
+                    Planar.Polygon2D polygon2D = plane.Convert(polygon3D);
+                    List<Planar.Polygon2D> polygon2Ds = Planar.Query.Simplify(polygon2D, tolerance);
+                    if (polygon2Ds == null)
+                        curve3Ds.AddRange(polygon3D.GetCurves());
+                    else
+                        polygon2Ds.ConvertAll(x => plane.Convert(x)).ForEach(x => curve3Ds.AddRange(x.GetCurves()));
+                }
+                else if (closed3D is ICurvable3D)
+                {
+                    curve3Ds.AddRange(((ICurvable3D)(closed3D)).GetCurves());
+                }
+            }
 
-            //if (breps != null && breps.Length > 0)
-            //    return breps[0];
+            if (curve3Ds.Count == 0)
+                return null;
 
-            //return null;
+            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(curve3Ds.ToRhino_PolylineCurve(true), tolerance);
+
+            if (breps == null || breps.Length == 0)
+                return null;
+
+            return breps[0];
         }
     }
 }
