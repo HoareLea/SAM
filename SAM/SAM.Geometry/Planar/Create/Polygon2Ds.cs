@@ -8,7 +8,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Create
     {
-        public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
+        public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segmentable2Ds == null)
                 return null;
