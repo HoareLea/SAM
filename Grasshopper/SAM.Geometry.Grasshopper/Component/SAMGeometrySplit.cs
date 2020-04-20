@@ -136,7 +136,7 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            dataAccess.SetData(0, segment2Ds.Split(tolerance));
+            dataAccess.SetDataList(0, segment2Ds.Split(tolerance));
             dataAccess.SetData(1, true);
         }
     }

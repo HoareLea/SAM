@@ -8,7 +8,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Create
     {
-        public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segmentable2Ds == null)
                 return null;
@@ -25,13 +25,15 @@ namespace SAM.Geometry.Planar
             }
 
             segment2Ds.RemoveAll(x => x == null || x.GetLength() < tolerance);
-            segment2Ds = Modify.Split(segment2Ds, tolerance);
+            //segment2Ds = Modify.Split(segment2Ds, tolerance);
+
+            //segment2Ds.ForEach(x => x.Round(1e-6));
 
             //PointGraph2D pointGraph2D = new PointGraph2D(segment2Ds);
             //return pointGraph2D.GetPolygon2Ds_External();
 
             Polygonizer polygonizer = new Polygonizer(false);
-            GeometryNoder geometryNoder = new GeometryNoder(new PrecisionModel(1 / tolerance));
+            GeometryNoder geometryNoder = new GeometryNoder(new PrecisionModel(1e8));
             polygonizer.Add(geometryNoder.Node(segment2Ds.ConvertAll(x => x.ToNetTopologySuite())).ToArray());
 
             IEnumerable<NetTopologySuite.Geometries.Geometry> polygons = polygonizer.GetPolygons();

@@ -4,8 +4,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using NetTopologySuite.Geometries;
+
 using SAM.Geometry.Planar;
 
 namespace SAM.Geometry

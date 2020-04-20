@@ -598,5 +598,11 @@ namespace SAM.Geometry.Planar
 
             return length / distance;
         }
+
+        public void Round(double tolerance = Core.Tolerance.Distance)
+        {
+            origin.Round(tolerance);
+            vector.Round(tolerance);
+        }
     }
 }
