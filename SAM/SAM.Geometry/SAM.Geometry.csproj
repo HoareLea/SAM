@@ -70,11 +70,14 @@
     <Compile Include="Classes\Face.cs" />
     <Compile Include="Convert\ToClipper\IntPoint.cs" />
     <Compile Include="Convert\ToClipper\IntPoints.cs" />
+    <Compile Include="Convert\ToNetTopologySuite\Geometry.cs" />
     <Compile Include="Convert\ToNetTopologySuite\Coordinates.cs" />
     <Compile Include="Convert\ToNetTopologySuite\Coordinate.cs" />
     <Compile Include="Convert\ToNetTopologySuite\LinearRing.cs" />
     <Compile Include="Convert\ToNetTopologySuite\Polygon.cs" />
     <Compile Include="Convert\ToNetTopologySuite\LineString.cs" />
+    <Compile Include="Convert\ToSAM\ISAMGeometry2D.cs" />
+    <Compile Include="Convert\ToSAM\Polyline2D.cs" />
     <Compile Include="Convert\ToSAM\Polygon2D.cs" />
     <Compile Include="Convert\ToSAM\Point2D.cs" />
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />

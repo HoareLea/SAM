@@ -22,5 +22,13 @@ namespace SAM.Geometry
 
             return new Polygon2D(polygon.Coordinates.ToSAM());
         }
+
+        public static Polygon2D ToSAM(this LinearRing linearRing)
+        {
+            if (linearRing == null)
+                return null;
+
+            return new Polygon2D(linearRing.Coordinates.ToSAM());
+        }
     }
 }

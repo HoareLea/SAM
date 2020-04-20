@@ -9,12 +9,12 @@ using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryPolycurveLoop2D : GH_Component
+    public class SAMGeometrySplit : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("27be7da1-8492-4400-9984-ffa70f3b5c69");
+        public override Guid ComponentGuid => new Guid("5de5aeeb-7d6c-4598-bf45-df9d72edb8f5");
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -24,9 +24,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public GeometryPolycurveLoop2D()
-          : base("Geometry.PolycurveLoop2D", "Geometry.PolycurveLoop2D",
-              "Find PolycurveLoop2Ds in geometry",
+        public SAMGeometrySplit()
+          : base("SAMGeometry.Split", "SAMGeometry.Split",
+              "Split Geometry or Segment2Ds",
               "SAM", "Geometry")
         {
 
@@ -38,6 +38,7 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_geometry", "Geo", "Geometry", GH_ParamAccess.list);
+            inputParamManager.AddNumberParameter("_tolerance_", "tolrnc", "Split Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
 
@@ -46,9 +47,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Loops", "Lps", "SAM PolycurveLoop2Ds", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "InternalPoint", "IntrPt", "Internal Point", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "ExternalLoops", "ExtLps", "SAM External PolycurveLoop2Ds", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("Geometry", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
         }
 
@@ -59,14 +58,22 @@ namespace SAM.Geometry.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
-            if (!dataAccess.GetData<bool>(1, ref run))
+            if (!dataAccess.GetData<bool>(2, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(3, false);
+                dataAccess.SetData(1, false);
                 return;
             }
             if (!run)
                 return;
+
+            double tolerance = Core.Tolerance.Distance;
+            if (!dataAccess.GetData(1, ref tolerance))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(1, false);
+                return;
+            }
 
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
@@ -92,18 +99,18 @@ namespace SAM.Geometry.Grasshopper
                 {
                     sAMGeometry3Ds = new List<Spatial.ISAMGeometry3D>();
 
-                     ISAMGeometry sAMGeometry = ((GooSAMGeometry)gHObjectWrapper.Value).Value;
-                    if(sAMGeometry is Spatial.ISAMGeometry3D)
+                    ISAMGeometry sAMGeometry = ((GooSAMGeometry)gHObjectWrapper.Value).Value;
+                    if (sAMGeometry is Spatial.ISAMGeometry3D)
                         sAMGeometry3Ds.Add((Spatial.ISAMGeometry3D)sAMGeometry);
-                    else if(sAMGeometry is Planar.ISAMGeometry2D)
-                        sAMGeometry3Ds.Add(Spatial.Plane.Base.Convert((Planar.ISAMGeometry2D)sAMGeometry));
+                    else if (sAMGeometry is ISAMGeometry2D)
+                        sAMGeometry3Ds.Add(Spatial.Plane.Base.Convert((ISAMGeometry2D)sAMGeometry));
                 }
                 else if (gHObjectWrapper.Value is IGH_GeometricGoo)
                 {
                     sAMGeometry3Ds = Convert.ToSAM((IGH_GeometricGoo)gHObjectWrapper.Value);
                 }
 
-                if(sAMGeometry3Ds != null && sAMGeometry3Ds.Count > 0)
+                if (sAMGeometry3Ds != null && sAMGeometry3Ds.Count > 0)
                 {
                     foreach (Spatial.ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
                     {
@@ -121,37 +128,16 @@ namespace SAM.Geometry.Grasshopper
                             if (curve3D == null)
                                 continue;
 
-                            Planar.ICurvable2D curvable2D = Spatial.Plane.Base.Convert(curve3D) as Planar.ICurvable2D;
+                            ICurvable2D curvable2D = Spatial.Plane.Base.Convert(curve3D) as ICurvable2D;
                             if (curvable2D != null)
-                                curvable2D.GetCurves().ForEach(x => segment2Ds.Add(new Planar.Segment2D(x.GetStart(), x.GetEnd())));
+                                curvable2D.GetCurves().ForEach(x => segment2Ds.Add(new Segment2D(x.GetStart(), x.GetEnd())));
                         }
                     }
                 }
             }
 
-            if(segment2Ds == null || segment2Ds.Count == 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
-            }
-
-            List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds);
-
-
-            //segment2Ds = Planar.Modify.Split(segment2Ds);
-
-            //Planar.PointGraph2D pointGraph2D = new Planar.PointGraph2D(segment2Ds);
-            //List<Planar.Polygon2D> polygon2Ds = pointGraph2D.GetPolygon2Ds();
-            dataAccess.SetDataList(0, polygon2Ds.ConvertAll(x => new GooSAMGeometry(x)));
-            dataAccess.SetDataList(1, polygon2Ds.ConvertAll(x => new GooSAMGeometry(x.GetInternalPoint2D())));
-
-            //List<Planar.Polygon2D> polygon2Ds_External = pointGraph2D.GetPolygon2Ds_External();
-            //dataAccess.SetDataList(2, polygon2Ds_External.ConvertAll(x => new GooSAMGeometry(x)));
-            dataAccess.SetDataList(2, null);
-
-            dataAccess.SetData(3, true);
-
-            //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
+            dataAccess.SetData(0, segment2Ds.Split(tolerance));
+            dataAccess.SetData(1, true);
         }
     }
 }
