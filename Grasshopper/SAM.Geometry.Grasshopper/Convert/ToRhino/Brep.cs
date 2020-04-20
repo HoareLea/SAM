@@ -50,7 +50,7 @@ namespace SAM.Geometry.Grasshopper
             if (closed3Ds == null || closed3Ds.Count() == 0)
                 return null;
 
-            List<ICurve3D> curve3Ds = new List<ICurve3D>();
+            List<Rhino.Geometry.PolylineCurve> polylineCurves = new List<Rhino.Geometry.PolylineCurve>();
             foreach (IClosed3D closed3D in closed3Ds)
             {
                 if (closed3D is Polygon3D)
@@ -62,21 +62,34 @@ namespace SAM.Geometry.Grasshopper
                     Planar.Polygon2D polygon2D = plane.Convert(polygon3D);
                     List<Planar.Polygon2D> polygon2Ds = Planar.Query.Simplify(polygon2D, tolerance);
                     if (polygon2Ds == null)
-                        curve3Ds.AddRange(polygon3D.GetCurves());
+                        polylineCurves.Add(polygon3D.GetCurves().ToRhino_PolylineCurve(true));
                     else
-                        polygon2Ds.ConvertAll(x => plane.Convert(x)).ForEach(x => curve3Ds.AddRange(x.GetCurves()));
+                        polygon2Ds.ConvertAll(x => plane.Convert(x)).ForEach(x => polylineCurves.Add(x.GetSegments().ToRhino_PolylineCurve(true)));
                 }
                 else if (closed3D is ICurvable3D)
                 {
-                    curve3Ds.AddRange(((ICurvable3D)(closed3D)).GetCurves());
+                    polylineCurves.Add(((ICurvable3D)(closed3D)).GetCurves().ToRhino_PolylineCurve(true));
                 }
             }
 
-            if (curve3Ds.Count == 0)
+            if (polylineCurves.Count == 0)
                 return null;
 
-            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(curve3Ds.ToRhino_PolylineCurve(true), tolerance);
+            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(polylineCurves, tolerance);
 
+            if (breps == null || breps.Length == 0)
+                return null;
+
+            if (breps.Length == 1)
+                return breps[0];
+
+            List<Rhino.Geometry.Brep> brepList = breps.ToList();
+            brepList.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
+
+            Rhino.Geometry.Brep brep = brepList.Last();
+            brepList.Remove(brep);
+
+            breps = Rhino.Geometry.Brep.CreateBooleanIntersection(new List<Rhino.Geometry.Brep> { brep }, brepList, tolerance);
             if (breps == null || breps.Length == 0)
                 return null;
 
