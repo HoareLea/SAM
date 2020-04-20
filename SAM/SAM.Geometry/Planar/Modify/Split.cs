@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ClipperLib;
+using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -110,6 +112,57 @@ namespace SAM.Geometry.Planar
             }
 
             return Split(segment2Ds, tolerance);
+        }
+
+        public static List<Polygon2D> Split(this IEnumerable<Polygon2D> polygon2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (polygon2Ds == null)
+                return null;
+
+            List<List<IntPoint>> intPointsList = polygon2Ds.ToList().ConvertAll(x => Convert.ToClipper((ISegmentable2D)x, tolerance)); ;
+
+            bool intersect = true;
+            while (intersect)
+            {
+                intersect = false;
+
+                List<List<IntPoint>> intPointsList_Temp = new List<List<IntPoint>>();
+
+                Clipper clipper = new Clipper();
+
+                int count = intPointsList.Count();
+                for (int i = 0; i < intPointsList.Count() - 1; i++)
+                {
+                    List < IntPoint > intPoints_1 = intPointsList[i];
+
+                    for (int j = i + 1; j < intPointsList.Count(); j++)
+                    {
+                        List<IntPoint> intPoints_2 = intPointsList[j];
+
+                        clipper.AddPath(intPoints_1, PolyType.ptSubject, true);
+                        clipper.AddPath(intPoints_1, PolyType.ptClip, true);
+
+                        List<List<IntPoint>> IntPointsList_Result = new List<List<IntPoint>>();
+
+                        clipper.Execute(ClipType.ctIntersection, IntPointsList_Result, PolyFillType.pftEvenOdd);
+                        if(IntPointsList_Result.Count > 0)
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+
+                        clipper.Clear();
+                    }
+                }
+
+                throw new System.Exception();
+
+            }
+
+            return null;
         }
 
     }

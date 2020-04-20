@@ -5,6 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
 using SAM.Geometry.Grasshopper.Properties;
+using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -134,15 +135,19 @@ namespace SAM.Geometry.Grasshopper
                 dataAccess.SetData(1, false);
             }
 
-            segment2Ds = Planar.Modify.Split(segment2Ds);
+            List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds);
 
-            Planar.PointGraph2D pointGraph2D = new Planar.PointGraph2D(segment2Ds);
-            List<Planar.Polygon2D> polygon2Ds = pointGraph2D.GetPolygon2Ds();
+
+            //segment2Ds = Planar.Modify.Split(segment2Ds);
+
+            //Planar.PointGraph2D pointGraph2D = new Planar.PointGraph2D(segment2Ds);
+            //List<Planar.Polygon2D> polygon2Ds = pointGraph2D.GetPolygon2Ds();
             dataAccess.SetDataList(0, polygon2Ds.ConvertAll(x => new GooSAMGeometry(x)));
             dataAccess.SetDataList(1, polygon2Ds.ConvertAll(x => new GooSAMGeometry(x.GetInternalPoint2D())));
 
-            List<Planar.Polygon2D> polygon2Ds_External = pointGraph2D.GetPolygon2Ds_External();
-            dataAccess.SetDataList(2, polygon2Ds_External.ConvertAll(x => new GooSAMGeometry(x)));
+            //List<Planar.Polygon2D> polygon2Ds_External = pointGraph2D.GetPolygon2Ds_External();
+            //dataAccess.SetDataList(2, polygon2Ds_External.ConvertAll(x => new GooSAMGeometry(x)));
+            dataAccess.SetDataList(2, null);
 
             dataAccess.SetData(3, true);
 

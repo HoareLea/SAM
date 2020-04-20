@@ -1,11 +1,12 @@
-﻿using System;
+﻿using SAM.Geometry.Planar;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> MergePanels(this IEnumerable<Panel> panels, double offset)
+        public static List<Panel> MergePanels(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (panels == null)
                 return null;
@@ -55,10 +56,34 @@ namespace SAM.Analytical
 
                 tuples_Offset.Insert(0, tuple);
 
+                Geometry.Spatial.Plane plane = tuple.Item2.GetFace3D().GetPlane();
+
+                List<Tuple<Polygon2D, Panel>> tuples_Polygon3D = new List<Tuple<Polygon2D, Panel>>();
+                foreach (Tuple<double, Panel> tuple_Temp in tuples_Offset)
+                {
+                    Panel panel = tuple_Temp.Item2;
+
+                    Geometry.Spatial.IClosedPlanar3D closedPlanar3D = plane.Project(panel.GetFace3D().GetExternalEdge());
+
+                    Geometry.Spatial.Polygon3D polygon3D = closedPlanar3D as Geometry.Spatial.Polygon3D;
+                    if (polygon3D == null)
+                        continue;
+
+                    Polygon2D polygon2D = plane.Convert(polygon3D);
+
+                    tuples_Polygon3D.Add(new Tuple<Polygon2D, Panel>(polygon2D, panel));
+                }
+
+                foreach(Tuple<Polygon2D, Panel> tuple_Temp in tuples_Polygon3D)
+                {
+                    
+                    //List<Polygon2D> polygon2Ds = Geometry.Planar.Query.Intersection(tolerance);
+                }
+
 
             }
-            
 
+            throw new NotImplementedException();
         }
     }
 }

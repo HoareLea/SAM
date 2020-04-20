@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using ClipperLib;
+using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
 
 namespace SAM.Geometry
@@ -15,6 +16,18 @@ namespace SAM.Geometry
             List<Point2D> point2Ds = new List<Point2D>();
             foreach (IntPoint intPoint in intPoints)
                 point2Ds.Add(intPoint.ToSAM(tolerance));
+
+            return point2Ds;
+        }
+
+        public static List<Point2D> ToSAM(this IEnumerable<Coordinate> coordinates)
+        {
+            if (coordinates == null)
+                return null;
+
+            List<Point2D> point2Ds = new List<Point2D>();
+            foreach (Coordinate coordinate in coordinates)
+                point2Ds.Add(coordinate.ToSAM());
 
             return point2Ds;
         }
