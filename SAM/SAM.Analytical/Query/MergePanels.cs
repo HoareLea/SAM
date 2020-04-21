@@ -76,6 +76,8 @@ namespace SAM.Analytical
                     tuples_LinearRing.Add(new Tuple<LinearRing, Panel>(polygon2D.ToNetTopologySuite(tolerance), panel));
                 }
 
+
+                List<Panel> result = new List<Panel>();
                 List<Polygon> polygons = Geometry.Convert.ToNetTopologySuite_Polygons(tuples_LinearRing.ConvertAll(x => x.Item1));
                 if(polygons != null || polygons.Count > 0)
                 {
@@ -84,6 +86,41 @@ namespace SAM.Analytical
                         Point point = polygon.InteriorPoint;
 
                         List<Tuple<LinearRing, Panel>> tuples_LinearRing_Within = tuples_LinearRing.FindAll(x => point.Within(x.Item1));
+                        int count = tuples_LinearRing_Within.Count;
+                        if (count == 0)
+                            continue;
+
+                        Panel panel_Old = null;
+                        Polygon2D polygon2D = null;
+
+
+                        if (count == 1)
+                        {
+                            panel_Old = tuples_LinearRing_Within[0].Item2;
+                            polygon2D = tuples_LinearRing_Within[0].Item1.ToSAM();
+                        }
+                        else
+                        {
+                            Tuple<LinearRing, Panel> tuple_Temp = tuples_LinearRing_Within.Find(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
+                            if(tuple_Temp == null)
+                            {
+                                panel_Old = tuples_LinearRing_Within[0].Item2;
+                                polygon2D = tuples_LinearRing_Within[0].Item1.ToSAM();
+                            }
+                            else
+                            {
+                                panel_Old = tuple_Temp.Item2;
+                                polygon2D = tuple_Temp.Item1.ToSAM();
+                            }
+                        }
+
+                        if (panel_Old == null || polygon2D == null)
+                            continue;
+
+                        Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon2D);
+
+                        Panel panel_New = new Panel(panel_Old.Guid, panel_Old, face3D);
+                        result.Add(panel_New);
                     }
                 }
 
