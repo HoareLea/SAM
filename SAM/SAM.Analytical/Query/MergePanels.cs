@@ -14,7 +14,7 @@ namespace SAM.Analytical
                 return null;
             
             Dictionary<PanelGroup, List<Panel>> dictionary = new Dictionary<PanelGroup, List<Panel>>();
-            foreach (PanelGroup panelGroup in System.Enum.GetValues(typeof(PanelType)))
+            foreach (PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
                 dictionary[panelGroup] = new List<Panel>();
 
             foreach(Panel panel in panels)

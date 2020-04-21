@@ -37,6 +37,14 @@ namespace SAM.Geometry
                 return null;
 
             List<Polygon> result = new List<Polygon>();
+
+            if (geometries_Result.Count() == 0)
+            {
+                result.AddRange(geometries.ToList().FindAll(x => x is Polygon).Cast<Polygon>());
+                result.AddRange(geometries.ToList().FindAll(x => x is LinearRing).ConvertAll(x => new Polygon((LinearRing)x)));
+                return result;
+            }
+
             foreach (NetTopologySuite.Geometries.Geometry geometry in geometries_Result)
             {
                 Polygon polygon = geometry as Polygon;
