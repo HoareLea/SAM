@@ -36,6 +36,8 @@ namespace SAM.Analytical
                 tuples.Add(new Tuple<double, Panel>(elevation, panel));
             }
 
+            List<Panel> result = new List<Panel>();
+
             tuples.Sort((x, y) => x.Item1.CompareTo(y.Item1));
             while(tuples.Count > 0)
             {
@@ -77,7 +79,7 @@ namespace SAM.Analytical
                 }
 
 
-                List<Panel> result = new List<Panel>();
+                
                 List<Polygon> polygons = Geometry.Convert.ToNetTopologySuite_Polygons(tuples_LinearRing.ConvertAll(x => x.Item1));
                 if(polygons != null || polygons.Count > 0)
                 {
@@ -93,13 +95,10 @@ namespace SAM.Analytical
                             continue;
 
                         Panel panel_Old = null;
-                        Polygon2D polygon2D = null;
-
 
                         if (count == 1)
                         {
                             panel_Old = tuples_LinearRing_Within[0].Item2;
-                            polygon2D = tuples_LinearRing_Within[0].Item1.ToSAM();
                         }
                         else
                         {
@@ -107,29 +106,31 @@ namespace SAM.Analytical
                             if(tuple_Temp == null)
                             {
                                 panel_Old = tuples_LinearRing_Within[0].Item2;
-                                polygon2D = tuples_LinearRing_Within[0].Item1.ToSAM();
                             }
                             else
                             {
                                 panel_Old = tuple_Temp.Item2;
-                                polygon2D = tuple_Temp.Item1.ToSAM();
                             }
                         }
 
-                        if (panel_Old == null || polygon2D == null)
+                        if (panel_Old == null)
                             continue;
 
-                        Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon2D);
+                        foreach(Polygon2D polygon2D in polygon.ToSAM())
+                        {
+                            Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon2D);
+                            Guid guid = panel_Old.Guid;
+                            if (result.Find(x => x.Guid == guid) != null)
+                                guid = Guid.NewGuid();
 
-                        Panel panel_New = new Panel(panel_Old.Guid, panel_Old, face3D);
-                        result.Add(panel_New);
+                            Panel panel_New = new Panel(guid, panel_Old, face3D);
+                            result.Add(panel_New);
+                        }
                     }
                 }
-
-
             }
 
-            throw new NotImplementedException();
+            return result;
         }
     }
 }

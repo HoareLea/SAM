@@ -18,6 +18,8 @@ namespace SAM.Geometry
             if (point2Ds == null || point2Ds.Count == 0)
                 return null;
 
+            point2Ds.Add(point2Ds.First());
+
             return new LinearRing(point2Ds.ToNetTopologySuite(tolerance).ToArray());
         }
     }
