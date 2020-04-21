@@ -58,8 +58,18 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            IBoundable3D geometry3D = objectWrapper.Value as IBoundable3D;
-            if (geometry3D == null)
+            IBoundable3D boundable3D = null;
+
+            if (objectWrapper.Value is GooSAMGeometry)
+            {
+                boundable3D = ((GooSAMGeometry)objectWrapper.Value).Value as IBoundable3D;
+            }
+            else if(objectWrapper.Value is IBoundable3D)
+            {
+                boundable3D = objectWrapper.Value as dynamic;
+            }
+
+            if (boundable3D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -81,8 +91,8 @@ namespace SAM.Geometry.Grasshopper
             Spatial.Plane plane = null;
 
             bool ownPlane = gHBoolean.Value;
-            if (ownPlane && geometry3D is IPlanar3D)
-                plane = (geometry3D as IPlanar3D).GetPlane();
+            if (ownPlane && boundable3D is IPlanar3D)
+                plane = (boundable3D as IPlanar3D).GetPlane();
 
             if(plane == null)
             {
@@ -108,7 +118,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            Planar.ISAMGeometry2D geometry2D = plane.Convert(geometry3D);
+            Planar.ISAMGeometry2D geometry2D = plane.Convert(boundable3D);
             if (geometry2D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
