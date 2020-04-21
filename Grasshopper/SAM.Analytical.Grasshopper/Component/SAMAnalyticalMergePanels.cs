@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -16,7 +12,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("9929faae-e76e-43f1-a3fd-80abf6c0381a");
+        public override Guid ComponentGuid => new Guid("4f90fff5-852c-480e-bf51-bc817e15e953");
 
         /// <summary>
         /// Provides an Icon for the component.
