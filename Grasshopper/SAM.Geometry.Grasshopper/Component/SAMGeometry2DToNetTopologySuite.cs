@@ -9,7 +9,7 @@ using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometryToNetTopologySuite : GH_Component
+    public class SAMGeometry2DToNetTopologySuite : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -24,7 +24,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMGeometryToNetTopologySuite()
+        public SAMGeometry2DToNetTopologySuite()
           : base("SAMGeometry.Snap", "SAMGeometry.Snap",
               "SAMGeometry To NetTopologySuite",
               "SAM", "Geometry")
@@ -45,7 +45,8 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Geometry", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("NTSGeometries", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("Text", "Text", "Text", GH_ParamAccess.list);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
         }
 
@@ -106,9 +107,11 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
+            List<NetTopologySuite.Geometries.Geometry> geometries = sAMGeometry2Ds.ConvertAll(x => x.ToNetTopologySuite());
 
-            dataAccess.SetData(0, sAMGeometry2Ds.ConvertAll(x => x.ToNetTopologySuite().ToString()));
-            dataAccess.SetData(1, true);
+            dataAccess.SetData(0, geometries);
+            dataAccess.SetData(1, geometries.ConvertAll(x => x.ToString()));
+            dataAccess.SetData(2, true);
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
         }
