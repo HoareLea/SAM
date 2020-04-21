@@ -25,7 +25,7 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMGeometry2DToNetTopologySuite()
-          : base("SAMGeometry.Snap", "SAMGeometry.Snap",
+          : base("SAMGeometry2D.ToNetTopologySuite", "SAMGeometry2D.ToNetTopologySuite",
               "SAMGeometry To NetTopologySuite",
               "SAM", "Geometry")
         {
@@ -109,8 +109,8 @@ namespace SAM.Geometry.Grasshopper
 
             List<NetTopologySuite.Geometries.Geometry> geometries = sAMGeometry2Ds.ConvertAll(x => x.ToNetTopologySuite());
 
-            dataAccess.SetData(0, geometries);
-            dataAccess.SetData(1, geometries.ConvertAll(x => x.ToString()));
+            dataAccess.SetDataList(0, geometries);
+            dataAccess.SetDataList(1, geometries.ConvertAll(x => x.ToString()));
             dataAccess.SetData(2, true);
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
