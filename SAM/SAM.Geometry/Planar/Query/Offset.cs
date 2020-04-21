@@ -1,13 +1,60 @@
-﻿using System.Collections.Generic;
+﻿using ClipperLib;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
+        public static List<Polygon2D> Offset(this Polygon2D polygon2D, double offset, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (polygon2D == null)
+                return null;
+
+            return Offset(new Polyline2D(polygon2D.GetPoints(), true), offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
+        }
+
+        public static List<Polygon2D> Offset(this Polyline2D polyline2D, double offset, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (polyline2D == null)
+                return null;
+
+            EndType endType = EndType.etOpenSquare;
+            if (polyline2D.IsClosed())
+                endType = EndType.etClosedPolygon;
+
+            return Offset(polyline2D, offset, JoinType.jtMiter, endType, tolerance);
+        }
+
+        public static List<Polygon2D> Offset(this Polyline2D polyline2D, double offset, JoinType joinType, EndType endType, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (polyline2D == null)
+                return null;
+
+            List<IntPoint> intPoints = ((ISegmentable2D)polyline2D).ToClipper(tolerance);
+            if (intPoints == null)
+                return null;
+
+            ClipperOffset clipperOffset = new ClipperOffset();
+            clipperOffset.AddPath(intPoints, joinType, endType);
+            List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
+            clipperOffset.Execute(ref intPointList, offset);
+
+            if (intPointList == null)
+                return null;
+
+            return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM()));
+        }
+
+
         public static List<Polygon2D> Offset(this Polygon2D polygon2D, double offset, bool inside, bool simplify = true, bool orient = true, double tolerance = Core.Tolerance.Distance)
         {
             return Offset(polygon2D, new double[] { offset }, inside, simplify, orient, tolerance);
+        }
+
+        public static List<Polyline2D> Offset(this Polyline2D polyline2D, double offset, Orientation orientation, double tolerance = Core.Tolerance.Distance)
+        {
+            return Offset(polyline2D, new double[] { offset }, orientation, tolerance);
         }
 
         public static List<Polygon2D> Offset(this Polygon2D polygon2D, IEnumerable<double> offsets, bool inside, bool simplify = true, bool orient = true, double tolerance = Core.Tolerance.Distance)
@@ -64,12 +111,6 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-
-        public static List<Polyline2D> Offset(this Polyline2D polyline2D, double offset, Orientation orientation, double tolerance = Core.Tolerance.Distance)
-        {
-            return Offset(polyline2D, new double[] { offset }, orientation, tolerance);
-        }
-
 
 
         private static List<Polygon2D> Offset_Inside(this Polygon2D polygon2D, List<double> offsets, bool simplify = true, bool orient = true, double tolerance = Core.Tolerance.Distance)

@@ -228,9 +228,9 @@ namespace SAM.Analytical
                         {
                             double area_Aperture = closed2D_Aperture.GetArea();
 
-                            List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
+                            //List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
 
-                            List<Geometry.Planar.Polygon2D> polygon2Ds = new Geometry.Planar.PointGraph2D(segment2Ds).GetPolygon2Ds();
+                            List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture }); //new Geometry.Planar.PointGraph2D(segment2Ds).GetPolygon2Ds();
                             
                             if (polygon2Ds != null && polygon2Ds.Count > 0)
                             {
