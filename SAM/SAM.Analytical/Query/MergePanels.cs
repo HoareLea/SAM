@@ -62,7 +62,7 @@ namespace SAM.Analytical
 
                 Geometry.Spatial.Plane plane = tuple.Item2.GetFace3D().GetPlane();
 
-                List<Tuple<LinearRing, Panel>> tuples_LinearRing = new List<Tuple<LinearRing, Panel>>();
+                List<Tuple<Polygon, Panel>> tuples_Polygon = new List<Tuple<Polygon, Panel>>();
                 foreach (Tuple<double, Panel> tuple_Temp in tuples_Offset)
                 {
                     Panel panel = tuple_Temp.Item2;
@@ -75,22 +75,23 @@ namespace SAM.Analytical
 
                     Polygon2D polygon2D = plane.Convert(polygon3D);
 
-                    tuples_LinearRing.Add(new Tuple<LinearRing, Panel>(polygon2D.ToNetTopologySuite(tolerance), panel));
+                    tuples_Polygon.Add(new Tuple<Polygon, Panel>(polygon2D.ToNetTopologySuite_Polygon(tolerance), panel));
                 }
 
 
-                
-                List<Polygon> polygons = Geometry.Convert.ToNetTopologySuite_Polygons(tuples_LinearRing.ConvertAll(x => x.Item1));
+                List<Polygon> polygons = Geometry.Convert.ToNetTopologySuite_Polygons(tuples_Polygon.ConvertAll(x => x.Item1));
                 if(polygons != null || polygons.Count > 0)
                 {
+                    HashSet<Guid> guids = new HashSet<Guid>();
+                    
                     foreach(Polygon polygon in polygons)
                     {
                         Point point = polygon.InteriorPoint;
 
-                        Point2D point2D = Geometry.Convert.ToSAM(polygon.InteriorPoint);
+                        //Point2D point2D = Geometry.Convert.ToSAM(polygon.InteriorPoint);
 
-                        List<Tuple<LinearRing, Panel>> tuples_LinearRing_Within = tuples_LinearRing.FindAll(x => x.Item1.ToSAM().Inside(point2D));
-                        int count = tuples_LinearRing_Within.Count;
+                        List<Tuple<Polygon, Panel>> tuples_Polygon_Within = tuples_Polygon.FindAll(x => x.Item1.Contains(point));
+                        int count = tuples_Polygon_Within.Count;
                         if (count == 0)
                             continue;
 
@@ -98,14 +99,14 @@ namespace SAM.Analytical
 
                         if (count == 1)
                         {
-                            panel_Old = tuples_LinearRing_Within[0].Item2;
+                            panel_Old = tuples_Polygon_Within[0].Item2;
                         }
                         else
                         {
-                            Tuple<LinearRing, Panel> tuple_Temp = tuples_LinearRing_Within.Find(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
+                            Tuple<Polygon, Panel> tuple_Temp = tuples_Polygon_Within.Find(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
                             if(tuple_Temp == null)
                             {
-                                panel_Old = tuples_LinearRing_Within[0].Item2;
+                                panel_Old = tuples_Polygon_Within[0].Item2;
                             }
                             else
                             {
@@ -120,8 +121,10 @@ namespace SAM.Analytical
                         {
                             Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon2D);
                             Guid guid = panel_Old.Guid;
-                            if (result.Find(x => x.Guid == guid) != null)
+                            if (guids.Contains(guid))
                                 guid = Guid.NewGuid();
+
+                            guids.Add(guid);
 
                             Panel panel_New = new Panel(guid, panel_Old, face3D);
                             result.Add(panel_New);
