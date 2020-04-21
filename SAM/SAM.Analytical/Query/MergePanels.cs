@@ -76,7 +76,9 @@ namespace SAM.Analytical
 
                 foreach(Tuple<Polygon2D, Panel> tuple_Temp in tuples_Polygon3D)
                 {
-                    
+                    //List<Tuple<Polygon2D, Panel>> tuples_Polygon3D_Temp = 
+
+
                     //List<Polygon2D> polygon2Ds = Geometry.Planar.Query.Intersection(tolerance);
                 }
 

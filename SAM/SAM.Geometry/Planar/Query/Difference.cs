@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 using ClipperLib;
 
 namespace SAM.Geometry.Planar
@@ -8,7 +8,7 @@ namespace SAM.Geometry.Planar
     {
         //Difference of U and A, denoted U \ A, is the set of all members of U that are not members of A. The set difference {1, 2, 3} \ {2, 3, 4} is {1} , while, conversely, the set difference
         
-        private static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = SAM.Core.Tolerance.MicroDistance)
+        private static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (tolerance == 0)
                 return Difference(polygon2D_1, polygon2D_2);
@@ -36,6 +36,41 @@ namespace SAM.Geometry.Planar
 
             foreach (List<IntPoint> intPoints in intPointsList)
                 result.Add(new Polygon2D(intPoints.ToSAM(tolerance)));
+
+            return result;
+        }
+
+        private static List<Polygon2D> Difference(this Polygon2D polygon2D, IEnumerable<Polygon2D> polygon2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (polygon2D == null || polygon2Ds == null)
+                return null;
+
+            if (polygon2Ds.Count() == 0)
+                return new List<Polygon2D>() { new Polygon2D(polygon2D)};
+
+            List<IntPoint> intPoints = Convert.ToClipper((ISegmentable2D)polygon2D, tolerance);
+
+            List<List<IntPoint>> intPointsList = new List<List<IntPoint>>();
+            foreach (Polygon2D polygon2D_Temp in polygon2Ds)
+                intPointsList.Add(Convert.ToClipper((ISegmentable2D)polygon2D_Temp, tolerance));
+
+            Clipper clipper = new Clipper();
+            clipper.AddPath(intPoints, PolyType.ptSubject, true);
+            clipper.AddPaths(intPointsList, PolyType.ptClip, true);
+
+            List<List<IntPoint>> intPointsList_Result = new List<List<IntPoint>>();
+
+            clipper.Execute(ClipType.ctDifference, intPointsList_Result, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
+
+            if (intPointsList_Result == null)
+                return null;
+
+            List<Polygon2D> result = new List<Polygon2D>();
+            if (intPointsList_Result.Count == 0)
+                return result;
+
+            foreach (List<IntPoint> intPoints_Result in intPointsList_Result)
+                result.Add(new Polygon2D(intPoints_Result.ToSAM(tolerance)));
 
             return result;
         }
