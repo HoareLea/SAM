@@ -74,6 +74,7 @@
     <Compile Include="Convert\ToNetTopologySuite\Coordinates.cs" />
     <Compile Include="Convert\ToNetTopologySuite\Coordinate.cs" />
     <Compile Include="Convert\ToNetTopologySuite\LinearRing.cs" />
+    <Compile Include="Convert\ToNetTopologySuite\Polygons.cs" />
     <Compile Include="Convert\ToNetTopologySuite\Polygon.cs" />
     <Compile Include="Convert\ToNetTopologySuite\LineString.cs" />
     <Compile Include="Convert\ToSAM\ISAMGeometry2D.cs" />

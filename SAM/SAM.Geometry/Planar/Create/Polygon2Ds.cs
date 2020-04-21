@@ -1,8 +1,5 @@
 ﻿using NetTopologySuite.Geometries;
-using NetTopologySuite.Noding.Snapround;
-using NetTopologySuite.Operation.Polygonize;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -24,17 +21,7 @@ namespace SAM.Geometry.Planar
                     segment2Ds.AddRange(segment2Ds_Temp);
             }
 
-            segment2Ds.RemoveAll(x => x == null || x.GetLength() < tolerance);
-            segment2Ds = Modify.Split(segment2Ds, tolerance);
-
-            //PointGraph2D pointGraph2D = new PointGraph2D(segment2Ds);
-            //return pointGraph2D.GetPolygon2Ds_External();
-
-            Polygonizer polygonizer = new Polygonizer(false);
-            GeometryNoder geometryNoder = new GeometryNoder(new PrecisionModel(1 / tolerance));
-            polygonizer.Add(geometryNoder.Node(segment2Ds.ConvertAll(x => x.ToNetTopologySuite(tolerance))).ToArray());
-
-            IEnumerable<NetTopologySuite.Geometries.Geometry> polygons = polygonizer.GetPolygons();
+            List<Polygon> polygons = segment2Ds.ToNetTopologySuite_Polygons(tolerance);
             if (polygons == null)
                 return null;
 

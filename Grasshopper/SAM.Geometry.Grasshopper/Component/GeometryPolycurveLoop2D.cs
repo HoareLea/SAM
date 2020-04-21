@@ -137,21 +137,13 @@ namespace SAM.Geometry.Grasshopper
 
             List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds);
 
-
-            //segment2Ds = Planar.Modify.Split(segment2Ds);
-
-            //Planar.PointGraph2D pointGraph2D = new Planar.PointGraph2D(segment2Ds);
-            //List<Planar.Polygon2D> polygon2Ds = pointGraph2D.GetPolygon2Ds();
             dataAccess.SetDataList(0, polygon2Ds.ConvertAll(x => new GooSAMGeometry(x)));
             dataAccess.SetDataList(1, polygon2Ds.ConvertAll(x => new GooSAMGeometry(x.GetInternalPoint2D())));
 
-            //List<Planar.Polygon2D> polygon2Ds_External = pointGraph2D.GetPolygon2Ds_External();
-            //dataAccess.SetDataList(2, polygon2Ds_External.ConvertAll(x => new GooSAMGeometry(x)));
-            dataAccess.SetDataList(2, null);
+            List<Polygon2D> polygon2Ds_External = Planar.Query.Union(polygon2Ds);
+            dataAccess.SetDataList(2, polygon2Ds_External.ConvertAll(x => new GooSAMGeometry(x)));
 
             dataAccess.SetData(3, true);
-
-            //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
         }
     }
 }

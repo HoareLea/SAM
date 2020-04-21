@@ -1,4 +1,6 @@
-﻿using SAM.Geometry.Planar;
+﻿using NetTopologySuite.Geometries;
+using SAM.Geometry;
+using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 
@@ -58,7 +60,7 @@ namespace SAM.Analytical
 
                 Geometry.Spatial.Plane plane = tuple.Item2.GetFace3D().GetPlane();
 
-                List<Tuple<Polygon2D, Panel>> tuples_Polygon3D = new List<Tuple<Polygon2D, Panel>>();
+                List<Tuple<LinearRing, Panel>> tuples_LinearRing = new List<Tuple<LinearRing, Panel>>();
                 foreach (Tuple<double, Panel> tuple_Temp in tuples_Offset)
                 {
                     Panel panel = tuple_Temp.Item2;
@@ -71,25 +73,19 @@ namespace SAM.Analytical
 
                     Polygon2D polygon2D = plane.Convert(polygon3D);
 
-                    tuples_Polygon3D.Add(new Tuple<Polygon2D, Panel>(polygon2D, panel));
+                    tuples_LinearRing.Add(new Tuple<LinearRing, Panel>(polygon2D.ToNetTopologySuite(tolerance), panel));
                 }
 
-                bool split = true;
-                while(split)
+                List<Polygon> polygons = Geometry.Convert.ToNetTopologySuite_Polygons(tuples_LinearRing.ConvertAll(x => x.Item1));
+                if(polygons != null || polygons.Count > 0)
                 {
-                    split = false;
-
-                    foreach (Tuple<Polygon2D, Panel> tuple_Temp in tuples_Polygon3D)
+                    foreach(Polygon polygon in polygons)
                     {
-                        List<Tuple<Polygon2D, Panel>> tuples_Polygon3D_Temp = new List<Tuple<Polygon2D, Panel>>(tuples_Polygon3D);
-                        tuples_Polygon3D_Temp.Remove(tuple_Temp);
+                        Point point = polygon.InteriorPoint;
 
-
-                        //List<Polygon2D> polygon2Ds = Geometry.Planar.Query.Difference(tuple_Temp.Item1,);
+                        List<Tuple<LinearRing, Panel>> tuples_LinearRing_Within = tuples_LinearRing.FindAll(x => point.Within(x.Item1));
                     }
                 }
-
-
 
 
             }
