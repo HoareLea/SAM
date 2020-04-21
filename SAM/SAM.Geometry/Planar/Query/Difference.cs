@@ -8,7 +8,7 @@ namespace SAM.Geometry.Planar
     {
         //Difference of U and A, denoted U \ A, is the set of all members of U that are not members of A. The set difference {1, 2, 3} \ {2, 3, 4} is {1} , while, conversely, the set difference
         
-        private static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (tolerance == 0)
                 return Difference(polygon2D_1, polygon2D_2);
@@ -40,7 +40,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        private static List<Polygon2D> Difference(this Polygon2D polygon2D, IEnumerable<Polygon2D> polygon2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon2D> Difference(this Polygon2D polygon2D, IEnumerable<Polygon2D> polygon2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (polygon2D == null || polygon2Ds == null)
                 return null;
@@ -75,7 +75,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        private static List<Polygon2D> Difference(this IEnumerable<Polygon2D> polygon2Ds_1, IEnumerable<Polygon2D> polygon2Ds_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon2D> Difference(this IEnumerable<Polygon2D> polygon2Ds_1, IEnumerable<Polygon2D> polygon2Ds_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (polygon2Ds_1 == null || polygon2Ds_2 == null)
                 return null;

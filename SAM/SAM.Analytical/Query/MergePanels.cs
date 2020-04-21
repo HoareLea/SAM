@@ -74,13 +74,22 @@ namespace SAM.Analytical
                     tuples_Polygon3D.Add(new Tuple<Polygon2D, Panel>(polygon2D, panel));
                 }
 
-                foreach(Tuple<Polygon2D, Panel> tuple_Temp in tuples_Polygon3D)
+                bool split = true;
+                while(split)
                 {
-                    //List<Tuple<Polygon2D, Panel>> tuples_Polygon3D_Temp = 
+                    split = false;
+
+                    foreach (Tuple<Polygon2D, Panel> tuple_Temp in tuples_Polygon3D)
+                    {
+                        List<Tuple<Polygon2D, Panel>> tuples_Polygon3D_Temp = new List<Tuple<Polygon2D, Panel>>(tuples_Polygon3D);
+                        tuples_Polygon3D_Temp.Remove(tuple_Temp);
 
 
-                    //List<Polygon2D> polygon2Ds = Geometry.Planar.Query.Intersection(tolerance);
+                        //List<Polygon2D> polygon2Ds = Geometry.Planar.Query.Difference(tuple_Temp.Item1,);
+                    }
                 }
+
+
 
 
             }
