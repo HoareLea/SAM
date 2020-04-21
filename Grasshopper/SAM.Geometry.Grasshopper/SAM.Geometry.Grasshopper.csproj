@@ -83,6 +83,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\GooSAMGeometry.cs" />
+    <Compile Include="Component\GeometryModifyIntersection.cs" />
+    <Compile Include="Component\GeometryModifyUnion.cs" />
+    <Compile Include="Component\GeometryModifyDifference.cs" />
     <Compile Include="Component\GeometryPolycurveLoop2D.cs" />
     <Compile Include="Component\GeometryCreatePlane.cs" />
     <Compile Include="Component\SAMGeometrySplit.cs" />
