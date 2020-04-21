@@ -25,7 +25,7 @@ namespace SAM.Geometry.Planar
             List<Polygon2D> polygon2Ds_Temp_1 = new List<Polygon2D>() { polygon2D };
             polygon2Ds_Temp_1.AddRange(polygon2Ds);
 
-            List<Polygon2D> polygon2Ds_Temp_2 = new PointGraph2D(polygon2Ds_Temp_1, true).GetPolygon2Ds();
+            List<Polygon2D> polygon2Ds_Temp_2 = Create.Polygon2Ds(polygon2Ds_Temp_1, tolerance);//new PointGraph2D(polygon2Ds_Temp_1, true).GetPolygon2Ds();
             if (polygon2Ds_Temp_2 == null || polygon2Ds_Temp_2.Count == 0)
                 return null;
 

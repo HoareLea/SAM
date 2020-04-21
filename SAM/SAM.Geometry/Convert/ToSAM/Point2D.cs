@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using ClipperLib;
+﻿using ClipperLib;
 
 using NetTopologySuite.Geometries;
 
@@ -23,6 +16,11 @@ namespace SAM.Geometry
         public static Point2D ToSAM(this Coordinate coordinate)
         {
             return new Point2D(coordinate.X, coordinate.Y);
+        }
+
+        public static Point2D ToSAM(NetTopologySuite.Geometries.Point point)
+        {
+            return new Point2D(point.X, point.Y);
         }
     }
 }

@@ -129,6 +129,7 @@
     <Compile Include="Planar\Modify\SortByDistance.cs" />
     <Compile Include="Planar\Modify\Reverse.cs" />
     <Compile Include="Planar\Query\AlmostSimilar.cs" />
+    <Compile Include="Planar\Query\ExternalPolygon2Ds.cs" />
     <Compile Include="Planar\Query\Simplify.cs" />
     <Compile Include="Planar\Query\SelfIntersectionPoint3D.cs" />
     <Compile Include="Planar\Query\SelfIntersectionPoint3Ds.cs" />

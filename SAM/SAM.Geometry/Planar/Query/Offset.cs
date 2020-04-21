@@ -143,7 +143,7 @@ namespace SAM.Geometry.Planar
                 segment2Ds_Offset.RemoveAll(x => segment2D.Distance(x) < offsets[i] - Core.Tolerance.MacroDistance);
             }
 
-            List<Polygon2D> polygon2Ds_Temp = new PointGraph2D(segment2Ds_Offset, false, tolerance).GetPolygon2Ds();
+            List<Polygon2D> polygon2Ds_Temp = Create.Polygon2Ds(segment2Ds_Offset, tolerance);//new PointGraph2D(segment2Ds_Offset, false, tolerance).GetPolygon2Ds();
             if (polygon2Ds_Temp == null || polygon2Ds_Temp.Count == 0)
                 return null;
 
@@ -175,7 +175,7 @@ namespace SAM.Geometry.Planar
                     polygon2Ds.Add(polygon2D_Temp);
             }
 
-            polygon2Ds = new PointGraph2D(polygon2Ds, false, tolerance).GetPolygon2Ds_External();
+            polygon2Ds = Query.ExternalPolygon2Ds(polygon2Ds, tolerance);//new PointGraph2D(polygon2Ds, false, tolerance).GetPolygon2Ds_External();
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
 

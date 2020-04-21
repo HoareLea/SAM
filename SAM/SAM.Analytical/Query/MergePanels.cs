@@ -85,7 +85,9 @@ namespace SAM.Analytical
                     {
                         Point point = polygon.InteriorPoint;
 
-                        List<Tuple<LinearRing, Panel>> tuples_LinearRing_Within = tuples_LinearRing.FindAll(x => point.Within(x.Item1));
+                        Point2D point2D = Geometry.Convert.ToSAM(polygon.InteriorPoint);
+
+                        List<Tuple<LinearRing, Panel>> tuples_LinearRing_Within = tuples_LinearRing.FindAll(x => x.Item1.ToSAM().Inside(point2D));
                         int count = tuples_LinearRing_Within.Count;
                         if (count == 0)
                             continue;

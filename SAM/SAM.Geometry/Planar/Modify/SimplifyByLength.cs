@@ -15,7 +15,7 @@ namespace SAM.Geometry.Planar
 
             List<Segment2D> segment2Ds_Temp = Query.SelfIntersectionSegment2Ds(polygon2D_Temp, maxLength, tolerance);
 
-            List<Polygon2D> polygon2Ds = new PointGraph2D(segment2Ds_Temp, true, tolerance).GetPolygon2Ds();
+            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds_Temp, tolerance); //new PointGraph2D(segment2Ds_Temp, true, tolerance).GetPolygon2Ds();
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return polygon2D;
 
@@ -23,7 +23,7 @@ namespace SAM.Geometry.Planar
             polygon2D_Temp = polygon2Ds.Last();
 
             segment2Ds_Temp = Query.SelfIntersectionSegment2Ds(polygon2D_Temp, maxLength, tolerance);
-            polygon2Ds = new PointGraph2D(segment2Ds_Temp, true, tolerance).GetPolygon2Ds_External();
+            polygon2Ds = Query.ExternalPolygon2Ds(segment2Ds_Temp, tolerance);//new PointGraph2D(segment2Ds_Temp, true, tolerance).GetPolygon2Ds_External();
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return polygon2D;
 
@@ -44,7 +44,7 @@ namespace SAM.Geometry.Planar
                 }
 
             segment2Ds_Temp.AddRange(polygon2D_Temp.GetSegments());
-            polygon2Ds = new PointGraph2D(segment2Ds_Temp, true, tolerance).GetPolygon2Ds();
+            polygon2Ds = Create.Polygon2Ds(segment2Ds_Temp, tolerance); //new PointGraph2D(segment2Ds_Temp, true, tolerance).GetPolygon2Ds();
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return polygon2D;
 
