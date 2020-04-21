@@ -88,7 +88,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            Spatial.Plane plane = null;
+            Plane plane = null;
 
             bool ownPlane = gHBoolean.Value;
             if (ownPlane && boundable3D is IPlanar3D)

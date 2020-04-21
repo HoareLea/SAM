@@ -16,7 +16,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<IntPoint> intPoints_1 = Convert.ToClipper((ISegmentable2D)polygon2D_1, tolerance);
-            List<IntPoint> intPoints_2 = Convert.ToClipper((ISegmentable2D)polygon2D_1, tolerance);
+            List<IntPoint> intPoints_2 = Convert.ToClipper((ISegmentable2D)polygon2D_2, tolerance);
 
             Clipper clipper = new Clipper();
             clipper.AddPath(intPoints_1, PolyType.ptSubject, true);
