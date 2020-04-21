@@ -75,6 +75,40 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        private static List<Polygon2D> Difference(this IEnumerable<Polygon2D> polygon2Ds_1, IEnumerable<Polygon2D> polygon2Ds_2, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (polygon2Ds_1 == null || polygon2Ds_2 == null)
+                return null;
+
+            List < List <IntPoint>> intPointsList_1 = new List<List<IntPoint>>();
+            foreach (Polygon2D polygon2D_Temp in polygon2Ds_1)
+                intPointsList_1.Add(Convert.ToClipper((ISegmentable2D)polygon2D_Temp, tolerance));
+
+            List<List<IntPoint>> intPointsList_2 = new List<List<IntPoint>>();
+            foreach (Polygon2D polygon2D_Temp in polygon2Ds_2)
+                intPointsList_2.Add(Convert.ToClipper((ISegmentable2D)polygon2D_Temp, tolerance));
+
+            Clipper clipper = new Clipper();
+            clipper.AddPaths(intPointsList_1, PolyType.ptSubject, true);
+            clipper.AddPaths(intPointsList_2, PolyType.ptClip, true);
+
+            List<List<IntPoint>> intPointsList_Result = new List<List<IntPoint>>();
+
+            clipper.Execute(ClipType.ctDifference, intPointsList_Result, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
+
+            if (intPointsList_Result == null)
+                return null;
+
+            List<Polygon2D> result = new List<Polygon2D>();
+            if (intPointsList_Result.Count == 0)
+                return result;
+
+            foreach (List<IntPoint> intPoints_Result in intPointsList_Result)
+                result.Add(new Polygon2D(intPoints_Result.ToSAM(tolerance)));
+
+            return result;
+        }
+
         private static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2)
         {
             if (polygon2D_1 == null || polygon2D_2 == null)
