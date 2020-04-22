@@ -118,6 +118,7 @@
     <Compile Include="Planar\Modify\Draw.cs" />
     <Compile Include="Planar\Modify\ExtendOrTrim.cs" />
     <Compile Include="Planar\Modify\Extend.cs" />
+    <Compile Include="Planar\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Planar\Modify\SimplifyByLength.cs" />
     <Compile Include="Planar\Modify\SimplifyByAngle.cs" />
     <Compile Include="Planar\Modify\OrientByEnds.cs" />

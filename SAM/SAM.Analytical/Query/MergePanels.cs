@@ -78,8 +78,10 @@ namespace SAM.Analytical
                     tuples_Polygon.Add(new Tuple<Polygon, Panel>(polygon2D.ToNetTopologySuite_Polygon(tolerance), panel));
                 }
 
+                List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
+                Geometry.Planar.Modify.RemoveAlmostSimilar(polygons_Temp, tolerance);
 
-                List<Polygon> polygons = Geometry.Convert.ToNetTopologySuite_Polygons(tuples_Polygon.ConvertAll(x => x.Item1));
+                List<Polygon> polygons = Geometry.Convert.ToNetTopologySuite_Polygons(polygons_Temp);
                 if(polygons != null || polygons.Count > 0)
                 {
                     HashSet<Guid> guids = new HashSet<Guid>();
@@ -88,10 +90,8 @@ namespace SAM.Analytical
                     {
                         Point point = polygon.InteriorPoint;
 
-                        //Point2D point2D = Geometry.Convert.ToSAM(polygon.InteriorPoint);
-
-                        List<Tuple<Polygon, Panel>> tuples_Polygon_Within = tuples_Polygon.FindAll(x => x.Item1.Contains(point));
-                        int count = tuples_Polygon_Within.Count;
+                        List<Tuple<Polygon, Panel>> tuples_Polygon_Contains = tuples_Polygon.FindAll(x => x.Item1.Contains(point));
+                        int count = tuples_Polygon_Contains.Count;
                         if (count == 0)
                             continue;
 
@@ -99,14 +99,14 @@ namespace SAM.Analytical
 
                         if (count == 1)
                         {
-                            panel_Old = tuples_Polygon_Within[0].Item2;
+                            panel_Old = tuples_Polygon_Contains[0].Item2;
                         }
                         else
                         {
-                            Tuple<Polygon, Panel> tuple_Temp = tuples_Polygon_Within.Find(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
+                            Tuple<Polygon, Panel> tuple_Temp = tuples_Polygon_Contains.Find(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
                             if(tuple_Temp == null)
                             {
-                                panel_Old = tuples_Polygon_Within[0].Item2;
+                                panel_Old = tuples_Polygon_Contains[0].Item2;
                             }
                             else
                             {

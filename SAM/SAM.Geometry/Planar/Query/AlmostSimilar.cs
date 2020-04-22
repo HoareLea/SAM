@@ -1,4 +1,7 @@
-﻿namespace SAM.Geometry.Planar
+﻿using NetTopologySuite.Geometries;
+using System.Collections.Generic;
+
+namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
@@ -11,6 +14,52 @@
                 return false;
 
             return (segment2D_1[0].AlmostEquals(segment2D_2[0], tolerance) && segment2D_1[1].AlmostEquals(segment2D_2[1], tolerance)) || (segment2D_1[0].AlmostEquals(segment2D_2[1], tolerance) && segment2D_1[1].AlmostEquals(segment2D_2[0], tolerance));
+        }
+
+        public static bool AlmostSimilar(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.Distance)
+        {
+            if (polygon2D_1 == polygon2D_2)
+                return true;
+
+            if (polygon2D_1 == null || polygon2D_2 == null)
+                return false;
+
+            List<Point2D> point2Ds = null;
+
+            point2Ds = polygon2D_1.GetPoints();
+            foreach (Point2D point2D in point2Ds)
+                if (!polygon2D_2.On(point2D, tolerance))
+                    return false;
+
+            point2Ds = polygon2D_2.GetPoints();
+            foreach (Point2D point2D in point2Ds)
+                if (!polygon2D_1.On(point2D, tolerance))
+                    return false;
+
+            return true;
+        }
+
+        public static bool AlmostSimilar(this Polygon polygon_1, Polygon polygon_2, double tolerance = Core.Tolerance.Distance)
+        {
+            if (polygon_1 == polygon_2)
+                return true;
+
+            if (polygon_1 == null || polygon_2 == null)
+                return false;
+
+            Coordinate[] coordinates = null;
+
+            coordinates = polygon_1.Coordinates;
+            foreach (Coordinate coordinate in coordinates)
+                if (polygon_2.Distance(new Point(coordinate)) > tolerance)
+                    return false;
+
+            coordinates = polygon_2.Coordinates;
+            foreach (Coordinate coordinate in coordinates)
+                if (polygon_1.Distance(new Point(coordinate)) > tolerance)
+                    return false;
+
+            return true;
         }
     }
 }
