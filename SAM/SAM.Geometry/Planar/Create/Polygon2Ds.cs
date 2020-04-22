@@ -28,7 +28,7 @@ namespace SAM.Geometry.Planar
             List<Polygon2D> result = new List<Polygon2D>();
             foreach (Polygon polygon in polygons)
             {
-                List<Polygon2D> polygon2Ds = polygon.ToSAM();
+                List<Polygon2D> polygon2Ds = polygon.ToSAM_Polygon2Ds();
                 if (polygon2Ds == null)
                     continue;
 

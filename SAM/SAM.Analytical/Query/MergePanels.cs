@@ -117,18 +117,15 @@ namespace SAM.Analytical
                         if (panel_Old == null)
                             continue;
 
-                        foreach(Polygon2D polygon2D in polygon.ToSAM())
-                        {
-                            Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon2D);
-                            Guid guid = panel_Old.Guid;
-                            if (guids.Contains(guid))
-                                guid = Guid.NewGuid();
+                        Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon.ToSAM());
+                        Guid guid = panel_Old.Guid;
+                        if (guids.Contains(guid))
+                            guid = Guid.NewGuid();
 
-                            guids.Add(guid);
+                        guids.Add(guid);
 
-                            Panel panel_New = new Panel(guid, panel_Old, face3D);
-                            result.Add(panel_New);
-                        }
+                        Panel panel_New = new Panel(guid, panel_Old, face3D);
+                        result.Add(panel_New);
                     }
                 }
             }

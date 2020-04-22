@@ -78,6 +78,7 @@
     <Compile Include="Convert\ToNTS\Polygon.cs" />
     <Compile Include="Convert\ToNTS\LineString.cs" />
     <Compile Include="Convert\ToSAM\ISAMGeometry2D.cs" />
+    <Compile Include="Convert\ToSAM\Face2D.cs" />
     <Compile Include="Convert\ToSAM\Polygon2Ds.cs" />
     <Compile Include="Convert\ToSAM\Polyline2D.cs" />
     <Compile Include="Convert\ToSAM\Polygon2D.cs" />
