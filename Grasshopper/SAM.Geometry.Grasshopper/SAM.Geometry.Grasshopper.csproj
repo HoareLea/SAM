@@ -89,7 +89,7 @@
     <Compile Include="Component\GeometryPolycurveLoop2D.cs" />
     <Compile Include="Component\GeometryCreatePlane.cs" />
     <Compile Include="Component\SAMGeometrySplit.cs" />
-    <Compile Include="Component\SAMGeometry2DToNetTopologySuite.cs" />
+    <Compile Include="Component\SAMGeometry2DToNTS.cs" />
     <Compile Include="Component\SAMGeometryGeometry.cs" />
     <Compile Include="Component\GeometrySAMGeometry.cs" />
     <Compile Include="Component\GeometrySnap.cs" />

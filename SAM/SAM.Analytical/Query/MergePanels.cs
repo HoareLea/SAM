@@ -75,13 +75,13 @@ namespace SAM.Analytical
 
                     Polygon2D polygon2D = plane.Convert(polygon3D);
 
-                    tuples_Polygon.Add(new Tuple<Polygon, Panel>(polygon2D.ToNetTopologySuite_Polygon(tolerance), panel));
+                    tuples_Polygon.Add(new Tuple<Polygon, Panel>(polygon2D.ToNTS_Polygon(tolerance), panel));
                 }
 
                 List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
                 Geometry.Planar.Modify.RemoveAlmostSimilar(polygons_Temp, tolerance);
 
-                List<Polygon> polygons = Geometry.Convert.ToNetTopologySuite_Polygons(polygons_Temp);
+                List<Polygon> polygons = Geometry.Convert.ToNTS_Polygons(polygons_Temp, tolerance);
                 if(polygons != null || polygons.Count > 0)
                 {
                     HashSet<Guid> guids = new HashSet<Guid>();

@@ -1,15 +1,18 @@
-﻿using NetTopologySuite.Geometries;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using NetTopologySuite.Geometries;
 using NetTopologySuite.Noding.Snapround;
 using NetTopologySuite.Operation.Polygonize;
+
 using SAM.Geometry.Planar;
-using System.Collections.Generic;
-using System.Linq;
+
 
 namespace SAM.Geometry
 {
     public static partial class Convert
     {
-        public static List<Polygon> ToNetTopologySuite_Polygons(this IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon> ToNTS_Polygons(this IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segment2Ds == null)
                 return null;
@@ -17,10 +20,10 @@ namespace SAM.Geometry
             if (segment2Ds.Count() == 0)
                 return new List<Polygon>();
 
-            return ToNetTopologySuite_Polygons(segment2Ds.ToList().ConvertAll(x => x.ToNetTopologySuite(tolerance)), tolerance);
+            return ToNTS_Polygons(segment2Ds.ToList().ConvertAll(x => x.ToNTS(tolerance)), tolerance);
         }
 
-        public static List<Polygon> ToNetTopologySuite_Polygons(this IEnumerable<NetTopologySuite.Geometries.Geometry> geometries, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon> ToNTS_Polygons(this IEnumerable<NetTopologySuite.Geometries.Geometry> geometries, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (geometries == null)
                 return null;

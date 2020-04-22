@@ -21,7 +21,7 @@ namespace SAM.Geometry.Planar
                     segment2Ds.AddRange(segment2Ds_Temp);
             }
 
-            List<Polygon> polygons = segment2Ds.ToNetTopologySuite_Polygons(tolerance);
+            List<Polygon> polygons = segment2Ds.ToNTS_Polygons(tolerance);
             if (polygons == null)
                 return null;
 

@@ -9,7 +9,7 @@ using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometry2DToNetTopologySuite : GH_Component
+    public class SAMGeometry2DToNTS : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -24,7 +24,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMGeometry2DToNetTopologySuite()
+        public SAMGeometry2DToNTS()
           : base("SAMGeometry2D.ToNetTopologySuite", "SAMGeometry2D.ToNetTopologySuite",
               "SAMGeometry To NetTopologySuite",
               "SAM", "Geometry")
@@ -107,7 +107,7 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            List<NetTopologySuite.Geometries.Geometry> geometries = sAMGeometry2Ds.ConvertAll(x => x.ToNetTopologySuite());
+            List<NetTopologySuite.Geometries.Geometry> geometries = sAMGeometry2Ds.ConvertAll(x => x.ToNTS());
 
             dataAccess.SetDataList(0, geometries);
             dataAccess.SetDataList(1, geometries.ConvertAll(x => x.ToString()));

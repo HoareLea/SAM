@@ -80,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            panels = Query.MergePanels(panels, offset);
+            panels = Query.MergePanels(panels, offset, Core.Tolerance.Distance);
             if (panels == null)
                 dataAccess.SetDataList(0, null);
             else
