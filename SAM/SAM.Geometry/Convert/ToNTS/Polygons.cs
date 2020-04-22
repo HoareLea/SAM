@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using ClipperLib;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Noding.Snapround;
 using NetTopologySuite.Operation.Polygonize;
@@ -50,8 +50,6 @@ namespace SAM.Geometry
             if (geometries_Result == null)
                 return null;
 
-            
-
             if (geometries_Result.Count() == 0)
             {
                 result.AddRange(geometries.ToList().FindAll(x => x is Polygon).Cast<Polygon>());
@@ -64,6 +62,11 @@ namespace SAM.Geometry
                 Polygon polygon = geometry as Polygon;
                 if (polygon == null)
                     continue;
+
+                //TODO: Update with native NTS method
+                List<IntPoint> intPoints = polygon.ExteriorRing.ToSAM().ToClipper(tolerance);
+                intPoints = Clipper.CleanPolygon(intPoints, tolerance);
+                polygon = (new Polygon2D(intPoints.ToSAM(tolerance))).ToNTS_Polygon(tolerance);
 
                 result.Add(polygon);
             }
