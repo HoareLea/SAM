@@ -67,15 +67,17 @@ namespace SAM.Analytical
                 {
                     Panel panel = tuple_Temp.Item2;
 
-                    Geometry.Spatial.IClosedPlanar3D closedPlanar3D = plane.Project(panel.GetFace3D().GetExternalEdge());
+                    //Geometry.Spatial.IClosedPlanar3D closedPlanar3D = plane.Project(panel.GetFace3D().GetExternalEdge());
 
-                    Geometry.Spatial.Polygon3D polygon3D = closedPlanar3D as Geometry.Spatial.Polygon3D;
-                    if (polygon3D == null)
-                        continue;
+                    Geometry.Spatial.Face3D face3D = plane.Project(panel.GetFace3D());
 
-                    Polygon2D polygon2D = plane.Convert(polygon3D);
+                    //Geometry.Spatial.Polygon3D polygon3D = closedPlanar3D as Geometry.Spatial.Polygon3D;
+                    //if (polygon3D == null)
+                    //    continue;
 
-                    tuples_Polygon.Add(new Tuple<Polygon, Panel>(polygon2D.ToNTS_Polygon(tolerance), panel));
+                    Face2D face2D = plane.Convert(face3D);
+
+                    tuples_Polygon.Add(new Tuple<Polygon, Panel>(face2D.ToNTS(tolerance), panel));
                 }
 
                 List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
@@ -105,13 +107,9 @@ namespace SAM.Analytical
                         {
                             Tuple<Polygon, Panel> tuple_Temp = tuples_Polygon_Contains.Find(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
                             if(tuple_Temp == null)
-                            {
                                 panel_Old = tuples_Polygon_Contains[0].Item2;
-                            }
                             else
-                            {
                                 panel_Old = tuple_Temp.Item2;
-                            }
                         }
 
                         if (panel_Old == null)
