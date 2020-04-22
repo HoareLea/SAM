@@ -10,32 +10,30 @@ namespace SAM.Geometry
     {
         public static Face2D ToSAM(this Polygon polygon)
         {
-            NetTopologySuite.Geometries.Geometry geometry = polygon?.Boundary;
-            if (geometry == null)
+            if (polygon == null)
                 return null;
 
-            if (geometry is LinearRing)
-                return new Face2D(((LinearRing)geometry).ToSAM());
-            else if (geometry is MultiLineString)
-            {
-                MultiLineString multiLineString = (MultiLineString)geometry;
-                IEnumerable<NetTopologySuite.Geometries.Geometry> geometries = multiLineString?.Geometries;
-                if (geometries == null)
-                    return null;
+            LinearRing linearRing = polygon.ExteriorRing as LinearRing;
+            if (linearRing == null)
+                return null;
 
-                List<Polygon2D> polygon2Ds = new List<Polygon2D>();
-                foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
+            List<Polygon2D> polygon2Ds = new List<Polygon2D>();
+
+            LineString[] lineStrings = polygon.InteriorRings;
+            if(lineStrings != null && lineStrings.Length > 0)
+            {
+                foreach(LineString lineString in lineStrings)
                 {
-                    LinearRing linearRing = geometry_Temp as LinearRing;
-                    if (linearRing == null)
+                    LinearRing linearRing_Temp = lineString as LinearRing;
+                    if (linearRing_Temp == null)
                         continue;
-                    
-                    polygon2Ds.Add(linearRing.ToSAM());
+
+                    polygon2Ds.Add(linearRing_Temp.ToSAM());
                 }
-                return SAM.Geometry.Planar.Create.Face2Ds(polygon2Ds).First();
             }
 
-            return null;
+            return Face2D.Create(linearRing.ToSAM(), polygon2Ds, true);
+
         }
     }
 }
