@@ -13,7 +13,8 @@ namespace SAM.Core
             if (tolerance.Equals(0.0))
                 return value;
 
-            return Math.Round(value / tolerance) * tolerance;
+
+            return (double)(Math.Round((decimal)value / (decimal)tolerance) * (decimal)tolerance);
         }
     }
 }
