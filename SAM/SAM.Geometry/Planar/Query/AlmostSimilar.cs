@@ -39,6 +39,9 @@ namespace SAM.Geometry.Planar
             return true;
         }
 
+        /// <summary>This method finds similar shapes by comparing point between two NetTopologySuite polygons
+        /// to be continue WIP
+        /// </summary>
         public static bool AlmostSimilar(this Polygon polygon_1, Polygon polygon_2, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon_1 == polygon_2)

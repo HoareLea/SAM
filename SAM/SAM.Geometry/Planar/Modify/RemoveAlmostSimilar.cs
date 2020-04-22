@@ -20,7 +20,7 @@ namespace SAM.Geometry.Planar
 
                 Polygon polygon_1 = polygons[i];
                 
-                for (int j = i + 1; j < polygons.Count - 1; j++)
+                for (int j = i + 1; j < polygons.Count; j++)
                 {
                     if (indexes_HashSet.Contains(j))
                         continue;
