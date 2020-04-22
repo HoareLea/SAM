@@ -28,18 +28,29 @@ namespace SAM.Geometry
             if (geometries == null)
                 return null;
 
+            List<Polygon> result = new List<Polygon>();
+
             if (geometries.Count() == 0)
-                return new List<Polygon>();
+                return result;
 
             Polygonizer polygonizer = new Polygonizer(false);
             GeometryNoder geometryNoder = new GeometryNoder(new PrecisionModel(1 / tolerance));
-            polygonizer.Add(geometryNoder.Node(geometries).ToArray());
+
+            List<LineString> lineStrings = geometryNoder.Node(geometries).ToList();
+            if (lineStrings == null || lineStrings.Count == 0)
+                return result;
+
+            Modify.RemoveAlmostSimilar(lineStrings, tolerance);
+            if (lineStrings == null || lineStrings.Count == 0)
+                return result;
+
+            polygonizer.Add(lineStrings.ToArray());
 
             IEnumerable<NetTopologySuite.Geometries.Geometry> geometries_Result = polygonizer.GetPolygons();
             if (geometries_Result == null)
                 return null;
 
-            List<Polygon> result = new List<Polygon>();
+            
 
             if (geometries_Result.Count() == 0)
             {

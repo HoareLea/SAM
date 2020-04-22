@@ -1,33 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NetTopologySuite.Geometries;
 
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static void RemoveAlmostSimilar(this List<Polygon> polygons, double tolerance = Core.Tolerance.Distance)
+        public static void RemoveAlmostSimilar<T>(this List<T> geometries, double tolerance = Core.Tolerance.Distance) where T : NetTopologySuite.Geometries.Geometry
         {
-            if (polygons == null)
+            if (geometries == null)
                 return;
 
             HashSet<int> indexes_HashSet = new HashSet<int>(); 
-            for(int i =0; i < polygons.Count - 1; i++)
+            for(int i =0; i < geometries.Count - 1; i++)
             {
                 if (indexes_HashSet.Contains(i))
                     continue;
 
-                Polygon polygon_1 = polygons[i];
+                NetTopologySuite.Geometries.Geometry geometry_1 = geometries[i];
                 
-                for (int j = i + 1; j < polygons.Count; j++)
+                for (int j = i + 1; j < geometries.Count; j++)
                 {
                     if (indexes_HashSet.Contains(j))
                         continue;
 
-                    Polygon polygon_2 = polygons[j];
+                    NetTopologySuite.Geometries.Geometry geometry_2 = geometries[j];
 
-                    if (Query.AlmostSimilar(polygon_1, polygon_2, tolerance))
+                    if (Query.AlmostSimilar(geometry_1, geometry_2, tolerance))
                         indexes_HashSet.Add(j);
                 }
             }
@@ -36,7 +35,7 @@ namespace SAM.Geometry.Planar
             indexes_List.Sort();
             indexes_List.Reverse();
 
-            indexes_List.ForEach(x => polygons.RemoveAt(x));
+            indexes_List.ForEach(x => geometries.RemoveAt(x));
         }
     }
 }

@@ -42,24 +42,24 @@ namespace SAM.Geometry.Planar
         /// <summary>This method finds similar shapes by comparing point between two NetTopologySuite polygons
         /// to be continue WIP
         /// </summary>
-        public static bool AlmostSimilar(this Polygon polygon_1, Polygon polygon_2, double tolerance = Core.Tolerance.Distance)
+        public static bool AlmostSimilar(this NetTopologySuite.Geometries.Geometry geometry_1, NetTopologySuite.Geometries.Geometry geometry_2, double tolerance = Core.Tolerance.Distance)
         {
-            if (polygon_1 == polygon_2)
+            if (geometry_1 == geometry_2)
                 return true;
 
-            if (polygon_1 == null || polygon_2 == null)
+            if (geometry_1 == null || geometry_2 == null)
                 return false;
 
             Coordinate[] coordinates = null;
 
-            coordinates = polygon_1.Coordinates;
+            coordinates = geometry_1.Coordinates;
             foreach (Coordinate coordinate in coordinates)
-                if (polygon_2.Distance(new Point(coordinate)) > tolerance)
+                if (geometry_2.Distance(new Point(coordinate)) > tolerance)
                     return false;
 
-            coordinates = polygon_2.Coordinates;
+            coordinates = geometry_2.Coordinates;
             foreach (Coordinate coordinate in coordinates)
-                if (polygon_1.Distance(new Point(coordinate)) > tolerance)
+                if (geometry_1.Distance(new Point(coordinate)) > tolerance)
                     return false;
 
             return true;
