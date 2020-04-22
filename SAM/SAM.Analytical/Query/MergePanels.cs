@@ -8,7 +8,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> MergePanels(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Panel> MergePanels(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
                 return null;

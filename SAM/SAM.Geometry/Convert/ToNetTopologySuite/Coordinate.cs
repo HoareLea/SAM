@@ -17,7 +17,7 @@ namespace SAM.Geometry
             if (point2D == null)
                 return null;
 
-            return new Coordinate(Core.Modify.Round(point2D.X), Core.Modify.Round(point2D.Y));
+            return new Coordinate(Core.Modify.Round(point2D.X, tolerance), Core.Modify.Round(point2D.Y, tolerance));
         }
     }
 }
