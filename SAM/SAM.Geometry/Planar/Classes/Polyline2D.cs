@@ -204,6 +204,11 @@ namespace SAM.Geometry.Planar
             return Query.Distance(this, segmentable2D);
         }
 
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        {
+            return Query.On(GetSegments(), point2D, tolerance);
+        }
+
         public bool Add(Segment2D segment2D, double tolerance = Core.Tolerance.Distance)
         {
             if (segment2D == null || segment2D.GetLength() < tolerance)

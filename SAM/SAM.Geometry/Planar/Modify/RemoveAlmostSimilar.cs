@@ -37,5 +37,7 @@ namespace SAM.Geometry.Planar
 
             indexes_List.ForEach(x => geometries.RemoveAt(x));
         }
+
+        //public static void RemoveAlmostSimilar(this List<ISegmen> )
     }
 }
