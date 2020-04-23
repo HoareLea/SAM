@@ -239,7 +239,7 @@ namespace SAM.Geometry.Planar
 
         public bool SimplifyByAngle(double maxAngle = Core.Tolerance.Angle)
         {
-            return Modify.SimplifyByAngle(points, true, maxAngle);
+            return Modify.SimplifyBySAM_Angle(points, true, maxAngle);
         }
 
         public IEnumerator<Point2D> GetEnumerator()

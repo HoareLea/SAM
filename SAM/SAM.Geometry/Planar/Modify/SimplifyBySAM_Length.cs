@@ -10,7 +10,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static Polygon2D SimplifyByLength(this Polygon2D polygon2D, double maxLength, double tolerance = Core.Tolerance.Distance)
+        public static Polygon2D SimplifyBySAM_Length(this Polygon2D polygon2D, double maxLength, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon2D == null || polygon2D.Count < 3 || double.IsNaN(maxLength) )
                 return null;
@@ -62,14 +62,14 @@ namespace SAM.Geometry.Planar
             return new Polygon2D(point2Ds);
         }
 
-        public static Polyline2D SimplifyByLength(this Polyline2D polyline2D, double maxLength, double tolerance = Core.Tolerance.Distance)
+        public static Polyline2D SimplifyBySAM_Length(this Polyline2D polyline2D, double maxLength, double tolerance = Core.Tolerance.Distance)
         {
             if (polyline2D == null || double.IsNaN(maxLength))
                 return null;
 
             if (polyline2D.IsClosed())
             {
-                Polygon2D polygon2D = SimplifyByLength(new Polygon2D(polyline2D.Points), maxLength, tolerance);
+                Polygon2D polygon2D = SimplifyBySAM_Length(new Polygon2D(polyline2D.Points), maxLength, tolerance);
                 if (polygon2D == null)
                     return null;
 
@@ -183,52 +183,6 @@ namespace SAM.Geometry.Planar
             point2Ds_Result.Add(point2Ds.Last().Last());
 
             return new Polyline2D(point2Ds_Result);
-        }
-
-        public static Polygon SimplifyByLength(this Polygon polygon, double maxLength, double tolerance = Core.Tolerance.MicroDistance)
-        {
-            if (polygon == null)
-                return null;
-
-            LinearRing linearRing = polygon.ExteriorRing as LinearRing;
-            if (linearRing == null)
-                return polygon;
-
-            List<IntPoint> intPoints;
-
-            intPoints = linearRing.ToClipper(tolerance);
-
-            intPoints = Clipper.CleanPolygon(intPoints, maxLength);
-            if (intPoints == null || intPoints.Count == 0)
-                return polygon;
-
-            linearRing = intPoints.ToNTS_LinearRing(tolerance);
-
-            LinearRing[] LinearRings = null;
-
-            LineString[] lineStrings = polygon.InteriorRings;
-            if (lineStrings != null && lineStrings.Length > 0)
-            {
-                List<LinearRing> linearRingsList = new List<LinearRing>();
-                foreach (LineString lineString in lineStrings)
-                {
-                    LinearRing linearRing_Temp = lineString as LinearRing;
-                    if (linearRing_Temp == null)
-                        continue;
-
-                    intPoints = linearRing_Temp.ToClipper(tolerance);
-                    intPoints = Clipper.CleanPolygon(intPoints, maxLength);
-                    linearRing_Temp = intPoints.ToNTS_LinearRing(tolerance);
-                    linearRingsList.Add(linearRing_Temp);
-                }
-
-                LinearRings = linearRingsList.ToArray();
-            }
-
-            if (LinearRings == null || LinearRings.Length == 0)
-                return new Polygon(linearRing);
-            else
-                return new Polygon(linearRing, LinearRings);
         }
 
 

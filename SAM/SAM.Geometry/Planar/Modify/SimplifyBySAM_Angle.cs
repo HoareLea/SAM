@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static bool SimplifyByAngle(this List<Point2D> point2Ds, bool closed, double maxAngle = Core.Tolerance.Angle)
+        public static bool SimplifyBySAM_Angle(this List<Point2D> point2Ds, bool closed, double maxAngle = Core.Tolerance.Angle)
         {
             if (point2Ds == null || point2Ds.Count < 3 )
                 return false;
@@ -97,7 +97,7 @@ namespace SAM.Geometry.Planar
                 if (point2Ds == null)
                     continue;
 
-                SimplifyByAngle(point2Ds, polyline2D.IsClosed(), maxAngle);
+                SimplifyBySAM_Angle(point2Ds, polyline2D.IsClosed(), maxAngle);
 
                 segment2Ds_Temp.AddRange(Create.Segment2Ds(point2Ds, polyline2D.IsClosed()));
             }

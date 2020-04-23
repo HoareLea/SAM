@@ -64,8 +64,9 @@ namespace SAM.Geometry
                 if (polygon == null)
                     continue;
 
-                //TODO: Update with native NTS method
-                polygon = Modify.SimplifyByLength(polygon, tolerance, tolerance);
+                //TODO: Check if native NTS Method works
+                //polygon = Modify.SimplifyByLength(polygon, tolerance, tolerance);
+                polygon = Modify.SimplifyByDouglasPeucker(polygon, tolerance);
 
                 result.Add(polygon);
             }

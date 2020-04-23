@@ -120,8 +120,9 @@
     <Compile Include="Planar\Modify\ExtendOrTrim.cs" />
     <Compile Include="Planar\Modify\Extend.cs" />
     <Compile Include="Planar\Modify\RemoveAlmostSimilar.cs" />
-    <Compile Include="Planar\Modify\SimplifyByLength.cs" />
-    <Compile Include="Planar\Modify\SimplifyByAngle.cs" />
+    <Compile Include="Planar\Modify\SimplifyByDouglasPeucker.cs" />
+    <Compile Include="Planar\Modify\SimplifyBySAM_Length.cs" />
+    <Compile Include="Planar\Modify\SimplifyBySAM_Angle.cs" />
     <Compile Include="Planar\Modify\OrientByEnds.cs" />
     <Compile Include="Planar\Modify\Join.cs" />
     <Compile Include="Planar\Modify\Cut.cs" />
@@ -132,7 +133,7 @@
     <Compile Include="Planar\Modify\Reverse.cs" />
     <Compile Include="Planar\Query\AlmostSimilar.cs" />
     <Compile Include="Planar\Query\ExternalPolygon2Ds.cs" />
-    <Compile Include="Planar\Modify\Simplify.cs" />
+    <Compile Include="Planar\Modify\SimplifyByClipper.cs" />
     <Compile Include="Planar\Query\SelfIntersectionPoint3D.cs" />
     <Compile Include="Planar\Query\SelfIntersectionPoint3Ds.cs" />
     <Compile Include="Planar\Query\SelfIntersectionPolygon2Ds.cs" />
