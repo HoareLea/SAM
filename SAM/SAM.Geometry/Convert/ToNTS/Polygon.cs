@@ -16,7 +16,7 @@ namespace SAM.Geometry
             List<LinearRing> linearRingsList_InternalEdges = face2D.InternalEdges?.ConvertAll(x => x.ToNTS(tolerance));
 
             LinearRing[] linearRingsArray_InternalEdges = null;
-            if (linearRingsList_InternalEdges != null || linearRingsList_InternalEdges.Count > 0)
+            if (linearRingsList_InternalEdges != null && linearRingsList_InternalEdges.Count > 0)
                 linearRingsArray_InternalEdges = linearRingsList_InternalEdges.ToArray();
 
             if (linearRingsArray_InternalEdges == null)

@@ -26,7 +26,7 @@ namespace SAM.Geometry.Planar
             if (intPoints == null || intPoints.Count == 0)
                 return polygon;
 
-            linearRing = new LinearRing(intPoints.ToNTS(tolerance).ToArray());
+            linearRing = intPoints.ToNTS_LinearRing(tolerance);
 
             LinearRing[] LinearRings = null;
 
@@ -42,7 +42,7 @@ namespace SAM.Geometry.Planar
 
                     intPoints = linearRing_Temp.ToClipper(tolerance);
                     intPoints = Clipper.CleanPolygon(intPoints, distance);
-                    linearRing_Temp = new LinearRing(intPoints.ToNTS(tolerance).ToArray());
+                    linearRing_Temp = intPoints.ToNTS_LinearRing(tolerance);
                     linearRingsList.Add(linearRing_Temp);
                 }
 
