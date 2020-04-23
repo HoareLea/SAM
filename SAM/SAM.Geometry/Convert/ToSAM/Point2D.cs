@@ -18,7 +18,7 @@ namespace SAM.Geometry
             return new Point2D(coordinate.X, coordinate.Y);
         }
 
-        public static Point2D ToSAM(NetTopologySuite.Geometries.Point point)
+        public static Point2D ToSAM(this Point point)
         {
             return new Point2D(point.X, point.Y);
         }

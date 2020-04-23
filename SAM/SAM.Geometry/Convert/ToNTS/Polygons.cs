@@ -3,6 +3,7 @@ using System.Linq;
 using ClipperLib;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Noding.Snapround;
+using NetTopologySuite.Operation.Buffer;
 using NetTopologySuite.Operation.Polygonize;
 
 using SAM.Geometry.Planar;
@@ -64,9 +65,7 @@ namespace SAM.Geometry
                     continue;
 
                 //TODO: Update with native NTS method
-                List<IntPoint> intPoints = polygon.ExteriorRing.ToSAM().ToClipper(tolerance);
-                intPoints = Clipper.CleanPolygon(intPoints, tolerance);
-                polygon = (new Polygon2D(intPoints.ToSAM(tolerance))).ToNTS_Polygon(tolerance);
+                polygon = Planar.Query.Clean(polygon, tolerance, tolerance);
 
                 result.Add(polygon);
             }

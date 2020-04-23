@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ClipperLib;
+using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
 
 namespace SAM.Geometry
@@ -34,6 +35,26 @@ namespace SAM.Geometry
                 result.Add(point2D.ToClipper(tolerance));
 
             return result;
+        }
+
+        public static List<IntPoint> ToClipper(this IEnumerable<Coordinate> coordinates, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (coordinates == null)
+                return null;
+
+            if (coordinates.Count() == 0)
+                return new List<IntPoint>();
+
+            List<IntPoint> result = new List<IntPoint>();
+            foreach (Coordinate coordinate in coordinates)
+                result.Add(coordinate.ToClipper(tolerance));
+
+            return result;
+        }
+
+        public static List<IntPoint> ToClipper(this LinearRing linearRing, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            return linearRing?.Coordinates?.ToClipper(tolerance);
         }
     }
 }
