@@ -73,6 +73,7 @@
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalOffsetAperturesOnEdge.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperture.cs" />
     <Compile Include="Component\SAMAnalyticalCreateApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalMergePanels.cs" />

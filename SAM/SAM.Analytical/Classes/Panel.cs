@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Newtonsoft.Json.Linq;
 
 using SAM.Core;
@@ -291,6 +291,61 @@ namespace SAM.Analytical
 
             apertures.Add(aperture);
             return true;
+        }
+
+        public bool OffsetAperturesOnEdge(double distance, double tolerance = Tolerance.Distance)
+        {
+            if (apertures == null || apertures.Count == 0)
+                return false;
+
+            Face3D face3D = GetFace3D();
+            if (face3D == null)
+                return false;
+
+            Plane plane = face3D.GetPlane();
+
+            Geometry.Planar.Polygon2D externalEdge = face3D.ExternalEdge as Geometry.Planar.Polygon2D;
+            if (externalEdge == null)
+                throw new NotImplementedException();
+
+            List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Query.Offset(externalEdge, distance, tolerance);
+            polygon2Ds.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
+
+            externalEdge = polygon2Ds.Last();
+
+
+            bool result = false;
+            for(int i=0; i < apertures.Count; i++)
+            {
+                Aperture aperture = apertures[i];
+
+               IClosedPlanar3D closedPlanar3D = aperture?.GetFace3D()?.GetExternalEdge();
+                if (closedPlanar3D == null)
+                    continue;
+
+                closedPlanar3D = plane.Project(closedPlanar3D);
+
+                Geometry.Planar.Polygon2D externalEdge_Aperture = plane.Convert(closedPlanar3D) as Geometry.Planar.Polygon2D;
+                if (externalEdge_Aperture == null)
+                    continue;
+
+                List<Geometry.Planar.Point2D> point2Ds_Intersections = Geometry.Planar.Query.Intersections(externalEdge, externalEdge_Aperture);
+                if (point2Ds_Intersections == null || point2Ds_Intersections.Count == 0)
+                    continue;
+
+                polygon2Ds = Geometry.Planar.Query.Intersection(externalEdge_Aperture, externalEdge, tolerance);
+                if (polygon2Ds == null || polygon2Ds.Count == 0)
+                    continue;
+
+                polygon2Ds.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
+
+                closedPlanar3D = plane.Convert(polygon2Ds.Last());
+
+                apertures[i] = new Aperture(aperture.ApertureConstruction, closedPlanar3D, aperture.PlanarBoundary3D.GetFace3D().GetPlane().Origin);
+                result = true;
+            }
+
+            return result;
         }
 
         public List<Aperture> Apertures
