@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using ClipperLib;
+
+using NetTopologySuite.Geometries;
+
 namespace SAM.Geometry.Planar
 {
     public static partial class Modify
@@ -181,6 +185,53 @@ namespace SAM.Geometry.Planar
             return new Polyline2D(point2Ds_Result);
         }
 
+        public static Polygon SimplifyByLength(this Polygon polygon, double maxLength, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (polygon == null)
+                return null;
+
+            LinearRing linearRing = polygon.ExteriorRing as LinearRing;
+            if (linearRing == null)
+                return polygon;
+
+            List<IntPoint> intPoints;
+
+            intPoints = linearRing.ToClipper(tolerance);
+
+            intPoints = Clipper.CleanPolygon(intPoints, maxLength);
+            if (intPoints == null || intPoints.Count == 0)
+                return polygon;
+
+            linearRing = intPoints.ToNTS_LinearRing(tolerance);
+
+            LinearRing[] LinearRings = null;
+
+            LineString[] lineStrings = polygon.InteriorRings;
+            if (lineStrings != null && lineStrings.Length > 0)
+            {
+                List<LinearRing> linearRingsList = new List<LinearRing>();
+                foreach (LineString lineString in lineStrings)
+                {
+                    LinearRing linearRing_Temp = lineString as LinearRing;
+                    if (linearRing_Temp == null)
+                        continue;
+
+                    intPoints = linearRing_Temp.ToClipper(tolerance);
+                    intPoints = Clipper.CleanPolygon(intPoints, maxLength);
+                    linearRing_Temp = intPoints.ToNTS_LinearRing(tolerance);
+                    linearRingsList.Add(linearRing_Temp);
+                }
+
+                LinearRings = linearRingsList.ToArray();
+            }
+
+            if (LinearRings == null || LinearRings.Length == 0)
+                return new Polygon(linearRing);
+            else
+                return new Polygon(linearRing, LinearRings);
+        }
+
+
         private static void GetNext(List<List<Point2D>> point2Ds, int index, out int index_Next, out Point2D point2D_Next, double tolerance = Core.Tolerance.Distance)
         {
             index_Next = -1;
@@ -202,129 +253,6 @@ namespace SAM.Geometry.Planar
                     point2D_Next = point2Ds_Current[i];
                 }
             }
-        }
-
-        public static Polyline2D SimplifyByLength_Old(this Polyline2D polyline2D, double maxLength, double tolerance = Core.Tolerance.Distance)
-        {
-            if (polyline2D == null || double.IsNaN(maxLength))
-                return null;
-
-            if (polyline2D.IsClosed())
-            {
-                Polygon2D polygon2D = SimplifyByLength(new Polygon2D(polyline2D.Points), maxLength, tolerance);
-                if (polygon2D == null)
-                    return null;
-
-                return polygon2D.GetPolyline();
-            }
-
-            List<Segment2D> segment2Ds = polyline2D.GetSegments();
-            if (segment2Ds == null || segment2Ds.Count == 0)
-                return null;
-
-            //Collecting Intersections
-            Dictionary<int, HashSet<Point2D>> dictionary = new Dictionary<int, HashSet<Point2D>>();
-            for(int i =0; i < segment2Ds.Count; i++)
-            {
-                Segment2D segment2D = segment2Ds[i];
-
-                HashSet<Point2D> point2Ds_Temp;
-                if (!dictionary.TryGetValue(i, out point2Ds_Temp))
-                {
-                    point2Ds_Temp = new HashSet<Point2D>();
-                    point2Ds_Temp.Add(segment2D.GetStart());
-                    point2Ds_Temp.Add(segment2D.GetEnd());
-                    dictionary[i] = point2Ds_Temp;
-                }
-
-                Tuple<Point2D, Segment2D, Vector2D> aTuple;
-
-                Point2D point2D_1 = segment2D.GetStart();
-                Vector2D vector2D_1 = segment2D.Direction.GetNegated();
-
-                aTuple = Query.TraceDataFirst(point2D_1, vector2D_1, segment2Ds);
-                if(aTuple != null && aTuple.Item3.Length < maxLength)
-                {
-                    int index_Temp = Query.IndexOfClosestSegment2D(segment2Ds, aTuple.Item1);
-
-                    Segment2D segment2D_Temp = segment2Ds[index_Temp];
-
-                    if(!dictionary.TryGetValue(index_Temp, out point2Ds_Temp))
-                    {
-                        point2Ds_Temp = new HashSet<Point2D>();
-                        point2Ds_Temp.Add(segment2D_Temp.GetStart());
-                        point2Ds_Temp.Add(segment2D_Temp.GetEnd());
-                        dictionary[index_Temp] = point2Ds_Temp;
-                    }
-                    point2Ds_Temp.Add(aTuple.Item1);
-                    dictionary[i].Add(aTuple.Item1);
-                }
-
-
-                Point2D point2D_2 = segment2D.GetEnd();
-                Vector2D vector2D_2 = segment2D.Direction;
-
-                aTuple = Query.TraceDataFirst(point2D_2, vector2D_2, segment2Ds);
-                if (aTuple != null && aTuple.Item3.Length < maxLength)
-                {
-                    int index_Temp = Query.IndexOfClosestSegment2D(segment2Ds, aTuple.Item1);
-
-                    Segment2D segment2D_Temp = segment2Ds[index_Temp];
-
-                    if (!dictionary.TryGetValue(index_Temp, out point2Ds_Temp))
-                    {
-                        point2Ds_Temp = new HashSet<Point2D>();
-                        point2Ds_Temp.Add(segment2D_Temp.GetStart());
-                        point2Ds_Temp.Add(segment2D_Temp.GetEnd());
-                        dictionary[index_Temp] = point2Ds_Temp;
-                    }
-                    point2Ds_Temp.Add(aTuple.Item1);
-                    dictionary[i].Add(aTuple.Item1);
-                }
-
-
-            }
-
-
-            //Sorting
-            List<int> indexes = dictionary.Keys.ToList();
-            indexes.Sort();
-
-            Point2D point2D_Start = dictionary[indexes.First()].ToList().First();
-
-            Dictionary<int, HashSet<Point2D>> dictionary_Temp = new Dictionary<int, HashSet<Point2D>>();
-            foreach (int index_Temp in indexes)
-            {
-                List<Point2D> point2Ds_Temp = dictionary[index_Temp].ToList();
-                Point2D point2D = point2Ds_Temp.First();
-
-                Modify.SortByDistance(point2Ds_Temp, point2D);
-
-                dictionary_Temp[index_Temp] = new HashSet<Point2D>(point2Ds_Temp);
-            }
-
-            //Reorganizing
-            List<Point2D> point2Ds_Result = new List<Point2D>();
-            int index = 0;
-            point2Ds_Result.Add(dictionary_Temp[index].ToList().First());
-            while (index < dictionary_Temp.Count)
-            {
-                List<Point2D> point2Ds = dictionary_Temp[index].ToList();
-                point2Ds_Result.Add(point2Ds.Last());
-
-                for(int i = index + 1; i < indexes.Count; i++)
-                {
-                    if(dictionary_Temp[i].Contains(point2Ds_Result.Last()))
-                        index = i - 1;
-                }
-                
-                index++;
-            }
-
-            if (point2Ds_Result == null || point2Ds_Result.Count == 0)
-                return null;
-
-            return new Polyline2D(point2Ds_Result);
         }
     }
 }

@@ -65,7 +65,7 @@ namespace SAM.Geometry
                     continue;
 
                 //TODO: Update with native NTS method
-                polygon = Planar.Query.Clean(polygon, tolerance, tolerance);
+                polygon = Modify.SimplifyByLength(polygon, tolerance, tolerance);
 
                 result.Add(polygon);
             }
