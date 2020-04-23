@@ -38,12 +38,12 @@ namespace SAM.Geometry.Planar
             ClipperOffset clipperOffset = new ClipperOffset();
             clipperOffset.AddPath(intPoints, joinType, endType);
             List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
-            clipperOffset.Execute(ref intPointList, offset);
+            clipperOffset.Execute(ref intPointList, offset / tolerance);
 
             if (intPointList == null)
                 return null;
 
-            return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM()));
+            return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
         }
 
 

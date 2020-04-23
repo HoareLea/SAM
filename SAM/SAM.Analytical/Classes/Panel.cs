@@ -308,7 +308,7 @@ namespace SAM.Analytical
             if (externalEdge == null)
                 throw new NotImplementedException();
 
-            List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Query.Offset(externalEdge, distance, tolerance);
+            List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Query.Offset(externalEdge, -distance, tolerance);
             polygon2Ds.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
 
             externalEdge = polygon2Ds.Last();
