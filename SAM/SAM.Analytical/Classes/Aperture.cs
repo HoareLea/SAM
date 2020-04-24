@@ -99,6 +99,14 @@ namespace SAM.Analytical
             return Query.Height(planarBoundary3D);
         }
 
+        public void Move(Vector3D vector3D)
+        {
+            if (vector3D == null)
+                return;
+
+            planarBoundary3D.Move(vector3D);
+        }
+
         public ApertureConstruction ApertureConstruction
         {
             get

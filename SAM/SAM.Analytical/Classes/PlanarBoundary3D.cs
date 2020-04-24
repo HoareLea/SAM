@@ -111,6 +111,11 @@ namespace SAM.Analytical
             }
         }
 
+        public void Move(Vector3D vector3D)
+        {
+            plane.Move(vector3D);
+        }
+
         public BoundaryEdge2DLoop Edge2DLoop
         {
             get

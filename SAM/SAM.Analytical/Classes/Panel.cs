@@ -147,6 +147,17 @@ namespace SAM.Analytical
             }
         }
 
+        public void Move(Vector3D vector3D)
+        {
+            if (vector3D == null)
+                return;
+
+            planarBoundary3D.Move(vector3D);
+
+            if(apertures != null)
+                apertures.ForEach(x => x.Move(vector3D));
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

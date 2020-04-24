@@ -77,6 +77,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperture.cs" />
     <Compile Include="Component\SAMAnalyticalCreateApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalMergePanels.cs" />
+    <Compile Include="Component\SAMAnalyticalMovePanel.cs" />
     <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalRenameConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByElevation.cs" />

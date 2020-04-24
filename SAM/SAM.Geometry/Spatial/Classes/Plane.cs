@@ -408,6 +408,14 @@ namespace SAM.Geometry.Spatial
            return new Plane(this);
         }
 
+        public void Move(Vector3D vector3D)
+        {
+            if (vector3D == null)
+                return;
+
+            origin.Move(vector3D);
+        }
+
         public override ISAMGeometry Clone()
         {
             return new Plane(this);
