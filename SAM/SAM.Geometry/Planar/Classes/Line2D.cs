@@ -5,28 +5,52 @@ using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public class Line2D : SAMGeometry
+    public class Line2D : SAMGeometry, ISAMGeometry2D
     {
-        
+        private Point2D origin;
+        private Vector2D vector;
+
         public Line2D(JObject jObject)
             : base(jObject)
         {
 
         }
-        
+
+        public Line2D(Point2D origin, Vector2D vector)
+        {
+            this.origin = origin;
+            this.vector = vector;
+        }
+
+        public Line2D(Line2D line2D)
+        {
+            origin = new Point2D(line2D.origin);
+            vector = new Vector2D(line2D.vector);
+        }
+
         public override ISAMGeometry Clone()
         {
-            throw new NotImplementedException();
+            return new Line2D(this);
         }
 
         public override bool FromJObject(JObject jObject)
         {
-            throw new NotImplementedException();
+            origin = new Point2D(jObject.Value<JObject>("Origin"));
+            vector = new Vector2D(jObject.Value<JObject>("Vector"));
+
+            return true;
         }
 
         public override JObject ToJObject()
         {
-            throw new NotImplementedException();
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
+            jObject.Add("Origin", origin.ToJObject());
+            jObject.Add("Vector", vector.ToJObject());
+
+            return jObject;
         }
     }
 }

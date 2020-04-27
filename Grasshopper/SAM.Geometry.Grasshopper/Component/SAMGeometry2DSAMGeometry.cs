@@ -78,7 +78,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            IBoundable3D geometry3D = plane.Convert(geometry2D);
+            ISAMGeometry3D geometry3D = plane.Convert(geometry2D);
             if (geometry3D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");

@@ -7,14 +7,24 @@ using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometryIntersection : GH_Component
+    public class SAMGeometrySegment2DIntersection : GH_Component
     {
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("2328b29d-21c2-4ad6-940f-482a8cdc6b68");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMGeometryIntersection()
-          : base("SAMGeometry.Intersection", "GHgeo",
-              "copy from Intersection",
+        public SAMGeometrySegment2DIntersection()
+          : base("SAMGeometry.Segment2DIntersection", "GHgeo",
+              "Segment2D Intersection",
               "SAM", "Geometry")
         {
         }
@@ -84,27 +94,6 @@ namespace SAM.Geometry.Grasshopper
 
             AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
 
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Geometry;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("2328b29d-21c2-4ad6-940f-482a8cdc6b68"); }
         }
     }
 }

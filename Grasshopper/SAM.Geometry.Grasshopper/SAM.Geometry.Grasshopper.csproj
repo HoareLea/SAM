@@ -91,6 +91,7 @@
     <Compile Include="Component\GeometryModifyDifference.cs" />
     <Compile Include="Component\GeometryPolycurveLoop2D.cs" />
     <Compile Include="Component\GeometryCreatePlane.cs" />
+    <Compile Include="Component\SAMGeometryPlaneIntersection.cs" />
     <Compile Include="Component\SAMGeometrySplit.cs" />
     <Compile Include="Component\SAMGeometry2DToNTS.cs" />
     <Compile Include="Component\SAMGeometryGeometry.cs" />
@@ -98,7 +99,7 @@
     <Compile Include="Component\GeometrySnap.cs" />
     <Compile Include="Component\SAMGeometry2DSAMGeometry.cs" />
     <Compile Include="Component\SAMGeometrySAMGeometry2D.cs" />
-    <Compile Include="Component\SAMGeometryIntersection.cs" />
+    <Compile Include="Component\SAMGeometrySegment2DIntersection.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Plane.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Vector.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />

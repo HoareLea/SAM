@@ -132,6 +132,8 @@
     <Compile Include="Planar\Modify\SortByDistance.cs" />
     <Compile Include="Planar\Modify\Reverse.cs" />
     <Compile Include="Planar\Query\AlmostSimilar.cs" />
+    <Compile Include="Spatial\Query\ExtremePoints.cs" />
+    <Compile Include="Spatial\Query\Parallel.cs" />
     <Compile Include="Planar\Query\ExternalPolygon2Ds.cs" />
     <Compile Include="Planar\Modify\SimplifyByClipper.cs" />
     <Compile Include="Planar\Query\Intersect.cs" />
@@ -182,6 +184,8 @@
     <Compile Include="Planar\Query\Closest.cs" />
     <Compile Include="Planar\Query\ConvexHull.cs" />
     <Compile Include="Query\Opposite.cs" />
+    <Compile Include="Spatial\Classes\PlanarIntersectionResult.cs" />
+    <Compile Include="Spatial\Interfaces\IIntersectionResult3D.cs" />
     <Compile Include="Spatial\Classes\Line3D.cs" />
     <Compile Include="Spatial\Create\Matrix.cs" />
     <Compile Include="Spatial\Create\Plane.cs" />

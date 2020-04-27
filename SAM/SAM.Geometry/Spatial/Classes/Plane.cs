@@ -182,7 +182,7 @@ namespace SAM.Geometry.Spatial
             return Convert(geometry as dynamic);
         }
 
-        public IBoundable3D Convert(Planar.ISAMGeometry2D geometry)
+        public ISAMGeometry3D Convert(Planar.ISAMGeometry2D geometry)
         {
             return Convert(geometry as dynamic);
         }
@@ -221,6 +221,12 @@ namespace SAM.Geometry.Spatial
             return new Planar.Point2D(baseX.DotProduct(vector3D), BaseY.DotProduct(vector3D));
         }
 
+        public Planar.Vector2D Convert(Vector3D vector3D)
+        {
+            //Vector3D vector3D_Result = new Vector3D(vector3D.X - origin.X, vector3D.Y - origin.Y, vector3D.Z - origin.Z);
+            return new Planar.Vector2D(baseX.DotProduct(vector3D), BaseY.DotProduct(vector3D));
+        }
+
         public Polygon3D Convert(Planar.Polygon2D polygon2D)
         {
             //return new Polygon3D(Convert(polygon2D.Points));
@@ -252,6 +258,11 @@ namespace SAM.Geometry.Spatial
         public Segment3D Convert(Planar.Segment2D segment2D)
         {
             return new Segment3D(Convert(segment2D.Start), Convert(segment2D.End));
+        }
+
+        public Planar.Line2D Convert(Line3D line3D)
+        {
+            return new Planar.Line2D(Convert(line3D.Origin), Convert(line3D.Direction));
         }
 
         public IClosedPlanar3D Convert(Planar.IClosed2D closed2D)
@@ -370,6 +381,11 @@ namespace SAM.Geometry.Spatial
             return Face3D.Create(this, externalEdge, internalEdges?.ConvertAll(x => Convert(x)));
         }
 
+        public Line3D Project(Line3D line3D)
+        {
+            return new Line3D(Project(line3D.Origin), Project(line3D.Direction));
+        }
+
         public IClosedPlanar3D Project(IClosedPlanar3D closedPlanar3D)
         {
             if (closedPlanar3D == null)
@@ -378,21 +394,14 @@ namespace SAM.Geometry.Spatial
             return Project(closedPlanar3D as dynamic);
         }
 
-        public Point3D Intersection(Segment3D segment3D)
+        public PlanarIntersectionResult Intersection(Segment3D segment3D)
         {
-            Vector3D direction = segment3D.Direction;
+            return PlanarIntersectionResult.Create(this, segment3D);
+        }
 
-            double d = normal.DotProduct(direction);
-            if (d == 0)
-                return null;
-
-            double u = (K - normal.DotProduct(segment3D[0].ToVector3D())) / d;
-            if (u < 0 || u > 1)
-                return null;
-
-            Point3D point3D = segment3D[0];
-
-            return new Point3D(point3D.X + u * direction.X, point3D.Y + u * direction.Y, point3D.Z + u * direction.Z);
+        public PlanarIntersectionResult Intersection(IClosedPlanar3D closedPlanar3D)
+        {
+            return PlanarIntersectionResult.Create(this, closedPlanar3D);
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)

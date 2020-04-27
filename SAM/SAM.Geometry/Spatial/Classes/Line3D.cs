@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Line3D : SAMGeometry
+    public class Line3D : SAMGeometry, ISAMGeometry3D
     {
         private Point3D origin;
         private Vector3D vector;
