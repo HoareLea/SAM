@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Security.Policy;
 
 namespace SAM.Geometry.Planar
 {
@@ -38,6 +38,36 @@ namespace SAM.Geometry.Planar
             indexes_List.ForEach(x => geometries.RemoveAt(x));
         }
 
-        //public static void RemoveAlmostSimilar(this List<ISegmen> )
+        /// <summary>
+        /// Removes segments from segment2Ds list which are similar to segmentable2D segments 
+        /// </summary>
+        public static void RemoveAlmostSimilar(this ISegmentable2D segmentable2D, List<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segmentable2D == null || segment2Ds == null || segment2Ds.Count() == 0)
+                return;
+
+            List<Segment2D> segment2s_Segmentable = segmentable2D.GetSegments();
+
+            HashSet<int> indexes = new HashSet<int>();
+            for (int i = 0; i < segment2Ds.Count; i++)
+            {
+                foreach (Segment2D segment2D_Segmentable in segment2s_Segmentable)
+                {
+                    if (!segment2Ds[i].AlmostSimilar(segment2D_Segmentable, tolerance))
+                        continue;
+
+                    indexes.Add(i);
+                    break;
+                }
+            }
+
+            if (indexes.Count == 0)
+                return;
+
+            List<int> indexes_List = indexes.ToList();
+            indexes_List.Sort((x, y) => y.CompareTo(x));
+
+            indexes_List.ForEach(x => segment2Ds.RemoveAt(x));
+        }
     }
 }

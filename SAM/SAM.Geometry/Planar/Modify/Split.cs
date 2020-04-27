@@ -1,7 +1,7 @@
-﻿using ClipperLib;
-using SAM.Geometry.Spatial;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
+using ClipperLib;
 
 namespace SAM.Geometry.Planar
 {
@@ -93,7 +93,7 @@ namespace SAM.Geometry.Planar
             return aResult;
         }
 
-        public static List<Segment2D> Split(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = 0)
+        public static List<Segment2D> Split(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segmentable2Ds == null)
                 return null;
@@ -165,5 +165,38 @@ namespace SAM.Geometry.Planar
             return null;
         }
 
+        public static List<Segment2D> Split(this ISegmentable2D segmentable2D, IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segmentable2D == null || segment2Ds == null)
+                return null;
+
+            if (segment2Ds.Count() == 0)
+                return new List<Segment2D>();
+
+            List<Segment2D> result = new List<Segment2D>();
+            foreach(Segment2D segment2D in segment2Ds)
+            {
+                List<Point2D> point2Ds = segmentable2D.Intersections(segment2D, tolerance);
+                if(point2Ds == null || point2Ds.Count == 0)
+                {
+                    result.Add(new Segment2D(segment2D));
+                    continue;
+                }
+
+                if (point2Ds.Find(x => x.AlmostEquals(segment2D[0])) == null)
+                    point2Ds.Add(segment2D[0]);
+
+                if (point2Ds.Find(x => x.AlmostEquals(segment2D[1])) == null)
+                    point2Ds.Add(segment2D[1]);
+
+                Modify.SortByDistance(point2Ds, segment2D[0]);
+
+                List<Segment2D> segment2Ds_Temp = Create.Segment2Ds(point2Ds, false);
+                if (segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
+                    result.AddRange(segment2Ds_Temp);
+            }
+
+            return result;
+        }
     }
 }
