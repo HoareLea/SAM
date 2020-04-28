@@ -318,7 +318,7 @@ namespace SAM.Geometry.Spatial
             List<PlanarIntersectionResult> PlanarIntersectionResults_InternalEdges = new List<PlanarIntersectionResult>();
             foreach (IClosedPlanar3D internalEdge in internalEdges)
             {
-                PlanarIntersectionResult planarIntersectionResult_InternalEdge = Create(plane, externaEdge, tolerance_Angle, tolerance_Distance);
+                PlanarIntersectionResult planarIntersectionResult_InternalEdge = Create(plane, internalEdge, tolerance_Angle, tolerance_Distance);
                 if (planarIntersectionResult_InternalEdge == null || !planarIntersectionResult_InternalEdge.Intersecting)
                     continue;
 
@@ -365,7 +365,7 @@ namespace SAM.Geometry.Spatial
                                 continue;
 
                             segment2Ds.Remove(segment2D_On);
-                            segment2Ds.AddRange(segment2Ds_On);
+                            segment2Ds.AddRange(segment2Ds_Temp);
                             @continue = true;
                             break;
                         }
