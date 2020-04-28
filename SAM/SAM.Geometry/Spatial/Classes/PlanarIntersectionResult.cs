@@ -213,12 +213,12 @@ namespace SAM.Geometry.Spatial
             return new PlanarIntersectionResult(plane_1,  new Line3D(orgin, tangent));
         }
 
-        public static PlanarIntersectionResult Create(Plane plane, IClosedPlanar3D closedPlanar3D, double tolerance = Core.Tolerance.Angle)
+        public static PlanarIntersectionResult Create(Plane plane, IClosedPlanar3D closedPlanar3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (plane == null || closedPlanar3D == null)
                 return null;
 
-            PlanarIntersectionResult planarIntersectionResult = Create(plane, closedPlanar3D.GetPlane(), tolerance);
+            PlanarIntersectionResult planarIntersectionResult = Create(plane, closedPlanar3D.GetPlane(), tolerance_Angle);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return new PlanarIntersectionResult(plane);
 
@@ -272,7 +272,7 @@ namespace SAM.Geometry.Spatial
                         point3D_1 = point3Ds[index];
                         point3D_2 = point3Ds[index + 1];
                         index++;
-                        if (point3D_1.Distance(point3D_2) < tolerance)
+                        if (point3D_1.Distance(point3D_2) < tolerance_Distance)
                         {
                             geometry3Ds.Add(point3D_1);
                         }
@@ -286,16 +286,21 @@ namespace SAM.Geometry.Spatial
             }
             
             List<Segment3D> segment3Ds = geometry3Ds.FindAll(x => x is Segment3D).Cast<Segment3D>().ToList();
-            Modify.RemoveAlmostSimilar(segment3Ds, tolerance);
+            Modify.RemoveAlmostSimilar(segment3Ds, tolerance_Distance);
             
             point3Ds = geometry3Ds.FindAll(x => x is Point3D).Cast<Point3D>().Distinct().ToList();
-            point3Ds.RemoveAll(x => segment3Ds.Find(y => y.On(x)) != null);
+            point3Ds.RemoveAll(x => segment3Ds.Find(y => y.On(x, tolerance_Distance)) != null);
 
             geometry3Ds = new List<ISAMGeometry3D>();
             geometry3Ds.AddRange(segment3Ds);
             geometry3Ds.AddRange(point3Ds);
 
             return new PlanarIntersectionResult(plane, geometry3Ds);
+        }
+
+        public static PlanarIntersectionResult Create(Plane plane, Face3D face3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            throw new NotImplementedException();
         }
     }
 }
