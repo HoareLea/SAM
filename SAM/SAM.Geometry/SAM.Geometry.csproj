@@ -132,7 +132,9 @@
     <Compile Include="Planar\Modify\SortByDistance.cs" />
     <Compile Include="Planar\Modify\Reverse.cs" />
     <Compile Include="Planar\Query\AlmostSimilar.cs" />
+    <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Query\ExtremePoints.cs" />
+    <Compile Include="Spatial\Query\On.cs" />
     <Compile Include="Spatial\Query\Parallel.cs" />
     <Compile Include="Planar\Query\ExternalPolygon2Ds.cs" />
     <Compile Include="Planar\Modify\SimplifyByClipper.cs" />

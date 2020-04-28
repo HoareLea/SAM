@@ -267,7 +267,7 @@ namespace SAM.Geometry.Spatial
                     Modify.SortByDistance(point3Ds, point3D_1);
                     int index = 0;
                     int count = point3Ds.Count - 2;
-                    while(index < count)
+                    while(index <= count)
                     {
                         point3D_1 = point3Ds[index];
                         point3D_2 = point3Ds[index + 1];
@@ -286,8 +286,11 @@ namespace SAM.Geometry.Spatial
             }
             
             List<Segment3D> segment3Ds = geometry3Ds.FindAll(x => x is Segment3D).Cast<Segment3D>().ToList();
+            Modify.RemoveAlmostSimilar(segment3Ds, tolerance);
+            
             point3Ds = geometry3Ds.FindAll(x => x is Point3D).Cast<Point3D>().Distinct().ToList();
             point3Ds.RemoveAll(x => segment3Ds.Find(y => y.On(x)) != null);
+
             geometry3Ds = new List<ISAMGeometry3D>();
             geometry3Ds.AddRange(segment3Ds);
             geometry3Ds.AddRange(point3Ds);

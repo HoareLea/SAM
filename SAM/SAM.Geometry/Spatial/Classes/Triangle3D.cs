@@ -124,5 +124,10 @@ namespace SAM.Geometry.Spatial
             jObject.Add("Points", Geometry.Create.JArray(points));
             return jObject;
         }
+
+        public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            return Query.On(this, point3D, tolerance);
+        }
     }
 }

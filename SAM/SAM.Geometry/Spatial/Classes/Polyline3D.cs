@@ -147,5 +147,10 @@ namespace SAM.Geometry.Spatial
             segments3D.ForEach(x => length += x.GetLength());
             return length;
         }
+
+        public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            return Query.On(this, point3D, tolerance);
+        }
     }
 }

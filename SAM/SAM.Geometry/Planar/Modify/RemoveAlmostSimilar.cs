@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
+
 
 namespace SAM.Geometry.Planar
 {
@@ -46,12 +46,12 @@ namespace SAM.Geometry.Planar
             if (segmentable2D == null || segment2Ds == null || segment2Ds.Count() == 0)
                 return;
 
-            List<Segment2D> segment2s_Segmentable = segmentable2D.GetSegments();
+            List<Segment2D> segment2Ds_Segmentable = segmentable2D.GetSegments();
 
             HashSet<int> indexes = new HashSet<int>();
             for (int i = 0; i < segment2Ds.Count; i++)
             {
-                foreach (Segment2D segment2D_Segmentable in segment2s_Segmentable)
+                foreach (Segment2D segment2D_Segmentable in segment2Ds_Segmentable)
                 {
                     if (!segment2Ds[i].AlmostSimilar(segment2D_Segmentable, tolerance))
                         continue;
