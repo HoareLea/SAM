@@ -416,7 +416,15 @@ namespace SAM.Geometry.Spatial
 
         public PlanarIntersectionResult Intersection(IClosedPlanar3D closedPlanar3D)
         {
+            if (closedPlanar3D is Face3D)
+                return Intersection((Face3D)closedPlanar3D);
+            
             return PlanarIntersectionResult.Create(this, closedPlanar3D);
+        }
+
+        public PlanarIntersectionResult Intersection(Face3D face3D)
+        {
+            return PlanarIntersectionResult.Create(this, face3D);
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
