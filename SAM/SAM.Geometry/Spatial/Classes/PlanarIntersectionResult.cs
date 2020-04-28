@@ -236,8 +236,9 @@ namespace SAM.Geometry.Spatial
             if (planarIntersectionResults_All == null || planarIntersectionResults_All.Count == 0)
                 return new PlanarIntersectionResult(plane);
 
+
             List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
-            List<Point3D> point3Ds_Segments = new List<Point3D>();
+            List<Point3D> point3Ds = new List<Point3D>();
 
             foreach(PlanarIntersectionResult planarIntersectionResult_Temp in planarIntersectionResults_All)
             {
@@ -252,29 +253,34 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                if (segment3Ds_Segmentable3D.Find(x => x[0].Distance(point3D) < tolerance || x[1].Distance(point3D) < tolerance) != null)
-                    geometry3Ds.Add(point3D);
-                else
-                    point3Ds_Segments.Add(point3D);
+                point3Ds.Add(point3D);
             }
 
-            if(point3Ds_Segments != null && point3Ds_Segments.Count > 1)
+            if(point3Ds != null && point3Ds.Count > 1)
             {
                 Point3D point3D_1 = null;
                 Point3D point3D_2 = null;
 
-                Query.ExtremePoints(point3Ds_Segments, out point3D_1, out point3D_2);
+                Query.ExtremePoints(point3Ds, out point3D_1, out point3D_2);
                 if (point3D_1 != null)
                 {
-                    Modify.SortByDistance(point3Ds_Segments, point3D_1);
-                    for(int i=0; i < point3Ds_Segments.Count; i = i + 2)
-                        geometry3Ds.Add(new Segment3D(point3Ds_Segments[i], point3Ds_Segments[i + 1]));
+                    Modify.SortByDistance(point3Ds, point3D_1);
+                    for(int i=0; i < point3Ds.Count; i = i + 2)
+                    {
+                        point3D_1 = point3Ds[i];
+                        point3D_2 = point3Ds[i + 1];
+
+                        if (point3D_1.Distance(point3D_2) < tolerance)
+                            geometry3Ds.Add(point3D_1);
+                        else
+                            geometry3Ds.Add(new Segment3D(point3D_1, point3D_2));
+                    }
                 }
             }
-
+            
             List<Segment3D> segment3Ds = geometry3Ds.FindAll(x => x is Segment3D).Cast<Segment3D>().ToList();
-            List<Point3D> point3Ds = geometry3Ds.FindAll(x => x is Point3D).Cast<Point3D>().Distinct().ToList();
-            point3Ds.RemoveAll(x => segment3Ds.Find(y => y[0].Equals(x) || y[1].Equals(x)) != null);
+            point3Ds = geometry3Ds.FindAll(x => x is Point3D).Cast<Point3D>().Distinct().ToList();
+            point3Ds.RemoveAll(x => segment3Ds.Find(y => y.On(x)) != null);
             geometry3Ds = new List<ISAMGeometry3D>();
             geometry3Ds.AddRange(segment3Ds);
             geometry3Ds.AddRange(point3Ds);
