@@ -116,23 +116,46 @@ namespace SAM.Geometry.Planar
                 return null;
 
             if (!Colinear(segment2D_1, segment2D_2))
-                return new List<Segment2D>() { segment2D_1, segment2D_2 };
+                return new List<Segment2D>() { segment2D_1 };
 
             bool on_1 = segment2D_1.On(segment2D_2[0], tolerance);
             bool on_2 = segment2D_1.On(segment2D_2[1], tolerance);
 
-
             if (!on_1 && !on_2)
-                return new List<Segment2D>() { segment2D_1, segment2D_2 };
+                return new List<Segment2D>() { segment2D_1 };
 
-            throw new NotImplementedException();
+            List<Segment2D> result = new List<Segment2D>();
 
-            if(on_1 && on_2)
+            List<Point2D> point2Ds = new List<Point2D>() { segment2D_1[0], segment2D_1[1], segment2D_2[0], segment2D_2[1] };
+            Point2D point2D_1;
+            Point2D point2D_2;
+            Query.ExtremePoints(point2Ds, out point2D_1, out point2D_2);
+            Modify.SortByDistance(point2Ds, point2D_1);
+
+            if (on_1 && on_2)
             {
+                if (point2Ds[0].Distance(point2Ds[1]) > tolerance)
+                    result.Add(new Segment2D(point2Ds[0], point2Ds[1]));
+
+                if (point2Ds[2].Distance(point2Ds[3]) > tolerance)
+                    result.Add(new Segment2D(point2Ds[2], point2Ds[3]));
+            }
+            else
+            {
+                if (point2Ds[0].Equals(segment2D_2[0]) || point2Ds[0].Equals(segment2D_2[1]))
+                {
+                    if (point2Ds[2].Distance(point2Ds[3]) > tolerance)
+                        result.Add(new Segment2D(point2Ds[2], point2Ds[3]));
+                }  
+                else
+                {
+                    if (point2Ds[0].Distance(point2Ds[1]) > tolerance)
+                        result.Add(new Segment2D(point2Ds[0], point2Ds[1]));
+                }
 
             }
 
-            return null;
+            return result;
         }
 
 

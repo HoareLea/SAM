@@ -345,14 +345,41 @@ namespace SAM.Geometry.Spatial
                         point2Ds.Add(point2D);
                 }
 
-                foreach(Segment2D segment2D in segment2Ds_internalEdge)
+                bool @continue = true;
+                while(@continue)
                 {
-                    List<Segment2D> segment2Ds_On = segment2Ds.FindAll(x => x.On(segment2D[0], tolerance_Distance) || x.On(segment2D[1], tolerance_Distance));
-                    if (segment2Ds_On == null || segment2Ds_On.Count == 0)
-                        continue;
+                    @continue = false;
 
+                    int count = 0;
+                    foreach (Segment2D segment2D in segment2Ds_internalEdge)
+                    {
+                        count++;
+                        List<Segment2D> segment2Ds_On = segment2Ds.FindAll(x => x.On(segment2D[0], tolerance_Distance) || x.On(segment2D[1], tolerance_Distance));
+                        if (segment2Ds_On == null || segment2Ds_On.Count == 0)
+                            continue;
+
+                        foreach (Segment2D segment2D_On in segment2Ds_On)
+                        {
+                            List<Segment2D> segment2Ds_Temp = Planar.Query.Difference(segment2D_On, segment2D, tolerance_Distance);
+                            if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
+                                continue;
+
+                            segment2Ds.Remove(segment2D_On);
+                            segment2Ds.AddRange(segment2Ds_On);
+                            @continue = true;
+                            break;
+                        }
+
+                        if(@continue)
+                        {
+                            segment2Ds_internalEdge.RemoveRange(0, count);
+                            break;
+                        }
+                    }
 
                 }
+
+
             }
 
             Planar.Modify.RemoveAlmostSimilar(segment2Ds, tolerance_Distance);
