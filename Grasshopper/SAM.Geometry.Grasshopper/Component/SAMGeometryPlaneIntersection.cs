@@ -75,8 +75,10 @@ namespace SAM.Geometry.Grasshopper
 
             if (obj is IGH_GeometricGoo)
                 geometry3Ds = Convert.ToSAM((IGH_GeometricGoo)obj);
-            else if (obj is Spatial.ISAMGeometry3D)
-                geometry3Ds = new List<Spatial.ISAMGeometry3D>() { (Spatial.ISAMGeometry3D)obj };
+            else if (obj is ISAMGeometry3D)
+                geometry3Ds = new List<ISAMGeometry3D>() { (ISAMGeometry3D)obj };
+            else if(obj is GooSAMGeometry)
+                geometry3Ds = new List<ISAMGeometry3D>() { ((GooSAMGeometry)obj).Value as ISAMGeometry3D };
 
             objectWrapper = null;
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)

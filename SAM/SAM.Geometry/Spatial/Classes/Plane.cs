@@ -227,6 +227,16 @@ namespace SAM.Geometry.Spatial
             return new Planar.Vector2D(baseX.DotProduct(vector3D), BaseY.DotProduct(vector3D));
         }
 
+        public Vector3D Convert(Planar.Vector2D vector2D)
+        {
+            Vector3D baseY = BaseY;
+
+            Vector3D u = new Vector3D(baseX.X * vector2D.X, baseX.Y * vector2D.X, baseX.Z * vector2D.X);
+            Vector3D v = new Vector3D(baseY.X * vector2D.Y, baseY.Y * vector2D.Y, baseY.Z * vector2D.Y);
+
+            return new Vector3D(u.X + v.X, u.Y + v.Y, u.Z + v.Z);
+        }
+
         public Polygon3D Convert(Planar.Polygon2D polygon2D)
         {
             //return new Polygon3D(Convert(polygon2D.Points));
@@ -263,6 +273,11 @@ namespace SAM.Geometry.Spatial
         public Planar.Line2D Convert(Line3D line3D)
         {
             return new Planar.Line2D(Convert(line3D.Origin), Convert(line3D.Direction));
+        }
+
+        public Line3D Convert(Planar.Line2D line2D)
+        {
+            return new Line3D(Convert(line2D.Origin), Convert(line2D.Direction));
         }
 
         public IClosedPlanar3D Convert(Planar.IClosed2D closed2D)

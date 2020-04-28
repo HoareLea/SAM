@@ -164,6 +164,11 @@ namespace SAM.Geometry.Spatial
                 return new Point3D(start.X + aParameter * C, start.Y + aParameter * D, start.Z + aParameter * F);
         }
 
+        public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {           
+            return Closest(point3D).Distance(point3D) < tolerance;
+        }
+
         public Line3D GetLine3D()
         {
             return new Line3D(origin, vector);

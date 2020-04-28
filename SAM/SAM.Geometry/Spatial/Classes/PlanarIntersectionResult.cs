@@ -126,7 +126,7 @@ namespace SAM.Geometry.Spatial
             Vector3D normal = plane.Normal;
 
             double d = normal.DotProduct(direction);
-            if (d < tolerance)
+            if (System.Math.Abs(d) < tolerance)
             {
                 if (plane.Distance(segment3D[0]) < tolerance)
                     return new PlanarIntersectionResult(plane, plane.Project(segment3D));
@@ -136,12 +136,12 @@ namespace SAM.Geometry.Spatial
                 
 
             double u = (plane.K - normal.DotProduct(segment3D[0].ToVector3D())) / d;
-            if (u < 0 || u > 1)
-                return null;
-
             Point3D point3D = segment3D[0];
 
             Point3D point3D_Intersection = new Point3D(point3D.X + u * direction.X, point3D.Y + u * direction.Y, point3D.Z + u * direction.Z);
+            if (!segment3D.On(point3D_Intersection, tolerance))
+                return new PlanarIntersectionResult(plane);
+
 
             return new PlanarIntersectionResult(plane, point3D_Intersection);
         }
@@ -157,9 +157,8 @@ namespace SAM.Geometry.Spatial
 
             Point3D origin = line3D.Origin;
 
-
             double d = normal.DotProduct(direction);
-            if (d < tolerance)
+            if (System.Math.Abs(d) < tolerance)
             {
                 if (plane.Distance(origin) < tolerance)
                     return new PlanarIntersectionResult(plane, plane.Project(line3D));
@@ -250,9 +249,10 @@ namespace SAM.Geometry.Spatial
                         continue;
 
                     geometry3Ds.Add(segment3D);
+                    continue;
                 }
 
-                if (segment3Ds_Segmentable3D.Find(x => x[0].Distance(point3D) < tolerance || x[1].Distance(point3D) < tolerance) == null)
+                if (segment3Ds_Segmentable3D.Find(x => x[0].Distance(point3D) < tolerance || x[1].Distance(point3D) < tolerance) != null)
                     geometry3Ds.Add(point3D);
                 else
                     point3Ds_Segments.Add(point3D);
@@ -271,6 +271,13 @@ namespace SAM.Geometry.Spatial
                         geometry3Ds.Add(new Segment3D(point3Ds_Segments[i], point3Ds_Segments[i + 1]));
                 }
             }
+
+            List<Segment3D> segment3Ds = geometry3Ds.FindAll(x => x is Segment3D).Cast<Segment3D>().ToList();
+            List<Point3D> point3Ds = geometry3Ds.FindAll(x => x is Point3D).Cast<Point3D>().Distinct().ToList();
+            point3Ds.RemoveAll(x => segment3Ds.Find(y => y[0].Equals(x) || y[1].Equals(x)) != null);
+            geometry3Ds = new List<ISAMGeometry3D>();
+            geometry3Ds.AddRange(segment3Ds);
+            geometry3Ds.AddRange(point3Ds);
 
             return new PlanarIntersectionResult(plane, geometry3Ds);
         }

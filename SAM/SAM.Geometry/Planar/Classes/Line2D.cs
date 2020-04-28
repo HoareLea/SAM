@@ -28,6 +28,22 @@ namespace SAM.Geometry.Planar
             vector = new Vector2D(line2D.vector);
         }
 
+        public Vector2D Direction
+        {
+            get
+            {
+                return new Vector2D(vector);
+            }
+        }
+
+        public Point2D Origin
+        {
+            get
+            {
+                return new Point2D(origin);
+            }
+        }
+
         public override ISAMGeometry Clone()
         {
             return new Line2D(this);
