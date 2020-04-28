@@ -272,7 +272,7 @@ namespace SAM.Geometry.Planar
 
             // Solve for t1 and t2
             double denominator = (dy12 * dx34 - dx12 * dy34);
-            if (double.IsNaN(denominator))
+            if (double.IsNaN(denominator) || System.Math.Abs(denominator) < tolerance)
                 return null;
 
             double t1 = ((Start.X - segment2D.Start.X) * dy34 + (segment2D.Start.Y - Start.Y) * dx34) / denominator;

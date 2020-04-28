@@ -71,7 +71,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            List<Spatial.ISAMGeometry3D> geometry3Ds = null;
+            List<ISAMGeometry3D> geometry3Ds = null;
 
             if (obj is IGH_GeometricGoo)
                 geometry3Ds = Convert.ToSAM((IGH_GeometricGoo)obj);
@@ -86,7 +86,13 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            Spatial.Plane plane = objectWrapper.Value as Spatial.Plane;
+            Plane plane = null;
+
+            if(objectWrapper.Value is Plane)
+                plane = objectWrapper.Value as Plane;
+            else if(objectWrapper.Value is GooSAMGeometry)
+                plane = ((GooSAMGeometry)objectWrapper.Value).Value as Plane;
+
             if (plane == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
