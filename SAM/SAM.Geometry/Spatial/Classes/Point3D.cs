@@ -198,6 +198,11 @@ namespace SAM.Geometry.Spatial
             coordinates[2] = Core.Modify.Round(coordinates[2], tolerance);
         }
 
+        public bool AlmostEquals(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            return ((System.Math.Abs(coordinates[0] - point3D.coordinates[0]) < tolerance) && (System.Math.Abs(coordinates[1] - point3D.coordinates[1]) < tolerance) && (System.Math.Abs(coordinates[2] - point3D.coordinates[2]) < tolerance));
+        }
+
         public static Point3D Snap(IEnumerable<Point3D> point3Ds, Point3D point3D, double maxDistance = double.NaN)
         {
             Point3D result = Point3D.Closest(point3Ds, point3D);

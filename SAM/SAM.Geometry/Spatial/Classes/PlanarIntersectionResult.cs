@@ -265,15 +265,22 @@ namespace SAM.Geometry.Spatial
                 if (point3D_1 != null)
                 {
                     Modify.SortByDistance(point3Ds, point3D_1);
-                    for(int i=0; i < point3Ds.Count; i = i + 2)
+                    int index = 0;
+                    int count = point3Ds.Count - 2;
+                    while(index < count)
                     {
-                        point3D_1 = point3Ds[i];
-                        point3D_2 = point3Ds[i + 1];
-
+                        point3D_1 = point3Ds[index];
+                        point3D_2 = point3Ds[index + 1];
+                        index++;
                         if (point3D_1.Distance(point3D_2) < tolerance)
+                        {
                             geometry3Ds.Add(point3D_1);
+                        }
                         else
+                        {
                             geometry3Ds.Add(new Segment3D(point3D_1, point3D_2));
+                            index++;
+                        }
                     }
                 }
             }
