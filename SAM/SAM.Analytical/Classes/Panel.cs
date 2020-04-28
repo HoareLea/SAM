@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 
 using SAM.Core;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
@@ -145,6 +146,58 @@ namespace SAM.Analytical
             {
                 return new PlanarBoundary3D(planarBoundary3D);
             }
+        }
+
+        public IEnumerable<ICurve2D> GetEdge2Ds(double elevation)
+        {
+            BoundingBox3D boundingBox3D = PlanarBoundary3D.GetBoundingBox();
+
+            if (elevation < boundingBox3D.Min.Z || elevation > boundingBox3D.Max.Z)
+                return null;
+
+            return GetEdge2Ds(new Plane(new Point3D(0, 0, elevation), Vector3D.BaseZ));
+        }
+
+        public IEnumerable<ICurve2D> GetEdge2Ds(Plane plane)
+        {
+            if (plane == null)
+                return null;
+
+            Face3D face3D = GetFace3D();
+            if (face3D == null)
+                return null;
+
+            PlanarIntersectionResult planarIntersectionResult = plane.Intersection(face3D);
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                return null;
+
+            return planarIntersectionResult.GetGeometry2Ds<Segment2D>()?.Cast<ICurve2D>();        
+        }
+
+        public IEnumerable<ICurve3D> GetEdge3Ds(double elevation)
+        {
+            BoundingBox3D boundingBox3D = PlanarBoundary3D.GetBoundingBox();
+
+            if (elevation < boundingBox3D.Min.Z || elevation > boundingBox3D.Max.Z)
+                return null;
+
+            return GetEdge3Ds(new Plane(new Point3D(0, 0, elevation), Vector3D.BaseZ));
+        }
+
+        public IEnumerable<ICurve3D> GetEdge3Ds(Plane plane)
+        {
+            if (plane == null)
+                return null;
+
+            Face3D face3D = GetFace3D();
+            if (face3D == null)
+                return null;
+
+            PlanarIntersectionResult planarIntersectionResult = plane.Intersection(face3D);
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                return null;
+
+            return planarIntersectionResult.GetGeometry3Ds<Segment3D>()?.Cast<ICurve3D>();
         }
 
         public void Move(Vector3D vector3D)

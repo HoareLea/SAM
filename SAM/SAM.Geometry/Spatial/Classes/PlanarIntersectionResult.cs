@@ -8,8 +8,8 @@ namespace SAM.Geometry.Spatial
 {
     public class PlanarIntersectionResult: IIntersectionResult3D
     {
-        public List<ISAMGeometry2D> geometry2Ds;
-        public Plane plane;
+        private List<ISAMGeometry2D> geometry2Ds;
+        private Plane plane;
 
         public PlanarIntersectionResult(Plane plane, IEnumerable<ISAMGeometry3D> sAMGeometry3Ds)
         {
@@ -107,7 +107,12 @@ namespace SAM.Geometry.Spatial
             return Geometry3Ds?.FindAll(x => x is T).ConvertAll(x => (T)x);
         }
 
-        
+        public List<T> GetGeometry2Ds<T>() where T : SAMGeometry, ISAMGeometry2D
+        {
+            return geometry2Ds?.FindAll(x => x is T).ConvertAll(x => (T)x);
+        }
+
+
         public static PlanarIntersectionResult Create(Plane plane, Point3D point3D)
         {
             if (plane == null || point3D == null)
