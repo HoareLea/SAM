@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ClipperLib;
 
@@ -108,6 +109,32 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
+
+        public static List<Segment2D> Difference(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segment2D_1 == null || segment2D_2 == null)
+                return null;
+
+            if (!Colinear(segment2D_1, segment2D_2))
+                return new List<Segment2D>() { segment2D_1, segment2D_2 };
+
+            bool on_1 = segment2D_1.On(segment2D_2[0], tolerance);
+            bool on_2 = segment2D_1.On(segment2D_2[1], tolerance);
+
+
+            if (!on_1 && !on_2)
+                return new List<Segment2D>() { segment2D_1, segment2D_2 };
+
+            throw new NotImplementedException();
+
+            if(on_1 && on_2)
+            {
+
+            }
+
+            return null;
+        }
+
 
         private static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2)
         {

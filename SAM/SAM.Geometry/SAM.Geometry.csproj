@@ -132,6 +132,7 @@
     <Compile Include="Planar\Modify\SortByDistance.cs" />
     <Compile Include="Planar\Modify\Reverse.cs" />
     <Compile Include="Planar\Query\AlmostSimilar.cs" />
+    <Compile Include="Planar\Query\EqualsTopologically.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Query\ExtremePoints.cs" />
     <Compile Include="Spatial\Query\On.cs" />

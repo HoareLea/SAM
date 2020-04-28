@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static void RemoveAlmostSimilar<T>(this List<T> geometries, double tolerance = Core.Tolerance.Distance) where T : NetTopologySuite.Geometries.Geometry
+        public static void RemoveAlmostSimilar_NTS<T>(this List<T> geometries, double tolerance = Core.Tolerance.Distance) where T : NetTopologySuite.Geometries.Geometry
         {
             if (geometries == null)
                 return;
@@ -68,6 +68,23 @@ namespace SAM.Geometry.Planar
             indexes_List.Sort((x, y) => y.CompareTo(x));
 
             indexes_List.ForEach(x => segment2Ds.RemoveAt(x));
+        }
+
+        /// <summary>
+        /// Removes segments from segment2Ds list which are similar to segmentable2D segments 
+        /// </summary>
+        public static void RemoveAlmostSimilar<T>(List<T> segmentable2Ds, double tolerance = Core.Tolerance.Distance) where T : ISegmentable2D
+        {
+            if (segmentable2Ds == null)
+                return;
+
+            List<T> result = new List<T>();
+            foreach (T segmentable2D in segmentable2Ds)
+                if (result.Find(x => Query.AlmostSimilar(x, segmentable2D, tolerance)) == null)
+                    result.Add(segmentable2D);
+
+            segmentable2Ds.Clear();
+            segmentable2Ds.AddRange(result);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace SAM.Geometry
             if (lineStrings == null || lineStrings.Count == 0)
                 return result;
 
-            Modify.RemoveAlmostSimilar(lineStrings, tolerance);
+            Modify.RemoveAlmostSimilar_NTS(lineStrings, tolerance);
             if (lineStrings == null || lineStrings.Count == 0)
                 return result;
 
