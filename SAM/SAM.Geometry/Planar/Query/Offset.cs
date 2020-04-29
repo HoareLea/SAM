@@ -157,10 +157,18 @@ namespace SAM.Geometry.Planar
 
             segment2Ds_Offset.RemoveAll(x => !polygon2D.Inside(x.Mid()) && !polygon2D.On(x.Mid()));
 
+            //segment2Ds_Offset.RemoveAll(x => polygon2D.On(x[0]) || polygon2D.On(x[1]));
+
             for (int i = 0; i < segment2Ds.Count; i++)
             {
+                if (offsets[i] - Core.Tolerance.MacroDistance < 0)
+                    continue;
+
                 Segment2D segment2D = segment2Ds[i];
-                segment2Ds_Offset.RemoveAll(x => segment2D.Distance(x) < offsets[i] - Core.Tolerance.MacroDistance);
+                //segment2Ds_Offset.RemoveAll(x => segment2D.Distance(x) < offsets[i] - Core.Tolerance.MacroDistance);
+
+                segment2Ds_Offset.RemoveAll(x => segment2D.On(x[0]) || segment2D.On(x[1]));
+
             }
 
             List<Polygon2D> polygon2Ds_Temp = Create.Polygon2Ds(segment2Ds_Offset, tolerance);//new PointGraph2D(segment2Ds_Offset, false, tolerance).GetPolygon2Ds();
