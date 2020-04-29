@@ -11,7 +11,8 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalEdge3Ds : GH_Component
+    //.PlaneIntersection
+    public class SAMAnalyticalPlaneIntersection : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -26,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalEdge3Ds()
+        public SAMAnalyticalPlaneIntersection()
           : base("SAMAnalytical.Edge3Ds", "SAMAnalytical.Edge3Ds",
               "Gets SAM Edge3Ds from Analytical Object",
               "SAM", "Analytical")
