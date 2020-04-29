@@ -55,7 +55,7 @@ namespace SAM.Analytical.Grasshopper
         /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<Core.SAMObject> sAMObjects = null;
+            List<Core.SAMObject> sAMObjects = new List<Core.SAMObject>();
             if (!dataAccess.GetDataList(0, sAMObjects) || sAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
