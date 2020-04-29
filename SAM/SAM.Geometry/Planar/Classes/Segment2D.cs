@@ -172,6 +172,9 @@ namespace SAM.Geometry.Planar
         /// <param name="point2D">Point2D to be projected.</param>
         public Point2D Project(Point2D point2D)
         {
+            if (point2D == null)
+                return null;
+            
             Point2D start = Start;
             Point2D end = End;
 
@@ -186,6 +189,24 @@ namespace SAM.Geometry.Planar
             double Y = (m * m * point2D.Y + m * point2D.X + b) / (m * m + 1);
 
             return new Point2D(X, Y);
+        }
+
+        public Segment2D Project(ISegmentable2D segmentable2D)
+        {
+            List<Point2D> point2Ds = segmentable2D?.GetPoints();
+            if (point2Ds == null || point2Ds.Count <= 1)
+                return null;
+
+            point2Ds = point2Ds.ConvertAll(x => Project(x));
+
+            Point2D point2D_1;
+            Point2D point2D_2;
+
+            Query.ExtremePoints(point2Ds, out point2D_1, out point2D_2);
+            if (point2D_1 == null || point2D_2 == null)
+                return null;
+
+            return new Segment2D(point2D_1, point2D_2);
         }
 
         /// <summary>
