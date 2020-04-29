@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// Intersect Panels with Plance and return SAM.Geometry Edge3Ds
         /// </summary>
         public SAMAnalyticalPlaneIntersection()
-          : base("SAMAnalytical.Edge3Ds", "SAMAnalytical.Edge3Ds",
+          : base("SAMAnalytical.PlaneIntersection", "SAMAnalytical.PlaneIntersection",
               "Gets SAM.Geometry Edge3Ds from Analytical Object that intersect with Planne by Elevation",
               "SAM", "Analytical")
         {
