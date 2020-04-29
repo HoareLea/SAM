@@ -11,7 +11,6 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
-    //.PlaneIntersection
     public class SAMAnalyticalPlaneIntersection : GH_Component
     {
         /// <summary>
@@ -25,11 +24,11 @@ namespace SAM.Analytical.Grasshopper
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         /// <summary>
-        /// Initializes a new instance of the SAM_point3D class.
+        /// Intersect Panels with Plance and return SAM.Geometry Edge3Ds
         /// </summary>
         public SAMAnalyticalPlaneIntersection()
           : base("SAMAnalytical.Edge3Ds", "SAMAnalytical.Edge3Ds",
-              "Gets SAM Edge3Ds from Analytical Object",
+              "Gets SAM.Geometry Edge3Ds from Analytical Object that intersect with Planne by Elevation",
               "SAM", "Analytical")
         {
         }
@@ -39,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object ie.Panel, Face3d", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
@@ -49,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Edge3Ds", "Edge3Ds", "Edge3Ds", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Edge3Ds", "Edge3Ds", "SAM.Geometry Edge3Ds", GH_ParamAccess.list);
         }
 
         /// <summary>
