@@ -11,7 +11,7 @@
                 return false;
 
             NetTopologySuite.Geometries.Geometry geometry_1 = segmentable2D_1.ToNTS(tolerance);
-            NetTopologySuite.Geometries.Geometry geometry_2 = segmentable2D_1.ToNTS(tolerance);
+            NetTopologySuite.Geometries.Geometry geometry_2 = segmentable2D_2.ToNTS(tolerance);
 
             if (geometry_1 == null || geometry_2 == null)
                 return false;
