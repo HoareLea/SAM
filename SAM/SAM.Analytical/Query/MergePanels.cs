@@ -91,6 +91,7 @@ namespace SAM.Analytical
 
                     Construction construction_FloorInternal_Default = Construction(Analytical.PanelType.FloorInternal);
                     Construction construction_FloorExposed_Default = Construction(Analytical.PanelType.FloorExposed);
+                    Construction construction_SlabOnGrade_Default = Construction(Analytical.PanelType.SlabOnGrade);
 
                     foreach (Polygon polygon in polygons)
                     {
@@ -106,6 +107,19 @@ namespace SAM.Analytical
                         if (count == 1)
                         {
                             panel_Old = tuples_Polygon_Contains[0].Item2;
+                            if(PanelGroup(panel_Old.PanelType) == Analytical.PanelGroup.Floor)
+                            {
+                                if (panel_Old.MinElevation() < Core.Tolerance.MacroDistance)
+                                {
+                                    //SlabOnGrad
+                                    panel_Old = new Panel(panel_Old, construction_SlabOnGrade_Default);
+                                }
+                                else
+                                {
+                                    //Exposed
+                                    panel_Old = new Panel(panel_Old, construction_FloorExposed_Default);
+                                }
+                            }
                         }
                         else
                         {
@@ -116,27 +130,10 @@ namespace SAM.Analytical
                             }
                             else
                             {
-                                if(tuples_Temp.Count == 1)
-                                {
-                                    if (panel_Old.MinElevation() < Core.Tolerance.MacroDistance)
-                                    {
-                                        //Exposed
-                                        panel_Old = tuples_Temp.Find(x => x.Item2.PanelType == Analytical.PanelType.FloorExposed)?.Item2;
-                                        if (panel_Old == null)
-                                            panel_Old = new Panel(tuples_Temp.First().Item2, construction_FloorExposed_Default);
-                                    }
-                                    else
-                                    {
-                                        panel_Old = tuples_Temp.First().Item2;
-                                    }
-                                }
-                                else
-                                {
-                                    //FloorInternal
-                                    panel_Old = tuples_Temp.Find(x => x.Item2.PanelType == Analytical.PanelType.FloorInternal)?.Item2;
-                                    if(panel_Old == null)
-                                        panel_Old = new Panel(tuples_Temp.First().Item2, construction_FloorInternal_Default);
-                                }
+                                //FloorInternal
+                                panel_Old = tuples_Temp.Find(x => x.Item2.PanelType == Analytical.PanelType.FloorInternal)?.Item2;
+                                if (panel_Old == null)
+                                    panel_Old = new Panel(tuples_Temp.First().Item2, construction_FloorInternal_Default);
                             }  
                         }
 
