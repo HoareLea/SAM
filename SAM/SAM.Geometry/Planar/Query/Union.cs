@@ -1,4 +1,5 @@
 ﻿using ClipperLib;
+using NetTopologySuite.Geometries;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -105,6 +106,33 @@ namespace SAM.Geometry.Planar
             }
 
             return new PointGraph2D(polygon2Ds, true).GetPolygon2Ds_External();
+        }
+
+        private static List<Face2D> Union(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            Polygon polygon_1 = face2D_1?.ToNTS(tolerance);
+            if (polygon_1 == null)
+                return null;
+
+            Polygon polygon_2 = face2D_2?.ToNTS(tolerance);
+            if (polygon_2 == null)
+                return null;
+
+            NetTopologySuite.Geometries.Geometry geometry = polygon_1.Union(polygon_2);
+            if (geometry == null)
+                return null;
+
+            if (geometry is MultiPolygon)
+                return ((MultiPolygon)geometry).ToSAM();
+
+            if(geometry is Polygon)
+            {
+                Face2D face2D = ((Polygon)geometry).ToSAM();
+                if (face2D != null)
+                    return new List<Face2D>() { face2D };
+            }
+
+            return null;
         }
     }
 }
