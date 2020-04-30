@@ -3,6 +3,7 @@ using SAM.Geometry;
 using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -87,8 +88,11 @@ namespace SAM.Analytical
                 if(polygons != null || polygons.Count > 0)
                 {
                     HashSet<Guid> guids = new HashSet<Guid>();
-                    
-                    foreach(Polygon polygon in polygons)
+
+                    Construction construction_FloorInternal_Default = Construction(Analytical.PanelType.FloorInternal);
+                    Construction construction_FloorExposed_Default = Construction(Analytical.PanelType.FloorExposed);
+
+                    foreach (Polygon polygon in polygons)
                     {
                         Point point = polygon.InteriorPoint;
 
@@ -105,11 +109,35 @@ namespace SAM.Analytical
                         }
                         else
                         {
-                            Tuple<Polygon, Panel> tuple_Temp = tuples_Polygon_Contains.Find(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
-                            if(tuple_Temp == null)
+                            List<Tuple<Polygon, Panel>> tuples_Temp = tuples_Polygon_Contains.FindAll(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
+                            if(tuples_Temp == null || tuples_Temp.Count == 0)
+                            {
                                 panel_Old = tuples_Polygon_Contains[0].Item2;
+                            }
                             else
-                                panel_Old = tuple_Temp.Item2;
+                            {
+                                if(tuples_Temp.Count == 1)
+                                {
+                                    if (panel_Old.MinElevation() < Core.Tolerance.MacroDistance)
+                                    {
+                                        //Exposed
+                                        panel_Old = tuples_Temp.Find(x => x.Item2.PanelType == Analytical.PanelType.FloorExposed)?.Item2;
+                                        if (panel_Old == null)
+                                            panel_Old = new Panel(tuples_Temp.First().Item2, construction_FloorExposed_Default);
+                                    }
+                                    else
+                                    {
+                                        panel_Old = tuples_Temp.First().Item2;
+                                    }
+                                }
+                                else
+                                {
+                                    //FloorInternal
+                                    panel_Old = tuples_Temp.Find(x => x.Item2.PanelType == Analytical.PanelType.FloorInternal)?.Item2;
+                                    if(panel_Old == null)
+                                        panel_Old = new Panel(tuples_Temp.First().Item2, construction_FloorInternal_Default);
+                                }
+                            }  
                         }
 
                         if (panel_Old == null)
