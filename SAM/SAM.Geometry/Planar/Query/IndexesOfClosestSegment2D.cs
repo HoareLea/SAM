@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -12,7 +11,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<int> result = new List<int>();
-            for(int i=0; i < segment2Ds.Count(); i++)
+            for (int i = 0; i < segment2Ds.Count(); i++)
             {
                 Segment2D segment2D = segment2Ds.ElementAt(i);
                 if (segment2D == null)

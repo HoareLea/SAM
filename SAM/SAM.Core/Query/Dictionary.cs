@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -11,7 +8,6 @@ namespace SAM.Core
         {
             if (objects == null || string.IsNullOrEmpty(name))
                 return null;
-
 
             Dictionary<T, List<Z>> result = new Dictionary<T, List<Z>>();
             foreach (Z z in objects)
@@ -24,7 +20,7 @@ namespace SAM.Core
                     continue;
 
                 List<Z> sAMObjects_Temp;
-                if(!result.TryGetValue((T)value, out sAMObjects_Temp))
+                if (!result.TryGetValue((T)value, out sAMObjects_Temp))
                 {
                     sAMObjects_Temp = new List<Z>();
                     result[(T)value] = sAMObjects_Temp;

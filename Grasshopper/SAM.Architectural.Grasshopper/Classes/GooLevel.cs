@@ -1,18 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using GH_IO.Serialization;
-using Rhino.Geometry;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
-using SAM.Core.Grasshopper;
-using Rhino;
 using Rhino.DocObjects;
-
-
+using Rhino.Geometry;
 using SAM.Architectural.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Architectural.Grasshopper
 {
@@ -21,13 +14,11 @@ namespace SAM.Architectural.Grasshopper
         public GooLevel()
             : base()
         {
-
         }
 
         public GooLevel(Level level)
             : base(level)
         {
-
         }
 
         public BoundingBox ClippingBox
@@ -50,7 +41,7 @@ namespace SAM.Architectural.Grasshopper
         {
             ConstructionPlane constructionPlane = new ConstructionPlane();
             constructionPlane.Plane = Geometry.Grasshopper.Convert.ToRhino(Value.GetPlane());
-            
+
             args.Pipeline.DrawConstructionPlane(constructionPlane);
         }
 
@@ -81,9 +72,9 @@ namespace SAM.Architectural.Grasshopper
 
         public GooLevelParam()
             : base(typeof(Level).Name, typeof(Level).Name, typeof(Level).FullName.Replace(".", " "), "Params", "SAM")
-        { 
+        {
         }
-        
+
         protected override GH_GetterResult Prompt_Plural(ref List<GooLevel> values)
         {
             throw new NotImplementedException();

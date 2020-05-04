@@ -1,7 +1,4 @@
-﻿using System;
-
-using Newtonsoft.Json.Linq;
-
+﻿using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -13,7 +10,6 @@ namespace SAM.Geometry.Planar
         public Line2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public Line2D(Point2D origin, Vector2D vector)

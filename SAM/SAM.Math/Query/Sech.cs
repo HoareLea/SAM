@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        // Hyperbolic Secant 
+        // Hyperbolic Secant
         //https://mathworld.wolfram.com/HyperbolicSecant.html
         public static double Sech(double angle)
         {

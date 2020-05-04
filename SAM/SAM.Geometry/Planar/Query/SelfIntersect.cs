@@ -11,7 +11,7 @@ namespace SAM.Geometry.Planar
                 return false;
 
             PointGraph2D pointGraph2D = new PointGraph2D(segment2Ds, true, tolerance);
-            for(int i=0; i < pointGraph2D.Count; i++)
+            for (int i = 0; i < pointGraph2D.Count; i++)
             {
                 int count = pointGraph2D.ConnectionsCount(i);
                 if (count > 2)

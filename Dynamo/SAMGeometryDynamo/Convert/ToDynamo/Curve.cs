@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Autodesk.DesignScript.Runtime;
+﻿using Autodesk.DesignScript.Runtime;
 
 namespace SAMGeometryDynamo
 {
@@ -18,7 +12,7 @@ namespace SAMGeometryDynamo
 
             if (curve3D is SAM.Geometry.Spatial.ICurvable3D)
                 return ToDynamo((SAM.Geometry.Spatial.ICurvable3D)curve3D);
-            
+
             return ToDynamo(curve3D as dynamic);
         }
 
@@ -27,7 +21,7 @@ namespace SAMGeometryDynamo
         {
             if (closed3D is SAM.Geometry.Spatial.ICurvable3D)
                 return ((SAM.Geometry.Spatial.ICurvable3D)closed3D).ToDynamo();
-            
+
             return null;
         }
     }

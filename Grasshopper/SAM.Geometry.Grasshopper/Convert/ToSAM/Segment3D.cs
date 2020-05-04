@@ -1,6 +1,5 @@
 ﻿using Grasshopper.Kernel.Types;
 
-
 namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
@@ -14,7 +13,6 @@ namespace SAM.Geometry.Grasshopper
         {
             return new Spatial.Segment3D(lineCurve.PointAtStart.ToSAM(), lineCurve.PointAtEnd.ToSAM());
         }
-
 
         public static Spatial.Segment3D ToSAM(this GH_Line line)
         {

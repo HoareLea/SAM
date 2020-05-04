@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
@@ -10,12 +9,11 @@ namespace SAM.Geometry.Grasshopper
         {
             List<Rhino.Geometry.Point3d> points = curve3Ds.ToList().ConvertAll(x => x.GetEnd().ToRhino());
             //TODO: Double Check if this is necessary
-            if(close)
+            if (close)
                 points.Add(curve3Ds.First().GetEnd().ToRhino());
 
             return new Rhino.Geometry.PolylineCurve(points);
         }
-
 
         public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this Spatial.Polygon3D polygon3D)
         {

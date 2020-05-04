@@ -1,10 +1,9 @@
-﻿using System;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
+using System;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -47,7 +46,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             GH_ObjectWrapper objectWrapper = null;
@@ -64,7 +65,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 boundable3D = ((GooSAMGeometry)objectWrapper.Value).Value as IBoundable3D;
             }
-            else if(objectWrapper.Value is IBoundable3D)
+            else if (objectWrapper.Value is IBoundable3D)
             {
                 boundable3D = objectWrapper.Value as dynamic;
             }
@@ -94,7 +95,7 @@ namespace SAM.Geometry.Grasshopper
             if (ownPlane && boundable3D is IPlanar3D)
                 plane = (boundable3D as IPlanar3D).GetPlane();
 
-            if(plane == null)
+            if (plane == null)
             {
                 if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper.Value == null)
                 {

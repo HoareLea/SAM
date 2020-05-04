@@ -4,7 +4,7 @@ using System.Linq;
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
-    { 
+    {
         public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, bool sort = true, bool selfIntersection = false, double tolerance = Core.Tolerance.Distance)
         {
             return IntersectionDictionary(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, keepDirection, removeColinear, sort, selfIntersection, tolerance);
@@ -16,7 +16,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Segment2D> segment2Ds = new List<Segment2D>();
-            foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
                 List<Segment2D> segment2Ds_Temp = segmentable2D?.GetSegments();
                 if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
@@ -59,13 +59,13 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            if(sort)
+            if (sort)
             {
                 List<Point2D> point2Ds = result.Keys.ToList();
                 Modify.SortByDistance(point2Ds, point2D);
 
                 Dictionary<Point2D, Segment2D> dictionary_Temp = new Dictionary<Point2D, Segment2D>();
-                foreach(Point2D point2D_Temp in point2Ds)
+                foreach (Point2D point2D_Temp in point2Ds)
                     dictionary_Temp[point2D_Temp] = result[point2D_Temp];
 
                 result = dictionary_Temp;
@@ -73,6 +73,5 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-
     }
 }

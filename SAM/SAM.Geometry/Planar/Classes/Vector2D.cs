@@ -2,7 +2,6 @@
 
 using SAM.Geometry.Interfaces;
 
-
 namespace SAM.Geometry.Planar
 {
     public class Vector2D : SAMGeometry, ISAMGeometry2D, IReversible
@@ -42,7 +41,6 @@ namespace SAM.Geometry.Planar
         public Vector2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public double this[int index]
@@ -265,8 +263,10 @@ namespace SAM.Geometry.Planar
             {
                 case Orientation.Clockwise:
                     return new Vector2D(coordinates[1], -coordinates[0]);
+
                 case Orientation.CounterClockwise:
                     return new Vector2D(-coordinates[1], coordinates[0]);
+
                 default:
                     return null;
             }

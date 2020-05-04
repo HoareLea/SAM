@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-
+﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -44,7 +38,6 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             index = inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
-
         }
 
         /// <summary>
@@ -58,7 +51,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             List<Panel> panels = new List<Panel>();
@@ -76,12 +71,12 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Panel> result = new List<Panel>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 double max = panel.MaxElevation();
                 double min = panel.MinElevation();
 
-                if(Math.Abs(min - elevation) < Core.Tolerance.Distance || (min - Core.Tolerance.Distance  < elevation &&  max - Core.Tolerance.Distance > elevation))
+                if (Math.Abs(min - elevation) < Core.Tolerance.Distance || (min - Core.Tolerance.Distance < elevation && max - Core.Tolerance.Distance > elevation))
                     result.Add(panel);
             }
 

@@ -1,6 +1,5 @@
 ﻿using SAM.Geometry.Spatial;
 
-
 namespace SAM.Analytical
 {
     public static partial class Query
@@ -47,7 +46,7 @@ namespace SAM.Analytical
         {
             if (panel == null || aperture == null)
                 return false;
-            
+
             PlanarBoundary3D planarBoundary3D_Panel = panel.PlanarBoundary3D;
             if (planarBoundary3D_Panel == null)
                 return false;

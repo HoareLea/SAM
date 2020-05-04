@@ -3,7 +3,6 @@ using Grasshopper.Kernel.Data;
 
 using System.Collections.Generic;
 
-
 namespace SAM.Core.Grasshopper
 {
     public static partial class Query
@@ -14,14 +13,14 @@ namespace SAM.Core.Grasshopper
                 return null;
 
             List<string[]> list = Convert.ToList(text, delimitedFileType);
-            if(list == null || list.Count == 0)
+            if (list == null || list.Count == 0)
                 return null;
 
             DataTree<string> result = new DataTree<string>();
             for (int i = 0; i < list.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
-                for(int j =0; j < list[i].Length; j++)
+                for (int j = 0; j < list[i].Length; j++)
                     result.Add(list[i][j], path);
             }
 

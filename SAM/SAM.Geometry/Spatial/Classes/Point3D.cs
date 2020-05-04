@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
-
-using Newtonsoft.Json.Linq;
-
 
 namespace SAM.Geometry.Spatial
 {
@@ -212,7 +210,7 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
-        
+
         public static List<Segment3D> GetSegments(IEnumerable<Point3D> point3Ds, bool close = false)
         {
             if (point3Ds == null)
@@ -257,7 +255,6 @@ namespace SAM.Geometry.Spatial
                 {
                     start++;
                 }
-
             }
             return result;
         }
@@ -266,7 +263,7 @@ namespace SAM.Geometry.Spatial
         {
             if (point3Ds == null)
                 return null;
-            
+
             List<Point3D> result = new List<Point3D>(point3Ds);
             Point3D last = result.Last();
 
@@ -283,7 +280,7 @@ namespace SAM.Geometry.Spatial
                     end--;
                 }
                 else
-                    start++; 
+                    start++;
             }
 
             if (!close)
@@ -291,7 +288,7 @@ namespace SAM.Geometry.Spatial
                 result.Remove(result.Last());
                 result.Add(last);
             }
-            //else 
+            //else
             //{
             //    result.Add(result.First());
             //}
@@ -320,11 +317,11 @@ namespace SAM.Geometry.Spatial
 
             Point3D result = null;
             double distance = double.MaxValue;
-            foreach(Point3D point3D_Temp in point3Ds)
+            foreach (Point3D point3D_Temp in point3Ds)
             {
                 double distance_Temp = point3D_Temp.Distance(point3D);
-                
-                if(distance > distance_Temp)
+
+                if (distance > distance_Temp)
                 {
                     distance = distance_Temp;
                     result = point3D_Temp;
@@ -414,7 +411,7 @@ namespace SAM.Geometry.Spatial
                 distance_Width += offset;
             }
 
-            return result;    
+            return result;
         }
 
         public static Point3D GetCenter(Point3D point3D_1, Point3D point3D_2)

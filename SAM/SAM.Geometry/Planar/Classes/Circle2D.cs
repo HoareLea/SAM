@@ -1,13 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
-    public class Circle2D: SAMGeometry, IClosed2D, IBoundable2D
+    public class Circle2D : SAMGeometry, IClosed2D, IBoundable2D
     {
         private Point2D center;
         private double radious;
@@ -27,9 +23,7 @@ namespace SAM.Geometry.Planar
         public Circle2D(JObject jObject)
             : base(jObject)
         {
-
         }
-
 
         public Point2D Center
         {

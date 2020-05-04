@@ -168,5 +168,6 @@ copy "%25GH_PACKAGES_DIR%25\$(ProjectName).dll" "%25GH_PACKAGES_DIR%25\$(Project
     <StartArguments>
     </StartArguments>
     <StartAction>Program</StartAction>
+    <DocumentationFile>..\..\build\SAM.Analytical.Grasshopper.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

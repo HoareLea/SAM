@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using SAM.Geometry.Spatial;
+﻿using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -17,10 +16,10 @@ namespace SAM.Analytical
             {
                 if (minArea != 0 && face.GetArea() < minArea)
                     continue;
-                
+
                 Panel panel = new Panel(construction, panelType, face);
 
-                if(panelType == PanelType.Undefined)
+                if (panelType == PanelType.Undefined)
                 {
                     Vector3D normal = panel.Normal;
                     if (normal == null)
@@ -31,16 +30,16 @@ namespace SAM.Analytical
                         panel = new Panel(panel, panelType_New);
                 }
 
-                if(panel.Construction == null)
+                if (panel.Construction == null)
                 {
                     Construction construction_Temp = Query.Construction(panel.PanelType);
-                    if(construction_Temp != null)
+                    if (construction_Temp != null)
                         panel = new Panel(panel, construction_Temp);
                 }
 
                 result.Add(panel);
             }
-                
+
             return result;
         }
     }

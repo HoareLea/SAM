@@ -1,15 +1,12 @@
-﻿using System;
-
-using Newtonsoft.Json.Linq;
-
+﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using System;
 
 namespace SAM.Analytical
 {
     public class Space : SAMObject
     {
         private Geometry.Spatial.Point3D location;
-
 
         public Space(Space space)
             : base(space)
@@ -43,7 +40,6 @@ namespace SAM.Analytical
         public Space(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public Geometry.Spatial.Point3D Location

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Reflection;
-
-using Newtonsoft.Json.Linq;
-
 
 namespace SAM.Core
 {
@@ -11,7 +8,7 @@ namespace SAM.Core
     {
         private DateTime created;
         private DateTime updated;
-       
+
         public Setting()
             : base()
         {
@@ -49,7 +46,6 @@ namespace SAM.Core
 
         public void Clear()
         {
-
         }
 
         public bool Add(string name, IJSAMObject value)
@@ -95,7 +91,7 @@ namespace SAM.Core
             if (@object == null && value == null)
                 return true;
 
-            if(@object is T)
+            if (@object is T)
             {
                 value = (T)@object;
                 return true;
@@ -124,7 +120,6 @@ namespace SAM.Core
             jObject.Add("Updated", DateTime.Now);
             return jObject;
         }
-
 
         private bool Add(string name, object @object)
         {

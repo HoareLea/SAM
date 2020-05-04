@@ -16,10 +16,10 @@ namespace SAM.Core
 
             dictionary = new Dictionary<string, Dictionary<string, HashSet<SAMRelation>>>();
 
-            foreach(KeyValuePair<string, Dictionary<string, HashSet<SAMRelation>>> keyValuePair_1 in sAMRelationCluster.dictionary)
+            foreach (KeyValuePair<string, Dictionary<string, HashSet<SAMRelation>>> keyValuePair_1 in sAMRelationCluster.dictionary)
             {
                 dictionary[keyValuePair_1.Key] = new Dictionary<string, HashSet<SAMRelation>>();
-                foreach(KeyValuePair<string, HashSet<SAMRelation>> keyValuePair_2 in keyValuePair_1.Value)
+                foreach (KeyValuePair<string, HashSet<SAMRelation>> keyValuePair_2 in keyValuePair_1.Value)
                 {
                     dictionary[keyValuePair_1.Key][keyValuePair_2.Key] = new HashSet<SAMRelation>(keyValuePair_2.Value);
                 }
@@ -75,7 +75,7 @@ namespace SAM.Core
         {
             if (string.IsNullOrWhiteSpace(typeName_Object) || string.IsNullOrWhiteSpace(typeName_RelatedObject))
                 return false;
-            
+
             Dictionary<string, HashSet<SAMRelation>> dictionary_Temp;
 
             if (!dictionary.TryGetValue(typeName_Object, out dictionary_Temp))
@@ -176,7 +176,7 @@ namespace SAM.Core
 
             dictionary = new Dictionary<string, Dictionary<string, HashSet<SAMRelation>>>();
 
-            foreach(JObject jObject_Types_1 in jArray_Types_1)
+            foreach (JObject jObject_Types_1 in jArray_Types_1)
             {
                 if (!jObject_Types_1.ContainsKey("Name"))
                     continue;
@@ -192,14 +192,14 @@ namespace SAM.Core
                 if (jArray_Types_2 == null)
                     continue;
 
-                Dictionary<string, HashSet<SAMRelation>> dictionary_SAMRelation; 
-                if(!dictionary.TryGetValue(name_1, out dictionary_SAMRelation))
+                Dictionary<string, HashSet<SAMRelation>> dictionary_SAMRelation;
+                if (!dictionary.TryGetValue(name_1, out dictionary_SAMRelation))
                 {
                     dictionary_SAMRelation = new Dictionary<string, HashSet<SAMRelation>>();
                     dictionary[name_1] = dictionary_SAMRelation;
                 }
 
-                foreach(JObject jObject_Types_2 in jArray_Types_2)
+                foreach (JObject jObject_Types_2 in jArray_Types_2)
                 {
                     if (!jObject_Types_2.ContainsKey("Name"))
                         continue;
@@ -222,7 +222,7 @@ namespace SAM.Core
                         dictionary_SAMRelation[name_2] = sAMRelations;
                     }
 
-                    foreach(JObject jObject_Relation in jArray_Relations)
+                    foreach (JObject jObject_Relation in jArray_Relations)
                     {
                         SAMRelation sAMRelation = Create.IJSAMObject<SAMRelation>(jObject_Relation);
                         if (sAMRelation != null)

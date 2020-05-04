@@ -1,10 +1,6 @@
 ﻿using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -19,11 +15,11 @@ namespace SAM.Geometry.Grasshopper
         }
 
         public static Spatial.ISAMGeometry3D ToSAM(this Curve curve, bool simplify = true)
-        { 
-            if(curve is PolylineCurve)
+        {
+            if (curve is PolylineCurve)
                 return ((PolylineCurve)curve).ToSAM();
 
-            if(curve is PolyCurve)
+            if (curve is PolyCurve)
                 return ((PolyCurve)curve).ToSAM();
 
             if (curve is LineCurve)
@@ -56,7 +52,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (simplify)
                 point3Ds = Spatial.Point3D.SimplifyByAngle(point3Ds, polylineCurve.IsClosed, Core.Tolerance.Angle);
-          
+
             if (polylineCurve.IsClosed && polylineCurve.IsPlanar(tolerance))
                 return new Spatial.Polygon3D(point3Ds);
 

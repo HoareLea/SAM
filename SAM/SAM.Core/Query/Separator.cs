@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SAM.Core
+﻿namespace SAM.Core
 {
     public static partial class Query
     {
@@ -14,8 +8,10 @@ namespace SAM.Core
             {
                 case DelimitedFileType.Csv:
                     return ',';
+
                 case DelimitedFileType.TabDelimited:
                     return '\t';
+
                 default:
                     return '\n';
             }

@@ -10,8 +10,7 @@ namespace SAM.Geometry.Planar
         //    if (segment2D_1 == segment2D_2)
         //        return true;
 
-        //    if (segment2D_1 == null || segment2D_2 == null)
-        //        return false;
+        // if (segment2D_1 == null || segment2D_2 == null) return false;
 
         //    return (segment2D_1[0].AlmostEquals(segment2D_2[0], tolerance) && segment2D_1[1].AlmostEquals(segment2D_2[1], tolerance)) || (segment2D_1[0].AlmostEquals(segment2D_2[1], tolerance) && segment2D_1[1].AlmostEquals(segment2D_2[0], tolerance));
         //}
@@ -39,8 +38,9 @@ namespace SAM.Geometry.Planar
             return true;
         }
 
-        /// <summary>This method finds similar shapes by comparing point between two NetTopologySuite polygons
-        /// to be continue WIP
+        /// <summary>
+        /// This method finds similar shapes by comparing point between two NetTopologySuite
+        /// polygons to be continue WIP
         /// </summary>
         public static bool AlmostSimilar(this NetTopologySuite.Geometries.Geometry geometry_1, NetTopologySuite.Geometries.Geometry geometry_2, double tolerance = Core.Tolerance.Distance)
         {

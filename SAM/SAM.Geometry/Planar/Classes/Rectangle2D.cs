@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -48,14 +47,13 @@ namespace SAM.Geometry.Planar
         public Rectangle2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public List<Point2D> GetPoints()
         {
             List<Point2D> points = new List<Point2D>();
             points.Add(new Point2D(origin));
-            
+
             Point2D point2D = null;
 
             Vector2D heightVector = height * heightDirection;
@@ -299,4 +297,3 @@ namespace SAM.Geometry.Planar
         }
     }
 }
-

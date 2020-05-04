@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
 using SAM.Core.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
@@ -20,7 +18,6 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_JSON;
 
-
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
@@ -29,7 +26,6 @@ namespace SAM.Core.Grasshopper
               "Writes SAM objects to Json ",
               "SAM", "Core")
         {
-
         }
 
         /// <summary>
@@ -41,7 +37,6 @@ namespace SAM.Core.Grasshopper
 
             int index = -1;
 
-
             index = inputParamManager.AddGenericParameter("_SAMObjects", "_SAMObjects", "any SAM Objects", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
@@ -49,7 +44,6 @@ namespace SAM.Core.Grasshopper
             inputParamManager[index].Optional = true;
 
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run, set to True to export JSON to given path", GH_ParamAccess.item, false);
-
         }
 
         /// <summary>
@@ -64,7 +58,9 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
@@ -110,8 +106,6 @@ namespace SAM.Core.Grasshopper
 
             dataAccess.SetData(0, json);
             dataAccess.SetData(1, true);
-
         }
-
     }
 }

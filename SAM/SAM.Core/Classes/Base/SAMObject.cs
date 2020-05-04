@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Core
 {
@@ -14,7 +11,6 @@ namespace SAM.Core
         private string name;
         private List<ParameterSet> parameterSets;
 
-        
         public SAMObject(SAMObject sAMObject)
         {
             this.guid = sAMObject.Guid;
@@ -72,14 +68,14 @@ namespace SAM.Core
             this.guid = guid;
             this.name = name;
 
-            if(parameterSets != null)
+            if (parameterSets != null)
             {
                 this.parameterSets = new List<ParameterSet>();
                 foreach (ParameterSet parameterSet in parameterSets)
                 {
                     ParameterSet parameterSet_Temp = parameterSet.Clone();
                     this.parameterSets.Add(parameterSet_Temp);
-                }  
+                }
             }
         }
 

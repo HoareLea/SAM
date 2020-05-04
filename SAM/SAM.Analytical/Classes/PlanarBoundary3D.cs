@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -100,7 +99,6 @@ namespace SAM.Analytical
         public PlanarBoundary3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public Plane Plane
@@ -182,7 +180,7 @@ namespace SAM.Analytical
         public Face3D GetFace3D()
         {
             List<Geometry.Planar.IClosed2D> internalClosed2Ds = null;
-            if(internalEdge2DLoops != null && internalEdge2DLoops.Count > 0)
+            if (internalEdge2DLoops != null && internalEdge2DLoops.Count > 0)
                 internalClosed2Ds = InternalEdge2DLoops.ConvertAll(x => x.GetClosed2D());
 
             return Face3D.Create(plane, externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
@@ -226,7 +224,7 @@ namespace SAM.Analytical
             jObject.Add("Edge2DLoop", externalEdge2DLoop.ToJObject());
             if (internalEdge2DLoops != null)
                 jObject.Add("InternalEdge2DLoops", Core.Create.JArray(internalEdge2DLoops));
-            
+
             return jObject;
         }
     }

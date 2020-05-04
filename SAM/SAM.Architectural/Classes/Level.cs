@@ -29,7 +29,6 @@ namespace SAM.Architectural
         public Level(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public double Elevation
@@ -60,7 +59,6 @@ namespace SAM.Architectural
 
             if (jObject == null)
                 return jObject;
-
 
             jObject.Add("Elevation", elevation);
 

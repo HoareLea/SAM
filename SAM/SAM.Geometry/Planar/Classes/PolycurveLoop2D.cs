@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Newtonsoft.Json.Linq;
-
 
 namespace SAM.Geometry.Planar
 {
@@ -12,19 +10,16 @@ namespace SAM.Geometry.Planar
         public PolycurveLoop2D(PolycurveLoop2D polycurveLoop2D)
             : base(polycurveLoop2D)
         {
-
         }
 
         public PolycurveLoop2D(Polygon2D polygon2D)
             : base(polygon2D.GetSegments())
         {
-
         }
 
         public PolycurveLoop2D(IEnumerable<ICurve2D> curves)
             : base(curves)
         {
-
         }
 
         public double GetArea()
@@ -33,7 +28,7 @@ namespace SAM.Geometry.Planar
             if (curves == null)
                 return 0;
 
-            if(curves.TrueForAll(x => x is Segment2D))
+            if (curves.TrueForAll(x => x is Segment2D))
                 return Point2D.GetArea(curves.ConvertAll(x => x.GetStart()));
 
             throw new NotImplementedException();

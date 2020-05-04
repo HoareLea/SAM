@@ -10,9 +10,7 @@
         /// </summary>
         /// <param name="sAMObject">SAM Analytical Object</param>
         /// <returns name="geometry">Dynamo Geometry</returns>
-        /// <search>
-        /// SAMObject, Convert
-        /// </search>
+        /// <search>SAMObject, Convert</search>
         public static Autodesk.DesignScript.Geometry.Geometry Convert(object sAMObject)
         {
             if (sAMObject is SAM.Analytical.Panel)

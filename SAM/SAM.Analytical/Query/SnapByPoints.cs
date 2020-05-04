@@ -1,11 +1,10 @@
 ﻿using SAM.Geometry.Spatial;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
 {
-    public static partial class Modify
+    public static partial class Query
     {
         public static Panel SnapByPoints(this Panel panel, IEnumerable<Point3D> point3Ds, double maxDixtance = double.NaN)
         {

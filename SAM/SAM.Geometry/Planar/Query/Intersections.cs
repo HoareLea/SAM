@@ -14,17 +14,17 @@ namespace SAM.Geometry.Planar
             if (segment2Ds_1 == null)
                 return null;
 
-            List<Segment2D> segment2Ds_2= segmentable2D_2.GetSegments();
+            List<Segment2D> segment2Ds_2 = segmentable2D_2.GetSegments();
             if (segment2Ds_2 == null)
                 return null;
 
             HashSet<Point2D> point2Ds = new HashSet<Point2D>();
-            foreach(Segment2D segment2D_1 in segment2Ds_1)
+            foreach (Segment2D segment2D_1 in segment2Ds_1)
             {
                 if (segment2D_1 == null)
                     continue;
 
-                foreach(Segment2D segment2D_2 in segment2Ds_2)
+                foreach (Segment2D segment2D_2 in segment2Ds_2)
                 {
                     if (segment2D_2 == null)
                         continue;
@@ -50,7 +50,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             HashSet<Point2D> point2Ds = new HashSet<Point2D>();
-            foreach(Segment2D segment2D in segment2Ds)
+            foreach (Segment2D segment2D in segment2Ds)
             {
                 List<Point2D> point2Ds_Temp = Intersections(segmentable2D, segment2D);
                 if (point2Ds_Temp == null || point2Ds_Temp.Count == 0)

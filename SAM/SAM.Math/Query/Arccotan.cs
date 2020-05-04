@@ -1,9 +1,8 @@
-﻿
-namespace SAM.Math
+﻿namespace SAM.Math
 {
     public static partial class Query
     {
-        // Inverse Cotangent 
+        // Inverse Cotangent
         //https://mathworld.wolfram.com/InverseCotangent.html
         public static double Arccotan(double angle)
         {

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Drawing;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
+using System;
+using System.Drawing;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -17,6 +16,7 @@ namespace SAM.Geometry.Grasshopper
                 return "SAM";
             }
         }
+
         public override Bitmap Icon
         {
             get
@@ -34,6 +34,7 @@ namespace SAM.Geometry.Grasshopper
                 return Properties.Resources.SAM_Geometry; ;
             }
         }
+
         public override string Description
         {
             get
@@ -42,6 +43,7 @@ namespace SAM.Geometry.Grasshopper
                 return "SAM.Geometry.Grasshopper Toolkit, please explore";
             }
         }
+
         public override Guid Id
         {
             get
@@ -58,6 +60,7 @@ namespace SAM.Geometry.Grasshopper
                 return "Michal Dengusiak & Jakub Ziolkowski at Hoare Lea";
             }
         }
+
         public override string AuthorContact
         {
             get
@@ -84,7 +87,6 @@ namespace SAM.Geometry.Grasshopper
                     //SimplePlanes = true,
                     //MinimumEdgeLength = 0.6,
                     //Tolerance = 0.2
-                   
                 };
             }
 

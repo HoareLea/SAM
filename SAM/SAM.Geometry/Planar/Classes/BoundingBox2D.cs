@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
@@ -85,7 +83,7 @@ namespace SAM.Geometry.Planar
 
         public BoundingBox2D(IEnumerable<BoundingBox2D> boundingBox2Ds)
         {
-            if(boundingBox2Ds != null)
+            if (boundingBox2Ds != null)
             {
                 HashSet<Point2D> point2Ds_Min = new HashSet<Point2D>();
                 HashSet<Point2D> point2Ds_Max = new HashSet<Point2D>();
@@ -103,7 +101,6 @@ namespace SAM.Geometry.Planar
         public BoundingBox2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public Point2D Min
@@ -164,18 +161,17 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        
         public bool Inside(IClosed2D closed2D)
         {
-            if(closed2D is BoundingBox2D)
+            if (closed2D is BoundingBox2D)
                 return Inside((BoundingBox2D)closed2D);
-            
-            if(closed2D is ISegmentable2D)
+
+            if (closed2D is ISegmentable2D)
                 return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
 
             throw new NotImplementedException();
         }
-        
+
         public bool Inside(BoundingBox2D boundingBox2D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
         {
             return Inside(boundingBox2D.max, acceptOnEdge, tolerance) && Inside(boundingBox2D.min, acceptOnEdge, tolerance);
@@ -217,7 +213,7 @@ namespace SAM.Geometry.Planar
             Segment2D segment2D = new Segment2D(point2D, direction);
 
             List<Point2D> point2Ds = new List<Point2D>();
-            foreach(Segment2D segment2D_Temp in segment2Ds)
+            foreach (Segment2D segment2D_Temp in segment2Ds)
             {
                 Point2D point2D_Closest_1 = null;
                 Point2D point2D_Closest_2 = null;
@@ -231,7 +227,7 @@ namespace SAM.Geometry.Planar
             if (point2Ds == null)
                 return null;
 
-            Point2D point2D_Closest =  Point2D.Closest(point2Ds, point2D);
+            Point2D point2D_Closest = Point2D.Closest(point2Ds, point2D);
             if (point2D_Closest == null)
                 return null;
 
@@ -247,7 +243,7 @@ namespace SAM.Geometry.Planar
         {
             List<Point2D> points = GetPoints();
 
-            return new List<Segment2D>() {new Segment2D(points[0], points[1]), new Segment2D(points[1], points[2]), new Segment2D(points[2], points[3]), new Segment2D(points[3], points[0]) };
+            return new List<Segment2D>() { new Segment2D(points[0], points[1]), new Segment2D(points[1], points[2]), new Segment2D(points[2], points[3]), new Segment2D(points[3], points[0]) };
         }
 
         public List<ICurve2D> GetCurves()
@@ -267,14 +263,17 @@ namespace SAM.Geometry.Planar
             if (corner == Corner.Undefined)
                 return null;
 
-            switch(corner)
+            switch (corner)
             {
                 case Corner.BottomLeft:
                     return new Point2D(min);
+
                 case Corner.BottomRight:
                     return new Point2D(max.X, max.Y - Height);
+
                 case Corner.TopLeft:
                     return new Point2D(min.X, min.Y + Height);
+
                 case Corner.TopRight:
                     return new Point2D(max);
             }
@@ -290,14 +289,14 @@ namespace SAM.Geometry.Planar
             Corner result = Corner.Undefined;
             double distance_Min = double.MaxValue;
 
-            foreach(Corner corner in Enum.GetValues(typeof(Corner)))
+            foreach (Corner corner in Enum.GetValues(typeof(Corner)))
             {
                 Point2D point2D_Temp = GetPoint(corner);
                 if (point2D_Temp == null)
                     continue;
 
                 double distance = point2D.Distance(point2D_Temp);
-                if(distance < distance_Min)
+                if (distance < distance_Min)
                 {
                     result = corner;
                     distance_Min = distance;
@@ -365,7 +364,7 @@ namespace SAM.Geometry.Planar
         {
             return Query.Point2D(this, parameter, inverted);
         }
-        
+
         public ISegmentable2D Trim(double parameter, bool inverted = false)
         {
             return Modify.Trim(this, parameter, inverted);

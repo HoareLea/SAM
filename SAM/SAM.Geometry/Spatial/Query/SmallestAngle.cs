@@ -8,7 +8,6 @@
                 return double.NaN;
 
             return (new Vector3D(point3D, point3D_Previous).SmallestAngle(new Vector3D(point3D, point3D_Next)));
-
         }
     }
 }

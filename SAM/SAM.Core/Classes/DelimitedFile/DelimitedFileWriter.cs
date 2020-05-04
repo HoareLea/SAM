@@ -50,8 +50,8 @@ namespace SAM.Core
                 // Add separator if this isn't the first value
                 if (!aFirstColumn)
                     aBuilder.Append(Separator);
-                // Implement special handling for values that contain comma or quote
-                // Enclose in quotes and double up any double quotes
+                // Implement special handling for values that contain comma or quote Enclose in
+                // quotes and double up any double quotes
                 if (aValue.IndexOfAny(new char[] { '"', pSeparator }) != -1)
                     aBuilder.AppendFormat("\"{0}\"", aValue.Replace("\"", "\"\""));
                 else

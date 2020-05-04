@@ -8,7 +8,7 @@ namespace SAM.Core
     public class SAMInstance : SAMObject
     {
         private SAMType sAMType;
-        
+
         public SAMInstance(SAMInstance sAMInstance)
             : base(sAMInstance)
         {
@@ -54,7 +54,6 @@ namespace SAM.Core
         public SAMInstance(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public SAMType SAMType

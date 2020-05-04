@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ClipperLib;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.Noding.Snapround;
-using NetTopologySuite.Operation.Buffer;
 using NetTopologySuite.Operation.Polygonize;
-
 using SAM.Geometry.Planar;
-
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry
 {

@@ -12,11 +12,11 @@ namespace SAM.Geometry.Planar
 
             double min = double.MaxValue;
             Point2D result = null;
-            foreach(Segment2D segment2D in segmentable2D.GetSegments())
+            foreach (Segment2D segment2D in segmentable2D.GetSegments())
             {
                 Point2D point2D_Closest = segment2D.Closest(point2D);
                 double distance = point2D.Distance(point2D_Closest);
-                if(distance < min)
+                if (distance < min)
                 {
                     result = point2D_Closest;
                     min = distance;
@@ -30,7 +30,7 @@ namespace SAM.Geometry.Planar
         {
             if (point2Ds == null || point2D == null)
                 return null;
-            
+
             double distance_Min = double.MaxValue;
             Point2D result = null;
             foreach (Point2D point2D_Temp in point2Ds)
@@ -108,7 +108,7 @@ namespace SAM.Geometry.Planar
             return ClosestDictionary(segmentable2D_1, segmentable2D_2, tolerance)?.Keys?.ToList();
         }
 
-        public static T Closest<T>(this ISegmentable2D segmentable2D, IEnumerable<T> segmentable2Ds, double tolerance = Core.Tolerance.Distance) where T: ISegmentable2D
+        public static T Closest<T>(this ISegmentable2D segmentable2D, IEnumerable<T> segmentable2Ds, double tolerance = Core.Tolerance.Distance) where T : ISegmentable2D
         {
             if (segmentable2D == null || segmentable2Ds == null)
                 return default;
@@ -122,7 +122,7 @@ namespace SAM.Geometry.Planar
                     continue;
 
                 double distance = dictionary.Values.Min();
-                if(distance < distance_Min)
+                if (distance < distance_Min)
                 {
                     distance_Min = distance;
 

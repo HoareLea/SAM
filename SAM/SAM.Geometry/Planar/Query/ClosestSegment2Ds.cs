@@ -12,7 +12,7 @@ namespace SAM.Geometry.Planar
 
             double min = double.MaxValue;
             Dictionary<Segment2D, double> dictionary = new Dictionary<Segment2D, double>();
-            foreach(Segment2D segment2D in segmentable2D.GetSegments())
+            foreach (Segment2D segment2D in segmentable2D.GetSegments())
             {
                 Point2D point2D_Closest = segment2D.Closest(point2D);
                 double distance = point2D.Distance(point2D_Closest);

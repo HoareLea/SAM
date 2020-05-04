@@ -1,9 +1,8 @@
-﻿using System;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
+using System;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -36,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, Query.ApertureConstructionName(ApertureType.Window, true));
             int index = inputParamManager.AddGenericParameter("_apertureType", "_apertureType", "Aperture Type", GH_ParamAccess.item);
-            
+
             Param_GenericObject genericObjectParameter = (Param_GenericObject)inputParamManager[index];
             genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(ApertureType.Window.ToString()));
         }
@@ -52,7 +51,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             string name = null;

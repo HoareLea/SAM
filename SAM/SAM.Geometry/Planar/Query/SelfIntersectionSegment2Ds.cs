@@ -8,7 +8,7 @@ namespace SAM.Geometry.Planar
         {
             if (polygon2D == null)
                 return null;
-            
+
             List<Segment2D> segment2Ds = polygon2D.GetSegments();
 
             List<Segment2D> result = new List<Segment2D>();

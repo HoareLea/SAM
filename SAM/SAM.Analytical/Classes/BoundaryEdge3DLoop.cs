@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-
-using Newtonsoft.Json.Linq;
-
+﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
-
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -26,7 +23,6 @@ namespace SAM.Analytical
         public BoundaryEdge3DLoop(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public List<BoundaryEdge3D> BoundaryEdge3Ds

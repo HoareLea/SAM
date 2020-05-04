@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-
 namespace SAM.Geometry.Planar
 {
     public static partial class Modify
@@ -11,14 +10,14 @@ namespace SAM.Geometry.Planar
             if (geometries == null)
                 return;
 
-            HashSet<int> indexes_HashSet = new HashSet<int>(); 
-            for(int i =0; i < geometries.Count - 1; i++)
+            HashSet<int> indexes_HashSet = new HashSet<int>();
+            for (int i = 0; i < geometries.Count - 1; i++)
             {
                 if (indexes_HashSet.Contains(i))
                     continue;
 
                 NetTopologySuite.Geometries.Geometry geometry_1 = geometries[i];
-                
+
                 for (int j = i + 1; j < geometries.Count; j++)
                 {
                     if (indexes_HashSet.Contains(j))
@@ -39,7 +38,7 @@ namespace SAM.Geometry.Planar
         }
 
         /// <summary>
-        /// Removes segments from segment2Ds list which are similar to segmentable2D segments 
+        /// Removes segments from segment2Ds list which are similar to segmentable2D segments
         /// </summary>
         public static void RemoveAlmostSimilar(this ISegmentable2D segmentable2D, List<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
         {
@@ -71,7 +70,7 @@ namespace SAM.Geometry.Planar
         }
 
         /// <summary>
-        /// Removes segments from segment2Ds list which are similar to segmentable2D segments 
+        /// Removes segments from segment2Ds list which are similar to segmentable2D segments
         /// </summary>
         public static void RemoveAlmostSimilar<T>(List<T> segmentable2Ds, double tolerance = Core.Tolerance.Distance) where T : ISegmentable2D
         {

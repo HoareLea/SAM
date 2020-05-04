@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
@@ -27,7 +25,6 @@ namespace SAM.Geometry.Spatial
         public Sphere(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public override ISAMGeometry Clone()
@@ -70,7 +67,7 @@ namespace SAM.Geometry.Spatial
         {
             if (point3Ds == null || point3Ds.Count() == 0)
                 return false;
-            
+
             foreach (Point3D point3D in point3Ds)
                 if (!Inside(point3D))
                     return false;

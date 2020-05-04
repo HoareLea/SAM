@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using ClipperLib;
-
-using NetTopologySuite.Geometries;
-
 namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
         public static Polygon2D SimplifyBySAM_Length(this Polygon2D polygon2D, double maxLength, double tolerance = Core.Tolerance.Distance)
         {
-            if (polygon2D == null || polygon2D.Count < 3 || double.IsNaN(maxLength) )
+            if (polygon2D == null || polygon2D.Count < 3 || double.IsNaN(maxLength))
                 return null;
 
             Polygon2D polygon2D_Temp = new Polygon2D(polygon2D);
@@ -120,7 +116,6 @@ namespace SAM.Geometry.Planar
                     dictionary[i].Add(aTuple.Item1);
                 }
 
-
                 Point2D point2D_2 = segment2D.GetEnd();
                 Vector2D vector2D_2 = segment2D.Direction;
 
@@ -141,10 +136,7 @@ namespace SAM.Geometry.Planar
                     point2Ds_Temp.Add(aTuple.Item1);
                     dictionary[i].Add(aTuple.Item1);
                 }
-
-
             }
-
 
             //Sorting
             List<int> indexes = dictionary.Keys.ToList();
@@ -185,7 +177,6 @@ namespace SAM.Geometry.Planar
             return new Polyline2D(point2Ds_Result);
         }
 
-
         private static void GetNext(List<List<Point2D>> point2Ds, int index, out int index_Next, out Point2D point2D_Next, double tolerance = Core.Tolerance.Distance)
         {
             index_Next = -1;
@@ -194,14 +185,14 @@ namespace SAM.Geometry.Planar
             List<Point2D> point2Ds_Current = point2Ds[index];
             List<int> indexes = point2Ds_Current.ConvertAll(x => -1);
 
-            for(int i = 0; i < point2Ds.Count; i++)
+            for (int i = 0; i < point2Ds.Count; i++)
                 for (int j = 0; j < point2Ds_Current.Count; j++)
-                    if(point2Ds[i].Contains(point2Ds_Current[j], tolerance))
+                    if (point2Ds[i].Contains(point2Ds_Current[j], tolerance))
                         indexes[j] = i;
 
             for (int i = 0; i < point2Ds_Current.Count; i++)
             {
-                if(indexes[i] > index_Next)
+                if (indexes[i] > index_Next)
                 {
                     index_Next = indexes[i];
                     point2D_Next = point2Ds_Current[i];

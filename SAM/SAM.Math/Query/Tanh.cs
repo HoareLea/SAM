@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        // Hyperbolic Tangent 
+        // Hyperbolic Tangent
         //https://mathworld.wolfram.com/HyperbolicTangent.html
         public static double Tanh(double angle)
         {

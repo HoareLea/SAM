@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Core
 {
@@ -45,7 +42,6 @@ namespace SAM.Core
                 return result;
             }
 
-
             foreach (GraphNode graphNode in this)
                 if (graphNode.Contains(@object))
                     result.Add(graphNode);
@@ -80,7 +76,6 @@ namespace SAM.Core
                 return result;
             }
 
-
             foreach (GraphNode graphNode in this)
             {
                 foreach (GraphEdge graphEdge in graphNode)
@@ -99,11 +94,9 @@ namespace SAM.Core
 
             if (object_1 is GraphNode)
             {
-
             }
             else if (object_1 is GraphEdge)
             {
-
             }
             else
             {
@@ -113,7 +106,6 @@ namespace SAM.Core
                     graphNode_1 = new GraphNode(object_1);
                     graphNodes.Add(graphNode_1);
                 }
-
             }
 
             if (graphNode_1 == null)
@@ -123,11 +115,9 @@ namespace SAM.Core
 
             if (object_2 is GraphNode)
             {
-
             }
             else if (object_2 is GraphEdge)
             {
-
             }
             else
             {
@@ -137,7 +127,6 @@ namespace SAM.Core
                     graphNode_2 = new GraphNode(object_2);
                     graphNodes.Add(graphNode_2);
                 }
-
             }
 
             if (graphNode_2 == null)
@@ -285,7 +274,7 @@ namespace SAM.Core
             {
                 if (!(graphNode.Object is X))
                     continue;
-                
+
                 foreach (GraphEdge graphEdge in graphNode)
                 {
                     HashSet<GraphNode> graphNodes_Temp = GetGraphNodes(graphEdge);

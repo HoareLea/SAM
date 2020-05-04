@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SAM.Geometry
 {
@@ -18,7 +17,7 @@ namespace SAM.Geometry
             return jArray;
         }
 
-        public static JArray JArray<T>(this IEnumerable<T> sAMGeometries) where T: ISAMGeometry
+        public static JArray JArray<T>(this IEnumerable<T> sAMGeometries) where T : ISAMGeometry
         {
             if (sAMGeometries == null)
                 return null;
@@ -29,6 +28,5 @@ namespace SAM.Geometry
 
             return jArray;
         }
-
     }
 }

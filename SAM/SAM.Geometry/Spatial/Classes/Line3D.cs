@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -25,7 +22,6 @@ namespace SAM.Geometry.Spatial
         public Line3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public Vector3D Direction

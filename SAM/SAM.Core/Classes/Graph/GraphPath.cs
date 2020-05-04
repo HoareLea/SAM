@@ -25,7 +25,7 @@ namespace SAM.Core
             if (graphEdges == null || graphEdges.Count == 0)
                 return weight;
 
-            graphEdges.ForEach(x => weight+= x.Weight);
+            graphEdges.ForEach(x => weight += x.Weight);
             return weight;
         }
 
@@ -33,8 +33,8 @@ namespace SAM.Core
         {
             if (graphEdges == null)
                 graphEdges = new List<GraphEdge>();
-            
-            if(graphEdges.Count == 0)
+
+            if (graphEdges.Count == 0)
             {
                 graphEdges.Add(graphEdge);
                 return true;
@@ -48,7 +48,7 @@ namespace SAM.Core
                     return false;
 
                 GraphNode graphNode = (GraphNode)graphEdge;
-                if(graphNode.Contains(graphEdge_Last))
+                if (graphNode.Contains(graphEdge_Last))
                 {
                     graphEdges.Add(graphNode);
                     return true;
@@ -74,7 +74,7 @@ namespace SAM.Core
         {
             if (graphEdges == null)
                 return null;
-            
+
             return graphEdges.GetEnumerator();
         }
 

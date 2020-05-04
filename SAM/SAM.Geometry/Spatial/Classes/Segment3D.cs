@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
-
-using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -31,7 +30,6 @@ namespace SAM.Geometry.Spatial
         public Segment3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public Point3D this[int index]
@@ -165,7 +163,7 @@ namespace SAM.Geometry.Spatial
         }
 
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
-        {           
+        {
             return Closest(point3D).Distance(point3D) < tolerance;
         }
 
@@ -181,7 +179,6 @@ namespace SAM.Geometry.Spatial
 
             return new Segment3D(line3D.Origin, line3D.Direction);
         }
-
 
         public static List<Point3D> GetPoints(IEnumerable<Segment3D> segment3Ds, bool close = false)
         {

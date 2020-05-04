@@ -1,8 +1,6 @@
-﻿using System.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using Newtonsoft.Json.Linq;
-
 
 namespace SAM.Core
 {
@@ -12,7 +10,7 @@ namespace SAM.Core
         {
             if (jObject == null)
                 return null;
-            
+
             return jObject.Value<string>("Name");
         }
 

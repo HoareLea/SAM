@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -17,13 +16,13 @@ namespace SAM.Geometry.Planar
 
             int index = -1;
             double distance_Min = double.MaxValue;
-            for(int i=0; i < point2Ds.Count(); i++)
+            for (int i = 0; i < point2Ds.Count(); i++)
             {
                 if (point2Ds[i] == null)
                     continue;
 
                 double distance = point2D.Distance(point2Ds[i]);
-                if(distance < distance_Min)
+                if (distance < distance_Min)
                 {
                     distance_Min = distance;
                     index = i;
@@ -31,7 +30,6 @@ namespace SAM.Geometry.Planar
             }
 
             return index;
-
         }
     }
 }

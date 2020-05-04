@@ -15,7 +15,7 @@ namespace SAM.Geometry.Planar
             if (segment2Ds.Count() == 0)
                 return result;
 
-            foreach(Segment2D segment2D in segment2Ds)
+            foreach (Segment2D segment2D in segment2Ds)
             {
                 if (segment2D == null)
                     continue;
@@ -65,7 +65,7 @@ namespace SAM.Geometry.Planar
                 point2D_Start = point2D_Segment2D_Start;
 
             if (point2D_End == null)
-                point2D_End= point2D_Segment2D_End;
+                point2D_End = point2D_Segment2D_End;
 
             return new Segment2D(point2D_Start, point2D_End);
 
@@ -171,7 +171,7 @@ namespace SAM.Geometry.Planar
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
-            if(extend_Start)
+            if (extend_Start)
             {
                 Segment2D segment2D = segment2Ds[0];
 

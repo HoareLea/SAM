@@ -9,7 +9,7 @@ namespace SAM.Geometry.Spatial
         {
             if (point3Ds == null || point3Ds.Count() < 3)
                 return null;
-            
+
             Vector3D vector3D = new Vector3D();
             double area = 0;
 

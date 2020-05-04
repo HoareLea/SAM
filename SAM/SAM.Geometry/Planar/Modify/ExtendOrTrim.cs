@@ -15,7 +15,7 @@ namespace SAM.Geometry.Planar
             if (segment2Ds.Count() == 0)
                 return result;
 
-            foreach(Segment2D segment2D in segment2Ds)
+            foreach (Segment2D segment2D in segment2Ds)
             {
                 if (segment2D == null)
                     continue;
@@ -54,7 +54,7 @@ namespace SAM.Geometry.Planar
             if (point2D_Segment2D_Start == null || point2D_Segment2D_End == null)
                 return null;
 
-            if(point2D_Segment2D_Start.Distance(segment2D.GetStart()) > point2D_Segment2D_End.Distance(segment2D.GetStart()))
+            if (point2D_Segment2D_Start.Distance(segment2D.GetStart()) > point2D_Segment2D_End.Distance(segment2D.GetStart()))
             {
                 Point2D point2D = point2D_Segment2D_Start;
                 point2D_Segment2D_Start = point2D_Segment2D_End;
@@ -66,7 +66,7 @@ namespace SAM.Geometry.Planar
             int index;
 
             index = -1;
-            for(int i=0; i < point2Ds.Count - 1; i++)
+            for (int i = 0; i < point2Ds.Count - 1; i++)
             {
                 Point2D point2D_Mid = point2Ds[i].Mid(point2Ds[i + 1]);
                 if (polygon2D.Inside(point2D_Mid) || polygon2D.On(point2D_Mid))
@@ -75,7 +75,7 @@ namespace SAM.Geometry.Planar
                 index = i;
             }
 
-            if(index != -1)
+            if (index != -1)
                 point2Ds = point2Ds.GetRange(index + 1, point2Ds.Count - index - 1);
 
             if (point2Ds == null || point2Ds.Count < 2)
@@ -97,7 +97,6 @@ namespace SAM.Geometry.Planar
                 return null;
 
             return new Segment2D(point2Ds.First(), point2Ds.Last());
-
 
             //Vector2D vector2D_Start = Query.TraceFirst(point2D_Segment2D_Start, segment2D.Direction.GetNegated(), polygon2D);
             //if(vector2D_Start == null)
@@ -140,8 +139,7 @@ namespace SAM.Geometry.Planar
             //    if (point2D_Start == null)
             //        point2D_Start = point2D_Segment2D_Start;
 
-            //    if (point2D_End == null)
-            //        point2D_End = point2D_Segment2D_End;
+            // if (point2D_End == null) point2D_End = point2D_Segment2D_End;
 
             //    return new Segment2D(point2D_Start, point2D_End);
             //}

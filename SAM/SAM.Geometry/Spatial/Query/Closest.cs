@@ -23,16 +23,16 @@ namespace SAM.Geometry.Spatial
 
                 Planar.Point2D point2D_Converted = plane.Convert(point3D_Projected);
                 Planar.IClosed2D externalEdge = face3D.ExternalEdge;
-                if(!externalEdge.Inside(point2D_Converted))
+                if (!externalEdge.Inside(point2D_Converted))
                 {
-                    if(externalEdge is Planar.ISegmentable2D)
+                    if (externalEdge is Planar.ISegmentable2D)
                     {
                         Planar.Point2D point2D_Closest = Planar.Query.Closest((Planar.ISegmentable2D)externalEdge, point2D_Converted);
                         distance += point2D_Closest.Distance(point2D_Converted);
                     }
                 }
 
-                if(min > distance)
+                if (min > distance)
                 {
                     min = distance;
                     result = face3D;

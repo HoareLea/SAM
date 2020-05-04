@@ -1,8 +1,6 @@
-﻿using System;
-
-using Newtonsoft.Json.Linq;
-
+﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using System;
 
 namespace SAM.Analytical
 {
@@ -42,9 +40,9 @@ namespace SAM.Analytical
         {
             get
             {
-                if(frameConstruction == null)
+                if (frameConstruction == null)
                     return null;
-                
+
                 return new Construction(frameConstruction);
             }
         }
@@ -55,7 +53,7 @@ namespace SAM.Analytical
             {
                 if (paneConstruction == null)
                     return null;
-                
+
                 return new Construction(paneConstruction);
             }
         }
@@ -90,7 +88,7 @@ namespace SAM.Analytical
             JObject jObject = base.ToJObject();
             if (jObject == null)
                 return jObject;
-            
+
             if (frameConstruction != null)
                 jObject.Add("FrameConstruction", frameConstruction.ToJObject());
 

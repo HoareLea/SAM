@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace SAM.Core
 {
@@ -13,7 +12,7 @@ namespace SAM.Core
 
             List<string> values = new List<string>();
 
-            foreach(string propertyName in propertyNames)
+            foreach (string propertyName in propertyNames)
             {
                 if (string.IsNullOrWhiteSpace(propertyName))
                 {
@@ -22,13 +21,13 @@ namespace SAM.Core
                 }
 
                 object value;
-                if(!Query.TryGetValue(jSAMObject, propertyName, out value))
+                if (!Query.TryGetValue(jSAMObject, propertyName, out value))
                 {
                     values.Add(string.Empty);
                     continue;
                 }
 
-                if(value == null)
+                if (value == null)
                 {
                     values.Add(string.Empty);
                     continue;
@@ -43,7 +42,7 @@ namespace SAM.Core
             string result = string.Empty;
             if (includeHeader)
                 result = string.Join(Query.Separator(DelimitedFileType.Csv).ToString(), propertyNames) + "\n";
-                
+
             result += string.Join(Query.Separator(DelimitedFileType.Csv).ToString(), values);
 
             return result;
@@ -55,10 +54,10 @@ namespace SAM.Core
                 return null;
 
             List<string> lines = new List<string>();
-            if(includeHeader)
+            if (includeHeader)
                 lines.Add(string.Join(Query.Separator(DelimitedFileType.Csv).ToString(), propertyNames));
 
-            foreach(IJSAMObject jSAMObject in jSAMObjects)
+            foreach (IJSAMObject jSAMObject in jSAMObjects)
             {
                 string line = ToCsv(jSAMObject, propertyNames, false);
                 if (string.IsNullOrWhiteSpace(line))

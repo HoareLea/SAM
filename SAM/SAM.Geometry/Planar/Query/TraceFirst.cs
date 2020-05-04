@@ -17,7 +17,7 @@ namespace SAM.Geometry.Planar
             if (point2D == null || vector2D == null || segmentable2D == null)
                 return null;
 
-            return TraceFirst(point2D, vector2D, new ISegmentable2D[] { segmentable2D});
+            return TraceFirst(point2D, vector2D, new ISegmentable2D[] { segmentable2D });
         }
     }
 }

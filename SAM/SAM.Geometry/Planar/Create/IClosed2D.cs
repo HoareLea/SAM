@@ -8,6 +8,5 @@ namespace SAM.Geometry.Planar
         {
             return SAM.Geometry.Create.ISAMGeometry(jObject) as IClosed2D;
         }
-
     }
 }

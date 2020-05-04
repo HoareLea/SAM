@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Planar;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -29,7 +27,6 @@ namespace SAM.Geometry.Grasshopper
               "Find PolycurveLoop2Ds in geometry",
               "SAM", "Geometry")
         {
-
         }
 
         /// <summary>
@@ -55,7 +52,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
@@ -92,10 +91,10 @@ namespace SAM.Geometry.Grasshopper
                 {
                     sAMGeometry3Ds = new List<Spatial.ISAMGeometry3D>();
 
-                     ISAMGeometry sAMGeometry = ((GooSAMGeometry)gHObjectWrapper.Value).Value;
-                    if(sAMGeometry is Spatial.ISAMGeometry3D)
+                    ISAMGeometry sAMGeometry = ((GooSAMGeometry)gHObjectWrapper.Value).Value;
+                    if (sAMGeometry is Spatial.ISAMGeometry3D)
                         sAMGeometry3Ds.Add((Spatial.ISAMGeometry3D)sAMGeometry);
-                    else if(sAMGeometry is Planar.ISAMGeometry2D)
+                    else if (sAMGeometry is Planar.ISAMGeometry2D)
                         sAMGeometry3Ds.Add(Spatial.Plane.Base.Convert((Planar.ISAMGeometry2D)sAMGeometry));
                 }
                 else if (gHObjectWrapper.Value is IGH_GeometricGoo)
@@ -103,7 +102,7 @@ namespace SAM.Geometry.Grasshopper
                     sAMGeometry3Ds = Convert.ToSAM((IGH_GeometricGoo)gHObjectWrapper.Value);
                 }
 
-                if(sAMGeometry3Ds != null && sAMGeometry3Ds.Count > 0)
+                if (sAMGeometry3Ds != null && sAMGeometry3Ds.Count > 0)
                 {
                     foreach (Spatial.ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
                     {
@@ -129,7 +128,7 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            if(segment2Ds == null || segment2Ds.Count == 0)
+            if (segment2Ds == null || segment2Ds.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(1, false);

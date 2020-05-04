@@ -20,7 +20,7 @@
             for (int i = 0; i < 3; i++)
             {
                 double k = eigenvalues[i];
-                Math.Matrix matrix_Equations = new Math.Matrix(new double[,] {{ a - k, b, c }, { b, d - k, e }, { c, e, f - k }});
+                Math.Matrix matrix_Equations = new Math.Matrix(new double[,] { { a - k, b, c }, { b, d - k, e }, { c, e, f - k } });
 
                 double REFTolerance = matrix_Equations.REFTolerance(tolerance);
                 Math.Matrix matrix_REF = matrix_Equations.RowEchelonForm(true, REFTolerance);

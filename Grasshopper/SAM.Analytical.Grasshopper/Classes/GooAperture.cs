@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino;
 using Rhino.DocObjects;
 using Rhino.Geometry;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-
-using SAM.Core.Grasshopper;
 using SAM.Analytical.Grasshopper.Properties;
-
+using SAM.Core.Grasshopper;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -18,13 +15,11 @@ namespace SAM.Analytical.Grasshopper
         public GooAperture()
             : base()
         {
-
         }
 
         public GooAperture(Aperture aperture)
             : base(aperture)
         {
-
         }
 
         public BoundingBox ClippingBox
@@ -81,9 +76,9 @@ namespace SAM.Analytical.Grasshopper
 
         public GooApertureParam()
             : base(typeof(Aperture).Name, typeof(Aperture).Name, typeof(Panel).FullName.Replace(".", " "), "Params", "SAM")
-        { 
+        {
         }
-        
+
         protected override GH_GetterResult Prompt_Plural(ref List<GooAperture> values)
         {
             throw new NotImplementedException();
@@ -96,7 +91,7 @@ namespace SAM.Analytical.Grasshopper
 
         public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
         {
-             BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
+            BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
         }
 
         public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
@@ -108,6 +103,5 @@ namespace SAM.Analytical.Grasshopper
                 obj_ids.Add(uuid);
             }
         }
-
     }
 }

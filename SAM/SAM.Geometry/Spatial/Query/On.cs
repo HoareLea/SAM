@@ -21,11 +21,10 @@ namespace SAM.Geometry.Spatial
             {
                 if (segment3D == null)
                     continue;
-                
+
                 if (segment3D.On(point3D, tolerance))
                     return true;
             }
-
 
             return false;
         }

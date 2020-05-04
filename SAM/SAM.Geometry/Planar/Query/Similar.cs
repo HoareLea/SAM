@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-
-using NetTopologySuite.Geometries;
-
-namespace SAM.Geometry.Planar
+﻿namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {

@@ -1,23 +1,17 @@
 ﻿using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
-    { 
-
+    {
         public static List<Spatial.ISAMGeometry3D> ToSAM(this IGH_GeometricGoo geometricGoo, bool simplify = true)
         {
             if (geometricGoo is GH_Curve)
             {
                 return new List<Spatial.ISAMGeometry3D>() { ((GH_Curve)geometricGoo).ToSAM(simplify) };
             }
-                
 
             if (geometricGoo is GH_Surface)
                 return ((GH_Surface)geometricGoo).ToSAM(simplify);
@@ -25,7 +19,7 @@ namespace SAM.Geometry.Grasshopper
             if (geometricGoo is GH_Point)
                 return new List<Spatial.ISAMGeometry3D>() { ((GH_Point)geometricGoo).ToSAM() };
 
-            if(geometricGoo is GH_Brep)
+            if (geometricGoo is GH_Brep)
                 return ((GH_Brep)geometricGoo).ToSAM(simplify);
 
             return (geometricGoo as dynamic).ToSAM();
@@ -37,7 +31,6 @@ namespace SAM.Geometry.Grasshopper
             //Has to be common for whole method
             double tolerance = Core.Tolerance.Distance;
 
-
             List<Brep> breps = new List<Brep>();
             List<BrepFace> brepFaces = new List<BrepFace>();
             foreach (BrepFace brepFace in brep.Faces)
@@ -48,7 +41,7 @@ namespace SAM.Geometry.Grasshopper
                     brepFaces.Add(brepFace);
             }
 
-            if(breps != null && breps.Count > 0)
+            if (breps != null && breps.Count > 0)
             {
                 Mesh mesh = new Mesh();
                 foreach (Brep brep_Temp in breps)
@@ -58,7 +51,6 @@ namespace SAM.Geometry.Grasshopper
                 }
                 Brep brep_Mesh = Brep.CreateFromMesh(mesh, true);
                 brep_Mesh.MergeCoplanarFaces(tolerance);
-                
 
                 foreach (BrepFace brepFace in brep_Mesh.Faces)
                     brepFaces.Add(brepFace);
@@ -112,6 +104,5 @@ namespace SAM.Geometry.Grasshopper
 
             return result;
         }
-
     }
 }

@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NetTopologySuite.Geometries;
-
+﻿using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
+using System.Collections.Generic;
 
 namespace SAM.Geometry
 {
@@ -14,7 +12,7 @@ namespace SAM.Geometry
                 return null;
 
             List<Face2D> result = new List<Face2D>();
-            foreach(Polygon polygon in multiPolygon)
+            foreach (Polygon polygon in multiPolygon)
             {
                 Face2D face2D = polygon?.ToSAM();
                 if (face2D == null)
@@ -24,7 +22,6 @@ namespace SAM.Geometry
             }
 
             return result;
-
         }
     }
 }

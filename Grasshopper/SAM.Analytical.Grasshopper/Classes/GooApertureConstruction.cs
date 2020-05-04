@@ -1,14 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using GH_IO.Serialization;
-using Rhino.Geometry;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
-using SAM.Core.Grasshopper;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -17,13 +12,11 @@ namespace SAM.Analytical.Grasshopper
         public GooApertureConstruction()
             : base()
         {
-
         }
 
         public GooApertureConstruction(ApertureConstruction apertureConstruction)
             : base(apertureConstruction)
         {
-
         }
 
         public override IGH_Goo Duplicate()
@@ -40,9 +33,9 @@ namespace SAM.Analytical.Grasshopper
 
         public GooApertureConstructionParam()
             : base(typeof(ApertureConstruction).Name, typeof(ApertureConstruction).Name, typeof(ApertureConstruction).FullName.Replace(".", " "), "Params", "SAM")
-        { 
+        {
         }
-        
+
         protected override GH_GetterResult Prompt_Plural(ref List<GooApertureConstruction> values)
         {
             throw new NotImplementedException();

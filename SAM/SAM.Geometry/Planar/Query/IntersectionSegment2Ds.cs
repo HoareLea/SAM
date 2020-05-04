@@ -63,7 +63,7 @@ namespace SAM.Geometry.Planar
                     result.Add(segment2D_2);
             }
 
-            if(sort)
+            if (sort)
             {
                 Dictionary<int, List<Segment2D>> dictionary = new Dictionary<int, List<Segment2D>>();
 
@@ -99,7 +99,6 @@ namespace SAM.Geometry.Planar
             }
 
             return result;
-
         }
     }
 }

@@ -13,12 +13,12 @@ namespace SAM.Analytical
         {
             if (panels == null)
                 return null;
-            
+
             Dictionary<PanelGroup, List<Panel>> dictionary = new Dictionary<PanelGroup, List<Panel>>();
             foreach (PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
                 dictionary[panelGroup] = new List<Panel>();
 
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 if (panel == null)
                     continue;
@@ -30,7 +30,7 @@ namespace SAM.Analytical
             panels_Temp.AddRange(dictionary[Analytical.PanelGroup.Roof]);
 
             List<Tuple<double, Panel>> tuples = new List<Tuple<double, Panel>>();
-            foreach(Panel panel in panels_Temp)
+            foreach (Panel panel in panels_Temp)
             {
                 double elevation = panel.MaxElevation();
 
@@ -40,7 +40,7 @@ namespace SAM.Analytical
             List<Panel> result = new List<Panel>();
 
             tuples.Sort((x, y) => x.Item1.CompareTo(y.Item1));
-            while(tuples.Count > 0)
+            while (tuples.Count > 0)
             {
                 Tuple<double, Panel> tuple = tuples[0];
                 tuples.RemoveAt(0);
@@ -48,7 +48,7 @@ namespace SAM.Analytical
                 double elevation = tuple.Item1;
                 double elevation_Offset = elevation + offset;
                 List<Tuple<double, Panel>> tuples_Offset = new List<Tuple<double, Panel>>();
-                foreach(Tuple<double, Panel> tuple_Temp in tuples)
+                foreach (Tuple<double, Panel> tuple_Temp in tuples)
                 {
                     if (tuple_Temp.Item1 > elevation_Offset)
                         break;
@@ -85,7 +85,7 @@ namespace SAM.Analytical
                 Geometry.Planar.Modify.RemoveAlmostSimilar_NTS(polygons_Temp, tolerance);
 
                 List<Polygon> polygons = Geometry.Convert.ToNTS_Polygons(polygons_Temp, tolerance);
-                if(polygons != null || polygons.Count > 0)
+                if (polygons != null || polygons.Count > 0)
                 {
                     HashSet<Guid> guids = new HashSet<Guid>();
 
@@ -107,7 +107,7 @@ namespace SAM.Analytical
                         if (count == 1)
                         {
                             panel_Old = tuples_Polygon_Contains[0].Item2;
-                            if(PanelGroup(panel_Old.PanelType) == Analytical.PanelGroup.Floor)
+                            if (PanelGroup(panel_Old.PanelType) == Analytical.PanelGroup.Floor)
                             {
                                 if (panel_Old.MinElevation() < Core.Tolerance.MacroDistance)
                                 {
@@ -124,7 +124,7 @@ namespace SAM.Analytical
                         else
                         {
                             List<Tuple<Polygon, Panel>> tuples_Temp = tuples_Polygon_Contains.FindAll(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
-                            if(tuples_Temp == null || tuples_Temp.Count == 0)
+                            if (tuples_Temp == null || tuples_Temp.Count == 0)
                             {
                                 panel_Old = tuples_Polygon_Contains[0].Item2;
                             }
@@ -134,7 +134,7 @@ namespace SAM.Analytical
                                 panel_Old = tuples_Temp.Find(x => x.Item2.PanelType == Analytical.PanelType.FloorInternal)?.Item2;
                                 if (panel_Old == null)
                                     panel_Old = new Panel(tuples_Temp.First().Item2, construction_FloorInternal_Default);
-                            }  
+                            }
                         }
 
                         if (panel_Old == null)

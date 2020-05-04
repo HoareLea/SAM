@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
@@ -21,6 +20,5 @@ namespace SAM.Geometry.Spatial
 
             return face2Ds.ConvertAll(x => new Face3D(plane, x));
         }
-
     }
 }

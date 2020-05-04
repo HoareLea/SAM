@@ -1,9 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
-
-using SAM.Geometry.Planar;
-
 
 namespace SAM.Geometry.Planar
 {
@@ -69,7 +65,6 @@ namespace SAM.Geometry.Planar
 
             return ConvexHull(aPointList);
         }
-
 
         private class ConvexHullComparer : IComparer<Point2D>
         {

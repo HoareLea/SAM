@@ -1,20 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
-
-using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Spatial
 {
     public class Polycurve3D : SAMGeometry, ICurve3D, ICurvable3D
     {
         private List<ICurve3D> curves;
-        
+
         public Polycurve3D(IEnumerable<ICurve3D> curves)
         {
             this.curves = new List<ICurve3D>();
             foreach (ICurve3D curve in curves)
                 this.curves.Add(curve);
-
         }
 
         public Polycurve3D(Polycurve3D polycurve3D)
@@ -25,7 +23,6 @@ namespace SAM.Geometry.Spatial
         public Polycurve3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public override ISAMGeometry Clone()
@@ -62,13 +59,12 @@ namespace SAM.Geometry.Spatial
         public List<ICurve3D> Explode()
         {
             List<ICurve3D> result = new List<ICurve3D>();
-            foreach(ICurve3D curve3D in curves)
+            foreach (ICurve3D curve3D in curves)
             {
                 if (curve3D is ICurvable3D)
                     result.AddRange(((ICurvable3D)curve3D).GetCurves());
                 else
                     result.Add((ICurve3D)curve3D.Clone());
-                    
             }
             return result;
         }
@@ -82,7 +78,7 @@ namespace SAM.Geometry.Spatial
         {
             if (jObject == null)
                 return false;
-            
+
             curves = Create.ICurve3Ds(jObject.Value<JArray>("Curves"));
 
             return true;
@@ -109,7 +105,6 @@ namespace SAM.Geometry.Spatial
             return length;
         }
 
-
         public static bool TryGetPolyline3D(Polycurve3D polycurve3D, out Polyline3D polyline3D)
         {
             polyline3D = null;
@@ -121,8 +116,7 @@ namespace SAM.Geometry.Spatial
             if (curve3Ds == null || curve3Ds.Count == 0)
                 return false;
 
-
-            List<Point3D> point3Ds = new List<Point3D>() { curve3Ds[0].GetStart()};
+            List<Point3D> point3Ds = new List<Point3D>() { curve3Ds[0].GetStart() };
             curve3Ds.ForEach(x => point3Ds.Add(x.GetEnd()));
 
             polyline3D = new Polyline3D(point3Ds);

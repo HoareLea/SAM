@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GH_IO.Types;
+﻿using GH_IO.Types;
 using Grasshopper.Kernel.Types;
-
 
 namespace SAM.Geometry.Grasshopper
 {

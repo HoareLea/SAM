@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-
 namespace SAM.Geometry.Spatial
 {
     public static partial class Create
@@ -9,7 +8,7 @@ namespace SAM.Geometry.Spatial
         {
             if (point3Ds == null)
                 return null;
-            
+
             Plane plane = Create.Plane(point3Ds, tolerace);
             if (plane == null)
                 return null;
@@ -21,6 +20,5 @@ namespace SAM.Geometry.Spatial
 
             return new Polygon3D(point3Ds_Plane);
         }
-
     }
 }

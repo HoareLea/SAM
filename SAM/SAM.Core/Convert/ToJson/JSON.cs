@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -22,13 +21,12 @@ namespace SAM.Core
         {
             if (jSAMObjects == null)
                 return null;
-            
+
             JArray jArray = new JArray();
             foreach (IJSAMObject jSAMObject in jSAMObjects)
                 jArray.Add(jSAMObject.ToJObject());
 
             return jArray.ToString();
-
         }
     }
 }

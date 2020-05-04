@@ -16,10 +16,10 @@ namespace SAM.Geometry.Planar
 
             Vector2D vector2D_Base = Vector2D.BaseY;
 
-            foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
                 List<Segment2D> segment2Ds = segmentable2D.GetSegments();
-                foreach(Segment2D segment2D in segment2Ds)
+                foreach (Segment2D segment2D in segment2Ds)
                 {
                     Vector2D vector2D = segment2D.Vector;
                     double angle = vector2D.Angle(vector2D_Base);
@@ -29,12 +29,10 @@ namespace SAM.Geometry.Planar
                         dictionary[angle] = vector2D + vector2D_Temp;
                     else
                         dictionary[angle] = vector2D;
-
                 }
             }
 
             return dictionary.Values.ToList();
         }
-
     }
 }

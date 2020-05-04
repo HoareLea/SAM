@@ -1,40 +1,55 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using SAM.Core;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
-using Newtonsoft.Json.Linq;
-
-using SAM.Core;
-using SAM.Geometry.Spatial;
-
-
 namespace SAM.Analytical
 {
+    /// <summary>
+    /// Boundary2D - list of BoundaryEdges2DLoops on a given plane and may include internal edges (as list of Edges2DLoops)
+    /// </summary>
+    /// <seealso cref="SAM.Core.SAMObject" />
     public class Boundary2D : SAMObject
     {
+        /// <summary>
+        /// The external edge2d loop
+        /// </summary>
         private BoundaryEdge2DLoop externalEdge2DLoop;
         private List<BoundaryEdge2DLoop> internalEdge2DLoops;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Boundary2D"/> class.
+        /// </summary>
+        /// <param name="boundary2D">The boundary2d.</param>
         public Boundary2D(Boundary2D boundary2D)
         {
             this.externalEdge2DLoop = new BoundaryEdge2DLoop(boundary2D.externalEdge2DLoop);
             if (boundary2D.internalEdge2DLoops != null)
                 this.internalEdge2DLoops = boundary2D.internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Boundary2D"/> class.
+        /// </summary>
+        /// <param name="edge2DLoop">The edge2d loop.</param>
         public Boundary2D(BoundaryEdge2DLoop edge2DLoop)
             : base()
         {
             this.externalEdge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
         }
-
-        //replace geometry closedPlanar3D for Analytical Boundary2D including internal and external
+   
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Boundary2D"/> class.
+        /// Replaces geometry closedPlanar3D for Analytical Boundary2D including internal and external  
+        /// </summary>
+        /// <param name="closedPlanar3D">The closed planar3d.</param>
         public Boundary2D(IClosedPlanar3D closedPlanar3D)
         {
             if (closedPlanar3D is Face3D)
             {
                 Face3D face3D = (Face3D)closedPlanar3D;
-                
+
                 externalEdge2DLoop = new BoundaryEdge2DLoop(face3D.GetExternalEdge());
                 List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdges();
                 if (internalEdges != null)
@@ -46,10 +61,14 @@ namespace SAM.Analytical
             }
         }
 
-        //replace geometry closed2D for Analytical Boundary2D including internal and external
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Boundary2D"/> class.
+        /// replace geometry closed2D for Analytical Boundary2D including internal and external  
+        /// </summary>
+        /// <param name="closed2D">The closed2d.</param>
         public Boundary2D(Geometry.Planar.IClosed2D closed2D)
         {
-            if(closed2D is Geometry.Planar.Face2D)
+            if (closed2D is Geometry.Planar.Face2D)
             {
                 Geometry.Planar.Face2D face2D = (Geometry.Planar.Face2D)closed2D;
 
@@ -64,12 +83,21 @@ namespace SAM.Analytical
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Boundary2D"/> class.
+        /// </summary>
+        /// <param name="jObject">The jobject.</param>
         public Boundary2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
+        /// <summary>
+        /// Gets the external edge2d loop.
+        /// </summary>
+        /// <value>
+        /// The external edge2d loop.
+        /// </value>
         public BoundaryEdge2DLoop ExternalEdge2DLoop
         {
             get
@@ -78,6 +106,12 @@ namespace SAM.Analytical
             }
         }
 
+        /// <summary>
+        /// Gets the internal edge2d loops.
+        /// </summary>
+        /// <value>
+        /// The internal edge2d loops.
+        /// </value>
         public List<BoundaryEdge2DLoop> InternalEdge2DLoops
         {
             get
@@ -89,11 +123,25 @@ namespace SAM.Analytical
             }
         }
 
+        /// <summary>
+        /// Gets the edge3d loop.
+        /// </summary>
+        /// <param name="plane">The plane.</param>
+        /// <returns>
+        ///   <see cref="BoundaryEdge3DLoop"/>
+        /// </returns>
         public BoundaryEdge3DLoop GetEdge3DLoop(Plane plane)
         {
             return new BoundaryEdge3DLoop(plane, externalEdge2DLoop);
         }
 
+        /// <summary>
+        /// Gets the internal edge3d loops.
+        /// </summary>
+        /// <param name="plane">The plane.</param>
+        /// <returns>
+        ///   <see cref="List{BoundaryEdge3DLoop}"/>
+        /// </returns>
         public List<BoundaryEdge3DLoop> GetInternalEdge3DLoops(Plane plane)
         {
             if (internalEdge2DLoops == null)
@@ -102,6 +150,13 @@ namespace SAM.Analytical
             return internalEdge2DLoops.ConvertAll(x => new BoundaryEdge3DLoop(plane, x));
         }
 
+        /// <summary>
+        /// Gets the internal closed planar3ds.
+        /// </summary>
+        /// <param name="plane">The plane.</param>
+        /// <returns>
+        ///   <see cref="List{IClosedPlanar3D}"/>
+        /// </returns>
         public List<IClosedPlanar3D> GetInternalClosedPlanar3Ds(Plane plane)
         {
             if (internalEdge2DLoops == null)
@@ -117,6 +172,13 @@ namespace SAM.Analytical
             return result;
         }
 
+        /// <summary>
+        /// Gets the face3d.
+        /// </summary>
+        /// <param name="plane">The plane.</param>
+        /// <returns>
+        ///   <see cref="Face3D"/>
+        /// </returns>
         public Face3D GetFace3D(Plane plane)
         {
             return new Face3D(plane, GetFace2D());
@@ -131,6 +193,13 @@ namespace SAM.Analytical
             return Geometry.Planar.Face2D.Create(externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
         }
 
+        /// <summary>
+        /// Froms the jobject.
+        /// </summary>
+        /// <param name="jObject">The jobject.</param>
+        /// <returns>
+        ///   <see cref="System.Boolean"/>
+        /// </returns>
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
@@ -142,16 +211,29 @@ namespace SAM.Analytical
             return true;
         }
 
+        /// <summary>
+        /// Converts to jobject.
+        /// </summary>
+        /// <returns>
+        ///   <see cref="JObject"/>
+        /// </returns>
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
             jObject.Add("Edge2DLoop", externalEdge2DLoop.ToJObject());
             if (internalEdge2DLoops != null)
                 jObject.Add("InternalEdge2DLoops", Core.Create.JArray(internalEdge2DLoops));
-            
+
             return jObject;
         }
 
+        /// <summary>
+        /// Gets the planar boundary3d.
+        /// </summary>
+        /// <param name="plane">The plane.</param>
+        /// <returns>
+        ///   <see cref="PlanarBoundary3D"/>
+        /// </returns>
         public PlanarBoundary3D GetPlanarBoundary3D(Plane plane)
         {
             if (plane == null)
@@ -160,7 +242,12 @@ namespace SAM.Analytical
             return new PlanarBoundary3D(plane, this);
         }
 
-
+        /// <summary>
+        /// Creates the specified edge2d loops.
+        /// </summary>
+        /// <param name="edge2DLoops">The edge2d loops.</param>
+        /// <param name="edge2DLoops_Outside">The edge2d loops outside.</param>
+        /// <returns name="Boundary2D">List of Boundary2></returns>
         public static Boundary2D Create(List<BoundaryEdge2DLoop> edge2DLoops, out List<BoundaryEdge2DLoop> edge2DLoops_Outside)
         {
             edge2DLoops_Outside = null;
@@ -213,6 +300,11 @@ namespace SAM.Analytical
             return boundary2D;
         }
 
+        /// <summary>
+        /// Creates the specified edge2 d loops.
+        /// </summary>
+        /// <param name="edge2DLoops">The edge2 d loops.</param>
+        /// <returns name="Boundary2D">List of Boundary2D</returns>
         public static List<Boundary2D> Create(List<BoundaryEdge2DLoop> edge2DLoops)
         {
             if (edge2DLoops == null)
@@ -223,7 +315,7 @@ namespace SAM.Analytical
                 return result;
 
             List<BoundaryEdge2DLoop> edge2DLoops_All = new List<BoundaryEdge2DLoop>(edge2DLoops);
-            while(edge2DLoops_All.Count > 0)
+            while (edge2DLoops_All.Count > 0)
             {
                 List<BoundaryEdge2DLoop> edge2DLoops_Outside = null;
                 Boundary2D boundary2D = Create(edge2DLoops_All, out edge2DLoops_Outside);

@@ -1,10 +1,5 @@
-﻿using System;
+﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using SAM.Geometry.Spatial;
 
 namespace SAMGeometryDynamo
 {
@@ -28,11 +23,10 @@ namespace SAMGeometryDynamo
         //    if (geometry3D is SAM.Geometry.Spatial.Point3D)
         //        return SAM.Geometry.Spatial.Point3D.Snap(point3Ds, (SAM.Geometry.Spatial.Point3D)geometry3D, maxDistance);
 
-        //    if (geometry3D is Segment3D)
-        //        return Segment3D.Snap(point3Ds, (Segment3D)geometry3D, maxDistance);
+        // if (geometry3D is Segment3D) return Segment3D.Snap(point3Ds, (Segment3D)geometry3D, maxDistance);
 
-        //    if (geometry3D is Polygon3D)
-        //        return SAM.Geometry.Spatial.Polygon3D.Snap(point3Ds, (SAM.Geometry.Spatial.Polygon3D)geometry3D, maxDistance);
+        // if (geometry3D is Polygon3D) return SAM.Geometry.Spatial.Polygon3D.Snap(point3Ds,
+        // (SAM.Geometry.Spatial.Polygon3D)geometry3D, maxDistance);
 
         //    return null;
         //}

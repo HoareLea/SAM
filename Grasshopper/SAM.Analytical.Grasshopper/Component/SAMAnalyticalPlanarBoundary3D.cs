@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-
+﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Geometry;
-using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Spatial;
+using System;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -51,7 +45,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             Core.SAMObject sAMObject = null;

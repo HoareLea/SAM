@@ -1,12 +1,11 @@
-﻿
-using SAM.Geometry.Planar;
+﻿using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
-    public class PlanarIntersectionResult: IIntersectionResult3D
+    public class PlanarIntersectionResult : IIntersectionResult3D
     {
         private List<ISAMGeometry2D> geometry2Ds;
         private Plane plane;
@@ -18,19 +17,18 @@ namespace SAM.Geometry.Spatial
             if (plane != null && sAMGeometry3Ds != null)
                 geometry2Ds = sAMGeometry3Ds.ToList().ConvertAll(x => plane.Convert(x as dynamic) as ISAMGeometry2D);
         }
-        
+
         public PlanarIntersectionResult(Plane plane, Point3D point3D)
         {
             this.plane = plane;
 
-            if(point3D != null && plane != null)
+            if (point3D != null && plane != null)
             {
                 geometry2Ds = new List<ISAMGeometry2D>();
                 geometry2Ds.Add(plane.Convert(plane.Project(point3D)));
             }
-                         
         }
-        
+
         public PlanarIntersectionResult(Plane plane, Line3D line3D)
         {
             this.plane = plane;
@@ -93,7 +91,7 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public T GetGeometry3D<T>() where T: SAMGeometry, ISAMGeometry3D
+        public T GetGeometry3D<T>() where T : SAMGeometry, ISAMGeometry3D
         {
             ISAMGeometry3D result = Geometry3Ds?.Find(x => x is T);
             if (result == null)
@@ -102,7 +100,7 @@ namespace SAM.Geometry.Spatial
             return (T)result;
         }
 
-        public List<T> GetGeometry3Ds<T>() where T: SAMGeometry, ISAMGeometry3D
+        public List<T> GetGeometry3Ds<T>() where T : SAMGeometry, ISAMGeometry3D
         {
             return Geometry3Ds?.FindAll(x => x is T).ConvertAll(x => (T)x);
         }
@@ -111,7 +109,6 @@ namespace SAM.Geometry.Spatial
         {
             return geometry2Ds?.FindAll(x => x is T).ConvertAll(x => (T)x);
         }
-
 
         public static PlanarIntersectionResult Create(Plane plane, Point3D point3D)
         {
@@ -138,7 +135,6 @@ namespace SAM.Geometry.Spatial
                 else
                     return new PlanarIntersectionResult(plane);
             }
-                
 
             double u = (plane.K - normal.DotProduct(segment3D[0].ToVector3D())) / d;
             Point3D point3D = segment3D[0];
@@ -146,7 +142,6 @@ namespace SAM.Geometry.Spatial
             Point3D point3D_Intersection = new Point3D(point3D.X + u * direction.X, point3D.Y + u * direction.Y, point3D.Z + u * direction.Z);
             if (!segment3D.On(point3D_Intersection, tolerance))
                 return new PlanarIntersectionResult(plane);
-
 
             return new PlanarIntersectionResult(plane, point3D_Intersection);
         }
@@ -215,7 +210,7 @@ namespace SAM.Geometry.Spatial
                 orgin = new Point3D { X = 0, Y = y0, Z = z0 };
             }
 
-            return new PlanarIntersectionResult(plane_1,  new Line3D(orgin, tangent));
+            return new PlanarIntersectionResult(plane_1, new Line3D(orgin, tangent));
         }
 
         public static PlanarIntersectionResult Create(Plane plane, IClosedPlanar3D closedPlanar3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
@@ -228,7 +223,7 @@ namespace SAM.Geometry.Spatial
                 return new PlanarIntersectionResult(plane);
 
             Line3D line3D = planarIntersectionResult.GetGeometry3D<Line3D>();
-            if(line3D == null)
+            if (line3D == null)
                 return new PlanarIntersectionResult(plane);
 
             ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
@@ -237,15 +232,14 @@ namespace SAM.Geometry.Spatial
 
             List<Segment3D> segment3Ds_Segmentable3D = segmentable3D.GetSegments();
 
-            List<PlanarIntersectionResult> planarIntersectionResults_All = segment3Ds_Segmentable3D?.ConvertAll(x => Create(plane, x)).FindAll(x =>x.Intersecting);
+            List<PlanarIntersectionResult> planarIntersectionResults_All = segment3Ds_Segmentable3D?.ConvertAll(x => Create(plane, x)).FindAll(x => x.Intersecting);
             if (planarIntersectionResults_All == null || planarIntersectionResults_All.Count == 0)
                 return new PlanarIntersectionResult(plane);
-
 
             List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
             List<Point3D> point3Ds = new List<Point3D>();
 
-            foreach(PlanarIntersectionResult planarIntersectionResult_Temp in planarIntersectionResults_All)
+            foreach (PlanarIntersectionResult planarIntersectionResult_Temp in planarIntersectionResults_All)
             {
                 Point3D point3D = planarIntersectionResult_Temp.GetGeometry3D<Point3D>();
                 if (point3D == null)
@@ -261,7 +255,7 @@ namespace SAM.Geometry.Spatial
                 point3Ds.Add(point3D);
             }
 
-            if(point3Ds != null && point3Ds.Count > 1)
+            if (point3Ds != null && point3Ds.Count > 1)
             {
                 Point3D point3D_1 = null;
                 Point3D point3D_2 = null;
@@ -272,7 +266,7 @@ namespace SAM.Geometry.Spatial
                     Modify.SortByDistance(point3Ds, point3D_1);
                     int index = 0;
                     int count = point3Ds.Count - 2;
-                    while(index <= count)
+                    while (index <= count)
                     {
                         point3D_1 = point3Ds[index];
                         point3D_2 = point3Ds[index + 1];
@@ -289,10 +283,10 @@ namespace SAM.Geometry.Spatial
                     }
                 }
             }
-            
+
             List<Segment3D> segment3Ds = geometry3Ds.FindAll(x => x is Segment3D).Cast<Segment3D>().ToList();
             Modify.RemoveAlmostSimilar(segment3Ds, tolerance_Distance);
-            
+
             point3Ds = geometry3Ds.FindAll(x => x is Point3D).Cast<Point3D>().Distinct().ToList();
             point3Ds.RemoveAll(x => segment3Ds.Find(y => y.On(x, tolerance_Distance)) != null);
 
@@ -313,7 +307,7 @@ namespace SAM.Geometry.Spatial
             if (planarIntersectionResult_externaEdge == null)
                 return null;
 
-            if(!planarIntersectionResult_externaEdge.Intersecting)
+            if (!planarIntersectionResult_externaEdge.Intersecting)
                 return planarIntersectionResult_externaEdge;
 
             List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdges();
@@ -337,21 +331,21 @@ namespace SAM.Geometry.Spatial
             List<Point2D> point2Ds = planarIntersectionResult_externaEdge.geometry2Ds.FindAll(x => x is Point2D).Cast<Point2D>().ToList();
 
             List<ISAMGeometry2D> result = new List<ISAMGeometry2D>();
-            foreach(PlanarIntersectionResult planarIntersectionResult_InternalEdge in PlanarIntersectionResults_InternalEdges)
+            foreach (PlanarIntersectionResult planarIntersectionResult_InternalEdge in PlanarIntersectionResults_InternalEdges)
             {
                 List<ISAMGeometry2D> geometry2Ds_internalEdge = planarIntersectionResult_InternalEdge.geometry2Ds;
 
                 List<Segment2D> segment2Ds_internalEdge = geometry2Ds_internalEdge.FindAll(x => x is Segment2D).Cast<Segment2D>().ToList();
                 List<Point2D> point2Ds_internalEdge = geometry2Ds_internalEdge.FindAll(x => x is Point2D).Cast<Point2D>().ToList();
 
-                foreach(Point2D point2D in point2Ds_internalEdge)
+                foreach (Point2D point2D in point2Ds_internalEdge)
                 {
                     if (point2Ds.Find(x => x.AlmostEquals(point2D)) == null)
                         point2Ds.Add(point2D);
                 }
 
                 bool @continue = true;
-                while(@continue)
+                while (@continue)
                 {
                     @continue = false;
 
@@ -375,16 +369,13 @@ namespace SAM.Geometry.Spatial
                             break;
                         }
 
-                        if(@continue)
+                        if (@continue)
                         {
                             segment2Ds_internalEdge.RemoveRange(0, count);
                             break;
                         }
                     }
-
                 }
-
-
             }
 
             Planar.Modify.RemoveAlmostSimilar(segment2Ds, tolerance_Distance);

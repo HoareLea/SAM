@@ -1,17 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using GH_IO.Serialization;
-using Rhino.Geometry;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
-using SAM.Core.Grasshopper;
 using Rhino;
 using Rhino.DocObjects;
-using SAM.Geometry.Grasshopper;
+using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -20,13 +15,11 @@ namespace SAM.Analytical.Grasshopper
         public GooSpace()
             : base()
         {
-
         }
 
         public GooSpace(Space space)
             : base(space)
         {
-
         }
 
         public BoundingBox ClippingBox
@@ -81,9 +74,9 @@ namespace SAM.Analytical.Grasshopper
 
         public GooSpaceParam()
             : base(typeof(Space).Name, typeof(Space).Name, typeof(Space).FullName.Replace(".", " "), "Params", "SAM")
-        { 
+        {
         }
-        
+
         protected override GH_GetterResult Prompt_Plural(ref List<GooSpace> values)
         {
             throw new NotImplementedException();

@@ -5,6 +5,7 @@ namespace SAM.Core
     public interface IJSAMObject
     {
         bool FromJObject(JObject jObject);
+
         JObject ToJObject();
     }
 }

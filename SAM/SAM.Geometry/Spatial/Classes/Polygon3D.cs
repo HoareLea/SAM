@@ -9,14 +9,14 @@ namespace SAM.Geometry.Spatial
         private List<Planar.Point2D> points;
         private Plane plane;
 
-       public Polygon3D(Plane plane, IEnumerable<Planar.Point2D> points)
+        public Polygon3D(Plane plane, IEnumerable<Planar.Point2D> points)
         {
             this.plane = plane;
 
             if (points != null)
                 this.points = new List<Planar.Point2D>(points);
         }
-        
+
         public Polygon3D(IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds != null)
@@ -40,7 +40,6 @@ namespace SAM.Geometry.Spatial
         public Polygon3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public List<Point3D> GetPoints()
@@ -61,7 +60,7 @@ namespace SAM.Geometry.Spatial
         public List<Segment3D> GetSegments()
         {
             List<Point3D> point3Ds = GetPoints();
-            
+
             int count = point3Ds.Count;
 
             Segment3D[] result = new Segment3D[count];
@@ -106,7 +105,7 @@ namespace SAM.Geometry.Spatial
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             List<Point3D> point3Ds = GetPoints();
-            
+
             return new Polygon3D(point3Ds.ConvertAll(x => (Point3D)x.GetMoved(vector3D)));
         }
 

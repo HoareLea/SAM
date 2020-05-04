@@ -6,6 +6,5 @@
         {
             return new Rhino.Geometry.Plane(ToRhino(plane.Origin), ToRhino(plane.Normal));
         }
-
     }
 }

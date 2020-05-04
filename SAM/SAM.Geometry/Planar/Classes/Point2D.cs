@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
@@ -126,7 +123,7 @@ namespace SAM.Geometry.Planar
         {
             return ((System.Math.Abs(coordinates[0] - point2D.coordinates[0]) < tolerance) && (System.Math.Abs(coordinates[1] - point2D.coordinates[1]) < tolerance));
         }
-        
+
         public bool AlmostOnSegment(Segment2D segment2D, double tolerance = Core.Tolerance.Distance)
         {
             Segment2D segment2D_temp = new Segment2D(new Point2D(0, 0), new Point2D(segment2D[1].X - segment2D[0].X, segment2D[1].Y - segment2D[0].Y));
@@ -154,7 +151,7 @@ namespace SAM.Geometry.Planar
         {
             if (decimals == Core.Rounding.NoRounding)
                 return;
-            
+
             coordinates[0] = System.Math.Round(coordinates[0], decimals);
             coordinates[1] = System.Math.Round(coordinates[1], decimals);
         }
@@ -263,7 +260,6 @@ namespace SAM.Geometry.Planar
             hash = (hash * 7) + coordinates[1].GetHashCode();
             return hash;
         }
-
 
         public static Point2D Move(Point2D point, Vector2D vector)
         {
@@ -424,7 +420,7 @@ namespace SAM.Geometry.Planar
 
         public static Point2D Mid(Point2D point2D_1, Point2D point2D_2)
         {
-            return new Point2D((point2D_1.X + point2D_2.X)/2, (point2D_1.Y + point2D_2.Y) / 2);
+            return new Point2D((point2D_1.X + point2D_2.X) / 2, (point2D_1.Y + point2D_2.Y) / 2);
         }
 
         public static double GetMaxDistance(IEnumerable<Point2D> point2Ds, out Point2D point2D_1, out Point2D point2D_2)
@@ -625,7 +621,7 @@ namespace SAM.Geometry.Planar
 
             return aResult;
         }
-        
+
         public static Rectangle2D GetRectangle2D(IEnumerable<Point2D> point2Ds, Vector2D direction)
         {
             if (point2Ds == null || direction == null || point2Ds.Count() < 2)
@@ -677,9 +673,8 @@ namespace SAM.Geometry.Planar
                 return null;
 
             return new Rectangle2D(point2D_Intersection, aWidth, aHeight, direction_Height);
-
         }
-        
+
         public static Rectangle2D GetRectangle2D(IEnumerable<Point2D> point2Ds)
         {
             if (point2Ds == null || point2Ds.Count() < 2)
@@ -738,7 +733,7 @@ namespace SAM.Geometry.Planar
                 if (distance == 0)
                     return point2D_Temp;
 
-                if(distance < distance_Min)
+                if (distance < distance_Min)
                 {
                     result = point2D_Temp;
                     distance_Min = distance;
@@ -747,7 +742,6 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-
 
         public static bool operator ==(Point2D point2D_1, Point2D point2D_2)
         {

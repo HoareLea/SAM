@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -30,6 +29,5 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-
     }
 }

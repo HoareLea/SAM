@@ -1,9 +1,6 @@
-﻿using System;
-
-using Grasshopper.Kernel;
-
+﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
-
+using System;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -35,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             int index;
-            
+
             index = inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
@@ -53,7 +50,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             Panel panel = null;
@@ -64,7 +63,6 @@ namespace SAM.Analytical.Grasshopper
             }
 
             panel = new Panel(panel);
-
 
             double distance = 0.1;
             dataAccess.GetData(1, ref distance);

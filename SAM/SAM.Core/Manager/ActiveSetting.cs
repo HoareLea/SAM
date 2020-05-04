@@ -15,7 +15,6 @@ namespace SAM.Core
             return setting;
         }
 
-
         public static Setting Setting
         {
             get
@@ -26,7 +25,7 @@ namespace SAM.Core
 
         public static Setting GetDefault()
         {
-            Setting result =  new Setting(Assembly.GetExecutingAssembly());
+            Setting result = new Setting(Assembly.GetExecutingAssembly());
 
             return result;
         }

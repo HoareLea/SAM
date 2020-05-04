@@ -1,14 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using GH_IO.Serialization;
-using Rhino.Geometry;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
-using SAM.Core.Grasshopper;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -17,13 +12,11 @@ namespace SAM.Analytical.Grasshopper
         public GooPanelCluster()
             : base()
         {
-
         }
 
         public GooPanelCluster(PanelCluster panelCluster)
             : base(panelCluster)
         {
-
         }
 
         public override IGH_Goo Duplicate()
@@ -40,9 +33,9 @@ namespace SAM.Analytical.Grasshopper
 
         public GooPanelClusterParam()
             : base(typeof(PanelCluster).Name, typeof(PanelCluster).Name, typeof(PanelCluster).FullName.Replace(".", " "), "Params", "SAM")
-        { 
+        {
         }
-        
+
         protected override GH_GetterResult Prompt_Plural(ref List<GooPanelCluster> values)
         {
             throw new NotImplementedException();

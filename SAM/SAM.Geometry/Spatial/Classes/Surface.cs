@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
@@ -15,7 +13,7 @@ namespace SAM.Geometry.Spatial
         {
             this.boundary = boundary.Clone() as IClosed3D;
         }
-        
+
         public Surface(Surface surface)
         {
             boundary = surface.boundary.Clone() as IClosed3D;
@@ -24,7 +22,6 @@ namespace SAM.Geometry.Spatial
         public Surface(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public Face3D ToFace(double tolerance = Core.Tolerance.Distance)
@@ -39,7 +36,7 @@ namespace SAM.Geometry.Spatial
                 curve3Ds = ((ICurvable3D)boundary).GetCurves();
 
             IEnumerable<Segment3D> segment3Ds = curve3Ds.FindAll(x => x is Segment3D).Cast<Segment3D>();
-            if(segment3Ds.Count() == curve3Ds.Count)
+            if (segment3Ds.Count() == curve3Ds.Count)
             {
                 List<Point3D> point3Ds = Segment3D.GetPoints(segment3Ds, false);
                 Plane plane = Create.Plane(point3Ds, tolerance);

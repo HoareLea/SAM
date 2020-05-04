@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-
-using Newtonsoft.Json.Linq;
-
 
 namespace SAM.Geometry.Spatial
 {
@@ -24,7 +22,6 @@ namespace SAM.Geometry.Spatial
         public Plane(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public Plane(Plane plane)
@@ -59,7 +56,7 @@ namespace SAM.Geometry.Spatial
         {
             if (normal == null)
                 return null;
-            
+
             if (normal.X == 0 && normal.Y == 0)
                 return new Vector3D(1, 0, 0);
 
@@ -113,9 +110,7 @@ namespace SAM.Geometry.Spatial
         /// <summary>
         /// A factor for point-normal equation A(x−a)+B(y−b)+C(z−c) = 0 where origin(a,b,c), normal(A,B,C)
         /// </summary>
-        /// <value>
-        /// A value for point-normal equation
-        /// </value>
+        /// <value>A value for point-normal equation</value>
         public double A
         {
             get
@@ -127,9 +122,7 @@ namespace SAM.Geometry.Spatial
         /// <summary>
         /// B factor for point-normal equation A(x−a)+B(y−b)+C(z−c) = 0 where origin(a,b,c), normal(A,B,C)
         /// </summary>
-        /// <value>
-        /// B value for point-normal equation
-        /// </value>
+        /// <value>B value for point-normal equation</value>
         public double B
         {
             get
@@ -141,9 +134,7 @@ namespace SAM.Geometry.Spatial
         /// <summary>
         /// C factor for point-normal equation A(x−a)+B(y−b)+C(z−c) = 0 where origin(a,b,c), normal(A,B,C)
         /// </summary>
-        /// <value>
-        /// C value for point-normal equation
-        /// </value>
+        /// <value>C value for point-normal equation</value>
         public double C
         {
             get
@@ -155,9 +146,7 @@ namespace SAM.Geometry.Spatial
         /// <summary>
         /// D factor for point-normal equation Ax+By+Cz = D where origin(a,b,c), normal(A,B,C)
         /// </summary>
-        /// <value>
-        /// D value for point-normal equation
-        /// </value>
+        /// <value>D value for point-normal equation</value>
         public double D
         {
             get
@@ -287,12 +276,12 @@ namespace SAM.Geometry.Spatial
 
         public Planar.Face2D Convert(Face3D face3D)
         {
-            IClosedPlanar3D  closedPlanar3D_External = face3D.GetExternalEdge();
+            IClosedPlanar3D closedPlanar3D_External = face3D.GetExternalEdge();
             Planar.IClosed2D closed2D_external = Convert(closedPlanar3D_External);
 
             List<Planar.IClosed2D> closed2Ds_internal = new List<Planar.IClosed2D>();
             List<IClosedPlanar3D> closedPlanar3Ds_Internal = face3D.GetInternalEdges();
-            if(closedPlanar3Ds_Internal != null && closedPlanar3Ds_Internal.Count > 0)
+            if (closedPlanar3Ds_Internal != null && closedPlanar3Ds_Internal.Count > 0)
                 closedPlanar3Ds_Internal.ForEach(x => closed2Ds_internal.Add(Convert(x)));
 
             return Planar.Face2D.Create(closed2D_external, closed2Ds_internal);
@@ -314,7 +303,7 @@ namespace SAM.Geometry.Spatial
             foreach (Point3D point3D in point3Ds)
                 point2ds.Add(Convert(point3D));
 
-            return  point2ds;
+            return point2ds;
         }
 
         public List<Point3D> Convert(IEnumerable<Planar.Point2D> point2Ds)
@@ -376,7 +365,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             List<Planar.Point2D> point2Ds = point3Ds.ConvertAll(x => Convert(x));
-            
+
             return new Polygon3D(this, point2Ds);
         }
 
@@ -418,7 +407,7 @@ namespace SAM.Geometry.Spatial
         {
             if (closedPlanar3D is Face3D)
                 return Intersection((Face3D)closedPlanar3D);
-            
+
             return PlanarIntersectionResult.Create(this, closedPlanar3D);
         }
 
@@ -437,7 +426,7 @@ namespace SAM.Geometry.Spatial
 
         public Plane GetPlane()
         {
-           return new Plane(this);
+            return new Plane(this);
         }
 
         public void Move(Vector3D vector3D)
@@ -485,4 +474,3 @@ namespace SAM.Geometry.Spatial
         }
     }
 }
-

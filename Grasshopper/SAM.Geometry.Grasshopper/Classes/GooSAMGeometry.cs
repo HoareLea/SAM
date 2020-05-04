@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Newtonsoft.Json.Linq;
-
-using GH_IO.Serialization;
+﻿using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
+using Newtonsoft.Json.Linq;
 using Rhino;
 using Rhino.DocObjects;
 using Rhino.Geometry;
-
 using SAM.Geometry.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -20,9 +16,8 @@ namespace SAM.Geometry.Grasshopper
         public GooSAMGeometry()
             : base()
         {
-
         }
-        
+
         public GooSAMGeometry(ISAMGeometry sAMGeometry)
         {
             Value = sAMGeometry;
@@ -35,7 +30,7 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 Type type = null;
-                
+
                 if (Value == null)
                     type = typeof(ISAMGeometry);
                 else
@@ -73,7 +68,7 @@ namespace SAM.Geometry.Grasshopper
                 if (Value is Spatial.IBoundable3D)
                     return ((Spatial.IBoundable3D)Value).GetBoundingBox().ToRhino();
 
-                if(Value is Spatial.Point3D)
+                if (Value is Spatial.Point3D)
                     return ((Spatial.Point3D)(object)Value).GetBoundingBox(1).ToRhino();
 
                 if (Value is Planar.IBoundable2D)
@@ -88,7 +83,7 @@ namespace SAM.Geometry.Grasshopper
                     return new Spatial.BoundingBox3D(new Spatial.Point3D(point2D.X, point2D.Y, -1), new Spatial.Point3D(point2D.X, point2D.Y, 1)).ToRhino();
                 }
 
-                if(Value is Spatial.Plane)
+                if (Value is Spatial.Plane)
                 {
                     return (((Spatial.Plane)Value).Origin).GetBoundingBox(1).ToRhino();
                 }
@@ -110,7 +105,6 @@ namespace SAM.Geometry.Grasshopper
             JObject jObject = Value.ToJObject();
             if (jObject == null)
                 return false;
-
 
             writer.SetString(typeof(ISAMGeometry).FullName, jObject.ToString());
             return true;
@@ -155,7 +149,7 @@ namespace SAM.Geometry.Grasshopper
                 {
                 }
 
-                if(source is ISAMGeometry)
+                if (source is ISAMGeometry)
                 {
                     Value = (ISAMGeometry)source;
                     return true;
@@ -308,32 +302,32 @@ namespace SAM.Geometry.Grasshopper
         public virtual void DrawViewportWires(GH_PreviewWireArgs args)
         {
             //TODO: Display Spatial.Surface as Rhino.Geometry.Surface
-            
+
             List<Spatial.ICurve3D> curve3Ds = null;
             if (Value is Spatial.Face3D)
             {
                 curve3Ds = new List<Spatial.ICurve3D>();
 
-                foreach(Spatial.IClosedPlanar3D closedPlanar3D in ((Spatial.Face3D)Value).GetEdges())
-                if(closedPlanar3D is Spatial.ICurvable3D)
-                    curve3Ds.AddRange(((Spatial.ICurvable3D)closedPlanar3D).GetCurves());
+                foreach (Spatial.IClosedPlanar3D closedPlanar3D in ((Spatial.Face3D)Value).GetEdges())
+                    if (closedPlanar3D is Spatial.ICurvable3D)
+                        curve3Ds.AddRange(((Spatial.ICurvable3D)closedPlanar3D).GetCurves());
             }
             else if (Value is Spatial.ICurvable3D)
             {
                 curve3Ds = ((Spatial.ICurvable3D)Value).GetCurves();
             }
-            else if(Value is Planar.ICurvable2D)
+            else if (Value is Planar.ICurvable2D)
             {
                 curve3Ds = ((Planar.ICurvable2D)Value).GetCurves().ConvertAll(x => Spatial.Plane.Base.Convert(x));
             }
 
-            if(curve3Ds != null && curve3Ds.Count > 0)
+            if (curve3Ds != null && curve3Ds.Count > 0)
             {
                 curve3Ds.ForEach(x => args.Pipeline.DrawCurve(x.ToRhino(), args.Color));
                 //return;
             }
 
-            if(Value is Spatial.Point3D)
+            if (Value is Spatial.Point3D)
             {
                 args.Pipeline.DrawPoint((Value as Spatial.Point3D).ToRhino());
                 return;
@@ -344,7 +338,6 @@ namespace SAM.Geometry.Grasshopper
                 args.Pipeline.DrawPoint((Value as Planar.Point2D).ToRhino());
                 return;
             }
-
         }
 
         public virtual void DrawViewportMeshes(GH_PreviewMeshArgs args)
@@ -360,7 +353,6 @@ namespace SAM.Geometry.Grasshopper
             {
                 args.Pipeline.DrawBrepShaded(brep, args.Material);
             }
-                
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
@@ -390,7 +382,6 @@ namespace SAM.Geometry.Grasshopper
         public GooSAMGeometryParam()
             : base(typeof(ISAMGeometry).Name, typeof(ISAMGeometry).Name, typeof(ISAMGeometry).FullName.Replace(".", " "), "Params", "SAM")
         {
-
         }
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooSAMGeometry> values)

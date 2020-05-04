@@ -19,7 +19,7 @@ namespace SAM.Core
                 return guid;
 
             JToken jToken = jObject.Value<JToken>("Guid");
-            switch(jToken.Type)
+            switch (jToken.Type)
             {
                 case JTokenType.String:
                     string guidString = jToken.Value<string>();
@@ -30,6 +30,7 @@ namespace SAM.Core
                             guid = guid_Temp;
                     }
                     break;
+
                 case JTokenType.Guid:
                     guid = jToken.Value<Guid>();
                     break;

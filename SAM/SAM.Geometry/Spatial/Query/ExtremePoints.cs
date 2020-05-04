@@ -27,7 +27,7 @@ namespace SAM.Geometry.Spatial
                     Point3D point3D_2_Temp = point3Ds.ElementAt(j);
 
                     double distance = point3D_1_Temp.Distance(point3D_2_Temp);
-                    if(distance_Max < distance)
+                    if (distance_Max < distance)
                     {
                         point3D_1 = point3D_1_Temp;
                         point3D_2 = point3D_2_Temp;

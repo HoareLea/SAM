@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
 using SAM.Geometry.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -20,7 +18,6 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
 
-
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
@@ -29,7 +26,6 @@ namespace SAM.Geometry.Grasshopper
               "Modify Difference from Polygon",
               "SAM", "Geometry")
         {
-
         }
 
         /// <summary>
@@ -41,7 +37,6 @@ namespace SAM.Geometry.Grasshopper
             inputParamManager.AddGenericParameter("_polygon2", "_polygon2", "Polygon 2", GH_ParamAccess.list);
 
             inputParamManager.AddNumberParameter("_tolerance_", "_tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
-
         }
 
         /// <summary>
@@ -56,7 +51,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             double tolerance = SAM.Core.Tolerance.Distance;
@@ -65,7 +62,6 @@ namespace SAM.Geometry.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-
 
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
@@ -85,7 +81,6 @@ namespace SAM.Geometry.Grasshopper
                     continue;
                 }
             }
-
 
             objectWrapperList = new List<GH_ObjectWrapper>();
             if (!dataAccess.GetDataList(1, objectWrapperList) || objectWrapperList == null)

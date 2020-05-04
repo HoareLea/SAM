@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using Newtonsoft.Json.Linq;
-
 
 namespace SAM.Core
 {
@@ -19,14 +16,14 @@ namespace SAM.Core
             name = parameterSet.name;
             guid = parameterSet.guid;
 
-            if(parameterSet.dictionary != null)
+            if (parameterSet.dictionary != null)
             {
                 dictionary = new Dictionary<string, object>();
                 foreach (KeyValuePair<string, object> keyValuePair in parameterSet.dictionary)
                     dictionary[keyValuePair.Key] = keyValuePair.Value;
             }
         }
-        
+
         public ParameterSet(string name)
         {
             this.name = name;
@@ -72,7 +69,7 @@ namespace SAM.Core
         {
             if (dictionary == null || name == null)
                 return false;
-            
+
             dictionary[name] = value;
             return true;
         }
@@ -139,7 +136,7 @@ namespace SAM.Core
             if (dictionary == null)
                 dictionary = new Dictionary<string, object>();
 
-            foreach(KeyValuePair<string, object> keyValuePair in parameterSet.dictionary)
+            foreach (KeyValuePair<string, object> keyValuePair in parameterSet.dictionary)
                 dictionary[keyValuePair.Key] = keyValuePair.Value;
 
             return true;
@@ -239,7 +236,7 @@ namespace SAM.Core
             return null;
         }
 
-        public IJSAMObject ToSAMObject<T>(string name) where T: IJSAMObject
+        public IJSAMObject ToSAMObject<T>(string name) where T : IJSAMObject
         {
             IJSAMObject result;
             if (!Query.TryGetValue(dictionary, name, out result))
@@ -278,7 +275,7 @@ namespace SAM.Core
             {
                 if (dictionary == null)
                     return null;
-                
+
                 return dictionary.Keys;
             }
         }
@@ -294,7 +291,7 @@ namespace SAM.Core
                 return false;
 
             dictionary = new Dictionary<string, object>();
-            
+
             name = Query.Name(jObject);
             guid = Query.Guid(jObject);
 
@@ -313,18 +310,23 @@ namespace SAM.Core
                     case JTokenType.String:
                         dictionary[jObject_Temp.Value<string>("Name")] = jToken.Value<string>();
                         break;
+
                     case JTokenType.Float:
                         dictionary[jObject_Temp.Value<string>("Name")] = jToken.Value<double>();
                         break;
+
                     case JTokenType.Integer:
                         dictionary[jObject_Temp.Value<string>("Name")] = jToken.Value<int>();
                         break;
+
                     case JTokenType.Boolean:
                         dictionary[jObject_Temp.Value<string>("Name")] = jToken.Value<bool>();
                         break;
+
                     case JTokenType.Date:
                         dictionary[jObject_Temp.Value<string>("Name")] = jToken.Value<DateTime>();
                         break;
+
                     case JTokenType.Object:
                         JSAMObjectWrapper jSAMObjectWrapper = new JSAMObjectWrapper((JObject)jToken);
                         IJSAMObject jSAMObject = jSAMObjectWrapper.ToIJSAMObject();
@@ -345,11 +347,11 @@ namespace SAM.Core
             jObject.Add("_type", GetType().FullName);
             if (name != null)
                 jObject.Add("Name", name);
-            
+
             jObject.Add("Guid", guid);
 
             JArray jArray = new JArray();
-            foreach (KeyValuePair <string, object> keyValuePair in dictionary)
+            foreach (KeyValuePair<string, object> keyValuePair in dictionary)
             {
                 JObject jObject_Temp = new JObject();
                 jObject_Temp.Add("Name", keyValuePair.Key);
@@ -360,7 +362,7 @@ namespace SAM.Core
                     else
                         jObject_Temp.Add("Value", keyValuePair.Value as dynamic);
                 }
-                    
+
                 jArray.Add(jObject_Temp);
             }
 

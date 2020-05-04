@@ -6,11 +6,10 @@ namespace SAM.Geometry.Planar
     public static partial class Modify
     {
         /// <summary>
-        /// Orients two curves by its ends (end point of first curve become the closest to start point of second curve)  
+        /// Orients two curves by its ends (end point of first curve become the closest to start
+        /// point of second curve)
         /// </summary>
-        /// <returns>
-        /// Returns true if at least one curve orientation changed
-        /// </returns>
+        /// <returns>Returns true if at least one curve orientation changed</returns>
         /// <param name="curve2D_1">First curve to be orieted</param>
         /// <param name="curve2D_2">Second curve to be orieted</param>
         /// <param name="Orient_1">True if update orientation of first curve</param>
@@ -35,7 +34,7 @@ namespace SAM.Geometry.Planar
             distances.Add(point2D_Previous_End.Distance(point2D_Start));
 
             double distance = distances.Min();
-            
+
             bool result = false;
             if (distance == distances[0])
             {
@@ -44,13 +43,12 @@ namespace SAM.Geometry.Planar
                     curve2D_1.Reverse();
                     result = true;
                 }
-                    
+
                 if (Orient_2)
                 {
                     curve2D_2.Reverse();
                     result = true;
                 }
-                    
             }
             else if (distance == distances[1])
             {
@@ -71,7 +69,6 @@ namespace SAM.Geometry.Planar
             else //if (distance == distances[3])
             {
                 //Do nothing
-
             }
 
             return result;

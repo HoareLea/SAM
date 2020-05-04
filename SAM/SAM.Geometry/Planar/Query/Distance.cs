@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -47,16 +46,15 @@ namespace SAM.Geometry.Planar
             double result = double.MaxValue;
             foreach (Segment2D segment2D_1 in segment2Ds_1)
             {
-                    double distance = segment2D_1.Distance(point2D);
-                    if (distance == 0)
-                        return 0;
+                double distance = segment2D_1.Distance(point2D);
+                if (distance == 0)
+                    return 0;
 
-                    if (distance < result)
-                        result = distance;
+                if (distance < result)
+                    result = distance;
             }
 
             return result;
         }
-
     }
 }

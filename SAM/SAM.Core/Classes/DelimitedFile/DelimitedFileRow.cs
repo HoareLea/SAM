@@ -11,7 +11,6 @@ namespace SAM.Core
 
         public DelimitedFileRow()
         {
-
         }
 
         public DelimitedFileRow(IEnumerable<string> Values)

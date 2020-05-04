@@ -27,7 +27,7 @@ namespace SAM.Geometry.Planar
                     Point2D point2D_2_Temp = point2Ds.ElementAt(j);
 
                     double distance = point2D_1_Temp.Distance(point2D_2_Temp);
-                    if(distance_Max < distance)
+                    if (distance_Max < distance)
                     {
                         point2D_1 = point2D_1_Temp;
                         point2D_2 = point2D_2_Temp;

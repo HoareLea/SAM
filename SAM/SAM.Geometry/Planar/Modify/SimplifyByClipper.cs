@@ -1,6 +1,5 @@
 ﻿using ClipperLib;
 using NetTopologySuite.Geometries;
-using NetTopologySuite.Simplify;
 using SAM.Core;
 using System.Collections.Generic;
 

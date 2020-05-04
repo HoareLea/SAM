@@ -1,10 +1,5 @@
-﻿using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
-using System;
+﻿using Rhino.Geometry;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -12,17 +7,16 @@ namespace SAM.Geometry.Grasshopper
     {
         public static Spatial.IClosed3D ToSAM(this BrepLoop brepLoop, bool simplify = true)
         {
-
             if (brepLoop.Face.IsPlanar(Core.Tolerance.Distance))
             {
                 Spatial.ISAMGeometry3D sAMGeometry3D = brepLoop.To3dCurve().ToSAM(simplify);
                 if (sAMGeometry3D is Spatial.IClosedPlanar3D)
                     return new Spatial.Face3D(sAMGeometry3D as Spatial.IClosedPlanar3D);
 
-                if(sAMGeometry3D is Spatial.ICurvable3D)
+                if (sAMGeometry3D is Spatial.ICurvable3D)
                 {
                     List<Spatial.ICurve3D> curves = ((Spatial.ICurvable3D)sAMGeometry3D).GetCurves();
-                    if(curves.TrueForAll(x => x is Spatial.Segment3D))
+                    if (curves.TrueForAll(x => x is Spatial.Segment3D))
                         return new Spatial.Face3D(new Spatial.Polygon3D(curves.ConvertAll(x => x.GetStart())));
                 }
             }
@@ -35,8 +29,6 @@ namespace SAM.Geometry.Grasshopper
                     return new Spatial.Surface(polycurveLoop3D);
                 }
             }
-
-
 
             return null;
         }

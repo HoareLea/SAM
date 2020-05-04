@@ -1,7 +1,5 @@
 ﻿using ClipperLib;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -17,7 +15,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Polygon2D> polygon2Ds = new List<Polygon2D>();
-            foreach(List<IntPoint> intPoints in intPointsList)
+            foreach (List<IntPoint> intPoints in intPointsList)
             {
                 List<Point2D> point2Ds = intPoints.ToSAM(tolerance);
                 polygon2Ds.Add(new Polygon2D(point2Ds));
@@ -40,10 +38,10 @@ namespace SAM.Geometry.Planar
             ////TODO: Check implementation for the case where parameter is equal to 0 or 1
             //while (parameter == 1 || parameter == 0)
             //    polygon2D_Temp.Reorder(1);
-            
+
             //Polygon2D polygon2D_Temp_Reversed = new Polygon2D(polygon2D_Temp);
             //polygon2D_Temp_Reversed.Reverse();
-            
+
             //double parameter_Reversed = polygon2D_Temp_Reversed.GetParameter(point2D_Intersection, false, tolerance);
 
             //Polyline2D polyline2D = polygon2D_Temp.Trim(parameter) as Polyline2D;
@@ -83,7 +81,6 @@ namespace SAM.Geometry.Planar
             //    result.Add(polygon2D_New);
 
             //return result;
-
         }
     }
 }

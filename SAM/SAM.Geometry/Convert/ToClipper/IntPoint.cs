@@ -9,8 +9,8 @@ namespace SAM.Geometry
         {
             if (point2D == null)
                 return default;
-            
-            if(tolerance == 0)
+
+            if (tolerance == 0)
                 return new IntPoint(point2D.X, point2D.Y);
 
             return new IntPoint(point2D.X / tolerance, point2D.Y / tolerance);

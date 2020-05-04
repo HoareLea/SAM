@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using SAM.Geometry.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-
-using Newtonsoft.Json.Linq;
-using SAM.Geometry.Interfaces;
 
 namespace SAM.Geometry.Planar
 {
@@ -32,7 +30,6 @@ namespace SAM.Geometry.Planar
         public Polycurve2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public override ISAMGeometry Clone()

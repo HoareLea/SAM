@@ -95,7 +95,7 @@ namespace SAM.Core
 
         public static bool Write()
         {
-            return  manager.Write();
+            return manager.Write();
         }
     }
 }

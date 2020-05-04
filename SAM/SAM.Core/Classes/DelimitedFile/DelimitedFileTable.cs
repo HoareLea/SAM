@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace SAM.Core
 {
     public class DelimitedFileTable : IDisposable, IEnumerable<object[]>
@@ -16,7 +15,6 @@ namespace SAM.Core
 
         private DelimitedFileTable()
         {
-
         }
 
         public DelimitedFileTable(DelimitedFileTable delimitedFileTable)
@@ -49,7 +47,6 @@ namespace SAM.Core
                         values.Add(new List<object>(aObjects).ToArray());
                 }
             }
-
         }
 
         public DelimitedFileTable(IDelimitedFileReader delimitedFileReader, int headerCount = 0)
@@ -103,7 +100,6 @@ namespace SAM.Core
                     header.Add(aValues);
                 }
             }
-
 
             values = new List<object[]>();
             for (int i = headerCount + aRowsStart + 1; i < aRowsCount + aRowsStart; i++)
@@ -440,7 +436,6 @@ namespace SAM.Core
 
                 if (aType_1 == typeof(string))
                 {
-
                 }
             }
 
@@ -493,7 +488,6 @@ namespace SAM.Core
         {
             return ((IEnumerable<object[]>)values).GetEnumerator();
         }
-
 
         private static string[] Extract<T>(T[] values)
         {

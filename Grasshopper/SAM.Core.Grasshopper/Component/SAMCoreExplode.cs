@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-
+﻿using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
+using System;
 
 namespace SAM.Core.Grasshopper
 {
@@ -21,6 +17,7 @@ namespace SAM.Core.Grasshopper
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Explode;
 
         private GH_OutputParamManager outputParamManager;
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
@@ -29,7 +26,6 @@ namespace SAM.Core.Grasshopper
               "Explode any SAM Object NOT IMPLEMENTED YET!",
               "SAM", "Core")
         {
-
         }
 
         /// <summary>
@@ -54,11 +50,11 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-
         }
-
     }
 }

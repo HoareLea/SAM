@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        // Secant 
+        // Secant
         //https://mathworld.wolfram.com/Secant.html
         public static double Sec(double angle)
         {

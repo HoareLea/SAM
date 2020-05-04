@@ -27,7 +27,6 @@ namespace SAM.Geometry.Planar
             if (point2Ds_Temp == null || point2Ds_Temp.Count < 3)
                 return Geometry.Orientation.Undefined;
 
-
             if (convexHull)
             {
                 List<Point2D> point2Ds_ConvexHull = Query.ConvexHull(point2Ds);
@@ -39,7 +38,6 @@ namespace SAM.Geometry.Planar
                     point2Ds_ConvexHull_Temp.RemoveAll(x => point2Ds_ConvexHull.Contains(x));
                     point2Ds_Temp.RemoveAll(x => point2Ds_ConvexHull_Temp.Contains(x));
                 }
-
             }
 
             point2Ds_Temp.Add(point2Ds_Temp[0]);

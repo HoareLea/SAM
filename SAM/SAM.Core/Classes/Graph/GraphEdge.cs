@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SAM.Core
+﻿namespace SAM.Core
 {
     public class GraphEdge
     {
@@ -23,7 +17,6 @@ namespace SAM.Core
 
         public GraphEdge()
         {
-
         }
 
         public GraphEdge(object @object)

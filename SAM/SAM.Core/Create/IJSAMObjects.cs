@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
     public static partial class Create
     {
-        public static List<T> IJSAMObjects<T>(this JArray jArray) where T: IJSAMObject
+        public static List<T> IJSAMObjects<T>(this JArray jArray) where T : IJSAMObject
         {
             if (jArray == null)
                 return null;
@@ -23,7 +22,7 @@ namespace SAM.Core
         {
             if (string.IsNullOrEmpty(json))
                 return default;
-            
+
             JArray jArray = Query.JArray(json);
             if (jArray == null)
                 return default;

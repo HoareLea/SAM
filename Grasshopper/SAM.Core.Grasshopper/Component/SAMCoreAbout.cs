@@ -1,9 +1,8 @@
-﻿using System;
-using GH_IO.Serialization;
+﻿using GH_IO.Serialization;
 using Grasshopper.Kernel;
-using System.Windows.Forms;
-
 using SAM.Core.Grasshopper.Properties;
+using System;
+using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
@@ -19,7 +18,6 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.HL_Logo24;
 
-
         private AboutInfoType aboutInfoType = AboutInfoType.HoareLea;
 
         /// <summary>
@@ -30,7 +28,6 @@ namespace SAM.Core.Grasshopper
               "Right click to find out more about our toolkit",
               "SAM", "About")
         {
-
         }
 
         public override bool Write(GH_IWriter writer)
@@ -44,7 +41,7 @@ namespace SAM.Core.Grasshopper
             int aIndex = -1;
             if (reader.TryGetInt32("About Info", ref aIndex))
                 aboutInfoType = (AboutInfoType)aIndex;
-            
+
             return base.Read(reader);
         }
 
@@ -71,7 +68,6 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-
         }
 
         /// <summary>
@@ -85,7 +81,9 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             dataAccess.SetData(0, SAM.Core.Query.AboutInfoTypeText(aboutInfoType));

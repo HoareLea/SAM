@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using ClipperLib;
+﻿using ClipperLib;
 using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry
 {
@@ -19,7 +14,6 @@ namespace SAM.Geometry
                 return null;
 
             return ToClipper(segmentable2D.GetPoints(), tolerance);
-
         }
 
         public static List<IntPoint> ToClipper(this IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.MicroDistance)

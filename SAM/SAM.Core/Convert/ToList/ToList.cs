@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace SAM.Core
 {
@@ -18,10 +16,10 @@ namespace SAM.Core
             List<string> columnNames = delimitedFileTable.GetColumnNames();
 
             List<string[]> result = new List<string[]>();
-            foreach(string columnName in columnNames)
+            foreach (string columnName in columnNames)
             {
                 string[] values = new string[delimitedFileTable.Count];
-                for (int i =0; i < delimitedFileTable.Count; i++)
+                for (int i = 0; i < delimitedFileTable.Count; i++)
                 {
                     object value = delimitedFileTable[i, columnName];
                     if (value != null)

@@ -1,40 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Planar
 {
     public class Face2D : Face, IClosed2D, ISAMGeometry2D, IBoundable2D
     {
-
         public Face2D(IClosed2D closed2D)
             : base(closed2D)
         {
-
         }
 
         public Face2D(JObject jObject)
             : base(jObject)
         {
-
         }
-        
+
         public override ISAMGeometry Clone()
         {
             return new Face2D(this);
         }
 
-
         public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null)
                 return false;
-            
+
             List<IClosed2D> closed2Ds = Edges;
             if (closed2Ds == null)
                 return false;
 
-            foreach(IClosed2D closed2D in closed2Ds)
+            foreach (IClosed2D closed2D in closed2Ds)
                 if (closed2D.On(point2D, tolerance))
                     return true;
 
@@ -46,12 +42,10 @@ namespace SAM.Geometry.Planar
             return externalEdge.GetBoundingBox(offset);
         }
 
-
         public Point2D GetCentroid()
         {
             return externalEdge.GetCentroid();
         }
-
 
         public static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, bool orientInternalEdges = true)
         {
@@ -72,8 +66,6 @@ namespace SAM.Geometry.Planar
 
                         result.internalEdges.Add(closed2D_Temp);
                     }
-                        
-
                 }
             }
 
@@ -97,7 +89,6 @@ namespace SAM.Geometry.Planar
                     area_Max = area;
                     closed2D_Max = closed2D;
                 }
-
             }
 
             if (closed2D_Max == null)

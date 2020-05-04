@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -13,14 +12,14 @@ namespace SAM.Geometry.Planar
 
             int index = -1;
             double distance_Min = double.MaxValue;
-            for(int i=0; i < segment2Ds.Count(); i++)
+            for (int i = 0; i < segment2Ds.Count(); i++)
             {
                 Segment2D segment2D = segment2Ds.ElementAt(i);
                 if (segment2D == null)
                     continue;
 
                 double distance = segment2D.Closest(point2D).Distance(point2D);
-                if(distance < distance_Min)
+                if (distance < distance_Min)
                 {
                     distance_Min = distance;
                     index = i;
@@ -28,7 +27,6 @@ namespace SAM.Geometry.Planar
             }
 
             return index;
-
         }
     }
 }

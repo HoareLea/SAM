@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using Newtonsoft.Json.Linq;
-
 
 namespace SAM.Core
 {
@@ -30,10 +25,12 @@ namespace SAM.Core
                 case TypeCode.Double:
                 case TypeCode.Single:
                     return true;
+
                 case TypeCode.Object:
                     if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                         return Nullable.GetUnderlyingType(type).IsNumeric();
                     return false;
+
                 default:
                     return false;
             }

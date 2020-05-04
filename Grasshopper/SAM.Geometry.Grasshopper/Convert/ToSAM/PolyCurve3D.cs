@@ -13,7 +13,7 @@ namespace SAM.Geometry.Grasshopper
             foreach (Rhino.Geometry.Curve curve in curves)
             {
                 if (!curve.IsLinear())
-                    curve3Ds.AddRange(Spatial.Query.Explode(curve.ToSAM() as Spatial.ICurve3D));  
+                    curve3Ds.AddRange(Spatial.Query.Explode(curve.ToSAM() as Spatial.ICurve3D));
                 else
                     curve3Ds.Add(new Spatial.Segment3D(curve.PointAtStart.ToSAM(), curve.PointAtEnd.ToSAM()));
             }

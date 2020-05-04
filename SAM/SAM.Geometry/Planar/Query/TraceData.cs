@@ -41,7 +41,7 @@ namespace SAM.Geometry.Planar
             do
             {
                 dictionary_Intersections = Query.IntersectionDictionary(point2D_Temp, vector2D_Temp, segment2Ds, true, true);
-                if(dictionary_Intersections != null && dictionary_Intersections.Count > 0)
+                if (dictionary_Intersections != null && dictionary_Intersections.Count > 0)
                 {
                     List<Point2D> point2Ds_Intersections = dictionary_Intersections.Keys.ToList();
                     Modify.SortByDistance(point2Ds_Intersections, point2D_Temp);
@@ -49,7 +49,7 @@ namespace SAM.Geometry.Planar
                     Point2D point2D_Intersection = point2Ds_Intersections[0];
 
                     Vector2D vector2D_result = new Vector2D(point2D_Temp, point2D_Intersection);
-                    result.Add(new Tuple<Point2D, Segment2D, Vector2D> (point2D_Intersection, dictionary_Intersections[point2D_Intersection], vector2D_result));
+                    result.Add(new Tuple<Point2D, Segment2D, Vector2D>(point2D_Intersection, dictionary_Intersections[point2D_Intersection], vector2D_result));
 
                     if (result.Count >= bounces)
                         break;

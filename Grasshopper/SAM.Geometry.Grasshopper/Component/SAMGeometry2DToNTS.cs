@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Planar;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -29,7 +27,6 @@ namespace SAM.Geometry.Grasshopper
               "SAMGeometry To NetTopologySuite",
               "SAM", "Geometry")
         {
-
         }
 
         /// <summary>
@@ -53,7 +50,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             GH_ObjectWrapper objectWrapper = null;

@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        // Hyperbolic Sine 
+        // Hyperbolic Sine
         //https://mathworld.wolfram.com/HyperbolicSine.html
         public static double Sinh(double angle)
         {

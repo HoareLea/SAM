@@ -9,7 +9,7 @@ namespace SAM.Geometry.Spatial
         {
             if (point3Ds == null)
                 return null;
-            
+
             int count = point3Ds.Count();
             if (count < 1)
                 return null;

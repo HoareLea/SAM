@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
-
-using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -36,10 +35,8 @@ namespace SAM.Geometry.Spatial
         public Face3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
-        
         public Plane GetPlane()
         {
             return new Plane(plane);
@@ -126,7 +123,7 @@ namespace SAM.Geometry.Spatial
                 return false;
 
             Planar.Point2D point2D = plane.Convert(point3D);
-            
+
             if (internalEdges == null || internalEdges.Count == 0)
                 return externalEdge.Inside(point2D);
 
@@ -148,7 +145,7 @@ namespace SAM.Geometry.Spatial
 
         public IClosedPlanar3D Project(IClosed3D closed3D)
         {
-            if(closed3D is ISegmentable3D)
+            if (closed3D is ISegmentable3D)
             {
                 List<Point3D> point3Ds = ((ISegmentable3D)closed3D).GetPoints().ConvertAll(x => plane.Project(x));
                 return new Polygon3D(point3Ds);
@@ -182,7 +179,6 @@ namespace SAM.Geometry.Spatial
             return plane.Convert(GetInternalPoint2D());
         }
 
-
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges, bool orientInternalEdges = true)
         {
             if (edges == null || edges.Count() == 0)
@@ -194,14 +190,13 @@ namespace SAM.Geometry.Spatial
             {
                 if (closedPlanar3D == null)
                     continue;
-                
+
                 double area = closedPlanar3D.GetArea();
                 if (area > area_Max)
                 {
                     area_Max = area;
                     externalEdge_3D = closedPlanar3D;
                 }
-
             }
 
             if (externalEdge_3D == null)
@@ -234,7 +229,7 @@ namespace SAM.Geometry.Spatial
 
             return Create(plane, externalEdge_2D, internalEdges_2D);
         }
-        
+
         public static Face3D Create(Plane plane, Planar.IClosed2D externalEdge, IEnumerable<Planar.IClosed2D> internalEdges, bool orientInternalEdges = true)
         {
             if (plane == null || externalEdge == null)
@@ -257,12 +252,12 @@ namespace SAM.Geometry.Spatial
             Planar.Face2D face2D = Planar.Face2D.Create(edges, out edges_Excluded, orientInternalEdges);
             return new Face3D(plane, face2D);
         }
-        
+
         public static Face3D Create(Plane plane, IEnumerable<Planar.IClosed2D> edges, bool orientInternalEdges = true)
         {
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
-            
+
             return new Face3D(plane, Planar.Face2D.Create(edges, orientInternalEdges));
         }
     }

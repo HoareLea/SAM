@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Grasshopper.Kernel;
+using System;
 using System.Drawing;
-
-using Grasshopper.Kernel;
 
 namespace SAM.Core.Grasshopper
 {
@@ -14,6 +13,7 @@ namespace SAM.Core.Grasshopper
                 return "SAM";
             }
         }
+
         public override Bitmap Icon
         {
             get
@@ -31,6 +31,7 @@ namespace SAM.Core.Grasshopper
                 return Properties.Resources.HL_Logo24; ;
             }
         }
+
         public override string Description
         {
             get
@@ -39,6 +40,7 @@ namespace SAM.Core.Grasshopper
                 return "SAM Grashopper Toolkit, please explore";
             }
         }
+
         public override Guid Id
         {
             get
@@ -55,6 +57,7 @@ namespace SAM.Core.Grasshopper
                 return "Michal Dengusiak & Jakub Ziolkowski at Hoare Lea";
             }
         }
+
         public override string AuthorContact
         {
             get

@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using SAM.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Newtonsoft.Json.Linq;
-
-using SAM.Core;
-
 
 namespace SAM.Geometry.Planar
 {
@@ -28,11 +25,11 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            if(pointGraph2D.objects != null)
+            if (pointGraph2D.objects != null)
             {
                 int count_1 = pointGraph2D.objects.Length;
                 objects = new object[count_1][];
-                for(int i = 0; i < count_1; i++)
+                for (int i = 0; i < count_1; i++)
                 {
                     int count_2 = pointGraph2D.objects[i].Length;
                     object[] objects_Temp = new object[count_2];
@@ -40,7 +37,7 @@ namespace SAM.Geometry.Planar
                     {
                         object @object = pointGraph2D.objects[i][j];
                         if (@object != null)
-                            objects_Temp[j] = @object;                    
+                            objects_Temp[j] = @object;
                     }
                     objects[i] = objects_Temp;
                 }
@@ -83,7 +80,7 @@ namespace SAM.Geometry.Planar
                     objects[i] = curve2Ds_Temp;
                 }
             }
-        }        
+        }
 
         public PointGraph2D(IEnumerable<Segment2D> segment2Ds, bool split = true, double tolerance = Tolerance.Distance)
         {
@@ -97,10 +94,10 @@ namespace SAM.Geometry.Planar
 
         public PointGraph2D(IEnumerable<Polygon2D> polygon2Ds, bool split = true, double tolerance = Tolerance.Distance)
         {
-            if(polygon2Ds != null)
+            if (polygon2Ds != null)
             {
                 List<Segment2D> segment2Ds = new List<Segment2D>();
-                foreach(Polygon2D polygon2D in polygon2Ds)
+                foreach (Polygon2D polygon2D in polygon2Ds)
                 {
                     if (polygon2D == null)
                         continue;
@@ -116,7 +113,6 @@ namespace SAM.Geometry.Planar
             }
         }
 
-
         public bool Load(IEnumerable<Segment2D> segment2Ds, bool split = false, double tolerance = Tolerance.Distance)
         {
             if (segment2Ds == null)
@@ -131,7 +127,6 @@ namespace SAM.Geometry.Planar
             IEnumerable<Segment2D> segments_Temp = segment2Ds;
             if (split)
                 segments_Temp = Modify.Split(segment2Ds, tolerance);
-                
 
             HashSet<Point2D> point2Ds_HashSet = new HashSet<Point2D>();
             List<Tuple<Point2D, Point2D, Segment2D>> tuples = new List<Tuple<Point2D, Point2D, Segment2D>>();
@@ -190,7 +185,6 @@ namespace SAM.Geometry.Planar
             return true;
         }
 
-
         public bool Disconnect(int connectionsCount)
         {
             if (connectionsCount < 0)
@@ -236,7 +230,6 @@ namespace SAM.Geometry.Planar
             return Disconnect(IndexOf(point2D_1), IndexOf(point2D_2));
         }
 
-        
         public bool DisconnectAll(int index)
         {
             if (index < 0)
@@ -290,7 +283,6 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        
         public int ConnectionsCount(int index)
         {
             List<int> connections = Connections(index);
@@ -305,7 +297,6 @@ namespace SAM.Geometry.Planar
             return ConnectionsCount(IndexOf(point2D));
         }
 
-        
         public List<int> Connections(int index)
         {
             if (index < 0)
@@ -338,7 +329,6 @@ namespace SAM.Geometry.Planar
             return Connections(IndexOf(point2D));
         }
 
-
         public HashSet<int> GetAllConnections(int index)
         {
             HashSet<int> result = new HashSet<int>();
@@ -346,7 +336,6 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        
         public int IndexOf(Point2D point2D)
         {
             if (points == null)
@@ -360,14 +349,13 @@ namespace SAM.Geometry.Planar
             return -1;
         }
 
-        
         public object this[int i, int j]
         {
             get
             {
                 if (objects == null)
                     return null;
-                
+
                 if (i < 0 || j < 0)
                     return null;
 
@@ -385,7 +373,7 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public object this [Point2D point2D_1, Point2D point2D_2]
+        public object this[Point2D point2D_1, Point2D point2D_2]
         {
             get
             {
@@ -409,7 +397,6 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        
         public int Count
         {
             get
@@ -418,7 +405,6 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        
         public bool IsConnected(int index)
         {
             if (index < 0)
@@ -441,19 +427,16 @@ namespace SAM.Geometry.Planar
             return false;
         }
 
-        
         public bool IsDiconnected(int index)
         {
             return !IsConnected(index);
         }
 
-        
         public PointGraph2D Clone()
         {
             return new PointGraph2D(this);
         }
 
-        
         public int GetFirstConnected(int connectionsCount)
         {
             if (connectionsCount < 0 || points == null)
@@ -472,7 +455,7 @@ namespace SAM.Geometry.Planar
         {
             if (points == null)
                 return -1;
-            
+
             int count = points.Length;
 
             for (int i = 0; i < count; i++)
@@ -481,7 +464,6 @@ namespace SAM.Geometry.Planar
 
             return -1;
         }
-
 
         public bool HasConnections()
         {
@@ -498,7 +480,6 @@ namespace SAM.Geometry.Planar
             return false;
         }
 
-
         public bool HasLoops()
         {
             PointGraph2D pointGraph2D = new PointGraph2D(this);
@@ -506,7 +487,6 @@ namespace SAM.Geometry.Planar
 
             return pointGraph2D.HasConnections();
         }
-
 
         public List<T> GetObjects<T>(IEnumerable<int> indexes, bool close = false)
         {
@@ -524,7 +504,7 @@ namespace SAM.Geometry.Planar
             {
                 object @object = this[indexes_Temp[i], indexes_Temp[i + 1]];
                 if (@object == null)
-                    result.Add( default(T));
+                    result.Add(default(T));
 
                 result.Add((T)@object);
             }
@@ -549,12 +529,11 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Point2D> result = new List<Point2D>();
-            for(int i =0; i < points.Length; i++)
+            for (int i = 0; i < points.Length; i++)
                 if (IsConnected(i))
                     result.Add(this[i]);
             return result;
         }
-
 
         public List<PointGraph2D> Split()
         {
@@ -567,12 +546,11 @@ namespace SAM.Geometry.Planar
                 HashSet<int> indexes = GetAllConnections(index);
                 if (indexes == null || indexes.Count == 0)
                     break;
-                    
 
                 result.Add(new PointGraph2D(pointGraph2D, indexes));
                 pointGraph2D.DisconnectAll(indexes);
 
-                index = pointGraph2D.GetFirstConnected();             
+                index = pointGraph2D.GetFirstConnected();
             }
             return result;
         }
@@ -596,7 +574,7 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-        
+
         public List<Polygon2D> GetPolygon2Ds()
         {
             PointGraph2D pointGraph2D = new PointGraph2D(this);
@@ -656,9 +634,9 @@ namespace SAM.Geometry.Planar
 
                         if (tuple_1.Item2.Inside(tuple_2.Item3))
                         {
-                            if(tuple_1.Item1.Inside(tuple_2.Item3))
+                            if (tuple_1.Item1.Inside(tuple_2.Item3))
                             {
-                                if(tuple_1.Item4 > tuple_2.Item4)
+                                if (tuple_1.Item4 > tuple_2.Item4)
                                 {
                                     redundantLoopIndexes.Add(i);
                                     break;
@@ -690,7 +668,7 @@ namespace SAM.Geometry.Planar
                     }
                 }
 
-                for(int i=0; i < tuples.Count(); i++)
+                for (int i = 0; i < tuples.Count(); i++)
                 {
                     if (redundantLoopIndexes != null && redundantLoopIndexes.Contains(i))
                         continue;
@@ -729,7 +707,7 @@ namespace SAM.Geometry.Planar
                         continue;
 
                     double area = polygon2D_Temp.GetBoundingBox().GetArea();
-                    if(area >= area_Max)
+                    if (area >= area_Max)
                     {
                         area = polygon2D_Temp.GetArea();
                         if (area > area_Max)
@@ -767,10 +745,10 @@ namespace SAM.Geometry.Planar
         public Polyline2D GetPolyline2D(Point2D point2D_1, Point2D point2D_2)
         {
             throw new NotImplementedException();
-            
+
             if (point2D_1 == null || point2D_2 == null)
                 return null;
-            
+
             List<PointGraph2D> pointGraph2Ds = Split();
             if (pointGraph2Ds == null || pointGraph2Ds.Count == 0)
                 return null;
@@ -800,7 +778,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             bool @continue = true;
-            while(@continue)
+            while (@continue)
             {
                 List<int> connections = pointGraph2D.Connections(index_1);
                 if (connections == null || connections.Count == 0)
@@ -815,29 +793,25 @@ namespace SAM.Geometry.Planar
                     break;
 
                 List<int> indexes_ToRemove = new List<int>();
-                if(!loop_Temp.Contains(index_1) && !loop_Temp.Contains(index_2))
+                if (!loop_Temp.Contains(index_1) && !loop_Temp.Contains(index_2))
                 {
-                    foreach(int index in loop_Temp)
+                    foreach (int index in loop_Temp)
                     {
                         //pointGraph2D
                     }
-                    
+
                     indexes_ToRemove.AddRange(loop_Temp);
                 }
                 else
                 {
-
                 }
 
-                if(indexes_ToRemove.Count > 0)
+                if (indexes_ToRemove.Count > 0)
                 {
                     pointGraph2D.DisconnectAll();
                 }
-
-
             }
             return null;
-
         }
 
         public List<Polyline2D> GetPolyline2Ds()
@@ -847,7 +821,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Polyline2D> result = new List<Polyline2D>();
-            foreach(PointGraph2D pointGraph2D in pointGraph2Ds)
+            foreach (PointGraph2D pointGraph2D in pointGraph2Ds)
             {
                 Polyline2D polyline2D = pointGraph2D.GetPolyline2D();
                 if (polyline2D != null)
@@ -876,13 +850,13 @@ namespace SAM.Geometry.Planar
                     for (int i = 0; i < count; i++)
                         objects[i] = new ICurve2D[i];
 
-                    foreach(JObject jObject_Object in jArray)
+                    foreach (JObject jObject_Object in jArray)
                     {
                         int index_1 = jObject_Object.Value<int>("Index_1");
                         int index_2 = jObject_Object.Value<int>("Index_2");
 
                         object @object = null;
-                        switch(jObject_Object.Type)
+                        switch (jObject_Object.Type)
                         {
                             case JTokenType.Object:
                                 @object = Geometry.Create.ISAMGeometry<ICurve2D>(jObject_Object.Value<JObject>("Object"));
@@ -917,16 +891,16 @@ namespace SAM.Geometry.Planar
             if (points != null)
                 jObject.Add("Points", Geometry.Create.JArray(points));
 
-            if(objects != null)
+            if (objects != null)
             {
                 JArray jArray = new JArray();
                 int count_1 = objects.Length;
-                for(int i =0; i < count_1; i++)
+                for (int i = 0; i < count_1; i++)
                 {
                     int count_2 = objects[i].Length;
-                    for(int j =0; j < count_2; j++)
+                    for (int j = 0; j < count_2; j++)
                     {
-                        if(objects[i][j] != null)
+                        if (objects[i][j] != null)
                         {
                             jObject = new JObject();
                             jObject.Add("Index_1", i);
@@ -938,7 +912,7 @@ namespace SAM.Geometry.Planar
                                 jObject.Add("Object", ((IJSAMObject)@object).ToJObject());
                             else if (@object is double)
                                 jObject.Add("Object", (double)@object);
-                            else if(@object is string)
+                            else if (@object is string)
                                 jObject.Add("Object", (string)@object);
                             jArray.Add(jObject);
                         }
@@ -950,7 +924,6 @@ namespace SAM.Geometry.Planar
 
             return jObject;
         }
-
 
         private Dictionary<int, Tuple<double, Orientation>> GetSortedConnectionDataDictionary(Point2D point2D, int index, Orientation orientation = Orientation.Undefined)
         {
@@ -979,6 +952,7 @@ namespace SAM.Geometry.Planar
                 case Orientation.Undefined:
                     tuples.ForEach(x => result[x.Item1] = new Tuple<double, Orientation>(x.Item3, x.Item2));
                     break;
+
                 case Orientation.Clockwise:
                     //Clockwise
                     tuples_Temp = tuples.FindAll(x => x.Item2 == Orientation.Clockwise);
@@ -995,6 +969,7 @@ namespace SAM.Geometry.Planar
                     tuples_Temp.ForEach(x => result[x.Item1] = new Tuple<double, Orientation>(x.Item3, x.Item2));
 
                     break;
+
                 case Orientation.CounterClockwise:
 
                     //CounterClockwise
@@ -1012,6 +987,7 @@ namespace SAM.Geometry.Planar
                     tuples_Temp.ForEach(x => result[x.Item1] = new Tuple<double, Orientation>(x.Item3, x.Item2));
 
                     break;
+
                 case Orientation.Collinear:
 
                     //Collinear
@@ -1037,7 +1013,7 @@ namespace SAM.Geometry.Planar
         private Dictionary<int, Tuple<double, Orientation>> GetSortedConnectionDataDictionary(int index_1, int index_2, Orientation orientation = Orientation.Undefined)
         {
             Dictionary<int, Tuple<double, Orientation>> dictionary = GetSortedConnectionDataDictionary(this[index_1], index_2, orientation);
-            if(dictionary != null)
+            if (dictionary != null)
                 dictionary.Remove(index_1);
 
             return dictionary;
@@ -1097,7 +1073,6 @@ namespace SAM.Geometry.Planar
 
             if (result.Count < 3)
                 return null;
-
 
             return result;
         }
@@ -1189,7 +1164,6 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-
 
         private static List<int> Trim(List<int> IndexList)
         {

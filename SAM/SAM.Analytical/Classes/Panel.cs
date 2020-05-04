@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json.Linq;
-
+﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -67,7 +66,7 @@ namespace SAM.Analytical
 
             if (panel.apertures != null)
             {
-                foreach(Aperture aperture in panel.apertures)
+                foreach (Aperture aperture in panel.apertures)
                 {
                     if (aperture == null)
                         continue;
@@ -89,7 +88,6 @@ namespace SAM.Analytical
         public Panel(JObject jObject)
              : base(jObject)
         {
-
         }
 
         public Face3D GetFace3D()
@@ -102,7 +100,7 @@ namespace SAM.Analytical
             Face3D face3D = GetFace3D();
             if (face3D == null)
                 return double.NaN;
-            
+
             return face3D.GetArea();
         }
 
@@ -171,7 +169,7 @@ namespace SAM.Analytical
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return null;
 
-            return planarIntersectionResult.GetGeometry2Ds<Segment2D>()?.Cast<ICurve2D>();        
+            return planarIntersectionResult.GetGeometry2Ds<Segment2D>()?.Cast<ICurve2D>();
         }
 
         public IEnumerable<ICurve3D> GetEdge3Ds(double elevation)
@@ -207,7 +205,7 @@ namespace SAM.Analytical
 
             planarBoundary3D.Move(vector3D);
 
-            if(apertures != null)
+            if (apertures != null)
                 apertures.ForEach(x => x.Move(vector3D));
         }
 
@@ -237,7 +235,7 @@ namespace SAM.Analytical
 
             if (apertures != null)
                 jObject.Add("Apertures", Core.Create.JArray(apertures));
-            
+
             return jObject;
         }
 
@@ -274,13 +272,13 @@ namespace SAM.Analytical
 
             if (minArea != 0 && closed2D_Aperture.GetArea() <= minArea)
                 return null;
-            
+
             Point3D point3D_Location;
             Geometry.Planar.Point2D point2D_Centroid = closed2D_Aperture.GetCentroid();
             point3D_Location = plane.Convert(point2D_Centroid);
             if (Geometry.Spatial.Query.Vertical(plane, Tolerance.Distance))
                 point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
-                
+
             if (trimGeometry)
             {
                 if (closed2D_Aperture is Geometry.Planar.ISegmentable2D)
@@ -295,7 +293,7 @@ namespace SAM.Analytical
                             //List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
 
                             List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture }); //new Geometry.Planar.PointGraph2D(segment2Ds).GetPolygon2Ds();
-                            
+
                             if (polygon2Ds != null && polygon2Ds.Count > 0)
                             {
                                 double area_Difference_Min = double.MaxValue;
@@ -377,13 +375,12 @@ namespace SAM.Analytical
 
             externalEdge = polygon2Ds.Last();
 
-
             bool result = false;
-            for(int i=0; i < apertures.Count; i++)
+            for (int i = 0; i < apertures.Count; i++)
             {
                 Aperture aperture = apertures[i];
 
-               IClosedPlanar3D closedPlanar3D = aperture?.GetFace3D()?.GetExternalEdge();
+                IClosedPlanar3D closedPlanar3D = aperture?.GetFace3D()?.GetExternalEdge();
                 if (closedPlanar3D == null)
                     continue;
 

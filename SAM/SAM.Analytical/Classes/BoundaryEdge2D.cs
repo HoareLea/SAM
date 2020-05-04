@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-
-using Newtonsoft.Json.Linq;
-
+﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Planar;
-
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -17,7 +14,7 @@ namespace SAM.Analytical
         {
             curve2D = (ICurve2D)plane.Convert(boundaryEdge3D.Curve3D);
         }
-        
+
         public BoundaryEdge2D(BoundaryEdge2D boundaryEdge2D)
             : base(boundaryEdge2D)
         {
@@ -39,7 +36,6 @@ namespace SAM.Analytical
         public BoundaryEdge2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public ICurve2D Curve2D
@@ -52,7 +48,7 @@ namespace SAM.Analytical
 
         public void Reverse()
         {
-            if(curve2D is Segment2D)
+            if (curve2D is Segment2D)
                 ((Segment2D)curve2D).Reverse();
         }
 
@@ -61,7 +57,7 @@ namespace SAM.Analytical
             if (vector2D == null || curve2D == null)
                 return false;
 
-            if(curve2D is Segment2D)
+            if (curve2D is Segment2D)
             {
                 curve2D = ((Segment2D)curve2D).GetMoved(vector2D);
                 return true;
@@ -89,7 +85,6 @@ namespace SAM.Analytical
             return jObject;
         }
 
-
         public static IEnumerable<BoundaryEdge2D> FromGeometry(ISAMGeometry2D geometry2D)
         {
             if (geometry2D is IClosed2D && geometry2D is ISegmentable2D)
@@ -104,7 +99,6 @@ namespace SAM.Analytical
             {
                 Geometry.Spatial.Plane plane = ((Geometry.Spatial.IClosedPlanar3D)geometry3D).GetPlane();
                 return ((Geometry.Spatial.ISegmentable3D)geometry3D).GetSegments().ConvertAll(x => new BoundaryEdge2D(plane.Convert(x)));
-
             }
 
             return null;

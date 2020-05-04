@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
 using SAM.Geometry.Grasshopper.Properties;
+using System;
+using System.Collections;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -48,7 +47,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             IGH_GeometricGoo geometricGoo = null;
@@ -62,12 +63,10 @@ namespace SAM.Geometry.Grasshopper
 
             if (@object == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
-            else if(@object is IEnumerable)
+            else if (@object is IEnumerable)
                 dataAccess.SetDataList(0, (IEnumerable)@object);
             else
                 dataAccess.SetData(0, @object);
         }
-
-
     }
 }

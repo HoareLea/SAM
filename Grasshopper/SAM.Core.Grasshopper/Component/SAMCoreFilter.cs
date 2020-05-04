@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
 using SAM.Core.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
@@ -23,6 +19,7 @@ namespace SAM.Core.Grasshopper
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Get_Filterpng;
 
         private GH_OutputParamManager outputParamManager;
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
@@ -31,7 +28,6 @@ namespace SAM.Core.Grasshopper
               "Get Value of object property and Filter by Name",
               "SAM", "Core")
         {
-
         }
 
         /// <summary>
@@ -58,7 +54,9 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             string name = null;
@@ -76,7 +74,7 @@ namespace SAM.Core.Grasshopper
             }
 
             List<object> objects = new List<object>();
-            foreach(GH_ObjectWrapper gH_ObjectWrapper in objectWrappers)
+            foreach (GH_ObjectWrapper gH_ObjectWrapper in objectWrappers)
             {
                 object @object = gH_ObjectWrapper.Value;
 
@@ -116,11 +114,10 @@ namespace SAM.Core.Grasshopper
             if (value is IGH_Goo)
                 value = (objectWrapper.Value as dynamic).Value;
 
-
             List<object> result_in = new List<object>();
             List<object> result_out = new List<object>();
             foreach (object @object in objects)
-            {                
+            {
                 object value_Temp;
                 if (Core.Query.TryGetValue(@object, name, out value_Temp))
                 {
@@ -130,26 +127,26 @@ namespace SAM.Core.Grasshopper
                         continue;
                     }
 
-                    if(value == null || value_Temp == null)
+                    if (value == null || value_Temp == null)
                     {
                         result_out.Add(@object);
                         continue;
                     }
 
-                    if(value.GetType().IsPrimitive)
+                    if (value.GetType().IsPrimitive)
                     {
-                        if(value.IsNumeric() && value_Temp.IsNumeric())
+                        if (value.IsNumeric() && value_Temp.IsNumeric())
                         {
                             double value_1 = System.Convert.ToDouble(value);
                             double value_2 = System.Convert.ToDouble(value_Temp);
-                            if(value_1.Equals(value_2))
+                            if (value_1.Equals(value_2))
                             {
                                 result_in.Add(@object);
                                 continue;
                             }
                         }
                     }
-                    if((value_Temp is Enum && value is string) || (value is Enum && value_Temp is string))
+                    if ((value_Temp is Enum && value is string) || (value is Enum && value_Temp is string))
                     {
                         if (value_Temp.ToString().Equals(value.ToString()))
                         {
@@ -165,9 +162,6 @@ namespace SAM.Core.Grasshopper
                             continue;
                         }
                     }
-
-
-
                 }
 
                 result_out.Add(@object);

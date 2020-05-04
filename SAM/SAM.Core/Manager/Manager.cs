@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
-using Newtonsoft.Json.Linq;
-
 
 namespace SAM.Core
 {
@@ -69,7 +67,7 @@ namespace SAM.Core
         public bool TryGetValue<T>(Assembly assembly, string name, out T value)
         {
             value = default;
-            
+
             Setting setting = GetSetting(assembly);
             ParameterSet parameterSet = setting.GetParameterSet(assembly);
             if (parameterSet == null)
@@ -178,9 +176,9 @@ namespace SAM.Core
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
-            if(settings != null)
+            if (settings != null)
 
-            jObject.Add("settings", Create.JArray(settings));
+                jObject.Add("settings", Create.JArray(settings));
 
             return jObject;
         }
@@ -189,7 +187,7 @@ namespace SAM.Core
         {
             if (settings == null || settings.Count == 0)
                 return;
-            
+
             Guid guid = Query.Guid(assembly);
             string name = Query.Name(assembly);
 
@@ -275,27 +273,23 @@ namespace SAM.Core
                 if (settings != null)
                 {
                     Dictionary<string, List<Setting>> dictionary = Query.Dictionary<string, Setting>(settings, "Name");
-                    if(dictionary != null)
+                    if (dictionary != null)
                     {
-                        foreach(KeyValuePair<string, List<Setting>> keyValuePair in dictionary)
+                        foreach (KeyValuePair<string, List<Setting>> keyValuePair in dictionary)
                         {
                             string settingsFilePath = System.IO.Path.Combine(settingsDirectoryPath, keyValuePair.Key);
                             new SAMJsonCollection<Setting>(settings).ToJson(settingsFilePath);
                         }
                     }
-                   
                 }
-
-
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return false;
             }
 
             return true;
         }
-
 
         private bool SetValue(Assembly assembly, string name, object value)
         {
@@ -315,7 +309,7 @@ namespace SAM.Core
                 parameterSet.Remove(name);
                 return true;
             }
-                
+
             return parameterSet.Add(name, value as dynamic);
         }
     }

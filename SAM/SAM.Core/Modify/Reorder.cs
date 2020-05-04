@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core
 {
@@ -18,7 +18,7 @@ namespace SAM.Core
             if (startIndex >= count)
                 return null;
 
-            List <T> result = new List<T>();
+            List<T> result = new List<T>();
             for (int i = startIndex; i < count; i++)
                 result.Add(objects.ElementAt(i));
 

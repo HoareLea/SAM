@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Grasshopper.Kernel;
-
+﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -37,7 +36,6 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddTextParameter("_csv", "_csv", "csv", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_sourceColumn", "_sourceColumn", "Source Column Name", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_destinationColumn", "_destinationColumn", "Destination Column Name", GH_ParamAccess.item);
-
         }
 
         /// <summary>
@@ -51,7 +49,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             List<Construction> constructions = new List<Construction>();
@@ -93,14 +93,14 @@ namespace SAM.Analytical.Grasshopper
                 delimitedFileTable = new Core.DelimitedFileTable(new Core.DelimitedFileReader(Core.DelimitedFileType.Csv, lines));
             }
 
-            if(delimitedFileTable == null)
+            if (delimitedFileTable == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             int index_Source = delimitedFileTable.GetIndex(sourceColumn);
-            if(index_Source == -1)
+            if (index_Source == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -114,7 +114,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Construction> result = new List<Construction>();
-            foreach(Construction construction in constructions)
+            foreach (Construction construction in constructions)
             {
                 string name = construction.Name;
                 if (name == null)
@@ -124,7 +124,7 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 string name_destination = null;
-                for(int i =0; i < delimitedFileTable.Count; i++)
+                for (int i = 0; i < delimitedFileTable.Count; i++)
                 {
                     string name_source = null;
                     if (!delimitedFileTable.TryGetValue(i, index_Source, out name_source))
@@ -142,7 +142,7 @@ namespace SAM.Analytical.Grasshopper
                     break;
                 }
 
-                if(name_destination == null)
+                if (name_destination == null)
                 {
                     //result.Add(construction);
                     continue;

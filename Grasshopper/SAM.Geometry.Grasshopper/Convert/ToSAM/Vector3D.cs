@@ -1,6 +1,4 @@
-﻿using GH_IO.Types;
-using Grasshopper.Kernel.Types;
-
+﻿using Grasshopper.Kernel.Types;
 
 namespace SAM.Geometry.Grasshopper
 {

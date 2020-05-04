@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Geometry.Grasshopper.Properties;
-using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -50,7 +49,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             GH_ObjectWrapper objectWrapper = null;
@@ -77,7 +78,7 @@ namespace SAM.Geometry.Grasshopper
                 geometry3Ds = Convert.ToSAM((IGH_GeometricGoo)obj);
             else if (obj is ISAMGeometry3D)
                 geometry3Ds = new List<ISAMGeometry3D>() { (ISAMGeometry3D)obj };
-            else if(obj is GooSAMGeometry)
+            else if (obj is GooSAMGeometry)
                 geometry3Ds = new List<ISAMGeometry3D>() { ((GooSAMGeometry)obj).Value as ISAMGeometry3D };
 
             objectWrapper = null;
@@ -90,9 +91,9 @@ namespace SAM.Geometry.Grasshopper
 
             Plane plane = null;
 
-            if(objectWrapper.Value is Plane)
+            if (objectWrapper.Value is Plane)
                 plane = objectWrapper.Value as Plane;
-            else if(objectWrapper.Value is GooSAMGeometry)
+            else if (objectWrapper.Value is GooSAMGeometry)
                 plane = ((GooSAMGeometry)objectWrapper.Value).Value as Plane;
 
             if (plane == null)

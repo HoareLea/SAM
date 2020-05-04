@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace SAM.Core
 {
     public static partial class Modify
@@ -12,7 +11,6 @@ namespace SAM.Core
 
             if (tolerance.Equals(0.0))
                 return value;
-
 
             return (double)(Math.Round((decimal)value / (decimal)tolerance) * (decimal)tolerance);
         }

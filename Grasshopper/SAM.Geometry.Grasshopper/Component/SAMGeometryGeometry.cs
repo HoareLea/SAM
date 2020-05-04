@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-
-using Grasshopper.Kernel;
-
+﻿using Grasshopper.Kernel;
 using SAM.Geometry.Grasshopper.Properties;
-
+using System;
+using System.Collections;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -39,7 +36,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             ISAMGeometry geometry = null;

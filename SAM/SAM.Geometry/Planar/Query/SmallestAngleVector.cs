@@ -11,10 +11,10 @@ namespace SAM.Geometry.Planar
 
             Vector2D result = null;
             double angle_Min = double.MaxValue;
-            foreach(Vector2D vector2D_Temp in vector2Ds)
+            foreach (Vector2D vector2D_Temp in vector2Ds)
             {
                 double angle = vector2D_Temp.SmallestAngle(vector2D);
-                if(angle < angle_Min)
+                if (angle < angle_Min)
                 {
                     result = vector2D_Temp;
                     angle_Min = angle;

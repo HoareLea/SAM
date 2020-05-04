@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-
 namespace SAM.Geometry.Spatial
 {
     public static partial class Modify
-    { 
+    {
         /// <summary>
-        /// Removes segments from segment2Ds list which are similar to segmentable2D segments 
+        /// Removes segments from segment2Ds list which are similar to segmentable2D segments
         /// </summary>
         public static void RemoveAlmostSimilar(this ISegmentable3D segmentable3D, List<Segment3D> segment3Ds, double tolerance = Core.Tolerance.Distance)
         {
@@ -37,14 +36,14 @@ namespace SAM.Geometry.Spatial
 
             indexes_List.ForEach(x => segment3Ds.RemoveAt(x));
         }
-    
-        public static void RemoveAlmostSimilar<T>(List<T> segmentable3Ds, double tolerance = Core.Tolerance.Distance) where T: ISegmentable3D
+
+        public static void RemoveAlmostSimilar<T>(List<T> segmentable3Ds, double tolerance = Core.Tolerance.Distance) where T : ISegmentable3D
         {
             if (segmentable3Ds == null)
                 return;
 
             List<T> result = new List<T>();
-            foreach(T segmentable3D in segmentable3Ds)
+            foreach (T segmentable3D in segmentable3Ds)
                 if (result.Find(x => Query.AlmostSimilar(x, segmentable3D, tolerance)) == null)
                     result.Add(segmentable3D);
 

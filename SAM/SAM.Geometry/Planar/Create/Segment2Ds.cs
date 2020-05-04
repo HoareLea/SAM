@@ -18,13 +18,14 @@ namespace SAM.Geometry.Planar
                 case SAM.Geometry.Alignment.Vertical:
                     offset_Vertical = offset;
                     break;
+
                 default:
                     return null;
             }
 
             return Segment2Ds(boundingBox2D, offset_Horizontal, offset_Vertical, corner, includeEdge);
         }
-        
+
         public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, double? offset_Horizontal, double? offset_Vertical, Point2D point2D, bool includeEdge = true)
         {
             return Segment2Ds(boundingBox2D, offset_Horizontal, offset_Vertical, boundingBox2D.GetCorner(point2D), true);

@@ -1,6 +1,4 @@
-﻿
-
-namespace SAM.Core
+﻿namespace SAM.Core
 {
     public static partial class Query
     {
@@ -12,7 +10,7 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(fullTypeName))
                 return false;
 
-            if(fullTypeName.Contains(","))
+            if (fullTypeName.Contains(","))
             {
                 string[] values = fullTypeName.Split(',');
                 if (values.Length != 2)
@@ -29,7 +27,6 @@ namespace SAM.Core
             }
 
             return false;
-            
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Segment2D> result = new List<Segment2D>();
-            foreach(Segment2D segment2D in segment2Ds)
+            foreach (Segment2D segment2D in segment2Ds)
             {
                 Segment2D segment2D_Temp = Trim(segment2D, length, trim_Start, trim_End);
                 if (segment2D_Temp != null)
@@ -51,7 +51,7 @@ namespace SAM.Geometry.Planar
             Vector2D vector2D = segment2D.Direction * distance;
 
             Point2D point2D_Start = segment2D.Start;
-            if(trim_Start)
+            if (trim_Start)
                 point2D_Start.Move(vector2D);
 
             vector2D.Negate();
@@ -135,7 +135,6 @@ namespace SAM.Geometry.Planar
                     else if (includeOnEdge && (polygon2D.On(point2D_Mid, tolerance) || polygon2D.Inside(point2D_Mid)))
                         result.Add(segment2D_Temp);
                 }
-
             }
 
             return result;
@@ -155,7 +154,6 @@ namespace SAM.Geometry.Planar
                     segment2Ds_Temp.RemoveAll(x => x == null);
                     result.AddRange(segment2Ds_Temp);
                 }
-                    
             }
 
             return result;
@@ -184,7 +182,7 @@ namespace SAM.Geometry.Planar
             List<Segment2D> segment2Ds = Create.Segment2Ds(point2Ds, closed);
             if (segment2Ds == null || segment2Ds.Count() == 0)
                 return null;
-                
+
             double length = segment2Ds.ConvertAll(x => x.GetLength()).Sum();
             if (double.IsNaN(length))
                 return null;
@@ -210,7 +208,7 @@ namespace SAM.Geometry.Planar
                     result.Add(segment2D);
                     return new Polyline2D(result);
                 }
-                    
+
                 if (length_Temp < 0)
                 {
                     Point2D point2D = segment2D.GetPoint(length / segment2D.GetLength());
@@ -227,6 +225,5 @@ namespace SAM.Geometry.Planar
 
             return new Polyline2D(result);
         }
-
     }
 }

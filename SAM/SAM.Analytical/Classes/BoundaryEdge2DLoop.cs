@@ -4,7 +4,6 @@ using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace SAM.Analytical
 {
     public class BoundaryEdge2DLoop : SAMObject
@@ -34,7 +33,7 @@ namespace SAM.Analytical
         {
             IEnumerable<BoundaryEdge2D> boundaryEdge2Ds_Temp = BoundaryEdge2D.FromGeometry(closedPlanar3D);
             if (boundaryEdge2Ds_Temp != null)
-                boundaryEdge2Ds = new List<BoundaryEdge2D> (boundaryEdge2Ds_Temp);
+                boundaryEdge2Ds = new List<BoundaryEdge2D>(boundaryEdge2Ds_Temp);
         }
 
         public BoundaryEdge2DLoop(Geometry.Spatial.Face3D face)
@@ -51,7 +50,6 @@ namespace SAM.Analytical
         public BoundaryEdge2DLoop(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public List<BoundaryEdge2D> BoundaryEdge2Ds
@@ -76,7 +74,6 @@ namespace SAM.Analytical
         {
             if (boundaryEdge2Ds == null || vector2D == null)
                 return false;
-
 
             boundaryEdge2Ds.ForEach(x => x.Move(vector2D));
             return true;
@@ -109,11 +106,10 @@ namespace SAM.Analytical
             return jObject;
         }
 
-
         public static Geometry.Planar.IClosed2D ToGeometry(BoundaryEdge2DLoop boundaryEdge2DLoop)
         {
             List<Geometry.Planar.Point2D> point2Ds = new List<Geometry.Planar.Point2D>();
-            foreach(BoundaryEdge2D edge2D in boundaryEdge2DLoop.boundaryEdge2Ds)
+            foreach (BoundaryEdge2D edge2D in boundaryEdge2DLoop.boundaryEdge2Ds)
             {
                 Geometry.Planar.Segment2D segment2D = edge2D.Curve2D as Geometry.Planar.Segment2D;
                 point2Ds.Add(segment2D.GetStart());

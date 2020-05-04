@@ -1,9 +1,8 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-
-using Newtonsoft.Json.Linq;
-using System.Collections;
+﻿using Newtonsoft.Json.Linq;
 using SAM.Geometry.Interfaces;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -33,7 +32,6 @@ namespace SAM.Geometry.Planar
         public Polyline2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public List<Point2D> Points
@@ -214,7 +212,7 @@ namespace SAM.Geometry.Planar
             if (segment2D == null || segment2D.GetLength() < tolerance)
                 return false;
 
-            if(points == null)
+            if (points == null)
                 points = new List<Point2D>();
 
             Point2D point2D_Start = segment2D.Start;
@@ -229,7 +227,7 @@ namespace SAM.Geometry.Planar
 
             Point2D point2D;
 
-           point2D = points[0];
+            point2D = points[0];
 
             if (point2D.Distance(point2D_Start) < tolerance)
             {

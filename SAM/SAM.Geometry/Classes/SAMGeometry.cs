@@ -1,9 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry
 {
@@ -11,9 +6,8 @@ namespace SAM.Geometry
     {
         public SAMGeometry()
         {
-
         }
-        
+
         public SAMGeometry(JObject jObject)
         {
             FromJObject(jObject);

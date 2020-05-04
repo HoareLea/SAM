@@ -9,7 +9,7 @@
 
             if (vector3D_1 == null || vector3D_2 == null)
                 return false;
-            
+
             double d = vector3D_1.Unit.DotProduct(vector3D_2.Unit);
             return System.Math.Abs(d) >= System.Math.Cos(tolerance);
         }

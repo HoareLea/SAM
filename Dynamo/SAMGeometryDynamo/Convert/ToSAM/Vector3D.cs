@@ -1,6 +1,5 @@
 ﻿using Autodesk.DesignScript.Runtime;
 
-
 namespace SAMGeometryDynamo
 {
     public static partial class Convert

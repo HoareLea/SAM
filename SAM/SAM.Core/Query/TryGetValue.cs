@@ -60,7 +60,6 @@ namespace SAM.Core
                     value = propertyInfo.GetValue(@object);
                     return true;
                 }
-
             }
 
             return false;
@@ -85,7 +84,6 @@ namespace SAM.Core
                     value = methodInfo.Invoke(@object, new object[] { });
                     return true;
                 }
-
             }
 
             return false;

@@ -3,8 +3,6 @@ using SAM.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
@@ -27,7 +25,6 @@ namespace SAM.Geometry.Planar
         public Triangle2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public bool Contains(Point2D point2D, double offset)

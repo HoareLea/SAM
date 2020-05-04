@@ -20,7 +20,6 @@ namespace SAM.Geometry.Planar
             }
 
             return result;
-
         }
     }
 }

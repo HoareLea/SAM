@@ -8,7 +8,6 @@
                 return double.NaN;
 
             return (new Vector2D(point2D, point2D_Previous).Angle(new Vector2D(point2D, point2D_Next)));
-
         }
     }
 }

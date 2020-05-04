@@ -7,13 +7,13 @@ namespace SAM.Math
 {
     public class Matrix : Core.IJSAMObject
     {
-        private double[,] values; 
-        
+        private double[,] values;
+
         public Matrix(int rowCount, int columnCount)
         {
             values = new double[rowCount, columnCount];
         }
-        
+
         public Matrix(double[] values)
         {
             if (values == null)
@@ -21,7 +21,7 @@ namespace SAM.Math
 
             this.values = new double[1, values.Length];
             for (int i = 0; i < values.Length; i++)
-                this.values[0, i] = values[i]; 
+                this.values[0, i] = values[i];
         }
 
         public Matrix(double[,] values)
@@ -57,12 +57,12 @@ namespace SAM.Math
         {
             return new Matrix((double[,])values.Clone());
         }
-        
+
         public int RowCount()
         {
             if (values == null)
                 return -1;
-            
+
             return values.GetLength(0);
         }
 
@@ -100,8 +100,7 @@ namespace SAM.Math
 
         public Matrix RowEchelonForm(bool reduced = true, double tolerance = Core.Tolerance.Distance)
         {
-            // Inspired by BHoM
-            // Strongly inspired by https://rosettacode.org/wiki/Reduced_row_echelon_form
+            // Inspired by BHoM Strongly inspired by https://rosettacode.org/wiki/Reduced_row_echelon_form
 
             Matrix matrix = this.Clone();
             int lead = 0;
@@ -226,12 +225,9 @@ namespace SAM.Math
             JObject jObject_Values = jObject.Value<JObject>("values");
 
             JArray jArray = jObject.Value<JArray>("values");
-            foreach(JArray jArray_Row in jArray)
+            foreach (JArray jArray_Row in jArray)
             {
-
             }
-
-
         }
 
         public JObject ToJObject()
@@ -243,7 +239,6 @@ namespace SAM.Math
 
             return jObject;
         }
-
 
         //// Solve Ax^3 + Bx^2 + Cx + D = 0 following http://www.code-kings.com/2013/11/cubic-equation-roots-in-csharp-code.html
         //private static double[] RealCubicRoots(double A, double B, double C, double D, double tolerance = Core.Tolerance.Distance)

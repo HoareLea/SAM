@@ -1,9 +1,8 @@
-﻿
-namespace SAM.Math
+﻿namespace SAM.Math
 {
     public static partial class Query
     {
-        // Inverse Secant 
+        // Inverse Secant
         //https://mathworld.wolfram.com/InverseSecant.html
         public static double Arcsec(double x)
         {

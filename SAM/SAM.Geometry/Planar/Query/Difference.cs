@@ -1,14 +1,13 @@
-﻿using System;
+﻿using ClipperLib;
 using System.Collections.Generic;
 using System.Linq;
-using ClipperLib;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
         //Difference of U and A, denoted U \ A, is the set of all members of U that are not members of A. The set difference {1, 2, 3} \ {2, 3, 4} is {1} , while, conversely, the set difference
-        
+
         public static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (tolerance == 0)
@@ -47,7 +46,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             if (polygon2Ds.Count() == 0)
-                return new List<Polygon2D>() { new Polygon2D(polygon2D)};
+                return new List<Polygon2D>() { new Polygon2D(polygon2D) };
 
             List<IntPoint> intPoints = Convert.ToClipper((ISegmentable2D)polygon2D, tolerance);
 
@@ -81,7 +80,7 @@ namespace SAM.Geometry.Planar
             if (polygon2Ds_1 == null || polygon2Ds_2 == null)
                 return null;
 
-            List < List <IntPoint>> intPointsList_1 = new List<List<IntPoint>>();
+            List<List<IntPoint>> intPointsList_1 = new List<List<IntPoint>>();
             foreach (Polygon2D polygon2D_Temp in polygon2Ds_1)
                 intPointsList_1.Add(Convert.ToClipper((ISegmentable2D)polygon2D_Temp, tolerance));
 
@@ -146,18 +145,16 @@ namespace SAM.Geometry.Planar
                 {
                     if (point2Ds[2].Distance(point2Ds[3]) > tolerance)
                         result.Add(new Segment2D(point2Ds[2], point2Ds[3]));
-                }  
+                }
                 else
                 {
                     if (point2Ds[0].Distance(point2Ds[1]) > tolerance)
                         result.Add(new Segment2D(point2Ds[0], point2Ds[1]));
                 }
-
             }
 
             return result;
         }
-
 
         private static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2)
         {

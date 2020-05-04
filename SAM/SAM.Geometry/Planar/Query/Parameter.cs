@@ -16,7 +16,7 @@ namespace SAM.Geometry.Planar
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return double.NaN;
 
-            if(inverted)
+            if (inverted)
             {
                 Segment2D segment2D_Temp = segment2Ds[0];
                 segment2Ds.Reverse();
@@ -40,7 +40,7 @@ namespace SAM.Geometry.Planar
                 }
 
                 lengths.Add(segment2D_Temp.GetLength());
-                
+
                 if (distance_Min < tolerance)
                     continue;
 
@@ -58,7 +58,7 @@ namespace SAM.Geometry.Planar
             double length = lengths.Sum();
             if (length == 0)
                 return 0;
-            
+
             double distance = lengths.GetRange(0, index).Sum();
 
             Segment2D segment2D = segment2Ds[index];

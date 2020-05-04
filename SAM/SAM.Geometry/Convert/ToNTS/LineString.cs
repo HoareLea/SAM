@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-
-using NetTopologySuite.Geometries;
-
+﻿using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
-
+using System.Collections.Generic;
 
 namespace SAM.Geometry
 {

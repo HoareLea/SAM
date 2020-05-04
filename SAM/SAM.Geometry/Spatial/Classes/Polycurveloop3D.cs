@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-
 namespace SAM.Geometry.Spatial
 {
     public class PolycurveLoop3D : Polycurve3D, IClosed3D
@@ -9,25 +8,21 @@ namespace SAM.Geometry.Spatial
         public PolycurveLoop3D(IEnumerable<ICurve3D> curves)
             : base(curves)
         {
-
         }
 
         public PolycurveLoop3D(PolycurveLoop3D polycurveLoop3D)
             : base(polycurveLoop3D)
         {
-
         }
 
         public PolycurveLoop3D(Triangle3D triangle3D)
             : base(triangle3D.GetSegments())
         {
-
         }
 
         public PolycurveLoop3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public override ISAMGeometry Clone()
@@ -45,7 +40,6 @@ namespace SAM.Geometry.Spatial
             return new PolycurveLoop3D(GetCurves().ConvertAll(x => (ICurve3D)x.GetMoved(vector3D)));
         }
 
-
         public static bool TryGetPolygon3D(PolycurveLoop3D polycurveLoop3D, out Polygon3D polygon3D)
         {
             polygon3D = null;
@@ -56,7 +50,6 @@ namespace SAM.Geometry.Spatial
             List<ICurve3D> curve3Ds = polycurveLoop3D.Explode();
             if (curve3Ds == null || curve3Ds.Count == 0)
                 return false;
-
 
             List<Point3D> point3Ds = new List<Point3D>() { curve3Ds[0].GetStart() };
             curve3Ds.ForEach(x => point3Ds.Add(x.GetEnd()));

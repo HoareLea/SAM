@@ -1,11 +1,6 @@
-﻿using System;
+﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Grasshopper.Kernel.Types;
-using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -55,7 +50,6 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (closed3D is Polygon3D)
                 {
-
                     Polygon3D polygon3D = (Polygon3D)closed3D;
 
                     Plane plane = polygon3D.GetPlane();

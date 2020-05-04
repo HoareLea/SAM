@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using SAM.Geometry.Interfaces;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
-using Newtonsoft.Json.Linq;
-
-using SAM.Geometry.Interfaces;
-
 
 namespace SAM.Geometry.Planar
 {
@@ -29,7 +26,6 @@ namespace SAM.Geometry.Planar
         public Polygon2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public List<Segment2D> GetSegments()
@@ -163,7 +159,7 @@ namespace SAM.Geometry.Planar
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
         {
-           return new BoundingBox2D(points, offset);
+            return new BoundingBox2D(points, offset);
         }
 
         public Point2D GetInternalPoint2D()
@@ -251,7 +247,6 @@ namespace SAM.Geometry.Planar
         {
             return this.GetEnumerator();
         }
-
 
         public static explicit operator Polygon2D(Polyline2D polyline2D)
         {

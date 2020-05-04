@@ -17,6 +17,7 @@ namespace SAM.Analytical
                     else
                         parameterName = ActiveSetting.Name.ApertureConstruction_InternalWindows;
                     break;
+
                 case Analytical.ApertureType.Door:
                     if (external)
                         parameterName = ActiveSetting.Name.ApertureConstruction_ExternalDoors;
@@ -53,14 +54,17 @@ namespace SAM.Analytical
                     if (!ActiveSetting.Setting.TryGetValue(ActiveSetting.Name.ApertureConstruction_Skylight, out apertureConstruction))
                         return null;
                     return apertureConstruction;
+
                 case Analytical.PanelType.CurtainWall:
                 case Analytical.PanelType.Wall:
                 case Analytical.PanelType.WallExternal:
                     external = true;
                     break;
+
                 case Analytical.PanelType.WallInternal:
                     external = false;
                     break;
+
                 default:
                     return null;
             }

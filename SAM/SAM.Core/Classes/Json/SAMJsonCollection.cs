@@ -1,9 +1,8 @@
-﻿using System.IO;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace SAM.Core
 {

@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -18,6 +17,5 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
-
     }
 }

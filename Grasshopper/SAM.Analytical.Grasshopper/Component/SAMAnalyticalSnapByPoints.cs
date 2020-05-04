@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
-
-
+﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -16,8 +13,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public override Guid ComponentGuid => new Guid("e61f2f2e-f655-430a-9dfd-507929edef58");
 
-        /// <summary>`
-        /// Provides an Icon for the component.
+        /// <summary>
+        /// ` Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
@@ -29,7 +26,6 @@ namespace SAM.Analytical.Grasshopper
               "Snap Panels to Points",
               "SAM", "Analytical")
         {
-
         }
 
         /// <summary>
@@ -53,7 +49,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             Core.SAMObject sAMObject = null;

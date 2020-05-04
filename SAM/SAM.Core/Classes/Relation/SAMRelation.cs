@@ -11,14 +11,12 @@ namespace SAM.Core
         {
             this.@object = @object;
             this.relatedObject = relatedObject;
-
         }
 
         public SAMRelation(SAMRelation sAMRelation)
         {
             this.@object = sAMRelation.@object;
             this.relatedObject = sAMRelation.relatedObject;
-
         }
 
         public SAMRelation(JObject jObject)
@@ -64,7 +62,7 @@ namespace SAM.Core
         {
             if (@object == null)
                 return default;
-            
+
             if (typeof(T).IsAssignableFrom(@object.GetType()))
                 return (T)(object)@object;
 
@@ -87,26 +85,31 @@ namespace SAM.Core
             if (jObject == null)
                 return false;
 
-            if(jObject.ContainsKey("Object"))
+            if (jObject.ContainsKey("Object"))
             {
                 JToken jToken = jObject.GetValue("Object");
-                switch(jToken.Type)
+                switch (jToken.Type)
                 {
                     case JTokenType.Object:
                         @object = Create.IJSAMObject((JObject)jToken);
                         break;
+
                     case JTokenType.Boolean:
                         @object = jToken.Value<bool>();
                         break;
+
                     case JTokenType.Integer:
                         @object = jToken.Value<int>();
                         break;
+
                     case JTokenType.String:
                         @object = jToken.Value<string>();
                         break;
+
                     case JTokenType.Float:
                         @object = jToken.Value<double>();
                         break;
+
                     case JTokenType.Date:
                         @object = jToken.Value<System.DateTime>();
                         break;
@@ -121,18 +124,23 @@ namespace SAM.Core
                     case JTokenType.Object:
                         relatedObject = Create.IJSAMObject((JObject)jToken);
                         break;
+
                     case JTokenType.Boolean:
                         relatedObject = jToken.Value<bool>();
                         break;
+
                     case JTokenType.Integer:
                         relatedObject = jToken.Value<int>();
                         break;
+
                     case JTokenType.String:
                         relatedObject = jToken.Value<string>();
                         break;
+
                     case JTokenType.Float:
                         relatedObject = jToken.Value<double>();
                         break;
+
                     case JTokenType.Date:
                         relatedObject = jToken.Value<System.DateTime>();
                         break;

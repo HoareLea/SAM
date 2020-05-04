@@ -3,8 +3,6 @@ using SAM.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
@@ -17,7 +15,7 @@ namespace SAM.Geometry.Planar
         private Vector2D vector;
 
         /// <summary>
-        /// Creates Segment2D by start and end Point2D 
+        /// Creates Segment2D by start and end Point2D
         /// </summary>
         /// <param name="start">Segment2D start point.</param>
         /// <param name="end">Segment2D end point.</param>
@@ -28,7 +26,7 @@ namespace SAM.Geometry.Planar
         }
 
         /// <summary>
-        /// Creates Segment2D by origin and Vector2D 
+        /// Creates Segment2D by origin and Vector2D
         /// </summary>
         /// <param name="origin">Segment2D origin point.</param>
         /// <param name="vector2D">Segment2D direction.</param>
@@ -52,7 +50,6 @@ namespace SAM.Geometry.Planar
         public Segment2D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         /// <summary>
@@ -94,7 +91,7 @@ namespace SAM.Geometry.Planar
 
         public List<Point2D> GetPoints()
         {
-            return new List<Point2D>() {origin, End };
+            return new List<Point2D>() { origin, End };
         }
 
         /// <summary>
@@ -160,24 +157,21 @@ namespace SAM.Geometry.Planar
 
         public Segment2D GetReversed()
         {
-           return new Segment2D(End, vector.GetNegated());
+            return new Segment2D(End, vector.GetNegated());
         }
 
         /// <summary>
         /// Project given Point2D onto Segment2D
         /// </summary>
-        /// <returns>
-        /// Point2D.
-        /// </returns>
+        /// <returns>Point2D.</returns>
         /// <param name="point2D">Point2D to be projected.</param>
         public Point2D Project(Point2D point2D)
         {
             if (point2D == null)
                 return null;
-            
+
             Point2D start = Start;
             Point2D end = End;
-
 
             if (start.X == end.X)
                 return new Point2D(start.X, point2D.Y);
@@ -212,9 +206,7 @@ namespace SAM.Geometry.Planar
         /// <summary>
         /// Move segment by Vector *was GetMoved
         /// </summary>
-        /// <returns>
-        /// Segment2D
-        /// </returns>
+        /// <returns>Segment2D</returns>
         /// <param name="vector2D">Vector tranformation.</param>
         public Segment2D GetMoved(Vector2D vector2D)
         {
@@ -233,7 +225,7 @@ namespace SAM.Geometry.Planar
         {
             if (segment2D == null)
                 return double.NaN;
-            
+
             Point2D point2D_Closest_1 = null;
             Point2D point2D_Closest_2 = null;
 
@@ -244,7 +236,7 @@ namespace SAM.Geometry.Planar
                 //Paraller segments
                 Segment2D segment2D_Temp = segment2D;
                 point2D_Closest_1 = Project(segment2D.origin);
-                if(!On(point2D_Closest_1, tolerance))
+                if (!On(point2D_Closest_1, tolerance))
                 {
                     point2D_Closest_1 = Project(segment2D.End);
                     if (!segment2D.On(point2D_Closest_1, tolerance))
@@ -271,11 +263,10 @@ namespace SAM.Geometry.Planar
         }
 
         /// <summary>
-        /// Find intersection Point2D by two segments2Ds.  Method will aslo return closest point2Ds on Segmnet2Ds to extended intersection Point2D 
+        /// Find intersection Point2D by two segments2Ds. Method will aslo return closest point2Ds
+        /// on Segmnet2Ds to extended intersection Point2D
         /// </summary>
-        /// <returns>
-        /// Point2D
-        /// </returns>
+        /// <returns>Point2D</returns>
         /// <param name="segment2D">Segment2D for intersection.</param>
         public Point2D Intersection(Segment2D segment2D, out Point2D point2D_Closest1, out Point2D point2D_Closest2, double tolerance = Core.Tolerance.Distance)
         {
@@ -297,9 +288,9 @@ namespace SAM.Geometry.Planar
                 return null;
 
             double t1 = ((Start.X - segment2D.Start.X) * dy34 + (segment2D.Start.Y - Start.Y) * dx34) / denominator;
-            
+
             // The lines are parallel (or close enough to it).
-            if (double.IsInfinity(t1) || double.IsNaN(t1)) 
+            if (double.IsInfinity(t1) || double.IsNaN(t1))
                 return null;
 
             double t2 = ((segment2D.Start.X - Start.X) * dy12 + (Start.Y - segment2D.Start.Y) * dx12) / -denominator;
@@ -348,7 +339,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Point2D> point2Ds = new List<Point2D>();
-            foreach(Segment2D segment2D in segment2Ds)
+            foreach (Segment2D segment2D in segment2Ds)
             {
                 Point2D point2D = Intersection(segment2D, true, tolerance);
                 if (point2D != null)
@@ -369,18 +360,16 @@ namespace SAM.Geometry.Planar
         }
 
         /// <summary>
-        /// Offset Segment2D by Vector2D and number count (default = 1) 
+        /// Offset Segment2D by Vector2D and number count (default = 1)
         /// </summary>
-        /// <returns>
-        /// List Segment2D
-        /// </returns>
+        /// <returns>List Segment2D</returns>
         /// <param name="vector2D">Ofset Vector.</param>
         /// <param name="count">Ofset count.</param>
         public List<Segment2D> Offset(Vector2D vector2D, int count = 1)
         {
             if (count < 1)
                 return null;
-            
+
             List<Segment2D> aResult = new List<Segment2D>();
             for (int i = 0; i < count; i++)
                 aResult.Add(GetMoved(vector2D * i));
@@ -416,7 +405,7 @@ namespace SAM.Geometry.Planar
         {
             origin = new Point2D(jObject.Value<JObject>("Origin"));
             vector = new Vector2D(jObject.Value<JObject>("Vector"));
-            
+
             return true;
         }
 
@@ -573,7 +562,7 @@ namespace SAM.Geometry.Planar
             if (parameter <= 0 || parameter > 1)
                 return null;
 
-            if(inverted)
+            if (inverted)
             {
                 Segment2D segment2D = new Segment2D(this);
                 segment2D.Reverse();
@@ -587,7 +576,6 @@ namespace SAM.Geometry.Planar
             if (point2D == null)
                 return null;
 
-
             return new Segment2D(Start, point2D);
         }
 
@@ -596,7 +584,7 @@ namespace SAM.Geometry.Planar
             if (point2D == null)
                 return double.NaN;
 
-            if(inverted)
+            if (inverted)
             {
                 Segment2D segment2D = new Segment2D(this);
                 segment2D.Reverse();

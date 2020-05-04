@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
@@ -26,7 +24,6 @@ namespace SAM.Geometry.Spatial
         public Triangle3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public List<Point3D> GetPoints()
@@ -52,7 +49,6 @@ namespace SAM.Geometry.Spatial
             return Create.Plane(points, Core.Tolerance.Distance);
         }
 
-
         public override ISAMGeometry Clone()
         {
             throw new NotImplementedException();
@@ -77,7 +73,7 @@ namespace SAM.Geometry.Spatial
         {
             return new BoundingBox3D(points, offset);
         }
-    
+
         public static List<Polygon3D> ToPolygons(IEnumerable<Triangle3D> triangle3Ds)
         {
             List<Polygon3D> result = new List<Polygon3D>();

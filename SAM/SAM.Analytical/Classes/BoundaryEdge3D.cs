@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -20,7 +20,7 @@ namespace SAM.Analytical
         {
             curve3D = (ICurve3D)plane.Convert(boundaryEdge2D.Curve2D);
         }
-        
+
         public BoundaryEdge3D(ICurve3D curve3D)
             : base()
         {
@@ -36,7 +36,6 @@ namespace SAM.Analytical
         public BoundaryEdge3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public List<Segment3D> ToSegments()
@@ -57,12 +56,12 @@ namespace SAM.Analytical
                 Point3D point3D_1 = Point3D.Closest(point3Ds, segment3D[0]);
                 Point3D point3D_2 = Point3D.Closest(point3Ds, segment3D[1]);
 
-                if(!double.IsNaN(maxDistance))
+                if (!double.IsNaN(maxDistance))
                 {
                     if (point3D_1.Distance(segment3D[0]) > maxDistance)
                         point3D_1 = new Point3D(segment3D[0]);
 
-                    if(point3D_2.Distance(segment3D[1]) > maxDistance)
+                    if (point3D_2.Distance(segment3D[1]) > maxDistance)
                         point3D_2 = new Point3D(segment3D[1]);
                 }
 
@@ -102,7 +101,6 @@ namespace SAM.Analytical
             return jObject;
         }
 
-
         public static IEnumerable<BoundaryEdge3D> FromGeometry(ISAMGeometry3D geometry3D)
         {
             ISAMGeometry3D geometry3D_Temp = geometry3D;
@@ -125,7 +123,6 @@ namespace SAM.Analytical
                         result.Add(new BoundaryEdge3D(curve3D));
                 }
                 return result;
-
             }
 
             return null;

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino;
 using Rhino.DocObjects;
 using Rhino.Geometry;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-
-using SAM.Geometry.Grasshopper;
-using SAM.Core.Grasshopper;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
+using SAM.Geometry.Grasshopper;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -18,13 +16,11 @@ namespace SAM.Analytical.Grasshopper
         public GooPlanarBoundary3D()
             : base()
         {
-
         }
 
         public GooPlanarBoundary3D(PlanarBoundary3D planarBoundary3D)
             : base(planarBoundary3D)
         {
-
         }
 
         public BoundingBox ClippingBox
@@ -54,7 +50,6 @@ namespace SAM.Analytical.Grasshopper
             //Assign Color for Edges
             aDictionary[planarBoundary3D.GetEdge3DLoop()] = System.Drawing.Color.DarkRed;
 
-            
             IEnumerable<BoundaryEdge3DLoop> edge3DLoops = planarBoundary3D.GetInternalEdge3DLoops();
             if (edge3DLoops != null)
             {
@@ -88,7 +83,7 @@ namespace SAM.Analytical.Grasshopper
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
             GeometryBase geometryBase = Value.ToRhino();
-            if(geometryBase == null)
+            if (geometryBase == null)
             {
                 obj_guid = Guid.Empty;
                 return false;

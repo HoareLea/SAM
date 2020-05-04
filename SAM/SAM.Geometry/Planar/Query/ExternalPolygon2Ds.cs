@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -13,7 +12,7 @@ namespace SAM.Geometry.Planar
             List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segmentable2Ds, tolerance);
             if (polygon2Ds == null)
                 return null;
-            
+
             return Query.Union(polygon2Ds, tolerance);
         }
     }

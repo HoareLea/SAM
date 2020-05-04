@@ -9,7 +9,7 @@ namespace SAM.Geometry.Planar
             if (point2Ds == null || point2Ds.Count < 3)
                 return;
 
-            if(close)
+            if (close)
             {
                 Point2D point2D = point2Ds[0];
                 point2Ds.RemoveAt(0);
@@ -20,8 +20,6 @@ namespace SAM.Geometry.Planar
             {
                 point2Ds.Reverse();
             }
-
-
         }
     }
 }

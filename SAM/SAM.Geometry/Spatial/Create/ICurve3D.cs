@@ -8,6 +8,5 @@ namespace SAM.Geometry.Spatial
         {
             return Geometry.Create.ISAMGeometry(jObject) as ICurve3D;
         }
-
     }
 }

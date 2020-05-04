@@ -7,6 +7,7 @@ namespace SAM.Core
         char Separator { get; }
 
         bool Read(DelimitedFileRow DelimitedFileRow);
+
         List<DelimitedFileRow> Read();
     }
 }

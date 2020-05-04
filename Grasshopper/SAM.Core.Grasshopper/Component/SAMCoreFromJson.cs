@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-
+﻿using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
@@ -28,7 +25,6 @@ namespace SAM.Core.Grasshopper
               "Reads SAM Objects from Json",
               "SAM", "Core")
         {
-
         }
 
         /// <summary>
@@ -52,7 +48,9 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
@@ -83,7 +81,7 @@ namespace SAM.Core.Grasshopper
             }
 
             List<IJSAMObject> jSAMObjects = Convert.ToSAM(pathOrJson);
-            if(jSAMObjects == null)
+            if (jSAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Could not parse Json to SAM");
                 dataAccess.SetData(0, null);
@@ -98,6 +96,5 @@ namespace SAM.Core.Grasshopper
 
             dataAccess.SetData(1, true);
         }
-
     }
 }

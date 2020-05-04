@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -31,19 +30,19 @@ namespace SAM.Geometry.Planar
                 Point2D point2D_Next = point2Ds[i + 1];
 
                 List<Point2D> point2Ds_Temp = RemoveAngle(point2D_Previous, point2D, point2D_Next, length, minAngle, tolerance);
-                if(point2Ds_Temp == null)
+                if (point2Ds_Temp == null)
                 {
                     point2Ds_New.Add(point2D);
                 }
-                else if(point2Ds_Temp.Count == 3)
+                else if (point2Ds_Temp.Count == 3)
                 {
                     point2Ds_New.Add(point2D);
                 }
-                else if(point2Ds_Temp.Count == 4)
+                else if (point2Ds_Temp.Count == 4)
                 {
                     //TODO: To find better way to determine which points to choose
                     List<Point2D> point2Ds_Temp_2 = RemoveAngle(point2D_Next, point2D, point2D_Previous, length, minAngle, tolerance);
-                    if(point2Ds_Temp_2 != null && point2Ds_Temp_2.Count == 4)
+                    if (point2Ds_Temp_2 != null && point2Ds_Temp_2.Count == 4)
                     {
                         Vector2D vector2D_1 = new Vector2D(point2Ds_Temp[1], point2Ds_Temp[2]);
                         Vector2D vector2D_2 = new Vector2D(point2Ds_Temp_2[1], point2Ds_Temp_2[2]);
@@ -51,7 +50,7 @@ namespace SAM.Geometry.Planar
                         Vector2D vector2D_direction_1 = Query.SmallestAngleVector(directions, vector2D_1);
                         Vector2D vector2D_direction_2 = Query.SmallestAngleVector(directions, vector2D_2);
 
-                        if(vector2D_direction_1.SmallestAngle(vector2D_1) < vector2D_direction_2.SmallestAngle(vector2D_2))
+                        if (vector2D_direction_1.SmallestAngle(vector2D_1) < vector2D_direction_2.SmallestAngle(vector2D_2))
                         {
                             point2Ds_New.Add(point2Ds_Temp[1]);
                             point2Ds_New.Add(point2Ds_Temp[2]);
@@ -110,7 +109,7 @@ namespace SAM.Geometry.Planar
             if (point2D_c.Distance(point2D_Next) < tolerance)
                 return new List<Point2D>() { point2D_Previous, point2D, point2D_Next };
 
-            return new List<Point2D>() { point2D_Previous, point2D.GetMoved(vector2D_b), point2D.GetMoved(vector2D_c), point2D_Next};
+            return new List<Point2D>() { point2D_Previous, point2D.GetMoved(vector2D_b), point2D.GetMoved(vector2D_c), point2D_Next };
         }
     }
 }

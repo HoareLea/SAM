@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Geometry.Planar;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry
 {
@@ -15,7 +11,7 @@ namespace SAM.Geometry
 
         public Face(IClosed2D closed2D)
         {
-            if(closed2D is Face)
+            if (closed2D is Face)
             {
                 Face face = (Face)closed2D;
                 externalEdge = (IClosed2D)face.externalEdge.Clone();
@@ -108,15 +104,15 @@ namespace SAM.Geometry
             if (Inside(result))
                 return result;
 
-            if(externalEdge is ISegmentable2D)
+            if (externalEdge is ISegmentable2D)
             {
                 List<Point2D> point2Ds = ((ISegmentable2D)externalEdge).GetPoints();
                 if (point2Ds == null || point2Ds.Count == 0)
                     return null;
 
-                foreach(IClosed2D closed2D in internalEdges)
+                foreach (IClosed2D closed2D in internalEdges)
                 {
-                    if(closed2D is ISegmentable2D)
+                    if (closed2D is ISegmentable2D)
                     {
                         List<Point2D> point2Ds_Internal = ((ISegmentable2D)closed2D).GetPoints();
                         if (point2Ds_Internal != null && point2Ds_Internal.Count > 0)
@@ -125,7 +121,7 @@ namespace SAM.Geometry
                 }
 
                 int count = point2Ds.Count;
-                for(int i=0; i < count - 2; i++)
+                for (int i = 0; i < count - 2; i++)
                 {
                     for (int j = 1; j < count - 1; j++)
                     {

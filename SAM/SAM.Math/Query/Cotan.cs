@@ -1,9 +1,8 @@
-﻿
-namespace SAM.Math
+﻿namespace SAM.Math
 {
     public static partial class Query
     {
-        // Cotangent 
+        // Cotangent
         //https://mathworld.wolfram.com/Cotangent.html
         public static double Cotan(double angle)
         {

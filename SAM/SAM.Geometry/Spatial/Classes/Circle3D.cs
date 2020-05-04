@@ -1,13 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Circle3D: SAMGeometry, IClosedPlanar3D, IBoundable3D
+    public class Circle3D : SAMGeometry, IClosedPlanar3D, IBoundable3D
     {
         private Plane plane;
         private double radious;
@@ -27,7 +23,6 @@ namespace SAM.Geometry.Spatial
         public Circle3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public Point3D Center

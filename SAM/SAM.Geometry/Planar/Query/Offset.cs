@@ -31,17 +31,14 @@ namespace SAM.Geometry.Planar
         //    if (polyline2D == null)
         //        return null;
 
-        //    List<IntPoint> intPoints = ((ISegmentable2D)polyline2D).ToClipper(tolerance);
-        //    if (intPoints == null)
-        //        return null;
+        // List<IntPoint> intPoints = ((ISegmentable2D)polyline2D).ToClipper(tolerance); if
+        // (intPoints == null) return null;
 
-        //    ClipperOffset clipperOffset = new ClipperOffset();
-        //    clipperOffset.AddPath(intPoints, joinType, endType);
-        //    List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
-        //    clipperOffset.Execute(ref intPointList, offset / tolerance);
+        // ClipperOffset clipperOffset = new ClipperOffset(); clipperOffset.AddPath(intPoints,
+        // joinType, endType); List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
+        // clipperOffset.Execute(ref intPointList, offset / tolerance);
 
-        //    if (intPointList == null)
-        //        return null;
+        // if (intPointList == null) return null;
 
         //    return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
         //}
@@ -66,7 +63,6 @@ namespace SAM.Geometry.Planar
             return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
         }
 
-
         public static List<Polygon2D> Offset(this Polygon2D polygon2D, double offset, bool inside, bool simplify = true, bool orient = true, double tolerance = Core.Tolerance.Distance)
         {
             return Offset(polygon2D, new double[] { offset }, inside, simplify, orient, tolerance);
@@ -88,7 +84,7 @@ namespace SAM.Geometry.Planar
             int count = polygon2D.Count;
 
             List<double> offsets_Temp = new List<double>(offsets);
-            double offset_Temp= offsets.Last();
+            double offset_Temp = offsets.Last();
             while (offsets_Temp.Count < count)
                 offsets_Temp.Add(offset_Temp);
 
@@ -127,11 +123,10 @@ namespace SAM.Geometry.Planar
 
             Modify.Join(segment2Ds, tolerance);
 
-            List<Polyline2D> result = new List<Polyline2D>() { new Polyline2D(segment2Ds)  };
+            List<Polyline2D> result = new List<Polyline2D>() { new Polyline2D(segment2Ds) };
 
             return result;
         }
-
 
         private static List<Polygon2D> Offset_Inside(this Polygon2D polygon2D, List<double> offsets, bool simplify = true, bool orient = true, double tolerance = Core.Tolerance.Distance)
         {
@@ -142,7 +137,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Segment2D> segment2Ds_Offset = new List<Segment2D>();
-            for(int i =0; i < segment2Ds.Count; i++)
+            for (int i = 0; i < segment2Ds.Count; i++)
             {
                 Segment2D segment2D = segment2Ds[i];
 
@@ -168,7 +163,6 @@ namespace SAM.Geometry.Planar
                 //segment2Ds_Offset.RemoveAll(x => segment2D.Distance(x) < offsets[i] - Core.Tolerance.MacroDistance);
 
                 segment2Ds_Offset.RemoveAll(x => segment2D.On(x[0]) || segment2D.On(x[1]));
-
             }
 
             List<Polygon2D> polygon2Ds_Temp = Create.Polygon2Ds(segment2Ds_Offset, tolerance);//new PointGraph2D(segment2Ds_Offset, false, tolerance).GetPolygon2Ds();
@@ -188,18 +182,18 @@ namespace SAM.Geometry.Planar
                 }
 
                 bool remove = false;
-                foreach(Segment2D Segment2Ds in segment2Ds_Temp)
+                foreach (Segment2D Segment2Ds in segment2Ds_Temp)
                 {
                     Point2D point2D = Segment2Ds.Mid();
                     int index = segment2Ds.FindIndex(x => x.On(point2D));
-                    if(index == -1 || offsets[index] != 0)
+                    if (index == -1 || offsets[index] != 0)
                     {
                         remove = true;
                         break;
                     }
                 }
 
-                if(!remove)
+                if (!remove)
                     polygon2Ds.Add(polygon2D_Temp);
             }
 

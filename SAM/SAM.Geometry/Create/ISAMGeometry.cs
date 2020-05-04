@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reflection;
-
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry
 {
@@ -10,7 +7,7 @@ namespace SAM.Geometry
         public static ISAMGeometry ISAMGeometry(this JObject jObject)
         {
             return Core.Create.IJSAMObject(jObject) as ISAMGeometry;
-            
+
             //string typeName = Core.Query.TypeName(jObject);
             //if (string.IsNullOrWhiteSpace(typeName))
             //    return null;

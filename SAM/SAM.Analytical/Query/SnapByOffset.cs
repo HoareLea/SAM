@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 using System.Linq;
-
-using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
-    public static partial class Modify
+    public static partial class Query
     {
         public static IEnumerable<Panel> SnapByOffset(this IEnumerable<Panel> panels, double offset = 0.2, double maxDixtance = double.NaN)
         {

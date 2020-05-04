@@ -1,11 +1,4 @@
-﻿using SAM.Geometry.Spatial;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SAMAnalyticalDynamo
+﻿namespace SAMAnalyticalDynamo
 {
     /// <summary>
     /// SAM Analytical Construction
@@ -17,9 +10,7 @@ namespace SAMAnalyticalDynamo
         /// </summary>
         /// <param name="name">Construction Name</param>
         /// <returns name="construction">SAM Analytical Construction</returns>
-        /// <search>
-        /// SAM Analytical Construction, ByName
-        /// </search>
+        /// <search>SAM Analytical Construction, ByName</search>
         public static SAM.Analytical.Construction ByName(string name)
         {
             return new SAM.Analytical.Construction(name);
@@ -30,9 +21,7 @@ namespace SAMAnalyticalDynamo
         /// </summary>
         /// <param name="name">Construction Name</param>
         /// <returns name="construction">SAM Analytical Construction</returns>
-        /// <search>
-        /// SAM Analytical Construction, ByName
-        /// </search>
+        /// <search>SAM Analytical Construction, ByName</search>
         public static string Name(SAM.Analytical.Construction construction)
         {
             return construction.Name;

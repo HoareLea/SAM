@@ -16,7 +16,7 @@ namespace SAM.Geometry.Planar
 
             double x_Min = double.MaxValue;
             double y_Min = double.MaxValue;
-            foreach(Segment2D segment2D in segment2Ds)
+            foreach (Segment2D segment2D in segment2Ds)
             {
                 Point2D point2D;
                 double value;

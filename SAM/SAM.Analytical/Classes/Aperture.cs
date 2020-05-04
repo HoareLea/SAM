@@ -3,7 +3,6 @@
 using SAM.Core;
 using SAM.Geometry.Spatial;
 
-
 namespace SAM.Analytical
 {
     public class Aperture : SAMInstance
@@ -19,7 +18,6 @@ namespace SAM.Analytical
         public Aperture(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public Aperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D)

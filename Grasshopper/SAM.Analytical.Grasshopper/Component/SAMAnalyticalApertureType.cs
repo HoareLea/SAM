@@ -1,16 +1,13 @@
-﻿using System;
-using System.Windows.Forms;
-
-using GH_IO.Serialization;
+﻿using GH_IO.Serialization;
 using Grasshopper.Kernel;
-
 using SAM.Analytical.Grasshopper.Properties;
+using System;
+using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
     public class SAMAnalyticalApertureType : GH_Component
     {
-        
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
@@ -31,7 +28,6 @@ namespace SAM.Analytical.Grasshopper
               "Select Aperture Type",
               "SAM", "Analytical")
         {
-
         }
 
         public override bool Write(GH_IWriter writer)
@@ -45,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
             int aIndex = -1;
             if (reader.TryGetInt32("ApertureType", ref aIndex))
                 apertureType = (ApertureType)aIndex;
-            
+
             return base.Read(reader);
         }
 
@@ -72,7 +68,6 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-
         }
 
         /// <summary>
@@ -86,12 +81,12 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             dataAccess.SetData(0, apertureType);
         }
-
-
     }
 }

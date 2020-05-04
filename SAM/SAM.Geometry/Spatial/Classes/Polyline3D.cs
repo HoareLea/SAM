@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
@@ -33,7 +30,6 @@ namespace SAM.Geometry.Spatial
         public Polyline3D(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public List<Point3D> Points

@@ -1,30 +1,29 @@
 ﻿using System.Collections.Generic;
 
-
 namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
         public static bool SimplifyBySAM_Angle(this List<Point2D> point2Ds, bool closed, double maxAngle = Core.Tolerance.Angle)
         {
-            if (point2Ds == null || point2Ds.Count < 3 )
+            if (point2Ds == null || point2Ds.Count < 3)
                 return false;
 
             List<Point2D> point2Ds_Temp = new List<Point2D>(point2Ds);
 
             bool removed = true;
-            while(removed)
+            while (removed)
             {
                 removed = false;
 
                 int count = point2Ds_Temp.Count;
 
-                for (int i=0; i < count - 2; i++ )
+                for (int i = 0; i < count - 2; i++)
                 {
                     Point2D point2D_1 = point2Ds_Temp[i];
                     Point2D point2D_2 = point2Ds_Temp[i + 1];
                     Point2D point2D_3 = point2Ds_Temp[i + 2];
-                    if(Query.SmallestAngle(point2D_1, point2D_2, point2D_3) < maxAngle)
+                    if (Query.SmallestAngle(point2D_1, point2D_2, point2D_3) < maxAngle)
                     {
                         point2Ds_Temp.RemoveAt(i + 1);
                         if ((point2Ds_Temp.Count < 3 && closed) || (point2Ds_Temp.Count < 2))
@@ -35,7 +34,7 @@ namespace SAM.Geometry.Planar
                     }
                 }
 
-                if(closed)
+                if (closed)
                 {
                     count = point2Ds_Temp.Count;
 
@@ -69,7 +68,6 @@ namespace SAM.Geometry.Planar
                         continue;
                     }
                 }
-
             }
 
             point2Ds.Clear();
@@ -91,7 +89,7 @@ namespace SAM.Geometry.Planar
                 return false;
 
             List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
-            foreach(Polyline2D polyline2D in polyline2Ds)
+            foreach (Polyline2D polyline2D in polyline2Ds)
             {
                 List<Point2D> point2Ds = polyline2D?.GetPoints();
                 if (point2Ds == null)

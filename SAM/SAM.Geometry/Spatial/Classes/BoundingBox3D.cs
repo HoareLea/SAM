@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
@@ -102,8 +99,8 @@ namespace SAM.Geometry.Spatial
         }
 
         public BoundingBox3D(IEnumerable<BoundingBox3D> boundingBox3Ds)
-        { 
-            foreach(BoundingBox3D boundingBox3D in boundingBox3Ds)
+        {
+            foreach (BoundingBox3D boundingBox3D in boundingBox3Ds)
             {
                 if (min == null)
                     min = new Point3D(boundingBox3D.Min);
@@ -118,9 +115,8 @@ namespace SAM.Geometry.Spatial
         }
 
         public BoundingBox3D(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
-
         }
 
         public Point3D Min
@@ -230,7 +226,7 @@ namespace SAM.Geometry.Spatial
             double x = Width;
             double z = Height;
             double y = Depth;
-            
+
             List<Segment3D> result = new List<Segment3D>();
             result.Add(new Segment3D(new Point3D(min), new Point3D(min.X + x, min.Y, min.Z)));
             result.Add(new Segment3D(new Point3D(min.X + x, min.Y, min.Z), new Point3D(min.X + x, min.Y + y, min.Z)));
@@ -294,7 +290,6 @@ namespace SAM.Geometry.Spatial
         {
             return new BoundingBox3D((Point3D)min.GetMoved(vector3D), (Point3D)max.GetMoved(vector3D));
         }
-
 
         public static List<BoundingBox3D> GetExternal(IEnumerable<BoundingBox3D> boundingBox3Ds)
         {

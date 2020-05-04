@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino;
+using Rhino.Commands;
 using Rhino.DocObjects;
 using Rhino.Geometry;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-
-using SAM.Core.Grasshopper;
 using SAM.Analytical.Grasshopper.Properties;
-using Rhino.Commands;
-using Rhino.Input;
+using SAM.Core.Grasshopper;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
@@ -20,13 +17,11 @@ namespace SAM.Analytical.Grasshopper
         public GooPanel()
             : base()
         {
-
         }
 
         public GooPanel(Panel panel)
             : base(panel)
         {
-
         }
 
         public BoundingBox ClippingBox
@@ -105,9 +100,9 @@ namespace SAM.Analytical.Grasshopper
 
         public GooPanelParam()
             : base(typeof(Panel).Name, typeof(Panel).Name, typeof(Panel).FullName.Replace(".", " "), "Params", "SAM")
-        { 
+        {
         }
-        
+
         protected override GH_GetterResult Prompt_Plural(ref List<GooPanel> values)
         {
             throw new NotImplementedException();
@@ -148,7 +143,7 @@ namespace SAM.Analytical.Grasshopper
 
         public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
         {
-             BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
+            BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
         }
 
         public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
@@ -160,6 +155,5 @@ namespace SAM.Analytical.Grasshopper
                 obj_ids.Add(uuid);
             }
         }
-
     }
 }

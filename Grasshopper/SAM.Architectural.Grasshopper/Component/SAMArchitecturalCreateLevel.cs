@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-
+﻿using Grasshopper.Kernel;
 using SAM.Architectural.Grasshopper.Properties;
-using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Spatial;
+using System;
 
 namespace SAM.Architectural.Grasshopper
 {
@@ -53,16 +46,17 @@ namespace SAM.Architectural.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             string name = null;
-            if(!dataAccess.GetData(0, ref name) || string.IsNullOrEmpty(name))
+            if (!dataAccess.GetData(0, ref name) || string.IsNullOrEmpty(name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-
 
             double elevation = double.NaN;
             if (!dataAccess.GetData(1, ref elevation) || double.IsNaN(elevation))

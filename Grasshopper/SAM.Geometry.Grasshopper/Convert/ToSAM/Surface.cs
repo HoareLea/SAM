@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
-
+﻿using Grasshopper.Kernel.Types;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {

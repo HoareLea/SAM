@@ -1,9 +1,8 @@
-﻿
-namespace SAM.Math
+﻿namespace SAM.Math
 {
     public static partial class Query
     {
-        // Inverse Cosecant 
+        // Inverse Cosecant
         //https://mathworld.wolfram.com/InverseCosecant.html
         public static double Arccosec(double angle)
         {

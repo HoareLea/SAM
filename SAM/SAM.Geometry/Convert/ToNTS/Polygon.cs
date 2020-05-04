@@ -6,7 +6,6 @@ namespace SAM.Geometry
 {
     public static partial class Convert
     {
-
         public static Polygon ToNTS(this Face2D face2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             LinearRing linearRing_ExternalEdge = face2D?.ExternalEdge?.ToNTS(tolerance);

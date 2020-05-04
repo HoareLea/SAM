@@ -1,7 +1,5 @@
-﻿using System.Reflection;
-
-using SAM.Core;
-
+﻿using SAM.Core;
+using System.Reflection;
 
 namespace SAM.Analytical
 {
@@ -45,7 +43,6 @@ namespace SAM.Analytical
             return setting;
         }
 
-
         public static Setting Setting
         {
             get
@@ -81,7 +78,7 @@ namespace SAM.Analytical
             result.Add(Name.ApertureConstruction_ExternalDoors, new ApertureConstruction(new System.Guid("5ad2e36d-6a2b-4cf1-af02-1ce62e7d2288"), "Doors: SIM_EXT_SLD", ApertureType.Door));
             result.Add(Name.ApertureConstruction_ExternalWindows, new ApertureConstruction(new System.Guid("f70c4ec7-931b-47ed-a95b-1b3df1b9d885"), "Windows: SIM_EXT_GLZ", ApertureType.Window));
             result.Add(Name.ApertureConstruction_InternalDoors, new ApertureConstruction(new System.Guid("1dcdad32-63ec-4a01-945d-39548be20491"), "Doors: SIM_INT_SLD", ApertureType.Door));
-            result.Add(Name.ApertureConstruction_InternalWindows, new ApertureConstruction(new System.Guid("3e43ecb2-638b-4d8b-9046-ba3d8455cd3f"), "Windows: SIM_INT_GLZ", ApertureType.Window)); 
+            result.Add(Name.ApertureConstruction_InternalWindows, new ApertureConstruction(new System.Guid("3e43ecb2-638b-4d8b-9046-ba3d8455cd3f"), "Windows: SIM_INT_GLZ", ApertureType.Window));
             result.Add(Name.ApertureConstruction_Skylight, new ApertureConstruction(new System.Guid("6f6dc032-6fa5-43fa-bfef-de5937e95599"), "Skylight: SIM_EXT_GLZ_SKY DF01", ApertureType.Window));
 
             return result;

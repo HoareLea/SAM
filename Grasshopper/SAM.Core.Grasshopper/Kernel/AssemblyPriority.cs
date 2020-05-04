@@ -1,6 +1,5 @@
-﻿using Grasshopper.Kernel;
-using Grasshopper;
-
+﻿using Grasshopper;
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 
 namespace SAM.Core.Grasshopper
@@ -14,5 +13,4 @@ namespace SAM.Core.Grasshopper
             return GH_LoadingInstruction.Proceed;
         }
     }
-
 }

@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using ClipperLib;
+using System.Collections.Generic;
 using System.Linq;
-
-using ClipperLib;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
         /// <summary>
-        /// Split Segment2Ds  
+        /// Split Segment2Ds
         /// </summary>
-        /// <returns>
-        /// List Segment2D
-        /// </returns>
+        /// <returns>List Segment2D</returns>
         /// <param name="segment2Ds">Sermnets2Ds</param>
-        /// <param name="tolerance"> tolerance (default = 0) .</param>
+        /// <param name="tolerance">tolerance (default = 0) .</param>
         public static List<Segment2D> Split(this IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segment2Ds == null)
@@ -99,7 +96,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Segment2D> segment2Ds = new List<Segment2D>();
-            foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
                 if (segmentable2D == null)
                     continue;
@@ -133,7 +130,7 @@ namespace SAM.Geometry.Planar
                 int count = intPointsList.Count();
                 for (int i = 0; i < intPointsList.Count() - 1; i++)
                 {
-                    List < IntPoint > intPoints_1 = intPointsList[i];
+                    List<IntPoint> intPoints_1 = intPointsList[i];
 
                     for (int j = i + 1; j < intPointsList.Count(); j++)
                     {
@@ -145,13 +142,11 @@ namespace SAM.Geometry.Planar
                         List<List<IntPoint>> IntPointsList_Result = new List<List<IntPoint>>();
 
                         clipper.Execute(ClipType.ctIntersection, IntPointsList_Result, PolyFillType.pftEvenOdd);
-                        if(IntPointsList_Result.Count > 0)
+                        if (IntPointsList_Result.Count > 0)
                         {
-
                         }
                         else
                         {
-
                         }
 
                         clipper.Clear();
@@ -159,7 +154,6 @@ namespace SAM.Geometry.Planar
                 }
 
                 throw new System.Exception();
-
             }
 
             return null;
@@ -174,10 +168,10 @@ namespace SAM.Geometry.Planar
                 return new List<Segment2D>();
 
             List<Segment2D> result = new List<Segment2D>();
-            foreach(Segment2D segment2D in segment2Ds)
+            foreach (Segment2D segment2D in segment2Ds)
             {
                 List<Point2D> point2Ds = segmentable2D.Intersections(segment2D, tolerance);
-                if(point2Ds == null || point2Ds.Count == 0)
+                if (point2Ds == null || point2Ds.Count == 0)
                 {
                     result.Add(new Segment2D(segment2D));
                     continue;

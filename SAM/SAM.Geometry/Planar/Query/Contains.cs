@@ -9,7 +9,7 @@ namespace SAM.Geometry.Planar
             if (point2Ds == null || point2D == null)
                 return false;
 
-            foreach(Point2D poin2D_Temp in point2Ds)
+            foreach (Point2D poin2D_Temp in point2Ds)
             {
                 if (poin2D_Temp != null && poin2D_Temp.AlmostEquals(point2D, tolerance))
                     return true;

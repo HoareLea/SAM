@@ -8,6 +8,5 @@ namespace SAM.Geometry.Planar
         {
             return Geometry.Create.ISAMGeometry(jObject) as ICurve2D;
         }
-
     }
 }

@@ -8,8 +8,10 @@
             {
                 case Alignment.Horizontal:
                     return Alignment.Vertical;
+
                 case Alignment.Vertical:
                     return Alignment.Horizontal;
+
                 default:
                     return Alignment.Undefined;
             }
@@ -21,8 +23,10 @@
             {
                 case Orientation.Clockwise:
                     return Orientation.CounterClockwise;
+
                 case Orientation.CounterClockwise:
                     return Orientation.Clockwise;
+
                 default:
                     return Orientation.Undefined;
             }
@@ -37,36 +41,47 @@
                     {
                         case Corner.BottomLeft:
                             return Corner.TopLeft;
+
                         case Corner.BottomRight:
                             return Corner.TopRight;
+
                         case Corner.TopLeft:
                             return Corner.BottomLeft;
+
                         case Corner.TopRight:
                             return Corner.BottomRight;
                     }
                     break;
+
                 case Alignment.Undefined:
                     switch (corner)
                     {
                         case Corner.BottomLeft:
                             return Corner.TopRight;
+
                         case Corner.BottomRight:
                             return Corner.TopLeft;
+
                         case Corner.TopLeft:
                             return Corner.BottomRight;
+
                         case Corner.TopRight:
                             return Corner.BottomLeft;
                     }
                     break;
+
                 case Alignment.Vertical:
                     switch (corner)
                     {
                         case Corner.BottomLeft:
                             return Corner.BottomRight;
+
                         case Corner.BottomRight:
                             return Corner.BottomLeft;
+
                         case Corner.TopLeft:
                             return Corner.TopRight;
+
                         case Corner.TopRight:
                             return Corner.TopLeft;
                     }

@@ -1,9 +1,8 @@
-﻿
-namespace SAM.Math
+﻿namespace SAM.Math
 {
     public static partial class Query
     {
-        // Inverse Cosine 
+        // Inverse Cosine
         //https://mathworld.wolfram.com/InverseCosine.html
         public static double Arccos(double angle)
         {

@@ -2,7 +2,6 @@
 
 using SAM.Geometry;
 
-
 namespace SAMGeometryDynamo
 {
     public static partial class Convert

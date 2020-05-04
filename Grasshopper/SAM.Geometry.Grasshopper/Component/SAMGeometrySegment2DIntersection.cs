@@ -1,9 +1,8 @@
-﻿using System;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Planar;
+using System;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -51,7 +50,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             GH_ObjectWrapper objectWrapper = null;
@@ -87,13 +88,11 @@ namespace SAM.Geometry.Grasshopper
 
             Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, out point2D_Closest_1, out point2D_Closest_2);
 
-
             dataAccess.SetData(0, point2D_Intersection);
             dataAccess.SetData(1, point2D_Closest_1);
             dataAccess.SetData(2, point2D_Closest_2);
 
             AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
-
         }
     }
 }

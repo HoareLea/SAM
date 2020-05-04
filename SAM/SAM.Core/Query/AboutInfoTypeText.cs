@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SAM.Core
+﻿namespace SAM.Core
 {
     public static partial class Query
     {
@@ -14,8 +8,10 @@ namespace SAM.Core
             {
                 case (AboutInfoType.HoareLea):
                     return "https://hoarelea.com/specialisms/ \n An award-winning engineering consultancy with a creative team of engineers, designers, and technical specialists. We provide innovative solutions to complex engineering and design challenges for buildings.";
+
                 case (AboutInfoType.SAM):
                     return "Sustainable Analytical Model originated by Michal Dengusiak and Jakub Ziolkowski";
+
                 case (AboutInfoType.Other):
                     return "Tbc";
             }

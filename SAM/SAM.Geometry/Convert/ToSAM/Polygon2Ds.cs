@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-using NetTopologySuite.Geometries;
-
+﻿using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
+using System.Collections.Generic;
 
 namespace SAM.Geometry
 {
@@ -29,7 +27,7 @@ namespace SAM.Geometry
                     LinearRing linearRing = geometry_Temp as LinearRing;
                     if (linearRing == null)
                         continue;
-                    
+
                     polygon2Ds.Add(linearRing.ToSAM());
                 }
                 return polygon2Ds;

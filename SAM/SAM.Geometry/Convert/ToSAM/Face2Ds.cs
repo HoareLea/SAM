@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NetTopologySuite.Geometries;
-
+﻿using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
+using System.Collections.Generic;
 
 namespace SAM.Geometry
 {
@@ -20,9 +18,9 @@ namespace SAM.Geometry
             List<Polygon2D> polygon2Ds = new List<Polygon2D>();
 
             LineString[] lineStrings = polygon.InteriorRings;
-            if(lineStrings != null && lineStrings.Length > 0)
+            if (lineStrings != null && lineStrings.Length > 0)
             {
-                foreach(LineString lineString in lineStrings)
+                foreach (LineString lineString in lineStrings)
                 {
                     LinearRing linearRing_Temp = lineString as LinearRing;
                     if (linearRing_Temp == null)
@@ -33,7 +31,6 @@ namespace SAM.Geometry
             }
 
             return Face2D.Create(linearRing.ToSAM(), polygon2Ds, true);
-
         }
     }
 }

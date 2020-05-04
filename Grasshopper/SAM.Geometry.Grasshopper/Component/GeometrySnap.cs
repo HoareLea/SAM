@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
 using SAM.Geometry.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -18,7 +16,6 @@ namespace SAM.Geometry.Grasshopper
               "Snap Geometry or SAM Geometry by points",
               "SAM", "Geometry")
         {
-
         }
 
         /// <summary>
@@ -44,7 +41,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
@@ -67,10 +66,10 @@ namespace SAM.Geometry.Grasshopper
             }
 
             List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
-            foreach(GH_ObjectWrapper gHObjectWrapper in objectWrapperList)
+            foreach (GH_ObjectWrapper gHObjectWrapper in objectWrapperList)
             {
                 Spatial.Point3D point3D = gHObjectWrapper.Value as Spatial.Point3D;
-                if(point3D != null)
+                if (point3D != null)
                 {
                     point3Ds.Add(point3D);
                     continue;
@@ -82,7 +81,6 @@ namespace SAM.Geometry.Grasshopper
 
                 point3Ds.Add(Convert.ToSAM(gHPoint));
             }
-
 
             GH_ObjectWrapper objectWrapper = null;
 
@@ -108,7 +106,7 @@ namespace SAM.Geometry.Grasshopper
             }
 
             object obj = objectWrapper.Value;
-            if(obj == null)
+            if (obj == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(1, false);
@@ -122,7 +120,7 @@ namespace SAM.Geometry.Grasshopper
             else if (obj is Spatial.ISAMGeometry3D)
                 geometry3Ds = new List<Spatial.ISAMGeometry3D>() { (Spatial.ISAMGeometry3D)obj };
 
-            for(int i=0; i < geometry3Ds.Count; i++)
+            for (int i = 0; i < geometry3Ds.Count; i++)
             {
                 if (geometry3Ds[i] is Spatial.Point3D)
                 {

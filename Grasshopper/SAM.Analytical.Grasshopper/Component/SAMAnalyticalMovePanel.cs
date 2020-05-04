@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
+﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Geometry.Grasshopper;
+using System;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -50,7 +48,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             Panel panel = null;
@@ -60,7 +60,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Vector3d vector3d = new Vector3d(); 
+            Vector3d vector3d = new Vector3d();
             if (!dataAccess.GetData(1, ref vector3d))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

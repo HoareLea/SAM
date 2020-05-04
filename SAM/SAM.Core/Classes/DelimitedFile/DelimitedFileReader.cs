@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Core
 {
@@ -83,8 +79,7 @@ namespace SAM.Core
                             // Found one
                             aPosition++;
 
-                            // If two quotes together, keep one
-                            // Otherwise, indicates end of value
+                            // If two quotes together, keep one Otherwise, indicates end of value
                             if (aPosition >= DelimitedFileRow.LineText.Length || DelimitedFileRow.LineText[aPosition] != '"')
                             {
                                 aPosition--;
@@ -102,7 +97,6 @@ namespace SAM.Core
 
                             DelimitedFileRow.LineText += "\n" + aLineText;
                         }
-
                     }
                     aValue = DelimitedFileRow.LineText.Substring(aStart, aPosition - aStart);
                     aValue = aValue.Replace("\"\"", "\"");

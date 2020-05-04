@@ -1,6 +1,5 @@
 ﻿using SAM.Core;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -11,18 +10,15 @@ namespace SAM.Geometry.Planar
         //    if (polygon2D_ToBeCut == null || polygon2D == null)
         //        return null;
 
-        //    return Query.Difference(polygon2D_ToBeCut, polygon2D, tolerance);
+        // return Query.Difference(polygon2D_ToBeCut, polygon2D, tolerance);
 
-        //    //List<Polygon2D> polygon2Ds = new PointGraph2D(new Polygon2D[] { polygon2D_ToBeCut, polygon }, true).GetPolygon2Ds();
-        //    //if (polygon2Ds == null || polygon2Ds.Count == 0)
-        //    //    return null;
+        // //List<Polygon2D> polygon2Ds = new PointGraph2D(new Polygon2D[] { polygon2D_ToBeCut,
+        // polygon }, true).GetPolygon2Ds(); //if (polygon2Ds == null || polygon2Ds.Count == 0) //
+        // return null;
 
-        //    //List<Polygon2D> result = new List<Polygon2D>();
-        //    //foreach (Polygon2D polygon2D_Temp in polygon2Ds)
-        //    //{
-        //    //    if (!polygon.Inside(polygon2D_Temp.GetInternalPoint2D()))
-        //    //        result.Add(polygon2D_Temp);
-        //    //}
+        // //List<Polygon2D> result = new List<Polygon2D>(); //foreach (Polygon2D polygon2D_Temp in
+        // polygon2Ds) //{ // if (!polygon.Inside(polygon2D_Temp.GetInternalPoint2D())) //
+        // result.Add(polygon2D_Temp); //}
 
         //    //return result;
         //}
@@ -34,7 +30,7 @@ namespace SAM.Geometry.Planar
 
             Point2D point2D_1_Closest = polyline2D.Closest(point2D_1, true);
             Point2D point2D_2_Closest = polyline2D.Closest(point2D_2, true);
-            if(point2D_1_Closest.Equals(point2D_2_Closest))
+            if (point2D_1_Closest.Equals(point2D_2_Closest))
             {
                 Polyline2D polyline2D_Temp = new Polyline2D(polyline2D);
                 polyline2D_Temp.InsertClosest(point2D_1_Closest);
@@ -47,7 +43,7 @@ namespace SAM.Geometry.Planar
             double parameter_1 = polyline2D.GetParameter(point2D_1_Closest);
             double parameter_2 = polyline2D.GetParameter(point2D_2_Closest);
 
-            if(parameter_1 > parameter_2)
+            if (parameter_1 > parameter_2)
             {
                 Point2D point2D = point2D_1_Closest;
                 point2D_1_Closest = point2D_2_Closest;
@@ -76,7 +72,7 @@ namespace SAM.Geometry.Planar
                 result.Add(polyline2D_Temp);
                 return result;
             }
-                
+
             result.Add(polyline2D.Trim(parameter_1) as Polyline2D);
 
             Polyline2D polyline2D_Reversed = new Polyline2D(polyline2D);

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
 using SAM.Core.Grasshopper.Properties;
+using System;
+using System.Collections;
 
 namespace SAM.Core.Grasshopper
 {
@@ -23,6 +19,7 @@ namespace SAM.Core.Grasshopper
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Get;
 
         private GH_OutputParamManager outputParamManager;
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
@@ -31,7 +28,6 @@ namespace SAM.Core.Grasshopper
               "Get Value of object property",
               "SAM", "Core")
         {
-
         }
 
         /// <summary>
@@ -57,7 +53,9 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             string name = null;
@@ -97,9 +95,9 @@ namespace SAM.Core.Grasshopper
             }
 
             object value = null;
-            if(!SAM.Core.Query.TryGetValue(@object, name, out value))
+            if (!SAM.Core.Query.TryGetValue(@object, name, out value))
             {
-                if(@object is SAMObject)
+                if (@object is SAMObject)
                 {
                     SAMObject sAMObject = (SAMObject)@object;
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Property or Method for: {3} not found. {0}:{1} Guid: {2}", sAMObject.GetType().Name, sAMObject.Name, sAMObject.Guid.ToString(), name));
@@ -108,8 +106,7 @@ namespace SAM.Core.Grasshopper
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Property or Method {0} not found", name));
                 }
-                
-                
+
                 return;
             }
 
@@ -122,7 +119,6 @@ namespace SAM.Core.Grasshopper
                 dataAccess.SetDataList(0, (IEnumerable)value);
             else
                 dataAccess.SetData(0, value);
-
         }
     }
 }

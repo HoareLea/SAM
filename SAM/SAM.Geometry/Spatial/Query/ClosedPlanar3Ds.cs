@@ -14,7 +14,7 @@ namespace SAM.Geometry.Spatial
             {
                 if (geometry3D is Segment3D)
                     continue;
-                
+
                 if (geometry3D is Face3D)
                 {
                     result.AddRange(((Face3D)geometry3D).GetEdges());
@@ -27,7 +27,7 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                if(geometry3D is ICurvable3D)
+                if (geometry3D is ICurvable3D)
                 {
                     List<Point3D> point3Ds = ((ICurvable3D)geometry3D).GetCurves().ConvertAll(x => x.GetStart());
                     result.Add(new Polygon3D(point3Ds));
@@ -36,6 +36,5 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
-
     }
 }

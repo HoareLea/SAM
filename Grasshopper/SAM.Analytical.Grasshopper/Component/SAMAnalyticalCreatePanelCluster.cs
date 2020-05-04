@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Grasshopper.Kernel;
-
+﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
-
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -50,7 +47,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             List<Panel> panels = new List<Panel>();
@@ -61,7 +60,6 @@ namespace SAM.Analytical.Grasshopper
             }
             PanelCluster panelCluster = new PanelCluster(panels);
             panelCluster.AssignPanelTypes();
-
 
             dataAccess.SetData(0, new GooPanelCluster(panelCluster));
             dataAccess.SetData(1, panelCluster.GetPanels().ConvertAll(x => new GooPanel(x)));

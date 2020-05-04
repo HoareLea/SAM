@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using GH_IO.Serialization;
+﻿using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
@@ -14,9 +12,8 @@ namespace SAM.Core.Grasshopper
         public GooSAMObject()
             : base()
         {
-
         }
-        
+
         public GooSAMObject(T sAMObject)
         {
             Value = sAMObject;
@@ -37,7 +34,7 @@ namespace SAM.Core.Grasshopper
         {
             if (Value == null)
                 return false;
-            
+
             writer.SetString(typeof(T).FullName, Value.ToJObject().ToString());
             return true;
         }
@@ -64,7 +61,7 @@ namespace SAM.Core.Grasshopper
         {
             if (Value == null)
                 return null;
-            
+
             string value = typeof(T).FullName;
 
             if (!string.IsNullOrWhiteSpace(Value.Name))
@@ -75,12 +72,12 @@ namespace SAM.Core.Grasshopper
 
         public override bool CastFrom(object source)
         {
-            if(source is T)
+            if (source is T)
             {
                 Value = (T)(object)source;
                 return true;
             }
-            
+
             if (typeof(IGooSAMObject).IsAssignableFrom(source.GetType()))
             {
                 SAMObject sAMObject = ((IGooSAMObject)source).GetSAMObject();
@@ -101,7 +98,7 @@ namespace SAM.Core.Grasshopper
                 return true;
             }
 
-            if(typeof(Y) == typeof(object))
+            if (typeof(Y) == typeof(object))
             {
                 target = (Y)(object)Value;
                 return true;
@@ -119,7 +116,6 @@ namespace SAM.Core.Grasshopper
         public GooSAMObjectParam()
             : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "Params", "SAM")
         {
-
         }
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooSAMObject<T>> values)

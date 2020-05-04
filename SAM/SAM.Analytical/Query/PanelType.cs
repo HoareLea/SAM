@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace SAM.Analytical
 {
     public static partial class Query
@@ -30,7 +29,7 @@ namespace SAM.Analytical
             }
 
             if (@object is int)
-                return(PanelType)(int)(@object);
+                return (PanelType)(int)(@object);
 
             return Analytical.PanelType.Undefined;
         }

@@ -1,16 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
     public class Vector3D : SAMGeometry, IBoundable3D
     {
         public static Vector3D BaseX { get; } = new Vector3D(1, 0, 0);
-        
+
         public static Vector3D BaseY { get; } = new Vector3D(0, 1, 0);
 
         public static Vector3D BaseZ { get; } = new Vector3D(0, 0, 1);
@@ -19,7 +14,7 @@ namespace SAM.Geometry.Spatial
 
         public Vector3D(double x, double y, double z)
         {
-            coordinates = new double[] { x, y, z};
+            coordinates = new double[] { x, y, z };
         }
 
         public Vector3D(Point3D start, Point3D end)
@@ -119,13 +114,13 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        /// <summary>
-        /// The cross product takes two vectors and produces a third vector that is orthogonal to both. For example, if you have two vectors lying on the World xy-plane, then their cross product is a vector perpendicular to the xy-plane going either in the positive or negative World z-axis direction. Sample: a​<a1, a2, a3> and ​b​<b1, b2, b3> then a​ ​×​ ​b ​=​ ​<​a2​ ​*​ ​b3 – a3​ ​*​ ​b2​,​ ​a3​ ​*​ ​b1 - a1​ ​*​ ​b3, a1​ ​*​ ​b2 - a2​ ​*​ ​b1​ ​>
-        /// </summary>
-        /// <returns>
-        /// Cross Product Vector3D
-        /// </returns>
-        /// <param name="vector3D">A Vector3D</param>
+        /// <summary> The cross product takes two vectors and produces a third vector that is
+        /// orthogonal to both. For example, if you have two vectors lying on the World xy-plane,
+        /// then their cross product is a vector perpendicular to the xy-plane going either in the
+        /// positive or negative World z-axis direction. Sample: a​<a1, a2, a3> and ​b​<b1, b2, b3>
+        /// then a​ ​×​ ​b ​=​ ​<​a2​ ​*​ ​b3 – a3​ ​*​ ​b2​,​ ​a3​ ​*​ ​b1 - a1​ ​*​ ​b3, a1​ ​*​
+        /// ​b2 - a2​ ​*​ ​b1​ ​> </summary> <returns> Cross Product Vector3D </returns> <param
+        /// name="vector3D">A Vector3D</param>
         public Vector3D CrossProduct(Vector3D vector3D)
         {
             return new Vector3D((coordinates[1] * vector3D.coordinates[2]) - (coordinates[2] * vector3D.coordinates[1]), (coordinates[2] * vector3D.coordinates[0]) - (coordinates[0] * vector3D.coordinates[2]), (coordinates[0] * vector3D.coordinates[1]) - (coordinates[1] * vector3D.coordinates[0]));
@@ -341,7 +336,6 @@ namespace SAM.Geometry.Spatial
             coordinates[1] = Core.Modify.Round(coordinates[1], tolerance);
             coordinates[2] = Core.Modify.Round(coordinates[2], tolerance);
         }
-
 
         public static Vector3D operator +(Vector3D vector3D_1, Vector3D vector3D_2)
         {

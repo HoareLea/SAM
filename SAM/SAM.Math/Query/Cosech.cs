@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        // Hyperbolic Cosecant 
+        // Hyperbolic Cosecant
         //https://mathworld.wolfram.com/HyperbolicCosecant.html
         public static double Cosech(double angle)
         {

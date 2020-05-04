@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -66,9 +64,11 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
-        {        
+        {
             bool simplyfy = false;
             if (!dataAccess.GetData<bool>(3, ref simplyfy))
             {
@@ -100,10 +100,10 @@ namespace SAM.Analytical.Grasshopper
                 if (sAMGeometry is ISAMGeometry3D)
                     geometry3Ds = new List<ISAMGeometry3D>() { (ISAMGeometry3D)sAMGeometry };
                 else if (sAMGeometry is Geometry.Planar.ISAMGeometry2D)
-                    geometry3Ds = new List<ISAMGeometry3D>() { Plane.Base.Convert(sAMGeometry as dynamic)};
+                    geometry3Ds = new List<ISAMGeometry3D>() { Plane.Base.Convert(sAMGeometry as dynamic) };
             }
 
-            if(geometry3Ds == null || geometry3Ds.Count() == 0)
+            if (geometry3Ds == null || geometry3Ds.Count() == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -128,7 +128,7 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.GetData(4, ref minArea);
 
             List<Panel> panels = Create.Panels(geometry3Ds, panelType, construction, minArea);
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid geometry for panel");
                 return;

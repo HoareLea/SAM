@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Grasshopper.Kernel;
-
+﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -37,12 +36,11 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_construction", "SAM Analytical Panels", GH_ParamAccess.list);
             index = inputParamManager.AddParameter(new GooConstructionParam(), "constructions_", "constructions_", "SAM Analytical Contructions", GH_ParamAccess.list);
-            inputParamManager[index].Optional = true; 
+            inputParamManager[index].Optional = true;
 
             inputParamManager.AddTextParameter("_csv", "_csv", "csv", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_sourceColumn", "_sourceColumn", "Source Column Name", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_destinationColumn", "_destinationColumn", "Destination Column Name", GH_ParamAccess.item);
-
         }
 
         /// <summary>
@@ -56,7 +54,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             List<Panel> panels = new List<Panel>();
@@ -103,14 +103,14 @@ namespace SAM.Analytical.Grasshopper
                 delimitedFileTable = new Core.DelimitedFileTable(new Core.DelimitedFileReader(Core.DelimitedFileType.Csv, lines));
             }
 
-            if(delimitedFileTable == null)
+            if (delimitedFileTable == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             int index_Source = delimitedFileTable.GetIndex(sourceColumn);
-            if(index_Source == -1)
+            if (index_Source == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -124,12 +124,12 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Panel> result = new List<Panel>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 Construction construction = panel?.Construction;
                 if (construction == null)
                     continue;
-                
+
                 string name = construction.Name;
                 if (name == null)
                 {
@@ -138,7 +138,7 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 string name_destination = null;
-                for(int i =0; i < delimitedFileTable.Count; i++)
+                for (int i = 0; i < delimitedFileTable.Count; i++)
                 {
                     string name_source = null;
                     if (!delimitedFileTable.TryGetValue(i, index_Source, out name_source))
@@ -156,7 +156,7 @@ namespace SAM.Analytical.Grasshopper
                     break;
                 }
 
-                if(string.IsNullOrWhiteSpace(name_destination))
+                if (string.IsNullOrWhiteSpace(name_destination))
                 {
                     //result.Add(construction);
                     continue;
@@ -166,7 +166,7 @@ namespace SAM.Analytical.Grasshopper
                     Construction construction_New = constructions.Find(x => x.Name == name_destination);
                     if (construction_New == null)
                         construction_New = new Construction(construction, name_destination);
-                    
+
                     result.Add(new Panel(panel, construction_New));
                 }
             }

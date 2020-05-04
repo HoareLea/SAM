@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace SAM.Analytical
 {
     public static partial class Query
@@ -30,7 +29,7 @@ namespace SAM.Analytical
             }
 
             if (@object is int)
-                return(ApertureType)(int)(@object);
+                return (ApertureType)(int)(@object);
 
             return Analytical.ApertureType.Undefined;
         }

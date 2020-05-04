@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -61,7 +59,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="dataAccess">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="dataAccess">
+        /// The DA object is used to retrieve from inputs and store in outputs.
+        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             List<object> objects = new List<object>();
@@ -84,7 +84,7 @@ namespace SAM.Analytical.Grasshopper
                     GH_ObjectWrapper objectWrapper_Temp = ((GH_ObjectWrapper)@object);
                     if (objectWrapper_Temp.Value is ISAMGeometry3D)
                         geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)objectWrapper_Temp.Value };
-                    else if(objectWrapper_Temp.Value is Geometry.Planar.ISAMGeometry2D)
+                    else if (objectWrapper_Temp.Value is Geometry.Planar.ISAMGeometry2D)
                         geometry3Ds_Temp = new List<ISAMGeometry3D>() { Plane.Base.Convert(objectWrapper_Temp.Value as dynamic) };
                 }
                 else if (@object is IGH_Goo)
@@ -99,7 +99,6 @@ namespace SAM.Analytical.Grasshopper
                 if (geometry3Ds_Temp != null && geometry3Ds_Temp.Count > 0)
                     geometry3Ds.AddRange(geometry3Ds_Temp);
             }
-
 
             List<IClosedPlanar3D> closedPlanar3Ds = Geometry.Spatial.Query.ClosedPlanar3Ds(geometry3Ds);
             if (closedPlanar3Ds == null || closedPlanar3Ds.Count() == 0)
@@ -142,7 +141,7 @@ namespace SAM.Analytical.Grasshopper
 
                 if (apertureConstruction_Temp == null)
                     continue;
-                
+
                 Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
                 if (aperture != null)
                     apertures.Add(aperture);

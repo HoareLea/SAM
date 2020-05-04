@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace SAM.Geometry.Planar
+﻿namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
@@ -34,6 +31,5 @@ namespace SAM.Geometry.Planar
 
             return (vector2D_1.Unit + vector2D_2.Unit).Unit;
         }
-
     }
 }

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Newtonsoft.Json.Linq;
-
+﻿using Newtonsoft.Json.Linq;
 using SAM.Architectural;
 using SAM.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -18,7 +16,6 @@ namespace SAM.Analytical
         {
             dictionary_Panels = new Dictionary<PanelType, Dictionary<Guid, Panel>>();
 
-
             if (panels != null)
                 foreach (Panel panel in panels)
                     Add(panel);
@@ -27,7 +24,6 @@ namespace SAM.Analytical
         public PanelCluster(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public bool Add(Panel panel)
@@ -48,9 +44,9 @@ namespace SAM.Analytical
 
         public Panel GetPanel(Guid guid, PanelType? panelType = null)
         {
-            if(panelType == null || !panelType.HasValue)
+            if (panelType == null || !panelType.HasValue)
             {
-                foreach(KeyValuePair<PanelType, Dictionary<Guid, Panel>> keyValuePair in dictionary_Panels)
+                foreach (KeyValuePair<PanelType, Dictionary<Guid, Panel>> keyValuePair in dictionary_Panels)
                 {
                     Panel panel;
                     if (keyValuePair.Value.TryGetValue(guid, out panel))
@@ -77,7 +73,7 @@ namespace SAM.Analytical
             if (panelTypeList.Count == 0)
                 return result;
 
-            foreach(PanelType panelType in panelTypeList)
+            foreach (PanelType panelType in panelTypeList)
             {
                 Dictionary<Guid, Panel> dictionary;
 
@@ -103,7 +99,7 @@ namespace SAM.Analytical
                 panels = GetPanels();
 
             HashSet<double> elevations = new HashSet<double>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 Geometry.Spatial.BoundingBox3D boundingBox3D = panel.GetBoundingBox();
                 elevations.Add(boundingBox3D.Max.Z);
@@ -111,7 +107,6 @@ namespace SAM.Analytical
             }
 
             return elevations.ToList().ConvertAll(x => new Level(x));
-
         }
 
         public List<Guid> AssignPanelType(double angle_Start, double angle_End, PanelType panelType)
@@ -130,8 +125,8 @@ namespace SAM.Analytical
             {
                 if (keyValuePair_PanelType.Key == panelType)
                     continue;
-                
-                foreach(KeyValuePair<Guid, Panel> keyValuePair_Panel in keyValuePair_PanelType.Value)
+
+                foreach (KeyValuePair<Guid, Panel> keyValuePair_Panel in keyValuePair_PanelType.Value)
                 {
                     Panel panel = keyValuePair_Panel.Value;
                     Geometry.Spatial.Vector3D vector3D = panel.Normal;
@@ -183,7 +178,7 @@ namespace SAM.Analytical
             if (panelTypeList.Count == 0)
                 return result;
 
-            foreach(PanelType panelType in panelTypeList)
+            foreach (PanelType panelType in panelTypeList)
             {
                 Construction construction;
                 if (!dictionary_Constructions.TryGetValue(panelType, out construction) || construction == null)
@@ -193,12 +188,11 @@ namespace SAM.Analytical
                 if (!dictionary_Panels.TryGetValue(panelType, out dictionary))
                     continue;
 
-                foreach(Panel panel in dictionary.Values)
+                foreach (Panel panel in dictionary.Values)
                 {
                     dictionary[panel.Guid] = new Panel(panel, construction);
                     result.Add(panel.Guid);
                 }
-                    
             }
 
             return result;
@@ -237,7 +231,7 @@ namespace SAM.Analytical
             {
                 dictionary_Constructions = new Dictionary<PanelType, Construction>();
                 JArray jArray_Constructions = jObject.Value<JArray>("Constructions");
-                foreach(JObject jObject_Construction in jArray_Constructions)
+                foreach (JObject jObject_Construction in jArray_Constructions)
                 {
                     PanelType panelType;
                     if (!Enum.TryParse(jObject_Construction.Value<string>("PanelType"), out panelType))
@@ -245,7 +239,6 @@ namespace SAM.Analytical
 
                     dictionary_Constructions[panelType] = new Construction(jObject_Construction.Value<JObject>("Construction"));
                 }
-
             }
 
             if (jObject.ContainsKey("Panels"))
@@ -289,7 +282,6 @@ namespace SAM.Analytical
 
             return jObject;
         }
-
 
         private static List<PanelType> GetPanelTypes(params PanelType[] panelTypes)
         {

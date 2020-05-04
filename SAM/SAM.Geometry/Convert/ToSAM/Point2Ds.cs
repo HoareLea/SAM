@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-
-using ClipperLib;
+﻿using ClipperLib;
 using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
+using System.Collections.Generic;
 
 namespace SAM.Geometry
 {

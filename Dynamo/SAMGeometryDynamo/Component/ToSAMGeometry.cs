@@ -1,6 +1,4 @@
-﻿
-
-namespace SAMGeometryDynamo
+﻿namespace SAMGeometryDynamo
 {
     public static partial class Convert
     {

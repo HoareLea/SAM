@@ -51,7 +51,7 @@ namespace SAM.Geometry.Planar
 
             List<List<IntPoint>> intPointsList = new List<List<IntPoint>>();
 
-            foreach(Polygon2D polygon in polygon2Ds)
+            foreach (Polygon2D polygon in polygon2Ds)
             {
                 List<IntPoint> intPoints = Convert.ToClipper((ISegmentable2D)polygon, tolerance);
                 if (intPoints != null)
@@ -77,7 +77,6 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-
 
         private static List<Polygon2D> Union(this Polygon2D polygon2D_1, Polygon2D polygon2D_2)
         {
@@ -125,7 +124,7 @@ namespace SAM.Geometry.Planar
             if (geometry is MultiPolygon)
                 return ((MultiPolygon)geometry).ToSAM();
 
-            if(geometry is Polygon)
+            if (geometry is Polygon)
             {
                 Face2D face2D = ((Polygon)geometry).ToSAM();
                 if (face2D != null)

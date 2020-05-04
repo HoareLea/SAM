@@ -8,7 +8,7 @@ namespace SAM.Geometry
         {
             if (sAMGeometry2D == null)
                 return null;
-            
+
             return ToNTS(sAMGeometry2D as dynamic, tolerance);
         }
     }

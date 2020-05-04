@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -12,10 +11,9 @@ namespace SAM.Geometry.Planar
                 return null;
 
             if (segment2Ds.Count() == 1)
-                return new Polyline2D(new List<Point2D>() { segment2Ds.ElementAt(0).Start, segment2Ds.ElementAt(0).End});
+                return new Polyline2D(new List<Point2D>() { segment2Ds.ElementAt(0).Start, segment2Ds.ElementAt(0).End });
 
             return new PointGraph2D(segment2Ds, split).GetPolyline2D();
         }
-
     }
 }
