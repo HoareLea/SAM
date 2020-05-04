@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public static partial class Modify
+    public static partial class Query
     {
         /// <summary>
         /// Split Segment2Ds
@@ -49,7 +49,7 @@ namespace SAM.Geometry.Planar
                             aPointDictionary[i] = aPointList;
                         }
 
-                        Point2D.Add(aPointList, point2D_Intersection, tolerance);
+                        Planar.Point2D.Add(aPointList, point2D_Intersection, tolerance);
                     }
 
                     if (point2D_Intersection.Distance(segment2D_2.Start) > tolerance && point2D_Intersection.Distance(segment2D_2.End) > tolerance)
@@ -60,7 +60,7 @@ namespace SAM.Geometry.Planar
                             aPointDictionary[j] = aPointList;
                         }
 
-                        Point2D.Add(aPointList, point2D_Intersection, tolerance);
+                        Planar.Point2D.Add(aPointList, point2D_Intersection, tolerance);
                     }
                 }
             }
@@ -78,10 +78,10 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                Point2D.Add(aPointList, segment2D_Temp[0], tolerance);
-                Point2D.Add(aPointList, segment2D_Temp[1], tolerance);
+                Planar.Point2D.Add(aPointList, segment2D_Temp[0], tolerance);
+                Planar.Point2D.Add(aPointList, segment2D_Temp[1], tolerance);
 
-                aPointList = Point2D.SortByDistance(segment2D_Temp[0], aPointList);
+                aPointList = Planar.Point2D.SortByDistance(segment2D_Temp[0], aPointList);
 
                 for (int j = 0; j < aPointList.Count - 1; j++)
                     aResult.Add(new Segment2D(aPointList[j], aPointList[j + 1]));

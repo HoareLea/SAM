@@ -5,18 +5,18 @@ namespace SAM.Core
 {
     public static partial class Modify
     {
-        public static List<T> Reorder<T>(this IEnumerable<T> objects, int startIndex)
+        public static bool Reorder<T>(this List<T> objects, int startIndex)
         {
             if (objects == null || objects == null)
-                return null;
+                return false;
 
             if (startIndex < 0)
-                return null;
+                return false;
 
             int count = objects.Count();
 
             if (startIndex >= count)
-                return null;
+                return false;
 
             List<T> result = new List<T>();
             for (int i = startIndex; i < count; i++)
@@ -25,7 +25,9 @@ namespace SAM.Core
             for (int i = 0; i < startIndex; i++)
                 result.Add(objects.ElementAt(i));
 
-            return result;
+            objects.Clear();
+            objects.AddRange(result);
+            return true;
         }
     }
 }

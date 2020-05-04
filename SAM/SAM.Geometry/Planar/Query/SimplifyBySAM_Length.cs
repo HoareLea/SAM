@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public static partial class Modify
+    public static partial class Query
     {
         public static Polygon2D SimplifyBySAM_Length(this Polygon2D polygon2D, double maxLength, double tolerance = Core.Tolerance.Distance)
         {
@@ -76,7 +76,7 @@ namespace SAM.Geometry.Planar
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
-            segment2Ds = Modify.Split(segment2Ds, tolerance);
+            segment2Ds = Query.Split(segment2Ds, tolerance);
 
             //Collecting Intersections
             Dictionary<int, HashSet<Point2D>> dictionary = new Dictionary<int, HashSet<Point2D>>();

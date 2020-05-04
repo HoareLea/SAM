@@ -59,7 +59,7 @@
         {
             double f = (3 * c / a - b * b / (a * a)) / 3;
             double g = (2 * System.Math.Pow(b, 3) / System.Math.Pow(a, 3) - (9 * b * c) / System.Math.Pow(a, 2) + 27 * d / a) / 27;
-            double h = Core.Modify.Round(System.Math.Pow(g, 2) * 0.25 + System.Math.Pow(f, 3) / 27, tolerance);
+            double h = Core.Query.Round(System.Math.Pow(g, 2) * 0.25 + System.Math.Pow(f, 3) / 27, tolerance);
 
             if (h <= 0)
             {

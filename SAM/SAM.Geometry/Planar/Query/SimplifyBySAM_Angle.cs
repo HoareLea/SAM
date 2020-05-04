@@ -2,7 +2,7 @@
 
 namespace SAM.Geometry.Planar
 {
-    public static partial class Modify
+    public static partial class Query
     {
         public static bool SimplifyBySAM_Angle(this List<Point2D> point2Ds, bool closed, double maxAngle = Core.Tolerance.Angle)
         {

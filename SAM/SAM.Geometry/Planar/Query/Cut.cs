@@ -3,26 +3,8 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
-    public static partial class Modify
+    public static partial class Query
     {
-        //public static List<Polygon2D> Cut(this Polygon2D polygon2D_ToBeCut, Polygon2D polygon2D, double tolerance = Tolerance.MicroDistance)
-        //{
-        //    if (polygon2D_ToBeCut == null || polygon2D == null)
-        //        return null;
-
-        // return Query.Difference(polygon2D_ToBeCut, polygon2D, tolerance);
-
-        // //List<Polygon2D> polygon2Ds = new PointGraph2D(new Polygon2D[] { polygon2D_ToBeCut,
-        // polygon }, true).GetPolygon2Ds(); //if (polygon2Ds == null || polygon2Ds.Count == 0) //
-        // return null;
-
-        // //List<Polygon2D> result = new List<Polygon2D>(); //foreach (Polygon2D polygon2D_Temp in
-        // polygon2Ds) //{ // if (!polygon.Inside(polygon2D_Temp.GetInternalPoint2D())) //
-        // result.Add(polygon2D_Temp); //}
-
-        //    //return result;
-        //}
-
         public static List<Polyline2D> Cut(this Polyline2D polyline2D, Point2D point2D_1, Point2D point2D_2)
         {
             if (polyline2D == null || point2D_1 == null || point2D_2 == null)
@@ -35,7 +17,7 @@ namespace SAM.Geometry.Planar
                 Polyline2D polyline2D_Temp = new Polyline2D(polyline2D);
                 polyline2D_Temp.InsertClosest(point2D_1_Closest);
                 int index = polyline2D_Temp.IndexOfClosestPoint2D(point2D_1);
-                polyline2D_Temp.Reorder(index);
+                //polyline2D_Temp.Reorder(index); //DODO: Check if this line is necessary
 
                 return new List<Polyline2D>() { polyline2D_Temp };
             }

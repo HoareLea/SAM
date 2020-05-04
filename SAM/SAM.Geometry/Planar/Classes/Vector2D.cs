@@ -159,8 +159,8 @@ namespace SAM.Geometry.Planar
 
         public void Round(double tolerance = Core.Tolerance.Distance)
         {
-            coordinates[0] = Core.Modify.Round(coordinates[0], tolerance);
-            coordinates[1] = Core.Modify.Round(coordinates[1], tolerance);
+            coordinates[0] = Core.Query.Round(coordinates[0], tolerance);
+            coordinates[1] = Core.Query.Round(coordinates[1], tolerance);
         }
 
         public BoundingBox2D GetBoundingBox()

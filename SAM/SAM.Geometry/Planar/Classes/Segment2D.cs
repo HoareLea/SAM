@@ -298,8 +298,8 @@ namespace SAM.Geometry.Planar
             // Find the point of intersection.
             Point2D point2D_Intersection = new Point2D(Start.X + dx12 * t1, Start.Y + dy12 * t1);
 
-            double t1_Temp = Core.Modify.Round(t1, tolerance);
-            double aT2_Temp = Core.Modify.Round(t2, tolerance);
+            double t1_Temp = Core.Query.Round(t1, tolerance);
+            double aT2_Temp = Core.Query.Round(t2, tolerance);
 
             // The segments intersect if t1 and t2 are between 0 and 1.
             if (((t1_Temp >= 0) && (t1_Temp <= 1) && (aT2_Temp >= 0) && (aT2_Temp <= 1)))

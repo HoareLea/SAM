@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public static partial class Modify
+    public static partial class Query
     {
         public static Polygon2D RemoveAngle(this Polygon2D polygon2D, double length, double minAngle = 1.5708, double tolerance = Core.Tolerance.MacroDistance)
         {

@@ -62,7 +62,7 @@ namespace SAM.Geometry
 
                 //TODO: Check if native NTS Method works
                 //polygon = Modify.SimplifyByLength(polygon, tolerance, tolerance);
-                polygon = Modify.SimplifyByDouglasPeucker(polygon, tolerance);
+                polygon = Planar.Query.SimplifyByDouglasPeucker(polygon, tolerance);
 
                 result.Add(polygon);
             }

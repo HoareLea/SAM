@@ -332,9 +332,9 @@ namespace SAM.Geometry.Spatial
 
         public void Round(double tolerance = Core.Tolerance.Distance)
         {
-            coordinates[0] = Core.Modify.Round(coordinates[0], tolerance);
-            coordinates[1] = Core.Modify.Round(coordinates[1], tolerance);
-            coordinates[2] = Core.Modify.Round(coordinates[2], tolerance);
+            coordinates[0] = Core.Query.Round(coordinates[0], tolerance);
+            coordinates[1] = Core.Query.Round(coordinates[1], tolerance);
+            coordinates[2] = Core.Query.Round(coordinates[2], tolerance);
         }
 
         public static Vector3D operator +(Vector3D vector3D_1, Vector3D vector3D_2)

@@ -200,12 +200,7 @@ namespace SAM.Geometry.Planar
 
         public bool Reorder(int startIndex)
         {
-            List<Point2D> points_New = Core.Modify.Reorder(points, startIndex);
-            if (points_New == null)
-                return false;
-
-            points = points_New;
-            return true;
+            return Core.Modify.Reorder(points, startIndex); ;
         }
 
         public double Distance(Point2D point2D)
@@ -225,7 +220,7 @@ namespace SAM.Geometry.Planar
 
         public ISegmentable2D Trim(double parameter, bool inverted = false)
         {
-            return Modify.Trim(this, parameter, inverted);
+            return Query.Trim(this, parameter, inverted);
         }
 
         public double GetLength()
@@ -235,7 +230,7 @@ namespace SAM.Geometry.Planar
 
         public bool SimplifyByAngle(double maxAngle = Core.Tolerance.Angle)
         {
-            return Modify.SimplifyBySAM_Angle(points, true, maxAngle);
+            return Query.SimplifyBySAM_Angle(points, true, maxAngle);
         }
 
         public IEnumerator<Point2D> GetEnumerator()

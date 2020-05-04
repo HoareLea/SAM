@@ -12,7 +12,7 @@ namespace SAM.Geometry
             if (point2D == null)
                 return null;
 
-            return new Coordinate(Core.Modify.Round(point2D.X, tolerance), Core.Modify.Round(point2D.Y, tolerance));
+            return new Coordinate(Core.Query.Round(point2D.X, tolerance), Core.Query.Round(point2D.Y, tolerance));
         }
 
         public static Coordinate ToNTS(this IntPoint intPoint, double tolerance = Core.Tolerance.MicroDistance)

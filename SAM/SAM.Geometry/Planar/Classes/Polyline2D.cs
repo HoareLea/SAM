@@ -318,7 +318,7 @@ namespace SAM.Geometry.Planar
 
         public ISegmentable2D Trim(double parameter, bool inverted = false)
         {
-            return Modify.Trim(this, parameter, inverted);
+            return Query.Trim(this, parameter, inverted);
         }
 
         public double Distance(Point2D point2D)

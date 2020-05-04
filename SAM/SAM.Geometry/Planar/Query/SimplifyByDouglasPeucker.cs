@@ -4,7 +4,7 @@ using SAM.Core;
 
 namespace SAM.Geometry.Planar
 {
-    public static partial class Modify
+    public static partial class Query
     {
         public static Polygon SimplifyByDouglasPeucker(this Polygon polygon, double tolerance = Tolerance.Distance)
         {

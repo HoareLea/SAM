@@ -126,7 +126,7 @@ namespace SAM.Geometry.Planar
 
             IEnumerable<Segment2D> segments_Temp = segment2Ds;
             if (split)
-                segments_Temp = Modify.Split(segment2Ds, tolerance);
+                segments_Temp = Query.Split(segment2Ds, tolerance);
 
             HashSet<Point2D> point2Ds_HashSet = new HashSet<Point2D>();
             List<Tuple<Point2D, Point2D, Segment2D>> tuples = new List<Tuple<Point2D, Point2D, Segment2D>>();

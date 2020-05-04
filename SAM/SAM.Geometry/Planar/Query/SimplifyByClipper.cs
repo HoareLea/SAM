@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
-    public static partial class Modify
+    public static partial class Query
     {
         public static List<Polygon2D> SimplifyByClipper(this Polygon2D polygon2D, double tolerance = Tolerance.MicroDistance)
         {

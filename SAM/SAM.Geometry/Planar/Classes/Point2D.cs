@@ -116,7 +116,7 @@ namespace SAM.Geometry.Planar
 
         public string ToString(double tolerance = Core.Tolerance.Distance)
         {
-            return string.Format("Point2D(X={0},Y={1})", Core.Modify.Round(coordinates[0], tolerance), Core.Modify.Round(coordinates[1], tolerance));
+            return string.Format("Point2D(X={0},Y={1})", Core.Query.Round(coordinates[0], tolerance), Core.Query.Round(coordinates[1], tolerance));
         }
 
         public bool AlmostEquals(Point2D point2D, double tolerance = Core.Tolerance.Distance)
@@ -158,8 +158,8 @@ namespace SAM.Geometry.Planar
 
         public void Round(double tolerance = Core.Tolerance.Distance)
         {
-            coordinates[0] = Core.Modify.Round(coordinates[0], tolerance);
-            coordinates[1] = Core.Modify.Round(coordinates[1], tolerance);
+            coordinates[0] = Core.Query.Round(coordinates[0], tolerance);
+            coordinates[1] = Core.Query.Round(coordinates[1], tolerance);
         }
 
         public void Mirror(Point2D point2D)

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public static partial class Modify
+    public static partial class Query
     {
         public static List<Segment2D> Trim(this IEnumerable<Segment2D> segment2Ds, double length, bool trim_Start = true, bool trim_End = true)
         {
@@ -177,7 +177,7 @@ namespace SAM.Geometry.Planar
             bool closed = segmentable2D is IClosed2D;
 
             if (inverted)
-                Reverse(point2Ds, closed);
+                Modify.Reverse(point2Ds, closed);
 
             List<Segment2D> segment2Ds = Create.Segment2Ds(point2Ds, closed);
             if (segment2Ds == null || segment2Ds.Count() == 0)

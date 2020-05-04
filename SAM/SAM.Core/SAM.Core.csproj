@@ -81,7 +81,7 @@
     <Compile Include="Interfaces\Base\IJSAMObject.cs" />
     <Compile Include="Interfaces\Base\ISAMObject.cs" />
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
-    <Compile Include="Modify\Round.cs" />
+    <Compile Include="Query\Round.cs" />
     <Compile Include="Modify\Reorder.cs" />
     <Compile Include="Modify\Add.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
