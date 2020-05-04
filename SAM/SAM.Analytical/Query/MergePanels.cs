@@ -26,16 +26,32 @@ namespace SAM.Analytical
                 dictionary[Query.PanelGroup(panel.PanelType)].Add(panel);
             }
 
+            List<Panel> result = new List<Panel>();
+
             List<Panel> panels_Temp = dictionary[Analytical.PanelGroup.Floor];
             panels_Temp.AddRange(dictionary[Analytical.PanelGroup.Roof]);
 
+            panels_Temp = MergePanels_FloorAndRoof(panels_Temp, offset, tolerance);
+            if (panels_Temp != null && panels_Temp.Count > 0)
+                result.AddRange(panels_Temp);
+
+
+
+            return result;
+        }
+    
+        private static List<Panel> MergePanels_FloorAndRoof(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
+        {
             List<Tuple<double, Panel>> tuples = new List<Tuple<double, Panel>>();
-            foreach (Panel panel in panels_Temp)
+            foreach (Panel panel in panels)
             {
                 double elevation = panel.MaxElevation();
-
                 tuples.Add(new Tuple<double, Panel>(elevation, panel));
             }
+
+            Construction construction_FloorInternal_Default = Construction(Analytical.PanelType.FloorInternal);
+            Construction construction_FloorExposed_Default = Construction(Analytical.PanelType.FloorExposed);
+            Construction construction_SlabOnGrade_Default = Construction(Analytical.PanelType.SlabOnGrade);
 
             List<Panel> result = new List<Panel>();
 
@@ -68,13 +84,7 @@ namespace SAM.Analytical
                 {
                     Panel panel = tuple_Temp.Item2;
 
-                    //Geometry.Spatial.IClosedPlanar3D closedPlanar3D = plane.Project(panel.GetFace3D().GetExternalEdge());
-
                     Geometry.Spatial.Face3D face3D = plane.Project(panel.GetFace3D());
-
-                    //Geometry.Spatial.Polygon3D polygon3D = closedPlanar3D as Geometry.Spatial.Polygon3D;
-                    //if (polygon3D == null)
-                    //    continue;
 
                     Face2D face2D = plane.Convert(face3D);
 
@@ -82,16 +92,12 @@ namespace SAM.Analytical
                 }
 
                 List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
-                Geometry.Planar.Modify.RemoveAlmostSimilar_NTS(polygons_Temp, tolerance);
+                Modify.RemoveAlmostSimilar_NTS(polygons_Temp, tolerance);
 
                 List<Polygon> polygons = Geometry.Convert.ToNTS_Polygons(polygons_Temp, tolerance);
                 if (polygons != null || polygons.Count > 0)
                 {
-                    HashSet<Guid> guids = new HashSet<Guid>();
-
-                    Construction construction_FloorInternal_Default = Construction(Analytical.PanelType.FloorInternal);
-                    Construction construction_FloorExposed_Default = Construction(Analytical.PanelType.FloorExposed);
-                    Construction construction_SlabOnGrade_Default = Construction(Analytical.PanelType.SlabOnGrade);
+                    Dictionary<Construction, List<Tuple<Panel, Polygon>>> dictionary = new Dictionary<Construction, List<Tuple<Panel, Polygon>>>();
 
                     foreach (Polygon polygon in polygons)
                     {
@@ -140,17 +146,47 @@ namespace SAM.Analytical
                         if (panel_Old == null)
                             continue;
 
-                        Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon.ToSAM());
-                        Guid guid = panel_Old.Guid;
-                        if (guids.Contains(guid))
-                            guid = Guid.NewGuid();
+                        Construction construction = dictionary.Keys.ToList().Find(x => x.Guid == panel_Old.Construction.Guid);
+                        if (construction == null)
+                            construction = panel_Old.Construction;
 
-                        guids.Add(guid);
+                        List<Tuple<Panel, Polygon>> tuples_Panels = null;
+                        if(!dictionary.TryGetValue(construction, out tuples_Panels))
+                        {
+                            tuples_Panels = new List<Tuple<Panel, Polygon>>();
+                            dictionary[construction] = tuples_Panels;
+                        }
 
-                        Panel panel_New = new Panel(guid, panel_Old, face3D);
-                        result.Add(panel_New);
+                        tuples_Panels.Add(new Tuple<Panel, Polygon>(panel_Old, polygon));
+                    }
+
+                    //TODO: Merge Panels
+                    foreach(KeyValuePair<Construction, List<Tuple<Panel, Polygon>>> keyValuePair in dictionary)
+                    {
+
+                    }
+
+                    HashSet<Guid> guids = new HashSet<Guid>();
+
+                    foreach (KeyValuePair<Construction, List<Tuple<Panel, Polygon>>> keyValuePair in dictionary)
+                    {
+                        foreach(Tuple<Panel, Polygon> tuple_Panel in keyValuePair.Value)
+                        {
+                            Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, tuple_Panel.Item2.ToSAM());
+                            Guid guid = tuple_Panel.Item1.Guid;
+                            if (guids.Contains(guid))
+                                guid = Guid.NewGuid();
+
+                            guids.Add(guid);
+
+                            Panel panel_New = new Panel(guid, tuple_Panel.Item1, face3D);
+
+                            result.Add(panel_New);
+                        }
                     }
                 }
+
+
             }
 
             return result;
