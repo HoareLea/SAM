@@ -8,12 +8,30 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
+    /// <summary>
+    /// SAM Analytical Panel stores information about shape and properties of building boundary such as Wall, Floor, Roof, Slab etc.
+    /// </summary>
     public class Panel : SAMInstance
     {
+        /// <summary>
+        /// Type of the Panel such as Wall, Ceiling etc.
+        /// </summary>
         private PanelType panelType;
+        
+        /// <summary>
+        /// Planar Boundary 3D of Panel
+        /// </summary>
         private PlanarBoundary3D planarBoundary3D;
+
+        /// <summary>
+        /// Apertures being hosted on Panel (Doors, Winodows, Skylight etc.)
+        /// </summary>
         private List<Aperture> apertures;
 
+        /// <summary>
+        /// Creates new instance of panel based on another panel
+        /// </summary>
+        /// <param name="panel">SAM Analytical Panel</param>
         public Panel(Panel panel)
             : base(panel)
         {
@@ -24,6 +42,11 @@ namespace SAM.Analytical
                 apertures = new List<Aperture>(panel.apertures.ConvertAll(x => new Aperture(x)));
         }
 
+        /// <summary>
+        /// Creates new Panles by given Panel and New Construction
+        /// </summary>
+        /// <param name="panel">SAM Analytical Panel</param>
+        /// <param name="construction">SAM Analytical Construction</param>
         public Panel(Panel panel, Construction construction)
             : base(construction == null ? null : construction.Name, panel, construction)
         {
@@ -34,6 +57,11 @@ namespace SAM.Analytical
                 apertures = new List<Aperture>(panel.apertures.ConvertAll(x => new Aperture(x)));
         }
 
+        /// <summary>
+        /// Creates new Panles by given Panel and new PanelType 
+        /// </summary>
+        /// <param name="panel">SAM Analytical Panel</param>
+        /// <param name="panelType">SAM Analytical PanelType</param>
         public Panel(Panel panel, PanelType panelType)
             : base(panel)
         {
@@ -90,6 +118,10 @@ namespace SAM.Analytical
         {
         }
 
+        /// <summary>
+        /// Gets Geometrical Representation of Panel (None Analytical Data)
+        /// </summary>
+        /// <returns name="face3D">SAM Geometry Face3D</returns>
         public Face3D GetFace3D()
         {
             return planarBoundary3D.GetFace3D();
