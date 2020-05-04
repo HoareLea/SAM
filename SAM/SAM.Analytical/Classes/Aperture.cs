@@ -5,10 +5,20 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
+    /// <summary>
+    /// Analytical Aperture object which stores information about Winodws and Doors
+    /// </summary>
     public class Aperture : SAMInstance
-    {
+    {   
+        /// <summary>
+        /// Planar Boundary 3D of Aperture
+        /// </summary>
         private PlanarBoundary3D planarBoundary3D;
-
+        
+        /// <summary>
+        ///  Constructor for Analytical Aperture
+        /// </summary>
+        /// <param name="aperture">Other Aperture</param>
         public Aperture(Aperture aperture)
             : base(aperture, aperture?.SAMType)
         {
