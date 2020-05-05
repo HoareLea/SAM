@@ -146,7 +146,7 @@ namespace SAM.Analytical
                         if (panel_Old == null)
                             continue;
 
-                        Construction construction = dictionary.Keys.ToList().Find(x => x.Guid == panel_Old.Construction.Guid);
+                        Construction construction = dictionary.Keys.ToList().Find(x => x.Name == panel_Old.Construction.Name);
                         if (construction == null)
                             construction = panel_Old.Construction;
 
