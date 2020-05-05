@@ -161,10 +161,26 @@ namespace SAM.Analytical
                     }
 
                     //TODO: Merge Panels
-                    foreach(KeyValuePair<Construction, List<Tuple<Panel, Polygon>>> keyValuePair in dictionary)
+                    Dictionary<Construction, List<Tuple<Panel, Polygon>>> dictionary_Temp = new Dictionary<Construction, List<Tuple<Panel, Polygon>>>();
+                    foreach (KeyValuePair<Construction, List<Tuple<Panel, Polygon>>> keyValuePair in dictionary)
                     {
+                        List<Tuple<Panel, Polygon>> tuples_Panel = new List<Tuple<Panel, Polygon>>();
 
+                        keyValuePair.Value.Sort((x, y) => y.Item2.Area.CompareTo(x.Item2.Area));
+
+                        IEnumerable<Polygon> polygons_Union = Geometry.Planar.Query.Union(keyValuePair.Value.ConvertAll(x => x.Item2));
+                        foreach(Polygon polygon in polygons_Union)
+                        {
+                            Tuple<Panel, Polygon> tuple_Panel = keyValuePair.Value.Find(x => polygon.Contains(x.Item2.InteriorPoint));
+                            if (tuple_Panel == null)
+                                continue;
+
+                            tuples_Panel.Add(new Tuple<Panel, Polygon>(tuple_Panel.Item1, polygon));
+                        }
+
+                        dictionary_Temp[keyValuePair.Key] = tuples_Panel;
                     }
+                    dictionary = dictionary_Temp;
 
                     HashSet<Guid> guids = new HashSet<Guid>();
 

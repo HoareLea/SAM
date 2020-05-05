@@ -78,6 +78,30 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public static List<Polygon> Union(this IEnumerable<Polygon> polygons)
+        {
+            if (polygons == null)
+                return null;
+
+            List<Polygon> result = new List<Polygon>();
+            if (polygons.Count() == 0)
+                return result;
+
+            MultiPolygon multiPolygon = new MultiPolygon(polygons.ToArray());
+            NetTopologySuite.Geometries.Geometry geometry = multiPolygon.Union();
+            if (geometry == null)
+                return null;
+
+            if (geometry is MultiPolygon)
+                return ((MultiPolygon)geometry).Cast<Polygon>().ToList();
+
+            if (geometry is Polygon)
+                result.Add((Polygon)geometry);
+
+            return result;
+        }
+
+        
         private static List<Polygon2D> Union(this Polygon2D polygon2D_1, Polygon2D polygon2D_2)
         {
             if (polygon2D_1 == null || polygon2D_2 == null)
@@ -106,7 +130,7 @@ namespace SAM.Geometry.Planar
 
             return new PointGraph2D(polygon2Ds, true).GetPolygon2Ds_External();
         }
-
+        
         private static List<Face2D> Union(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             Polygon polygon_1 = face2D_1?.ToNTS(tolerance);
