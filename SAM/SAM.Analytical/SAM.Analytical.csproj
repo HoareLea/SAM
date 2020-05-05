@@ -81,11 +81,12 @@
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Manager\ActiveSettings.cs" />
+    <Compile Include="Query\MergeCoplanarPanels.cs" />
     <Compile Include="Query\SnapByOffset.cs" />
     <Compile Include="Query\SnapByPoints.cs" />
     <Compile Include="Query\ApertureConstruction.cs" />
     <Compile Include="Query\ApertureConstructionName.cs" />
-    <Compile Include="Query\MergePanels.cs" />
+    <Compile Include="Query\MergeOverlapPanels.cs" />
     <Compile Include="Query\PanelGroup.cs" />
     <Compile Include="Query\ConstructionName.cs" />
     <Compile Include="Query\Construction.cs" />

@@ -81,7 +81,7 @@
     <Compile Include="Component\SAMAnalyticalOffsetAperturesOnEdge.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperture.cs" />
     <Compile Include="Component\SAMAnalyticalCreateApertureConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalMergePanels.cs" />
+    <Compile Include="Component\SAMAnalyticalMergeOverlapPanels.cs" />
     <Compile Include="Component\SAMAnalyticalMovePanel.cs" />
     <Compile Include="Component\SAMAnalyticalPlaneIntersection.cs" />
     <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />

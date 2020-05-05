@@ -9,7 +9,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> MergePanels(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> MergeOverlapPanels(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
                 return null;
@@ -31,16 +31,14 @@ namespace SAM.Analytical
             List<Panel> panels_Temp = dictionary[Analytical.PanelGroup.Floor];
             panels_Temp.AddRange(dictionary[Analytical.PanelGroup.Roof]);
 
-            panels_Temp = MergePanels_FloorAndRoof(panels_Temp, offset, tolerance);
+            panels_Temp = MergeOverlapPanels_FloorAndRoof(panels_Temp, offset, tolerance);
             if (panels_Temp != null && panels_Temp.Count > 0)
                 result.AddRange(panels_Temp);
-
-
 
             return result;
         }
     
-        private static List<Panel> MergePanels_FloorAndRoof(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
+        private static List<Panel> MergeOverlapPanels_FloorAndRoof(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
         {
             List<Tuple<double, Panel>> tuples = new List<Tuple<double, Panel>>();
             foreach (Panel panel in panels)
@@ -54,6 +52,7 @@ namespace SAM.Analytical
             Construction construction_SlabOnGrade_Default = Construction(Analytical.PanelType.SlabOnGrade);
 
             List<Panel> result = new List<Panel>();
+            HashSet<Guid> guids = new HashSet<Guid>();
 
             tuples.Sort((x, y) => x.Item1.CompareTo(y.Item1));
             while (tuples.Count > 0)
@@ -146,63 +145,16 @@ namespace SAM.Analytical
                         if (panel_Old == null)
                             continue;
 
-                        Construction construction = dictionary.Keys.ToList().Find(x => x.Name == panel_Old.Construction.Name);
-                        if (construction == null)
-                            construction = panel_Old.Construction;
+                        Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon.ToSAM());
+                        Guid guid = panel_Old.Guid;
+                        if (guids.Contains(guid))
+                            guid = Guid.NewGuid();
 
-                        List<Tuple<Panel, Polygon>> tuples_Panels = null;
-                        if(!dictionary.TryGetValue(construction, out tuples_Panels))
-                        {
-                            tuples_Panels = new List<Tuple<Panel, Polygon>>();
-                            dictionary[construction] = tuples_Panels;
-                        }
+                        Panel panel_New = new Panel(guid, panel_Old, face3D);
 
-                        tuples_Panels.Add(new Tuple<Panel, Polygon>(panel_Old, polygon));
-                    }
-
-                    //TODO: Merge Panels
-                    Dictionary<Construction, List<Tuple<Panel, Polygon>>> dictionary_Temp = new Dictionary<Construction, List<Tuple<Panel, Polygon>>>();
-                    foreach (KeyValuePair<Construction, List<Tuple<Panel, Polygon>>> keyValuePair in dictionary)
-                    {
-                        List<Tuple<Panel, Polygon>> tuples_Panel = new List<Tuple<Panel, Polygon>>();
-
-                        keyValuePair.Value.Sort((x, y) => y.Item2.Area.CompareTo(x.Item2.Area));
-
-                        IEnumerable<Polygon> polygons_Union = Geometry.Planar.Query.Union(keyValuePair.Value.ConvertAll(x => x.Item2));
-                        foreach(Polygon polygon in polygons_Union)
-                        {
-                            Tuple<Panel, Polygon> tuple_Panel = keyValuePair.Value.Find(x => polygon.Contains(x.Item2.InteriorPoint));
-                            if (tuple_Panel == null)
-                                continue;
-
-                            tuples_Panel.Add(new Tuple<Panel, Polygon>(tuple_Panel.Item1, polygon));
-                        }
-
-                        dictionary_Temp[keyValuePair.Key] = tuples_Panel;
-                    }
-                    dictionary = dictionary_Temp;
-
-                    HashSet<Guid> guids = new HashSet<Guid>();
-
-                    foreach (KeyValuePair<Construction, List<Tuple<Panel, Polygon>>> keyValuePair in dictionary)
-                    {
-                        foreach(Tuple<Panel, Polygon> tuple_Panel in keyValuePair.Value)
-                        {
-                            Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, tuple_Panel.Item2.ToSAM());
-                            Guid guid = tuple_Panel.Item1.Guid;
-                            if (guids.Contains(guid))
-                                guid = Guid.NewGuid();
-
-                            guids.Add(guid);
-
-                            Panel panel_New = new Panel(guid, tuple_Panel.Item1, face3D);
-
-                            result.Add(panel_New);
-                        }
+                        result.Add(panel_New);
                     }
                 }
-
-
             }
 
             return result;

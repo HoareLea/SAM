@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalMergePanels : GH_Component
+    public class SAMAnalyticalMergeOverlapPanels : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,8 +20,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalMergePanels()
-          : base("SAMAnalytical.MergePanels", "SAMAnalytical.MergePanels",
+        public SAMAnalyticalMergeOverlapPanels()
+          : base("SAMAnalytical.MergeOverlapPanels", "SAMAnalytical.MergeOverlapPanels",
               "Merge SAM Analytical Panels",
               "SAM", "Analytical")
         {
@@ -80,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            panels = Query.MergePanels(panels, offset, Core.Tolerance.Distance);
+            panels = Query.MergeOverlapPanels(panels, offset, Core.Tolerance.Distance);
             if (panels == null)
                 dataAccess.SetDataList(0, null);
             else
