@@ -6,6 +6,7 @@ using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Grasshopper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,6 +62,15 @@ namespace SAM.Analytical.Grasshopper
         {
             Geometry.Grasshopper.GooSAMGeometry gooSAMGeometry = new Geometry.Grasshopper.GooSAMGeometry(Value.GetFace3D());
             gooSAMGeometry.DrawViewportMeshes(args);
+
+            ////TODO Play with  text values on model
+            //TextEntity textEntity = new TextEntity
+            //{
+            //    Plane = Value.GetFace3D().GetPlane().ToRhino(),
+            //    PlainText = Value.Name,
+            //    Justification = TextJustification.MiddleCenter
+            //};
+            //args.Pipeline.DrawText(textEntity, System.Drawing.Color.Red);
 
             List<Aperture> apertures = Value.Apertures;
             if (apertures != null)
