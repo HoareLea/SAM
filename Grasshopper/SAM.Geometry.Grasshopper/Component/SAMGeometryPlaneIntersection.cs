@@ -96,7 +96,7 @@ namespace SAM.Geometry.Grasshopper
                 plane = objectWrapper.Value as Plane;
             else if (objectWrapper.Value is GooSAMGeometry)
                 plane = ((GooSAMGeometry)objectWrapper.Value).Value as Plane;
-            else if(objectWrapper.Value is GH_Plane)
+            else if (objectWrapper.Value is GH_Plane)
                 plane = ((GH_Plane)objectWrapper.Value).ToSAM();
 
             if (plane == null)
