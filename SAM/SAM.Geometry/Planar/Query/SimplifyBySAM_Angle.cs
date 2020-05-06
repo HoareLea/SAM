@@ -23,7 +23,7 @@ namespace SAM.Geometry.Planar
                     Point2D point2D_1 = point2Ds_Temp[i];
                     Point2D point2D_2 = point2Ds_Temp[i + 1];
                     Point2D point2D_3 = point2Ds_Temp[i + 2];
-                    if (Query.SmallestAngle(point2D_1, point2D_2, point2D_3) < maxAngle)
+                    if (SmallestAngle(point2D_1, point2D_2, point2D_3) < maxAngle)
                     {
                         point2Ds_Temp.RemoveAt(i + 1);
                         if ((point2Ds_Temp.Count < 3 && closed) || (point2Ds_Temp.Count < 2))
@@ -45,7 +45,7 @@ namespace SAM.Geometry.Planar
                     point2D_1 = point2Ds_Temp[count - 2];
                     point2D_2 = point2Ds_Temp[count - 1];
                     point2D_3 = point2Ds_Temp[0];
-                    if (Query.SmallestAngle(point2D_1, point2D_2, point2D_3) < maxAngle)
+                    if (SmallestAngle(point2D_1, point2D_2, point2D_3) < maxAngle)
                     {
                         point2Ds_Temp.RemoveAt(count - 1);
                         if (point2Ds_Temp.Count < 3)
@@ -58,7 +58,7 @@ namespace SAM.Geometry.Planar
                     point2D_1 = point2Ds_Temp[count - 1];
                     point2D_2 = point2Ds_Temp[0];
                     point2D_3 = point2Ds_Temp[1];
-                    if (Query.SmallestAngle(point2D_1, point2D_2, point2D_3) < maxAngle)
+                    if (SmallestAngle(point2D_1, point2D_2, point2D_3) < maxAngle)
                     {
                         point2Ds_Temp.RemoveAt(0);
                         if (point2Ds_Temp.Count < 3)

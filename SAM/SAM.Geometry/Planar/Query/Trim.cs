@@ -101,14 +101,14 @@ namespace SAM.Geometry.Planar
             if (segment2D == null || polygon2D == null)
                 return null;
 
-            List<Point2D> point2Ds = Query.Intersections(segment2D.End, segment2D.Direction, polygon2D, false, true, false, true, tolerance);
+            List<Point2D> point2Ds = Intersections(segment2D.End, segment2D.Direction, polygon2D, false, true, false, true, tolerance);
             if (point2Ds == null || point2Ds.Count <= 1)
                 return null;
 
             Point2D point2D_1;
             Point2D point2D_2;
 
-            Query.ExtremePoints(point2Ds, out point2D_1, out point2D_2);
+            ExtremePoints(point2Ds, out point2D_1, out point2D_2);
             if (point2D_1 == null || point2D_2 == null)
                 return null;
 

@@ -56,7 +56,7 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            double tolerance = SAM.Core.Tolerance.Distance;
+            double tolerance = Core.Tolerance.Distance;
             if (!dataAccess.GetData(2, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

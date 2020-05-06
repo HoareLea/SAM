@@ -128,7 +128,7 @@ namespace SAM.Geometry.Planar
             List<Point2D> point2Ds = new List<Point2D>() { segment2D_1[0], segment2D_1[1], segment2D_2[0], segment2D_2[1] };
             Point2D point2D_1;
             Point2D point2D_2;
-            Query.ExtremePoints(point2Ds, out point2D_1, out point2D_2);
+            ExtremePoints(point2Ds, out point2D_1, out point2D_2);
             Modify.SortByDistance(point2Ds, point2D_1);
 
             if (on_1 && on_2)

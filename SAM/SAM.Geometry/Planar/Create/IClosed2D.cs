@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
     {
         public static IClosed2D IClosed2D(this JObject jObject)
         {
-            return SAM.Geometry.Create.ISAMGeometry(jObject) as IClosed2D;
+            return Geometry.Create.ISAMGeometry(jObject) as IClosed2D;
         }
     }
 }

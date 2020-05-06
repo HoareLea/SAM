@@ -4,7 +4,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static double Round(this double value, double tolerance = SAM.Core.Tolerance.Distance)
+        public static double Round(this double value, double tolerance = Core.Tolerance.Distance)
         {
             if (double.IsNaN(value))
                 return double.NaN;

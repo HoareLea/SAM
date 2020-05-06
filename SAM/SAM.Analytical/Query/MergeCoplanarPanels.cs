@@ -23,7 +23,7 @@ namespace SAM.Analytical
                 if (panel == null)
                     continue;
 
-                dictionary[Query.PanelGroup(panel.PanelType)].Add(panel);
+                dictionary[PanelGroup(panel.PanelType)].Add(panel);
             }
 
             List<Panel> result = new List<Panel>();

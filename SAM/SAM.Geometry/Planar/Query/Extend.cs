@@ -42,7 +42,7 @@ namespace SAM.Geometry.Planar
 
             Point2D point2D_Start = null;
 
-            vector2D = Query.TraceFirst(point2D_Segment2D_Start, segment2D.Direction.GetNegated(), polygon2D);
+            vector2D = TraceFirst(point2D_Segment2D_Start, segment2D.Direction.GetNegated(), polygon2D);
             if (vector2D != null)
                 point2D_Start = point2D_Segment2D_Start.GetMoved(vector2D);
 
@@ -51,7 +51,7 @@ namespace SAM.Geometry.Planar
 
             Point2D point2D_End = null;
 
-            vector2D = Query.TraceFirst(point2D_Segment2D_End, segment2D.Direction, polygon2D);
+            vector2D = TraceFirst(point2D_Segment2D_End, segment2D.Direction, polygon2D);
             if (vector2D != null)
                 point2D_End = point2D_Segment2D_End.GetMoved(vector2D);
 
@@ -179,7 +179,7 @@ namespace SAM.Geometry.Planar
                 Vector2D vector2D = segment2D.Direction;
                 vector2D.Negate();
 
-                List<Vector2D> vector2Ds = Query.Trace(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, 0);
+                List<Vector2D> vector2Ds = Trace(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, 0);
                 if (vector2Ds != null && vector2Ds.Count > 0)
                     segment2Ds[0] = new Segment2D(point2D.GetMoved(vector2Ds[0]), segment2D.End);
             }
@@ -191,7 +191,7 @@ namespace SAM.Geometry.Planar
                 Point2D point2D = segment2D.End;
                 Vector2D vector2D = segment2D.Direction;
 
-                List<Vector2D> vector2Ds = Query.Trace(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, 0);
+                List<Vector2D> vector2Ds = Trace(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, 0);
                 if (vector2Ds != null && vector2Ds.Count > 0)
                     segment2Ds[segment2Ds.Count - 1] = new Segment2D(segment2D.End, point2D.GetMoved(vector2Ds[0]));
             }

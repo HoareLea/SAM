@@ -17,7 +17,7 @@ namespace SAM.Geometry.Planar
                 Point2D point2D = segment2D.GetStart();
                 Vector2D vector2D = segment2D.Direction.GetNegated();
 
-                Vector2D vector2D_Intersection = Query.TraceFirst(point2D, vector2D, polygon2D);
+                Vector2D vector2D_Intersection = TraceFirst(point2D, vector2D, polygon2D);
                 if (vector2D_Intersection != null && vector2D_Intersection.Length > 0)
                 {
                     Segment2D segment2D_Intersection = new Segment2D(point2D.GetMoved(vector2D_Intersection), point2D);
@@ -33,7 +33,7 @@ namespace SAM.Geometry.Planar
                 point2D = segment2D.GetEnd();
                 vector2D = segment2D.Direction;
 
-                vector2D_Intersection = Query.TraceFirst(point2D, vector2D, polygon2D);
+                vector2D_Intersection = TraceFirst(point2D, vector2D, polygon2D);
                 if (vector2D_Intersection != null && vector2D_Intersection.Length > 0)
                 {
                     Segment2D segment2D_Intersection = new Segment2D(point2D.GetMoved(vector2D_Intersection), point2D);

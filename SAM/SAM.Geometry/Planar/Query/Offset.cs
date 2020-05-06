@@ -148,7 +148,7 @@ namespace SAM.Geometry.Planar
                     segment2Ds_Offset.Add(segment2D_Offset);
             }
 
-            segment2Ds_Offset = Query.Split(segment2Ds_Offset, tolerance);
+            segment2Ds_Offset = Split(segment2Ds_Offset, tolerance);
 
             segment2Ds_Offset.RemoveAll(x => !polygon2D.Inside(x.Mid()) && !polygon2D.On(x.Mid()));
 
@@ -174,7 +174,7 @@ namespace SAM.Geometry.Planar
             {
                 Polygon2D polygon2D_Temp = polygon2Ds_Temp[i];
 
-                List<Segment2D> segment2Ds_Temp = Query.IntersectionSegment2Ds(polygon2D, polygon2D_Temp, false, tolerance);
+                List<Segment2D> segment2Ds_Temp = IntersectionSegment2Ds(polygon2D, polygon2D_Temp, false, tolerance);
                 if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
                 {
                     polygon2Ds.Add(polygon2D_Temp);
@@ -197,7 +197,7 @@ namespace SAM.Geometry.Planar
                     polygon2Ds.Add(polygon2D_Temp);
             }
 
-            polygon2Ds = Query.ExternalPolygon2Ds(polygon2Ds, tolerance);//new PointGraph2D(polygon2Ds, false, tolerance).GetPolygon2Ds_External();
+            polygon2Ds = ExternalPolygon2Ds(polygon2Ds, tolerance);//new PointGraph2D(polygon2Ds, false, tolerance).GetPolygon2Ds_External();
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
 
@@ -206,7 +206,7 @@ namespace SAM.Geometry.Planar
                 if (simplify)
                 {
                     List<Point2D> point2Ds_Simplify = polygon2Ds[i].GetPoints();
-                    Query.SimplifyBySAM_Angle(point2Ds_Simplify, true, Core.Tolerance.Angle);
+                    SimplifyBySAM_Angle(point2Ds_Simplify, true, Core.Tolerance.Angle);
                     polygon2Ds[i] = new Polygon2D(point2Ds_Simplify);
                 }
 

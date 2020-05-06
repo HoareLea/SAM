@@ -11,11 +11,11 @@ namespace SAM.Geometry.Planar
             double offset_Vertical = 0;
             switch (alignment)
             {
-                case SAM.Geometry.Alignment.Horizontal:
+                case Alignment.Horizontal:
                     offset_Horizontal = offset;
                     break;
 
-                case SAM.Geometry.Alignment.Vertical:
+                case Alignment.Vertical:
                     offset_Vertical = offset;
                     break;
 

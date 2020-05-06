@@ -10,12 +10,12 @@ namespace SAM.Geometry.Planar
             double aDeterminant = Determinant(point2D_1, point2D_2, point2D_3);
 
             if (aDeterminant == 0)
-                return SAM.Geometry.Orientation.Collinear;
+                return Geometry.Orientation.Collinear;
 
             if (aDeterminant > 0)
-                return SAM.Geometry.Orientation.Clockwise;
+                return Geometry.Orientation.Clockwise;
             else
-                return SAM.Geometry.Orientation.CounterClockwise;
+                return Geometry.Orientation.CounterClockwise;
         }
 
         public static Orientation Orientation(this IEnumerable<Point2D> point2Ds, bool convexHull = true)
@@ -29,7 +29,7 @@ namespace SAM.Geometry.Planar
 
             if (convexHull)
             {
-                List<Point2D> point2Ds_ConvexHull = Query.ConvexHull(point2Ds);
+                List<Point2D> point2Ds_ConvexHull = ConvexHull(point2Ds);
 
                 //ConvexHull may have different orientation so needs to remove unnecessary points from existing point2Ds
                 if (point2Ds_ConvexHull != null && point2Ds_ConvexHull.Count > 0)

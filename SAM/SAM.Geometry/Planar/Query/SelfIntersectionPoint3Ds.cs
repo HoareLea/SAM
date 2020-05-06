@@ -4,7 +4,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Point2D> SelfIntersectionPoint2Ds(this Polygon2D polygon2D, double tolerance = SAM.Core.Tolerance.MicroDistance)
+        public static List<Point2D> SelfIntersectionPoint2Ds(this Polygon2D polygon2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (polygon2D == null)
                 return null;

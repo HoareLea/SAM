@@ -97,7 +97,7 @@ namespace SAM.Geometry.Planar
                 ICurve2D curve2D = (ICurve2D)curves2D_Temp[i].Clone();
 
                 if (count_Result > 0)
-                    Modify.OrientByEnds(curves2D[count_Result - 1], curve2D, count_Result == 1, true);
+                    OrientByEnds(curves2D[count_Result - 1], curve2D, count_Result == 1, true);
 
                 curves2D.Add(curves2D_Temp[i]);
             }

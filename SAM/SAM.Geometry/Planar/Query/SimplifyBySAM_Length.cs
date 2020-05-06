@@ -13,7 +13,7 @@ namespace SAM.Geometry.Planar
 
             Polygon2D polygon2D_Temp = new Polygon2D(polygon2D);
 
-            List<Segment2D> segment2Ds_Temp = Query.SelfIntersectionSegment2Ds(polygon2D_Temp, maxLength, tolerance);
+            List<Segment2D> segment2Ds_Temp = SelfIntersectionSegment2Ds(polygon2D_Temp, maxLength, tolerance);
 
             List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds_Temp, tolerance); //new PointGraph2D(segment2Ds_Temp, true, tolerance).GetPolygon2Ds();
             if (polygon2Ds == null || polygon2Ds.Count == 0)
@@ -22,8 +22,8 @@ namespace SAM.Geometry.Planar
             polygon2Ds.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
             polygon2D_Temp = polygon2Ds.Last();
 
-            segment2Ds_Temp = Query.SelfIntersectionSegment2Ds(polygon2D_Temp, maxLength, tolerance);
-            polygon2Ds = Query.ExternalPolygon2Ds(segment2Ds_Temp, tolerance);//new PointGraph2D(segment2Ds_Temp, true, tolerance).GetPolygon2Ds_External();
+            segment2Ds_Temp = SelfIntersectionSegment2Ds(polygon2D_Temp, maxLength, tolerance);
+            polygon2Ds = ExternalPolygon2Ds(segment2Ds_Temp, tolerance);//new PointGraph2D(segment2Ds_Temp, true, tolerance).GetPolygon2Ds_External();
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return polygon2D;
 
@@ -76,7 +76,7 @@ namespace SAM.Geometry.Planar
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
-            segment2Ds = Query.Split(segment2Ds, tolerance);
+            segment2Ds = Split(segment2Ds, tolerance);
 
             //Collecting Intersections
             Dictionary<int, HashSet<Point2D>> dictionary = new Dictionary<int, HashSet<Point2D>>();
@@ -98,10 +98,10 @@ namespace SAM.Geometry.Planar
                 Point2D point2D_1 = segment2D.GetStart();
                 Vector2D vector2D_1 = segment2D.Direction.GetNegated();
 
-                aTuple = Query.TraceDataFirst(point2D_1, vector2D_1, segment2Ds);
+                aTuple = TraceDataFirst(point2D_1, vector2D_1, segment2Ds);
                 if (aTuple != null && aTuple.Item3.Length < maxLength)
                 {
-                    int index_Temp = Query.IndexOfClosestSegment2D(segment2Ds, aTuple.Item1);
+                    int index_Temp = IndexOfClosestSegment2D(segment2Ds, aTuple.Item1);
 
                     Segment2D segment2D_Temp = segment2Ds[index_Temp];
 
@@ -119,10 +119,10 @@ namespace SAM.Geometry.Planar
                 Point2D point2D_2 = segment2D.GetEnd();
                 Vector2D vector2D_2 = segment2D.Direction;
 
-                aTuple = Query.TraceDataFirst(point2D_2, vector2D_2, segment2Ds);
+                aTuple = TraceDataFirst(point2D_2, vector2D_2, segment2Ds);
                 if (aTuple != null && aTuple.Item3.Length < maxLength)
                 {
-                    int index_Temp = Query.IndexOfClosestSegment2D(segment2Ds, aTuple.Item1);
+                    int index_Temp = IndexOfClosestSegment2D(segment2Ds, aTuple.Item1);
 
                     Segment2D segment2D_Temp = segment2Ds[index_Temp];
 

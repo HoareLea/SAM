@@ -47,7 +47,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            Vector3D[] eigenvectors = Query.Eigenvectors(matrix, tolerance);
+            Vector3D[] eigenvectors = Eigenvectors(matrix, tolerance);
             if (eigenvectors == null)
                 return null;
 

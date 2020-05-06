@@ -38,19 +38,19 @@ namespace SAM.Geometry.Planar
             Point2D point2D_Segment2D_Start = segment2D.Start;
             Point2D point2D_Segment2D_End = segment2D.End;
 
-            List<Point2D> point2Ds = Query.Intersections(polygon2D, segment2D, tolerance);
-            Vector2D vector2D_Start = Query.TraceFirst(point2D_Segment2D_Start, segment2D.Direction.GetNegated(), polygon2D);
+            List<Point2D> point2Ds = Intersections(polygon2D, segment2D, tolerance);
+            Vector2D vector2D_Start = TraceFirst(point2D_Segment2D_Start, segment2D.Direction.GetNegated(), polygon2D);
             if (vector2D_Start != null)
                 point2Ds.Add(point2D_Segment2D_Start.GetMoved(vector2D_Start));
 
-            Vector2D vector2D_End = Query.TraceFirst(point2D_Segment2D_End, segment2D.Direction, polygon2D);
+            Vector2D vector2D_End = TraceFirst(point2D_Segment2D_End, segment2D.Direction, polygon2D);
             if (vector2D_End != null)
                 point2Ds.Add(point2D_Segment2D_End.GetMoved(vector2D_End));
 
             if (point2Ds.Count == 0)
                 return null;
 
-            Query.ExtremePoints(point2Ds, out point2D_Segment2D_Start, out point2D_Segment2D_End);
+            ExtremePoints(point2Ds, out point2D_Segment2D_Start, out point2D_Segment2D_End);
             if (point2D_Segment2D_Start == null || point2D_Segment2D_End == null)
                 return null;
 

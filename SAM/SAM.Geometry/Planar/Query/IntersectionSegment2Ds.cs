@@ -52,7 +52,7 @@ namespace SAM.Geometry.Planar
                 bool on = false;
                 foreach (Polygon2D polygon2D_Temp in polygon2Ds)
                 {
-                    if (Query.On(polygon2D_Temp, point2D, tolerance))
+                    if (On(polygon2D_Temp, point2D, tolerance))
                     {
                         on = true;
                         break;
@@ -72,7 +72,7 @@ namespace SAM.Geometry.Planar
                 {
                     Point2D point2D = segment2D.Mid();
 
-                    int index = Query.IndexOfClosestSegment2D(segment2Ds, point2D);
+                    int index = IndexOfClosestSegment2D(segment2Ds, point2D);
                     if (index == -1)
                         continue;
 

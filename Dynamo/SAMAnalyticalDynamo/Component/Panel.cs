@@ -30,7 +30,7 @@ namespace SAMAnalyticalDynamo
         /// </example>
         public static SAM.Analytical.Panel ByPoint3Ds(IEnumerable<SAM.Geometry.Spatial.Point3D> point3Ds, SAM.Analytical.Construction construction, object panelType = null)
         {
-            Plane plane = SAM.Geometry.Spatial.Create.Plane(point3Ds, SAM.Core.Tolerance.Distance);
+            Plane plane = Create.Plane(point3Ds, SAM.Core.Tolerance.Distance);
 
             return new SAM.Analytical.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face3D(new SAM.Geometry.Spatial.Polygon3D(point3Ds.ToList().ConvertAll(x => plane.Project(x)))));
         }

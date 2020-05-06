@@ -75,7 +75,7 @@ namespace SAM.Geometry.Planar
             if (point2D == null || vector2D == null)
                 return null;
 
-            return IntersectionDictionary(point2D, vector2D, Query.Segment2Ds(segmentable2Ds), keepDirection, removeColinear, sort, selfIntersection, tolerance)?.Keys?.ToList();
+            return IntersectionDictionary(point2D, vector2D, Segment2Ds(segmentable2Ds), keepDirection, removeColinear, sort, selfIntersection, tolerance)?.Keys?.ToList();
         }
     }
 }

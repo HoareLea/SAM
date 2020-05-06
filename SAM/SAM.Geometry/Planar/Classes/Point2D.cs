@@ -338,12 +338,12 @@ namespace SAM.Geometry.Planar
 
         public static List<Point2D> Orient(IEnumerable<Point2D> point2Ds, Orientation orientation)
         {
-            if (point2Ds == null || point2Ds.Count() < 3 || orientation == SAM.Geometry.Orientation.Collinear)
+            if (point2Ds == null || point2Ds.Count() < 3 || orientation == Orientation.Collinear)
                 return null;
 
             List<Point2D> aResult = new List<Point2D>(point2Ds);
 
-            if (orientation == SAM.Geometry.Orientation.Undefined)
+            if (orientation == Orientation.Undefined)
                 return aResult;
 
             List<Orientation> aOrienationList = Orientations(point2Ds);
@@ -745,10 +745,10 @@ namespace SAM.Geometry.Planar
 
         public static bool operator ==(Point2D point2D_1, Point2D point2D_2)
         {
-            if (object.ReferenceEquals(point2D_1, null) && object.ReferenceEquals(point2D_2, null))
+            if (ReferenceEquals(point2D_1, null) && ReferenceEquals(point2D_2, null))
                 return true;
 
-            if (object.ReferenceEquals(point2D_1, null) || object.ReferenceEquals(point2D_2, null))
+            if (ReferenceEquals(point2D_1, null) || ReferenceEquals(point2D_2, null))
                 return false;
 
             return point2D_1.coordinates[0] == point2D_2.coordinates[0] && point2D_1.coordinates[1] == point2D_2.coordinates[1];

@@ -50,7 +50,7 @@ namespace SAM.Core.Grasshopper
             foreach (AboutInfoType aboutInfo in Enum.GetValues(typeof(AboutInfoType)))
                 //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
                 //base.AppendAdditionalComponentMenuItems(menu);
-                GH_Component.Menu_AppendItem(menu, aboutInfo.ToString(), Menu_PanelTypeChanged, true, aboutInfo == this.aboutInfoType).Tag = aboutInfo;
+                Menu_AppendItem(menu, aboutInfo.ToString(), Menu_PanelTypeChanged, true, aboutInfo == this.aboutInfoType).Tag = aboutInfo;
         }
 
         private void Menu_PanelTypeChanged(object sender, EventArgs e)
@@ -86,7 +86,7 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, SAM.Core.Query.AboutInfoTypeText(aboutInfoType));
+            dataAccess.SetData(0, Core.Query.AboutInfoTypeText(aboutInfoType));
         }
     }
 }

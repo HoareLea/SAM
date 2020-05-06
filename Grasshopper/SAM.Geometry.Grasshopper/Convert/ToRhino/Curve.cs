@@ -9,12 +9,12 @@ namespace SAM.Geometry.Grasshopper
         {
             //TODO: Add handling of Polyline3D!!
             if (curve3D is Spatial.Segment3D)
-                return Convert.ToRhino_LineCurve((Spatial.Segment3D)curve3D);
+                return ToRhino_LineCurve((Spatial.Segment3D)curve3D);
 
             if (curve3D is Spatial.ICurvable3D)
             {
                 List<Spatial.ICurve3D> curve3Ds = ((Spatial.ICurvable3D)curve3D).GetCurves();
-                return Convert.ToRhino_PolylineCurve(curve3Ds, curve3D is Spatial.IClosed3D || curve3Ds.First().GetStart() == curve3Ds.Last().GetEnd());
+                return ToRhino_PolylineCurve(curve3Ds, curve3D is Spatial.IClosed3D || curve3Ds.First().GetStart() == curve3Ds.Last().GetEnd());
             }
 
             return null;

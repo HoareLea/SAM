@@ -13,7 +13,7 @@ namespace SAM.Geometry.Planar
             if (polygon2Ds == null)
                 return null;
 
-            return Query.Union(polygon2Ds, tolerance);
+            return Union(polygon2Ds, tolerance);
         }
     }
 }

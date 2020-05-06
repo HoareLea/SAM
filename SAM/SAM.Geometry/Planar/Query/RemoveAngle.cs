@@ -20,7 +20,7 @@ namespace SAM.Geometry.Planar
 
             int count = point2Ds.Count;
 
-            List<Vector2D> directions = Query.Directions(polygon2D.GetSegments());
+            List<Vector2D> directions = Directions(polygon2D.GetSegments());
 
             List<Point2D> point2Ds_New = new List<Point2D>();
             for (int i = 1; i < count - 1; i++)
@@ -47,8 +47,8 @@ namespace SAM.Geometry.Planar
                         Vector2D vector2D_1 = new Vector2D(point2Ds_Temp[1], point2Ds_Temp[2]);
                         Vector2D vector2D_2 = new Vector2D(point2Ds_Temp_2[1], point2Ds_Temp_2[2]);
 
-                        Vector2D vector2D_direction_1 = Query.SmallestAngleVector(directions, vector2D_1);
-                        Vector2D vector2D_direction_2 = Query.SmallestAngleVector(directions, vector2D_2);
+                        Vector2D vector2D_direction_1 = SmallestAngleVector(directions, vector2D_1);
+                        Vector2D vector2D_direction_2 = SmallestAngleVector(directions, vector2D_2);
 
                         if (vector2D_direction_1.SmallestAngle(vector2D_1) < vector2D_direction_2.SmallestAngle(vector2D_2))
                         {
@@ -84,7 +84,7 @@ namespace SAM.Geometry.Planar
             if (point2D_Previous == null || point2D == null || point2D_Next == null)
                 return null;
 
-            double angle = Query.Angle(point2D_Previous, point2D, point2D_Next);
+            double angle = Angle(point2D_Previous, point2D, point2D_Next);
             if (angle - minAngle + tolerance > 0)
                 return new List<Point2D>() { point2D_Previous, point2D, point2D_Next };
 

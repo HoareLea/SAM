@@ -10,7 +10,7 @@ namespace SAM.Geometry.Planar
             if (parameter < 0 || parameter > 1 || segmentable2D == null)
                 return null;
 
-            List<Segment2D> segment2Ds = Query.Trim(segmentable2D, parameter, inverted)?.GetSegments();
+            List<Segment2D> segment2Ds = Trim(segmentable2D, parameter, inverted)?.GetSegments();
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 

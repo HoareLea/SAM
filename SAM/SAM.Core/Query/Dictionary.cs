@@ -13,7 +13,7 @@ namespace SAM.Core
             foreach (Z z in objects)
             {
                 object value;
-                if (!Query.TryGetValue(z, name, out value))
+                if (!TryGetValue(z, name, out value))
                     continue;
 
                 if (!(value is T))

@@ -23,7 +23,7 @@ namespace SAM.Geometry.Planar
             return intPointsList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
         }
 
-        public static Polygon SimplifyByClipper(this Polygon polygon, double maxLength, double tolerance = Core.Tolerance.MicroDistance)
+        public static Polygon SimplifyByClipper(this Polygon polygon, double maxLength, double tolerance = Tolerance.MicroDistance)
         {
             if (polygon == null)
                 return null;

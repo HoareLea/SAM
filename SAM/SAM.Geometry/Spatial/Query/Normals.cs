@@ -31,7 +31,7 @@ namespace SAM.Geometry.Spatial
                 if (!Collinear(point3D_1, point3D_2, point3D_3, tolerance))
                 {
                     vector3D = Normal(point3D_1, point3D_2, point3D_3);
-                    if (Query.IsValid(vector3D))
+                    if (IsValid(vector3D))
                         vector3D = vector3D.Unit;
                     else
                         vector3D = null;
