@@ -17,6 +17,13 @@ namespace SAM.Analytical
                 this.boundaryEdge2Ds = boundaryEdge2Ds.ToList().ConvertAll(x => new BoundaryEdge2D(x));
         }
 
+        public BoundaryEdge2DLoop(System.Guid guid, BoundaryEdge2DLoop boundaryEdge2DLoop)
+            : base(guid, boundaryEdge2DLoop)
+        {
+            if (boundaryEdge2DLoop != null)
+                boundaryEdge2Ds = boundaryEdge2DLoop.boundaryEdge2Ds.ToList().ConvertAll(x => new BoundaryEdge2D(x));
+        }
+
         public BoundaryEdge2DLoop(Geometry.Spatial.Plane plane, BoundaryEdge3DLoop boundaryEdge3DLoop)
             : base(System.Guid.NewGuid(), boundaryEdge3DLoop)
         {

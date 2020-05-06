@@ -149,6 +149,11 @@ namespace SAM.Analytical
             planarBoundary3D.Snap(point3Ds, maxDistance);
         }
 
+        public void Snap(IEnumerable<Plane> planes, Point3D origin, double offset)
+        {
+
+        }
+
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             return GetFace3D().GetBoundingBox(offset);

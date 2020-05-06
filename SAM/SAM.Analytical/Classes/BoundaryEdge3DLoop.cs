@@ -1,23 +1,24 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class BoundaryEdge3DLoop : SAMObject
+    public class BoundaryEdge3DLoop : BoundaryEdge2DLoop
     {
-        private List<BoundaryEdge3D> boundaryEdge3Ds;
+        private Plane plane;
 
-        public BoundaryEdge3DLoop(Geometry.Spatial.Plane plane, BoundaryEdge2DLoop boundaryEdge2DLoop)
+        public BoundaryEdge3DLoop(Plane plane, BoundaryEdge2DLoop boundaryEdge2DLoop)
             : base(System.Guid.NewGuid(), boundaryEdge2DLoop)
         {
-            boundaryEdge3Ds = boundaryEdge2DLoop.BoundaryEdge2Ds.ConvertAll(x => new BoundaryEdge3D(plane, x));
+            this.plane = plane; 
         }
 
         public BoundaryEdge3DLoop(BoundaryEdge3DLoop boundaryEdge3DLoop)
             : base(boundaryEdge3DLoop)
         {
-            this.boundaryEdge3Ds = boundaryEdge3DLoop.boundaryEdge3Ds.ConvertAll(x => new BoundaryEdge3D(x));
+            this.plane = boundaryEdge3DLoop?.plane;
         }
 
         public BoundaryEdge3DLoop(JObject jObject)
@@ -29,21 +30,14 @@ namespace SAM.Analytical
         {
             get
             {
-                return boundaryEdge3Ds.ConvertAll(x => new BoundaryEdge3D(x));
+                return BoundaryEdge2Ds.ConvertAll(x => new BoundaryEdge3D(plane, x));
             }
         }
 
-        public void Snap(IEnumerable<Geometry.Spatial.Point3D> point3Ds, double maxDistance = double.NaN)
+        public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
         {
-            foreach (BoundaryEdge3D boundaryEdge3D in boundaryEdge3Ds)
+            foreach (BoundaryEdge3D boundaryEdge3D in BoundaryEdge3Ds)
                 boundaryEdge3D.Snap(point3Ds, maxDistance);
-
-            Planarize();
-        }
-
-        public bool Planarize()
-        {
-            return true;
         }
 
         public override bool FromJObject(JObject jObject)
@@ -51,7 +45,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            boundaryEdge3Ds = Core.Create.IJSAMObjects<BoundaryEdge3D>(jObject.Value<JArray>("BoundaryEdge3Ds"));
+            plane = Geometry.Create.ISAMGeometry<Plane>(jObject.Value<JObject>("Plane"));
             return true;
         }
 
@@ -61,7 +55,7 @@ namespace SAM.Analytical
             if (jObject == null)
                 return null;
 
-            jObject.Add("BoundaryEdge3Ds", Core.Create.JArray(boundaryEdge3Ds));
+            jObject.Add("Plane", plane.ToJObject());
             return jObject;
         }
     }

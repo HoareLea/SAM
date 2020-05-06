@@ -32,8 +32,10 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_offset_", "Offs", "Snap offset", GH_ParamAccess.item, 0.2);
+            inputParamManager.AddPointParameter("_origin", "_origin", "Origin Point", GH_ParamAccess.item);
+            inputParamManager.AddLineParameter("_bucketAxes", "_bucketAxes", "Bucket Axes", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Panel>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
             outputParamManager.AddParameter(new Geometry.Grasshopper.GooSAMGeometryParam(), "Point3Ds", "Point3Ds", "Snap Point3Ds", GH_ParamAccess.list);
         }
 
@@ -53,8 +55,8 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<Core.SAMObject> sAMObjects = new List<Core.SAMObject>();
-            if (!dataAccess.GetDataList(0, sAMObjects) || sAMObjects == null)
+            List<Panel> panels = new List<Panel>();
+            if (!dataAccess.GetDataList(0, panels))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -67,23 +69,12 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> panelList = new List<Panel>();
-            foreach (Core.SAMObject sAMObject in sAMObjects)
-            {
-                Panel panel = sAMObject as Panel;
+            List<Geometry.Spatial.Point3D> point3DList = Geometry.Spatial.Point3D.Generate(new Geometry.Spatial.BoundingBox3D(panels.ConvertAll(x => x.GetBoundingBox(offset))), offset);
 
-                if (panel == null)
-                    continue;
+            panels = panels.ConvertAll(x => new Panel(x));
+            panels.ForEach(x => x.Snap(point3DList, offset));
 
-                panelList.Add(panel);
-            }
-
-            List<Geometry.Spatial.Point3D> point3DList = Geometry.Spatial.Point3D.Generate(new Geometry.Spatial.BoundingBox3D(panelList.ConvertAll(x => x.GetBoundingBox(offset))), offset);
-
-            panelList = panelList.ConvertAll(x => new Panel(x));
-            panelList.ForEach(x => x.Snap(point3DList, offset));
-
-            dataAccess.SetDataList(0, panelList.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(0, panels.ConvertAll(x => new GooPanel(x)));
             dataAccess.SetDataList(1, point3DList.ConvertAll(x => new Geometry.Grasshopper.GooSAMGeometry(x)));
         }
     }
