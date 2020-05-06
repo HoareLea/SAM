@@ -50,5 +50,19 @@ namespace SAM.Geometry.Spatial
             segmentable3Ds.Clear();
             segmentable3Ds.AddRange(result);
         }
+
+        public static void RemoveAlmostSimilar(List<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3Ds == null)
+                return;
+
+            List<Point3D> result = new List<Point3D>();
+            foreach (Point3D point3D in point3Ds)
+                if (result.Find(x => x.AlmostEquals(point3D, tolerance)) == null)
+                    result.Add(point3D);
+
+            point3Ds.Clear();
+            point3Ds.AddRange(result);
+        }
     }
 }
