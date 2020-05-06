@@ -34,8 +34,8 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_plane", "_plane", "SAM Plane", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_geometry3D", "_geometry3D", "SAM Geometry 3D", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_plane", "_plane", "SAM Plane", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -44,6 +44,7 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new GooSAMGeometryParam(), "Geometries", "Geometries", "Intersection Geometries", GH_ParamAccess.list);
+            outputParamManager.AddBooleanParameter("Successful", "Successful", "Successful", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace SAM.Geometry.Grasshopper
             GH_ObjectWrapper objectWrapper = null;
 
             objectWrapper = null;
-            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
+            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(1, false);
@@ -82,7 +83,7 @@ namespace SAM.Geometry.Grasshopper
                 geometry3Ds = new List<ISAMGeometry3D>() { ((GooSAMGeometry)obj).Value as ISAMGeometry3D };
 
             objectWrapper = null;
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
+            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(1, false);
@@ -95,6 +96,8 @@ namespace SAM.Geometry.Grasshopper
                 plane = objectWrapper.Value as Plane;
             else if (objectWrapper.Value is GooSAMGeometry)
                 plane = ((GooSAMGeometry)objectWrapper.Value).Value as Plane;
+            else if(objectWrapper.Value is GH_Plane)
+                plane = ((GH_Plane)objectWrapper.Value).ToSAM();
 
             if (plane == null)
             {
@@ -116,6 +119,7 @@ namespace SAM.Geometry.Grasshopper
             }
 
             dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMGeometry(x)));
+            dataAccess.SetData(1, true);
         }
     }
 }
