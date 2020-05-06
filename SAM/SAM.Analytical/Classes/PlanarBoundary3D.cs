@@ -188,8 +188,10 @@ namespace SAM.Analytical
 
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
         {
-            BoundaryEdge3DLoop edge3DLoop = GetEdge3DLoop();
-            edge3DLoop.Snap(point3Ds, maxDistance);
+            BoundaryEdge3DLoop boundaryEdge3DLoop = GetEdge3DLoop();
+            boundaryEdge3DLoop.Snap(point3Ds, maxDistance);
+
+            externalEdge2DLoop = new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop);
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)

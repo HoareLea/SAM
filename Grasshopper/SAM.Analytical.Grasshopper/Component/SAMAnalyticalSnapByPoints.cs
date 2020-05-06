@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooPanelParam(), "_Panel", "_Panel", "SAM Analytical Panel", GH_ParamAccess.item);
             inputParamManager.AddParameter(new Geometry.Grasshopper.GooSAMGeometryParam(), "_points", "_points", "List of Points", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_maxDistance_", "_maxDistance_", "Max Distance to snap points default 1m", GH_ParamAccess.item, 1);
         }
@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooPanelParam(), "_Panel", "_Panel", "SAM Analytical Panel", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -54,8 +54,8 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Core.SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject) || !(sAMObject is Panel))
+            Panel panel = null;
+            if (!dataAccess.GetData(0, ref panel))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -77,10 +77,10 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Panel panel = new Panel((Panel)sAMObject);
-            panel.Snap(geometries.Cast<Geometry.Spatial.Point3D>(), maxDistance);
+            Panel result = new Panel(panel);
+            result.Snap(geometries.Cast<Geometry.Spatial.Point3D>(), maxDistance);
 
-            dataAccess.SetData(0, new GooPanel(panel));
+            dataAccess.SetData(0, new GooPanel(result));
         }
     }
 }
