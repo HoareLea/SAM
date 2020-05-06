@@ -174,7 +174,12 @@ namespace SAM.Analytical
 
         public bool Coplanar(PlanarBoundary3D planarBoundary3D, double tolerance = Tolerance.Angle)
         {
-            return plane.Coplanar(planarBoundary3D.plane, tolerance);
+            return Coplanar(planarBoundary3D.plane, tolerance);
+        }
+
+        public bool Coplanar(Plane plane, double tolerance = Tolerance.Angle)
+        {
+            return plane.Coplanar(plane, tolerance);
         }
 
         public Face3D GetFace3D()
@@ -186,12 +191,64 @@ namespace SAM.Analytical
             return Face3D.Create(plane, externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
         }
 
-        public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
+        public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN, bool snapInternalEdges = true)
+        {
+            BoundaryEdge3DLoop boundaryEdge3DLoop_External = GetEdge3DLoop();
+            boundaryEdge3DLoop_External.Snap(point3Ds, maxDistance);
+            externalEdge2DLoop = new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop_External);
+
+            List<BoundaryEdge2DLoop> internalEdge2DLoops_New = new List<BoundaryEdge2DLoop>();
+
+            if (snapInternalEdges && internalEdge2DLoops != null)
+            {
+                foreach(BoundaryEdge3DLoop boundaryEdge3DLoop_Internal in GetInternalEdge3DLoops())
+                {
+                    boundaryEdge3DLoop_Internal.Snap(point3Ds, maxDistance);
+                    internalEdge2DLoops_New.Add(new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop_Internal));
+                }
+
+                internalEdge2DLoops = internalEdge2DLoops_New;
+            }
+        }
+
+        public void Snap(IEnumerable<Plane> planes, double maxDistance)
         {
             BoundaryEdge3DLoop boundaryEdge3DLoop = GetEdge3DLoop();
-            boundaryEdge3DLoop.Snap(point3Ds, maxDistance);
+            BoundingBox3D boundingBox3D = boundaryEdge3DLoop.GetBoundingBox(maxDistance);
 
+            Plane plane_Min = null;
+            double distance_Min = double.MaxValue;
+            foreach(Plane plane_Temp in planes)
+            {
+                double distance_Temp = plane.Distance(plane_Temp);
+
+                if (distance_Temp > maxDistance)
+                    continue;
+                
+                if (plane_Temp.Distance(boundingBox3D) > maxDistance)
+                    continue;
+
+                if (!plane_Temp.Coplanar(plane))
+                    continue;
+
+                //This is true only when planes are coplanar
+                if(distance_Temp < distance_Min)
+                {
+                    plane_Min = plane_Temp;
+                    distance_Min = distance_Temp;
+                }
+            }
+
+            if (plane_Min == null)
+                return;
+
+            List<BoundaryEdge3DLoop> boundaryEdge3DLoops_Internal = GetInternalEdge3DLoops();
+
+            plane = plane_Min;
             externalEdge2DLoop = new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop);
+            internalEdge2DLoops = null;
+            if (boundaryEdge3DLoops_Internal != null)
+                internalEdge2DLoops = boundaryEdge3DLoops_Internal.ConvertAll(x => new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop));
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)

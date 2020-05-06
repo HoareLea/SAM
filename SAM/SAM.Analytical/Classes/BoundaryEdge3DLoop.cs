@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -25,6 +26,7 @@ namespace SAM.Analytical
         {
         }
 
+
         public List<BoundaryEdge3D> BoundaryEdge3Ds
         {
             get
@@ -33,17 +35,18 @@ namespace SAM.Analytical
             }
         }
 
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            if (boundaryEdge3Ds == null)
+                return null;
+            
+            return new BoundingBox3D(boundaryEdge3Ds.ConvertAll(x => x.GetBoundingBox(offset)));
+        }
+
         public void Snap(IEnumerable<Geometry.Spatial.Point3D> point3Ds, double maxDistance = double.NaN)
         {
             foreach (BoundaryEdge3D boundaryEdge3D in boundaryEdge3Ds)
                 boundaryEdge3D.Snap(point3Ds, maxDistance);
-
-            Planarize();
-        }
-
-        public bool Planarize()
-        {
-            return true;
         }
 
         public override bool FromJObject(JObject jObject)

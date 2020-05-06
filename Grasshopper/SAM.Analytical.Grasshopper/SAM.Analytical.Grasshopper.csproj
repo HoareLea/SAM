@@ -96,6 +96,7 @@
     <Compile Include="Component\SAMAnalyticalCreateConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalCreateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalPanelType.cs" />
+    <Compile Include="Component\SAMAnalyticalSnapByLines.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByPoints.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByOffset.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />

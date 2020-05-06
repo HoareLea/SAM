@@ -34,8 +34,6 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_offset_", "Offs", "Snap offset", GH_ParamAccess.item, 0.2);
-            inputParamManager.AddPointParameter("_origin", "_origin", "Origin Point", GH_ParamAccess.item);
-            inputParamManager.AddLineParameter("_bucketAxes", "_bucketAxes", "Bucket Axes", GH_ParamAccess.list);
         }
 
         /// <summary>

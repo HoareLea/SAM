@@ -320,6 +320,43 @@ namespace SAM.Geometry.Spatial
             return Closest(point3D).Distance(point3D);
         }
 
+        public double Distance(Segment3D segment3D)
+        {
+            PlanarIntersectionResult planarIntersectionResult = Intersection(segment3D);
+            if (planarIntersectionResult == null)
+                return double.NaN;
+
+            if (!planarIntersectionResult.Intersecting)
+                return System.Math.Min(Distance(segment3D[0]), Distance(segment3D[1]));
+
+            return 0;
+        }
+
+        public double Distance(ISegmentable3D segmentable3D)
+        {
+            List<Segment3D> segment3Ds = segmentable3D?.GetSegments();
+            if (segment3Ds == null || segment3Ds.Count == 0)
+                return double.MinValue;
+
+            double result = double.MaxValue;
+            foreach(Segment3D segment3D in segment3Ds)
+            {
+                result = System.Math.Min(Distance(segment3D), result);
+                if (result == 0)
+                    return result;
+            }
+
+            return result;
+        }
+
+        public double Distance(Plane plane)
+        {
+            if (!Coplanar(plane))
+                return 0;
+
+            return Distance(plane.origin);
+        }
+
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
             return (normal.X * (point3D.X - origin.X)) + (normal.Y * (point3D.Y - origin.Y)) + (normal.Z * (point3D.Z - origin.Z)) < tolerance;

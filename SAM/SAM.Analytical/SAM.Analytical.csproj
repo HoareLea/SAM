@@ -83,6 +83,7 @@
     <Compile Include="Manager\ActiveSettings.cs" />
     <Compile Include="Query\MergeCoplanarPanels.cs" />
     <Compile Include="Query\SnapByOffset.cs" />
+    <Compile Include="Query\SnapByPlanes.cs" />
     <Compile Include="Query\SnapByPoints.cs" />
     <Compile Include="Query\ApertureConstruction.cs" />
     <Compile Include="Query\ApertureConstructionName.cs" />
