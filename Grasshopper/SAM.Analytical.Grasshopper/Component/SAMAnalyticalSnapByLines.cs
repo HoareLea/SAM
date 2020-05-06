@@ -2,10 +2,9 @@
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Geometry.Grasshopper;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -39,7 +38,6 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddParameter(new GooPanelParam(), "_Panel", "_Panel", "SAM Analytical Panel", GH_ParamAccess.item);
             inputParamManager.AddLineParameter("_lines", "_lines", "Lines", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_maxDistance_", "_maxDistance_", "Max Distance", GH_ParamAccess.item, 1);
-           
         }
 
         /// <summary>
@@ -64,8 +62,6 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-
-
 
             List<Line> lines = new List<Line>();
             if (!dataAccess.GetDataList(1, lines) || lines == null)

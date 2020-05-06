@@ -93,7 +93,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             if (geometry is MultiPolygon)
-                return ((MultiPolygon)geometry).Cast<Polygon>().ToList();
+                return ((MultiPolygon)geometry).Geometries.Cast<Polygon>().ToList();
 
             if (geometry is Polygon)
                 result.Add((Polygon)geometry);
