@@ -33,8 +33,10 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
+            int index = -1;
             inputParamManager.AddParameter(new GooPanelParam(), "_Panel", "_Panel", "SAM Analytical Panel", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new Geometry.Grasshopper.GooSAMGeometryParam(), "_points", "_points", "List of Points", GH_ParamAccess.list);
+            index = inputParamManager.AddParameter(new Geometry.Grasshopper.GooSAMGeometryParam(), "_points", "_points", "List of Points", GH_ParamAccess.list);
+            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
             inputParamManager.AddNumberParameter("_maxDistance_", "_maxDistance_", "Max Distance to snap points default 1m", GH_ParamAccess.item, 1);
         }
 
