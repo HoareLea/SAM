@@ -81,6 +81,7 @@
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Manager\ActiveSettings.cs" />
+    <Compile Include="Query\TryGetConstruction.cs" />
     <Compile Include="Query\MergeCoplanarPanels.cs" />
     <Compile Include="Query\SnapByOffset.cs" />
     <Compile Include="Query\SnapByPlanes.cs" />

@@ -9,7 +9,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> MergeOverlapPanels(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> MergeOverlapPanels(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
                 return null;
@@ -31,14 +31,14 @@ namespace SAM.Analytical
             List<Panel> panels_Temp = dictionary[Analytical.PanelGroup.Floor];
             panels_Temp.AddRange(dictionary[Analytical.PanelGroup.Roof]);
 
-            panels_Temp = MergeOverlapPanels_FloorAndRoof(panels_Temp, offset, tolerance);
+            panels_Temp = MergeOverlapPanels_FloorAndRoof(panels_Temp, offset, ref redundantPanels, setDefaultConstruction, tolerance);
             if (panels_Temp != null && panels_Temp.Count > 0)
                 result.AddRange(panels_Temp);
 
             return result;
         }
     
-        private static List<Panel> MergeOverlapPanels_FloorAndRoof(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
+        private static List<Panel> MergeOverlapPanels_FloorAndRoof(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
         {
             List<Tuple<double, Panel>> tuples = new List<Tuple<double, Panel>>();
             foreach (Panel panel in panels)
@@ -46,10 +46,6 @@ namespace SAM.Analytical
                 double elevation = panel.MaxElevation();
                 tuples.Add(new Tuple<double, Panel>(elevation, panel));
             }
-
-            Construction construction_FloorInternal_Default = Construction(Analytical.PanelType.FloorInternal);
-            Construction construction_FloorExposed_Default = Construction(Analytical.PanelType.FloorExposed);
-            Construction construction_SlabOnGrade_Default = Construction(Analytical.PanelType.SlabOnGrade);
 
             List<Panel> result = new List<Panel>();
             HashSet<Guid> guids = new HashSet<Guid>();
@@ -108,38 +104,26 @@ namespace SAM.Analytical
                             continue;
 
                         Panel panel_Old = null;
-
-                        if (count == 1)
+                        if(setDefaultConstruction)
                         {
-                            panel_Old = tuples_Polygon_Contains[0].Item2;
-                            if (PanelGroup(panel_Old.PanelType) == Analytical.PanelGroup.Floor)
+                            Construction construction = null;
+                            if(TryGetConstruction(tuples_Polygon_Contains.ConvertAll(x => x.Item2), out panel_Old, out construction))
                             {
-                                if (panel_Old.MinElevation() < Core.Tolerance.MacroDistance)
+                                if(panel_Old != null && construction != null)
                                 {
-                                    //SlabOnGrad
-                                    panel_Old = new Panel(panel_Old, construction_SlabOnGrade_Default);
+                                    tuples_Polygon_Contains.RemoveAll(x => x.Item2 == panel_Old);
+                                    redundantPanels.AddRange(tuples_Polygon_Contains.ConvertAll(x => x.Item2));
+                                    panel_Old = new Panel(panel_Old, construction);
                                 }
-                                else
-                                {
-                                    //Exposed
-                                    panel_Old = new Panel(panel_Old, construction_FloorExposed_Default);
-                                }
+
                             }
                         }
-                        else
+
+                        if(panel_Old == null)
                         {
-                            List<Tuple<Polygon, Panel>> tuples_Temp = tuples_Polygon_Contains.FindAll(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
-                            if (tuples_Temp == null || tuples_Temp.Count == 0)
-                            {
-                                panel_Old = tuples_Polygon_Contains[0].Item2;
-                            }
-                            else
-                            {
-                                //FloorInternal
-                                panel_Old = tuples_Temp.Find(x => x.Item2.PanelType == Analytical.PanelType.FloorInternal)?.Item2;
-                                if (panel_Old == null)
-                                    panel_Old = new Panel(tuples_Temp.First().Item2, construction_FloorInternal_Default);
-                            }
+                            panel_Old = tuples_Polygon_Contains.First().Item2;
+                            tuples_Polygon_Contains.RemoveAt(0);
+                            redundantPanels.AddRange(tuples_Polygon_Contains.ConvertAll(x => x.Item2));
                         }
 
                         if (panel_Old == null)
