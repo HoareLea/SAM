@@ -10,6 +10,13 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
+        public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
+        {
+            List<Panel> redundantPanels = new List<Panel>();
+            return MergeCoplanarPanels(panels, offset, ref redundantPanels, false, tolerance);
+        }
+
+
         public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
