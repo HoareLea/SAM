@@ -1,11 +1,9 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Geometry.Grasshopper;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -37,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_Panel", "_Panel", "SAM Analytical Panel", GH_ParamAccess.item);
-            inputParamManager.AddPointParameter("_origin", "_origin", "Origin Point", GH_ParamAccess.item);
+            inputParamManager.AddPointParameter("_origin_", "_origin_", "Origin Point", GH_ParamAccess.item, new Point3d(0, 0, 0));
             inputParamManager.AddNumberParameter("_offset_", "_offset_", "offset", GH_ParamAccess.item, 1);
         }
 
@@ -64,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Point origin = null;
+            Point3d origin = new Point3d(0, 0, 0);
             if (!dataAccess.GetData(1, ref origin))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -79,14 +77,14 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<IClosedPlanar3D> closedPlanar3Ds = panel.GetFace3D().GetEdges();
-            if(closedPlanar3Ds == null)
+            if (closedPlanar3Ds == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Geometry");
                 return;
             }
 
             List<Point3D> point3Ds = new List<Point3D>();
-            foreach(IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+            foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
             {
                 ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
                 if (segmentable3D == null)
@@ -109,23 +107,23 @@ namespace SAM.Analytical.Grasshopper
             {
                 Geometry.Planar.Point2D point2D_Project = plane.Convert(plane.Project(point3D));
 
-                double x = Math.Round(Math.Abs(point2D_Project_Origin.X - point2D_Project.X) / offset, 0, MidpointRounding.ToEven);
-                double y = Math.Round(Math.Abs(point2D_Project_Origin.Y - point2D_Project.Y) / offset, 0, MidpointRounding.ToEven);
+                double x = Math.Round((point2D_Project_Origin.X - point2D_Project.X) / offset, 0, MidpointRounding.ToEven);
+                double y = Math.Round((point2D_Project_Origin.Y - point2D_Project.Y) / offset, 0, MidpointRounding.ToEven);
 
-                Geometry.Planar.Point2D point2D = new Geometry.Planar.Point2D(offset * x, offset * y);
+                Geometry.Planar.Point2D point2D = new Geometry.Planar.Point2D(point2D_Project_Origin.X - (offset * x), point2D_Project_Origin.Y - (offset * y));
 
                 point2Ds.Add(point2D);
                 point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(0, offset)));
-                point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(1, 1).Unit * offset));
+                point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(offset, offset)));
                 point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(offset, 0)));
-                point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(1, -1).Unit * offset));
+                point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(offset, -offset)));
                 point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(0, -offset)));
-                point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(-1, -1).Unit * offset));
+                point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(-offset, -offset)));
                 point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(-offset, 0)));
-                point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(-1, 1).Unit * offset));
+                point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(-offset, offset)));
             }
 
-            dataAccess.SetDataList(0, point2Ds.ConvertAll(x => plane.Convert(x)));
+            dataAccess.SetDataList(0, point2Ds.ConvertAll(x => Geometry.Grasshopper.Convert.ToRhino(plane.Convert(x))));
         }
     }
 }
