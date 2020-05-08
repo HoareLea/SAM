@@ -13,11 +13,11 @@ namespace SAM.Analytical
         public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
         {
             List<Panel> redundantPanels = new List<Panel>();
-            return MergeCoplanarPanels(panels, offset, ref redundantPanels, false, tolerance);
+            return MergeCoplanarPanels(panels, offset, ref redundantPanels, tolerance);
         }
 
 
-        public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
                 return null;
@@ -38,7 +38,7 @@ namespace SAM.Analytical
 
             foreach(PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
             {
-                List<Panel> panels_Temp = MergeCoplanarPanels(dictionary[panelGroup], offset, ref redundantPanels, setDefaultConstruction, tolerance);
+                List<Panel> panels_Temp = MergeCoplanarPanels(dictionary[panelGroup], offset, ref redundantPanels, tolerance);
                 if (panels_Temp != null && panels_Temp.Count > 0)
                     result.AddRange(panels_Temp);
             }
@@ -46,7 +46,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        private static List<Panel> MergeCoplanarPanels(this List<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
+        private static List<Panel> MergeCoplanarPanels(this List<Panel> panels, double offset, ref List<Panel> redundantPanels, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
                 return null;
@@ -116,28 +116,9 @@ namespace SAM.Analytical
                         panels_Temp.Remove(tuple.Item2);
                     }
 
-                    Panel panel_Old = null;
-                    if (setDefaultConstruction)
-                    {
-                        Construction construction = null;
-                        if (TryGetConstruction(tuples_Panel.ConvertAll(x => x.Item2), out panel_Old, out construction))
-                        {
-                            if (panel_Old != null && construction != null)
-                            {
-                                tuples_Panel.RemoveAll(x => x.Item2 == panel_Old);
-                                redundantPanels.AddRange(tuples_Panel.ConvertAll(x => x.Item2));
-                                panel_Old = new Panel(panel_Old, construction);
-                            }
-
-                        }
-                    }
-
-                    if (panel_Old == null)
-                    {
-                        panel_Old = tuples_Panel.First().Item2;
-                        tuples_Panel.RemoveAt(0);
-                        redundantPanels.AddRange(tuples_Panel.ConvertAll(x => x.Item2));
-                    }
+                    Panel panel_Old = tuples_Panel.First().Item2;
+                    tuples_Panel.RemoveAt(0);
+                    redundantPanels.AddRange(tuples_Panel.ConvertAll(x => x.Item2));
 
                     if (panel_Old == null)
                         continue;

@@ -38,7 +38,6 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             inputParamManager.AddNumberParameter("_offset", "_offset", "Offset", GH_ParamAccess.item, Core.Tolerance.Distance);
-            inputParamManager.AddBooleanParameter("_defaultConstruction_", "_defaultConstruction_", "Set default Construtcion for Panels", GH_ParamAccess.item, false);
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
 
@@ -60,7 +59,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
-            if (!dataAccess.GetData(3, ref run))
+            if (!dataAccess.GetData(2, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -82,16 +81,9 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            bool setDefaultConstruction = false;
-            if (!dataAccess.GetData(2, ref setDefaultConstruction))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             List<Panel> redundantPanels = new List<Panel>();
 
-            panels = Query.MergeCoplanarPanels(panels, offset, ref redundantPanels, setDefaultConstruction, Core.Tolerance.Distance);
+            panels = Query.MergeCoplanarPanels(panels, offset, ref redundantPanels, Core.Tolerance.Distance);
 
             dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
             dataAccess.SetDataList(1, redundantPanels?.ConvertAll(x => new GooPanel(x)));

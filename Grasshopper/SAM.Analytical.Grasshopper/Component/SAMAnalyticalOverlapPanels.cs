@@ -1,16 +1,18 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalMergeOverlapPanels : GH_Component
+    public class SAMAnalyticalOverlapPanels : GH_Component
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("4f90fff5-852c-480e-bf51-bc817e15e953");
+        public override Guid ComponentGuid => new Guid("b48cbeeb-4f49-4d30-8bb5-0e46b42451e8");
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -20,9 +22,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalMergeOverlapPanels()
-          : base("SAMAnalytical.MergeOverlapPanels", "SAMAnalytical.MergeOverlapPanels",
-              "Merge Overlap SAM Analytical Panels",
+        public SAMAnalyticalOverlapPanels()
+          : base("SAMAnalytical.OverlapPanels", "SAMAnalytical.OverlapPanels",
+              "Gets Overlaping SAM Analytical Panels",
               "SAM", "Analytical")
         {
         }
@@ -37,8 +39,6 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
-            inputParamManager.AddNumberParameter("_offset", "_offset", "Offset", GH_ParamAccess.item, Core.Tolerance.Distance);
-            inputParamManager.AddBooleanParameter("_defaultConstruction_", "_defaultConstruction_", "Set default Construtcion for Panels", GH_ParamAccess.item, false);
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
 
@@ -48,7 +48,6 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooPanelParam(), "RedundantPanels", "RedundantPanels", "RedundantPanels", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -60,20 +59,13 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
-            if (!dataAccess.GetData(3, ref run))
+            if (!dataAccess.GetData(1, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
             if (!run)
                 return;
-
-            double offset = Core.Tolerance.Distance;
-            if (!dataAccess.GetData(1, ref offset))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
 
             List<Panel> panels = new List<Panel>();
             if (!dataAccess.GetDataList(0, panels) || panels == null)
@@ -82,19 +74,23 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            bool setDefaultConstruction = false;
-            if (!dataAccess.GetData(2, ref setDefaultConstruction))
+            DataTree<GooPanel> dataTree_GooPanel = null;
+
+            List<List<Panel>> panelsList = Query.OverlapPanels(panels);
+            int count = 0;
+            if (panelsList != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataTree_GooPanel = new DataTree<GooPanel>();
+
+                foreach (List<Panel> panels_Temp in panelsList)
+                {
+                    GH_Path path = new GH_Path(count);
+                    panels_Temp.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+                    panels_Temp.ForEach(x => dataTree_GooPanel.Add(new GooPanel(x), path));
+                    count++;
+                }
             }
-
-            List<Panel> redundantPanels = new List<Panel>();
-
-            panels = Query.MergeOverlapPanels(panels, offset, ref redundantPanels, setDefaultConstruction, Core.Tolerance.Distance);
-
-            dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
-            dataAccess.SetDataList(1, redundantPanels?.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataTree(0, dataTree_GooPanel);
         }
     }
 }

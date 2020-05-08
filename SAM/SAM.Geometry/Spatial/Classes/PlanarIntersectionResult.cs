@@ -51,6 +51,17 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        public PlanarIntersectionResult(Plane plane, Face3D face3D)
+        {
+            this.plane = plane;
+
+            if (face3D != null && plane != null)
+            {
+                geometry2Ds = new List<ISAMGeometry2D>();
+                geometry2Ds.Add(plane.Convert(plane.Project(face3D)));
+            }
+        }
+
         public PlanarIntersectionResult(Plane plane)
         {
             this.plane = plane;
@@ -109,6 +120,7 @@ namespace SAM.Geometry.Spatial
         {
             return geometry2Ds?.FindAll(x => x is T).ConvertAll(x => (T)x);
         }
+
 
         public static PlanarIntersectionResult Create(Plane plane, Point3D point3D)
         {
@@ -302,6 +314,18 @@ namespace SAM.Geometry.Spatial
             if (plane == null || face3D == null)
                 return null;
 
+            Plane plane_Face3D = face3D.GetPlane();
+            if (plane_Face3D == null)
+                return null;
+
+            if(plane.Coplanar(plane_Face3D, tolerance_Distance))
+            {
+                if (plane.Distance(plane_Face3D) < tolerance_Distance)
+                    return new PlanarIntersectionResult(plane, face3D);
+                else
+                    return new PlanarIntersectionResult(plane);
+            }
+
             IClosedPlanar3D externaEdge = face3D.GetExternalEdge();
             PlanarIntersectionResult planarIntersectionResult_externaEdge = Create(plane, externaEdge, tolerance_Angle, tolerance_Distance);
             if (planarIntersectionResult_externaEdge == null)
@@ -388,6 +412,38 @@ namespace SAM.Geometry.Spatial
             geometry3Ds.AddRange(point2Ds.ConvertAll(x => plane.Convert(x)));
 
             return new PlanarIntersectionResult(plane, geometry3Ds);
+        }
+
+        public static PlanarIntersectionResult Create(Face3D face3D_1, Face3D face3D_2, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if (face3D_1 == null || face3D_2 == null)
+                return null;
+
+            Plane plane_1 = face3D_1.GetPlane();
+            if (plane_1 == null)
+                return null;
+
+            Plane plane_2 = face3D_2.GetPlane();
+            if (plane_2 == null)
+                return null;
+
+            if(plane_1.Coplanar(plane_2, tolerance_Distance))
+            {
+                face3D_2 = plane_1.Project(face3D_2);
+                return new PlanarIntersectionResult(plane_1, Planar.Query.Intersection(plane_1.Convert(face3D_1), plane_1.Convert(face3D_2))?.ConvertAll(x => plane_1.Convert(x)));
+            }
+
+            PlanarIntersectionResult planarIntersectionResult_1 = Create(plane_1, face3D_2, tolerance_Angle, tolerance_Distance);
+            if (planarIntersectionResult_1 == null || !planarIntersectionResult_1.Intersecting)
+                return new PlanarIntersectionResult(plane_1);
+
+            PlanarIntersectionResult planarIntersectionResult_2 = Create(plane_2, face3D_1, tolerance_Angle, tolerance_Distance);
+            if (planarIntersectionResult_2 == null || !planarIntersectionResult_2.Intersecting)
+                return new PlanarIntersectionResult(plane_1);
+
+            //TODO: Check and process intersection results
+
+            throw new NotImplementedException();
         }
     }
 }

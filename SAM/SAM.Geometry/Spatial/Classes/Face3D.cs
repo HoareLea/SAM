@@ -179,6 +179,7 @@ namespace SAM.Geometry.Spatial
             return plane.Convert(GetInternalPoint2D());
         }
 
+
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges, bool orientInternalEdges = true)
         {
             if (edges == null || edges.Count() == 0)
