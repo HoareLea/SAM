@@ -37,7 +37,7 @@ namespace SAM.Analytical
 
             return result;
         }
-    
+
         private static List<Panel> MergeOverlapPanels_FloorAndRoof(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
         {
             List<Tuple<double, Panel>> tuples = new List<Tuple<double, Panel>>();
@@ -104,25 +104,24 @@ namespace SAM.Analytical
                             continue;
 
                         Panel panel_Old = null;
-                        if(setDefaultConstruction)
+                        if (setDefaultConstruction)
                         {
                             Construction construction = null;
-                            if(TryGetConstruction(tuples_Polygon_Contains.ConvertAll(x => x.Item2), out panel_Old, out construction))
+                            if (TryGetConstruction(tuples_Polygon_Contains.ConvertAll(x => x.Item2), out panel_Old, out construction))
                             {
-                                if(panel_Old != null && construction != null)
+                                if (panel_Old != null && construction != null)
                                 {
                                     tuples_Polygon_Contains.RemoveAll(x => x.Item2 == panel_Old);
                                     redundantPanels.AddRange(tuples_Polygon_Contains.ConvertAll(x => x.Item2));
                                     panel_Old = new Panel(panel_Old, construction);
                                 }
-
                             }
                         }
 
-                        if(panel_Old == null)
+                        if (panel_Old == null)
                         {
-                            List<Tuple<Polygon, Panel>> tuples_Polygon_Floor = tuples_Polygon.FindAll(x => Query.PanelGroup( x.Item2.PanelType) == Analytical.PanelGroup.Floor);
-                            if(tuples_Polygon_Floor != null && tuples_Polygon_Floor.Count != 0)
+                            List<Tuple<Polygon, Panel>> tuples_Polygon_Floor = tuples_Polygon.FindAll(x => Query.PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
+                            if (tuples_Polygon_Floor != null && tuples_Polygon_Floor.Count != 0)
                             {
                                 panel_Old = tuples_Polygon_Floor.Find(x => x.PanelType() == Analytical.PanelType.FloorInternal)?.Item2;
                                 if (panel_Old == null)

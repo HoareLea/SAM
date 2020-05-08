@@ -121,7 +121,6 @@ namespace SAM.Geometry.Spatial
             return geometry2Ds?.FindAll(x => x is T).ConvertAll(x => (T)x);
         }
 
-
         public static PlanarIntersectionResult Create(Plane plane, Point3D point3D)
         {
             if (plane == null || point3D == null)
@@ -318,7 +317,7 @@ namespace SAM.Geometry.Spatial
             if (plane_Face3D == null)
                 return null;
 
-            if(plane.Coplanar(plane_Face3D, tolerance_Distance))
+            if (plane.Coplanar(plane_Face3D, tolerance_Distance))
             {
                 if (plane.Distance(plane_Face3D) < tolerance_Distance)
                     return new PlanarIntersectionResult(plane, face3D);
@@ -427,7 +426,7 @@ namespace SAM.Geometry.Spatial
             if (plane_2 == null)
                 return null;
 
-            if(plane_1.Coplanar(plane_2, tolerance_Distance))
+            if (plane_1.Coplanar(plane_2, tolerance_Distance))
             {
                 face3D_2 = plane_1.Project(face3D_2);
                 return new PlanarIntersectionResult(plane_1, Planar.Query.Intersection(plane_1.Convert(face3D_1), plane_1.Convert(face3D_2))?.ConvertAll(x => plane_1.Convert(x)));
@@ -447,14 +446,12 @@ namespace SAM.Geometry.Spatial
             List<Point3D> point3Ds;
 
             point3Ds = planarIntersectionResult_1.GetGeometry3Ds<Point3D>();
-            if(point3Ds != null && point3Ds.Count > 0)
+            if (point3Ds != null && point3Ds.Count > 0)
                 point3Ds.FindAll(x => face3D_1.Inside(x)).ForEach(x => geometry3Ds.Add(x));
 
             point3Ds = planarIntersectionResult_2.GetGeometry3Ds<Point3D>();
             if (point3Ds != null && point3Ds.Count > 0)
                 point3Ds.FindAll(x => face3D_2.Inside(x)).ForEach(x => geometry3Ds.Add(x));
-
-
 
             throw new NotImplementedException();
         }
