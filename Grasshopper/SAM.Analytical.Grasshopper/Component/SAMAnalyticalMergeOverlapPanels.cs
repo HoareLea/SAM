@@ -93,6 +93,18 @@ namespace SAM.Analytical.Grasshopper
 
             panels = Query.MergeOverlapPanels(panels, offset, ref redundantPanels, setDefaultConstruction, Core.Tolerance.Distance);
 
+            if(panels != null)
+            {
+                foreach (Panel panel in panels)
+                {
+                    if (panel == null)
+                        continue;
+
+                    if (panel.GetArea() < Core.Tolerance.MacroDistance)
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Area of panel {0} [Guid: {1}] is below {2}", panel.Name, panel.Guid, Core.Tolerance.MacroDistance));  
+                }
+            }
+
             dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
             dataAccess.SetDataList(1, redundantPanels?.ConvertAll(x => new GooPanel(x)));
         }
