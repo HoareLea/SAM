@@ -125,7 +125,9 @@ namespace SAM.Analytical
                     if (panel_Old == null)
                         continue;
 
-                    Face3D face3D = new Face3D(plane, polygon.ToSAM());
+                    Polygon polygon_Temp = NetTopologySuite.Simplify.DouglasPeuckerSimplifier.Simplify(polygon, tolerance) as Polygon;
+
+                    Face3D face3D = new Face3D(plane, polygon_Temp.ToSAM());
                     Guid guid = panel_Old.Guid;
                     if (guids.Contains(guid))
                         guid = Guid.NewGuid();
