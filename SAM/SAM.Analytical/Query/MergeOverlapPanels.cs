@@ -98,7 +98,7 @@ namespace SAM.Analytical
                     {
                         Point point = polygon.InteriorPoint;
 
-                        List<Tuple<Polygon, Panel>> tuples_Polygon_Contains = tuples_Polygon.FindAll(x => x.Item1.Contains(point));
+                        List<Tuple<Polygon, Panel>> tuples_Polygon_Contains = tuples_Polygon.FindAll(x => x.Item1.Contains(point) || x.Item1.Contains(polygon.InteriorPoint));
                         int count = tuples_Polygon_Contains.Count;
                         if (count == 0)
                             continue;
