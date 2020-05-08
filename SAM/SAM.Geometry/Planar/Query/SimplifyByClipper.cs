@@ -23,6 +23,17 @@ namespace SAM.Geometry.Planar
             return intPointsList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
         }
 
+        public static Face2D SimplifyByClipper(this Face2D face2D, double tolerance = Tolerance.MicroDistance)
+        {
+            //IClosed2D closed2D = face2D.ExternalEdge;
+            //if(closed2D is Polygon2D)
+            //{
+            //    Polygon2D polygon = 
+            //}
+            
+            return face2D;
+        }
+
         public static Polygon SimplifyByClipper(this Polygon polygon, double maxLength, double tolerance = Tolerance.MicroDistance)
         {
             if (polygon == null)

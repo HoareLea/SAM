@@ -1,5 +1,6 @@
 ﻿using ClipperLib;
 using NetTopologySuite.Geometries;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
@@ -98,6 +99,33 @@ namespace SAM.Geometry.Planar
                 Face2D face2D = ((Polygon)geometry).ToSAM();
                 if (face2D != null)
                     return new List<Face2D>() { face2D };
+            }
+
+            return null;
+        }
+
+        public static List<Segment2D> Intersection(this Face2D face2D, Segment2D segment2D, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            Polygon polygon = face2D?.ToNTS(tolerance);
+            if (polygon == null)
+                return null;
+
+            LineString lineString = segment2D?.ToNTS(tolerance);
+            if (lineString == null)
+                return null;
+
+            NetTopologySuite.Geometries.Geometry geometry = polygon.Intersection(lineString);
+            if (geometry == null)
+                return null;
+
+            if (geometry is LineString)
+                return new List<Segment2D>(((LineString)geometry).ToSAM().GetSegments());
+
+            if(geometry is MultiLineString)
+            {
+                List<Segment2D> result = new List<Segment2D>();
+                ((MultiLineString)geometry).ToSAM().ForEach(x => result.AddRange(x));
+                return result;
             }
 
             return null;
