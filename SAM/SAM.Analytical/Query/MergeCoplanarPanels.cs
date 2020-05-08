@@ -110,6 +110,8 @@ namespace SAM.Analytical
                     if (tuples_Panel == null || tuples_Panel.Count == 0)
                         continue;
 
+                    tuples_Panel.Sort((x, y) => y.Item1.Area.CompareTo(x.Item1.Area));
+
                     foreach (Tuple<Polygon, Panel> tuple in tuples_Panel)
                     {
                         result.Remove(tuple.Item2);

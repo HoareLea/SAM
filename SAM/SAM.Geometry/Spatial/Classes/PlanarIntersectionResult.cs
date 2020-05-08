@@ -442,6 +442,19 @@ namespace SAM.Geometry.Spatial
                 return new PlanarIntersectionResult(plane_1);
 
             //TODO: Check and process intersection results
+            List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
+
+            List<Point3D> point3Ds;
+
+            point3Ds = planarIntersectionResult_1.GetGeometry3Ds<Point3D>();
+            if(point3Ds != null && point3Ds.Count > 0)
+                point3Ds.FindAll(x => face3D_1.Inside(x)).ForEach(x => geometry3Ds.Add(x));
+
+            point3Ds = planarIntersectionResult_2.GetGeometry3Ds<Point3D>();
+            if (point3Ds != null && point3Ds.Count > 0)
+                point3Ds.FindAll(x => face3D_2.Inside(x)).ForEach(x => geometry3Ds.Add(x));
+
+
 
             throw new NotImplementedException();
         }
