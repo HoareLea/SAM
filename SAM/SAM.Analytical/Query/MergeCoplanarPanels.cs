@@ -129,7 +129,7 @@ namespace SAM.Analytical
                     //Polygon polygon_Temp = NetTopologySuite.Simplify.DouglasPeuckerSimplifier.Simplify(polygon, tolerance) as Polygon;
 
                     Face2D face2D = polygon.ToSAM();
-                    face2D = Geometry.Planar.Query.SimplifyByClipper(face2D);
+                    face2D = Geometry.Planar.Query.SimplifyByNTS_Snapper(face2D);
 
                     Face3D face3D = new Face3D(plane, face2D);
                     Guid guid = panel_Old.Guid;

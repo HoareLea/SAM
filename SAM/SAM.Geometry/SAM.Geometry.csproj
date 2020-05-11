@@ -123,7 +123,8 @@
     <Compile Include="Planar\Query\ExtendOrTrim.cs" />
     <Compile Include="Planar\Query\Extend.cs" />
     <Compile Include="Planar\Modify\RemoveAlmostSimilar.cs" />
-    <Compile Include="Planar\Query\SimplifyByDouglasPeucker.cs" />
+    <Compile Include="Planar\Query\SimplifyByNTS_Snapper.cs" />
+    <Compile Include="Planar\Query\SimplifyByNTS_DouglasPeucker.cs" />
     <Compile Include="Planar\Query\SimplifyBySAM_Length.cs" />
     <Compile Include="Planar\Query\SimplifyBySAM_Angle.cs" />
     <Compile Include="Planar\Modify\OrientByEnds.cs" />
