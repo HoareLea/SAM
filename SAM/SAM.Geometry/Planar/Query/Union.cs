@@ -12,9 +12,6 @@ namespace SAM.Geometry.Planar
 
         public static List<Polygon2D> Union(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if (tolerance == 0)
-                return Union(polygon2D_1, polygon2D_2);
-
             if (polygon2D_1 == null || polygon2D_2 == null)
                 return null;
 
@@ -182,37 +179,6 @@ namespace SAM.Geometry.Planar
             }
 
             return null;
-        }
-
-
-        private static List<Polygon2D> Union(this Polygon2D polygon2D_1, Polygon2D polygon2D_2)
-        {
-            if (polygon2D_1 == null || polygon2D_2 == null)
-                return null;
-
-            return new PointGraph2D(new List<Polygon2D>() { polygon2D_1, polygon2D_2 }, true).GetPolygon2Ds_External();
-        }
-
-        private static List<Polygon2D> Union(this IEnumerable<Polygon2D> polygon2Ds)
-        {
-            if (polygon2Ds == null)
-                return null;
-
-            int count = polygon2Ds.Count();
-
-            List<Polygon2D> result = new List<Polygon2D>();
-
-            if (count == 0)
-                return result;
-
-            if (count == 1)
-            {
-                result.Add(new Polygon2D(polygon2Ds.First()));
-                return result;
-            }
-
-            return new PointGraph2D(polygon2Ds, true).GetPolygon2Ds_External();
-        }
-       
+        }      
     }
 }
