@@ -16,7 +16,6 @@ namespace SAM.Analytical
             return MergeCoplanarPanels(panels, offset, ref redundantPanels, tolerance);
         }
 
-
         public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
@@ -36,7 +35,7 @@ namespace SAM.Analytical
 
             List<Panel> result = new List<Panel>();
 
-            foreach(PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
+            foreach (PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
             {
                 List<Panel> panels_Temp = MergeCoplanarPanels(dictionary[panelGroup], offset, ref redundantPanels, tolerance);
                 if (panels_Temp != null && panels_Temp.Count > 0)
