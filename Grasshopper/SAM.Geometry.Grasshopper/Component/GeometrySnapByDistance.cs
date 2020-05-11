@@ -3,7 +3,6 @@ using Grasshopper.Kernel.Types;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
@@ -36,7 +35,7 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_Face3D_1", "F_1", "SAM Geometry Face3D", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_Face3D_2", "F_2", "SAM Geometry Face3D", GH_ParamAccess.list);
+            inputParamManager.AddGenericParameter("_Face3D_2", "F_2", "SAM Geometry Face3D", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_snapDistance", "SnDist", "Snapping Distance", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
@@ -81,7 +80,7 @@ namespace SAM.Geometry.Grasshopper
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                dataAccess.SetData(0, false);
                 return;
             }
 
@@ -93,6 +92,14 @@ namespace SAM.Geometry.Grasshopper
                 face3D_1 = (Face3D)objectWrapper.Value;
 
             if (face3D_1 == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(1, false);
+                return;
+            }
+
+
+            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(1, false);
