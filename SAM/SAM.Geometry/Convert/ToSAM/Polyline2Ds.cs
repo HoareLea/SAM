@@ -7,7 +7,7 @@ namespace SAM.Geometry
 {
     public static partial class Convert
     {
-        public static List<Polyline2D> ToSAM(this MultiLineString multiLineString)
+        public static List<Polyline2D> ToSAM(this MultiLineString multiLineString, double tolerance = Core.Tolerance.Distance)
         {
             IEnumerable<NetTopologySuite.Geometries.Geometry> geometries = multiLineString?.Geometries;
             if (geometries == null)
@@ -20,7 +20,7 @@ namespace SAM.Geometry
                 if (lineString == null)
                     continue;
 
-                result.Add(lineString.ToSAM());
+                result.Add(lineString.ToSAM(tolerance));
             }
             return result;
         }

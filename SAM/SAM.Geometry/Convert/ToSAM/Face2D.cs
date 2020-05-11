@@ -6,7 +6,7 @@ namespace SAM.Geometry
 {
     public static partial class Convert
     {
-        public static List<Face2D> ToSAM(this MultiPolygon multiPolygon)
+        public static List<Face2D> ToSAM(this MultiPolygon multiPolygon, double tolerance = Core.Tolerance.Distance)
         {
             if (multiPolygon == null)
                 return null;
@@ -14,7 +14,7 @@ namespace SAM.Geometry
             List<Face2D> result = new List<Face2D>();
             foreach (Polygon polygon in multiPolygon)
             {
-                Face2D face2D = polygon?.ToSAM();
+                Face2D face2D = polygon?.ToSAM(tolerance);
                 if (face2D == null)
                     continue;
 

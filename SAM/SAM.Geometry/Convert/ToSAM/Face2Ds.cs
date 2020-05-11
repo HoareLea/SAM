@@ -6,7 +6,7 @@ namespace SAM.Geometry
 {
     public static partial class Convert
     {
-        public static Face2D ToSAM(this Polygon polygon)
+        public static Face2D ToSAM(this Polygon polygon, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon == null)
                 return null;
@@ -26,11 +26,15 @@ namespace SAM.Geometry
                     if (linearRing_Temp == null)
                         continue;
 
-                    polygon2Ds.Add(linearRing_Temp.ToSAM());
+                    Polygon2D polygon2D = linearRing_Temp.ToSAM(tolerance);
+                    if (polygon2D == null || polygon2D.GetArea() <= tolerance)
+                        continue;
+
+                    polygon2Ds.Add(polygon2D);
                 }
             }
 
-            return Face2D.Create(linearRing.ToSAM(), polygon2Ds, true);
+            return Face2D.Create(linearRing.ToSAM(tolerance), polygon2Ds, true);
         }
     }
 }

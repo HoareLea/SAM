@@ -6,12 +6,12 @@ namespace SAM.Geometry
 {
     public static partial class Convert
     {
-        public static Polygon2D ToSAM(this LinearRing linearRing)
+        public static Polygon2D ToSAM(this LinearRing linearRing, double tolerance = Core.Tolerance.Distance)
         {
             if (linearRing == null)
                 return null;
 
-            return new Polygon2D(linearRing.Coordinates.ToSAM());
+            return new Polygon2D(linearRing.Coordinates.ToSAM(tolerance));
         }
     }
 }

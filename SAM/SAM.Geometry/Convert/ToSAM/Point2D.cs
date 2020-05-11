@@ -13,14 +13,14 @@ namespace SAM.Geometry
             return new Point2D(intPoint.X * tolerance, intPoint.Y * tolerance);
         }
 
-        public static Point2D ToSAM(this Coordinate coordinate)
+        public static Point2D ToSAM(this Coordinate coordinate, double tolerance = Core.Tolerance.MicroDistance)
         {
-            return new Point2D(coordinate.X, coordinate.Y);
+            return new Point2D(Core.Query.Round(coordinate.X, tolerance), Core.Query.Round(coordinate.Y, tolerance));
         }
 
-        public static Point2D ToSAM(this Point point)
+        public static Point2D ToSAM(this Point point, double tolerance = Core.Tolerance.MicroDistance)
         {
-            return new Point2D(point.X, point.Y);
+            return new Point2D(Core.Query.Round(point.X, tolerance), Core.Query.Round(point.Y, tolerance));
         }
     }
 }

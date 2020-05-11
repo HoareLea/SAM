@@ -19,14 +19,14 @@ namespace SAM.Geometry
             return point2Ds;
         }
 
-        public static List<Point2D> ToSAM(this IEnumerable<Coordinate> coordinates)
+        public static List<Point2D> ToSAM(this IEnumerable<Coordinate> coordinates, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (coordinates == null)
                 return null;
 
             List<Point2D> point2Ds = new List<Point2D>();
             foreach (Coordinate coordinate in coordinates)
-                point2Ds.Add(coordinate.ToSAM());
+                point2Ds.Add(coordinate.ToSAM(tolerance));
 
             return point2Ds;
         }

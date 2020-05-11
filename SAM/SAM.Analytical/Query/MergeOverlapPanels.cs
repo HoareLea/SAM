@@ -120,7 +120,7 @@ namespace SAM.Analytical
 
                         if (panel_Old == null)
                         {
-                            List<Tuple<Polygon, Panel>> tuples_Polygon_Floor = tuples_Polygon.FindAll(x => Query.PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
+                            List<Tuple<Polygon, Panel>> tuples_Polygon_Floor = tuples_Polygon_Contains.FindAll(x => Query.PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
                             if (tuples_Polygon_Floor != null && tuples_Polygon_Floor.Count != 0)
                             {
                                 panel_Old = tuples_Polygon_Floor.Find(x => x.PanelType() == Analytical.PanelType.FloorInternal)?.Item2;
@@ -138,7 +138,10 @@ namespace SAM.Analytical
                         if (panel_Old == null)
                             continue;
 
-                        Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon.ToSAM());
+                        Polygon polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon);
+                        polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_TopologyPreservingSimplifier(polygon_Temp);
+
+                        Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon_Temp.ToSAM());
                         Guid guid = panel_Old.Guid;
                         if (guids.Contains(guid))
                             guid = Guid.NewGuid();

@@ -6,14 +6,14 @@ namespace SAM.Geometry
 {
     public static partial class Convert
     {
-        public static List<Polygon2D> ToSAM_Polygon2Ds(this Polygon polygon)
+        public static List<Polygon2D> ToSAM_Polygon2Ds(this Polygon polygon, double tolerance = Core.Tolerance.Distance)
         {
             NetTopologySuite.Geometries.Geometry geometry = polygon?.Boundary;
             if (geometry == null)
                 return null;
 
             if (geometry is LinearRing)
-                return new List<Polygon2D>() { ((LinearRing)geometry).ToSAM() };
+                return new List<Polygon2D>() { ((LinearRing)geometry).ToSAM(tolerance) };
             else if (geometry is MultiLineString)
             {
                 MultiLineString multiLineString = (MultiLineString)geometry;
@@ -28,7 +28,7 @@ namespace SAM.Geometry
                     if (linearRing == null)
                         continue;
 
-                    polygon2Ds.Add(linearRing.ToSAM());
+                    polygon2Ds.Add(linearRing.ToSAM(tolerance));
                 }
                 return polygon2Ds;
             }
