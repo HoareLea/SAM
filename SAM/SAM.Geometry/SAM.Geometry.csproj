@@ -120,6 +120,7 @@
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
     <Compile Include="Planar\Modify\InsertClosest.cs" />
     <Compile Include="Planar\Modify\Draw.cs" />
+    <Compile Include="Planar\Query\Snap.cs" />
     <Compile Include="Planar\Query\ExtendOrTrim.cs" />
     <Compile Include="Planar\Query\Extend.cs" />
     <Compile Include="Planar\Modify\RemoveAlmostSimilar.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Planar\Query\EqualsTopologically.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Query\ExtremePoints.cs" />
+    <Compile Include="Spatial\Query\Snap.cs" />
     <Compile Include="Spatial\Query\On.cs" />
     <Compile Include="Spatial\Query\Parallel.cs" />
     <Compile Include="Planar\Query\ExternalPolygon2Ds.cs" />

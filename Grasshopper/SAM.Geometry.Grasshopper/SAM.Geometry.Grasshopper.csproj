@@ -96,12 +96,13 @@
     <Compile Include="Component\GeometryModifyDifference.cs" />
     <Compile Include="Component\GeometryPolycurveLoop2D.cs" />
     <Compile Include="Component\GeometryCreatePlane.cs" />
+    <Compile Include="Component\GeometrySnapByDistance.cs" />
     <Compile Include="Component\SAMGeometryPlaneIntersection.cs" />
     <Compile Include="Component\SAMGeometrySplit.cs" />
     <Compile Include="Component\SAMGeometry2DToNTS.cs" />
     <Compile Include="Component\SAMGeometryGeometry.cs" />
     <Compile Include="Component\GeometrySAMGeometry.cs" />
-    <Compile Include="Component\GeometrySnap.cs" />
+    <Compile Include="Component\GeometrySnapByPoints.cs" />
     <Compile Include="Component\SAMGeometry2DSAMGeometry.cs" />
     <Compile Include="Component\SAMGeometrySAMGeometry2D.cs" />
     <Compile Include="Component\SAMGeometrySegment2DIntersection.cs" />

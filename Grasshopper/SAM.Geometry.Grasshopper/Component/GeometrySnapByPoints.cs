@@ -6,13 +6,23 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometrySnap : GH_Component
+    public class GeometrySnapByPoints : GH_Component
     {
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("1165eb14-9f8a-460e-a3e7-e9b3d7f08ddc");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public GeometrySnap()
-          : base("Geometry.Snap", "GeometryEngine.Snap",
+        public GeometrySnapByPoints()
+          : base("Geometry.SnapByPoints", "GeometryEngine.SnapByPoints",
               "Snap Geometry or SAM Geometry by points",
               "SAM", "Geometry")
         {
@@ -140,27 +150,6 @@ namespace SAM.Geometry.Grasshopper
             dataAccess.SetData(1, true);
 
             //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Geometry;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("1165eb14-9f8a-460e-a3e7-e9b3d7f08ddc"); }
         }
     }
 }

@@ -29,5 +29,37 @@ namespace SAM.Geometry.Spatial
 
             return nonZeroRows < 3;
         }
+
+        public static bool Coplanar(this Face3D face3D_1, Face3D face3D_2, double tolerance = Core.Tolerance.Distance)
+        {
+            if (face3D_1 == face3D_2)
+                return true;
+
+            Plane plane_1 = face3D_1?.GetPlane();
+            if (plane_1 == null)
+                return false;
+
+            Plane plane_2 = face3D_2?.GetPlane();
+            if (plane_2 == null)
+                return false;
+
+            return plane_1.Coplanar(plane_2, tolerance);
+        }
+
+        public static bool Coplanar(this IPlanar3D planar3D_1, IPlanar3D planar3D_2, double tolerance = Core.Tolerance.Distance)
+        {
+            if (planar3D_1 == planar3D_2)
+                return true;
+
+            Plane plane_1 = planar3D_1?.GetPlane();
+            if (plane_1 == null)
+                return false;
+
+            Plane plane_2 = planar3D_2?.GetPlane();
+            if (plane_2 == null)
+                return false;
+
+            return plane_1.Coplanar(plane_2, tolerance);
+        }
     }
 }
