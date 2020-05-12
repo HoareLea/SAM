@@ -75,6 +75,7 @@
     <Compile Include="Convert\ToNTS\Coordinates.cs" />
     <Compile Include="Convert\ToNTS\Coordinate.cs" />
     <Compile Include="Convert\ToNTS\LinearRing.cs" />
+    <Compile Include="Convert\ToNTS\MultiPolygon.cs" />
     <Compile Include="Convert\ToNTS\Polygons.cs" />
     <Compile Include="Convert\ToNTS\Polygon.cs" />
     <Compile Include="Convert\ToNTS\LineString.cs" />

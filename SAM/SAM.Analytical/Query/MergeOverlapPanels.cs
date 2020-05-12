@@ -1,6 +1,7 @@
 ﻿using NetTopologySuite.Geometries;
 using SAM.Geometry;
 using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,12 @@ namespace SAM.Analytical
             panels_Temp = MergeOverlapPanels_FloorAndRoof(panels_Temp, offset, ref redundantPanels, setDefaultConstruction, tolerance);
             if (panels_Temp != null && panels_Temp.Count > 0)
                 result.AddRange(panels_Temp);
+
+            panels_Temp = dictionary[Analytical.PanelGroup.Wall];
+            panels_Temp = MergeOverlapPanels_Walls(panels_Temp, offset, ref redundantPanels, setDefaultConstruction, tolerance);
+            if (panels_Temp != null && panels_Temp.Count > 0)
+                result.AddRange(panels_Temp);
+
 
             return result;
         }
@@ -87,7 +94,7 @@ namespace SAM.Analytical
                 }
 
                 List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
-                Modify.RemoveAlmostSimilar_NTS(polygons_Temp, tolerance);
+                Geometry.Planar.Modify.RemoveAlmostSimilar_NTS(polygons_Temp, tolerance);
 
                 List<Polygon> polygons = Geometry.Convert.ToNTS_Polygons(polygons_Temp, tolerance);
                 if (polygons != null || polygons.Count > 0)
@@ -141,7 +148,7 @@ namespace SAM.Analytical
                         Polygon polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon);
                         polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_TopologyPreservingSimplifier(polygon_Temp);
 
-                        Geometry.Spatial.Face3D face3D = new Geometry.Spatial.Face3D(plane, polygon_Temp.ToSAM());
+                        Face3D face3D = new Face3D(plane, polygon_Temp.ToSAM());
                         Guid guid = panel_Old.Guid;
                         if (guids.Contains(guid))
                             guid = Guid.NewGuid();
@@ -151,6 +158,67 @@ namespace SAM.Analytical
                         result.Add(panel_New);
                     }
                 }
+            }
+
+            return result;
+        }
+    
+        private static List<Panel> MergeOverlapPanels_Walls(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
+        {
+            List<Tuple<Face3D, Panel>> tuples = panels?.ToList().ConvertAll(x => new Tuple<Face3D, Panel>(x.GetFace3D(), x));
+            if (tuples == null || tuples.Count == 0)
+                return null;
+
+            tuples.Sort((x, y) => y.Item1.GetArea().CompareTo(x.Item1.GetArea()));
+
+            List<Panel> result = new List<Panel>();
+            HashSet<Guid> guids = new HashSet<Guid>();
+            while(tuples.Count > 0)
+            {
+                Tuple<Face3D, Panel> tuple = tuples[0];
+                tuples.RemoveAt(0);
+
+                Plane plane = tuple.Item1.GetPlane();
+
+                List<Tuple<Face3D, Panel>> tuples_Face3D = tuples.FindAll(x => x.Item1.Coplanar(tuple.Item1) && plane.Distance(x.Item1.GetPlane()) <= offset);
+                if (tuples_Face3D.Count == 0)
+                {
+                    result.Add(tuple.Item2);
+                    continue;
+                }
+
+                tuples.RemoveAll(x => tuples_Face3D.Contains(x));
+
+                Polygon polygon = plane.Convert(tuple.Item1).ToNTS(tolerance);
+                List<Tuple<Polygon, Panel>> tuples_Polygon = tuples_Face3D.ConvertAll(x => new Tuple<Polygon, Panel>(plane.Convert(plane.Project(x.Item1)).ToNTS(tolerance), x.Item2));
+                tuples_Polygon.Add(new Tuple<Polygon, Panel>(polygon, tuple.Item2));
+
+                List<Polygon> polygons = tuples_Polygon.ConvertAll(x => x.Item1).ToNTS_Polygons(tolerance);
+
+                foreach (Polygon polygon_Temp in polygons)
+                {
+                    Face3D face3D = plane.Convert(polygon_Temp.ToSAM(tolerance));
+                    if (face3D == null)
+                        continue;
+
+                    List<Tuple<Polygon, Panel>> tuples_Polygon_Temp = tuples_Polygon.FindAll(x => x.Item1.Contains(polygon_Temp.InteriorPoint) || polygon_Temp.Contains(x.Item1.InteriorPoint));
+                    if (tuples_Polygon_Temp == null || tuples_Polygon_Temp.Count == 0)
+                        continue;
+
+                    tuples_Polygon_Temp.Sort((x, y) => y.Item1.Area.CompareTo(x.Item1.Area));
+
+                    Panel panel_Old = tuples_Polygon_Temp.First().Item2;
+                    Guid guid = panel_Old.Guid;
+                    if (guids.Contains(guid))
+                        guid = Guid.NewGuid();
+
+                    guids.Add(guid);
+
+                    Panel panel_New = new Panel(guid, panel_Old, face3D);
+
+                    result.Add(panel_New);
+                }
+
             }
 
             return result;

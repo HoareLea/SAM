@@ -1,4 +1,5 @@
 ﻿using ClipperLib;
+using NetTopologySuite.Geometries;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -111,54 +112,6 @@ namespace SAM.Geometry.Planar
             return Split(segment2Ds, tolerance);
         }
 
-        public static List<Polygon2D> Split(this IEnumerable<Polygon2D> polygon2Ds, double tolerance = Core.Tolerance.MicroDistance)
-        {
-            if (polygon2Ds == null)
-                return null;
-
-            List<List<IntPoint>> intPointsList = polygon2Ds.ToList().ConvertAll(x => Convert.ToClipper((ISegmentable2D)x, tolerance)); ;
-
-            bool intersect = true;
-            while (intersect)
-            {
-                intersect = false;
-
-                List<List<IntPoint>> intPointsList_Temp = new List<List<IntPoint>>();
-
-                Clipper clipper = new Clipper();
-
-                int count = intPointsList.Count();
-                for (int i = 0; i < intPointsList.Count() - 1; i++)
-                {
-                    List<IntPoint> intPoints_1 = intPointsList[i];
-
-                    for (int j = i + 1; j < intPointsList.Count(); j++)
-                    {
-                        List<IntPoint> intPoints_2 = intPointsList[j];
-
-                        clipper.AddPath(intPoints_1, PolyType.ptSubject, true);
-                        clipper.AddPath(intPoints_1, PolyType.ptClip, true);
-
-                        List<List<IntPoint>> IntPointsList_Result = new List<List<IntPoint>>();
-
-                        clipper.Execute(ClipType.ctIntersection, IntPointsList_Result, PolyFillType.pftEvenOdd);
-                        if (IntPointsList_Result.Count > 0)
-                        {
-                        }
-                        else
-                        {
-                        }
-
-                        clipper.Clear();
-                    }
-                }
-
-                throw new System.Exception();
-            }
-
-            return null;
-        }
-
         public static List<Segment2D> Split(this ISegmentable2D segmentable2D, IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segmentable2D == null || segment2Ds == null)
@@ -191,6 +144,25 @@ namespace SAM.Geometry.Planar
             }
 
             return result;
+        }
+        
+        public static List<Face2D> Split(this IEnumerable<Face2D> face2Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if (face2Ds == null)
+                return null;
+
+            if (face2Ds.Count() <= 1)
+                return new List<Face2D>(face2Ds);
+
+            MultiPolygon multiPolygon = face2Ds.ToNTS(tolerance);
+            if (multiPolygon == null || multiPolygon.IsEmpty)
+                return null;
+
+            List<Polygon> polygons = multiPolygon.ToNTS_Polygons(tolerance);
+            if (polygons == null)
+                return null;
+
+            return polygons.ConvertAll(x => x.ToSAM(tolerance));
         }
     }
 }
