@@ -8,7 +8,7 @@ namespace SAM.Geometry
     {
         public static List<Face2D> ToSAM(this MultiPolygon multiPolygon, double tolerance = Core.Tolerance.Distance)
         {
-            if (multiPolygon == null)
+            if (multiPolygon == null || multiPolygon.IsEmpty)
                 return null;
 
             List<Face2D> result = new List<Face2D>();

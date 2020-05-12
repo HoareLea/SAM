@@ -8,7 +8,7 @@ namespace SAM.Geometry
     {
         public static Face2D ToSAM(this Polygon polygon, double tolerance = Core.Tolerance.Distance)
         {
-            if (polygon == null)
+            if (polygon == null || polygon.IsEmpty)
                 return null;
 
             LinearRing linearRing = polygon.ExteriorRing as LinearRing;

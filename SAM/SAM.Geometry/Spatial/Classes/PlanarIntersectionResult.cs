@@ -428,6 +428,9 @@ namespace SAM.Geometry.Spatial
 
             if (plane_1.Coplanar(plane_2, tolerance_Distance))
             {
+                if (plane_1.Distance(plane_2) > tolerance_Distance)
+                    return new PlanarIntersectionResult(plane_1);
+
                 face3D_2 = plane_1.Project(face3D_2);
                 return new PlanarIntersectionResult(plane_1, Planar.Query.Intersection(plane_1.Convert(face3D_1), plane_1.Convert(face3D_2))?.ConvertAll(x => plane_1.Convert(x)));
             }

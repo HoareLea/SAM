@@ -1,6 +1,5 @@
 ﻿using ClipperLib;
 using NetTopologySuite.Geometries;
-using System;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
@@ -54,7 +53,7 @@ namespace SAM.Geometry.Planar
             if (!on_1 && !on_2 && !on_3 && !on_4)
                 return null;
 
-            List<Point2D> point2Ds = new List<Point2D>() { segment2D_1 [0], segment2D_1[1], segment2D_2[0], segment2D_2[1] };
+            List<Point2D> point2Ds = new List<Point2D>() { segment2D_1[0], segment2D_1[1], segment2D_2[0], segment2D_2[1] };
 
             Point2D point2D_1;
             Point2D point2D_2;
@@ -64,7 +63,7 @@ namespace SAM.Geometry.Planar
 
             Modify.SortByDistance(point2Ds, point2D_1);
 
-            for(int i=0; i < point2Ds.Count - 1; i++)
+            for (int i = 0; i < point2Ds.Count - 1; i++)
             {
                 Point2D point2D_Mid = point2Ds[i].Mid(point2Ds[i + 1]);
                 if (segment2D_1.On(point2D_Mid) && segment2D_2.On(point2D_Mid) && point2Ds[i].Distance(point2Ds[i + 1]) > tolerance)
@@ -86,6 +85,9 @@ namespace SAM.Geometry.Planar
 
             NetTopologySuite.Geometries.Geometry geometry = polygon_1.Intersection(polygon_2);
             if (geometry == null)
+                return null;
+
+            if (geometry.IsEmpty)
                 return null;
 
             if (geometry is MultiPolygon)
@@ -118,7 +120,7 @@ namespace SAM.Geometry.Planar
             if (geometry is LineString)
                 return new List<Segment2D>(((LineString)geometry).ToSAM().GetSegments());
 
-            if(geometry is MultiLineString)
+            if (geometry is MultiLineString)
             {
                 List<Segment2D> result = new List<Segment2D>();
                 ((MultiLineString)geometry).ToSAM().ForEach(x => result.AddRange(x));

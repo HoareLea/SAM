@@ -84,7 +84,6 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-
             Face3D face3D_1 = null;
             if (objectWrapper.Value is IGH_GeometricGoo)
                 face3D_1 = Convert.ToSAM((IGH_GeometricGoo)objectWrapper.Value)?.First() as Face3D;
@@ -97,7 +96,6 @@ namespace SAM.Geometry.Grasshopper
                 dataAccess.SetData(1, false);
                 return;
             }
-
 
             if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper == null)
             {
