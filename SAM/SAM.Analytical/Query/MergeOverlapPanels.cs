@@ -208,6 +208,9 @@ namespace SAM.Analytical
                     tuples_Polygon_Temp.Sort((x, y) => y.Item1.Area.CompareTo(x.Item1.Area));
 
                     Panel panel_Old = tuples_Polygon_Temp.First().Item2;
+                    tuples_Polygon_Temp.RemoveAt(0);
+                    redundantPanels.AddRange(tuples_Polygon_Temp.ConvertAll(x => x.Item2));
+
                     Guid guid = panel_Old.Guid;
                     if (guids.Contains(guid))
                         guid = Guid.NewGuid();
