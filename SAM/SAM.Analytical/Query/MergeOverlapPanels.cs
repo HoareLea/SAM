@@ -79,14 +79,14 @@ namespace SAM.Analytical
 
                 tuples_Offset.Insert(0, tuple);
 
-                Geometry.Spatial.Plane plane = tuple.Item2.GetFace3D().GetPlane();
+                Plane plane = tuple.Item2.GetFace3D().GetPlane();
 
                 List<Tuple<Polygon, Panel>> tuples_Polygon = new List<Tuple<Polygon, Panel>>();
                 foreach (Tuple<double, Panel> tuple_Temp in tuples_Offset)
                 {
                     Panel panel = tuple_Temp.Item2;
 
-                    Geometry.Spatial.Face3D face3D = plane.Project(panel.GetFace3D());
+                    Face3D face3D = plane.Project(panel.GetFace3D());
 
                     Face2D face2D = plane.Convert(face3D);
 
@@ -173,6 +173,7 @@ namespace SAM.Analytical
 
             List<Panel> result = new List<Panel>();
             HashSet<Guid> guids = new HashSet<Guid>();
+            List<Panel> redundantPanels_Temp = new List<Panel>(panels);
             while(tuples.Count > 0)
             {
                 Tuple<Face3D, Panel> tuple = tuples[0];
@@ -197,19 +198,14 @@ namespace SAM.Analytical
 
                 foreach (Polygon polygon_Temp in polygons)
                 {
-                    Face3D face3D = plane.Convert(polygon_Temp.ToSAM(tolerance));
-                    if (face3D == null)
+                    List<Tuple<Polygon, Panel>> tuples_Polygon_Contains = tuples_Polygon.FindAll(x => x.Item1.Contains(polygon_Temp.InteriorPoint) || polygon_Temp.Contains(x.Item1.InteriorPoint));
+                    if (tuples_Polygon_Contains == null || tuples_Polygon_Contains.Count == 0)
                         continue;
 
-                    List<Tuple<Polygon, Panel>> tuples_Polygon_Temp = tuples_Polygon.FindAll(x => x.Item1.Contains(polygon_Temp.InteriorPoint) || polygon_Temp.Contains(x.Item1.InteriorPoint));
-                    if (tuples_Polygon_Temp == null || tuples_Polygon_Temp.Count == 0)
-                        continue;
+                    tuples_Polygon_Contains.Sort((x, y) => y.Item1.Area.CompareTo(x.Item1.Area));
 
-                    tuples_Polygon_Temp.Sort((x, y) => y.Item1.Area.CompareTo(x.Item1.Area));
-
-                    Panel panel_Old = tuples_Polygon_Temp.First().Item2;
-                    tuples_Polygon_Temp.RemoveAt(0);
-                    redundantPanels.AddRange(tuples_Polygon_Temp.ConvertAll(x => x.Item2));
+                    Panel panel_Old = tuples_Polygon_Contains.First().Item2;
+                    redundantPanels_Temp.Remove(panel_Old);
 
                     Guid guid = panel_Old.Guid;
                     if (guids.Contains(guid))
@@ -217,13 +213,20 @@ namespace SAM.Analytical
 
                     guids.Add(guid);
 
+                    Polygon polygon_Simplify = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon_Temp);
+                    polygon_Simplify = Geometry.Planar.Query.SimplifyByNTS_TopologyPreservingSimplifier(polygon_Simplify);
+
+                    Face3D face3D = plane.Convert(polygon_Simplify.ToSAM(tolerance));
+                    if (face3D == null)
+                        continue;
+
                     Panel panel_New = new Panel(guid, panel_Old, face3D);
 
                     result.Add(panel_New);
                 }
-
             }
 
+            redundantPanels.AddRange(redundantPanels_Temp);
             return result;
         }
     }
