@@ -40,5 +40,22 @@ namespace SAM.Geometry.Planar
 
             return geometries.ToList().ConvertAll(x => (x as Polygon).ToSAM(tolerance));
         }
+
+        public static List<ISAMGeometry2D> Snap(this Face2D face2D_1, Segment2D segment2D, double snapDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            Polygon polygon = face2D_1?.ToNTS(tolerance);
+            if (polygon == null)
+                return null;
+
+            LineString lineString = segment2D?.ToNTS(tolerance);
+            if (lineString == null)
+                return null;
+
+            NetTopologySuite.Geometries.Geometry[] geometries = GeometrySnapper.Snap(polygon, lineString, snapDistance);
+            if (geometries == null)
+                return null;
+
+            return geometries.ToList().ConvertAll(x => x.ToSAM(tolerance));
+        }
     }
 }

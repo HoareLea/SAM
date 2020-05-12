@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -14,17 +15,27 @@ namespace SAM.Geometry.Spatial
             if (plane_2 == null)
                 return null;
 
-            if (!plane_1.Coplanar(plane_2, tolerance))
+            if (plane_1.Coplanar(plane_2, tolerance))
+            {
+                Planar.Face2D face2D_1 = plane_1.Convert(face3D_1);
+                Planar.Face2D face2D_2 = plane_1.Convert(plane_1.Project(face3D_2));
+
+                List<Planar.Face2D> face2Ds = Planar.Query.Snap(face2D_1, face2D_2, snapDistance, tolerance);
+                if (face2Ds == null)
+                    return null;
+
+                return face2Ds?.ConvertAll(x => plane_1.Convert(x));
+            }
+
+            PlanarIntersectionResult planarIntersectionResult = plane_1.Intersection(plane_2);
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return null;
 
-            Planar.Face2D face2D_1 = plane_1.Convert(face3D_1);
-            Planar.Face2D face2D_2 = plane_1.Convert(plane_1.Project(face3D_2));
-
-            List<Planar.Face2D> face2Ds = Planar.Query.Snap(face2D_1, face2D_2, snapDistance, tolerance);
-            if (face2Ds == null)
+            List<Segment3D> segment3Ds = planarIntersectionResult.GetGeometry3Ds<Segment3D>();
+            if (segment3Ds == null || segment3Ds.Count == 0)
                 return null;
 
-            return face2Ds?.ConvertAll(x => plane_1.Convert(x));
+            throw new NotImplementedException();
         }
     }
 }

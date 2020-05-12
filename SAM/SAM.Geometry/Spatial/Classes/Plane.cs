@@ -453,6 +453,11 @@ namespace SAM.Geometry.Spatial
             return PlanarIntersectionResult.Create(this, face3D);
         }
 
+        public PlanarIntersectionResult Intersection(Plane plane)
+        {
+            return PlanarIntersectionResult.Create(this, plane);
+        }
+
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             Plane plane = new Plane((Point3D)origin.GetMoved(vector3D), (Vector3D)normal.Clone());
