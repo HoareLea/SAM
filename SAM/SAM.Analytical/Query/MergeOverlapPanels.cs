@@ -185,6 +185,7 @@ namespace SAM.Analytical
                 if (tuples_Face3D.Count == 0)
                 {
                     result.Add(tuple.Item2);
+                    redundantPanels_Temp.Remove(tuple.Item2);
                     continue;
                 }
 
