@@ -71,7 +71,7 @@ namespace SAM.Math
             return Create.Matrix3D(matrix);
         }
 
-        public static Matrix3D operator +(Matrix3D matrix3D_1, Matrix matrix3D_2)
+        public static Matrix3D operator +(Matrix3D matrix3D_1, Matrix3D matrix3D_2)
         {
             if (matrix3D_1 == null || matrix3D_2 == null)
                 return null;
