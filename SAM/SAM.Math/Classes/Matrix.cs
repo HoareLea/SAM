@@ -220,14 +220,24 @@ namespace SAM.Math
             if (jObject == null)
                 return false;
 
-            throw new Exception();
+            JArray jArray_Column = jObject.Value<JArray>("Values");
 
-            JObject jObject_Values = jObject.Value<JObject>("values");
-
-            JArray jArray = jObject.Value<JArray>("values");
-            foreach (JArray jArray_Row in jArray)
+            List<List<double>> valuesList = new List<List<double>>();
+            foreach (JArray jArray_Row in jArray_Column)
             {
+                List<double> values = new List<double>();
+                foreach(double value in jArray_Row)
+                    values.Add(value);
+
+                valuesList.Add(values);
             }
+
+            values = new double[valuesList.Count, valuesList.ConvertAll(x => x.Count).Max()];
+            for (int i = 0; i < valuesList.Count; i++)
+                for (int j = 0; j < valuesList[i].Count; j++)
+                    values[i, j] = valuesList[i][j];
+
+            return true;
         }
 
         public JObject ToJObject()
@@ -235,35 +245,21 @@ namespace SAM.Math
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
-            throw new Exception();
+            JArray jArray_Column = new JArray();
+
+            for (int i=0; i < values.GetLength(0); i++)
+            {
+                JArray jArray_Row = new JArray();
+                for (int j = 0; j < values.GetLength(1); j++)
+                    jArray_Row.Add(values[i, j]);
+
+                jArray_Column.Add(jArray_Row);
+            }
+
+            jObject.Add("Values", jArray_Column);
 
             return jObject;
         }
-
-        //// Solve Ax^3 + Bx^2 + Cx + D = 0 following http://www.code-kings.com/2013/11/cubic-equation-roots-in-csharp-code.html
-        //private static double[] RealCubicRoots(double A, double B, double C, double D, double tolerance = Core.Tolerance.Distance)
-        //{
-        //    double f = (3 * C / A - B * B / (A * A)) / 3;
-        //    double g = (2 * System.Math.Pow(B, 3) / System.Math.Pow(A, 3) - (9 * B * C) / System.Math.Pow(A, 2) + 27 * D / A) / 27;
-        //    double h = Core.Modify.Round(System.Math.Pow(g, 2) * 0.25 + System.Math.Pow(f, 3) / 27, tolerance);
-
-        //    if (h <= 0)
-        //    {
-        //        double i = System.Math.Pow(System.Math.Pow(g, 2) * 0.25 - h, 0.5);
-        //        double j = System.Math.Pow(i, 0.333333333333333333333333);
-        //        double k = System.Math.Acos(-g / (2 * i));
-        //        double l = -j;
-        //        double m = System.Math.Cos(k / 3);
-        //        double n = System.Math.Pow(3, 0.5) * System.Math.Sin(k / 3);
-        //        double p = -B / (3 * A);
-        //        double x = 2 * j * System.Math.Cos(k / 3) - B / (3 * A);
-        //        double y = l * (m + n) + p;
-        //        double z = l * (m - n) + p;
-        //        return new double[] { x, y, z };
-        //    }
-        //    else
-        //        return null;
-        //}
 
         public static Matrix GetIdentity(int count = 3)
         {
