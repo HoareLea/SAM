@@ -35,6 +35,11 @@ namespace SAM.Math
             return matrix4D;
         }
 
+        public static Matrix4D GetUnset()
+        {
+            return Create.Matrix4D(GetUnset(4, 4));
+        }
+
         public static Matrix4D operator *(Matrix4D matrix4D_1, Matrix4D matrix4D_2)
         {
             if (matrix4D_1 == null || matrix4D_2 == null)

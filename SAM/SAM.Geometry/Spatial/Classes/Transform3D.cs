@@ -43,7 +43,7 @@ namespace SAM.Geometry.Spatial
             return jObject;
         }
 
-        public static Transform3D GetIndentity()
+        public static Transform3D GetIdentity()
         {
             return new Transform3D(Matrix4D.GetIdentity());
         }
@@ -58,7 +58,27 @@ namespace SAM.Geometry.Spatial
 
         public static Transform3D GetUnset()
         {
+            return new Transform3D(Matrix4D.GetUnset());
+        }
 
+        public static Transform3D GetScale(double factor)
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[0, 0] = factor;
+            result.matrix4D[1, 1] = factor;
+            result.matrix4D[2, 2] = factor;
+
+            return result;
+        }
+
+        public static Transform3D GetTranslation(Vector3D vector3D)
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[0, 3] = vector3D[0];
+            result.matrix4D[1, 3] = vector3D[1];
+            result.matrix4D[2, 3] = vector3D[2];
+
+            return result;
         }
     }
 }
