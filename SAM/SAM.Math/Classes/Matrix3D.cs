@@ -26,7 +26,6 @@ namespace SAM.Math
             return new Matrix3D(this);
         }
 
-
         public static Matrix3D GetIdentity()
         {
             Matrix3D matrix3D = new Matrix3D();
@@ -107,6 +106,11 @@ namespace SAM.Math
 
 
             return Create.Matrix3D(matrix);
+        }
+
+        public static explicit operator Matrix3D(double[,] values)
+        {
+            return Create.Matrix3D(values);
         }
     }
 }

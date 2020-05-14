@@ -289,9 +289,9 @@ namespace SAM.Math
                 for (int j = 0; j < values.GetLength(1); j++)
                 {
                     if(result == int.MinValue)
-                        result = 17 * 23 + values[i, j].GetHashCode();
+                        result = values[i, j].GetHashCode();
                     else
-                        result = result * 23 + values[i, j].GetHashCode();
+                        result = result ^ values[i, j].GetHashCode();
                 }
             }
 
@@ -539,6 +539,34 @@ namespace SAM.Math
         public static Matrix operator -(Matrix matrix, double value)
         {
             return matrix + (-value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            Matrix matrix = obj as Matrix;
+            if (matrix == null)
+                return false;
+
+            if (!SizeEqual(matrix))
+                return false;
+
+            int count_Rows = values.GetLength(0);
+            int count_Columns = values.GetLength(1);
+
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    if (!values[i, j].Equals(matrix.values[i, j]))
+                        return false;
+
+            return true;
+        }
+
+        public static explicit operator Matrix(double[,] values)
+        {
+            if (values == null)
+                return null;
+
+            return new Matrix(values);
         }
     }
 }
