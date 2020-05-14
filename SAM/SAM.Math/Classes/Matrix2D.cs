@@ -2,7 +2,7 @@
 
 namespace SAM.Math
 {
-    public class Matrix2D : Matrix
+    public class Matrix2D : Matrix, ISquareMatrix
     {
         public Matrix2D(JObject jObject) 
             : base(jObject)

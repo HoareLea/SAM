@@ -73,6 +73,16 @@ namespace SAM.Math
             }
         }
 
+        public void SetValues(double value)
+        {
+            int count_Rows = values.GetLength(0);
+            int count_Columns = values.GetLength(1);
+
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    values[i, j] = value;
+        }
+
         public virtual Matrix Clone()
         {
             return new Matrix((double[,])values.Clone());
@@ -415,6 +425,14 @@ namespace SAM.Math
                 matrix[i, i] = 1;
 
             return matrix;
+        }
+
+        public static Matrix GetUnset(int rowCount, int columnCount)
+        {
+            Matrix result = new Matrix(rowCount, columnCount);
+            result.SetValues(double.MinValue);
+
+            return result;
         }
 
         public static Matrix GetScale(IEnumerable<double> values)

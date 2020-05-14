@@ -47,8 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Matrix.cs" />
+    <Compile Include="Classes\Matrix2D.cs" />
+    <Compile Include="Classes\Matrix4D.cs" />
     <Compile Include="Classes\Matrix3D.cs" />
+    <Compile Include="Create\Matrix2D.cs" />
+    <Compile Include="Create\Matrix4D.cs" />
     <Compile Include="Create\Matrix3D.cs" />
+    <Compile Include="Interfaces\ISquareMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\Arccotan.cs" />
     <Compile Include="Query\Arccosec.cs" />
