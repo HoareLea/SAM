@@ -26,13 +26,33 @@ namespace SAM.Math
 
         public Matrix(double[,] values)
         {
-            this.values = values;
+            int count_Rows = values.GetLength(0);
+            int count_Columns = values.GetLength(1);
+
+            this.values = new double[count_Rows, count_Columns];
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    this.values[i, j] = values[i, j];
         }
 
         public Matrix(JObject jObject)
         {
             values = default;
             FromJObject(jObject);
+        }
+
+        public Matrix(Matrix matrix)
+        {
+            if (matrix == null)
+                return;
+
+            int count_Rows = matrix.values.GetLength(0);
+            int count_Columns = matrix.values.GetLength(1);
+
+            values = new double[count_Rows, count_Columns];
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    values[i, j] = matrix.values[i, j];
         }
 
         public double this[int row, int column]
@@ -261,6 +281,123 @@ namespace SAM.Math
             return jObject;
         }
 
+        public override int GetHashCode()
+        {
+            int result = int.MinValue;
+            for(int i=0; i < values.GetLength(0); i++)
+            {
+                for (int j = 0; j < values.GetLength(1); j++)
+                {
+                    if(result == int.MinValue)
+                        result = 17 * 23 + values[i, j].GetHashCode();
+                    else
+                        result = result * 23 + values[i, j].GetHashCode();
+                }
+            }
+
+            return result;
+        }
+
+        public void Transpose()
+        {
+            int count_Rows = values.GetLength(0);
+            int count_Columns = values.GetLength(1);
+
+            double[,] values_Temp = new double[count_Columns, count_Rows];
+
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    values_Temp[j, i] = values[i, j];
+
+            values = values_Temp;
+        }
+
+        public Matrix GetTransposed()
+        {
+            Matrix result = new Matrix(this);
+            result.Transpose();
+            return result;
+        }
+
+        public static double GetCofactorFactor(int row, int column)
+        {
+            if ((row + column) % 2 == 1)
+                return -1;
+            else
+                return 1;
+        }
+
+        public Matrix GetCofactorMatrix(int row, int column)
+        {
+            int count_Rows = values.GetLength(0);
+            int count_Columns = values.GetLength(1);
+            if (count_Columns <= 1 || count_Rows <= 1)
+                return null;
+
+            double[,] values_Temp = new double[count_Columns - 1, count_Rows - 1];
+            for (int i = 0; i < count_Rows; i++)
+            {
+                if (i == row)
+                    continue;
+
+                int index_row = i;
+                if (index_row > row)
+                    index_row--;
+
+                for (int j = 0; j < count_Columns; j++)
+                {
+                    if (j == column)
+                        continue;
+
+                    int index_column = j;
+                    if (index_column > column)
+                        index_column--;
+
+                    values_Temp[index_column, index_row] = values[i, j];
+                }
+                    
+            }
+
+            return new Matrix(values_Temp);
+        }
+
+        public int GetOrder()
+        {
+            return Convert.ToInt32(System.Math.Round(System.Math.Sqrt(values.Length)));
+        }
+
+        public double Determinant()
+        {
+            if (!IsSquare())
+                return double.NaN;
+
+            int order = values.GetLength(0);
+            if (order > 2)
+            {
+                double value = 0;
+                for (int j = 0; j < order; j++)
+                {
+                    Matrix matrix_Temp = GetCofactorMatrix(0, j);
+                    value = value + values[0, j] * (GetCofactorFactor(0, j) * matrix_Temp.Determinant());
+                }
+                return value;
+            }
+            else if (order == 2)
+            {
+                return ((values[0, 0] * values[1, 1]) - (values[1, 0] * values[0, 1]));
+            }
+            else
+            {
+                return (values[0, 0]);
+            }
+
+        }
+
+        public bool IsSquare()
+        {
+            return values.GetLength(0) == values.GetLength(1);
+        }
+
         public static Matrix GetIdentity(int count = 3)
         {
             Matrix matrix = new Matrix(new double[count, count]);
@@ -319,6 +456,39 @@ namespace SAM.Math
                 }
 
             return result;
+        }
+
+        public static Matrix operator *(Matrix matrix, double value)
+        {
+            int count_Rows = matrix.values.GetLength(0);
+            int count_Columns = matrix.values.GetLength(1);
+
+            double[,] values_Temp = new double[count_Columns, count_Rows];
+
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    values_Temp[i, j] = matrix.values[i, j] * value;
+
+            return new Matrix(values_Temp);
+        }
+
+        public static Matrix operator +(Matrix matrix, double value)
+        {
+            int count_Rows = matrix.values.GetLength(0);
+            int count_Columns = matrix.values.GetLength(1);
+
+            double[,] values_Temp = new double[count_Columns, count_Rows];
+
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    values_Temp[i, j] = matrix.values[i, j] + value;
+
+            return new Matrix(values_Temp);
+        }
+
+        public static Matrix operator -(Matrix matrix, double value)
+        {
+            return matrix + (-value);
         }
     }
 }
