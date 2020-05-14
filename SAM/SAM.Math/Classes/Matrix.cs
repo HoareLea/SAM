@@ -398,6 +398,16 @@ namespace SAM.Math
             return values.GetLength(0) == values.GetLength(1);
         }
 
+        public bool SizeEqual(Matrix matrix)
+        {
+            return values.GetLength(0) == matrix.values.GetLength(0) && values.GetLength(1) == matrix.values.GetLength(1);
+        }
+
+        public Matrix Size()
+        {
+            return new Matrix(new double[] { values.GetLength(0), values.GetLength(1) });
+        }
+
         public static Matrix GetIdentity(int count = 3)
         {
             Matrix matrix = new Matrix(new double[count, count]);
@@ -484,6 +494,46 @@ namespace SAM.Math
                     values_Temp[i, j] = matrix.values[i, j] + value;
 
             return new Matrix(values_Temp);
+        }
+
+        public static Matrix operator +(Matrix matrix_1, Matrix matrix_2)
+        {
+            if (matrix_1 == null || matrix_2 == null)
+                return null;
+
+            if (!matrix_1.SizeEqual(matrix_2))
+                return null;
+
+            Matrix result = new Matrix(matrix_1);
+
+            int count_Rows = result.values.GetLength(0);
+            int count_Columns = result.values.GetLength(1);
+
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    result.values[i, j] += matrix_2.values[i, j];
+
+            return result;
+        }
+
+        public static Matrix operator -(Matrix matrix_1, Matrix matrix_2)
+        {
+            if (matrix_1 == null || matrix_2 == null)
+                return null;
+
+            if (!matrix_1.SizeEqual(matrix_2))
+                return null;
+
+            Matrix result = new Matrix(matrix_1);
+
+            int count_Rows = result.values.GetLength(0);
+            int count_Columns = result.values.GetLength(1);
+
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    result.values[i, j] -= matrix_2.values[i, j];
+
+            return result;
         }
 
         public static Matrix operator -(Matrix matrix, double value)

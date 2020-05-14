@@ -1,9 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Math
 {
@@ -41,6 +36,77 @@ namespace SAM.Math
             return matrix3D;
         }
 
+        public static Matrix3D operator *(Matrix3D matrix3D_1, Matrix3D matrix3D_2)
+        {
+            if (matrix3D_1 == null || matrix3D_2 == null)
+                return null;
 
+            Matrix matrix = ((Matrix)matrix3D_1) * ((Matrix)matrix3D_2);
+            if (matrix == null)
+                return null;
+
+            return Create.Matrix3D(matrix);
+        }
+
+        public static Matrix3D operator *(Matrix3D matrix3D, double value)
+        {
+            if (matrix3D == null)
+                return null;
+
+            Matrix matrix = (Matrix)matrix3D * value;
+            if (matrix == null)
+                return null;
+
+            return Create.Matrix3D(matrix);
+        }
+
+        public static Matrix3D operator +(Matrix3D matrix3D, double value)
+        {
+            if (matrix3D == null)
+                return null;
+
+            Matrix matrix = (Matrix)matrix3D + value;
+            if (matrix == null)
+                return null;
+
+            return Create.Matrix3D(matrix);
+        }
+
+        public static Matrix3D operator +(Matrix3D matrix3D_1, Matrix matrix3D_2)
+        {
+            if (matrix3D_1 == null || matrix3D_2 == null)
+                return null;
+
+            Matrix matrix = ((Matrix)matrix3D_1) + ((Matrix)matrix3D_2);
+            if (matrix == null)
+                return null;
+
+            return Create.Matrix3D(matrix);
+        }
+
+        public static Matrix3D operator -(Matrix3D matrix3D_1, Matrix3D matrix3D_2)
+        {
+            if (matrix3D_1 == null || matrix3D_2 == null)
+                return null;
+
+            Matrix matrix = ((Matrix)matrix3D_1) + ((Matrix)matrix3D_2);
+            if (matrix == null)
+                return null;
+
+            return Create.Matrix3D(matrix);
+        }
+
+        public static Matrix3D operator -(Matrix3D matrix3D, double value)
+        {
+            if (matrix3D == null)
+                return null;
+
+            Matrix matrix = (Matrix)matrix3D + (-value);
+            if (matrix == null)
+                return null;
+
+
+            return Create.Matrix3D(matrix);
+        }
     }
 }
