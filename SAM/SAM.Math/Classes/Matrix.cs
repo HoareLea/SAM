@@ -73,7 +73,7 @@ namespace SAM.Math
             }
         }
 
-        public Matrix Clone()
+        public virtual Matrix Clone()
         {
             return new Matrix((double[,])values.Clone());
         }
@@ -401,7 +401,7 @@ namespace SAM.Math
         public static Matrix GetIdentity(int count = 3)
         {
             Matrix matrix = new Matrix(new double[count, count]);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < count; i++)
                 matrix[i, i] = 1;
 
             return matrix;
