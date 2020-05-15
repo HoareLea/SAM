@@ -413,6 +413,16 @@ namespace SAM.Math
             return values.GetLength(0) == matrix.values.GetLength(0) && values.GetLength(1) == matrix.values.GetLength(1);
         }
 
+        public Matrix Multiply(Matrix matrix)
+        {
+            return this * matrix;
+        }
+
+        public Matrix Multiply(double value)
+        {
+            return this * value;
+        }
+
         public Matrix Size()
         {
             return new Matrix(new double[] { values.GetLength(0), values.GetLength(1) });
@@ -578,6 +588,7 @@ namespace SAM.Math
 
             return true;
         }
+
 
         public static explicit operator Matrix(double[,] values)
         {

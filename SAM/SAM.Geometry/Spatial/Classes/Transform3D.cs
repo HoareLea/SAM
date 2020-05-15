@@ -51,6 +51,28 @@ namespace SAM.Geometry.Spatial
             return jObject;
         }
 
+        public Transform3D Multiply(Transform3D transform3D)
+        {
+            return this * transform3D;
+        }
+
+        public Transform3D Multiply(IEnumerable<Transform3D> transform3Ds)
+        {
+            if (transform3Ds == null)
+                return null;
+
+            Transform3D result = this;
+            foreach (Transform3D transform3D in transform3Ds)
+            {
+                result = result * transform3D;
+
+                if (result == null)
+                    return null;
+            }
+
+            return result;
+        }
+
         public static Transform3D GetIdentity()
         {
             return new Transform3D(Matrix4D.GetIdentity());
@@ -107,6 +129,14 @@ namespace SAM.Geometry.Spatial
             result.matrix4D[2, 3] = z;
 
             return result;
+        }
+
+        public static Transform3D operator *(Transform3D transform3D_1, Transform3D transform3D_2)
+        {
+            if (transform3D_1 == null || transform3D_2 == null)
+                return null;
+
+            return new Transform3D(transform3D_1.matrix4D * transform3D_2.matrix4D);
         }
     }
 }
