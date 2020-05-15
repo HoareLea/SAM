@@ -114,6 +114,27 @@ namespace SAM.Analytical
             plane.Move(vector3D);
         }
 
+        public void Transform(Transform3D transform3D)
+        {
+            BoundaryEdge3DLoop boundaryEdge3DLoop_External = GetEdge3DLoop();
+            if (boundaryEdge3DLoop_External == null)
+                return;
+
+            boundaryEdge3DLoop_External.Transform(transform3D);
+
+            List<BoundaryEdge3DLoop> boundaryEdge2DLoops_Internal = GetInternalEdge3DLoops();
+            if (internalEdge2DLoops != null && internalEdge2DLoops.Count > 0)
+            {
+                foreach(BoundaryEdge3DLoop boundaryEdge3DLoop_Internal in boundaryEdge2DLoops_Internal)
+                    boundaryEdge3DLoop_Internal.Transform(transform3D);
+            }
+
+            plane = plane.Transform(transform3D);
+            externalEdge2DLoop = new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop_External);
+            if (boundaryEdge2DLoops_Internal != null && boundaryEdge2DLoops_Internal.Count > 0)
+                internalEdge2DLoops = boundaryEdge2DLoops_Internal.ConvertAll(x => new BoundaryEdge2DLoop(plane, x));
+        }
+
         public BoundaryEdge2DLoop Edge2DLoop
         {
             get

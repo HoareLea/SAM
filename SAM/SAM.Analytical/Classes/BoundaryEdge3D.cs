@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -9,7 +10,7 @@ namespace SAM.Analytical
     {
         private ICurve3D curve3D;
 
-        public BoundaryEdge3D(System.Guid guid, string name, ICurve3D curve3D)
+        public BoundaryEdge3D(Guid guid, string name, ICurve3D curve3D)
             : base(guid, name)
         {
             this.curve3D = (ICurve3D)curve3D.Clone();
@@ -67,6 +68,17 @@ namespace SAM.Analytical
 
                 curve3D = new Segment3D(point3D_1, point3D_2);
             }
+        }
+
+        public void Transform(Transform3D transform3D)
+        {
+            if (curve3D == null || transform3D == null)
+                return;
+
+            if (!(curve3D is ISegmentable3D))
+                throw new NotImplementedException();
+
+            curve3D = SAM.Geometry.Spatial.Query.Transform(curve3D as dynamic, transform3D);
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)

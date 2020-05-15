@@ -246,6 +246,12 @@ namespace SAM.Analytical
                 apertures.ForEach(x => x.Move(vector3D));
         }
 
+        public void Transform(Transform3D transform3D)
+        {
+            if (planarBoundary3D != null)
+                planarBoundary3D.Transform(transform3D);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
@@ -341,7 +347,7 @@ namespace SAM.Analytical
                                     if (minArea != 0 && area_Temp <= minArea)
                                         continue;
 
-                                    double area_Difference = Math.Abs(area_Aperture - area_Temp);
+                                    double area_Difference = System.Math.Abs(area_Aperture - area_Temp);
 
                                     if (area_Difference > area_Difference_Min)
                                         continue;

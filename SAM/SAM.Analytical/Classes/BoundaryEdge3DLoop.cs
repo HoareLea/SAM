@@ -49,6 +49,14 @@ namespace SAM.Analytical
                 boundaryEdge3D.Snap(point3Ds, maxDistance);
         }
 
+        public void Transform(Transform3D transform3D)
+        {
+            if (boundaryEdge3Ds == null || boundaryEdge3Ds.Count == 0|| transform3D == null)
+                return;
+
+            boundaryEdge3Ds.ForEach(x => x.Transform(transform3D));
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
