@@ -50,7 +50,7 @@ namespace SAM.Geometry.Grasshopper
             }
 
             Spatial.Transform3D transform3D = null;
-            if (!dataAccess.GetData(0, ref transform3D) || transform3D == null)
+            if (!dataAccess.GetData(1, ref transform3D) || transform3D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -85,7 +85,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("111fcc37-a02e-4b5e-aaa5-0988171b6143"); }
+            get { return new Guid("ca12bdd8-d050-4bf1-9c37-963cfee655f3"); }
         }
     }
 }
