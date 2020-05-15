@@ -143,7 +143,10 @@
     <Compile Include="Planar\Query\Determinants.cs" />
     <Compile Include="Planar\Query\EqualsTopologically.cs" />
     <Compile Include="Spatial\Classes\Transform3D.cs" />
+    <Compile Include="Spatial\Create\Vector3D.cs" />
+    <Compile Include="Spatial\Create\Point3D.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
+    <Compile Include="Spatial\Query\Transform.cs" />
     <Compile Include="Spatial\Query\Overlap.cs" />
     <Compile Include="Spatial\Query\ExtremePoints.cs" />
     <Compile Include="Spatial\Query\Snap.cs" />

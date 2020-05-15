@@ -474,7 +474,7 @@ namespace SAM.Math
 
             int columnCount_2 = matrix_2.ColumnCount();
 
-            Matrix result = new Matrix(rowCount_1, columnCount_1);
+            Matrix result = new Matrix(rowCount_1, columnCount_2);
             for (int i = 0; i < rowCount_1; i++)
                 for (int j = 0; j < columnCount_2; j++)
                 {

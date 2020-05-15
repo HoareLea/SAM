@@ -26,6 +26,14 @@ namespace SAM.Geometry.Spatial
             matrix4D = new Matrix4D(transform3D.matrix4D);
         }
 
+        public Matrix4D Matrix4D
+        {
+            get
+            {
+                return new Matrix4D(matrix4D);
+            }
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)
@@ -71,12 +79,32 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        public static Transform3D GetScale(double x, double y, double z)
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[0, 0] = x;
+            result.matrix4D[1, 1] = y;
+            result.matrix4D[2, 2] = z;
+
+            return result;
+        }
+
         public static Transform3D GetTranslation(Vector3D vector3D)
         {
             Transform3D result = GetIdentity();
             result.matrix4D[0, 3] = vector3D[0];
             result.matrix4D[1, 3] = vector3D[1];
             result.matrix4D[2, 3] = vector3D[2];
+
+            return result;
+        }
+
+        public static Transform3D GetTranslation(double x, double y, double z)
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[0, 3] = x;
+            result.matrix4D[1, 3] = y;
+            result.matrix4D[2, 3] = z;
 
             return result;
         }

@@ -95,6 +95,11 @@ namespace SAM.Geometry.Spatial
                 return new Vector3D(coordinates[0] - point3D[0], coordinates[1] - point3D[1], coordinates[2] - point3D[2]);
         }
 
+        public Math.Matrix GetArgumentedMatrix()
+        {
+            return new Math.Matrix(new double[,] { { coordinates[0] }, { coordinates[1] }, { coordinates[2] }, { 1 } });
+        }
+
         public double Distance(Point3D point3D)
         {
             return new Vector3D(this, point3D).Length;
