@@ -250,6 +250,9 @@ namespace SAM.Analytical
         {
             if (planarBoundary3D != null)
                 planarBoundary3D.Transform(transform3D);
+
+            if (apertures != null && apertures.Count > 0)
+                apertures.ForEach(x => x.Transform(transform3D));
         }
 
         public override bool FromJObject(JObject jObject)

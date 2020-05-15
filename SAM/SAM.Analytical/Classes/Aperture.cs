@@ -115,6 +115,12 @@ namespace SAM.Analytical
             planarBoundary3D.Move(vector3D);
         }
 
+        public void Transform(Transform3D transform3D)
+        {
+            if (planarBoundary3D != null)
+                planarBoundary3D.Transform(transform3D);
+        }
+
         public ApertureConstruction ApertureConstruction
         {
             get

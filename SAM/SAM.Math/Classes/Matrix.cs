@@ -324,8 +324,34 @@ namespace SAM.Math
 
         public Matrix GetTransposed()
         {
-            Matrix result = new Matrix(this);
+            Matrix result = Clone();
             result.Transpose();
+            return result;
+        }
+
+        public void Inverse()
+        {
+            if (!IsSquare())
+                return;
+
+            int count = values.GetLength(0);
+
+            double factor = 1 / Determinant();
+            double[,] values_Temp = new double[count, count];
+            for (int i = 0; i < count; i++)
+                for (int j = 0; j < count; j++)
+                    values_Temp[i, j] = factor * GetCofactorMatrix(i, j).Determinant();
+
+            values = values_Temp;
+        }
+
+        public Matrix GetInversed()
+        {
+            if (!IsSquare())
+                return null;
+
+            Matrix result = Clone();
+            result.Inverse();
             return result;
         }
 
