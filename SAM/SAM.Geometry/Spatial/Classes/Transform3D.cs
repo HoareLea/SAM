@@ -131,6 +131,54 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        public static Transform3D GetMirrorYZ()
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[0, 0] = -result.matrix4D[0, 0];
+
+            return result;
+        }
+
+        public static Transform3D GetMirrorXZ()
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[1, 1] = -result.matrix4D[1, 1];
+
+            return result;
+        }
+
+        public static Transform3D GetMirrorXY()
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[2, 2] = -result.matrix4D[2, 2];
+
+            return result;
+        }
+
+        public static Transform3D GetProjectionYZ()
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[0, 0] = 0;
+
+            return result;
+        }
+
+        public static Transform3D GetProjectionXZ()
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[1, 1] = 0;
+
+            return result;
+        }
+
+        public static Transform3D GetProjectionXY()
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[2, 2] = 0;
+
+            return result;
+        }
+
         public static Transform3D operator *(Transform3D transform3D_1, Transform3D transform3D_2)
         {
             if (transform3D_1 == null || transform3D_2 == null)
