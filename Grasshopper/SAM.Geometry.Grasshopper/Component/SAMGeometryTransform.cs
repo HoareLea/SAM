@@ -23,6 +23,7 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooSAMGeometryParam(), "_SAMGeometry", "_SAMGeometry", "SAM Geometry", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooTransform3DParam(), "_transform3D", "_transform3D", "SAM Transform 3D", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGeometryParameter("Geometry", "Geo", "Rhino geometry", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "SAMGeometry", "SAMGeometry", "SAM Geometry", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -48,14 +49,22 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            object @object = geometry.ToGrasshopper();
+            Spatial.Transform3D transform3D = null;
+            if (!dataAccess.GetData(0, ref transform3D) || transform3D == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            if (@object == null)
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
-            else if (@object is IEnumerable)
-                dataAccess.SetDataList(0, (IEnumerable)@object);
-            else
-                dataAccess.SetData(0, @object);
+
+            geometry = Spatial.Query.Transform(geometry as dynamic, transform3D);
+            if(geometry == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Geometry could not be transformed");
+                return;
+            }
+
+            dataAccess.SetData(0, new GooSAMGeometry(geometry));
         }
 
         /// <summary>
