@@ -29,22 +29,7 @@ namespace SAM.Core
 
         public IJSAMObject ToIJSAMObject()
         {
-            if (jObject == null)
-                return null;
-
-            string fullTypeName = Query.FullTypeName(jObject);
-            if (string.IsNullOrWhiteSpace(fullTypeName))
-                return new JSAMObjectWrapper(jObject);
-
-            Type type = Type.GetType(fullTypeName);
-            if (type == null)
-                return new JSAMObjectWrapper(jObject);
-
-            ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(JObject) });
-            if (constructorInfo == null)
-                return new JSAMObjectWrapper(jObject);
-
-            return constructorInfo.Invoke(new object[] { jObject }) as IJSAMObject;
+            return Query.IJSAMObject(jObject);
         }
 
         public Guid Guid

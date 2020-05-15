@@ -50,6 +50,7 @@
     <Compile Include="Classes\Matrix2D.cs" />
     <Compile Include="Classes\Matrix4D.cs" />
     <Compile Include="Classes\Matrix3D.cs" />
+    <Compile Include="Create\Matrix.cs" />
     <Compile Include="Create\Matrix2D.cs" />
     <Compile Include="Create\Matrix4D.cs" />
     <Compile Include="Create\Matrix3D.cs" />

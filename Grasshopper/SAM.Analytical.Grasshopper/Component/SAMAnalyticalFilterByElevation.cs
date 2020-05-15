@@ -76,7 +76,7 @@ namespace SAM.Analytical.Grasshopper
                 double max = panel.MaxElevation();
                 double min = panel.MinElevation();
 
-                if (Math.Abs(min - elevation) < Core.Tolerance.Distance || (min - Core.Tolerance.Distance < elevation && max - Core.Tolerance.Distance > elevation))
+                if (System.Math.Abs(min - elevation) < Core.Tolerance.Distance || (min - Core.Tolerance.Distance < elevation && max - Core.Tolerance.Distance > elevation))
                     result.Add(panel);
             }
 
