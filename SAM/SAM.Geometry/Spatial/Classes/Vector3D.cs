@@ -72,6 +72,14 @@ namespace SAM.Geometry.Spatial
             coordinates[2] = coordinates[2] * value;
         }
 
+        public void Normalize()
+        {
+            double aLength = Length;
+            coordinates[0] = coordinates[0] / aLength;
+            coordinates[1] = coordinates[1] / aLength;
+            coordinates[2] = coordinates[2] / aLength;
+        }
+
         public bool SameHalf(Vector3D vector3D)
         {
             if (vector3D == null)
