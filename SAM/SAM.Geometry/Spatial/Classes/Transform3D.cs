@@ -121,6 +121,15 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        public static Transform3D GetScale(Point3D origin, double factor)
+        {
+            Transform3D transform3D_Translation_1 = GetTranslation(origin.X, origin.Y, origin.Z);
+            Transform3D transform3D_Scale = GetScale(factor);
+            Transform3D transform3D_Translation_2 = GetTranslation(-origin.X, -origin.Y, -origin.Z);
+
+            return transform3D_Translation_1 * transform3D_Scale * transform3D_Translation_2;
+        }
+
         public static Transform3D GetTranslation(Vector3D vector3D)
         {
             Transform3D result = GetIdentity();
@@ -189,6 +198,34 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        public static Transform3D GetPlaneToOrigin(Plane plane, double tolerance = Tolerance.Distance)
+        {
+            if (plane == null)
+                return null;
+
+            Point3D origin = plane.Origin;
+
+            Transform3D transform3D_Translation_1 = GetIdentity();
+            Transform3D transform3D_Rotation = GetIdentity();
+            Transform3D transform3D_Translation_2 = GetTranslation(-origin.X, -origin.Y, -origin.Z);
+
+            if(plane.BaseZ.AlmostEqual(Vector3D.BaseZ, tolerance))
+            {
+                transform3D_Rotation = GetRotation(Vector3D.BaseX, System.Math.PI);
+            }            
+            else
+            {
+                Vector3D vector3D_Z = Vector3D.BaseZ.CrossProduct(plane.BaseZ);
+                transform3D_Rotation = GetRotation(Point3D.Zero, vector3D_Z, Query.Angle(plane.BaseZ, Vector3D.BaseZ, new Plane(Point3D.Zero, vector3D_Z)));
+            }
+
+            Vector3D vector3D_X = plane.BaseX.Transform(transform3D_Rotation * transform3D_Translation_2);
+
+            transform3D_Translation_1 = GetRotation(Vector3D.BaseZ, Query.Angle(vector3D_X, Vector3D.BaseX, Plane.Base));
+
+            return transform3D_Translation_1 * transform3D_Rotation * transform3D_Translation_2;
+        }
+
         /// <summary>
         /// Gets Rotation Transform3D around the z-axis
         /// </summary>
@@ -240,21 +277,43 @@ namespace SAM.Geometry.Spatial
         /// <summary>
         /// Rotation Transform3D around the axis
         /// </summary>
-        /// <param name="axis">rotation axis Vector3D</param>
+        /// <param name="axis_Unit">rotation axis Vector3D</param>
         /// <param name="angle">Angle in radians</param>
         /// <returns>Transform3D</returns>
-        public static Transform3D Rotate(Vector3D axis, double angle)
+        public static Transform3D GetRotation(Vector3D axis, double angle)
         {
-            //Vector3D vector3D = axis.Unit;
-            axis.Normalize();
+            if (axis == null)
+                return null;
+            
             Transform3D result = GetIdentity();
 
-            result.matrix4D[0, 0] = System.Math.Cos(angle);
-            result.matrix4D[0, 2] = System.Math.Sin(angle);
-            result.matrix4D[2, 0] = -System.Math.Sin(angle);
-            result.matrix4D[2, 2] = System.Math.Cos(angle);
+            Vector3D axis_Unit = axis.Unit;
+
+            result.matrix4D[0, 0] = System.Math.Cos(angle) + System.Math.Pow(axis_Unit.X, 2) * (1 - System.Math.Cos(angle));
+            result.matrix4D[1, 0] = axis_Unit.X * axis_Unit.Y * (1 - System.Math.Cos(angle)) - axis_Unit.Z * System.Math.Sin(angle);
+            result.matrix4D[2, 0] = axis_Unit.X * axis_Unit.Z * (1 - System.Math.Cos(angle)) - axis_Unit.Y * System.Math.Sin(angle);
+
+            result.matrix4D[0, 1] = axis_Unit.X * axis_Unit.Y * (1 - System.Math.Cos(angle)) + axis_Unit.Z * System.Math.Sin(angle);
+            result.matrix4D[1, 1] = System.Math.Cos(angle) + System.Math.Pow(axis_Unit.Y, 2) * (1 - System.Math.Cos(angle));
+            result.matrix4D[2, 1] = axis_Unit.Y * axis_Unit.Z * (1 - System.Math.Cos(angle)) - axis_Unit.X * System.Math.Sin(angle);
+
+            result.matrix4D[0, 2] = axis_Unit.X * axis_Unit.Z * (1 - System.Math.Cos(angle)) - axis_Unit.Y * System.Math.Sin(angle);
+            result.matrix4D[1, 2] = axis_Unit.Y * axis_Unit.Z * (1 - System.Math.Cos(angle)) + axis_Unit.X * System.Math.Sin(angle);
+            result.matrix4D[2, 2] = System.Math.Cos(angle) + System.Math.Pow(axis_Unit.Z, 2) * (1 - System.Math.Cos(angle));
 
             return result;
+        }
+
+        public static Transform3D GetRotation(Point3D origin, Vector3D axis, double angle)
+        {
+            if (origin == null)
+                return null;
+            
+            Transform3D transform3D_Translation_1 = GetTranslation(origin.X, origin.Y, origin.Z);
+            Transform3D transform3D_Rotation = GetRotation(axis, angle);
+            Transform3D transform3D_Translation_2 = GetTranslation(-origin.X, -origin.Y, -origin.Z);
+
+            return transform3D_Translation_1 * transform3D_Rotation * transform3D_Translation_2;
         }
 
         public static Transform3D operator *(Transform3D transform3D_1, Transform3D transform3D_2)
