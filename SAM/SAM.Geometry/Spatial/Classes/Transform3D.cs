@@ -226,6 +226,15 @@ namespace SAM.Geometry.Spatial
             return transform3D_Translation_1 * transform3D_Rotation * transform3D_Translation_2;
         }
 
+        public static Transform3D GetPlaneToPlane(Plane plane_1, Plane plane_2, double tolerance = Tolerance.Distance)
+        {
+            Transform3D transform3D_PlaneToOrigin_1 = GetPlaneToOrigin(plane_1, tolerance);
+            Transform3D transform3D_PlaneToOrigin_2 = GetPlaneToOrigin(plane_2, tolerance);
+            transform3D_PlaneToOrigin_2.Inverse();
+
+            return transform3D_PlaneToOrigin_2 * transform3D_PlaneToOrigin_1;
+        }
+
         /// <summary>
         /// Gets Rotation Transform3D around the z-axis
         /// </summary>

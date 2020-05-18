@@ -384,14 +384,6 @@ namespace SAM.Math
             return result;
         }
 
-        public static double GetCofactor(int row, int column)
-        {
-            if ((row + column) % 2 == 1)
-                return -1;
-            else
-                return 1;
-        }
-
         public Matrix GetMinorMatrix(int row, int column)
         {
             int count_Rows = values.GetLength(0);
@@ -422,6 +414,32 @@ namespace SAM.Math
                 }
                     
             }
+
+            return new Matrix(values_Temp);
+        }
+
+        public Matrix GetMinorsMatrix()
+        {
+            int count_Rows = values.GetLength(0);
+            int count_Columns = values.GetLength(1);
+
+            double[,] values_Temp = new double[count_Rows, count_Columns];
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    values_Temp[i, j] = GetMinorMatrix(i, j).Determinant();
+
+            return new Matrix(values_Temp);
+        }
+
+        public Matrix GetCofactorsMatrix()
+        {
+            int count_Rows = values.GetLength(0);
+            int count_Columns = values.GetLength(1);
+
+            double[,] values_Temp = new double[count_Rows, count_Columns];
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    values_Temp[i, j] = GetCofactor(i, j);
 
             return new Matrix(values_Temp);
         }
@@ -472,6 +490,14 @@ namespace SAM.Math
         public Matrix Size()
         {
             return new Matrix(new double[] { values.GetLength(0), values.GetLength(1) });
+        }
+
+        public static double GetCofactor(int row, int column)
+        {
+            if ((row + column) % 2 == 1)
+                return -1;
+            else
+                return 1;
         }
 
         public static Matrix GetIdentity(int count = 3)
