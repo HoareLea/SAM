@@ -75,7 +75,12 @@ namespace SAM.Geometry.Spatial
 
         public void Inverse()
         {
-            matrix4D.Inverse();
+            matrix4D?.Inverse();
+        }
+
+        public void Transpose()
+        {
+            matrix4D?.Transpose();
         }
 
         public static Transform3D GetIdentity()
