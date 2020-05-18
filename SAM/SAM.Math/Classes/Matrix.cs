@@ -357,7 +357,11 @@ namespace SAM.Math
             if (!IsSquare())
                 return;
 
-            this.ToMathNet().Inverse()?.ToSAM();
+            double[,] values_Temp = this.ToMathNet().Inverse()?.ToArray();
+            if (values_Temp == null)
+                return;
+
+            values = values_Temp;
         }
 
         public Matrix GetInversed()
