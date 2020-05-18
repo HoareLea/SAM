@@ -364,6 +364,16 @@ namespace SAM.Math
             values = values_Temp;
         }
 
+        public void Negate()
+        {
+            int count_Rows = values.GetLength(0);
+            int count_Columns = values.GetLength(1);
+
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    values[i, j] = -values[i, j];
+        }
+
         public Matrix GetInversed()
         {
             if (!IsSquare())
