@@ -7,6 +7,7 @@ using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
+using SAM.Math.Grasshopper;
 using System;
 using System.Collections.Generic;
 
@@ -136,7 +137,7 @@ namespace SAM.Geometry.Grasshopper
 
         public override bool CastTo<Y>(ref Y target)
         {
-            if (typeof(Y) == typeof(Spatial.Transform3D))
+            if (typeof(Y) == typeof(Transform3D))
             {
                 target = (Y)(object)Value;
                 return true;
@@ -152,6 +153,16 @@ namespace SAM.Geometry.Grasshopper
             {
                 target = (Y)(object)Value.Matrix4D;
                 return true;
+            }
+
+            if(typeof(Y) == typeof(GH_Matrix))
+            {
+                target = (Y)(object)Value.Matrix4D.ToGrasshopper();
+            }
+
+            if (typeof(Y) == typeof(Matrix))
+            {
+                target = (Y)(object)Value.Matrix4D.ToRhino();
             }
 
             if (typeof(Y).IsAssignableFrom(Value.GetType()))

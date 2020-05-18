@@ -131,6 +131,16 @@ namespace SAM.Math.Grasshopper
                 return true;
             }
 
+            if (typeof(Y) == typeof(GH_Matrix))
+            {
+                target = (Y)(object)Value.ToGrasshopper();
+            }
+
+            if (typeof(Y) == typeof(Rhino.Geometry.Matrix))
+            {
+                target = (Y)(object)Value.ToRhino();
+            }
+
 
             if (typeof(Y).IsAssignableFrom(Value.GetType()))
             {

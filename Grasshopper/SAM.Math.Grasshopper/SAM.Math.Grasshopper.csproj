@@ -72,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\GooMatrix.cs" />
+    <Compile Include="Convert\ToGrasshopper\GH_Matrix.cs" />
+    <Compile Include="Convert\ToRhino\Matrix.cs" />
     <Compile Include="Convert\ToSAM\Matrix.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,8 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Component\" />
-    <Folder Include="Convert\ToGrasshopper\" />
-    <Folder Include="Convert\ToRhino\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Math\SAM.Math.csproj">
