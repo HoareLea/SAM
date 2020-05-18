@@ -308,6 +308,16 @@ namespace SAM.Math
             return result;
         }
 
+        public void Round(double tolerance = Core.Tolerance.Distance)
+        {
+            int count_Rows = values.GetLength(0);
+            int count_Columns = values.GetLength(1);
+
+            for (int i = 0; i < count_Rows; i++)
+                for (int j = 0; j < count_Columns; j++)
+                    values[i, j] = Core.Query.Round(values[i, j], tolerance);
+        }
+
         public void Transpose()
         {
             int count_Rows = values.GetLength(0);
@@ -329,18 +339,18 @@ namespace SAM.Math
             return result;
         }
 
-        public void Inverse()
+        public void Inverse(double tolerance = Core.Tolerance.Distance)
         {
             if (!IsSquare())
                 return;
 
             int count = values.GetLength(0);
 
-            double factor = 1 / Determinant();
+            double factor = 1 / Determinant(tolerance);
             double[,] values_Temp = new double[count, count];
             for (int i = 0; i < count; i++)
                 for (int j = 0; j < count; j++)
-                    values_Temp[i, j] = factor * GetCofactorMatrix(i, j).Determinant();
+                    values_Temp[i, j] = Core.Query.Round(factor * GetCofactor(j, i) * GetMinorMatrix(j, i).Determinant(tolerance), tolerance);
 
             values = values_Temp;
         }
@@ -355,7 +365,7 @@ namespace SAM.Math
             return result;
         }
 
-        public static double GetCofactorFactor(int row, int column)
+        public static double GetCofactor(int row, int column)
         {
             if ((row + column) % 2 == 1)
                 return -1;
@@ -363,7 +373,7 @@ namespace SAM.Math
                 return 1;
         }
 
-        public Matrix GetCofactorMatrix(int row, int column)
+        public Matrix GetMinorMatrix(int row, int column)
         {
             int count_Rows = values.GetLength(0);
             int count_Columns = values.GetLength(1);
@@ -397,36 +407,95 @@ namespace SAM.Math
             return new Matrix(values_Temp);
         }
 
-        public int GetOrder()
-        {
-            return Convert.ToInt32(System.Math.Round(System.Math.Sqrt(values.Length)));
-        }
-
-        public double Determinant()
+        public double Determinant(double tolerance = Core.Tolerance.Distance)
         {
             if (!IsSquare())
                 return double.NaN;
 
-            int order = values.GetLength(0);
-            if (order > 2)
-            {
-                double value = 0;
-                for (int j = 0; j < order; j++)
-                {
-                    Matrix matrix_Temp = GetCofactorMatrix(0, j);
-                    value = value + values[0, j] * (GetCofactorFactor(0, j) * matrix_Temp.Determinant());
-                }
-                return value;
-            }
-            else if (order == 2)
-            {
-                return ((values[0, 0] * values[1, 1]) - (values[1, 0] * values[0, 1]));
-            }
-            else
-            {
-                return (values[0, 0]);
-            }
+            int count = values.GetLength(0);
+            
+            if (count == 1)
+                return Core.Query.Round(values[0, 0], tolerance);
 
+            if(count == 2)
+                return Core.Query.Round((values[0, 0] * values[1, 1]) - (values[1, 0] * values[0, 1]));
+
+            double factor;
+            Matrix matrix = Decompose(out factor, tolerance);
+            if (matrix == null)
+                return double.NaN;
+
+            double result = factor;
+            for (int i = 0; i < count; ++i)
+                result *= matrix[i, i];
+
+            return Core.Query.Round(result, tolerance);
+        }
+
+        public Matrix Decompose(out double factor, double tolerance = Core.Tolerance.Distance)
+        {
+            factor = -1;
+            
+            if (!IsSquare())
+                return null;
+            
+            // Doolittle LUP decomposition with partial pivoting.
+            // rerturns: result is L (with 1s on diagonal) and U
+            int rowCount = RowCount();
+
+            Matrix result = new Matrix(this); // make a copy of the input matrix
+
+            factor = 1; // toggle tracks row swaps. +1 -> even, -1 -> odd. used by Determinant
+
+            for (int j = 0; j < rowCount - 1; ++j) // each column, j is counter for coulmns
+            {
+                double colMax = System.Math.Abs(result[j, j]); // find largest value in col j
+                int pRow = j;
+                for (int i = j + 1; i < rowCount; ++i)
+                {
+                    if (result[i, j] > colMax)
+                    {
+                        colMax = result[i, j];
+                        pRow = i;
+                    }
+                }
+
+                if (pRow != j) // if largest value not on pivot, swap rows
+                {
+                    double[] rowPtr = new double[rowCount];
+
+                    //in order to preserve value of j new variable k for counter is declared
+                    //rowPtr[] is a 1D array that contains all the elements on a single row of the matrix
+                    //there has to be a loop over the columns to transfer the values
+                    //from the 2D array to the 1D rowPtr array.
+                    //----tranfer 2D array to 1D array BEGIN
+                    for (int k = 0; k < rowCount; k++)
+                        rowPtr[k] = result[pRow, k];
+
+                    for (int k = 0; k < rowCount; k++)
+                        result[pRow, k] = result[j, k];
+
+                    for (int k = 0; k < rowCount; k++)
+                        result[j, k] = rowPtr[k];
+                    //----tranfer 2D array to 1D array END
+
+                    factor = -factor;
+                }
+
+                if (System.Math.Abs(result[j, j]) < tolerance) // if diagonal after swap is zero . . .
+                    return null; // consider a throw
+
+                for (int i = j + 1; i < rowCount; ++i)
+                {
+                    result[i, j] /= result[j, j];
+                    for (int k = j + 1; k < rowCount; ++k)
+                    {
+                        result[i, k] -= result[i, j] * result[j, k];
+                    }
+                }
+            } // main j column loop
+
+            return result;
         }
 
         public bool IsSquare()
