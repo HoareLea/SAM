@@ -189,6 +189,54 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        /// <summary>
+        /// Gets Rotation Transform3D around the z-axis
+        /// </summary>
+        /// <param name="angle">Angle in radians</param>
+        /// <returns>Transform3D</returns>
+        public static Transform3D GetRotationZ(double angle)
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[0, 0] = System.Math.Cos(angle);
+            result.matrix4D[0, 1] = -System.Math.Sin(angle);
+            result.matrix4D[1, 0] = System.Math.Sin(angle);
+            result.matrix4D[1, 1] = System.Math.Cos(angle);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets Rotation Transform3D around the x-axis
+        /// </summary>
+        /// <param name="angle">Angle in radians</param>
+        /// <returns>Transform3D</returns>
+        public static Transform3D GetRotationX(double angle)
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[1, 1] = System.Math.Cos(angle);
+            result.matrix4D[1, 2] = -System.Math.Sin(angle);
+            result.matrix4D[2, 1] = System.Math.Sin(angle);
+            result.matrix4D[2, 2] = System.Math.Cos(angle);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets Rotation Transform3D around the y-axis
+        /// </summary>
+        /// <param name="angle">Angle in radians</param>
+        /// <returns>Transform3D</returns>
+        public static Transform3D GetRotationY(double angle)
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[0, 0] = System.Math.Cos(angle);
+            result.matrix4D[0, 2] = System.Math.Sin(angle);
+            result.matrix4D[2, 0] = -System.Math.Sin(angle);
+            result.matrix4D[2, 2] = System.Math.Cos(angle);
+
+            return result;
+        }
+
         public static Transform3D operator *(Transform3D transform3D_1, Transform3D transform3D_2)
         {
             if (transform3D_1 == null || transform3D_2 == null)
