@@ -98,6 +98,8 @@
     <Compile Include="Component\GeometryPolycurveLoop2D.cs" />
     <Compile Include="Component\GeometryCreatePlane.cs" />
     <Compile Include="Component\GeometrySnapByDistance.cs" />
+    <Compile Include="Component\SAMGeometryTransform3DByPlanes.cs" />
+    <Compile Include="Component\SAMGeometryTransform3DByPlane.cs" />
     <Compile Include="Component\SAMGeometryTransform.cs" />
     <Compile Include="Component\SAMGeometryPlaneIntersection.cs" />
     <Compile Include="Component\SAMGeometrySplit.cs" />
