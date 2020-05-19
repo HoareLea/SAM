@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryCreatePlane : GH_SAMComponent
+    public class GeometryCreateSAMPlane : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -22,8 +22,8 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public GeometryCreatePlane()
-          : base("Geometry.CreatePlane", "Geometry.CreatePlane",
+        public GeometryCreateSAMPlane()
+          : base("Geometry.CreateSAMPlane", "Geometry.CreateSAMPlane",
               "Creates Plane by points",
               "SAM", "Geometry")
         {

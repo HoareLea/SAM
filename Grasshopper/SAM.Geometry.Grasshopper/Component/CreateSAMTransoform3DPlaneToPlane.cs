@@ -7,7 +7,7 @@ using System;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometryTransform3DByPlanes : GH_SAMComponent
+    public class CreateSAMTransoform3DPlaneToPlane : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -22,9 +22,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMGeometryTransform3DByPlanes()
-          : base("SAMGeometry.Transform3DByPlanes", "SAMGeometry.Transform3DByPlanes",
-              "Creates Transform3D By Planes (Plane To Plane Transformation)",
+        public CreateSAMTransoform3DPlaneToPlane()
+          : base("Create.SAMTransoform3DPlaneToPlane", "Create.Transoform3DPlaneToPlane",
+              "Creates Transform3D Plane To Plane)",
               "SAM", "Geometry")
         {
         }

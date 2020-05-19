@@ -54,7 +54,7 @@ namespace SAM.Geometry.Spatial
 
         public Plane(Point3D origin, Vector3D direction_X, Vector3D direction_Y)
         {
-            origin = new Point3D(origin);
+            this.origin = new Point3D(origin);
             baseX = direction_X.Unit;
             normal = baseX.CrossProduct(direction_Y.Unit).Unit;
         }

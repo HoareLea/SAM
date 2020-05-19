@@ -258,10 +258,10 @@ namespace SAM.Geometry.Spatial
 
         public static Transform3D GetPlaneToPlane(Plane plane_From, Plane plane_To)
         {
-            Transform3D transform3D_Plane_1 = GetOriginToPlane(plane_From);
-            Transform3D transform3D_Plane_2 = GetPlaneToOrigin(plane_To);
+            Transform3D transform3D_From = GetPlaneToOrigin(plane_From);
+            Transform3D transform3D_To = GetOriginToPlane(plane_To);
 
-            return transform3D_Plane_2 * transform3D_Plane_1;
+            return transform3D_To * transform3D_From;
         }
 
         /// <summary>
