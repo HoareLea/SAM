@@ -77,7 +77,7 @@ namespace SAM.Analytical.Grasshopper
 
             DataTree<GooPanel> dataTree_GooPanel = null;
 
-            List<List<Panel>> panelsList = Query.OverlapPanels(panels);
+            List<List<Panel>> panelsList = Analytical.Query.OverlapPanels(panels);
             int count = 0;
             if (panelsList != null)
             {

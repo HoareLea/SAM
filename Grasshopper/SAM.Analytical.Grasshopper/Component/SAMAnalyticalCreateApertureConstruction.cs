@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, Query.ApertureConstructionName(ApertureType.Window, true));
+            inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, Analytical.Query.ApertureConstructionName(ApertureType.Window, true));
             int index = inputParamManager.AddGenericParameter("_apertureType", "_apertureType", "Aperture Type", GH_ParamAccess.item);
 
             Param_GenericObject genericObjectParameter = (Param_GenericObject)inputParamManager[index];
@@ -71,9 +71,9 @@ namespace SAM.Analytical.Grasshopper
             if (objectWrapper != null)
             {
                 if (objectWrapper.Value is GH_String)
-                    apertureType = Query.ApertureType(((GH_String)objectWrapper.Value).Value);
+                    apertureType = Analytical.Query.ApertureType(((GH_String)objectWrapper.Value).Value);
                 else
-                    apertureType = Query.ApertureType(objectWrapper.Value);
+                    apertureType = Analytical.Query.ApertureType(objectWrapper.Value);
             }
 
             dataAccess.SetData(0, new GooApertureConstruction(new ApertureConstruction(name, apertureType)));

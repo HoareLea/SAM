@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
+using Rhino.Display;
 using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
@@ -40,14 +41,47 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
+            if (Value == null)
+                return;
+
+            System.Drawing.Color color_ExternalEdge = System.Drawing.Color.Empty;
+            System.Drawing.Color color_InternalEdges = System.Drawing.Color.Empty;
+
+            if(Value.ApertureConstruction != null)
+            {
+                color_ExternalEdge = Query.Color(Value.ApertureConstruction.ApertureType, false);
+                color_InternalEdges = Query.Color(Value.ApertureConstruction.ApertureType, true);
+            }
+
+            if (color_ExternalEdge == System.Drawing.Color.Empty)
+                color_ExternalEdge = System.Drawing.Color.DarkRed;
+
+            if (color_InternalEdges == System.Drawing.Color.Empty)
+                color_InternalEdges = System.Drawing.Color.BlueViolet;
+
+            DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
+        }
+
+        public void DrawViewportWires(GH_PreviewWireArgs args, System.Drawing.Color color_ExternalEdge, System.Drawing.Color color_InternalEdges)
+        {
             GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
-            gooPlanarBoundary3D.DrawViewportWires(args);
+            gooPlanarBoundary3D.DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
+            if (Value == null)
+                return;
+
+            DisplayMaterial displayMaterial = null;
+            if(Value.ApertureConstruction != null)
+                displayMaterial = Query.DisplayMaterial(Value.ApertureConstruction.ApertureType);
+
+            if (displayMaterial == null)
+                displayMaterial = args.Material;
+            
             GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
-            gooPlanarBoundary3D.DrawViewportMeshes(args);
+            gooPlanarBoundary3D.DrawViewportMeshes(args, displayMaterial);
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)

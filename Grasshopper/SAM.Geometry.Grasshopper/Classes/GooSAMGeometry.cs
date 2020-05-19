@@ -301,6 +301,11 @@ namespace SAM.Geometry.Grasshopper
 
         public virtual void DrawViewportWires(GH_PreviewWireArgs args)
         {
+            DrawViewportWires(args, args.Color);
+        }
+
+        public virtual void DrawViewportWires(GH_PreviewWireArgs args, System.Drawing.Color color)
+        {
             //TODO: Display Spatial.Surface as Rhino.Geometry.Surface
 
             List<Spatial.ICurve3D> curve3Ds = null;
@@ -323,7 +328,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (curve3Ds != null && curve3Ds.Count > 0)
             {
-                curve3Ds.ForEach(x => args.Pipeline.DrawCurve(x.ToRhino(), args.Color));
+                curve3Ds.ForEach(x => args.Pipeline.DrawCurve(x.ToRhino(), color));
                 //return;
             }
 
@@ -342,17 +347,18 @@ namespace SAM.Geometry.Grasshopper
 
         public virtual void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
+            DrawViewportMeshes(args, args.Material);
+        }
+
+        public virtual void DrawViewportMeshes(GH_PreviewMeshArgs args, Rhino.Display.DisplayMaterial displayMaterial)
+        {
             Brep brep = null;
 
             if (Value is Spatial.Face3D)
-            {
                 brep = Convert.ToRhino_Brep(Value as Spatial.Face3D);
-            }
 
             if (brep != null)
-            {
-                args.Pipeline.DrawBrepShaded(brep, args.Material);
-            }
+                args.Pipeline.DrawBrepShaded(brep, displayMaterial);
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)

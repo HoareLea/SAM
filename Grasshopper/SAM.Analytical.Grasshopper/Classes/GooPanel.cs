@@ -43,25 +43,46 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
+            if (Value == null)
+                return;
+
+            System.Drawing.Color color_ExternalEdge = Query.Color(Value.PanelType, false);
+            System.Drawing.Color color_InternalEdges = Query.Color(Value.PanelType, true);
+
+            if (color_ExternalEdge == System.Drawing.Color.Empty)
+                color_ExternalEdge = args.Color;
+
+            if (color_InternalEdges == System.Drawing.Color.Empty)
+                color_InternalEdges = args.Color;
+
             GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
-            gooPlanarBoundary3D.DrawViewportWires(args);
+            gooPlanarBoundary3D.DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
 
             List<Aperture> apertures = Value.Apertures;
             if (apertures != null)
             {
                 foreach (Aperture aperture in apertures)
-                    foreach (Geometry.Spatial.IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdges())
-                    {
-                        Geometry.Grasshopper.GooSAMGeometry gooSAMGeometry = new Geometry.Grasshopper.GooSAMGeometry(closedPlanar3D);
-                        gooSAMGeometry.DrawViewportWires(args);
-                    }
+                {
+                    if (aperture == null)
+                        continue;
+                    
+                    GooAperture gooAperture = new GooAperture(aperture);
+                    gooAperture.DrawViewportWires(args);
+                }
             }
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            Geometry.Grasshopper.GooSAMGeometry gooSAMGeometry = new Geometry.Grasshopper.GooSAMGeometry(Value.GetFace3D());
-            gooSAMGeometry.DrawViewportMeshes(args);
+            if (Value == null)
+                return;
+
+            Rhino.Display.DisplayMaterial displayMaterial = Query.DisplayMaterial(Value.PanelType);
+            if (displayMaterial == null)
+                displayMaterial = args.Material;
+            
+            GooSAMGeometry gooSAMGeometry = new GooSAMGeometry(Value.GetFace3D());
+            gooSAMGeometry.DrawViewportMeshes(args, displayMaterial);
 
             ////TODO Play with  text values on model
             //TextEntity textEntity = new TextEntity
@@ -78,15 +99,19 @@ namespace SAM.Analytical.Grasshopper
                 foreach (Aperture aperture in apertures)
                     foreach (Geometry.Spatial.IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdges())
                     {
-                        Geometry.Grasshopper.GooSAMGeometry gooSAMGeometry_Aperture = new Geometry.Grasshopper.GooSAMGeometry(closedPlanar3D);
-                        gooSAMGeometry_Aperture.DrawViewportMeshes(args);
+                        Rhino.Display.DisplayMaterial displayMaterial_Aperture = Query.DisplayMaterial(aperture.ApertureConstruction.ApertureType);
+                        if (displayMaterial_Aperture == null)
+                            displayMaterial_Aperture = args.Material;
+
+                        GooSAMGeometry gooSAMGeometry_Aperture = new GooSAMGeometry(closedPlanar3D);
+                        gooSAMGeometry_Aperture.DrawViewportMeshes(args, displayMaterial_Aperture);
                     }
             }
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            return Geometry.Grasshopper.Modify.BakeGeometry(Value.GetFace3D(), doc, att, out obj_guid);
+            return Modify.BakeGeometry(Value.GetFace3D(), doc, att, out obj_guid);
         }
     }
 
@@ -143,7 +168,7 @@ namespace SAM.Analytical.Grasshopper
             if (surface == null)
                 return GH_GetterResult.cancel;
 
-            List<Panel> panels = Create.Panels(Geometry.Grasshopper.Convert.ToSAM(surface), PanelType.WallExternal, Query.Construction(PanelType.WallExternal), Core.Tolerance.MacroDistance);
+            List<Panel> panels = Create.Panels(Geometry.Grasshopper.Convert.ToSAM(surface), PanelType.WallExternal, Analytical.Query.Construction(PanelType.WallExternal), Core.Tolerance.MacroDistance);
             if (panels == null || panels.Count == 0)
                 return GH_GetterResult.cancel;
 

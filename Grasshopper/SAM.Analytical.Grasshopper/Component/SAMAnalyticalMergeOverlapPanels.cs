@@ -92,7 +92,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> redundantPanels = new List<Panel>();
 
-            panels = Query.MergeOverlapPanels(panels, offset, ref redundantPanels, setDefaultConstruction, Core.Tolerance.Distance);
+            panels = Analytical.Query.MergeOverlapPanels(panels, offset, ref redundantPanels, setDefaultConstruction, Core.Tolerance.Distance);
 
             if (panels != null)
             {

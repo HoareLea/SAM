@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
+using Rhino.Display;
 using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
@@ -41,6 +42,11 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
+            DrawViewportWires(args, System.Drawing.Color.DarkRed, System.Drawing.Color.BlueViolet);
+        }
+
+        public void DrawViewportWires(GH_PreviewWireArgs args, System.Drawing.Color color_ExternalEdge, System.Drawing.Color color_InternalEdges)
+        {
             PlanarBoundary3D planarBoundary3D = Value;
             if (planarBoundary3D == null)
                 return;
@@ -48,13 +54,13 @@ namespace SAM.Analytical.Grasshopper
             Dictionary<BoundaryEdge3DLoop, System.Drawing.Color> aDictionary = new Dictionary<BoundaryEdge3DLoop, System.Drawing.Color>();
 
             //Assign Color for Edges
-            aDictionary[planarBoundary3D.GetEdge3DLoop()] = System.Drawing.Color.DarkRed;
+            aDictionary[planarBoundary3D.GetEdge3DLoop()] = color_ExternalEdge;
 
             IEnumerable<BoundaryEdge3DLoop> edge3DLoops = planarBoundary3D.GetInternalEdge3DLoops();
             if (edge3DLoops != null)
             {
                 foreach (BoundaryEdge3DLoop edge3DLoop in edge3DLoops)
-                    aDictionary[edge3DLoop] = System.Drawing.Color.BlueViolet;
+                    aDictionary[edge3DLoop] = color_InternalEdges;
             }
 
             foreach (KeyValuePair<BoundaryEdge3DLoop, System.Drawing.Color> keyValuePair in aDictionary)
@@ -75,9 +81,14 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
+            DrawViewportMeshes(args, args.Material);
+        }
+
+        public void DrawViewportMeshes(GH_PreviewMeshArgs args, DisplayMaterial displayMaterial)
+        {
             Brep brep = Value.ToRhino();
             if (brep != null)
-                args.Pipeline.DrawBrepShaded(brep, args.Material);
+                args.Pipeline.DrawBrepShaded(brep, displayMaterial);
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)

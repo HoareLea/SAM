@@ -117,9 +117,9 @@ namespace SAM.Analytical.Grasshopper
             if (objectWrapper != null)
             {
                 if (objectWrapper.Value is GH_String)
-                    panelType = Query.PanelType(((GH_String)objectWrapper.Value).Value);
+                    panelType = Analytical.Query.PanelType(((GH_String)objectWrapper.Value).Value);
                 else
-                    panelType = Query.PanelType(objectWrapper.Value);
+                    panelType = Analytical.Query.PanelType(objectWrapper.Value);
             }
 
             Construction construction = null;
