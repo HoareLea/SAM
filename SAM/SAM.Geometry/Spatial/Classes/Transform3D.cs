@@ -198,41 +198,70 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static Transform3D GetPlaneToOrigin(Plane plane, double tolerance = Tolerance.Distance)
+        public static Transform3D GetPlaneToOrigin(Plane plane)
+        {
+            Transform3D result = GetOriginToPlane(plane);
+            result.Inverse();
+            return result;
+
+            //Transform3D transform3D_Translation_1 = GetIdentity();
+            //Transform3D transform3D_Rotation = GetIdentity();
+            //Transform3D transform3D_Translation_2 = GetTranslation(-origin.X, -origin.Y, -origin.Z);
+
+            //if(plane.BaseZ.AlmostEqual(Vector3D.BaseZ, tolerance))
+            //{
+            //    transform3D_Rotation = GetRotation(Vector3D.BaseX, System.Math.PI);
+            //}            
+            //else
+            //{
+            //    Vector3D vector3D_Z = Vector3D.BaseZ.CrossProduct(plane.BaseZ);
+            //    transform3D_Rotation = GetRotation(Point3D.Zero, vector3D_Z, Query.Angle(plane.BaseZ, Vector3D.BaseZ, new Plane(Point3D.Zero, vector3D_Z)));
+            //}
+
+            //Vector3D vector3D_X = plane.BaseX.Transform(transform3D_Rotation * transform3D_Translation_2);
+
+            //transform3D_Translation_1 = GetRotation(Vector3D.BaseZ, Query.Angle(vector3D_X, Vector3D.BaseX, Plane.Base));
+
+            //return transform3D_Translation_1 * transform3D_Rotation * transform3D_Translation_2;
+        }
+
+        public static Transform3D GetOriginToPlane(Plane plane)
         {
             if (plane == null)
                 return null;
 
             Point3D origin = plane.Origin;
 
-            Transform3D transform3D_Translation_1 = GetIdentity();
-            Transform3D transform3D_Rotation = GetIdentity();
-            Transform3D transform3D_Translation_2 = GetTranslation(-origin.X, -origin.Y, -origin.Z);
+            Vector3D Vector3D_X = plane.BaseX.Unit;
+            Vector3D Vector3D_Y = plane.BaseY.Unit;
+            Vector3D Vector3D_Z = plane.BaseZ.Unit;
 
-            if(plane.BaseZ.AlmostEqual(Vector3D.BaseZ, tolerance))
-            {
-                transform3D_Rotation = GetRotation(Vector3D.BaseX, System.Math.PI);
-            }            
-            else
-            {
-                Vector3D vector3D_Z = Vector3D.BaseZ.CrossProduct(plane.BaseZ);
-                transform3D_Rotation = GetRotation(Point3D.Zero, vector3D_Z, Query.Angle(plane.BaseZ, Vector3D.BaseZ, new Plane(Point3D.Zero, vector3D_Z)));
-            }
+            Matrix4D matrix4D = Matrix4D.GetIdentity();
+            matrix4D[0, 0] = Vector3D.BaseX.DotProduct(Vector3D_X);
+            matrix4D[0, 1] = Vector3D.BaseX.DotProduct(Vector3D_Y);
+            matrix4D[0, 2] = Vector3D.BaseX.DotProduct(Vector3D_Z);
+            matrix4D[0, 3] = origin.X;
 
-            Vector3D vector3D_X = plane.BaseX.Transform(transform3D_Rotation * transform3D_Translation_2);
+            matrix4D[1, 0] = Vector3D.BaseY.DotProduct(Vector3D_X);
+            matrix4D[1, 1] = Vector3D.BaseY.DotProduct(Vector3D_Y);
+            matrix4D[1, 2] = Vector3D.BaseY.DotProduct(Vector3D_Z);
+            matrix4D[1, 3] = origin.Y;
 
-            transform3D_Translation_1 = GetRotation(Vector3D.BaseZ, Query.Angle(vector3D_X, Vector3D.BaseX, Plane.Base));
+            matrix4D[2, 0] = Vector3D.BaseZ.DotProduct(Vector3D_X);
+            matrix4D[2, 1] = Vector3D.BaseZ.DotProduct(Vector3D_Y);
+            matrix4D[2, 2] = Vector3D.BaseZ.DotProduct(Vector3D_Z);
+            matrix4D[2, 3] = origin.Z;
 
-            return transform3D_Translation_1 * transform3D_Rotation * transform3D_Translation_2;
+
+            return new Transform3D(matrix4D);
         }
 
-        public static Transform3D GetPlaneToPlane(Plane plane_1, Plane plane_2, double tolerance = Tolerance.Distance)
+        public static Transform3D GetPlaneToPlane(Plane plane_From, Plane plane_To)
         {
-            Transform3D transform3D_PlaneToOrigin_1 = GetPlaneToOrigin(plane_1, tolerance);
-            Transform3D transform3D_PlaneToOrigin_2 = GetPlaneToOrigin(plane_2, tolerance);
-            transform3D_PlaneToOrigin_2.Inverse();
+            Transform3D transform3D_Plane_1 = GetOriginToPlane(plane_From);
+            Transform3D transform3D_Plane_2 = GetPlaneToOrigin(plane_To);
 
-            return transform3D_PlaneToOrigin_2 * transform3D_PlaneToOrigin_1;
+            return transform3D_Plane_2 * transform3D_Plane_1;
         }
 
         /// <summary>
