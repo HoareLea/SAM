@@ -14,19 +14,22 @@ namespace SAM.Analytical.Grasshopper
                 switch (panelType)
                 {
                     case PanelType.Wall:
-                        return System.Drawing.Color.Red;
-                    case PanelType.Floor:
-                        return System.Drawing.Color.Blue;
+                        return System.Drawing.Color.Gray;
                     default:
                         return System.Drawing.Color.Empty;
                 }
             }
             else
+            //geometry external edges
             {
                 switch (panelType)
                 {
                     case PanelType.Wall:
                         return System.Drawing.Color.Red;
+                    case PanelType.WallExternal:
+                        return System.Drawing.Color.Red;
+                    case PanelType.WallInternal:
+                        return System.Drawing.Color.Blue;
                     case PanelType.Floor:
                         return System.Drawing.Color.Blue;
                     default:
@@ -42,9 +45,9 @@ namespace SAM.Analytical.Grasshopper
                 switch (apertureType)
                 {
                     case ApertureType.Door:
-                        return System.Drawing.Color.Red;
+                        return System.Drawing.Color.Violet;
                     case ApertureType.Window:
-                        return System.Drawing.Color.Blue;
+                        return System.Drawing.Color.Violet;
                     default:
                         return System.Drawing.Color.Empty;
                 }
@@ -54,9 +57,9 @@ namespace SAM.Analytical.Grasshopper
                 switch (apertureType)
                 {
                     case ApertureType.Door:
-                        return System.Drawing.Color.Red;
+                        return System.Drawing.Color.Violet;
                     case ApertureType.Window:
-                        return System.Drawing.Color.Blue;
+                        return System.Drawing.Color.Violet;
                     default:
                         return System.Drawing.Color.Empty;
                 }

@@ -9,13 +9,13 @@
             switch (panelType)
             {
                 case PanelType.Ceiling:
-                    color = System.Drawing.ColorTranslator.FromHtml("##FF8080");
+                    color = System.Drawing.ColorTranslator.FromHtml("#FF8080");
                     break;
                 case PanelType.CurtainWall:
                     color = System.Drawing.Color.BlueViolet;
                     break;
                 case PanelType.Floor:
-                    color = System.Drawing.ColorTranslator.FromHtml("##804000");
+                    color = System.Drawing.ColorTranslator.FromHtml("#804000");
                     break;
                 case PanelType.FloorExposed:
                     color = System.Drawing.ColorTranslator.FromHtml("#40B4FF");
