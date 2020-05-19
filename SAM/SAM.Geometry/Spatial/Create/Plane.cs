@@ -12,5 +12,13 @@ namespace SAM.Geometry.Spatial
 
             return new Plane(point3Ds.Average(), normal);
         }
+
+        public static Plane Plane(Point3D origin, Vector3D direction_X, Vector3D direction_Y)
+        {
+            if (origin == null || direction_X == null || direction_Y == null)
+                return null;
+
+            return new Plane(origin, direction_X, direction_Y);
+        }
     }
 }
