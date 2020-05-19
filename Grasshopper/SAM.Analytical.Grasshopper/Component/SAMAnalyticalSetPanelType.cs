@@ -1,11 +1,12 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
 using System;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSetPanelType : GH_Component
+    public class SAMAnalyticalSetPanelType : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

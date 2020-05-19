@@ -1,12 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
 using System;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalMovePanel : GH_Component
+    public class SAMAnalyticalMovePanel : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

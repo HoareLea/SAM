@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 using System;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometryPlaneIntersection : GH_Component
+    public class SAMGeometryPlaneIntersection : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

@@ -1,11 +1,12 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalMergeCoplanarPanels : GH_Component
+    public class SAMAnalyticalMergeCoplanarPanels : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

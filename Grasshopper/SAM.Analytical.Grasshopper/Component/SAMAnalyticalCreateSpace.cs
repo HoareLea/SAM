@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
 using SAM.Geometry;
 using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
@@ -7,7 +8,7 @@ using System;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateSpace : GH_Component
+    public class SAMAnalyticalCreateSpace : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

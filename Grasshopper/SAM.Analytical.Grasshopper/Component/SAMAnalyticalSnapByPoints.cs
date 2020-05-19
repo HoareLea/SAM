@@ -1,12 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSnapByPoints : GH_Component
+    public class SAMAnalyticalSnapByPoints : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

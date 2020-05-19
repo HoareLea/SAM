@@ -1,11 +1,12 @@
 ﻿using Grasshopper.Kernel;
+using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using System;
 using System.Collections;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometryGeometry : GH_Component
+    public class SAMGeometryGeometry : GH_SAMComponent
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.

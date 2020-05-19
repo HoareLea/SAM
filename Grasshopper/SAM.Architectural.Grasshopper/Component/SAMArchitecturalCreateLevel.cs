@@ -1,10 +1,11 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Architectural.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
 using System;
 
 namespace SAM.Architectural.Grasshopper
 {
-    public class SAMArchitecturalCreateLevel : GH_Component
+    public class SAMArchitecturalCreateLevel : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

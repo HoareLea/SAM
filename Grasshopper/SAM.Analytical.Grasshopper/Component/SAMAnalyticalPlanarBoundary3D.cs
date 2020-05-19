@@ -1,10 +1,11 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
 using System;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalPlanarBoundary3D : GH_Component
+    public class SAMAnalyticalPlanarBoundary3D : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
