@@ -8,7 +8,7 @@ using System;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class CreateSAMTransoform3DPlaneToOrigin : GH_SAMComponent
+    public class CreateSAMTransform3DPlaneToOrigin : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -23,7 +23,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public CreateSAMTransoform3DPlaneToOrigin()
+        public CreateSAMTransform3DPlaneToOrigin()
           : base("Create.SAMTransoform3DPlaneToOrigin", "Create.Transoform3DPlaneToOrigin",
               "Creates Transform3D By Plane To Origin",
               "SAM", "Geometry")
