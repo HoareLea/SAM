@@ -25,7 +25,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public CreateSAMTransform3DPlaneToOrigin()
           : base("Create.SAMTransoform3DPlaneToOrigin", "Create.Transoform3DPlaneToOrigin",
-              "Creates Transform3D By Plane To Origin",
+              "Creates SAM Transform3D By Plane To Origin",
               "SAM", "Geometry")
         {
         }

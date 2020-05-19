@@ -24,7 +24,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public CreateSAMTransform3DPlaneToPlane()
           : base("Create.SAMTransoform3DPlaneToPlane", "Create.Transoform3DPlaneToPlane",
-              "Creates Transform3D Plane To Plane)",
+              "Creates SAM Transform3D Plane To Plane)",
               "SAM", "Geometry")
         {
         }

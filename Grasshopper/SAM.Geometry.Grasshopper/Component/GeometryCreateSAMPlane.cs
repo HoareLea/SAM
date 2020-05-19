@@ -24,7 +24,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public GeometryCreateSAMPlane()
           : base("Geometry.CreateSAMPlane", "Geometry.CreateSAMPlane",
-              "Creates Plane by points",
+              "Creates SAM Plane by points",
               "SAM", "Geometry")
         {
         }
