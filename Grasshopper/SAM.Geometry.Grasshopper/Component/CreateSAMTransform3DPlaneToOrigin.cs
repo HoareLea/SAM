@@ -24,7 +24,7 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public CreateSAMTransform3DPlaneToOrigin()
-          : base("Create.SAMTransoform3DPlaneToOrigin", "Create.Transoform3DPlaneToOrigin",
+          : base("Create.SAMTransform3DPlaneToOrigin", "Create.Transoform3DPlaneToOrigin",
               "Creates SAM Transform3D By Plane To Origin",
               "SAM", "Geometry")
         {

@@ -23,7 +23,7 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public CreateSAMTransform3DPlaneToPlane()
-          : base("Create.SAMTransoform3DPlaneToPlane", "Create.Transoform3DPlaneToPlane",
+          : base("Create.SAMTransform3DPlaneToPlane", "Create.Transoform3DPlaneToPlane",
               "Creates SAM Transform3D Plane To Plane)",
               "SAM", "Geometry")
         {
