@@ -32,6 +32,21 @@
                     case PanelType.Floor:
                         return System.Drawing.Color.Blue;
 
+                    case PanelType.FloorExposed:
+                        return System.Drawing.Color.Blue;
+
+                    case PanelType.FloorInternal:
+                        return System.Drawing.Color.Red;
+
+                    case PanelType.UndergroundSlab:
+                        return System.Drawing.Color.Red;
+
+                    case PanelType.UndergroundWall:
+                        return System.Drawing.Color.Red;
+
+                    case PanelType.SlabOnGrade:
+                        return System.Drawing.Color.Red;
+
                     default:
                         return System.Drawing.Color.Empty;
                 }
@@ -59,10 +74,10 @@
                 switch (apertureType)
                 {
                     case ApertureType.Door:
-                        return System.Drawing.Color.Violet;
+                        return System.Drawing.Color.Brown;
 
                     case ApertureType.Window:
-                        return System.Drawing.Color.Violet;
+                        return System.Drawing.Color.Blue;
 
                     default:
                         return System.Drawing.Color.Empty;
