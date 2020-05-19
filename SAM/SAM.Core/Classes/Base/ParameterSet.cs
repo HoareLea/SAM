@@ -128,6 +128,24 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Add(string name, System.Drawing.Color color)
+        {
+            if (dictionary == null || name == null)
+                return false;
+
+            dictionary[name] = new SAMColor(color);
+            return true;
+        }
+
+        public bool Add(string name, SAMColor sAMColor)
+        {
+            if (dictionary == null || name == null)
+                return false;
+
+            dictionary[name] = sAMColor;
+            return true;
+        }
+
         public bool Copy(ParameterSet parameterSet)
         {
             if (parameterSet == null)
@@ -236,16 +254,26 @@ namespace SAM.Core
             return null;
         }
 
-        public IJSAMObject ToSAMObject<T>(string name) where T : IJSAMObject
+        public T ToSAMObject<T>(string name) where T : IJSAMObject
         {
             IJSAMObject result;
             if (!Query.TryGetValue(dictionary, name, out result))
-                return null;
+                return default(T);
 
             if (!(result is T))
-                return null;
+                return default(T);
 
             return (T)(object)result;
+        }
+
+        public System.Drawing.Color ToColor(string name)
+        {
+            SAMColor sAMColor = ToSAMObject<SAMColor>(name); 
+
+            if (sAMColor == null)
+                return System.Drawing.Color.Empty;
+
+            return sAMColor.ToColor();
         }
 
         public object ToObject(string name)

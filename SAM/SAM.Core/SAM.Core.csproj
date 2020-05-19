@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Classes\Base\SAMColor.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileReader.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileRow.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileTable.cs" />
