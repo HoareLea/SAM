@@ -30,7 +30,7 @@
                         return System.Drawing.Color.Blue;
 
                     case PanelType.Floor:
-                        return System.Drawing.Color.Blue;
+                        return System.Drawing.Color.Red;
 
                     case PanelType.FloorExposed:
                         return System.Drawing.Color.Blue;
