@@ -41,7 +41,6 @@ namespace SAM.Analytical
             if (panels_Temp != null && panels_Temp.Count > 0)
                 result.AddRange(panels_Temp);
 
-
             return result;
         }
 
@@ -162,7 +161,7 @@ namespace SAM.Analytical
 
             return result;
         }
-    
+
         private static List<Panel> MergeOverlapPanels_Walls(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
         {
             List<Tuple<Face3D, Panel>> tuples = panels?.ToList().ConvertAll(x => new Tuple<Face3D, Panel>(x.GetFace3D(), x));
@@ -174,7 +173,7 @@ namespace SAM.Analytical
             List<Panel> result = new List<Panel>();
             HashSet<Guid> guids = new HashSet<Guid>();
             List<Panel> redundantPanels_Temp = new List<Panel>(panels);
-            while(tuples.Count > 0)
+            while (tuples.Count > 0)
             {
                 Tuple<Face3D, Panel> tuple = tuples[0];
                 tuples.RemoveAt(0);

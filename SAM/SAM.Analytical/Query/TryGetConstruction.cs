@@ -1,5 +1,4 @@
 ﻿using SAM.Core;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +10,7 @@ namespace SAM.Analytical
         {
             construction = null;
             panel = null;
-            
+
             if (panels == null || panels.Count() == 0)
                 return false;
 
@@ -68,7 +67,7 @@ namespace SAM.Analytical
                     if (panels_Temp.Count == 1)
                     {
                         Panel panel_Roof = panels.ToList().Find(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Roof);
-                        if(panel_Roof != null)
+                        if (panel_Roof != null)
                         {
                             //FloorInternal
                             panel = panels_Temp.Find(x => x.PanelType == Analytical.PanelType.FloorInternal);

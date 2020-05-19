@@ -64,7 +64,7 @@ namespace SAM.Geometry.Grasshopper
             object value = null;
 
             value = objectWrapper.Value;
-            if(value is IGH_Goo)
+            if (value is IGH_Goo)
                 value = (value as dynamic).Value;
 
             Plane plane_1 = null;
@@ -81,7 +81,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-             objectWrapper = null;
+            objectWrapper = null;
             if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Math;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -20,7 +18,7 @@ namespace SAM.Geometry.Spatial
         {
             FromJObject(jObject);
         }
-        
+
         public Transform3D(Transform3D transform3D)
         {
             matrix4D = new Matrix4D(transform3D.matrix4D);
@@ -211,7 +209,7 @@ namespace SAM.Geometry.Spatial
             //if(plane.BaseZ.AlmostEqual(Vector3D.BaseZ, tolerance))
             //{
             //    transform3D_Rotation = GetRotation(Vector3D.BaseX, System.Math.PI);
-            //}            
+            //}
             //else
             //{
             //    Vector3D vector3D_Z = Vector3D.BaseZ.CrossProduct(plane.BaseZ);
@@ -251,7 +249,6 @@ namespace SAM.Geometry.Spatial
             matrix4D[2, 1] = Vector3D.BaseZ.DotProduct(Vector3D_Y);
             matrix4D[2, 2] = Vector3D.BaseZ.DotProduct(Vector3D_Z);
             matrix4D[2, 3] = origin.Z;
-
 
             return new Transform3D(matrix4D);
         }
@@ -322,7 +319,7 @@ namespace SAM.Geometry.Spatial
         {
             if (axis == null)
                 return null;
-            
+
             Transform3D result = GetIdentity();
 
             Vector3D axis_Unit = axis.Unit;
@@ -346,7 +343,7 @@ namespace SAM.Geometry.Spatial
         {
             if (origin == null)
                 return null;
-            
+
             Transform3D transform3D_Translation_1 = GetTranslation(origin.X, origin.Y, origin.Z);
             Transform3D transform3D_Rotation = GetRotation(axis, angle);
             Transform3D transform3D_Translation_2 = GetTranslation(-origin.X, -origin.Y, -origin.Z);

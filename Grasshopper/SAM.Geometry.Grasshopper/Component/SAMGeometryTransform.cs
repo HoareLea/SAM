@@ -56,9 +56,8 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-
             geometry = Spatial.Query.Transform(geometry as dynamic, transform3D);
-            if(geometry == null)
+            if (geometry == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Geometry could not be transformed");
                 return;

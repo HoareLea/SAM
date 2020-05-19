@@ -2,8 +2,6 @@
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
-using Rhino;
-using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
@@ -155,7 +153,7 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            if(typeof(Y) == typeof(GH_Matrix))
+            if (typeof(Y) == typeof(GH_Matrix))
             {
                 target = (Y)(object)Value.Matrix4D.ToGrasshopper();
             }

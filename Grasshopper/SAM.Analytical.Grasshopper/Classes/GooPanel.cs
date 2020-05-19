@@ -65,7 +65,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     if (aperture == null)
                         continue;
-                    
+
                     GooAperture gooAperture = new GooAperture(aperture);
                     gooAperture.DrawViewportWires(args);
                 }
@@ -80,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
             Rhino.Display.DisplayMaterial displayMaterial = Query.DisplayMaterial(Value.PanelType);
             if (displayMaterial == null)
                 displayMaterial = args.Material;
-            
+
             GooSAMGeometry gooSAMGeometry = new GooSAMGeometry(Value.GetFace3D());
             gooSAMGeometry.DrawViewportMeshes(args, displayMaterial);
 

@@ -1,6 +1,6 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
+using Rhino.Geometry;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
@@ -36,6 +36,7 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_plane", "_plane", "Rhino or SAM Plane", GH_ParamAccess.item);
+            Point3D.Zero;
         }
 
         /// <summary>

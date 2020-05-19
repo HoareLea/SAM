@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
@@ -63,9 +62,9 @@ namespace SAM.Geometry.Grasshopper
             }
 
             object value = objectWrapper.Value;
-            if(value is IGH_Goo)
+            if (value is IGH_Goo)
                 value = (value as dynamic).Value;
-            
+
             Plane plane = null;
             if (value is Plane)
                 plane = (Plane)value;
@@ -74,7 +73,7 @@ namespace SAM.Geometry.Grasshopper
             else if (value is Rhino.Geometry.Plane)
                 plane = ((Rhino.Geometry.Plane)value).ToSAM();
 
-            if(plane == null)
+            if (plane == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

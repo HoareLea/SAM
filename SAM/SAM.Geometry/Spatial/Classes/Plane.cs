@@ -351,7 +351,7 @@ namespace SAM.Geometry.Spatial
                 return double.MinValue;
 
             double result = double.MaxValue;
-            foreach(Segment3D segment3D in segment3Ds)
+            foreach (Segment3D segment3D in segment3Ds)
             {
                 result = System.Math.Min(Distance(segment3D), result);
                 if (result == 0)
