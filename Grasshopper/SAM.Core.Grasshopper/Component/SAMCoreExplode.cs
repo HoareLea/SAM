@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreExplode : GH_Component
+    public class SAMCoreExplode : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

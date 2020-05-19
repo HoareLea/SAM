@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreGetValue : GH_Component
+    public class SAMCoreGetValue : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

@@ -71,6 +71,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GH_SAMComponent.cs" />
     <Compile Include="Classes\GooSAMObject.cs" />
     <Compile Include="Component\SAMCoreExplode.cs" />
     <Compile Include="Component\SAMCoreFilter.cs" />
