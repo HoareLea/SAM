@@ -35,7 +35,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_plane", "_plane", "Plane", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_plane", "_plane", "Rhino or SAM Plane", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -63,19 +63,18 @@ namespace SAM.Geometry.Grasshopper
             }
 
             object value = objectWrapper.Value;
-            if(value is IGH_Goo)
+            if (value is IGH_Goo)
                 value = (value as dynamic).Value;
-            
 
             Plane plane = null;
-            if (objectWrapper.Value is Plane)
-                plane = (Plane)objectWrapper.Value;
-            else if (objectWrapper.Value is GH_Plane)
-                plane = ((GH_Plane)objectWrapper.Value).ToSAM();
-            else if (objectWrapper.Value is Rhino.Geometry.Plane)
-                plane = ((Rhino.Geometry.Plane)objectWrapper.Value).ToSAM();
+            if (value is Plane)
+                plane = (Plane)value;
+            else if (value is GH_Plane)
+                plane = ((GH_Plane)value).ToSAM();
+            else if (value is Rhino.Geometry.Plane)
+                plane = ((Rhino.Geometry.Plane)value).ToSAM();
 
-            if(plane == null)
+            if (plane == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

@@ -34,7 +34,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_points", "Points", "snapping Points", GH_ParamAccess.list);
+            inputParamManager.AddGenericParameter("_points", "Points", "snapping Rhino or SAM Points", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
         }
 

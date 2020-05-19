@@ -34,8 +34,8 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_source", "_source", "Source Plane", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_target", "_target", "Target Plane", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_source", "_source", "Source Rhino or SAM Plane", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_target", "_target", "Target Rhino or SAM Plane", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -61,20 +61,21 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            object value = objectWrapper.Value;
+            object value = null;
+
+            value = objectWrapper.Value;
             if(value is IGH_Goo)
                 value = (value as dynamic).Value;
-            
 
             Plane plane_1 = null;
-            if (objectWrapper.Value is Plane)
-                plane_1 = (Plane)objectWrapper.Value;
-            else if (objectWrapper.Value is GH_Plane)
-                plane_1 = ((GH_Plane)objectWrapper.Value).ToSAM();
-            else if (objectWrapper.Value is Rhino.Geometry.Plane)
-                plane_1 = ((Rhino.Geometry.Plane)objectWrapper.Value).ToSAM();
+            if (value is Plane)
+                plane_1 = (Plane)value;
+            else if (value is GH_Plane)
+                plane_1 = ((GH_Plane)value).ToSAM();
+            else if (value is Rhino.Geometry.Plane)
+                plane_1 = ((Rhino.Geometry.Plane)value).ToSAM();
 
-            if(plane_1 == null)
+            if (plane_1 == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -92,12 +93,12 @@ namespace SAM.Geometry.Grasshopper
                 value = (value as dynamic).Value;
 
             Plane plane_2 = null;
-            if (objectWrapper.Value is Plane)
-                plane_2 = (Plane)objectWrapper.Value;
-            else if (objectWrapper.Value is GH_Plane)
-                plane_2 = ((GH_Plane)objectWrapper.Value).ToSAM();
-            else if (objectWrapper.Value is Rhino.Geometry.Plane)
-                plane_2 = ((Rhino.Geometry.Plane)objectWrapper.Value).ToSAM();
+            if (value is Plane)
+                plane_2 = (Plane)value;
+            else if (value is GH_Plane)
+                plane_2 = ((GH_Plane)value).ToSAM();
+            else if (value is Rhino.Geometry.Plane)
+                plane_2 = ((Rhino.Geometry.Plane)value).ToSAM();
 
             if (plane_2 == null)
             {
