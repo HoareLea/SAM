@@ -269,7 +269,7 @@ namespace SAM.Core
 
         public SAMRelationCluster GetSAMRelationCluster<X, Z>()
         {
-            List<SAMRelation> sAMRelations = new List<SAMRelation>();
+            SAMRelationCluster result = new SAMRelationCluster();
             foreach (GraphNode graphNode in graphNodes)
             {
                 if (!(graphNode.Object is X))
@@ -284,15 +284,12 @@ namespace SAM.Core
                             continue;
 
                         if (graphNode_Temp != graphNode)
-                            sAMRelations.Add(new SAMRelation(graphNode.Object, graphNode_Temp.Object));
+                            result.Add(graphNode.Object, graphNode_Temp.Object);
                     }
                 }
             }
 
-            if (sAMRelations != null)
-                return new SAMRelationCluster(sAMRelations);
-
-            return null;
+            return result;
         }
 
         private void AppendGraphEdges(GraphEdge graphEdge, ref HashSet<GraphEdge> graphEdges)

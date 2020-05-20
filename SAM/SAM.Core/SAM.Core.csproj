@@ -54,6 +54,7 @@
     <Compile Include="Classes\DelimitedFile\DelimitedFileRow.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileTable.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileWriter.cs" />
+    <Compile Include="Classes\Relation\SAMRelationCluster.cs" />
     <Compile Include="Convert\ToCsv\ToCsv.cs" />
     <Compile Include="Convert\ToList\ToList.cs" />
     <Compile Include="Enums\DelimitedFileType.cs" />
@@ -71,8 +72,6 @@
     <Compile Include="Classes\Graph\GraphNode.cs" />
     <Compile Include="Classes\Graph\GraphPath.cs" />
     <Compile Include="Classes\Json\SAMJsonCollection.cs" />
-    <Compile Include="Classes\Relation\SAMRelationCluster.cs" />
-    <Compile Include="Classes\Relation\SAMRelation.cs" />
     <Compile Include="Convert\ToJson\Json.cs" />
     <Compile Include="Convert\ToSAM\IJSAMObjects.cs" />
     <Compile Include="Create\IJSAMObject.cs" />

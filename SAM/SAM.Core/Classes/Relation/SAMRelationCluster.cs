@@ -1,236 +1,283 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Core
 {
     public class SAMRelationCluster : SAMObject, IJSAMObject
     {
-        private Dictionary<string, Dictionary<string, HashSet<SAMRelation>>> dictionary;
-
-        public SAMRelationCluster(SAMRelationCluster sAMRelationCluster)
-            : base(sAMRelationCluster)
-        {
-            if (sAMRelationCluster == null || sAMRelationCluster.dictionary == null)
-                return;
-
-            dictionary = new Dictionary<string, Dictionary<string, HashSet<SAMRelation>>>();
-
-            foreach (KeyValuePair<string, Dictionary<string, HashSet<SAMRelation>>> keyValuePair_1 in sAMRelationCluster.dictionary)
-            {
-                dictionary[keyValuePair_1.Key] = new Dictionary<string, HashSet<SAMRelation>>();
-                foreach (KeyValuePair<string, HashSet<SAMRelation>> keyValuePair_2 in keyValuePair_1.Value)
-                {
-                    dictionary[keyValuePair_1.Key][keyValuePair_2.Key] = new HashSet<SAMRelation>(keyValuePair_2.Value);
-                }
-            }
-        }
+        private Dictionary<string, Dictionary<Guid, object>> dictionary_Objects;
+        private Dictionary<string, Dictionary<Guid, HashSet<Guid>>> dictionary_Relations;
 
         public SAMRelationCluster()
-            : base()
         {
-            dictionary = new Dictionary<string, Dictionary<string, HashSet<SAMRelation>>>();
-        }
-
-        public SAMRelationCluster(IEnumerable<SAMRelation> sAMRelations)
-            : base()
-        {
-            dictionary = new Dictionary<string, Dictionary<string, HashSet<SAMRelation>>>();
-
-            if (sAMRelations != null)
-            {
-                foreach (SAMRelation sAMRelation in sAMRelations)
-                    Add(sAMRelation);
-            }
+            dictionary_Objects = new Dictionary<string, Dictionary<Guid, object>>();
+            dictionary_Relations = new Dictionary<string, Dictionary<Guid, HashSet<Guid>>>();
         }
 
         public SAMRelationCluster(JObject jObject)
-            : base()
         {
             FromJObject(jObject);
         }
 
-        public virtual bool Add(SAMRelation sAMRelation)
+        /// <summary>
+        /// Adds two objects to SAMRelationCluster and creates relation between them
+        /// </summary>
+        /// <param name="object_1">First Object</param>
+        /// <param name="object_2">Second Object</param>
+        /// <returns>true if objects and relations sucessfully added</returns>
+        public bool Add(object object_1, object object_2)
         {
-            object @object = sAMRelation.GetObject<object>();
+            if (object_1 == null || object_2 == null)
+                return false;
+
+            //dictionary_Objects object_1
+            string typeName_1 = null;
+            Guid guid_1 = Guid.Empty;
+            if (!TryAddObject(object_1, out typeName_1, out guid_1))
+                return false;
+
+            //dictionary_Objects object_2
+            string typeName_2 = null;
+            Guid guid_2 = Guid.Empty;
+            if (!TryAddObject(object_2, out typeName_2, out guid_2))
+                return false;
+
+            //dictionary_Relations object_1
+            if (!AddRelation(typeName_1, guid_1, guid_2))
+                return false;
+
+            //dictionary_Relations object_1
+            if (!AddRelation(typeName_2, guid_2, guid_1))
+                return false;
+
+            return true;
+        }
+        
+        /// <summary>
+        /// Creates relation between two objects. Objects with provided guids needs to be added before adding relation
+        /// </summary>
+        /// <param name="guid_1">Guid of first element</param>
+        /// <param name="guid_2">Guid of second element</param>
+        /// <returns>true if relation sucessfully added</returns>
+        public bool AddRelation(Guid guid_1, Guid guid_2)
+        {
+            string typeName_1 = GetTypeName(guid_1);
+            if (string.IsNullOrEmpty(typeName_1))
+                return false;
+
+            string typeName_2 = GetTypeName(guid_2);
+            if (string.IsNullOrEmpty(typeName_2))
+                return false;
+
+            if (!AddRelation(typeName_1, guid_1, guid_2))
+                return false;
+
+            if (!AddRelation(typeName_2, guid_2, guid_1))
+                return false;
+
+            return true;
+        }
+
+        private bool AddRelation(string typeName, Guid guid_1, Guid guid_2)
+        {
+            if (string.IsNullOrWhiteSpace(typeName) || guid_1 == Guid.Empty || guid_2 == Guid.Empty)
+                return false;
+
+            Dictionary<Guid, HashSet<Guid>> dictionary = null;
+            if (!dictionary_Relations.TryGetValue(typeName, out dictionary))
+            {
+                dictionary = new Dictionary<Guid, HashSet<Guid>>();
+                dictionary_Relations[typeName] = dictionary;
+            }
+
+            HashSet<Guid> guids = null;
+            if (!dictionary.TryGetValue(guid_1, out guids))
+            {
+                guids = new HashSet<Guid>();
+                dictionary[guid_1] = guids;
+            }
+
+            guids.Add(guid_2);
+            return true;
+        }
+
+        public bool AddObject(object @object)
+        {
+            string typeName = null;
+            Guid guid = Guid.Empty;
+
+            return TryAddObject(@object, out typeName, out guid);
+        }
+
+        public bool TryAddObject(object @object, out string typeName, out Guid guid)
+        {
+            typeName = null;
+            guid = Guid.Empty;
+
             if (@object == null)
                 return false;
 
-            object relatedObject = sAMRelation.GetRelatedObject<object>();
-            if (relatedObject == null)
-                return false;
+            typeName = @object.GetType().FullName;
 
-            return Add(@object.GetType().FullName, relatedObject.GetType().FullName, sAMRelation);
-        }
-
-        public virtual bool Add(System.Type type_Object, System.Type type_RelatedObject, SAMRelation sAMRelation)
-        {
-            if (type_Object == null || type_RelatedObject == null)
-                return false;
-
-            return Add(type_Object.FullName, type_RelatedObject.FullName, sAMRelation);
-        }
-
-        public virtual bool Add(string typeName_Object, string typeName_RelatedObject, SAMRelation sAMRelation)
-        {
-            if (string.IsNullOrWhiteSpace(typeName_Object) || string.IsNullOrWhiteSpace(typeName_RelatedObject))
-                return false;
-
-            Dictionary<string, HashSet<SAMRelation>> dictionary_Temp;
-
-            if (!dictionary.TryGetValue(typeName_Object, out dictionary_Temp))
+            Dictionary<Guid, object> dictionary = null;
+            if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
             {
-                dictionary_Temp = new Dictionary<string, HashSet<SAMRelation>>();
-                dictionary[typeName_Object] = dictionary_Temp;
+                dictionary = new Dictionary<Guid, object>();
+                dictionary_Objects[typeName] = dictionary;
             }
 
-            HashSet<SAMRelation> sAMRelations_Temp;
-            if (!dictionary_Temp.TryGetValue(typeName_RelatedObject, out sAMRelations_Temp))
+            guid = Guid.Empty;
+            if (@object is ISAMObject)
+                guid = ((ISAMObject)@object).Guid;
+
+            if (guid == Guid.Empty)
             {
-                sAMRelations_Temp = new HashSet<SAMRelation>();
-                dictionary_Temp[typeName_RelatedObject] = sAMRelations_Temp;
+                foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
+                    if (@object.Equals(keyValuePair.Value))
+                    {
+                        guid = keyValuePair.Key;
+                        break;
+                    }
             }
 
-            sAMRelations_Temp.Add(sAMRelation);
+            if (guid == Guid.Empty)
+                guid = Guid.NewGuid();
+
+            dictionary[guid] = @object;
             return true;
         }
 
-        public List<SAMRelation> GetSAMRelations<X, Z>()
+        public Guid GetGuid(object @object)
         {
+            if (@object == null)
+                return Guid.Empty;
+
+            Dictionary<Guid, object> dictionary = dictionary_Objects[@object.GetType().FullName];
             if (dictionary == null)
-                return null;
+                return Guid.Empty;
 
-            string fullName_1 = typeof(X).FullName;
-            string fullName_2 = typeof(Z).FullName;
-
-            List<SAMRelation> result = new List<SAMRelation>();
-
-            Dictionary<string, HashSet<SAMRelation>> dictionary_Type = null;
-            if (!dictionary.TryGetValue(fullName_1, out dictionary_Type))
-                return result;
-
-            HashSet<SAMRelation> sAMRelations = null;
-            if (!dictionary_Type.TryGetValue(fullName_2, out sAMRelations))
-                return result;
-
-            if (sAMRelations == null)
-                return result;
-
-            return sAMRelations.ToList();
-        }
-
-        public List<SAMRelation> GetSAMRelations(string typeName_Object, string typeName_RelatedObject)
-        {
-            if (dictionary == null || string.IsNullOrWhiteSpace(typeName_Object) || string.IsNullOrWhiteSpace(typeName_RelatedObject))
-                return null;
-
-            List<SAMRelation> result = new List<SAMRelation>();
-
-            Dictionary<string, HashSet<SAMRelation>> dictionary_Type = null;
-            if (!dictionary.TryGetValue(typeName_Object, out dictionary_Type))
-                return result;
-
-            HashSet<SAMRelation> sAMRelations = null;
-            if (!dictionary_Type.TryGetValue(typeName_RelatedObject, out sAMRelations))
-                return result;
-
-            if (sAMRelations == null)
-                return result;
-
-            return sAMRelations.ToList();
-        }
-
-        public List<SAMRelation> GetSAMRelations(System.Type type_Object, System.Type type_RelatedObject)
-        {
-            if (type_Object == null || type_RelatedObject == null)
-                return null;
-
-            return GetSAMRelations(type_Object.FullName, type_RelatedObject.FullName);
-        }
-
-        public List<SAMRelation> GetSAMRelations()
-        {
-            if (dictionary == null)
-                return null;
-
-            List<SAMRelation> result = new List<SAMRelation>();
-            foreach (KeyValuePair<string, Dictionary<string, HashSet<SAMRelation>>> keyValuePair_1 in dictionary)
+            if (@object is ISAMObject)
             {
-                foreach (KeyValuePair<string, HashSet<SAMRelation>> keyValuePair_2 in keyValuePair_1.Value)
-                    result.AddRange(keyValuePair_2.Value);
+                Guid guid = ((ISAMObject)@object).Guid;
+                if (dictionary.ContainsKey(guid))
+                    return guid;
             }
+            else
+            {
+                foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
+                    if (@object.Equals(keyValuePair.Value))
+                        return keyValuePair.Key;
+            }
+
+            return Guid.Empty;
+        }
+
+        public List<object> GetObjects(IEnumerable<Guid> guids)
+        {
+            if (guids == null)
+                return null;
+
+            List<Guid> guids_Temp = new List<Guid>(guids);
+            guids_Temp.RemoveAll(x => x == Guid.Empty);
+
+            List<object> result = new List<object>();
+            foreach (Dictionary<Guid, object> dictionary_Temp in dictionary_Objects.Values)
+            {
+                List<Guid> guids_Remove = new List<Guid>();
+                foreach (Guid guid_Temp in guids_Temp)
+                {
+                    object object_Temp = dictionary_Temp[guid_Temp];
+                    if (object_Temp == null)
+                        continue;
+
+                    guids_Remove.Add(guid_Temp);
+                    result.Add(object_Temp);
+                }
+
+                guids_Temp.RemoveAll(x => guids_Remove.Contains(x));
+                if (guids_Temp.Count == 0)
+                    break;
+            }
+
             return result;
         }
 
-        public override bool FromJObject(JObject jObject)
+        public List<object> GetObjects(Type type)
         {
-            if (!base.FromJObject(jObject))
-                return false;
+            if (type == null)
+                return null;
 
-            if (!jObject.ContainsKey("Types"))
-                return true;
+            List<object> result = new List<object>();
+            foreach (KeyValuePair<Guid, object> keyValuePair in dictionary_Objects[type.FullName])
+                result.Add(keyValuePair.Value);
 
-            JArray jArray_Types_1 = jObject.Value<JArray>("Types");
-            if (jArray_Types_1 == null)
-                return true;
+            return result;
+        }
 
-            dictionary = new Dictionary<string, Dictionary<string, HashSet<SAMRelation>>>();
+        public object GetObject(Guid guid)
+        {
+            if (guid == Guid.Empty)
+                return null;
 
-            foreach (JObject jObject_Types_1 in jArray_Types_1)
+            foreach (Dictionary<Guid, object> dictionary_Temp in dictionary_Objects.Values)
             {
-                if (!jObject_Types_1.ContainsKey("Name"))
-                    continue;
-
-                string name_1 = jObject_Types_1.Value<string>("Name");
-                if (string.IsNullOrEmpty(name_1))
-                    continue;
-
-                if (!jObject_Types_1.ContainsKey("Types"))
-                    continue;
-
-                JArray jArray_Types_2 = jObject_Types_1.Value<JArray>("Types");
-                if (jArray_Types_2 == null)
-                    continue;
-
-                Dictionary<string, HashSet<SAMRelation>> dictionary_SAMRelation;
-                if (!dictionary.TryGetValue(name_1, out dictionary_SAMRelation))
-                {
-                    dictionary_SAMRelation = new Dictionary<string, HashSet<SAMRelation>>();
-                    dictionary[name_1] = dictionary_SAMRelation;
-                }
-
-                foreach (JObject jObject_Types_2 in jArray_Types_2)
-                {
-                    if (!jObject_Types_2.ContainsKey("Name"))
-                        continue;
-
-                    string name_2 = jObject_Types_2.Value<string>("Name");
-                    if (string.IsNullOrEmpty(name_2))
-                        continue;
-
-                    if (!jObject_Types_2.ContainsKey("Relations"))
-                        continue;
-
-                    JArray jArray_Relations = jObject_Types_2.Value<JArray>("Relations");
-                    if (jArray_Relations == null)
-                        continue;
-
-                    HashSet<SAMRelation> sAMRelations;
-                    if (!dictionary_SAMRelation.TryGetValue(name_2, out sAMRelations))
-                    {
-                        sAMRelations = new HashSet<SAMRelation>();
-                        dictionary_SAMRelation[name_2] = sAMRelations;
-                    }
-
-                    foreach (JObject jObject_Relation in jArray_Relations)
-                    {
-                        SAMRelation sAMRelation = Create.IJSAMObject<SAMRelation>(jObject_Relation);
-                        if (sAMRelation != null)
-                            sAMRelations.Add(sAMRelation);
-                    }
-                }
+                object object_Temp = dictionary_Temp[guid];
+                if (object_Temp != null)
+                    return object_Temp;
             }
-            return true;
+
+            return null;
+        }
+
+        public string GetTypeName(Guid guid)
+        {
+            foreach (KeyValuePair<string, Dictionary<Guid, object>> keyValuePair in dictionary_Objects)
+                if (keyValuePair.Value.ContainsKey(guid))
+                    return keyValuePair.Key;
+
+            return null;
+        }
+
+        public List<object> GetRelatedObjects(Guid guid)
+        {
+            object @object = GetObject(guid);
+            if (@object == null)
+                return null;
+
+            return GetRelatedObjects(@object);
+        }
+
+        public List<object> GetRelatedObjects(object @object)
+        {
+            if (@object == null)
+                return null;
+
+            Guid guid = GetGuid(@object);
+            if (guid == Guid.Empty)
+                return null;
+
+            string typeName = @object.GetType().FullName;
+
+            Dictionary<Guid, HashSet<Guid>> dictionary = dictionary_Relations[typeName];
+            if (dictionary == null)
+                return null;
+
+            return GetObjects(dictionary[guid]);
+        }
+
+        public List<T> GetRelatedObjects<T>(object @object)
+        {
+            List<object> objects = GetRelatedObjects(@object);
+            if (objects == null)
+                return null;
+
+            List<T> result = new List<T>();
+            foreach (object object_Temp in objects)
+                if (object_Temp is T)
+                    result.Add((T)object_Temp);
+
+            return result;
         }
 
         public override JObject ToJObject()
@@ -239,39 +286,162 @@ namespace SAM.Core
             if (jObject == null)
                 return null;
 
-            if (dictionary != null)
+            JArray jArray_Objects = new JArray();
+            foreach (KeyValuePair<string, Dictionary<Guid, object>> keyValuePair_Type in dictionary_Objects)
             {
-                JArray jArray_Type_1 = new JArray();
-                foreach (KeyValuePair<string, Dictionary<string, HashSet<SAMRelation>>> keyValuePair_1 in dictionary)
+                JObject jObject_Objects = new JObject();
+                jObject_Objects.Add("Key", keyValuePair_Type.Key);
+                JArray jArray = new JArray();
+                foreach (KeyValuePair<Guid, object> keyValuePair in keyValuePair_Type.Value)
                 {
-                    JObject jObject_Type_1 = new JObject();
-                    jObject_Type_1.Add("Name", keyValuePair_1.Key);
+                    JObject jObject_Temp = new JObject();
+                    jObject_Temp.Add("Key", keyValuePair.Key);
 
-                    JArray jArray_Type_2 = new JArray();
-                    foreach (KeyValuePair<string, HashSet<SAMRelation>> keyValuePair_2 in keyValuePair_1.Value)
+                    object @object = keyValuePair.Value;
+
+                    if (@object is IJSAMObject)
+                        jObject_Temp.Add("Value", ((IJSAMObject)@object).ToJObject());
+                    else if (@object is double)
+                        jObject_Temp.Add("Value", (double)@object);
+                    else if (@object is string)
+                        jObject_Temp.Add("Value", (string)@object);
+                    else if (@object is int)
+                        jObject_Temp.Add("Value", (int)@object);
+                    else if (@object is bool)
+                        jObject_Temp.Add("Value", (bool)@object);
+
+                    jArray.Add(jObject_Temp);
+                }
+                jObject_Objects.Add("Value", jArray);
+
+                jArray_Objects.Add(jObject_Objects);
+            }
+
+            jObject.Add("Objects", jArray_Objects);
+
+            JArray jArray_Relations = new JArray();
+            foreach (KeyValuePair<string, Dictionary<Guid, HashSet<Guid>>> keyValuePair_Type in dictionary_Relations)
+            {
+                JObject jObject_Objects = new JObject();
+                jObject_Objects.Add("Key", keyValuePair_Type.Key);
+                JArray jArray = new JArray();
+                foreach (KeyValuePair<Guid, HashSet<Guid>> keyValuePair in keyValuePair_Type.Value)
+                {
+                    JObject jObject_Temp = new JObject();
+                    jObject_Temp.Add("Key", keyValuePair.Key);
+                    JArray jArray_Guids = new JArray();
+                    foreach (Guid guid in keyValuePair.Value)
+                        jArray_Guids.Add(guid);
+                    jObject_Temp.Add("Value", jArray_Guids);
+
+                    jArray.Add(jObject_Temp);
+                }
+                jObject_Objects.Add("Value", jArray);
+
+                jArray_Objects.Add(jObject_Objects);
+            }
+            jObject.Add("Relations", jArray_Relations);
+
+            return jObject;
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+                return false;
+
+            dictionary_Objects = new Dictionary<string, Dictionary<Guid, object>>();
+            dictionary_Relations = new Dictionary<string, Dictionary<Guid, HashSet<Guid>>>();
+
+            JArray jArray_Objects = jObject.Value<JArray>("Objects");
+            if (jArray_Objects != null)
+            {
+                foreach (JObject jObject_Objects in jArray_Objects)
+                {
+                    string typeName = jObject_Objects.Value<string>("Key");
+                    if (string.IsNullOrWhiteSpace((typeName)))
+                        continue;
+
+                    JArray jArray = jObject_Objects.Value<JArray>("Value");
+                    if (jArray == null)
+                        continue;
+
+                    Dictionary<Guid, object> dictionary = new Dictionary<Guid, object>();
+                    foreach (JObject jObject_Temp in jArray)
                     {
-                        JObject jObject_Type_2 = new JObject();
-                        jObject_Type_2.Add("Name", keyValuePair_2.Key);
+                        Guid guid = jObject_Temp.Value<Guid>("Key");
+                        if (guid == Guid.Empty)
+                            continue;
 
-                        JArray jArray_Relations = new JArray();
-                        foreach (SAMRelation sAMRelation in keyValuePair_2.Value)
+                        object @object = null;
+                        JToken jToken = jObject_Temp.GetValue("Value");
+                        switch (jToken.Type)
                         {
-                            if (sAMRelation == null)
-                                continue;
-
-                            jArray_Relations.Add(sAMRelation.ToJObject());
+                            case JTokenType.Object:
+                                @object = Create.IJSAMObject((JObject)jToken);
+                                break;
+                            case JTokenType.Boolean:
+                                @object = jToken.Value<bool>();
+                                break;
+                            case JTokenType.Integer:
+                                @object = jToken.Value<int>();
+                                break;
+                            case JTokenType.String:
+                                @object = jToken.Value<string>();
+                                break;
+                            case JTokenType.Float:
+                                @object = jToken.Value<double>();
+                                break;
+                            case JTokenType.Date:
+                                @object = jToken.Value<System.DateTime>();
+                                break;
                         }
 
-                        jObject_Type_2.Add("Relations", jArray_Relations);
-                        jArray_Type_2.Add(jObject_Type_2);
-                    }
-                    jObject_Type_1.Add("Types", jArray_Type_2);
+                        if (@object == null)
+                            continue;
 
-                    jArray_Type_1.Add(jObject_Type_1);
+                        dictionary[guid] = @object;
+                    }
+                    dictionary_Objects[typeName] = dictionary;
                 }
-                jObject.Add("Types", jArray_Type_1);
             }
-            return jObject;
+
+            JArray jArray_Relations = jObject.Value<JArray>("Relations");
+            if (jArray_Relations != null)
+            {
+                foreach (JObject jObject_Relations in jArray_Relations)
+                {
+                    string typeName = jObject_Relations.Value<string>("Key");
+                    if (string.IsNullOrWhiteSpace((typeName)))
+                        continue;
+
+                    JArray jArray = jObject_Relations.Value<JArray>("Value");
+                    if (jArray == null)
+                        continue;
+
+                    Dictionary<Guid, HashSet<Guid>> dictionary = new Dictionary<Guid, HashSet<Guid>>();
+                    foreach (JObject jObject_Temp in jArray)
+                    {
+                        Guid guid = jObject_Temp.Value<Guid>("Key");
+                        if (guid == Guid.Empty)
+                            continue;
+
+                        JArray jArray_Guids = jObject_Temp.Value<JArray>("Value");
+                        if (jArray_Guids == null)
+                            continue;
+
+                        HashSet<Guid> guids = new HashSet<Guid>();
+                        foreach (JToken jToken in jArray_Guids)
+                            if (jToken.Type == JTokenType.Guid)
+                                guids.Add(jToken.Value<Guid>());
+
+                        dictionary[guid] = guids;
+                    }
+                    dictionary_Relations[typeName] = dictionary;
+                }
+            }
+
+            return true;
         }
     }
 }
