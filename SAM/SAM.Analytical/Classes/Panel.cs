@@ -301,7 +301,8 @@ namespace SAM.Analytical
             Vector3D normal = plane.Normal;
             Vector3D normal_closedPlanar3D = plane_closedPlanar3D.Normal;
 
-            if (!normal.AlmostSimilar(normal_closedPlanar3D, tolerance))
+            //TODO changed tolerance fix value to 0.01, should be changed to angle
+            if (!normal.AlmostSimilar(normal_closedPlanar3D, 0.01))
                 return null;
 
             IClosedPlanar3D closedPlanar3D_Projected = plane.Project(closedPlanar3D);
