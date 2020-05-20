@@ -54,7 +54,10 @@
     <Compile Include="Classes\DelimitedFile\DelimitedFileRow.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileTable.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileWriter.cs" />
-    <Compile Include="Classes\Relation\SAMRelationCluster.cs" />
+    <Compile Include="Classes\Log\Log.cs" />
+    <Compile Include="Classes\Log\LogRecord.cs" />
+    <Compile Include="Classes\Relation\MapCluster.cs" />
+    <Compile Include="Classes\Relation\RelationCluster.cs" />
     <Compile Include="Convert\ToCsv\ToCsv.cs" />
     <Compile Include="Convert\ToList\ToList.cs" />
     <Compile Include="Enums\DelimitedFileType.cs" />

@@ -4,24 +4,24 @@ using System.Collections.Generic;
 
 namespace SAM.Core
 {
-    public class SAMRelationCluster : SAMObject, IJSAMObject
+    public class RelationCluster : SAMObject, IJSAMObject
     {
         private Dictionary<string, Dictionary<Guid, object>> dictionary_Objects;
         private Dictionary<string, Dictionary<Guid, HashSet<Guid>>> dictionary_Relations;
 
-        public SAMRelationCluster()
+        public RelationCluster()
         {
             dictionary_Objects = new Dictionary<string, Dictionary<Guid, object>>();
             dictionary_Relations = new Dictionary<string, Dictionary<Guid, HashSet<Guid>>>();
         }
 
-        public SAMRelationCluster(JObject jObject)
+        public RelationCluster(JObject jObject)
         {
             FromJObject(jObject);
         }
 
         /// <summary>
-        /// Adds two objects to SAMRelationCluster and creates relation between them
+        /// Adds two objects to RelationCluster and creates relation between them
         /// </summary>
         /// <param name="object_1">First Object</param>
         /// <param name="object_2">Second Object</param>
@@ -108,6 +108,22 @@ namespace SAM.Core
             Guid guid = Guid.Empty;
 
             return TryAddObject(@object, out typeName, out guid);
+        }
+
+        public bool AddObjects<T>(IEnumerable<T> objects)
+        {
+            if (objects == null)
+                return false;
+
+            foreach(T @object in objects)
+            {
+                if (@object == null)
+                    continue;
+
+                AddObject(@object);
+            }
+
+            return true;
         }
 
         public bool TryAddObject(object @object, out string typeName, out Guid guid)
@@ -211,6 +227,20 @@ namespace SAM.Core
             List<object> result = new List<object>();
             foreach (KeyValuePair<Guid, object> keyValuePair in dictionary_Objects[type.FullName])
                 result.Add(keyValuePair.Value);
+
+            return result;
+        }
+
+        public List<T> GetObjects<T>()
+        {
+            List<object> objects = GetObjects(typeof(T));
+            if (objects == null)
+                return null;
+
+            List<T> result = new List<T>();
+            foreach (object @object in objects)
+                if (@object is T)
+                    result.Add((T)@object);
 
             return result;
         }
