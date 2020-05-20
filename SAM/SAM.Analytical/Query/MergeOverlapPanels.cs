@@ -113,13 +113,15 @@ namespace SAM.Analytical
                         if (setDefaultConstruction)
                         {
                             Construction construction = null;
-                            if (TryGetConstruction(tuples_Polygon_Contains.ConvertAll(x => x.Item2), out panel_Old, out construction))
+                            PanelType panelType = Analytical.PanelType.Undefined;
+                            if (TryGetConstruction(tuples_Polygon_Contains.ConvertAll(x => x.Item2), out panel_Old, out construction, out panelType))
                             {
                                 if (panel_Old != null && construction != null)
                                 {
                                     tuples_Polygon_Contains.RemoveAll(x => x.Item2 == panel_Old);
                                     redundantPanels.AddRange(tuples_Polygon_Contains.ConvertAll(x => x.Item2));
                                     panel_Old = new Panel(panel_Old, construction);
+                                    panel_Old = new Panel(panel_Old, panelType);
                                 }
                             }
                         }

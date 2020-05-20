@@ -6,10 +6,11 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static bool TryGetConstruction(IEnumerable<Panel> panels, out Panel panel, out Construction construction)
+        public static bool TryGetConstruction(IEnumerable<Panel> panels, out Panel panel, out Construction construction, out PanelType panelType)
         {
             construction = null;
             panel = null;
+            panelType = Analytical.PanelType.Undefined;
 
             if (panels == null || panels.Count() == 0)
                 return false;
@@ -23,17 +24,20 @@ namespace SAM.Analytical
                     if (panel.MinElevation() < Tolerance.MacroDistance)
                     {
                         //SlabOnGrad
-                        construction = Construction(Analytical.PanelType.SlabOnGrade);
+                        panelType = Analytical.PanelType.SlabOnGrade;
+                        construction = Construction(panelType);
                     }
                     else
                     {
                         //Exposed
-                        construction = Construction(Analytical.PanelType.FloorExposed);
+                        panelType = Analytical.PanelType.FloorExposed;
+                        construction = Construction(panelType);
                     }
                 }
                 else
                 {
-                    construction = Query.Construction(panel.PanelType);
+                    panelType = panel.PanelType;
+                    construction = Query.Construction(panelType);
                 }
             }
             else
@@ -47,7 +51,8 @@ namespace SAM.Analytical
                     {
                         //WallExternal
                         panel = panels_Temp[0];
-                        construction = Construction(Analytical.PanelType.WallExternal);
+                        panelType = Analytical.PanelType.WallExternal;
+                        construction = Construction(panelType);
                     }
                     else
                     {
@@ -56,7 +61,8 @@ namespace SAM.Analytical
                         if (panel == null)
                             panel = panels_Temp.First();
 
-                        construction = Construction(Analytical.PanelType.WallInternal);
+                        panelType = Analytical.PanelType.WallInternal;
+                        construction = Construction(panelType);
                     }
                     return true;
                 }
@@ -74,13 +80,15 @@ namespace SAM.Analytical
                             if (panel == null)
                                 panel = panels_Temp.First();
 
-                            construction = Query.Construction(Analytical.PanelType.FloorInternal);
+                            panelType = Analytical.PanelType.FloorInternal;
+                            construction = Query.Construction(panelType);
                         }
                         else
                         {
                             //Floor
                             panel = panels_Temp[0];
-                            construction = Construction(Analytical.PanelType.Floor);
+                            panelType = Analytical.PanelType.Floor;
+                            construction = Construction(panelType);
                         }
                     }
                     else
@@ -90,13 +98,15 @@ namespace SAM.Analytical
                         if (panel == null)
                             panel = panels_Temp.First();
 
-                        construction = Query.Construction(Analytical.PanelType.FloorInternal);
+                        panelType = Analytical.PanelType.FloorInternal;
+                        construction = Query.Construction(panelType);
                     }
                     return true;
                 }
 
                 panel = panels.First();
-                construction = Construction(panel.PanelType);
+                panelType = panel.PanelType;
+                construction = Construction(panelType);
             }
 
             return true;
