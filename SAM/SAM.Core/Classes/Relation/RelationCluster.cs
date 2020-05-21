@@ -20,6 +20,36 @@ namespace SAM.Core
             FromJObject(jObject);
         }
 
+        public RelationCluster(RelationCluster relationCluster)
+            : base(relationCluster)
+        {
+            dictionary_Objects = new Dictionary<string, Dictionary<Guid, object>>();
+            foreach (KeyValuePair<string, Dictionary<Guid, object>> keyValuePair_1 in relationCluster.dictionary_Objects)
+            {
+                Dictionary<Guid, object> dictionary = new Dictionary<Guid, object>();
+                foreach (KeyValuePair<Guid, object> keyValuePair_2 in keyValuePair_1.Value)
+                    dictionary[keyValuePair_2.Key] = keyValuePair_2.Value;
+
+                dictionary_Objects[keyValuePair_1.Key] = dictionary;
+            }
+
+            dictionary_Relations = new Dictionary<string, Dictionary<Guid, HashSet<Guid>>>();
+            foreach (KeyValuePair<string, Dictionary<Guid, HashSet<Guid>>> keyValuePair_1 in relationCluster.dictionary_Relations)
+            {
+                Dictionary<Guid, HashSet<Guid>> dictionary = new Dictionary<Guid, HashSet<Guid>>();
+                foreach (KeyValuePair<Guid, HashSet<Guid>> keyValuePair_2 in keyValuePair_1.Value)
+                {
+                    HashSet<Guid> guids = new HashSet<Guid>();
+                    foreach (Guid guid in guids)
+                        guids.Add(guid);
+
+                    dictionary[keyValuePair_2.Key] = guids;
+                }
+
+                dictionary_Relations[keyValuePair_1.Key] = dictionary;
+            }
+        }
+
         /// <summary>
         /// Adds two objects to RelationCluster and creates relation between them
         /// </summary>
@@ -258,6 +288,15 @@ namespace SAM.Core
             }
 
             return null;
+        }
+
+        public T GetObject<T>(Guid guid)
+        {
+           object @object = dictionary_Objects[typeof(T).FullName]?[guid];
+            if (@object is T)
+                return (T)@object;
+
+            return default(T);
         }
 
         public string GetTypeName(Guid guid)
