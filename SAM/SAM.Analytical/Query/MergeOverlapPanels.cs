@@ -163,6 +163,7 @@ namespace SAM.Analytical
                         Panel panel_New = new Panel(guid, panel_Old, face3D);
 
                         result.Add(panel_New);
+                        guids.Add(guid);
                     }
                 }
             }
