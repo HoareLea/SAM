@@ -135,6 +135,12 @@ namespace SAM.Analytical
                                 if (panel_Old == null)
                                     panel_Old = tuples_Polygon_Floor.First().Item2;
                             }
+                            else
+                            {
+                                List<Tuple<Polygon, Panel>> tuples_Polygon_Roof = tuples_Polygon_Contains.FindAll(x => Query.PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Roof);
+                                if (tuples_Polygon_Roof != null && tuples_Polygon_Roof.Count > 1)
+                                    panel_Old = tuples_Polygon_Contains.Find(x => x.PanelType() == Analytical.PanelType.FloorInternal)?.Item2;
+                            }
 
                             if (panel_Old == null)
                                 panel_Old = tuples_Polygon_Contains.First().Item2;

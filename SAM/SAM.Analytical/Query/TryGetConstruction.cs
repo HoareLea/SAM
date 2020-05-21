@@ -104,6 +104,19 @@ namespace SAM.Analytical
                     return true;
                 }
 
+                panels_Temp = panels.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Roof);
+                if (panels_Temp != null && panels_Temp.Count > 1)
+                {
+                    //FloorInternal
+                    panel = panels.ToList().Find(x => x.PanelType == Analytical.PanelType.FloorInternal);
+                    if (panel == null)
+                        panel = panels_Temp.First();
+
+                    panelType = Analytical.PanelType.FloorInternal;
+                    construction = Query.Construction(panelType);
+                    return true;
+                }
+
                 panel = panels.First();
                 panelType = panel.PanelType;
                 construction = Construction(panelType);
