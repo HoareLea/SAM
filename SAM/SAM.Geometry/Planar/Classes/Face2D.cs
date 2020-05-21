@@ -95,8 +95,11 @@ namespace SAM.Geometry.Planar
                 return null;
 
             Face2D result = new Face2D(closed2D_Max);
+            List<IClosed2D> edges_Temp = new List<IClosed2D>(edges);
+            edges_Temp.Remove(closed2D_Max);
+
             edges_Excluded = new List<IClosed2D>();
-            foreach (IClosed2D closed2D in edges)
+            foreach (IClosed2D closed2D in edges_Temp)
             {
                 if (result == closed2D_Max)
                     continue;
