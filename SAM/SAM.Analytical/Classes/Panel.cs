@@ -148,7 +148,15 @@ namespace SAM.Analytical
         {
             get
             {
-                return planarBoundary3D.Plane.Normal;
+                return planarBoundary3D?.Plane?.Normal;
+            }
+        }
+
+        public Point3D Origin
+        {
+            get
+            {
+                return planarBoundary3D?.Plane?.Origin;
             }
         }
 

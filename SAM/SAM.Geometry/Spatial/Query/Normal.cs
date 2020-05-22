@@ -90,10 +90,10 @@ namespace SAM.Geometry.Spatial
         //    double yz = 0;
         //    double zz = 0;
 
-        //    foreach(Point3D point3D in point3Ds)
+        //    foreach (Point3D point3D in point3Ds)
         //    {
         //        Point3D point3D_Temp = new Point3D(point3D.X - centroid.X, point3D.Y - centroid.Y, point3D.Z - centroid.Z);
-                
+
         //        xx += point3D_Temp.X * point3D_Temp.X;
         //        xy += point3D_Temp.X * point3D_Temp.Y;
         //        xz += point3D_Temp.X * point3D_Temp.Z;
@@ -111,10 +111,18 @@ namespace SAM.Geometry.Spatial
         //    yz /= count;
         //    zz /= count;
 
+        //    Vector3D direction = new Vector3D(0, 0, 0);
+
+        //    Vector3D direction_Axis = null;
+
+        //    double determinant_x = yy * zz - yz * yz;
+        //    direction_Axis = new Vector3D(determinant_x, xz * yz - xy * zz, xy * yz - xz * yy);
+
+
 
 
         //}
-        
+
         public static Vector3D Normal(this Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
         {
             return new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));

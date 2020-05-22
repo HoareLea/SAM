@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
-
+using SAM.Geometry.Planar;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -57,6 +57,14 @@ namespace SAM.Analytical
         public BoundaryEdge2DLoop(JObject jObject)
             : base(jObject)
         {
+        }
+
+        public BoundingBox2D GetBoundingBox2D(double offset = 0)
+        {
+            if (boundaryEdge2Ds == null || boundaryEdge2Ds.Count == 0)
+                return null;
+
+            return new BoundingBox2D(boundaryEdge2Ds.ConvertAll(x => x.Curve2D.GetBoundingBox(offset)));
         }
 
         public List<BoundaryEdge2D> BoundaryEdge2Ds
