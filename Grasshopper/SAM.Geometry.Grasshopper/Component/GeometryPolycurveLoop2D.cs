@@ -96,7 +96,7 @@ namespace SAM.Geometry.Grasshopper
                     if (sAMGeometry is Spatial.ISAMGeometry3D)
                         sAMGeometry3Ds.Add((Spatial.ISAMGeometry3D)sAMGeometry);
                     else if (sAMGeometry is Planar.ISAMGeometry2D)
-                        sAMGeometry3Ds.Add(Spatial.Plane.Base.Convert((Planar.ISAMGeometry2D)sAMGeometry));
+                        sAMGeometry3Ds.Add(Spatial.Plane.WorldXY.Convert((Planar.ISAMGeometry2D)sAMGeometry));
                 }
                 else if (gHObjectWrapper.Value is IGH_GeometricGoo)
                 {
@@ -109,9 +109,9 @@ namespace SAM.Geometry.Grasshopper
                     {
                         List<Spatial.ICurve3D> curve3Ds = new List<Spatial.ICurve3D>();
                         if (sAMGeometry3D is Spatial.ICurvable3D)
-                            curve3Ds.AddRange(((Spatial.ICurvable3D)sAMGeometry3D).GetCurves().ConvertAll(x => Spatial.Plane.Base.Project(x)));
+                            curve3Ds.AddRange(((Spatial.ICurvable3D)sAMGeometry3D).GetCurves().ConvertAll(x => Spatial.Plane.WorldXY.Project(x)));
                         else if (sAMGeometry3D is Spatial.ICurve3D)
-                            curve3Ds.Add(Spatial.Plane.Base.Project((Spatial.ICurve3D)sAMGeometry3D));
+                            curve3Ds.Add(Spatial.Plane.WorldXY.Project((Spatial.ICurve3D)sAMGeometry3D));
 
                         if (curve3Ds == null || curve3Ds.Count == 0)
                             continue;
@@ -121,7 +121,7 @@ namespace SAM.Geometry.Grasshopper
                             if (curve3D == null)
                                 continue;
 
-                            Planar.ICurvable2D curvable2D = Spatial.Plane.Base.Convert(curve3D) as Planar.ICurvable2D;
+                            Planar.ICurvable2D curvable2D = Spatial.Plane.WorldXY.Convert(curve3D) as Planar.ICurvable2D;
                             if (curvable2D != null)
                                 curvable2D.GetCurves().ForEach(x => segment2Ds.Add(new Planar.Segment2D(x.GetStart(), x.GetEnd())));
                         }

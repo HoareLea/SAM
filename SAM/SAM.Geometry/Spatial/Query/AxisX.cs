@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        public static Vector3D BaseX(this Vector3D normal)
+        public static Vector3D AxisX(this Vector3D normal)
         {
             if (normal == null)
                 return null;

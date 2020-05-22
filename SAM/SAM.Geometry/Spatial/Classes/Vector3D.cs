@@ -4,11 +4,11 @@ namespace SAM.Geometry.Spatial
 {
     public class Vector3D : SAMGeometry, IBoundable3D
     {
-        public static Vector3D BaseX { get; } = new Vector3D(1, 0, 0);
+        public static Vector3D WorldX { get; } = new Vector3D(1, 0, 0);
 
-        public static Vector3D BaseY { get; } = new Vector3D(0, 1, 0);
+        public static Vector3D WorldY { get; } = new Vector3D(0, 1, 0);
 
-        public static Vector3D BaseZ { get; } = new Vector3D(0, 0, 1);
+        public static Vector3D WorldZ { get; } = new Vector3D(0, 0, 1);
 
         private double[] coordinates = new double[] { 0, 0, 0 };
 

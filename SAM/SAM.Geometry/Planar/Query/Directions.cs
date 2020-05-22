@@ -14,7 +14,7 @@ namespace SAM.Geometry.Planar
             if (segmentable2Ds.Count() == 0)
                 return new List<Vector2D>();
 
-            Vector2D vector2D_Base = Vector2D.BaseY;
+            Vector2D vector2D_Y = Vector2D.WorldY;
 
             foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
@@ -22,7 +22,7 @@ namespace SAM.Geometry.Planar
                 foreach (Segment2D segment2D in segment2Ds)
                 {
                     Vector2D vector2D = segment2D.Vector;
-                    double angle = vector2D.Angle(vector2D_Base);
+                    double angle = vector2D.Angle(vector2D_Y);
 
                     Vector2D vector2D_Temp;
                     if (dictionary.TryGetValue(angle, out vector2D_Temp))

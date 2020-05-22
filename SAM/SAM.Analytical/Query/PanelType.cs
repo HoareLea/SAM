@@ -41,7 +41,7 @@ namespace SAM.Analytical
 
             double tolerance = 0.1;
 
-            double value = normal.Unit.DotProduct(Geometry.Spatial.Vector3D.BaseZ);
+            double value = normal.Unit.DotProduct(Geometry.Spatial.Vector3D.WorldZ);
             if (value < tolerance && value > -tolerance)
                 return Analytical.PanelType.Wall;
 

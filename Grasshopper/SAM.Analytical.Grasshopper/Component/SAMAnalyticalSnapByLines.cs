@@ -71,7 +71,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Geometry.Spatial.Plane plane = Geometry.Spatial.Plane.Base;
+            Geometry.Spatial.Plane plane = Geometry.Spatial.Plane.WorldXY;
             List<Geometry.Spatial.Plane> planes = new List<Geometry.Spatial.Plane>();
 
             foreach (Segment3D segment3D in lines.ConvertAll(x => x.ToSAM()))

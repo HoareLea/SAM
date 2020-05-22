@@ -685,13 +685,13 @@ namespace SAM.Geometry.Planar
             double area = double.MaxValue;
             Rectangle2D rectangle = null;
 
-            Vector2D vector2D_Base = new Vector2D(0, 1);
+            Vector2D vector2D = Vector2D.WorldY;
 
             HashSet<double> angleHashSet = new HashSet<double>();
             for (int i = 0; i < point2Ds_ConvexHull.Count - 1; i++)
             {
                 Vector2D direction = new Vector2D(point2Ds_ConvexHull[i], point2Ds_ConvexHull[i + 1]);
-                double angle = direction.Angle(vector2D_Base);
+                double angle = direction.Angle(vector2D);
                 if (!angleHashSet.Contains(angle))
                 {
                     angleHashSet.Add(angle);

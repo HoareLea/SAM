@@ -7,7 +7,7 @@
             if (plane == null)
                 return false;
 
-            return System.Math.Abs(plane.Normal.DotProduct(Plane.Base.BaseZ)) < tolerance;
+            return System.Math.Abs(plane.Normal.DotProduct(Plane.WorldXY.AxisZ)) < tolerance;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SAM.Geometry.Spatial
         public Face3D(Planar.IClosed2D externalEdge)
             : base(externalEdge)
         {
-            plane = new Plane(Point3D.Zero, Vector3D.BaseZ);
+            plane = new Plane(Point3D.Zero, Vector3D.WorldZ);
         }
 
         public Face3D(Plane plane, Planar.IClosed2D externalEdge)

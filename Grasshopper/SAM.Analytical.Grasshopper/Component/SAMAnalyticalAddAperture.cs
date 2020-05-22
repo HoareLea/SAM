@@ -86,7 +86,7 @@ namespace SAM.Analytical.Grasshopper
                     if (objectWrapper_Temp.Value is ISAMGeometry3D)
                         geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)objectWrapper_Temp.Value };
                     else if (objectWrapper_Temp.Value is Geometry.Planar.ISAMGeometry2D)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { Plane.Base.Convert(objectWrapper_Temp.Value as dynamic) };
+                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { Plane.WorldXY.Convert(objectWrapper_Temp.Value as dynamic) };
                 }
                 else if (@object is IGH_Goo)
                 {
@@ -94,7 +94,7 @@ namespace SAM.Analytical.Grasshopper
                     if (sAMGeometry is ISAMGeometry3D)
                         geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)sAMGeometry };
                     else if (sAMGeometry is Geometry.Planar.ISAMGeometry2D)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { Plane.Base.Convert(sAMGeometry as dynamic) };
+                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { Plane.WorldXY.Convert(sAMGeometry as dynamic) };
                 }
 
                 if (geometry3Ds_Temp != null && geometry3Ds_Temp.Count > 0)

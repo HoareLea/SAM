@@ -111,7 +111,7 @@ namespace SAM.Analytical
 
         public List<Guid> AssignPanelType(double angle_Start, double angle_End, PanelType panelType)
         {
-            Geometry.Spatial.Plane plane = Geometry.Spatial.Plane.Base;
+            Geometry.Spatial.Plane plane = Geometry.Spatial.Plane.WorldXY;
 
             Dictionary<Guid, Panel> dictionary = null;
             if (!dictionary_Panels.TryGetValue(panelType, out dictionary))

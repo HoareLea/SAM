@@ -6,8 +6,8 @@ namespace SAM.Geometry.Planar
 {
     public class Vector2D : SAMGeometry, ISAMGeometry2D, IReversible
     {
-        public static Vector2D BaseX { get; } = new Vector2D(1, 0);
-        public static Vector2D BaseY { get; } = new Vector2D(0, 1);
+        public static Vector2D WorldX { get; } = new Vector2D(1, 0);
+        public static Vector2D WorldY { get; } = new Vector2D(0, 1);
 
         private double[] coordinates = new double[2] { 0, 0 };
 

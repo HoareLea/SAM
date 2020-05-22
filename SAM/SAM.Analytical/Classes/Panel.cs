@@ -190,7 +190,7 @@ namespace SAM.Analytical
             if (elevation < boundingBox3D.Min.Z || elevation > boundingBox3D.Max.Z)
                 return null;
 
-            return GetEdge2Ds(new Plane(new Point3D(0, 0, elevation), Vector3D.BaseZ));
+            return GetEdge2Ds(new Plane(new Point3D(0, 0, elevation), Vector3D.WorldZ));
         }
 
         public IEnumerable<ICurve2D> GetEdge2Ds(Plane plane)
@@ -216,7 +216,7 @@ namespace SAM.Analytical
             if (elevation < boundingBox3D.Min.Z || elevation > boundingBox3D.Max.Z)
                 return null;
 
-            return GetEdge3Ds(new Plane(new Point3D(0, 0, elevation), Vector3D.BaseZ));
+            return GetEdge3Ds(new Plane(new Point3D(0, 0, elevation), Vector3D.WorldZ));
         }
 
         public IEnumerable<ICurve3D> GetEdge3Ds(Plane plane)

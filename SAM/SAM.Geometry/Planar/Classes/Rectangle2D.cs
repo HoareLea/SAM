@@ -17,7 +17,7 @@ namespace SAM.Geometry.Planar
             origin = Point2D.Zero;
             this.width = width;
             this.height = height;
-            heightDirection = Vector2D.BaseY;
+            heightDirection = Vector2D.WorldY;
         }
 
         public Rectangle2D(Point2D origin, double width, double height)
@@ -25,7 +25,7 @@ namespace SAM.Geometry.Planar
             this.origin = origin;
             this.width = width;
             this.height = height;
-            heightDirection = Vector2D.BaseY;
+            heightDirection = Vector2D.WorldY;
         }
 
         public Rectangle2D(Point2D origin, double width, double height, Vector2D heightDirection)
