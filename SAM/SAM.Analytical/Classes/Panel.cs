@@ -481,5 +481,10 @@ namespace SAM.Analytical
                 return apertures.ConvertAll(x => x.Clone());
             }
         }
+
+        public double GetThinnessRatio()
+        {
+            return Geometry.Planar.Query.ThinnessRatio(planarBoundary3D.Edge2DLoop.GetClosed2D());
+        }
     }
 }
