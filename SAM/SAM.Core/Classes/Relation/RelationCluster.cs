@@ -281,6 +281,10 @@ namespace SAM.Core
             if (type == null)
                 return null;
 
+            string typeName = type.FullName;
+            if (!dictionary_Objects.ContainsKey(typeName))
+                return null;
+
             List<object> result = new List<object>();
             foreach (KeyValuePair<Guid, object> keyValuePair in dictionary_Objects[type.FullName])
                 result.Add(keyValuePair.Value);

@@ -7,12 +7,11 @@ namespace SAM.Core
 {
     public class Log : SAMObject, IEnumerable<LogRecord>, IJSAMObject
     {
-        private List<LogRecord> logRecords;
+        private List<LogRecord> logRecords = new List<LogRecord>();
 
         public Log(string name)
             : base(name)
         {
-            logRecords = new List<LogRecord>();
         }
 
         public Log()
