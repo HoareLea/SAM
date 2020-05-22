@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SAM.Math;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
@@ -74,6 +75,46 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+
+        //public static Vector3D Normal_(this IEnumerable<Point3D> point3Ds)
+        //{
+        //    if (point3Ds == null || point3Ds.Count() < 3)
+        //        return null;
+
+        //    Point3D centroid = point3Ds.Average();
+
+        //    double xx = 0;
+        //    double xy = 0;
+        //    double xz = 0;
+        //    double yy = 0;
+        //    double yz = 0;
+        //    double zz = 0;
+
+        //    foreach(Point3D point3D in point3Ds)
+        //    {
+        //        Point3D point3D_Temp = new Point3D(point3D.X - centroid.X, point3D.Y - centroid.Y, point3D.Z - centroid.Z);
+                
+        //        xx += point3D_Temp.X * point3D_Temp.X;
+        //        xy += point3D_Temp.X * point3D_Temp.Y;
+        //        xz += point3D_Temp.X * point3D_Temp.Z;
+        //        yy += point3D_Temp.Y * point3D_Temp.Y;
+        //        yz += point3D_Temp.Y * point3D_Temp.Z;
+        //        zz += point3D_Temp.Z * point3D_Temp.Z;
+        //    }
+
+        //    int count = point3Ds.Count();
+
+        //    xx /= count;
+        //    xy /= count;
+        //    xz /= count;
+        //    yy /= count;
+        //    yz /= count;
+        //    zz /= count;
+
+
+
+        //}
+        
         public static Vector3D Normal(this Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
         {
             return new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));

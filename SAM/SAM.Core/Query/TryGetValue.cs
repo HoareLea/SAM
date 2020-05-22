@@ -77,7 +77,10 @@ namespace SAM.Core
             {
                 System.Reflection.ParameterInfo[] parameterInfos = methodInfo.GetParameters();
                 if (parameterInfos != null && parameterInfos.Length > 0)
-                    continue;
+                {
+                    if (!parameterInfos.ToList().TrueForAll(x => x.IsOptional))
+                        continue;
+                }
 
                 if (methodInfo.Name.Equals(name) || (!name.StartsWith("Get") && methodInfo.Name.Equals(string.Format("Get{0}", name))))
                 {
