@@ -212,6 +212,14 @@ namespace SAM.Analytical
             return Face3D.Create(plane, externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
         }
 
+        public double GetPermieter()
+        {
+            if (externalEdge2DLoop == null)
+                return double.NaN;
+
+            return externalEdge2DLoop.GetPerimeter();
+        }
+
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN, bool snapInternalEdges = true)
         {
             BoundaryEdge3DLoop boundaryEdge3DLoop_External = GetEdge3DLoop();

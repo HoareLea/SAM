@@ -121,6 +121,7 @@
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
     <Compile Include="Planar\Modify\InsertClosest.cs" />
     <Compile Include="Planar\Modify\Draw.cs" />
+    <Compile Include="Planar\Query\Perimeter.cs" />
     <Compile Include="Planar\Query\Snap.cs" />
     <Compile Include="Planar\Query\ExtendOrTrim.cs" />
     <Compile Include="Planar\Query\Extend.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Spatial\Create\Point3D.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Permieter.cs" />
     <Compile Include="Spatial\Query\AxisX.cs" />
     <Compile Include="Spatial\Query\Angle.cs" />
     <Compile Include="Spatial\Query\Convert.cs" />

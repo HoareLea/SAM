@@ -92,6 +92,11 @@ namespace SAM.Geometry
             return area;
         }
 
+        public double GetPerimeter()
+        {
+            return Planar.Query.Perimeter(externalEdge);
+        }
+
         public Point2D GetInternalPoint2D()
         {
             if (externalEdge == null)

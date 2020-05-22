@@ -77,6 +77,24 @@ namespace SAM.Analytical
             return GetClosed2D().GetArea();
         }
 
+        public double GetPerimeter()
+        {
+            if (boundaryEdge2Ds == null)
+                return double.NaN;
+
+            double perimeter = 0;
+            foreach(BoundaryEdge2D boundaryEdge2D in boundaryEdge2Ds)
+            {
+                SAM.Geometry.Planar.ICurve2D curve2D = boundaryEdge2D.Curve2D;
+                if (curve2D == null)
+                    continue;
+
+                perimeter += curve2D.GetLength();
+            }
+
+            return perimeter;
+        }
+
         public bool Move(Geometry.Planar.Vector2D vector2D)
         {
             if (boundaryEdge2Ds == null || vector2D == null)
