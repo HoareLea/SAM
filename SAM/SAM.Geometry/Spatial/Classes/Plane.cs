@@ -16,7 +16,7 @@ namespace SAM.Geometry.Spatial
         {
             normal = new Vector3D(0, 0, 1);
             origin = new Point3D(0, 0, 0);
-            baseX = GetBaseX();
+            baseX = normal.BaseX();
         }
 
         public Plane(JObject jObject)
@@ -42,14 +42,14 @@ namespace SAM.Geometry.Spatial
         {
             origin = new Point3D(point3D_1);
             normal = new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3)).Unit;
-            baseX = GetBaseX();
+            baseX = normal.BaseX();
         }
 
         public Plane(Point3D origin, Vector3D normal)
         {
             this.normal = normal.Unit;
             this.origin = new Point3D(origin);
-            baseX = GetBaseX();
+            baseX = normal.BaseX();
         }
 
         public Plane(Point3D origin, Vector3D direction_X, Vector3D direction_Y)
@@ -57,17 +57,6 @@ namespace SAM.Geometry.Spatial
             this.origin = new Point3D(origin);
             baseX = direction_X.Unit;
             normal = baseX.CrossProduct(direction_Y.Unit).Unit;
-        }
-
-        private Vector3D GetBaseX()
-        {
-            if (normal == null)
-                return null;
-
-            if (normal.X == 0 && normal.Y == 0)
-                return new Vector3D(1, 0, 0);
-
-            return new Vector3D(normal.Y, -normal.X, 0).Unit;
         }
 
         public Vector3D Normal
@@ -511,7 +500,12 @@ namespace SAM.Geometry.Spatial
         {
             origin = new Point3D(jObject.Value<JObject>("Origin"));
             normal = new Vector3D(jObject.Value<JObject>("Normal"));
-            baseX = GetBaseX();
+
+            if (jObject.ContainsKey("BaseX"))
+                baseX = new Vector3D(jObject.Value<JObject>("BaseX"));
+            else
+                baseX = normal.BaseX();
+
             return true;
         }
 
@@ -523,6 +517,7 @@ namespace SAM.Geometry.Spatial
 
             jObject.Add("Origin", origin.ToJObject());
             jObject.Add("Normal", normal.ToJObject());
+            jObject.Add("BaseX", baseX.ToJObject());
 
             return jObject;
         }
