@@ -20,6 +20,9 @@
             {
                 switch (panelType)
                 {
+                    case PanelType.Roof:
+                        return System.Drawing.Color.Red;
+
                     case PanelType.Wall:
                         return System.Drawing.Color.Red;
 
@@ -27,16 +30,16 @@
                         return System.Drawing.Color.Red;
 
                     case PanelType.WallInternal:
-                        return System.Drawing.Color.Blue;
+                        return System.Drawing.Color.Lime;
 
                     case PanelType.Floor:
                         return System.Drawing.Color.Red;
 
                     case PanelType.FloorExposed:
-                        return System.Drawing.Color.Blue;
+                        return System.Drawing.Color.Red;
 
                     case PanelType.FloorInternal:
-                        return System.Drawing.Color.Red;
+                        return System.Drawing.Color.Lime;
 
                     case PanelType.UndergroundSlab:
                         return System.Drawing.Color.Red;
