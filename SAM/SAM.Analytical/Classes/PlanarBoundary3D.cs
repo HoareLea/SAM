@@ -212,7 +212,7 @@ namespace SAM.Analytical
             return Face3D.Create(plane, externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
         }
 
-        public double GetPermieter()
+        public double GetPerimeter()
         {
             if (externalEdge2DLoop == null)
                 return double.NaN;

@@ -136,12 +136,12 @@ namespace SAM.Analytical
             return face3D.GetArea();
         }
 
-        public double GetPermieter()
+        public double GetPerimeter()
         {
             if (planarBoundary3D == null)
                 return double.NaN;
             
-            return planarBoundary3D.GetPermieter();
+            return planarBoundary3D.GetPerimeter();
         }
 
         public Vector3D Normal
