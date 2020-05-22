@@ -59,7 +59,7 @@ namespace SAM.Analytical
         {
         }
 
-        public BoundingBox2D GetBoundingBox2D(double offset = 0)
+        public BoundingBox2D GetBoundingBox(double offset = 0)
         {
             if (boundaryEdge2Ds == null || boundaryEdge2Ds.Count == 0)
                 return null;

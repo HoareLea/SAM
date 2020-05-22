@@ -6,7 +6,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static Vector3D Normal(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
+        public static Vector3D Normal_(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds == null || point3Ds.Collinear(tolerance))
                 return null;
@@ -75,53 +75,75 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        public static Vector3D Normal(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3Ds == null || point3Ds.Count() < 3)
+                return null;
 
-        //public static Vector3D Normal_(this IEnumerable<Point3D> point3Ds)
-        //{
-        //    if (point3Ds == null || point3Ds.Count() < 3)
-        //        return null;
+            Point3D centroid = point3Ds.Average();
 
-        //    Point3D centroid = point3Ds.Average();
+            double xx = 0;
+            double xy = 0;
+            double xz = 0;
+            double yy = 0;
+            double yz = 0;
+            double zz = 0;
 
-        //    double xx = 0;
-        //    double xy = 0;
-        //    double xz = 0;
-        //    double yy = 0;
-        //    double yz = 0;
-        //    double zz = 0;
+            foreach (Point3D point3D in point3Ds)
+            {
+                Point3D point3D_Temp = new Point3D(point3D.X - centroid.X, point3D.Y - centroid.Y, point3D.Z - centroid.Z);
 
-        //    foreach (Point3D point3D in point3Ds)
-        //    {
-        //        Point3D point3D_Temp = new Point3D(point3D.X - centroid.X, point3D.Y - centroid.Y, point3D.Z - centroid.Z);
+                xx += point3D_Temp.X * point3D_Temp.X;
+                xy += point3D_Temp.X * point3D_Temp.Y;
+                xz += point3D_Temp.X * point3D_Temp.Z;
+                yy += point3D_Temp.Y * point3D_Temp.Y;
+                yz += point3D_Temp.Y * point3D_Temp.Z;
+                zz += point3D_Temp.Z * point3D_Temp.Z;
+            }
 
-        //        xx += point3D_Temp.X * point3D_Temp.X;
-        //        xy += point3D_Temp.X * point3D_Temp.Y;
-        //        xz += point3D_Temp.X * point3D_Temp.Z;
-        //        yy += point3D_Temp.Y * point3D_Temp.Y;
-        //        yz += point3D_Temp.Y * point3D_Temp.Z;
-        //        zz += point3D_Temp.Z * point3D_Temp.Z;
-        //    }
+            int count = point3Ds.Count();
 
-        //    int count = point3Ds.Count();
+            xx /= count;
+            xy /= count;
+            xz /= count;
+            yy /= count;
+            yz /= count;
+            zz /= count;
 
-        //    xx /= count;
-        //    xy /= count;
-        //    xz /= count;
-        //    yy /= count;
-        //    yz /= count;
-        //    zz /= count;
+            Vector3D direction_Weighted = new Vector3D(0, 0, 0);
 
-        //    Vector3D direction = new Vector3D(0, 0, 0);
+            Vector3D direction_Axis = null;
+            double weight;
 
-        //    Vector3D direction_Axis = null;
+            double determinant_x = yy * zz - yz * yz;
+            direction_Axis = new Vector3D(determinant_x, xz * yz - xy * zz, xy * yz - xz * yy);
+            weight = determinant_x * determinant_x;
+            if (direction_Weighted.DotProduct(direction_Axis) < 0)
+                weight = -weight;
 
-        //    double determinant_x = yy * zz - yz * yz;
-        //    direction_Axis = new Vector3D(determinant_x, xz * yz - xy * zz, xy * yz - xz * yy);
+            direction_Weighted += direction_Axis * weight;
 
+            double determinant_y = xx * zz - xz * xz;
+            direction_Axis = new Vector3D(xz * yz - xy * zz, determinant_y, xy * xz - yz * xx);
+            weight = determinant_y * determinant_y;
+            if (direction_Weighted.DotProduct(direction_Axis) < 0)
+                weight = -weight;
 
+            direction_Weighted += direction_Axis * weight;
 
+            double determinant_z = xx * yy - xy * xy;
+            direction_Axis = new Vector3D(xy * yz - xz * yy, xy * xz - yz * xx, determinant_z);
+            weight = determinant_z * determinant_z;
+            if (direction_Weighted.DotProduct(direction_Axis) < 0)
+                weight = -weight;
 
-        //}
+            direction_Weighted += direction_Axis * weight;
+
+            if (!direction_Weighted.IsValid())
+                return null;
+
+            return direction_Weighted.Unit;
+        }
 
         public static Vector3D Normal(this Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
         {
