@@ -118,24 +118,24 @@ namespace SAM.Geometry.Spatial
             double determinant_x = yy * zz - yz * yz;
             direction_Axis = new Vector3D(determinant_x, xz * yz - xy * zz, xy * yz - xz * yy);
             weight = determinant_x * determinant_x;
-            if (direction_Weighted.DotProduct(direction_Axis) < 0)
-                weight = -weight;
+            //if (direction_Weighted.DotProduct(direction_Axis) < 0)
+            //    weight = -weight;
 
             direction_Weighted += direction_Axis * weight;
 
             double determinant_y = xx * zz - xz * xz;
             direction_Axis = new Vector3D(xz * yz - xy * zz, determinant_y, xy * xz - yz * xx);
             weight = determinant_y * determinant_y;
-            if (direction_Weighted.DotProduct(direction_Axis) < 0)
-                weight = -weight;
+            //if (direction_Weighted.DotProduct(direction_Axis) < 0)
+            //    weight = -weight;
 
             direction_Weighted += direction_Axis * weight;
 
             double determinant_z = xx * yy - xy * xy;
             direction_Axis = new Vector3D(xy * yz - xz * yy, xy * xz - yz * xx, determinant_z);
             weight = determinant_z * determinant_z;
-            if (direction_Weighted.DotProduct(direction_Axis) < 0)
-                weight = -weight;
+            //if (direction_Weighted.DotProduct(direction_Axis) < 0)
+            //    weight = -weight;
 
             direction_Weighted += direction_Axis * weight;
 
