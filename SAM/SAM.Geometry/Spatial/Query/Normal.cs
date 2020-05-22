@@ -6,7 +6,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static Vector3D Normal_(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
+        public static Vector3D Normal(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds == null || point3Ds.Collinear(tolerance))
                 return null;
@@ -75,7 +75,13 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static Vector3D Normal(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
+        /// <summary>
+        /// Calculates normal Vector3D for Point3Ds
+        /// source: <see cref="http://www.ilikebigbits.com/2017_09_25_plane_from_points_2.html"/>
+        /// </summary>
+        /// <param name="point3Ds">List of points for plane</param>
+        /// <returns>Normal Vector3D</returns>
+        public static Vector3D Normal_Legacy(this IEnumerable<Point3D> point3Ds)
         {
             if (point3Ds == null || point3Ds.Count() < 3)
                 return null;
@@ -118,24 +124,24 @@ namespace SAM.Geometry.Spatial
             double determinant_x = yy * zz - yz * yz;
             direction_Axis = new Vector3D(determinant_x, xz * yz - xy * zz, xy * yz - xz * yy);
             weight = determinant_x * determinant_x;
-            //if (direction_Weighted.DotProduct(direction_Axis) < 0)
-            //    weight = -weight;
+            if (direction_Weighted.DotProduct(direction_Axis) < 0)
+                weight = -weight;
 
             direction_Weighted += direction_Axis * weight;
 
             double determinant_y = xx * zz - xz * xz;
             direction_Axis = new Vector3D(xz * yz - xy * zz, determinant_y, xy * xz - yz * xx);
             weight = determinant_y * determinant_y;
-            //if (direction_Weighted.DotProduct(direction_Axis) < 0)
-            //    weight = -weight;
+            if (direction_Weighted.DotProduct(direction_Axis) < 0)
+                weight = -weight;
 
             direction_Weighted += direction_Axis * weight;
 
             double determinant_z = xx * yy - xy * xy;
             direction_Axis = new Vector3D(xy * yz - xz * yy, xy * xz - yz * xx, determinant_z);
             weight = determinant_z * determinant_z;
-            //if (direction_Weighted.DotProduct(direction_Axis) < 0)
-            //    weight = -weight;
+            if (direction_Weighted.DotProduct(direction_Axis) < 0)
+                weight = -weight;
 
             direction_Weighted += direction_Axis * weight;
 
