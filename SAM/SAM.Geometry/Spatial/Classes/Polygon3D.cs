@@ -77,6 +77,18 @@ namespace SAM.Geometry.Spatial
             return new BoundingBox3D(GetPoints());
         }
 
+        public double GetPerimiter()
+        {
+            List<Planar.Segment2D> segment2Ds = Planar.Create.Segment2Ds(points, true);
+            if (segment2Ds == null || segment2Ds.Count == 0)
+                return double.NaN;
+
+            double permieter = 0;
+            segment2Ds.ForEach(x => permieter += x.GetLength());
+
+            return permieter;
+        }
+
         public Face3D ToFace()
         {
             return new Face3D(this);
