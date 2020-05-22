@@ -75,16 +75,22 @@ namespace SAM.Core
             System.Reflection.MethodInfo[] methodInfos = @object.GetType().GetMethods();
             foreach (System.Reflection.MethodInfo methodInfo in methodInfos)
             {
+                object[] parameters = new object[] { };
+
                 System.Reflection.ParameterInfo[] parameterInfos = methodInfo.GetParameters();
                 if (parameterInfos != null && parameterInfos.Length > 0)
                 {
                     if (!parameterInfos.ToList().TrueForAll(x => x.IsOptional))
                         continue;
+
+                    parameters = new object[parameterInfos.Length];
+                    for (int i = 0; i < parameters.Length; i++)
+                        parameters[i] = System.Type.Missing;
                 }
 
                 if (methodInfo.Name.Equals(name) || (!name.StartsWith("Get") && methodInfo.Name.Equals(string.Format("Get{0}", name))))
                 {
-                    value = methodInfo.Invoke(@object, new object[] { });
+                    value = methodInfo.Invoke(@object, parameters);
                     return true;
                 }
             }
