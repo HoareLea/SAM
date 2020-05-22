@@ -15,6 +15,12 @@ namespace SAM.Core
             logRecords = new List<LogRecord>();
         }
 
+        public Log()
+            : base()
+        {
+
+        }
+
         public LogRecord Add(string format, params object[] values)
         {
             LogRecord logRecord = new LogRecord(format, values);

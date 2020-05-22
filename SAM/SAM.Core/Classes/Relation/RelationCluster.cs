@@ -109,6 +109,33 @@ namespace SAM.Core
             return true;
         }
 
+        public bool AddRelation(object object_1, object object_2)
+        {
+            if (object_1 == null || object_2 == null)
+                return false;
+
+            Guid guid_1 = GetGuid(object_1);
+            if (guid_1 == Guid.Empty)
+                return false;
+
+            Guid guid_2 = GetGuid(object_2);
+            if (guid_2 == Guid.Empty)
+                return false;
+
+            string typeName_1 = object_1.GetType().FullName;
+
+            string typeName_2 = object_2.GetType().FullName;
+
+            if (!AddRelation(typeName_1, guid_1, guid_2))
+                return false;
+
+            if (!AddRelation(typeName_2, guid_2, guid_1))
+                return false;
+
+            return true;
+
+        }
+
         private bool AddRelation(string typeName, Guid guid_1, Guid guid_2)
         {
             if (string.IsNullOrWhiteSpace(typeName) || guid_1 == Guid.Empty || guid_2 == Guid.Empty)
