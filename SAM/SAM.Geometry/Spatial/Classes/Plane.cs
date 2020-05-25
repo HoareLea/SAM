@@ -14,13 +14,13 @@ namespace SAM.Geometry.Spatial
 
         private Vector3D normal;
         private Point3D origin;
-        private Vector3D axisX;
+        private Vector3D axisY;
 
         public Plane()
         {
             normal = new Vector3D(0, 0, 1);
             origin = new Point3D(0, 0, 0);
-            axisX = normal.AxisX();
+            axisY = normal.AxisY();
         }
 
         public Plane(JObject jObject)
@@ -32,35 +32,35 @@ namespace SAM.Geometry.Spatial
         {
             normal = new Vector3D(plane.normal);
             origin = new Point3D(plane.origin);
-            axisX = new Vector3D(plane.axisX);
+            axisY = new Vector3D(plane.axisY);
         }
 
         public Plane(Plane plane, Point3D origin)
         {
             normal = new Vector3D(plane.normal);
             this.origin = new Point3D(origin);
-            axisX = new Vector3D(plane.axisX);
+            axisY = new Vector3D(plane.axisY);
         }
 
         public Plane(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
         {
             origin = new Point3D(point3D_1);
             normal = new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3)).Unit;
-            axisX = normal.AxisX();
+            axisY = normal.AxisY();
         }
 
         public Plane(Point3D origin, Vector3D normal)
         {
             this.normal = normal.Unit;
             this.origin = new Point3D(origin);
-            axisX = normal.AxisX();
+            axisY = normal.AxisY();
         }
 
         public Plane(Point3D origin, Vector3D axisX, Vector3D axisY)
         {
             this.origin = new Point3D(origin);
-            this.axisX = axisX.Unit;
-            normal = this.axisX.CrossProduct(axisY.Unit).Unit;
+            this.axisY = axisY.Unit;
+            normal = this.axisY.CrossProduct(axisX.Unit).Unit;
         }
 
         public Vector3D Normal
@@ -87,7 +87,7 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                return new Vector3D(axisX);
+                return normal.CrossProduct(axisY);
             }
         }
 
@@ -95,7 +95,7 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                return normal.CrossProduct(axisX);
+                return new Vector3D(axisY);
             }
         }
 
@@ -196,10 +196,10 @@ namespace SAM.Geometry.Spatial
 
         public Point3D Convert(Planar.Point2D point2D)
         {
-            Vector3D baseY = AxisY;
+            Vector3D axisX = AxisX;
 
-            Vector3D u = new Vector3D(axisX.X * point2D.X, axisX.Y * point2D.X, axisX.Z * point2D.X);
-            Vector3D v = new Vector3D(baseY.X * point2D.Y, baseY.Y * point2D.Y, baseY.Z * point2D.Y);
+            Vector3D u = new Vector3D(axisY.X * point2D.X, axisY.Y * point2D.X, axisY.Z * point2D.X);
+            Vector3D v = new Vector3D(axisX.X * point2D.Y, axisX.Y * point2D.Y, axisX.Z * point2D.Y);
 
             return new Point3D(Origin.X + u.X + v.X, Origin.Y + u.Y + v.Y, Origin.Z + u.Z + v.Z);
         }
@@ -207,21 +207,21 @@ namespace SAM.Geometry.Spatial
         public Planar.Point2D Convert(Point3D point3D)
         {
             Vector3D vector3D = new Vector3D(point3D.X - origin.X, point3D.Y - origin.Y, point3D.Z - origin.Z);
-            return new Planar.Point2D(axisX.DotProduct(vector3D), AxisY.DotProduct(vector3D));
+            return new Planar.Point2D(AxisX.DotProduct(vector3D), axisY.DotProduct(vector3D));
         }
 
         public Planar.Vector2D Convert(Vector3D vector3D)
         {
             //Vector3D vector3D_Result = new Vector3D(vector3D.X - origin.X, vector3D.Y - origin.Y, vector3D.Z - origin.Z);
-            return new Planar.Vector2D(axisX.DotProduct(vector3D), AxisY.DotProduct(vector3D));
+            return new Planar.Vector2D(AxisX.DotProduct(vector3D), axisY.DotProduct(vector3D));
         }
 
         public Vector3D Convert(Planar.Vector2D vector2D)
         {
-            Vector3D baseY = AxisY;
+            Vector3D axisX = AxisX;
 
-            Vector3D u = new Vector3D(axisX.X * vector2D.X, axisX.Y * vector2D.X, axisX.Z * vector2D.X);
-            Vector3D v = new Vector3D(baseY.X * vector2D.Y, baseY.Y * vector2D.Y, baseY.Z * vector2D.Y);
+            Vector3D u = new Vector3D(axisY.X * vector2D.X, axisY.Y * vector2D.X, axisY.Z * vector2D.X);
+            Vector3D v = new Vector3D(axisX.X * vector2D.Y, axisX.Y * vector2D.Y, axisX.Z * vector2D.Y);
 
             return new Vector3D(u.X + v.X, u.Y + v.Y, u.Z + v.Z);
         }
@@ -466,7 +466,7 @@ namespace SAM.Geometry.Spatial
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             Plane plane = new Plane((Point3D)origin.GetMoved(vector3D), (Vector3D)normal.Clone());
-            plane.axisX = axisX;
+            plane.axisY = axisY;
 
             return plane;
         }
@@ -497,7 +497,7 @@ namespace SAM.Geometry.Spatial
         public void Reverse()
         {
             normal.Negate();
-            axisX.Negate();
+            axisY.Negate();
         }
 
         public override bool FromJObject(JObject jObject)
@@ -505,10 +505,10 @@ namespace SAM.Geometry.Spatial
             origin = new Point3D(jObject.Value<JObject>("Origin"));
             normal = new Vector3D(jObject.Value<JObject>("Normal"));
 
-            if (jObject.ContainsKey("AxisX"))
-                axisX = new Vector3D(jObject.Value<JObject>("AxisX"));
+            if (jObject.ContainsKey("AxisY"))
+                axisY = new Vector3D(jObject.Value<JObject>("AxisY"));
             else
-                axisX = normal.AxisX();
+                axisY = normal.AxisY();
 
             return true;
         }
@@ -521,7 +521,7 @@ namespace SAM.Geometry.Spatial
 
             jObject.Add("Origin", origin.ToJObject());
             jObject.Add("Normal", normal.ToJObject());
-            jObject.Add("AxisX", axisX.ToJObject());
+            jObject.Add("AxisY", axisY.ToJObject());
 
             return jObject;
         }
