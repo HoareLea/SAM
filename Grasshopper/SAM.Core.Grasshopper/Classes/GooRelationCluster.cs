@@ -2,12 +2,10 @@
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using SAM.Core.Grasshopper.Properties;
-using SAM.Core;
-using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 
-namespace SAM.Analytical.Grasshopper.Topologic
+namespace SAM.Core.Grasshopper
 {
     public class GooRelationCluster : GooSAMObject<RelationCluster>
     {
