@@ -38,8 +38,9 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
-            inputParamManager.AddNumberParameter("_offset", "_offset", "Offset", GH_ParamAccess.item, Core.Tolerance.Distance);
+            inputParamManager.AddNumberParameter("_offset_", "_offset_", "Offset", GH_ParamAccess.item, Core.Tolerance.Distance);
             inputParamManager.AddBooleanParameter("_defaultConstruction_", "_defaultConstruction_", "Set default Construtcion for Panels", GH_ParamAccess.item, false);
+            inputParamManager.AddNumberParameter("_tolerance_", "_tolerance_", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
 
@@ -61,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
-            if (!dataAccess.GetData(3, ref run))
+            if (!dataAccess.GetData(4, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -71,6 +72,13 @@ namespace SAM.Analytical.Grasshopper
 
             double offset = Core.Tolerance.Distance;
             if (!dataAccess.GetData(1, ref offset))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            double tolerance = Core.Tolerance.Distance;
+            if (!dataAccess.GetData(3, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -92,7 +100,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> redundantPanels = new List<Panel>();
 
-            panels = Analytical.Query.MergeOverlapPanels(panels, offset, ref redundantPanels, setDefaultConstruction, Core.Tolerance.Distance);
+            panels = Analytical.Query.MergeOverlapPanels(panels, offset, ref redundantPanels, setDefaultConstruction, tolerance);
 
             if (panels != null)
             {
