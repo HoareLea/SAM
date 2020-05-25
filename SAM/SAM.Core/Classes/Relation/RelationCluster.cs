@@ -58,7 +58,7 @@ namespace SAM.Core
         /// <returns>true if objects and relations sucessfully added</returns>
         public bool Add(object object_1, object object_2)
         {
-            if (object_1 == null || object_2 == null)
+            if (!IsValid(object_1) || !IsValid(object_2))
                 return false;
 
             //dictionary_Objects object_1
@@ -111,7 +111,7 @@ namespace SAM.Core
 
         public bool AddRelation(object object_1, object object_2)
         {
-            if (object_1 == null || object_2 == null)
+            if (!IsValid(object_1) || !IsValid(object_2))
                 return false;
 
             Guid guid_1 = GetGuid(object_1);
@@ -161,6 +161,9 @@ namespace SAM.Core
 
         public bool AddObject(object @object)
         {
+            if (!IsValid(@object))
+                return false;
+            
             string typeName = null;
             Guid guid = Guid.Empty;
 
@@ -173,12 +176,7 @@ namespace SAM.Core
                 return false;
 
             foreach(T @object in objects)
-            {
-                if (@object == null)
-                    continue;
-
                 AddObject(@object);
-            }
 
             return true;
         }
@@ -188,7 +186,7 @@ namespace SAM.Core
             typeName = null;
             guid = Guid.Empty;
 
-            if (@object == null)
+            if (!IsValid(@object))
                 return false;
 
             typeName = @object.GetType().FullName;
@@ -223,7 +221,7 @@ namespace SAM.Core
 
         public Guid GetGuid(object @object)
         {
-            if (@object == null)
+            if (!IsValid(@object))
                 return Guid.Empty;
 
             Dictionary<Guid, object> dictionary = dictionary_Objects[@object.GetType().FullName];
@@ -278,7 +276,7 @@ namespace SAM.Core
 
         public List<object> GetObjects(Type type)
         {
-            if (type == null)
+            if (!IsValid(type))
                 return null;
 
             string typeName = type.FullName;
@@ -323,7 +321,10 @@ namespace SAM.Core
 
         public T GetObject<T>(Guid guid)
         {
-           object @object = dictionary_Objects[typeof(T).FullName]?[guid];
+            if (!IsValid(typeof(T)))
+                return default(T);
+            
+            object @object = dictionary_Objects[typeof(T).FullName]?[guid];
             if (@object is T)
                 return (T)@object;
 
@@ -350,7 +351,7 @@ namespace SAM.Core
 
         public List<object> GetRelatedObjects(object @object)
         {
-            if (@object == null)
+            if (!IsValid(@object))
                 return null;
 
             Guid guid = GetGuid(@object);
@@ -386,6 +387,19 @@ namespace SAM.Core
                 return false;
 
             return dictionary_Objects.ContainsKey(type.FullName);
+        }
+
+        public virtual bool IsValid(Type type)
+        {
+            return type != null;
+        }
+
+        public bool IsValid(object @object)
+        {
+            if (@object == null)
+                return false;
+
+            return IsValid(@object.GetType());
         }
 
         public override JObject ToJObject()

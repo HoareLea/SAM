@@ -68,7 +68,6 @@
     <Compile Include="Classes\ApertureConstruction.cs" />
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
-    <Compile Include="Classes\PanelCluster.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\ApertureType.cs" />

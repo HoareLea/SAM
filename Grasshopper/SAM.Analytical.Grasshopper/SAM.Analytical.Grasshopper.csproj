@@ -92,7 +92,6 @@
   <ItemGroup>
     <Compile Include="Classes\GooAperture.cs" />
     <Compile Include="Classes\GooApertureConstruction.cs" />
-    <Compile Include="Classes\GooPanelCluster.cs" />
     <Compile Include="Classes\GooConstruction.cs" />
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
@@ -109,7 +108,6 @@
     <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalRenameConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByElevation.cs" />
-    <Compile Include="Component\SAMAnalyticalCreatePanelCluster.cs" />
     <Compile Include="Component\SAMAnalyticalApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalSetPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalPlanarBoundary3D.cs" />
