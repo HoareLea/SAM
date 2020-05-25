@@ -1,16 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
-        public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this IEnumerable<Spatial.ICurve3D> curve3Ds, bool close)
+        public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this IEnumerable<ICurve3D> curve3Ds, bool close)
         {
-            List<Rhino.Geometry.Point3d> points = curve3Ds.ToList().ConvertAll(x => x.GetEnd().ToRhino());
+            if (curve3Ds == null || curve3Ds.Count() == 0)
+                return null;
+
+            List<Rhino.Geometry.Point3d> points = new List<Rhino.Geometry.Point3d>();
+            points.Add(curve3Ds.First().GetStart().ToRhino());
+
+            points.AddRange(curve3Ds.ToList().ConvertAll(x => x.GetEnd().ToRhino()));
+            
             //TODO: Double Check if this is necessary
             if (close)
-                points.Add(curve3Ds.First().GetEnd().ToRhino());
+                points.Add(curve3Ds.First().GetStart().ToRhino());
+
+            if (points == null || points.Count < 2)
+                return null;
 
             return new Rhino.Geometry.PolylineCurve(points);
         }

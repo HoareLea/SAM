@@ -9,6 +9,16 @@ namespace SAM.Geometry.Grasshopper
     public class SAMGeometryGeometry : GH_SAMComponent
     {
         /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
+
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("111fcc37-a02e-4b5e-aaa5-0988171b6143");
+
+        /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMGeometryGeometry()
@@ -57,27 +67,6 @@ namespace SAM.Geometry.Grasshopper
                 dataAccess.SetDataList(0, (IEnumerable)@object);
             else
                 dataAccess.SetData(0, @object);
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Resources.SAM_Geometry;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("111fcc37-a02e-4b5e-aaa5-0988171b6143"); }
         }
     }
 }

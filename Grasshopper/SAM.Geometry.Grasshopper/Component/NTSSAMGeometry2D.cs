@@ -43,7 +43,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Geometry2Ds", "Geometry2Ds", "SAM Geometry 2D", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Geometry2Ds", "Geometry2Ds", "SAM Geometry 2D", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -54,15 +54,20 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<string> lines_NTS = null;
+            List<string> lines_NTS = new List<string>();
             if (!dataAccess.GetDataList(0, lines_NTS))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
 
-            dataAccess.SetDataList(0, Geometry.Convert.ToSAM(lines_NTS));
+            List<ISAMGeometry2D> geometry2Ds = Geometry.Convert.ToSAM(lines_NTS);
+            if(geometry2Ds == null)
+                dataAccess.SetDataList(0, null);
+            else
+                dataAccess.SetDataList(0, geometry2Ds.ConvertAll(x => new GooSAMGeometry(x)));
+
+
         }
     }
 }

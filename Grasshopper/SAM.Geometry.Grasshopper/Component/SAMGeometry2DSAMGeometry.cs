@@ -25,14 +25,11 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            int index = -1;
-            Param_GenericObject genericObjectParameter = null;
+            inputParamManager.AddParameter(new GooSAMGeometryParam(), "_SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
 
-            inputParamManager.AddGenericParameter("_SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
-
-            index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
-            genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(new Plane()));
+            GooSAMGeometryParam gooSAMGeometryParam = new GooSAMGeometryParam();
+            gooSAMGeometryParam.PersistentData.Append(new GooSAMGeometry(Plane.WorldXY));
+            inputParamManager.AddParameter(gooSAMGeometryParam, "Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -40,7 +37,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("SAMGeometry3D", "SAMgeo3D", "SAM Geometry 3D", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "SAMGeometry3D", "SAMgeo3D", "SAM Geometry 3D", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -51,28 +48,29 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            GH_ObjectWrapper objectWrapper = null;
+            ISAMGeometry sAMGeometry = null;
 
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
+            if (!dataAccess.GetData(0, ref sAMGeometry) || sAMGeometry == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            Planar.ISAMGeometry2D geometry2D = objectWrapper.Value as Planar.ISAMGeometry2D;
+            Planar.ISAMGeometry2D geometry2D = sAMGeometry as Planar.ISAMGeometry2D;
             if (geometry2D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
+            sAMGeometry = null;
+            if (!dataAccess.GetData(1, ref sAMGeometry) || sAMGeometry == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            Plane plane = objectWrapper.Value as Plane;
+            Plane plane = sAMGeometry as Plane;
             if (plane == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

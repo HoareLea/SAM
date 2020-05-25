@@ -248,6 +248,11 @@ namespace SAM.Geometry.Spatial
             return new Planar.Polyline2D(Convert(polyline3D.GetPoints()));
         }
 
+        public Polyline3D Convert(Planar.Polyline2D polyline2D)
+        {
+            return new Polyline3D(Convert(polyline2D.GetPoints()));
+        }
+
         public Planar.Triangle2D Convert(Triangle3D triangle3D)
         {
             List<Point3D> point3Ds = triangle3D.GetPoints();
