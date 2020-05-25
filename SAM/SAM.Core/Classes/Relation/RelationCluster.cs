@@ -380,6 +380,14 @@ namespace SAM.Core
             return result;
         }
 
+        public bool Contains(Type type)
+        {
+            if (type == null)
+                return false;
+
+            return dictionary_Objects.ContainsKey(type.FullName);
+        }
+
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
