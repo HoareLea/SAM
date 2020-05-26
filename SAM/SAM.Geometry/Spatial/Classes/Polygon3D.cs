@@ -22,7 +22,8 @@ namespace SAM.Geometry.Spatial
             if (point3Ds != null)
             {
                 List<Point3D> point3Ds_Temp = new List<Point3D>(point3Ds);
-                if (point3Ds_Temp.First().Distance(point3Ds_Temp.Last()) == 0)
+                //check if points first and last are the same
+                if (point3Ds_Temp.First().Distance(point3Ds_Temp.Last()) <= tolerance)
                     point3Ds_Temp.RemoveAt(point3Ds_Temp.Count - 1);
 
                 plane = Create.Plane(point3Ds_Temp, tolerance);
