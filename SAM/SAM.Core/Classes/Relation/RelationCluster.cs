@@ -287,7 +287,7 @@ namespace SAM.Core
                 return null;
 
             List<object> result = new List<object>();
-            foreach (KeyValuePair<Guid, object> keyValuePair in dictionary_Objects[type.FullName])
+            foreach (KeyValuePair<Guid, object> keyValuePair in dictionary_Objects[typeName])
                 result.Add(keyValuePair.Value);
 
             return result;
