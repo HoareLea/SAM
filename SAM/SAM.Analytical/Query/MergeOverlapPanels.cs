@@ -154,6 +154,8 @@ namespace SAM.Analytical
 
                         Polygon polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon);
                         polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_TopologyPreservingSimplifier(polygon_Temp);
+                        if (polygon_Temp.IsEmpty || !polygon_Temp.IsValid)
+                            continue;
 
                         Face3D face3D = new Face3D(plane, polygon_Temp.ToSAM());
                         Guid guid = panel_Old.Guid;
