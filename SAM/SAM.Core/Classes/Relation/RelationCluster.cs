@@ -363,14 +363,15 @@ namespace SAM.Core
 
             string typeName = @object.GetType().FullName;
 
-            if (!dictionary_Relations.ContainsKey(typeName))
+            Dictionary<Guid, HashSet<Guid>> dictionary = null;
+            if(!dictionary_Relations.TryGetValue(typeName, out dictionary))
                 return null;
 
-            Dictionary<Guid, HashSet<Guid>> dictionary = dictionary_Relations[typeName];
-            if (dictionary == null)
+            HashSet<Guid> guids = null;
+            if (!dictionary.TryGetValue(guid, out guids))
                 return null;
 
-            return GetObjects(dictionary[guid]);
+            return GetObjects(guids);
         }
 
         public List<T> GetRelatedObjects<T>(object @object)
