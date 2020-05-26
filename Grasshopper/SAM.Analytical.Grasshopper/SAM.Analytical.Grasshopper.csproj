@@ -90,6 +90,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GooAdjacencyCluster.cs" />
     <Compile Include="Classes\GooAperture.cs" />
     <Compile Include="Classes\GooApertureConstruction.cs" />
     <Compile Include="Classes\GooConstruction.cs" />

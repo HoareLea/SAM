@@ -81,11 +81,6 @@
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Manager\ActiveSettings.cs" />
-    <Compile Include="Query\ExternalPanel.cs" />
-    <Compile Include="Query\ExternalPanels.cs" />
-    <Compile Include="Query\ShadingPanels.cs" />
-    <Compile Include="Query\ShadingPanel.cs" />
-    <Compile Include="Query\InternalPanel.cs" />
     <Compile Include="Query\Overlap.cs" />
     <Compile Include="Query\OverlapPanels.cs" />
     <Compile Include="Query\TryGetConstruction.cs" />
@@ -101,7 +96,6 @@
     <Compile Include="Query\Construction.cs" />
     <Compile Include="Query\IsValid.cs" />
     <Compile Include="Query\Height.cs" />
-    <Compile Include="Query\InternalPanels.cs" />
     <Compile Include="Query\Width.cs" />
     <Compile Include="Query\MinElevation.cs" />
     <Compile Include="Query\MaxElevation.cs" />
