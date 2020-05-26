@@ -6,22 +6,35 @@ namespace SAM.Geometry
 {
     public static partial class Convert
     {
-        public static List<Face2D> ToSAM(this MultiPolygon multiPolygon, double tolerance = Core.Tolerance.Distance)
+        public static Face2D ToSAM(this Polygon polygon, double tolerance = Core.Tolerance.Distance)
         {
-            if (multiPolygon == null || multiPolygon.IsEmpty)
+            if (polygon == null || polygon.IsEmpty)
                 return null;
 
-            List<Face2D> result = new List<Face2D>();
-            foreach (Polygon polygon in multiPolygon)
-            {
-                Face2D face2D = polygon?.ToSAM(tolerance);
-                if (face2D == null)
-                    continue;
+            LinearRing linearRing = polygon.ExteriorRing as LinearRing;
+            if (linearRing == null)
+                return null;
 
-                result.Add(face2D);
+            List<Polygon2D> polygon2Ds = new List<Polygon2D>();
+
+            LineString[] lineStrings = polygon.InteriorRings;
+            if (lineStrings != null && lineStrings.Length > 0)
+            {
+                foreach (LineString lineString in lineStrings)
+                {
+                    LinearRing linearRing_Temp = lineString as LinearRing;
+                    if (linearRing_Temp == null)
+                        continue;
+
+                    Polygon2D polygon2D = linearRing_Temp.ToSAM(tolerance);
+                    if (polygon2D == null || polygon2D.GetArea() <= tolerance)
+                        continue;
+
+                    polygon2Ds.Add(polygon2D);
+                }
             }
 
-            return result;
+            return Face2D.Create(linearRing.ToSAM(tolerance), polygon2Ds, true);
         }
     }
 }

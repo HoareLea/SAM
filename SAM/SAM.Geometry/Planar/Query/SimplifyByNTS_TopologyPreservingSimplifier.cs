@@ -37,7 +37,7 @@ namespace SAM.Geometry.Planar
             if (face2D == null)
                 return null;
 
-            Polygon polygon = face2D.ToNTS(tolerance);
+            Polygon polygon = ((Face)face2D).ToNTS(tolerance);
 
             polygon = TopologyPreservingSimplifier.Simplify(polygon, tolerance) as Polygon;
 

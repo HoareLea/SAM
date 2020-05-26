@@ -26,11 +26,11 @@ namespace SAM.Geometry.Planar
 
         public static List<Face2D> Snap(this Face2D face2D_1, Face2D face2D_2, double snapDistance, double tolerance = Core.Tolerance.Distance)
         {
-            Polygon polygon_1 = face2D_1?.ToNTS(tolerance);
+            Polygon polygon_1 = Convert.ToNTS(face2D_1 as Face, tolerance);
             if (polygon_1 == null)
                 return null;
 
-            Polygon polygon_2 = face2D_2?.ToNTS(tolerance);
+            Polygon polygon_2 = Convert.ToNTS(face2D_2 as Face, tolerance);
             if (polygon_2 == null)
                 return null;
 
@@ -43,7 +43,7 @@ namespace SAM.Geometry.Planar
 
         public static List<ISAMGeometry2D> Snap(this Face2D face2D_1, Segment2D segment2D, double snapDistance, double tolerance = Core.Tolerance.Distance)
         {
-            Polygon polygon = face2D_1?.ToNTS(tolerance);
+            Polygon polygon = Convert.ToNTS(face2D_1 as Face, tolerance);
             if (polygon == null)
                 return null;
 

@@ -29,19 +29,16 @@ namespace SAM.Geometry.Planar
             if (linearRing == null)
                 return null;
 
-            return linearRing.ToSAM();
+            return linearRing.ToSAM(tolerance);
         }
 
         public static Face2D SimplifyByNTS_Snapper(this Face2D face2D, double tolerance = Tolerance.Distance)
         {
-            if (face2D == null)
-                return null;
-
-            Polygon polygon = face2D.ToNTS(tolerance);
+            Polygon polygon = Convert.ToNTS(face2D as Face, tolerance);
 
             polygon = NetTopologySuite.Operation.Overlay.Snap.GeometrySnapper.SnapToSelf(polygon, tolerance, true) as Polygon;
 
-            return polygon?.ToSAM();
+            return polygon?.ToSAM(tolerance);
         }
     }
 }

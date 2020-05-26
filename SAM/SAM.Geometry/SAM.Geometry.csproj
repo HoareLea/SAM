@@ -79,9 +79,10 @@
     <Compile Include="Convert\ToNTS\Polygons.cs" />
     <Compile Include="Convert\ToNTS\Polygon.cs" />
     <Compile Include="Convert\ToNTS\LineString.cs" />
-    <Compile Include="Convert\ToSAM\Face2Ds.cs" />
-    <Compile Include="Convert\ToSAM\ISAMGeometry2D.cs" />
+    <Compile Include="Convert\ToSAM\Face3D.cs" />
     <Compile Include="Convert\ToSAM\Face2D.cs" />
+    <Compile Include="Convert\ToSAM\ISAMGeometry2D.cs" />
+    <Compile Include="Convert\ToSAM\Face2Ds.cs" />
     <Compile Include="Convert\ToSAM\Polygon2Ds.cs" />
     <Compile Include="Convert\ToSAM\Polyline2Ds.cs" />
     <Compile Include="Convert\ToSAM\Polyline2D.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
     <Compile Include="Spatial\Query\AxisY.cs" />
+    <Compile Include="Spatial\Query\SimplifyByNTS_TopologyPreservingSimplifier.cs" />
     <Compile Include="Spatial\Query\ThinnessRatio.cs" />
     <Compile Include="Spatial\Query\Permieter.cs" />
     <Compile Include="Spatial\Query\AxisX.cs" />
