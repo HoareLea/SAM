@@ -258,7 +258,10 @@ namespace SAM.Core
                 List<Guid> guids_Remove = new List<Guid>();
                 foreach (Guid guid_Temp in guids_Temp)
                 {
-                    object object_Temp = dictionary_Temp[guid_Temp];
+                    object object_Temp = null;
+                    if (!dictionary_Temp.TryGetValue(guid_Temp, out object_Temp))
+                        continue;
+
                     if (object_Temp == null)
                         continue;
 
@@ -359,6 +362,9 @@ namespace SAM.Core
                 return null;
 
             string typeName = @object.GetType().FullName;
+
+            if (!dictionary_Relations.ContainsKey(typeName))
+                return null;
 
             Dictionary<Guid, HashSet<Guid>> dictionary = dictionary_Relations[typeName];
             if (dictionary == null)
