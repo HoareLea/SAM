@@ -27,17 +27,19 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             List<Face3D> result = new List<Face3D>();
-            
-            if (polygon3Ds.Count() == 0)
+
+            List<Polygon3D> polygon3Ds_Temp = new List<Polygon3D>(polygon3Ds);
+            polygon3Ds_Temp.RemoveAll(x => x == null);
+
+            if (polygon3Ds_Temp.Count() == 0)
                 return result;
 
-            if (polygon3Ds.Count() == 1)
+            if (polygon3Ds_Temp.Count() == 1)
             {
-                result.Add(new Face3D(polygon3Ds.First()));
+                result.Add(new Face3D(polygon3Ds_Temp.First()));
                 return result;
             }
 
-            List<Polygon3D> polygon3Ds_Temp = new List<Polygon3D>(polygon3Ds);
             polygon3Ds_Temp.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
             while(polygon3Ds_Temp.Count > 0)
             {
