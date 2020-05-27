@@ -25,7 +25,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreGetValue()
           : base("GetValue", "GetValue",
-              "Get Value of object property",
+              "Get Value of object property, use 'GetNames' component to find out what can be connected here",
               "SAM", "Core")
         {
         }

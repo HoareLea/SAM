@@ -26,7 +26,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreGetNames()
           : base("GetNames", "GetNames",
-              "Get Names of properties from object",
+              "Get Names of properties from SAM object to be used in 'GetValue' to Query possible data from SAM object",
               "SAM", "Core")
         {
         }
