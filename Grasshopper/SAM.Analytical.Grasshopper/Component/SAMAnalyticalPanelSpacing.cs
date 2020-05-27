@@ -73,7 +73,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             double min = Core.Tolerance.Distance;
-            if (!dataAccess.GetData(1, ref min))
+            if (!dataAccess.GetData(2, ref min))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -113,14 +113,14 @@ namespace SAM.Analytical.Grasshopper
                         if (!boundingBox3D.Inside(point3D))
                             continue;
 
-                        double distance = face3D.Distance(point3D);
+                        double distance = face3D.DistanceToEdges(point3D);
                         if (distance < max && distance > min)
                             point3Ds.Add(point3D);
                     }
                 }
             }
 
-            dataAccess.SetData(0, point3Ds.ToList().ConvertAll(x => x.ToRhino()));
+            dataAccess.SetDataList(0, point3Ds.ToList().ConvertAll(x => x.ToRhino()));
         }
     }
 }

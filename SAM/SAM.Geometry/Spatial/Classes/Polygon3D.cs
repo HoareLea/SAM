@@ -75,7 +75,7 @@ namespace SAM.Geometry.Spatial
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            return new BoundingBox3D(GetPoints());
+            return new BoundingBox3D(GetPoints(), offset);
         }
 
         public double GetPerimiter()
