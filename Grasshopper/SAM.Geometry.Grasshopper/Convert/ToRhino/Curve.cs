@@ -14,7 +14,7 @@ namespace SAM.Geometry.Grasshopper
             if (curve3D is Spatial.ICurvable3D)
             {
                 List<Spatial.ICurve3D> curve3Ds = ((Spatial.ICurvable3D)curve3D).GetCurves();
-                return ToRhino_PolylineCurve(curve3Ds, curve3D is Spatial.IClosed3D || curve3Ds.First().GetStart() == curve3Ds.Last().GetEnd());
+                return ToRhino_PolylineCurve(curve3Ds);
             }
 
             return null;

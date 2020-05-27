@@ -6,7 +6,7 @@ namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
-        public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this IEnumerable<ICurve3D> curve3Ds, bool close)
+        public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this IEnumerable<ICurve3D> curve3Ds)
         {
             if (curve3Ds == null || curve3Ds.Count() == 0)
                 return null;
@@ -15,10 +15,7 @@ namespace SAM.Geometry.Grasshopper
             points.Add(curve3Ds.First().GetStart().ToRhino());
 
             points.AddRange(curve3Ds.ToList().ConvertAll(x => x.GetEnd().ToRhino()));
-            
-            //TODO: Double Check if this is necessary
-            if (close)
-                points.Add(curve3Ds.First().GetStart().ToRhino());
+           
 
             if (points == null || points.Count < 2)
                 return null;

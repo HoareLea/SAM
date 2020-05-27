@@ -87,7 +87,7 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                return normal.CrossProduct(axisY);
+                return axisY.CrossProduct(normal);
             }
         }
 
