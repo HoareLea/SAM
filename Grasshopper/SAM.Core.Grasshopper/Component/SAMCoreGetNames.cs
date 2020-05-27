@@ -56,13 +56,6 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            string name = null;
-            if (!dataAccess.GetData(1, ref name) || string.IsNullOrWhiteSpace(name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             GH_ObjectWrapper objectWrapper = null;
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null)
             {
