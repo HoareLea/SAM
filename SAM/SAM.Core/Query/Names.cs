@@ -18,21 +18,21 @@ namespace SAM.Core
             {
                 names = Names_Property(@object);
                 if (names != null && names.Count > 0)
-                    result.AddRange(result);
+                    result.AddRange(names);
             }
 
             if(method)
             {
                 names = Names_Method(@object);
                 if (names != null && names.Count > 0)
-                    result.AddRange(result);
+                    result.AddRange(names);
             }
 
             if(propertySets)
             {
                 names = Names_PropertySets(@object);
                 if (names != null && names.Count > 0)
-                    result.AddRange(result);
+                    result.AddRange(names);
             }
 
             return result;

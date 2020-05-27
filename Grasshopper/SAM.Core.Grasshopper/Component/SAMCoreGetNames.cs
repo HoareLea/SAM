@@ -17,7 +17,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Get;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Names;
 
         private GH_OutputParamManager outputParamManager;
 
@@ -26,7 +26,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreGetNames()
           : base("GetNames", "GetNames",
-              "Get Names of properties from object",
+              "Get Names of properties from SAM object to be used in 'GetValue' to Query possible data from SAM object",
               "SAM", "Core")
         {
         }
@@ -56,13 +56,6 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            string name = null;
-            if (!dataAccess.GetData(1, ref name) || string.IsNullOrWhiteSpace(name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             GH_ObjectWrapper objectWrapper = null;
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null)
             {
