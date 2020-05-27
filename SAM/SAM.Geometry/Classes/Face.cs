@@ -140,6 +140,53 @@ namespace SAM.Geometry
             return null;
         }
 
+        public double Distance(Point2D point2D)
+        {
+            if (point2D == null)
+                return double.NaN;
+
+            if (Inside(point2D))
+                return 0;
+
+            if (!(externalEdge is ISegmentable2D))
+                throw new System.NotImplementedException();
+
+            if (internalEdges != null && internalEdges.Count > 0 && !internalEdges.TrueForAll(x => x is ISegmentable2D))
+                throw new System.NotImplementedException();
+
+            double distance_Min = ((ISegmentable2D)externalEdge).Distance(point2D);
+            if(internalEdges != null && internalEdges.Count > 0)
+            {
+                foreach(ISegmentable2D segmentable2D in internalEdges)
+                {
+                    double distance = segmentable2D.Distance(point2D);
+                    if (distance < distance_Min)
+                        distance_Min = distance;
+                }
+            }
+
+            return distance_Min;
+        }
+
+        public double DistanceToEdges(Point2D point2D)
+        {
+            if (point2D == null)
+                return double.NaN;
+
+            double distance_Min = ((ISegmentable2D)externalEdge).Distance(point2D);
+            if (internalEdges != null && internalEdges.Count > 0)
+            {
+                foreach (ISegmentable2D segmentable2D in internalEdges)
+                {
+                    double distance = segmentable2D.Distance(point2D);
+                    if (distance < distance_Min)
+                        distance_Min = distance;
+                }
+            }
+
+            return distance_Min;
+        }
+
         public bool Inside(Point2D point2D)
         {
             if (internalEdges == null || internalEdges.Count == 0)

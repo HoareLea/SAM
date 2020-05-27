@@ -179,6 +179,40 @@ namespace SAM.Geometry.Spatial
             return plane.Convert(GetInternalPoint2D());
         }
 
+        public double Distance(Point3D point3D)
+        {
+            if (point3D == null)
+                return double.NaN;
+
+            Point3D point3D_Project = plane.Project(point3D);
+
+            Planar.Point2D point2D = plane.Convert(point3D_Project);
+            if (point2D == null)
+                return double.NaN;
+
+            double a = point3D_Project.Distance(point3D);
+            double b = Distance(point2D);
+
+            return System.Math.Sqrt((a * a) + (b * b));
+        }
+
+        public double DistanceToEdges(Point3D point3D)
+        {
+            if (point3D == null)
+                return double.NaN;
+
+            Point3D point3D_Project = plane.Project(point3D);
+
+            Planar.Point2D point2D = plane.Convert(point3D_Project);
+            if (point2D == null)
+                return double.NaN;
+
+            double a = point3D_Project.Distance(point3D);
+            double b = DistanceToEdges(point2D);
+
+            return System.Math.Sqrt((a * a) + (b * b));
+        }
+
 
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges, bool orientInternalEdges = true)
         {
