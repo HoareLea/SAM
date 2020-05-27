@@ -33,7 +33,7 @@ namespace SAM.Geometry.Grasshopper
             if (face3D == null)
                 return null;
 
-            List<Spatial.IClosedPlanar3D> edges = face3D.GetEdges();
+            List<IClosedPlanar3D> edges = face3D.GetEdges();
             if (edges == null || edges.Count == 0)
                 return null;
 
