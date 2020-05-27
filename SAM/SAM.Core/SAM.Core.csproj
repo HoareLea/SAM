@@ -105,6 +105,7 @@
     <Compile Include="Query\Name.cs" />
     <Compile Include="Query\TryGetTypeNameAndAssemblyName.cs" />
     <Compile Include="Query\Tolerance.cs" />
+    <Compile Include="Query\Names.cs" />
     <Compile Include="Query\TryGetValue.cs" />
     <Compile Include="Query\ValidFilePath.cs" />
     <Compile Include="Query\Value.cs" />

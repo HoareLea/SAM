@@ -45,7 +45,7 @@ namespace SAM.Core
             return false;
         }
 
-        public static bool TryGetValue_Property(this object @object, string name, out object value)
+        private static bool TryGetValue_Property(this object @object, string name, out object value)
         {
             value = null;
 
@@ -65,7 +65,7 @@ namespace SAM.Core
             return false;
         }
 
-        public static bool TryGetValue_Method(this object @object, string name, out object value)
+        private static bool TryGetValue_Method(this object @object, string name, out object value)
         {
             value = null;
 
@@ -98,7 +98,7 @@ namespace SAM.Core
             return false;
         }
 
-        public static bool TryGetValue_PropertySets(this object @object, string name, out object value)
+        private static bool TryGetValue_PropertySets(this object @object, string name, out object value)
         {
             value = null;
 
