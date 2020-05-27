@@ -97,6 +97,7 @@
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalPanelSpacing.cs" />
     <Compile Include="Component\SAMAnalyticalPanelDistance.cs" />
     <Compile Include="Component\SAMAnalyticalTransfom.cs" />
     <Compile Include="Component\SAMAnalyticalMergeOverlapPanels.cs" />

@@ -119,6 +119,11 @@ namespace SAM.Geometry.Spatial
         {
         }
 
+        public bool Intersect(BoundingBox3D boundingBox3D)
+        {
+            return (min.X <= boundingBox3D.max.X && max.X >= boundingBox3D.min.X) && (min.Y <= boundingBox3D.max.Y && max.Y >= boundingBox3D.min.Y) && (min.Z <= boundingBox3D.max.Z && max.Z >= boundingBox3D.min.Z);
+        }
+
         public Point3D Min
         {
             get
