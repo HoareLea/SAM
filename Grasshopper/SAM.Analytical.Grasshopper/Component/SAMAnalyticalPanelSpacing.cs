@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
@@ -80,7 +79,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Tuple<Panel, BoundingBox3D, Face3D, List<Point3D>>> tuples = new List<Tuple<Panel, BoundingBox3D, Face3D, List<Point3D>>>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 if (panel == null)
                     continue;
@@ -93,7 +92,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             HashSet<Point3D> point3Ds = new HashSet<Point3D>();
-            foreach(Tuple<Panel, BoundingBox3D, Face3D, List<Point3D>> tuple in tuples)
+            foreach (Tuple<Panel, BoundingBox3D, Face3D, List<Point3D>> tuple in tuples)
             {
                 List<Tuple<Panel, BoundingBox3D, Face3D, List<Point3D>>> tuples_Temp = tuples.FindAll(x => x.Item2.Intersect(tuple.Item2) || x.Item2.Inside(tuple.Item2) || tuple.Item2.Inside(x.Item2));
                 if (tuples_Temp == null || tuples_Temp.Count < 2)
@@ -103,9 +102,9 @@ namespace SAM.Analytical.Grasshopper
 
                 Face3D face3D = tuple.Item3;
                 BoundingBox3D boundingBox3D = tuple.Item2;
-                foreach(Tuple<Panel, BoundingBox3D, Face3D, List<Point3D>> tuple_Temp in tuples_Temp)
+                foreach (Tuple<Panel, BoundingBox3D, Face3D, List<Point3D>> tuple_Temp in tuples_Temp)
                 {
-                    foreach(Point3D point3D in tuple_Temp.Item4)
+                    foreach (Point3D point3D in tuple_Temp.Item4)
                     {
                         if (point3Ds.Contains(point3D))
                             continue;

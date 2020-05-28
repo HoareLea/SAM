@@ -213,7 +213,6 @@ namespace SAM.Geometry.Spatial
             return System.Math.Sqrt((a * a) + (b * b));
         }
 
-
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges, bool orientInternalEdges = true)
         {
             if (edges == null || edges.Count() == 0)

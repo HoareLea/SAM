@@ -41,7 +41,7 @@ namespace SAM.Geometry.Spatial
             }
 
             polygon3Ds_Temp.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
-            while(polygon3Ds_Temp.Count > 0)
+            while (polygon3Ds_Temp.Count > 0)
             {
                 Polygon3D polygon3D = polygon3Ds_Temp.First();
                 Plane plane = polygon3D.GetPlane();
