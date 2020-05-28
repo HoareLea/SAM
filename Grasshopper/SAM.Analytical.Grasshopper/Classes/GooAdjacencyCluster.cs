@@ -202,12 +202,17 @@ namespace SAM.Analytical.Grasshopper
 
         public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
         {
-            throw new NotImplementedException();
+            BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
         }
 
         public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
         {
-            throw new NotImplementedException();
+            foreach (var value in VolatileData.AllData(true))
+            {
+                Guid uuid = default;
+                (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
+                obj_ids.Add(uuid);
+            }
         }
 
         #endregion IGH_PreviewObject

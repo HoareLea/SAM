@@ -1,8 +1,10 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -41,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGeometryParameter("Geometry", "Geometry", "Geometry in GH ie.Surface", GH_ParamAccess.item);
+            outputParamManager.AddGeometryParameter("Geometry", "Geometry", "Geometry in GH ie.Surface", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -59,31 +61,25 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            List<IGH_Goo> result = new List<IGH_Goo>();
+
             if (sAMObject is Panel)
+                result.Add(((Panel)sAMObject).PlanarBoundary3D.ToGrasshopper());
+            else if (sAMObject is Aperture)
+                result.Add(((Aperture)sAMObject).ToGrasshopper());
+            else if (sAMObject is PlanarBoundary3D)
+                result.Add(((PlanarBoundary3D)sAMObject).ToGrasshopper());
+            else if(sAMObject is Space)
+                result.Add(((Space)sAMObject).ToGrasshopper());
+            else if (sAMObject is AdjacencyCluster)
             {
-                dataAccess.SetData(0, ((Panel)sAMObject).PlanarBoundary3D.ToGrasshopper());
-                return;
+                List<GH_Brep> breps = ((AdjacencyCluster)sAMObject).ToGrasshopper();
+                if(breps != null)
+                    result.AddRange(breps);
+
             }
 
-            if (sAMObject is Aperture)
-            {
-                dataAccess.SetData(0, ((Aperture)sAMObject).ToGrasshopper());
-                return;
-            }
-
-            if (sAMObject is PlanarBoundary3D)
-            {
-                dataAccess.SetData(0, ((PlanarBoundary3D)sAMObject).ToGrasshopper());
-                return;
-            }
-
-            if (sAMObject is Space)
-            {
-                dataAccess.SetData(0, ((Space)sAMObject).ToGrasshopper()[0]);
-                return;
-            }
-
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Object");
+            dataAccess.SetDataList(0, result);
         }
     }
 }
