@@ -39,6 +39,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             index = inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
+            index = inputParamManager.AddNumberParameter("_tolerance", "_tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
         }
 
         /// <summary>
@@ -71,20 +72,23 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            double tolerance = double.NaN;
+            if (!dataAccess.GetData(2, ref tolerance))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             List<Panel> result = new List<Panel>();
             foreach (Panel panel in panels)
             {
-                double max = panel.MaxElevation();
                 double min = panel.MinElevation();
 
-                if (System.Math.Abs(min - elevation) < Core.Tolerance.Distance || (min - Core.Tolerance.Distance < elevation && max - Core.Tolerance.Distance > elevation))
+                if (System.Math.Abs(min - elevation) < tolerance)
                     result.Add(panel);
             }
 
-            if (result.Count == 1)
-                dataAccess.SetData(0, new GooPanel(result[0]));
-            else
-                dataAccess.SetDataList(0, result.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(0, result.ConvertAll(x => new GooPanel(x)));
         }
     }
 }
