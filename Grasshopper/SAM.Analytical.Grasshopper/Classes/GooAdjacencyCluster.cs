@@ -1,5 +1,8 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Rhino;
+using Rhino.Display;
+using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -8,7 +11,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooAdjacencyCluster : GooSAMObject<AdjacencyCluster>, IGH_PreviewData
+    public class GooAdjacencyCluster : GooSAMObject<AdjacencyCluster>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooAdjacencyCluster()
             : base()
@@ -77,22 +80,69 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            foreach (Panel panel in Value.GetPanels())
+            DrawViewportMeshes(args, args.Material, Core.Tolerance.Distance);
+        }
+
+        public void DrawViewportMeshes(GH_PreviewMeshArgs args, DisplayMaterial displayMaterial, double tolerance = Core.Tolerance.Distance)
+        {
+            if (Value == null)
+                return;
+            
+            List<Panel> panels = Value.GetPanels();
+            if (panels == null)
+                panels = new List<Panel>();
+
+            List<Space> spaces = Value.GetSpaces();
+            if (spaces != null && spaces.Count > 0)
+            {
+                foreach (Space space in spaces)
+                {
+                    GooSpace gooSpace = new GooSpace(space);
+                    gooSpace.DrawViewportMeshes(args);
+
+                    List<Panel> panels_Related = Value.GetRelatedObjects<Panel>(space);
+                    if (panels_Related == null || panels_Related.Count == 0)
+                        continue;
+
+                    panels.RemoveAll(x => panels_Related.Contains(x));
+                    List<Brep> breps = new List<Brep>();
+                    foreach(Panel panel in panels_Related)
+                    {
+                        Brep brep = panel.ToRhino();
+                        if (brep == null)
+                            continue;
+
+                        breps.Add(brep);
+                    }
+
+                    if (breps == null || breps.Count == 0)
+                        continue;
+
+                    Brep[] breps_Join = Brep.JoinBreps(breps, tolerance);
+
+                    if (breps_Join != null)
+                    {
+                        foreach (Brep brep in breps_Join)
+                            args.Pipeline.DrawBrepShaded(brep, displayMaterial);
+                    }
+                }   
+            }
+
+            foreach (Panel panel in panels)
             {
                 GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(panel.PlanarBoundary3D);
                 gooPlanarBoundary3D.DrawViewportMeshes(args);
             }
+        }
 
-            foreach (Space space in Value.GetSpaces())
-            {
-                GooSpace gooSpace = new GooSpace(space);
-                gooSpace.DrawViewportMeshes(args);
-            }
+        public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
+        {
+            throw new NotImplementedException();
         }
     }
 
     //Params Components -> SAM used for internalizing data
-    public class GooAdjacencyClusterParam : GH_PersistentParam<GooAdjacencyCluster>, IGH_PreviewObject
+    public class GooAdjacencyClusterParam : GH_PersistentParam<GooAdjacencyCluster>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         public override Guid ComponentGuid => new Guid("408ca3f4-0598-4f18-8b25-1f9646c53ef0");
 
@@ -120,9 +170,21 @@ namespace SAM.Analytical.Grasshopper
         bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
         BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
 
+        public bool IsBakeCapable => throw new NotImplementedException();
+
         void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
 
         void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
+
+        public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion IGH_PreviewObject
     }
