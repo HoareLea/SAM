@@ -41,7 +41,7 @@ namespace SAM.Architectural.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooLevelParam(), "Level", "Level", "SAM Architectural Level", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooLevelParam(), "Level", "Level", "SAM Architectural Level", GH_ParamAccess.item);
         }
 
         /// <summary>

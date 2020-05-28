@@ -123,6 +123,7 @@
     <Compile Include="Component\SAMAnalyticalSnapByPoints.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByOffset.cs" />
     <Compile Include="Component\SAMAnalyticalSnapPoints.cs" />
+    <Compile Include="Component\SAMArchitecturalCreateLevels.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToRhino\Breps.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
@@ -143,6 +144,10 @@
       <Project>{b47bad06-8523-455e-acf8-4879d0286ec1}</Project>
       <Name>SAM.Analytical</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SAM\SAM.Architectural\SAM.Architectural.csproj">
+      <Project>{752ad1b6-fd09-4008-b7cc-5fd45fd2f9d9}</Project>
+      <Name>SAM.Architectural</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
       <Project>{1C86B9AC-81B3-41D8-BA48-321F28AB94F4}</Project>
       <Name>SAM.Core</Name>
@@ -154,6 +159,10 @@
     <ProjectReference Include="..\..\SAM\SAM.Math\SAM.Math.csproj">
       <Project>{255e428d-6969-4542-9846-67b7de87501b}</Project>
       <Name>SAM.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Architectural.Grasshopper\SAM.Architectural.Grasshopper.csproj">
+      <Project>{d8b37aba-a2f9-4eb2-9bc6-717bb11f5f47}</Project>
+      <Name>SAM.Architectural.Grasshopper</Name>
     </ProjectReference>
     <ProjectReference Include="..\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj">
       <Project>{ea20d57f-bb3e-447a-80a2-14c04baa665f}</Project>
