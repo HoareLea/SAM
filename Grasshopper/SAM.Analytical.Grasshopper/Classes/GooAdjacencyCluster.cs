@@ -137,7 +137,31 @@ namespace SAM.Analytical.Grasshopper
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            throw new NotImplementedException();
+            obj_guid = Guid.Empty;
+
+            List<Panel> panels = Value?.GetPanels();
+            if (panels == null || panels.Count == 0)
+                return false;
+
+            List<Brep> breps = new List<Brep>();
+            foreach(Panel panel in panels)
+            {
+                Brep brep = panel.ToRhino();
+                if (brep == null)
+                    continue;
+
+                breps.Add(brep);
+            }
+
+            if (breps == null || breps.Count == 0)
+                return false;
+
+            Brep result = Brep.MergeBreps(breps, Core.Tolerance.Distance);
+            if (result == null)
+                return false;
+
+            obj_guid = doc.Objects.AddBrep(result);
+            return true;
         }
     }
 
