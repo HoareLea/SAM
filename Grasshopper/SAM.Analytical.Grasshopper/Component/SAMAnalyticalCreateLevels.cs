@@ -47,7 +47,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new Architectural.Grasshopper.GooLevelParam(), "Levels", "Levels", "SAM Architectural Levels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooLevelParam(), "Levels", "Levels", "SAM Architectural Levels", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Architectural.Level> levels = Create.Levels(panels, tolerance);
             if (levels != null)
-                dataAccess.SetData(0, levels.ConvertAll(x => new GooLevel(x)));
+                dataAccess.SetDataList(0, levels.ConvertAll(x => new GooLevel(x)));
         }
     }
 }

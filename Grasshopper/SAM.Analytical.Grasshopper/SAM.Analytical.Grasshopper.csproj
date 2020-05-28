@@ -123,7 +123,7 @@
     <Compile Include="Component\SAMAnalyticalSnapByPoints.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByOffset.cs" />
     <Compile Include="Component\SAMAnalyticalSnapPoints.cs" />
-    <Compile Include="Component\SAMArchitecturalCreateLevels.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateLevels.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToRhino\Breps.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
