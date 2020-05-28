@@ -106,7 +106,7 @@ namespace SAM.Analytical.Grasshopper
 
             if (geometry3Ds == null || geometry3Ds.Count() == 0)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid data");
                 return;
             }
 
