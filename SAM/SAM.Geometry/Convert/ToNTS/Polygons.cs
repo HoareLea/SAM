@@ -45,22 +45,31 @@ namespace SAM.Geometry
             if(lineStrings_Short != null && lineStrings_Short.Count > 0)
             {
                 lineStrings.RemoveAll(x => lineStrings_Short.Contains(x));
-                foreach (LineString lineString_Short in lineStrings_Short)
+                for (int i = 0; i < lineStrings.Count; i++)
                 {
-                    Coordinate coordinate_Main = lineString_Short[0];
+                    LineString lineString = lineStrings[i];
 
-                    for(int i = 1; i < lineStrings_Short.Count; i++)
+                    bool update = false;
+                    Coordinate[] coordinates = lineString.Coordinates;
+                    foreach(LineString lineString_Short in lineStrings_Short)
                     {
-                        Coordinate coordinate_ToReplace = lineString_Short[i];
-                        foreach (LineString lineString in lineStrings)
+                        Coordinate coordinate_Main = lineString_Short[0];
+                        for (int j = 1; j < lineString_Short.Count; j++)
                         {
-                            for(int j = 0; j < lineString.Count; j++)
+                            Coordinate coordinate_ToReplace = lineString_Short[j];
+                            for (int k = 0; k < coordinates.Length; k++)
                             {
-                                if (lineString[j].Distance(coordinate_ToReplace) <= tolerance)
-                                    lineString[j] = coordinate_Main;
+                                if(coordinates[k].Distance(coordinate_ToReplace) < tolerance)
+                                {
+                                    update = true;
+                                    coordinates[k] = coordinate_Main;
+                                }
                             }
                         }
                     }
+
+                    if (update)
+                        lineStrings[i] = new LineString(coordinates);
                 }
             }
 

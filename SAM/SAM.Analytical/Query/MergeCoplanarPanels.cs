@@ -10,13 +10,13 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             List<Panel> redundantPanels = new List<Panel>();
-            return MergeCoplanarPanels(panels, offset, ref redundantPanels, tolerance);
+            return MergeCoplanarPanels(panels, offset, ref redundantPanels, minArea, tolerance);
         }
 
-        public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
                 return null;
@@ -37,7 +37,7 @@ namespace SAM.Analytical
 
             foreach (PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
             {
-                List<Panel> panels_Temp = MergeCoplanarPanels(dictionary[panelGroup], offset, ref redundantPanels, tolerance);
+                List<Panel> panels_Temp = MergeCoplanarPanels(dictionary[panelGroup], offset, ref redundantPanels, minArea, tolerance);
                 if (panels_Temp != null && panels_Temp.Count > 0)
                     result.AddRange(panels_Temp);
             }
@@ -45,7 +45,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        private static List<Panel> MergeCoplanarPanels(this List<Panel> panels, double offset, ref List<Panel> redundantPanels, double tolerance = Core.Tolerance.Distance)
+        private static List<Panel> MergeCoplanarPanels(this List<Panel> panels, double offset, ref List<Panel> redundantPanels, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
                 return null;
@@ -105,6 +105,9 @@ namespace SAM.Analytical
                 polygons_Temp = Geometry.Planar.Query.Union(polygons_Temp);
                 foreach (Polygon polygon in polygons_Temp)
                 {
+                    if (polygon.Area < minArea)
+                        continue;
+                    
                     List<Tuple<Polygon, Panel>> tuples_Panel = tuples_Polygon.FindAll(x => polygon.Contains(x.Item1.InteriorPoint));
                     if (tuples_Panel == null || tuples_Panel.Count == 0)
                         continue;
@@ -127,7 +130,11 @@ namespace SAM.Analytical
                     Polygon polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon, tolerance);
                     polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_TopologyPreservingSimplifier(polygon_Temp, tolerance);
 
-                    Face3D face3D = new Face3D(plane, polygon_Temp.ToSAM());
+                    Face2D face2D = polygon_Temp.ToSAM(minArea, Core.Tolerance.MicroDistance);
+                    if (face2D == null)
+                        continue;
+
+                    Face3D face3D = new Face3D(plane, face2D);
                     Guid guid = panel_Old.Guid;
                     if (guids.Contains(guid))
                         guid = Guid.NewGuid();
