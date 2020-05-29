@@ -530,5 +530,15 @@ namespace SAM.Geometry.Spatial
 
             return jObject;
         }
+
+        public static bool operator ==(Plane plane_1, Plane plane_2)
+        {
+            return plane_1.origin == plane_2.origin && plane_1.normal == plane_2.normal && plane_1.axisY == plane_2.axisY;
+        }
+
+        public static bool operator !=(Plane plane_1, Plane plane_2)
+        {
+            return plane_1.origin != plane_2.origin || plane_1.normal != plane_2.normal || plane_1.axisY != plane_2.axisY;
+        }
     }
 }

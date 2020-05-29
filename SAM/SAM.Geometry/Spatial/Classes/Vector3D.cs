@@ -384,5 +384,15 @@ namespace SAM.Geometry.Spatial
         {
             return new Vector3D(vector3D.coordinates[0] * factor, vector3D.coordinates[1] * factor, vector3D.coordinates[2] * factor);
         }
+
+        public static bool operator ==(Vector3D vector3D_1, Vector3D vector3D_2)
+        {
+            return vector3D_1?.coordinates[0] == vector3D_2?.coordinates[0] && vector3D_1?.coordinates[1] == vector3D_2?.coordinates[1] && vector3D_1?.coordinates[2] == vector3D_2?.coordinates[2];
+        }
+
+        public static bool operator !=(Vector3D vector3D_1, Vector3D vector3D_2)
+        {
+            return vector3D_1?.coordinates[0] != vector3D_2?.coordinates[0] || vector3D_1?.coordinates[1] != vector3D_2?.coordinates[1] || vector3D_1?.coordinates[2] != vector3D_2?.coordinates[2];
+        }
     }
 }

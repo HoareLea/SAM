@@ -202,5 +202,15 @@ namespace SAM.Geometry.Spatial
 
             return new Segment3D(point3D_1, point3D_2);
         }
+
+        public static bool operator ==(Segment3D segment3D_1, Segment3D segment3D_2)
+        {
+            return segment3D_1.origin == segment3D_2.origin && segment3D_1.vector == segment3D_2.vector;
+        }
+
+        public static bool operator !=(Segment3D segment3D_1, Segment3D segment3D_2)
+        {
+            return segment3D_1.origin != segment3D_2.origin || segment3D_1.vector != segment3D_2.vector;
+        }
     }
 }
