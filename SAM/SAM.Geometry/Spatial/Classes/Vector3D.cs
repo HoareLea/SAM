@@ -387,11 +387,29 @@ namespace SAM.Geometry.Spatial
 
         public static bool operator ==(Vector3D vector3D_1, Vector3D vector3D_2)
         {
+            if (ReferenceEquals(vector3D_1, null) && ReferenceEquals(vector3D_2, null))
+                return true;
+
+            if (ReferenceEquals(vector3D_1, null))
+                return false;
+
+            if (ReferenceEquals(vector3D_2, null))
+                return false;
+
             return vector3D_1?.coordinates[0] == vector3D_2?.coordinates[0] && vector3D_1?.coordinates[1] == vector3D_2?.coordinates[1] && vector3D_1?.coordinates[2] == vector3D_2?.coordinates[2];
         }
 
         public static bool operator !=(Vector3D vector3D_1, Vector3D vector3D_2)
         {
+            if (ReferenceEquals(vector3D_1, null) && ReferenceEquals(vector3D_2, null))
+                return false;
+
+            if (ReferenceEquals(vector3D_1, null))
+                return true;
+
+            if (ReferenceEquals(vector3D_2, null))
+                return true;
+
             return vector3D_1?.coordinates[0] != vector3D_2?.coordinates[0] || vector3D_1?.coordinates[1] != vector3D_2?.coordinates[1] || vector3D_1?.coordinates[2] != vector3D_2?.coordinates[2];
         }
     }

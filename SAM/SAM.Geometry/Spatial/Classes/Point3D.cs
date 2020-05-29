@@ -431,11 +431,29 @@ namespace SAM.Geometry.Spatial
 
         public static bool operator ==(Point3D point3D_1, Point3D point3D_2)
         {
+            if (ReferenceEquals(point3D_1, null) && ReferenceEquals(point3D_2, null))
+                return true;
+
+            if (ReferenceEquals(point3D_1, null))
+                return false;
+
+            if (ReferenceEquals(point3D_2, null))
+                return false;
+
             return point3D_1?.coordinates[0] == point3D_2?.coordinates[0] && point3D_1?.coordinates[1] == point3D_2?.coordinates[1] && point3D_1?.coordinates[2] == point3D_2?.coordinates[2];
         }
 
         public static bool operator !=(Point3D point3D_1, Point3D point3D_2)
         {
+            if (ReferenceEquals(point3D_1, null) && ReferenceEquals(point3D_2, null))
+                return false;
+
+            if (ReferenceEquals(point3D_1, null))
+                return true;
+
+            if (ReferenceEquals(point3D_2, null))
+                return true;
+
             return point3D_1?.coordinates[0] != point3D_2?.coordinates[0] || point3D_1?.coordinates[1] != point3D_2?.coordinates[1] || point3D_1?.coordinates[2] != point3D_2?.coordinates[2];
         }
 
