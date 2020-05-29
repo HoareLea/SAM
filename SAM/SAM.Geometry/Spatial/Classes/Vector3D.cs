@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -44,6 +46,13 @@ namespace SAM.Geometry.Spatial
             this.coordinates[0] = coordinates[0];
             this.coordinates[1] = coordinates[1];
             this.coordinates[2] = coordinates[2];
+        }
+
+        public Vector3D(IEnumerable<double> coordinates)
+        {
+            this.coordinates[0] = coordinates.ElementAt(0);
+            this.coordinates[1] = coordinates.ElementAt(1);
+            this.coordinates[2] = coordinates.ElementAt(2);
         }
 
         public double this[int index]
