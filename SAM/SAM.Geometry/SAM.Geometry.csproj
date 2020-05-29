@@ -122,6 +122,7 @@
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
     <Compile Include="Planar\Modify\InsertClosest.cs" />
     <Compile Include="Planar\Modify\Draw.cs" />
+    <Compile Include="Planar\Modify\Tighten.cs" />
     <Compile Include="Planar\Query\ThinnessRatio.cs" />
     <Compile Include="Planar\Query\Perimeter.cs" />
     <Compile Include="Planar\Query\Snap.cs" />

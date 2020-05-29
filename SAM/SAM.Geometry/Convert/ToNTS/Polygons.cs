@@ -41,37 +41,9 @@ namespace SAM.Geometry
             if (lineStrings == null || lineStrings.Count == 0)
                 return result;
 
-            List<LineString> lineStrings_Short = lineStrings.FindAll(x => x.Length < tolerance && x.Coordinates.Length > 1);
-            if(lineStrings_Short != null && lineStrings_Short.Count > 0)
-            {
-                lineStrings.RemoveAll(x => lineStrings_Short.Contains(x));
-                for (int i = 0; i < lineStrings.Count; i++)
-                {
-                    LineString lineString = lineStrings[i];
-
-                    bool update = false;
-                    Coordinate[] coordinates = lineString.Coordinates;
-                    foreach(LineString lineString_Short in lineStrings_Short)
-                    {
-                        Coordinate coordinate_Main = lineString_Short[0];
-                        for (int j = 1; j < lineString_Short.Count; j++)
-                        {
-                            Coordinate coordinate_ToReplace = lineString_Short[j];
-                            for (int k = 0; k < coordinates.Length; k++)
-                            {
-                                if(coordinates[k].Distance(coordinate_ToReplace) < tolerance)
-                                {
-                                    update = true;
-                                    coordinates[k] = coordinate_Main;
-                                }
-                            }
-                        }
-                    }
-
-                    if (update)
-                        lineStrings[i] = new LineString(coordinates);
-                }
-            }
+            Modify.Tighten(lineStrings, tolerance);
+            if (lineStrings == null || lineStrings.Count == 0)
+                return result;
 
             polygonizer.Add(lineStrings.ToArray());
 
