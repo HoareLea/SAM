@@ -41,6 +41,29 @@ namespace SAM.Geometry
             if (lineStrings == null || lineStrings.Count == 0)
                 return result;
 
+            List<LineString> lineStrings_Short = lineStrings.FindAll(x => x.Length < tolerance && x.Coordinates.Length > 1);
+            if(lineStrings_Short != null && lineStrings_Short.Count > 0)
+            {
+                lineStrings.RemoveAll(x => lineStrings_Short.Contains(x));
+                foreach (LineString lineString_Short in lineStrings_Short)
+                {
+                    Coordinate coordinate_Main = lineString_Short[0];
+
+                    for(int i = 1; i < lineStrings_Short.Count; i++)
+                    {
+                        Coordinate coordinate_ToReplace = lineString_Short[i];
+                        foreach (LineString lineString in lineStrings)
+                        {
+                            for(int j = 0; j < lineString.Count; j++)
+                            {
+                                if (lineString[j].Distance(coordinate_ToReplace) <= tolerance)
+                                    lineString[j] = coordinate_Main;
+                            }
+                        }
+                    }
+                }
+            }
+
             polygonizer.Add(lineStrings.ToArray());
 
             IEnumerable<NetTopologySuite.Geometries.Geometry> geometries_Result = polygonizer.GetPolygons();
@@ -60,9 +83,6 @@ namespace SAM.Geometry
                 if (polygon == null)
                     continue;
 
-                //TODO: Check if native NTS Method works
-                //polygon = Modify.SimplifyByLength(polygon, tolerance, tolerance);
-                //polygon = Planar.Query.SimplifyByNTS_DouglasPeucker(polygon, tolerance);
                 polygon = Planar.Query.SimplifyByNTS_Snapper(polygon, tolerance);
                 if (polygon.Area < tolerance)
                     continue;
