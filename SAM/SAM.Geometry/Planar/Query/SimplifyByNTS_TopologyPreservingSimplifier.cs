@@ -12,7 +12,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             Polygon result = TopologyPreservingSimplifier.Simplify(polygon, tolerance) as Polygon;
-            if (result == null)
+            if (result == null || result.Area <= tolerance)
                 return polygon;
 
             return result;
@@ -26,7 +26,7 @@ namespace SAM.Geometry.Planar
             LinearRing linearRing = ((IClosed2D)polygon2D).ToNTS(tolerance);
 
             linearRing = TopologyPreservingSimplifier.Simplify(linearRing, tolerance) as LinearRing;
-            if (linearRing == null)
+            if (linearRing == null || linearRing.Area <= tolerance)
                 return null;
 
             return linearRing.ToSAM();
@@ -40,8 +40,10 @@ namespace SAM.Geometry.Planar
             Polygon polygon = ((Face)face2D).ToNTS(tolerance);
 
             polygon = TopologyPreservingSimplifier.Simplify(polygon, tolerance) as Polygon;
+            if (polygon == null || polygon.Area <= tolerance)
+                return null;
 
-            return polygon?.ToSAM();
+            return polygon.ToSAM();
         }
     }
 }

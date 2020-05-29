@@ -11,6 +11,9 @@ namespace SAM.Geometry
 
         public Face(IClosed2D closed2D)
         {
+            if (closed2D == null)
+                return;
+            
             if (closed2D is Face)
             {
                 Face face = (Face)closed2D;

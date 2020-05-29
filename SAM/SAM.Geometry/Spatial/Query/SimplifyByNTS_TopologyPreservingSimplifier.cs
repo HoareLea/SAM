@@ -11,11 +11,17 @@ namespace SAM.Geometry.Spatial
             if (face3D == null)
                 return null;
 
+            Plane plane = face3D.GetPlane();
+            if (plane == null)
+                return null;
+
             Polygon polygon = face3D.ToNTS(tolerance);
 
             polygon = TopologyPreservingSimplifier.Simplify(polygon, tolerance) as Polygon;
+            if (polygon.Area <= tolerance)
+                return null;
 
-            return polygon?.ToSAM(face3D.GetPlane(), tolerance);
+            return polygon?.ToSAM(plane, tolerance);
         }
     }
 }
