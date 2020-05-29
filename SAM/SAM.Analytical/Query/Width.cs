@@ -1,4 +1,5 @@
-﻿namespace SAM.Analytical
+﻿
+namespace SAM.Analytical
 {
     public static partial class Query
     {
@@ -9,6 +10,8 @@
             Geometry.Planar.IClosed2D closed2D = planarBoundary3D?.Edge2DLoop?.GetClosed2D();
             if (closed2D == null)
                 return double.NaN;
+
+            Geometry.Spatial.Vector3D vector3D_X = Geometry.Spatial.Vector3D.
 
             return closed2D.GetBoundingBox().Width;
         }

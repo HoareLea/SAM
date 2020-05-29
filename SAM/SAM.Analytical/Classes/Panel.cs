@@ -341,23 +341,23 @@ namespace SAM.Analytical
             if (point3D_ClosedPlanar3D.Distance(point3D_ClosedPlanar3D_Projected) >= maxDistance + tolerance)
                 return null;
 
-            Geometry.Planar.IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
+            IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);
 
             if (minArea != 0 && closed2D_Aperture.GetArea() <= minArea)
                 return null;
 
             Point3D point3D_Location;
-            Geometry.Planar.Point2D point2D_Centroid = closed2D_Aperture.GetCentroid();
+            Point2D point2D_Centroid = closed2D_Aperture.GetCentroid();
             point3D_Location = plane.Convert(point2D_Centroid);
             if (Geometry.Spatial.Query.Vertical(plane, Tolerance.Distance))
                 point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
 
             if (trimGeometry)
             {
-                if (closed2D_Aperture is Geometry.Planar.ISegmentable2D)
+                if (closed2D_Aperture is ISegmentable2D)
                 {
-                    Geometry.Planar.IClosed2D closed2D = plane.Convert(planarBoundary3D.GetFace3D().GetExternalEdge());
-                    if (closed2D is Geometry.Planar.ISegmentable2D)
+                    IClosed2D closed2D = plane.Convert(planarBoundary3D.GetFace3D().GetExternalEdge());
+                    if (closed2D is ISegmentable2D)
                     {
                         if (!closed2D.Inside(closed2D_Aperture))
                         {
@@ -365,13 +365,13 @@ namespace SAM.Analytical
 
                             //List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Modify.Split(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture });
 
-                            List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(new List<Geometry.Planar.ISegmentable2D>() { (Geometry.Planar.ISegmentable2D)closed2D, (Geometry.Planar.ISegmentable2D)closed2D_Aperture }); //new Geometry.Planar.PointGraph2D(segment2Ds).GetPolygon2Ds();
+                            List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(new List<ISegmentable2D>() { (ISegmentable2D)closed2D, (ISegmentable2D)closed2D_Aperture }); //new Geometry.Planar.PointGraph2D(segment2Ds).GetPolygon2Ds();
 
                             if (polygon2Ds != null && polygon2Ds.Count > 0)
                             {
                                 double area_Difference_Min = double.MaxValue;
-                                Geometry.Planar.Polygon2D polygon2D_Min = null;
-                                foreach (Geometry.Planar.Polygon2D polygon2D_Temp in polygon2Ds)
+                                Polygon2D polygon2D_Min = null;
+                                foreach (Polygon2D polygon2D_Temp in polygon2Ds)
                                 {
                                     double area_Temp = polygon2D_Temp.GetArea();
                                     if (minArea != 0 && area_Temp <= minArea)
@@ -382,7 +382,7 @@ namespace SAM.Analytical
                                     if (area_Difference > area_Difference_Min)
                                         continue;
 
-                                    Geometry.Planar.Point2D point2D = polygon2D_Temp.GetInternalPoint2D();
+                                    Point2D point2D = polygon2D_Temp.GetInternalPoint2D();
                                     if (closed2D_Aperture.Inside(point2D) && closed2D.Inside(point2D))
                                     {
                                         point2D_Centroid = Geometry.Planar.Query.Centroid(polygon2D_Temp.Points);
@@ -439,11 +439,11 @@ namespace SAM.Analytical
 
             Plane plane = face3D.GetPlane();
 
-            Geometry.Planar.Polygon2D externalEdge = face3D.ExternalEdge as Geometry.Planar.Polygon2D;
+            Polygon2D externalEdge = face3D.ExternalEdge as Polygon2D;
             if (externalEdge == null)
                 throw new NotImplementedException();
 
-            List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Query.Offset(externalEdge, -distance, tolerance);
+            List<Polygon2D> polygon2Ds = Geometry.Planar.Query.Offset(externalEdge, -distance, tolerance);
             polygon2Ds.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
 
             externalEdge = polygon2Ds.Last();
@@ -459,11 +459,11 @@ namespace SAM.Analytical
 
                 closedPlanar3D = plane.Project(closedPlanar3D);
 
-                Geometry.Planar.Polygon2D externalEdge_Aperture = plane.Convert(closedPlanar3D) as Geometry.Planar.Polygon2D;
+                Polygon2D externalEdge_Aperture = plane.Convert(closedPlanar3D) as Polygon2D;
                 if (externalEdge_Aperture == null)
                     continue;
 
-                List<Geometry.Planar.Point2D> point2Ds_Intersections = Geometry.Planar.Query.Intersections(externalEdge, externalEdge_Aperture);
+                List<Point2D> point2Ds_Intersections = Geometry.Planar.Query.Intersections(externalEdge, externalEdge_Aperture);
                 if (point2Ds_Intersections == null || point2Ds_Intersections.Count == 0)
                     continue;
 
