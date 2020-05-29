@@ -533,11 +533,29 @@ namespace SAM.Geometry.Spatial
 
         public static bool operator ==(Plane plane_1, Plane plane_2)
         {
+            if (ReferenceEquals(plane_1, null) && ReferenceEquals(plane_2, null))
+                return true;
+
+            if (ReferenceEquals(plane_1, null))
+                return false;
+
+            if (ReferenceEquals(plane_2, null))
+                return false;
+
             return plane_1.origin == plane_2.origin && plane_1.normal == plane_2.normal && plane_1.axisY == plane_2.axisY;
         }
 
         public static bool operator !=(Plane plane_1, Plane plane_2)
         {
+            if (ReferenceEquals(plane_1, null) && ReferenceEquals(plane_2, null))
+                return false;
+
+            if (ReferenceEquals(plane_1, null))
+                return true;
+
+            if (ReferenceEquals(plane_2, null))
+                return true;
+
             return plane_1.origin != plane_2.origin || plane_1.normal != plane_2.normal || plane_1.axisY != plane_2.axisY;
         }
     }
