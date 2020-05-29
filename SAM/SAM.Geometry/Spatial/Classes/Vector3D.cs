@@ -236,6 +236,19 @@ namespace SAM.Geometry.Spatial
             return (System.Math.PI / 2) - Angle(plane.Normal);
         }
 
+        public Point3D Project(Point3D point3D)
+        {
+            if (point3D == null)
+                return null;
+            
+            return (this * (DotProduct(point3D.ToVector3D()))).ToPoint3D();
+        }
+
+        public Point3D ToPoint3D()
+        {
+            return new Point3D(coordinates[0], coordinates[1], coordinates[2]);
+        }
+
         public Math.Matrix GetArgumentedMatrix()
         {
             return new Math.Matrix(new double[,] { { coordinates[0] }, { coordinates[1] }, { coordinates[2] }, { 0 } });
