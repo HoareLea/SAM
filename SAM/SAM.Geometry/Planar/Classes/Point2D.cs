@@ -194,6 +194,23 @@ namespace SAM.Geometry.Planar
             coordinates[1] = point2D.coordinates[1] + vector[1];
         }
 
+        public void Scale(double factor)
+        {
+            if (factor == 1)
+                return;
+
+            coordinates[0] = coordinates[0] * factor;
+            coordinates[1] = coordinates[1] * factor;
+        }
+
+        public Point2D GetScaled(double factor)
+        {
+            Point2D point2D = new Point2D(this);
+
+            point2D.Scale(factor);
+            return point2D;
+        }
+
         public override bool Equals(object obj)
         {
             if (!(obj is Point2D))
