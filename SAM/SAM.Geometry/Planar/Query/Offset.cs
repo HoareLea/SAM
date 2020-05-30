@@ -63,9 +63,12 @@ namespace SAM.Geometry.Planar
             return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
         }
 
-        public static List<Polygon2D> Offset(this Polygon2D polygon2D, double offset, bool inside, bool simplify = true, bool orient = true, double tolerance = Core.Tolerance.Distance)
+        public static List<Polygon2D> Offset(this Polygon2D polygon2D, double offset, bool inside, double tolerance = Core.Tolerance.Distance)
         {
-            return Offset(polygon2D, new double[] { offset }, inside, simplify, orient, tolerance);
+            if (inside && offset > 0)
+                offset = -offset;
+
+            return Offset(polygon2D, offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
         }
 
         public static List<Polyline2D> Offset(this Polyline2D polyline2D, double offset, Orientation orientation, double tolerance = Core.Tolerance.Distance)
@@ -81,12 +84,19 @@ namespace SAM.Geometry.Planar
             if (offsets.Count() < 1)
                 return null;
 
+            if (offsets.Count() == 1)
+                return Offset(polygon2D, offsets.First(), inside, tolerance);
+
+
             int count = polygon2D.Count;
 
             List<double> offsets_Temp = new List<double>(offsets);
             double offset_Temp = offsets.Last();
             while (offsets_Temp.Count < count)
                 offsets_Temp.Add(offset_Temp);
+
+            if(offsets_Temp.TrueForAll(x => System.Math.Abs(offsets_Temp.First() - x) <= tolerance ))
+                return Offset(polygon2D, offsets.First(), inside, tolerance);
 
             if (inside)
                 return Offset_Inside(polygon2D, offsets_Temp, simplify, orient, tolerance);
