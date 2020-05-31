@@ -74,5 +74,15 @@ namespace SAM.Geometry.Planar
 
             return Draw(graphics, pen, segmentable2D.GetSegments());
         }
+
+        public static bool Draw(this Graphics graphics, Pen pen, Polyline2D polyline2D)
+        {
+            return Draw(graphics, pen, polyline2D as ISegmentable2D);
+        }
+
+        public static bool Draw(this Graphics graphics, Pen pen, Polygon2D polygon2D)
+        {
+            return Draw(graphics, pen, polygon2D as ISegmentable2D);
+        }
     }
 }
