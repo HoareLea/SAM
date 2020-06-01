@@ -12,5 +12,13 @@
 
             return new Vector3D(normal.Y, -normal.X, 0).Unit;
         }
+
+        public static Vector3D AxisX(this Vector3D normal, Vector3D axisY)
+        {
+            if (normal == null || axisY == null)
+                return null;
+
+            return normal.CrossProduct(axisY).Unit;
+        }
     }
 }

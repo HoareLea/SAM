@@ -10,7 +10,7 @@
             if (closed2D == null)
                 return double.NaN;
 
-            return closed2D.GetBoundingBox().Width;
+            return closed2D.GetBoundingBox().Height;
         }
     }
 }
