@@ -7,6 +7,8 @@
             if (normal == null)
                 return null;
 
+            return AxisX(normal).CrossProduct(normal);
+
             if (normal.X == 0 && normal.Y == 0)
                 return new Vector3D(0, 1, 0);
 
