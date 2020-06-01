@@ -205,11 +205,29 @@ namespace SAM.Geometry.Spatial
 
         public static bool operator ==(Segment3D segment3D_1, Segment3D segment3D_2)
         {
+            if (ReferenceEquals(segment3D_1, null) && ReferenceEquals(segment3D_2, null))
+                return true;
+
+            if (ReferenceEquals(segment3D_1, null))
+                return false;
+
+            if (ReferenceEquals(segment3D_2, null))
+                return false;
+
             return segment3D_1.origin == segment3D_2.origin && segment3D_1.vector == segment3D_2.vector;
         }
 
         public static bool operator !=(Segment3D segment3D_1, Segment3D segment3D_2)
         {
+            if (ReferenceEquals(segment3D_1, null) && ReferenceEquals(segment3D_2, null))
+                return false;
+
+            if (ReferenceEquals(segment3D_1, null))
+                return true;
+
+            if (ReferenceEquals(segment3D_2, null))
+                return true;
+
             return segment3D_1.origin != segment3D_2.origin || segment3D_1.vector != segment3D_2.vector;
         }
     }
