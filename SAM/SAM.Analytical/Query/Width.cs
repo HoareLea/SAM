@@ -11,9 +11,7 @@ namespace SAM.Analytical
             if (closed2D == null)
                 return double.NaN;
 
-            //Geometry.Spatial.Vector3D vector3D_X = Geometry.Spatial.Vector3D.
-
-            return closed2D.GetBoundingBox().Height;
+            return closed2D.GetBoundingBox().Width;
         }
     }
 }
