@@ -17,6 +17,9 @@
                 case Analytical.PanelType.FloorExposed:
                 case Analytical.PanelType.FloorInternal:
                 case Analytical.PanelType.FloorRaised:
+                case Analytical.PanelType.SlabOnGrade:
+                case Analytical.PanelType.UndergroundSlab:
+                case Analytical.PanelType.UndergroundCeiling:
                     return Analytical.PanelGroup.Floor;
 
                 case Analytical.PanelType.Roof:
