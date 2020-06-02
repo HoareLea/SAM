@@ -365,5 +365,33 @@ namespace SAM.Geometry.Spatial
         {
             return Query.On(this, point3D, tolerance);
         }
+
+        public static bool operator ==(BoundingBox3D boundingBox3D_1, BoundingBox3D boundingBox3D_2)
+        {
+            if (ReferenceEquals(boundingBox3D_1, null) && ReferenceEquals(boundingBox3D_2, null))
+                return true;
+
+            if (ReferenceEquals(boundingBox3D_1, null))
+                return false;
+
+            if (ReferenceEquals(boundingBox3D_2, null))
+                return false;
+
+            return boundingBox3D_1.min == boundingBox3D_2.min && boundingBox3D_1.max == boundingBox3D_2.max;
+        }
+
+        public static bool operator !=(BoundingBox3D boundingBox3D_1, BoundingBox3D boundingBox3D_2)
+        {
+            if (ReferenceEquals(boundingBox3D_1, null) && ReferenceEquals(boundingBox3D_2, null))
+                return false;
+
+            if (ReferenceEquals(boundingBox3D_1, null))
+                return true;
+
+            if (ReferenceEquals(boundingBox3D_2, null))
+                return true;
+
+            return boundingBox3D_1.min != boundingBox3D_2.min || boundingBox3D_1.max != boundingBox3D_2.max;
+        }
     }
 }

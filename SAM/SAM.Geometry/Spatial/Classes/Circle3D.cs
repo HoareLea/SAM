@@ -125,5 +125,33 @@ namespace SAM.Geometry.Spatial
 
             return jObject;
         }
+
+        public static bool operator ==(Circle3D circle3D_1, Circle3D circle3D_2)
+        {
+            if (ReferenceEquals(circle3D_1, null) && ReferenceEquals(circle3D_2, null))
+                return true;
+
+            if (ReferenceEquals(circle3D_1, null))
+                return false;
+
+            if (ReferenceEquals(circle3D_2, null))
+                return false;
+
+            return circle3D_1.plane == circle3D_2.plane && circle3D_1.radious == circle3D_2.radious;
+        }
+
+        public static bool operator !=(Circle3D circle3D_1, Circle3D circle3D_2)
+        {
+            if (ReferenceEquals(circle3D_1, null) && ReferenceEquals(circle3D_2, null))
+                return false;
+
+            if (ReferenceEquals(circle3D_1, null))
+                return true;
+
+            if (ReferenceEquals(circle3D_2, null))
+                return true;
+
+            return circle3D_1.plane != circle3D_2.plane || circle3D_1.radious != circle3D_2.radious;
+        }
     }
 }
