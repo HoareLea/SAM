@@ -160,7 +160,6 @@
     <Compile Include="Spatial\Query\Permieter.cs" />
     <Compile Include="Spatial\Query\AxisX.cs" />
     <Compile Include="Spatial\Query\Angle.cs" />
-    <Compile Include="Spatial\Query\Convert.cs" />
     <Compile Include="Spatial\Query\Transform.cs" />
     <Compile Include="Spatial\Query\Overlap.cs" />
     <Compile Include="Spatial\Query\ExtremePoints.cs" />

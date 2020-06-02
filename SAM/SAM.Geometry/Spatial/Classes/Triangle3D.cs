@@ -125,5 +125,59 @@ namespace SAM.Geometry.Spatial
         {
             return Query.On(this, point3D, tolerance);
         }
+
+        public static bool operator ==(Triangle3D triangle3D_1, Triangle3D triangle3D_2)
+        {
+            if (ReferenceEquals(triangle3D_1, null) && ReferenceEquals(triangle3D_2, null))
+                return true;
+
+            if (ReferenceEquals(triangle3D_1, null))
+                return false;
+
+            if (ReferenceEquals(triangle3D_2, null))
+                return false;
+
+            if (triangle3D_1.points == null && triangle3D_2.points == null)
+                return true;
+
+            if (triangle3D_1.points == null || triangle3D_2.points == null)
+                return false;
+
+            if (triangle3D_1.points.Length != triangle3D_2.points.Length)
+                return false;
+
+            for (int i = 0; i < triangle3D_1.points.Length; i++)
+                if (triangle3D_1.points[i] != triangle3D_2.points[i])
+                    return false;
+
+            return true;
+        }
+
+        public static bool operator !=(Triangle3D triangle3D_1, Triangle3D triangle3D_2)
+        {
+            if (ReferenceEquals(triangle3D_1, null) && ReferenceEquals(triangle3D_2, null))
+                return false;
+
+            if (ReferenceEquals(triangle3D_1, null))
+                return true;
+
+            if (ReferenceEquals(triangle3D_2, null))
+                return true;
+
+            if (triangle3D_1.points == null && triangle3D_2.points == null)
+                return false;
+
+            if (triangle3D_1.points == null || triangle3D_2.points == null)
+                return true;
+
+            if (triangle3D_1.points.Length != triangle3D_2.points.Length)
+                return true;
+
+            for (int i = 0; i < triangle3D_1.points.Length; i++)
+                if (triangle3D_1.points[i] != triangle3D_2.points[i])
+                    return true;
+
+            return false;
+        }
     }
 }
