@@ -82,6 +82,7 @@
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Manager\ActiveSettings.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Query\Text.cs" />
     <Compile Include="Query\Overlap.cs" />
     <Compile Include="Query\OverlapPanels.cs" />
     <Compile Include="Query\TryGetConstruction.cs" />

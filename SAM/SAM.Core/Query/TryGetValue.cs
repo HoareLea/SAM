@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core
@@ -41,6 +42,26 @@ namespace SAM.Core
 
             if (TryGetValue_PropertySets(@object, name, out value))
                 return true;
+
+            return false;
+        }
+
+        public static bool TryGetValue<T>(this object @object, string name, out T value)
+        {
+            value = default(T);
+
+            object object_value = null;
+            if (!TryGetValue(@object, name, out object_value))
+                return false;
+
+            if (object_value == null)
+                return Nullable.GetUnderlyingType(typeof(T)) != null;
+
+            if(typeof(T).IsAssignableFrom(object_value.GetType()))
+            {
+                value = (T)object_value;
+                return true;
+            }
 
             return false;
         }

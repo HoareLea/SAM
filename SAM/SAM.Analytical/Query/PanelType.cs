@@ -51,15 +51,21 @@ namespace SAM.Analytical
             return Analytical.PanelType.Roof;
         }
 
-        public static PanelType PanelType(string constructionName)
+        public static PanelType PanelType(string text)
         {
-            if (string.IsNullOrWhiteSpace(constructionName))
+            if (string.IsNullOrWhiteSpace(text))
                 return Analytical.PanelType.Undefined;
-
-            foreach(PanelType panelType in Enum.GetValues(typeof(PanelType)))
+            
+            foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
             {
-                Construction construction = Query.Construction(panelType);
-                if (construction != null && construction.Name.Equals(constructionName))
+                string value = null;
+
+                value = Construction(panelType)?.Name;
+                if (text.Equals(value))
+                    return panelType;
+
+                value = Text(panelType);
+                if (text.Equals(value))
                     return panelType;
             }
 
