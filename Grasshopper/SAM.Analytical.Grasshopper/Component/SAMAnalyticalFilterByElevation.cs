@@ -83,9 +83,15 @@ namespace SAM.Analytical.Grasshopper
             foreach (Panel panel in panels)
             {
                 double min = panel.MinElevation();
+                double max = panel.MaxElevation();
 
-                if (System.Math.Abs(min - elevation) < tolerance)
+                if(min - tolerance <= elevation && max + tolerance >= elevation)
+                {
+                    if (System.Math.Abs(max - elevation) < elevation)
+                        continue;
+
                     result.Add(panel);
+                }
             }
 
             dataAccess.SetDataList(0, result.ConvertAll(x => new GooPanel(x)));
