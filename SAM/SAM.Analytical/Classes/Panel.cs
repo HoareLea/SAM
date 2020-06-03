@@ -286,9 +286,33 @@ namespace SAM.Analytical
                 foreach(Aperture aperture in apertures)
                 {
                     Plane plane_Aperture_Before = aperture.Plane;
-
+                    
+                    //Option 1
                     Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Aperture_Before, plane_Panel_Before);
                     transform3D_Aperture = transform3D_Aperture * transform3D;
+
+                    //Option 2
+                    //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Panel_Before, plane_Aperture_Before);
+                    //transform3D_Aperture = transform3D_Aperture * transform3D;
+
+                    //Option 3
+                    //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Aperture_Before, plane_Panel_Before);
+                    //transform3D_Aperture = transform3D * transform3D_Aperture;
+
+                    //Option 4
+                    //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Panel_Before, plane_Aperture_Before);
+                    //transform3D_Aperture = transform3D * transform3D_Aperture;
+
+                    //Option 5
+                    //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Aperture_Before, plane_Panel_Before);
+                    //transform3D_Aperture.Inverse();
+                    //transform3D_Aperture = transform3D_Aperture * transform3D;
+
+                    //Option 6
+                    //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Aperture_Before, plane_Panel_Before);
+                    //transform3D_Aperture.Inverse();
+                    //transform3D_Aperture = transform3D * transform3D_Aperture;
+
                     //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(aperture.Plane, plane);
                     //aperture.Transform(transform3D_Aperture);
                     aperture.Transform(transform3D_Aperture);
