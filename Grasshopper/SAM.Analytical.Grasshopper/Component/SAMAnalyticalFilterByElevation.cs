@@ -87,7 +87,7 @@ namespace SAM.Analytical.Grasshopper
 
                 if(min - tolerance <= elevation && max + tolerance >= elevation)
                 {
-                    if (System.Math.Abs(max - elevation) < elevation)
+                    if (System.Math.Abs(max - min) >  tolerance && System.Math.Abs(max - elevation) < tolerance)
                         continue;
 
                     result.Add(panel);
