@@ -21,7 +21,7 @@
 
             if (closed2D is ISegmentable2D)
             {
-                Rectangle2D rectangle2D = Planar.Point2D.GetRectangle2D(((ISegmentable2D)closed2D).GetPoints());
+                Rectangle2D rectangle2D = Create.Rectangle2D(((ISegmentable2D)closed2D).GetPoints());
 
                 return System.Math.Abs(closed2D.GetArea() - rectangle2D.GetArea()) < tolerance;
             }

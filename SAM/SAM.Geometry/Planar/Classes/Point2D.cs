@@ -440,33 +440,6 @@ namespace SAM.Geometry.Planar
             return new Point2D((point2D_1.X + point2D_2.X) / 2, (point2D_1.Y + point2D_2.Y) / 2);
         }
 
-        public static double GetMaxDistance(IEnumerable<Point2D> point2Ds, out Point2D point2D_1, out Point2D point2D_2)
-        {
-            int aCount = point2Ds.Count();
-
-            double aDistance = double.MinValue;
-            point2D_1 = null;
-            point2D_2 = null;
-
-            for (int i = 0; i < aCount; i++)
-            {
-                Point2D point2D_Temp_1 = point2Ds.ElementAt(i);
-                for (int j = 0; j < aCount - 1; j++)
-                {
-                    Point2D point2D_Temp_2 = point2Ds.ElementAt(j);
-                    double aDistance_Temp = point2D_Temp_1.Distance(point2D_Temp_2);
-                    if (aDistance_Temp > aDistance)
-                    {
-                        aDistance = aDistance_Temp;
-                        point2D_1 = point2D_Temp_1;
-                        point2D_2 = point2D_Temp_2;
-                    }
-                }
-            }
-
-            return aDistance;
-        }
-
         public static bool Add(List<Point2D> point2Ds, Point2D point2D, double offset = 0)
         {
             if (point2Ds == null || point2D == null)
@@ -487,21 +460,6 @@ namespace SAM.Geometry.Planar
 
             point2Ds.Add(point2D);
             return true;
-        }
-
-        public static double GetArea(IEnumerable<Point2D> point2Ds)
-        {
-            if (point2Ds == null)
-                return double.NaN;
-
-            if (point2Ds.Count() < 3)
-                return 0;
-
-            List<Point2D> point2DList = new List<Point2D>(point2Ds);
-            if (!point2DList[point2DList.Count - 1].Equals(point2DList[0]))
-                point2DList.Add(point2DList[0]);
-
-            return System.Math.Abs(point2Ds.Take(point2DList.Count - 1).Select((p, i) => (point2DList[i + 1].X - p.X) * (point2DList[i + 1].Y + p.Y)).Sum() / 2);
         }
 
         public static bool Contains(IEnumerable<Point2D> point2Ds, Point2D point2D, double tolerance = 0)
@@ -637,92 +595,6 @@ namespace SAM.Geometry.Planar
             aResult[count] = new Point2D(point2D_2);
 
             return aResult;
-        }
-
-        public static Rectangle2D GetRectangle2D(IEnumerable<Point2D> point2Ds, Vector2D direction)
-        {
-            if (point2Ds == null || direction == null || point2Ds.Count() < 2)
-                return null;
-
-            Vector2D direction_Height = new Vector2D(direction);
-            direction_Height = direction_Height.Unit;
-            Vector2D direction_Width = direction_Height.GetPerpendicular();
-
-            List<Point2D> point2DList_Height = new List<Point2D>();
-            List<Point2D> point2DList_Width = new List<Point2D>();
-
-            foreach (Point2D point2D in point2Ds)
-            {
-                point2DList_Height.Add(direction_Height.Project(point2D));
-                point2DList_Width.Add(direction_Width.Project(point2D));
-            }
-
-            Point2D point2D_1_Height = null;
-            Point2D point2D_2_Height = null;
-            double aHeight = GetMaxDistance(point2DList_Height, out point2D_1_Height, out point2D_2_Height);
-            if (point2D_1_Height == null || point2D_2_Height == null)
-                return null;
-
-            Point2D point2D_1_Width = null;
-            Point2D point2D_2_Width = null;
-            double aWidth = GetMaxDistance(point2DList_Width, out point2D_1_Width, out point2D_2_Width);
-            if (point2D_1_Width == null || point2D_2_Width == null)
-                return null;
-
-            Segment2D segment2D_Height = new Segment2D(point2D_1_Height, point2D_2_Height);
-            Segment2D segment2D_Width = new Segment2D(point2D_1_Width, point2D_2_Width);
-
-            if (!segment2D_Height.Direction.AlmostEqual(direction_Height))
-                segment2D_Height.Reverse();
-
-            if (!segment2D_Width.Direction.AlmostEqual(direction_Width))
-                segment2D_Width.Reverse();
-
-            Point2D point2D_Temp = segment2D_Height[0];
-            segment2D_Height.MoveTo(segment2D_Width[0]);
-            segment2D_Width.MoveTo(point2D_Temp);
-
-            Point2D point2D_Closest1 = null;
-            Point2D point2D_Closest2 = null;
-
-            Point2D point2D_Intersection = segment2D_Height.Intersection(segment2D_Width, out point2D_Closest1, out point2D_Closest2);
-            if (point2D_Intersection == null)
-                return null;
-
-            return new Rectangle2D(point2D_Intersection, aWidth, aHeight, direction_Height);
-        }
-
-        public static Rectangle2D GetRectangle2D(IEnumerable<Point2D> point2Ds)
-        {
-            if (point2Ds == null || point2Ds.Count() < 2)
-                return null;
-
-            List<Point2D> point2Ds_ConvexHull = Query.ConvexHull(point2Ds);
-
-            double area = double.MaxValue;
-            Rectangle2D rectangle = null;
-
-            Vector2D vector2D = Vector2D.WorldY;
-
-            HashSet<double> angleHashSet = new HashSet<double>();
-            for (int i = 0; i < point2Ds_ConvexHull.Count - 1; i++)
-            {
-                Vector2D direction = new Vector2D(point2Ds_ConvexHull[i], point2Ds_ConvexHull[i + 1]);
-                double angle = direction.Angle(vector2D);
-                if (!angleHashSet.Contains(angle))
-                {
-                    angleHashSet.Add(angle);
-                    Rectangle2D rectangle_Temp = GetRectangle2D(point2Ds_ConvexHull, direction);
-                    double aArea_Temp = rectangle_Temp.GetArea();
-                    if (aArea_Temp < area)
-                    {
-                        area = aArea_Temp;
-                        rectangle = rectangle_Temp;
-                    }
-                }
-            }
-
-            return rectangle;
         }
 
         public static List<Point2D> Clone(IEnumerable<Point2D> point2Ds)

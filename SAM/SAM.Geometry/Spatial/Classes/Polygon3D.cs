@@ -127,7 +127,7 @@ namespace SAM.Geometry.Spatial
             if (points == null || points.Count < 3)
                 return 0;
 
-            return Planar.Point2D.GetArea(points);
+            return Planar.Query.Area(points);
         }
 
         public bool Inside(Polygon3D polygon3D, double tolerance = Core.Tolerance.Distance)

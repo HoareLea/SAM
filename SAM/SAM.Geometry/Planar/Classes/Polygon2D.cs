@@ -135,7 +135,7 @@ namespace SAM.Geometry.Planar
 
         public double GetArea()
         {
-            return Point2D.GetArea(points);
+            return Query.Area(points);
         }
 
         public override bool FromJObject(JObject jObject)

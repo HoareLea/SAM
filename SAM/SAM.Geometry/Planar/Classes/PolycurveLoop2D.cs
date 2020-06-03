@@ -29,7 +29,7 @@ namespace SAM.Geometry.Planar
                 return 0;
 
             if (curves.TrueForAll(x => x is Segment2D))
-                return Point2D.GetArea(curves.ConvertAll(x => x.GetStart()));
+                return Query.Area(curves.ConvertAll(x => x.GetStart()));
 
             throw new NotImplementedException();
         }

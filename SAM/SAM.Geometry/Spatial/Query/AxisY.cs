@@ -7,12 +7,20 @@
             if (normal == null)
                 return null;
 
-            return AxisX(normal).CrossProduct(normal).Unit;
+            return AxisX(normal, AxisX(normal));
 
             //if (normal.X == 0 && normal.Y == 0)
             //    return new Vector3D(0, 1, 0);
 
             //return new Vector3D(-normal.Y, normal.X, 0).Unit;
+        }
+
+        public static Vector3D AxisY(this Vector3D normal, Vector3D axisX)
+        {
+            if (normal == null || axisX == null)
+                return null;
+
+            return axisX.CrossProduct(normal).Unit;
         }
     }
 }

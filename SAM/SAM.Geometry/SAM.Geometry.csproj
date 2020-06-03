@@ -105,6 +105,7 @@
     <Compile Include="Planar\Classes\Polycurve2D.cs" />
     <Compile Include="Planar\Classes\PolycurveLoop2D.cs" />
     <Compile Include="Planar\Classes\Polyline2D.cs" />
+    <Compile Include="Planar\Create\Rectangle2D.cs" />
     <Compile Include="Planar\Create\Polyline2D.cs" />
     <Compile Include="Planar\Create\Point2Ds.cs" />
     <Compile Include="Planar\Create\Polygon2Ds.cs" />
@@ -124,6 +125,8 @@
     <Compile Include="Planar\Modify\Draw.cs" />
     <Compile Include="Planar\Modify\Scale.cs" />
     <Compile Include="Planar\Modify\Tighten.cs" />
+    <Compile Include="Planar\Query\Area.cs" />
+    <Compile Include="Planar\Query\MaxDistance.cs" />
     <Compile Include="Planar\Query\Scale.cs" />
     <Compile Include="Planar\Query\ThinnessRatio.cs" />
     <Compile Include="Planar\Query\Perimeter.cs" />

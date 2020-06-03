@@ -34,7 +34,7 @@ namespace SAM.Geometry.Planar
 
         public double GetArea()
         {
-            return Point2D.GetArea(points);
+            return Query.Area(points);
             //0.5 * [x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)]
         }
 
@@ -55,7 +55,7 @@ namespace SAM.Geometry.Planar
 
         public Rectangle2D GetMinRectangle()
         {
-            return Point2D.GetRectangle2D(points);
+            return Create.Rectangle2D(points);
         }
 
         public double GetPerimeter()
