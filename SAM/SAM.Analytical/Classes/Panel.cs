@@ -274,18 +274,24 @@ namespace SAM.Analytical
 
         public void Transform(Transform3D transform3D)
         {
+            Plane plane_Panel_Before = planarBoundary3D.Plane;
+
             if (planarBoundary3D != null)
                 planarBoundary3D.Transform(transform3D);
 
-            //Plane plane = planarBoundary3D.Plane;
+            //Plane plane_Panel_After = planarBoundary3D.Plane;
 
             if (apertures != null && apertures.Count > 0)
             {
                 foreach(Aperture aperture in apertures)
                 {
+                    Plane plane_Aperture_Before = aperture.Plane;
+
+                    Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Aperture_Before, plane_Panel_Before);
+                    transform3D_Aperture = transform3D_Aperture * transform3D;
                     //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(aperture.Plane, plane);
                     //aperture.Transform(transform3D_Aperture);
-                    aperture.Transform(transform3D);
+                    aperture.Transform(transform3D_Aperture);
                 }
             }
         }
