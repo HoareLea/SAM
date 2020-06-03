@@ -277,8 +277,17 @@ namespace SAM.Analytical
             if (planarBoundary3D != null)
                 planarBoundary3D.Transform(transform3D);
 
+            //Plane plane = planarBoundary3D.Plane;
+
             if (apertures != null && apertures.Count > 0)
-                apertures.ForEach(x => x.Transform(transform3D));
+            {
+                foreach(Aperture aperture in apertures)
+                {
+                    //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(aperture.Plane, plane);
+                    //aperture.Transform(transform3D_Aperture);
+                    aperture.Transform(transform3D);
+                }
+            }
         }
 
         public override bool FromJObject(JObject jObject)
