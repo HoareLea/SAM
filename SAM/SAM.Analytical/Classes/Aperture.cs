@@ -10,12 +10,12 @@ namespace SAM.Analytical
     /// Analytical Aperture object which stores information about Winodws and Doors
     /// </summary>
     public class Aperture : SAMInstance
-    {   
+    {
         /// <summary>
         /// Planar Boundary 3D of Aperture
         /// </summary>
         private PlanarBoundary3D planarBoundary3D;
-        
+
         /// <summary>
         ///  Constructor for Analytical Aperture
         /// </summary>
@@ -121,6 +121,7 @@ namespace SAM.Analytical
             if (planarBoundary3D != null)
                 planarBoundary3D.Transform(transform3D);
         }
+
         /// <summary>
         /// TEMPORARY METHOD to Transform Aperture with Plane. Find the way to use Transform(Transform3D transform3D) method
         /// </summary>
@@ -172,7 +173,7 @@ namespace SAM.Analytical
 
             plane = new Plane(plane.Origin, axisX, axisY);
 
-            planarBoundary3D = new PlanarBoundary3D(planarBoundary3D, plane, new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop_External), boundaryEdge3DLoops_Internal.ConvertAll(x => new BoundaryEdge2DLoop(plane, x)));
+            planarBoundary3D = new PlanarBoundary3D(planarBoundary3D, plane, new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop_External), boundaryEdge3DLoops_Internal?.ConvertAll(x => new BoundaryEdge2DLoop(plane, x)));
         }
 
         public ApertureConstruction ApertureConstruction

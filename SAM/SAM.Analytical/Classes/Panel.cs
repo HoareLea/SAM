@@ -17,7 +17,7 @@ namespace SAM.Analytical
         /// Type of the Panel such as Wall, Ceiling etc.
         /// </summary>
         private PanelType panelType;
-        
+
         /// <summary>
         /// Planar Boundary 3D of Panel
         /// </summary>
@@ -58,7 +58,7 @@ namespace SAM.Analytical
         }
 
         /// <summary>
-        /// Creates new Panles by given Panel and new PanelType 
+        /// Creates new Panles by given Panel and new PanelType
         /// </summary>
         /// <param name="panel">SAM Analytical Panel</param>
         /// <param name="panelType">SAM Analytical PanelType</param>
@@ -140,7 +140,7 @@ namespace SAM.Analytical
         {
             if (planarBoundary3D == null)
                 return double.NaN;
-            
+
             return planarBoundary3D.GetPerimeter();
         }
 
@@ -287,12 +287,11 @@ namespace SAM.Analytical
                 //planarBoundary3D.Transform(transform3D_Aperture_Move);
             }
 
-
             //Plane plane_Panel_After = planarBoundary3D.Plane;
 
             if (apertures != null && apertures.Count > 0)
             {
-                foreach(Aperture aperture in apertures)
+                foreach (Aperture aperture in apertures)
                 {
                     Plane plane_Aperture_Before = aperture.Plane;
 
@@ -300,7 +299,6 @@ namespace SAM.Analytical
                     bool flipHand = !plane_Panel_Before.AxisX.SameHalf(plane_Aperture_Before.AxisX);
                     bool flipFacing = !plane_Panel_Before.Normal.SameHalf(plane_Aperture_Before.Normal);
                     aperture.Transform(transform3D, flipHand, flipFacing);// THIS METHOD TO BE REMOVED use aperture.Transform(transform3D) in the future
-
 
                     //Option 1
                     //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Aperture_Before, plane_Panel_Before);
@@ -365,18 +363,11 @@ namespace SAM.Analytical
                     //transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Panel_Before.Origin, plane_Aperture_Before.Origin));
                     //aperture.Transform(transform3D_Aperture_Move);
 
-
                     //Transform3D transform3D_Aperture_PlaneToPlane = Transform3D.GetPlaneToPlane(plane_Aperture_Before, planarBoundary3D.Plane);
                     //aperture.Transform(transform3D_Aperture_PlaneToPlane);
 
-
-
-
-
-
                     //Transform3D transform3D_Aperture_PlaneToPlane = Transform3D.GetPlaneToOrigin(plane_Aperture_Before);
                     //transform3D_Aperture_PlaneToPlane.Inverse();
-
 
                     //Transform3D transform3D_Rotation = Transform3D.GetRotation(new Point3D(0, 0, 0), new Vector3D(0, 0, 1), System.Math.PI / 2);
 
@@ -392,8 +383,6 @@ namespace SAM.Analytical
                     //transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(planarBoundary3D.Plane.Origin, aperture.Plane.Origin));
                     //transform3D_Aperture_Move.Inverse();
                     //aperture.Transform(transform3D_Aperture_Move);
-
-
 
                     //double angle_X = plane_Aperture_Before.AxisX.Angle(plane_Panel_Before.AxisX);
                     //double angle_Y = plane_Aperture_Before.AxisY.Angle(plane_Panel_Before.AxisY);
@@ -412,7 +401,6 @@ namespace SAM.Analytical
                     //double angle_X_After = aperture.Plane.AxisX.Angle(plane_Panel_Before.AxisX);
                     //double angle_Y_After = aperture.Plane.AxisY.Angle(plane_Panel_Before.AxisY);
                     //double angle_Z_After = aperture.Plane.AxisZ.Angle(plane_Panel_Before.AxisZ);
-
 
                     //transform3D_Aperture.Inverse();
                     //transform3D_Aperture_Move.Inverse();
