@@ -277,7 +277,12 @@ namespace SAM.Analytical
             Plane plane_Panel_Before = planarBoundary3D.Plane;
 
             if (planarBoundary3D != null)
+            {
                 planarBoundary3D.Transform(transform3D);
+                //Transform3D transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Panel_Before.Origin, Point3D.Zero));
+                //planarBoundary3D.Transform(transform3D_Aperture_Move);
+            }
+
 
             //Plane plane_Panel_After = planarBoundary3D.Plane;
 
@@ -318,31 +323,94 @@ namespace SAM.Analytical
                     //aperture.Transform(transform3D_Aperture);
 
                     //Option 7
-                    Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Aperture_Before, plane_Panel_Before);
-                    Transform3D transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Aperture_Before.Origin, plane_Panel_Before.Origin));
-                    Transform3D transform3D_X = Transform3D.GetRotationX(plane_Aperture_Before.AxisX.Angle(plane_Panel_Before.AxisX));
-                    Transform3D transform3D_Y = Transform3D.GetRotationY(plane_Aperture_Before.AxisY.Angle(plane_Panel_Before.AxisY));
-                    Transform3D transform3D_Z = Transform3D.GetRotationZ(plane_Aperture_Before.AxisZ.Angle(plane_Panel_Before.AxisZ));
+                    //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Aperture_Before, plane_Panel_Before);
+                    //aperture.Transform(transform3D_Aperture);
 
-                    aperture.Transform(transform3D_Aperture);
+                    //aperture.Transform(transform3D);
+
+                    //transform3D_Aperture.Inverse();
+                    //aperture.Transform(transform3D_Aperture);
+
+                    //Transform3D transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(aperture.Origin, plane_Panel_Before.Origin));
+                    //aperture.Transform(transform3D_Aperture_Move);
+
+                    double angle_X = plane_Aperture_Before.AxisX.Angle(plane_Panel_Before.AxisX);
+                    double angle_Y = plane_Aperture_Before.AxisY.Angle(plane_Panel_Before.AxisY);
+                    double angle_Z = plane_Aperture_Before.AxisZ.Angle(plane_Panel_Before.AxisZ);
+
+                    Transform3D transform3D_X = Transform3D.GetRotationX(angle_X);
+                    Transform3D transform3D_Y = Transform3D.GetRotationY(angle_Y);
+                    Transform3D transform3D_Z = Transform3D.GetRotationZ(angle_Z);
+
+                    Transform3D transform3D_Aperture_Rotation = transform3D_X * transform3D_Y * transform3D_Z;
+                    transform3D_Aperture_Rotation.Inverse();
+
+                    Transform3D transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Aperture_Before.Origin, Point3D.Zero));
                     aperture.Transform(transform3D_Aperture_Move);
-                    aperture.Transform(transform3D_X);
-                    aperture.Transform(transform3D_Y);
-                    aperture.Transform(transform3D_Z);
-
-                    aperture.Transform(transform3D);
-                    
-                    transform3D_Aperture.Inverse();
+                    //transform3D_Aperture_Rotation.Inverse();
+                    //aperture.Transform(transform3D_Aperture_Rotation);
                     transform3D_Aperture_Move.Inverse();
-                    transform3D_X.Inverse();
-                    transform3D_Y.Inverse();
-                    transform3D_Z.Inverse();
+                    //aperture.Transform(transform3D_Aperture_Move);
 
-                    aperture.Transform(transform3D_Aperture);
-                    aperture.Transform(transform3D_Aperture_Move);
-                    aperture.Transform(transform3D_X);
-                    aperture.Transform(transform3D_Y);
-                    aperture.Transform(transform3D_Z);
+                    //transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Panel_Before.Origin, plane_Aperture_Before.Origin));
+                    //aperture.Transform(transform3D_Aperture_Move);
+
+
+                    //Transform3D transform3D_Aperture_PlaneToPlane = Transform3D.GetPlaneToPlane(plane_Aperture_Before, planarBoundary3D.Plane);
+                    //aperture.Transform(transform3D_Aperture_PlaneToPlane);
+
+
+
+
+
+
+                    //Transform3D transform3D_Aperture_PlaneToPlane = Transform3D.GetPlaneToOrigin(plane_Aperture_Before);
+                    //transform3D_Aperture_PlaneToPlane.Inverse();
+
+
+                    //Transform3D transform3D_Rotation = Transform3D.GetRotation(new Point3D(0, 0, 0), new Vector3D(0, 0, 1), System.Math.PI / 2);
+
+                    //transform3D_Aperture_Rotation.Inverse();
+                    //aperture.Transform(transform3D_Aperture_Rotation);
+
+                    //transform3D_Aperture_PlaneToPlane = Transform3D.GetPlaneToOrigin(plane_Panel_Before);
+                    //planarBoundary3D.Transform(transform3D_Aperture_PlaneToPlane);
+
+                    //transform3D_Aperture_PlaneToPlane = Transform3D.GetOriginToPlane(planarBoundary3D.Plane);
+                    //aperture.Transform(transform3D_Aperture_PlaneToPlane);
+
+                    //transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(planarBoundary3D.Plane.Origin, aperture.Plane.Origin));
+                    //transform3D_Aperture_Move.Inverse();
+                    //aperture.Transform(transform3D_Aperture_Move);
+
+
+
+                    //double angle_X = plane_Aperture_Before.AxisX.Angle(plane_Panel_Before.AxisX);
+                    //double angle_Y = plane_Aperture_Before.AxisY.Angle(plane_Panel_Before.AxisY);
+                    //double angle_Z = plane_Aperture_Before.AxisZ.Angle(plane_Panel_Before.AxisZ);
+
+                    //Transform3D transform3D_X = Transform3D.GetRotationX(angle_X);
+                    //Transform3D transform3D_Y = Transform3D.GetRotationY(angle_Y);
+                    //Transform3D transform3D_Z = Transform3D.GetRotationZ(angle_Z);
+
+                    //Transform3D transform3D_Aperture_Rotation = transform3D_X * transform3D_Y * transform3D_Z;
+                    //transform3D_Aperture_Rotation.Inverse();
+                    //aperture.Transform(transform3D_Aperture_Rotation);
+
+                    //aperture.Transform(transform3D);
+
+                    //double angle_X_After = aperture.Plane.AxisX.Angle(plane_Panel_Before.AxisX);
+                    //double angle_Y_After = aperture.Plane.AxisY.Angle(plane_Panel_Before.AxisY);
+                    //double angle_Z_After = aperture.Plane.AxisZ.Angle(plane_Panel_Before.AxisZ);
+
+
+                    //transform3D_Aperture.Inverse();
+                    //transform3D_Aperture_Move.Inverse();
+                    //transform3D_Aperture.Inverse();
+
+                    //aperture.Transform(transform3D_Aperture);
+                    //aperture.Transform(transform3D_Aperture_Move);
+                    //aperture.Transform(transform3D_Aperture);
                 }
             }
         }

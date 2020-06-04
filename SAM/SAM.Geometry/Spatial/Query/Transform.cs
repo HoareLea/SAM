@@ -124,9 +124,10 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             Point3D origin = plane.Origin.Transform(matrix4D);
-            Vector3D normal = plane.Normal.Transform(matrix4D);
+            Vector3D axisX = plane.AxisX.Transform(matrix4D);
+            Vector3D axisY = plane.AxisY.Transform(matrix4D);
 
-            return new Plane(origin, normal);
+            return new Plane(origin, axisX, axisY);
         }
 
         public static Segment3D Transform(this Segment3D segment3D, Matrix4D matrix4D)
