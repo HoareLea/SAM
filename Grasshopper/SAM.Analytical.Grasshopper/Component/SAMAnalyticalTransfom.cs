@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
@@ -34,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Object", GH_ParamAccess.item);
             inputParamManager.AddParameter(new GooTransform3DParam(), "_transform", "_transform", "SAM Transform", GH_ParamAccess.item);
         }
 
@@ -43,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -54,13 +55,6 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Panel panel = null;
-            if (!dataAccess.GetData(0, ref panel))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             Transform3D transform3D = null;
             if (!dataAccess.GetData(1, ref transform3D))
             {
@@ -68,10 +62,26 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Panel panel_New = new Panel(panel);
-            panel_New.Transform(transform3D);
+            SAMObject sAMObject = null;
+            if (!dataAccess.GetData(0, ref sAMObject))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            dataAccess.SetData(0, new GooPanel(panel_New));
+            if(sAMObject is Panel)
+            {
+                Panel panel_New = new Panel((Panel)sAMObject);
+                panel_New.Transform(transform3D);
+                dataAccess.SetData(0, new GooPanel(panel_New));
+            }
+            else if(sAMObject is Aperture)
+            {
+                Aperture panel_Aperture = new Aperture((Aperture)sAMObject);
+                panel_Aperture.Transform(transform3D);
+                dataAccess.SetData(0, new GooAperture(panel_Aperture));
+            }
+            
         }
     }
 }

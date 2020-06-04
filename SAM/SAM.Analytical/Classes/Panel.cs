@@ -319,11 +319,13 @@ namespace SAM.Analytical
 
                     //Option 7
                     Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Aperture_Before, plane_Panel_Before);
+                    Transform3D transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Aperture_Before.Origin, plane_Panel_Before.Origin));
                     Transform3D transform3D_X = Transform3D.GetRotationX(plane_Aperture_Before.AxisX.Angle(plane_Panel_Before.AxisX));
                     Transform3D transform3D_Y = Transform3D.GetRotationY(plane_Aperture_Before.AxisY.Angle(plane_Panel_Before.AxisY));
                     Transform3D transform3D_Z = Transform3D.GetRotationZ(plane_Aperture_Before.AxisZ.Angle(plane_Panel_Before.AxisZ));
 
                     aperture.Transform(transform3D_Aperture);
+                    aperture.Transform(transform3D_Aperture_Move);
                     aperture.Transform(transform3D_X);
                     aperture.Transform(transform3D_Y);
                     aperture.Transform(transform3D_Z);
@@ -331,11 +333,13 @@ namespace SAM.Analytical
                     aperture.Transform(transform3D);
                     
                     transform3D_Aperture.Inverse();
+                    transform3D_Aperture_Move.Inverse();
                     transform3D_X.Inverse();
                     transform3D_Y.Inverse();
                     transform3D_Z.Inverse();
 
                     aperture.Transform(transform3D_Aperture);
+                    aperture.Transform(transform3D_Aperture_Move);
                     aperture.Transform(transform3D_X);
                     aperture.Transform(transform3D_Y);
                     aperture.Transform(transform3D_Z);
