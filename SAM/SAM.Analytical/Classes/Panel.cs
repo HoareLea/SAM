@@ -272,15 +272,19 @@ namespace SAM.Analytical
                 apertures.ForEach(x => x.Move(vector3D));
         }
 
+        /// <summary>
+        /// Transform Panel and Apertures by given Transform. Works only if Panel and Apertures plane axes are similar!
+        /// </summary>
+        /// <param name="transform3D">Transform3D to be applied</param>
         public void Transform(Transform3D transform3D)
         {
             Plane plane_Panel_Before = planarBoundary3D.Plane;
 
             if (planarBoundary3D != null)
             {
-                //planarBoundary3D.Transform(transform3D);
-                Transform3D transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Panel_Before.Origin, Point3D.Zero));
-                planarBoundary3D.Transform(transform3D_Aperture_Move);
+                planarBoundary3D.Transform(transform3D);
+                //Transform3D transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Panel_Before.Origin, Point3D.Zero));
+                //planarBoundary3D.Transform(transform3D_Aperture_Move);
             }
 
 
@@ -291,6 +295,12 @@ namespace SAM.Analytical
                 foreach(Aperture aperture in apertures)
                 {
                     Plane plane_Aperture_Before = aperture.Plane;
+
+                    //TODO: Find better way to transform Apertures. Current limitaton: Panel and Apertures plane axes are similar
+                    bool flipHand = !plane_Panel_Before.AxisX.SameHalf(plane_Aperture_Before.AxisX);
+                    bool flipFacing = !plane_Panel_Before.Normal.SameHalf(plane_Aperture_Before.Normal);
+                    aperture.Transform(transform3D, flipHand, flipFacing);// THIS METHOD TO BE REMOVED use aperture.Transform(transform3D) in the future
+
 
                     //Option 1
                     //Transform3D transform3D_Aperture = Transform3D.GetPlaneToPlane(plane_Aperture_Before, plane_Panel_Before);
@@ -334,22 +344,22 @@ namespace SAM.Analytical
                     //Transform3D transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(aperture.Origin, plane_Panel_Before.Origin));
                     //aperture.Transform(transform3D_Aperture_Move);
 
-                    double angle_X = plane_Aperture_Before.AxisX.Angle(plane_Panel_Before.AxisX);
-                    double angle_Y = plane_Aperture_Before.AxisY.Angle(plane_Panel_Before.AxisY);
-                    double angle_Z = plane_Aperture_Before.AxisZ.Angle(plane_Panel_Before.AxisZ);
+                    //double angle_X = plane_Aperture_Before.AxisX.Angle(plane_Panel_Before.AxisX);
+                    //double angle_Y = plane_Aperture_Before.AxisY.Angle(plane_Panel_Before.AxisY);
+                    //double angle_Z = plane_Aperture_Before.AxisZ.Angle(plane_Panel_Before.AxisZ);
 
-                    Transform3D transform3D_X = Transform3D.GetRotationX(angle_X);
-                    Transform3D transform3D_Y = Transform3D.GetRotationY(angle_Y);
-                    Transform3D transform3D_Z = Transform3D.GetRotationZ(angle_Z);
+                    //Transform3D transform3D_X = Transform3D.GetRotationX(angle_X);
+                    //Transform3D transform3D_Y = Transform3D.GetRotationY(angle_Y);
+                    //Transform3D transform3D_Z = Transform3D.GetRotationZ(angle_Z);
 
-                    Transform3D transform3D_Aperture_Rotation = transform3D_X * transform3D_Y * transform3D_Z;
+                    //Transform3D transform3D_Aperture_Rotation = transform3D_X * transform3D_Y * transform3D_Z;
                     //transform3D_Aperture_Rotation.Inverse();
 
-                    Transform3D transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Aperture_Before.Origin, Point3D.Zero));
-                    aperture.Transform(transform3D_Aperture_Move);
+                    //Transform3D transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Aperture_Before.Origin, Point3D.Zero));
+                    //aperture.Transform(transform3D_Aperture_Move);
                     //transform3D_Aperture_Rotation.Inverse();
-                    aperture.Transform(transform3D_Aperture_Rotation);
-                    transform3D_Aperture_Move.Inverse();
+                    //aperture.Transform(transform3D_Aperture_Rotation);
+                    //transform3D_Aperture_Move.Inverse();
                     //aperture.Transform(transform3D_Aperture_Move);
 
                     //transform3D_Aperture_Move = Transform3D.GetTranslation(new Vector3D(plane_Panel_Before.Origin, plane_Aperture_Before.Origin));

@@ -73,6 +73,15 @@ namespace SAM.Analytical
                 internalEdge2DLoops = planarBoundary3D.internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
         }
 
+        public PlanarBoundary3D(PlanarBoundary3D planarBoundary3D, Plane plane, BoundaryEdge2DLoop edge2DLoop, IEnumerable<BoundaryEdge2DLoop> internalEdge2DLoops)
+            : base(planarBoundary3D)
+        {
+            this.plane = new Plane(plane);
+            this.externalEdge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
+            if (internalEdge2DLoops != null)
+                this.internalEdge2DLoops = internalEdge2DLoops.ToList().ConvertAll(x => new BoundaryEdge2DLoop(x));
+        }
+
         public PlanarBoundary3D(Plane plane, Boundary2D boundary2D)
         {
             this.plane = new Plane(plane);
@@ -122,17 +131,17 @@ namespace SAM.Analytical
 
             boundaryEdge3DLoop_External.Transform(transform3D);
 
-            List<BoundaryEdge3DLoop> boundaryEdge2DLoops_Internal = GetInternalEdge3DLoops();
-            if (internalEdge2DLoops != null && internalEdge2DLoops.Count > 0)
+            List<BoundaryEdge3DLoop> boundaryEdge3DLoops_Internal = GetInternalEdge3DLoops();
+            if (boundaryEdge3DLoops_Internal != null && boundaryEdge3DLoops_Internal.Count > 0)
             {
-                foreach(BoundaryEdge3DLoop boundaryEdge3DLoop_Internal in boundaryEdge2DLoops_Internal)
+                foreach(BoundaryEdge3DLoop boundaryEdge3DLoop_Internal in boundaryEdge3DLoops_Internal)
                     boundaryEdge3DLoop_Internal.Transform(transform3D);
             }
 
             plane = plane.Transform(transform3D);
             externalEdge2DLoop = new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop_External);
-            if (boundaryEdge2DLoops_Internal != null && boundaryEdge2DLoops_Internal.Count > 0)
-                internalEdge2DLoops = boundaryEdge2DLoops_Internal.ConvertAll(x => new BoundaryEdge2DLoop(plane, x));
+            if (boundaryEdge3DLoops_Internal != null && boundaryEdge3DLoops_Internal.Count > 0)
+                internalEdge2DLoops = boundaryEdge3DLoops_Internal.ConvertAll(x => new BoundaryEdge2DLoop(plane, x));
         }
 
         public BoundaryEdge2DLoop Edge2DLoop

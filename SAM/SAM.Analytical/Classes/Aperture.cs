@@ -2,6 +2,7 @@
 
 using SAM.Core;
 using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -119,6 +120,59 @@ namespace SAM.Analytical
         {
             if (planarBoundary3D != null)
                 planarBoundary3D.Transform(transform3D);
+        }
+        /// <summary>
+        /// TEMPORARY METHOD to Transform Aperture with Plane. Find the way to use Transform(Transform3D transform3D) method
+        /// </summary>
+        /// <param name="transform3D">Transform3D</param>
+        /// <param name="flipHand">Flip Hand</param>
+        /// <param name="flipFacing">Flip Facing</param>
+        internal void Transform(Transform3D transform3D, bool flipHand, bool flipFacing)
+        {
+            //TODO: Remove this method and find better way to transform Aperture
+            if (transform3D == null)
+                return;
+
+            BoundaryEdge3DLoop boundaryEdge3DLoop_External = planarBoundary3D.GetEdge3DLoop();
+            if (boundaryEdge3DLoop_External == null)
+                return;
+
+            boundaryEdge3DLoop_External.Transform(transform3D);
+
+            List<BoundaryEdge3DLoop> boundaryEdge3DLoops_Internal = planarBoundary3D.GetInternalEdge3DLoops();
+            if (boundaryEdge3DLoops_Internal != null && boundaryEdge3DLoops_Internal.Count > 0)
+            {
+                foreach (BoundaryEdge3DLoop boundaryEdge3DLoop_Internal in boundaryEdge3DLoops_Internal)
+                    boundaryEdge3DLoop_Internal.Transform(transform3D);
+            }
+
+            Plane plane = planarBoundary3D.Plane;
+
+            Vector3D normal = plane.Normal;
+            Vector3D axisX = plane.AxisX;
+            if (flipHand)
+                axisX.Negate();
+
+            if (flipFacing)
+                normal.Negate();
+
+            Vector3D axisY = Geometry.Spatial.Query.AxisY(normal, axisX);
+
+            plane = new Plane(plane.Origin, axisX, axisY).Transform(transform3D);
+
+            normal = plane.Normal;
+            axisX = plane.AxisX;
+            if (flipHand)
+                axisX.Negate();
+
+            if (flipFacing)
+                normal.Negate();
+
+            axisY = Geometry.Spatial.Query.AxisY(normal, axisX);
+
+            plane = new Plane(plane.Origin, axisX, axisY);
+
+            planarBoundary3D = new PlanarBoundary3D(planarBoundary3D, plane, new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop_External), boundaryEdge3DLoops_Internal.ConvertAll(x => new BoundaryEdge2DLoop(plane, x)));
         }
 
         public ApertureConstruction ApertureConstruction

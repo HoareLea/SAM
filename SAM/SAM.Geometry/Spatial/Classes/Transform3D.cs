@@ -290,13 +290,15 @@ namespace SAM.Geometry.Spatial
         }
 
         /// <summary>
-        /// Rotation Transform3D around the axis
+        /// Rotation Transform3D around the axis. Method to be revised
         /// </summary>
-        /// <param name="axis_Unit">rotation axis Vector3D</param>
+        /// <param name="axis">rotation axis Vector3D</param>
         /// <param name="angle">Angle in radians</param>
         /// <returns>Transform3D</returns>
         public static Transform3D GetRotation(Vector3D axis, double angle)
         {
+            //TODO: Revise this method
+
             if (axis == null)
                 return null;
 
@@ -319,8 +321,17 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        /// <summary>
+        /// Rotation Transform around given axis and origin by angle. Method to be revised
+        /// </summary>
+        /// <param name="origin">Origin Point</param>
+        /// <param name="axis">Axis</param>
+        /// <param name="angle">Angle</param>
+        /// <returns></returns>
         public static Transform3D GetRotation(Point3D origin, Vector3D axis, double angle)
         {
+            //TODO: Revise this method
+            
             if (origin == null)
                 return null;
 

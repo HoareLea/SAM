@@ -63,5 +63,13 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
+
+        public static List<Tuple<Point2D, Segment2D, Vector2D>> TraceData(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, int bounces = 0)
+        {
+            if (segmentable2D == null)
+                return null;
+
+            return TraceData(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, bounces);
+        }
     }
 }
