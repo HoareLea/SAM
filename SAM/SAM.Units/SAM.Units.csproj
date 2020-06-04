@@ -50,6 +50,10 @@
     <Compile Include="Convert\ToRadians.cs" />
     <Compile Include="Convert\ToSI.cs" />
     <Compile Include="Enums\UnitType.cs" />
+    <Compile Include="Classes\Factor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Query\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

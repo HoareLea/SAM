@@ -10,7 +10,7 @@
                     switch (to)
                     {
                         case UnitType.Feet:
-                            return value * 3.280839895;
+                            return value * Factor.MetersToFeet;
 
                         case UnitType.Meter:
                             return value;
@@ -21,7 +21,7 @@
                     switch (to)
                     {
                         case UnitType.Meter:
-                            return value * 0.3048;
+                            return value * Factor.FeetToMeters;
 
                         case UnitType.Feet:
                             return value;
