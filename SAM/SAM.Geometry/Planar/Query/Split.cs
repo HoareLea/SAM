@@ -165,6 +165,13 @@ namespace SAM.Geometry.Planar
             return polygons.ConvertAll(x => x.ToSAM(tolerance));
         }
 
+        /// <summary>
+        /// Generates additional points between two points where point2D_1 is first point on list and point2D_2 is last point.
+        /// </summary>
+        /// <param name="point2D_1">First point</param>
+        /// <param name="point2D_2">Last point</param>
+        /// <param name="count">Number of additional points</param>
+        /// <returns></returns>
         public static IEnumerable<Point2D> Split(this Point2D point2D_1, Point2D point2D_2, int count)
         {
             if (point2D_1 == null || point2D_2 == null)
@@ -184,7 +191,7 @@ namespace SAM.Geometry.Planar
 
             aResult[0] = new Point2D(point2D_1);
             for (int i = 0; i < count; i++)
-                aResult[i + 1] = (Point2D)aResult[i].GetMoved(vector2D);
+                aResult[i + 1] = aResult[i].GetMoved(vector2D);
 
             aResult[count] = new Point2D(point2D_2);
 
