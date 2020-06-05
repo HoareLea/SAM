@@ -7,7 +7,7 @@ namespace SAM.Geometry.Spatial
     public class Plane : SAMGeometry, IPlanar3D
     {
         public static Plane WorldXY { get; } = new Plane(Point3D.Zero, Vector3D.WorldZ);
-        
+
         public static Plane WorldYZ { get; } = new Plane(Point3D.Zero, Vector3D.WorldX);
 
         public static Plane WorldXZ { get; } = new Plane(Point3D.Zero, Vector3D.WorldY);
@@ -451,7 +451,7 @@ namespace SAM.Geometry.Spatial
         {
             Vector3D axisZ = normal.GetNegated();
 
-            if(!flipX)
+            if (!flipX)
                 axisY = Query.AxisY(axisZ, AxisX);
 
             normal = axisZ;

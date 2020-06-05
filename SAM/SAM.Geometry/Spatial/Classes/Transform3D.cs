@@ -331,7 +331,7 @@ namespace SAM.Geometry.Spatial
         public static Transform3D GetRotation(Point3D origin, Vector3D axis, double angle)
         {
             //TODO: Revise this method
-            
+
             if (origin == null)
                 return null;
 

@@ -97,7 +97,7 @@ namespace SAM.Geometry.Spatial
             Vector3D vector3D_Temp = new Vector3D(vector3D);
             vector3D_Temp.Negate();
 
-            return Angle(vector3D) < Angle(vector3D_Temp);
+            return Angle(vector3D) <= Angle(vector3D_Temp);
         }
 
         public bool InRange(Vector3D direction, double angleDifference)
@@ -157,7 +157,7 @@ namespace SAM.Geometry.Spatial
 
         public Vector3D GetNegated()
         {
-            return new Vector3D(-coordinates[0], -coordinates[0], -coordinates[0]);
+            return new Vector3D(-coordinates[0], -coordinates[1], -coordinates[2]);
         }
 
         public double X
@@ -249,7 +249,7 @@ namespace SAM.Geometry.Spatial
         {
             if (point3D == null)
                 return null;
-            
+
             return (this * (DotProduct(point3D.ToVector3D()))).ToPoint3D();
         }
 

@@ -87,7 +87,6 @@ namespace SAM.Geometry.Planar
             if (offsets.Count() == 1)
                 return Offset(polygon2D, offsets.First(), inside, tolerance);
 
-
             int count = polygon2D.Count;
 
             List<double> offsets_Temp = new List<double>(offsets);
@@ -95,7 +94,7 @@ namespace SAM.Geometry.Planar
             while (offsets_Temp.Count < count)
                 offsets_Temp.Add(offset_Temp);
 
-            if(offsets_Temp.TrueForAll(x => System.Math.Abs(offsets_Temp.First() - x) <= tolerance ))
+            if (offsets_Temp.TrueForAll(x => System.Math.Abs(offsets_Temp.First() - x) <= tolerance))
                 return Offset(polygon2D, offsets.First(), inside, tolerance);
 
             if (inside)

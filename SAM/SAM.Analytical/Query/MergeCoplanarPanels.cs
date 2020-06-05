@@ -107,7 +107,7 @@ namespace SAM.Analytical
                 {
                     if (polygon.Area < minArea)
                         continue;
-                    
+
                     List<Tuple<Polygon, Panel>> tuples_Panel = tuples_Polygon.FindAll(x => polygon.Contains(x.Item1.InteriorPoint));
                     if (tuples_Panel == null || tuples_Panel.Count == 0)
                         continue;

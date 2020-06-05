@@ -20,7 +20,7 @@
             if (normal == null || axisX == null)
                 return null;
 
-            return axisX.CrossProduct(normal).Unit;
+            return normal.CrossProduct(axisX).Unit;
         }
     }
 }
