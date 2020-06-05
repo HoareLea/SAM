@@ -18,8 +18,8 @@ namespace SAM.Geometry.Spatial
 
         public Plane()
         {
-            normal = new Vector3D(0, 0, 1);
-            origin = new Point3D(0, 0, 0);
+            normal = Vector3D.WorldZ; //new Vector3D(0, 0, 1);
+            origin = Point3D.Zero;
             axisY = normal.AxisY();
         }
 
@@ -45,7 +45,7 @@ namespace SAM.Geometry.Spatial
         public Plane(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
         {
             origin = new Point3D(point3D_1);
-            normal = new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3)).Unit;
+            normal = Query.Normal(point3D_1, point3D_2, point3D_3); //new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3)).Unit;
             axisY = normal.AxisY();
         }
 
@@ -60,7 +60,7 @@ namespace SAM.Geometry.Spatial
         {
             this.origin = new Point3D(origin);
             this.axisY = axisY.Unit;
-            normal = this.axisY.CrossProduct(axisX.Unit).Unit;
+            normal = Query.Normal(axisX, axisY); //this.axisY.CrossProduct(axisX).Unit;
         }
 
         public Vector3D Normal

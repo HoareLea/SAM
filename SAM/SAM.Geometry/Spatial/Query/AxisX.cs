@@ -18,7 +18,7 @@
             if (normal == null || axisY == null)
                 return null;
 
-            return normal.CrossProduct(axisY).Unit;
+            return axisY.CrossProduct(normal).Unit;
         }
     }
 }

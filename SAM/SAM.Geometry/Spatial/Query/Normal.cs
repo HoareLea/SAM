@@ -155,5 +155,13 @@ namespace SAM.Geometry.Spatial
         {
             return new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
         }
+
+        public static Vector3D Normal(this Vector3D axisX, Vector3D axisY)
+        {
+            if (axisX == null || axisY == null)
+                return null;
+
+            return axisX.CrossProduct(axisY);
+        }
     }
 }
