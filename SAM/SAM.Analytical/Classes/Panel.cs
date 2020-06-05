@@ -464,13 +464,15 @@ namespace SAM.Analytical
             if (plane_closedPlanar3D == null)
                 return null;
 
-            //Flipping normal if not match with shape 
+            //Flipping if not match with Aperture plane 
             Vector3D normal = plane.Normal;
             Vector3D normal_closedPlanar3D = plane_closedPlanar3D.Normal;
             if (!normal.SameHalf(normal_closedPlanar3D))
                 plane.FlipZ(false);
 
-            //TODO changed tolerance fix value to 0.01, should be changed to angle
+            if (!plane.AxisX.SameHalf(plane_closedPlanar3D.AxisX))
+                plane.FlipX(true);
+
             if (!normal.Collinear(normal_closedPlanar3D, Tolerance.MacroDistance))
                 return null;
 
