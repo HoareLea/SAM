@@ -152,6 +152,14 @@ namespace SAM.Analytical
             }
         }
 
+        public Plane Plane
+        {
+            get
+            {
+                return planarBoundary3D?.Plane;
+            }
+        }
+
         public Point3D Origin
         {
             get
@@ -458,6 +466,8 @@ namespace SAM.Analytical
 
             Vector3D normal = plane.Normal;
             Vector3D normal_closedPlanar3D = plane_closedPlanar3D.Normal;
+            if (!normal.SameHalf(normal_closedPlanar3D))
+                plane.FlipZ(false);
 
             //TODO changed tolerance fix value to 0.01, should be changed to angle
             if (!normal.AlmostSimilar(normal_closedPlanar3D, 0.01))
@@ -481,7 +491,7 @@ namespace SAM.Analytical
             Point3D point3D_Location;
             Point2D point2D_Centroid = closed2D_Aperture.GetCentroid();
             point3D_Location = plane.Convert(point2D_Centroid);
-            if (Geometry.Spatial.Query.Vertical(plane, Tolerance.Distance))
+            if (Geometry.Spatial.Query.Vertical(plane, tolerance))
                 point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, closedPlanar3D_Projected.GetBoundingBox().Min.Z);
 
             if (trimGeometry)

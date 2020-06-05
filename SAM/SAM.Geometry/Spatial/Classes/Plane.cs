@@ -447,6 +447,16 @@ namespace SAM.Geometry.Spatial
             return Project(closedPlanar3D as dynamic);
         }
 
+        public void FlipZ(bool flipX = true)
+        {
+            Vector3D axisZ = normal.GetNegated();
+
+            if(!flipX)
+                axisY = Query.AxisY(axisZ, AxisX);
+
+            normal = axisZ;
+        }
+
         public PlanarIntersectionResult Intersection(Segment3D segment3D)
         {
             return PlanarIntersectionResult.Create(this, segment3D);
