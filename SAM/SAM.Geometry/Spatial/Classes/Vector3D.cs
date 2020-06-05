@@ -94,13 +94,7 @@ namespace SAM.Geometry.Spatial
             if(vector3D == null)
                 return false;
 
-            List<double> values = new List<double>();
-            for (int i = 1; i < coordinates.Length; i++)
-                values.Add(coordinates[i] / vector3D.coordinates[i]);
-
-            double value = coordinates[0] / vector3D.coordinates[0];
-
-            return values.TrueForAll(x => System.Math.Abs(value - x) <= tolerance);
+            return System.Math.Abs(System.Math.Abs(this * vector3D) - (Length * vector3D.Length)) <= tolerance;
         }
 
         public bool SameHalf(Vector3D vector3D)
