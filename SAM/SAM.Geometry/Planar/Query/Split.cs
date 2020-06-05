@@ -164,5 +164,31 @@ namespace SAM.Geometry.Planar
 
             return polygons.ConvertAll(x => x.ToSAM(tolerance));
         }
+
+        public static IEnumerable<Point2D> Split(this Point2D point2D_1, Point2D point2D_2, int count)
+        {
+            if (point2D_1 == null || point2D_2 == null)
+                return null;
+
+            if (count <= 0)
+                return null;
+
+            if (count == 1)
+                return new Point2D[] { point2D_1, point2D_2 };
+
+            Vector2D vector2D = new Vector2D(point2D_1, point2D_2);
+            double aLength_Split = vector2D.Length / count;
+            vector2D = vector2D.Unit * aLength_Split;
+
+            Point2D[] aResult = new Point2D[count + 1];
+
+            aResult[0] = new Point2D(point2D_1);
+            for (int i = 0; i < count; i++)
+                aResult[i + 1] = (Point2D)aResult[i].GetMoved(vector2D);
+
+            aResult[count] = new Point2D(point2D_2);
+
+            return aResult;
+        }
     }
 }

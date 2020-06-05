@@ -285,52 +285,6 @@ namespace SAM.Geometry.Planar
             return point_Temp;
         }
 
-        public static Point2D Max(Point2D point2D_1, Point2D point2D_2)
-        {
-            return new Point2D(System.Math.Max(point2D_1.X, point2D_2.X), System.Math.Max(point2D_1.Y, point2D_2.Y));
-        }
-
-        public static Point2D Max(IEnumerable<Point2D> point2Ds)
-        {
-            if (point2Ds == null || point2Ds.Count() == 0)
-                return null;
-
-            double aX = double.MinValue;
-            double aY = double.MinValue;
-            foreach (Point2D point in point2Ds)
-            {
-                if (aX < point.X)
-                    aX = point.X;
-                if (aY < point.Y)
-                    aY = point.Y;
-            }
-
-            return new Point2D(aX, aY);
-        }
-
-        public static Point2D Min(Point2D point2D_1, Point2D point2D_2)
-        {
-            return new Point2D(System.Math.Min(point2D_1.X, point2D_2.X), System.Math.Min(point2D_1.Y, point2D_2.Y));
-        }
-
-        public static Point2D Min(IEnumerable<Point2D> point2Ds)
-        {
-            if (point2Ds == null || point2Ds.Count() == 0)
-                return null;
-
-            double aX = double.MaxValue;
-            double aY = double.MaxValue;
-            foreach (Point2D point2D in point2Ds)
-            {
-                if (aX > point2D.X)
-                    aX = point2D.X;
-                if (aY > point2D.Y)
-                    aY = point2D.Y;
-            }
-
-            return new Point2D(aX, aY);
-        }
-
         public static List<Orientation> Orientations(IEnumerable<Point2D> point2Ds)
         {
             if (point2Ds == null)
@@ -569,32 +523,6 @@ namespace SAM.Geometry.Planar
 
             for (int i = 0; i < point2Ds.Count; i++)
                 point2Ds[i].Mirror(point2D);
-        }
-
-        public static IEnumerable<Point2D> Split(Point2D point2D_1, Point2D point2D_2, int count)
-        {
-            if (point2D_1 == null || point2D_2 == null)
-                return null;
-
-            if (count <= 0)
-                return null;
-
-            if (count == 1)
-                return new Point2D[] { point2D_1, point2D_2 };
-
-            Vector2D vector2D = new Vector2D(point2D_1, point2D_2);
-            double aLength_Split = vector2D.Length / count;
-            vector2D = vector2D.Unit * aLength_Split;
-
-            Point2D[] aResult = new Point2D[count + 1];
-
-            aResult[0] = new Point2D(point2D_1);
-            for (int i = 0; i < count; i++)
-                aResult[i + 1] = (Point2D)aResult[i].GetMoved(vector2D);
-
-            aResult[count] = new Point2D(point2D_2);
-
-            return aResult;
         }
 
         public static List<Point2D> Clone(IEnumerable<Point2D> point2Ds)

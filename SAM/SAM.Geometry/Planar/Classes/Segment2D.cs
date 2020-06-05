@@ -486,7 +486,7 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                return Point2D.Max(origin, End);
+                return Query.Max(origin, End);
             }
         }
 
@@ -494,7 +494,7 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                return Point2D.Min(origin, End);
+                return Query.Min(origin, End);
             }
         }
 

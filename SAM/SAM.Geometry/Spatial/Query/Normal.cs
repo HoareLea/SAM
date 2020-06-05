@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
@@ -74,12 +75,26 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        public static Vector3D Normal(this Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
+        {
+            return new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
+        }
+
+        public static Vector3D Normal(this Vector3D axisX, Vector3D axisY)
+        {
+            if (axisX == null || axisY == null)
+                return null;
+
+            return axisX.CrossProduct(axisY);
+        }
+
         /// <summary>
         /// Calculates normal Vector3D for Point3Ds
         /// source: <see cref="http://www.ilikebigbits.com/2017_09_25_plane_from_points_2.html"/>
         /// </summary>
         /// <param name="point3Ds">List of points for plane</param>
         /// <returns>Normal Vector3D</returns>
+        [Obsolete("This method is obsolete. Query.Normal([...]) instead.", false)]
         public static Vector3D Normal_Legacy(this IEnumerable<Point3D> point3Ds)
         {
             if (point3Ds == null || point3Ds.Count() < 3)
@@ -148,19 +163,6 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             return direction_Weighted.Unit;
-        }
-
-        public static Vector3D Normal(this Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
-        {
-            return new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3));
-        }
-
-        public static Vector3D Normal(this Vector3D axisX, Vector3D axisY)
-        {
-            if (axisX == null || axisY == null)
-                return null;
-
-            return axisX.CrossProduct(axisY);
         }
     }
 }

@@ -127,6 +127,8 @@
     <Compile Include="Planar\Modify\Tighten.cs" />
     <Compile Include="Planar\Query\Area.cs" />
     <Compile Include="Planar\Query\MaxDistance.cs" />
+    <Compile Include="Planar\Query\Max.cs" />
+    <Compile Include="Planar\Query\Min.cs" />
     <Compile Include="Planar\Query\Scale.cs" />
     <Compile Include="Planar\Query\ThinnessRatio.cs" />
     <Compile Include="Planar\Query\Perimeter.cs" />

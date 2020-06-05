@@ -34,14 +34,14 @@ namespace SAM.Geometry.Planar
 
         public BoundingBox2D(Point2D point2D_1, Point2D point2D_2)
         {
-            max = Point2D.Max(point2D_1, point2D_2);
-            min = Point2D.Min(point2D_1, point2D_2);
+            max = Query.Max(point2D_1, point2D_2);
+            min = Query.Min(point2D_1, point2D_2);
         }
 
         public BoundingBox2D(Point2D point2D_1, Point2D point2D_2, double offset)
         {
-            max = Point2D.Max(point2D_1, point2D_2);
-            min = Point2D.Min(point2D_1, point2D_2);
+            max = Query.Max(point2D_1, point2D_2);
+            min = Query.Min(point2D_1, point2D_2);
 
             min = new Point2D(min.X - offset, min.Y - offset);
             max = new Point2D(max.X + offset, max.Y + offset);
@@ -93,8 +93,8 @@ namespace SAM.Geometry.Planar
                     point2Ds_Max.Add(boundingBox2D.max);
                 }
 
-                min = Point2D.Min(point2Ds_Min);
-                max = Point2D.Max(point2Ds_Max);
+                min = Query.Min(point2Ds_Min);
+                max = Query.Max(point2Ds_Max);
             }
         }
 
@@ -118,8 +118,8 @@ namespace SAM.Geometry.Planar
                 }
                 else
                 {
-                    max = Point2D.Max(max, value);
-                    min = Point2D.Min(max, value);
+                    max = Query.Max(max, value);
+                    min = Query.Min(max, value);
                 }
             }
         }
@@ -139,8 +139,8 @@ namespace SAM.Geometry.Planar
                 }
                 else
                 {
-                    max = Point2D.Max(min, value);
-                    min = Point2D.Min(min, value);
+                    max = Query.Max(min, value);
+                    min = Query.Min(min, value);
                 }
             }
         }
@@ -375,8 +375,8 @@ namespace SAM.Geometry.Planar
             if (boundingBox2D == null)
                 return false;
 
-            max = Point2D.Max(max, boundingBox2D.Max);
-            min = Point2D.Min(min, boundingBox2D.Min);
+            max = Query.Max(max, boundingBox2D.Max);
+            min = Query.Min(min, boundingBox2D.Min);
             return true;
         }
 
