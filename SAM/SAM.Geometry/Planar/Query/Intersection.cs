@@ -42,7 +42,7 @@ namespace SAM.Geometry.Planar
             if (segment2D_1 == null || segment2D_2 == null)
                 return null;
 
-            if (!Colinear(segment2D_1, segment2D_2))
+            if (!Collinear(segment2D_1, segment2D_2))
                 return null;
 
             bool on_1 = segment2D_1.On(segment2D_2[0], tolerance);

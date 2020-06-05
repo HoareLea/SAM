@@ -191,9 +191,10 @@ namespace SAM.Geometry.Planar
             //return result;
         }
 
-        public bool Colinear(Vector2D vector2D, double tolerance = Core.Tolerance.Angle)
+        public bool Collinear(Vector2D vector2D, double tolerance = Core.Tolerance.Angle)
         {
-            return SmallestAngle(vector2D) <= tolerance;
+            if (vector2D == null)
+                return false;
         }
 
         public double SmallestAngle(Vector2D vector2D)

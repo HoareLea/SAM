@@ -523,7 +523,7 @@ namespace SAM.Geometry.Planar
 
         public bool Colinear(Segment2D segment2D, double tolerance = Core.Tolerance.Angle)
         {
-            return vector.Colinear(segment2D.vector, tolerance);
+            return vector.Collinear(segment2D.vector, tolerance);
         }
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
