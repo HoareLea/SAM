@@ -195,6 +195,8 @@ namespace SAM.Geometry.Planar
         {
             if (vector2D == null)
                 return false;
+
+            return System.Math.Abs((coordinates[0] / vector2D.coordinates[0]) - (coordinates[1] / vector2D.coordinates[1])) <= tolerance;
         }
 
         public double SmallestAngle(Vector2D vector2D)

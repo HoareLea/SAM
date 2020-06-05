@@ -206,7 +206,7 @@
     <Compile Include="Planar\Query\Intersection.cs" />
     <Compile Include="Planar\Query\IntersectionSegment2Ds.cs" />
     <Compile Include="Planar\Query\Union.cs" />
-    <Compile Include="Planar\Query\Colinear.cs" />
+    <Compile Include="Planar\Query\Collinear.cs" />
     <Compile Include="Planar\Query\Segment2Ds.cs" />
     <Compile Include="Planar\Query\IndexOfClosestSegment2D.cs" />
     <Compile Include="Planar\Query\SmallestAngleVector.cs" />

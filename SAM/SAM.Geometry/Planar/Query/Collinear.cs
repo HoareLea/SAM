@@ -26,7 +26,7 @@
             if (segment2D_1 == null || segment2D_2 == null)
                 return false;
 
-            return Collinear(segment2D_1, segment2D_2[0]) && Collinear(segment2D_1, segment2D_2[1]);
+            return Collinear(segment2D_1, segment2D_2[0], tolerance) && Collinear(segment2D_1, segment2D_2[1], tolerance);
         }
     }
 }
