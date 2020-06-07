@@ -521,7 +521,7 @@ namespace SAM.Geometry.Planar
             return new List<ICurve2D>() { new Segment2D(this) };
         }
 
-        public bool Colinear(Segment2D segment2D, double tolerance = Core.Tolerance.Angle)
+        public bool Collinear(Segment2D segment2D, double tolerance = Core.Tolerance.Angle)
         {
             return vector.Collinear(segment2D.vector, tolerance);
         }

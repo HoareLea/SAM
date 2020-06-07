@@ -146,7 +146,7 @@ namespace SAM.Geometry.Planar
                 Segment2D segment2D = segment2Ds_Temp[0];
                 segment2Ds_Temp.RemoveAt(0);
 
-                List<Segment2D> segment2Ds_Colinear = segment2Ds_Temp.FindAll(x => x.Colinear(segment2D, tolerance));
+                List<Segment2D> segment2Ds_Collinear = segment2Ds_Temp.FindAll(x => x.Collinear(segment2D, tolerance));
 
 
             }

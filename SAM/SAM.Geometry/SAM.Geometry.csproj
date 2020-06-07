@@ -121,6 +121,7 @@
     <Compile Include="Planar\Classes\Triangle2D.cs" />
     <Compile Include="Planar\Interfaces\ICurvable2D.cs" />
     <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
+    <Compile Include="Planar\Modify\Add.cs" />
     <Compile Include="Planar\Modify\InsertClosest.cs" />
     <Compile Include="Planar\Modify\Draw.cs" />
     <Compile Include="Planar\Modify\Scale.cs" />

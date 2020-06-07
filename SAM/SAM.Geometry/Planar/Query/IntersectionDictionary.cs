@@ -5,12 +5,12 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, bool sort = true, bool selfIntersection = false, double tolerance = Core.Tolerance.Distance)
+        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeCollinear = true, bool sort = true, bool selfIntersection = false, double tolerance = Core.Tolerance.Distance)
         {
-            return IntersectionDictionary(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, keepDirection, removeColinear, sort, selfIntersection, tolerance);
+            return IntersectionDictionary(point2D, vector2D, new ISegmentable2D[] { segmentable2D }, keepDirection, removeCollinear, sort, selfIntersection, tolerance);
         }
 
-        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, bool sort = true, bool selfIntersection = false, double tolerance = Core.Tolerance.Distance)
+        public static Dictionary<Point2D, Segment2D> IntersectionDictionary(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeCollinear = true, bool sort = true, bool selfIntersection = false, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null || vector2D == null || segmentable2Ds == null)
                 return null;
@@ -33,7 +33,7 @@ namespace SAM.Geometry.Planar
                 Point2D point2D_closest_1;
                 Point2D point2D_closest_2;
 
-                if (removeColinear && segment2D.Colinear(segment2D_Temp))
+                if (removeCollinear && segment2D.Collinear(segment2D_Temp))
                     continue;
 
                 Point2D point2D_Intersection = segment2D.Intersection(segment2D_Temp, out point2D_closest_1, out point2D_closest_2, tolerance);

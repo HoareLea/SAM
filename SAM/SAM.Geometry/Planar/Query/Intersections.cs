@@ -62,20 +62,20 @@ namespace SAM.Geometry.Planar
             return point2Ds.ToList();
         }
 
-        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeColinear = true, bool sort = true, bool selfIntersection = true, double tolerance = Core.Tolerance.Distance)
+        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeCollinear = true, bool sort = true, bool selfIntersection = true, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null || vector2D == null)
                 return null;
 
-            return IntersectionDictionary(point2D, vector2D, segmentable2D, keepDirection, removeColinear, sort, selfIntersection, tolerance)?.Keys?.ToList();
+            return IntersectionDictionary(point2D, vector2D, segmentable2D, keepDirection, removeCollinear, sort, selfIntersection, tolerance)?.Keys?.ToList();
         }
 
-        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeColinear = true, bool sort = true, bool selfIntersection = true, double tolerance = Core.Tolerance.Distance)
+        public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, bool keepDirection, bool removeCollinear = true, bool sort = true, bool selfIntersection = true, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null || vector2D == null)
                 return null;
 
-            return IntersectionDictionary(point2D, vector2D, Segment2Ds(segmentable2Ds), keepDirection, removeColinear, sort, selfIntersection, tolerance)?.Keys?.ToList();
+            return IntersectionDictionary(point2D, vector2D, Segment2Ds(segmentable2Ds), keepDirection, removeCollinear, sort, selfIntersection, tolerance)?.Keys?.ToList();
         }
     }
 }
