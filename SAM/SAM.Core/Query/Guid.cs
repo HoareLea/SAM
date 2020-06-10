@@ -10,15 +10,23 @@ namespace SAM.Core
     {
         public static Guid Guid(this JObject jObject)
         {
-            if (jObject == null)
+            Guid guid = Guid(jObject, "Guid");
+            if (guid == System.Guid.Empty)
+                guid = System.Guid.NewGuid();
+
+            return guid;
+        }
+
+        public static Guid Guid(this JObject jObject, string name)
+        {
+            if (jObject == null || string.IsNullOrWhiteSpace(name))
                 return System.Guid.Empty;
 
-            Guid guid = System.Guid.NewGuid();
+            if (!jObject.ContainsKey(name))
+                return System.Guid.Empty;
 
-            if (!jObject.ContainsKey("Guid"))
-                return guid;
-
-            JToken jToken = jObject.Value<JToken>("Guid");
+            Guid guid = System.Guid.Empty;
+            JToken jToken = jObject.Value<JToken>(name);
             switch (jToken.Type)
             {
                 case JTokenType.String:

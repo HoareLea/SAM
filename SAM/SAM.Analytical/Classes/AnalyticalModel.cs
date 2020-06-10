@@ -39,6 +39,9 @@ namespace SAM.Analytical
         {
             get
             {
+                if (address == null)
+                    return null;
+
                 return new Core.Address(address);
             }
         }

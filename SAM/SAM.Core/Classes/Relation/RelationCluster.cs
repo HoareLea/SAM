@@ -467,7 +467,7 @@ namespace SAM.Core
                 }
                 jObject_Objects.Add("Value", jArray);
 
-                jArray_Objects.Add(jObject_Objects);
+                jArray_Relations.Add(jObject_Objects);
             }
             jObject.Add("Relations", jArray_Relations);
 
@@ -498,7 +498,7 @@ namespace SAM.Core
                     Dictionary<Guid, object> dictionary = new Dictionary<Guid, object>();
                     foreach (JObject jObject_Temp in jArray)
                     {
-                        Guid guid = jObject_Temp.Value<Guid>("Key");
+                        Guid guid = jObject_Temp.Guid("Key");
                         if (guid == Guid.Empty)
                             continue;
 
@@ -551,7 +551,7 @@ namespace SAM.Core
                     Dictionary<Guid, HashSet<Guid>> dictionary = new Dictionary<Guid, HashSet<Guid>>();
                     foreach (JObject jObject_Temp in jArray)
                     {
-                        Guid guid = jObject_Temp.Value<Guid>("Key");
+                        Guid guid = jObject_Temp.Guid("Key");
                         if (guid == Guid.Empty)
                             continue;
 
