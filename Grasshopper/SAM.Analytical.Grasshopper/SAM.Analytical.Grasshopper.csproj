@@ -92,11 +92,13 @@
   <ItemGroup>
     <Compile Include="Classes\GooAdjacencyCluster.cs" />
     <Compile Include="Classes\GooAperture.cs" />
+    <Compile Include="Classes\GooAnalyticalModel.cs" />
     <Compile Include="Classes\GooApertureConstruction.cs" />
     <Compile Include="Classes\GooConstruction.cs" />
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateAnalyticalModel.cs" />
     <Compile Include="Component\SAMAnalyticalPanelSpacing.cs" />
     <Compile Include="Component\SAMAnalyticalPanelDistance.cs" />
     <Compile Include="Component\SAMAnalyticalTransfom.cs" />
