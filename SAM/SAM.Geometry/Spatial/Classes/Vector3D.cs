@@ -227,17 +227,27 @@ namespace SAM.Geometry.Spatial
         //Source: https://wiki.unity3d.com/index.php/3d_Math_functions
         public double Angle(Vector3D vector3D)
         {
-            //get the dot product
             double dotProduct = DotProduct(vector3D);
+            double length = Length * vector3D.Length;
 
-            //Clamp to prevent NaN error. Shouldn't need this in the first place, but there could be a rounding error issue.
-            if (dotProduct < -1)
-                dotProduct = -1;
-            else if (dotProduct > 1)
-                dotProduct = 1;
+            return (System.Math.Abs(dotProduct) < length) ? System.Math.Acos(dotProduct / length) : (dotProduct < 0) ? System.Math.PI : 0;
 
-            //Calculate the angle. The output is in radians
-            return System.Math.Acos(dotProduct);
+            //Version 2
+
+            ////get the dot product
+            //double dotProduct = DotProduct(vector3D);
+
+            ////Clamp to prevent NaN error. Shouldn't need this in the first place, but there could be a rounding error issue.
+            //if (dotProduct < -1)
+            //    dotProduct = -1;
+            //else if (dotProduct > 1)
+            //    dotProduct = 1;
+
+            ////Calculate the angle. The output is in radians
+            //return System.Math.Acos(dotProduct);
+
+
+            //Version 1
 
             //double value = System.Math.Acos(DotProduct(vector3D) / (Length * vector3D.Length));
             //if (double.IsNaN(value))

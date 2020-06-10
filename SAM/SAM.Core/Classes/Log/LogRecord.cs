@@ -63,7 +63,7 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(text_Temp))
                 text_Temp = string.Empty;
 
-            return string.Format("[{0}]/t{1}", dateTime.ToString("yyyy-MM-dd HH:mm:ss.f"), text_Temp);
+            return string.Format("[{0}]\t{1}", dateTime.ToString("yyyy-MM-dd HH:mm:ss.f"), text_Temp);
         }
 
         public bool FromJObject(JObject jObject)

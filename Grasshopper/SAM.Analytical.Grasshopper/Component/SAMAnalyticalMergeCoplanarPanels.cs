@@ -100,7 +100,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> redundantPanels = new List<Panel>();
 
-            panels = Analytical.Query.MergeCoplanarPanels(panels, offset, ref redundantPanels, minArea, tolerance);
+            panels = Analytical.Query.MergeCoplanarPanels(panels, offset, ref redundantPanels, true, minArea, tolerance);
 
             if (panels != null)
             {

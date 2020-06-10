@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
+    <Compile Include="Classes\AnalyticalModel.cs" />
     <Compile Include="Classes\ApertureConstruction.cs" />
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
@@ -82,6 +83,8 @@
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Manager\ActiveSettings.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Query\Area.cs" />
+    <Compile Include="Query\MinElevationDictionary.cs" />
     <Compile Include="Query\Text.cs" />
     <Compile Include="Query\Overlap.cs" />
     <Compile Include="Query\OverlapPanels.cs" />

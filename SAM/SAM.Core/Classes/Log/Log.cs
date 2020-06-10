@@ -29,7 +29,7 @@ namespace SAM.Core
 
         public override string ToString()
         {
-            return string.Join("/n", logRecords.ConvertAll(x => x.ToString()));
+            return string.Join(Environment.NewLine, logRecords.ConvertAll(x => x.ToString()));
         }
 
         public bool FromJObject(JObject jObject)
@@ -84,7 +84,7 @@ namespace SAM.Core
 
             try
             {
-                System.IO.File.AppendAllText(path, ToString() + "\n");
+                System.IO.File.AppendAllText(path, ToString() + Environment.NewLine);
             }
             catch(Exception exception)
             {

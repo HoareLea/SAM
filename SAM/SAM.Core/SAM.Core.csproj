@@ -49,7 +49,10 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Classes\Model\Address.cs" />
+    <Compile Include="Classes\Model\Location.cs" />
     <Compile Include="Classes\Base\SAMColor.cs" />
+    <Compile Include="Classes\Model\SAMModel.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileReader.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileRow.cs" />
     <Compile Include="Classes\DelimitedFile\DelimitedFileTable.cs" />
@@ -60,6 +63,7 @@
     <Compile Include="Classes\Relation\RelationCluster.cs" />
     <Compile Include="Convert\ToCsv\ToCsv.cs" />
     <Compile Include="Convert\ToList\ToList.cs" />
+    <Compile Include="Enums\CountryCode.cs" />
     <Compile Include="Enums\DelimitedFileType.cs" />
     <Compile Include="Interfaces\DelimitedFile\IDelimitedFileReader.cs" />
     <Compile Include="Interfaces\DelimitedFile\IDelimitedFileWriter.cs" />
@@ -85,7 +89,10 @@
     <Compile Include="Interfaces\Base\IJSAMObject.cs" />
     <Compile Include="Interfaces\Base\ISAMObject.cs" />
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
+    <Compile Include="Query\CountryCode.cs" />
+    <Compile Include="Query\Description.cs" />
     <Compile Include="Query\JSAMObject.cs" />
+    <Compile Include="Query\Text.cs" />
     <Compile Include="Query\Round.cs" />
     <Compile Include="Modify\Reorder.cs" />
     <Compile Include="Modify\Add.cs" />

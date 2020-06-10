@@ -27,7 +27,7 @@ namespace SAM.Analytical
 
             List<Architectural.Level> result = new List<Architectural.Level>();
             foreach(double elevation in elevations)
-                result.Add(new Architectural.Level(string.Format("Level {0}", elevation), elevation));
+                result.Add(Architectural.Create.Level(elevation));
 
             return result;
         }

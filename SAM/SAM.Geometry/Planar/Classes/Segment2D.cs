@@ -239,7 +239,7 @@ namespace SAM.Geometry.Planar
                 if (!On(point2D_Closest_1, tolerance))
                 {
                     point2D_Closest_1 = Project(segment2D.End);
-                    if (!segment2D.On(point2D_Closest_1, tolerance))
+                    if (!On(point2D_Closest_1, tolerance))
                     {
                         segment2D_Temp = this;
                         point2D_Closest_1 = segment2D.Project(origin);
