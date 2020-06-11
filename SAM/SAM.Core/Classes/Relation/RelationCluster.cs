@@ -40,7 +40,7 @@ namespace SAM.Core
                 foreach (KeyValuePair<Guid, HashSet<Guid>> keyValuePair_2 in keyValuePair_1.Value)
                 {
                     HashSet<Guid> guids = new HashSet<Guid>();
-                    foreach (Guid guid in guids)
+                    foreach (Guid guid in keyValuePair_2.Value)
                         guids.Add(guid);
 
                     dictionary[keyValuePair_2.Key] = guids;
@@ -354,6 +354,9 @@ namespace SAM.Core
 
         public List<object> GetRelatedObjects(object @object)
         {
+            if (@object is Guid)
+                return GetRelatedObjects((Guid)@object);
+            
             if (!IsValid(@object))
                 return null;
 
@@ -561,9 +564,11 @@ namespace SAM.Core
 
                         HashSet<Guid> guids = new HashSet<Guid>();
                         foreach (JToken jToken in jArray_Guids)
-                            if (jToken.Type == JTokenType.Guid)
-                                guids.Add(jToken.Value<Guid>());
-
+                        {
+                            Guid guid_Temp = Query.Guid(jToken);
+                            if(guid_Temp != Guid.Empty)
+                                guids.Add(guid_Temp);
+                        }                            
                         dictionary[guid] = guids;
                     }
                     dictionary_Relations[typeName] = dictionary;

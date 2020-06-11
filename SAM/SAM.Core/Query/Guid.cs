@@ -25,8 +25,14 @@ namespace SAM.Core
             if (!jObject.ContainsKey(name))
                 return System.Guid.Empty;
 
-            Guid guid = System.Guid.Empty;
-            JToken jToken = jObject.Value<JToken>(name);
+            return Guid(jObject.Value<JToken>(name));
+        }
+
+        public static Guid Guid(this JToken jToken)
+        {
+            if (jToken == null)
+                return System.Guid.Empty;
+            
             switch (jToken.Type)
             {
                 case JTokenType.String:
@@ -35,18 +41,18 @@ namespace SAM.Core
                     {
                         Guid guid_Temp;
                         if (System.Guid.TryParse(guidString, out guid_Temp))
-                            guid = guid_Temp;
+                            return guid_Temp;
                     }
                     break;
 
                 case JTokenType.Guid:
-                    guid = jToken.Value<Guid>();
-                    break;
+                    return jToken.Value<Guid>();
             }
-            return guid;
+
+            return System.Guid.Empty;
         }
 
-        public static Guid Guid(Assembly assembly)
+        public static Guid Guid(this Assembly assembly)
         {
             Guid guid = System.Guid.Empty;
 

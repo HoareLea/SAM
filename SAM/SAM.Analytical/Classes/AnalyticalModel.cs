@@ -12,9 +12,14 @@ namespace SAM.Analytical
         public AnalyticalModel(string name, Core.Location location, Core.Address address, AdjacencyCluster adjacencyCluster)
             : base(name)
         {
-            this.location = location;
-            this.address = address;
-            this.adjacencyCluster = adjacencyCluster;
+            if (location != null)
+                this.location = new Core.Location(location);
+
+            if (address != null)
+                this.address = new Core.Address(address);
+
+            if (adjacencyCluster != null)
+                this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
         }
 
         public AnalyticalModel(Guid guid, string name)
