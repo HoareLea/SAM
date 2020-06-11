@@ -5,13 +5,16 @@ namespace SAM.Analytical
 {
     public class AnalyticalModel : Core.SAMModel
     {
+        private string description;
         private Core.Location location;
         private Core.Address address;
         private AdjacencyCluster adjacencyCluster;
 
-        public AnalyticalModel(string name, Core.Location location, Core.Address address, AdjacencyCluster adjacencyCluster)
+        public AnalyticalModel(string name, string description, Core.Location location, Core.Address address, AdjacencyCluster adjacencyCluster)
             : base(name)
         {
+            this.description = description;
+
             if (location != null)
                 this.location = new Core.Location(location);
 
@@ -40,6 +43,14 @@ namespace SAM.Analytical
             }
         }
 
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+        }
+
         public Core.Address Address
         {
             get
@@ -64,6 +75,9 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
+            if (jObject.ContainsKey("Description"))
+                description = jObject.Value<string>("Description");
+
             if (jObject.ContainsKey("Location"))
                 location = new Core.Location(jObject.Value<JObject>("Location"));
 
@@ -81,6 +95,9 @@ namespace SAM.Analytical
             JObject jObject = base.ToJObject();
             if (jObject == null)
                 return jObject;
+
+            if (description != null)
+                jObject.Add("Description", description);
 
             if (location != null)
                 jObject.Add("Location", location.ToJObject());

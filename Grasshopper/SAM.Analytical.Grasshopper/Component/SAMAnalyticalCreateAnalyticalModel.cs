@@ -32,6 +32,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
+            inputParamManager.AddTextParameter("_name_", "_name_", "Analytical Model Name", GH_ParamAccess.item, string.Empty);
+            inputParamManager.AddTextParameter("_description_", "_description_", "SAM Description", GH_ParamAccess.item, string.Empty);
             inputParamManager.AddParameter(new GooLocationParam(), "_location", "_location", "SAM Location", GH_ParamAccess.item);
             inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Adjacency Cluster", GH_ParamAccess.item);
         }
@@ -52,21 +54,35 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            string name = null;
+            if (!dataAccess.GetData(0, ref name) || name == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            string description = null;
+            if (!dataAccess.GetData(1, ref description) || description == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             Core.Location location = null;
-            if (!dataAccess.GetData(0, ref location) || location == null)
+            if (!dataAccess.GetData(2, ref location) || location == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            if (!dataAccess.GetData(1, ref adjacencyCluster) || adjacencyCluster == null)
+            if (!dataAccess.GetData(3, ref adjacencyCluster) || adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(null, location, null, adjacencyCluster)));
+            dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(name, description, location, null, adjacencyCluster)));
         }
     }
 }

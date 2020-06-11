@@ -9,14 +9,14 @@ using System;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometrySAMGeometry2D : GH_SAMComponent
+    public class SAMGeometrySAMGeometry3D : GH_SAMComponent
     {
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMGeometrySAMGeometry2D()
-          : base("SAMGeometry.SAMGeometry2D", "SAMGeometry.SAMGeometry2D",
-              "Convert SAM geometry 3D to SAM geometry 2D",
+        public SAMGeometrySAMGeometry3D()
+          : base("SAMGeometry.SAMGeometry3D", "SAMGeometry.SAMGeometry3D",
+              "Convert SAM geometry 2D to SAM geometry 3D",
               "SAM", "Geometry")
         {
         }
