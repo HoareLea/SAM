@@ -404,6 +404,11 @@ namespace SAM.Core
             return type != null;
         }
 
+        public virtual RelationCluster Clone()
+        {
+            return new RelationCluster(this);
+        }
+
         public bool IsValid(object @object)
         {
             if (@object == null)

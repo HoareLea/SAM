@@ -32,6 +32,11 @@ namespace SAM.Analytical
             return typeof(Panel).IsAssignableFrom(type) || typeof(Space).IsAssignableFrom(type);
         }
 
+        public override Core.RelationCluster Clone()
+        {
+            return new AdjacencyCluster(this);
+        }
+
         public bool Internal(Panel panel)
         {
             if (panel == null)
