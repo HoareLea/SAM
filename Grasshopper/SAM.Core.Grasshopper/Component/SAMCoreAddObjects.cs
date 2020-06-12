@@ -62,7 +62,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            List<SAMObject> sAMObjects = null;
+            List<SAMObject> sAMObjects = new List<SAMObject>();
             if (!dataAccess.GetDataList(1, sAMObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
