@@ -21,7 +21,7 @@ namespace SAM.Core.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMCoreFromJson()
-          : base("FormJson", "FromJson",
+          : base("FromJson", "FromJson",
               "Reads SAM Objects from Json",
               "SAM", "Core")
         {
@@ -32,7 +32,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_pathJSON", "_pathJSON", "JSON file path including extension .json", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_pathJSON", "_pathJSON", "JSON file path including extension .json or .JSON", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
 

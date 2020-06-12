@@ -21,7 +21,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreCreateLocation()
           : base("SAMCore.CreateLocation", "SAMCore.CreateLocation",
-              "Create Location",
+              "Create Location, , default London Heathrow",
               "SAM", "Core")
         {
         }
@@ -31,9 +31,9 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_latitude", "_latitude", "Latitude", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_longitude", "_longitude", "Longitude", GH_ParamAccess.item);
+            inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item, 25);
+            inputParamManager.AddNumberParameter("_latitude", "_latitude", "Latitude", GH_ParamAccess.item, 51.48);
+            inputParamManager.AddNumberParameter("_longitude", "_longitude", "Longitude", GH_ParamAccess.item, -0.45);
         }
 
         /// <summary>
