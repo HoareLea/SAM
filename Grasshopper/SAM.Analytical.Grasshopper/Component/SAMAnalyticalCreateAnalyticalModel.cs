@@ -2,10 +2,11 @@
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateAnalyticalModelByAdjacencyCluster : GH_SAMComponent
+    public class SAMAnalyticalCreateAnalyticalModel : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreateAnalyticalModelByAdjacencyCluster()
+        public SAMAnalyticalCreateAnalyticalModel()
           : base("SAMAnalytical.CreateAnalyticalModelByAdjacencyCluster", "SAMAnalytical.CreateAnalyticalModelByAdjacencyCluster",
               "Create Analytical Model",
               "SAM", "Analytical")
@@ -32,10 +33,17 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
+            int index = -1;
+
             inputParamManager.AddTextParameter("_name_", "_name_", "Analytical Model Name", GH_ParamAccess.item, string.Empty);
             inputParamManager.AddTextParameter("_description_", "_description_", "SAM Description", GH_ParamAccess.item, string.Empty);
             inputParamManager.AddParameter(new GooLocationParam(), "_location", "_location", "SAM Location", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Adjacency Cluster", GH_ParamAccess.item);
+
+            index = inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "adjacencyCluster_", "adjacencyCluster_", "SAM Adjacency Cluster", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddParameter(new GooPanelParam(), "panels_", "panels_", "SAM Analytical Panels", GH_ParamAccess.list);
+            inputParamManager[index].Optional = true;
         }
 
         /// <summary>
@@ -76,10 +84,18 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            if (!dataAccess.GetData(3, ref adjacencyCluster) || adjacencyCluster == null)
+            dataAccess.GetData(3, ref adjacencyCluster);
+            if (adjacencyCluster == null)
+                adjacencyCluster = new AdjacencyCluster();
+            else
+                adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+
+            List<Panel> panels = new List<Panel>();
+            dataAccess.GetDataList(4, panels);
+            if(panels != null && panels.Count > 0)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                foreach (Panel panel in panels)
+                    adjacencyCluster.AddObject(panel);
             }
 
             dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(name, description, location, null, adjacencyCluster)));

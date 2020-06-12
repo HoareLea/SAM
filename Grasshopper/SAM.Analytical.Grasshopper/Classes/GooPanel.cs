@@ -111,7 +111,7 @@ namespace SAM.Analytical.Grasshopper
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            return Modify.BakeGeometry(Value.GetFace3D(), doc, att, out obj_guid);
+            return Geometry.Grasshopper.Modify.BakeGeometry(Value.GetFace3D(), doc, att, out obj_guid);
         }
     }
 

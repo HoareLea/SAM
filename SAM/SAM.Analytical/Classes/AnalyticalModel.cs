@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -35,6 +36,15 @@ namespace SAM.Analytical
         {
         }
 
+        public AnalyticalModel(AnalyticalModel analyticalModel)
+            : base(analyticalModel)
+        {
+            description = analyticalModel.description;
+            location = new Core.Location(analyticalModel.location);
+            address = new Core.Address(analyticalModel.address);
+            adjacencyCluster = new AdjacencyCluster(analyticalModel.adjacencyCluster);
+        }
+
         public Core.Location Location
         {
             get
@@ -68,6 +78,17 @@ namespace SAM.Analytical
             {
                 return new AdjacencyCluster(adjacencyCluster);
             }
+        }
+
+        public bool AddSpace(Space space, IEnumerable<Panel> panels)
+        {
+            if (space == null || panels == null)
+                return false;
+
+            if (adjacencyCluster == null)
+                adjacencyCluster = new AdjacencyCluster();
+
+            return adjacencyCluster.AddSpace(space, panels);
         }
 
         public override bool FromJObject(JObject jObject)

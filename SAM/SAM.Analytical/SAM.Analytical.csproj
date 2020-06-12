@@ -83,6 +83,7 @@
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Manager\ActiveSettings.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Query\Area.cs" />
     <Compile Include="Query\MinElevationDictionary.cs" />
     <Compile Include="Query\Text.cs" />
@@ -130,8 +131,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modify\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
