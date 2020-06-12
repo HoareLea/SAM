@@ -5,7 +5,7 @@ using System;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateAnalyticalModel : GH_SAMComponent
+    public class SAMAnalyticalCreateAnalyticalModelByAdjacencyCluster : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,8 +20,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreateAnalyticalModel()
-          : base("SAMAnalytical.CreateAnalyticalModel", "SAMAnalytical.CreateAnalyticalModel",
+        public SAMAnalyticalCreateAnalyticalModelByAdjacencyCluster()
+          : base("SAMAnalytical.CreateAnalyticalModelByAdjacencyCluster", "SAMAnalytical.CreateAnalyticalModelByAdjacencyCluster",
               "Create Analytical Model",
               "SAM", "Analytical")
         {
