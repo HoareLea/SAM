@@ -34,8 +34,8 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooAnalyticalModelParam(), "_analyticalModel", "_analyticalModel", "SAM Analytical Model", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytical Space", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytical Space", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -61,22 +61,32 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Space space = null;
-            if (!dataAccess.GetData(1, ref space) || space == null)
+            List<Space> spaces = new List<Space>();
+            if (!dataAccess.GetDataList(1, spaces) || spaces == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(2, panels))
+            global::Grasshopper.Kernel.Data.GH_Structure<GooPanel> structure_GooPanels; // <Panel> panels = new List<Panel>();
+            if (!dataAccess.GetDataTree(2, out structure_GooPanels))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-
+            
             analyticalModel = new AnalyticalModel(analyticalModel);
-            analyticalModel.AddSpace(space, panels);
+            for(int i=0; i < structure_GooPanels.PathCount; i++)
+            {
+                if (i >= spaces.Count)
+                    break;
+
+                List<GooPanel> gooPanels = structure_GooPanels[i];
+                if (gooPanels == null)
+                    continue;
+
+                analyticalModel.AddSpace(spaces[i], gooPanels.ConvertAll(x => x.Value));
+            }
 
             dataAccess.SetData(0, new GooAnalyticalModel(analyticalModel));
         }
