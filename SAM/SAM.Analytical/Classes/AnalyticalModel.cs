@@ -39,10 +39,19 @@ namespace SAM.Analytical
         public AnalyticalModel(AnalyticalModel analyticalModel)
             : base(analyticalModel)
         {
+            if (analyticalModel == null)
+                return;
+
             description = analyticalModel.description;
-            location = new Core.Location(analyticalModel.location);
-            address = new Core.Address(analyticalModel.address);
-            adjacencyCluster = new AdjacencyCluster(analyticalModel.adjacencyCluster);
+            
+            if (analyticalModel.location != null)
+                location = new Core.Location(analyticalModel.location);
+
+            if (analyticalModel.address != null)
+                address = new Core.Address(analyticalModel.address);
+
+            if (analyticalModel.adjacencyCluster != null)
+                adjacencyCluster = new AdjacencyCluster(analyticalModel.adjacencyCluster);
         }
 
         public Core.Location Location
