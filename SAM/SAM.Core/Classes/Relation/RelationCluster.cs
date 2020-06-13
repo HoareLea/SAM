@@ -181,6 +181,36 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Join(RelationCluster relationCluster)
+        {
+            if (relationCluster == null)
+                return false;
+
+            foreach(KeyValuePair<string, Dictionary<Guid, object>> keyValuePair_1 in relationCluster.dictionary_Objects)
+            {
+                foreach (KeyValuePair<Guid, object> keyValuePair_2 in keyValuePair_1.Value)
+                {
+                    if (!AddObject(keyValuePair_2.Value))
+                        continue;
+
+                    List<object> relatedObjects = GetRelatedObjects(keyValuePair_2.Value);
+                    if (relatedObjects == null)
+                        continue;
+
+                    foreach (object relatedObject in relatedObjects)
+                    {
+                        if (!AddObject(relatedObject))
+                            continue;
+
+                        AddRelation(keyValuePair_2.Value, relatedObject);
+                    }
+                        
+                }
+            }
+
+            return true;
+        }
+
         public bool TryAddObject(object @object, out string typeName, out Guid guid)
         {
             typeName = null;

@@ -98,6 +98,8 @@
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdatePanelType.cs" />
     <Compile Include="Component\SAMAnalyticalAddSpace.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAnalyticalModel.cs" />
     <Compile Include="Component\SAMAnalyticalPanelSpacing.cs" />
@@ -189,7 +191,9 @@
   <ItemGroup>
     <None Include="Resources\HL_Logo24.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Modify\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

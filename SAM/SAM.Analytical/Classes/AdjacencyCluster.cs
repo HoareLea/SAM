@@ -119,5 +119,27 @@ namespace SAM.Analytical
         {
             return GetRelatedObjects<Space>(panel);
         }
+
+        public AdjacencyCluster Filter(IEnumerable<Space> spaces)
+        {
+            if (spaces == null)
+                return null;
+
+            AdjacencyCluster result = new AdjacencyCluster();
+            foreach(Space space in spaces)
+            {
+                if (GetGuid(space) == Guid.Empty)
+                    continue;
+
+                AddObject(space);
+
+                List<object> relatedObjects = GetRelatedObjects(space);
+                if (relatedObjects == null)
+                    continue;
+                
+            }
+
+            return result;
+        }
     }
 }

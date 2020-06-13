@@ -71,6 +71,7 @@
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
+    <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\ApertureType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Manager\ActiveSettings.cs" />
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddSpace.cs" />
+    <Compile Include="Modify\UpdatePanelType.cs" />
     <Compile Include="Query\Area.cs" />
     <Compile Include="Query\MinElevationDictionary.cs" />
     <Compile Include="Query\Text.cs" />
