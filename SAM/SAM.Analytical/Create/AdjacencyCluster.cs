@@ -35,7 +35,7 @@ namespace SAM.Analytical
                     foreach(Segment2D segment2D in segment2Ds)
                     {
                         Segment3D segment3D_Min = plane_Min.Convert(segment2D);
-                        Segment3D segment3D_Max = plane_Min.Convert(segment2D);
+                        Segment3D segment3D_Max = plane_Max.Convert(segment2D);
 
                         Polygon3D polygon3D = new Polygon3D(new Point3D[] {segment3D_Min[0], segment3D_Min[1], segment3D_Max[1], segment3D_Max[0] });
                         Panel panel = new Panel(construction_Wall, PanelType.Wall, new Face3D(polygon3D));

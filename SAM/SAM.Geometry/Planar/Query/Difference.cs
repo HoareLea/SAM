@@ -1,4 +1,5 @@
 ﻿using ClipperLib;
+using NetTopologySuite.Geometries;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -148,6 +149,45 @@ namespace SAM.Geometry.Planar
                     if (point2Ds[0].Distance(point2Ds[1]) > tolerance)
                         result.Add(new Segment2D(point2Ds[0], point2Ds[1]));
                 }
+            }
+
+            return result;
+        }
+
+        public static List<Face2D> Difference(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (face2D_1 == null || face2D_2 == null)
+                return null;
+            
+            Polygon polygon_1 = face2D_1.ToNTS(tolerance);
+            Polygon polygon_2 = face2D_2.ToNTS(tolerance);
+
+            if (polygon_1 == null || polygon_2 == null)
+                return null;
+
+            NetTopologySuite.Geometries.Geometry geometry = polygon_1.Difference(polygon_2);
+
+            List<Face2D> result = new List<Face2D>();
+            if (geometry is Polygon)
+            {
+                Face2D face2D = ((Polygon)geometry).ToSAM(tolerance);
+                if (face2D != null)
+                    result.Add(face2D);
+            }
+            else if (geometry is MultiPolygon)
+            {
+                foreach (Polygon polygon in (MultiPolygon)geometry)
+                {
+                    Face2D face2D = polygon.ToSAM(tolerance);
+                    if (face2D != null)
+                        result.Add(face2D);
+                }
+            }
+            else if (geometry is LinearRing)
+            {
+                Polygon2D polygon2D = ((LinearRing)geometry).ToSAM(tolerance);
+                if (polygon2D != null)
+                    result.Add(new Face2D(polygon2D));
             }
 
             return result;
