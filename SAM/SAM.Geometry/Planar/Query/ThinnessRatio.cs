@@ -13,14 +13,18 @@
             if (closed2D == null)
                 return double.NaN;
 
-            if(closed2D is ICurvable2D)
+            IClosed2D closed2D_Temp = closed2D;
+            if(closed2D_Temp is Face)
+                closed2D_Temp = ((Face)closed2D_Temp).ExternalEdge;
+
+            if(closed2D_Temp is ICurvable2D)
             {
-                double area = closed2D.GetArea();
+                double area = closed2D_Temp.GetArea();
                 if (double.IsNaN(area))
                     return double.NaN;
 
                 double length = 0;
-                ((ICurvable2D)closed2D).GetCurves().ForEach(x => length += x.GetLength());
+                ((ICurvable2D)closed2D_Temp).GetCurves().ForEach(x => length += x.GetLength());
 
                 return (4 * System.Math.PI * area) / (length * length);
             }

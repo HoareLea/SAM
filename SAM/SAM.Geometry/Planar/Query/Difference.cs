@@ -176,11 +176,10 @@ namespace SAM.Geometry.Planar
             }
             else if (geometry is MultiPolygon)
             {
-                foreach (Polygon polygon in (MultiPolygon)geometry)
+                List<Polygon> polygons = Query.Polygons((MultiPolygon)geometry);
+                if(polygons != null && polygons.Count > 0)
                 {
-                    Face2D face2D = polygon.ToSAM(tolerance);
-                    if (face2D != null)
-                        result.Add(face2D);
+                    polygons.ForEach(x => result.Add(x.ToSAM(tolerance)));
                 }
             }
             else if (geometry is LinearRing)
