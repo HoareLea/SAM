@@ -2,6 +2,7 @@
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry;
 using SAM.Geometry.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
+            List<SAMGeometry> objectWrapperList = new List<SAMGeometry>();
 
             if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
             {
@@ -65,9 +66,9 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Geometry.Planar.ISegmentable2D> segmentable2Ds = new List<Geometry.Planar.ISegmentable2D>();
-            foreach (GH_ObjectWrapper gHObjectWrapper in objectWrapperList)
+            foreach (SAMGeometry gHObjectWrapper in objectWrapperList)
             {
-                Geometry.Planar.ISegmentable2D segmentable2D = gHObjectWrapper.Value as Geometry.Planar.ISegmentable2D;
+                Geometry.Planar.ISegmentable2D segmentable2D = gHObjectWrapper as Geometry.Planar.ISegmentable2D;
                 if (segmentable2D != null)
                 {
                     segmentable2Ds.Add(segmentable2D);
