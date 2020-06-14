@@ -73,7 +73,7 @@ namespace SAM.Geometry.Planar
                 return false;
 
             if (curves.TrueForAll(x => x is Segment2D))
-                return Point2D.Inside(curves.ConvertAll(x => x.GetStart()), point2D);
+                return Query.Inside(curves.ConvertAll(x => x.GetStart()), point2D);
 
             throw new NotImplementedException();
         }

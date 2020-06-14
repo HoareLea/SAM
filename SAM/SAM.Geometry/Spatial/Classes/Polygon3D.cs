@@ -138,7 +138,7 @@ namespace SAM.Geometry.Spatial
             if (!plane_1.Coplanar(plane_2, tolerance))
                 return false;
 
-            return polygon3D.points.TrueForAll(x => Planar.Point2D.Inside(points, x));
+            return polygon3D.points.TrueForAll(x => Planar.Query.Inside(points, x));
         }
 
         public void Reverse()

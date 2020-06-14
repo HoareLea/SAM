@@ -71,6 +71,7 @@
     <Compile Include="Classes\Face.cs" />
     <Compile Include="Convert\ToClipper\IntPoint.cs" />
     <Compile Include="Convert\ToClipper\IntPoints.cs" />
+    <Compile Include="Convert\ToNTS\Point.cs" />
     <Compile Include="Convert\ToNTS\Geometry.cs" />
     <Compile Include="Convert\ToNTS\Coordinates.cs" />
     <Compile Include="Convert\ToNTS\Coordinate.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Planar\Modify\Draw.cs" />
     <Compile Include="Planar\Modify\Scale.cs" />
     <Compile Include="Planar\Modify\Tighten.cs" />
+    <Compile Include="Planar\Query\Inside.cs" />
     <Compile Include="Planar\Query\Area.cs" />
     <Compile Include="Planar\Query\MaxDistance.cs" />
     <Compile Include="Planar\Query\Max.cs" />

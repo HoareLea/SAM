@@ -216,7 +216,7 @@ namespace SAM.Geometry.Planar
 
         public bool Inside(Point2D point2D)
         {
-            return Point2D.Inside(GetPoints(), point2D);
+            return Query.Inside(GetPoints(), point2D);
         }
 
         public bool Inside(IClosed2D closed2D)

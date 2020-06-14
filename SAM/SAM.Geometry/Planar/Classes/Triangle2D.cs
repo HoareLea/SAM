@@ -85,7 +85,7 @@ namespace SAM.Geometry.Planar
 
         public bool Inside(Point2D point2D)
         {
-            return Point2D.Inside(points, point2D);
+            return Query.Inside(points, point2D);
         }
 
         public void Mirror(Point2D point2D)

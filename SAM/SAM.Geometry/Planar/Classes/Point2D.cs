@@ -353,7 +353,7 @@ namespace SAM.Geometry.Planar
 
             Point2D result = Query.Centroid(point2Ds);
 
-            if (result != null && Inside(point2Ds, result))
+            if (result != null && Query.Inside(point2Ds, result))
                 return result;
 
             List<Point2D> point2Ds_List = new List<Point2D>(point2Ds);
@@ -380,7 +380,7 @@ namespace SAM.Geometry.Planar
                             continue;
 
                         result = Mid(point2D_1, point2D_3);
-                        if (Inside(point2Ds, result) && !Query.On(segments, result))
+                        if (Query.Inside(point2Ds, result) && !Query.On(segments, result))
                             return result;
                     }
                 }
@@ -426,54 +426,6 @@ namespace SAM.Geometry.Planar
                     return true;
 
             return false;
-        }
-
-        public static bool Inside(IEnumerable<Point2D> point2Ds, Point2D point2D)
-        {
-            if (point2Ds == null)
-                return false;
-
-            int aCount = point2Ds.Count();
-
-            if (aCount < 3)
-                return false;
-
-            bool result = false;
-
-            int j = aCount - 1;
-            for (int i = 0; i < aCount; i++)
-            {
-                if (point2Ds.ElementAt(i).Y < point2D.Y && point2Ds.ElementAt(j).Y >= point2D.Y || point2Ds.ElementAt(j).Y < point2D.Y && point2Ds.ElementAt(i).Y >= point2D.Y)
-                    if (point2Ds.ElementAt(i).X + (point2D.Y - point2Ds.ElementAt(i).Y) / (point2Ds.ElementAt(j).Y - point2Ds.ElementAt(i).Y) * (point2Ds.ElementAt(j).X - point2Ds.ElementAt(i).X) < point2D.X)
-                        result = !result;
-                j = i;
-            }
-            return result;
-        }
-
-        public static bool Inside_2(IEnumerable<Point2D> point2Ds, Point2D point2D)
-        {
-            if (point2Ds == null || point2Ds.Count() < 3)
-                return false;
-
-            bool result = false;
-            Point2D point2D_1 = point2Ds.Last();
-            foreach (Point2D point2D_2 in point2Ds)
-            {
-                if ((point2D_2.X == point2D.X) && (point2D_2.Y == point2D.Y))
-                    return true;
-
-                if ((point2D_2.Y == point2D_1.Y) && (point2D.Y == point2D_1.Y) && (point2D_1.X <= point2D.X) && (point2D.X <= point2D_2.X))
-                    return true;
-
-                if ((point2D_2.Y < point2D.Y) && (point2D_1.Y >= point2D.Y) || (point2D_1.Y < point2D.Y) && (point2D_2.Y >= point2D.Y))
-                {
-                    if (point2D_2.X + (point2D.Y - point2D_2.Y) / (point2D_1.Y - point2D_2.Y) * (point2D_1.X - point2D_2.X) <= point2D.X)
-                        result = !result;
-                }
-                point2D_1 = point2D_2;
-            }
-            return result;
         }
 
         public static void Scale(List<Point2D> point2Ds, Point2D point2D, double factor)
