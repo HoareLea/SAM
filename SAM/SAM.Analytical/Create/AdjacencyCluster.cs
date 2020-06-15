@@ -15,6 +15,7 @@ namespace SAM.Analytical
             AdjacencyCluster adjacencyCluster = new AdjacencyCluster();
 
             Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0,0, elevation_Min)) as Plane;
+            plane_Min.FlipZ();
             Plane plane_Max = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
 
             Construction construction_Wall = Query.Construction(PanelType.Wall);
@@ -37,7 +38,7 @@ namespace SAM.Analytical
                         Segment3D segment3D_Min = plane_Min.Convert(segment2D);
                         Segment3D segment3D_Max = plane_Max.Convert(segment2D);
 
-                        Polygon3D polygon3D = new Polygon3D(new Point3D[] {segment3D_Min[0], segment3D_Min[1], segment3D_Max[1], segment3D_Max[0] });
+                        Polygon3D polygon3D = new Polygon3D(new Point3D[] { segment3D_Max[0], segment3D_Max[1], segment3D_Min[1], segment3D_Min[0] });
                         Panel panel = new Panel(construction_Wall, PanelType.Wall, new Face3D(polygon3D));
 
                         tuples.Add(new Tuple<Segment2D, Panel, Space> (segment2D, panel, space));
@@ -46,6 +47,7 @@ namespace SAM.Analytical
                     adjacencyCluster.AddObject(space);
 
                     Polygon3D polygon3D_Min = plane_Min.Convert(polygon2D);
+
                     Panel panel_Min = new Panel(construction_Floor, PanelType.Floor, new Face3D(polygon3D_Min));
                     adjacencyCluster.AddObject(panel_Min);
                     adjacencyCluster.AddRelation(space, panel_Min);
