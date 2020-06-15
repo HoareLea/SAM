@@ -17,6 +17,9 @@ namespace SAM.Analytical
             Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0,0, elevation_Min)) as Plane;
             Plane plane_Max = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
 
+            Plane plane_Min_Flipped = new Plane(plane_Min);
+            plane_Min_Flipped.FlipZ();
+
             Construction construction_Wall = Query.Construction(PanelType.Wall);
             Construction construction_Floor = Query.Construction(PanelType.Floor);
             Construction construction_Roof = Query.Construction(PanelType.Roof);
@@ -46,7 +49,7 @@ namespace SAM.Analytical
                     adjacencyCluster.AddObject(space);
 
                     Polygon3D polygon3D_Min = plane_Min.Convert(polygon2D);
-                    polygon3D_Min.Reverse();
+                    polygon3D_Min = plane_Min_Flipped.Convert(plane_Min_Flipped.Convert(polygon3D_Min));
 
                     Panel panel_Min = new Panel(construction_Floor, PanelType.Floor, new Face3D(polygon3D_Min));
                     adjacencyCluster.AddObject(panel_Min);
