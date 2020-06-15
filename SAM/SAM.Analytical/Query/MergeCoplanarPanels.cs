@@ -149,7 +149,25 @@ namespace SAM.Analytical
                     if (guids.Contains(guid))
                         guid = Guid.NewGuid();
 
-                    Panel panel_New = new Panel(guid, panel_Old, face3D);
+                    //Adding Apertures from redundant Panels
+                    List<Aperture> apertures = new List<Aperture>();
+                    if (redundantPanels != null && redundantPanels.Count != 0)
+                    {
+
+                        foreach (Panel panel_redundant in redundantPanels)
+                        {
+                            if (panel_redundant == null)
+                                continue;
+
+                            List<Aperture> apertures_Temp = panel_redundant.Apertures;
+                            if (apertures_Temp == null || apertures_Temp.Count == 0)
+                                continue;
+
+                            apertures.AddRange(apertures_Temp);
+                        }
+                    }
+
+                    Panel panel_New = new Panel(guid, panel_Old, face3D, apertures);
 
                     result.Add(panel_New);
                 }

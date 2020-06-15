@@ -104,6 +104,8 @@ namespace SAM.Analytical
                     {
                         Point point = polygon.InteriorPoint;
 
+                        List<Panel> redundantPanels_Temp = new List<Panel>();
+
                         List<Tuple<Polygon, Panel>> tuples_Polygon_Contains = tuples_Polygon.FindAll(x => x.Item1.Contains(point) || x.Item1.Contains(polygon.InteriorPoint));
                         int count = tuples_Polygon_Contains.Count;
                         if (count == 0)
@@ -119,7 +121,7 @@ namespace SAM.Analytical
                                 if (panel_Old != null && construction != null)
                                 {
                                     tuples_Polygon_Contains.RemoveAll(x => x.Item2 == panel_Old);
-                                    redundantPanels.AddRange(tuples_Polygon_Contains.ConvertAll(x => x.Item2));
+                                    redundantPanels_Temp.AddRange(tuples_Polygon_Contains.ConvertAll(x => x.Item2));
                                     panel_Old = new Panel(panel_Old, construction);
                                     panel_Old = new Panel(panel_Old, panelType);
                                 }
@@ -146,7 +148,7 @@ namespace SAM.Analytical
                                 panel_Old = tuples_Polygon_Contains.First().Item2;
 
                             tuples_Polygon_Contains.RemoveAt(0);
-                            redundantPanels.AddRange(tuples_Polygon_Contains.ConvertAll(x => x.Item2));
+                            redundantPanels_Temp.AddRange(tuples_Polygon_Contains.ConvertAll(x => x.Item2));
                         }
 
                         if (panel_Old == null)
@@ -162,8 +164,26 @@ namespace SAM.Analytical
                         if (guids.Contains(guid))
                             guid = Guid.NewGuid();
 
-                        Panel panel_New = new Panel(guid, panel_Old, face3D);
+                        //Adding Apertures from redundant Panels
+                        List<Aperture> apertures = new List<Aperture>();
+                        if (redundantPanels_Temp != null && redundantPanels_Temp.Count != 0)
+                        {
+                            foreach (Panel panel_redundant in redundantPanels_Temp)
+                            {
+                                if (panel_redundant == null)
+                                    continue;
 
+                                List<Aperture> apertures_Temp = panel_redundant.Apertures;
+                                if (apertures_Temp == null || apertures_Temp.Count == 0)
+                                    continue;
+
+                                apertures.AddRange(apertures_Temp);
+                            }
+                        }
+
+                        Panel panel_New = new Panel(guid, panel_Old, face3D, apertures);
+
+                        redundantPanels.AddRange(redundantPanels_Temp);
                         result.Add(panel_New);
                         guids.Add(guid);
                     }
@@ -218,6 +238,8 @@ namespace SAM.Analytical
                     Panel panel_Old = tuples_Polygon_Contains.First().Item2;
                     redundantPanels_Temp.Remove(panel_Old);
 
+                    tuples_Polygon_Contains.RemoveAt(0);
+
                     Guid guid = panel_Old.Guid;
                     if (guids.Contains(guid))
                         guid = Guid.NewGuid();
@@ -231,7 +253,25 @@ namespace SAM.Analytical
                     if (face3D == null)
                         continue;
 
-                    Panel panel_New = new Panel(guid, panel_Old, face3D);
+                    //Adding Apertures from redundant Panels
+                    List<Aperture> apertures = new List<Aperture>();
+                    if (tuples_Polygon_Contains != null && tuples_Polygon_Contains.Count != 0)
+                    {
+
+                        foreach (Panel panel_redundant in tuples_Polygon_Contains.ConvertAll(x => x.Item2))
+                        {
+                            if (panel_redundant == null)
+                                continue;
+
+                            List<Aperture> apertures_Temp = panel_redundant.Apertures;
+                            if (apertures_Temp == null || apertures_Temp.Count == 0)
+                                continue;
+
+                            apertures.AddRange(apertures_Temp);
+                        }
+                    }
+
+                    Panel panel_New = new Panel(guid, panel_Old, face3D, apertures);
 
                     result.Add(panel_New);
                 }

@@ -86,15 +86,22 @@ namespace SAM.Analytical
             this.planarBoundary3D = planarBoundary3D;
         }
 
-        public Panel(Guid guid, Panel panel, Face3D face, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)
+        public Panel(Guid guid, Panel panel, Face3D face, IEnumerable<Aperture> apertures, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)
             : base(guid, panel)
         {
             panelType = panel.panelType;
             planarBoundary3D = new PlanarBoundary3D(face);
 
+            List<Aperture> apertures_All = new List<Aperture>();
+            if (apertures != null)
+                apertures_All.AddRange(apertures);
+
             if (panel.apertures != null)
+                apertures_All.AddRange(panel.apertures);
+            
+            if (apertures_All.Count > 0)
             {
-                foreach (Aperture aperture in panel.apertures)
+                foreach (Aperture aperture in apertures_All)
                 {
                     if (aperture == null)
                         continue;
