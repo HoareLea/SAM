@@ -86,7 +86,17 @@ namespace SAM.Analytical
             this.planarBoundary3D = planarBoundary3D;
         }
 
-        public Panel(Guid guid, Panel panel, Face3D face, IEnumerable<Aperture> apertures, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)
+        /// <summary>
+        /// Creates SAM Analytical Panel using information from existing panel and updating its geometry to given face
+        /// </summary>
+        /// <param name="guid">New Guid of panel</param>
+        /// <param name="panel">SAM Analytical Panel</param>
+        /// <param name="face">New face for Panel</param>
+        /// <param name="apertures">Additional apertures will be added to panel (panel apertures will be included automatically).</param>
+        /// <param name="trimGeometry">Trim geometry to make sure it fits on panel</param>
+        /// <param name="minArea">Minimal area of aperture to be added to panel</param>
+        /// <param name="maxDistance">Max distance between panel and aperture to be added</param>
+        public Panel(Guid guid, Panel panel, Face3D face, IEnumerable<Aperture> apertures = null, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)
             : base(guid, panel)
         {
             panelType = panel.panelType;
