@@ -6,15 +6,16 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static Dictionary<double, List<Panel>> MinElevationDictionary(this IEnumerable<Panel> panels)
+        public static Dictionary<double, List<Panel>> MinElevationDictionary(this IEnumerable<Panel> panels, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (panels == null)
                 return null;
 
             Dictionary<double, List<Panel>> result = new Dictionary<double, List<Panel>>();
             foreach (Panel panel in panels)
-            {
-                double minElevation = panel.MinElevation();
+            {               
+                double minElevation = Core.Query.Round(panel.MinElevation(), tolerance);
+
                 List<Panel> panels_Elevation = null;
                 if (!result.TryGetValue(minElevation, out panels_Elevation))
                 {
