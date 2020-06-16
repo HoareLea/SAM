@@ -157,6 +157,34 @@ namespace SAM.Geometry.Spatial
             return new PlanarIntersectionResult(plane, point3D_Intersection);
         }
 
+        public static PlanarIntersectionResult Create(Face3D face3D, Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (face3D == null || segment3D == null)
+                return null;
+
+            Plane plane = face3D.GetPlane();
+            if (plane == null)
+                return null;
+
+            PlanarIntersectionResult planarIntersectionResult = Create(plane, segment3D, tolerance);
+            if (planarIntersectionResult == null)
+                return null;
+
+            if (!planarIntersectionResult.Intersecting)
+                return planarIntersectionResult;
+
+            List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
+
+            List<Point3D> point3Ds = planarIntersectionResult.GetGeometry3Ds<Point3D>();
+            if(point3Ds != null && point3Ds.Count > 0)
+            {
+                point3Ds = point3Ds.FindAll(x => face3D.Inside(x));
+                geometry3Ds.AddRange(point3Ds);
+            }
+
+            return new PlanarIntersectionResult(plane, geometry3Ds);
+        }
+
         public static PlanarIntersectionResult Create(Plane plane, Line3D line3D, double tolerance = Core.Tolerance.Distance)
         {
             if (plane == null || line3D == null)
