@@ -86,6 +86,7 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\UpdatePanelType.cs" />
+    <Compile Include="Query\ExternalVector3D.cs" />
     <Compile Include="Query\Inside.cs" />
     <Compile Include="Query\Area.cs" />
     <Compile Include="Query\MinElevationDictionary.cs" />
