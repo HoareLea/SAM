@@ -1,7 +1,9 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry;
+using SAM.Geometry.Grasshopper;
 using System;
 
 namespace SAM.Analytical.Grasshopper
@@ -55,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             AdjacencyCluster adjacencyCluster = null;
-            if(!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
+            if (!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -68,14 +70,24 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            ISAMGeometry point = null;
-            if (!dataAccess.GetData(2, ref point) || !(point is Geometry.Spatial.Point3D))
+            GH_ObjectWrapper objectWrapper = null;
+            if (!dataAccess.GetData(2, ref objectWrapper))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, Analytical.Query.Inside(adjacencyCluster, space, (Geometry.Spatial.Point3D)point));
+            Geometry.Spatial.Point3D point3D = null;
+            if (objectWrapper.Value is GH_Point)
+            {
+                point3D = ((GH_Point)objectWrapper.Value).ToSAM();
+            }
+            else if (objectWrapper.Value is Geometry.Spatial.Point3D)
+            {
+                point3D = ((Geometry.Spatial.Point3D)objectWrapper.Value);
+            }
+
+            dataAccess.SetData(0, Analytical.Query.Inside(adjacencyCluster, space, point3D));
         }
     }
 }
