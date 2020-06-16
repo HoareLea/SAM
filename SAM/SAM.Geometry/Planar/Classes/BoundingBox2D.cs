@@ -227,7 +227,7 @@ namespace SAM.Geometry.Planar
             if (point2Ds == null)
                 return null;
 
-            Point2D point2D_Closest = Point2D.Closest(point2Ds, point2D);
+            Point2D point2D_Closest = Query.Closest(point2Ds, point2D);
             if (point2D_Closest == null)
                 return null;
 

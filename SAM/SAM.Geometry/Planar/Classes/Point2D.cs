@@ -235,7 +235,7 @@ namespace SAM.Geometry.Planar
 
         public Point2D Closest(IEnumerable<Point2D> point2Ds)
         {
-            return Closest(point2Ds, this);
+            return Query.Closest(point2Ds, this);
         }
 
         public override ISAMGeometry Clone()
@@ -482,32 +482,6 @@ namespace SAM.Geometry.Planar
             List<Point2D> result = new List<Point2D>();
             foreach (Point2D point2D in point2Ds)
                 result.Add(new Point2D(point2D));
-
-            return result;
-        }
-
-        public static Point2D Closest(IEnumerable<Point2D> point2Ds, Point2D point2D)
-        {
-            if (point2Ds == null || point2D == null)
-                return null;
-
-            Point2D result = null;
-            double distance_Min = double.MaxValue;
-            foreach (Point2D point2D_Temp in point2Ds)
-            {
-                if (point2D_Temp == null)
-                    continue;
-
-                double distance = point2D.Distance(point2D_Temp);
-                if (distance == 0)
-                    return point2D_Temp;
-
-                if (distance < distance_Min)
-                {
-                    result = point2D_Temp;
-                    distance_Min = distance;
-                }
-            }
 
             return result;
         }
