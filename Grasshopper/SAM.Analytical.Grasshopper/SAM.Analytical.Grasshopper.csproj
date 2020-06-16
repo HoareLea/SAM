@@ -98,6 +98,7 @@
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalInsideSpace.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalUpdatePanelType.cs" />
     <Compile Include="Component\SAMAnalyticalAddSpace.cs" />
