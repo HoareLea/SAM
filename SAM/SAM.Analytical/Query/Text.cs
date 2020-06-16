@@ -28,7 +28,7 @@ namespace SAM.Analytical
                     return "Slab on Grade";
                 case Analytical.PanelType.SolarPanel:
                     return "Solar/PV panel";
-                case Analytical.PanelType.Undefined:
+                case Analytical.PanelType.Air:
                     return "No Type";
                 case Analytical.PanelType.UndergroundCeiling:
                     return "Underground Ceiling";
