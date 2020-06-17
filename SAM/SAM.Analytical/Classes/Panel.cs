@@ -144,6 +144,11 @@ namespace SAM.Analytical
             return planarBoundary3D.GetFace3D();
         }
 
+        public Point3D GetInternalPoint3D(double tolerance = Tolerance.Distance)
+        {
+            return SAM.Geometry.Spatial.Query.InternalPoint3D(GetFace3D(), tolerance);
+        }
+
         public double GetArea()
         {
             Face3D face3D = GetFace3D();
