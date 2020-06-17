@@ -157,6 +157,7 @@
     <Compile Include="Planar\Query\ObtuseAngles.cs" />
     <Compile Include="Planar\Query\Determinants.cs" />
     <Compile Include="Planar\Query\EqualsTopologically.cs" />
+    <Compile Include="Spatial\Classes\Shell.cs" />
     <Compile Include="Spatial\Classes\Transform3D.cs" />
     <Compile Include="Spatial\Create\Vector3D.cs" />
     <Compile Include="Spatial\Create\Point3D.cs" />
