@@ -174,11 +174,6 @@ namespace SAM.Geometry.Spatial
             return jObject;
         }
 
-        public Point3D GetInternalPoint3D()
-        {
-            return plane.Convert(GetInternalPoint2D());
-        }
-
         public double Distance(Point3D point3D)
         {
             if (point3D == null)

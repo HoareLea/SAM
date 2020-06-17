@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -81,10 +83,12 @@ namespace SAM.Geometry.Spatial
             if (!IsClosed(tolerance))
                 return false;
 
-            if (!boundingBox3D.Inside(point3D))
+            BoundingBox3D boundingBox3D_Temp = new BoundingBox3D(boundingBox3D, tolerance);
+
+            if (!boundingBox3D_Temp.Inside(point3D))
                 return false;
 
-            Vector3D vector3D = new Vector3D(boundingBox3D.Min, boundingBox3D.Max);
+            Vector3D vector3D = new Vector3D(boundingBox3D_Temp.Min, boundingBox3D_Temp.Max);
             if (vector3D.Length < silverSpacing)
                 return false;
 
@@ -126,6 +130,68 @@ namespace SAM.Geometry.Spatial
             }
 
             return false;
+        }
+
+        public List<Face3D> ClosestFace3Ds(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3D == null)
+                return null;
+
+            if (boundaries == null || boundaries.Count == 0)
+                return null;
+
+            if (boundaries.Count == 1)
+                return new List<Face3D>() { boundaries[0].Item2 };
+
+            List<Face3D> result = new List<Face3D>();
+
+            List<double> distances = boundaries.ConvertAll(x => x.Item2.Distance(point3D));
+            double min = distances.Min();
+            for(int i=0; i < distances.Count; i++)
+            {
+                if (System.Math.Abs(distances[i] - min) <= tolerance)
+                    result.Add(new Face3D(boundaries[i].Item2));
+            }
+
+            return result;
+        }
+
+        public List<Point3D> ClosestPoint3Ds(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            List<Face3D> face3Ds = ClosestFace3Ds(point3D, tolerance);
+            if (face3Ds == null)
+                return null;
+
+            List<Point3D> result = new List<Point3D>();
+            foreach(Face3D face3D in face3Ds)
+            {
+                Point3D point3D_Closest = face3D.Closest(point3D);
+                if (point3D_Closest != null)
+                    result.Add(point3D_Closest);
+            }
+
+            return result;
+        }
+
+        public Vector3D Normal(Point3D point3D, bool external = false, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            List<Face3D> face3Ds = ClosestFace3Ds(point3D, tolerance);
+            if (face3Ds == null || face3Ds.Count == 0)
+                return null;
+
+            Face3D face3D = face3Ds[0];
+
+            Vector3D vector3D = face3D?.GetPlane()?.Normal;
+            if (!external || !IsClosed(tolerance))
+                return vector3D;
+
+            vector3D *= silverSpacing;
+
+            Point3D point3D_Move = point3D.GetMoved(vector3D) as Point3D;
+            if (Inside(point3D_Move, silverSpacing, tolerance))
+                vector3D.Negate();
+
+            return vector3D.Unit;
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)

@@ -127,6 +127,7 @@
     <Compile Include="Planar\Modify\Draw.cs" />
     <Compile Include="Planar\Modify\Scale.cs" />
     <Compile Include="Planar\Modify\Tighten.cs" />
+    <Compile Include="Planar\Query\InternalPoint2D.cs" />
     <Compile Include="Planar\Query\Polygons.cs" />
     <Compile Include="Planar\Query\Inside.cs" />
     <Compile Include="Planar\Query\Area.cs" />
@@ -163,6 +164,8 @@
     <Compile Include="Spatial\Create\Point3D.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\InternalPoint3D.cs" />
+    <Compile Include="Spatial\Query\InternalPoint2D.cs" />
     <Compile Include="Spatial\Query\SignedAngle.cs" />
     <Compile Include="Spatial\Query\Clockwise.cs" />
     <Compile Include="Spatial\Query\Point3Ds.cs" />
