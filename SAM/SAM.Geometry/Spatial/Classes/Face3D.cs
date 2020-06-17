@@ -174,7 +174,7 @@ namespace SAM.Geometry.Spatial
             return jObject;
         }
 
-        public Point3D GetInternaPoint3D()
+        public Point3D GetInternalPoint3D()
         {
             return plane.Convert(GetInternalPoint2D());
         }

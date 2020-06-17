@@ -23,10 +23,10 @@ namespace SAM.Analytical
 
             vector3D *= silverSpacing;
 
-            Point3D point3D = face3D.GetInternaPoint3D();
+            Point3D point3D = face3D.GetInternalPoint3D();
 
             Point3D point3D_Move = point3D.GetMoved(vector3D) as Point3D;
-            if (!adjacencyCluster.Inside(space, point3D_Move, silverSpacing, tolerance))
+            if (adjacencyCluster.Inside(space, point3D_Move, silverSpacing, tolerance))
                 vector3D.Negate();
 
             return vector3D.Unit;           
