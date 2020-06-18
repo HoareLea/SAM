@@ -95,7 +95,7 @@ namespace SAM.Geometry.Spatial
         public BoundingBox3D(BoundingBox3D boundingBox3D, double offset)
         {
             min = new Point3D(boundingBox3D.min.X - offset, boundingBox3D.min.Y - offset, boundingBox3D.min.Z - offset);
-            max = new Point3D(boundingBox3D.min.X + offset, boundingBox3D.min.Y + offset, boundingBox3D.min.Z + offset);
+            max = new Point3D(boundingBox3D.max.X + offset, boundingBox3D.max.Y + offset, boundingBox3D.max.Z + offset);
         }
 
         public BoundingBox3D(IEnumerable<BoundingBox3D> boundingBox3Ds)
