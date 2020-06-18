@@ -134,7 +134,7 @@ namespace SAM.Geometry.Spatial
                 if (!boundary.Item1.Inside(point3D, true, tolerance))
                     continue;
 
-                if (boundary.Item2.On(point3D))
+                if (boundary.Item2.On(point3D, tolerance))
                     return true;
             }
 
@@ -325,6 +325,24 @@ namespace SAM.Geometry.Spatial
             }
 
             return null;
+        }
+
+        public bool Simplify(double tolerance = Core.Tolerance.Distance)
+        {
+            if (boundaries == null || boundaries.Count == 0)
+                return false;
+
+            for (int i = 0; i < boundaries.Count; i++)
+            {
+                Face3D face3D = Query.SimplifyByNTS_TopologyPreservingSimplifier(boundaries[i].Item2, tolerance);
+                if (face3D == null)
+                    continue;
+
+                boundaries[i] = new Tuple<BoundingBox3D, Face3D>(face3D.GetBoundingBox(), face3D);
+            }
+
+            boundingBox3D = new BoundingBox3D(boundaries.ConvertAll(x => x.Item1));
+            return true;
         }
     }
 }
