@@ -222,6 +222,7 @@ namespace SAM.Analytical
                 tuples.RemoveAll(x => tuples_Face3D.Contains(x));
 
                 Polygon polygon = plane.Convert(tuple.Item1).ToNTS(tolerance);
+                bool counterClockwise = polygon.Shell.IsCCW;
                 List<Tuple<Polygon, Panel>> tuples_Polygon = tuples_Face3D.ConvertAll(x => new Tuple<Polygon, Panel>(plane.Convert(plane.Project(x.Item1)).ToNTS(tolerance), x.Item2));
                 tuples_Polygon.Add(new Tuple<Polygon, Panel>(polygon, tuple.Item2));
 
@@ -249,6 +250,9 @@ namespace SAM.Analytical
                     Polygon polygon_Simplify = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon_Temp);
                     polygon_Simplify = Geometry.Planar.Query.SimplifyByNTS_TopologyPreservingSimplifier(polygon_Simplify);
 
+                    if (polygon_Simplify.Shell.IsCCW != counterClockwise)
+                        polygon_Simplify.Reverse();
+                    
                     Face3D face3D = plane.Convert(polygon_Simplify.ToSAM(tolerance));
                     if (face3D == null)
                         continue;
