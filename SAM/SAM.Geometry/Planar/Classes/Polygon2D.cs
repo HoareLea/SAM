@@ -80,7 +80,12 @@ namespace SAM.Geometry.Planar
             return points.ConvertAll(x => new Point2D(x));
         }
 
-        //Inserts new point on one of the edges (closest to given point2D)
+        /// <summary>
+        /// Inserts new point on one of the edges (closest to given point2D)
+        /// </summary>
+        /// <param name="point2D"> Point2D will be use as a reference to insert Point2D on Polygon2D edge</param>
+        /// <param name="tolerance">tolerance</param>
+        /// <returns>Point2D on Polygon2D edge</returns>
         public Point2D InsertClosest(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             return Modify.InsertClosest(points, point2D, true, tolerance);
