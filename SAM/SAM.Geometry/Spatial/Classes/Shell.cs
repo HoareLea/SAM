@@ -132,15 +132,35 @@ namespace SAM.Geometry.Spatial
             if (point3D == null || boundaries == null || boundingBox3D == null)
                 return false;
 
-            if (!boundingBox3D.Inside(point3D, true, tolerance))
+            if (!boundingBox3D.InRange(point3D, tolerance))
                 return false;
 
             foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries)
             {
-                if (!boundary.Item1.Inside(point3D, true, tolerance))
+                if (!boundary.Item1.InRange(point3D, tolerance))
                     continue;
 
                 if (boundary.Item2.On(point3D, tolerance))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool InRange(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3D == null || boundaries == null || boundingBox3D == null)
+                return false;
+
+            if (!boundingBox3D.InRange(point3D, tolerance))
+                return false;
+
+            foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries)
+            {
+                if (!boundary.Item1.InRange(point3D, tolerance))
+                    continue;
+
+                if (boundary.Item2.InRange(point3D, tolerance))
                     return true;
             }
 

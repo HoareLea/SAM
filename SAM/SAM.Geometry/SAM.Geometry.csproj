@@ -127,6 +127,7 @@
     <Compile Include="Planar\Modify\Draw.cs" />
     <Compile Include="Planar\Modify\Scale.cs" />
     <Compile Include="Planar\Modify\Tighten.cs" />
+    <Compile Include="Planar\Query\InRange.cs" />
     <Compile Include="Planar\Query\InternalPoint2D.cs" />
     <Compile Include="Planar\Query\Polygons.cs" />
     <Compile Include="Planar\Query\Inside.cs" />

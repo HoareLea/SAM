@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Geometry.Planar;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -130,17 +131,38 @@ namespace SAM.Geometry.Spatial
             return externalEdge.Inside(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D));
         }
 
-        public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        public bool OnEdge(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
             if (!plane.On(point3D, tolerance))
                 return false;
 
-            Planar.Point2D point2D = plane.Convert(point3D);
+            Point2D point2D = plane.Convert(point3D);
 
             if (internalEdges == null || internalEdges.Count == 0)
                 return externalEdge.On(point2D);
 
             return externalEdge.On(point2D) || internalEdges.Any(x => x.On(point2D, tolerance));
+        }
+
+        public bool InRange(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (!plane.On(point3D, tolerance))
+                return false;
+
+            return externalEdge.InRange(plane.Convert(point3D), tolerance);
+        }
+
+        public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (!plane.On(point3D, tolerance))
+                return false;
+
+            Point2D point2D = plane.Convert(point3D);
+
+            if (internalEdges == null || internalEdges.Count == 0)
+                return externalEdge.InRange(point2D);
+
+            return externalEdge.InRange(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D));
         }
 
         public IClosedPlanar3D Project(IClosed3D closed3D)
