@@ -127,6 +127,7 @@ namespace SAM.Analytical
 
             List<Tuple<Space, Geometry.Spatial.Shell>> tuples = new List<Tuple<Space, Geometry.Spatial.Shell>>();
             spaces.ForEach(x => tuples.Add(new Tuple<Space, Geometry.Spatial.Shell>(x, this.Shell(x))));
+            tuples.RemoveAll(x => x.Item2 == null);
 
             List<Space> result = new List<Space>();
             foreach(Geometry.Spatial.Point3D point3D in point3Ds)
