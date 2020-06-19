@@ -132,7 +132,7 @@ namespace SAM.Analytical
             List<Space> result = new List<Space>();
             foreach(Geometry.Spatial.Point3D point3D in point3Ds)
             {
-                Tuple<Space, Geometry.Spatial.Shell> tuple = tuples.Find(x => x.Item2.Inside(point3D, silverSpacing, tolerance));
+                Tuple<Space, Geometry.Spatial.Shell> tuple = tuples.Find(x => x.Item2.InRange(point3D, tolerance) || x.Item2.Inside(point3D, silverSpacing, tolerance));
                 result.Add(tuple?.Item1);
             }
 
