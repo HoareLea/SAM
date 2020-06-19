@@ -94,14 +94,14 @@ namespace SAM.Geometry.Spatial
 
             Segment3D segment3D = new Segment3D(point3D, vector3D);
 
-            List<Point3D> point3Ds = IntersectionPoint3Ds(segment3D, tolerance);
+            List<Point3D> point3Ds = IntersectionPoint3Ds(segment3D, false, tolerance);
             if (point3Ds == null || point3Ds.Count == 0)
                 return false;
 
             return point3Ds.Count % 2 != 0;
         }
 
-        public List<Point3D> IntersectionPoint3Ds(Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
+        public List<Point3D> IntersectionPoint3Ds(Segment3D segment3D, bool includeInternalEdges = true, double tolerance = Core.Tolerance.Distance)
         {
             if (segment3D == null || boundaries == null)
                 return null;
@@ -109,7 +109,13 @@ namespace SAM.Geometry.Spatial
             HashSet<Point3D> point3Ds = new HashSet<Point3D>();
             foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries)
             {
-                PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(boundary.Item2, segment3D, tolerance);
+                PlanarIntersectionResult planarIntersectionResult = null;
+
+                if(includeInternalEdges)
+                    planarIntersectionResult = PlanarIntersectionResult.Create(boundary.Item2, segment3D, tolerance);
+                else
+                    planarIntersectionResult = PlanarIntersectionResult.Create(new Face3D(boundary.Item2.GetExternalEdge()), segment3D, tolerance);
+
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 
@@ -311,7 +317,7 @@ namespace SAM.Geometry.Spatial
             {
                 for (int j = i + 1; j < point3Ds.Count; j++)
                 {
-                    List<Point3D> point3D_Intersections = IntersectionPoint3Ds(new Segment3D(point3Ds[i], point3Ds[j]), tolerance);
+                    List<Point3D> point3D_Intersections = IntersectionPoint3Ds(new Segment3D(point3Ds[i], point3Ds[j]), false, tolerance);
                     if (point3D_Intersections == null || point3D_Intersections.Count < 2)
                         continue;
 
