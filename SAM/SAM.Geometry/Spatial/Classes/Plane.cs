@@ -466,27 +466,27 @@ namespace SAM.Geometry.Spatial
                 axisY = Query.AxisY(normal, axisX);
         }
 
-        public PlanarIntersectionResult Intersection(Segment3D segment3D)
+        public PlanarIntersectionResult Intersection(Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
         {
-            return PlanarIntersectionResult.Create(this, segment3D);
+            return PlanarIntersectionResult.Create(this, segment3D, tolerance);
         }
 
-        public PlanarIntersectionResult Intersection(IClosedPlanar3D closedPlanar3D)
+        public PlanarIntersectionResult Intersection(IClosedPlanar3D closedPlanar3D, double tolerance = Core.Tolerance.Distance)
         {
             if (closedPlanar3D is Face3D)
                 return Intersection((Face3D)closedPlanar3D);
 
-            return PlanarIntersectionResult.Create(this, closedPlanar3D);
+            return PlanarIntersectionResult.Create(this, closedPlanar3D, tolerance);
         }
 
-        public PlanarIntersectionResult Intersection(Face3D face3D)
+        public PlanarIntersectionResult Intersection(Face3D face3D, double tolerance = Core.Tolerance.Distance)
         {
-            return PlanarIntersectionResult.Create(this, face3D);
+            return PlanarIntersectionResult.Create(this, face3D, tolerance);
         }
 
-        public PlanarIntersectionResult Intersection(Plane plane)
+        public PlanarIntersectionResult Intersection(Plane plane, double tolerance = Core.Tolerance.Distance)
         {
-            return PlanarIntersectionResult.Create(this, plane);
+            return PlanarIntersectionResult.Create(this, plane, tolerance);
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)

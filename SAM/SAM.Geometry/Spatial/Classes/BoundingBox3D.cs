@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using NetTopologySuite.Mathematics;
+using NetTopologySuite.Operation.Distance3D;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -124,6 +126,44 @@ namespace SAM.Geometry.Spatial
             return (min.X <= boundingBox3D.max.X && max.X >= boundingBox3D.min.X) && (min.Y <= boundingBox3D.max.Y && max.Y >= boundingBox3D.min.Y) && (min.Z <= boundingBox3D.max.Z && max.Z >= boundingBox3D.min.Z);
         }
 
+        public bool Intersect(Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segment3D == null)
+                return false;
+
+            bool inside_1 = Inside(segment3D[0]);
+            bool inside_2 = Inside(segment3D[1]);
+
+            if (inside_1 != inside_2)
+                return true;
+
+            if (inside_1 && inside_2)
+                return false;
+
+            foreach (Plane plane in GetPlanes())
+            {
+                PlanarIntersectionResult planarIntersectionResult = plane.Intersection(segment3D, tolerance);
+                if (planarIntersectionResult != null && planarIntersectionResult.Intersecting)
+                {
+                    ISAMGeometry3D geometry3D = planarIntersectionResult.Geometry3D;
+                    if (geometry3D is Point3D)
+                    {
+                        if (On((Point3D)geometry3D, tolerance))
+                            return true;
+                    }
+                    else if (geometry3D is Segment3D)
+                    {
+                        Segment3D segment3D_Temp = (Segment3D)geometry3D;
+                        if (On(segment3D_Temp[0], tolerance) || On(segment3D_Temp[1], tolerance))
+                            return true;
+                    }
+                }
+                return true;
+            }
+
+            return false;
+        }
+
         public Point3D Min
         {
             get
@@ -188,6 +228,18 @@ namespace SAM.Geometry.Spatial
             {
                 return max.Y - min.Y;
             }
+        }
+
+        public List<Plane> GetPlanes()
+        {
+            List<Plane> planes = new List<Plane>();
+            planes.Add(new Plane(min, Vector3D.WorldX));
+            planes.Add(new Plane(min, Vector3D.WorldY));
+            planes.Add(new Plane(min, Vector3D.WorldZ));
+            planes.Add(new Plane(max, Vector3D.WorldX));
+            planes.Add(new Plane(max, Vector3D.WorldY));
+            planes.Add(new Plane(max, Vector3D.WorldZ));
+            return planes;
         }
 
         public bool Inside(BoundingBox3D boundingBox3D)
