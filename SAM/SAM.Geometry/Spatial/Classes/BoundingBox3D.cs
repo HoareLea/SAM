@@ -211,6 +211,20 @@ namespace SAM.Geometry.Spatial
             return (point3D.X > min.X + tolerance && point3D.X < max.X - tolerance && point3D.Y > min.Y + tolerance && point3D.Y < max.Y - tolerance && point3D.Z > min.Z + tolerance && point3D.Z < max.Z - tolerance);
         }
 
+        public bool Inside(Segment3D segment3D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segment3D == null)
+                return false;
+
+            if (!Inside(segment3D[0], acceptOnEdge, tolerance))
+                return false;
+
+            if (!Inside(segment3D[1], acceptOnEdge, tolerance))
+                return false;
+
+            return true;
+        }
+        
         public override ISAMGeometry Clone()
         {
             return new BoundingBox3D(this);
