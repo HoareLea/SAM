@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -115,9 +116,39 @@ namespace SAM.Analytical
             return GetObjects<Space>();
         }
 
+        public List<Space> GetSpaces(IEnumerable<Geometry.Spatial.Point3D> point3Ds, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3Ds == null)
+                return null;
+
+            List<Space> spaces = GetSpaces();
+            if (spaces == null)
+                return null;
+
+            List<Tuple<Space, Geometry.Spatial.Shell>> tuples = new List<Tuple<Space, Geometry.Spatial.Shell>>();
+            spaces.ForEach(x => tuples.Add(new Tuple<Space, Geometry.Spatial.Shell>(x, this.Shell(x))));
+
+            List<Space> result = new List<Space>();
+            foreach(Geometry.Spatial.Point3D point3D in point3Ds)
+            {
+                Tuple<Space, Geometry.Spatial.Shell> tuple = tuples.Find(x => x.Item2.Inside(point3D, silverSpacing, tolerance));
+                result.Add(tuple?.Item1);
+            }
+
+            return result;
+        }
+
         public List<Space> GetSpaces(Panel panel)
         {
             return GetRelatedObjects<Space>(panel);
+        }
+
+        public Space GetSpace(Geometry.Spatial.Point3D point3D, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3D == null)
+                return null;
+
+            return GetSpaces(new Geometry.Spatial.Point3D[] { point3D }, silverSpacing, tolerance)?.FirstOrDefault();
         }
 
         public AdjacencyCluster Filter(IEnumerable<Space> spaces)
