@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -214,11 +215,20 @@ namespace SAM.Analytical
 
         public Face3D GetFace3D()
         {
-            List<Geometry.Planar.IClosed2D> internalClosed2Ds = null;
+            Face2D face2D = GetFace2D();
+            if (face2D == null)
+                return null;
+
+            return new Face3D(plane, face2D);
+        }
+
+        public Face2D GetFace2D()
+        {
+            List<IClosed2D> internalClosed2Ds = null;
             if (internalEdge2DLoops != null && internalEdge2DLoops.Count > 0)
                 internalClosed2Ds = InternalEdge2DLoops.ConvertAll(x => x.GetClosed2D());
 
-            return Face3D.Create(plane, externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
+            return Face2D.Create(externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
         }
 
         public double GetPerimeter()

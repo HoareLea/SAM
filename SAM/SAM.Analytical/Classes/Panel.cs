@@ -139,9 +139,35 @@ namespace SAM.Analytical
         /// Gets Geometrical Representation of Panel (None Analytical Data)
         /// </summary>
         /// <returns name="face3D">SAM Geometry Face3D</returns>
-        public Face3D GetFace3D()
+        public Face3D GetFace3D(bool cutApertures = false, double tolerance = Tolerance.MacroDistance)
         {
-            return planarBoundary3D.GetFace3D();
+            Face2D face2D = planarBoundary3D?.GetFace2D();
+            if (face2D == null)
+                return null;
+
+            Plane plane = planarBoundary3D.Plane;
+
+            if(cutApertures && apertures != null && apertures.Count != 0)
+            {
+                foreach(Aperture aperture in apertures)
+                {
+                    Face3D face3D_Aperture = aperture?.GetFace3D();
+                    if (face3D_Aperture == null)
+                        continue;
+
+                    Face2D face2D_Aperture = plane.Convert(face3D_Aperture);
+
+                    List<Face2D> face2Ds = face2D.Difference(face2D_Aperture, tolerance);
+                    if (face2Ds == null || face2Ds.Count == 0)
+                        continue;
+
+                    face2Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+                    face2D = face2Ds[0];
+                    
+                }
+            }
+
+            return plane.Convert(face2D);
         }
 
         public Point3D GetInternalPoint3D(double tolerance = Tolerance.Distance)

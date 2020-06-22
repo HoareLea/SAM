@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_cutOpenings", "_cutOpenings", "Cut Openings If Possible", GH_ParamAccess.item, false);
+            inputParamManager.AddBooleanParameter("_cutApertures", "_cutApertures", "Cut Apertures If Applicable", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -62,8 +62,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            bool cutOpenings = false;
-            if(!dataAccess.GetData(1, ref cutOpenings))
+            bool cutApertures = false;
+            if(!dataAccess.GetData(1, ref cutApertures))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -72,7 +72,7 @@ namespace SAM.Analytical.Grasshopper
             List<IGH_Goo> result = new List<IGH_Goo>();
 
             if (sAMObject is Panel)
-                result.Add(((Panel)sAMObject).PlanarBoundary3D.ToGrasshopper());
+                result.Add(((Panel)sAMObject).ToGrasshopper(cutApertures));
             else if (sAMObject is Aperture)
                 result.Add(((Aperture)sAMObject).ToGrasshopper());
             else if (sAMObject is PlanarBoundary3D)
@@ -81,14 +81,14 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(((Space)sAMObject).ToGrasshopper());
             else if (sAMObject is AdjacencyCluster)
             {
-                List<GH_Brep> breps = ((AdjacencyCluster)sAMObject).ToGrasshopper();
+                List<GH_Brep> breps = ((AdjacencyCluster)sAMObject).ToGrasshopper(cutApertures);
                 if(breps != null)
                     result.AddRange(breps);
 
             }
             else if (sAMObject is AnalyticalModel)
             {
-                List<GH_Brep> breps = ((AnalyticalModel)sAMObject)?.AdjacencyCluster?.ToGrasshopper();
+                List<GH_Brep> breps = ((AnalyticalModel)sAMObject)?.AdjacencyCluster?.ToGrasshopper(cutApertures);
                 if (breps != null)
                     result.AddRange(breps);
             }
