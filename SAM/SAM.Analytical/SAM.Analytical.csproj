@@ -84,8 +84,11 @@
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Manager\ActiveSettings.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\UpdatePanelType.cs" />
+    <Compile Include="Query\ApertureHost.cs" />
+    <Compile Include="Query\ApertureHosts.cs" />
     <Compile Include="Query\Shell.cs" />
     <Compile Include="Query\ExternalVector3D.cs" />
     <Compile Include="Query\Inside.cs" />

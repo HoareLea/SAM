@@ -98,6 +98,7 @@
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalAddApertures.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalExternalVector3D.cs" />
     <Compile Include="Component\SAMAnalyticalInsideSpace.cs" />
@@ -111,7 +112,6 @@
     <Compile Include="Component\SAMAnalyticalMergeOverlapPanels.cs" />
     <Compile Include="Component\SAMAnalyticalMergeCoplanarPanels.cs" />
     <Compile Include="Component\SAMAnalyticalOffsetAperturesOnEdge.cs" />
-    <Compile Include="Component\SAMAnalyticalAddAperture.cs" />
     <Compile Include="Component\SAMAnalyticalCreateApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalOverlapPanels.cs" />
     <Compile Include="Component\SAMAnalyticalMovePanel.cs" />

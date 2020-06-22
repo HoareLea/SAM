@@ -504,6 +504,9 @@ namespace SAM.Analytical
             if (apertureConstruction == null || closedPlanar3D == null)
                 return null;
 
+            if (!Query.ApertureHost(this, closedPlanar3D, minArea, maxDistance, tolerance))
+                return null;
+
             Plane plane = planarBoundary3D?.Plane;
             if (plane == null)
                 return null;
@@ -521,17 +524,8 @@ namespace SAM.Analytical
             if (!plane.AxisX.SameHalf(plane_closedPlanar3D.AxisX))
                 plane.FlipX(true);
 
-            if (!normal.Collinear(normal_closedPlanar3D, Tolerance.MacroDistance))
-                return null;
-
             IClosedPlanar3D closedPlanar3D_Projected = plane.Project(closedPlanar3D);
             if (closedPlanar3D_Projected == null)
-                return null;
-
-            Point3D point3D_ClosedPlanar3D = plane_closedPlanar3D.Origin;
-            Point3D point3D_ClosedPlanar3D_Projected = plane.Project(plane_closedPlanar3D.Origin);
-
-            if (point3D_ClosedPlanar3D.Distance(point3D_ClosedPlanar3D_Projected) >= maxDistance + tolerance)
                 return null;
 
             IClosed2D closed2D_Aperture = plane.Convert(closedPlanar3D_Projected);

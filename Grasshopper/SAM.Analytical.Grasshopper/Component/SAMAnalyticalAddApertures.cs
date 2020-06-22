@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
@@ -10,12 +11,12 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddAperture : GH_SAMComponent
+    public class SAMAnalyticalAddApertures : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("56dcc3a4-a1ad-4568-858d-fe9fb6ad32db");
+        public override Guid ComponentGuid => new Guid("64ee6364-37ba-4554-9ec2-39980afa92c3");
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -25,9 +26,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAddAperture()
-          : base("SAMAnalytical.AddAperture", "SAMAnalytical.AddAperture",
-              "Add Aperture to SAM Analytical Panel",
+        public SAMAnalyticalAddApertures()
+          : base("SAMAnalytical.AddApertures", "SAMAnalytical.AddApertures",
+              "Add Apertures to SAM AdjacencyCluster",
               "SAM", "Analytical")
         {
         }
@@ -38,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_geometry", "_geometry", "Geometry incl Rhino geometry", GH_ParamAccess.list);
-            inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
 
             int index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
@@ -115,15 +116,6 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Panel panel = null;
-            if (!dataAccess.GetData(1, ref panel))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            panel = new Panel(panel);
-
             ApertureConstruction apertureConstruction = null;
             dataAccess.GetData(2, ref apertureConstruction);
 
@@ -133,23 +125,92 @@ namespace SAM.Analytical.Grasshopper
             double minArea = Core.Tolerance.MacroDistance;
             dataAccess.GetData(5, ref minArea);
 
-            List<Aperture> apertures = new List<Aperture>();
-            foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+            SAMObject sAMObject = null;
+            if (!dataAccess.GetData(1, ref sAMObject))
             {
-                ApertureConstruction apertureConstruction_Temp = apertureConstruction;
-                if (apertureConstruction_Temp == null)
-                    apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, ApertureType.Window);
-
-                if (apertureConstruction_Temp == null)
-                    continue;
-
-                Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
-                if (aperture != null)
-                    apertures.Add(aperture);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
             }
 
-            dataAccess.SetData(0, new GooPanel(panel));
-            dataAccess.SetDataList(1, apertures.ConvertAll(x => new GooAperture(x)));
+            if (sAMObject is Panel)
+            {
+                Panel panel = new Panel((Panel)sAMObject);
+
+                List<Aperture> apertures = new List<Aperture>();
+
+                foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+                {
+                    ApertureConstruction apertureConstruction_Temp = apertureConstruction;
+                    if (apertureConstruction_Temp == null)
+                        apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, ApertureType.Window);
+
+                    Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
+                    if (aperture != null)
+                        apertures.Add(aperture);
+                }
+
+                dataAccess.SetData(0, new GooPanel(panel));
+                dataAccess.SetDataList(1, apertures.ConvertAll(x => new GooAperture(x)));
+                return;
+            }
+
+            AdjacencyCluster adjacencyCluster = null;
+            if (sAMObject is AdjacencyCluster)
+                adjacencyCluster = (AdjacencyCluster)sAMObject;
+            else if (sAMObject is AnalyticalModel)
+                adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
+
+            if (adjacencyCluster == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            List<Panel> panels = adjacencyCluster.GetPanels();
+            if (panels != null)
+            {
+                List<Tuple<BoundingBox3D, IClosedPlanar3D>> tuples = new List<Tuple<BoundingBox3D, IClosedPlanar3D>>();
+                foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+                {
+                    if (closedPlanar3D == null)
+                        continue;
+
+                    tuples.Add(new Tuple<BoundingBox3D, IClosedPlanar3D>(closedPlanar3D.GetBoundingBox(maxDistance), closedPlanar3D));
+                }
+
+                List<Tuple<Panel, Aperture>> tuples_Result = new List<Tuple<Panel, Aperture>>();
+                foreach (Panel panel in panels)
+                {
+                    BoundingBox3D boundingBox3D = panel.GetBoundingBox(maxDistance);
+
+                    foreach (Tuple<BoundingBox3D, IClosedPlanar3D> tuple in tuples)
+                    {
+                        if (!boundingBox3D.InRange(tuple.Item1))
+                            continue;
+
+                        if (!panel.ApertureHost(tuple.Item2, minArea, maxDistance))
+                            continue;
+
+                        ApertureConstruction apertureConstruction_Temp = apertureConstruction;
+                        if (apertureConstruction_Temp == null)
+                            apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, ApertureType.Window);
+
+                        if (apertureConstruction_Temp == null)
+                            continue;
+
+                        Aperture aperture = panel.AddAperture(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
+                        if (aperture == null)
+                            continue;
+
+                        tuples_Result.Add(new Tuple<Panel, Aperture>(panel, aperture));
+                    }
+                }
+
+                dataAccess.SetData(0, tuples_Result.ConvertAll(x => new GooPanel(x.Item1)));
+                dataAccess.SetDataList(1, tuples_Result.ConvertAll(x => new GooAperture(x.Item2)));
+            }
+
+
         }
     }
 }
