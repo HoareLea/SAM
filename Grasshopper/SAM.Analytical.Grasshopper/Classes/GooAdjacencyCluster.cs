@@ -108,7 +108,7 @@ namespace SAM.Analytical.Grasshopper
                     List<Brep> breps = new List<Brep>();
                     foreach(Panel panel in panels_Related)
                     {
-                        Brep brep = panel.ToRhino(true);
+                        Brep brep = panel.ToRhino();
                         if (brep == null)
                             continue;
 
@@ -146,7 +146,7 @@ namespace SAM.Analytical.Grasshopper
             List<Brep> breps = new List<Brep>();
             foreach(Panel panel in panels)
             {
-                Brep brep = panel.ToRhino(true);
+                Brep brep = panel.ToRhino();
                 if (brep == null)
                     continue;
 

@@ -86,14 +86,14 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args, DisplayMaterial displayMaterial)
         {
-            Brep brep = Value.ToRhino(true);
+            Brep brep = Value.ToRhino();
             if (brep != null)
                 args.Pipeline.DrawBrepShaded(brep, displayMaterial);
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            GeometryBase geometryBase = Value.ToRhino(true);
+            GeometryBase geometryBase = Value.ToRhino();
             if (geometryBase == null)
             {
                 obj_guid = Guid.Empty;

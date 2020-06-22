@@ -18,9 +18,9 @@ namespace SAM.Geometry.Grasshopper
             return new GH_Surface(brep);
         }
 
-        public static GH_Surface ToGrasshopper(this Face3D face, bool includeInternalEdges, double tolerance = Core.Tolerance.Distance)
+        public static GH_Surface ToGrasshopper(this Face3D face, double tolerance = Core.Tolerance.Distance)
         {
-            return new GH_Surface(ToRhino_Brep(face, includeInternalEdges, tolerance));
+            return new GH_Surface(ToRhino_Brep(face, tolerance));
         }
     }
 }

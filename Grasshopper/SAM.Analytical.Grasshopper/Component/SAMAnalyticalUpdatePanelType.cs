@@ -85,7 +85,7 @@ namespace SAM.Analytical.Grasshopper
                         dataTree_Names.Add(name, path);
                 }
 
-                dataTree_GeometricGoos.Add(Geometry.Grasshopper.Convert.ToGrasshopper(panel.GetFace3D(), true), path);
+                dataTree_GeometricGoos.Add(Geometry.Grasshopper.Convert.ToGrasshopper(panel.GetFace3D()), path);
 
                 count++;
             }

@@ -5,19 +5,19 @@ namespace SAM.Analytical.Grasshopper
 {
     public static partial class Convert
     {
-        public static GH_Surface ToGrasshopper(this Panel panel, bool includeInternalEdges, double tolerance = Core.Tolerance.Distance)
+        public static GH_Surface ToGrasshopper(this Panel panel)
         {
-            return panel.PlanarBoundary3D.ToGrasshopper(includeInternalEdges, tolerance);
+            return panel.PlanarBoundary3D.ToGrasshopper();
         }
 
-        public static GH_Surface ToGrasshopper(this PlanarBoundary3D planarBoundary3D, bool includeInternalEdges, double tolerance = Core.Tolerance.Distance)
+        public static GH_Surface ToGrasshopper(this PlanarBoundary3D planarBoundary3D)
         {
-            return new GH_Surface(planarBoundary3D.ToRhino(includeInternalEdges, tolerance));
+            return new GH_Surface(planarBoundary3D.ToRhino());
         }
 
-        public static GH_Surface ToGrasshopper(this Aperture aperture, bool includeInternalEdges, double tolerance = Core.Tolerance.Distance)
+        public static GH_Surface ToGrasshopper(this Aperture aperture)
         {
-            return new GH_Surface(aperture.GetFace3D().ToRhino_Brep(includeInternalEdges, tolerance));
+            return new GH_Surface(aperture.GetFace3D().ToRhino_Brep());
         }
     }
 }

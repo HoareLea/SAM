@@ -5,7 +5,7 @@ namespace SAM.Analytical.Grasshopper
 {
     public static partial class Convert
     {
-        public static List<Brep> ToRhino(this AdjacencyCluster adjacencyCluster, bool includeInternalEdges = true, double tolerance = Core.Tolerance.Distance)
+        public static List<Brep> ToRhino(this AdjacencyCluster adjacencyCluster, double tolerance = Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null)
                 return null;
@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
                     List<Brep> breps = new List<Brep>();
                     foreach (Panel panel in panels_Related)
                     {
-                        Brep brep = panel.ToRhino(includeInternalEdges, tolerance);
+                        Brep brep = panel.ToRhino();
                         if (brep == null)
                             continue;
 
@@ -49,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
 
             foreach (Panel panel in panels)
             {
-                Brep brep = panel.ToRhino(includeInternalEdges, tolerance);
+                Brep brep = panel.ToRhino();
                 if (brep == null)
                     continue;
 
