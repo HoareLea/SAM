@@ -194,7 +194,7 @@ namespace SAM.Analytical.Grasshopper
         bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
         BoundingBox IGH_PreviewObject.ClippingBox => Preview_ComputeClippingBox();
 
-        public bool IsBakeCapable => throw new NotImplementedException();
+        public bool IsBakeCapable => true;
 
         void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
 
