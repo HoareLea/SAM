@@ -35,6 +35,13 @@ namespace SAM.Analytical
                     adjacencyCluster.AddObject(space);
 
                     List<Segment2D> segment2Ds = polygon2D.GetSegments();
+                    if (segment2Ds == null || segment2Ds.Count < 3)
+                        continue;
+
+                    segment2Ds.SimplifyByAngle();
+                    segment2Ds.RemoveAll(x => x.GetLength() < tolerance);
+                    Geometry.Planar.Modify.Join(segment2Ds, tolerance);
+
                     foreach(Segment2D segment2D in segment2Ds)
                     {
                         Segment3D segment3D_Min = plane_Min.Convert(segment2D);

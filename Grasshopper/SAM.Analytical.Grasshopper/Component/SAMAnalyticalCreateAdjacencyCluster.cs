@@ -90,7 +90,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(segmentable2Ds, elevation_Min, elevation_Max, Core.Tolerance.Distance);
+            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(segmentable2Ds, elevation_Min, elevation_Max, Core.Tolerance.MacroDistance);
 
             dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
         }
