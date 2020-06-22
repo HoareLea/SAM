@@ -35,7 +35,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new Core.Grasshopper.GooSAMObjectParam<SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
+            inputParamManager.AddBooleanParameter("_cutOpenings", "_cutOpenings", "Cut Openings If Possible", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -61,6 +62,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            bool cutOpenings = false;
+            if(!dataAccess.GetData(1, ref cutOpenings))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             List<IGH_Goo> result = new List<IGH_Goo>();
 
             if (sAMObject is Panel)
@@ -77,6 +85,12 @@ namespace SAM.Analytical.Grasshopper
                 if(breps != null)
                     result.AddRange(breps);
 
+            }
+            else if (sAMObject is AnalyticalModel)
+            {
+                List<GH_Brep> breps = ((AnalyticalModel)sAMObject)?.AdjacencyCluster?.ToGrasshopper();
+                if (breps != null)
+                    result.AddRange(breps);
             }
 
             dataAccess.SetDataList(0, result);
