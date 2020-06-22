@@ -37,6 +37,12 @@ namespace SAM.Analytical
             this.location = location;
         }
 
+        public Space(Space space, string name, Geometry.Spatial.Point3D location)
+            : base(name, space)
+        {
+            this.location = location;
+        }
+
         public Space(JObject jObject)
             : base(jObject)
         {
@@ -46,7 +52,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return location;
+                return new Geometry.Spatial.Point3D(location);
             }
         }
 
