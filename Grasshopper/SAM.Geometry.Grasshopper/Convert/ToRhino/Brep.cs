@@ -7,7 +7,7 @@ namespace SAM.Geometry.Grasshopper
     public static partial class Convert
     {
         //Create surfaace from planar polyline points
-        public static Rhino.Geometry.Brep ToRihno_Brep(this IEnumerable<Rhino.Geometry.Point3d> points)
+        public static Rhino.Geometry.Brep ToRhino_Brep(this IEnumerable<Rhino.Geometry.Point3d> points)
         {
             List<Rhino.Geometry.Point3d> pointList = new List<Rhino.Geometry.Point3d>(points);
 
@@ -28,7 +28,7 @@ namespace SAM.Geometry.Grasshopper
             return Rhino.Geometry.Brep.CreateEdgeSurface(lineCurves);
         }
 
-        public static Rhino.Geometry.Brep ToRhino_Brep(this Face3D face3D, double tolerance = Core.Tolerance.Distance)
+        public static Rhino.Geometry.Brep ToRhino_Brep(this Face3D face3D, bool includeInternalEdges = true, double tolerance = Core.Tolerance.Distance)
         {
             if (face3D == null)
                 return null;
@@ -37,7 +37,42 @@ namespace SAM.Geometry.Grasshopper
             if (edges == null || edges.Count == 0)
                 return null;
 
-            return ToRhino_Brep(edges, tolerance);
+            Rhino.Geometry.Brep brep = ToRhino_Brep(edges, tolerance);
+
+            if(includeInternalEdges)
+            {
+                List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdges();
+                if (internalEdges != null && internalEdges.Count > 0)
+                {
+                    Vector3D normal = face3D.GetExternalEdge().GetPlane().Normal;
+
+                    for (int i = 0; i < internalEdges.Count; i++)
+                    {
+                        Plane plane = internalEdges[i].GetPlane();
+                        if (plane.Normal.SameHalf(normal))
+                        {
+                            ISegmentable3D segmentable3D = internalEdges[i] as ISegmentable3D;
+                            if (segmentable3D != null)
+                            {
+                                List<Point3D> point3Ds = segmentable3D.GetPoints();
+                                plane.FlipZ();
+
+                                segmentable3D = new Polygon3D(plane, point3Ds.ConvertAll(x => plane.Convert(x)));
+                            }
+
+                            Rhino.Geometry.Brep brep_Cutter = ToRhino_Brep(new IClosed3D[] { (IClosed3D)segmentable3D }, tolerance);
+                            List<Rhino.Geometry.Brep> breps = brep.Trim(brep_Cutter, tolerance)?.ToList();
+                            if (breps != null)
+                            {
+                                breps.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+                                brep = breps.First();
+                            }
+                        }
+                    }
+                }
+            }
+
+            return brep;
         }
 
         public static Rhino.Geometry.Brep ToRhino_Brep(this IEnumerable<IClosed3D> closed3Ds, double tolerance = Core.Tolerance.Distance)

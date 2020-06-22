@@ -2,14 +2,14 @@
 {
     public static partial class Convert
     {
-        public static Rhino.Geometry.Brep ToRhino(this PlanarBoundary3D planarBoundary3D)
+        public static Rhino.Geometry.Brep ToRhino(this PlanarBoundary3D planarBoundary3D, bool includeInternalEdges, double tolerance = Core.Tolerance.Distance)
         {
-            return Geometry.Grasshopper.Convert.ToRhino_Brep(planarBoundary3D?.GetFace3D());
+            return Geometry.Grasshopper.Convert.ToRhino_Brep(planarBoundary3D?.GetFace3D(), includeInternalEdges, tolerance);
         }
 
-        public static Rhino.Geometry.Brep ToRhino(this Panel panel)
+        public static Rhino.Geometry.Brep ToRhino(this Panel panel, bool includeInternalEdges, double tolerance = Core.Tolerance.Distance)
         {
-            return Geometry.Grasshopper.Convert.ToRhino_Brep(panel?.PlanarBoundary3D?.GetFace3D());
+            return Geometry.Grasshopper.Convert.ToRhino_Brep(panel?.PlanarBoundary3D?.GetFace3D(), includeInternalEdges, tolerance);
         }
     }
 }

@@ -5,10 +5,10 @@ namespace SAM.Analytical.Grasshopper
 {
     public static partial class Convert
     {
-        public static List<GH_Brep> ToGrasshopper(this AdjacencyCluster adjacencyCluster, double tolerance = Core.Tolerance.Distance)
+        public static List<GH_Brep> ToGrasshopper(this AdjacencyCluster adjacencyCluster, bool includeInternalEdges = true, double tolerance = Core.Tolerance.Distance)
         {
 
-            List<Rhino.Geometry.Brep> breps = adjacencyCluster?.ToRhino(tolerance);
+            List<Rhino.Geometry.Brep> breps = adjacencyCluster?.ToRhino(includeInternalEdges, tolerance);
             if (breps == null || breps.Count == 0)
                 return null;
 
