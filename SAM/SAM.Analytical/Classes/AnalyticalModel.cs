@@ -54,6 +54,15 @@ namespace SAM.Analytical
                 adjacencyCluster = new AdjacencyCluster(analyticalModel.adjacencyCluster);
         }
 
+        public AnalyticalModel(AnalyticalModel analyticalModel, AdjacencyCluster adjacencyCluster)
+            : base(analyticalModel)
+        {
+            this.adjacencyCluster = adjacencyCluster;
+            location = analyticalModel.location;
+            address = analyticalModel.address;
+            description = analyticalModel.description;
+        }
+
         public Core.Location Location
         {
             get

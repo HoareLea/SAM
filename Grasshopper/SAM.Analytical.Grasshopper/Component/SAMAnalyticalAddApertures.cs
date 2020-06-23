@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalAddApertures()
           : base("SAMAnalytical.AddApertures", "SAMAnalytical.AddApertures",
-              "Add Apertures to SAM AdjacencyCluster",
+              "Add Apertures to SAM Analytical Object: ie Panel, AdjacencyCluster or Analytical Model",
               "SAM", "Analytical")
         {
         }
@@ -54,7 +54,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "AnalyticalObject", "AnalyticalObject", "SAM Analytical Object", GH_ParamAccess.list);
             outputParamManager.AddParameter(new GooApertureParam(), "Apertures", "Apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
         }
 
@@ -149,16 +149,22 @@ namespace SAM.Analytical.Grasshopper
                         apertures.Add(aperture);
                 }
 
-                dataAccess.SetData(0, new GooPanel(panel));
+                dataAccess.SetData(0, panel);
                 dataAccess.SetDataList(1, apertures.ConvertAll(x => new GooAperture(x)));
                 return;
             }
 
             AdjacencyCluster adjacencyCluster = null;
+            AnalyticalModel analyticalModel = null;
             if (sAMObject is AdjacencyCluster)
+            {
                 adjacencyCluster = (AdjacencyCluster)sAMObject;
-            else if (sAMObject is AnalyticalModel)
-                adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
+            }
+            else if(sAMObject is AnalyticalModel)
+            {
+                analyticalModel = ((AnalyticalModel)sAMObject);
+                adjacencyCluster = analyticalModel.AdjacencyCluster;
+            }
 
             if (adjacencyCluster == null)
             {
@@ -206,7 +212,16 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                dataAccess.SetData(0, tuples_Result.ConvertAll(x => new GooPanel(x.Item1)));
+                if(analyticalModel != null)
+                {
+                    AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                    dataAccess.SetData(0, analyticalModel_Result);
+                }
+                else
+                {
+                    dataAccess.SetData(0, adjacencyCluster);
+                }
+                
                 dataAccess.SetDataList(1, tuples_Result.ConvertAll(x => new GooAperture(x.Item2)));
             }
         }
