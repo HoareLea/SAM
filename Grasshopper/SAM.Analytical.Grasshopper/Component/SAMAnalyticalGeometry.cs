@@ -37,6 +37,7 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("_cutApertures", "_cutApertures", "Cut Apertures If Applicable", GH_ParamAccess.item, false);
+            inputParamManager.AddNumberParameter("_tolerance_", "_tolerance_", "Tolerance", GH_ParamAccess.item, 0.00001);
         }
 
         /// <summary>
@@ -69,10 +70,17 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            double tolerance = 0.00001;
+            if (!dataAccess.GetData(2, ref tolerance))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             List<IGH_Goo> result = new List<IGH_Goo>();
 
             if (sAMObject is Panel)
-                result.Add(((Panel)sAMObject).ToGrasshopper(cutApertures));
+                result.Add(((Panel)sAMObject).ToGrasshopper(cutApertures, tolerance));
             else if (sAMObject is Aperture)
                 result.Add(((Aperture)sAMObject).ToGrasshopper());
             else if (sAMObject is PlanarBoundary3D)
@@ -81,14 +89,14 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(((Space)sAMObject).ToGrasshopper());
             else if (sAMObject is AdjacencyCluster)
             {
-                List<GH_Brep> breps = ((AdjacencyCluster)sAMObject).ToGrasshopper(cutApertures);
+                List<GH_Brep> breps = ((AdjacencyCluster)sAMObject).ToGrasshopper(cutApertures, tolerance);
                 if(breps != null)
                     result.AddRange(breps);
 
             }
             else if (sAMObject is AnalyticalModel)
             {
-                List<GH_Brep> breps = ((AnalyticalModel)sAMObject)?.AdjacencyCluster?.ToGrasshopper(cutApertures);
+                List<GH_Brep> breps = ((AnalyticalModel)sAMObject)?.AdjacencyCluster?.ToGrasshopper(cutApertures, tolerance);
                 if (breps != null)
                     result.AddRange(breps);
             }
