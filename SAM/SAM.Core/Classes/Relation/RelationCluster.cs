@@ -133,7 +133,6 @@ namespace SAM.Core
                 return false;
 
             return true;
-
         }
 
         private bool AddRelation(string typeName, Guid guid_1, Guid guid_2)
@@ -157,6 +156,28 @@ namespace SAM.Core
 
             guids.Add(guid_2);
             return true;
+        }
+
+        private bool RemoveRelation(string typeName, Guid guid_1, Guid guid_2)
+        {
+            if (string.IsNullOrWhiteSpace(typeName) || guid_1 == Guid.Empty || guid_2 == Guid.Empty)
+                return false;
+
+            Dictionary<Guid, HashSet<Guid>> dictionary = null;
+            if (!dictionary_Relations.TryGetValue(typeName, out dictionary))
+            {
+                dictionary = new Dictionary<Guid, HashSet<Guid>>();
+                dictionary_Relations[typeName] = dictionary;
+            }
+
+            HashSet<Guid> guids = null;
+            if (!dictionary.TryGetValue(guid_1, out guids))
+            {
+                guids = new HashSet<Guid>();
+                dictionary[guid_1] = guids;
+            }
+
+            return guids.Remove(guid_2);
         }
 
         public bool AddObject(object @object)
@@ -247,6 +268,43 @@ namespace SAM.Core
 
             dictionary[guid] = @object;
             return true;
+        }
+
+        public bool TryRemoveObject(object @object, out string typeName, out Guid guid)
+        {
+            typeName = null;
+            guid = Guid.Empty;
+
+            if (!IsValid(@object))
+                return false;
+
+            typeName = @object.GetType().FullName;
+
+            Dictionary<Guid, object> dictionary = null;
+            if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
+            {
+                dictionary = new Dictionary<Guid, object>();
+                dictionary_Objects[typeName] = dictionary;
+            }
+
+            guid = Guid.Empty;
+            if (@object is ISAMObject)
+                guid = ((ISAMObject)@object).Guid;
+
+            if (guid == Guid.Empty)
+            {
+                foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
+                    if (@object.Equals(keyValuePair.Value))
+                    {
+                        guid = keyValuePair.Key;
+                        break;
+                    }
+            }
+
+            if (guid == Guid.Empty)
+                return false;
+
+            return dictionary.Remove(guid);
         }
 
         public Guid GetGuid(object @object)
@@ -354,14 +412,23 @@ namespace SAM.Core
 
         public T GetObject<T>(Guid guid)
         {
-            if (!IsValid(typeof(T)))
+            object @object = GetObject(typeof(T), guid);
+            if (@object == null)
                 return default(T);
-            
-            object @object = dictionary_Objects[typeof(T).FullName]?[guid];
-            if (@object is T)
-                return (T)@object;
 
-            return default(T);
+            return (T)@object;
+        }
+
+        public object GetObject(Type type, Guid guid)
+        {
+            if (!IsValid(type))
+                return null;
+
+            object @object = dictionary_Objects[type.FullName]?[guid];
+            if (type.IsAssignableFrom(@object.GetType()))
+                return @object;
+
+            return null;
         }
 
         public string GetTypeName(Guid guid)
@@ -609,6 +676,63 @@ namespace SAM.Core
                     dictionary_Relations[typeName] = dictionary;
                 }
             }
+
+            return true;
+        }
+
+        public bool RemoveObject(Type type, Guid guid)
+        {
+            if (guid == Guid.Empty || type == null)
+                return false;
+
+            if (!IsValid(type))
+                return false;
+
+            string typeName = type.GetType().FullName;
+
+            Dictionary<Guid, object> dictionary = null;
+            if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
+            {
+                dictionary = new Dictionary<Guid, object>();
+                dictionary_Objects[typeName] = dictionary;
+            }
+
+            object @object = null;
+            if(!dictionary.TryGetValue(guid, out @object))
+                return false;
+
+            List<object> relatedObjects = GetRelatedObjects(@object);
+            if(relatedObjects != null && relatedObjects.Count != 0)
+            {
+                foreach(object relatedObject in relatedObjects)
+                    RemoveRelation(@object, relatedObject);
+            }
+
+            return dictionary.Remove(guid);
+        }
+
+        public bool RemoveRelation(object object_1, object object_2)
+        {
+            if (!IsValid(object_1) || !IsValid(object_2))
+                return false;
+
+            Guid guid_1 = GetGuid(object_1);
+            if (guid_1 == Guid.Empty)
+                return false;
+
+            Guid guid_2 = GetGuid(object_2);
+            if (guid_2 == Guid.Empty)
+                return false;
+
+            string typeName_1 = object_1.GetType().FullName;
+
+            string typeName_2 = object_2.GetType().FullName;
+
+            if (!RemoveRelation(typeName_1, guid_1, guid_2))
+                return false;
+
+            if (!RemoveRelation(typeName_2, guid_2, guid_1))
+                return false;
 
             return true;
         }

@@ -89,6 +89,8 @@
     <Compile Include="Interfaces\Base\IJSAMObject.cs" />
     <Compile Include="Interfaces\Base\ISAMObject.cs" />
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
+    <Compile Include="Modify\SetParameter.cs" />
+    <Compile Include="Query\TypeDictionary.cs" />
     <Compile Include="Query\Filter.cs" />
     <Compile Include="Query\CountryCode.cs" />
     <Compile Include="Query\Description.cs" />

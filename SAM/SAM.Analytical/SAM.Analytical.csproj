@@ -85,6 +85,7 @@
     <Compile Include="Manager\ActiveSettings.cs" />
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
+    <Compile Include="Modify\Remove.cs" />
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\UpdatePanelType.cs" />
     <Compile Include="Query\ApertureHost.cs" />

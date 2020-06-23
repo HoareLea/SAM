@@ -615,6 +615,23 @@ namespace SAM.Analytical
             return true;
         }
 
+        public bool RemoveAperture(Guid guid)
+        {
+            if (apertures == null && apertures.Count == 0)
+                return false;
+
+            for(int i=0; i < apertures.Count; i++)
+            {
+                if(apertures[i].Guid.Equals(guid))
+                {
+                    apertures.RemoveAt(i);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public bool OffsetAperturesOnEdge(double distance, double tolerance = Tolerance.Distance)
         {
             if (apertures == null || apertures.Count == 0)

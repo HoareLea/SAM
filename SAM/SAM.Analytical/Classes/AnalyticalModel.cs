@@ -1,14 +1,15 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class AnalyticalModel : Core.SAMModel
+    public class AnalyticalModel : SAMModel
     {
         private string description;
-        private Core.Location location;
-        private Core.Address address;
+        private Location location;
+        private Address address;
         private AdjacencyCluster adjacencyCluster;
 
         public AnalyticalModel(string name, string description, Core.Location location, Core.Address address, AdjacencyCluster adjacencyCluster)
@@ -54,7 +55,7 @@ namespace SAM.Analytical
                 adjacencyCluster = new AdjacencyCluster(analyticalModel.adjacencyCluster);
         }
 
-        public Core.Location Location
+        public Location Location
         {
             get
             {
@@ -70,7 +71,7 @@ namespace SAM.Analytical
             }
         }
 
-        public Core.Address Address
+        public Address Address
         {
             get
             {
@@ -87,6 +88,35 @@ namespace SAM.Analytical
             {
                 return new AdjacencyCluster(adjacencyCluster);
             }
+        }
+
+        public List<Guid> Remove(Type type, IEnumerable<Guid> guids)
+        {
+            if (type == null || guids == null)
+                return null;
+            
+            if (typeof(Space).IsAssignableFrom(type) || typeof(Panel).IsAssignableFrom(type) || typeof(Aperture).IsAssignableFrom(type))
+                return adjacencyCluster.Remove(type, guids);
+
+            return null;
+        }
+
+        public List<Guid> Remove(IEnumerable<SAMObject> sAMObjects)
+        {
+            if (sAMObjects == null)
+                return null;
+
+            Dictionary<Type, List<SAMObject>> dictionary = Core.Query.TypeDictionary(sAMObjects);
+
+            List<Guid> result = new List<Guid>();
+            foreach(KeyValuePair<Type, List<SAMObject>> keyValuePair in dictionary)
+            {
+                List<Guid> guids = Remove(keyValuePair.Key, keyValuePair.Value.ConvertAll(x => x.Guid));
+                if (guids != null && guids.Count > 0)
+                    result.AddRange(guids);
+            }
+
+            return result;
         }
 
         public bool AddSpace(Space space, IEnumerable<Panel> panels)
