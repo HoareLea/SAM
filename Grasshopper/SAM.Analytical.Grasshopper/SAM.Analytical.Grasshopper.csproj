@@ -99,6 +99,7 @@
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Component\SAMAnalyticalAddApertures.cs" />
+    <Compile Include="Component\SAMAnalyticalRemove.cs" />
     <Compile Include="Component\SAMAnalyticalFilter.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalExternalVector3D.cs" />

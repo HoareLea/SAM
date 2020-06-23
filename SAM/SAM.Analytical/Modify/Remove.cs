@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SAM.Core;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -45,6 +46,26 @@ namespace SAM.Analytical
                     if(adjacencyCluster.RemoveObject(type, guid))
                         result.Add(guid);
                 }
+            }
+
+            return result;
+        }
+
+        public static List<System.Guid> Remove(this AdjacencyCluster adjacencyCluster, List<SAMObject> objects)
+        {
+            if (adjacencyCluster == null || objects == null)
+                return null;
+
+            Dictionary<System.Type, List<SAMObject>> dictionary = Core.Query.TypeDictionary(objects);
+            if (dictionary != null)
+                return null;
+
+            List<System.Guid> result = new List<System.Guid>();
+            foreach(KeyValuePair<System.Type, List<SAMObject>> keyValuePair in dictionary)
+            {
+                List<System.Guid> guids = Remove(adjacencyCluster, keyValuePair.Key, keyValuePair.Value.ConvertAll(x => x.Guid));
+                if (guids != null && guids.Count != 0)
+                    result.AddRange(guids);
             }
 
             return result;
