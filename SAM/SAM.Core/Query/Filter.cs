@@ -53,7 +53,8 @@ namespace SAM.Core
                 objects_Out.Add(object_In);
             }
 
-            Filter(relationCluster_In, relationCluster_Out, objects_In_New, objects_Out);
+            if (objects_In_New != null && objects_In_New.Count != 0)
+                Filter(relationCluster_In, relationCluster_Out, objects_In_New, objects_Out);
         }
     }
 }

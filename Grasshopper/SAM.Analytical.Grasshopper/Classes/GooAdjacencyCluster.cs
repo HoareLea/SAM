@@ -65,16 +65,27 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            foreach (Panel panel in Value.GetPanels())
+            if (Value == null)
+                return;
+
+            List<Panel> panels = Value.GetPanels();
+            if(panels != null && panels.Count != 0)
             {
-                GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(panel.PlanarBoundary3D);
-                gooPlanarBoundary3D.DrawViewportWires(args);
+                foreach (Panel panel in panels)
+                {
+                    GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(panel.PlanarBoundary3D);
+                    gooPlanarBoundary3D.DrawViewportWires(args);
+                }
             }
 
-            foreach (Space space in Value.GetSpaces())
+            List<Space> spaces = Value.GetSpaces();
+            if (spaces != null && spaces.Count != 0)
             {
-                GooSpace gooSpace = new GooSpace(space);
-                gooSpace.DrawViewportWires(args);
+                foreach (Space space in spaces)
+                {
+                    GooSpace gooSpace = new GooSpace(space);
+                    gooSpace.DrawViewportWires(args);
+                }
             }
         }
 
