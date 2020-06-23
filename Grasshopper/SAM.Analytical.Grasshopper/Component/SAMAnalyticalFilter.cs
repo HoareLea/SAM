@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical Adjacency Cluster", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObjects", "_analyticalObjects", "SAM Analytical Objects", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooSpaceParam(), "_spaces", "_spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<SAMObject> sAMObjects = new List<SAMObject>();
-            if (!dataAccess.GetDataList(1, sAMObjects) || sAMObjects == null)
+            List<Space> spaces = new List<Space>();
+            if (!dataAccess.GetDataList(1, spaces) || spaces == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -72,7 +72,24 @@ namespace SAM.Analytical.Grasshopper
 
             AdjacencyCluster adjacencyCluster_New = new AdjacencyCluster();
 
-            List<object> objects = adjacencyCluster.Filter(adjacencyCluster_New, sAMObjects.Cast<object>());
+            List<object> objects = new List<object>();
+            foreach(Space space in spaces)
+            {
+                adjacencyCluster_New.AddObject(space);
+
+                List<object> relatedObjects = adjacencyCluster.GetRelatedObjects(space);
+                if (relatedObjects == null || relatedObjects.Count == 0)
+                    continue;
+
+                foreach(object relatedObject in relatedObjects)
+                {
+                    if (!adjacencyCluster_New.AddObject(relatedObject))
+                        continue;
+
+                    objects.Add(relatedObject);
+                    adjacencyCluster_New.AddRelation(space, relatedObject);
+                }
+            }
 
             dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster_New));
             dataAccess.SetDataList(1, objects);
