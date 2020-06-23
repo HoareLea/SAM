@@ -617,7 +617,7 @@ namespace SAM.Analytical
 
         public bool RemoveAperture(Guid guid)
         {
-            if (apertures == null && apertures.Count == 0)
+            if (apertures == null || apertures.Count == 0)
                 return false;
 
             for(int i=0; i < apertures.Count; i++)
@@ -628,6 +628,18 @@ namespace SAM.Analytical
                     return true;
                 }
             }
+
+            return false;
+        }
+
+        public bool HasAperture(Guid guid)
+        {
+            if (apertures == null || apertures.Count == 0)
+                return false;
+
+            for (int i = 0; i < apertures.Count; i++)
+                if (apertures[i].Guid.Equals(guid))
+                    return true;
 
             return false;
         }

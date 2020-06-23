@@ -83,7 +83,7 @@ namespace SAM.Core
 
             return true;
         }
-        
+
         /// <summary>
         /// Creates relation between two objects. Objects with provided guids needs to be added before adding relation
         /// </summary>
@@ -184,7 +184,7 @@ namespace SAM.Core
         {
             if (!IsValid(@object))
                 return false;
-            
+
             string typeName = null;
             Guid guid = Guid.Empty;
 
@@ -196,7 +196,7 @@ namespace SAM.Core
             if (objects == null)
                 return false;
 
-            foreach(T @object in objects)
+            foreach (T @object in objects)
                 AddObject(@object);
 
             return true;
@@ -207,7 +207,7 @@ namespace SAM.Core
             if (relationCluster == null)
                 return false;
 
-            foreach(KeyValuePair<string, Dictionary<Guid, object>> keyValuePair_1 in relationCluster.dictionary_Objects)
+            foreach (KeyValuePair<string, Dictionary<Guid, object>> keyValuePair_1 in relationCluster.dictionary_Objects)
             {
                 foreach (KeyValuePair<Guid, object> keyValuePair_2 in keyValuePair_1.Value)
                 {
@@ -225,7 +225,7 @@ namespace SAM.Core
 
                         AddRelation(keyValuePair_2.Value, relatedObject);
                     }
-                        
+
                 }
             }
 
@@ -453,7 +453,7 @@ namespace SAM.Core
         {
             if (@object is Guid)
                 return GetRelatedObjects((Guid)@object);
-            
+
             if (!IsValid(@object))
                 return null;
 
@@ -464,7 +464,7 @@ namespace SAM.Core
             string typeName = @object.GetType().FullName;
 
             Dictionary<Guid, HashSet<Guid>> dictionary = null;
-            if(!dictionary_Relations.TryGetValue(typeName, out dictionary))
+            if (!dictionary_Relations.TryGetValue(typeName, out dictionary))
                 return null;
 
             HashSet<Guid> guids = null;
@@ -668,9 +668,9 @@ namespace SAM.Core
                         foreach (JToken jToken in jArray_Guids)
                         {
                             Guid guid_Temp = Query.Guid(jToken);
-                            if(guid_Temp != Guid.Empty)
+                            if (guid_Temp != Guid.Empty)
                                 guids.Add(guid_Temp);
-                        }                            
+                        }
                         dictionary[guid] = guids;
                     }
                     dictionary_Relations[typeName] = dictionary;
@@ -688,23 +688,20 @@ namespace SAM.Core
             if (!IsValid(type))
                 return false;
 
-            string typeName = type.GetType().FullName;
+            string typeName = type.FullName;
 
             Dictionary<Guid, object> dictionary = null;
             if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
-            {
-                dictionary = new Dictionary<Guid, object>();
-                dictionary_Objects[typeName] = dictionary;
-            }
+                return false;
 
             object @object = null;
-            if(!dictionary.TryGetValue(guid, out @object))
+            if (!dictionary.TryGetValue(guid, out @object))
                 return false;
 
             List<object> relatedObjects = GetRelatedObjects(@object);
-            if(relatedObjects != null && relatedObjects.Count != 0)
+            if (relatedObjects != null && relatedObjects.Count != 0)
             {
-                foreach(object relatedObject in relatedObjects)
+                foreach (object relatedObject in relatedObjects)
                     RemoveRelation(@object, relatedObject);
             }
 

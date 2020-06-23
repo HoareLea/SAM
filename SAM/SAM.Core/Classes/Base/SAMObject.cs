@@ -176,5 +176,10 @@ namespace SAM.Core
 
             return jObject;
         }
+
+        public virtual SAMObject Clone()
+        {
+            return new SAMObject(ToJObject());
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace SAM.Analytical
 
             List<System.Guid> result = new List<System.Guid>();
 
-            if (type.IsAssignableFrom(typeof(Aperture)))
+            if (typeof(Aperture).IsAssignableFrom(type))
             {
                 List<Panel> panels = adjacencyCluster.GetPanels();
                 if (panels == null || panels.Count == 0)
@@ -28,8 +28,15 @@ namespace SAM.Analytical
                     HashSet<System.Guid> guids_Removed = new HashSet<System.Guid>();
                     foreach(System.Guid guid in guids_Temp)
                     {
-                        if(panel.RemoveAperture(guid))
-                            guids_Removed.Add(guid);
+                        if(panel.HasAperture(guid))
+                        {
+                            Panel panel_New = new Panel(panel);
+                            if (panel_New.RemoveAperture(guid))
+                            {
+                                guids_Removed.Add(guid);
+                                adjacencyCluster.AddObject(panel_New);
+                            }
+                        }
                     }
 
                     foreach (System.Guid guid in guids_Removed)
@@ -57,12 +64,12 @@ namespace SAM.Analytical
                 return null;
 
             Dictionary<System.Type, List<SAMObject>> dictionary = Core.Query.TypeDictionary(objects);
-            if (dictionary != null)
+            if (dictionary == null)
                 return null;
 
             List<System.Guid> result = new List<System.Guid>();
             foreach(KeyValuePair<System.Type, List<SAMObject>> keyValuePair in dictionary)
-            {
+            {               
                 List<System.Guid> guids = Remove(adjacencyCluster, keyValuePair.Key, keyValuePair.Value.ConvertAll(x => x.Guid));
                 if (guids != null && guids.Count != 0)
                     result.AddRange(guids);

@@ -9,15 +9,19 @@ namespace SAM.Core
             if (objects == null)
                 return null;
 
-
             Dictionary<System.Type, List<T>> result = new Dictionary<System.Type, List<T>>();
             foreach (T @object in objects)
             {
+                if (@object == null)
+                    continue;
+
+                System.Type type = @object.GetType();
+                
                 List<T> objects_Temp = null;
-                if (!result.TryGetValue(@object.GetType().FullName, out objects_Temp))
+                if (!result.TryGetValue(type, out objects_Temp))
                 {
                     objects_Temp = new List<T>();
-                    result[typeof(T)] = objects_Temp;
+                    result[type] = objects_Temp;
                 }
                 objects_Temp.Add(@object);
             }

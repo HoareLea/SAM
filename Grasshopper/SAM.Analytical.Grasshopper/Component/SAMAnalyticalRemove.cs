@@ -79,10 +79,8 @@ namespace SAM.Analytical.Grasshopper
                 if(apertures != null)
                 {
                     foreach(Aperture aperture in apertures)
-                    {
                         if (result.RemoveAperture(aperture.Guid))
                             guids.Add(aperture.Guid);
-                    }
                 }
 
                 dataAccess.SetData(0, result);
