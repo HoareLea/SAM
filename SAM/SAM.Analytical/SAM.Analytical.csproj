@@ -90,6 +90,7 @@
     <Compile Include="Modify\UpdatePanelType.cs" />
     <Compile Include="Query\ApertureHost.cs" />
     <Compile Include="Query\ApertureHosts.cs" />
+    <Compile Include="Query\SplitByInternalEdges.cs" />
     <Compile Include="Query\Shell.cs" />
     <Compile Include="Query\ExternalVector3D.cs" />
     <Compile Include="Query\Inside.cs" />

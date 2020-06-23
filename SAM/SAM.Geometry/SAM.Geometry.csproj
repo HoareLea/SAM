@@ -176,6 +176,7 @@
     <Compile Include="Spatial\Query\Point3Ds.cs" />
     <Compile Include="Spatial\Query\AxisY.cs" />
     <Compile Include="Spatial\Query\SimplifyByNTS_TopologyPreservingSimplifier.cs" />
+    <Compile Include="Spatial\Query\SplitByInternalEdges.cs" />
     <Compile Include="Spatial\Query\ThinnessRatio.cs" />
     <Compile Include="Spatial\Query\Permieter.cs" />
     <Compile Include="Spatial\Query\AxisX.cs" />
