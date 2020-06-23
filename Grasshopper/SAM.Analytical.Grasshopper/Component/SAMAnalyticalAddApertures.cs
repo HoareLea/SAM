@@ -209,8 +209,6 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetData(0, tuples_Result.ConvertAll(x => new GooPanel(x.Item1)));
                 dataAccess.SetDataList(1, tuples_Result.ConvertAll(x => new GooAperture(x.Item2)));
             }
-
-
         }
     }
 }
