@@ -21,9 +21,28 @@ namespace SAM.Core.Grasshopper
 
         public override bool IsValid => Value != null;
 
-        public override string TypeName => typeof(T).Name;
+        public override string TypeName
+        {
+            get
+            {
+                if (Value == null)
+                    return typeof(T).FullName;
 
-        public override string TypeDescription => typeof(T).FullName.Replace(".", " ");
+                return Value.GetType().FullName;
+            }
+        }
+
+        public override string TypeDescription
+        {
+            get
+            {
+                if (Value == null)
+                    return typeof(T).FullName.Replace(".", " ");
+
+                return Value.GetType().FullName.Replace(".", " ");
+            }
+        }
+
 
         public override IGH_Goo Duplicate()
         {
@@ -62,7 +81,7 @@ namespace SAM.Core.Grasshopper
             if (Value == null)
                 return null;
 
-            string value = typeof(T).FullName;
+            string value = Value.GetType().FullName;
 
             if (!string.IsNullOrWhiteSpace(Value.Name))
                 value += string.Format(" [{0}]", Value.Name);
