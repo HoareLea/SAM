@@ -50,6 +50,8 @@ namespace SAM.Geometry.Spatial
             if (polygon2Ds == null)
                 return null;
 
+            polygon2Ds.RemoveAll(x => !face3D.Inside(x.InternalPoint2D()));
+
             Plane plane = face3D.GetPlane();
 
             return polygon2Ds.ConvertAll(x => new Face3D(plane, new Face2D(x)));

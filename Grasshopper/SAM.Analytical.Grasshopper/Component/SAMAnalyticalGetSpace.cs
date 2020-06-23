@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_point", "_point", "Geometry Point", GH_ParamAccess.list);
+            inputParamManager.AddGenericParameter("_points", "_points", "List of Geometry Points", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -62,8 +62,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<GH_ObjectWrapper> objectWrappers = null;
-            if (!dataAccess.GetData(1, ref objectWrappers))
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+            if (!dataAccess.GetDataList(1, objectWrappers))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

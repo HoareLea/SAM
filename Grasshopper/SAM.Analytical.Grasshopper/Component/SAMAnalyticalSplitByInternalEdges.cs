@@ -11,7 +11,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("11ef3364-37ba-4554-9ec2-5t980afa9d5g");
+        public override Guid ComponentGuid => new Guid("5fea1128-e879-4d65-b1ce-8ea95efa2561");
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -63,7 +63,7 @@ namespace SAM.Analytical.Grasshopper
             if (panels == null)
                 panels = new List<Panel>() { panel };
 
-            dataAccess.SetDataList(1, panels.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(0, panels.ConvertAll(x => new GooPanel(x)));
         }
     }
 }
