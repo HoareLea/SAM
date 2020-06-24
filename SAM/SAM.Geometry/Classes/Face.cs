@@ -100,7 +100,7 @@ namespace SAM.Geometry
             return Planar.Query.Perimeter(externalEdge);
         }
 
-        public Point2D GetInternalPoint2D()
+        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
             if (externalEdge == null)
                 return null;
@@ -190,20 +190,24 @@ namespace SAM.Geometry
             return distance_Min;
         }
 
-        public bool Inside(Point2D point2D)
+        public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if (internalEdges == null || internalEdges.Count == 0)
-                return externalEdge.Inside(point2D);
+                return externalEdge.Inside(point2D) && !externalEdge.On(point2D, tolerance);
 
-            return externalEdge.Inside(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D));
+            bool result = externalEdge.Inside(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D));
+            if (!result)
+                return result;
+
+            return !externalEdge.On(point2D) && internalEdges.TrueForAll(x => !x.On(point2D));
         }
 
-        public bool Inside(IClosed2D closed2D)
+        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if (internalEdges == null || internalEdges.Count == 0)
-                return externalEdge.Inside(closed2D);
+                return externalEdge.Inside(closed2D, tolerance);
 
-            return externalEdge.Inside(closed2D) && internalEdges.TrueForAll(x => !x.Inside(closed2D));
+            return externalEdge.Inside(closed2D, tolerance) && internalEdges.TrueForAll(x => !x.Inside(closed2D, tolerance));
         }
     }
 }

@@ -81,9 +81,9 @@ namespace SAM.Geometry.Planar
             return new Circle2D((Point2D)center.GetMoved(vector2D), radious);
         }
 
-        public bool Inside(Point2D point2D)
+        public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            return center.Distance(point2D) < radious;
+            return center.Distance(point2D) < radious + tolerance;
         }
 
         public void Move(Vector2D vector2D)
@@ -101,10 +101,10 @@ namespace SAM.Geometry.Planar
             return new Circle2D(this);
         }
 
-        public bool Inside(IClosed2D closed2D)
+        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if (closed2D is ISegmentable2D)
-                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance));
 
             throw new NotImplementedException();
         }
@@ -128,7 +128,7 @@ namespace SAM.Geometry.Planar
             return jObject;
         }
 
-        public Point2D GetInternalPoint2D()
+        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
             return new Point2D(center);
         }

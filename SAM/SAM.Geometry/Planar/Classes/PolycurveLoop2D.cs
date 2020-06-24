@@ -46,7 +46,7 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
 
-        public Point2D GetInternalPoint2D()
+        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
             List<ICurve2D> curves = GetCurves();
             if (curves == null)
@@ -55,25 +55,31 @@ namespace SAM.Geometry.Planar
             if (!curves.TrueForAll(x => x is Segment2D))
                 throw new NotImplementedException();
 
-            return Point2D.GetInternalPoint2D(curves.ConvertAll(x => x.GetStart()));
+            return Point2D.GetInternalPoint2D(curves.ConvertAll(x => x.GetStart()), tolerance);
         }
 
-        public bool Inside(IClosed2D closed2D)
+        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if (closed2D is ISegmentable2D)
-                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance));
 
             throw new NotImplementedException();
         }
 
-        public bool Inside(Point2D point2D)
+        public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             List<ICurve2D> curves = GetCurves();
             if (curves == null)
                 return false;
 
             if (curves.TrueForAll(x => x is Segment2D))
-                return Query.Inside(curves.ConvertAll(x => x.GetStart()), point2D);
+            {
+                bool result = Query.Inside(curves.ConvertAll(x => x.GetStart()), point2D);
+                if (!result)
+                    return result;
+
+                return curves.TrueForAll(x => !((Segment2D)x).On(point2D, tolerance));
+            }
 
             throw new NotImplementedException();
         }

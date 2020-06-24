@@ -214,15 +214,19 @@ namespace SAM.Geometry.Planar
             return new Rectangle2D(this);
         }
 
-        public bool Inside(Point2D point2D)
+        public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            return Query.Inside(GetPoints(), point2D);
+            bool result = Query.Inside(GetPoints(), point2D);
+            if (!result)
+                return result;
+
+            return !On(point2D, tolerance);
         }
 
-        public bool Inside(IClosed2D closed2D)
+        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if (closed2D is ISegmentable2D)
-                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance));
 
             throw new NotImplementedException();
         }
@@ -251,7 +255,7 @@ namespace SAM.Geometry.Planar
             return jObject;
         }
 
-        public Point2D GetInternalPoint2D()
+        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
             Point2D result = new Point2D(origin);
 

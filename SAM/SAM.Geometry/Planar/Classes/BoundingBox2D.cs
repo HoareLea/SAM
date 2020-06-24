@@ -161,39 +161,23 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public bool Inside(IClosed2D closed2D)
+        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if (closed2D is BoundingBox2D)
-                return Inside((BoundingBox2D)closed2D);
+                return Inside((BoundingBox2D)closed2D, tolerance);
 
             if (closed2D is ISegmentable2D)
-                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance));
 
             throw new NotImplementedException();
         }
 
-        public bool Inside(BoundingBox2D boundingBox2D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
-        {
-            return Inside(boundingBox2D.max, acceptOnEdge, tolerance) && Inside(boundingBox2D.min, acceptOnEdge, tolerance);
-        }
-
-        public bool Inside(Point2D point2D)
+        public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null)
                 return false;
 
-            return point2D.X > min.X && point2D.X < max.X && point2D.Y < max.Y && point2D.Y > min.Y;
-        }
-
-        public bool Inside(Point2D point2D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
-        {
-            if (point2D == null)
-                return false;
-
-            if (acceptOnEdge)
-                return (point2D.X >= min.X - tolerance && point2D.X <= max.X + tolerance && point2D.Y >= min.Y - tolerance && point2D.Y <= max.Y + tolerance);
-
-            return (point2D.X > min.X + tolerance && point2D.X < max.X - tolerance && point2D.Y > min.Y + tolerance && point2D.Y < max.Y - tolerance);
+            return point2D.X > min.X + tolerance && point2D.X < max.X - tolerance && point2D.Y < max.Y - tolerance && point2D.Y > min.Y + tolerance;
         }
 
         public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
@@ -316,7 +300,7 @@ namespace SAM.Geometry.Planar
             return Point2D.Mid(min, max);
         }
 
-        public Point2D GetInternalPoint2D()
+        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
             return Point2D.Mid(min, max);
         }

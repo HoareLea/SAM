@@ -123,7 +123,7 @@ namespace SAM.Geometry.Spatial
             if (!plane.On(point3D, tolerance))
                 return false;
 
-            Planar.Point2D point2D = plane.Convert(point3D);
+            Point2D point2D = plane.Convert(point3D);
 
             if (internalEdges == null || internalEdges.Count == 0)
                 return externalEdge.Inside(point2D);
@@ -162,7 +162,7 @@ namespace SAM.Geometry.Spatial
             if (internalEdges == null || internalEdges.Count == 0)
                 return externalEdge.InRange(point2D);
 
-            return externalEdge.InRange(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D));
+            return externalEdge.InRange(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D, tolerance));
         }
 
         public IClosedPlanar3D Project(IClosed3D closed3D)

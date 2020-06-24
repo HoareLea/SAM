@@ -48,7 +48,7 @@ namespace SAM.Geometry.Planar
             return Query.Centroid(points);
         }
 
-        public Point2D GetInternalPoint2D()
+        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
             return GetCentroid();
         }
@@ -78,14 +78,18 @@ namespace SAM.Geometry.Planar
             return GetSegments().ConvertAll(x => (ICurve2D)x);
         }
 
-        public bool Inside(BoundingBox2D boundingBox2D)
+        public bool Inside(BoundingBox2D boundingBox2D, double tolerance = Core.Tolerance.Distance)
         {
-            return this.GetBoundingBox().Inside(boundingBox2D);
+            return GetBoundingBox().Inside(boundingBox2D, tolerance);
         }
 
-        public bool Inside(Point2D point2D)
+        public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            return Query.Inside(points, point2D);
+            bool result = Query.Inside(points, point2D);
+            if (!result)
+                return result;
+
+            return !On(point2D, tolerance);
         }
 
         public void Mirror(Point2D point2D)
@@ -116,10 +120,10 @@ namespace SAM.Geometry.Planar
             return new Triangle2D(this);
         }
 
-        public bool Inside(IClosed2D closed2D)
+        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if (closed2D is ISegmentable2D)
-                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance));
 
             throw new NotImplementedException();
         }

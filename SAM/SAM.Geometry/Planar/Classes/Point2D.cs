@@ -346,7 +346,7 @@ namespace SAM.Geometry.Planar
             return aResult;
         }
 
-        public static Point2D GetInternalPoint2D(IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.Angle)
+        public static Point2D GetInternalPoint2D(IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point2Ds == null || point2Ds.Count() < 3)
                 return null;
@@ -373,13 +373,11 @@ namespace SAM.Geometry.Planar
                         Point2D point2D_2 = point2Ds_List[j];
                         Point2D point2D_3 = point2Ds_List[k];
 
-                        Vector2D vector2D_1 = new Vector2D(point2D_1, point2D_2);
-                        Vector2D vector2D_2 = new Vector2D(point2D_2, point2D_3);
-
-                        if (vector2D_1.SmallestAngle(vector2D_2) < tolerance)
+                        Segment2D segment2D = new Segment2D(point2D_1, point2D_3);
+                        if (segment2D.On(point2D_2, tolerance))
                             continue;
 
-                        result = Mid(point2D_1, point2D_3);
+                        result = segment2D.Mid();
                         if (Query.Inside(point2Ds, result) && !Query.On(segments, result))
                             return result;
                     }

@@ -106,16 +106,19 @@ namespace SAM.Geometry.Planar
             return Query.Distance(this, segmentable2D);
         }
 
-        public bool Inside(Point2D point2D)
+        public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            //TODO: Safe to change for Inside
-            return Query.Inside(points, point2D);
+            bool result = Query.Inside(points, point2D);
+            if (!result)
+                return result;
+
+            return !On(point2D, tolerance);
         }
 
-        public bool Inside(IClosed2D closed2D)
+        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if (closed2D is ISegmentable2D)
-                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x));
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance));
 
             throw new NotImplementedException();
         }
@@ -167,9 +170,9 @@ namespace SAM.Geometry.Planar
             return new BoundingBox2D(points, offset);
         }
 
-        public Point2D GetInternalPoint2D()
+        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
-            return Point2D.GetInternalPoint2D(points);
+            return Point2D.GetInternalPoint2D(points, tolerance);
         }
 
         public Point2D GetCentroid()

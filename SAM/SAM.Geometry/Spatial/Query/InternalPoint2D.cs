@@ -10,7 +10,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             if (closedPlanar3D is Face3D)
-                return InternalPoint2D((Face3D)closedPlanar3D);
+                return InternalPoint2D((Face3D)closedPlanar3D, tolerance);
 
             Plane plane = closedPlanar3D.GetPlane();
             if (plane == null)
@@ -23,7 +23,7 @@ namespace SAM.Geometry.Spatial
             return Planar.Query.InternalPoint2D(closed2D, tolerance);
         }
 
-        public static Planar.Point2D InternalPoint2D(this Face3D face3D)
+        public static Planar.Point2D InternalPoint2D(this Face3D face3D, double tolerance = Core.Tolerance.Distance)
         {
             if (face3D == null)
                 return null;
@@ -62,7 +62,7 @@ namespace SAM.Geometry.Spatial
                     for (int j = 1; j < count - 1; j++)
                     {
                         Planar.Point2D point2D = Planar.Point2D.Mid(point2Ds[i], point2Ds[j]);
-                        if (face3D.Inside(point2D))
+                        if (face3D.Inside(point2D, tolerance))
                             return point2D;
                     }
                 }

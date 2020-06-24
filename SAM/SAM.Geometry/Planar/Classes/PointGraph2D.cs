@@ -632,7 +632,7 @@ namespace SAM.Geometry.Planar
 
                         Tuple<Polygon2D, BoundingBox2D, Point2D, double> tuple_2 = tuples[j];
 
-                        if (tuple_1.Item2.Inside(tuple_2.Item3))
+                        if (tuple_1.Item2.Inside(tuple_2.Item3) || tuple_1.Item2.On(tuple_2.Item3))
                         {
                             if (tuple_1.Item1.Inside(tuple_2.Item3))
                             {
@@ -649,7 +649,7 @@ namespace SAM.Geometry.Planar
                             }
                         }
 
-                        if (tuple_2.Item2.Inside(tuple_1.Item3))
+                        if (tuple_2.Item2.Inside(tuple_1.Item3) || tuple_2.Item2.On(tuple_1.Item3))
                         {
                             if (tuple_2.Item1.Inside(tuple_1.Item3))
                             {
