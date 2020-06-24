@@ -116,7 +116,7 @@ namespace SAM.Analytical
             return GetObjects<Space>();
         }
 
-        public List<Space> GetSpaces(IEnumerable<Geometry.Spatial.Point3D> point3Ds, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public List<List<Space>> GetSpaces(IEnumerable<Geometry.Spatial.Point3D> point3Ds, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds == null)
                 return null;
@@ -129,11 +129,11 @@ namespace SAM.Analytical
             spaces.ForEach(x => tuples.Add(new Tuple<Space, Geometry.Spatial.Shell>(x, this.Shell(x))));
             tuples.RemoveAll(x => x.Item2 == null);
 
-            List<Space> result = new List<Space>();
+            List<List<Space>> result = new List<List<Space>>();
             foreach(Geometry.Spatial.Point3D point3D in point3Ds)
             {
-                Tuple<Space, Geometry.Spatial.Shell> tuple = tuples.Find(x => x.Item2.InRange(point3D, tolerance) || x.Item2.Inside(point3D, silverSpacing, tolerance));
-                result.Add(tuple?.Item1);
+                List<Tuple<Space, Geometry.Spatial.Shell>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(point3D, tolerance) || x.Item2.Inside(point3D, silverSpacing, tolerance));                   
+                result.Add(tuples_Temp?.ConvertAll(x => x.Item1));
             }
 
             return result;
@@ -144,7 +144,7 @@ namespace SAM.Analytical
             return GetRelatedObjects<Space>(panel);
         }
 
-        public Space GetSpace(Geometry.Spatial.Point3D point3D, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public List<Space> GetSpaces(Geometry.Spatial.Point3D point3D, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (point3D == null)
                 return null;
