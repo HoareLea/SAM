@@ -35,5 +35,36 @@ namespace SAM.Analytical
 
             return result;
         }
+
+        public static AdjacencyCluster SplitByInternalEdges(this AdjacencyCluster adjacencyCluster, double tolerance = Core.Tolerance.Distance)
+        {
+            if (adjacencyCluster == null)
+                return null;
+
+            AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
+            List<Panel> panels = result.GetPanels();
+            if(panels != null && panels.Count > 0)
+            {
+                foreach(Panel panel in panels)
+                {
+                    List<Panel> panels_Split = panel.SplitByInternalEdges(tolerance);
+                    if (panels_Split == null || panels_Split.Count < 2)
+                        continue;
+
+                    List<object> relatedObjects = result.GetRelatedObjects(panel); 
+
+                    foreach(Panel panel_Split in panels_Split)
+                    {
+                        result.AddObject(panel_Split);
+
+                        if(relatedObjects != null && relatedObjects.Count > 0)
+                            foreach (object relatedObject in relatedObjects)
+                                result.AddRelation(panel_Split, relatedObject);
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
