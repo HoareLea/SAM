@@ -40,11 +40,28 @@ namespace SAM.Geometry.Spatial
                 
                 tuples.Sort((x, y) => x.Item1.Distance(x.Item2).CompareTo(y.Item1.Distance(y.Item2)));
 
-                segment2Ds.Add(new Segment2D(tuples[0].Item1, tuples[0].Item2));
-                segment2Ds.Add(new Segment2D(tuples[1].Item1, tuples[1].Item2));
+                List<Segment2D> segment2Ds_Tuples = new List<Segment2D>();
+                foreach(Tuple<Point2D, Point2D> tuple in tuples)
+                {
+                    if (tuple.Item1.Distance(tuple.Item2) <= tolerance)
+                        continue;
+
+                    Segment2D segment2D = new Segment2D(tuple.Item1, tuple.Item2);
+                    segment2Ds_Tuples.Add(segment2D);
+                }
+
+                Segment2D segment2D_1 = segment2Ds_Tuples[0];
+                Segment2D segment2D_2 = segment2Ds_Tuples.Find(x => x.Distance(segment2D_1) > segment2D_1.GetLength());
+                if(segment2D_2 == null)
+                    segment2D_2 = segment2Ds_Tuples.Find(x => x.Distance(segment2D_1) >= tolerance);
+
+                if (segment2D_2 == null)
+                    segment2D_2 = segment2Ds_Tuples[1];
+
+                segment2Ds.Add(segment2D_1);
+                segment2Ds.Add(segment2D_2);
                 segment2Ds.AddRange(internalEdge.GetSegments());
             }
-
 
             List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds, tolerance);
             if (polygon2Ds == null)
