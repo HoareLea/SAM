@@ -35,8 +35,8 @@ namespace SAM.Geometry.Planar
 
                         if (segment2Ds[j][1].Distance(point2D_Segment2D) <= tolerance)
                         {
-                            point2Ds.Add(segment2Ds[j][0]);
                             indexes.Add(1);
+                            point2Ds.Add(segment2Ds[j][1]);
                         }
 
                         if (indexes.Count == 0)
