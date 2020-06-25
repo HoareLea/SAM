@@ -62,6 +62,10 @@ namespace SAM.Analytical
                 Tuple<double, Panel> tuple = tuples[0];
                 tuples.RemoveAt(0);
 
+                Plane plane = tuple.Item2.Plane;
+                if (plane == null)
+                    continue;
+
                 double elevation = tuple.Item1;
                 double elevation_Offset = elevation + offset;
                 List<Tuple<double, Panel>> tuples_Offset = new List<Tuple<double, Panel>>();
@@ -69,6 +73,9 @@ namespace SAM.Analytical
                 {
                     if (tuple_Temp.Item1 > elevation_Offset)
                         break;
+
+                    if (!plane.Coplanar(tuple_Temp.Item2.Plane, tolerance))
+                        continue;
 
                     tuples_Offset.Add(tuple_Temp);
                 }
@@ -78,7 +85,6 @@ namespace SAM.Analytical
 
                 tuples_Offset.Insert(0, tuple);
 
-                Plane plane = tuple.Item2.GetFace3D().GetPlane();
 
                 List<Tuple<Polygon, Panel>> tuples_Polygon = new List<Tuple<Polygon, Panel>>();
                 foreach (Tuple<double, Panel> tuple_Temp in tuples_Offset)
