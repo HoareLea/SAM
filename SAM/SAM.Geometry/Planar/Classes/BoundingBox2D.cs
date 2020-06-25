@@ -297,12 +297,12 @@ namespace SAM.Geometry.Planar
 
         public Point2D GetCentroid()
         {
-            return Point2D.Mid(min, max);
+            return Query.Mid(min, max);
         }
 
         public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
-            return Point2D.Mid(min, max);
+            return Query.Mid(min, max);
         }
 
         public override bool FromJObject(JObject jObject)

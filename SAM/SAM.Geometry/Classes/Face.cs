@@ -133,7 +133,7 @@ namespace SAM.Geometry
                 {
                     for (int j = 1; j < count - 1; j++)
                     {
-                        Point2D point2D = Point2D.Mid(point2Ds[i], point2Ds[j]);
+                        Point2D point2D = Planar.Query.Mid(point2Ds[i], point2Ds[j]);
                         if (Inside(point2D))
                             return point2D;
                     }

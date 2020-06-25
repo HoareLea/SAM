@@ -387,11 +387,6 @@ namespace SAM.Geometry.Planar
             return null;
         }
 
-        public static Point2D Mid(Point2D point2D_1, Point2D point2D_2)
-        {
-            return new Point2D((point2D_1.X + point2D_2.X) / 2, (point2D_1.Y + point2D_2.Y) / 2);
-        }
-
         public static bool Add(List<Point2D> point2Ds, Point2D point2D, double offset = 0)
         {
             if (point2Ds == null || point2D == null)

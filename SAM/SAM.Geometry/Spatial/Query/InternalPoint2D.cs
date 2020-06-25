@@ -61,7 +61,7 @@ namespace SAM.Geometry.Spatial
                 {
                     for (int j = 1; j < count - 1; j++)
                     {
-                        Planar.Point2D point2D = Planar.Point2D.Mid(point2Ds[i], point2Ds[j]);
+                        Planar.Point2D point2D = Planar.Query.Mid(point2Ds[i], point2Ds[j]);
                         if (face3D.Inside(point2D, tolerance))
                             return point2D;
                     }

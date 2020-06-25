@@ -29,7 +29,7 @@ namespace SAM.Geometry.Planar
             {
                 for (int j = 1; j < count - 1; j++)
                 {
-                    result = Planar.Point2D.Mid(point2Ds[i], point2Ds[j]);
+                    result = Planar.Query.Mid(point2Ds[i], point2Ds[j]);
                     if (On(segment2Ds, result, tolerance))
                         continue;
 

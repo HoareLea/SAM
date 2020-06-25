@@ -130,7 +130,7 @@ namespace SAM.Geometry.Planar
                 segment2Ds.Add(segment2D.GetMoved(vector2D));
             }
 
-            Modify.Join(segment2Ds, tolerance);
+            Modify.JoinByIntersections(segment2Ds, false, tolerance);
 
             List<Polyline2D> result = new List<Polyline2D>() { new Polyline2D(segment2Ds) };
 
