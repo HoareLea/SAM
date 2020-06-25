@@ -7,6 +7,20 @@ namespace SAM.Geometry.Planar
     {
         public static Point2D Centroid(this IEnumerable<Point2D> point2Ds)
         {
+            if (point2Ds == null || point2Ds.Count() == 0)
+                return null;
+
+            int count = point2Ds.Count();
+
+            if (count == 0)
+                return null;
+
+            if (count == 1)
+                return point2Ds.ElementAt(0);
+
+            if (count == 2)
+                return point2Ds.ElementAt(0).Mid(point2Ds.ElementAt(1));
+
             double aArea = 0;
             double aX = 0;
             double aY = 0;
