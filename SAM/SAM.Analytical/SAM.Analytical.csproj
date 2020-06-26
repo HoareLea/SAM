@@ -90,6 +90,7 @@
     <Compile Include="Modify\UpdatePanelType.cs" />
     <Compile Include="Query\ApertureHost.cs" />
     <Compile Include="Query\ApertureHosts.cs" />
+    <Compile Include="Query\UpdateNormals.cs" />
     <Compile Include="Query\NormalDictionary.cs" />
     <Compile Include="Query\ShellDictionary.cs" />
     <Compile Include="Query\SplitByInternalEdges.cs" />
