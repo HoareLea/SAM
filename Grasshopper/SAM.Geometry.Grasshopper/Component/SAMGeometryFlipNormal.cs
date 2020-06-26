@@ -23,7 +23,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         public SAMGeometryFlipNormal()
           : base("SAMGeometry.FlipNormal", "SAMGeometry.FlipNormal",
-              "Convert SAM geometry to Rhino geometry",
+              "Modify Flip SAM Geometry",
               "SAM", "Geometry")
         {
         }
@@ -33,7 +33,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMGeometryParam(), "_SAMGeometry", "_SAMGeometry", "SAM Geometry", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSAMGeometryParam(), "_face3D", "_face3D", "SAM Geometry Face3D", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGeometryParameter("Geometry", "Geo", "Rhino geometry", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Face3D", "Face3D", "SAM Geometry Face3D", GH_ParamAccess.item);
         }
 
         /// <summary>
