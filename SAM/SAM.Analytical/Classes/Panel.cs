@@ -139,7 +139,7 @@ namespace SAM.Analytical
         /// Gets Geometrical Representation of Panel (None Analytical Data)
         /// </summary>
         /// <returns name="face3D">SAM Geometry Face3D</returns>
-        public Face3D GetFace3D(bool cutApertures = false, double tolerance = Tolerance.MacroDistance)
+        public Face3D GetFace3D(bool cutApertures = false, double tolerance = Tolerance.Distance)
         {
             Face2D face2D = planarBoundary3D?.GetFace2D();
             if (face2D == null)

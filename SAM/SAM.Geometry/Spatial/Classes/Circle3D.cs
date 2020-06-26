@@ -126,6 +126,11 @@ namespace SAM.Geometry.Spatial
             return jObject;
         }
 
+        public void Reverse()
+        {
+            plane.FlipZ(true);
+        }
+
         public static bool operator ==(Circle3D circle3D_1, Circle3D circle3D_2)
         {
             if (ReferenceEquals(circle3D_1, null) && ReferenceEquals(circle3D_2, null))

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Geometry.Interfaces;
 using SAM.Geometry.Planar;
 using System.Collections.Generic;
 
@@ -13,7 +14,7 @@ namespace SAM.Geometry
         {
             if (closed2D == null)
                 return;
-            
+
             if (closed2D is Face)
             {
                 Face face = (Face)closed2D;
@@ -158,9 +159,9 @@ namespace SAM.Geometry
                 throw new System.NotImplementedException();
 
             double distance_Min = ((ISegmentable2D)externalEdge).Distance(point2D);
-            if(internalEdges != null && internalEdges.Count > 0)
+            if (internalEdges != null && internalEdges.Count > 0)
             {
-                foreach(ISegmentable2D segmentable2D in internalEdges)
+                foreach (ISegmentable2D segmentable2D in internalEdges)
                 {
                     double distance = segmentable2D.Distance(point2D);
                     if (distance < distance_Min)
@@ -208,6 +209,19 @@ namespace SAM.Geometry
                 return externalEdge.Inside(closed2D, tolerance);
 
             return externalEdge.Inside(closed2D, tolerance) && internalEdges.TrueForAll(x => !x.Inside(closed2D, tolerance));
+        }
+
+        public void Reverse()
+        {
+            if (externalEdge is IReversible)
+                ((IReversible)externalEdge).Reverse();
+
+            if (internalEdges != null)
+            {
+                for (int i = 0; i < internalEdges.Count; i++)
+                    if (internalEdges[i] is IReversible)
+                        ((IReversible)internalEdges[i]).Reverse();
+            }
         }
     }
 }

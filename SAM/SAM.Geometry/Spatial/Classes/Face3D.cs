@@ -9,7 +9,7 @@ namespace SAM.Geometry.Spatial
     {
         private Plane plane;
 
-        public Face3D(Planar.IClosed2D externalEdge)
+        public Face3D(IClosed2D externalEdge)
             : base(externalEdge)
         {
             plane = new Plane(Point3D.Zero, Vector3D.WorldZ);
@@ -163,6 +163,25 @@ namespace SAM.Geometry.Spatial
                 return externalEdge.InRange(point2D);
 
             return externalEdge.InRange(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D, tolerance));
+        }
+
+        public void FlipNormal()
+        {
+            IClosedPlanar3D externalEdge = GetExternalEdge();
+            if (externalEdge != null)
+                externalEdge.Reverse();
+
+            List<IClosedPlanar3D> internalEdges = GetInternalEdges();
+            if (internalEdges != null)
+                internalEdges.ForEach(x => x.Reverse());
+
+            plane.FlipZ(true);
+
+            if (externalEdge != null)
+                this.externalEdge = plane.Convert(externalEdge);
+
+            if (internalEdges != null)
+                this.internalEdges = internalEdges.ConvertAll(x => plane.Convert(x));
         }
 
         public IClosedPlanar3D Project(IClosed3D closed3D)

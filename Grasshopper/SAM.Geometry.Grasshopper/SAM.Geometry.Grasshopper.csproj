@@ -102,6 +102,7 @@
     <Compile Include="Component\CreateSAMTransform3DPlaneToPlane.cs" />
     <Compile Include="Component\CreateSAMTransform3DPlaneToOrigin.cs" />
     <Compile Include="Component\NTSSAMGeometry2D.cs" />
+    <Compile Include="Component\SAMGeometryFlipNormal.cs" />
     <Compile Include="Component\SAMGeometrySAMGeometry3D.cs" />
     <Compile Include="Component\SAMGeometryTransform.cs" />
     <Compile Include="Component\SAMGeometryPlaneIntersection.cs" />
