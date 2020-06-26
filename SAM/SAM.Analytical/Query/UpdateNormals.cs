@@ -51,7 +51,7 @@ namespace SAM.Analytical
                     panel = new Panel(panel);
                     panel.FlipNormal();
 
-                    adjacencyCluster.AddObject(panel);
+                    result.AddObject(panel);
                 }
             }
 
