@@ -17,6 +17,8 @@ namespace SAM.Analytical
             if (spaces == null || spaces.Count == 0)
                 return result;
 
+
+            HashSet<System.Guid> guids = new HashSet<System.Guid>();
             foreach(Space space in spaces)
             {
                 Shell shell = null;
@@ -29,6 +31,11 @@ namespace SAM.Analytical
                     Panel panel = keyValuePair.Key;
                     if (panel == null)
                         continue;
+
+                    if (guids.Contains(panel.Guid))
+                        continue;
+
+                    guids.Add(panel.Guid);
 
                     Vector3D normal_External = keyValuePair.Value;
                     if (normal_External == null)
