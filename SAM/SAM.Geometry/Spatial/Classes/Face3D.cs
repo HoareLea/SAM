@@ -165,7 +165,7 @@ namespace SAM.Geometry.Spatial
             return externalEdge.InRange(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D, tolerance));
         }
 
-        public void FlipNormal()
+        public void FlipNormal(bool flipX = true)
         {
             IClosedPlanar3D externalEdge = GetExternalEdge();
             if (externalEdge != null)
@@ -175,7 +175,7 @@ namespace SAM.Geometry.Spatial
             if (internalEdges != null)
                 internalEdges.ForEach(x => x.Reverse());
 
-            plane.FlipZ(true);
+            plane.FlipZ(flipX);
 
             if (externalEdge != null)
                 this.externalEdge = plane.Convert(externalEdge);

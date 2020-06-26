@@ -713,13 +713,13 @@ namespace SAM.Analytical
             return Geometry.Planar.Query.ThinnessRatio(planarBoundary3D.Edge2DLoop.GetClosed2D());
         }
 
-        public void FlipNormal()
+        public void FlipNormal(bool flipX = true)
         {
             Face3D face3D = PlanarBoundary3D?.GetFace3D();
             if (face3D == null)
                 return;
 
-            face3D.FlipNormal();
+            face3D.FlipNormal(flipX);
 
             planarBoundary3D = new PlanarBoundary3D(face3D);
         }

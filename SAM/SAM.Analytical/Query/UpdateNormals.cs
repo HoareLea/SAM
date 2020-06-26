@@ -80,7 +80,7 @@ namespace SAM.Analytical
                         if(normal_Panel != null && !normal_External.SameHalf(normal_Panel))
                         {
                             panel = new Panel(panel);
-                            panel.FlipNormal();
+                            panel.FlipNormal(false);
                         }
                     }
                 }
