@@ -57,5 +57,37 @@ namespace SAM.Analytical
 
             return result;
         }
+    
+        public static List<Panel> UpdateNormals(this AdjacencyCluster adjacencyCluster, Space space, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (adjacencyCluster == null || space == null)
+                return null;
+
+            Shell shell = null;
+
+            Dictionary<Panel, Vector3D> dictionary = adjacencyCluster.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
+
+            List<Panel> result = new List<Panel>();
+            foreach (KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
+            {
+                Panel panel = keyValuePair.Key;
+                if (panel != null)
+                {
+                    Vector3D normal_External = keyValuePair.Value;
+                    if (normal_External != null)
+                    {
+                        Vector3D normal_Panel = panel.Plane?.Normal;
+                        if(normal_Panel != null && !normal_External.SameHalf(normal_Panel))
+                        {
+                            panel = new Panel(panel);
+                            panel.FlipNormal();
+                        }
+                    }
+                }
+                result.Add(panel);
+            }
+
+            return result;
+        }
     }
 }
