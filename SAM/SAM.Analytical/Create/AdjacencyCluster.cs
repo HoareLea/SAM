@@ -39,7 +39,7 @@ namespace SAM.Analytical
                         continue;
 
                     segment2Ds.SimplifyByAngle();
-                    Geometry.Planar.Modify.Snap(segment2Ds, tolerance);
+                    Geometry.Planar.Modify.Snap(segment2Ds, true, tolerance);
 
                     foreach(Segment2D segment2D in segment2Ds)
                     {

@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
     public static partial class Modify
     {
         /// <summary>
-        /// Removes LineStrings whicha are shorter than given tolerance and adjusts points of the rest LineStrings to avoid discontinuity 
+        /// Removes LineStrings which are shorter than given tolerance and adjusts points of the rest LineStrings to avoid discontinuity 
         /// </summary>
         /// <param name="lineStrings">NTS LineStrings</param>
         /// <param name="tolerance"> Tolerance</param>

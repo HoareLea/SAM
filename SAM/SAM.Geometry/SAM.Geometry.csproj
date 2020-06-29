@@ -130,6 +130,7 @@
     <Compile Include="Planar\Modify\JoinByIntersections.cs" />
     <Compile Include="Planar\Modify\Scale.cs" />
     <Compile Include="Planar\Modify\Tighten.cs" />
+    <Compile Include="Planar\Query\Average.cs" />
     <Compile Include="Planar\Query\InRange.cs" />
     <Compile Include="Planar\Query\InternalPoint2D.cs" />
     <Compile Include="Planar\Query\Polygons.cs" />
@@ -168,6 +169,8 @@
     <Compile Include="Spatial\Create\Point3D.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Tilt.cs" />
+    <Compile Include="Spatial\Query\Azimuth.cs" />
     <Compile Include="Spatial\Query\InRange.cs" />
     <Compile Include="Spatial\Query\Below.cs" />
     <Compile Include="Spatial\Query\Above.cs" />

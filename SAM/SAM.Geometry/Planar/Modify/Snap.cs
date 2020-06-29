@@ -5,7 +5,14 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static bool Snap(this List<Segment2D> segment2Ds, double tolerance = Core.Tolerance.MacroDistance)
+        /// <summary>
+        /// Snap points for reach segment in given tolerance. Points will be snapped to average points in range of tolerance
+        /// </summary>
+        /// <param name="segment2Ds">List of Segments to be snapped</param>
+        /// <param name="includeIntersection">Intersection point will be applied if there is only two segments to be snapped</param>
+        /// <param name="tolerance">Snapping tolerance</param>
+        /// <returns></returns>
+        public static bool Snap(this List<Segment2D> segment2Ds, bool includeIntersection = true, double tolerance = Core.Tolerance.MacroDistance)
         {
             if (segment2Ds == null || segment2Ds.Count < 2)
                 return false;
@@ -46,15 +53,29 @@ namespace SAM.Geometry.Planar
 
                     }
 
-                    Point2D point2D_Centroid = Query.Centroid(point2Ds);
+                    Point2D point2D_New = null;
+                    if (point2Ds.Count == 1)
+                    {
+                        point2D_New = point2Ds[0];
+                    } 
+                    else if(point2Ds.Count == 2 && includeIntersection)
+                    {
+                        IEnumerable<int> indexes = dictionary.Keys;
+                        if(indexes.Count() == 2)
+                            point2D_New = segment2Ds[indexes.ElementAt(0)].Intersection(segment2Ds[indexes.ElementAt(1)], false, tolerance);
+                    }
+                    
+                    if(point2D_New == null)
+                        point2D_New = Query.Average(point2Ds);
+                        
 
                     foreach(KeyValuePair<int, List<int>> keyValuePair in dictionary)
                     {
                         if (keyValuePair.Value.Contains(0))
-                            segment2Ds[keyValuePair.Key] = new Segment2D(point2D_Centroid, segment2Ds[keyValuePair.Key][1]);
+                            segment2Ds[keyValuePair.Key] = new Segment2D(point2D_New, segment2Ds[keyValuePair.Key][1]);
 
                         if (keyValuePair.Value.Contains(1))
-                            segment2Ds[keyValuePair.Key] = new Segment2D(segment2Ds[keyValuePair.Key][0], point2D_Centroid);
+                            segment2Ds[keyValuePair.Key] = new Segment2D(segment2Ds[keyValuePair.Key][0], point2D_New);
                     }
                 }
             }
