@@ -34,6 +34,10 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+
+            GooSpaceParam gooSpaceParam = new GooSpaceParam();
+            gooSpaceParam.Optional = true;
+            inputParamManager.AddParameter(gooSpaceParam, "space_", "space_", "SAM Analytical Space", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -58,8 +62,22 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            
-            AdjacencyCluster adjacencyCluster_New = adjacencyCluster.UpdateNormals();
+
+            Space space = null;
+            dataAccess.GetData(1, ref space);
+
+            AdjacencyCluster adjacencyCluster_New = null;
+            if(space == null)
+            {
+                adjacencyCluster_New = adjacencyCluster.UpdateNormals();
+            }
+            else
+            {
+                adjacencyCluster_New = adjacencyCluster.Filter(new Space[] { space });
+                List<Panel> panels = adjacencyCluster_New.UpdateNormals(space);
+                if (panels != null)
+                    panels.ForEach(x => adjacencyCluster_New.AddObject(x));
+            }
 
             dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster_New));
         }
