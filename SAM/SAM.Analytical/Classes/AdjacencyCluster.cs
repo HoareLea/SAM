@@ -158,17 +158,28 @@ namespace SAM.Analytical
                 return null;
 
             AdjacencyCluster result = new AdjacencyCluster();
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 if (GetGuid(space) == Guid.Empty)
                     continue;
 
-                AddObject(space);
+                if (!result.AddObject(space))
+                    continue;
 
                 List<object> relatedObjects = GetRelatedObjects(space);
                 if (relatedObjects == null)
                     continue;
-                
+
+                foreach(object relatedObject in relatedObjects)
+                {
+                    if (relatedObject == null)
+                        continue;
+
+                    if (!result.AddObject(relatedObject))
+                        continue;
+
+                    result.AddRelation(space, relatedObject);
+                }
             }
 
             return result;
