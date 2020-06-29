@@ -9,6 +9,11 @@ namespace SAM.Geometry.Grasshopper
         {
             return new Spatial.Point3D(point3d.X, point3d.Y, point3d.Z);
         }
+
+        public static Spatial.Point3D ToSAM(this Rhino.Geometry.Point3f point3f)
+        {
+            return new Spatial.Point3D(point3f.X, point3f.Y, point3f.Z);
+        }
         public static Spatial.Point3D ToSAM(this Rhino.Geometry.Point point)
         {
             return ToSAM(point.Location);
