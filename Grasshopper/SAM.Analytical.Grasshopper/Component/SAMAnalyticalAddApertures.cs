@@ -158,7 +158,7 @@ namespace SAM.Analytical.Grasshopper
             AnalyticalModel analyticalModel = null;
             if (sAMObject is AdjacencyCluster)
             {
-                adjacencyCluster = (AdjacencyCluster)sAMObject;
+                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
             }
             else if(sAMObject is AnalyticalModel)
             {
@@ -204,11 +204,14 @@ namespace SAM.Analytical.Grasshopper
                         if (apertureConstruction_Temp == null)
                             continue;
 
-                        Aperture aperture = panel.AddAperture(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
+                        Panel panel_Temp = new Panel(panel);
+
+                        Aperture aperture = panel_Temp.AddAperture(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
                         if (aperture == null)
                             continue;
 
-                        tuples_Result.Add(new Tuple<Panel, Aperture>(panel, aperture));
+                        adjacencyCluster.AddObject(panel_Temp);
+                        tuples_Result.Add(new Tuple<Panel, Aperture>(panel_Temp, aperture));
                     }
                 }
 
