@@ -4,7 +4,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Segment2D> SelfIntersectionSegment2Ds(Polygon2D polygon2D, double maxLength, double tolerance = Core.Tolerance.Distance)
+        public static List<Segment2D> SelfIntersectionSegment2Ds(this Polygon2D polygon2D, double maxLength, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon2D == null)
                 return null;
