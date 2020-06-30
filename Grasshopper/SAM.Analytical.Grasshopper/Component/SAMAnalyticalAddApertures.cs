@@ -185,9 +185,12 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 List<Tuple<Panel, Aperture>> tuples_Result = new List<Tuple<Panel, Aperture>>();
-                foreach (Panel panel in panels)
+                for(int i=0; i < panels.Count; i++)
                 {
+                    Panel panel = panels[i];
                     BoundingBox3D boundingBox3D = panel.GetBoundingBox(maxDistance);
+
+                    Panel panel_Temp = null;
 
                     foreach (Tuple<BoundingBox3D, IClosedPlanar3D> tuple in tuples)
                     {
@@ -204,15 +207,18 @@ namespace SAM.Analytical.Grasshopper
                         if (apertureConstruction_Temp == null)
                             continue;
 
-                        Panel panel_Temp = new Panel(panel);
+                        if(panel_Temp == null)
+                            panel_Temp = new Panel(panel);
 
                         Aperture aperture = panel_Temp.AddAperture(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
                         if (aperture == null)
                             continue;
 
-                        adjacencyCluster.AddObject(panel_Temp);
                         tuples_Result.Add(new Tuple<Panel, Aperture>(panel_Temp, aperture));
                     }
+
+                    if(panel_Temp != null)
+                        adjacencyCluster.AddObject(panel_Temp);
                 }
 
                 if(analyticalModel != null)
