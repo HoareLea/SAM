@@ -469,7 +469,7 @@ namespace SAM.Geometry.Planar
 
         public Point2D Mid()
         {
-            return Point2D.Move(origin, vector.GetScaled(0.5));
+            return Query.Move(origin, vector.GetScaled(0.5));
         }
 
         public void Adjust(Point2D point2D)

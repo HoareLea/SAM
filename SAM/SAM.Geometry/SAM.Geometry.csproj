@@ -130,6 +130,10 @@
     <Compile Include="Planar\Modify\JoinByIntersections.cs" />
     <Compile Include="Planar\Modify\Scale.cs" />
     <Compile Include="Planar\Modify\Tighten.cs" />
+    <Compile Include="Planar\Modify\Mirror.cs" />
+    <Compile Include="Planar\Query\Move.cs" />
+    <Compile Include="Planar\Query\Orient.cs" />
+    <Compile Include="Planar\Query\Orientations.cs" />
     <Compile Include="Planar\Query\Average.cs" />
     <Compile Include="Planar\Query\InRange.cs" />
     <Compile Include="Planar\Query\InternalPoint2D.cs" />

@@ -274,54 +274,6 @@ namespace SAM.Geometry.Planar
             return hash;
         }
 
-        public static Point2D Move(Point2D point, Vector2D vector)
-        {
-            Point2D point_Temp = new Point2D(point);
-            point_Temp.Move(vector);
-            return point_Temp;
-        }
-
-        public static List<Orientation> Orientations(IEnumerable<Point2D> point2Ds)
-        {
-            if (point2Ds == null)
-                return null;
-
-            int aCount = point2Ds.Count();
-
-            if (aCount < 3)
-                return null;
-
-            List<Orientation> aResult = new List<Orientation>();
-
-            aResult.Add(Query.Orientation(point2Ds.ElementAt(aCount - 1), point2Ds.ElementAt(0), point2Ds.ElementAt(1)));
-
-            for (int i = 1; i < aCount - 1; i++)
-                aResult.Add(Query.Orientation(point2Ds.ElementAt(i - 1), point2Ds.ElementAt(i), point2Ds.ElementAt(i + 1)));
-
-            aResult.Add(Query.Orientation(point2Ds.ElementAt(aCount - 2), point2Ds.ElementAt(aCount - 1), point2Ds.ElementAt(0)));
-
-            return aResult;
-        }
-
-        public static List<Point2D> Orient(IEnumerable<Point2D> point2Ds, Orientation orientation)
-        {
-            if (point2Ds == null || point2Ds.Count() < 3 || orientation == Orientation.Collinear)
-                return null;
-
-            List<Point2D> aResult = new List<Point2D>(point2Ds);
-
-            if (orientation == Orientation.Undefined)
-                return aResult;
-
-            List<Orientation> aOrienationList = Orientations(point2Ds);
-            if (aOrienationList.Count(x => x == orientation) > (aOrienationList.Count / 2))
-                return aResult;
-
-            aResult.Reverse();
-
-            return aResult;
-        }
-
         public static List<Point2D> SortByDistance(Point2D point2D, IEnumerable<Point2D> point2Ds)
         {
             List<double> aDistanceList = point2Ds.ToList().ConvertAll(x => x.Distance(point2D));
@@ -440,30 +392,6 @@ namespace SAM.Geometry.Planar
 
             for (int i = 0; i < point2Ds.Count; i++)
                 point2Ds[i].Move(vector2D);
-        }
-
-        public static void Mirror(List<Point2D> point2Ds, Segment2D segment2D)
-        {
-            if (point2Ds == null || segment2D == null)
-                return;
-
-            if (point2Ds.Count() == 0)
-                return;
-
-            for (int i = 0; i < point2Ds.Count; i++)
-                point2Ds[i].Mirror(segment2D);
-        }
-
-        public static void Mirror(List<Point2D> point2Ds, Point2D point2D)
-        {
-            if (point2Ds == null || point2D == null)
-                return;
-
-            if (point2Ds.Count() == 0)
-                return;
-
-            for (int i = 0; i < point2Ds.Count; i++)
-                point2Ds[i].Mirror(point2D);
         }
 
         public static List<Point2D> Clone(IEnumerable<Point2D> point2Ds)
