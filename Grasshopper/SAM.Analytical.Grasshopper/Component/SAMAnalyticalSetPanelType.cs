@@ -35,6 +35,7 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_panelType", "_panelType", "SAM Analytical Panel Type", GH_ParamAccess.item);
+            inputParamManager.AddBooleanParameter("_setDefaultConstruction_", "_setDefaultConstruction_", "Set Default Construction", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -67,6 +68,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            bool setDefaultConstruction = false;
+            if (!dataAccess.GetData(2, ref setDefaultConstruction))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             object value = objectWrapper.Value;
 
             if (value is GH_String)
@@ -74,7 +82,14 @@ namespace SAM.Analytical.Grasshopper
 
             PanelType panelType = Analytical.Query.PanelType(value);
 
-            dataAccess.SetData(0, new GooPanel(new Panel(panel, panelType)));
+            Panel panel_New = new Panel(panel, panelType);
+            if(setDefaultConstruction)
+            {
+                Construction construction = Analytical.Query.Construction(panelType);
+                panel_New = new Panel(panel_New, construction);
+            }
+
+            dataAccess.SetData(0, new GooPanel(panel_New));
         }
     }
 }
