@@ -57,11 +57,18 @@ namespace SAM.Analytical
 
                 case Analytical.PanelType.CurtainWall:
                 case Analytical.PanelType.Wall:
+                case Analytical.PanelType.Floor:
+                case Analytical.PanelType.FloorExposed:
+                case Analytical.PanelType.FloorRaised:
+                case Analytical.PanelType.Shade:
+                case Analytical.PanelType.SolarPanel:
                 case Analytical.PanelType.WallExternal:
                     external = true;
                     break;
 
                 case Analytical.PanelType.WallInternal:
+                case Analytical.PanelType.FloorInternal:
+                case Analytical.PanelType.Ceiling:
                     external = false;
                     break;
 
