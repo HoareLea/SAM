@@ -81,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
                     continue;
                 }
 
-                successfuls.Add(adjacencyCluster_Result.AddObject(sAMObject.Clone()));
+                successfuls.Add(adjacencyCluster_Result.AddObject(sAMObject));
             }
 
             dataAccess.SetData(0, adjacencyCluster_Result);
