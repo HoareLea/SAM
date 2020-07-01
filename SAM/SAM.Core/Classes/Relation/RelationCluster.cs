@@ -232,6 +232,31 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Contains(object @object)
+        {
+            if (!IsValid(@object))
+                return false;
+
+            string typeName = @object.GetType().FullName;
+
+            Dictionary<Guid, object> dictionary = null;
+            if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
+                return false;
+
+            Guid guid = Guid.Empty;
+            if (@object is ISAMObject)
+                guid = ((ISAMObject)@object).Guid;
+
+            if (guid != Guid.Empty)
+                return dictionary.ContainsKey(guid);
+
+            foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
+                if (@object.Equals(keyValuePair.Value))
+                    return true;
+
+            return false;
+        }
+
         public bool TryAddObject(object @object, out string typeName, out Guid guid)
         {
             typeName = null;
