@@ -306,7 +306,7 @@ namespace SAM.Geometry.Spatial
 
                 if (System.Math.Abs(boundary.Item1.Max.Z - boundary.Item1.Min.Z) <= tolerance)
                 {
-                    normal = Vector3D.WorldZ * (boundingBox3D.Height / 2);
+                    normal = Vector3D.WorldZ() * (boundingBox3D.Height / 2);
 
                     if (System.Math.Abs(boundary.Item1.Max.Z - boundingBox3D.Max.Z) <= tolerance)
                         normal = normal.GetNegated();

@@ -6,8 +6,6 @@ namespace SAM.Geometry.Spatial
 {
     public class Point3D : SAMGeometry, ISAMGeometry3D
     {
-        public static Point3D Zero { get; } = new Point3D(0, 0, 0);
-
         private double[] coordinates = new double[3] { 0, 0, 0 };
 
         public Point3D()
@@ -427,6 +425,11 @@ namespace SAM.Geometry.Spatial
         public static bool Collinear(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3, double tolerance = Core.Tolerance.Angle)
         {
             return new Vector3D(point3D_1, point3D_2).SmallestAngle(new Vector3D(point3D_1, point3D_3)) < tolerance;
+        }
+
+        public static Point3D Zero() 
+        {
+            return new Point3D(0, 0, 0);
         }
 
         public static bool operator ==(Point3D point3D_1, Point3D point3D_2)

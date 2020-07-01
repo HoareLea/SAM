@@ -22,7 +22,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (sAMGeometry is Planar.ISAMGeometry2D)
             {
-                sAMGeometry = Spatial.Plane.WorldXY.Convert(sAMGeometry as dynamic);
+                sAMGeometry = Spatial.Plane.WorldXY().Convert(sAMGeometry as dynamic);
             }
 
             if (sAMGeometry is Spatial.Point3D)

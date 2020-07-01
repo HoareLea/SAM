@@ -41,7 +41,7 @@ namespace SAM.Architectural
 
         public Geometry.Spatial.Plane GetPlane()
         {
-            return new Geometry.Spatial.Plane(new Geometry.Spatial.Point3D(0, 0, elevation), Geometry.Spatial.Vector3D.WorldZ);
+            return new Geometry.Spatial.Plane(new Geometry.Spatial.Point3D(0, 0, elevation), Geometry.Spatial.Vector3D.WorldZ());
         }
 
         public override bool FromJObject(JObject jObject)

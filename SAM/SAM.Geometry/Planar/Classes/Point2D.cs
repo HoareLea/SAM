@@ -9,10 +9,6 @@ namespace SAM.Geometry.Planar
     /// </summary>
     public class Point2D : SAMGeometry, ISAMGeometry2D
     {
-        public static Point2D Invalid { get; } = new Point2D(double.NaN, double.NaN);
-
-        public static Point2D Zero { get; } = new Point2D(0, 0);
-
         private double[] coordinates = new double[2] { 0, 0 };
 
         public Point2D()
@@ -477,6 +473,16 @@ namespace SAM.Geometry.Planar
                 result.Add(new Point2D(point2D));
 
             return result;
+        }
+
+        public static Point2D Invalid()
+        {
+            return new Point2D(double.NaN, double.NaN);
+        }
+
+        public static Point2D Zero()
+        {
+            return new Point2D(0, 0);
         }
 
         public static bool operator ==(Point2D point2D_1, Point2D point2D_2)

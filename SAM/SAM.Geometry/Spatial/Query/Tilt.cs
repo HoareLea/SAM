@@ -28,7 +28,7 @@ namespace SAM.Geometry.Spatial
             if (normal == null)
                 return double.NaN;
             
-            return normal.Angle(Plane.WorldXY.Normal) * (180 / System.Math.PI);
+            return normal.Angle(Plane.WorldXY().Normal) * (180 / System.Math.PI);
         }
     }
 }

@@ -233,12 +233,12 @@ namespace SAM.Geometry.Spatial
         public List<Plane> GetPlanes()
         {
             List<Plane> planes = new List<Plane>();
-            planes.Add(new Plane(min, Vector3D.WorldX));
-            planes.Add(new Plane(min, Vector3D.WorldY));
-            planes.Add(new Plane(min, Vector3D.WorldZ));
-            planes.Add(new Plane(max, Vector3D.WorldX));
-            planes.Add(new Plane(max, Vector3D.WorldY));
-            planes.Add(new Plane(max, Vector3D.WorldZ));
+            planes.Add(new Plane(min, Vector3D.WorldX()));
+            planes.Add(new Plane(min, Vector3D.WorldY()));
+            planes.Add(new Plane(min, Vector3D.WorldZ()));
+            planes.Add(new Plane(max, Vector3D.WorldX()));
+            planes.Add(new Plane(max, Vector3D.WorldY()));
+            planes.Add(new Plane(max, Vector3D.WorldZ()));
             return planes;
         }
 

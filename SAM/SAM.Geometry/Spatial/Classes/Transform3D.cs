@@ -215,19 +215,19 @@ namespace SAM.Geometry.Spatial
             Vector3D Vector3D_Z = plane.AxisZ;
 
             Matrix4D matrix4D = Matrix4D.GetIdentity();
-            matrix4D[0, 0] = Vector3D.WorldX.DotProduct(Vector3D_X);
-            matrix4D[0, 1] = Vector3D.WorldX.DotProduct(Vector3D_Y);
-            matrix4D[0, 2] = Vector3D.WorldX.DotProduct(Vector3D_Z);
+            matrix4D[0, 0] = Vector3D.WorldX().DotProduct(Vector3D_X);
+            matrix4D[0, 1] = Vector3D.WorldX().DotProduct(Vector3D_Y);
+            matrix4D[0, 2] = Vector3D.WorldX().DotProduct(Vector3D_Z);
             matrix4D[0, 3] = origin.X;
 
-            matrix4D[1, 0] = Vector3D.WorldY.DotProduct(Vector3D_X);
-            matrix4D[1, 1] = Vector3D.WorldY.DotProduct(Vector3D_Y);
-            matrix4D[1, 2] = Vector3D.WorldY.DotProduct(Vector3D_Z);
+            matrix4D[1, 0] = Vector3D.WorldY().DotProduct(Vector3D_X);
+            matrix4D[1, 1] = Vector3D.WorldY().DotProduct(Vector3D_Y);
+            matrix4D[1, 2] = Vector3D.WorldY().DotProduct(Vector3D_Z);
             matrix4D[1, 3] = origin.Y;
 
-            matrix4D[2, 0] = Vector3D.WorldZ.DotProduct(Vector3D_X);
-            matrix4D[2, 1] = Vector3D.WorldZ.DotProduct(Vector3D_Y);
-            matrix4D[2, 2] = Vector3D.WorldZ.DotProduct(Vector3D_Z);
+            matrix4D[2, 0] = Vector3D.WorldZ().DotProduct(Vector3D_X);
+            matrix4D[2, 1] = Vector3D.WorldZ().DotProduct(Vector3D_Y);
+            matrix4D[2, 2] = Vector3D.WorldZ().DotProduct(Vector3D_Z);
             matrix4D[2, 3] = origin.Z;
 
             return new Transform3D(matrix4D);

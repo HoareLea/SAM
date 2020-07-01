@@ -6,20 +6,14 @@ namespace SAM.Geometry.Spatial
 {
     public class Plane : SAMGeometry, IPlanar3D
     {
-        public static Plane WorldXY { get; } = new Plane(Point3D.Zero, Vector3D.WorldZ);
-
-        public static Plane WorldYZ { get; } = new Plane(Point3D.Zero, Vector3D.WorldX);
-
-        public static Plane WorldXZ { get; } = new Plane(Point3D.Zero, Vector3D.WorldY);
-
         private Vector3D normal;
         private Point3D origin;
         private Vector3D axisY;
 
         public Plane()
         {
-            normal = Vector3D.WorldZ; //new Vector3D(0, 0, 1);
-            origin = Point3D.Zero;
+            normal = Vector3D.WorldZ(); //new Vector3D(0, 0, 1);
+            origin = Point3D.Zero();
             axisY = normal.AxisY();
         }
 
@@ -60,7 +54,7 @@ namespace SAM.Geometry.Spatial
         {
             this.origin = new Point3D(origin);
             this.axisY = axisY.Unit;
-            normal = Query.Normal(axisX, axisY); //this.axisY.CrossProduct(axisX).Unit;
+            normal = Query.Normal(axisX.Unit, this.axisY); //this.axisY.CrossProduct(axisX).Unit;
         }
 
         public Vector3D Normal
@@ -460,7 +454,7 @@ namespace SAM.Geometry.Spatial
         public void FlipX(bool flipY = true)
         {
             Vector3D axisX = AxisX.GetNegated();
-            if(!flipY)
+            if (!flipY)
                 normal = Query.Normal(axisX, axisY);
             else
                 axisY = Query.AxisY(normal, axisX);
@@ -550,6 +544,21 @@ namespace SAM.Geometry.Spatial
             jObject.Add("AxisY", axisY.ToJObject());
 
             return jObject;
+        }
+
+        public static Plane WorldXY()
+        {
+            return new Plane(Point3D.Zero(), Vector3D.WorldZ());
+        }
+
+        public static Plane WorldYZ()
+        {
+            return new Plane(Point3D.Zero(), Vector3D.WorldX());
+        }
+
+        public static Plane WorldXZ()
+        {
+            return new Plane(Point3D.Zero(), Vector3D.WorldY());
         }
 
         public static bool operator ==(Plane plane_1, Plane plane_2)

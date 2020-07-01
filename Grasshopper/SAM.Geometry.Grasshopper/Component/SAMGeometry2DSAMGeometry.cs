@@ -26,7 +26,7 @@ namespace SAM.Geometry.Grasshopper
             inputParamManager.AddParameter(new GooSAMGeometryParam(), "_SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
 
             GooSAMGeometryParam gooSAMGeometryParam = new GooSAMGeometryParam();
-            gooSAMGeometryParam.PersistentData.Append(new GooSAMGeometry(Plane.WorldXY));
+            gooSAMGeometryParam.PersistentData.Append(new GooSAMGeometry(Plane.WorldXY()));
             inputParamManager.AddParameter(gooSAMGeometryParam, "Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
         }
 

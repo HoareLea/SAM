@@ -101,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
                 if (sAMGeometry is ISAMGeometry3D)
                     geometry3Ds = new List<ISAMGeometry3D>() { (ISAMGeometry3D)sAMGeometry };
                 else if (sAMGeometry is Geometry.Planar.ISAMGeometry2D)
-                    geometry3Ds = new List<ISAMGeometry3D>() { Plane.WorldXY.Convert(sAMGeometry as dynamic) };
+                    geometry3Ds = new List<ISAMGeometry3D>() { Plane.WorldXY().Convert(sAMGeometry as dynamic) };
             }
 
             if (geometry3Ds == null || geometry3Ds.Count() == 0)

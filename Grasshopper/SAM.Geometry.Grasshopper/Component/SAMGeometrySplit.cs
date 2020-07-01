@@ -103,7 +103,7 @@ namespace SAM.Geometry.Grasshopper
                     if (sAMGeometry is Spatial.ISAMGeometry3D)
                         sAMGeometry3Ds.Add((Spatial.ISAMGeometry3D)sAMGeometry);
                     else if (sAMGeometry is ISAMGeometry2D)
-                        sAMGeometry3Ds.Add(Spatial.Plane.WorldXY.Convert((ISAMGeometry2D)sAMGeometry));
+                        sAMGeometry3Ds.Add(Spatial.Plane.WorldXY().Convert((ISAMGeometry2D)sAMGeometry));
                 }
                 else if (gHObjectWrapper.Value is IGH_GeometricGoo)
                 {
@@ -116,9 +116,9 @@ namespace SAM.Geometry.Grasshopper
                     {
                         List<Spatial.ICurve3D> curve3Ds = new List<Spatial.ICurve3D>();
                         if (sAMGeometry3D is Spatial.ICurvable3D)
-                            curve3Ds.AddRange(((Spatial.ICurvable3D)sAMGeometry3D).GetCurves().ConvertAll(x => Spatial.Plane.WorldXY.Project(x)));
+                            curve3Ds.AddRange(((Spatial.ICurvable3D)sAMGeometry3D).GetCurves().ConvertAll(x => Spatial.Plane.WorldXY().Project(x)));
                         else if (sAMGeometry3D is Spatial.ICurve3D)
-                            curve3Ds.Add(Spatial.Plane.WorldXY.Project((Spatial.ICurve3D)sAMGeometry3D));
+                            curve3Ds.Add(Spatial.Plane.WorldXY().Project((Spatial.ICurve3D)sAMGeometry3D));
 
                         if (curve3Ds == null || curve3Ds.Count == 0)
                             continue;
@@ -128,7 +128,7 @@ namespace SAM.Geometry.Grasshopper
                             if (curve3D == null)
                                 continue;
 
-                            ICurvable2D curvable2D = Spatial.Plane.WorldXY.Convert(curve3D) as ICurvable2D;
+                            ICurvable2D curvable2D = Spatial.Plane.WorldXY().Convert(curve3D) as ICurvable2D;
                             if (curvable2D != null)
                                 curvable2D.GetCurves().ForEach(x => segment2Ds.Add(new Segment2D(x.GetStart(), x.GetEnd())));
                         }

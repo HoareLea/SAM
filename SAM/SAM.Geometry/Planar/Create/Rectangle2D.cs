@@ -68,7 +68,7 @@ namespace SAM.Geometry.Planar
             double area = double.MaxValue;
             Rectangle2D rectangle = null;
 
-            Vector2D vector2D = Vector2D.WorldY;
+            Vector2D vector2D = Vector2D.WorldY();
 
             HashSet<double> angleHashSet = new HashSet<double>();
             for (int i = 0; i < point2Ds_ConvexHull.Count - 1; i++)

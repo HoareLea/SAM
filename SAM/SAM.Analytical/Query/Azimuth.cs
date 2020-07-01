@@ -7,7 +7,7 @@
             if (panel == null)
                 return double.NaN;
 
-            return Geometry.Spatial.Query.Azimuth(panel.GetFace3D(), Geometry.Spatial.Vector3D.WorldY);
+            return Geometry.Spatial.Query.Azimuth(panel.GetFace3D(), Geometry.Spatial.Vector3D.WorldY());
         }
     }
 }

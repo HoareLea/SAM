@@ -6,9 +6,6 @@ namespace SAM.Geometry.Planar
 {
     public class Vector2D : SAMGeometry, ISAMGeometry2D, IReversible
     {
-        public static Vector2D WorldX { get; } = new Vector2D(1, 0);
-        public static Vector2D WorldY { get; } = new Vector2D(0, 1);
-
         private double[] coordinates = new double[2] { 0, 0 };
 
         public Vector2D(double x, double y)
@@ -165,7 +162,7 @@ namespace SAM.Geometry.Planar
 
         public BoundingBox2D GetBoundingBox()
         {
-            return new BoundingBox2D(Point2D.Zero, new Point2D(coordinates[0], coordinates[1]));
+            return new BoundingBox2D(Point2D.Zero(), new Point2D(coordinates[0], coordinates[1]));
         }
 
         //Calculate the dot product as an angle
@@ -275,46 +272,6 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public static Vector2D operator +(Vector2D vector2D_1, Vector2D vector2D_2)
-        {
-            return new Vector2D(vector2D_1.coordinates[0] + vector2D_2.coordinates[0], vector2D_1.coordinates[1] + vector2D_2.coordinates[1]);
-        }
-
-        public static Vector2D operator -(Vector2D vector2D_1, Vector2D vector2D_2)
-        {
-            return new Vector2D(vector2D_1.coordinates[0] - vector2D_2.coordinates[0], vector2D_1.coordinates[1] - vector2D_2.coordinates[1]);
-        }
-
-        public static double operator *(Vector2D vector2D_1, Vector2D vector2D_2)
-        {
-            return vector2D_1.coordinates[0] * vector2D_2.coordinates[0] + vector2D_1.coordinates[1] * vector2D_2.coordinates[1];
-        }
-
-        public static Vector2D operator /(Vector2D vector2D, double factor)
-        {
-            return new Vector2D(vector2D.X / factor, vector2D.Y / factor);
-        }
-
-        public static Vector2D operator *(Vector2D vector2D_1, double factor)
-        {
-            return new Vector2D(vector2D_1.coordinates[0] * factor, vector2D_1.coordinates[1] * factor);
-        }
-
-        public static Vector2D operator *(double factor, Vector2D vector2D_1)
-        {
-            return new Vector2D(vector2D_1.coordinates[0] * factor, vector2D_1.coordinates[1] * factor);
-        }
-
-        public static bool operator ==(Vector2D vector2D_1, Vector2D vector2D_2)
-        {
-            return vector2D_1?.coordinates[0] == vector2D_2?.coordinates[0] && vector2D_1?.coordinates[1] == vector2D_2?.coordinates[1];
-        }
-
-        public static bool operator !=(Vector2D vector2D_1, Vector2D vector2D_2)
-        {
-            return vector2D_1?.coordinates[0] != vector2D_2?.coordinates[0] || vector2D_1?.coordinates[1] != vector2D_2?.coordinates[1];
-        }
-
         public double X
         {
             get
@@ -372,6 +329,55 @@ namespace SAM.Geometry.Planar
             jObject.Add("X", coordinates[0]);
             jObject.Add("Y", coordinates[1]);
             return jObject;
+        }
+
+        public static Vector2D WorldX()
+        {
+            return new Vector2D(1, 0);
+        }
+        public static Vector2D WorldY() 
+        { 
+            return new Vector2D(0, 1); 
+        }
+
+        public static Vector2D operator +(Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            return new Vector2D(vector2D_1.coordinates[0] + vector2D_2.coordinates[0], vector2D_1.coordinates[1] + vector2D_2.coordinates[1]);
+        }
+
+        public static Vector2D operator -(Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            return new Vector2D(vector2D_1.coordinates[0] - vector2D_2.coordinates[0], vector2D_1.coordinates[1] - vector2D_2.coordinates[1]);
+        }
+
+        public static double operator *(Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            return vector2D_1.coordinates[0] * vector2D_2.coordinates[0] + vector2D_1.coordinates[1] * vector2D_2.coordinates[1];
+        }
+
+        public static Vector2D operator /(Vector2D vector2D, double factor)
+        {
+            return new Vector2D(vector2D.X / factor, vector2D.Y / factor);
+        }
+
+        public static Vector2D operator *(Vector2D vector2D_1, double factor)
+        {
+            return new Vector2D(vector2D_1.coordinates[0] * factor, vector2D_1.coordinates[1] * factor);
+        }
+
+        public static Vector2D operator *(double factor, Vector2D vector2D_1)
+        {
+            return new Vector2D(vector2D_1.coordinates[0] * factor, vector2D_1.coordinates[1] * factor);
+        }
+
+        public static bool operator ==(Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            return vector2D_1?.coordinates[0] == vector2D_2?.coordinates[0] && vector2D_1?.coordinates[1] == vector2D_2?.coordinates[1];
+        }
+
+        public static bool operator !=(Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            return vector2D_1?.coordinates[0] != vector2D_2?.coordinates[0] || vector2D_1?.coordinates[1] != vector2D_2?.coordinates[1];
         }
     }
 }
