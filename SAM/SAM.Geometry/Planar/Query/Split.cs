@@ -82,7 +82,7 @@ namespace SAM.Geometry.Planar
                 Planar.Point2D.Add(aPointList, segment2D_Temp[0], tolerance);
                 Planar.Point2D.Add(aPointList, segment2D_Temp[1], tolerance);
 
-                aPointList = Planar.Point2D.SortByDistance(segment2D_Temp[0], aPointList);
+                Modify.SortByDistance(aPointList, segment2D_Temp[0]);
 
                 for (int j = 0; j < aPointList.Count - 1; j++)
                     aResult.Add(new Segment2D(aPointList[j], aPointList[j + 1]));

@@ -274,26 +274,6 @@ namespace SAM.Geometry.Planar
             return hash;
         }
 
-        public static List<Point2D> SortByDistance(Point2D point2D, IEnumerable<Point2D> point2Ds)
-        {
-            List<double> aDistanceList = point2Ds.ToList().ConvertAll(x => x.Distance(point2D));
-
-            List<double> aDistanceList_Sorted = aDistanceList.Distinct().ToList();
-            aDistanceList_Sorted.Sort();
-
-            List<Point2D> aResult = new List<Point2D>();
-            foreach (double aDistance in aDistanceList_Sorted)
-            {
-                for (int i = 0; i < aDistanceList.Count; i++)
-                {
-                    if (aDistance == aDistanceList[i])
-                        aResult.Add(point2Ds.ElementAt(i));
-                }
-            }
-
-            return aResult;
-        }
-
         public static Point2D GetInternalPoint2D(IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point2Ds == null || point2Ds.Count() < 3)
