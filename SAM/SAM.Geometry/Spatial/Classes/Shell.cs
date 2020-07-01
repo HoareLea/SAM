@@ -72,7 +72,7 @@ namespace SAM.Geometry.Spatial
 
         public bool IsClosed(double tolerance = Core.Tolerance.Distance)
         {
-            return true;
+            return boundaries != null && boundaries.Count != 0;
         }
 
         public bool Inside(Point3D point3D, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
@@ -89,8 +89,13 @@ namespace SAM.Geometry.Spatial
                 return false;
 
             Vector3D vector3D = new Vector3D(boundingBox3D_Temp.Min, boundingBox3D_Temp.Max);
-            if (vector3D.Length < silverSpacing)
+            double length = vector3D.Length;
+            if (length < silverSpacing)
                 return false;
+
+            Point3D point3D_InternalPoint = boundaries.First().Item2.InternalPoint3D(tolerance);
+            if(point3D_InternalPoint != null)
+                vector3D = new Vector3D(point3D, point3D_InternalPoint).Unit * length;
 
             Segment3D segment3D = new Segment3D(point3D, vector3D);
 
