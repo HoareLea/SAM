@@ -286,7 +286,7 @@ namespace SAM.Geometry.Spatial
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            return new BoundingBox3D(Point3D.Zero(), new Point3D(coordinates[0], coordinates[1], coordinates[2]), offset);
+            return new BoundingBox3D(Point3D.Zero, new Point3D(coordinates[0], coordinates[1], coordinates[2]), offset);
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
@@ -369,19 +369,28 @@ namespace SAM.Geometry.Spatial
             coordinates[2] = Core.Query.Round(coordinates[2], tolerance);
         }
 
-        public static Vector3D WorldX()
+        public static Vector3D WorldX
         { 
-            return new Vector3D(1, 0, 0);
+            get
+            {
+                return new Vector3D(1, 0, 0);
+            }
         }
 
-        public static Vector3D WorldY() 
+        public static Vector3D WorldY
         {
-            return new Vector3D(0, 1, 0); 
+            get
+            {
+                return new Vector3D(0, 1, 0);
+            }
         }
 
-        public static Vector3D WorldZ() 
+        public static Vector3D WorldZ
         { 
-            return new Vector3D(0, 0, 1); 
+            get
+            {
+                return new Vector3D(0, 0, 1);
+            }
         }
 
         public static Vector3D operator +(Vector3D vector3D_1, Vector3D vector3D_2)

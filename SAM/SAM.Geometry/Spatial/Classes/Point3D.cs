@@ -427,9 +427,12 @@ namespace SAM.Geometry.Spatial
             return new Vector3D(point3D_1, point3D_2).SmallestAngle(new Vector3D(point3D_1, point3D_3)) < tolerance;
         }
 
-        public static Point3D Zero() 
+        public static Point3D Zero 
         {
-            return new Point3D(0, 0, 0);
+            get
+            {
+                return new Point3D(0, 0, 0);
+            }
         }
 
         public static bool operator ==(Point3D point3D_1, Point3D point3D_2)

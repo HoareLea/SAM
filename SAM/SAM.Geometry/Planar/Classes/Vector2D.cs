@@ -162,7 +162,7 @@ namespace SAM.Geometry.Planar
 
         public BoundingBox2D GetBoundingBox()
         {
-            return new BoundingBox2D(Point2D.Zero(), new Point2D(coordinates[0], coordinates[1]));
+            return new BoundingBox2D(Point2D.Zero, new Point2D(coordinates[0], coordinates[1]));
         }
 
         //Calculate the dot product as an angle
@@ -331,13 +331,20 @@ namespace SAM.Geometry.Planar
             return jObject;
         }
 
-        public static Vector2D WorldX()
+        public static Vector2D WorldX
         {
-            return new Vector2D(1, 0);
+            get
+            {
+                return new Vector2D(1, 0);
+            }
         }
-        public static Vector2D WorldY() 
-        { 
-            return new Vector2D(0, 1); 
+
+        public static Vector2D WorldY
+        {
+            get
+            {
+                return new Vector2D(0, 1);
+            }
         }
 
         public static Vector2D operator +(Vector2D vector2D_1, Vector2D vector2D_2)

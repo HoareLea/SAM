@@ -12,8 +12,8 @@ namespace SAM.Geometry.Spatial
 
         public Plane()
         {
-            normal = Vector3D.WorldZ(); //new Vector3D(0, 0, 1);
-            origin = Point3D.Zero();
+            normal = Vector3D.WorldZ; //new Vector3D(0, 0, 1);
+            origin = Point3D.Zero;
             axisY = normal.AxisY();
         }
 
@@ -546,19 +546,28 @@ namespace SAM.Geometry.Spatial
             return jObject;
         }
 
-        public static Plane WorldXY()
+        public static Plane WorldXY
         {
-            return new Plane(Point3D.Zero(), Vector3D.WorldZ());
+            get
+            {
+                return new Plane(Point3D.Zero, Vector3D.WorldZ);
+            }
         }
 
-        public static Plane WorldYZ()
+        public static Plane WorldYZ
         {
-            return new Plane(Point3D.Zero(), Vector3D.WorldX());
+            get
+            {
+                return new Plane(Point3D.Zero, Vector3D.WorldX);
+            }
         }
 
-        public static Plane WorldXZ()
+        public static Plane WorldXZ
         {
-            return new Plane(Point3D.Zero(), Vector3D.WorldY());
+            get
+            {
+                return new Plane(Point3D.Zero, Vector3D.WorldY);
+            }
         }
 
         public static bool operator ==(Plane plane_1, Plane plane_2)

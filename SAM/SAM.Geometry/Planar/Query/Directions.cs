@@ -14,7 +14,7 @@ namespace SAM.Geometry.Planar
             if (segmentable2Ds.Count() == 0)
                 return new List<Vector2D>();
 
-            Vector2D vector2D_Y = Vector2D.WorldY();
+            Vector2D vector2D_Y = Vector2D.WorldY;
 
             foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {

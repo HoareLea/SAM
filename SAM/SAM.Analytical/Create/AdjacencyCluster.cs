@@ -14,8 +14,8 @@ namespace SAM.Analytical
 
             AdjacencyCluster adjacencyCluster = new AdjacencyCluster();
 
-            Plane plane_Min = Plane.WorldXY().GetMoved(new Vector3D(0,0, elevation_Min)) as Plane;
-            Plane plane_Max = Plane.WorldXY().GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
+            Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0,0, elevation_Min)) as Plane;
+            Plane plane_Max = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
 
             Plane plane_Min_Flipped = new Plane(plane_Min);
             plane_Min_Flipped.FlipZ();

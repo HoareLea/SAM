@@ -274,14 +274,20 @@ namespace SAM.Geometry.Planar
             return hash;
         }
 
-        public static Point2D Invalid()
+        public static Point2D Invalid
         {
-            return new Point2D(double.NaN, double.NaN);
+            get
+            {
+                return new Point2D(double.NaN, double.NaN);
+            }
         }
 
-        public static Point2D Zero()
+        public static Point2D Zero
         {
-            return new Point2D(0, 0);
+            get
+            {
+                return new Point2D(0, 0);
+            }
         }
 
         public static bool operator ==(Point2D point2D_1, Point2D point2D_2)
