@@ -29,6 +29,10 @@ namespace SAM.Analytical.Grasshopper
                 if (Value == null)
                     return BoundingBox.Empty;
 
+                Geometry.Spatial.Point3D location = Value.Location;
+                if (location == null || !location.IsValid())
+                    return BoundingBox.Empty;
+
                 return Geometry.Grasshopper.Convert.ToRhino(Value.Location.GetBoundingBox(1));
             }
         }
@@ -40,17 +44,25 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            args.Pipeline.DrawPoint(Geometry.Grasshopper.Convert.ToRhino(Value.Location));
+            Geometry.Spatial.Point3D point3D = Value?.Location;
+            if (point3D == null)
+                return;
+
+            args.Pipeline.DrawPoint(Geometry.Grasshopper.Convert.ToRhino(point3D));
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            args.Pipeline.DrawPoint(Geometry.Grasshopper.Convert.ToRhino(Value.Location));
+            Geometry.Spatial.Point3D point3D = Value?.Location;
+            if (point3D == null)
+                return;
+
+            args.Pipeline.DrawPoint(Geometry.Grasshopper.Convert.ToRhino(point3D));
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            return Geometry.Grasshopper.Modify.BakeGeometry(Value.Location, doc, att, out obj_guid);
+            return Geometry.Grasshopper.Modify.BakeGeometry(Value?.Location, doc, att, out obj_guid);
         }
     }
 

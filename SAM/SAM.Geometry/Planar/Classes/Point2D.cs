@@ -127,20 +127,14 @@ namespace SAM.Geometry.Planar
             return System.Math.Abs(segment2D_temp[1].X * aPoint2D.Y - aPoint2D.X * segment2D_temp[1].Y) < tolerance;
         }
 
-        public bool IsValid
+        public bool IsValid()
         {
-            get
-            {
-                return !double.IsNaN(coordinates[0]) && !double.IsNaN(coordinates[1]);
-            }
+            return !double.IsNaN(coordinates[0]) && !double.IsNaN(coordinates[1]);
         }
 
-        public bool IsZero
+        public bool IsZero()
         {
-            get
-            {
-                return coordinates[0] == 0 && coordinates[1] == 0;
-            }
+            return coordinates[0] == 0 && coordinates[1] == 0;
         }
 
         public void Round(int decimals = Core.Rounding.Distance)

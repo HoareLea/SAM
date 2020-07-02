@@ -56,6 +56,11 @@ namespace SAM.Analytical
             }
         }
 
+        public bool IsPlaced()
+        {
+            return location != null && location.IsValid();
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
