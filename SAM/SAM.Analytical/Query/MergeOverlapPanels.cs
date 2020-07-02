@@ -32,14 +32,22 @@ namespace SAM.Analytical
             List<Panel> panels_Temp = dictionary[Analytical.PanelGroup.Floor];
             panels_Temp.AddRange(dictionary[Analytical.PanelGroup.Roof]);
 
+            dictionary.Remove(Analytical.PanelGroup.Floor);
+            dictionary.Remove(Analytical.PanelGroup.Roof);
+
             panels_Temp = MergeOverlapPanels_FloorAndRoof(panels_Temp, offset, ref redundantPanels, setDefaultConstruction, tolerance);
             if (panels_Temp != null && panels_Temp.Count > 0)
                 result.AddRange(panels_Temp);
 
             panels_Temp = dictionary[Analytical.PanelGroup.Wall];
+            dictionary.Remove(Analytical.PanelGroup.Wall);
             panels_Temp = MergeOverlapPanels_Walls(panels_Temp, offset, ref redundantPanels, setDefaultConstruction, tolerance);
             if (panels_Temp != null && panels_Temp.Count > 0)
                 result.AddRange(panels_Temp);
+
+            foreach (KeyValuePair<PanelGroup, List<Panel>> keyValuePair in dictionary)
+                if (keyValuePair.Value != null && keyValuePair.Value.Count > 0)
+                    result.AddRange(keyValuePair.Value);
 
             return result;
         }
