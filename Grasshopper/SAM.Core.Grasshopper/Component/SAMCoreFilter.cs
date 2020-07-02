@@ -133,22 +133,9 @@ namespace SAM.Core.Grasshopper
                         continue;
                     }
 
-                    if (value.GetType().IsPrimitive)
+                    if(value.GetType().Equals(value_Temp.GetType()))
                     {
-                        if (value.IsNumeric() && value_Temp.IsNumeric())
-                        {
-                            double value_1 = System.Convert.ToDouble(value);
-                            double value_2 = System.Convert.ToDouble(value_Temp);
-                            if (value_1.Equals(value_2))
-                            {
-                                result_in.Add(@object);
-                                continue;
-                            }
-                        }
-                    }
-                    if ((value_Temp is Enum && value is string) || (value is Enum && value_Temp is string))
-                    {
-                        if (value_Temp.ToString().Equals(value.ToString()))
+                        if (value.Equals(value_Temp))
                         {
                             result_in.Add(@object);
                             continue;
@@ -156,12 +143,57 @@ namespace SAM.Core.Grasshopper
                     }
                     else
                     {
-                        if (value == value_Temp || (value != null && value.Equals(value_Temp)))
+                        if (value.GetType().IsPrimitive)
                         {
-                            result_in.Add(@object);
-                            continue;
+                            if (value.IsNumeric() && value_Temp.IsNumeric())
+                            {
+                                double value_1 = System.Convert.ToDouble(value);
+                                double value_2 = System.Convert.ToDouble(value_Temp);
+                                if (value_1.Equals(value_2))
+                                {
+                                    result_in.Add(@object);
+                                    continue;
+                                }
+                            }
+                        }
+
+                        if ((value_Temp is Enum && value is string) || (value is Enum && value_Temp is string))
+                        {
+                            if (value_Temp.ToString().Equals(value.ToString()))
+                            {
+                                result_in.Add(@object);
+                                continue;
+                            }
+                        }
+
+                        if ((value_Temp is bool && value is string) || (value is bool && value_Temp is string))
+                        {
+                            if (value_Temp.ToString().ToLower().Trim().Equals(value.ToString().ToLower().Trim()))
+                            {
+                                result_in.Add(@object);
+                                continue;
+                            }
+                        }
+
+                        if (value is string)
+                        {
+                            if(value.Equals(value_Temp?.ToString()))
+                            {
+                                result_in.Add(@object);
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            if (value == value_Temp || (value != null && value.Equals(value_Temp)))
+                            {
+                                result_in.Add(@object);
+                                continue;
+                            }
                         }
                     }
+
+
                 }
 
                 result_out.Add(@object);

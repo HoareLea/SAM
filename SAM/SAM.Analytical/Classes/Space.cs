@@ -52,6 +52,9 @@ namespace SAM.Analytical
         {
             get
             {
+                if (location == null)
+                    return null;
+
                 return new Geometry.Spatial.Point3D(location);
             }
         }
