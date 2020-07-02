@@ -125,12 +125,14 @@
     <Compile Include="Planar\Modify\Add.cs" />
     <Compile Include="Planar\Modify\InsertClosest.cs" />
     <Compile Include="Planar\Modify\Draw.cs" />
+    <Compile Include="Planar\Modify\Move.cs" />
     <Compile Include="Planar\Modify\Snap.cs" />
     <Compile Include="Planar\Modify\JoinInRange.cs" />
     <Compile Include="Planar\Modify\JoinByIntersections.cs" />
     <Compile Include="Planar\Modify\Scale.cs" />
     <Compile Include="Planar\Modify\Tighten.cs" />
     <Compile Include="Planar\Modify\Mirror.cs" />
+    <Compile Include="Planar\Query\Clone.cs" />
     <Compile Include="Planar\Query\Move.cs" />
     <Compile Include="Planar\Query\Orient.cs" />
     <Compile Include="Planar\Query\Orientations.cs" />

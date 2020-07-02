@@ -55,7 +55,7 @@ namespace SAM.Geometry.Planar
             if (!curves.TrueForAll(x => x is Segment2D))
                 throw new NotImplementedException();
 
-            return Point2D.GetInternalPoint2D(curves.ConvertAll(x => x.GetStart()), tolerance);
+            return Query.InternalPoint2D(curves.ConvertAll(x => x.GetStart()), tolerance);
         }
 
         public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)

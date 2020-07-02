@@ -13,7 +13,7 @@ namespace SAM.Geometry.Planar
 
         public Polygon2D(IEnumerable<Point2D> points)
         {
-            this.points = Point2D.Clone(points);
+            this.points = Query.Clone(points);
             if (this.points.Last().Equals(this.points.First()))
                 this.points.RemoveAt(this.points.Count - 1);
         }
@@ -71,7 +71,7 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                return Point2D.Clone(points);
+                return Query.Clone(points);
             }
         }
 
@@ -172,7 +172,7 @@ namespace SAM.Geometry.Planar
 
         public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
-            return Point2D.GetInternalPoint2D(points, tolerance);
+            return Query.InternalPoint2D(points, tolerance);
         }
 
         public Point2D GetCentroid()

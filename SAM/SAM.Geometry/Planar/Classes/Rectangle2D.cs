@@ -103,7 +103,7 @@ namespace SAM.Geometry.Planar
 
         public bool Contains(Point2D point, double offset)
         {
-            return Point2D.Contains(GetPoints(), point, offset);
+            return Query.Contains(GetPoints(), point, offset);
         }
 
         public Vector2D WidthDirection

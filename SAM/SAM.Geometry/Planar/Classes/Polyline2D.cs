@@ -12,7 +12,7 @@ namespace SAM.Geometry.Planar
 
         public Polyline2D(IEnumerable<Point2D> point2Ds, bool close = false)
         {
-            this.points = Point2D.Clone(point2Ds);
+            this.points = Query.Clone(point2Ds);
             if (close && !IsClosed())
                 points.Add(points.First());
         }
@@ -26,7 +26,7 @@ namespace SAM.Geometry.Planar
 
         public Polyline2D(Polyline2D polyline2D)
         {
-            this.points = Point2D.Clone(polyline2D.points);
+            this.points = Query.Clone(polyline2D.points);
         }
 
         public Polyline2D(JObject jObject)

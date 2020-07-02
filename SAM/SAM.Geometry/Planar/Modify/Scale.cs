@@ -11,5 +11,17 @@ namespace SAM.Geometry.Planar
 
             point2Ds.ForEach(x => x.Scale(factor));
         }
+
+        public static void Scale(this List<Point2D> point2Ds, Point2D point2D, double factor)
+        {
+            if (point2Ds == null)
+                return;
+
+            if (point2Ds.Count == 0)
+                return;
+
+            for (int i = 0; i < point2Ds.Count; i++)
+                point2Ds[i].Scale(point2D, factor);
+        }
     }
 }

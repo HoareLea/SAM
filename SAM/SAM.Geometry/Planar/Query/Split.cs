@@ -50,7 +50,7 @@ namespace SAM.Geometry.Planar
                             aPointDictionary[i] = aPointList;
                         }
 
-                        Planar.Point2D.Add(aPointList, point2D_Intersection, tolerance);
+                        Modify.Add(aPointList, point2D_Intersection, tolerance);
                     }
 
                     if (point2D_Intersection.Distance(segment2D_2.Start) > tolerance && point2D_Intersection.Distance(segment2D_2.End) > tolerance)
@@ -61,7 +61,7 @@ namespace SAM.Geometry.Planar
                             aPointDictionary[j] = aPointList;
                         }
 
-                        Planar.Point2D.Add(aPointList, point2D_Intersection, tolerance);
+                        Modify.Add(aPointList, point2D_Intersection, tolerance);
                     }
                 }
             }
@@ -79,8 +79,8 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                Planar.Point2D.Add(aPointList, segment2D_Temp[0], tolerance);
-                Planar.Point2D.Add(aPointList, segment2D_Temp[1], tolerance);
+                Modify.Add(aPointList, segment2D_Temp[0], tolerance);
+                Modify.Add(aPointList, segment2D_Temp[1], tolerance);
 
                 Modify.SortByDistance(aPointList, segment2D_Temp[0]);
 

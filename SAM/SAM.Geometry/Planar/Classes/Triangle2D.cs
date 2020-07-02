@@ -19,7 +19,7 @@ namespace SAM.Geometry.Planar
 
         public Triangle2D(Triangle2D triangle2D)
         {
-            points = Point2D.Clone(triangle2D.points).ToArray();
+            points = Query.Clone(triangle2D.points).ToArray();
         }
 
         public Triangle2D(JObject jObject)
@@ -29,7 +29,7 @@ namespace SAM.Geometry.Planar
 
         public bool Contains(Point2D point2D, double offset)
         {
-            return Point2D.Contains(points, point2D, offset);
+            return Query.Contains(points, point2D, offset);
         }
 
         public double GetArea()
