@@ -1,6 +1,7 @@
 ﻿using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Newtonsoft.Json.Linq;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -103,7 +104,9 @@ namespace SAM.Core.Grasshopper
         private string name;
         
         public override Guid ComponentGuid => new Guid("a7a5eb79-1834-43db-9aa3-30ca105c3bbb");
-        
+
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
         
         public GooParameterParam(string name)
@@ -137,6 +140,30 @@ namespace SAM.Core.Grasshopper
                 return base.GetHashCode();
 
             return name.GetHashCode();
+        }
+
+        public override sealed bool Read(GH_IReader reader)
+        {
+            if (!reader.TryGetString(typeof(GooParameter).FullName, ref name))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            return true;
+        }
+
+        public override sealed bool Write(GH_IWriter writer)
+        {
+            if (!base.Write(writer))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            writer.SetString(typeof(GooParameter).FullName, name);
+
+            return true;
         }
     }
 }
