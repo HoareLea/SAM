@@ -196,6 +196,9 @@ namespace SAM.Core.Grasshopper
             {
                 GooParameterParam gooParameterParam = Params.Output[i] as GooParameterParam;
                 if (gooParameterParam == null)
+                    gooParameterParam = new GooParameterParam(Params.Output[i].Name);
+
+                if(gooParameterParam == null || string.IsNullOrWhiteSpace(gooParameterParam.Name))
                     continue;
 
                 object result = null;
