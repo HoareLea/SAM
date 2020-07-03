@@ -106,6 +106,12 @@ namespace SAM.Core.Grasshopper
                 return true;
             }
 
+            if(typeof(IGH_Goo).IsAssignableFrom(source.GetType()))
+            {
+                Value = (source as dynamic).Value;
+                return true;
+            }
+
             return base.CastFrom(source);
         }
 
@@ -120,6 +126,12 @@ namespace SAM.Core.Grasshopper
             if (typeof(Y) == typeof(object))
             {
                 target = (Y)(object)Value;
+                return true;
+            }
+
+            if (typeof(GH_ObjectWrapper) == typeof(Y))
+            {
+                target = (Y)(object)(new GH_ObjectWrapper(Value));
                 return true;
             }
 

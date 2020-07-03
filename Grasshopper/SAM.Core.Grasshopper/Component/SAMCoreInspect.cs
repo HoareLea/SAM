@@ -88,53 +88,61 @@ namespace SAM.Core.Grasshopper
 
         void Menu_PopulateOutputsWithAllParameters(object sender, EventArgs e)
         {
-            var all = new HashSet<GooParameterParam>();
-            foreach (var goo in Params.Input[0].VolatileData.AllData(true).OfType<object>())
-            {
-                var element = goo;
-                if (element is null)
-                    continue;
-
-                List<string> names = element.UserFriendlyNames();
-                if (names == null && names.Count == 0)
-                    continue;
-
-                foreach (string name in names)
-                    all.Add(new GooParameterParam(name));
-            }
-
-            RecordUndoEvent("Get All Parameters");
-
-            PopulateOutputParameters(all);
-        }
-
-        void Menu_PopulateOutputsWithCommonParameters(object sender, EventArgs e)
-        {
-            var common = default(HashSet<GooParameterParam>);
+            HashSet<string> names = new HashSet<string>();
             foreach (object @object in Params.Input[0].VolatileData.AllData(true).OfType<object>())
             {
                 object value = @object;
-                if(@object is IGH_Goo)
+                if (@object is IGH_Goo)
                     value = (@object as dynamic).Value;
 
-                if (value is null)
-                    continue;
-
-                var current = new HashSet<GooParameterParam>();
-
-                List<string> names = value.UserFriendlyNames();
-                foreach (var name in names)
-                    current.Add(new GooParameterParam(name));
-
-                if (common is null)
-                    common = current;
-                else
-                    common.IntersectWith(current);
+                value?.UserFriendlyNames()?.ForEach(x => names.Add(x));
             }
 
             RecordUndoEvent("Get Common Parameters");
 
-            PopulateOutputParameters(common);
+            List<string> names_Temp = names.ToList();
+            names_Temp.Sort();
+
+            PopulateOutputParameters(names_Temp.ConvertAll(x => new GooParameterParam(x)));
+        }
+
+        void Menu_PopulateOutputsWithCommonParameters(object sender, EventArgs e)
+        {
+            HashSet<string> names_Unique = new HashSet<string>();
+            List<HashSet<string>> names_Objects = new List<HashSet<string>>();
+            foreach (object @object in Params.Input[0].VolatileData.AllData(true).OfType<object>())
+            {
+                object value = @object;
+                if (@object is IGH_Goo)
+                    value = (@object as dynamic).Value;
+
+                List<string> names = value?.UserFriendlyNames();
+                if (names == null || names.Count == 0)
+                {
+                    PopulateOutputParameters(new List<GooParameterParam>());
+                    return;
+                }
+
+                HashSet<string> names_Unique_Temp = new HashSet<string>();
+                names.ForEach(x => names_Unique_Temp.Add(x));
+
+                names.ForEach(x => names_Unique.Add(x));
+                names_Objects.Add(names_Unique_Temp);
+            }
+
+            RecordUndoEvent("Get Common Parameters");
+
+            List<string> names_Temp = names_Unique.ToList();
+            names_Temp.Sort();
+
+            HashSet<string> names_Result = new HashSet<string>();
+            foreach (string name in names_Temp)
+            {
+                if (names_Objects.TrueForAll(x => x.Contains(name)))
+                    names_Result.Add(name);
+            }
+
+            PopulateOutputParameters(names_Result.ToList().ConvertAll(x => new GooParameterParam(x)));
         }
 
         void Menu_RemoveUnconnectedParameters(object sender, EventArgs e)

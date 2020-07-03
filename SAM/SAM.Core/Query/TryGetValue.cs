@@ -114,7 +114,7 @@ namespace SAM.Core
         {
             value = null;
 
-            if (@object == null)
+            if (@object == null || methodInfo == null || methodInfo.ContainsGenericParameters)
                 return false;
 
             object[] parameters = new object[] { };

@@ -130,5 +130,13 @@ namespace SAM.Core.Grasshopper
                 return name;
             }
         }
+
+        public override int GetHashCode()
+        {
+            if (name == null)
+                return base.GetHashCode();
+
+            return name.GetHashCode();
+        }
     }
 }
