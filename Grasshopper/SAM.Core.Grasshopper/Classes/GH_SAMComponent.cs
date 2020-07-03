@@ -12,7 +12,7 @@ namespace SAM.Core.Grasshopper
 
         }
         
-        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        public virtual void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
             base.AppendAdditionalMenuItems(menu);
             Menu_AppendSeparator(menu);

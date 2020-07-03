@@ -17,8 +17,6 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Names;
 
-        private GH_OutputParamManager outputParamManager;
-
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>

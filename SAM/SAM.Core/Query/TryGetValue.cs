@@ -46,6 +46,30 @@ namespace SAM.Core
             return false;
         }
 
+        public static bool TryGetValue(this object @object, string name, out object value, bool UserFriendlyName)
+        {
+            value = null;
+            if (@object == null || string.IsNullOrEmpty(name))
+                return false;
+
+            List<string> names = new List<string>() { name };
+            if (UserFriendlyName)
+                names = Names((string)name);
+            else
+                names = new List<string>() { name };
+
+            if (names == null || names.Count == 0)
+                return false;
+
+            foreach(string name_Temp in names)
+            {
+                if (TryGetValue(@object, name_Temp, out value))
+                    return true;
+            }
+
+            return false;
+        }
+
         public static bool TryGetValue<T>(this object @object, string name, out T value)
         {
             value = default(T);
@@ -78,12 +102,36 @@ namespace SAM.Core
             {
                 if (propertyInfo.Name.Equals(name) && propertyInfo.GetMethod != null)
                 {
-                    value = propertyInfo.GetValue(@object);
-                    return true;
+                    if (TryGetValue_Method(@object, propertyInfo.GetMethod, out value))
+                        return true;
                 }
             }
 
             return false;
+        }
+
+        private static bool TryGetValue_Method(this object @object, System.Reflection.MethodInfo methodInfo, out object value)
+        {
+            value = null;
+
+            if (@object == null)
+                return false;
+
+            object[] parameters = new object[] { };
+
+            System.Reflection.ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+            if (parameterInfos != null && parameterInfos.Length > 0)
+            {
+                if (!parameterInfos.ToList().TrueForAll(x => x.IsOptional))
+                    return false;
+
+                parameters = new object[parameterInfos.Length];
+                for (int i = 0; i < parameters.Length; i++)
+                    parameters[i] = Type.Missing;
+            }
+
+            value = methodInfo.Invoke(@object, parameters);
+            return true;
         }
 
         private static bool TryGetValue_Method(this object @object, string name, out object value)
@@ -96,23 +144,10 @@ namespace SAM.Core
             System.Reflection.MethodInfo[] methodInfos = @object.GetType().GetMethods();
             foreach (System.Reflection.MethodInfo methodInfo in methodInfos)
             {
-                object[] parameters = new object[] { };
-
-                System.Reflection.ParameterInfo[] parameterInfos = methodInfo.GetParameters();
-                if (parameterInfos != null && parameterInfos.Length > 0)
-                {
-                    if (!parameterInfos.ToList().TrueForAll(x => x.IsOptional))
-                        continue;
-
-                    parameters = new object[parameterInfos.Length];
-                    for (int i = 0; i < parameters.Length; i++)
-                        parameters[i] = System.Type.Missing;
-                }
-
                 if (methodInfo.Name.Equals(name) || (!name.StartsWith("Get") && methodInfo.Name.Equals(string.Format("Get{0}", name))))
                 {
-                    value = methodInfo.Invoke(@object, parameters);
-                    return true;
+                    if (TryGetValue_Method(@object, methodInfo, out value))
+                        return true;
                 }
             }
 

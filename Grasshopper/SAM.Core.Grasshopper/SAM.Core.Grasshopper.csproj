@@ -76,7 +76,8 @@
     <Compile Include="Classes\GooLocation.cs" />
     <Compile Include="Classes\GooRelationCluster.cs" />
     <Compile Include="Classes\GooSAMObject.cs" />
-    <Compile Include="Component\SAMCoreExplode.cs" />
+    <Compile Include="Classes\GooParameter.cs" />
+    <Compile Include="Component\SAMCoreInspect.cs" />
     <Compile Include="Component\SAMCoreCreateLocation.cs" />
     <Compile Include="Component\SAMCoreFilter.cs" />
     <Compile Include="Component\SAMCoreGetNames.cs" />

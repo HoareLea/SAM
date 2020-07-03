@@ -38,6 +38,24 @@ namespace SAM.Core
             return result;
         }
 
+        public static List<string> Names(this string userFriendlyName)
+        {
+            if (string.IsNullOrWhiteSpace(userFriendlyName))
+                return null;
+
+            List<string> result = new List<string>() { userFriendlyName };
+            if (!userFriendlyName.StartsWith("Get"))
+                result.Add(string.Format("{0}{1}", "Get", userFriendlyName));
+
+            if (!userFriendlyName.StartsWith("get"))
+                result.Add(string.Format("{0}{1}", "get", userFriendlyName));
+
+            if (!userFriendlyName.StartsWith("get_"))
+                result.Add(string.Format("{0}{1}", "get_", userFriendlyName));
+
+            return result;
+        }
+        
         private static List<string> Names_Property(this object @object)
         {
             if (@object == null)
