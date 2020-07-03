@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Grasshopper.Kernel.Types;
+using Newtonsoft.Json.Linq;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections;
@@ -193,7 +194,12 @@ namespace SAM.Core.Grasshopper
                 
                 @object.TryGetValue(gooParameterParam.Name, out result, true);
 
-                if(result is IEnumerable && !(result is string))
+                
+                if(result is JToken)
+                {
+                    dataAccess.SetData(i, new GooParameter(result.ToString()));
+                }
+                else if(result is IEnumerable && !(result is string))
                 {
                     List<GooParameter> gooParameters = new List<GooParameter>();
                     foreach (object @object_Result in (IEnumerable)result)

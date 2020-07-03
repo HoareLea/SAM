@@ -58,6 +58,9 @@ namespace SAM.Core.Grasshopper
             if (Value.GetType().IsPrimitive)
                 return Value.ToString();
 
+            if (Value is Newtonsoft.Json.Linq.JToken)
+                return Value.ToString();
+
             string value = Value.GetType().FullName;
 
             if (Value is ISAMObject)
