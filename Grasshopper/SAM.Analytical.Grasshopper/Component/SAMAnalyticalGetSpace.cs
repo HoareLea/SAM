@@ -95,7 +95,7 @@ namespace SAM.Analytical.Grasshopper
                 Space space = null;
                 foreach(KeyValuePair<Space, Geometry.Spatial.Shell> keyValuePair in dictionary)
                 {
-                    if(keyValuePair.Value.InRange(point3D))
+                    if(keyValuePair.Value.InRange(point3D) || keyValuePair.Value.Inside(point3D))
                     {
                         space = keyValuePair.Key;
                         break;
