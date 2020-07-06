@@ -167,7 +167,7 @@ namespace SAM.Analytical.Grasshopper
             if (breps == null || breps.Count == 0)
                 return false;
 
-            Brep result = Brep.MergeBreps(breps, Core.Tolerance.Distance);
+            Brep result = Brep.MergeBreps(breps, Core.Tolerance.MacroDistance); //Tolerance has been changed from Core.Tolerance.Distance
             if (result == null)
                 return false;
 

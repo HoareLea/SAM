@@ -95,6 +95,12 @@ namespace SAM.Core.Grasshopper
                 return true;
             }
 
+            if(typeof(Y) == typeof(GH_ObjectWrapper))
+            {
+                target = (Y)(object)(new GH_ObjectWrapper(Value));
+                return true;
+            }
+
             return base.CastTo<Y>(ref target);
         }
     }
