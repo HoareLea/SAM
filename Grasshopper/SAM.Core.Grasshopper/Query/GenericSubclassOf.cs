@@ -1,7 +1,4 @@
-﻿using Grasshopper;
-using Grasshopper.Kernel.Data;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace SAM.Core.Grasshopper
 {

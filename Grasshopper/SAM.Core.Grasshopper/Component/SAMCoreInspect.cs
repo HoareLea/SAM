@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
+using Grasshopper.Kernel.Components;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
 using SAM.Core.Grasshopper.Properties;
@@ -191,6 +192,12 @@ namespace SAM.Core.Grasshopper
 
             if(@object is IGH_Goo)
                 @object = (@object as dynamic).Value;
+
+            if(@object is Rhino.Geometry.GeometryBase)
+            {
+                if (((Rhino.Geometry.GeometryBase)@object).Disposed)
+                    return;
+            }
 
             for (int i = 0; i < Params.Output.Count; ++i)
             {
