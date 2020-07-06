@@ -51,14 +51,21 @@ namespace SAM.Core.Grasshopper
 
         void PopulateOutputParameters(IEnumerable<GooParameterParam> gooParameterParams)
         {
-            var connected = new Dictionary<GooParameterParam, IList<IGH_Param>>();
-            foreach (var output in Params.Output.ToArray())
+            Dictionary<GooParameterParam, IList<IGH_Param>> dictionary = new Dictionary<GooParameterParam, IList<IGH_Param>>();
+            foreach (IGH_Param param in Params.Output)
             {
-                if(output.Recipients.Count > 0 && output is GooParameterParam gooParameterParam)
-                    connected.Add(gooParameterParam, gooParameterParam.Recipients.ToArray());
+                if (param.Recipients == null && param.Recipients.Count == 0)
+                    continue;
 
-                Params.UnregisterOutputParameter(output);
+                GooParameterParam gooParameterParam = param as GooParameterParam;
+                if (gooParameterParam == null)
+                    continue;
+
+                dictionary.Add(gooParameterParam, new List(gooParameterParam.Recipients));
             }
+
+            while(Params.Output != null && Params.Output.Count() > 0)
+                Params.UnregisterOutputParameter(Params.Output[0]);
 
             if (gooParameterParams != null)
             {
@@ -66,11 +73,13 @@ namespace SAM.Core.Grasshopper
                 {
                     AddOutputParameter(gooParameterParam);
 
-                    if (connected.TryGetValue(gooParameterParam, out var recipients))
-                    {
-                        foreach (var recipient in recipients)
-                            recipient.AddSource(gooParameterParam);
-                    }
+                    IList<IGH_Param> @params = null;
+
+                    if (!dictionary.TryGetValue(gooParameterParam, out @params))
+                        continue;
+
+                    foreach (IGH_Param param in @params)
+                        param.AddSource(gooParameterParam);
                 }
             }
 
