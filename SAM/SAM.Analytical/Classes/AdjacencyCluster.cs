@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace SAM.Analytical
 {
@@ -74,6 +75,56 @@ namespace SAM.Analytical
             return spaces == null || spaces.Count == 0;
         }
 
+        public bool ExposedToSun(Panel panel)
+        {
+            if (panel == null)
+                return false;
+
+            if (!Contains(typeof(Panel)))
+                return false;
+
+            List<Space> spaces = GetRelatedObjects<Space>(panel);
+            if (spaces == null || spaces.Count != 1)
+                return false;
+
+            switch(panel.PanelType)
+            {
+                case PanelType.CurtainWall:
+                case PanelType.FloorExposed:
+                case PanelType.FloorRaised:
+                case PanelType.Roof:
+                case PanelType.Shade:
+                case PanelType.SolarPanel:
+                case PanelType.WallExternal:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public bool Ground(Panel panel)
+        {
+            if (panel == null)
+                return false;
+
+            if (!Contains(typeof(Panel)))
+                return false;
+
+            List<Space> spaces = GetRelatedObjects<Space>(panel);
+            if (spaces == null || spaces.Count != 1)
+                return false;
+
+            switch (panel.PanelType)
+            {
+                case PanelType.SlabOnGrade:
+                case PanelType.UndergroundSlab:
+                case PanelType.UndergroundWall:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         public List<Panel> GetInternalPanels()
         {
             List<Panel> panels = GetObjects<Panel>();
@@ -99,6 +150,24 @@ namespace SAM.Analytical
                 return null;
 
             return panels.FindAll(x => Shade(x));
+        }
+
+        public List<Panel> GetExposedToSunPanels()
+        {
+            List<Panel> panels = GetObjects<Panel>();
+            if (panels == null || panels.Count == 0)
+                return null;
+
+            return panels.FindAll(x => ExposedToSun(x));
+        }
+
+        public List<Panel> GetGroundPanels()
+        {
+            List<Panel> panels = GetObjects<Panel>();
+            if (panels == null || panels.Count == 0)
+                return null;
+
+            return panels.FindAll(x => Ground(x));
         }
 
         public List<Panel> GetPanels()
