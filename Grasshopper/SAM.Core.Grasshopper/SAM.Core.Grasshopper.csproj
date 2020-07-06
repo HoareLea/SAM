@@ -92,6 +92,8 @@
     <Compile Include="Component\SAMCoreFromJson.cs" />
     <Compile Include="Component\SAMCoreAbout.cs" />
     <Compile Include="Component\SAMCoreGetValue.cs" />
+    <Compile Include="Convert\ToSAM\GH_SAMParam.cs" />
+    <Compile Include="Create\GH_SAMParam.cs" />
     <Compile Include="Enums\ParamVisibility.cs" />
     <Compile Include="Interfaces\IGooSAMObject.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
@@ -138,9 +140,7 @@
   <ItemGroup>
     <None Include="Resources\SAM_Get.Filterpng.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Convert\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\SAM_Names.png" />
   </ItemGroup>

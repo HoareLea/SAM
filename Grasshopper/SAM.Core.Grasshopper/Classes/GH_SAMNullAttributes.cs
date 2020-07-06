@@ -11,8 +11,6 @@ namespace SAM.Core.Grasshopper
 {
     public class GH_SAMNullAttributes : IGH_Attributes
     {
-        public static GH_SAMNullAttributes Instance = new GH_SAMNullAttributes();
-
         public GH_SAMNullAttributes() 
         { 
         }

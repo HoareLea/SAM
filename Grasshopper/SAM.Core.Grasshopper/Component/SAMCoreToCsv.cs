@@ -119,7 +119,7 @@ namespace SAM.Core.Grasshopper
                     jSAMObjects.Add((IJSAMObject)@object);
             }
 
-            string csv = Convert.ToCsv(jSAMObjects, propertyNames, true);
+            string csv = Core.Convert.ToCsv(jSAMObjects, propertyNames, true);
 
             if (!string.IsNullOrWhiteSpace(path))
                 System.IO.File.WriteAllText(path, csv);

@@ -87,7 +87,7 @@ namespace SAM.Core.Grasshopper
         public IGH_Param CreateParameter(GH_ParameterSide side, int index)
         {
             if (GetTemplateParam(side, index) is IGH_Param param)
-                return param.Duplicate();
+                return param.Clone();
 
             return default;
         }

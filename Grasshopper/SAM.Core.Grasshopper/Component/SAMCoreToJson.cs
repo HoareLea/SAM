@@ -99,7 +99,7 @@ namespace SAM.Core.Grasshopper
                     jSAMObjects.Add((IJSAMObject)@object);
             }
 
-            string json = Convert.ToJson(jSAMObjects);
+            string json = Core.Convert.ToJson(jSAMObjects);
 
             if (!string.IsNullOrWhiteSpace(path))
                 System.IO.File.WriteAllText(path, json);

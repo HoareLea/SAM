@@ -12,7 +12,7 @@ namespace SAM.Core.Grasshopper
             if (string.IsNullOrWhiteSpace(text))
                 return null;
 
-            List<string[]> list = Convert.ToList(text, delimitedFileType);
+            List<string[]> list = Core.Convert.ToList(text, delimitedFileType);
             if (list == null || list.Count == 0)
                 return null;
 

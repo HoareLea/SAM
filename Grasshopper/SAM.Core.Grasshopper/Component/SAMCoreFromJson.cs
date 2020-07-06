@@ -80,7 +80,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            List<IJSAMObject> jSAMObjects = Convert.ToSAM(pathOrJson);
+            List<IJSAMObject> jSAMObjects = Core.Convert.ToSAM(pathOrJson);
             if (jSAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Could not parse Json to SAM");

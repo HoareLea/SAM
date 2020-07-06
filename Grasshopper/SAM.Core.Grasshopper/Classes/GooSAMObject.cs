@@ -67,7 +67,7 @@ namespace SAM.Core.Grasshopper
             if (string.IsNullOrWhiteSpace(value))
                 return false;
 
-            Value = Create.IJSAMObject<T>(value);
+            Value = Core.Create.IJSAMObject<T>(value);
             return true;
         }
 
