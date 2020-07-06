@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 GH_SAMParam[] result = new GH_SAMParam[1];
-                result[0] = new GH_SAMParam(new GooAdjacencyClusterParam(), ParamVisibility.Binding);
+                result[0] = new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "_adjacencyCluster", NickName = "_adjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
                 return result;
             }
         }
@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                GH_SAMParam[] result = new GH_SAMParam[3];
+                GH_SAMParam[] result = new GH_SAMParam[5];
                 result[0] = new GH_SAMParam(new GooAdjacencyClusterParam() {Name = "AdjacencyCluster", NickName = "AdjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
                 result[1] = new GH_SAMParam(new GooPanelParam() { Name = "Panels", NickName = "Panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
                 result[2] = new GH_SAMParam(new Param_GenericObject() { Name = "PanelTypes", NickName = "PanelTypes", Description = "SAM Analytical PanelTypes", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
@@ -57,16 +57,6 @@ namespace SAM.Analytical.Grasshopper
               "Updates PanelType for Adjacency Cluster",
               "SAM", "Analytical")
         {
-        }
-
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
-        {
-
-        }
-
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
-        {
-
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
@@ -142,6 +132,8 @@ namespace SAM.Analytical.Grasshopper.Obsolete
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.tertiary | GH_Exposure.hidden;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
