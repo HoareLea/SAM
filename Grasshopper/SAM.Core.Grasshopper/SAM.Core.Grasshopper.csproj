@@ -71,6 +71,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GH_SAMNullAttributes.cs" />
+    <Compile Include="Classes\GH_SAMParam.cs" />
+    <Compile Include="Classes\GH_SAMVariableOutputParameterComponent.cs" />
     <Compile Include="Classes\GH_SAMComponent.cs" />
     <Compile Include="Classes\GooAddress.cs" />
     <Compile Include="Classes\GooLocation.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="Component\SAMCoreFromJson.cs" />
     <Compile Include="Component\SAMCoreAbout.cs" />
     <Compile Include="Component\SAMCoreGetValue.cs" />
+    <Compile Include="Enums\ParamVisibility.cs" />
     <Compile Include="Interfaces\IGooSAMObject.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Kernel\AssemblyPriority.cs" />
@@ -98,6 +102,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Query\Duplicate.cs" />
+    <Compile Include="Query\GenericSubclassOf.cs" />
     <Compile Include="Query\DataTree.cs" />
   </ItemGroup>
   <ItemGroup>

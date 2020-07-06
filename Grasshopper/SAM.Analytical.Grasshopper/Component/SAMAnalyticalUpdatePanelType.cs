@@ -1,13 +1,136 @@
 ﻿using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 
+
 namespace SAM.Analytical.Grasshopper
 {
+    public class SAMAnalyticalUpdatePanelType : GH_SAMVariableOutputParameterComponent
+    {
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("0bb56c32-57dd-4641-826c-ac41b3ee5bb2");
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.tertiary | GH_Exposure.obscure;
+
+        protected override GH_SAMParam[] Inputs
+        {
+            get
+            {
+                GH_SAMParam[] result = new GH_SAMParam[1];
+                result[0] = new GH_SAMParam(new GooAdjacencyClusterParam(), ParamVisibility.Binding);
+                return result;
+            }
+        }
+
+        protected override GH_SAMParam[] Outputs
+        {
+            get
+            {
+                GH_SAMParam[] result = new GH_SAMParam[3];
+                result[0] = new GH_SAMParam(new GooAdjacencyClusterParam() {Name = "AdjacencyCluster", NickName = "AdjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
+                result[1] = new GH_SAMParam(new GooPanelParam() { Name = "Panels", NickName = "Panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                result[2] = new GH_SAMParam(new Param_GenericObject() { Name = "PanelTypes", NickName = "PanelTypes", Description = "SAM Analytical PanelTypes", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                result[3] = new GH_SAMParam(new Param_Geometry() { Name = "Geometries", NickName = "Geometries", Description = "GH Geometries from SAM Analytical Panels", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary);
+                result[4] = new GH_SAMParam(new Param_String() { Name = "SpaceAdjNames", NickName = "SpaceAdjNames", Description = "Space Adjacency Names, to which Space each Panel is connected", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary);
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Updates PanelTypes for AdjacencyCluster
+        /// </summary>
+        public SAMAnalyticalUpdatePanelType()
+          : base("SAMAdjacencyCluster.PanelTypeUpdate", "SAMAdjacencyCluster.PanelTypeUpdate",
+              "Updates PanelType for Adjacency Cluster",
+              "SAM", "Analytical")
+        {
+        }
+
+        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        {
+
+        }
+
+        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        {
+
+        }
+
+        protected override void SolveInstance(IGH_DataAccess dataAccess)
+        {
+            AdjacencyCluster adjacencyCluster = null;
+            if (!dataAccess.GetData(0, ref adjacencyCluster))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            AdjacencyCluster adjacencyCluster_Result = new AdjacencyCluster(adjacencyCluster);
+            List<Panel> panels = adjacencyCluster_Result.UpdatePanelType();
+
+            DataTree<string> dataTree_Names = new DataTree<string>();
+            DataTree<IGH_GeometricGoo> dataTree_GeometricGoos = new DataTree<IGH_GeometricGoo>();
+            List<GooPanel> gooPanels = new List<GooPanel>();
+            int count = 0;
+            foreach (Panel panel in panels)
+            {
+                gooPanels.Add(new GooPanel(panel));
+
+                GH_Path path = new GH_Path(count);
+
+                List<Space> spaces = adjacencyCluster.GetSpaces(panel);
+                if (spaces != null && spaces.Count > 0)
+                {
+                    foreach (string name in spaces.ConvertAll(x => x.Name))
+                        dataTree_Names.Add(name, path);
+                }
+
+                dataTree_GeometricGoos.Add(Geometry.Grasshopper.Convert.ToGrasshopper(panel.GetFace3D()), path);
+
+                count++;
+            }
+
+            int index = -1;
+
+            index = Params.IndexOfOutputParam("AdjacencyCluster");
+            if (index != -1)
+                dataAccess.SetData(index, new GooAdjacencyCluster(adjacencyCluster_Result));
+
+            index = Params.IndexOfOutputParam("Panels");
+            if (index != -1)
+                dataAccess.SetDataList(index, gooPanels);
+
+            index = Params.IndexOfOutputParam("PanelTypes");
+            if (index != -1)
+                dataAccess.SetDataList(index, panels.ConvertAll(x => x.PanelType));
+
+            index = Params.IndexOfOutputParam("Geometries");
+            if (index != -1)
+                dataAccess.SetDataTree(index, dataTree_GeometricGoos);
+
+            index = Params.IndexOfOutputParam("SpaceAdjNames");
+            if (index != -1)
+                dataAccess.SetDataTree(index, dataTree_Names);
+        }
+    }
+}
+
+namespace SAM.Analytical.Grasshopper.Obsolete
+{
+    [Obsolete("Obsolete since 2020-07-06")]
     public class SAMAnalyticalUpdatePanelType : GH_Component
     {
         /// <summary>
