@@ -1,6 +1,7 @@
 # SAM
 SAM  Core
 
+[![Build Status](https://hldigitalinnovation.visualstudio.com/HLApps/_apis/build/status/SAM-Deploy-SAM?branchName=master)](https://hldigitalinnovation.visualstudio.com/HLApps/_build/latest?definitionId=18&branchName=master)
 
 Panel-> | PlanarBoundary3D-> | Face3D-> | Polygon3D 
 ------------ | ------------- | ------------- | -------------
