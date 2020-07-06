@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using System.Linq;
 
 namespace SAM.Core.Grasshopper
 {
@@ -97,6 +98,18 @@ namespace SAM.Core.Grasshopper
         public void VariableParameterMaintenance()
         {
 
+        }
+
+        protected override sealed void RegisterInputParams(GH_InputParamManager manager)
+        {
+            foreach (var definition in Inputs.Where(x => x.ParamVisibility.HasFlag(ParamVisibility.Default)))
+                manager.AddParameter(definition.Param.Duplicate());
+        }
+
+        protected override sealed void RegisterOutputParams(GH_OutputParamManager manager)
+        {
+            foreach (var definition in Outputs.Where(x => x.ParamVisibility.HasFlag(ParamVisibility.Default)))
+                manager.AddParameter(definition.Param.Duplicate());
         }
     }
 }
