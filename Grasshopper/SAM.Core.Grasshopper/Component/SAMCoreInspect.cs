@@ -197,6 +197,8 @@ namespace SAM.Core.Grasshopper
             {
                 if (((Rhino.Geometry.GeometryBase)@object).Disposed)
                     return;
+
+                @object = ((Rhino.Geometry.GeometryBase)@object).Duplicate();
             }
 
             for (int i = 0; i < Params.Output.Count; ++i)
@@ -208,8 +210,14 @@ namespace SAM.Core.Grasshopper
                 if(gooParameterParam == null || string.IsNullOrWhiteSpace(gooParameterParam.Name))
                     continue;
 
+                if (@object is Rhino.Geometry.GeometryBase)
+                {
+                    if (((Rhino.Geometry.GeometryBase)@object).Disposed)
+                        break;
+                }
+
                 object result = null;
-                
+
                 @object.TryGetValue(gooParameterParam.Name, out result, true);
 
                 
