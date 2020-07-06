@@ -51,7 +51,7 @@ namespace SAM.Core.Grasshopper
 
         void PopulateOutputParameters(IEnumerable<GooParameterParam> gooParameterParams)
         {
-            Dictionary<GooParameterParam, IList<IGH_Param>> dictionary = new Dictionary<GooParameterParam, IList<IGH_Param>>();
+            Dictionary<string, IList<IGH_Param>> dictionary = new Dictionary<string, IList<IGH_Param>>();
             foreach (IGH_Param param in Params.Output)
             {
                 if (param.Recipients == null && param.Recipients.Count == 0)
@@ -61,7 +61,7 @@ namespace SAM.Core.Grasshopper
                 if (gooParameterParam == null)
                     continue;
 
-                dictionary.Add(gooParameterParam, new List(gooParameterParam.Recipients));
+                dictionary.Add(gooParameterParam.Name, new List<IGH_Param>(gooParameterParam.Recipients));
             }
 
             while(Params.Output != null && Params.Output.Count() > 0)
@@ -75,7 +75,7 @@ namespace SAM.Core.Grasshopper
 
                     IList<IGH_Param> @params = null;
 
-                    if (!dictionary.TryGetValue(gooParameterParam, out @params))
+                    if (!dictionary.TryGetValue(gooParameterParam.Name, out @params))
                         continue;
 
                     foreach (IGH_Param param in @params)
