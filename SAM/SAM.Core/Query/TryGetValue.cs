@@ -117,6 +117,9 @@ namespace SAM.Core
             if (@object == null || methodInfo == null || methodInfo.ContainsGenericParameters)
                 return false;
 
+            if (methodInfo.ReturnType == typeof(void))
+                return false;
+
             object[] parameters = new object[] { };
 
             System.Reflection.ParameterInfo[] parameterInfos = methodInfo.GetParameters();
@@ -144,6 +147,9 @@ namespace SAM.Core
             System.Reflection.MethodInfo[] methodInfos = @object.GetType().GetMethods();
             foreach (System.Reflection.MethodInfo methodInfo in methodInfos)
             {
+                if (methodInfo.ReturnType == typeof(void))
+                    continue;
+                
                 if (methodInfo.Name.Equals(name) || (!name.StartsWith("Get") && methodInfo.Name.Equals(string.Format("Get{0}", name))))
                 {
                     if (TryGetValue_Method(@object, methodInfo, out value))

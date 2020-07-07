@@ -79,6 +79,10 @@ namespace SAM.Core
             System.Reflection.MethodInfo[] methodInfos = @object.GetType().GetMethods();
             foreach (System.Reflection.MethodInfo methodInfo in methodInfos)
             {
+
+                if (methodInfo.ReturnType == typeof(void))
+                    continue;
+
                 object[] parameters = new object[] { };
 
                 System.Reflection.ParameterInfo[] parameterInfos = methodInfo.GetParameters();
