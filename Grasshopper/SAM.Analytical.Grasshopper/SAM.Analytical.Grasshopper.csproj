@@ -105,11 +105,12 @@
     <Compile Include="Component\SAMAnalyticalAddApertures.cs" />
     <Compile Include="Component\SAMAnalyticalRemove.cs" />
     <Compile Include="Component\SAMAnalyticalFilter.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateConstructions.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalExternalVector3D.cs" />
     <Compile Include="Component\SAMAnalyticalInsideSpace.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdatePanelType.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdatePanelTypes.cs" />
     <Compile Include="Component\SAMAnalyticalAddSpace.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAnalyticalModel.cs" />
     <Compile Include="Component\SAMAnalyticalPanelSpacing.cs" />

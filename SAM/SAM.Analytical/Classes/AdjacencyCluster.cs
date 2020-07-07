@@ -83,23 +83,7 @@ namespace SAM.Analytical
             if (!Contains(typeof(Panel)))
                 return false;
 
-            List<Space> spaces = GetRelatedObjects<Space>(panel);
-            if (spaces == null || spaces.Count != 1)
-                return false;
-
-            switch(panel.PanelType)
-            {
-                case PanelType.CurtainWall:
-                case PanelType.FloorExposed:
-                case PanelType.FloorRaised:
-                case PanelType.Roof:
-                case PanelType.Shade:
-                case PanelType.SolarPanel:
-                case PanelType.WallExternal:
-                    return true;
-                default:
-                    return false;
-            }
+            return Query.ExposedToSun(panel.PanelType);
         }
 
         public bool Ground(Panel panel)

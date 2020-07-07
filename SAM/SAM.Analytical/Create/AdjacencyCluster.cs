@@ -83,7 +83,7 @@ namespace SAM.Analytical
                 }
             }
 
-            adjacencyCluster.UpdatePanelType();
+            adjacencyCluster.UpdatePanelTypes();
 
             return adjacencyCluster;
         }
