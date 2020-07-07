@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Panel> UpdatePanelType(this AdjacencyCluster adjacencyCluster)
+        public static IEnumerable<Panel> UpdatePanelType(this AdjacencyCluster adjacencyCluster)
         {
             if (adjacencyCluster == null)
                 return null;
@@ -26,15 +27,114 @@ namespace SAM.Analytical
             string slabOnGradeConstructionPrefix = "SIM_EXT_";
             string slabOnGradeConstructionSufix = "GRD_FLR FLR01";
 
-            List<Panel> panelList = null;
+            List<Panel> panels = adjacencyCluster.GetPanels();
+            if (panels == null || panels.Count == 0)
+                return null;
 
-            List<Panel> result = new List<Panel>();
+            Dictionary<System.Guid, Panel> result = new Dictionary<System.Guid, Panel>();
+
+            foreach (Panel panel in panels)
+            {
+                List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(panel);
+                PanelType panelType = panel.PanelType;
+
+                if(spaces == null || spaces.Count == 0)
+                {
+                    if (panelType != PanelType.SolarPanel)
+                        panelType = PanelType.Shade;
+                }
+                else if(spaces.Count == 1)
+                {
+                    panelType = Query.PanelType(panel.Normal);
+
+                    switch(panelType)
+                    {
+                        case PanelType.Shade:
+                        case PanelType.Air:
+                        case PanelType.Ceiling:
+                            switch (panelType.PanelGroup())
+                            {
+                                case PanelGroup.Wall:
+                                    panelType = PanelType.WallExternal;
+                                    break;
+                                case PanelGroup.Floor:
+                                    panelType = PanelType.FloorExposed;
+                                    break;
+                                case PanelGroup.Roof:
+                                    panelType = PanelType.Roof;
+                                    break;
+                            }
+                            break;
+                        
+                        case PanelType.Wall:
+                        case PanelType.WallInternal:
+                            panelType = PanelType.WallExternal;
+                            break;
+                        
+                        case PanelType.Floor:
+                        case PanelType.FloorExposed:
+                        case PanelType.FloorInternal:
+                        case PanelType.UndergroundCeiling:
+                            panelType = PanelType.FloorExposed;
+                            break;
+                    }                 
+
+                }
+                else if(spaces.Count > 1)
+                {
+                    panelType = Query.PanelType(panel.Normal);
+
+                    switch (panelType)
+                    {
+                        case PanelType.Shade:
+                        case PanelType.SolarPanel:
+                        case PanelType.Air:
+                            switch (panelType.PanelGroup())
+                            {
+                                case PanelGroup.Wall:
+                                    panelType = PanelType.WallInternal;
+                                    break;
+                                case PanelGroup.Floor:
+                                    panelType = PanelType.FloorInternal;
+                                    break;
+                            }
+                            break;
+
+                        case PanelType.Wall:
+                        case PanelType.WallExternal:
+                        case PanelType.CurtainWall:
+                        case PanelType.UndergroundWall:
+                            panelType = PanelType.WallInternal;
+                            break;
+
+                        case PanelType.Floor:
+                        case PanelType.FloorExposed:
+                        case PanelType.FloorRaised:
+                        case PanelType.Roof:
+                        case PanelType.SlabOnGrade:
+                        case PanelType.UndergroundSlab:
+                            panelType = PanelType.FloorInternal;
+                            break;
+                    }
+                }
+
+                if(panelType != panel.PanelType)
+                {
+                    Panel panel_New = new Panel(panel, panelType);
+                    adjacencyCluster.AddObject(panel_New);
+                    result[panel_New.Guid] = panel_New;
+                }
+
+            }
+
+            
+
 
             //Internal
-            panelList = adjacencyCluster.GetInternalPanels();
-            if (panelList != null && panelList.Count != 0)
+            panels = adjacencyCluster.GetInternalPanels();
+            if (panels != null && panels.Count != 0)
             {
-                foreach (Panel panel in panelList)
+                foreach (Panel panel in panels)
                 {
                     PanelType panelType = panel.PanelType;
 
@@ -59,15 +159,15 @@ namespace SAM.Analytical
                         panel_New = new Panel(panel_New, panelType);
 
                     adjacencyCluster.AddObject(panel_New);
-                    result.Add(panel_New);
+                    result[panel_New.Guid] = (panel_New);
                 }
             }
 
             //External
-            panelList = adjacencyCluster.GetExternalPanels();
-            if (panelList != null && panelList.Count != 0)
+            panels = adjacencyCluster.GetExternalPanels();
+            if (panels != null && panels.Count != 0)
             {
-                foreach (Panel panel in panelList)
+                foreach (Panel panel in panels)
                 {
                     PanelType panelType = panel.PanelType;
 
@@ -124,15 +224,15 @@ namespace SAM.Analytical
                         panel_New = new Panel(panel_New, panelType);
 
                     adjacencyCluster.AddObject(panel_New);
-                    result.Add(panel_New);
+                    result[panel_New.Guid] = (panel_New);
                 }
             }
 
             //Shading
-            panelList = adjacencyCluster.GetShadingPanels();
-            if (panelList != null && panelList.Count != 0)
+            panels = adjacencyCluster.GetShadingPanels();
+            if (panels != null && panels.Count != 0)
             {
-                foreach (Panel panel in panelList)
+                foreach (Panel panel in panels)
                 {
                     PanelType panelType = panel.PanelType;
 
@@ -150,11 +250,11 @@ namespace SAM.Analytical
                         panel_New = new Panel(panel_New, panelType);
 
                     adjacencyCluster.AddObject(panel_New);
-                    result.Add(panel_New);
+                    result[panel_New.Guid] = (panel_New);
                 }
             }
 
-            return result;
+            return result.Values;
         }
     }
 }

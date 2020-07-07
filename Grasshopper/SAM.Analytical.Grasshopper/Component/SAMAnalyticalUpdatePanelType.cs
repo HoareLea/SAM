@@ -7,7 +7,7 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -69,7 +69,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster_Result = new AdjacencyCluster(adjacencyCluster);
-            List<Panel> panels = adjacencyCluster_Result.UpdatePanelType();
+            List<Panel> panels = adjacencyCluster_Result.UpdatePanelType()?.ToList();
 
             DataTree<string> dataTree_Names = new DataTree<string>();
             DataTree<IGH_GeometricGoo> dataTree_GeometricGoos = new DataTree<IGH_GeometricGoo>();
@@ -181,7 +181,7 @@ namespace SAM.Analytical.Grasshopper.Obsolete
             }
 
             AdjacencyCluster adjacencyCluster_Result = new AdjacencyCluster(adjacencyCluster);
-            List<Panel> panels = adjacencyCluster_Result.UpdatePanelType();
+            List<Panel> panels = adjacencyCluster_Result.UpdatePanelType()?.ToList();
 
             DataTree<string> dataTree_Names = new DataTree<string>();
             DataTree<IGH_GeometricGoo> dataTree_GeometricGoos = new DataTree<IGH_GeometricGoo>();
