@@ -15,7 +15,7 @@ namespace SAM.Analytical
             if (panels == null || panels.Count == 0)
                 return null;
 
-            if (guids != null)
+            if (guids != null && guids.Count() > 0)
                 panels = panels.FindAll(x => guids.Contains(x.Guid));
 
             Dictionary<Guid, Panel> result = new Dictionary<Guid, Panel>();

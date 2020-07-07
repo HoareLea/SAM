@@ -13,9 +13,7 @@ namespace SAM.Analytical
 
             string wallInternalConstructionPrefix = "SIM_INT_";
             string wallExternalConstructionPrefix = "SIM_EXT_";
-            string wallShadingConstructionPrefix = "SIM_EXT_";
             string floorInternalConstructionPrefix = "SIM_INT_";
-            string floorExternalConstructionPrefix = "SIM_EXT_GRD_";
             string roofExternalConstructionPrefix = "SIM_EXT_";
             string floorExposedConstructionPrefix = "SIM_EXT_";
             string slabOnGradeConstructionPrefix = "SIM_EXT_";
@@ -24,7 +22,7 @@ namespace SAM.Analytical
             if (panels == null || panels.Count == 0)
                 return null;
 
-            if (guids != null)
+            if (guids != null && guids.Count() > 0)
                 panels = panels.FindAll(x => guids.Contains(x.Guid));
 
             Dictionary<Guid, Panel> result = new Dictionary<Guid, Panel>();
@@ -107,7 +105,6 @@ namespace SAM.Analytical
                             {
                                 panelType = PanelType.FloorExposed;
                             }
-
                         }
                         else if (panelType_Normal == PanelType.Roof)
                         {
@@ -117,17 +114,26 @@ namespace SAM.Analytical
                     case PanelType.SlabOnGrade:
                         update = !panel.Construction.Name.StartsWith(slabOnGradeConstructionPrefix);
                         break;
+                    case PanelType.UndergroundSlab:
+                        update = !panel.Construction.Name.StartsWith(slabOnGradeConstructionPrefix);
+                        break;
                     case PanelType.FloorInternal:
                         update = !panel.Construction.Name.StartsWith(floorInternalConstructionPrefix);
                         break;
+                    case PanelType.UndergroundCeiling:
+                        update = !panel.Construction.Name.StartsWith(floorInternalConstructionPrefix);
+                        break;
                     case PanelType.FloorExposed:
-                        update = !panel.Construction.Name.StartsWith(floorExposedConstructionPrefix);
+                        update = !panel.Construction.Name.StartsWith(floorExposedConstructionPrefix) || panel.Construction.Name.Contains("_GRD_");
                         break;
                     case PanelType.FloorRaised:
                         update = !panel.Construction.Name.StartsWith(floorInternalConstructionPrefix);
                         break;
                     case PanelType.Shade:
-                        update = !panel.Construction.Name.StartsWith(wallShadingConstructionPrefix);
+                        update = !panel.Construction.Name.Contains("_SHD_");
+                        break;
+                    case PanelType.UndergroundWall:
+                        update = !panel.Construction.Name.StartsWith(wallExternalConstructionPrefix) || !panel.Construction.Name.Contains("_GRD_");
                         break;
                 }
 
