@@ -63,7 +63,7 @@ namespace SAM.Analytical
             result.Add(Name.Construction_FloorInternal, new Construction(new System.Guid("d5521200-8376-49b2-a9ed-ad914f380022"), "SIM_INT_SLD_FLR FLR02"));
             result.Add(Name.Construction_FloorRaised, new Construction(new System.Guid("3290e9b5-323d-40b2-9be4-312894681119"), "SIM_INT_SLD_FLR FLR02"));
             result.Add(Name.Construction_Roof, new Construction(new System.Guid("6ebe9f3b-b20d-4583-a5db-3f17d8106016"), "SIM_EXT_SLD_Roof DA01"));
-            result.Add(Name.Construction_Shade, new Construction(new System.Guid("4acfae60-42c4-4b00-ba12-bc0329987b51"), "SIM_EXT_SHD_Roof SD01"));
+            result.Add(Name.Construction_Shade, new Construction(new System.Guid("4acfae60-42c4-4b00-ba12-bc0329987b51"), "SIM_EXT_SHD"));
             result.Add(Name.Construction_SlabOnGrade, new Construction(new System.Guid("6892f46e-396e-46ef-bf00-42a91e2f3d49"), "SIM_EXT_GRD_FLR FLR01"));
             result.Add(Name.Construction_SolarPanel, new Construction(new System.Guid("28b83556-a292-4c0a-b5dc-2d6fe85eb728"), "SIM_EXT_SOL_Roof"));
             result.Add(Name.Construction_Undefined, new Construction(new System.Guid("cac8e3ad-50bd-4323-b0c8-2f3128c591c7"), "SIM_EXT_SHD_Roof SD01"));

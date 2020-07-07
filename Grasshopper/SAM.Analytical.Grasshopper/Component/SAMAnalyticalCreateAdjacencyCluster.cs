@@ -36,7 +36,11 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMGeometryParam(), "_segment2Ds", "_segment2Ds", "SAM Geometry Segment2Ds", GH_ParamAccess.list);
+            int index;
+
+            index = inputParamManager.AddParameter(new GooSAMGeometryParam(), "_segment2Ds", "_segment2Ds", "SAM Geometry Segment2Ds", GH_ParamAccess.list);
+            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+
             inputParamManager.AddNumberParameter("elevation_Min", "elevation_Min", "Minimal Elevation", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("elevation_Max", "elevation_Max", "Maximal Elevation", GH_ParamAccess.item);
         }
