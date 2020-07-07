@@ -31,7 +31,7 @@ namespace SAM.Analytical
             if (panels == null || panels.Count == 0)
                 return null;
 
-            Dictionary<System.Guid, Panel> result = new Dictionary<System.Guid, Panel>();
+            Dictionary<Guid, Panel> result = new Dictionary<Guid, Panel>();
 
             foreach (Panel panel in panels)
             {
@@ -45,13 +45,12 @@ namespace SAM.Analytical
                 }
                 else if(spaces.Count == 1)
                 {
-                    panelType = Query.PanelType(panel.Normal);
-
                     switch(panelType)
                     {
                         case PanelType.Shade:
                         case PanelType.Air:
                         case PanelType.Ceiling:
+                            panelType = Query.PanelType(panel.Normal);
                             switch (panelType.PanelGroup())
                             {
                                 case PanelGroup.Wall:
@@ -82,13 +81,14 @@ namespace SAM.Analytical
                 }
                 else if(spaces.Count > 1)
                 {
-                    panelType = Query.PanelType(panel.Normal);
+                    
 
                     switch (panelType)
                     {
                         case PanelType.Shade:
                         case PanelType.SolarPanel:
                         case PanelType.Air:
+                            panelType = Query.PanelType(panel.Normal);
                             switch (panelType.PanelGroup())
                             {
                                 case PanelGroup.Wall:
