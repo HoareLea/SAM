@@ -6,6 +6,7 @@ using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
@@ -86,7 +87,13 @@ namespace SAM.Analytical.Grasshopper
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            return Geometry.Grasshopper.Modify.BakeGeometry(Value.GetFace3D(), doc, att, out obj_guid);
+            obj_guid = Guid.Empty;
+            
+            Face3D face3D = Value?.GetFace3D();
+            if (face3D == null)
+                return false;
+
+            return Geometry.Grasshopper.Modify.BakeGeometry(face3D, doc, att, out obj_guid);
         }
     }
 
@@ -130,11 +137,15 @@ namespace SAM.Analytical.Grasshopper
 
         public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
         {
-            foreach (var value in VolatileData.AllData(true))
+            foreach (IGH_Goo goo in VolatileData.AllData(true))
             {
-                Guid uuid = default;
-                (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
-                obj_ids.Add(uuid);
+                Guid guid = default;
+                
+                IGH_BakeAwareData bakeAwareData = goo as IGH_BakeAwareData;
+                if (bakeAwareData != null)
+                    bakeAwareData.BakeGeometry(doc, att, out guid);
+                
+                obj_ids.Add(guid);
             }
         }
     }
