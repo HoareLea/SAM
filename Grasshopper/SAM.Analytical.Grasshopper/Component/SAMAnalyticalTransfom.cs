@@ -25,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalTransform()
           : base("SAMAnalytical.Transform", "SAMAnalytical.Transform",
-              "Transform Panel",
+              "WIP!!! Currently Transform only Panel - known issue when Pushing Revit - DO NOT USE WITH REVIT",
               "SAM", "Analytical")
         {
         }
@@ -35,8 +35,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Object", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooTransform3DParam(), "_transform", "_transform", "SAM Transform", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Panel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooTransform3DParam(), "_transform", "_transform", "Transform can be SAM or GH", GH_ParamAccess.item);
         }
 
         /// <summary>
