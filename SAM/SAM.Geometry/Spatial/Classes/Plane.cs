@@ -376,8 +376,10 @@ namespace SAM.Geometry.Spatial
 
         public Vector3D Project(Vector3D vector3D)
         {
-            double factor = vector3D.DotProduct(normal) - K;
-            return new Vector3D(vector3D.X - (normal.X * factor), vector3D.Y - (normal.Y * factor), vector3D.Z - (normal.Z * factor));
+            return vector3D - vector3D.DotProduct(normal) * normal;
+
+            //double factor = vector3D.DotProduct(normal) - K;
+            //return new Vector3D(vector3D.X - (normal.X * factor), vector3D.Y - (normal.Y * factor), vector3D.Z - (normal.Z * factor));
         }
 
         public Point3D Project(Point3D point3D)
