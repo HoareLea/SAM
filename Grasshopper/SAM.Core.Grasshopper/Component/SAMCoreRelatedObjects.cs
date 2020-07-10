@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreRelatedObjects : GH_Component
+    public class SAMCoreRelatedObjects : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
