@@ -106,6 +106,7 @@
     <Compile Include="Component\SAMAnalyticalRemove.cs" />
     <Compile Include="Component\SAMAnalyticalFilter.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructions.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdatePanelTypes_Obsolete.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalExternalVector3D.cs" />
     <Compile Include="Component\SAMAnalyticalInsideSpace.cs" />

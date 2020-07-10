@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SAM.Core.Grasshopper
 {
-    public abstract class GH_SAMVariableOutputParameterComponent : GH_Component, IGH_VariableParameterComponent
+    public abstract class GH_SAMVariableOutputParameterComponent : GH_SAMComponent, IGH_VariableParameterComponent
     {
         protected abstract GH_SAMParam[] Inputs { get; }
 
