@@ -8,11 +8,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreInspect : GH_SAMComponent, IGH_VariableParameterComponent
+    public class SAMCoreInspect : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -34,6 +35,7 @@ namespace SAM.Core.Grasshopper
               "Inspect Object",
               "SAM", "Core")
         {
+            Message = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
