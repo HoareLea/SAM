@@ -23,6 +23,39 @@ namespace SAM.Analytical.Grasshopper
         {
             return new GooApertureConstruction(Value);
         }
+
+        public override bool CastFrom(object source)
+        {
+            if (source is ApertureConstruction)
+            {
+                Value = (ApertureConstruction)source;
+                return true;
+            }
+
+            if (typeof(IGH_Goo).IsAssignableFrom(source.GetType()))
+            {
+                try
+                {
+                    source = (source as dynamic).Value;
+                }
+                catch
+                {
+                }
+
+                if (source is ApertureConstruction)
+                {
+                    Value = (ApertureConstruction)source;
+                    return true;
+                }
+            }
+
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Y>(ref Y target)
+        {
+            return base.CastTo(ref target);
+        }
     }
 
     public class GooApertureConstructionParam : GH_PersistentParam<GooApertureConstruction>

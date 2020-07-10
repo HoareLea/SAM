@@ -135,6 +135,16 @@ namespace SAM.Core.Grasshopper
                 return true;
             }
 
+            try
+            {
+                target = (Y)Activator.CreateInstance(typeof(Y), Value);
+                return true;
+            }
+            catch
+            {
+
+            }
+            
             return base.CastTo<Y>(ref target);
         }
     }

@@ -95,6 +95,39 @@ namespace SAM.Analytical.Grasshopper
 
             return Geometry.Grasshopper.Modify.BakeGeometry(face3D, doc, att, out obj_guid);
         }
+
+        public override bool CastFrom(object source)
+        {
+            if (source is Aperture)
+            {
+                Value = (Aperture)source;
+                return true;
+            }
+
+            if (typeof(IGH_Goo).IsAssignableFrom(source.GetType()))
+            {
+                try
+                {
+                    source = (source as dynamic).Value;
+                }
+                catch
+                {
+                }
+
+                if (source is Aperture)
+                {
+                    Value = (Aperture)source;
+                    return true;
+                }
+            }
+
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Y>(ref Y target)
+        {
+            return base.CastTo(ref target);
+        }
     }
 
     public class GooApertureParam : GH_PersistentParam<GooAperture>, IGH_PreviewObject, IGH_BakeAwareObject

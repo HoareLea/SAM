@@ -63,6 +63,39 @@ namespace SAM.Analytical.Grasshopper
         {
             return new GooAnalyticalModel(Value);
         }
+
+        public override bool CastFrom(object source)
+        {
+            if (source is AnalyticalModel)
+            {
+                Value = (AnalyticalModel)source;
+                return true;
+            }
+
+            if (typeof(IGH_Goo).IsAssignableFrom(source.GetType()))
+            {
+                try
+                {
+                    source = (source as dynamic).Value;
+                }
+                catch
+                {
+                }
+
+                if (source is AnalyticalModel)
+                {
+                    Value = (AnalyticalModel)source;
+                    return true;
+                }
+            }
+
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Y>(ref Y target)
+        {
+            return base.CastTo(ref target);
+        }
     }
 
     public class GooAnalyticalModelParam : GH_PersistentParam<GooAnalyticalModel>, IGH_PreviewObject, IGH_BakeAwareObject

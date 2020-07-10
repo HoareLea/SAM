@@ -174,6 +174,39 @@ namespace SAM.Analytical.Grasshopper
             obj_guid = doc.Objects.AddBrep(result);
             return true;
         }
+
+        public override bool CastFrom(object source)
+        {
+            if (source is AdjacencyCluster)
+            {
+                Value = (AdjacencyCluster)source;
+                return true;
+            }
+
+            if (typeof(IGH_Goo).IsAssignableFrom(source.GetType()))
+            {
+                try
+                {
+                    source = (source as dynamic).Value;
+                }
+                catch
+                {
+                }
+
+                if (source is AdjacencyCluster)
+                {
+                    Value = (AdjacencyCluster)source;
+                    return true;
+                }
+            }
+
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Y>(ref Y target)
+        {
+            return base.CastTo(ref target);
+        }
     }
 
     //Params Components -> SAM used for internalizing data
