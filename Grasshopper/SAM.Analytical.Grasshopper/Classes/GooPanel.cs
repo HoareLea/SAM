@@ -113,6 +113,39 @@ namespace SAM.Analytical.Grasshopper
         {
             return Geometry.Grasshopper.Modify.BakeGeometry(Value.GetFace3D(), doc, att, out obj_guid);
         }
+
+        public override bool CastFrom(object source)
+        {
+            if (source is Panel)
+            {
+                Value = (Panel)source;
+                return true;
+            }
+
+            if (typeof(IGH_Goo).IsAssignableFrom(source.GetType()))
+            {
+                try
+                {
+                    source = (source as dynamic).Value;
+                }
+                catch
+                {
+                }
+
+                if (source is Panel)
+                {
+                    Value = (Panel)source;
+                    return true;
+                }
+            }
+
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Y>(ref Y target)
+        {
+            return base.CastTo(ref target);
+        }
     }
 
     public class GooPanelParam : GH_PersistentParam<GooPanel>, IGH_PreviewObject, IGH_BakeAwareObject
