@@ -12,6 +12,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper.Obsolete_20200707
 {
+    [Obsolete("Obsolete since 2020-07-07")]
     public class SAMAnalyticalUpdatePanelType : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
