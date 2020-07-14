@@ -63,6 +63,7 @@
     <Compile Include="Classes\Relation\RelationCluster.cs" />
     <Compile Include="Convert\ToCsv\ToCsv.cs" />
     <Compile Include="Convert\ToList\ToList.cs" />
+    <Compile Include="Create\Object.cs" />
     <Compile Include="Enums\CountryCode.cs" />
     <Compile Include="Enums\DelimitedFileType.cs" />
     <Compile Include="Interfaces\DelimitedFile\IDelimitedFileReader.cs" />

@@ -1,6 +1,7 @@
 ﻿using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SAM.Analytical
 {
@@ -58,7 +59,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<System.Guid> Remove(this AdjacencyCluster adjacencyCluster, List<SAMObject> objects)
+        public static List<System.Guid> Remove(this AdjacencyCluster adjacencyCluster, IEnumerable<SAMObject> objects)
         {
             if (adjacencyCluster == null || objects == null)
                 return null;
@@ -76,6 +77,14 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+
+        public static List<System.Guid> Remove<T>(this AdjacencyCluster adjacencyCluster, IEnumerable<T> objects) where T: SAMObject
+        {
+            if (adjacencyCluster == null || objects == null)
+                return null;
+
+            return Remove(adjacencyCluster, objects.Cast<SAMObject>());
         }
     }
 }

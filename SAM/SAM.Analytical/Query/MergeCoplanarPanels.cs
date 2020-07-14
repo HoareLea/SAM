@@ -52,6 +52,40 @@ namespace SAM.Analytical
             return result;
         }
 
+        public static AdjacencyCluster MergeCoplanarPanels(this AdjacencyCluster adjacencyCluster, double offset, ref List<Panel> redundantPanels, bool validateConstruction = true, bool validatePanelGroup = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            List<Panel> panels = adjacencyCluster?.GetPanels();
+            if (panels == null)
+                return null;
+
+            List<Panel> mergedPanels = null;
+
+            if (validatePanelGroup)
+                mergedPanels = MergeCoplanarPanels(panels, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
+            else
+                mergedPanels = MergeCoplanarPanels(panels.ToList(), offset, ref redundantPanels, validateConstruction, minArea, tolerance);
+
+            AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
+            if (redundantPanels != null && redundantPanels.Count != 0)
+                result.Remove(redundantPanels);
+
+            if (mergedPanels != null && mergedPanels.Count != 0)
+                mergedPanels.ForEach(x => adjacencyCluster.AddObject(x));
+
+            return result;
+        }
+
+        public static AnalyticalModel MergeCoplanarPanels(this AnalyticalModel analyticalModel, double offset, ref List<Panel> redundantPanels, bool validateConstruction = true, bool validatePanelGroup = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
+            if (adjacencyCluster == null)
+                return null;
+
+            adjacencyCluster = MergeCoplanarPanels(adjacencyCluster, offset, ref redundantPanels, validateConstruction, validatePanelGroup, minArea, tolerance);
+
+            return new AnalyticalModel(analyticalModel, adjacencyCluster);
+        }
+
         private static List<Panel> MergeCoplanarPanels(this List<Panel> panels, double offset, ref List<Panel> redundantPanels, bool validateConstruction = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)

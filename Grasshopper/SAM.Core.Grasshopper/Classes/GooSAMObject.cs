@@ -137,8 +137,10 @@ namespace SAM.Core.Grasshopper
 
             try
             {
-                target = (Y)Activator.CreateInstance(typeof(Y), Value);
-                return true;
+                //target = (Y)Activator.CreateInstance(typeof(Y), Value);
+                target = Core.Create.Object<Y>(Value);
+                if (target != null)
+                    return true;
             }
             catch
             {

@@ -12,16 +12,16 @@ namespace SAM.Analytical
         private Address address;
         private AdjacencyCluster adjacencyCluster;
 
-        public AnalyticalModel(string name, string description, Core.Location location, Core.Address address, AdjacencyCluster adjacencyCluster)
+        public AnalyticalModel(string name, string description, Location location, Address address, AdjacencyCluster adjacencyCluster)
             : base(name)
         {
             this.description = description;
 
             if (location != null)
-                this.location = new Core.Location(location);
+                this.location = new Location(location);
 
             if (address != null)
-                this.address = new Core.Address(address);
+                this.address = new Address(address);
 
             if (adjacencyCluster != null)
                 this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
@@ -46,10 +46,10 @@ namespace SAM.Analytical
             description = analyticalModel.description;
             
             if (analyticalModel.location != null)
-                location = new Core.Location(analyticalModel.location);
+                location = new Location(analyticalModel.location);
 
             if (analyticalModel.address != null)
-                address = new Core.Address(analyticalModel.address);
+                address = new Address(analyticalModel.address);
 
             if (analyticalModel.adjacencyCluster != null)
                 adjacencyCluster = new AdjacencyCluster(analyticalModel.adjacencyCluster);
@@ -58,17 +58,26 @@ namespace SAM.Analytical
         public AnalyticalModel(AnalyticalModel analyticalModel, AdjacencyCluster adjacencyCluster)
             : base(analyticalModel)
         {
-            this.adjacencyCluster = adjacencyCluster;
-            location = analyticalModel.location;
-            address = analyticalModel.address;
+            if (analyticalModel == null)
+                return;
+
             description = analyticalModel.description;
+
+            if (analyticalModel.location != null)
+                location = new Location(analyticalModel.location);
+
+            if (analyticalModel.address != null)
+                address = new Address(analyticalModel.address);
+
+            if (adjacencyCluster != null)
+                adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
         }
 
         public Location Location
         {
             get
             {
-                return new Core.Location(location);
+                return new Location(location);
             }
         }
 
@@ -87,7 +96,7 @@ namespace SAM.Analytical
                 if (address == null)
                     return null;
 
-                return new Core.Address(address);
+                return new Address(address);
             }
         }
 
@@ -148,10 +157,10 @@ namespace SAM.Analytical
                 description = jObject.Value<string>("Description");
 
             if (jObject.ContainsKey("Location"))
-                location = new Core.Location(jObject.Value<JObject>("Location"));
+                location = new Location(jObject.Value<JObject>("Location"));
 
             if (jObject.ContainsKey("Address"))
-                address = new Core.Address(jObject.Value<JObject>("Address"));
+                address = new Address(jObject.Value<JObject>("Address"));
 
             if (jObject.ContainsKey("AdjacencyCluster"))
                 adjacencyCluster = new AdjacencyCluster(jObject.Value<JObject>("AdjacencyCluster"));
