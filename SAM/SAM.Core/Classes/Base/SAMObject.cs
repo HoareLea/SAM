@@ -13,15 +13,11 @@ namespace SAM.Core
 
         public SAMObject(SAMObject sAMObject)
         {
-            this.guid = sAMObject.Guid;
-            this.name = sAMObject.Name;
+            guid = sAMObject.Guid;
+            name = sAMObject.Name;
 
             if (sAMObject.parameterSets != null)
-            {
-                this.parameterSets = new List<ParameterSet>();
-                foreach (ParameterSet parameterSet in sAMObject.parameterSets)
-                    this.parameterSets.Add(parameterSet.Clone());
-            }
+                parameterSets = sAMObject.parameterSets.Clone();
         }
 
         public SAMObject(string name, SAMObject sAMObject)

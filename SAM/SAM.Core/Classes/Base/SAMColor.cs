@@ -17,6 +17,14 @@ namespace SAM.Core
             blue = color.B;
         }
 
+        public SAMColor(SAMColor sAMColor)
+        {
+            alpha = sAMColor.alpha;
+            red = sAMColor.red;
+            green = sAMColor.Green;
+            blue = sAMColor.blue;
+        }
+
         public SAMColor(byte alpha, byte red, byte green, byte blue)
         {
             this.alpha = alpha;
@@ -55,6 +63,11 @@ namespace SAM.Core
             {
                 return blue;
             }
+        }
+
+        public SAMColor Clone()
+        {
+            return new SAMColor(this);
         }
 
         public System.Drawing.Color ToColor()

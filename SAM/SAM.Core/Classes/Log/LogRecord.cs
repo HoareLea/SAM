@@ -10,6 +10,12 @@ namespace SAM.Core
         private DateTime dateTime;
         private string text;
 
+        public LogRecord(LogRecord logRecord)
+        {
+            dateTime = logRecord.dateTime;
+            text = logRecord.text;
+        }
+
         public LogRecord(string text)
         {
             dateTime = DateTime.UtcNow;

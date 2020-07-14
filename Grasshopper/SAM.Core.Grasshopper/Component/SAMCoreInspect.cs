@@ -201,15 +201,22 @@ namespace SAM.Core.Grasshopper
             if (!dataAccess.GetData(0, ref @object))
                 return;
 
-            if(@object is IGH_Goo)
+            if (@object is IGH_Goo)
                 @object = (@object as dynamic).Value;
 
-            if(@object is Rhino.Geometry.GeometryBase)
+            if (@object is Rhino.Geometry.GeometryBase)
             {
                 if (((Rhino.Geometry.GeometryBase)@object).Disposed)
                     return;
 
                 @object = ((Rhino.Geometry.GeometryBase)@object).Duplicate();
+            }
+
+            if (@object is IJSAMObject)
+            {
+                IJSAMObject jSAMObject = Core.Query.Clone((IJSAMObject)@object);
+                if (jSAMObject != null)
+                    @object = jSAMObject;
             }
 
             for (int i = 0; i < Params.Output.Count; ++i)
@@ -218,7 +225,7 @@ namespace SAM.Core.Grasshopper
                 if (gooParameterParam == null)
                     gooParameterParam = new GooParameterParam(Params.Output[i].Name);
 
-                if(gooParameterParam == null || string.IsNullOrWhiteSpace(gooParameterParam.Name))
+                if (gooParameterParam == null || string.IsNullOrWhiteSpace(gooParameterParam.Name))
                     continue;
 
                 if (@object is Rhino.Geometry.GeometryBase)
@@ -231,12 +238,11 @@ namespace SAM.Core.Grasshopper
 
                 @object.TryGetValue(gooParameterParam.Name, out result, true);
 
-                
-                if(result is JToken)
+                if (result is JToken)
                 {
                     dataAccess.SetData(i, new GooParameter(result.ToString()));
                 }
-                else if(result is IEnumerable && !(result is string))
+                else if (result is IEnumerable && !result.GetType().Namespace.StartsWith("SAM.") && !(result is string))
                 {
                     List<GooParameter> gooParameters = new List<GooParameter>();
                     foreach (object @object_Result in (IEnumerable)result)
@@ -248,9 +254,6 @@ namespace SAM.Core.Grasshopper
                 {
                     dataAccess.SetData(i, new GooParameter(result));
                 }
-                
-                
-
             }
         }
 

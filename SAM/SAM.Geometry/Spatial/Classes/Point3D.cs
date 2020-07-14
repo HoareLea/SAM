@@ -88,7 +88,7 @@ namespace SAM.Geometry.Spatial
         public Vector3D ToVector3D(Point3D point3D = null)
         {
             if (point3D == null)
-                return new Vector3D(coordinates);
+                return new Vector3D(coordinates[0], coordinates[1], coordinates[2]);
             else
                 return new Vector3D(coordinates[0] - point3D[0], coordinates[1] - point3D[1], coordinates[2] - point3D[2]);
         }

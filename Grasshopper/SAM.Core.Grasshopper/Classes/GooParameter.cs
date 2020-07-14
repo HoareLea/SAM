@@ -111,10 +111,8 @@ namespace SAM.Core.Grasshopper
         }
     }
 
-    public class GooParameterParam : GH_PersistentParam<GooParameter>
-    {
-        private string name;
-        
+    public class GooParameterParam : GH_Param<GooParameter>
+    {       
         public override Guid ComponentGuid => new Guid("a7a5eb79-1834-43db-9aa3-30ca105c3bbb");
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
@@ -122,45 +120,38 @@ namespace SAM.Core.Grasshopper
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
         
         public GooParameterParam(string name)
-             : base(name, name, name, "Params", "SAM")
+             : base(name, name, name, "Params", "SAM", GH_ParamAccess.item)
         {
-            this.name = name;
+
         }
 
-
-        protected override GH_GetterResult Prompt_Plural(ref List<GooParameter> values)
+        public GooParameterParam()
+            : base("Parameter", "Parameter", "Parameter", "Params", "SAM", GH_ParamAccess.item)
         {
-            throw new NotImplementedException();
-        }
 
-        protected override GH_GetterResult Prompt_Singular(ref GooParameter value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
         }
 
         public override int GetHashCode()
         {
-            if (name == null)
+            if (Name == null)
                 return base.GetHashCode();
 
-            return name.GetHashCode();
+            return Name.GetHashCode();
         }
 
         public override sealed bool Read(GH_IReader reader)
         {
+            string name = null;
+            
             if (!reader.TryGetString(typeof(GooParameter).FullName, ref name))
                 return false;
 
             if (string.IsNullOrWhiteSpace(name))
                 return false;
+
+            Name = name;
+            Description = name;
+            NickName = name;
 
             return true;
         }
@@ -170,10 +161,10 @@ namespace SAM.Core.Grasshopper
             if (!base.Write(writer))
                 return false;
 
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(Name))
                 return false;
 
-            writer.SetString(typeof(GooParameter).FullName, name);
+            writer.SetString(typeof(GooParameter).FullName, Name);
 
             return true;
         }

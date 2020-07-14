@@ -10,6 +10,14 @@ namespace SAM.Core
         private double latitude;
         private double elevation;
 
+        public Location(Location location)
+            : base(location)
+        {
+            longitude = location.longitude;
+            latitude = location.latitude;
+            elevation = location.elevation;
+        }
+
         public Location(string name, double longitude, double latitude, double elevation)
             : base(name)
         {
@@ -29,14 +37,6 @@ namespace SAM.Core
         public Location(JObject jObject)
             : base(jObject)
         {
-        }
-
-        public Location(Location location)
-            : base(location)
-        {
-            longitude = location.longitude;
-            latitude = location.latitude;
-            elevation = location.elevation;
         }
 
         public double Longitude

@@ -15,6 +15,12 @@ namespace SAM.Core
             this.id = id;
         }
 
+        public IntegerId(IntegerId integerId)
+        {
+            id = integerId.id;
+            parameterSets = integerId.parameterSets?.Clone();
+        }
+
         public int Id
         {
             get

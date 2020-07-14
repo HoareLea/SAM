@@ -8,6 +8,12 @@ namespace SAM.Core
     {
         private List<Tuple<string, string, string, string>> tuples;
 
+        public MapCluster(MapCluster mapCluster)
+            :base(mapCluster)
+        {
+            tuples = mapCluster.tuples.ConvertAll(x => new Tuple<string, string, string, string>(x.Item1, x.Item2, x.Item3, x.Item4));
+        }
+        
         public MapCluster()
         {
             tuples = new List<Tuple<string, string, string, string>>();

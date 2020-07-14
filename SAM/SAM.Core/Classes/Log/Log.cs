@@ -20,6 +20,13 @@ namespace SAM.Core
 
         }
 
+        public Log(Log log)
+            : base(log)
+        {
+            if (log.logRecords != null)
+                logRecords = log.logRecords.ConvertAll(x => new LogRecord(x));
+        }
+
         public LogRecord Add(string format, params object[] values)
         {
             LogRecord logRecord = new LogRecord(format, values);

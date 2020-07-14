@@ -120,6 +120,7 @@
     <Compile Include="Query\Names.cs" />
     <Compile Include="Query\TryGetValue.cs" />
     <Compile Include="Query\ValidFilePath.cs" />
+    <Compile Include="Query\Clone.cs" />
     <Compile Include="Query\Value.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -8,6 +8,11 @@ namespace SAM.Core
     {
         private JObject jObject;
 
+        public JSAMObjectWrapper(JSAMObjectWrapper jSAMObjectWrapper)
+        {
+            jObject = jSAMObjectWrapper.jObject.DeepClone() as JObject;
+        }
+        
         public JSAMObjectWrapper(JObject jObject)
         {
             this.jObject = jObject;
@@ -25,6 +30,11 @@ namespace SAM.Core
         public JObject ToJObject()
         {
             return jObject;
+        }
+
+        public JSAMObjectWrapper Clone()
+        {
+            return new JSAMObjectWrapper(this);
         }
 
         public IJSAMObject ToIJSAMObject()

@@ -10,6 +10,15 @@ namespace SAM.Core
         private string postalCode;
         private CountryCode countryCode;
 
+        public Address(Address address)
+            : base(address)
+        {
+            street = address.street;
+            city = address.city;
+            postalCode = address.postalCode;
+            countryCode = address.countryCode;
+        }
+        
         public Address(string street, string city, string postalCode, CountryCode countryCode)
             : base()
         {
@@ -31,12 +40,6 @@ namespace SAM.Core
         public Address(JObject jObject)
             : base(jObject)
         {
-        }
-
-        public Address(Address address)
-            :base(address)
-        {
-
         }
 
         public string Street

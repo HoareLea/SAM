@@ -236,7 +236,7 @@ namespace SAM.Geometry.Planar
         public Vector2D ToVector(Point2D point2D = null)
         {
             if (point2D == null)
-                return new Vector2D(coordinates);
+                return new Vector2D(coordinates[0], coordinates[1]);
             else
                 return new Vector2D(coordinates[0] - point2D[0], coordinates[1] - point2D[1]);
         }
