@@ -7,7 +7,7 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double tolerance = Core.Tolerance.Distance)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double elevation_Ground = 0, double tolerance = Core.Tolerance.Distance)
         {
             if (segmentable2Ds == null || double.IsNaN(elevation_Min) || double.IsNaN(elevation_Max))
                 return null;
@@ -22,6 +22,7 @@ namespace SAM.Analytical
 
             Construction construction_Wall = Query.Construction(PanelType.Wall);
             Construction construction_Floor = Query.Construction(PanelType.Floor);
+            Construction construction_FloorExposed = Query.Construction(PanelType.FloorExposed);
             Construction construction_Roof = Query.Construction(PanelType.Roof);
 
             List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segmentable2Ds, tolerance);
@@ -56,15 +57,24 @@ namespace SAM.Analytical
 
                     Polygon3D polygon3D_Min = plane_Min.Convert(polygon2D);
                     polygon3D_Min = plane_Min_Flipped.Convert(plane_Min_Flipped.Convert(polygon3D_Min));
+                    if (polygon3D_Min != null)
+                    {
+                        Construction construction_Floor_Temp = construction_Floor;
+                        if (polygon3D_Min.GetBoundingBox().Min.Z > elevation_Ground)
+                            construction_Floor_Temp = construction_FloorExposed;
 
-                    Panel panel_Min = new Panel(construction_Floor, PanelType.Floor, new Face3D(polygon3D_Min));
-                    adjacencyCluster.AddObject(panel_Min);
-                    adjacencyCluster.AddRelation(space, panel_Min);
+                        Panel panel_Min = new Panel(construction_Floor_Temp, PanelType.Floor, new Face3D(polygon3D_Min));
+                        adjacencyCluster.AddObject(panel_Min);
+                        adjacencyCluster.AddRelation(space, panel_Min);
+                    }
 
                     Polygon3D polygon3D_Max = plane_Max.Convert(polygon2D);
-                    Panel panel_Max = new Panel(construction_Roof, PanelType.Roof, new Face3D(polygon3D_Max));
-                    adjacencyCluster.AddObject(panel_Max);
-                    adjacencyCluster.AddRelation(space, panel_Max);
+                    if (polygon3D_Max != null)
+                    {
+                        Panel panel_Max = new Panel(construction_Roof, PanelType.Roof, new Face3D(polygon3D_Max));
+                        adjacencyCluster.AddObject(panel_Max);
+                        adjacencyCluster.AddRelation(space, panel_Max);
+                    }
                 }
 
                 while(tuples.Count > 0)

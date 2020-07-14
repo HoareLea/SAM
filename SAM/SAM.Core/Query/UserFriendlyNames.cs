@@ -17,8 +17,6 @@ namespace SAM.Core
             HashSet<string> result = new HashSet<string>();
             foreach (string name in names)
             {
-
-
                 result.Add(UserFriendlyName(name));
             }
             return result.ToList();

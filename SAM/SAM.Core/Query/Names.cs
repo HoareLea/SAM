@@ -5,7 +5,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static List<string> Names(this object @object, bool property = true, bool method = true, bool propertySets = true)
+        public static List<string> Names(this object @object, bool property = true, bool method = true, bool propertySets = true, bool includeStatic = false)
         {
             if (@object == null)
                 return null;
@@ -16,14 +16,14 @@ namespace SAM.Core
 
             if(property)
             {
-                names = Names_Property(@object);
+                names = Names_Property(@object, includeStatic);
                 if (names != null && names.Count > 0)
                     result.AddRange(names);
             }
 
             if(method)
             {
-                names = Names_Method(@object);
+                names = Names_Method(@object, includeStatic);
                 if (names != null && names.Count > 0)
                     result.AddRange(names);
             }
@@ -56,7 +56,7 @@ namespace SAM.Core
             return result;
         }
         
-        private static List<string> Names_Property(this object @object)
+        private static List<string> Names_Property(this object @object, bool includeStatic = false)
         {
             if (@object == null)
                 return null;
@@ -64,13 +64,21 @@ namespace SAM.Core
             List<string> result = new List<string>();
             System.Reflection.PropertyInfo[] propertyInfos = @object.GetType().GetProperties();
             foreach (System.Reflection.PropertyInfo propertyInfo in propertyInfos)
-                if (propertyInfo?.GetMethod != null)
-                    result.Add(propertyInfo.Name);
+            {
+                System.Reflection.MethodInfo methodInfo = propertyInfo?.GetMethod;
+                if (methodInfo == null)
+                    continue;
+
+                if (!includeStatic && methodInfo.IsStatic)
+                    continue;
+
+                result.Add(propertyInfo.Name);
+            }
 
             return result;
         }
 
-        private static List<string> Names_Method(this object @object)
+        private static List<string> Names_Method(this object @object, bool includeStatic = false)
         {
             if (@object == null)
                 return null;
@@ -79,6 +87,8 @@ namespace SAM.Core
             System.Reflection.MethodInfo[] methodInfos = @object.GetType().GetMethods();
             foreach (System.Reflection.MethodInfo methodInfo in methodInfos)
             {
+                if (!includeStatic && methodInfo.IsStatic)
+                    continue;
 
                 if (methodInfo.ReturnType == typeof(void))
                     continue;

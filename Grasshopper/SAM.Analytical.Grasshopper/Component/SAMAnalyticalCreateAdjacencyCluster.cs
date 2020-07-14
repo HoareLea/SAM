@@ -43,6 +43,8 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddNumberParameter("elevation_Min", "elevation_Min", "Minimal Elevation", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("elevation_Max", "elevation_Max", "Maximal Elevation", GH_ParamAccess.item);
+
+            inputParamManager.AddNumberParameter("elevation_Ground_", "elevation_Ground_", "Ground Elevation", GH_ParamAccess.item, 0);
         }
 
         /// <summary>
@@ -94,7 +96,14 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(segmentable2Ds, elevation_Min, elevation_Max, Core.Tolerance.MacroDistance);
+            double elevation_Ground = double.NaN;
+            if (!dataAccess.GetData(3, ref elevation_Ground))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(segmentable2Ds, elevation_Min, elevation_Max, elevation_Ground, Core.Tolerance.MacroDistance);
 
             dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
         }
