@@ -124,17 +124,19 @@ namespace SAM.Analytical.Grasshopper
 
             if (typeof(IGH_Goo).IsAssignableFrom(source.GetType()))
             {
+                object object_Temp = null;
+
                 try
                 {
-                    source = (source as dynamic).Value;
+                    object_Temp = (source as dynamic).Value;
                 }
                 catch
                 {
                 }
 
-                if (source is Panel)
+                if (object_Temp is Panel)
                 {
-                    Value = (Panel)source;
+                    Value = (Panel)object_Temp;
                     return true;
                 }
             }
