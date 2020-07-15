@@ -64,8 +64,10 @@
     <Compile Include="Convert\ToCsv\ToCsv.cs" />
     <Compile Include="Convert\ToList\ToList.cs" />
     <Compile Include="Create\Object.cs" />
+    <Compile Include="Enums\AboutInfoType.cs" />
     <Compile Include="Enums\CountryCode.cs" />
     <Compile Include="Enums\DelimitedFileType.cs" />
+    <Compile Include="Enums\TextComparisonType.cs" />
     <Compile Include="Interfaces\DelimitedFile\IDelimitedFileReader.cs" />
     <Compile Include="Interfaces\DelimitedFile\IDelimitedFileWriter.cs" />
     <Compile Include="Manager\ActiveManager.cs" />
@@ -86,11 +88,12 @@
     <Compile Include="Create\IJSAMObjects.cs" />
     <Compile Include="Create\JArray.cs" />
     <Compile Include="Create\ParameterSets.cs" />
-    <Compile Include="Enums\AboutInfoType.cs" />
+    <Compile Include="Enums\NumberComparisonType.cs" />
     <Compile Include="Interfaces\Base\IJSAMObject.cs" />
     <Compile Include="Interfaces\Base\ISAMObject.cs" />
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\SetParameter.cs" />
+    <Compile Include="Query\Compare.cs" />
     <Compile Include="Query\UserFriendlyName.cs" />
     <Compile Include="Query\UserFriendlyNames.cs" />
     <Compile Include="Query\TypeDictionary.cs" />
@@ -124,7 +127,9 @@
     <Compile Include="Query\Clone.cs" />
     <Compile Include="Query\Value.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Classes\Comparison\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
