@@ -28,6 +28,7 @@ namespace SAM.Analytical.Grasshopper
                 GH_SAMParam[] result = new GH_SAMParam[2];
                 result[0] = new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "_adjacencyCluster", NickName = "_adjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
                 result[1] = new GH_SAMParam(new GooPanelParam() { Name = "_panels_", NickName = "_panels_", Description = "SAM Analytical Panels to be modifed", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding);
+                result[2] = new GH_SAMParam(new GooPanelParam() { Name = "elevation_Ground_", NickName = "elevation_Ground_", Description = "Ground Elevation", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding);
                 return result;
             }
         }
@@ -65,9 +66,13 @@ namespace SAM.Analytical.Grasshopper
             List<Panel> panels = new List<Panel>();
             dataAccess.GetDataList(1, panels);
 
+            double elevation_Ground = double.NaN;
+            if (!dataAccess.GetData(2, ref elevation_Ground) || double.IsNaN(elevation_Ground))
+                elevation_Ground = 0;
+
             AdjacencyCluster adjacencyCluster_Result = new AdjacencyCluster(adjacencyCluster);
 
-            panels = adjacencyCluster_Result.UpdatePanelTypes(panels?.ConvertAll(x => x.Guid))?.ToList();
+            panels = adjacencyCluster_Result.UpdatePanelTypes(elevation_Ground, panels?.ConvertAll(x => x.Guid))?.ToList();
 
             int index = -1;
 

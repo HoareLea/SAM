@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static IEnumerable<Panel> UpdatePanelTypes(this AdjacencyCluster adjacencyCluster, IEnumerable<Guid> guids = null)
+        public static IEnumerable<Panel> UpdatePanelTypes(this AdjacencyCluster adjacencyCluster, double elevation_Ground = 0, IEnumerable<Guid> guids = null)
         {
             if (adjacencyCluster == null)
                 return null;
@@ -59,7 +59,7 @@ namespace SAM.Analytical
                             
                             elevation = Query.MaxElevation(panel);
 
-                            if (elevation <= 0)
+                            if (elevation <= elevation_Ground)
                                 panelType = PanelType.UndergroundWall;
                             else
                                 panelType = PanelType.WallExternal;
@@ -77,9 +77,9 @@ namespace SAM.Analytical
                             {
                                 elevation = Query.MaxElevation(panel);
 
-                                if (elevation == 0)
+                                if (elevation == elevation_Ground)
                                     panelType = PanelType.SlabOnGrade;
-                                else if (elevation < 0)
+                                else if (elevation < elevation_Ground)
                                     panelType = PanelType.SlabOnGrade;
                                 else
                                     panelType = PanelType.FloorExposed;

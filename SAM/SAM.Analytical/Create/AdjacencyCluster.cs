@@ -93,7 +93,7 @@ namespace SAM.Analytical
                 }
             }
 
-            adjacencyCluster.UpdatePanelTypes();
+            adjacencyCluster.UpdatePanelTypes(elevation_Ground);
 
             return adjacencyCluster;
         }
