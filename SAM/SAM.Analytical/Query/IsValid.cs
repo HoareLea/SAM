@@ -51,7 +51,7 @@ namespace SAM.Analytical
             if (planarBoundary3D_Panel == null)
                 return false;
 
-            IClosedPlanar3D closedPlanar3D = aperture.PlanarBoundary3D?.GetFace3D()?.GetExternalEdge();
+            IClosedPlanar3D closedPlanar3D = aperture.PlanarBoundary3D?.GetFace3D()?.GetExternalEdge3D();
             if (closedPlanar3D == null)
                 return false;
 

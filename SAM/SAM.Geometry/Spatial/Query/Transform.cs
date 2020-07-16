@@ -143,7 +143,7 @@ namespace SAM.Geometry.Spatial
             if (matrix4D == null)
                 return null;
 
-            IClosedPlanar3D externalEdge = face3D?.GetExternalEdge();
+            IClosedPlanar3D externalEdge = face3D?.GetExternalEdge3D();
             if (externalEdge == null)
                 return null;
 
@@ -151,7 +151,7 @@ namespace SAM.Geometry.Spatial
             if (externalEdge == null)
                 return null;
 
-            List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdges();
+            List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
             if (internalEdges != null && internalEdges.Count > 0)
                 internalEdges.ConvertAll(x => Transform(x as dynamic, matrix4D));
 

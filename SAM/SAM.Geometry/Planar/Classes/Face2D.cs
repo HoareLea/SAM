@@ -26,7 +26,7 @@ namespace SAM.Geometry.Planar
             if (point2D == null)
                 return false;
 
-            List<IClosed2D> closed2Ds = Edges;
+            List<IClosed2D> closed2Ds = Edge2Ds;
             if (closed2Ds == null)
                 return false;
 
@@ -39,12 +39,12 @@ namespace SAM.Geometry.Planar
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
         {
-            return externalEdge.GetBoundingBox(offset);
+            return externalEdge2D.GetBoundingBox(offset);
         }
 
         public Point2D GetCentroid()
         {
-            return externalEdge.GetCentroid();
+            return externalEdge2D.GetCentroid();
         }
 
         public static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, bool orientInternalEdges = true)
@@ -52,7 +52,7 @@ namespace SAM.Geometry.Planar
             Face2D result = new Face2D(externalEdge);
             if (internalEdges != null && internalEdges.Count() > 0)
             {
-                result.internalEdges = new List<IClosed2D>();
+                result.internalEdge2Ds = new List<IClosed2D>();
                 foreach (IClosed2D closed2D in internalEdges)
                 {
                     if (externalEdge.Inside(closed2D))
@@ -64,7 +64,7 @@ namespace SAM.Geometry.Planar
                                 ((Polygon2D)closed2D_Temp).SetOrientation(Geometry.Query.Opposite(((Polygon2D)externalEdge).GetOrientation()));
                         }
 
-                        result.internalEdges.Add(closed2D_Temp);
+                        result.internalEdge2Ds.Add(closed2D_Temp);
                     }
                 }
             }
@@ -110,8 +110,8 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                if (result.internalEdges == null)
-                    result.internalEdges = new List<IClosed2D>();
+                if (result.internalEdge2Ds == null)
+                    result.internalEdge2Ds = new List<IClosed2D>();
 
                 IClosed2D closed2D_New = (IClosed2D)closed2D.Clone();
                 if (orientInternalEdges)
@@ -120,7 +120,7 @@ namespace SAM.Geometry.Planar
                         ((Polygon2D)closed2D_New).SetOrientation(Geometry.Query.Opposite(((Polygon2D)closed2D_Max).GetOrientation()));
                 }
 
-                result.internalEdges.Add(closed2D_New);
+                result.internalEdge2Ds.Add(closed2D_New);
             }
 
             return result;

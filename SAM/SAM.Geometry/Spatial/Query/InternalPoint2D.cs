@@ -28,11 +28,11 @@ namespace SAM.Geometry.Spatial
             if (face3D == null)
                 return null;
 
-            Planar.IClosed2D externalEdge = face3D.ExternalEdge;
+            Planar.IClosed2D externalEdge = face3D.ExternalEdge2D;
             if (externalEdge == null)
                 return null;
 
-            List<Planar.IClosed2D> internalEdges = face3D.InternalEdges;
+            List<Planar.IClosed2D> internalEdges = face3D.InternalEdge2Ds;
             if (internalEdges == null || internalEdges.Count == 0)
                 return externalEdge.GetInternalPoint2D();
 

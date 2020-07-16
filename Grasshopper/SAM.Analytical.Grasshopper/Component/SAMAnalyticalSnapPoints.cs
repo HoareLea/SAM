@@ -77,7 +77,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<IClosedPlanar3D> closedPlanar3Ds = panel.GetFace3D().GetEdges();
+            List<IClosedPlanar3D> closedPlanar3Ds = panel.GetFace3D().GetEdge3Ds();
             if (closedPlanar3Ds == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Geometry");

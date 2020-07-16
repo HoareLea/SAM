@@ -45,7 +45,7 @@ namespace SAM.Analytical
 
         public BoundaryEdge2DLoop(Geometry.Spatial.Face3D face)
         {
-            boundaryEdge2Ds = BoundaryEdge2D.FromGeometry(face.ExternalEdge).ToList();
+            boundaryEdge2Ds = BoundaryEdge2D.FromGeometry(face.ExternalEdge2D).ToList();
         }
 
         public BoundaryEdge2DLoop(BoundaryEdge2DLoop boundaryEdge2DLoop)

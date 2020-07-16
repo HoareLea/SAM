@@ -313,7 +313,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 curve3Ds = new List<Spatial.ICurve3D>();
 
-                foreach (Spatial.IClosedPlanar3D closedPlanar3D in ((Spatial.Face3D)Value).GetEdges())
+                foreach (Spatial.IClosedPlanar3D closedPlanar3D in ((Spatial.Face3D)Value).GetEdge3Ds())
                     if (closedPlanar3D is Spatial.ICurvable3D)
                         curve3Ds.AddRange(((Spatial.ICurvable3D)closedPlanar3D).GetCurves());
             }

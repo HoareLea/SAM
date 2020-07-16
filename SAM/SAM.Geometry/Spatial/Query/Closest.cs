@@ -22,7 +22,7 @@ namespace SAM.Geometry.Spatial
                     continue;
 
                 Planar.Point2D point2D_Converted = plane.Convert(point3D_Projected);
-                Planar.IClosed2D externalEdge = face3D.ExternalEdge;
+                Planar.IClosed2D externalEdge = face3D.ExternalEdge2D;
                 if (!externalEdge.Inside(point2D_Converted))
                 {
                     if (externalEdge is Planar.ISegmentable2D)
@@ -53,7 +53,7 @@ namespace SAM.Geometry.Spatial
 
             Planar.IClosed2D externalEdge = null;
             if (closedPlanar3D is Face3D)
-                externalEdge = plane.Convert(((Face3D)closedPlanar3D).GetExternalEdge());
+                externalEdge = plane.Convert(((Face3D)closedPlanar3D).GetExternalEdge3D());
             else
                 externalEdge = plane.Convert(closedPlanar3D);
 

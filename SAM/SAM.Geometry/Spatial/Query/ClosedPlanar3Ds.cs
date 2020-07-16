@@ -17,7 +17,7 @@ namespace SAM.Geometry.Spatial
 
                 if (geometry3D is Face3D)
                 {
-                    result.AddRange(((Face3D)geometry3D).GetEdges());
+                    result.AddRange(((Face3D)geometry3D).GetEdge3Ds());
                     continue;
                 }
 

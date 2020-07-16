@@ -353,7 +353,7 @@ namespace SAM.Geometry.Spatial
                     return new PlanarIntersectionResult(plane);
             }
 
-            IClosedPlanar3D externaEdge = face3D.GetExternalEdge();
+            IClosedPlanar3D externaEdge = face3D.GetExternalEdge3D();
             PlanarIntersectionResult planarIntersectionResult_externaEdge = Create(plane, externaEdge, tolerance_Angle, tolerance_Distance);
             if (planarIntersectionResult_externaEdge == null)
                 return null;
@@ -361,7 +361,7 @@ namespace SAM.Geometry.Spatial
             if (!planarIntersectionResult_externaEdge.Intersecting)
                 return planarIntersectionResult_externaEdge;
 
-            List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdges();
+            List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
             if (internalEdges == null || internalEdges.Count == 0)
                 return planarIntersectionResult_externaEdge;
 

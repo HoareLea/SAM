@@ -50,8 +50,8 @@ namespace SAM.Analytical
             {
                 Face3D face3D = (Face3D)closedPlanar3D;
 
-                externalEdge2DLoop = new BoundaryEdge2DLoop(face3D.GetExternalEdge());
-                List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdges();
+                externalEdge2DLoop = new BoundaryEdge2DLoop(face3D.GetExternalEdge3D());
+                List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
                 if (internalEdges != null)
                     internalEdge2DLoops = internalEdges.ConvertAll(x => new BoundaryEdge2DLoop(x));
             }
@@ -72,8 +72,8 @@ namespace SAM.Analytical
             {
                 Geometry.Planar.Face2D face2D = (Geometry.Planar.Face2D)closed2D;
 
-                externalEdge2DLoop = new BoundaryEdge2DLoop(face2D.ExternalEdge);
-                List<Geometry.Planar.IClosed2D> internalEdges = face2D.InternalEdges;
+                externalEdge2DLoop = new BoundaryEdge2DLoop(face2D.ExternalEdge2D);
+                List<Geometry.Planar.IClosed2D> internalEdges = face2D.InternalEdge2Ds;
                 if (internalEdges != null)
                     internalEdge2DLoops = internalEdges.ConvertAll(x => new BoundaryEdge2DLoop(x));
             }

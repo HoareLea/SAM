@@ -15,7 +15,7 @@
 
             IClosed2D closed2D_Temp = closed2D;
             if(closed2D_Temp is Face)
-                closed2D_Temp = ((Face)closed2D_Temp).ExternalEdge;
+                closed2D_Temp = ((Face)closed2D_Temp).ExternalEdge2D;
 
             if(closed2D_Temp is ICurvable2D)
             {

@@ -15,13 +15,13 @@ namespace SAM.Geometry.Spatial
             plane = new Plane(Point3D.Zero, Vector3D.WorldZ);
         }
 
-        public Face3D(Plane plane, Planar.IClosed2D externalEdge)
+        public Face3D(Plane plane, IClosed2D externalEdge)
             : base(externalEdge)
         {
             this.plane = new Plane(plane);
         }
 
-        public Face3D(Plane plane, Planar.Face2D face2D)
+        public Face3D(Plane plane, Face2D face2D)
             : base(face2D)
         {
             this.plane = new Plane(plane);
@@ -50,35 +50,30 @@ namespace SAM.Geometry.Spatial
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            return plane.Convert(externalEdge).GetBoundingBox(offset);
+            return plane.Convert(externalEdge2D).GetBoundingBox(offset);
         }
 
-        IClosed3D IClosed3D.GetExternalEdge()
+        public IClosedPlanar3D GetExternalEdge3D()
         {
-            return this.GetExternalEdge();
+            return plane.Convert(externalEdge2D);//.GetExternalEdge();
         }
 
-        public IClosedPlanar3D GetExternalEdge()
+        public List<IClosedPlanar3D> GetInternalEdge3Ds()
         {
-            return plane.Convert(externalEdge);//.GetExternalEdge();
-        }
-
-        public List<IClosedPlanar3D> GetInternalEdges()
-        {
-            if (internalEdges == null)
+            if (internalEdge2Ds == null)
                 return null;
 
             List<IClosedPlanar3D> result = new List<IClosedPlanar3D>();
-            foreach (Planar.IClosed2D closed2D in internalEdges)
+            foreach (IClosed2D closed2D in internalEdge2Ds)
                 result.Add(plane.Convert(closed2D));//.GetExternalEdge());
 
             return result;
         }
 
-        public List<IClosedPlanar3D> GetEdges()
+        public List<IClosedPlanar3D> GetEdge3Ds()
         {
-            List<IClosedPlanar3D> result = new List<IClosedPlanar3D>() { GetExternalEdge() };
-            List<IClosedPlanar3D> closedPlanar3Ds = GetInternalEdges();
+            List<IClosedPlanar3D> result = new List<IClosedPlanar3D>() { GetExternalEdge3D() };
+            List<IClosedPlanar3D> closedPlanar3Ds = GetInternalEdge3Ds();
             if (closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
                 result.AddRange(closedPlanar3Ds);
             return result;
@@ -86,18 +81,18 @@ namespace SAM.Geometry.Spatial
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
-            return new Face3D((Plane)plane.GetMoved(vector3D), (Planar.IClosed2D)externalEdge.Clone());
+            return new Face3D((Plane)plane.GetMoved(vector3D), (IClosed2D)externalEdge2D.Clone());
         }
 
         public bool RemoveInternalEdge(int index)
         {
-            if (index < 0 || internalEdges == null || internalEdges.Count == 0)
+            if (index < 0 || internalEdge2Ds == null || internalEdge2Ds.Count == 0)
                 return false;
 
-            if (index >= internalEdges.Count)
+            if (index >= internalEdge2Ds.Count)
                 return false;
 
-            internalEdges.RemoveAt(index);
+            internalEdge2Ds.RemoveAt(index);
             return true;
         }
 
@@ -106,16 +101,16 @@ namespace SAM.Geometry.Spatial
             if (!plane.Coplanar(face3D.plane, tolerance))
                 return false;
 
-            IClosed3D closed3D = face3D.plane.Convert(face3D.externalEdge);
+            IClosed3D closed3D = face3D.plane.Convert(face3D.externalEdge2D);
             if (closed3D == null)
                 return false;
 
-            Planar.IClosed2D closed2D = plane.Convert(closed3D);
+            IClosed2D closed2D = plane.Convert(closed3D);
 
-            if (internalEdges == null || internalEdges.Count == 0)
-                return externalEdge.Inside(closed2D);
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+                return externalEdge2D.Inside(closed2D);
 
-            return externalEdge.Inside(closed2D) && internalEdges.TrueForAll(x => !x.Inside(closed2D));
+            return externalEdge2D.Inside(closed2D) && internalEdge2Ds.TrueForAll(x => !x.Inside(closed2D));
         }
 
         public bool Inside(Point3D point3D, double tolerance = Core.Tolerance.Distance)
@@ -125,10 +120,10 @@ namespace SAM.Geometry.Spatial
 
             Point2D point2D = plane.Convert(point3D);
 
-            if (internalEdges == null || internalEdges.Count == 0)
-                return externalEdge.Inside(point2D);
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+                return externalEdge2D.Inside(point2D);
 
-            return externalEdge.Inside(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D));
+            return externalEdge2D.Inside(point2D) && internalEdge2Ds.TrueForAll(x => !x.Inside(point2D));
         }
 
         public bool OnEdge(Point3D point3D, double tolerance = Core.Tolerance.Distance)
@@ -138,10 +133,10 @@ namespace SAM.Geometry.Spatial
 
             Point2D point2D = plane.Convert(point3D);
 
-            if (internalEdges == null || internalEdges.Count == 0)
-                return externalEdge.On(point2D);
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+                return externalEdge2D.On(point2D);
 
-            return externalEdge.On(point2D) || internalEdges.Any(x => x.On(point2D, tolerance));
+            return externalEdge2D.On(point2D) || internalEdge2Ds.Any(x => x.On(point2D, tolerance));
         }
 
         public bool InRange(Point3D point3D, double tolerance = Core.Tolerance.Distance)
@@ -149,7 +144,7 @@ namespace SAM.Geometry.Spatial
             if (!plane.On(point3D, tolerance))
                 return false;
 
-            return externalEdge.InRange(plane.Convert(point3D), tolerance);
+            return externalEdge2D.InRange(plane.Convert(point3D), tolerance);
         }
 
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
@@ -159,29 +154,29 @@ namespace SAM.Geometry.Spatial
 
             Point2D point2D = plane.Convert(point3D);
 
-            if (internalEdges == null || internalEdges.Count == 0)
-                return externalEdge.InRange(point2D);
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+                return externalEdge2D.InRange(point2D);
 
-            return externalEdge.InRange(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D, tolerance));
+            return externalEdge2D.InRange(point2D) && internalEdge2Ds.TrueForAll(x => !x.Inside(point2D, tolerance));
         }
 
         public void FlipNormal(bool flipX = true)
         {
-            IClosedPlanar3D externalEdge = GetExternalEdge();
+            IClosedPlanar3D externalEdge = GetExternalEdge3D();
             if (externalEdge != null)
                 externalEdge.Reverse();
 
-            List<IClosedPlanar3D> internalEdges = GetInternalEdges();
+            List<IClosedPlanar3D> internalEdges = GetInternalEdge3Ds();
             if (internalEdges != null)
                 internalEdges.ForEach(x => x.Reverse());
 
             plane.FlipZ(flipX);
 
             if (externalEdge != null)
-                this.externalEdge = plane.Convert(externalEdge);
+                this.externalEdge2D = plane.Convert(externalEdge);
 
             if (internalEdges != null)
-                this.internalEdges = internalEdges.ConvertAll(x => plane.Convert(x));
+                this.internalEdge2Ds = internalEdges.ConvertAll(x => plane.Convert(x));
         }
 
         public IClosedPlanar3D Project(IClosed3D closed3D)
@@ -222,7 +217,7 @@ namespace SAM.Geometry.Spatial
 
             Point3D point3D_Project = plane.Project(point3D);
 
-            Planar.Point2D point2D = plane.Convert(point3D_Project);
+            Point2D point2D = plane.Convert(point3D_Project);
             if (point2D == null)
                 return double.NaN;
 
@@ -232,19 +227,19 @@ namespace SAM.Geometry.Spatial
             return System.Math.Sqrt((a * a) + (b * b));
         }
 
-        public double DistanceToEdges(Point3D point3D)
+        public double DistanceToEdge2Ds(Point3D point3D)
         {
             if (point3D == null)
                 return double.NaN;
 
             Point3D point3D_Project = plane.Project(point3D);
 
-            Planar.Point2D point2D = plane.Convert(point3D_Project);
+            Point2D point2D = plane.Convert(point3D_Project);
             if (point2D == null)
                 return double.NaN;
 
             double a = point3D_Project.Distance(point3D);
-            double b = DistanceToEdges(point2D);
+            double b = DistanceToEdge2Ds(point2D);
 
             return System.Math.Sqrt((a * a) + (b * b));
         }
@@ -274,24 +269,24 @@ namespace SAM.Geometry.Spatial
 
             Plane plane = externalEdge_3D.GetPlane();
 
-            Planar.IClosed2D externalEdge_2D = plane?.Convert(externalEdge_3D);
+            IClosed2D externalEdge_2D = plane?.Convert(externalEdge_3D);
 
             List<IClosedPlanar3D> internalEdges_3D = edges.ToList();
             internalEdges_3D.RemoveAll(x => x == null);
             internalEdges_3D.Remove(externalEdge_3D);
 
-            List<Planar.IClosed2D> internalEdges_2D = internalEdges_3D.ConvertAll(x => plane.Convert(x));
+            List<IClosed2D> internalEdges_2D = internalEdges_3D.ConvertAll(x => plane.Convert(x));
 
             if (orientInternalEdges)
             {
                 for (int i = 0; i < internalEdges_2D.Count; i++)
                 {
-                    Planar.IClosed2D internalEdge_2D = internalEdges_2D[i];
+                    IClosed2D internalEdge_2D = internalEdges_2D[i];
 
-                    if (internalEdge_2D is Planar.Polygon2D && externalEdge_2D is Planar.Polygon2D)
+                    if (internalEdge_2D is Polygon2D && externalEdge_2D is Polygon2D)
                     {
-                        Planar.Polygon2D polygon2D = (Planar.Polygon2D)internalEdge_2D;
-                        polygon2D.SetOrientation(Geometry.Query.Opposite(((Planar.Polygon2D)externalEdge_2D).GetOrientation()));
+                        Polygon2D polygon2D = (Polygon2D)internalEdge_2D;
+                        polygon2D.SetOrientation(Geometry.Query.Opposite(((Polygon2D)externalEdge_2D).GetOrientation()));
                         internalEdges_2D[i] = polygon2D;
                     }
                 }
@@ -300,30 +295,30 @@ namespace SAM.Geometry.Spatial
             return Create(plane, externalEdge_2D, internalEdges_2D);
         }
 
-        public static Face3D Create(Plane plane, Planar.IClosed2D externalEdge, IEnumerable<Planar.IClosed2D> internalEdges, bool orientInternalEdges = true)
+        public static Face3D Create(Plane plane, IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, bool orientInternalEdges = true)
         {
             if (plane == null || externalEdge == null)
                 return null;
 
-            Planar.Face2D face2D = Planar.Face2D.Create(externalEdge, internalEdges, orientInternalEdges);
+            Face2D face2D = Planar.Face2D.Create(externalEdge, internalEdges, orientInternalEdges);
             if (face2D == null)
                 return null;
 
             return new Face3D(plane, face2D);
         }
 
-        public static Face3D Create(Plane plane, IEnumerable<Planar.IClosed2D> edges, out List<Planar.IClosed2D> edges_Excluded, bool orientInternalEdges = true)
+        public static Face3D Create(Plane plane, IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded, bool orientInternalEdges = true)
         {
             edges_Excluded = null;
 
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            Planar.Face2D face2D = Planar.Face2D.Create(edges, out edges_Excluded, orientInternalEdges);
+            Face2D face2D = Planar.Face2D.Create(edges, out edges_Excluded, orientInternalEdges);
             return new Face3D(plane, face2D);
         }
 
-        public static Face3D Create(Plane plane, IEnumerable<Planar.IClosed2D> edges, bool orientInternalEdges = true)
+        public static Face3D Create(Plane plane, IEnumerable<IClosed2D> edges, bool orientInternalEdges = true)
         {
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;

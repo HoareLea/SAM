@@ -7,8 +7,8 @@ namespace SAM.Geometry
 {
     public abstract class Face : SAMGeometry
     {
-        protected IClosed2D externalEdge;
-        protected List<IClosed2D> internalEdges;
+        protected IClosed2D externalEdge2D;
+        protected List<IClosed2D> internalEdge2Ds;
 
         public Face(IClosed2D closed2D)
         {
@@ -18,13 +18,13 @@ namespace SAM.Geometry
             if (closed2D is Face)
             {
                 Face face = (Face)closed2D;
-                externalEdge = (IClosed2D)face.externalEdge.Clone();
-                if (face.internalEdges != null)
-                    internalEdges = face.internalEdges.ConvertAll(x => (IClosed2D)x.Clone());
+                externalEdge2D = (IClosed2D)face.externalEdge2D.Clone();
+                if (face.internalEdge2Ds != null)
+                    internalEdge2Ds = face.internalEdge2Ds.ConvertAll(x => (IClosed2D)x.Clone());
             }
             else
             {
-                externalEdge = (IClosed2D)closed2D.Clone();
+                externalEdge2D = (IClosed2D)closed2D.Clone();
             }
         }
 
@@ -35,10 +35,10 @@ namespace SAM.Geometry
 
         public override bool FromJObject(JObject jObject)
         {
-            externalEdge = Planar.Create.IClosed2D(jObject.Value<JObject>("ExternalEdge"));
+            externalEdge2D = Planar.Create.IClosed2D(jObject.Value<JObject>("ExternalEdge"));
 
             if (jObject.ContainsKey("InternalEdges"))
-                internalEdges = Core.Create.IJSAMObjects<IClosed2D>(jObject.Value<JArray>("InternalEdges"));
+                internalEdge2Ds = Core.Create.IJSAMObjects<IClosed2D>(jObject.Value<JArray>("InternalEdges"));
 
             return true;
         }
@@ -49,48 +49,48 @@ namespace SAM.Geometry
             if (jObject == null)
                 return null;
 
-            jObject.Add("ExternalEdge", externalEdge.ToJObject());
-            if (internalEdges != null)
-                jObject.Add("InternalEdges", Core.Create.JArray(internalEdges));
+            jObject.Add("ExternalEdge2D", externalEdge2D.ToJObject());
+            if (internalEdge2Ds != null)
+                jObject.Add("InternalEdge2Ds", Core.Create.JArray(internalEdge2Ds));
 
             return jObject;
         }
 
-        public IClosed2D ExternalEdge
+        public IClosed2D ExternalEdge2D
         {
             get
             {
-                return externalEdge.Clone() as IClosed2D;
+                return externalEdge2D.Clone() as IClosed2D;
             }
         }
 
-        public List<IClosed2D> InternalEdges
+        public List<IClosed2D> InternalEdge2Ds
         {
             get
             {
-                if (internalEdges == null)
+                if (internalEdge2Ds == null)
                     return null;
 
-                return internalEdges.ConvertAll(x => x.Clone() as IClosed2D);
+                return internalEdge2Ds.ConvertAll(x => x.Clone() as IClosed2D);
             }
         }
 
-        public List<IClosed2D> Edges
+        public List<IClosed2D> Edge2Ds
         {
             get
             {
-                List<IClosed2D> result = new List<IClosed2D>() { externalEdge };
-                if (internalEdges != null && internalEdges.Count > 0)
-                    result.AddRange(internalEdges);
+                List<IClosed2D> result = new List<IClosed2D>() { externalEdge2D };
+                if (internalEdge2Ds != null && internalEdge2Ds.Count > 0)
+                    result.AddRange(internalEdge2Ds);
                 return result;
             }
         }
 
         public double GetArea()
         {
-            double area = externalEdge.GetArea();
-            if (internalEdges != null && internalEdges.Count > 0)
-                foreach (IClosed2D closed2D in internalEdges)
+            double area = externalEdge2D.GetArea();
+            if (internalEdge2Ds != null && internalEdge2Ds.Count > 0)
+                foreach (IClosed2D closed2D in internalEdge2Ds)
                     area -= closed2D.GetArea();
 
             return area;
@@ -98,28 +98,28 @@ namespace SAM.Geometry
 
         public double GetPerimeter()
         {
-            return Planar.Query.Perimeter(externalEdge);
+            return Planar.Query.Perimeter(externalEdge2D);
         }
 
         public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
-            if (externalEdge == null)
+            if (externalEdge2D == null)
                 return null;
 
-            if (internalEdges == null || internalEdges.Count == 0)
-                return externalEdge.GetInternalPoint2D();
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+                return externalEdge2D.GetInternalPoint2D();
 
-            Point2D result = externalEdge.GetCentroid();
+            Point2D result = externalEdge2D.GetCentroid();
             if (Inside(result))
                 return result;
 
-            if (externalEdge is ISegmentable2D)
+            if (externalEdge2D is ISegmentable2D)
             {
-                List<Point2D> point2Ds = ((ISegmentable2D)externalEdge).GetPoints();
+                List<Point2D> point2Ds = ((ISegmentable2D)externalEdge2D).GetPoints();
                 if (point2Ds == null || point2Ds.Count == 0)
                     return null;
 
-                foreach (IClosed2D closed2D in internalEdges)
+                foreach (IClosed2D closed2D in internalEdge2Ds)
                 {
                     if (closed2D is ISegmentable2D)
                     {
@@ -152,16 +152,16 @@ namespace SAM.Geometry
             if (Inside(point2D))
                 return 0;
 
-            if (!(externalEdge is ISegmentable2D))
+            if (!(externalEdge2D is ISegmentable2D))
                 throw new System.NotImplementedException();
 
-            if (internalEdges != null && internalEdges.Count > 0 && !internalEdges.TrueForAll(x => x is ISegmentable2D))
+            if (internalEdge2Ds != null && internalEdge2Ds.Count > 0 && !internalEdge2Ds.TrueForAll(x => x is ISegmentable2D))
                 throw new System.NotImplementedException();
 
-            double distance_Min = ((ISegmentable2D)externalEdge).Distance(point2D);
-            if (internalEdges != null && internalEdges.Count > 0)
+            double distance_Min = ((ISegmentable2D)externalEdge2D).Distance(point2D);
+            if (internalEdge2Ds != null && internalEdge2Ds.Count > 0)
             {
-                foreach (ISegmentable2D segmentable2D in internalEdges)
+                foreach (ISegmentable2D segmentable2D in internalEdge2Ds)
                 {
                     double distance = segmentable2D.Distance(point2D);
                     if (distance < distance_Min)
@@ -172,15 +172,15 @@ namespace SAM.Geometry
             return distance_Min;
         }
 
-        public double DistanceToEdges(Point2D point2D)
+        public double DistanceToEdge2Ds(Point2D point2D)
         {
             if (point2D == null)
                 return double.NaN;
 
-            double distance_Min = ((ISegmentable2D)externalEdge).Distance(point2D);
-            if (internalEdges != null && internalEdges.Count > 0)
+            double distance_Min = ((ISegmentable2D)externalEdge2D).Distance(point2D);
+            if (internalEdge2Ds != null && internalEdge2Ds.Count > 0)
             {
-                foreach (ISegmentable2D segmentable2D in internalEdges)
+                foreach (ISegmentable2D segmentable2D in internalEdge2Ds)
                 {
                     double distance = segmentable2D.Distance(point2D);
                     if (distance < distance_Min)
@@ -193,34 +193,34 @@ namespace SAM.Geometry
 
         public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            if (internalEdges == null || internalEdges.Count == 0)
-                return externalEdge.Inside(point2D) && !externalEdge.On(point2D, tolerance);
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+                return externalEdge2D.Inside(point2D) && !externalEdge2D.On(point2D, tolerance);
 
-            bool result = externalEdge.Inside(point2D) && internalEdges.TrueForAll(x => !x.Inside(point2D));
+            bool result = externalEdge2D.Inside(point2D) && internalEdge2Ds.TrueForAll(x => !x.Inside(point2D));
             if (!result)
                 return result;
 
-            return !externalEdge.On(point2D) && internalEdges.TrueForAll(x => !x.On(point2D));
+            return !externalEdge2D.On(point2D) && internalEdge2Ds.TrueForAll(x => !x.On(point2D));
         }
 
         public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
-            if (internalEdges == null || internalEdges.Count == 0)
-                return externalEdge.Inside(closed2D, tolerance);
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+                return externalEdge2D.Inside(closed2D, tolerance);
 
-            return externalEdge.Inside(closed2D, tolerance) && internalEdges.TrueForAll(x => !x.Inside(closed2D, tolerance));
+            return externalEdge2D.Inside(closed2D, tolerance) && internalEdge2Ds.TrueForAll(x => !x.Inside(closed2D, tolerance));
         }
 
         public void Reverse()
         {
-            if (externalEdge is IReversible)
-                ((IReversible)externalEdge).Reverse();
+            if (externalEdge2D is IReversible)
+                ((IReversible)externalEdge2D).Reverse();
 
-            if (internalEdges != null)
+            if (internalEdge2Ds != null)
             {
-                for (int i = 0; i < internalEdges.Count; i++)
-                    if (internalEdges[i] is IReversible)
-                        ((IReversible)internalEdges[i]).Reverse();
+                for (int i = 0; i < internalEdge2Ds.Count; i++)
+                    if (internalEdge2Ds[i] is IReversible)
+                        ((IReversible)internalEdge2Ds[i]).Reverse();
             }
         }
     }

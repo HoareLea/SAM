@@ -282,11 +282,11 @@ namespace SAM.Geometry.Spatial
 
         public Planar.Face2D Convert(Face3D face3D)
         {
-            IClosedPlanar3D closedPlanar3D_External = face3D.GetExternalEdge();
+            IClosedPlanar3D closedPlanar3D_External = face3D.GetExternalEdge3D();
             Planar.IClosed2D closed2D_external = Convert(closedPlanar3D_External);
 
             List<Planar.IClosed2D> closed2Ds_internal = new List<Planar.IClosed2D>();
-            List<IClosedPlanar3D> closedPlanar3Ds_Internal = face3D.GetInternalEdges();
+            List<IClosedPlanar3D> closedPlanar3Ds_Internal = face3D.GetInternalEdge3Ds();
             if (closedPlanar3Ds_Internal != null && closedPlanar3Ds_Internal.Count > 0)
                 closedPlanar3Ds_Internal.ForEach(x => closed2Ds_internal.Add(Convert(x)));
 
@@ -421,9 +421,9 @@ namespace SAM.Geometry.Spatial
 
         public Face3D Project(Face3D face3D)
         {
-            Planar.IClosed2D externalEdge = Convert(Project(face3D.GetExternalEdge()));
+            Planar.IClosed2D externalEdge = Convert(Project(face3D.GetExternalEdge3D()));
 
-            List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdges();
+            List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
             if (internalEdges != null && internalEdges.Count > 0)
                 internalEdges = internalEdges.ConvertAll(x => Project(x));
 

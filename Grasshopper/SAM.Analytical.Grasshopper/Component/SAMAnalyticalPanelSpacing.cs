@@ -112,7 +112,7 @@ namespace SAM.Analytical.Grasshopper
                         if (!boundingBox3D.Inside(point3D))
                             continue;
 
-                        double distance = face3D.DistanceToEdges(point3D);
+                        double distance = face3D.DistanceToEdge2Ds(point3D);
                         if (distance < max && distance > min)
                             point3Ds.Add(point3D);
                     }

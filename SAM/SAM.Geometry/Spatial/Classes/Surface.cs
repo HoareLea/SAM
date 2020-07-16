@@ -7,16 +7,16 @@ namespace SAM.Geometry.Spatial
 {
     public class Surface : SAMGeometry, IClosed3D
     {
-        private IClosed3D boundary;
+        private IClosed3D externalEdge3D;
 
-        public Surface(IClosed3D boundary)
+        public Surface(IClosed3D externalEdge3D)
         {
-            this.boundary = boundary.Clone() as IClosed3D;
+            this.externalEdge3D = externalEdge3D?.Clone() as IClosed3D;
         }
 
         public Surface(Surface surface)
         {
-            boundary = surface.boundary.Clone() as IClosed3D;
+            externalEdge3D = surface.externalEdge3D.Clone() as IClosed3D;
         }
 
         public Surface(JObject jObject)
@@ -26,14 +26,14 @@ namespace SAM.Geometry.Spatial
 
         public Face3D ToFace(double tolerance = Core.Tolerance.Distance)
         {
-            if (boundary is IClosedPlanar3D)
-                return new Face3D(boundary as IClosedPlanar3D);
+            if (externalEdge3D is IClosedPlanar3D)
+                return new Face3D(externalEdge3D as IClosedPlanar3D);
 
             List<ICurve3D> curve3Ds = null;
-            if (boundary is Polycurve3D)
-                curve3Ds = ((Polycurve3D)boundary).Explode();
-            else if (boundary is ICurvable3D)
-                curve3Ds = ((ICurvable3D)boundary).GetCurves();
+            if (externalEdge3D is Polycurve3D)
+                curve3Ds = ((Polycurve3D)externalEdge3D).Explode();
+            else if (externalEdge3D is ICurvable3D)
+                curve3Ds = ((ICurvable3D)externalEdge3D).GetCurves();
 
             IEnumerable<Segment3D> segment3Ds = curve3Ds.FindAll(x => x is Segment3D).Cast<Segment3D>();
             if (segment3Ds.Count() == curve3Ds.Count)
@@ -54,22 +54,25 @@ namespace SAM.Geometry.Spatial
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            return boundary.GetBoundingBox(offset);
+            return externalEdge3D.GetBoundingBox(offset);
         }
 
-        public IClosed3D GetExternalEdge()
+        public IClosed3D ExternalEdge3D
         {
-            return boundary.Clone() as IClosed3D;
+            get
+            {
+                return externalEdge3D.Clone() as IClosed3D;
+            }
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
-            return new Surface((IClosed3D)boundary.GetMoved(vector3D));
+            return new Surface((IClosed3D)externalEdge3D.GetMoved(vector3D));
         }
 
         public override bool FromJObject(JObject jObject)
         {
-            boundary = Geometry.Create.ISAMGeometry<IClosed3D>(jObject);
+            externalEdge3D = Geometry.Create.ISAMGeometry<IClosed3D>(jObject);
             return true;
         }
 
@@ -79,7 +82,7 @@ namespace SAM.Geometry.Spatial
             if (jObject == null)
                 return null;
 
-            jObject.Add("Boundary", boundary.ToJObject());
+            jObject.Add("Boundary", externalEdge3D.ToJObject());
             return jObject;
         }
     }

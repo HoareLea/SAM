@@ -11,11 +11,11 @@ namespace SAM.Geometry.Spatial
             if (face3D == null)
                 return null;
 
-            List<IClosed2D> internalEdges = face3D.InternalEdges;
+            List<IClosed2D> internalEdges = face3D.InternalEdge2Ds;
             if (internalEdges == null || internalEdges.Count == 0)
                 return new List<Face3D>() { (Face3D)face3D.Clone() };
 
-            ISegmentable2D externalEdge = face3D.ExternalEdge as ISegmentable2D;
+            ISegmentable2D externalEdge = face3D.ExternalEdge2D as ISegmentable2D;
             if (externalEdge == null)
                 throw new NotImplementedException();
 

@@ -7,7 +7,7 @@ namespace SAM.Geometry.Grasshopper
     {
         public static GH_Surface ToGrasshopper(this Surface surface, double tolerance = Core.Tolerance.Distance)
         {
-            IClosed3D closed3D = surface?.GetExternalEdge();
+            IClosed3D closed3D = surface?.ExternalEdge3D;
             if (closed3D == null)
                 return null;
 

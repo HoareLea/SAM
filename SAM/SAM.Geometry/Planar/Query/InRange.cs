@@ -15,7 +15,7 @@
 
             IClosed2D closed2D_Temp = closed2D;
             if (closed2D_Temp is Face2D)
-                closed2D_Temp = ((Face2D)closed2D_Temp).ExternalEdge;
+                closed2D_Temp = ((Face2D)closed2D_Temp).ExternalEdge2D;
 
             return closed2D_Temp.On(point2D, tolerance) || closed2D_Temp.Inside(point2D);
         }

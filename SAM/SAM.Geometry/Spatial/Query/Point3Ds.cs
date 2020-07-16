@@ -13,7 +13,7 @@ namespace SAM.Geometry.Spatial
 
             if(externalEdge)
             {
-                ICurvable3D curvable3D = face3D.GetExternalEdge() as ICurvable3D;
+                ICurvable3D curvable3D = face3D.GetExternalEdge3D() as ICurvable3D;
                 if (curvable3D != null)
                 {
                     List<Point3D> point3Ds = curvable3D.GetCurves()?.ConvertAll(x => x.GetStart());
@@ -24,7 +24,7 @@ namespace SAM.Geometry.Spatial
 
             if (internalEdges)
             {
-                List<IClosedPlanar3D> closedPlanar3Ds = face3D.GetInternalEdges();
+                List<IClosedPlanar3D> closedPlanar3Ds = face3D.GetInternalEdge3Ds();
                 if(closedPlanar3Ds != null)
                 {
                     foreach(IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)

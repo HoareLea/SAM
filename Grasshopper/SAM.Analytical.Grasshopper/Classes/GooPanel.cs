@@ -97,7 +97,7 @@ namespace SAM.Analytical.Grasshopper
             if (apertures != null)
             {
                 foreach (Aperture aperture in apertures)
-                    foreach (Geometry.Spatial.IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdges())
+                    foreach (Geometry.Spatial.IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdge3Ds())
                     {
                         Rhino.Display.DisplayMaterial displayMaterial_Aperture = Query.DisplayMaterial(aperture.ApertureConstruction.ApertureType);
                         if (displayMaterial_Aperture == null)

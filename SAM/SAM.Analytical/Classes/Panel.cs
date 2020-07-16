@@ -117,7 +117,7 @@ namespace SAM.Analytical
                         continue;
 
                     //TODO: Update ExternalEdge with PlanarBoundary3D
-                    AddAperture(aperture.ApertureConstruction, aperture.GetFace3D()?.GetExternalEdge(), trimGeometry, minArea, maxDistance);
+                    AddAperture(aperture.ApertureConstruction, aperture.GetFace3D()?.GetExternalEdge3D(), trimGeometry, minArea, maxDistance);
                 }
             }
             //apertures = panel.apertures.FindAll(x => Query.IsValid(this, x, Core.Tolerance.MacroDistance)).ConvertAll(x => new Aperture(x));
@@ -254,7 +254,7 @@ namespace SAM.Analytical
 
         public double DistanceToEdges(Point3D point3D)
         {
-            return GetFace3D().DistanceToEdges(point3D);
+            return GetFace3D().DistanceToEdge2Ds(point3D);
         }
 
         public PlanarBoundary3D PlanarBoundary3D
@@ -543,7 +543,7 @@ namespace SAM.Analytical
             {
                 if (closed2D_Aperture is ISegmentable2D)
                 {
-                    IClosed2D closed2D = plane.Convert(planarBoundary3D.GetFace3D().GetExternalEdge());
+                    IClosed2D closed2D = plane.Convert(planarBoundary3D.GetFace3D().GetExternalEdge3D());
                     if (closed2D is ISegmentable2D)
                     {
                         if (!closed2D.Inside(closed2D_Aperture))
@@ -655,7 +655,7 @@ namespace SAM.Analytical
 
             Plane plane = face3D.GetPlane();
 
-            Polygon2D externalEdge = face3D.ExternalEdge as Polygon2D;
+            Polygon2D externalEdge = face3D.ExternalEdge2D as Polygon2D;
             if (externalEdge == null)
                 throw new NotImplementedException();
 
@@ -669,7 +669,7 @@ namespace SAM.Analytical
             {
                 Aperture aperture = apertures[i];
 
-                IClosedPlanar3D closedPlanar3D = aperture?.GetFace3D()?.GetExternalEdge();
+                IClosedPlanar3D closedPlanar3D = aperture?.GetFace3D()?.GetExternalEdge3D();
                 if (closedPlanar3D == null)
                     continue;
 

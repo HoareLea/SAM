@@ -8,11 +8,11 @@ namespace SAM.Geometry
     {
         public static Polygon ToNTS(this Face face, double tolerance = Core.Tolerance.MicroDistance)
         {
-            LinearRing linearRing_ExternalEdge = face?.ExternalEdge?.ToNTS(tolerance);
+            LinearRing linearRing_ExternalEdge = face?.ExternalEdge2D?.ToNTS(tolerance);
             if (linearRing_ExternalEdge == null)
                 return null;
 
-            List<LinearRing> linearRingsList_InternalEdges = face.InternalEdges?.ConvertAll(x => x.ToNTS(tolerance));
+            List<LinearRing> linearRingsList_InternalEdges = face.InternalEdge2Ds?.ConvertAll(x => x.ToNTS(tolerance));
 
             LinearRing[] linearRingsArray_InternalEdges = null;
             if (linearRingsList_InternalEdges != null && linearRingsList_InternalEdges.Count > 0)

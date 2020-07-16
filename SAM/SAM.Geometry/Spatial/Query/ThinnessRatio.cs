@@ -18,7 +18,7 @@
                 return double.NaN;
 
             if (closedPlanar3D is Face)
-                return Planar.Query.ThinnessRatio(((Face)closedPlanar3D).ExternalEdge);
+                return Planar.Query.ThinnessRatio(((Face)closedPlanar3D).ExternalEdge2D);
 
             return Planar.Query.ThinnessRatio(plane.Convert(closedPlanar3D));
         }
