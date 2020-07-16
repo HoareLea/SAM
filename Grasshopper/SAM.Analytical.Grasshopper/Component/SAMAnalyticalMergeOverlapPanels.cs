@@ -1,8 +1,10 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -35,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            index = inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            index = inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             inputParamManager.AddNumberParameter("_offset_", "_offset_", "Offset", GH_ParamAccess.item, Core.Tolerance.Distance);
@@ -49,7 +51,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "AnalyticalObject", "AnalyticalObject", "SAM Analytical Object", GH_ParamAccess.list);
             outputParamManager.AddParameter(new GooPanelParam(), "RedundantPanels", "RedundantPanels", "RedundantPanels", GH_ParamAccess.list);
         }
 
@@ -84,8 +86,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(0, panels) || panels == null)
+            List<SAMObject> sAMObjects = new List<SAMObject>();
+            if (!dataAccess.GetDataList(0, sAMObjects) || sAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -100,6 +102,15 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> redundantPanels = new List<Panel>();
 
+                        List<Panel> panels = sAMObjects.ConvertAll(x => x as Panel);
+            panels.RemoveAll(x => x == null);
+
+            List<AdjacencyCluster> adjacencyClusters = sAMObjects.ConvertAll(x => x as AdjacencyCluster);
+            adjacencyClusters.RemoveAll(x => x == null);
+
+            List<AnalyticalModel> analyticalModels = sAMObjects.ConvertAll(x => x as AnalyticalModel);
+            analyticalModels.RemoveAll(x => x == null);
+
             panels = Analytical.Query.MergeOverlapPanels(panels, offset, ref redundantPanels, setDefaultConstruction, tolerance);
 
             if (panels != null)
@@ -109,12 +120,25 @@ namespace SAM.Analytical.Grasshopper
                     if (panel == null)
                         continue;
 
-                    if (panel.GetArea() < Core.Tolerance.MacroDistance)
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Area of panel {0} [Guid: {1}] is below {2}", panel.Name, panel.Guid, Core.Tolerance.MacroDistance));
+                    if (panel.GetArea() < Tolerance.MacroDistance)
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Area of panel {0} [Guid: {1}] is below {2}", panel.Name, panel.Guid, Tolerance.MacroDistance));
                 }
             }
 
-            dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
+            adjacencyClusters = adjacencyClusters.ConvertAll(x => Analytical.Query.MergeOverlapPanels(x, offset, ref redundantPanels, setDefaultConstruction, tolerance));
+            analyticalModels = analyticalModels.ConvertAll(x => Analytical.Query.MergeOverlapPanels(x, offset, ref redundantPanels, setDefaultConstruction, tolerance));
+
+            List<SAMObject> result = new List<SAMObject>();
+            if (panels != null)
+                result.AddRange(panels.Cast<SAMObject>());
+
+            if (adjacencyClusters != null)
+                result.AddRange(adjacencyClusters.Cast<SAMObject>());
+
+            if (analyticalModels != null)
+                result.AddRange(analyticalModels.Cast<SAMObject>());
+
+            dataAccess.SetDataList(0, result);
             dataAccess.SetDataList(1, redundantPanels?.ConvertAll(x => new GooPanel(x)));
         }
     }

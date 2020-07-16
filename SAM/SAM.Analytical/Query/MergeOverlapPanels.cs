@@ -52,6 +52,36 @@ namespace SAM.Analytical
             return result;
         }
 
+        public static AdjacencyCluster MergeOverlapPanels(this AdjacencyCluster adjacencyCluster, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
+        {
+            List<Panel> panels = adjacencyCluster?.GetPanels();
+            if (panels == null)
+                return null;
+
+            List<Panel> mergedPanels = MergeOverlapPanels(panels.ToList(), offset, ref redundantPanels, setDefaultConstruction, tolerance);
+
+            AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
+            if (redundantPanels != null && redundantPanels.Count != 0)
+                result.Remove(redundantPanels);
+
+            if (mergedPanels != null && mergedPanels.Count != 0)
+                mergedPanels.ForEach(x => adjacencyCluster.AddObject(x));
+
+            return result;
+        }
+
+        public static AnalyticalModel MergeOverlapPanels(this AnalyticalModel analyticalModel, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
+        {
+            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
+            if (adjacencyCluster == null)
+                return null;
+
+            adjacencyCluster = MergeOverlapPanels(adjacencyCluster, offset, ref redundantPanels, setDefaultConstruction, tolerance);
+
+            return new AnalyticalModel(analyticalModel, adjacencyCluster);
+        }
+
+
         private static List<Panel> MergeOverlapPanels_FloorAndRoof(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
         {
             List<Tuple<double, Panel>> tuples = new List<Tuple<double, Panel>>();
