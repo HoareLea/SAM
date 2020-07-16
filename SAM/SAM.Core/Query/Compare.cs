@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-
-namespace SAM.Core
+﻿namespace SAM.Core
 {
     public static partial class Query
     {
@@ -96,6 +93,58 @@ namespace SAM.Core
             }
 
             return false;
+        }
+
+        public static bool Compare(this object @object, string name, double value, NumberComparisonType numberComparisonType)
+        {
+            if (string.IsNullOrEmpty(name) || @object == null)
+                return false;
+
+            object value_Existing;
+            if (!TryGetValue(@object, name, out value_Existing))
+                return false;
+
+            if (value_Existing is double)
+                return Compare((double)value_Existing, value, numberComparisonType);
+
+            if(IsNumeric(value_Existing))
+                return Compare(System.Convert.ToDouble(value_Existing), value, numberComparisonType);
+
+            if(value_Existing is string)
+            {
+                double value_Existing_Temp;
+                if(double.TryParse((string)value_Existing, out value_Existing_Temp))
+                    return Compare(value_Existing_Temp, value, numberComparisonType);
+            }
+
+            if(value_Existing is bool)
+            {
+                double value_Existing_Temp = 1;
+                if (!(bool)value_Existing)
+                    value_Existing_Temp = 0;
+
+                return Compare(value_Existing_Temp, value, numberComparisonType);
+            }
+
+            return false;
+        }
+
+        public static bool Compare(this object @object, string name, string value, TextComparisonType textComparisonType, bool caseSensitive = true)
+        {
+            if (string.IsNullOrEmpty(name) || @object == null)
+                return false;
+
+            object value_Existing;
+            if (!TryGetValue(@object, name, out value_Existing))
+                return false;
+
+            if(value == null)
+                return Compare(null, value, textComparisonType, caseSensitive);
+
+            if (value_Existing is string)
+                return Compare((string)value_Existing, value, textComparisonType, caseSensitive);
+
+            return Compare(value_Existing.ToString(), value, textComparisonType, caseSensitive);
         }
     }
 }

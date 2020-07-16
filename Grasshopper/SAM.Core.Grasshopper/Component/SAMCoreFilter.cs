@@ -35,9 +35,14 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
+            int index;
+            
             inputParamManager.AddGenericParameter("_objects", "_objects", "Objects", GH_ParamAccess.list);
             inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item, "Name");
             inputParamManager.AddGenericParameter("_value", "_value", "Value to Filter elements", GH_ParamAccess.item);
+
+            index = inputParamManager.AddGenericParameter("_comparisonType_", "_comparisonType_", "SAM ComparisonType (TextComparisonType or NumberComparisonType)", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
         }
 
         /// <summary>
@@ -107,96 +112,66 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            object test = null;
-            dataAccess.GetData(2, ref test);
-
             object value = objectWrapper.Value;
             if (value is IGH_Goo)
                 value = (objectWrapper.Value as dynamic).Value;
 
+            
+            objectWrapper = null;
+            dataAccess.GetData(3, ref objectWrapper);
+            object object_ComparisonType = null;
+            if(objectWrapper?.Value == null)
+            {
+                if (Core.Query.IsNumeric(value))
+                    object_ComparisonType = NumberComparisonType.Equals;
+                else
+                    object_ComparisonType = TextComparisonType.Equals;
+            }
+            else if(objectWrapper.Value is NumberComparisonType || objectWrapper.Value is TextComparisonType)
+            {
+                object_ComparisonType = objectWrapper.Value;
+            }
+
+            if (object_ComparisonType == null)
+                return;
+
+
             List<object> result_in = new List<object>();
             List<object> result_out = new List<object>();
-            foreach (object @object in objects)
+
+            if (object_ComparisonType is NumberComparisonType)
             {
-                object value_Temp;
-                if (Core.Query.TryGetValue(@object, name, out value_Temp))
+                double value_Double = double.NaN;
+                if (value is double)
+                    value_Double = (double)value;
+                else if (Core.Query.IsNumeric(value))
+                    value_Double = System.Convert.ToDouble(value);
+                else if(value is string)
                 {
-                    if (value == null && value_Temp == null)
-                    {
-                        result_in.Add(@object);
-                        continue;
-                    }
-
-                    if (value == null || value_Temp == null)
-                    {
-                        result_out.Add(@object);
-                        continue;
-                    }
-
-                    if(value.GetType().Equals(value_Temp.GetType()))
-                    {
-                        if (value.Equals(value_Temp))
-                        {
-                            result_in.Add(@object);
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        if (value.GetType().IsPrimitive)
-                        {
-                            if (value.IsNumeric() && value_Temp.IsNumeric())
-                            {
-                                double value_1 = System.Convert.ToDouble(value);
-                                double value_2 = System.Convert.ToDouble(value_Temp);
-                                if (value_1.Equals(value_2))
-                                {
-                                    result_in.Add(@object);
-                                    continue;
-                                }
-                            }
-                        }
-
-                        if ((value_Temp is Enum && value is string) || (value is Enum && value_Temp is string))
-                        {
-                            if (value_Temp.ToString().Equals(value.ToString()))
-                            {
-                                result_in.Add(@object);
-                                continue;
-                            }
-                        }
-
-                        if ((value_Temp is bool && value is string) || (value is bool && value_Temp is string))
-                        {
-                            if (value_Temp.ToString().ToLower().Trim().Equals(value.ToString().ToLower().Trim()))
-                            {
-                                result_in.Add(@object);
-                                continue;
-                            }
-                        }
-
-                        if (value is string)
-                        {
-                            if(value.Equals(value_Temp?.ToString()))
-                            {
-                                result_in.Add(@object);
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            if (value == value_Temp || (value != null && value.Equals(value_Temp)))
-                            {
-                                result_in.Add(@object);
-                                continue;
-                            }
-                        }
-                    }
-
-
+                    if (!double.TryParse((string)value, out value_Double))
+                        value_Double = double.NaN;
                 }
 
-                result_out.Add(@object);
+                if(!double.IsNaN(value_Double))
+                {
+                    foreach (object @object in objects)
+                    {
+                        if (Core.Query.Compare(@object, name, value_Double, (NumberComparisonType)object_ComparisonType))
+                            result_in.Add(@object);
+                        else
+                            result_out.Add(@object);
+                    }
+                }
+            }
+            else if(object_ComparisonType is TextComparisonType)
+            {
+                foreach (object @object in objects)
+                {
+                    if (Core.Query.Compare(@object, name, value?.ToString(), (TextComparisonType)object_ComparisonType))
+                        result_in.Add(@object);
+                    else
+                        result_out.Add(@object);
+                }
             }
 
             dataAccess.SetDataList(0, result_in);
