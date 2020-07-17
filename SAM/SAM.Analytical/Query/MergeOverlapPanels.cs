@@ -151,8 +151,7 @@ namespace SAM.Analytical
                         List<Panel> redundantPanels_Temp = new List<Panel>();
 
                         List<Tuple<Polygon, Panel>> tuples_Polygon_Contains = tuples_Polygon.FindAll(x => x.Item1.Contains(point));
-                        int count = tuples_Polygon_Contains.Count;
-                        if (count == 0)
+                        if (tuples_Polygon_Contains.Count == 0)
                             continue;
 
                         tuples_Polygon_Contains.Sort((x, y) => x.Item1.Area.CompareTo(y.Item1.Area));
@@ -292,7 +291,12 @@ namespace SAM.Analytical
 
                     tuples_Polygon_Contains.Sort((x, y) => y.Item1.Area.CompareTo(x.Item1.Area));
 
+                    List<Tuple<Polygon, Panel>> tuples_Polygon_Contains_Unused = tuples_Polygon_Contains.FindAll(x => !guids.Contains(x.Item2.Guid));
+
                     Panel panel_Old = tuples_Polygon_Contains.First().Item2;
+                    if(tuples_Polygon_Contains_Unused.Count != 0)
+                        panel_Old = tuples_Polygon_Contains_Unused.First().Item2;
+
                     Polygon polygon_Old = tuples_Polygon_Contains.First().Item1;
                     redundantPanels_Temp.Remove(panel_Old);
 
