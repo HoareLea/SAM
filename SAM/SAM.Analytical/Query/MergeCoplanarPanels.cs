@@ -70,7 +70,7 @@ namespace SAM.Analytical
                 result.Remove(redundantPanels);
 
             if (mergedPanels != null && mergedPanels.Count != 0)
-                mergedPanels.ForEach(x => adjacencyCluster.AddObject(x));
+                mergedPanels.ForEach(x => result.AddObject(x));
 
             return result;
         }
