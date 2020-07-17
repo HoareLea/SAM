@@ -6,21 +6,21 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static bool TryGetConstruction(IEnumerable<Panel> panels, out Panel panel, out Construction construction, out PanelType panelType, int count = -1)
+        public static bool TryGetConstruction(IEnumerable<Panel> panels_All, IEnumerable<Panel> panels, out Panel panel, out Construction construction, out PanelType panelType)
         {
             construction = null;
             panel = null;
             panelType = Analytical.PanelType.Undefined;
 
-            if (panels == null || panels.Count() == 0)
+            if (panels_All == null || panels_All.Count() == 0)
                 return false;
 
-            panel = panels.First();
+            if (panels == null || panels.Count() == 0)
+                panel = panels_All.First();
+            else
+                panel = panels.First();
 
-            if (count == -1)
-                count = panels.Count();
-
-            if (count == 1)
+            if (panels_All.Count() == 1)
             {
                 if (PanelGroup(panel.PanelType) == Analytical.PanelGroup.Floor)
                 {
@@ -47,7 +47,10 @@ namespace SAM.Analytical
             {
                 List<Panel> panels_Temp = null;
 
-                panels_Temp = panels.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Wall);
+                panels_Temp = panels?.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Wall);
+                if(panels_Temp == null || panels_Temp.Count == 0)
+                    panels_Temp = panels_All?.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Wall);
+
                 if (panels_Temp != null && panels_Temp.Count > 0)
                 {
                     if (panels_Temp.Count == 1)
@@ -70,12 +73,15 @@ namespace SAM.Analytical
                     return true;
                 }
 
-                panels_Temp = panels.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Floor);
+                panels_Temp = panels?.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Floor);
+                if (panels_Temp == null || panels_Temp.Count == 0)
+                    panels_Temp = panels_All?.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Floor);
+
                 if (panels_Temp != null && panels_Temp.Count > 0)
                 {
                     if (panels_Temp.Count == 1)
                     {
-                        Panel panel_Roof = panels.ToList().Find(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Roof);
+                        Panel panel_Roof = panels_All.ToList().Find(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Roof);
                         if (panel_Roof != null)
                         {
                             //FloorInternal
@@ -107,11 +113,14 @@ namespace SAM.Analytical
                     return true;
                 }
 
-                panels_Temp = panels.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Roof);
+                panels_Temp = panels?.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Roof);
+                if (panels_Temp == null || panels_Temp.Count == 0)
+                    panels_Temp = panels_All?.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Roof);
+
                 if (panels_Temp != null && panels_Temp.Count > 1)
                 {
                     //FloorInternal
-                    panel = panels.ToList().Find(x => x.PanelType == Analytical.PanelType.FloorInternal);
+                    panel = panels_All.ToList().Find(x => x.PanelType == Analytical.PanelType.FloorInternal);
                     if (panel == null)
                         panel = panels_Temp.First();
 
@@ -120,7 +129,11 @@ namespace SAM.Analytical
                     return true;
                 }
 
-                panel = panels.First();
+                if (panels == null || panels.Count() == 0)
+                    panel = panels_All.First();
+                else
+                    panel = panels.First();
+
                 panelType = panel.PanelType;
                 construction = Construction(panelType);
             }
