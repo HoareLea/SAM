@@ -150,10 +150,12 @@ namespace SAM.Analytical
 
                         List<Panel> redundantPanels_Temp = new List<Panel>();
 
-                        List<Tuple<Polygon, Panel>> tuples_Polygon_Contains = tuples_Polygon.FindAll(x => x.Item1.Contains(point) || x.Item1.Contains(polygon.InteriorPoint));
+                        List<Tuple<Polygon, Panel>> tuples_Polygon_Contains = tuples_Polygon.FindAll(x => x.Item1.Contains(point));
                         int count = tuples_Polygon_Contains.Count;
                         if (count == 0)
                             continue;
+
+                        tuples_Polygon_Contains.Sort((x, y) => x.Item1.Area.CompareTo(y.Item1.Area));
 
                         Panel panel_Old = null;
                         if (setDefaultConstruction)
@@ -222,12 +224,15 @@ namespace SAM.Analytical
                                     continue;
 
                                 apertures.AddRange(apertures_Temp);
+
+                                if (redundantPanels.Find(x => x.Guid == panel_redundant.Guid) == null)
+                                    redundantPanels.Add(panel_redundant);
                             }
                         }
 
                         Panel panel_New = new Panel(guid, panel_Old, face3D, apertures);
 
-                        redundantPanels.AddRange(redundantPanels_Temp);
+                        //redundantPanels.AddRange(redundantPanels_Temp);
                         result.Add(panel_New);
                         guids.Add(guid);
                     }
