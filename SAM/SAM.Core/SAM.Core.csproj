@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Modify\ReleaseCOMObject.cs" />
     <Compile Include="Classes\Model\Address.cs" />
     <Compile Include="Classes\Model\Location.cs" />
     <Compile Include="Classes\Base\SAMColor.cs" />
