@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static bool TryGetConstruction(IEnumerable<Panel> panels, out Panel panel, out Construction construction, out PanelType panelType)
+        public static bool TryGetConstruction(IEnumerable<Panel> panels, out Panel panel, out Construction construction, out PanelType panelType, int count = -1)
         {
             construction = null;
             panel = null;
@@ -17,7 +17,10 @@ namespace SAM.Analytical
 
             panel = panels.First();
 
-            if (panels.Count() == 1)
+            if (count == -1)
+                count = panels.Count();
+
+            if (count == 1)
             {
                 if (PanelGroup(panel.PanelType) == Analytical.PanelGroup.Floor)
                 {

@@ -155,6 +155,8 @@ namespace SAM.Analytical
                         if (count == 0)
                             continue;
 
+                        tuples_Polygon_Contains.RemoveAll(x => guids.Contains(x.Item2.Guid));
+
                         tuples_Polygon_Contains.Sort((x, y) => x.Item1.Area.CompareTo(y.Item1.Area));
 
                         Panel panel_Old = null;
@@ -162,7 +164,7 @@ namespace SAM.Analytical
                         {
                             Construction construction = null;
                             PanelType panelType = Analytical.PanelType.Undefined;
-                            if (TryGetConstruction(tuples_Polygon_Contains.ConvertAll(x => x.Item2), out panel_Old, out construction, out panelType))
+                            if (TryGetConstruction(tuples_Polygon_Contains.ConvertAll(x => x.Item2), out panel_Old, out construction, out panelType, count))
                             {
                                 if (panel_Old != null && construction != null)
                                 {
