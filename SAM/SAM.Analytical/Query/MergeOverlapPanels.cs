@@ -234,6 +234,8 @@ namespace SAM.Analytical
                 }
             }
 
+            redundantPanels.RemoveAll(x => guids.Contains(x.Guid));
+
             return result;
         }
 
