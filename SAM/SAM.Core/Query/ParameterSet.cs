@@ -5,7 +5,7 @@ using System.Reflection;
 namespace SAM.Core
 {
     public static partial class Query
-    {
+    {        
         public static ParameterSet ParameterSet(this IEnumerable<ParameterSet> parameterSets, string name)
         {
             if (name == null || parameterSets == null)

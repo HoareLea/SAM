@@ -605,6 +605,12 @@ namespace SAM.Analytical
 
         public bool AddAperture(Aperture aperture)
         {
+            if (aperture == null)
+                return false;
+
+            if (aperture.PlanarBoundary3D == null)
+                apertures.Add(aperture);
+            
             if (!Query.IsValid(this, aperture))
                 return false;
 

@@ -8,6 +8,11 @@ namespace SAM.Core
 {
     public class SAMJsonCollection<T> : Collection<T> where T : IJSAMObject
     {
+        public SAMJsonCollection()
+        {
+
+        }
+        
         public SAMJsonCollection(string path)
         {
             FromJson(path);
