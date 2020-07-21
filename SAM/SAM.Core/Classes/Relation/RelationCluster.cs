@@ -390,6 +390,48 @@ namespace SAM.Core
             return result;
         }
 
+        public List<T> GetObjects<T>(GuidCollection guidCollection)
+        {
+            if (guidCollection == null)
+                return null;
+
+            List<T> result = new List<T>();
+            foreach(Guid guid in guidCollection)
+            {
+                object @object = GetObject(guid);
+                if (@object is T)
+                    result.Add((T)@object);
+                else
+                    result.Add(default);
+            }
+
+            return result;
+        }
+
+        public List<T> GetObjects<T>(GuidCollection guidCollection, Type type)
+        {
+            if (guidCollection == null)
+                return null;
+
+            string typeName = type.FullName;
+
+            Dictionary<Guid, object> dictionary = null;
+            if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
+                return null;
+
+            List<T> result = new List<T>();
+            foreach(Guid guid in guidCollection)
+            {
+                object @object = null;
+                if (dictionary.TryGetValue(guid, out @object) && @object is T)
+                    result.Add((T)@object);
+                else
+                    result.Add(default);
+            }
+
+            return result;
+        }
+
         public List<object> GetObjects(Type type)
         {
             if (!IsValid(type))

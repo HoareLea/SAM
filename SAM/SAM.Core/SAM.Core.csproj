@@ -49,8 +49,9 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
-    <Compile Include="Collections\GuidCollection.cs" />
-    <Compile Include="Collections\SAMCollection.cs" />
+    <Compile Include="Classes\Collections\GuidCollection.cs" />
+    <Compile Include="Classes\Collections\SAMCollection.cs" />
+    <Compile Include="Create\GuidCollection.cs" />
     <Compile Include="Create\ParameterSet.cs" />
     <Compile Include="Modify\ReleaseCOMObject.cs" />
     <Compile Include="Classes\Model\Address.cs" />
@@ -85,7 +86,7 @@
     <Compile Include="Classes\Graph\GraphEdge.cs" />
     <Compile Include="Classes\Graph\GraphNode.cs" />
     <Compile Include="Classes\Graph\GraphPath.cs" />
-    <Compile Include="Collections\SAMJsonCollection.cs" />
+    <Compile Include="Classes\Collections\SAMJsonCollection.cs" />
     <Compile Include="Convert\ToJson\Json.cs" />
     <Compile Include="Convert\ToSAM\IJSAMObjects.cs" />
     <Compile Include="Create\IJSAMObject.cs" />

@@ -5,24 +5,47 @@ using System.Collections.ObjectModel;
 
 namespace SAM.Core
 {
-    public class SAMCollection<T> : Collection<T>, ISAMObject where T : IJSAMObject
+    public class GuidCollection : Collection<Guid>, ISAMObject
     {
         private string name;
         private Guid guid;
         private List<ParameterSet> parameterSets;
 
-        public SAMCollection(T t)
+        public GuidCollection(string name)
         {
-            Add(t);
+            guid = Guid.NewGuid();
+            this.name = name;
+        }
+        
+        public GuidCollection(JObject jObject)
+        {
+            FromJObject(jObject);
         }
 
-        public SAMCollection(IEnumerable<T> ts)
+        public GuidCollection(GuidCollection guidCollection)
         {
-            if (ts == null)
+            name = guidCollection.name;
+            guid = guidCollection.guid;
+            parameterSets = guidCollection.parameterSets?.Clone();
+
+            foreach (Guid guid in guidCollection)
+                Add(guid);
+        }
+
+        public GuidCollection()
+        {
+            guid = Guid.NewGuid();
+        }
+
+        public GuidCollection(IEnumerable<Guid> guids)
+        {
+            guid = Guid.NewGuid();
+            
+            if (guids == null)
                 return;
 
-            foreach (T t in ts)
-                Add(t);
+            foreach (Guid guid in guids)
+                Add(guid);
         }
 
         public string Name
@@ -52,8 +75,8 @@ namespace SAM.Core
 
             if(jObject.ContainsKey("Collection"))
             {
-                foreach (JObject jObject_Collection in jObject.Value<JArray>("Collection"))
-                    Add(Create.IJSAMObject<T>(jObject_Collection));
+                foreach (JToken jToken in jObject.Value<JArray>("Collection"))
+                    Add(Query.Guid(jToken));
             }
 
             return true;
@@ -72,8 +95,8 @@ namespace SAM.Core
                 jObject.Add("ParameterSets", Create.JArray(parameterSets));
 
             JArray jArray = new JArray();
-            foreach (T t in this)
-                jArray.Add(t.ToJObject());
+            foreach (Guid guid in this)
+                jArray.Add(guid);
 
             jObject.Add("Collection", jArray);
 
