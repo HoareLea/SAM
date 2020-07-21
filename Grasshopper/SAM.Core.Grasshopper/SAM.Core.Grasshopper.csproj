@@ -80,6 +80,7 @@
     <Compile Include="Classes\GooRelationCluster.cs" />
     <Compile Include="Classes\GooSAMObject.cs" />
     <Compile Include="Classes\GooParameter.cs" />
+    <Compile Include="Component\SAMCoreRemoveGroup.cs" />
     <Compile Include="Component\SAMCoreAddGroup.cs" />
     <Compile Include="Component\SAMCoreTextComparisonType.cs" />
     <Compile Include="Component\SAMCoreNumberComparisonType.cs" />
