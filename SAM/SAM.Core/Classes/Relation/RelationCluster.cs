@@ -304,6 +304,17 @@ namespace SAM.Core
             return false;
         }
 
+        public List<GuidCollection> Groups
+        {
+            get
+            {
+                if (groups == null)
+                    return null;
+
+                return groups.ConvertAll(x => new GuidCollection(x));
+            }
+        }
+
         public bool Join(RelationCluster relationCluster)
         {
             if (relationCluster == null)

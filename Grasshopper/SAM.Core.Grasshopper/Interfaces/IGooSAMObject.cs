@@ -2,6 +2,6 @@
 {
     public interface IGooSAMObject
     {
-        SAMObject GetSAMObject();
+        ISAMObject GetSAMObject();
     }
 }

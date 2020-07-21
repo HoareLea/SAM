@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooSAMObject<T> : GH_Goo<T>, IGooSAMObject where T : SAMObject
+    public class GooSAMObject<T> : GH_Goo<T>, IGooSAMObject where T : ISAMObject
     {
         public GooSAMObject()
             : base()
@@ -71,7 +71,7 @@ namespace SAM.Core.Grasshopper
             return true;
         }
 
-        public SAMObject GetSAMObject()
+        public ISAMObject GetSAMObject()
         {
             return Value;
         }
@@ -99,7 +99,7 @@ namespace SAM.Core.Grasshopper
 
             if (typeof(IGooSAMObject).IsAssignableFrom(source.GetType()))
             {
-                SAMObject sAMObject = ((IGooSAMObject)source).GetSAMObject();
+                ISAMObject sAMObject = ((IGooSAMObject)source).GetSAMObject();
                 if (sAMObject is T)
                     Value = (T)sAMObject;
 
@@ -151,7 +151,7 @@ namespace SAM.Core.Grasshopper
         }
     }
 
-    public class GooSAMObjectParam<T> : GH_PersistentParam<GooSAMObject<T>> where T : SAMObject
+    public class GooSAMObjectParam<T> : GH_PersistentParam<GooSAMObject<T>> where T : ISAMObject
     {
         public override Guid ComponentGuid => new Guid("5af7e0dc-8d0c-4d51-8c85-6f2795c2fc37");
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
