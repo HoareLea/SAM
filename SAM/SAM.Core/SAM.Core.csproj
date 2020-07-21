@@ -51,6 +51,8 @@
     <Compile Include="Accuracy\Tolerance.cs" />
     <Compile Include="Classes\Collections\GuidCollection.cs" />
     <Compile Include="Classes\Collections\SAMCollection.cs" />
+    <Compile Include="Convert\ToColor\Color.cs" />
+    <Compile Include="Convert\ToUint\Uint.cs" />
     <Compile Include="Create\GuidCollection.cs" />
     <Compile Include="Create\ParameterSet.cs" />
     <Compile Include="Modify\ReleaseCOMObject.cs" />
