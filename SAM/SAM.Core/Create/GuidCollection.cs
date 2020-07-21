@@ -7,27 +7,27 @@ namespace SAM.Core
     {
         public static GuidCollection GuidCollection<T>(this IEnumerable<T> ts, string name = null, bool allowDuplicates = false) where T: ISAMObject
         {
-            if (ts == null)
-                return null;
-
             HashSet<Guid> guids = new HashSet<Guid>();
             GuidCollection result = new GuidCollection(name);
-            foreach(T t in ts)
+            if(ts != null)
             {
-                if (t == null)
-                    continue;
-
-                Guid guid = t.Guid;
-
-                if(!allowDuplicates)
+                foreach (T t in ts)
                 {
-                    if (guids.Contains(guid))
+                    if (t == null)
                         continue;
 
-                    guids.Add(guid);
-                }
+                    Guid guid = t.Guid;
 
-                result.Add(guid);
+                    if (!allowDuplicates)
+                    {
+                        if (guids.Contains(guid))
+                            continue;
+
+                        guids.Add(guid);
+                    }
+
+                    result.Add(guid);
+                }
             }
 
             return result;
