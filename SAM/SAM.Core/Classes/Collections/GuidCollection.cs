@@ -11,10 +11,12 @@ namespace SAM.Core
         private Guid guid;
         private List<ParameterSet> parameterSets;
 
-        public GuidCollection(string name)
+        public GuidCollection(string name, ParameterSet parameterSet)
         {
             guid = Guid.NewGuid();
             this.name = name;
+            if (parameterSet != null)
+                parameterSets = new List<ParameterSet>() { parameterSet };
         }
         
         public GuidCollection(JObject jObject)

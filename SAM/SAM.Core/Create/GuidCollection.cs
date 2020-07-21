@@ -5,10 +5,10 @@ namespace SAM.Core
 {
     public static partial class Create
     {
-        public static GuidCollection GuidCollection<T>(this IEnumerable<T> ts, string name = null, bool allowDuplicates = false) where T: ISAMObject
+        public static GuidCollection GuidCollection<T>(this IEnumerable<T> ts, string name = null, ParameterSet parameterSet = null, bool allowDuplicates = false) where T: ISAMObject
         {
             HashSet<Guid> guids = new HashSet<Guid>();
-            GuidCollection result = new GuidCollection(name);
+            GuidCollection result = new GuidCollection(name, parameterSet);
             if(ts != null)
             {
                 foreach (T t in ts)

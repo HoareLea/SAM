@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace SAM.Core
 {
@@ -208,9 +207,9 @@ namespace SAM.Core
             return true;
         }
 
-        public GuidCollection AddGroup<T>(IEnumerable<T> objects, string name = null)
+        public GuidCollection AddGroup<T>(IEnumerable<T> objects, string name = null, ParameterSet parameterSet = null)
         {
-            GuidCollection result = new GuidCollection(name);
+            GuidCollection result = new GuidCollection(name, parameterSet);
             if(objects != null)
             {
                 foreach(T @object in objects)
