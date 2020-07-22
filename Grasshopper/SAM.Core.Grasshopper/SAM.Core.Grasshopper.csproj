@@ -144,7 +144,9 @@
   <ItemGroup>
     <None Include="Resources\SAM_Get.Filterpng.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\SAM_Inspect.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\SAM_Names.png" />
   </ItemGroup>

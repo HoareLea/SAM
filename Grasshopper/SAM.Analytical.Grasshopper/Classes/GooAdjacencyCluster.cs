@@ -36,14 +36,29 @@ namespace SAM.Analytical.Grasshopper
                 if (panels != null)
                 {
                     foreach (Panel panel in panels)
-                        boundingBox3Ds.Add(panel.GetBoundingBox());
+                    {
+                        Geometry.Spatial.BoundingBox3D boundingBox3D = panel?.GetBoundingBox();
+                        if (boundingBox3D == null)
+                            continue;
+
+                        boundingBox3Ds.Add(boundingBox3D);
+                    }
                 }
 
                 IEnumerable<Space> spaces = Value.GetSpaces();
                 if (spaces != null)
                 {
                     foreach (Space space in spaces)
-                        boundingBox3Ds.Add(space.Location.GetBoundingBox(1));
+                    {
+                        if (space == null)
+                            continue;
+
+                        Geometry.Spatial.Point3D location = space.Location;
+                        if (location == null)
+                            continue;
+
+                        boundingBox3Ds.Add(location.GetBoundingBox(1));
+                    }
                 }
 
                 if (boundingBox3Ds == null)
