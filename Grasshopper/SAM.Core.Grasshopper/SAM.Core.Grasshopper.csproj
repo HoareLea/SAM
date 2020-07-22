@@ -145,10 +145,10 @@
     <None Include="Resources\SAM_Get.Filterpng.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\SAM_Inspect.png" />
+    <None Include="Resources\SAM_Names.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\SAM_Names.png" />
+    <None Include="Resources\SAM_Inspect.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
