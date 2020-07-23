@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace SAM.Analytical
 {
@@ -164,9 +163,102 @@ namespace SAM.Analytical
             return GetRelatedObjects<Panel>(space);
         }
 
+        public List<Panel> GetPanels(Construction construction)
+        {
+            if (construction == null)
+                return null;
+
+            List<Panel> panels = GetPanels();
+            if (panels == null)
+                return null;
+
+            List<Panel> result = new List<Panel>();
+            foreach (Panel panel in panels)
+            {
+                if (panel == null)
+                    continue;
+
+                if (panel.SAMTypeGuid != construction.Guid)
+                    continue;
+
+                result.Add(panel);
+            }
+
+            return result;
+        }
+
         public List<Space> GetSpaces()
         {
             return GetObjects<Space>();
+        }
+
+        public List<Construction> GetConstructions()
+        {
+            List<Panel> panels = GetPanels();
+            if (panels == null)
+                return null;
+
+            Dictionary<Guid, Construction> dictionary = new Dictionary<Guid, Construction>();
+            foreach(Panel panel in panels)
+            {
+                if (panel == null)
+                    continue;
+
+                Guid guid = panel.SAMTypeGuid;
+                if (guid == Guid.Empty)
+                    continue;
+
+                if (dictionary.ContainsKey(guid))
+                    continue;
+
+                Construction construction = panel.Construction;
+                if (construction == null)
+                    continue;
+
+                dictionary[guid] = construction;
+            }
+
+            return dictionary.Values.ToList();
+        }
+
+        public List<ApertureConstruction> GetApertureConstructions()
+        {
+            List<Panel> panels = GetPanels();
+            if (panels == null)
+                return null;
+
+            Dictionary<Guid, ApertureConstruction> dictionary = new Dictionary<Guid, ApertureConstruction>();
+            foreach (Panel panel in panels)
+            {
+                if (panel == null)
+                    continue;
+
+                List<Aperture> apertures = panel.Apertures;
+                if (apertures == null || apertures.Count == 0)
+                    continue;
+
+                foreach(Aperture aperture in apertures)
+                {
+                    if (aperture == null)
+                        continue;
+
+                    Guid guid = aperture.SAMTypeGuid;
+                    if (guid == Guid.Empty)
+                        continue;
+
+                    if (dictionary.ContainsKey(guid))
+                        continue;
+
+                    ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
+                    if (apertureConstruction == null)
+                        continue;
+
+                    dictionary[guid] = apertureConstruction;
+
+                }
+            }
+
+            return dictionary.Values.ToList();
         }
 
         public List<List<Space>> GetSpaces(IEnumerable<Geometry.Spatial.Point3D> point3Ds, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)

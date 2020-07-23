@@ -64,6 +64,17 @@ namespace SAM.Core
             }
         }
 
+        public Guid SAMTypeGuid
+        {
+            get
+            {
+                if (sAMType == null)
+                    return Guid.Empty;
+
+                return sAMType.Guid;
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

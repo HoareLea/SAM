@@ -173,5 +173,22 @@ namespace SAM.Analytical
         {
             return ParameterName_FrameWidth(ActiveSetting.Setting);
         }
+
+        public static string ParameterName_NorthAngle(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_NorthAngle, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_NorthAngle()
+        {
+            return ParameterName_NorthAngle(ActiveSetting.Setting);
+        }
     }
 }

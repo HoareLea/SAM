@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SAM.Core
 {
@@ -25,6 +26,153 @@ namespace SAM.Core
 
             result = (T)(object)(value);
             return true;
+        }
+
+        public static bool TryGetValue<T>(this object @object, string name, out T value, bool tryConvert)
+        {
+            if (!tryConvert)
+                return TryGetValue(@object, name, out value);
+
+            value = default;
+
+            object object_Value = null;
+
+            bool result = TryGetValue(@object, name, out object_Value);
+            if (!result)
+                return result;
+                
+            if(object_Value is T)
+            {
+                value = (T)object_Value;
+                return true;
+            }
+
+            if(value is bool)
+            {
+                if(object_Value is string)
+                {
+                    bool @bool;
+                    if(bool.TryParse((string)object_Value, out @bool))
+                    {
+                        value = (T)(object)@bool;
+                        return true;
+                    }
+                    
+                    string @string = ((string)object_Value).Trim().ToUpper();
+                    value = (T)(object)(@string.Equals("1") || @string.Equals("YES") || @string.Equals("TRUE"));
+                    return true;
+                } 
+                else if(IsNumeric(object_Value))
+                {
+                    value = (T)(object)(System.Convert.ToInt64(object_Value) == 1);
+                    return true;
+                }
+            }
+            else if(value is int)
+            {
+                if (object_Value is string)
+                {
+                    int @int;
+                    if (int.TryParse((string)object_Value, out @int))
+                    {
+                        value = (T)(object)@int;
+                        return true;
+                    }
+                }
+                else if (IsNumeric(object_Value))
+                {
+                    value = (T)(object)(System.Convert.ToInt32(object_Value));
+                    return true;
+                }
+            }
+            else if (value is double)
+            {
+                if (object_Value is string)
+                {
+                    double @double;
+                    if (double.TryParse((string)object_Value, out @double))
+                    {
+                        value = (T)(object)@double;
+                        return true;
+                    }
+                }
+                else if (IsNumeric(object_Value))
+                {
+                    value = (T)(object)(System.Convert.ToDouble(object_Value));
+                    return true;
+                }
+            }
+            else if (value is uint)
+            {
+                if (object_Value is string)
+                {
+                    uint @uint;
+                    if (uint.TryParse((string)object_Value, out @uint))
+                    {
+                        value = (T)(object)@uint;
+                        return true;
+                    }
+                }
+                else if (IsNumeric(object_Value))
+                {
+                    value = (T)(object)(System.Convert.ToUInt32(object_Value));
+                    return true;
+                }
+            }
+            else if (value is short)
+            {
+                if (object_Value is string)
+                {
+                    short @short;
+                    if (short.TryParse((string)object_Value, out @short))
+                    {
+                        value = (T)(object)@short;
+                        return true;
+                    }
+                }
+                else if (IsNumeric(object_Value))
+                {
+                    value = (T)(object)(System.Convert.ToInt16(object_Value));
+                    return true;
+                }
+            }
+            else if (value is int)
+            {
+                if (object_Value is string)
+                {
+                    int @int;
+                    if (int.TryParse((string)object_Value, out @int))
+                    {
+                        value = (T)(object)@int;
+                        return true;
+                    }
+                }
+                else if (IsNumeric(object_Value))
+                {
+                    value = (T)(object)(System.Convert.ToInt16(object_Value));
+                    return true;
+                }
+            }
+            else if (value is long)
+            {
+                if (object_Value is string)
+                {
+                    long @long;
+                    if (long.TryParse((string)object_Value, out @long))
+                    {
+                        value = (T)(object)@long;
+                        return true;
+                    }
+                }
+                else if (IsNumeric(object_Value))
+                {
+                    value = (T)(object)(System.Convert.ToInt32(object_Value));
+                    return true;
+                }
+            }
+
+            value = default;
+            return false;
         }
 
         public static bool TryGetValue(this object @object, string name, out object value)
