@@ -30,6 +30,18 @@ namespace SAM.Analytical
             public const string ApertureConstruction_ExternalDoors = "ApertureConstruction_ExternalDoors";
             public const string ApertureConstruction_InternalDoors = "ApertureConstruction_InternalDoors";
             public const string ApertureConstruction_Skylight = "ApertureConstruction_Skylight";
+
+            public const string ParameterName_PanelType = "ParameterName_PanelType";
+            public const string ParameterName_Height = "ParameterName_Height";
+            public const string ParameterName_Width = "ParameterName_Width";
+            public const string ParameterName_Thickness = "ParameterName_Thickness";
+            public const string ParameterName_Color = "ParameterName_Color";
+            public const string ParameterName_Transparent = "ParameterName_Transparent";
+            public const string ParameterName_InternalShadows = "ParameterName_InternalShadows";
+            public const string ParameterName_Ground = "ParameterName_Ground";
+            public const string ParameterName_Air = "ParameterName_Air";
+            public const string ParameterName_FrameWidth = "ParameterName_FrameWidth";
+            public const string ParameterName_NorthAngle = "ParameterName_NorthAngle";
         }
 
         private static Setting setting = Load();
@@ -54,6 +66,18 @@ namespace SAM.Analytical
         public static Setting GetDefault()
         {
             Setting result = new Setting(Assembly.GetExecutingAssembly());
+
+            result.Add(Name.ParameterName_PanelType, "SAM_BuildingElementType");
+            result.Add(Name.ParameterName_Height, "SAM_BuildingElementHeight");
+            result.Add(Name.ParameterName_Width, "SAM_BuildingElementWidth");
+            result.Add(Name.ParameterName_Thickness, "SAM_BuildingElementThickness");
+            result.Add(Name.ParameterName_Color, "SAM_BuildingElementColor");
+            result.Add(Name.ParameterName_Transparent, "SAM_BuildingElementTransparent");
+            result.Add(Name.ParameterName_InternalShadows, "SAM_BuildingElementInternalShadows");
+            result.Add(Name.ParameterName_Ground, "SAM_BuildingElementGround");
+            result.Add(Name.ParameterName_Air, "SAM_BuildingElementAir");
+            result.Add(Name.ParameterName_FrameWidth, "SAM_BuildingElementFrameWidth");
+            result.Add(Name.ParameterName_NorthAngle, "SAM_NorthAngle");
 
             //Default Constructions
             result.Add(Name.Construction_Ceiling, new Construction(new System.Guid("6ff47aad-ec17-4806-8e81-e84b10d5756a"), "Generic"));
