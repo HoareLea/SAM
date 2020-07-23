@@ -70,7 +70,7 @@ namespace SAM.Analytical
                 address = new Address(analyticalModel.address);
 
             if (adjacencyCluster != null)
-                adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+                this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
         }
 
         public Location Location
@@ -104,6 +104,9 @@ namespace SAM.Analytical
         {
             get
             {
+                if (adjacencyCluster == null)
+                    return null;
+                
                 return new AdjacencyCluster(adjacencyCluster);
             }
         }
