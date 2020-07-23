@@ -89,7 +89,7 @@
     <Compile Include="Classes\Graph\GraphNode.cs" />
     <Compile Include="Classes\Graph\GraphPath.cs" />
     <Compile Include="Classes\Collections\SAMJsonCollection.cs" />
-    <Compile Include="Convert\ToJson\Json.cs" />
+    <Compile Include="Convert\ToString\String.cs" />
     <Compile Include="Convert\ToSAM\IJSAMObjects.cs" />
     <Compile Include="Create\IJSAMObject.cs" />
     <Compile Include="Create\IJSAMObjects.cs" />

@@ -34,7 +34,7 @@ namespace SAM.Core
                 }
 
                 if (value is ISAMObject)
-                    values.Add(((ISAMObject)value).ToJson());
+                    values.Add(ToString(((ISAMObject)value)));
                 else
                     values.Add(value.ToString());
             }

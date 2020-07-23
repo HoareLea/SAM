@@ -51,7 +51,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddTextParameter("Json", "Json", "Json", GH_ParamAccess.list);
+            outputParamManager.AddTextParameter("String", "String", "String", GH_ParamAccess.item);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
         }
 
@@ -99,12 +99,12 @@ namespace SAM.Core.Grasshopper
                     jSAMObjects.Add((IJSAMObject)@object);
             }
 
-            string json = Core.Convert.ToJson(jSAMObjects);
+            string @string = Core.Convert.ToString(jSAMObjects);
 
             if (!string.IsNullOrWhiteSpace(path))
-                System.IO.File.WriteAllText(path, json);
+                System.IO.File.WriteAllText(path, @string);
 
-            dataAccess.SetData(0, json);
+            dataAccess.SetData(0, @string);
             dataAccess.SetData(1, true);
         }
     }
