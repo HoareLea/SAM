@@ -6,25 +6,25 @@ namespace SAM.Core
     {
         public static uint ToUint(this Color color)
         {
-            return (uint)((color.R << 16) | (color.G << 8) | (color.B << 0));
+            return (uint)((color.B << 16) | (color.G << 8) | (color.R << 0));
         }
 
         public static uint ToUint(this Color color, bool includeAlpha)
         {
             if (includeAlpha)
-                return (uint)((color.A << 24) | (color.R << 16) | (color.G << 8) | (color.B << 0));
+                return (uint)((color.A << 24) | (color.B << 16) | (color.G << 8) | (color.R << 0));
             else
                 return ToUint(color);
         }
 
         public static uint ToUint(this byte a, byte r, byte g, byte b)
         {
-            return (uint)((a << 24) | (r << 16) | (g << 8) | (b << 0));
+            return (uint)((a << 24) | (b << 16) | (g << 8) | (r << 0));
         }
 
         public static uint ToUint(this byte r, byte g, byte b)
         {
-            return (uint)((r << 16) | (g << 8) | (b << 0));
+            return (uint)((b << 16) | (g << 8) | (r << 0));
         }
     }
 }

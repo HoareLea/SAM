@@ -31,9 +31,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            int index = inputParamManager.AddIntegerParameter("a_", "a_", "Alpha", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
-
+            inputParamManager.AddIntegerParameter("a_", "a_", "Alpha", GH_ParamAccess.item, 255);
             inputParamManager.AddIntegerParameter("_r", "_r", "Red", GH_ParamAccess.item);
             inputParamManager.AddIntegerParameter("_g", "_g", "Green", GH_ParamAccess.item);
             inputParamManager.AddIntegerParameter("_b", "_b", "Blue", GH_ParamAccess.item);
@@ -55,28 +53,31 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            int @a = int.MinValue;
-            if (!dataAccess.GetData(0, ref @a))
-                a = int.MinValue;
+            int a = 255;
+            if (!dataAccess.GetData(0, ref a))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            int @r = int.MinValue;
-            if (!dataAccess.GetData(1, ref @r))
+            int r = int.MinValue;
+            if (!dataAccess.GetData(1, ref r))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
 
-            int @g = int.MinValue;
-            if (!dataAccess.GetData(2, ref @g))
+            int g = int.MinValue;
+            if (!dataAccess.GetData(2, ref g))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
 
-            int @b = int.MinValue;
-            if (!dataAccess.GetData(3, ref @b))
+            int b = int.MinValue;
+            if (!dataAccess.GetData(3, ref b))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
