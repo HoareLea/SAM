@@ -60,7 +60,7 @@ namespace SAM.Core.Grasshopper
                 a = int.MinValue;
 
             int @r = int.MinValue;
-            if (!dataAccess.GetData(0, ref @r))
+            if (!dataAccess.GetData(1, ref @r))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -68,7 +68,7 @@ namespace SAM.Core.Grasshopper
 
 
             int @g = int.MinValue;
-            if (!dataAccess.GetData(0, ref @g))
+            if (!dataAccess.GetData(2, ref @g))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -76,7 +76,7 @@ namespace SAM.Core.Grasshopper
 
 
             int @b = int.MinValue;
-            if (!dataAccess.GetData(0, ref @b))
+            if (!dataAccess.GetData(3, ref @b))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
