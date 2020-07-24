@@ -90,6 +90,7 @@
     <Compile Include="Component\SAMCoreGetNames.cs" />
     <Compile Include="Component\SAMCoreAddObjects.cs" />
     <Compile Include="Component\SAMCoreRelatedObjects.cs" />
+    <Compile Include="Component\SAMCoreARGBToUint.cs" />
     <Compile Include="Component\SAMCoreUintToARGB.cs" />
     <Compile Include="Component\SAMCoreToList.cs" />
     <Compile Include="Component\SAMCoreToCsv.cs" />

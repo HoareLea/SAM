@@ -20,7 +20,7 @@ namespace SAM.Core.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMCoreUintToARGB()
-          : base("UintToARGB", "UintARGB",
+          : base("UintToARGB", "UintToARGB",
               "Converts Uint to ARGB",
               "SAM", "Core")
         {
