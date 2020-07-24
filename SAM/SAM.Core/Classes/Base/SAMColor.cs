@@ -25,6 +25,11 @@ namespace SAM.Core
             blue = sAMColor.blue;
         }
 
+        public SAMColor(JObject jObject)
+        {
+            FromJObject(jObject);
+        }
+
         public SAMColor(byte alpha, byte red, byte green, byte blue)
         {
             this.alpha = alpha;
