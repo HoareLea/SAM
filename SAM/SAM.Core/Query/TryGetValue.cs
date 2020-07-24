@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -101,6 +102,24 @@ namespace SAM.Core
                     value = (T)(object)(System.Convert.ToDouble(object_Value));
                     return true;
                 }
+                else if(object_Value is bool)
+                {
+                    double @double = 0;
+                    if ((bool)object_Value)
+                        @double = 1;
+                    
+                    value = (T)(object)@double;
+                    return true;
+                }
+                else if(object_Value is int)
+                {
+                    int @int = 0;
+                    if ((bool)object_Value)
+                        @int = 1;
+
+                    value = (T)(object)@int;
+                    return true;
+                }
             }
             else if (value is uint)
             {
@@ -167,6 +186,55 @@ namespace SAM.Core
                 else if (IsNumeric(object_Value))
                 {
                     value = (T)(object)(System.Convert.ToInt32(object_Value));
+                    return true;
+                }
+            }
+            else if(value is Guid)
+            {
+                if(object_Value is string)
+                {
+                    Guid guid;
+                    if(System.Guid.TryParse((string)object_Value, out guid))
+                    {
+                        value = (T)(object)guid;
+                        return true;
+                    }
+                }
+            }
+            else if(value is DateTime)
+            {
+                if (object_Value is string)
+                {
+                    DateTime dateTime;
+                    if (System.DateTime.TryParse((string)object_Value, out dateTime))
+                    {
+                        value = (T)(object)dateTime;
+                        return true;
+                    }
+                }
+                else if(IsNumeric(object_Value))
+                {
+                    if(object_Value is double)
+                        value = (T)(object)DateTime.FromOADate((double)object_Value);
+                    else
+                        value = (T)(object) (new DateTime(System.Convert.ToInt64(object_Value)));
+
+                    return true;
+                }
+            }
+            else if(typeof(IJSAMObject).IsAssignableFrom(typeof(T)))
+            {
+                if(object_Value is string)
+                {
+                    value = (T)(object)Convert.ToSAM((string)object_Value);
+                    return true;
+                }
+            }
+            else if(typeof(JObject).IsAssignableFrom(typeof(T)))
+            {
+                if(object_Value is string)
+                {
+                    value = (T)(object)JObject.Parse((string)object_Value);
                     return true;
                 }
             }
