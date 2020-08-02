@@ -1,5 +1,6 @@
 ﻿using ClipperLib;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -183,6 +184,29 @@ namespace SAM.Geometry.Planar
             {
                 Polygon2D polygon2D_Temp = polygon2Ds_Temp[i];
 
+                //2020.08.02 START
+                List<Point2D> point2Ds = polygon2D_Temp.Points;
+                if (point2Ds == null || point2Ds.Count < 3)
+                    continue;
+
+                bool remove = false;
+                foreach (Point2D point2D in point2Ds)
+                {
+                    List<double> distances = segment2Ds.ConvertAll(x => x.Distance(point2D));
+                    double distance_Min = distances.Min();
+                    int index_Min = distances.IndexOf(distance_Min);
+                    double offset = offsets[index_Min];
+                    if (distance_Min < offset - tolerance)
+                    {
+                        remove = true;
+                        break;
+                    }
+                }
+
+                if (remove)
+                    continue;
+                //2020.08.02 END
+
                 List<Segment2D> segment2Ds_Temp = IntersectionSegment2Ds(polygon2D, polygon2D_Temp, false, tolerance);
                 if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
                 {
@@ -190,7 +214,7 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                bool remove = false;
+                remove = false;
                 foreach (Segment2D Segment2Ds in segment2Ds_Temp)
                 {
                     Point2D point2D = Segment2Ds.Mid();
@@ -202,8 +226,10 @@ namespace SAM.Geometry.Planar
                     }
                 }
 
-                if (!remove)
-                    polygon2Ds.Add(polygon2D_Temp);
+                if (remove)
+                    continue;
+
+                polygon2Ds.Add(polygon2D_Temp);
             }
 
             polygon2Ds = ExternalPolygon2Ds(polygon2Ds, tolerance);//new PointGraph2D(polygon2Ds, false, tolerance).GetPolygon2Ds_External();
