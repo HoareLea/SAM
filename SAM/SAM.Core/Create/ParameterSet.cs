@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SAM.Core
 {
@@ -10,11 +11,19 @@ namespace SAM.Core
             if (@object == null || names == null)
                 return null;
 
-            ParameterSet result = new ParameterSet(@object.GetType()?.Assembly);
+            return ParameterSet(@object, @object.GetType()?.Assembly, names);
+        }
 
-            foreach(string name in names)
+        public static ParameterSet ParameterSet(this object @object, Assembly assembly, IEnumerable<string> names)
+        {
+            if (@object == null || names == null)
+                return null;
+
+            ParameterSet result = new ParameterSet(assembly);
+
+            foreach (string name in names)
             {
-                object value = null; 
+                object value = null;
 
                 if (!Query.TryGetValue(@object, name, out value))
                     continue;
@@ -29,6 +38,14 @@ namespace SAM.Core
         {
             if (@object == null || mapCluster == null)
                 return null;
+            
+            return ParameterSet(@object, @object.GetType().Assembly, type_destination, mapCluster);
+        }
+
+        public static ParameterSet ParameterSet(this object @object, Assembly assembly, Type type_destination, MapCluster mapCluster)
+        {
+            if (@object == null || mapCluster == null || assembly == null)
+                return null;
 
             Type type_source = @object.GetType();
 
@@ -36,7 +53,7 @@ namespace SAM.Core
             if (names == null)
                 return null;
 
-            ParameterSet result = new ParameterSet(type_source.Assembly);
+            ParameterSet result = new ParameterSet(assembly);
 
             foreach (string name in names)
             {

@@ -128,6 +128,11 @@ namespace SAM.Core
             return Query.ParameterSet(parameterSets, assembly);
         }
 
+        public ParameterSet GetParameterSet(Guid guid)
+        {
+            return Query.ParameterSet(parameterSets, guid);
+        }
+
         public bool Add(ParameterSet parameterSet)
         {
             if (parameterSet == null)

@@ -190,5 +190,56 @@ namespace SAM.Analytical
         {
             return ParameterName_NorthAngle(ActiveSetting.Setting);
         }
+
+        public static string ParameterName_SpaceName(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_SpaceName, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_SpaceName()
+        {
+            return ParameterName_SpaceName(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_FacingExternal(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_FacingExternal, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_FacingExternal()
+        {
+            return ParameterName_FacingExternal(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_FacingExternalGlazing(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_FacingExternalGlazing, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_FacingExternalGlazing()
+        {
+            return ParameterName_FacingExternalGlazing(ActiveSetting.Setting);
+        }
     }
 }
