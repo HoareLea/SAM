@@ -184,6 +184,18 @@ namespace SAM.Analytical
             }
         }
 
+        public ApertureType ApertureType
+        {
+            get
+            {
+                ApertureConstruction apertureConstruction = ApertureConstruction;
+                if (apertureConstruction == null)
+                    return ApertureType.Undefined;
+
+                return apertureConstruction.ApertureType;
+            }
+        }
+
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             return GetFace3D().GetBoundingBox(offset);

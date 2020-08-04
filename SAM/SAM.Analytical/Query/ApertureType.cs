@@ -31,6 +31,16 @@ namespace SAM.Analytical
             if (@object is int)
                 return (ApertureType)(int)(@object);
 
+            if (@object is Aperture)
+            {
+                ApertureConstruction apertureConstruction = ((Aperture)@object).ApertureConstruction;
+                if (apertureConstruction != null)
+                    return apertureConstruction.ApertureType;
+            }
+
+            if (@object is ApertureConstruction)
+                return ((ApertureConstruction)@object).ApertureType;
+
             return Analytical.ApertureType.Undefined;
         }
     }

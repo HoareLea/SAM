@@ -99,6 +99,7 @@
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Component\SAMAnalyticalGetAdjacentSpaceNames.cs" />
+    <Compile Include="Component\SAMAnalyticalApertureConstructions.cs" />
     <Compile Include="Component\SAMAnalyticalPanelLocation.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateNormals.cs" />
     <Compile Include="Component\SAMAnalyticalGetSpace.cs" />
