@@ -146,6 +146,15 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Add(string name, JArray jArray)
+        {
+            if (dictionary == null || name == null)
+                return false;
+
+            dictionary[name] = jArray;
+            return true;
+        }
+
         public bool Copy(ParameterSet parameterSet)
         {
             if (parameterSet == null)
@@ -248,6 +257,15 @@ namespace SAM.Core
         public JObject ToJObject(string name)
         {
             JObject result;
+            if (!Query.TryGetValue(dictionary, name, out result))
+                return result;
+
+            return null;
+        }
+
+        public JArray ToJArray(string name)
+        {
+            JArray result;
             if (!Query.TryGetValue(dictionary, name, out result))
                 return result;
 
@@ -363,6 +381,10 @@ namespace SAM.Core
                         else
                             dictionary[jObject_Temp.Value<string>("Name")] = jSAMObject;
                         break;
+
+                    case JTokenType.Array:
+                        dictionary[jObject_Temp.Value<string>("Name")] = (JArray)jToken;
+                        break;
                 }
             }
 
@@ -387,6 +409,8 @@ namespace SAM.Core
                 {
                     if (keyValuePair.Value is IJSAMObject)
                         jObject_Temp.Add("Value", ((IJSAMObject)keyValuePair.Value).ToJObject());
+                    else if(keyValuePair.Value is JArray)
+                        jObject_Temp.Add("Value", (JArray)keyValuePair.Value);
                     else
                         jObject_Temp.Add("Value", keyValuePair.Value as dynamic);
                 }
