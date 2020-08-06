@@ -65,7 +65,7 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, false);
+            dataAccess.SetData(1, false);
 
             SAMObject sAMObject = null;
             if(!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
@@ -124,8 +124,8 @@ namespace SAM.Analytical.Grasshopper
 
             List<ApertureConstruction> apertureConstructions = Analytical.Query.ApertureConstructions(panels, apertureType, panelType);
 
-            dataAccess.SetDataList(1, apertureConstructions?.ConvertAll(x => new GooApertureConstruction(x)));
-            dataAccess.SetData(0, apertureConstructions != null);
+            dataAccess.SetDataList(0, apertureConstructions?.ConvertAll(x => new GooApertureConstruction(x)));
+            dataAccess.SetData(1, apertureConstructions != null);
         }
     }
 }
