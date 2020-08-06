@@ -41,10 +41,10 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object ie.Panel, AdjacencyCluster", GH_ParamAccess.item);
             
-            index = inputParamManager.AddGenericParameter("panelType", "panelType", "panelType", GH_ParamAccess.item);
+            index = inputParamManager.AddGenericParameter("panelType_", "panelType_", "PanelType", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddGenericParameter("apertureType", "apertureType", "apertureType", GH_ParamAccess.item);
+            index = inputParamManager.AddGenericParameter("apertureType_", "apertureType_", "ApertureType", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
         }
 
@@ -54,6 +54,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new GooApertureConstructionParam(), "ApertureConstructions", "ApertureConstructions", "SAM Analytical Aperture Constructions", GH_ParamAccess.list);
+            outputParamManager.AddBooleanParameter("Successful", "Successful", "Successful", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -64,6 +65,8 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            dataAccess.SetData(0, false);
+
             SAMObject sAMObject = null;
             if(!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
             {
@@ -121,7 +124,8 @@ namespace SAM.Analytical.Grasshopper
 
             List<ApertureConstruction> apertureConstructions = Analytical.Query.ApertureConstructions(panels, apertureType, panelType);
 
-            dataAccess.SetDataList(0, apertureConstructions?.ConvertAll(x => new GooApertureConstruction(x)));
+            dataAccess.SetDataList(1, apertureConstructions?.ConvertAll(x => new GooApertureConstruction(x)));
+            dataAccess.SetData(0, apertureConstructions != null);
         }
     }
 }
