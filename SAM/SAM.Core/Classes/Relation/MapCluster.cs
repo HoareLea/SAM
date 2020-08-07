@@ -30,9 +30,6 @@ namespace SAM.Core
             if (type_1 == null || type_2 == null || string.IsNullOrEmpty(name_1) || string.IsNullOrEmpty(name_2))
                 return false;
 
-            string fullName_1 = Query.FullName(type_1);
-            string fullName_2 = Query.FullName(type_2);
-
             return Add(type_1.FullName, type_2.FullName, name_1, name_2);
         }
         

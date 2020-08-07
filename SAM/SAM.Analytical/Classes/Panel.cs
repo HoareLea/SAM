@@ -227,8 +227,8 @@ namespace SAM.Analytical
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
-        {
-            return GetFace3D().GetBoundingBox(offset);
+        {           
+            return GetFace3D()?.GetBoundingBox(offset);
         }
 
         public Construction Construction
