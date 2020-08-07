@@ -71,5 +71,33 @@ namespace SAM.Core
 
             return result;
         }
+
+        public static ParameterSet ParameterSet(this object @object, Assembly assembly, string typeName_1, string typeName_2, MapCluster mapCluster)
+        {
+            if (@object == null || assembly == null || mapCluster == null || string.IsNullOrWhiteSpace(typeName_1) || string.IsNullOrWhiteSpace(typeName_2))
+                return null;
+
+            List<string> names = mapCluster.GetNames(typeName_1, typeName_2);
+            if (names == null)
+                return null;
+
+            ParameterSet result = new ParameterSet(assembly);
+
+            foreach (string name in names)
+            {
+                string name_destination = mapCluster.GetName(typeName_1, typeName_2, name);
+                if (string.IsNullOrWhiteSpace(name_destination))
+                    continue;
+
+                object value = null;
+
+                if (!Query.TryGetValue(@object, name, out value))
+                    continue;
+
+                result.Add(name_destination, value as dynamic);
+            }
+
+            return result;
+        }
     }
 }
