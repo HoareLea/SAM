@@ -94,8 +94,11 @@
     <Compile Include="Query\ApertureHosts.cs" />
     <Compile Include="Query\ExposedToSun.cs" />
     <Compile Include="Query\Azimuth.cs" />
+    <Compile Include="Query\Ground.cs" />
+    <Compile Include="Query\Internal.cs" />
     <Compile Include="Query\ParameterName.cs" />
     <Compile Include="Modify\SetConstructionByName.cs" />
+    <Compile Include="Query\External.cs" />
     <Compile Include="Query\Tilt.cs" />
     <Compile Include="Query\UpdateNormals.cs" />
     <Compile Include="Query\NormalDictionary.cs" />

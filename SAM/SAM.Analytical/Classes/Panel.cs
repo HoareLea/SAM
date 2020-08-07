@@ -729,5 +729,25 @@ namespace SAM.Analytical
 
             planarBoundary3D = new PlanarBoundary3D(face3D);
         }
+
+        public bool IsExternal()
+        {
+            return Query.External(panelType);
+        }
+
+        public bool IsExposedToSun()
+        {
+            return Query.ExposedToSun(panelType);
+        }
+
+        public bool IsInternal()
+        {
+            return Query.Internal(panelType);
+        }
+
+        public bool IsGround()
+        {
+            return Query.Ground(panelType);
+        }
     }
 }
