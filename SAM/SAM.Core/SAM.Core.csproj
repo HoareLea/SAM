@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Interfaces\Base\IDispatch.cs" />
     <Compile Include="Classes\Collections\GuidCollection.cs" />
     <Compile Include="Classes\Collections\SAMCollection.cs" />
     <Compile Include="Convert\ToColor\Color.cs" />
@@ -101,7 +102,9 @@
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\SetParameter.cs" />
     <Compile Include="Query\Compare.cs" />
+    <Compile Include="Query\FullName.cs" />
     <Compile Include="Query\Mask.cs" />
+    <Compile Include="Query\COMObjectTypeName.cs" />
     <Compile Include="Query\TryConvert.cs" />
     <Compile Include="Query\UserFriendlyName.cs" />
     <Compile Include="Query\UserFriendlyNames.cs" />
