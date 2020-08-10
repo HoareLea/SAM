@@ -140,7 +140,8 @@ namespace SAM.Analytical
                 {
                     Face2D face2D = plane.Convert(plane.Project(panel_Temp.GetFace3D()));
 
-                    tuples_Polygon.Add(new Tuple<Polygon, Panel>(face2D.ToNTS(), panel_Temp));
+                    //tuples_Polygon.Add(new Tuple<Polygon, Panel>(face2D.ToNTS(), panel_Temp));
+                    tuples_Polygon.Add(new Tuple<Polygon, Panel>(face2D.ToNTS(tolerance), panel_Temp));
                 }
 
                 List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
