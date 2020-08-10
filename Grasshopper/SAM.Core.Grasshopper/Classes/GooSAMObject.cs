@@ -91,25 +91,32 @@ namespace SAM.Core.Grasshopper
 
         public override bool CastFrom(object source)
         {
+            if (source == null)
+                return false;
+            
             if (source is T)
             {
                 Value = (T)(object)source;
                 return true;
             }
 
-            if (typeof(IGooSAMObject).IsAssignableFrom(source.GetType()))
+            Type type_Source = source?.GetType();
+            if(type_Source != null)
             {
-                ISAMObject sAMObject = ((IGooSAMObject)source).GetSAMObject();
-                if (sAMObject is T)
-                    Value = (T)sAMObject;
+                if (typeof(IGooSAMObject).IsAssignableFrom(type_Source))
+                {
+                    ISAMObject sAMObject = ((IGooSAMObject)source).GetSAMObject();
+                    if (sAMObject is T)
+                        Value = (T)sAMObject;
 
-                return true;
-            }
+                    return true;
+                }
 
-            if(typeof(IGH_Goo).IsAssignableFrom(source.GetType()))
-            {
-                Value = (source as dynamic).Value;
-                return true;
+                if (typeof(IGH_Goo).IsAssignableFrom(type_Source))
+                {
+                    Value = (source as dynamic).Value;
+                    return true;
+                }
             }
 
             return base.CastFrom(source);
