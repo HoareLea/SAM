@@ -1,5 +1,5 @@
-﻿using ClipperLib;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 

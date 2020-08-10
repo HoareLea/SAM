@@ -1,5 +1,6 @@
 ﻿using SAM.Core;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -64,6 +65,37 @@ namespace SAM.Geometry.Planar
                 result.Add(polyline2D_Reversed.Trim(1 - parameter_2) as Polyline2D);
 
             return result;
+        }
+
+        public static List<Face2D> Cut(this Face2D face2D, IEnumerable<Segment2D> segment2Ds, double tolerance = Tolerance.Distance)
+        {
+            if (face2D == null || segment2Ds == null || segment2Ds.Count() == 0)
+                return null;
+
+            List<IClosed2D> closed2Ds = face2D.Edge2Ds;
+            if (closed2Ds == null || closed2Ds.Count == 0)
+                return null;
+
+            List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
+            foreach (IClosed2D closed2D in closed2Ds)
+            {
+                if (closed2D == null || !(closed2D is ISegmentable2D))
+                    continue;
+
+                segment2Ds_Temp.AddRange(((ISegmentable2D)closed2D).GetSegments());
+            }
+
+            if (segment2Ds_Temp.Count < 2)
+                return null;
+
+            segment2Ds_Temp.AddRange(segment2Ds);
+
+            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds_Temp, tolerance);
+            if (polygon2Ds == null || polygon2Ds.Count == 0)
+                return null;
+
+            return Create.Face2Ds(polygon2Ds);
+
         }
     }
 }

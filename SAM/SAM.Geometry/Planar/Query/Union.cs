@@ -147,11 +147,31 @@ namespace SAM.Geometry.Planar
                 segment2Ds_Temp.RemoveAt(0);
 
                 List<Segment2D> segment2Ds_Collinear = segment2Ds_Temp.FindAll(x => x.Collinear(segment2D, tolerance));
-
-
             }
 
             throw new NotImplementedException();
+        }
+
+        public static List<Face2D> Union(this IEnumerable<Face2D> face2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (face2Ds == null)
+                return null;
+
+            List<Polygon> polygons = new List<Polygon>(); 
+            foreach(Face2D face2D in face2Ds)
+            {
+                Polygon polygon = face2D?.ToNTS(tolerance);
+                if (polygon == null)
+                    continue;
+
+                polygons.Add(polygon);
+            }
+
+            polygons = Union(polygons);
+            if (polygons == null)
+                return null;
+
+            return polygons.ConvertAll(x => x.ToSAM(tolerance));
         }
 
         public static List<Face2D> Union(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)

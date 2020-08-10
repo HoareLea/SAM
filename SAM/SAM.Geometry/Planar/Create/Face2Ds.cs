@@ -14,7 +14,7 @@ namespace SAM.Geometry.Planar
             if (edges.Count() == 0)
                 return result;
 
-            List<Planar.IClosed2D> edges_Current = new List<IClosed2D>(edges);
+            List<IClosed2D> edges_Current = new List<IClosed2D>(edges);
             while (edges_Current.Count > 0)
             {
                 List<IClosed2D> edges_Excluded = null;
