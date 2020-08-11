@@ -167,6 +167,32 @@ namespace SAM.Geometry.Spatial
             return Convert(geometry as dynamic);
         }
 
+        public Planar.Polycurve2D Convert(Polycurve3D polycurve3D)
+        {
+            if (polycurve3D == null)
+                return null;
+
+            List<ICurve3D> curve3Ds = polycurve3D.GetCurves();
+
+            if (curve3Ds.TrueForAll(x => x is Segment3D))
+                return new Planar.Polycurve2D(curve3Ds.ConvertAll(x => Convert((Segment3D)x)));
+
+            throw new NotImplementedException();
+        }
+
+        public Polycurve3D Convert(Planar.Polycurve2D polycurve2D)
+        {
+            if (polycurve2D == null)
+                return null;
+
+            List<Planar.ICurve2D> curve2Ds = polycurve2D.GetCurves();
+
+            if (curve2Ds.TrueForAll(x => x is Planar.Segment2D))
+                return new Polycurve3D(curve2Ds.ConvertAll(x => Convert((Planar.Segment2D)x)));
+
+            throw new NotImplementedException();
+        }
+
         public ISAMGeometry3D Convert(Planar.ISAMGeometry2D geometry)
         {
             return Convert(geometry as dynamic);
