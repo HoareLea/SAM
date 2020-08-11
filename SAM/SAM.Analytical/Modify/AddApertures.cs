@@ -88,5 +88,29 @@ namespace SAM.Analytical
 
             return result;
         }
+    
+        public static List<Aperture> AddApertures(this IEnumerable<Panel> panels, ApertureConstruction apertureConstruction, double ratio, double azimuth_Start, double azimuth_End, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (panels == null || apertureConstruction == null)
+                return null;
+
+            List<Aperture> result = new List<Aperture>();
+
+            foreach (Panel panel in panels)
+            {
+                if (panel == null)
+                    continue;
+
+                double azimuth = panel.Azimuth();
+                if (azimuth < azimuth_Start || azimuth > azimuth_End)
+                    continue;
+
+                Aperture aperture = panel.AddAperture(apertureConstruction, ratio, tolerance_Area, tolerance);
+                if (aperture != null)
+                    result.Add(aperture);
+            }
+
+            return result;
+        }
     }
 }

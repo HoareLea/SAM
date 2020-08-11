@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddApertures : GH_SAMComponent
+    public class SAMAnalyticalAddAperturesByGeometry : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -26,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAddApertures()
+        public SAMAnalyticalAddAperturesByGeometry()
           : base("SAMAnalytical.AddApertures", "SAMAnalytical.AddApertures",
               "Add Apertures to SAM Analytical Object: ie Panel, AdjacencyCluster or Analytical Model",
               "SAM", "Analytical")

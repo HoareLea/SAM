@@ -1,4 +1,5 @@
 ﻿using ClipperLib;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
@@ -7,6 +8,57 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
+        public static List<Face2D> Offset(this Face2D face2D, double offset, bool includeExternalEdge = true, bool includeInternalEdges = true, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (face2D == null)
+                return null;
+
+            IClosed2D externalEdge = face2D.ExternalEdge2D;
+            if (externalEdge == null)
+                return null;
+
+            List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
+
+            List<IClosed2D> externalEdges_Offset = new List<IClosed2D>() { externalEdge };
+            List<IClosed2D> internalEdges_Offset = internalEdges;
+
+            if (includeExternalEdge)
+            {
+                if(externalEdge is Polygon2D)
+                {
+                    List<Polygon2D> polygon2Ds = Offset((Polygon2D)externalEdge, offset, tolerance);
+                    if (polygon2Ds != null)
+                        externalEdges_Offset = new List<IClosed2D>(polygon2Ds);
+                }
+            }
+
+            if (externalEdges_Offset == null || externalEdges_Offset.Count == 0)
+                return null;
+
+            if (includeInternalEdges)
+            {
+                if(internalEdges != null)
+                {
+                    internalEdges_Offset = new List<IClosed2D>();
+                    foreach (IClosed2D closed2D in internalEdges)
+                    {
+                        if(closed2D is Polygon2D)
+                        {
+                            List<Polygon2D> polygon2Ds = Offset((Polygon2D)externalEdge, offset, tolerance);
+                            if (polygon2Ds != null)
+                                internalEdges_Offset.AddRange(polygon2Ds);
+                        }
+                    }
+                }
+            }
+
+            List<IClosed2D> edges = new List<IClosed2D>(externalEdges_Offset);
+            if (internalEdges_Offset != null && internalEdges_Offset.Count != 0)
+                edges.AddRange(internalEdges_Offset);
+
+            return Create.Face2Ds(edges);
+        }
+        
         public static List<Polygon2D> Offset(this Polygon2D polygon2D, double offset, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (polygon2D == null)
