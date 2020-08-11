@@ -326,7 +326,7 @@ namespace SAM.Core
                     if (!AddObject(keyValuePair_2.Value))
                         continue;
 
-                    List<object> relatedObjects = GetRelatedObjects(keyValuePair_2.Value);
+                    List<object> relatedObjects = relationCluster.GetRelatedObjects(keyValuePair_2.Value);
                     if (relatedObjects == null)
                         continue;
 

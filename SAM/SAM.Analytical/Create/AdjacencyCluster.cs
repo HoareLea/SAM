@@ -188,6 +188,9 @@ namespace SAM.Analytical
                         dictionary[elevation_Ground] = dictionary[elevations[i]];
                         break;
                     }
+
+                    if(!dictionary.ContainsKey(elevation_Ground))
+                        dictionary[elevation_Ground] = dictionary[elevations.Last()];
                 }
 
                 AdjacencyCluster adjacencyCluster = AdjacencyCluster(dictionary, dictionary.Keys.ToList().IndexOf(elevation_Ground), tolerance);
