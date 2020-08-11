@@ -7,6 +7,7 @@ using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
@@ -16,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("a70a669c-5431-4af1-94b0-6270f455d24f");
+        public override Guid ComponentGuid => new Guid("387683eb-fe77-4aa3-a71b-b25e613fdfcd");
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -79,7 +80,11 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else if(objectWrapper.Value is IGH_GeometricGoo)
                 {
-                    sAMGeometries.AddRange(Geometry.Grasshopper.Convert.ToSAM(objectWrapper.Value as dynamic));
+                    object @object = Geometry.Grasshopper.Convert.ToSAM(objectWrapper.Value as dynamic);
+                    if(@object is IEnumerable)
+                        sAMGeometries.AddRange(@object as dynamic);
+                    else
+                        sAMGeometries.Add(@object as dynamic);
                 }
             }
 

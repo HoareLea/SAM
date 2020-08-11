@@ -254,7 +254,7 @@ namespace SAM.Analytical
                 tuples.Add(new Tuple<double, List<Face2D>>(elevation_Bottom, face2D_New));
             }
 
-            tuples.Add(new Tuple<double, List<Face2D>>(elevations[elevations.Count - 1], face2Ds[elevations.Count - 1]));
+            tuples.Add(new Tuple<double, List<Face2D>>(elevations[elevations.Count - 1], face2Ds[elevations[elevations.Count - 1]]));
 
             Construction construction_Wall = Query.Construction(PanelType.Wall);
             Construction construction_Floor = Query.Construction(PanelType.Floor);
@@ -278,12 +278,17 @@ namespace SAM.Analytical
 
                 Plane plane_Top = plane.GetMoved(new Vector3D(0, 0, elevation_Top)) as Plane;
                 Plane plane_Bottom = plane.GetMoved(new Vector3D(0, 0, elevation_Bottom)) as Plane;
+                Plane plane_Bottom_Flipped = new Plane(plane_Bottom);
+                plane_Bottom_Flipped.FlipZ();
 
                 int count = 1;
                 foreach(Face2D face2D in face2Ds_Temp)
                 {
                     Space space = new Space(string.Format("Cell {0}.{1}", i, count), plane_Bottom.Convert(face2D.GetInternalPoint2D()));
                     count++;
+
+                    if (space != null)
+                        result.AddObject(space);
 
                     List<Segment2D> segment2Ds = new List<Segment2D>();
                     foreach(IClosed2D closed2D in face2D.Edge2Ds)
@@ -325,9 +330,12 @@ namespace SAM.Analytical
 
                     foreach (Face2D face2D_Bottom in tuple_Bottom.Item2)
                     {
-                        Face3D face3D_Bottom = plane_Top.Convert(face2D_Bottom);
+                        Face3D face3D_Bottom = plane_Bottom.Convert(face2D_Bottom);
                         if (face3D_Bottom == null)
                             continue;
+
+                        Face2D face2D_Bottom_Flipped = plane_Bottom_Flipped.Convert(face3D_Bottom);
+                        face3D_Bottom = plane_Bottom_Flipped.Convert(face2D_Bottom_Flipped);
 
                         Panel panel = new Panel(construction_Floor, PanelType.Floor, face3D_Bottom);
                         tuples_Point3D.Add(new Tuple<Point3D, Panel, Space>(face3D_Bottom.InternalPoint3D(), panel, space));

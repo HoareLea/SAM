@@ -463,7 +463,10 @@ namespace SAM.Core
             if (!IsValid(@object))
                 return Guid.Empty;
 
-            Dictionary<Guid, object> dictionary = dictionary_Objects[@object.GetType().FullName];
+            Dictionary<Guid, object> dictionary;
+            if (!dictionary_Objects.TryGetValue(@object.GetType().FullName, out dictionary))
+                return Guid.Empty;
+
             if (dictionary == null)
                 return Guid.Empty;
 
