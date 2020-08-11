@@ -4,6 +4,8 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry;
 using SAM.Geometry.Grasshopper;
+using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
@@ -38,11 +40,8 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            index = inputParamManager.AddParameter(new GooSAMGeometryParam(), "_segment2Ds", "_segment2Ds", "SAM Geometry Segment2Ds", GH_ParamAccess.list);
+            index = inputParamManager.AddGenericParameter("_geometry", "_geometry", "SAM or Rhino Geometry", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
-
-            inputParamManager.AddNumberParameter("elevation_Min", "elevation_Min", "Minimal Elevation", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("elevation_Max", "elevation_Max", "Maximal Elevation", GH_ParamAccess.item);
 
             inputParamManager.AddNumberParameter("elevation_Ground_", "elevation_Ground_", "Ground Elevation", GH_ParamAccess.item, 0);
         }
@@ -63,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<SAMGeometry> objectWrapperList = new List<SAMGeometry>();
+            List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
             if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
             {
@@ -71,39 +70,83 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Geometry.Planar.ISegmentable2D> segmentable2Ds = new List<Geometry.Planar.ISegmentable2D>();
-            foreach (SAMGeometry gHObjectWrapper in objectWrapperList)
+            List<SAMGeometry> sAMGeometries = new List<SAMGeometry>();
+            foreach (GH_ObjectWrapper objectWrapper in objectWrapperList)
             {
-                Geometry.Planar.ISegmentable2D segmentable2D = gHObjectWrapper as Geometry.Planar.ISegmentable2D;
-                if (segmentable2D != null)
+                if(objectWrapper.Value is SAMGeometry)
                 {
+                    sAMGeometries.Add((SAMGeometry)objectWrapper.Value);
+                }
+                else if(objectWrapper.Value is IGH_GeometricGoo)
+                {
+                    sAMGeometries.AddRange(Geometry.Grasshopper.Convert.ToSAM(objectWrapper.Value as dynamic));
+                }
+            }
+
+            if (sAMGeometries.Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            List<Face3D> face3Ds = new List<Face3D>();
+            Dictionary<double, List<ISegmentable2D>> dictionary = new Dictionary<double, List<ISegmentable2D>>();
+
+            Plane plane_Default = Plane.WorldXY;
+            foreach(SAMGeometry sAMGeometry in sAMGeometries)
+            {
+                if (sAMGeometry is Face3D)
+                {
+                    face3Ds.Add((Face3D)sAMGeometry);
+                    continue;
+                }
+                    
+                if(sAMGeometry is ISegmentable3D)
+                {
+                    ISegmentable3D segmentable3D = (ISegmentable3D)sAMGeometry;
+                    BoundingBox3D boundingBox3D = segmentable3D.GetBoundingBox();
+                    if (boundingBox3D == null)
+                        continue;
+
+                    Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;
+                    ISegmentable2D segmentable2D = plane.Convert(plane.Project(segmentable3D as dynamic));
+                    if (segmentable2D == null)
+                        continue;
+
+                    List<ISegmentable2D> segmentable2Ds = null;
+                    if (!dictionary.TryGetValue(plane.Origin.Z, out segmentable2Ds))
+                    {
+                        segmentable2Ds = new List<ISegmentable2D>();
+                        dictionary[plane.Origin.Z] = segmentable2Ds;
+                    }
+
                     segmentable2Ds.Add(segmentable2D);
                     continue;
                 }
             }
 
-            double elevation_Min = double.NaN;
-            if (!dataAccess.GetData(1, ref elevation_Min))
+            foreach(KeyValuePair<double, List<ISegmentable2D>> keyValuePair in dictionary)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+                List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(keyValuePair.Value);
+                if (polygon2Ds == null)
+                    continue;
 
-            double elevation_Max = double.NaN;
-            if (!dataAccess.GetData(2, ref elevation_Max))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
+                if (face2Ds == null)
+                    continue;
+
+                Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, keyValuePair.Key)) as Plane;
+                face3Ds.AddRange(face2Ds.ConvertAll(x => plane.Convert(x)));
             }
 
             double elevation_Ground = double.NaN;
-            if (!dataAccess.GetData(3, ref elevation_Ground))
+            if (!dataAccess.GetData(1, ref elevation_Ground))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(segmentable2Ds, elevation_Min, elevation_Max, elevation_Ground, Core.Tolerance.MacroDistance);
+            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(face3Ds, elevation_Ground, Core.Tolerance.MacroDistance);
 
             dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
         }
