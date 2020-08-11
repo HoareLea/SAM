@@ -9,6 +9,7 @@ using SAM.Geometry.Spatial;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -82,7 +83,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     object @object = Geometry.Grasshopper.Convert.ToSAM(objectWrapper.Value as dynamic);
                     if(@object is IEnumerable)
-                        sAMGeometries.AddRange(@object as dynamic);
+                        sAMGeometries.AddRange(((IEnumerable)@object).Cast<SAMGeometry>());
                     else
                         sAMGeometries.Add(@object as dynamic);
                 }
