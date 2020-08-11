@@ -277,16 +277,15 @@ namespace SAM.Analytical
                 double elevation_Top = tuple_Top.Item1;
                 double elevation_Bottom = tuple_Bottom.Item1;
 
-                //List<Face2D> face2Ds_Top = face2Ds[elevation_Top];
-
                 Plane plane_Top = plane.GetMoved(new Vector3D(0, 0, elevation_Top)) as Plane;
                 Plane plane_Bottom = plane.GetMoved(new Vector3D(0, 0, elevation_Bottom)) as Plane;
                 Plane plane_Bottom_Flipped = new Plane(plane_Bottom);
                 plane_Bottom_Flipped.FlipZ();
 
+                List<Face2D> face2Ds_Top = face2Ds[elevation_Top];
+
                 int count = 1;
-                //foreach(Face2D face2D in face2Ds_Top)
-                foreach (Face2D face2D in tuple_Top.Item2)
+                foreach (Face2D face2D in face2Ds_Top)
                 {
                     Space space = new Space(string.Format("Cell {0}.{1}", i, count), plane_Bottom.Convert(face2D.GetInternalPoint2D()));
                     count++;
@@ -324,17 +323,21 @@ namespace SAM.Analytical
                         tuples_Point3D.Add(new Tuple<Point3D, Panel, Space>(Geometry.Spatial.Query.Mid(plane_Bottom.Convert(segment2D)), panel, space));
                     }
 
-                    Face3D face3D_Top = plane_Top.Convert(face2D);
-                    if (face3D_Top == null)
-                        continue;
-
-                    panel = new Panel(construction_Roof, PanelType.Roof, face3D_Top);
-                    tuples_Point3D.Add(new Tuple<Point3D, Panel, Space>(face3D_Top.InternalPoint3D(), panel, space));
-
-                    List<Face2D> face2Ds_Bottom = tuple_Bottom.Item2.FindAll(x => face2D.InRange(x.GetInternalPoint2D()));
-                    if(face2Ds_Bottom != null && face2Ds_Bottom.Count != 0)
+                    List<Face2D> face2Ds_Space_Top = tuple_Top.Item2.FindAll(x => face2D.InRange(x.GetInternalPoint2D()));
+                    foreach(Face2D face2D_Top in face2Ds_Space_Top)
                     {
-                        foreach (Face2D face2D_Bottom in face2Ds_Bottom)
+                        Face3D face3D_Top = plane_Top.Convert(face2D_Top);
+                        if (face3D_Top == null)
+                            continue;
+
+                        panel = new Panel(construction_Roof, PanelType.Roof, face3D_Top);
+                        tuples_Point3D.Add(new Tuple<Point3D, Panel, Space>(face3D_Top.InternalPoint3D(), panel, space));
+                    }
+
+                    List<Face2D> face2Ds_Space_Bottom = tuple_Bottom.Item2.FindAll(x => face2D.InRange(x.GetInternalPoint2D()));
+                    if(face2Ds_Space_Bottom != null && face2Ds_Space_Bottom.Count != 0)
+                    {
+                        foreach (Face2D face2D_Bottom in face2Ds_Space_Bottom)
                         {
                             Face3D face3D_Bottom = plane_Bottom.Convert(face2D_Bottom);
                             if (face3D_Bottom == null)
