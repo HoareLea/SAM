@@ -180,12 +180,12 @@ namespace SAM.Analytical
                 if(!elevations.Contains(elevation_Ground))
                 {
                     elevations.Sort();
-                    for(int i=0; i < elevations.Count; i++)
+                    for(int i=1; i < elevations.Count; i++)
                     {
                         if (elevation_Ground > elevations[i])
                             continue;
 
-                        dictionary[elevation_Ground] = dictionary[elevations[i]];
+                        dictionary[elevation_Ground] = dictionary[elevations[i - 1]];
                         break;
                     }
 
