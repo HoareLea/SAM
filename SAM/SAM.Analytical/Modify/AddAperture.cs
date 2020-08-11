@@ -18,6 +18,8 @@ namespace SAM.Analytical
 
             double area = face3D.GetArea();
             double area_Target = area * ratio;
+            if (area_Target < tolerance_Area)
+                return null;
 
             if(area_Target < area)
             {
@@ -30,13 +32,12 @@ namespace SAM.Analytical
                 if (diagonals == null || diagonals.Length == 0)
                     return null;
 
-                double offset = -1 * diagonals.ToList().ConvertAll(x => x.GetLength()).Max();
+                double factor = -1 * diagonals.ToList().ConvertAll(x => x.GetLength()).Max();
                 List<Face2D> face2Ds = null;
-                while (face2Ds == null && offset > tolerance)
+                while (face2Ds == null && System.Math.Abs(factor) > tolerance_Area)
                 {
-                    face2Ds = face2D_Panel.Offset(offset, true, true, tolerance);
-                    offset = offset / 2;
-
+                    face2Ds = face2D_Panel.Offset(factor, true, true, tolerance);
+                    factor = factor / 2;
                 }
 
                 if (face2Ds == null || face2Ds.Count == 0)
@@ -47,17 +48,14 @@ namespace SAM.Analytical
 
                 Face2D face2D = face2Ds.First();
 
+                double offset = factor;
+
                 double area_Current = face2D.GetArea();
                 double difference = System.Math.Abs(area_Current - area_Target);
                 while (face2Ds != null && difference > tolerance_Area)
                 {
-                    double factor = 1;
-                    if (area_Current > area_Target)
-                        factor = -factor;
-
-                    offset = offset + (factor * (System.Math.Abs(offset) / 2));
-
                     face2Ds = face2D_Panel.Offset(offset, true, true, tolerance);
+
                     if (face2Ds != null && face2Ds.Count != 0)
                     {
                         if (face2Ds.Count > 1)
@@ -66,11 +64,13 @@ namespace SAM.Analytical
                         face2D = face2Ds.First();
 
                         area_Current = face2D.GetArea();
-                        double difference_Temp = System.Math.Abs(area_Current - area_Target);
-                        if (difference_Temp > difference)
-                            break;
+                        difference = System.Math.Abs(area_Current - area_Target);
 
-                        difference = difference_Temp;
+                        factor = System.Math.Abs(factor / 2);
+                        if (area_Current > area_Target)
+                            factor = -factor;
+
+                        offset = offset + factor;
                     }
                 }
 

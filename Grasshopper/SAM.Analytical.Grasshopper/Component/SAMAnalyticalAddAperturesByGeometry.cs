@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalAddAperturesByGeometry()
-          : base("SAMAnalytical.AddApertures", "SAMAnalytical.AddApertures",
+          : base("SAMAnalytical.AddAperturesByGeometry", "SAMAnalytical.AddAperturesByGeometry",
               "Add Apertures to SAM Analytical Object: ie Panel, AdjacencyCluster or Analytical Model",
               "SAM", "Analytical")
         {
