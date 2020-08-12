@@ -1,4 +1,5 @@
 ﻿using GH_IO.Serialization;
+using Grasshopper.Documentation;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
@@ -107,6 +108,7 @@ namespace SAM.Core.Grasshopper
                 target = (Y)(object)(new GH_ObjectWrapper(Value));
                 return true;
             }
+
             if (typeof(Y) == typeof(GH_Boolean))
             {
                 if(Value is bool)
@@ -121,8 +123,49 @@ namespace SAM.Core.Grasshopper
                 }
             }
 
+            if (typeof(Y) == typeof(GH_Number))
+            {
+                if(Core.Query.IsNumeric(Value))
+                {
+                    target = (Y)(object)(new GH_Number(System.Convert.ToDouble(Value)));
+                    return true;
+                }
+            }
 
-                return base.CastTo<Y>(ref target);
+            if (typeof(Y) == typeof(GH_String))
+            {
+
+                target = (Y)(object)(new GH_String(Value?.ToString()));
+                return true;
+
+            }
+
+            if(typeof(IGH_QuickCast).IsAssignableFrom(typeof(Y)))
+            {
+                //target = (Y)(object)(new GH_String(Value?.ToString()));
+                //return true;
+
+                if (Value is bool)
+                {
+                    target = (Y)(object)(new GH_Boolean((bool)Value));
+                    return true;
+                }
+
+                if (Value is string)
+                {
+                    target = (Y)(object)(new GH_String((string)Value));
+                    return true;
+                }
+
+                if (Core.Query.IsNumeric(Value))
+                {
+                    target = (Y)(object)(new GH_Number(System.Convert.ToDouble(Value)));
+                    return true;
+                }
+
+            }
+
+            return base.CastTo<Y>(ref target);
         }
     }
 

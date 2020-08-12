@@ -74,6 +74,7 @@ namespace SAM.Analytical
                         factor = System.Math.Abs(factor / 2);
                         if (area_Current > area_Target)
                             factor = -factor;
+                            
 
                         if (double.IsNaN(factor) || System.Math.Abs(factor) < tolerance)
                             break;
