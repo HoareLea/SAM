@@ -57,10 +57,11 @@ namespace SAM.Analytical
 
                 double area_Current = face2D.GetArea();
                 double difference = System.Math.Abs(area_Current - area_Target);
-                while (face2Ds != null && difference > tolerance_Area)
+                while (!double.IsNaN(factor) && System.Math.Abs(factor) > tolerance && difference > tolerance_Area)
                 {
                     face2Ds = face2D_Panel.Offset(offset, true, true, tolerance);
 
+                    double factor_New = factor;
                     if (face2Ds != null && face2Ds.Count != 0)
                     {
                         if (face2Ds.Count > 1)
@@ -71,16 +72,19 @@ namespace SAM.Analytical
                         area_Current = face2D.GetArea();
                         difference = System.Math.Abs(area_Current - area_Target);
 
-                        factor = System.Math.Abs(factor / 2);
+                        factor_New = System.Math.Abs(factor_New);
                         if (area_Current > area_Target)
-                            factor = -factor;
-                            
+                            factor_New = -factor_New;
 
-                        if (double.IsNaN(factor) || System.Math.Abs(factor) < tolerance)
-                            break;
-
-                        offset = offset + factor;
+                        if (factor_New != factor)
+                            factor = System.Math.Abs(factor_New / 2);
                     }
+                    else
+                    {
+                        factor = System.Math.Abs(factor_New / 2);
+                    }
+
+                    offset = offset + factor;
                 }
 
                 face3D = plane.Convert(face2D);
