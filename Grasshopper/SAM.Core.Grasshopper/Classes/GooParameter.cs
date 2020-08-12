@@ -116,7 +116,7 @@ namespace SAM.Core.Grasshopper
                 }
                 if(Value is int)
                 {
-                    target = (Y)(object)((int)Value == 1);
+                    target = (Y)(object)(new GH_Boolean((int)Value == 1));
                     return true;
                 }
             }
