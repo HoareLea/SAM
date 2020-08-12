@@ -33,6 +33,9 @@ namespace SAM.Analytical
                     return null;
 
                 double factor = -1 * diagonals.ToList().ConvertAll(x => x.GetLength()).Max();
+                if (double.IsNaN(factor) || System.Math.Abs(factor) < tolerance)
+                    return null;
+
                 List<Face2D> face2Ds = null;
                 while (face2Ds == null && System.Math.Abs(factor) > tolerance_Area)
                 {
@@ -41,6 +44,9 @@ namespace SAM.Analytical
                 }
 
                 if (face2Ds == null || face2Ds.Count == 0)
+                    return null;
+
+                if (double.IsNaN(factor) || System.Math.Abs(factor) < tolerance)
                     return null;
 
                 if (face2Ds.Count > 1)
@@ -70,6 +76,9 @@ namespace SAM.Analytical
                         if (area_Current > area_Target)
                             factor = -factor;
 
+                        if (double.IsNaN(factor) || System.Math.Abs(factor) < tolerance)
+                            break;
+
                         offset = offset + factor;
                     }
                 }
@@ -82,6 +91,22 @@ namespace SAM.Analytical
                 return aperture;
 
             return null;
+        }
+
+        public static Aperture AddAperture(this Panel panel, ApertureConstruction apertureConstruction, double ratio, double azimuth_Start, double azimuth_End, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (panel == null || apertureConstruction == null || ratio > 1 || ratio <= 0)
+                return null;
+
+            double azimuth = panel.Azimuth();
+            if (double.IsNaN(azimuth))
+                return null;
+
+            if (azimuth < azimuth_Start || azimuth >= azimuth_End)
+                return null;
+
+            return AddAperture(panel, apertureConstruction, ratio, tolerance_Area, tolerance);
+
         }
     }
 }

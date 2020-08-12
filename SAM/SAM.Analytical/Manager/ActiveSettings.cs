@@ -45,6 +45,8 @@ namespace SAM.Analytical
             public const string ParameterName_SpaceName = "ParameterName_SpaceName";
             public const string ParameterName_FacingExternal = "ParameterName_FacingExternal";
             public const string ParameterName_FacingExternalGlazing = "ParameterName_FacingExternalGlazing";
+            public const string ParameterName_Area = "ParameterName_Area";
+            public const string ParameterName_Volume = "ParameterName_Volume";
         }
 
         private static Setting setting = Load();
@@ -81,9 +83,11 @@ namespace SAM.Analytical
             result.Add(Name.ParameterName_Air, "SAM_BuildingElementAir");
             result.Add(Name.ParameterName_FrameWidth, "SAM_BuildingElementFrameWidth");
             result.Add(Name.ParameterName_NorthAngle, "SAM_NorthAngle");
-            result.Add(Name.ParameterName_NorthAngle, "SAM_SpaceName");
+            result.Add(Name.ParameterName_SpaceName, "SAM_SpaceName");
             result.Add(Name.ParameterName_FacingExternal, "SAM_FacingExternal");
             result.Add(Name.ParameterName_FacingExternalGlazing, "SAM_FacingExternalGlazing");
+            result.Add(Name.ParameterName_Area, "SAM_Area");
+            result.Add(Name.ParameterName_Volume, "SAM_Volume");
 
 
             //Default Constructions

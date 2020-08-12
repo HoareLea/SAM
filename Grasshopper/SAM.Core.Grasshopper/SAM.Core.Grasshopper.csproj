@@ -112,6 +112,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Query\TryGetValue.cs" />
     <Compile Include="Query\Duplicate.cs" />
     <Compile Include="Query\GenericSubclassOf.cs" />
     <Compile Include="Query\DataTree.cs" />

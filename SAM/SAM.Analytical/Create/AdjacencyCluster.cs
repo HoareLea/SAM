@@ -350,7 +350,21 @@ namespace SAM.Analytical
                             tuples_Point3D.Add(new Tuple<Point3D, Panel, Space>(face3D_Bottom.InternalPoint3D(), panel, space));
                         }
                     }
+
+                    double area = face2D.GetArea();
+                    double height = elevation_Top - elevation_Bottom;
+                    double volume = area * height;
+                    
+                    Core.ParameterSet parameterSet_Space = new Core.ParameterSet(typeof(Space).Assembly);
+                    parameterSet_Space.Add(Query.ParameterName_Area(), area);
+                    parameterSet_Space.Add(Query.ParameterName_Volume(), volume);
+
+                    space.Add(parameterSet_Space);
+
                 }
+
+
+
             }
 
             while (tuples_Point3D.Count > 0)

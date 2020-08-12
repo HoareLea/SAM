@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using NetTopologySuite.DataStructures;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -7,12 +8,12 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddAperturesByRatio : GH_SAMComponent
+    public class SAMAnalyticalAddAperturesByAzimuth : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("6afa8baf-7cc3-4993-a6ec-43e5b674ff00");
+        public override Guid ComponentGuid => new Guid("84d34834-8ce0-42cb-a3de-7366337bac4a");
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -22,8 +23,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAddAperturesByRatio()
-          : base("SAMAnalytical.AddAperturesByRatio", "SAMAnalytical.AddAperturesByRatio",
+        public SAMAnalyticalAddAperturesByAzimuth()
+          : base("SAMAnalytical.AddAperturesByAzimuth", "SAMAnalytical.AddAperturesByAzimuth",
               "Add Apertures to SAM Analytical Object: ie Panel, AdjacencyCluster or Analytical Model",
               "SAM", "Analytical")
         {
@@ -35,7 +36,8 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_ratio", "_ratio", "Ratio", GH_ParamAccess.item);
+            inputParamManager.AddNumberParameter("_ratios", "_ratios", "Ratios", GH_ParamAccess.list);
+            inputParamManager.AddNumberParameter("_azimuths", "_azimuths", "Azimuths Domains/Intervals", GH_ParamAccess.list);
 
             int index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
@@ -64,12 +66,30 @@ namespace SAM.Analytical.Grasshopper
             ApertureConstruction apertureConstruction = null;
             dataAccess.GetData(2, ref apertureConstruction);
 
-            double ratio = double.NaN;
-            if (!dataAccess.GetData(1, ref ratio))
+            List<double> ratios = new List<double>();
+            if (!dataAccess.GetDataList(1, ratios) || ratios == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+
+            List<Rhino.Geometry.Interval> azimuths = new List<Rhino.Geometry.Interval>();
+            if (!dataAccess.GetDataList(2, azimuths) || azimuths == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            if(azimuths.Count != ratios.Count)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            Dictionary<Rhino.Geometry.Interval, double> dictionary = new Dictionary<Rhino.Geometry.Interval, double>();
+            for (int i = 0; i < ratios.Count; i++)
+                if (azimuths[i] != null)
+                    dictionary[azimuths[i]] = ratios[i];
 
             SAMObject sAMObject = null;
             if (!dataAccess.GetData(0, ref sAMObject))
@@ -84,6 +104,14 @@ namespace SAM.Analytical.Grasshopper
                     return;
                 
                 Panel panel = new Panel((Panel)sAMObject);
+
+                double azimuth = panel.Azimuth();
+                if (double.IsNaN(azimuth))
+                    return;
+
+                double ratio;
+                if (!Core.Grasshopper.Query.TryGetValue<double>(dictionary, azimuth, out ratio))
+                    return;
 
                 ApertureConstruction apertureConstruction_Temp = apertureConstruction;
                 if (apertureConstruction_Temp == null)
@@ -122,6 +150,14 @@ namespace SAM.Analytical.Grasshopper
                 foreach (Panel panel in panels)
                 {
                     if (panel.PanelType != PanelType.WallExternal)
+                        continue;
+
+                    double azimuth = panel.Azimuth();
+                    if (double.IsNaN(azimuth))
+                        continue;
+
+                    double ratio;
+                    if (!Core.Grasshopper.Query.TryGetValue(dictionary, azimuth, out ratio))
                         continue;
 
                     ApertureConstruction apertureConstruction_Temp = apertureConstruction;

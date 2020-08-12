@@ -98,14 +98,7 @@ namespace SAM.Analytical
 
             foreach (Panel panel in panels)
             {
-                if (panel == null)
-                    continue;
-
-                double azimuth = panel.Azimuth();
-                if (azimuth < azimuth_Start || azimuth > azimuth_End)
-                    continue;
-
-                Aperture aperture = panel.AddAperture(apertureConstruction, ratio, tolerance_Area, tolerance);
+                Aperture aperture = panel.AddAperture(apertureConstruction, ratio, azimuth_Start, azimuth_End, tolerance_Area, tolerance);
                 if (aperture != null)
                     result.Add(aperture);
             }

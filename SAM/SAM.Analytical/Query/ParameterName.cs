@@ -207,6 +207,39 @@ namespace SAM.Analytical
         {
             return ParameterName_SpaceName(ActiveSetting.Setting);
         }
+        public static string ParameterName_Area(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_Area, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_Area()
+        {
+            return ParameterName_Area(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_Volume(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_Volume, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_Volume()
+        {
+            return ParameterName_Volume(ActiveSetting.Setting);
+        }
 
         public static string ParameterName_FacingExternal(this Setting setting)
         {
