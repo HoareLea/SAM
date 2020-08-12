@@ -2,6 +2,7 @@
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
+using Rhino;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -106,8 +107,22 @@ namespace SAM.Core.Grasshopper
                 target = (Y)(object)(new GH_ObjectWrapper(Value));
                 return true;
             }
+            if (typeof(Y) == typeof(GH_Boolean))
+            {
+                if(Value is bool)
+                {
+                    target = (Y)(object)(new GH_Boolean((bool)Value));
+                    return true;
+                }
+                if(Value is int)
+                {
+                    target = (Y)(object)((int)Value == 1);
+                    return true;
+                }
+            }
 
-            return base.CastTo<Y>(ref target);
+
+                return base.CastTo<Y>(ref target);
         }
     }
 
@@ -141,6 +156,8 @@ namespace SAM.Core.Grasshopper
 
         public override sealed bool Read(GH_IReader reader)
         {
+            base.Read(reader);
+
             string name = null;
             
             if (!reader.TryGetString(typeof(GooParameter).FullName, ref name))
@@ -149,9 +166,9 @@ namespace SAM.Core.Grasshopper
             if (string.IsNullOrWhiteSpace(name))
                 return false;
 
-            Name = name;
-            Description = name;
-            NickName = name;
+            ////Name = name;
+            ////Description = name;
+            ////NickName = name;
 
             return true;
         }
