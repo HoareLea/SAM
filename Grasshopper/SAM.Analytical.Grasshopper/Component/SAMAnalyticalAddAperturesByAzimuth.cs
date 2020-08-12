@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using NetTopologySuite.DataStructures;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -160,16 +159,18 @@ namespace SAM.Analytical.Grasshopper
                     if (!Core.Grasshopper.Query.TryGetValue(dictionary, azimuth, out ratio))
                         continue;
 
+                    Panel panel_New = new Panel(panel);
+
                     ApertureConstruction apertureConstruction_Temp = apertureConstruction;
                     if (apertureConstruction_Temp == null)
-                        apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, ApertureType.Window);
+                        apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel_New, ApertureType.Window);
 
-                    Aperture aperture = panel.AddAperture(apertureConstruction_Temp, ratio);
+                    Aperture aperture = panel_New.AddAperture(apertureConstruction_Temp, ratio);
                     if (aperture == null)
                         continue;
 
-                    tuples_Result.Add(new Tuple<Panel, Aperture>(panel, aperture));
-                    adjacencyCluster.AddObject(panel);
+                    tuples_Result.Add(new Tuple<Panel, Aperture>(panel_New, aperture));
+                    adjacencyCluster.AddObject(panel_New);
                 }
 
                 if(analyticalModel != null)
