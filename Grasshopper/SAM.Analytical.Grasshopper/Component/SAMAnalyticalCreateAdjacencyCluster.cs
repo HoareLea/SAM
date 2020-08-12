@@ -141,6 +141,21 @@ namespace SAM.Analytical.Grasshopper
                 if (face2Ds == null)
                     continue;
 
+                for(int i=0; i < face2Ds.Count; i++)
+                {
+                    List<IClosed2D> internalEdge2Ds = face2Ds[i]?.InternalEdge2Ds;
+                    if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+                        continue;
+
+                    foreach(IClosed2D internalEdge2D in internalEdge2Ds)
+                    {
+                        if (internalEdge2D == null)
+                            continue;
+
+                        face2Ds.Add(new Face2D(internalEdge2D));
+                    }
+                }
+
                 Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, keyValuePair.Key)) as Plane;
                 face3Ds.AddRange(face2Ds.ConvertAll(x => plane.Convert(x)));
             }

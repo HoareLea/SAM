@@ -1,5 +1,4 @@
-﻿using NetTopologySuite.Triangulate;
-using SAM.Geometry.Planar;
+﻿using SAM.Geometry.Planar;
 using System.Collections.Generic;
 using System.Linq;
 
