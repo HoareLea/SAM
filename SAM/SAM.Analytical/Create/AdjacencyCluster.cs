@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Planar;
+﻿using NetTopologySuite.Geometries;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -253,6 +254,32 @@ namespace SAM.Analytical
                     continue;
 
                 List<Face2D> face2Ds_New = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
+
+                List<Face2D> face2Ds_All = new List<Face2D>();
+                face2Ds_All.AddRange(face2Ds_Top);
+                face2Ds_All.AddRange(face2Ds_Bottom);
+
+                List<IClosed2D> internalEdge2Ds = new List<IClosed2D>();
+                foreach(Face2D face2D_New in face2Ds_New)
+                {
+                    List<IClosed2D> internalEdge2Ds_New = face2D_New.InternalEdge2Ds;
+                    if (internalEdge2Ds_New == null || internalEdge2Ds_New.Count == 0)
+                        continue;
+
+                    foreach (IClosed2D closed2D in internalEdge2Ds_New)
+                    {
+                        Point2D point2D = closed2D?.GetInternalPoint2D();
+                        if (point2D == null)
+                            continue;
+
+                        if (face2Ds_All.Find(x => x.Inside(point2D)) == null)
+                            continue;
+
+                        internalEdge2Ds.Add(closed2D);
+                    }
+                }
+
+                face2Ds_New.AddRange(internalEdge2Ds.ConvertAll(x => new Face2D(x)));
 
                 tuples.Add(new Tuple<double, List<Face2D>>(elevation_Bottom, face2Ds_New));
             }
