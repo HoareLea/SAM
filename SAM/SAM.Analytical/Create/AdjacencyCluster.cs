@@ -160,7 +160,7 @@ namespace SAM.Analytical
                     if (boundingBox3D == null)
                         continue;
 
-                    double elevation = boundingBox3D.Min.Z;
+                    double elevation = SAM.Core.Query.Round(boundingBox3D.Min.Z, tolerance);
                     plane_Default.Move(new Vector3D(0, 0, elevation));
 
                     Face2D face2D = plane_Default.Convert(plane_Default.Project(face3D));

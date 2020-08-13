@@ -47,6 +47,8 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             inputParamManager.AddNumberParameter("elevation_Ground_", "elevation_Ground_", "Ground Elevation", GH_ParamAccess.item, 0);
+            inputParamManager.AddNumberParameter("tolerance_", "tolerance_", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
+
         }
 
         /// <summary>
@@ -92,6 +94,13 @@ namespace SAM.Analytical.Grasshopper
                     else
                         sAMGeometries.Add(@object as dynamic);
                 }
+            }
+
+            double tolerance = Core.Tolerance.Distance;
+            if (!dataAccess.GetData(2, ref tolerance))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
             }
 
             if (sAMGeometries.Count == 0)
@@ -145,16 +154,18 @@ namespace SAM.Analytical.Grasshopper
                 if (boundingBox3D == null)
                     continue;
 
-                Geometry.Spatial.Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Geometry.Spatial.Plane;
+                double elevation = Core.Query.Round(boundingBox3D.Min.Z, tolerance);
+
+                Geometry.Spatial.Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, elevation)) as Geometry.Spatial.Plane;
                 ISegmentable2D segmentable2D = plane.Convert(plane.Project(segmentable3D as dynamic));
                 if (segmentable2D == null)
                     continue;
 
                 List<ISegmentable2D> segmentable2Ds = null;
-                if (!dictionary.TryGetValue(plane.Origin.Z, out segmentable2Ds))
+                if (!dictionary.TryGetValue(elevation, out segmentable2Ds))
                 {
                     segmentable2Ds = new List<ISegmentable2D>();
-                    dictionary[plane.Origin.Z] = segmentable2Ds;
+                    dictionary[elevation] = segmentable2Ds;
                 }
 
                 segmentable2Ds.Add(segmentable2D);
@@ -197,7 +208,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(face3Ds, elevation_Ground, Core.Tolerance.MacroDistance);
+            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(face3Ds, elevation_Ground, tolerance);
 
             dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
         }
