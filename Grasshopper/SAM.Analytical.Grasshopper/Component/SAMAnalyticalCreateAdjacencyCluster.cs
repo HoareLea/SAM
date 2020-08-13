@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry;
@@ -72,18 +73,22 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<SAMGeometry> sAMGeometries = new List<SAMGeometry>();
+            List<ISAMGeometry> sAMGeometries = new List<ISAMGeometry>();
             foreach (GH_ObjectWrapper objectWrapper in objectWrapperList)
             {
-                if(objectWrapper.Value is SAMGeometry)
+                if(objectWrapper.Value is ISAMGeometry)
                 {
-                    sAMGeometries.Add((SAMGeometry)objectWrapper.Value);
+                    sAMGeometries.Add((ISAMGeometry)objectWrapper.Value);
+                }
+                else if(objectWrapper.Value is GooSAMGeometry)
+                {
+                    sAMGeometries.Add(((GooSAMGeometry)objectWrapper.Value).Value);
                 }
                 else if(objectWrapper.Value is IGH_GeometricGoo)
                 {
                     object @object = Geometry.Grasshopper.Convert.ToSAM(objectWrapper.Value as dynamic);
                     if(@object is IEnumerable)
-                        sAMGeometries.AddRange(((IEnumerable)@object).Cast<SAMGeometry>());
+                        sAMGeometries.AddRange(((IEnumerable)@object).Cast<ISAMGeometry>());
                     else
                         sAMGeometries.Add(@object as dynamic);
                 }
@@ -96,42 +101,67 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Face3D> face3Ds = new List<Face3D>();
-            Dictionary<double, List<ISegmentable2D>> dictionary = new Dictionary<double, List<ISegmentable2D>>();
+            List<ISegmentable3D> segmentable3Ds = new List<ISegmentable3D>();
 
-            Plane plane_Default = Plane.WorldXY;
-            foreach(SAMGeometry sAMGeometry in sAMGeometries)
+            Geometry.Spatial.Plane plane_Default = Geometry.Spatial.Plane.WorldXY;
+            foreach(ISAMGeometry sAMGeometry in sAMGeometries)
             {
                 if (sAMGeometry is Face3D)
                 {
                     face3Ds.Add((Face3D)sAMGeometry);
                     continue;
                 }
-                    
-                if(sAMGeometry is ISegmentable3D)
+                else if(sAMGeometry is ISegmentable3D)
                 {
                     ISegmentable3D segmentable3D = (ISegmentable3D)sAMGeometry;
-                    BoundingBox3D boundingBox3D = segmentable3D.GetBoundingBox();
-                    if (boundingBox3D == null)
-                        continue;
+                    segmentable3Ds.Add(segmentable3D);
 
-                    Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;
-                    ISegmentable2D segmentable2D = plane.Convert(plane.Project(segmentable3D as dynamic));
-                    if (segmentable2D == null)
-                        continue;
-
-                    List<ISegmentable2D> segmentable2Ds = null;
-                    if (!dictionary.TryGetValue(plane.Origin.Z, out segmentable2Ds))
+                }
+                else if(sAMGeometry is ICurvable3D)
+                {
+                    List<ICurve3D> curve3Ds = ((ICurvable3D)sAMGeometry).GetCurves();
+                    if(curve3Ds != null && curve3Ds.Count != 0)
                     {
-                        segmentable2Ds = new List<ISegmentable2D>();
-                        dictionary[plane.Origin.Z] = segmentable2Ds;
-                    }
+                        if (curve3Ds.TrueForAll(x => x is Segment3D))
+                        {
+                            bool closed = curve3Ds.First().GetStart().AlmostEquals(curve3Ds.Last().GetEnd());
+                            segmentable3Ds.Add(new Polyline3D(curve3Ds.Cast<Segment3D>(), closed));
+                        }
+                        else
+                        {
+                            foreach(ICurve3D curve3D in curve3Ds)
+                                if (curve3D is ISegmentable3D)
+                                    segmentable3Ds.Add((ISegmentable3D)curve3D);
+                        }
 
-                    segmentable2Ds.Add(segmentable2D);
-                    continue;
+                    }
                 }
             }
 
-            foreach(KeyValuePair<double, List<ISegmentable2D>> keyValuePair in dictionary)
+            Dictionary<double, List<ISegmentable2D>> dictionary = new Dictionary<double, List<ISegmentable2D>>();
+            foreach(ISegmentable3D segmentable3D in segmentable3Ds)
+            {
+                BoundingBox3D boundingBox3D = segmentable3D.GetBoundingBox();
+                if (boundingBox3D == null)
+                    continue;
+
+                Geometry.Spatial.Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Geometry.Spatial.Plane;
+                ISegmentable2D segmentable2D = plane.Convert(plane.Project(segmentable3D as dynamic));
+                if (segmentable2D == null)
+                    continue;
+
+                List<ISegmentable2D> segmentable2Ds = null;
+                if (!dictionary.TryGetValue(plane.Origin.Z, out segmentable2Ds))
+                {
+                    segmentable2Ds = new List<ISegmentable2D>();
+                    dictionary[plane.Origin.Z] = segmentable2Ds;
+                }
+
+                segmentable2Ds.Add(segmentable2D);
+                continue;
+            }
+
+            foreach (KeyValuePair<double, List<ISegmentable2D>> keyValuePair in dictionary)
             {
                 List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(keyValuePair.Value);
                 if (polygon2Ds == null)
@@ -156,7 +186,7 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, keyValuePair.Key)) as Plane;
+                Geometry.Spatial.Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, keyValuePair.Key)) as Geometry.Spatial.Plane;
                 face3Ds.AddRange(face2Ds.ConvertAll(x => plane.Convert(x)));
             }
 

@@ -77,7 +77,7 @@ namespace SAM.Analytical
                             factor_New = -factor_New;
 
                         if (factor_New != factor)
-                            factor = System.Math.Abs(factor_New / 2);
+                            factor = factor_New / 2;
                     }
                     else
                     {

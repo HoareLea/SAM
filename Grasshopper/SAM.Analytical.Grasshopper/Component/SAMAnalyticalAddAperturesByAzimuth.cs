@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("_ratios", "_ratios", "Ratios", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("_azimuths", "_azimuths", "Azimuths Domains/Intervals", GH_ParamAccess.list);
+            inputParamManager.AddIntervalParameter("_azimuths", "_azimuths", "Azimuths Domains/Intervals", GH_ParamAccess.list);
 
             int index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
@@ -56,14 +56,14 @@ namespace SAM.Analytical.Grasshopper
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="dataAccess">
-        /// The DA object is used to retrieve from inputs and store in outputs.
+        ///// The DA object is used to retrieve from inputs and store in outputs.
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             dataAccess.SetData(2, false);
 
             ApertureConstruction apertureConstruction = null;
-            dataAccess.GetData(2, ref apertureConstruction);
+            dataAccess.GetData(3, ref apertureConstruction);
 
             List<double> ratios = new List<double>();
             if (!dataAccess.GetDataList(1, ratios) || ratios == null)
