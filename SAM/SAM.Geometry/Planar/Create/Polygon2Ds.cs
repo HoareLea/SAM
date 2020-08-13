@@ -32,7 +32,12 @@ namespace SAM.Geometry.Planar
                 if (polygon2Ds == null)
                     continue;
 
-                result.AddRange(polygon2Ds);
+                //result.AddRange(polygon2Ds);
+
+                //Removing duplicated polygon2Ds
+                foreach (Polygon2D polygon2D in polygon2Ds)
+                    if (result.Find(x => x.Similar(polygon2D)) == null)
+                        result.AddRange(polygon2Ds);
             }
 
             return result;

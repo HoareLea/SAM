@@ -343,7 +343,6 @@ namespace SAM.Analytical
                         Segment3D segment3D_Top = plane_Top.Convert(segment2D);
                         Segment3D segment3D_Bottom = plane_Bottom.Convert(segment2D);
                         
-
                         Polygon3D polygon3D = new Polygon3D(new Point3D[] { segment3D_Top[0], segment3D_Top[1], segment3D_Bottom[1], segment3D_Bottom[0] });
                         panel = new Panel(construction_Wall, PanelType.Wall, new Face3D(polygon3D));
 
@@ -387,11 +386,7 @@ namespace SAM.Analytical
                     parameterSet_Space.Add(Query.ParameterName_Volume(), volume);
 
                     space.Add(parameterSet_Space);
-
                 }
-
-
-
             }
 
             while (tuples_Point3D.Count > 0)
