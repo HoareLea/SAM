@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NetTopologySuite.Geometries;
 
 
 namespace SAM.Geometry.Planar
@@ -28,6 +27,25 @@ namespace SAM.Geometry.Planar
                 j = i;
             }
             return result;
+        }
+
+        public static bool Inside(this Face2D face2D, Point2D point2D)
+        {
+            if (face2D == null || point2D == null)
+                return false;
+
+            if (!face2D.ExternalEdge2D.Inside(point2D))
+                return false;
+
+            List<IClosed2D> internalEdge2Ds = face2D.InternalEdge2Ds;
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+                return true;
+
+            foreach(IClosed2D closed2D in internalEdge2Ds)
+                if (closed2D.Inside(point2D))
+                    return false;
+
+            return true;
         }
 
         //public static bool Inside(this IEnumerable<Point2D> point2Ds, Point2D point2D)

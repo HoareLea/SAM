@@ -349,7 +349,7 @@ namespace SAM.Analytical
                         tuples_Point3D.Add(new Tuple<Point3D, Panel, Space>(Geometry.Spatial.Query.Mid(plane_Bottom.Convert(segment2D)), panel, space));
                     }
 
-                    List<Face2D> face2Ds_Space_Top = tuple_Top.Item2.FindAll(x => face2D.InRange(x.GetInternalPoint2D()));
+                    List<Face2D> face2Ds_Space_Top = tuple_Top.Item2.FindAll(x => face2D.On(x.GetInternalPoint2D()) || face2D.Inside(x.GetInternalPoint2D()));
                     foreach(Face2D face2D_Top in face2Ds_Space_Top)
                     {
                         Face3D face3D_Top = plane_Top.Convert(face2D_Top);
@@ -360,8 +360,8 @@ namespace SAM.Analytical
                         tuples_Point3D.Add(new Tuple<Point3D, Panel, Space>(face3D_Top.InternalPoint3D(), panel, space));
                     }
 
-                    List<Face2D> face2Ds_Space_Bottom = tuple_Bottom.Item2.FindAll(x => face2D.InRange(x.GetInternalPoint2D()));
-                    if(face2Ds_Space_Bottom != null && face2Ds_Space_Bottom.Count != 0)
+                    List<Face2D> face2Ds_Space_Bottom = tuple_Bottom.Item2.FindAll(x => face2D.On(x.GetInternalPoint2D()) || face2D.Inside(x.GetInternalPoint2D()));
+                    if (face2Ds_Space_Bottom != null && face2Ds_Space_Bottom.Count != 0)
                     {
                         foreach (Face2D face2D_Bottom in face2Ds_Space_Bottom)
                         {
