@@ -203,13 +203,13 @@
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(TargetDir)\$(ProjectName).gha"
 
-set GH_PACKAGES_DIR=$(APPDATA)\Grasshopper\Libraries\SAM\
-if not exist "%25GH_PACKAGES_DIR%25" mkdir "%25GH_PACKAGES_DIR%25"
+set SAM_DIR=$(APPDATA)\SAM\
+if not exist "%25SAM_DIR%25" mkdir "%25SAM_DIR%25"
 
-copy "$(TargetDir)*.dll" "%25GH_PACKAGES_DIR%25"
-copy "%25GH_PACKAGES_DIR%25\$(ProjectName).dll" "%25GH_PACKAGES_DIR%25\$(ProjectName).gha"
+copy "$(TargetDir)*.dll" "%25SAM_DIR%25"
+copy "%25SAM_DIR%25\$(ProjectName).dll" "%25SAM_DIR%25\$(ProjectName).gha"
 
-::erase "%25GH_PACKAGES_DIR%25$(ProjectName).dll"
+::erase "%25SAM_DIR%25$(ProjectName).dll"
 ::erase "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
