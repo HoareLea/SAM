@@ -90,11 +90,14 @@ namespace SAM.Analytical
                 face3D = plane.Convert(face2D);
             }
 
-            Aperture aperture = new Aperture(apertureConstruction, face3D);
-            if (panel.AddAperture(aperture))
-                return aperture;
+            Aperture aperture = panel.AddAperture(apertureConstruction, face3D, false, tolerance_Area, tolerance, tolerance);
+            return aperture;
 
-            return null;
+            //Aperture aperture = new Aperture(apertureConstruction, face3D);
+            //if (panel.AddAperture(aperture))
+            //    return aperture;
+
+            //return null;
         }
 
         public static Aperture AddAperture(this Panel panel, ApertureConstruction apertureConstruction, double ratio, double azimuth_Start, double azimuth_End, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
