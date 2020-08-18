@@ -22,7 +22,7 @@ namespace SAM.Analytical
             if (boundingBox3D == null)
                 return double.NaN;
 
-            return boundingBox3D.Max.Y - boundingBox3D.Min.Y;
+            return boundingBox3D.Max.X - boundingBox3D.Min.X;
 
             //ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
 
