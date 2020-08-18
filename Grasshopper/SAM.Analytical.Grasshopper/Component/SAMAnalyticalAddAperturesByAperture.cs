@@ -73,10 +73,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             if (sAMObject is Panel)
-            {
-                if (((Panel)sAMObject).PanelType != PanelType.WallExternal)
-                    return;
-                
+            {              
                 Panel panel = new Panel((Panel)sAMObject);
 
                 List<Aperture> apertures_Result = new List<Aperture>();
@@ -115,9 +112,6 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach (Panel panel in panels)
                 {
-                    if (panel.PanelType != PanelType.WallExternal)
-                        continue;
-
                     Panel panel_New = new Panel(panel);
 
                     bool updated = false;
