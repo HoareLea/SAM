@@ -608,11 +608,8 @@ namespace SAM.Analytical
             if (aperture == null)
                 return false;
 
-            if (aperture.PlanarBoundary3D == null)
-                apertures.Add(aperture);
-            
             if (!Query.IsValid(this, aperture))
-                return false;
+                return false;        
 
             if (apertures == null)
                 apertures = new List<Aperture>();
