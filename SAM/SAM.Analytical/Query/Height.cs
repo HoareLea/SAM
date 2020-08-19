@@ -23,13 +23,16 @@ namespace SAM.Analytical
 
             Plane plane = Plane.WorldXY;
 
-            Vector3D vector3D_WidthDirection = plane.Convert(rectangle2D.WidthDirection);
-            Vector3D vector3D_HeightDirection = plane.Convert(rectangle2D.HeightDirection);
+            if(plane.Coplanar(planarBoundary3D.Plane))
+                return rectangle2D.Height;
 
-            Vector3D axisY = plane.AxisY;
+            Vector3D vector3D_WidthDirection = plane.Convert(rectangle2D.WidthDirection);
+
+            double angle_AxisX = System.Math.Min(plane.AxisX.SmallestAngle(vector3D_WidthDirection), plane.AxisX.GetNegated().SmallestAngle(vector3D_WidthDirection));
+            double angle_AxisY = System.Math.Min(plane.AxisY.SmallestAngle(vector3D_WidthDirection), plane.AxisY.GetNegated().SmallestAngle(vector3D_WidthDirection));
 
             double result = rectangle2D.Height;
-            if (axisY.SmallestAngle(vector3D_WidthDirection) < axisY.SmallestAngle(vector3D_HeightDirection))
+            if (angle_AxisX > angle_AxisY)
                 result = rectangle2D.Width;
 
             return result;
