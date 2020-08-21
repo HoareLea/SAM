@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateAdjacencyCluster()
           : base("SAMAnalytical.CreateAdjacencyCluster", "SAMAnalytical.CreateAdjacencyCluster",
-              "Create AdjacencyCluster",
+              "Create AdjacencyCluster, Use only Top Floors or Roof shape ONLY this will generate Walls and close Spaces. For 3D shapes use 'Create.SAMAdjacencyCluster' from Topologic",
               "SAM", "Analytical")
         {
         }
@@ -43,10 +43,10 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            index = inputParamManager.AddGenericParameter("_geometry", "_geometry", "SAM or Rhino Geometry", GH_ParamAccess.list);
+            index = inputParamManager.AddGenericParameter("_geometry", "_geometry", "SAM or Rhino Geometry, Use only Top Floors or Roof shape ONLY", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
-            inputParamManager.AddNumberParameter("elevation_Ground_", "elevation_Ground_", "Ground Elevation", GH_ParamAccess.item, 0);
+            inputParamManager.AddNumberParameter("elevation_Ground_", "elevation_Ground_", "Ground Elevation, Number", GH_ParamAccess.item, 0);
             inputParamManager.AddNumberParameter("tolerance_", "tolerance_", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
 
         }
