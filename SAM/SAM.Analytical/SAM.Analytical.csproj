@@ -97,6 +97,7 @@
     <Compile Include="Query\ExposedToSun.cs" />
     <Compile Include="Query\Azimuth.cs" />
     <Compile Include="Query\Ground.cs" />
+    <Compile Include="Create\Rectangle2D.cs" />
     <Compile Include="Query\Internal.cs" />
     <Compile Include="Query\Panels.cs" />
     <Compile Include="Query\ParameterName.cs" />
