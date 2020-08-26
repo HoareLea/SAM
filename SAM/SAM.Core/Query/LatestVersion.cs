@@ -11,41 +11,57 @@ namespace SAM.Core
         {
             string url = @"https://api.github.com/repos/HoareLea/SAM_Deploy/releases/latest";
 
-            HttpWebRequest httpWebRequest = null;
+            //HttpWebRequest httpWebRequest = null;
 
-            try
-            {
-                httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-            }
-            catch
-            {
-                return null;
-            }
+            //try
+            //{
+            //    httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            //}
+            //catch
+            //{
+            //    return null;
+            //}
 
-            if (httpWebRequest == null)
-                return null;
+            //if (httpWebRequest == null)
+            //    return null;
+
+            //string json = null;
+
+            //using (HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse())
+            //{
+            //    if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+            //    {
+            //        Stream stream = httpWebResponse.GetResponseStream();
+            //        StreamReader streamReader = null;
+
+            //        if (string.IsNullOrWhiteSpace(httpWebResponse.CharacterSet))
+            //            streamReader = new StreamReader(stream);
+            //        else
+            //            streamReader = new StreamReader(stream, Encoding.GetEncoding(httpWebResponse.CharacterSet));
+
+            //        json = streamReader.ReadToEnd();
+
+            //        if (streamReader != null)
+            //            streamReader.Close();
+
+            //        httpWebResponse.Close();
+            //    }
+            //}
+
+            //if (string.IsNullOrWhiteSpace(json))
+            //    return null;
+
+            //JObject jObject = JObject.Parse(json);
+            //if (jObject == null)
+            //    return null;
+
+            //return jObject.Value<string>("tag_name");
 
             string json = null;
 
-            using (HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse())
+            using (WebClient webClient = new WebClient())
             {
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    Stream stream = httpWebResponse.GetResponseStream();
-                    StreamReader streamReader = null;
-
-                    if (string.IsNullOrWhiteSpace(httpWebResponse.CharacterSet))
-                        streamReader = new StreamReader(stream);
-                    else
-                        streamReader = new StreamReader(stream, Encoding.GetEncoding(httpWebResponse.CharacterSet));
-
-                    json = streamReader.ReadToEnd();
-
-                    if (streamReader != null)
-                        streamReader.Close();
-
-                    httpWebResponse.Close();
-                }
+                json = webClient.DownloadString(url);
             }
 
             if (string.IsNullOrWhiteSpace(json))
