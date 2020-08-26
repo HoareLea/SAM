@@ -10,7 +10,28 @@ namespace SAM.Core.Grasshopper
         public GH_SAMComponent(string name, string nickname, string description, string category, string subCategory)
             : base(name, nickname, description, category, subCategory)
         {
-            Message = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+            string directory = Core.Query.ExecutingAssemblyDirectory();
+            if(!string.IsNullOrWhiteSpace(directory))
+            {
+                string path = System.IO.Path.Combine(directory, "version");
+                if(!string.IsNullOrWhiteSpace(path) && System.IO.File.Exists(path))
+                {
+                    string[] lines = System.IO.File.ReadAllLines(path);
+                    if(lines != null && lines.Length != 0)
+                    {
+                        foreach(string line in lines)
+                        {
+                            if (!string.IsNullOrWhiteSpace(line))
+                            {
+                                Message = line.Trim();
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
         }
         
         public virtual void AppendAdditionalMenuItems(ToolStripDropDown menu)

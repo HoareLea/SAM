@@ -101,6 +101,7 @@
     <Compile Include="Interfaces\Base\ISAMObject.cs" />
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\SetParameter.cs" />
+    <Compile Include="Query\ExecutingAssemblyDirectory.cs" />
     <Compile Include="Query\Compare.cs" />
     <Compile Include="Query\FullName.cs" />
     <Compile Include="Query\Mask.cs" />
