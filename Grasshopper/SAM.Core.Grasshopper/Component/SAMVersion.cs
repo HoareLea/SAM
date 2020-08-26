@@ -40,7 +40,7 @@ namespace SAM.Core.Grasshopper
         {
             outputParamManager.AddTextParameter("CurrentVersion", "CurrentVersion", "Current Version", GH_ParamAccess.item);
             outputParamManager.AddTextParameter("LatestVersion", "LatesttVersion", "The Latest Version", GH_ParamAccess.item);
-            outputParamManager.AddBooleanParameter("Update", "Update", "Software is Up to Date", GH_ParamAccess.item);
+            outputParamManager.AddBooleanParameter("IsUpdateAvaliable", "IsUpdateAvaliable", "Is new version avaliable?", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace SAM.Core.Grasshopper
         {
             dataAccess.SetData(0, string.Empty);
             dataAccess.SetData(1, string.Empty);
-            dataAccess.SetData(2, true);
+            dataAccess.SetData(2, false);
 
             string currentVersion = Core.Query.CurrentVersion();
             if (string.IsNullOrWhiteSpace(currentVersion))
@@ -65,9 +65,9 @@ namespace SAM.Core.Grasshopper
             if (string.IsNullOrWhiteSpace(latestVersion))
                 return;
 
-            dataAccess.SetData(0, latestVersion);
+            dataAccess.SetData(1, latestVersion);
 
-            dataAccess.SetData(0, currentVersion.Equals(latestVersion));
+            dataAccess.SetData(2, !currentVersion.Equals(latestVersion));
         }
     }
 }
