@@ -93,6 +93,7 @@ namespace SAM.Analytical.Grasshopper
 
                 dataAccess.SetData(0, panel);
                 dataAccess.SetDataList(1, new List<GooAperture>() { new GooAperture(aperture) });
+                dataAccess.SetData(2, aperture != null);
                 return;
             }
 
@@ -149,6 +150,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 
                 dataAccess.SetDataList(1, tuples_Result.ConvertAll(x => new GooAperture(x.Item2)));
+                dataAccess.SetData(2, tuples_Result != null && tuples_Result.Count > 0);
             }
         }
     }
