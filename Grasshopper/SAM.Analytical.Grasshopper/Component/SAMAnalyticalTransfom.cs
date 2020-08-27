@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("Analytical", "Analytical", "SAM Analytical Object such as Panel, Aperture etc.", GH_ParamAccess.item);
         }
 
         /// <summary>
