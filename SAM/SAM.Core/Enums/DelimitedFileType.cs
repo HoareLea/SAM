@@ -2,7 +2,7 @@
 {
     public enum DelimitedFileType
     {
-        Unknown,
+        Undefined,
         Csv,
         TabDelimited
     }

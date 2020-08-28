@@ -18,5 +18,21 @@ namespace SAM.Core
 
             return parameterSet_Existing.Copy(parameterSet);
         }
+
+        public static LogRecord Add(this Log log, string format, params object[] values)
+        {
+            if (log == null || format == null)
+                return null;
+
+            return log.Add(format, values);
+        }
+
+        public static LogRecord Add(this Log log, string format, LogRecordType logRecordType, params object[] values)
+        {
+            if (log == null || format == null)
+                return null;
+
+            return log.Add(format, logRecordType, values);
+        }
     }
 }

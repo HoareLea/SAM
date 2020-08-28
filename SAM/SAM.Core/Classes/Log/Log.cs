@@ -34,6 +34,13 @@ namespace SAM.Core
             return logRecord;
         }
 
+        public LogRecord Add(string format, LogRecordType logRecordType, params object[] values)
+        {
+            LogRecord logRecord = new LogRecord(format, logRecordType, values);
+            logRecords.Add(logRecord);
+            return logRecord;
+        }
+
         public override string ToString()
         {
             return string.Join(Environment.NewLine, logRecords.ConvertAll(x => x.ToString()));
@@ -99,15 +106,6 @@ namespace SAM.Core
             }
 
             return true;
-        }
-
-
-        public static LogRecord Add(Log log, string format, params object[] values)
-        {
-            if (log == null)
-                return null;
-
-            return log.Add(format, values);
         }
     }
 }

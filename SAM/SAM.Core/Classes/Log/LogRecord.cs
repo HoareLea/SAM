@@ -9,22 +9,37 @@ namespace SAM.Core
     {
         private DateTime dateTime;
         private string text;
+        private LogRecordType logRecordType;
 
         public LogRecord(LogRecord logRecord)
         {
             dateTime = logRecord.dateTime;
+            logRecordType = logRecord.logRecordType;
             text = logRecord.text;
         }
 
         public LogRecord(string text)
         {
             dateTime = DateTime.UtcNow;
+            logRecordType = LogRecordType.Undefined;
             this.text = text;
         }
 
         public LogRecord(string format, params object[] values)
         {
             dateTime = DateTime.UtcNow;
+            logRecordType = LogRecordType.Undefined;
+
+            if (format != null)
+                text = string.Format(format, values);
+            else
+                text = string.Empty;
+        }
+
+        public LogRecord(string format, LogRecordType logRecordType, params object[] values)
+        {
+            dateTime = DateTime.UtcNow;
+            this.logRecordType = logRecordType;
 
             if (format != null)
                 text = string.Format(format, values);
@@ -40,6 +55,7 @@ namespace SAM.Core
         public LogRecord(DateTime dateTime, string text)
         {
             this.dateTime = dateTime;
+            logRecordType = LogRecordType.Undefined;
 
             if (text == null)
                 this.text = string.Empty;
@@ -63,13 +79,24 @@ namespace SAM.Core
             }
         }
 
+        public LogRecordType LogRecordType
+        {
+            get
+            {
+                return LogRecordType;
+            }
+        }
+
         public override string ToString()
         {
             string text_Temp = text;
             if (string.IsNullOrWhiteSpace(text_Temp))
                 text_Temp = string.Empty;
 
-            return string.Format("[{0}]\t{1}", dateTime.ToString("yyyy-MM-dd HH:mm:ss.f"), text_Temp);
+            if (logRecordType == LogRecordType.Undefined)
+                return string.Format("[{0}]\t{1}", dateTime.ToString("yyyy-MM-dd HH:mm:ss.f"), text_Temp);
+            else
+                return string.Format("[{0}\t{1}]\t{2}", dateTime.ToString("yyyy-MM-dd HH:mm:ss.f"), logRecordType.ToString(), text_Temp);
         }
 
         public bool FromJObject(JObject jObject)
@@ -79,6 +106,11 @@ namespace SAM.Core
 
             dateTime = jObject.Value<DateTime>("DateTime");
             text = jObject.Value<string>("Text");
+
+            logRecordType = LogRecordType.Undefined;
+            if (jObject.ContainsKey("LogRecordType"))
+                Enum.TryParse(jObject.Value<string>("LogRecordType"), out logRecordType);
+
             return true;
         }
 
@@ -87,6 +119,9 @@ namespace SAM.Core
             JObject jObject = new JObject();
             jObject.Add("_type", Query.FullTypeName(this));
             jObject.Add("DateTime", dateTime);
+
+            if (logRecordType != LogRecordType.Undefined)
+                jObject.Add("LogRecordType", logRecordType.ToString());
 
             if (text != null)
                 jObject.Add("Text", text);

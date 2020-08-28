@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Enums\LogRecordType.cs" />
     <Compile Include="Interfaces\Base\IDispatch.cs" />
     <Compile Include="Classes\Collections\GuidCollection.cs" />
     <Compile Include="Classes\Collections\SAMCollection.cs" />
