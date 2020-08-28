@@ -41,6 +41,24 @@ namespace SAM.Core
             return logRecord;
         }
 
+        public List<LogRecord> AddRange(IEnumerable<LogRecord> logRecords)
+        {
+            if (logRecords == null)
+                return null;
+
+            List<LogRecord> result = new List<LogRecord>();
+            foreach (LogRecord logRecord in logRecords)
+            {
+                LogRecord logRecord_New = logRecord?.Clone();
+                if (logRecord_New == null)
+                    continue;
+
+                this.logRecords.Add(logRecord_New);
+                result.Add(logRecord_New);
+            }
+            return result;
+        }
+
         public override string ToString()
         {
             return string.Join(Environment.NewLine, logRecords.ConvertAll(x => x.ToString()));
