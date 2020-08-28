@@ -28,7 +28,7 @@ namespace SAM.Core.Grasshopper
             if (Value == null)
                 return base.ToString();
             else
-                return Value.ToString();
+                return Value.ToString().Replace("\t", "  ");
         }
     }
 
