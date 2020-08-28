@@ -6,32 +6,40 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooLocation : GooSAMObject<Location>
+    public class GooLog : GooSAMObject<Log>
     {
-        public GooLocation()
+        public GooLog()
             : base()
         {
         }
 
-        public GooLocation(Location location)
-            : base(location)
+        public GooLog(Log log)
+            : base(log)
         {
         }
 
         public override IGH_Goo Duplicate()
         {
-            return new GooLocation(Value);
+            return new GooLog(Value);
+        }
+
+        public override string ToString()
+        {
+            if (Value == null)
+                return base.ToString();
+            else
+                return Value.ToString();
         }
     }
 
-    public class GooLocationParam : GH_PersistentParam<GooLocation>
+    public class GooLogParam : GH_PersistentParam<GooLocation>
     {
-        public override Guid ComponentGuid => new Guid("ce7b8666-f1e6-4931-9e86-1b4da97a5056");
+        public override Guid ComponentGuid => new Guid("02b69601-dc9d-4a3e-9950-aa6e19c1a033");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        public GooLocationParam()
-            : base(typeof(Location).Name, typeof(Location).Name, typeof(Location).FullName.Replace(".", " "), "Params", "SAM")
+        public GooLogParam()
+            : base(typeof(Log).Name, typeof(Log).Name, typeof(Log).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 

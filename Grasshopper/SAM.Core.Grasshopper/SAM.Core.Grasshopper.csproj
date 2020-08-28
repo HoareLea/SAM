@@ -76,6 +76,7 @@
     <Compile Include="Classes\GH_SAMVariableOutputParameterComponent.cs" />
     <Compile Include="Classes\GH_SAMComponent.cs" />
     <Compile Include="Classes\GooAddress.cs" />
+    <Compile Include="Classes\GooLog.cs" />
     <Compile Include="Classes\GooLocation.cs" />
     <Compile Include="Classes\GooRelationCluster.cs" />
     <Compile Include="Classes\GooSAMObject.cs" />
