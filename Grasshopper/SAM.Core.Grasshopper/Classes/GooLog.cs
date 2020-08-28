@@ -32,7 +32,7 @@ namespace SAM.Core.Grasshopper
         }
     }
 
-    public class GooLogParam : GH_PersistentParam<GooLocation>
+    public class GooLogParam : GH_PersistentParam<GooLog>
     {
         public override Guid ComponentGuid => new Guid("02b69601-dc9d-4a3e-9950-aa6e19c1a033");
 
@@ -43,12 +43,12 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GooLocation> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GooLog> values)
         {
             throw new NotImplementedException();
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GooLocation value)
+        protected override GH_GetterResult Prompt_Singular(ref GooLog value)
         {
             throw new NotImplementedException();
         }
