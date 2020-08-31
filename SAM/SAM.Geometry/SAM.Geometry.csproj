@@ -99,6 +99,7 @@
     <Compile Include="Classes\SAMGeometry.cs" />
     <Compile Include="Interfaces\IReversible.cs" />
     <Compile Include="Interfaces\ISAMGeometry.cs" />
+    <Compile Include="Planar\Modify\District.cs" />
     <Compile Include="Planar\Classes\BoundingBox2D.cs" />
     <Compile Include="Planar\Classes\Circle2D.cs" />
     <Compile Include="Planar\Classes\Face2D.cs" />
