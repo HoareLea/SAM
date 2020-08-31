@@ -1,15 +1,9 @@
 ﻿using GH_IO.Serialization;
-using Grasshopper.Documentation;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
-using Rhino;
 using SAM.Core.Grasshopper.Properties;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAM.Core.Grasshopper
 {

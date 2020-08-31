@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper.Documentation;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Grasshopper.Kernel.Components;
 using Grasshopper.Kernel.Types;
@@ -35,7 +36,7 @@ namespace SAM.Core.Grasshopper
               "Inspect Object",
               "SAM", "Core")
         {
-            Message = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            Message = Core.Query.CurrentVersion();
         }
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
@@ -252,7 +253,18 @@ namespace SAM.Core.Grasshopper
                 }
                 else
                 {
-                    dataAccess.SetData(i, new GooParameter(result));
+                    if (result is string)
+                    {
+                        dataAccess.SetData(i, new GooParameter(new GH_String((string)result)));
+                    }
+                    else if (Core.Query.IsNumeric(result))
+                    {
+                        double value;
+                        if (Core.Query.TryConvert(result, out value))
+                            dataAccess.SetData(i, new GooParameter(new GH_Number((double)result)));
+                        else
+                            dataAccess.SetData(i, new GooParameter(result));
+                    }
                 }
             }
         }
