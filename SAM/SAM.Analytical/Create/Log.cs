@@ -1,4 +1,5 @@
 ﻿using SAM.Core;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -21,6 +22,20 @@ namespace SAM.Analytical
 
             foreach(Space space in spaces)
             {
+                Shell shell = adjacencyCluster.Shell(space);
+                if(shell == null || !shell.IsClosed())
+                {
+                    result.Add("Space {0} (Guid: {1}) is not enclosed.", LogRecordType.Warning, space.Name, space.Guid);
+                    return result;
+                }
+
+                List<Space> spaces_InRange = spaces.FindAll(x => shell.InRange(space.Location));
+                if(spaces_InRange == null || spaces_InRange.Count > 1)
+                {
+                    result.Add("There are more than one space enclosed in single shell: {0}", LogRecordType.Warning, string.Join(", ",spaces_InRange.ConvertAll(x => x.Name)));
+                    return result;
+                }
+                
                 List<Panel> panels = adjacencyCluster.GetPanels(space);
                 if(panels == null || panels.Count == 0)
                 {

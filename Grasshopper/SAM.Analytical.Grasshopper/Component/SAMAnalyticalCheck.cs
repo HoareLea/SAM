@@ -65,7 +65,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Log log = Analytical.Create.Log(sAMObject as dynamic);
+            Log log = Create.Log(sAMObject as dynamic);
 
             if (log == null)
                 log = new Log();
