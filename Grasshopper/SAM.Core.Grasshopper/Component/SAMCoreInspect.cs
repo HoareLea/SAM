@@ -252,7 +252,7 @@ namespace SAM.Core.Grasshopper
                 {
                     if (result is string)
                     {
-                        dataAccess.SetData(i, new GH_String((string)result));
+                        dataAccess.SetData(i, new GH_String ((string)result));
                     }
                     else if (Core.Query.IsNumeric(result))
                     {
@@ -261,6 +261,14 @@ namespace SAM.Core.Grasshopper
                             dataAccess.SetData(i, new GH_Number((double)result));
                         else
                             dataAccess.SetData(i, new GooParameter(result));
+                    }
+                    else if(result is bool)
+                    {
+                        dataAccess.SetData(i, new GH_Boolean((bool)result));
+                    }
+                    else
+                    {
+                        dataAccess.SetData(i, new GooParameter(result));
                     }
                 }
 
