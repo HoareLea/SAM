@@ -17,15 +17,15 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.HL_Logo24;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalCheck()
-          : base("SAMAnalytical.RevitCheck", "SAMAnalytical.RevitCheck",
-              "Check Document against analytical object",
-              "SAM", "Revit")
+          : base("SAMAnalytical.Check", "SAMAnalytical.Check",
+              "Check Document against analytical object ie. AdjacencyCluster or Analytical Model",
+              "SAM", "Analytical")
         {
         }
 
