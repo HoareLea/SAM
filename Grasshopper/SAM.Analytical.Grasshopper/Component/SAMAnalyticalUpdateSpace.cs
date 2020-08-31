@@ -1,11 +1,9 @@
-﻿using GH_IO.Types;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
+﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
-using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Spatial;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -14,7 +12,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("1571d29d-f01d-4f31-afbe-dd012b0f60c9");
+        public override Guid ComponentGuid => new Guid("4f700cfb-0344-442f-b882-b16ffa499bc3");
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -25,8 +23,8 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalUpdateSpace()
-          : base("SAMAnalytical.UpdateSpace ", "SAMAnalytical.UpdateSpace ",
-              "Update SAM Analytical Space",
+          : base("SAMAnalytical.UpdateSpace", "SAMAnalytical.UpdateSpace",
+              "Update Space in SAM Adjacency Cluster or Analytical Model",
               "SAM", "Analytical")
         {
         }
@@ -36,15 +34,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            int index;
-
-            inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytcial Space", GH_ParamAccess.item);
-
-            index = inputParamManager.AddGenericParameter("_location", "_location", "Location", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
-
-            index = inputParamManager.AddGenericParameter("name_", "name_", "Name", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Model ot Adjacency Cluster", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytical Space", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -52,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSpaceParam(), "Space", "Space", "SAM Analytical Space", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Analytical", "Analytical", "SAM Analytical Model or Adjacency Cluster", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -64,38 +55,43 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             Space space = null;
-            if (!dataAccess.GetData(0, ref space))
+            if (!dataAccess.GetData(1, ref space) || space == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            string name = null;
-            dataAccess.GetData(2, ref name);
 
-            Point3D location = null;
-            GH_ObjectWrapper objectWrapper = null;
-            if (dataAccess.GetData(1, ref objectWrapper))
+            SAMObject sAMObject = null;
+            if(!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
             {
-                if (objectWrapper.Value is GH_Point)
-                    location = ((GH_Point)objectWrapper.Value).Value.ToSAM();
-                else if(objectWrapper.Value is GH_Point3D)
-                    location = ((GH_Point3D)objectWrapper.Value).ToSAM();
-                else if(objectWrapper.Value is GooSAMGeometry)
-                {
-                    //location = (GooSAMGeometry)(objectWrapper.Value) as Point3D;
-                }
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
             }
 
-            if (name == null)
-                name = space.Name;
+            AdjacencyCluster adjacencyCluster = sAMObject as AdjacencyCluster;
+            if(adjacencyCluster == null && sAMObject is AnalyticalModel)
+                adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
 
-            if (location == null)
-                location = space.Location;
+            if(adjacencyCluster == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            Space space_Result = new Space(space, name, location);
+            adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+            adjacencyCluster.UpdateSpace(space);
 
-            dataAccess.SetData(0, new GooSpace(space_Result));
+            if(sAMObject is AnalyticalModel)
+            {
+                AnalyticalModel analyticalModel = ((AnalyticalModel)sAMObject);
+                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                dataAccess.SetData(0, new GooSAMObject<SAMObject>(analyticalModel));
+            }
+            else
+            {
+                dataAccess.SetData(0, new GooSAMObject<SAMObject>(adjacencyCluster));
+            }
         }
     }
 }

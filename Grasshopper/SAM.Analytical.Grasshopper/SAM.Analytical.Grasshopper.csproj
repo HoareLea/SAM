@@ -101,6 +101,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByAzimuth.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByAperture.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster_Obsolete.cs" />
     <Compile Include="Component\SAMAnalyticalGetAdjacentSpaceNames.cs" />
     <Compile Include="Component\SAMAnalyticalApertureConstructions.cs" />
@@ -113,7 +114,7 @@
     <Compile Include="Component\SAMAnalyticalFilter.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructions.cs" />
     <Compile Include="Component\SAMAnalyticalUpdatePanelTypes_Obsolete.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateSpaceByLocationAndName.cs" />
     <Compile Include="Component\SAMAnalyticalExternalVector3D.cs" />
     <Compile Include="Component\SAMAnalyticalInsideSpace.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster.cs" />

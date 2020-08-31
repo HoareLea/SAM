@@ -87,6 +87,7 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
+    <Compile Include="Modify\UpdateSpace.cs" />
     <Compile Include="Modify\Remove.cs" />
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\UpdateConstructions.cs" />
