@@ -81,6 +81,7 @@
     <Compile Include="Classes\GooRelationCluster.cs" />
     <Compile Include="Classes\GooSAMObject.cs" />
     <Compile Include="Classes\GooParameter.cs" />
+    <Compile Include="Component\SAMCoreSaveLog.cs" />
     <Compile Include="Component\SAMVersion.cs" />
     <Compile Include="Component\SAMCoreColorToUint.cs" />
     <Compile Include="Component\SAMCoreRemoveGroup.cs" />
