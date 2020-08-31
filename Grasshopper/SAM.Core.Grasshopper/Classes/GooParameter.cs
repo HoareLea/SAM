@@ -163,7 +163,7 @@ namespace SAM.Core.Grasshopper
         }
     }
 
-    public class GooParameterParam : GH_Param<GooParameter>
+    public class GooParameterParam : GH_Param<IGH_Goo>
     {       
         public override Guid ComponentGuid => new Guid("a7a5eb79-1834-43db-9aa3-30ca105c3bbb");
 

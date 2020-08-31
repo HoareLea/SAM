@@ -1,7 +1,5 @@
-﻿using Grasshopper.Documentation;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
-using Grasshopper.Kernel.Components;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
 using SAM.Core.Grasshopper.Properties;
@@ -9,7 +7,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
@@ -255,17 +252,18 @@ namespace SAM.Core.Grasshopper
                 {
                     if (result is string)
                     {
-                        dataAccess.SetData(i, new GooParameter(new GH_String((string)result)));
+                        dataAccess.SetData(i, new GH_String((string)result));
                     }
                     else if (Core.Query.IsNumeric(result))
                     {
                         double value;
                         if (Core.Query.TryConvert(result, out value))
-                            dataAccess.SetData(i, new GooParameter(new GH_Number((double)result)));
+                            dataAccess.SetData(i, new GH_Number((double)result));
                         else
                             dataAccess.SetData(i, new GooParameter(result));
                     }
                 }
+
             }
         }
 

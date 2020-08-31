@@ -1,6 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using System;
 
 namespace SAM.Core.Grasshopper
 {

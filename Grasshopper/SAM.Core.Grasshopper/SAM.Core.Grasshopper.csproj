@@ -106,6 +106,7 @@
     <Compile Include="Convert\ToSAM\GH_SAMParam.cs" />
     <Compile Include="Create\GH_SAMParam.cs" />
     <Compile Include="Enums\ParamVisibility.cs" />
+    <Compile Include="Interfaces\IGooParameter.cs" />
     <Compile Include="Interfaces\IGooSAMObject.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Kernel\AssemblyPriority.cs" />
