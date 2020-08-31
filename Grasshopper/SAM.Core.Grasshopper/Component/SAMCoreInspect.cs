@@ -258,7 +258,7 @@ namespace SAM.Core.Grasshopper
                     {
                         double value;
                         if (Core.Query.TryConvert(result, out value))
-                            dataAccess.SetData(i, new GH_Number((double)result));
+                            dataAccess.SetData(i, new GH_Number((double)value));
                         else
                             dataAccess.SetData(i, new GooParameter(result));
                     }
