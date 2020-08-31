@@ -54,8 +54,8 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Space space = null;
-            if (!dataAccess.GetData(1, ref space) || space == null)
+            List<Space> spaces = new List<Space>();
+            if (!dataAccess.GetDataList(1, spaces))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -80,7 +80,8 @@ namespace SAM.Analytical.Grasshopper
             }
 
             adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-            adjacencyCluster.UpdateSpace(space);
+            foreach (Space space in spaces)
+                adjacencyCluster.UpdateSpace(space);
 
             if(sAMObject is AnalyticalModel)
             {

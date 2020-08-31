@@ -1,23 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static bool UpdateSpace(this AdjacencyCluster adjacencyCluster, Space space, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static bool UpdateSpace(this AdjacencyCluster adjacencyCluster, Space space, double tolerance = Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null || space == null)
                 return false;
 
-            Geometry.Spatial.Point3D point3D = space.Location;
+            Point3D point3D = space.Location;
             List<Space> spaces = adjacencyCluster.GetSpaces();
             if (spaces == null || spaces.Count == 0)
                 return false;
 
             foreach(Space space_Temp in spaces)
             {
-                bool inside = adjacencyCluster.Inside(space_Temp, point3D, silverSpacing, tolerance);
-                if(inside)
+                Shell shell = adjacencyCluster.Shell(space_Temp);
+                if (shell == null)
+                    continue;
+
+                bool inRange = shell.InRange(point3D, tolerance);
+                if(inRange)
                 {
                     List<Panel> panels = adjacencyCluster.GetPanels(space_Temp);
                     adjacencyCluster.RemoveObject(typeof(Space), space_Temp.Guid);
