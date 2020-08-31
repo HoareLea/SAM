@@ -73,6 +73,7 @@
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
+    <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\ApertureType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
