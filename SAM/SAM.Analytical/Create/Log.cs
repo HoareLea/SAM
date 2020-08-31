@@ -29,7 +29,7 @@ namespace SAM.Analytical
                     return result;
                 }
 
-                List<Space> spaces_InRange = spaces.FindAll(x => shell.InRange(space.Location));
+                List<Space> spaces_InRange = spaces.FindAll(x => shell.InRange(x.Location));
                 if(spaces_InRange == null || spaces_InRange.Count > 1)
                 {
                     result.Add("There are more than one space enclosed in single shell: {0}", LogRecordType.Warning, string.Join(", ",spaces_InRange.ConvertAll(x => x.Name)));
