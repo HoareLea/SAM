@@ -10,9 +10,9 @@ namespace SAM.Geometry.Planar
             if (edges == null)
                 return null;
 
-            List<Face2D> result = new List<Face2D>();
+            List<Face2D> face2Ds = new List<Face2D>();
             if (edges.Count() == 0)
-                return result;
+                return face2Ds;
 
             List<IClosed2D> edges_Current = new List<IClosed2D>(edges);
             while (edges_Current.Count > 0)
@@ -22,9 +22,26 @@ namespace SAM.Geometry.Planar
                 if (face == null)
                     break;
 
-                result.Add(face);
+                face2Ds.Add(face);
 
                 edges_Current = edges_Excluded;
+            }
+
+            if (face2Ds.Count == 1)
+                return face2Ds;
+
+            face2Ds.Sort((x, y) => y.ExternalEdge2D.GetArea().CompareTo(x.ExternalEdge2D.GetArea()));
+            List<Face2D> result = new List<Face2D>();
+            while(face2Ds.Count > 0)
+            {
+                Face2D face2D = face2Ds[0];
+                face2Ds.RemoveAt(0);
+
+                List<Face2D> faces2D_Inside = face2Ds.FindAll(x => face2D.Inside(x.InternalPoint2D()));
+                if (faces2D_Inside.Count != 0)
+                    continue;
+
+                result.Add(face2D);                
             }
 
             return result;
