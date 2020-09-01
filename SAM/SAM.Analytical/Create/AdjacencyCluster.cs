@@ -1,5 +1,4 @@
-﻿using NetTopologySuite.Geometries;
-using SAM.Geometry.Planar;
+﻿using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
