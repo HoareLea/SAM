@@ -1,4 +1,5 @@
 ﻿using ClipperLib;
+using SAM.Core;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.IO.Compression;
@@ -246,8 +247,12 @@ namespace SAM.Geometry.Planar
                 {
                     List<double> distances = segment2Ds.ConvertAll(x => x.Distance(point2D));
                     double distance_Min = distances.Min();
-                    int index_Min = distances.IndexOf(distance_Min);
-                    double offset = offsets[index_Min];
+                    List<int> indexes = distances.IndexesOf(distance_Min);
+
+                    double offset = offsets[indexes.First()];
+                    if(indexes.Count > 1)
+                        offset = indexes.ConvertAll(x => offsets[x]).Min();
+
                     if (distance_Min < offset - tolerance)
                     {
                         remove = true;
