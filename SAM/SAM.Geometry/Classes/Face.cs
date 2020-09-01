@@ -35,10 +35,10 @@ namespace SAM.Geometry
 
         public override bool FromJObject(JObject jObject)
         {
-            externalEdge2D = Planar.Create.IClosed2D(jObject.Value<JObject>("ExternalEdge"));
+            externalEdge2D = Planar.Create.IClosed2D(jObject.Value<JObject>("ExternalEdge2D"));
 
-            if (jObject.ContainsKey("InternalEdges"))
-                internalEdge2Ds = Core.Create.IJSAMObjects<IClosed2D>(jObject.Value<JArray>("InternalEdges"));
+            if (jObject.ContainsKey("InternalEdge2Ds"))
+                internalEdge2Ds = Core.Create.IJSAMObjects<IClosed2D>(jObject.Value<JArray>("InternalEdge2Ds"));
 
             return true;
         }
