@@ -174,6 +174,13 @@ namespace SAM.Analytical.Grasshopper
 
             foreach (KeyValuePair<double, List<ISegmentable2D>> keyValuePair in dictionary)
             {
+                IEnumerable<ISegmentable2D> segmentable2Ds = Geometry.Planar.Query.Split(keyValuePair.Value)?.Cast<ISegmentable2D>();
+                if (segmentable2Ds == null)
+                    segmentable2Ds = keyValuePair.Value;
+
+                if (segmentable2Ds == null)
+                    continue;
+
                 List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(keyValuePair.Value);
                 if (polygon2Ds == null)
                     continue;
