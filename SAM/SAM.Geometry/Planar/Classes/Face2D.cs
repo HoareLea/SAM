@@ -109,7 +109,7 @@ namespace SAM.Geometry.Planar
                         continue;
                 }
 
-                IClosed2D internalEdge = result.InternalEdge2Ds.Find(x => x.InRange(edge_Temp));
+                IClosed2D internalEdge = result.InternalEdge2Ds.Find(x => x.InRange(edge_Temp as ISegmentable2D));
                 if(internalEdge != null)
                 {
                     if (!edges_Excluded.Contains(internalEdge))
