@@ -279,6 +279,8 @@ namespace SAM.Analytical
                     }
                 }
 
+                internalEdge2Ds.RemoveAll(x => x is Polygon2D && face2Ds_New.Find(y => y.ExternalEdge2D is Polygon2D && ((Polygon2D)y.ExternalEdge2D).Similar((Polygon2D)x)) != null);
+
                 face2Ds_New.AddRange(internalEdge2Ds.ConvertAll(x => new Face2D(x)));
 
                 tuples.Add(new Tuple<double, List<Face2D>>(elevation_Bottom, face2Ds_New));
