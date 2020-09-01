@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SAM.Geometry.Planar
 {
@@ -79,48 +80,58 @@ namespace SAM.Geometry.Planar
             if (edges == null || edges.Count() == 0)
                 return null;
 
-            IClosed2D closed2D_Max = null;
-            double area_Max = double.MinValue;
-            foreach (IClosed2D closed2D in edges)
-            {
-                double area = closed2D.GetArea();
-                if (area > area_Max)
-                {
-                    area_Max = area;
-                    closed2D_Max = closed2D;
-                }
-            }
-
-            if (closed2D_Max == null)
-                return null;
-
-            Face2D result = new Face2D(closed2D_Max);
             List<IClosed2D> edges_Temp = new List<IClosed2D>(edges);
-            edges_Temp.Remove(closed2D_Max);
+            edges_Temp.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+
+            IClosed2D edge_Max = edges_Temp[0];
+            edges_Temp.RemoveAt(0);
+
+            Face2D result = new Face2D(edge_Max);
+           
+            Orientation orientation = Orientation.Undefined;
 
             edges_Excluded = new List<IClosed2D>();
-            foreach (IClosed2D closed2D in edges_Temp)
+            foreach (IClosed2D edge_Temp in edges_Temp)
             {
-                if (result == closed2D_Max)
-                    continue;
-
-                if (!closed2D_Max.Inside(closed2D))
+                if (!edge_Max.Inside(edge_Temp))
                 {
-                    edges_Excluded.Add(closed2D);
+                    edges_Excluded.Add(edge_Temp);
                     continue;
                 }
 
                 if (result.internalEdge2Ds == null)
                     result.internalEdge2Ds = new List<IClosed2D>();
 
-                IClosed2D closed2D_New = (IClosed2D)closed2D.Clone();
-                if (orientInternalEdges)
+                if (edge_Temp is Polygon2D && edge_Max is Polygon2D)
                 {
-                    if (closed2D_New is Polygon2D && closed2D_Max is Polygon2D)
-                        ((Polygon2D)closed2D_New).SetOrientation(Geometry.Query.Opposite(((Polygon2D)closed2D_Max).GetOrientation()));
+                    IClosed2D edge = result.InternalEdge2Ds.Find(x => ((Polygon2D)x).Similar((Polygon2D)edge_Temp));
+                    if (edge != null)
+                        continue;
                 }
 
-                result.internalEdge2Ds.Add(closed2D_New);
+                IClosed2D internalEdge = result.InternalEdge2Ds.Find(x => x.Inside(edge_Temp));
+                if(internalEdge != null)
+                {
+                    if (!edges_Excluded.Contains(internalEdge))
+                        edges_Excluded.Add(internalEdge);
+
+                    edges_Excluded.Add(edge_Temp);
+                    continue;
+                }
+
+                internalEdge = (IClosed2D)edge_Temp.Clone();
+                if (orientInternalEdges)
+                {
+                    if (internalEdge is Polygon2D && edge_Max is Polygon2D)
+                    {
+                        if (orientation == Orientation.Undefined)
+                            orientation = Geometry.Query.Opposite(((Polygon2D)edge_Max).GetOrientation());
+
+                        ((Polygon2D)internalEdge).SetOrientation(orientation);
+                    }
+                }
+
+                result.internalEdge2Ds.Add(internalEdge);
             }
 
             return result;
