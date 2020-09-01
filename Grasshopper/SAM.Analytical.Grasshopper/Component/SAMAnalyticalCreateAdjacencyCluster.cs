@@ -181,7 +181,7 @@ namespace SAM.Analytical.Grasshopper
                 if (segmentable2Ds == null)
                     continue;
 
-                List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(keyValuePair.Value);
+                List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segmentable2Ds);
                 if (polygon2Ds == null)
                     continue;
 
