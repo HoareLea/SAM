@@ -188,7 +188,9 @@ namespace SAM.Analytical.Grasshopper
                     if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
                         continue;
 
-                    foreach(IClosed2D internalEdge2D in internalEdge2Ds)
+                    internalEdge2Ds.RemoveAll(x => x is Polygon2D && face2Ds.Find(y => y.ExternalEdge2D is Polygon2D && ((Polygon2D)y.ExternalEdge2D).Similar((Polygon2D)x)) != null);
+
+                    foreach (IClosed2D internalEdge2D in internalEdge2Ds)
                     {
                         if (internalEdge2D == null)
                             continue;
