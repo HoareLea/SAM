@@ -190,7 +190,7 @@ namespace SAM.Analytical.Grasshopper
                 if (face2Ds == null)
                     continue;
 
-                for(int i=0; i < face2Ds.Count; i++)
+                for (int i = 0; i < face2Ds.Count; i++)
                 {
                     List<IClosed2D> internalEdge2Ds = face2Ds[i]?.InternalEdge2Ds;
                     if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
@@ -203,7 +203,9 @@ namespace SAM.Analytical.Grasshopper
                         if (internalEdge2D == null)
                             continue;
 
-                        face2Ds.Add(new Face2D(internalEdge2D));
+                        Face2D face2D = face2Ds.Find(x => x.Inside(internalEdge2D.InternalPoint2D()));
+                        if (face2D == null)
+                            face2Ds.Add(new Face2D(internalEdge2D));
                     }
                 }
 

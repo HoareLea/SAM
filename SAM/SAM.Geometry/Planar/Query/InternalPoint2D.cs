@@ -11,6 +11,9 @@ namespace SAM.Geometry.Planar
             if (closed2D == null)
                 return null;
 
+            if (closed2D is Face)
+                return ((Face)closed2D).GetInternalPoint2D(tolerance);
+
             if (!(closed2D is ISegmentable2D))
                 throw new NotImplementedException();
 
@@ -18,7 +21,7 @@ namespace SAM.Geometry.Planar
             if (point2Ds == null || point2Ds.Count < 3)
                 return null;
 
-            Point2D result = Query.Centroid(point2Ds);
+            Point2D result = Centroid(point2Ds);
             if (Inside(point2Ds, result))
                 return result;
 
