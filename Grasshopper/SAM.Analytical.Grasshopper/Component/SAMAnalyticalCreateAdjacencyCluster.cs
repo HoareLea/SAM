@@ -78,6 +78,9 @@ namespace SAM.Analytical.Grasshopper
             List<ISAMGeometry> sAMGeometries = new List<ISAMGeometry>();
             foreach (GH_ObjectWrapper objectWrapper in objectWrapperList)
             {
+                if (objectWrapper == null || objectWrapper.Value == null)
+                    continue;
+                
                 if(objectWrapper.Value is ISAMGeometry)
                 {
                     sAMGeometries.Add((ISAMGeometry)objectWrapper.Value);
@@ -96,14 +99,14 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            double tolerance = Core.Tolerance.Distance;
-            if (!dataAccess.GetData(2, ref tolerance))
+            if (sAMGeometries.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            if (sAMGeometries.Count == 0)
+            double tolerance = Core.Tolerance.Distance;
+            if (!dataAccess.GetData(2, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

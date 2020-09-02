@@ -26,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateSpaceByLocationAndName()
           : base("SAMAnalytical.UpdateSpaceByLocationAndName", "SAMAnalytical.UpdateSpaceByLocationAndName",
-              "Update SAM Analytical Space By given Location Point and Name",
+              "Update SAM Analytical Space By given Location Point or Name",
               "SAM", "Analytical")
         {
         }
@@ -40,10 +40,10 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytcial Space", GH_ParamAccess.item);
 
-            index = inputParamManager.AddGenericParameter("_location", "_location", "Location", GH_ParamAccess.item);
+            index = inputParamManager.AddGenericParameter("_location_", "_location_", "Location", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddGenericParameter("name_", "name_", "Name", GH_ParamAccess.item);
+            index = inputParamManager.AddGenericParameter("_name_", "_name_", "Name", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
         }
 
