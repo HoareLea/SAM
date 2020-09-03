@@ -38,6 +38,8 @@ namespace SAM.Analytical.Grasshopper
             GooSpaceParam gooSpaceParam = new GooSpaceParam();
             gooSpaceParam.Optional = true;
             inputParamManager.AddParameter(gooSpaceParam, "space_", "space_", "SAM Analytical Space", GH_ParamAccess.item);
+
+            inputParamManager.AddBooleanParameter("_includeApertures_", "_includeApertures_", "Include Apertures", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -66,15 +68,22 @@ namespace SAM.Analytical.Grasshopper
             Space space = null;
             dataAccess.GetData(1, ref space);
 
+            bool includeApertures = false;
+            if (!dataAccess.GetData(2, ref includeApertures))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             AdjacencyCluster adjacencyCluster_New = null;
             if(space == null)
             {
-                adjacencyCluster_New = adjacencyCluster.UpdateNormals();
+                adjacencyCluster_New = adjacencyCluster.UpdateNormals(includeApertures);
             }
             else
             {
                 adjacencyCluster_New = adjacencyCluster.Filter(new Space[] { space });
-                List<Panel> panels = adjacencyCluster_New.UpdateNormals(space);
+                List<Panel> panels = adjacencyCluster_New.UpdateNormals(space, includeApertures);
                 if (panels != null)
                     panels.ForEach(x => adjacencyCluster_New.AddObject(x));
             }

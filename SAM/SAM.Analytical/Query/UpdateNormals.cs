@@ -1,12 +1,18 @@
 ﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static AdjacencyCluster UpdateNormals(this AdjacencyCluster adjacencyCluster, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance= Core.Tolerance.Distance)
+        /// <summary>
+        /// Update panels (plane) normals to point out outside direction
+        /// </summary>
+        /// <param name="adjacencyCluster">SAM AdjacencyCluster</param>
+        /// <param name="silverSpacing">Silver Spacing Tolerance</param>
+        /// <param name="tolerance">Distance tolerance</param>
+        /// <returns></returns>
+        public static AdjacencyCluster UpdateNormals(this AdjacencyCluster adjacencyCluster, bool includeApertures, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance= Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null)
                 return null;
@@ -49,7 +55,7 @@ namespace SAM.Analytical
                         continue;
 
                     panel = new Panel(panel);
-                    panel.FlipNormal();
+                    panel.FlipNormal(includeApertures, false); //2020.09.03 Input changed to false to match with second Method for UpdateNormals
 
                     result.AddObject(panel);
                 }
@@ -57,8 +63,17 @@ namespace SAM.Analytical
 
             return result;
         }
-    
-        public static List<Panel> UpdateNormals(this AdjacencyCluster adjacencyCluster, Space space, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+
+        /// <summary>
+        /// Update panels (plane) normals to point out outside direction
+        /// </summary>
+        /// <param name="adjacencyCluster">SAM AdjacencyCluster</param>
+        /// <param name="space">Space</param>
+        /// <param name="includeApertures">Update normals for Apertures</param>
+        /// <param name="silverSpacing">SilverSpacing Tolerance</param>
+        /// <param name="tolerance">Distance Tolerance</param>
+        /// <returns>Copy of panles which enclose given space</returns>
+        public static List<Panel> UpdateNormals(this AdjacencyCluster adjacencyCluster, Space space, bool includeApertures, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null || space == null)
                 return null;
@@ -80,7 +95,7 @@ namespace SAM.Analytical
                         if(normal_Panel != null && !normal_External.SameHalf(normal_Panel))
                         {
                             panel = new Panel(panel);
-                            panel.FlipNormal(false);
+                            panel.FlipNormal(includeApertures, false);
                         }
                     }
                 }

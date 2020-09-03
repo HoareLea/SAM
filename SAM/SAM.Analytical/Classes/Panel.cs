@@ -716,15 +716,32 @@ namespace SAM.Analytical
             return Geometry.Planar.Query.ThinnessRatio(planarBoundary3D.ExternalEdge2DLoop.GetClosed2D());
         }
 
-        public void FlipNormal(bool flipX = true)
+        public void FlipNormal(bool includeApertures, bool flipX = true)
         {
-            Face3D face3D = PlanarBoundary3D?.GetFace3D();
+            Face3D face3D = planarBoundary3D?.GetFace3D();
             if (face3D == null)
                 return;
 
             face3D.FlipNormal(flipX);
 
             planarBoundary3D = new PlanarBoundary3D(face3D);
+
+            if (apertures != null && includeApertures)
+            {
+                foreach (Aperture aperture in apertures)
+                    aperture.FlipNormal(flipX);
+            }
+        }
+
+        public void Normalize(bool includeApertures = true, double tolerance = Tolerance.Distance)
+        {
+            planarBoundary3D?.Normalize(tolerance);
+
+            if (apertures != null && includeApertures)
+            {
+                foreach (Aperture aperture in apertures)
+                    aperture.Normalize(tolerance);
+            }
         }
 
         public bool IsExternal()

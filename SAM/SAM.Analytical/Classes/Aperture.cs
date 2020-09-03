@@ -208,5 +208,21 @@ namespace SAM.Analytical
                 return new PlanarBoundary3D(planarBoundary3D);
             }
         }
+
+        public void Normalize(double tolerance = Tolerance.Distance)
+        {
+            planarBoundary3D?.Normalize(tolerance);
+        }
+
+        public void FlipNormal(bool flipX = true)
+        {
+            Face3D face3D = planarBoundary3D?.GetFace3D();
+            if (face3D == null)
+                return;
+
+            face3D.FlipNormal(flipX);
+
+            planarBoundary3D = new PlanarBoundary3D(face3D);
+        }
     }
 }
