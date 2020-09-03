@@ -9,7 +9,7 @@ namespace SAM.Analytical
     {
         private List<BoundaryEdge3D> boundaryEdge3Ds;
 
-        public BoundaryEdge3DLoop(Geometry.Spatial.Plane plane, BoundaryEdge2DLoop boundaryEdge2DLoop)
+        public BoundaryEdge3DLoop(Plane plane, BoundaryEdge2DLoop boundaryEdge2DLoop)
             : base(System.Guid.NewGuid(), boundaryEdge2DLoop)
         {
             boundaryEdge3Ds = boundaryEdge2DLoop.BoundaryEdge2Ds.ConvertAll(x => new BoundaryEdge3D(plane, x));
@@ -74,17 +74,6 @@ namespace SAM.Analytical
 
             jObject.Add("BoundaryEdge3Ds", Core.Create.JArray(boundaryEdge3Ds));
             return jObject;
-        }
-
-        public void Flip()
-        {
-            if (BoundaryEdge3Ds == null)
-                return;
-
-            BoundaryEdge3Ds.Reverse();
-
-            foreach (BoundaryEdge3D boundaryEdge3D in BoundaryEdge3Ds)
-                boundaryEdge3D.Flip();
         }
     }
 }

@@ -5,10 +5,13 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static bool Clockwise(this IClosedPlanar3D closedPlanar3D, double tolerance = Core.Tolerance.Angle)
+        public static bool Clockwise(this IClosedPlanar3D closedPlanar3D, Vector3D normal = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            Vector3D normal = closedPlanar3D?.GetPlane()?.Normal;
-            if (normal == null)
+            Vector3D vector3D_Normal = normal;
+            if (vector3D_Normal == null)
+                vector3D_Normal = closedPlanar3D?.GetPlane()?.Normal;
+
+            if (vector3D_Normal == null)
                 return false;
 
             ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
@@ -19,7 +22,7 @@ namespace SAM.Geometry.Spatial
             if (point3Ds == null || point3Ds.Count < 3)
                 return false;
 
-            return Clockwise(point3Ds, normal, tolerance);
+            return Clockwise(point3Ds, vector3D_Normal, tolerance_Angle, tolerance_Distance);
 
         }
 

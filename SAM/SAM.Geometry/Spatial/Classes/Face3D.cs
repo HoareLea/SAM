@@ -244,6 +244,28 @@ namespace SAM.Geometry.Spatial
             return System.Math.Sqrt((a * a) + (b * b));
         }
 
+        public void Normalize(double tolerance = Core.Tolerance.Distance)
+        {
+            Vector3D normal = plane?.Normal;
+            if (normal == null)
+                return;
+
+            bool clockwise = Query.Clockwise(GetExternalEdge3D(), normal, Core.Tolerance.Angle, tolerance);
+            if (!clockwise)
+                (externalEdge2D as Polygon2D)?.Reverse();
+
+            List<IClosedPlanar3D> internalEdge3Ds = GetInternalEdge3Ds();
+            if (internalEdge3Ds != null)
+            {
+                for (int i = 0; i < internalEdge3Ds.Count; i++)
+                {
+                    clockwise = Query.Clockwise(internalEdge3Ds[i], normal, Core.Tolerance.Angle, tolerance);
+                    if (clockwise)
+                        (internalEdge2Ds[i] as Polygon2D)?.Reverse();
+                }
+            }
+        }
+
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges, bool orientInternalEdges = true)
         {
             if (edges == null || edges.Count() == 0)

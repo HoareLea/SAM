@@ -312,15 +312,33 @@ namespace SAM.Analytical
             }
         }
 
-        public void Flip()
+        public void Normalize(double tolerance = Tolerance.Distance)
         {
-            BoundaryEdge3DLoop externalEdge3DLoop = GetExternalEdge3DLoop();
-            List<BoundaryEdge3DLoop> internalEdge3DLoops = GetInternalEdge3DLoops();
+            Vector3D normal = plane?.Normal;
+            if (normal == null)
+                return;
 
-            plane.FlipZ();
+            IClosedPlanar3D externalEdge = plane.Convert(externalEdge2DLoop?.GetClosed2D());
+            if (externalEdge == null)
+                return;
 
-            externalEdge3DLoop.Flip();
-            internalEdge3DLoops?.ForEach(x => x.Flip());
+            bool clockwise = Geometry.Spatial.Query.Clockwise(externalEdge, normal, Tolerance.Angle, tolerance);
+            if (!clockwise)
+                externalEdge2DLoop.Reverse();
+
+            if(internalEdge2DLoops != null)
+            {
+                for (int i = 0; i < internalEdge2DLoops.Count; i++)
+                {
+                    IClosedPlanar3D internalEdge = plane.Convert(internalEdge2DLoops[i]?.GetClosed2D());
+                    if (internalEdge == null)
+                        continue;
+
+                    clockwise = Geometry.Spatial.Query.Clockwise(internalEdge, normal, Tolerance.Angle, tolerance);
+                    if (clockwise)
+                        internalEdge2DLoops[i].Reverse();
+                }
+            }
         }
 
         public override bool FromJObject(JObject jObject)
