@@ -713,7 +713,7 @@ namespace SAM.Analytical
 
         public double GetThinnessRatio()
         {
-            return Geometry.Planar.Query.ThinnessRatio(planarBoundary3D.Edge2DLoop.GetClosed2D());
+            return Geometry.Planar.Query.ThinnessRatio(planarBoundary3D.ExternalEdge2DLoop.GetClosed2D());
         }
 
         public void FlipNormal(bool flipX = true)

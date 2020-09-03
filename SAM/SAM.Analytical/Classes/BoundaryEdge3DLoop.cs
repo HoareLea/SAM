@@ -75,5 +75,16 @@ namespace SAM.Analytical
             jObject.Add("BoundaryEdge3Ds", Core.Create.JArray(boundaryEdge3Ds));
             return jObject;
         }
+
+        public void Flip()
+        {
+            if (BoundaryEdge3Ds == null)
+                return;
+
+            BoundaryEdge3Ds.Reverse();
+
+            foreach (BoundaryEdge3D boundaryEdge3D in BoundaryEdge3Ds)
+                boundaryEdge3D.Flip();
+        }
     }
 }

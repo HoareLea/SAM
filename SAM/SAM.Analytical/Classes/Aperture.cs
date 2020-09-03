@@ -134,7 +134,7 @@ namespace SAM.Analytical
             if (transform3D == null)
                 return;
 
-            BoundaryEdge3DLoop boundaryEdge3DLoop_External = planarBoundary3D.GetEdge3DLoop();
+            BoundaryEdge3DLoop boundaryEdge3DLoop_External = planarBoundary3D.GetExternalEdge3DLoop();
             if (boundaryEdge3DLoop_External == null)
                 return;
 
@@ -205,7 +205,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return planarBoundary3D;
+                return new PlanarBoundary3D(planarBoundary3D);
             }
         }
     }

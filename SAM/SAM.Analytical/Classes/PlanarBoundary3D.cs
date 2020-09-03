@@ -78,7 +78,7 @@ namespace SAM.Analytical
             : base(planarBoundary3D)
         {
             this.plane = new Plane(plane);
-            this.externalEdge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
+            externalEdge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
             if (internalEdge2DLoops != null)
                 this.internalEdge2DLoops = internalEdge2DLoops.ToList().ConvertAll(x => new BoundaryEdge2DLoop(x));
         }
@@ -115,7 +115,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return new Geometry.Spatial.Plane(plane);
+                return new Plane(plane);
             }
         }
 
@@ -126,7 +126,7 @@ namespace SAM.Analytical
 
         public void Transform(Transform3D transform3D)
         {
-            BoundaryEdge3DLoop boundaryEdge3DLoop_External = GetEdge3DLoop();
+            BoundaryEdge3DLoop boundaryEdge3DLoop_External = GetExternalEdge3DLoop();
             if (boundaryEdge3DLoop_External == null)
                 return;
 
@@ -145,7 +145,7 @@ namespace SAM.Analytical
                 internalEdge2DLoops = boundaryEdge3DLoops_Internal.ConvertAll(x => new BoundaryEdge2DLoop(plane, x));
         }
 
-        public BoundaryEdge2DLoop Edge2DLoop
+        public BoundaryEdge2DLoop ExternalEdge2DLoop
         {
             get
             {
@@ -164,7 +164,7 @@ namespace SAM.Analytical
             }
         }
 
-        public BoundaryEdge3DLoop GetEdge3DLoop()
+        public BoundaryEdge3DLoop GetExternalEdge3DLoop()
         {
             return new BoundaryEdge3DLoop(plane, externalEdge2DLoop);
         }
@@ -241,7 +241,7 @@ namespace SAM.Analytical
 
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN, bool snapInternalEdges = true)
         {
-            BoundaryEdge3DLoop boundaryEdge3DLoop_External = GetEdge3DLoop();
+            BoundaryEdge3DLoop boundaryEdge3DLoop_External = GetExternalEdge3DLoop();
             boundaryEdge3DLoop_External.Snap(point3Ds, maxDistance);
             externalEdge2DLoop = new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop_External);
 
@@ -261,7 +261,7 @@ namespace SAM.Analytical
 
         public void Snap(IEnumerable<Plane> planes, double maxDistance)
         {
-            BoundaryEdge3DLoop boundaryEdge3DLoop = GetEdge3DLoop();
+            BoundaryEdge3DLoop boundaryEdge3DLoop = GetExternalEdge3DLoop();
             BoundingBox3D boundingBox3D = boundaryEdge3DLoop.GetBoundingBox(maxDistance);
 
             Plane plane_Min = null;
@@ -310,6 +310,17 @@ namespace SAM.Analytical
             {
                 return plane.Normal;
             }
+        }
+
+        public void Flip()
+        {
+            BoundaryEdge3DLoop externalEdge3DLoop = GetExternalEdge3DLoop();
+            List<BoundaryEdge3DLoop> internalEdge3DLoops = GetInternalEdge3DLoops();
+
+            plane.FlipZ();
+
+            externalEdge3DLoop.Flip();
+            internalEdge3DLoops?.ForEach(x => x.Flip());
         }
 
         public override bool FromJObject(JObject jObject)

@@ -9,7 +9,7 @@ namespace SAM.Analytical
         {
             //TODO: Find better way to determine Height
 
-            IClosed2D closed2D = planarBoundary3D?.Edge2DLoop?.GetClosed2D();
+            IClosed2D closed2D = planarBoundary3D?.ExternalEdge2DLoop?.GetClosed2D();
             if (closed2D == null)
                 return null;
 

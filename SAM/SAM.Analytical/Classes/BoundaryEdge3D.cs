@@ -94,6 +94,17 @@ namespace SAM.Analytical
             }
         }
 
+        public void Flip()
+        {
+            if(curve3D is Segment3D)
+            {
+                ((Segment3D)curve3D).Reverse();
+                return;
+            }
+
+            throw new NotImplementedException();
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
