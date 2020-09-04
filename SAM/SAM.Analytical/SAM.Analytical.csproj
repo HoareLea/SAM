@@ -105,6 +105,7 @@
     <Compile Include="Query\ParameterName.cs" />
     <Compile Include="Modify\SetConstructionByName.cs" />
     <Compile Include="Query\External.cs" />
+    <Compile Include="Query\SplitByConcaveEdges.cs" />
     <Compile Include="Query\Tilt.cs" />
     <Compile Include="Query\UpdateNormals.cs" />
     <Compile Include="Query\NormalDictionary.cs" />

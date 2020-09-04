@@ -236,11 +236,6 @@ namespace SAM.Geometry.Planar
             return GetSegments().ConvertAll(x => x.GetLength()).Sum();
         }
 
-        public bool SimplifyByAngle(double maxAngle = Core.Tolerance.Angle)
-        {
-            return Query.SimplifyBySAM_Angle(points, true, maxAngle);
-        }
-
         public IEnumerator<Point2D> GetEnumerator()
         {
             return GetPoints().GetEnumerator();

@@ -266,6 +266,7 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges, bool orientInternalEdges = true)
         {
             if (edges == null || edges.Count() == 0)

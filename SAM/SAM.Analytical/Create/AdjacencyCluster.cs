@@ -32,7 +32,10 @@ namespace SAM.Analytical
                 List<Tuple<Segment2D, Panel, Space>> tuples = new List<Tuple<Segment2D, Panel, Space>>();
                 for(int i=0; i < polygon2Ds.Count; i++)
                 {
-                    Polygon2D polygon2D = polygon2Ds[i];
+                    Polygon2D polygon2D = polygon2Ds[i]?.SimplifyBySAM_Angle();
+                    if (polygon2D == null)
+                        polygon2D = polygon2Ds[i];
+
                     Space space = new Space(string.Format("Cell {0}", i + 1), plane_Min.Convert(polygon2D.GetInternalPoint2D()));
                     adjacencyCluster.AddObject(space);
 
@@ -40,7 +43,6 @@ namespace SAM.Analytical
                     if (segment2Ds == null || segment2Ds.Count < 3)
                         continue;
 
-                    segment2Ds.SimplifyByAngle();
                     Geometry.Planar.Modify.Snap(segment2Ds, true, tolerance);
 
                     foreach(Segment2D segment2D in segment2Ds)
@@ -324,7 +326,10 @@ namespace SAM.Analytical
                     List<Segment2D> segment2Ds = new List<Segment2D>();
                     foreach(IClosed2D closed2D in face2D.Edge2Ds)
                     {
-                        ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
+                        ISegmentable2D segmentable2D = (closed2D as Polygon2D)?.SimplifyBySAM_Angle();
+                        if(segmentable2D == null)
+                            segmentable2D = closed2D as ISegmentable2D;
+                        
                         if (segmentable2D == null)
                             continue;
 
@@ -334,7 +339,6 @@ namespace SAM.Analytical
                     if (segment2Ds == null || segment2Ds.Count < 3)
                         continue;
 
-                    segment2Ds.SimplifyByAngle();
                     Geometry.Planar.Modify.Snap(segment2Ds, true, tolerance);
 
                     Panel panel;

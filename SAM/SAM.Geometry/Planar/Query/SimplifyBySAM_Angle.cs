@@ -75,34 +75,36 @@ namespace SAM.Geometry.Planar
             return true;
         }
 
-        public static bool SimplifyByAngle(this List<Segment2D> segment2Ds, double maxAngle = Core.Tolerance.Angle)
+        public static Polygon2D SimplifyBySAM_Angle(this Polygon2D polygon2D, double maxAngle = Core.Tolerance.Angle)
         {
-            if (segment2Ds == null)
-                return false;
+            if (polygon2D == null)
+                return null;
 
-            List<PointGraph2D> pointGraph2Ds = new PointGraph2D(segment2Ds, false).Split();
-            if (pointGraph2Ds == null || pointGraph2Ds.Count == 0)
-                return false;
+            List<Point2D> point2Ds = polygon2D.Points;
+            if (point2Ds == null || point2Ds.Count < 3)
+                return new Polygon2D(polygon2D);
 
-            List<Polyline2D> polyline2Ds = new PointGraph2D(segment2Ds, false).GetPolyline2Ds();
-            if (polyline2Ds == null || polyline2Ds.Count == 0)
-                return false;
+            SimplifyBySAM_Angle(point2Ds, true, maxAngle);
+            if (point2Ds == null || point2Ds.Count < 3)
+                return new Polygon2D(polygon2D);
 
-            List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
-            foreach (Polyline2D polyline2D in polyline2Ds)
-            {
-                List<Point2D> point2Ds = polyline2D?.GetPoints();
-                if (point2Ds == null)
-                    continue;
+            return new Polygon2D(point2Ds);
+        }
 
-                SimplifyBySAM_Angle(point2Ds, polyline2D.IsClosed(), maxAngle);
+        public static Polyline2D SimplifyBySAM_Angle(this Polyline2D polyline2D, double maxAngle = Core.Tolerance.Angle)
+        {
+            if (polyline2D == null)
+                return null;
 
-                segment2Ds_Temp.AddRange(Create.Segment2Ds(point2Ds, polyline2D.IsClosed()));
-            }
+            List<Point2D> point2Ds = polyline2D.Points;
+            if (point2Ds == null || point2Ds.Count < 3)
+                return new Polyline2D(polyline2D);
 
-            segment2Ds.Clear();
-            segment2Ds.AddRange(segment2Ds_Temp);
-            return true;
+            SimplifyBySAM_Angle(point2Ds, true, maxAngle);
+            if (point2Ds == null || point2Ds.Count < 3)
+                return new Polyline2D(polyline2D);
+
+            return new Polyline2D(point2Ds, polyline2D.IsClosed());
         }
     }
 }
