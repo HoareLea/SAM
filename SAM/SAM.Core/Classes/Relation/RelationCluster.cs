@@ -684,6 +684,40 @@ namespace SAM.Core
             return result;
         }
 
+        public int GetIndex(object @object)
+        {
+            if (@object == null)
+                return -1;
+
+            object object_Temp = @object;
+            if (@object is Guid)
+                object_Temp = GetObject(Guid);
+
+            if (object_Temp == null)
+                return -1;
+
+            Guid guid = GetGuid(object_Temp);
+            if (guid.Equals(Guid.Empty))
+                return -1;
+
+            string typeName = object_Temp.GetType().FullName;
+
+            Dictionary<Guid, object> dictionary;
+            if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
+                return -1;
+
+            int count = 0;
+            foreach(Guid guid_Temp in dictionary.Keys)
+            {
+                if (guid_Temp.Equals(guid))
+                    return count;
+
+                count++;
+            }
+
+            return -1;
+        }
+
         public bool Contains(Type type)
         {
             if (type == null)
