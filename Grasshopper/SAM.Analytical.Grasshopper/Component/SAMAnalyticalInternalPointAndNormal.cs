@@ -98,9 +98,9 @@ namespace SAM.Analytical.Grasshopper
                 Face3D face3D = planarBoundary3D.GetFace3D();
                 if(face3D != null)
                 {
-                    Point2D point2D = face3D.GetInternalPoint2D();
-                    if (point2D != null)
-                        internalPoint = point2D.ToRhino();
+                    Point3D point3D = face3D.InternalPoint3D();
+                    if (point3D != null)
+                        internalPoint = point3D.ToRhino();
 
                     Vector3D vector3D = face3D.GetPlane().Normal;
                     if (vector3D != null)
