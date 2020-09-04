@@ -29,7 +29,6 @@ namespace SAM.Analytical
 
             externalEdge = polygon2Ds.Last();
 
-            List<Aperture> result = new List<Aperture>();
             for (int i = 0; i < apertures.Count; i++)
             {
                 Aperture aperture = apertures[i];
@@ -59,7 +58,7 @@ namespace SAM.Analytical
                 apertures[i] = new Aperture(aperture.ApertureConstruction, closedPlanar3D, aperture.PlanarBoundary3D.GetFace3D().GetPlane().Origin);
             }
 
-            return result;
+            return apertures;
         }
     }
 }

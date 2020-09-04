@@ -109,6 +109,11 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            if(geometry3Ds.Count != closedPlanar3Ds.Count)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Some of the geometries could not be converted");
+            }
+
             bool trimGeometry = true;
             if (!dataAccess.GetData(4, ref trimGeometry))
             {
