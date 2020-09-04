@@ -12,7 +12,7 @@ using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalInternalPointAndNormal : GH_SAMComponent
+    public class SAMAnalyticalNormals : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -27,9 +27,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalInternalPointAndNormal()
-          : base("SAMAnalytical.InternalPointAndNormal", "SAMAnalytical.InternalPointAndNormal",
-              "Gets Internal Point and Normal Vector for SAM Analytical Object",
+        public SAMAnalyticalNormals()
+          : base("SAMAnalytical.Normals", "SAMAnalytical.Normals",
+              "Gets Internal Point and Normal Vector for SAM Analytical Object please connect to GH 'Vector Display' component",
               "SAM", "Analytical")
         {
         }
@@ -40,7 +40,6 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Object", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -56,10 +55,6 @@ namespace SAM.Analytical.Grasshopper
         {
             dataAccess.SetDataList(0, null);
             dataAccess.SetDataList(1, null);
-
-            bool run = false;
-            if (!dataAccess.GetData(1, ref run) || !run)
-                return;
 
             SAMObject sAMObject = null;
             if (!dataAccess.GetData(0, ref sAMObject))

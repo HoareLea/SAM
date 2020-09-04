@@ -101,7 +101,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByAzimuth.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByAperture.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
-    <Compile Include="Component\SAMAnalyticalInternalPointAndNormal.cs" />
+    <Compile Include="Component\SAMAnalyticalNormals.cs" />
     <Compile Include="Component\SAMAnalyticalCheck.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster_Obsolete.cs" />
