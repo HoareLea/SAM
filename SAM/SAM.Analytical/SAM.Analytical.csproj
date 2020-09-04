@@ -96,6 +96,7 @@
     <Compile Include="Query\ApertureConstructions.cs" />
     <Compile Include="Query\ApertureHost.cs" />
     <Compile Include="Query\ApertureHosts.cs" />
+    <Compile Include="Query\OffsetAperturesOnEdge.cs" />
     <Compile Include="Query\ExposedToSun.cs" />
     <Compile Include="Query\Azimuth.cs" />
     <Compile Include="Query\Ground.cs" />
