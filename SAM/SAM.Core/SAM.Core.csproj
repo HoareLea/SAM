@@ -49,14 +49,20 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Classes\Material\GasMaterial.cs" />
+    <Compile Include="Classes\Material\MaterialLibrary.cs" />
+    <Compile Include="Classes\Material\TransparentMaterial.cs" />
+    <Compile Include="Classes\Material\OpaqueMaterial.cs" />
+    <Compile Include="Classes\Material\Material.cs" />
     <Compile Include="Enums\LogRecordType.cs" />
     <Compile Include="Interfaces\Base\IDispatch.cs" />
-    <Compile Include="Classes\Collections\GuidCollection.cs" />
-    <Compile Include="Classes\Collections\SAMCollection.cs" />
+    <Compile Include="Classes\Collection\GuidCollection.cs" />
+    <Compile Include="Classes\Collection\SAMCollection.cs" />
     <Compile Include="Convert\ToColor\Color.cs" />
     <Compile Include="Convert\ToUint\Uint.cs" />
     <Compile Include="Create\GuidCollection.cs" />
     <Compile Include="Create\ParameterSet.cs" />
+    <Compile Include="Interfaces\Material\IMaterial.cs" />
     <Compile Include="Modify\ReleaseCOMObject.cs" />
     <Compile Include="Classes\Model\Address.cs" />
     <Compile Include="Classes\Model\Location.cs" />
@@ -90,7 +96,7 @@
     <Compile Include="Classes\Graph\GraphEdge.cs" />
     <Compile Include="Classes\Graph\GraphNode.cs" />
     <Compile Include="Classes\Graph\GraphPath.cs" />
-    <Compile Include="Classes\Collections\SAMJsonCollection.cs" />
+    <Compile Include="Classes\Collection\SAMJsonCollection.cs" />
     <Compile Include="Convert\ToString\String.cs" />
     <Compile Include="Convert\ToSAM\IJSAMObjects.cs" />
     <Compile Include="Create\IJSAMObject.cs" />
