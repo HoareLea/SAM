@@ -58,7 +58,7 @@ namespace SAM.Core
             foreach(IMaterial material in materials)
             {
                 if (Query.Compare(material.Name, text, textComparisonType, caseSensitive))
-                    return material;
+                    return material.Clone();
             }
 
             return null;
@@ -73,7 +73,7 @@ namespace SAM.Core
             foreach (IMaterial material in materials)
             {
                 if (Query.Compare(material.Name, text, textComparisonType, caseSensitive))
-                    result.Add(material);
+                    result.Add(material.Clone());
             }
 
             return null;
@@ -88,10 +88,40 @@ namespace SAM.Core
             foreach (IMaterial material in materials)
             {
                 if (material is T)
-                    result.Add((T)material);
+                    result.Add((T)material.Clone());
             }
 
             return null;
+        }
+
+        public bool Update(IMaterial material)
+        {
+            if (material == null || materials == null || materials.Count == 0)
+                return false;
+
+            int index = materials.FindIndex(x => x.Name == material.Name);
+            if (index == -1)
+                return false;
+
+            materials[index] = material;
+            return true;
+        }
+
+        public bool Add(IMaterial material)
+        {
+            if (material == null)
+                return false;
+
+            if (materials == null)
+                materials = new List<IMaterial>();
+
+            int index = materials.FindIndex(x => x.Name == material.Name);
+            if (index == -1)
+                materials.Add(material);
+            else
+                materials[index] = material;
+
+            return true;
         }
     }
 }

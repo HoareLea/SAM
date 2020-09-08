@@ -54,6 +54,7 @@
     <Compile Include="Classes\Material\TransparentMaterial.cs" />
     <Compile Include="Classes\Material\OpaqueMaterial.cs" />
     <Compile Include="Classes\Material\Material.cs" />
+    <Compile Include="Create\MaterialLibrary.cs" />
     <Compile Include="Enums\LogRecordType.cs" />
     <Compile Include="Interfaces\Base\IDispatch.cs" />
     <Compile Include="Classes\Collection\GuidCollection.cs" />
