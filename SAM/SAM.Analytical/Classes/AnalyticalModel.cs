@@ -11,6 +11,7 @@ namespace SAM.Analytical
         private Location location;
         private Address address;
         private AdjacencyCluster adjacencyCluster;
+        private MaterialLibrary materialLibrary;
 
         public AnalyticalModel(string name, string description, Location location, Address address, AdjacencyCluster adjacencyCluster)
             : base(name)
@@ -100,6 +101,14 @@ namespace SAM.Analytical
             }
         }
 
+        public MaterialLibrary MaterialLibrary
+        {
+            get
+            {
+                return materialLibrary?.Clone();
+            }
+        }
+
         public AdjacencyCluster AdjacencyCluster
         {
             get
@@ -168,6 +177,9 @@ namespace SAM.Analytical
             if (jObject.ContainsKey("AdjacencyCluster"))
                 adjacencyCluster = new AdjacencyCluster(jObject.Value<JObject>("AdjacencyCluster"));
 
+            if (jObject.ContainsKey("MaterialLibrary"))
+                materialLibrary = new MaterialLibrary(jObject.Value<JObject>("MaterialLibrary"));
+
             return true;
         }
 
@@ -188,6 +200,9 @@ namespace SAM.Analytical
 
             if (adjacencyCluster != null)
                 jObject.Add("AdjacencyCluster", adjacencyCluster.ToJObject());
+
+            if (materialLibrary != null)
+                jObject.Add("MaterialLibrary", materialLibrary.ToJObject());
 
             return jObject;
         }

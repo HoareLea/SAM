@@ -72,6 +72,7 @@
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
+    <Compile Include="Classes\ConstructionLayer.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Panels.cs" />
