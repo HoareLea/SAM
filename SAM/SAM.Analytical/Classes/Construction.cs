@@ -14,6 +14,18 @@ namespace SAM.Analytical
         {
         }
 
+        public Construction(Guid guid, string name, IEnumerable<ConstructionLayer> constructionLayers)
+            : base(guid, name)
+        {
+            if(constructionLayers != null)
+            {
+                this.constructionLayers = new List<ConstructionLayer>();
+                foreach (ConstructionLayer constructionLayer in constructionLayers)
+                    if (constructionLayer != null)
+                        this.constructionLayers.Add(constructionLayer.Clone());
+            }
+        }
+
         public Construction(Guid guid, string name)
             : base(guid, name)
         {
