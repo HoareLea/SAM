@@ -317,7 +317,7 @@ namespace SAM.Analytical
                 int count = 1;
                 foreach (Face2D face2D in face2Ds_Top)
                 {
-                    Space space = new Space(string.Format("Cell {0}.{1}", i, count), plane_Bottom.Convert(face2D.GetInternalPoint2D()));
+                    Space space = new Space(string.Format("Cell {0}.{1}", tuples.Count - i, count), plane_Bottom.Convert(face2D.GetInternalPoint2D()));
                     count++;
 
                     if (space != null)
