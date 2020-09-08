@@ -1,5 +1,4 @@
-﻿using SAM.Geometry.Spatial;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -30,6 +29,11 @@ namespace SAM.Analytical
                 result.Add(Architectural.Create.Level(elevation));
 
             return result;
+        }
+
+        public static List<Architectural.Level> Levels(this AdjacencyCluster adjacencyCluster, double tolerance = Core.Tolerance.MacroDistance)
+        {
+            return Levels(adjacencyCluster?.GetPanels(), tolerance);
         }
     }
 }

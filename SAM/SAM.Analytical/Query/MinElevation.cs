@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -37,6 +36,15 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+
+        public static double MinElevation(this Space space, AdjacencyCluster adjacencyCluster)
+        {
+            List<Panel> panels = adjacencyCluster?.GetPanels(space);
+            if (panels == null || panels.Count == 0)
+                return double.NaN;
+
+            return MinElevation(panels);
         }
     }
 }
