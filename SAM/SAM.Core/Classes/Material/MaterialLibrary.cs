@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Core
 {
-    public class MaterialLibrary : SAMObject, IMaterial
+    public class MaterialLibrary : SAMObject
     {
         List<IMaterial> materials;
         
@@ -25,6 +25,18 @@ namespace SAM.Core
         public MaterialLibrary(JObject jObject)
             : base(jObject)
         {
+        }
+
+        public MaterialLibrary(MaterialLibrary materialLibrary)
+            : base(materialLibrary)
+        {
+            if(materialLibrary.materials != null)
+            {
+                materials = new List<IMaterial>();
+
+                foreach (IMaterial material in materialLibrary.materials)
+                    materials.Add(material.Clone());
+            }
         }
 
         public override bool FromJObject(JObject jObject)
@@ -94,6 +106,17 @@ namespace SAM.Core
             return null;
         }
 
+        public List<IMaterial> Materials
+        {
+            get
+            {
+                if (materials == null)
+                    return null;
+
+                return materials.ConvertAll(x => x.Clone());
+            }
+        }
+
         public bool Update(IMaterial material)
         {
             if (material == null || materials == null || materials.Count == 0)
@@ -103,7 +126,7 @@ namespace SAM.Core
             if (index == -1)
                 return false;
 
-            materials[index] = material;
+            materials[index] = material.Clone();
             return true;
         }
 
@@ -117,10 +140,79 @@ namespace SAM.Core
 
             int index = materials.FindIndex(x => x.Name == material.Name);
             if (index == -1)
-                materials.Add(material);
+                materials.Add(material.Clone());
             else
-                materials[index] = material;
+                materials[index] = material.Clone();
 
+            return true;
+        }
+
+        public bool Remove(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return false;
+
+            if (materials == null || materials.Count == 0)
+                return false;
+
+            int index = materials.FindIndex(x => x.Name.Equals(name));
+            if (index == -1)
+                return false;
+
+            materials.RemoveAt(index);
+            return true;
+        }
+
+        public bool Remove(Guid guid)
+        {
+            if (guid == Guid.Empty)
+                return false;
+
+            if (materials == null || materials.Count == 0)
+                return false;
+
+            int index = materials.FindIndex(x => x.Guid.Equals(guid));
+            if (index == -1)
+                return false;
+
+            materials.RemoveAt(index);
+            return true;
+        }
+
+        public List<IMaterial> Append(string path)
+        {
+            MaterialLibrary materialLibrary = Create.MaterialLibrary(path);
+            if (materialLibrary == null)
+                return null;
+
+            List<IMaterial> result = new List<IMaterial>();
+
+            if (materialLibrary.materials == null || materialLibrary.materials.Count == 0)
+                return result;
+
+            foreach (IMaterial material in materialLibrary.materials)
+                if (Add(material))
+                    result.Add(material);
+
+            return result;
+        }
+
+        public List<IMaterial> Read(string path)
+        {
+            materials = new List<IMaterial>();
+
+            return Append(path);
+        }
+
+        public bool Write(string path)
+        {
+            JObject jObject = ToJObject();
+            if (jObject == null)
+                return false;
+
+            string json = jObject.ToString();
+
+            System.IO.File.WriteAllText(path, json);
             return true;
         }
     }
