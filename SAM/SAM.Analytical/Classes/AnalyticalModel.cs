@@ -160,6 +160,17 @@ namespace SAM.Analytical
             return adjacencyCluster.AddSpace(space, panels);
         }
 
+        public bool AddMaterial(IMaterial material)
+        {
+            if (material == null)
+                return false;
+
+            if (materialLibrary == null)
+                materialLibrary = new MaterialLibrary("Default Material Libarary");
+
+            return materialLibrary.Add(material.Clone());
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
