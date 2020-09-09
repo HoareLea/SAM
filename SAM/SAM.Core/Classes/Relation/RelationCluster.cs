@@ -965,6 +965,11 @@ namespace SAM.Core
             return dictionary.Remove(guid);
         }
 
+        public bool RemoveObject<T>(Guid guid)
+        {
+            return RemoveObject(typeof(T), guid);
+        }
+
         public bool RemoveRelation(object object_1, object object_2)
         {
             if (!IsValid(object_1) || !IsValid(object_2))
