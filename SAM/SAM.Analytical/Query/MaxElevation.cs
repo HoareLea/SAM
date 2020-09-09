@@ -1,4 +1,7 @@
-﻿namespace SAM.Analytical
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
@@ -9,6 +12,25 @@
                 return double.NaN;
 
             return boundingBox3D.Max.Z;
+        }
+
+        public static double MaxElevation(this IEnumerable<Panel> panels)
+        {
+            if (panels == null || panels.Count() == 0)
+                return double.NaN;
+            
+            double result = double.MinValue;
+            foreach(Panel panel in panels)
+            {
+                if (panel == null)
+                    continue;
+
+                double maxElevation = MaxElevation(panel);
+                if (maxElevation > result)
+                    result = maxElevation;
+            }
+
+            return result;
         }
     }
 }

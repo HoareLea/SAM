@@ -97,6 +97,16 @@
     <Compile Include="Query\ApertureConstructions.cs" />
     <Compile Include="Query\ApertureHost.cs" />
     <Compile Include="Query\ApertureHosts.cs" />
+    <Compile Include="Query\FirstMaterial.cs" />
+    <Compile Include="Query\FirstConstructionLayer.cs" />
+    <Compile Include="Query\InternalMaterialDictionary.cs" />
+    <Compile Include="Query\InternalConstructionLayerDictionary.cs" />
+    <Compile Include="Query\InternalMaterial.cs" />
+    <Compile Include="Query\Material.cs" />
+    <Compile Include="Query\ExternalMaterial.cs" />
+    <Compile Include="Query\InternalConstructionLayer.cs" />
+    <Compile Include="Query\ExternalConstructionLayer.cs" />
+    <Compile Include="Query\Volume.cs" />
     <Compile Include="Query\OffsetAperturesOnEdge.cs" />
     <Compile Include="Query\ExposedToSun.cs" />
     <Compile Include="Query\Azimuth.cs" />

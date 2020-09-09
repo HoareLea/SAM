@@ -62,6 +62,20 @@ namespace SAM.Core
             return jObject;
         }
 
+        public IMaterial GetMaterial(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
+
+            foreach (IMaterial material in materials)
+            {
+                if (material.Name.Equals(name))
+                    return material.Clone();
+            }
+
+            return null;
+        }
+        
         public IMaterial GetMaterial(string text, TextComparisonType textComparisonType, bool caseSensitive = true)
         {
             if (string.IsNullOrEmpty(text) || materials == null || materials.Count == 0)
