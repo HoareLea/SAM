@@ -267,7 +267,7 @@ namespace SAM.Analytical
 
                 Plane plane = tuple.Item1.GetPlane();
 
-                List<Tuple<Face3D, Panel>> tuples_Face3D = tuples.FindAll(x => x.Item1.Coplanar(tuple.Item1) && plane.Distance(x.Item1.GetPlane()) <= offset);
+                List<Tuple<Face3D, Panel>> tuples_Face3D = tuples.FindAll(x => x.Item1.Coplanar(tuple.Item1, tolerance) && plane.Distance(x.Item1.GetPlane()) <= offset);
                 if (tuples_Face3D.Count == 0)
                 {
                     result.Add(tuple.Item2);
