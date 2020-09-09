@@ -4,7 +4,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static List<Face3D> Face3Ds(this IEnumerable<ISAMGeometry3D> geometry3Ds)
+        public static List<Face3D> Face3Ds(this IEnumerable<ISAMGeometry3D> geometry3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (geometry3Ds == null)
                 return null;
@@ -35,7 +35,7 @@ namespace SAM.Geometry.Spatial
                 if (geometry3D is ICurvable3D)
                 {
                     List<Point3D> point3Ds = ((ICurvable3D)geometry3D).GetCurves().ConvertAll(x => x.GetStart());
-                    faces.Add(new Face3D(new Polygon3D(point3Ds)));
+                    faces.Add(new Face3D(new Polygon3D(point3Ds, tolerance)));
                 }
             }
 

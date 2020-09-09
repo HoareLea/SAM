@@ -5,9 +5,9 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static List<Panel> Panels(this List<ISAMGeometry3D> geometry3Ds, PanelType panelType, Construction construction = null, double minArea = Core.Tolerance.MacroDistance)
+        public static List<Panel> Panels(this List<ISAMGeometry3D> geometry3Ds, PanelType panelType, Construction construction = null, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            List<Face3D> faces = Geometry.Spatial.Query.Face3Ds(geometry3Ds);
+            List<Face3D> faces = Geometry.Spatial.Query.Face3Ds(geometry3Ds, tolerance);
             if (faces == null)
                 return null;
 

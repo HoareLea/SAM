@@ -52,6 +52,7 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddBooleanParameter("simplify_", "simplify_", "Simplify", GH_ParamAccess.item, true);
             inputParamManager.AddNumberParameter("minArea_", "minArea_", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
+            inputParamManager.AddNumberParameter("tolerance_", "tolerance_", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
         }
 
         /// <summary>
@@ -110,6 +111,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            double tolerance = double.NaN;
+            if(!dataAccess.GetData(5, ref tolerance))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             PanelType panelType = PanelType.Undefined;
 
             GH_ObjectWrapper objectWrapper = null;
@@ -128,7 +136,7 @@ namespace SAM.Analytical.Grasshopper
             double minArea = Core.Tolerance.MacroDistance;
             dataAccess.GetData(4, ref minArea);
 
-            List<Panel> panels = Create.Panels(geometry3Ds, panelType, construction, minArea);
+            List<Panel> panels = Create.Panels(geometry3Ds, panelType, construction, minArea, tolerance);
             if (panels == null || panels.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid geometry for panel");
