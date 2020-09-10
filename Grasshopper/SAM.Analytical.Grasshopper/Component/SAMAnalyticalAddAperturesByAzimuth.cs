@@ -99,8 +99,10 @@ namespace SAM.Analytical.Grasshopper
 
             if (sAMObject is Panel)
             {
-                if (((Panel)sAMObject).PanelType != PanelType.WallExternal)
-                    return;
+
+                //TODO: Rethink wthe way of filtering elements
+                //if (((Panel)sAMObject).PanelType != PanelType.WallExternal)
+                //    return;
                 
                 Panel panel = new Panel((Panel)sAMObject);
 
