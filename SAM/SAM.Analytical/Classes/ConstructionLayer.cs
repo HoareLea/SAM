@@ -1,34 +1,28 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
-using System;
 
 namespace SAM.Analytical
 {
-    public class ConstructionLayer : SAMObject
+    public class ConstructionLayer : IJSAMObject
     {
         private double thickness;
+        private string name;
 
         public ConstructionLayer(string name, double thickness)
-            : base(name)
         {
             this.thickness = thickness;
-        }
-
-        public ConstructionLayer(Guid guid, string name, double thickness)
-        : base(guid, name)
-        {
-            this.thickness = thickness;
+            this.name = name;
         }
 
         public ConstructionLayer(ConstructionLayer constructionLayer)
-            : base(constructionLayer)
         {
             thickness = constructionLayer.thickness;
+            name = constructionLayer.name;
         }
 
         public ConstructionLayer(JObject jObject)
-            : base(jObject)
         {
+            FromJObject(jObject);
         }
 
         public double Thickness
@@ -39,25 +33,37 @@ namespace SAM.Analytical
             }
         }
 
-        public override bool FromJObject(JObject jObject)
+        public string Name
         {
-            if (!base.FromJObject(jObject))
+            get
+            {
+                return name;
+            }
+        }
+
+        public bool FromJObject(JObject jObject)
+        {
+            if (jObject == null)
                 return false;
 
-            if(jObject.ContainsKey("Thickness"))
-            thickness = jObject.Value<double>("Thickness");
+            if (jObject.ContainsKey("Thickness"))
+                thickness = jObject.Value<double>("Thickness");
+
+            if (jObject.ContainsKey("Name"))
+                name = jObject.Value<string>("Name");
 
             return true;
         }
 
-        public override JObject ToJObject()
+        public JObject ToJObject()
         {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
-                return jObject;
+            JObject jObject = new JObject();
 
             if (!double.IsNaN(thickness))
                 jObject.Add("Thickness", thickness);
+
+            if(name != null)
+                jObject.Add("Name", name);
 
             return jObject;
         }
