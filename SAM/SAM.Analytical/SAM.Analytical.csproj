@@ -74,6 +74,7 @@
     <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Classes\ConstructionLayer.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
+    <Compile Include="Create\ConstructionLayers.cs" />
     <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\ApertureType.cs" />
