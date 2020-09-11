@@ -66,15 +66,15 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            string name = null;
-            if (!dataAccess.GetData(0, ref name))
+            GH_ObjectWrapper objectWrapper = null;
+            if (!dataAccess.GetData(0, ref objectWrapper))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             DefaultGasType defaultGasType = DefaultGasType.Undefined;
-            if(Enum.TryParse(name, out defaultGasType) || defaultGasType == DefaultGasType.Undefined)
+            if(!Enum.TryParse(objectWrapper.Value?.ToString(), out defaultGasType) || defaultGasType == DefaultGasType.Undefined)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -101,20 +101,20 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if (!dataAccess.GetData(4, ref name))
+            if (!dataAccess.GetData(4, ref objectWrapper))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             HeatFlowDirection heatFlowDirection = HeatFlowDirection.Undefined;
-            if (Enum.TryParse(name, out heatFlowDirection) || heatFlowDirection == HeatFlowDirection.Undefined)
+            if (!Enum.TryParse(objectWrapper.Value?.ToString(), out heatFlowDirection) || heatFlowDirection == HeatFlowDirection.Undefined)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            double HeatTransferCoefficient = SAM.Analytical.Query.HeatTransferCoefficient(defaultGasType, width, height, temperatureDifference, heatFlowDirection);
+            double HeatTransferCoefficient = Analytical.Query.HeatTransferCoefficient(defaultGasType, width, height, temperatureDifference, heatFlowDirection);
 
             dataAccess.SetData(0, HeatTransferCoefficient);
         }

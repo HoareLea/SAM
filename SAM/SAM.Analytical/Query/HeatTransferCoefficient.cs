@@ -6,7 +6,7 @@ namespace SAM.Analytical
     {
 
         /// <summary>
-        /// Calculates Heat Transfer Coefficient [W/m2K] <see href="https://www.edsl.net/htmlhelp/Building_Simulator/ParametersforGasLayers.htm">source</see>
+        /// Calculates Heat Transfer Coefficient (Thermal Conductance) [W/m2K] <see href="https://www.edsl.net/htmlhelp/Building_Simulator/ParametersforGasLayers.htm">source</see>
         /// </summary>
         /// <param name="defaultGasType">Default Gas Type</param>
         /// <param name="width">Width of the cavity [m]</param>

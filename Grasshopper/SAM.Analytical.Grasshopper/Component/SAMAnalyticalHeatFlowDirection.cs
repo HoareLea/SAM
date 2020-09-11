@@ -51,12 +51,12 @@ namespace SAM.Analytical.Grasshopper
             foreach (HeatFlowDirection heatFlowDirection in Enum.GetValues(typeof(HeatFlowDirection)))
                 //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
                 //base.AppendAdditionalComponentMenuItems(menu);
-                Menu_AppendItem(menu, heatFlowDirection.ToString(), Menu_PanelTypeChanged, true, heatFlowDirection == this.heatFlowDirection).Tag = heatFlowDirection;
+                Menu_AppendItem(menu, heatFlowDirection.ToString(), Menu_Changed, true, heatFlowDirection == this.heatFlowDirection).Tag = heatFlowDirection;
         }
 
-        private void Menu_PanelTypeChanged(object sender, EventArgs e)
+        private void Menu_Changed(object sender, EventArgs e)
         {
-            if (sender is ToolStripMenuItem item && item.Tag is ApertureType)
+            if (sender is ToolStripMenuItem item && item.Tag is HeatFlowDirection)
             {
                 //Do something with panelType
                 this.heatFlowDirection = (HeatFlowDirection)item.Tag;

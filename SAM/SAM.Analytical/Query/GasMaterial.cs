@@ -32,6 +32,10 @@ namespace SAM.Analytical
                 case DefaultGasType.Xenon:
                     parameterName = ActiveSetting.Name.GasMaterial_Xenon;
                     break;
+
+                case DefaultGasType.SulfurHexaFluoride:
+                    parameterName = ActiveSetting.Name.GasMaterial_SulfurHexaFluoride;
+                    break;
             }
 
             if (string.IsNullOrWhiteSpace(parameterName))

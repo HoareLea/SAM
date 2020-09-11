@@ -50,10 +50,10 @@ namespace SAM.Core.Grasshopper
             foreach (TextComparisonType textComparisonType in Enum.GetValues(typeof(TextComparisonType)))
                 //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
                 //base.AppendAdditionalComponentMenuItems(menu);
-                Menu_AppendItem(menu, textComparisonType.ToString(), Menu_PanelTypeChanged, true, textComparisonType == this.textComparisonType).Tag = textComparisonType;
+                Menu_AppendItem(menu, textComparisonType.ToString(), Menu_Changed, true, textComparisonType == this.textComparisonType).Tag = textComparisonType;
         }
 
-        private void Menu_PanelTypeChanged(object sender, EventArgs e)
+        private void Menu_Changed(object sender, EventArgs e)
         {
             if (sender is ToolStripMenuItem item && item.Tag is TextComparisonType)
             {

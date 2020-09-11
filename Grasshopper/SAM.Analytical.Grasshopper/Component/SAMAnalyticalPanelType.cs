@@ -51,10 +51,10 @@ namespace SAM.Analytical.Grasshopper
             foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
                 //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
                 //base.AppendAdditionalComponentMenuItems(menu);
-                Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged, true, panelType == this.panelType).Tag = panelType;
+                Menu_AppendItem(menu, panelType.ToString(), Menu_Changed, true, panelType == this.panelType).Tag = panelType;
         }
 
-        private void Menu_PanelTypeChanged(object sender, EventArgs e)
+        private void Menu_Changed(object sender, EventArgs e)
         {
             if (sender is ToolStripMenuItem item && item.Tag is PanelType)
             {

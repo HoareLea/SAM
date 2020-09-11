@@ -51,12 +51,12 @@ namespace SAM.Analytical.Grasshopper
             foreach (DefaultGasType defaultGasType in Enum.GetValues(typeof(DefaultGasType)))
                 //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
                 //base.AppendAdditionalComponentMenuItems(menu);
-                Menu_AppendItem(menu, defaultGasType.ToString(), Menu_PanelTypeChanged, true, defaultGasType == this.defaultGasType).Tag = defaultGasType;
+                Menu_AppendItem(menu, defaultGasType.ToString(), Menu_Changed, true, defaultGasType == this.defaultGasType).Tag = defaultGasType;
         }
 
-        private void Menu_PanelTypeChanged(object sender, EventArgs e)
+        private void Menu_Changed(object sender, EventArgs e)
         {
-            if (sender is ToolStripMenuItem item && item.Tag is ApertureType)
+            if (sender is ToolStripMenuItem item && item.Tag is DefaultGasType)
             {
                 //Do something with panelType
                 this.defaultGasType = (DefaultGasType)item.Tag;

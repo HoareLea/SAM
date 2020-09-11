@@ -49,12 +49,12 @@ namespace SAM.Analytical.Grasshopper
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             foreach (ApertureType apertureType in Enum.GetValues(typeof(ApertureType)))
-                //    GH_Component.Menu_AppendItem(menu, panelType.ToString(), Menu_PanelTypeChanged).Tag = panelType;
+                //    GH_Component.AppendItem(menu, apertureType.ToString(), Menu_Changed).Tag = apertureType;
                 //base.AppendAdditionalComponentMenuItems(menu);
-                Menu_AppendItem(menu, apertureType.ToString(), Menu_PanelTypeChanged, true, apertureType == this.apertureType).Tag = apertureType;
+                Menu_AppendItem(menu, apertureType.ToString(), Menu_Changed, true, apertureType == this.apertureType).Tag = apertureType;
         }
 
-        private void Menu_PanelTypeChanged(object sender, EventArgs e)
+        private void Menu_Changed(object sender, EventArgs e)
         {
             if (sender is ToolStripMenuItem item && item.Tag is ApertureType)
             {
