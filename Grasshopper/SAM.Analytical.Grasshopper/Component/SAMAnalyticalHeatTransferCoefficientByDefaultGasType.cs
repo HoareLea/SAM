@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
             genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(DefaultGasType.Air.ToString()));
 
             inputParamManager.AddNumberParameter("_width", "_width", "Cavity width [m]", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_height", "_height", "Height of the cavity in case of horizontal heat flow (vertically oriented cavity) [m]", GH_ParamAccess.item);
+            inputParamManager.AddNumberParameter("_meanTemperature", "_meanTemperature", "Mean Temperature [K]", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("_temperatureDifference", "_temperatureDifference", "Mean temperature difference across the cavity [K]", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("_angle", "_angle", "Angle in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction", GH_ParamAccess.item);
         }
@@ -85,8 +85,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            double height = double.NaN;
-            if (!dataAccess.GetData(2, ref height) || double.IsNaN(height))
+            double meanTemperature = double.NaN;
+            if (!dataAccess.GetData(2, ref meanTemperature) || double.IsNaN(meanTemperature))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -108,7 +108,7 @@ namespace SAM.Analytical.Grasshopper
 
             GasMaterial gasMaterial = Analytical.Query.GasMaterial(defaultGasType);
 
-            double HeatTransferCoefficient = Analytical.Query.HeatTransferCoefficient(gasMaterial, width, height, temperatureDifference, angle);
+            double HeatTransferCoefficient = Analytical.Query.HeatTransferCoefficient(gasMaterial, temperatureDifference, width, meanTemperature, angle);
 
             dataAccess.SetData(0, HeatTransferCoefficient);
         }
