@@ -78,6 +78,8 @@
     <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\ApertureType.cs" />
+    <Compile Include="Enums\HeatFlowDirection.cs" />
+    <Compile Include="Enums\DefaultGasType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
     <Compile Include="Enums\PanelType.cs" />
     <Compile Include="Classes\PlanarBoundary3D.cs" />
@@ -100,6 +102,9 @@
     <Compile Include="Query\ApertureHosts.cs" />
     <Compile Include="Query\FirstMaterial.cs" />
     <Compile Include="Query\FirstConstructionLayer.cs" />
+    <Compile Include="Query\HeatTransferCoefficient.cs" />
+    <Compile Include="Query\Nu.cs" />
+    <Compile Include="Query\GrPr.cs" />
     <Compile Include="Query\InternalMaterialDictionary.cs" />
     <Compile Include="Query\InternalConstructionLayerDictionary.cs" />
     <Compile Include="Query\InternalMaterial.cs" />
@@ -107,6 +112,7 @@
     <Compile Include="Query\ExternalMaterial.cs" />
     <Compile Include="Query\InternalConstructionLayer.cs" />
     <Compile Include="Query\ExternalConstructionLayer.cs" />
+    <Compile Include="Query\GasMaterial.cs" />
     <Compile Include="Query\Volume.cs" />
     <Compile Include="Query\OffsetAperturesOnEdge.cs" />
     <Compile Include="Query\ExposedToSun.cs" />

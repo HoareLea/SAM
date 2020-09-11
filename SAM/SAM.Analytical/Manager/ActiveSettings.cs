@@ -47,6 +47,12 @@ namespace SAM.Analytical
             public const string ParameterName_FacingExternalGlazing = "ParameterName_FacingExternalGlazing";
             public const string ParameterName_Area = "ParameterName_Area";
             public const string ParameterName_Volume = "ParameterName_Volume";
+
+            public const string GasMaterial_Air = "GasMaterial_Air";
+            public const string GasMaterial_Argon = "GasMaterial_Argon";
+            public const string GasMaterial_Krypton = "GasMaterial_Krypton";
+            public const string GasMaterial_Xenon = "GasMaterial_Xenon";
+            public const string GasMaterial_SulfurHexaFluoride = "GasMaterial_SulfurHexaFluoride";
         }
 
         private static Setting setting = Load();
@@ -106,7 +112,7 @@ namespace SAM.Analytical
             result.Add(Name.Construction_UndergroundSlab, new Construction(new System.Guid("b4a6da31-169c-4781-a1cb-39e9900f7d35"), "SIM_EXT_GRD_FLR FLR01", Create.ConstructionLayers("C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK", 0.0127, "C00_Concrete_2400kg/m3_2.362W/mK", 0.2, "I03_Mineral Wool_43.25kg/m3_0.035W/mK", 0.14, "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK", 1)));
             result.Add(Name.Construction_UndergroundWall, new Construction(new System.Guid("99972a36-6fb2-4565-9337-3b163d056c9c"), "SIM_EXT_GRD", Create.ConstructionLayers("C00_Gypsym Board_800.923kg/m3_0.161W/mK", 0.0127, "I00_Glass Fibre Insulation_11.998kg / m3_0.038W / mK",0.13018, "C00_Concrete Block_1842.12kg/m3_1.315W/mK",0.23, "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK", 1)));
             result.Add(Name.Construction_Wall, new Construction(new System.Guid("5c3039ff-c4af-4953-bbf0-5c84bdd8044c"), "SIM_EXT_SLD", Create.ConstructionLayers()));
-            result.Add(Name.Construction_WallExternal, new Construction(new System.Guid("8f424c58-6570-4b9b-b753-e7584b7b4494"), "SIM_EXT_SLD", Create.ConstructionLayers("C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05,)));
+            result.Add(Name.Construction_WallExternal, new Construction(new System.Guid("8f424c58-6570-4b9b-b753-e7584b7b4494"), "SIM_EXT_SLD", Create.ConstructionLayers("C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05)));
             result.Add(Name.Construction_WallInternal, new Construction(new System.Guid("625d9ed6-64fa-4877-bb56-b84ba118c900"), "SIM_INT_SLD_Partition", Create.ConstructionLayers()));
 
             //Default Aperture Constructions
@@ -115,6 +121,13 @@ namespace SAM.Analytical
             result.Add(Name.ApertureConstruction_InternalDoors, new ApertureConstruction(new System.Guid("1dcdad32-63ec-4a01-945d-39548be20491"), "SIM_INT_SLD", ApertureType.Door));
             result.Add(Name.ApertureConstruction_InternalWindows, new ApertureConstruction(new System.Guid("3e43ecb2-638b-4d8b-9046-ba3d8455cd3f"), "SIM_INT_GLZ", ApertureType.Window));
             result.Add(Name.ApertureConstruction_Skylight, new ApertureConstruction(new System.Guid("6f6dc032-6fa5-43fa-bfef-de5937e95599"), "SIM_EXT_GLZ_SKY DF01", ApertureType.Window));
+
+            //Default Gas Materials
+            result.Add(Name.GasMaterial_Air, new GasMaterial(new System.Guid("b701be87-3012-450d-a6c5-582dcff33e61"), "Default Dry Air Gas", "Dry Air", "Dry Air Material with properties at 10°C", 0.025, 1.232, 1008));
+            result.Add(Name.GasMaterial_Argon, new GasMaterial(new System.Guid("da58562e-38b1-4ab2-86f9-08832591e029"), "Default Argon Gas", "Argon", "Argon Material with properties at 10°C", 0.017, 1.699, 519));
+            result.Add(Name.GasMaterial_Krypton, new GasMaterial(new System.Guid("448c7b25-8696-455a-af09-5c0f305c441a"), "Default Krypton Gas", "Krypton", "Krypton Material with properties at 10°C", 0.009, 3.56, 245));
+            result.Add(Name.GasMaterial_Xenon, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Xenon Gas", "Xenon", "Xenon Material with properties at 10°C", 0.0516, 5.858, 158.34));
+            result.Add(Name.GasMaterial_SulfurHexaFluoride, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Sulfur HexaFluoride Gas", "Sulfur HexaFluoride", "SulfurHexa Fluoride Material with properties at 10°C", 0.013, 6.36, 614));
 
             return result;
         }

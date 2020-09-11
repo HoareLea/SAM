@@ -6,6 +6,14 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Method resturns trace data all the segment2Ds hits starting from given point2D in direction of vector2D. Number of bounces can be controlled by bounces parameter
+        /// </summary>
+        /// <param name="point2D">Starting point</param>
+        /// <param name="vector2D">Starting direction of trace</param>
+        /// <param name="segmentable2Ds">Segmentable2Ds </param>
+        /// <param name="bounces">Number of bounces</param>
+        /// <returns>List of tuples which represents point2D - hit point, segment2D - segment being hit, vector2D - hit direction from previous point</returns>
         public static List<Tuple<Point2D, Segment2D, Vector2D>> TraceData(this Point2D point2D, Vector2D vector2D, IEnumerable<ISegmentable2D> segmentable2Ds, int bounces = 0)
         {
             if (point2D == null || vector2D == null || segmentable2Ds == null)

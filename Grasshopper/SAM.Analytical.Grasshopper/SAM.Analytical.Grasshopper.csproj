@@ -95,6 +95,7 @@
     <Compile Include="Classes\GooAnalyticalModel.cs" />
     <Compile Include="Classes\GooApertureConstruction.cs" />
     <Compile Include="Classes\GooConstruction.cs" />
+    <Compile Include="Classes\GooConstructionLayer.cs" />
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
@@ -102,6 +103,9 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByAperture.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateApertureConstruction - Copy.cs" />
+    <Compile Include="Component\SAMAnalyticalHeatFlowDirection.cs" />
+    <Compile Include="Component\SAMAnalyticalDefaultGasType.cs" />
     <Compile Include="Component\SAMAnalyticalNormals.cs" />
     <Compile Include="Component\SAMAnalyticalCheck.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
@@ -130,7 +134,7 @@
     <Compile Include="Component\SAMAnalyticalMergeOverlapPanels.cs" />
     <Compile Include="Component\SAMAnalyticalMergeCoplanarPanels.cs" />
     <Compile Include="Component\SAMAnalyticalOffsetAperturesOnEdge.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateApertureConstruction.cs" />
+    <Compile Include="Component\SAMAnalyticalHeatTransferCoefficientByDefaultGasType.cs" />
     <Compile Include="Component\SAMAnalyticalOverlapPanels.cs" />
     <Compile Include="Component\SAMAnalyticalMovePanel.cs" />
     <Compile Include="Component\SAMAnalyticalPlaneIntersection.cs" />

@@ -56,6 +56,7 @@
     <Compile Include="Classes\Material\Material.cs" />
     <Compile Include="Create\MaterialLibrary.cs" />
     <Compile Include="Enums\LogRecordType.cs" />
+    <Compile Include="Enums\MaterialType.cs" />
     <Compile Include="Interfaces\Base\IDispatch.cs" />
     <Compile Include="Classes\Collection\GuidCollection.cs" />
     <Compile Include="Classes\Collection\SAMCollection.cs" />

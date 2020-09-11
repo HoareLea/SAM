@@ -2,6 +2,7 @@
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -32,7 +33,13 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddTextParameter("_name_", "_name_", "Contruction Name", GH_ParamAccess.item, Analytical.Query.ConstructionName(PanelType.Roof));
+            Construction construction = Analytical.Query.Construction(PanelType.Roof);
+            
+            inputParamManager.AddTextParameter("_name_", "_name_", "Contruction Name", GH_ParamAccess.item, construction.Name);
+
+            GooConstructionLayerParam gooConstructionLayerParam = new GooConstructionLayerParam();
+            gooConstructionLayerParam.PersistentData.AppendRange(construction.ConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
+            inputParamManager.AddParameter(gooConstructionLayerParam, "constructionLayers_", "constructionLayers_", "SAM Contruction Layers", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -58,7 +65,10 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, new GooConstruction(new Construction(name)));
+            List<ConstructionLayer> constructionLayers = new List<ConstructionLayer>();
+            dataAccess.GetDataList(1, constructionLayers);
+
+            dataAccess.SetData(0, new GooConstruction(new Construction(name, constructionLayers)));
         }
     }
 }
