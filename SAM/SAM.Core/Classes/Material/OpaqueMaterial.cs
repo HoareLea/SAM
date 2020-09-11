@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Core
 {
-    public class OpaqueMaterial : Material
+    public class OpaqueMaterial : SolidMaterial
     {
         public OpaqueMaterial(string name)
             : base(name)

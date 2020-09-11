@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Core
 {
-    public class GasMaterial : Material
+    public class GasMaterial : FluidMaterial
     {
         public GasMaterial(string name)
             : base(name)
@@ -12,14 +12,14 @@ namespace SAM.Core
 
         }
 
-        public GasMaterial(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeat)
-        : base(guid, name, displayName, description, thermalConductivity, density, specificHeat)
+        public GasMaterial(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeat, double dynamicViscosity)
+        : base(guid, name, displayName, description, thermalConductivity, density, specificHeat, dynamicViscosity)
         {
 
         }
 
-        public GasMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeat, double density)
-            : base(name, group, displayName, description, thermalConductivity, specificHeat, density)
+        public GasMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeat, double density, double dynamicViscosity)
+            : base(name, group, displayName, description, thermalConductivity, specificHeat, density, dynamicViscosity)
         {
 
         }

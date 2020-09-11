@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Classes\Material\SolidMaterial.cs" />
+    <Compile Include="Classes\Material\FluidMaterial.cs" />
     <Compile Include="Classes\Material\GasMaterial.cs" />
     <Compile Include="Classes\Material\MaterialLibrary.cs" />
     <Compile Include="Classes\Material\TransparentMaterial.cs" />
