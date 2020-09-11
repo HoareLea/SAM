@@ -12,14 +12,14 @@ namespace SAM.Core
 
         }
 
-        public GasMaterial(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeat, double dynamicViscosity)
-        : base(guid, name, displayName, description, thermalConductivity, density, specificHeat, dynamicViscosity)
+        public GasMaterial(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeatCapacity, double dynamicViscosity)
+        : base(guid, name, displayName, description, thermalConductivity, density, specificHeatCapacity, dynamicViscosity)
         {
 
         }
 
-        public GasMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeat, double density, double dynamicViscosity)
-            : base(name, group, displayName, description, thermalConductivity, specificHeat, density, dynamicViscosity)
+        public GasMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeatCapacity, double density, double dynamicViscosity)
+            : base(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density, dynamicViscosity)
         {
 
         }

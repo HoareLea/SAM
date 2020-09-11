@@ -12,14 +12,14 @@ namespace SAM.Core
 
         }
 
-        public SolidMaterial(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeat)
-        : base(guid, name, displayName, description, thermalConductivity, density, specificHeat)
+        public SolidMaterial(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeatCapacity)
+        : base(guid, name, displayName, description, thermalConductivity, density, specificHeatCapacity)
         {
 
         }
 
-        public SolidMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeat, double density)
-            : base(name, group, displayName, description, thermalConductivity, specificHeat, density)
+        public SolidMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeatCapacity, double density)
+            : base(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density)
         {
 
         }

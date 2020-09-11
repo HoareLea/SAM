@@ -11,7 +11,7 @@ namespace SAM.Core
         private string description;
 
         private double thermalConductivity = double.NaN;
-        private double specificHeat = double.NaN;
+        private double specificHeatCapacity = double.NaN;
         private double density = double.NaN;
         private double vapourDiffusionFactor = double.NaN;
         
@@ -21,7 +21,7 @@ namespace SAM.Core
 
         }
 
-        public Material(string name, string group, string displayName, string description, double thermalConductivity, double specificHeat, double density)
+        public Material(string name, string group, string displayName, string description, double thermalConductivity, double specificHeatCapacity, double density)
             : base(name)
         {
             this.group = group;
@@ -29,18 +29,18 @@ namespace SAM.Core
             this.description = description;
 
             this.thermalConductivity = thermalConductivity;
-            this.specificHeat = specificHeat;
+            this.specificHeatCapacity = specificHeatCapacity;
             this.density = density;
         }
 
-        public Material(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeat)
+        public Material(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeatCapacity)
             :base(guid, name)
         {
             this.displayName = displayName;
             this.description = description;
             this.thermalConductivity = thermalConductivity;
             this.density = density;
-            this.specificHeat = specificHeat;
+            this.specificHeatCapacity = specificHeatCapacity;
         }
 
         public Material(Guid guid, string name, string group, string displayName, string description)
@@ -106,13 +106,13 @@ namespace SAM.Core
         }
 
         /// <summary>
-        /// Specific Heat of Material [J/kgK]
+        /// Specific Heat Capcity of Material [J/kgK]
         /// </summary>
-        public double SpecificHeat
+        public double SpecificHeatCapacity
         {
             get
             {
-                return specificHeat;
+                return specificHeatCapacity;
             }
         }
 
@@ -172,6 +172,15 @@ namespace SAM.Core
             if (jObject.ContainsKey("VapourDiffusionFactor"))
                 vapourDiffusionFactor = jObject.Value<double>("VapourDiffusionFactor");
 
+            if(jObject.ContainsKey("ThermalConductivity"))
+                thermalConductivity = jObject.Value<double>("ThermalConductivity");
+
+            if (jObject.ContainsKey("SpecificHeatCapacity"))
+                specificHeatCapacity = jObject.Value<double>("SpecificHeatCapacity");
+
+            if (jObject.ContainsKey("Density"))
+                density = jObject.Value<double>("Density");
+
             return true;
         }
 
@@ -194,10 +203,10 @@ namespace SAM.Core
                 jObject.Add("VapourDiffusionFactor", vapourDiffusionFactor);
 
             if (!double.IsNaN(thermalConductivity))
-                jObject.Add("Conductivity", thermalConductivity);
+                jObject.Add("ThermalConductivity", thermalConductivity);
 
-            if (!double.IsNaN(specificHeat))
-                jObject.Add("SpecificHeat", specificHeat);
+            if (!double.IsNaN(specificHeatCapacity))
+                jObject.Add("SpecificHeatCapacity", specificHeatCapacity);
 
             if (!double.IsNaN(density))
                 jObject.Add("Density", density);

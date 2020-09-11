@@ -12,8 +12,8 @@ namespace SAM.Core
 
         }
 
-        public OpaqueMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeat, double density)
-            : base(name, group, displayName, description, thermalConductivity, specificHeat, density)
+        public OpaqueMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeatCapacity, double density)
+            : base(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density)
         {
 
         }

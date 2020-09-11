@@ -14,14 +14,14 @@ namespace SAM.Core
 
         }
 
-        public FluidMaterial(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeat, double dynamicViscosity)
-        : base(guid, name, displayName, description, thermalConductivity, density, specificHeat)
+        public FluidMaterial(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeatCapacity, double dynamicViscosity)
+        : base(guid, name, displayName, description, thermalConductivity, density, specificHeatCapacity)
         {
             this.dynamicViscosity = dynamicViscosity;
         }
 
-        public FluidMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeat, double density, double dynamicViscosity)
-            : base(name, group, displayName, description, thermalConductivity, specificHeat, density)
+        public FluidMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeatCapacity, double density, double dynamicViscosity)
+            : base(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density)
         {
             this.dynamicViscosity = dynamicViscosity;
         }

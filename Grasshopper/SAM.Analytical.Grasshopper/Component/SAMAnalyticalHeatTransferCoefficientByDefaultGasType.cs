@@ -2,6 +2,7 @@
 using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 
@@ -44,10 +45,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddNumberParameter("_width", "_width", "Cavity width [m]", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("_height", "_height", "Height of the cavity in case of horizontal heat flow (vertically oriented cavity) [m]", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("_temperatureDifference", "_temperatureDifference", "Mean temperature difference across the cavity [K]", GH_ParamAccess.item);
-
-            index = inputParamManager.AddGenericParameter("_heatFlowDirection", "_heatFlowDirection", "HeatFlowDirection", GH_ParamAccess.item);
-            genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(HeatFlowDirection.Horizontal.ToString()));
+            inputParamManager.AddNumberParameter("_angle", "_angle", "Angle in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -101,20 +99,16 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if (!dataAccess.GetData(4, ref objectWrapper))
+            double angle = double.NaN;
+            if (!dataAccess.GetData(4, ref angle) || double.IsNaN(angle))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            HeatFlowDirection heatFlowDirection = HeatFlowDirection.Undefined;
-            if (!Enum.TryParse(objectWrapper.Value?.ToString(), out heatFlowDirection) || heatFlowDirection == HeatFlowDirection.Undefined)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            GasMaterial gasMaterial = Analytical.Query.GasMaterial(defaultGasType);
 
-            double HeatTransferCoefficient = Analytical.Query.HeatTransferCoefficient(defaultGasType, width, height, temperatureDifference, heatFlowDirection);
+            double HeatTransferCoefficient = Analytical.Query.HeatTransferCoefficient(gasMaterial, width, height, temperatureDifference, angle);
 
             dataAccess.SetData(0, HeatTransferCoefficient);
         }

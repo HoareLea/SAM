@@ -205,6 +205,19 @@ namespace SAM.Geometry.Planar
             return System.Math.PI - value;
         }
 
+        public double SignedAngle(Vector2D vector2D)
+        {
+            if (vector2D == null)
+                return double.NaN;
+
+            double angle = Angle(vector2D);
+
+            if (DotProduct(vector2D) < 0)
+                return -angle;
+
+            return angle;
+        }
+
         public bool SameHalf(Vector2D vector2D)
         {
             if (vector2D == null)
