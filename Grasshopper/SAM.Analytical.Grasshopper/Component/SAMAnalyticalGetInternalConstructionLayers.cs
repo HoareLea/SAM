@@ -43,6 +43,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new GooConstructionLayerParam(), "ConstructionLayers", "ConstructionLayers", "SAM Analytical ConstructionLayers", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "Panels", GH_ParamAccess.list);
             outputParamManager.AddNumberParameter("Areas", "Areas", "Areas", GH_ParamAccess.list);
         }
 
@@ -56,6 +57,7 @@ namespace SAM.Analytical.Grasshopper
         {
             dataAccess.SetDataList(0, null);
             dataAccess.SetDataList(1, null);
+            dataAccess.SetDataList(2, null);
 
             AdjacencyCluster adjacencyCluster = null;
             if(!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
@@ -75,16 +77,20 @@ namespace SAM.Analytical.Grasshopper
             if(dictionary != null)
             {
                 List<double> areas = new List<double>();
+                List<Panel> panels = new List<Panel>();
                 List<ConstructionLayer> constructionLayers = new List<ConstructionLayer>();
 
-                foreach(KeyValuePair<Panel, ConstructionLayer> keyValuePair in dictionary)
+                foreach (KeyValuePair<Panel, ConstructionLayer> keyValuePair in dictionary)
                 {
-                    areas.Add(keyValuePair.Key.GetArea());
                     constructionLayers.Add(keyValuePair.Value);
+                    panels.Add(keyValuePair.Key);
+                    areas.Add(keyValuePair.Key.GetArea());
+                    
                 }
 
                 dataAccess.SetDataList(0, constructionLayers?.ConvertAll(x => new GooConstructionLayer(x)));
-                dataAccess.SetDataList(1, areas);
+                dataAccess.SetDataList(1, panels?.ConvertAll(x => new GooPanel(x)));
+                dataAccess.SetDataList(2, areas);
             }
         }
     }
