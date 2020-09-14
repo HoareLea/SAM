@@ -68,6 +68,23 @@ namespace SAM.Core.Grasshopper
 
             return null;
         }
+
+        public override bool CastFrom(object source)
+        {
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Q>(ref Q target)
+        {
+            if(Value is Q)
+            {
+                target = (Q)Value;
+                return true;
+            }
+           
+            
+            return base.CastTo(ref target);
+        }
     }
 
     public class GooMaterialParam : GH_PersistentParam<GooMaterial>

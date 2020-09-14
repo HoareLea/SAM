@@ -32,7 +32,7 @@ namespace SAM.Core.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooMaterialLibraryParam(), "_materialLibrary", "_materialLibrary", "SAM Material Library", GH_ParamAccess.item);
-            inputParamManager.AddPathParameter("_path", "_path", "Path", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_path", "_path", "Path", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,7 +42,6 @@ namespace SAM.Core.Grasshopper
         {
             outputParamManager.AddParameter(new GooMaterialLibraryParam(), "MaterialLibrary", "MaterialLibrary", "SAM MaterialLibrary", GH_ParamAccess.item);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
-
         }
 
         /// <summary>

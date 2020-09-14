@@ -44,8 +44,8 @@ namespace SAM.Core
             if (!base.FromJObject(jObject))
                 return false;
 
-            if(materials != null && materials.Count != 0)
-                jObject.Add("Materials", Create.JArray(materials.Cast<IJSAMObject>()));
+            if (jObject.ContainsKey("Materials"))
+                materials = Create.IJSAMObjects<IJSAMObject>(jObject.Value<JArray>("Materials"))?.Cast<IMaterial>().ToList();
 
             return true;
         }
@@ -56,8 +56,8 @@ namespace SAM.Core
             if (jObject == null)
                 return jObject;
 
-            if (jObject.ContainsKey("Materials"))
-                materials = Create.IJSAMObjects<IJSAMObject>(jObject.Value<JArray>("Materials"))?.Cast<IMaterial>().ToList();
+            if (materials != null && materials.Count != 0)
+                jObject.Add("Materials", Create.JArray(materials.Cast<IJSAMObject>()));
 
             return jObject;
         }
