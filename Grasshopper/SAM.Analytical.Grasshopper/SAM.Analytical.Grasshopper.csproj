@@ -104,6 +104,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalCreateApertureConstruction - Copy.cs" />
+    <Compile Include="Component\SAMAnalyticalGetInternalConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalHeatFlowDirection.cs" />
     <Compile Include="Component\SAMAnalyticalDefaultGasType.cs" />
     <Compile Include="Component\SAMAnalyticalNormals.cs" />
