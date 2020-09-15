@@ -58,12 +58,13 @@ namespace SAM.Analytical
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
+            jObject.Add("_type", Core.Query.FullTypeName(this));
+
+            if (name != null)
+                jObject.Add("Name", name);
 
             if (!double.IsNaN(thickness))
                 jObject.Add("Thickness", thickness);
-
-            if(name != null)
-                jObject.Add("Name", name);
 
             return jObject;
         }

@@ -41,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
             GooSpaceParam gooSpaceParam = new GooSpaceParam();
             gooSpaceParam.Optional = true;
 
-            inputParamManager.AddParameter(gooSpaceParam, "_spaces", "_spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
+            inputParamManager.AddParameter(gooSpaceParam, "_spaces_", "_spaces_", "SAM Analytical Spaces", GH_ParamAccess.list);
             inputParamManager.AddParameter(new GooMaterialLibraryParam(), "_materialLibrary", "_materialLibrary", "SAM MaterialLibrary", GH_ParamAccess.item);
         }
         
@@ -64,11 +64,6 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetDataList(0, null);
-            dataAccess.SetDataList(1, null);
-            dataAccess.SetDataList(2, null);
-            dataAccess.SetDataList(3, null);
-
             AdjacencyCluster adjacencyCluster = null;
             if(!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
             {
@@ -117,7 +112,7 @@ namespace SAM.Analytical.Grasshopper
                     count++;
                 }
 
-                dataAccess.SetDataList(0, spaces.ConvertAll(x => new GooSpace(x)));
+                dataAccess.SetDataList(0, spaces_Temp.ConvertAll(x => new GooSpace(x)));
                 dataAccess.SetDataTree(1, dataTree_Materials);
                 dataAccess.SetDataTree(2, dataTree_Panels);
                 dataAccess.SetDataTree(3, dataTree_Areas);

@@ -254,6 +254,10 @@ namespace SAM.Core.Grasshopper
                     {
                         dataAccess.SetData(i, new GH_String((string)result));
                     }
+                    else if (result is Enum)
+                    {
+                        dataAccess.SetData(i, new GooParameter(result.ToString()));
+                    }
                     else if (Core.Query.IsNumeric(result))
                     {
                         double value;
@@ -265,10 +269,6 @@ namespace SAM.Core.Grasshopper
                     else if (result is bool)
                     {
                         dataAccess.SetData(i, new GH_Boolean((bool)result));
-                    }
-                    else if (result is Enum)
-                    {
-                        dataAccess.SetData(i, new GooParameter(result.ToString()));
                     }
                     else
                     {
