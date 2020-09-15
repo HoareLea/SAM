@@ -103,6 +103,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByAperture.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalLabelPanel.cs" />
     <Compile Include="Component\SAMAnalyticalCreateApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalGetInternalMaterials.cs" />
