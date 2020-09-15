@@ -125,7 +125,7 @@ namespace SAM.Analytical
             //Default Gas Materials
             result.Add(Name.GasMaterial_Air, new GasMaterial(new System.Guid("b701be87-3012-450d-a6c5-582dcff33e61"), "Default Dry Air Gas", "Dry Air", "Dry Air Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 2.496e-2, 1.232, 1008, 1.761e-5));
             result.Add(Name.GasMaterial_Argon, new GasMaterial(new System.Guid("da58562e-38b1-4ab2-86f9-08832591e029"), "Default Argon Gas", "Argon", "Argon Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 0.01684, 1.699, 519, 2.164e-5));
-            result.Add(Name.GasMaterial_Krypton, new GasMaterial(new System.Guid("448c7b25-8696-455a-af09-5c0f305c441a"), "Default Krypton Gas", "Krypton", "Krypton Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 0.009, 3.56, 245, 2.4e-5));
+            result.Add(Name.GasMaterial_Krypton, new GasMaterial(new System.Guid("448c7b25-8696-455a-af09-5c0f305c441a"), "Default Krypton Gas", "Krypton", "Krypton Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 0.9e-2, 3.56, 0.245e3, 2.4e-5));
             result.Add(Name.GasMaterial_Xenon, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Xenon Gas", "Xenon", "Xenon Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 0.0529, 5.689, 161, 2.226e-5));
             result.Add(Name.GasMaterial_SulfurHexaFluoride, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Sulfur HexaFluoride Gas", "Sulfur HexaFluoride (SF6) [EN 673:1997 Table 1 - Gas Properties]", "SulfurHexa Fluoride Material with properties at 10°C", 0.01275, 6.36, 614, 1.459e-5));
 
