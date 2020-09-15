@@ -9,12 +9,12 @@ using System;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalLabelPanel : GH_SAMComponent
+    public class SAMAnalyticalLabelSpace : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("5393ec84-4cb5-4198-8a92-3d392054c11b");
+        public override Guid ComponentGuid => new Guid("432dfea1-3242-4540-816e-d65bf1b28e4a");
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -24,9 +24,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalLabelPanel()
-          : base("SAMAnalytical.LabelPanel", "SAMAnalytical.LabelPanel",
-              "Label SAM Analytical Panel",
+        public SAMAnalyticalLabelSpace()
+          : base("SAMAnalytical.LabelSpace", "SAMAnalytical.LabelSpace",
+              "Label SAM Analytical Space",
               "SAM", "Analytical")
         {
         }
@@ -38,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytical Space", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_name_", "_name_", "Parameter Name", GH_ParamAccess.item, "Name");
             
             index = inputParamManager.AddNumberParameter("_height_", "_height_", "Text Height", GH_ParamAccess.item);
@@ -62,8 +62,8 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Panel panel = null;
-            if(!dataAccess.GetData(0, ref panel))
+            Space space = null;
+            if(!dataAccess.GetData(0, ref space))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -75,7 +75,7 @@ namespace SAM.Analytical.Grasshopper
                 name = "Name";
 
             string value = null;
-            if (panel.TryGetValue(name, out value, true))
+            if (space.TryGetValue(name, out value, true))
                 value = "???";
 
             double height = double.NaN;
@@ -85,20 +85,17 @@ namespace SAM.Analytical.Grasshopper
                 if (length < 10)
                     length = 10;
 
-                BoundingBox2D boundingBox2D = panel.GetFace3D().ExternalEdge2D.GetBoundingBox();
-                double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
-
-                height = max / (length * 2);
+                height = 10;
             }
 
-            Point3D point3D = panel.GetInternalPoint3D();
+            Point3D point3D = space.Location;
             if(point3D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Could not find proper location of label");
                 return;
             }
 
-            Vector3D normal = panel.Normal;
+            Vector3D normal = Plane.WorldXY.Normal;
             if (normal.Z < 0)
                 normal.Negate();
 
@@ -107,7 +104,7 @@ namespace SAM.Analytical.Grasshopper
 
             Rhino.Display.Text3d text3D = new Rhino.Display.Text3d(value, plane.ToRhino(), height);
 
-            dataAccess.SetData(0, value);
+            dataAccess.SetData(0, text3D);
         }
     }
 }
