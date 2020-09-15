@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\Comparison\" />
+    <Folder Include="Classes\Library\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

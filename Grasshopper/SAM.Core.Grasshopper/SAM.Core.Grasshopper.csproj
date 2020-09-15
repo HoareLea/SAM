@@ -84,6 +84,7 @@
     <Compile Include="Classes\GooSAMObject.cs" />
     <Compile Include="Classes\GooParameter.cs" />
     <Compile Include="Component\SAMCoreAddMaterials.cs" />
+    <Compile Include="Component\SAMCoreLoadMaterialLibrary.cs" />
     <Compile Include="Component\SAMCoreSaveMaterialLibrary.cs" />
     <Compile Include="Component\SAMCoreCreateMaterialLibrary.cs" />
     <Compile Include="Component\SAMCoreCreateTransparentMaterial.cs" />
