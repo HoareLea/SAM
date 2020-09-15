@@ -19,6 +19,9 @@ namespace SAM.Analytical
             if (double.IsNaN(nusseltNumber))
                 return double.NaN;
 
+            if (nusseltNumber < 1)
+                nusseltNumber = 1;
+
             return nusseltNumber * (thermalConductivity / width);
         }
     }
