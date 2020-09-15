@@ -13,71 +13,71 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooText : GH_GeometricGoo<Rhino.Display.Text3d> , IGH_PreviewData, IGH_BakeAwareData
-    {
-        public GooText()
-            : base()
-        {
-        }
+    //public class GooText : GH_GeometricGoo<Rhino.Display.Text3d> , IGH_PreviewData, IGH_BakeAwareData
+    //{
+    //    public GooText()
+    //        : base()
+    //    {
+    //    }
 
-        public GooText(Rhino.Display.Text3d text3D)
-        {
-            Value = text3D;
-        }
+    //    public GooText(Rhino.Display.Text3d text3D)
+    //    {
+    //        Value = text3D;
+    //    }
 
-        public BoundingBox ClippingBox
-        {
-            get
-            {
-                if (Value == null)
-                    return BoundingBox.Empty;
+    //    public BoundingBox ClippingBox
+    //    {
+    //        get
+    //        {
+    //            if (Value == null)
+    //                return BoundingBox.Empty;
 
-                return Value.BoundingBox;
-            }
-        }
+    //            return Value.BoundingBox;
+    //        }
+    //    }
 
-        public override IGH_Goo Duplicate()
-        {
-            return new GooText(Value);
-        }
+    //    public override IGH_Goo Duplicate()
+    //    {
+    //        return new GooText(Value);
+    //    }
 
-        public void DrawViewportWires(GH_PreviewWireArgs args)
-        {
-            if (Value == null)
-                return;
+    //    public void DrawViewportWires(GH_PreviewWireArgs args)
+    //    {
+    //        if (Value == null)
+    //            return;
 
-            args.Pipeline.Draw3dText(Value, args.Color);
-        }
+    //        args.Pipeline.Draw3dText(Value, args.Color);
+    //    }
 
-        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
-        {
+    //    public void DrawViewportMeshes(GH_PreviewMeshArgs args)
+    //    {
 
-        }
+    //    }
 
-        public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
-        {
-            obj_guid = Guid.Empty;
+    //    public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
+    //    {
+    //        obj_guid = Guid.Empty;
 
 
-            if (Value == null)
-                return false;
+    //        if (Value == null)
+    //            return false;
 
-            if (att == null)
-                att = doc.CreateDefaultAttributes();
+    //        if (att == null)
+    //            att = doc.CreateDefaultAttributes();
 
-            obj_guid = doc.Objects.AddText(Value);
+    //        obj_guid = doc.Objects.AddText(Value);
 
-            return obj_guid != Guid.Empty;
-        }
+    //        return obj_guid != Guid.Empty;
+    //    }
 
-        public override bool CastFrom(object source)
-        {
-            return base.CastFrom(source);
-        }
+    //    public override bool CastFrom(object source)
+    //    {
+    //        return base.CastFrom(source);
+    //    }
 
-        public override bool CastTo<Y>(ref Y target)
-        {
-            return base.CastTo(ref target);
-        }
-    }
+    //    public override bool CastTo<Y>(ref Y target)
+    //    {
+    //        return base.CastTo(ref target);
+    //    }
+    //}
 }
