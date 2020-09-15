@@ -107,6 +107,7 @@
     <Compile Include="Component\SAMAnalyticalCreateConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalGetInternalMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalGetInternalConstructionLayers.cs" />
+    <Compile Include="Component\SAMAnalyticalGetDefaultConstructions.cs" />
     <Compile Include="Component\SAMAnalyticalHeatFlowDirection.cs" />
     <Compile Include="Component\SAMAnalyticalDefaultGasType.cs" />
     <Compile Include="Component\SAMAnalyticalNormals.cs" />
