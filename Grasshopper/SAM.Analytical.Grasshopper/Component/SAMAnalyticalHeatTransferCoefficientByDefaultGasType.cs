@@ -38,14 +38,14 @@ namespace SAM.Analytical.Grasshopper
             int index = -1;
             Param_GenericObject genericObjectParameter = null;
 
-            index = inputParamManager.AddGenericParameter("_defaultGasType", "_defaultGasType", "DefaultGasType", GH_ParamAccess.item);
+            index = inputParamManager.AddGenericParameter("_defaultGasType_", "_defaultGasType_", "DefaultGasType", GH_ParamAccess.item);
             genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(DefaultGasType.Air.ToString()));
+            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(DefaultGasType.Argon.ToString()));
 
-            inputParamManager.AddNumberParameter("_width", "_width", "Cavity width [m]", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_meanTemperature", "_meanTemperature", "Mean Temperature [K]", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_temperatureDifference", "_temperatureDifference", "Mean temperature difference across the cavity [K]", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_angle", "_angle", "Angle in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction", GH_ParamAccess.item);
+            inputParamManager.AddNumberParameter("_width_", "_width_", "Cavity width [m]", GH_ParamAccess.item, 0.012);
+            inputParamManager.AddNumberParameter("_meanTemperature_", "_meanTemperature_", "Mean Temperature [K]", GH_ParamAccess.item, 283);
+            inputParamManager.AddNumberParameter("_temperatureDifference_", "_temperatureDifference_", "Mean temperature difference across the cavity [K]", GH_ParamAccess.item, 15);
+            inputParamManager.AddNumberParameter("_angle_", "_angle_", "Angle in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction", GH_ParamAccess.item, System.Math.PI / 2);
         }
 
         /// <summary>
