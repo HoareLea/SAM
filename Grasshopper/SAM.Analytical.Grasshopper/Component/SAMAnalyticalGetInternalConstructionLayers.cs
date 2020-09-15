@@ -1,5 +1,8 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -11,7 +14,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("3beff062-1428-4eb9-bd97-9077f082db5b");
+        public override Guid ComponentGuid => new Guid("c5573e0e-a3ce-4f38-9992-9d8f80a924af");
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalGetInternalConstructionLayers()
           : base("SAMAnalytical.GetInternalConstructionLayers", "SAMAnalytical.GetInternalConstructionLayers",
-              "Gets Internal ConstructionLayers from SAM AdjacencyCluster",
+              "Gets Internal ConstructionLAyers from SAM AdjacencyCluster",
               "SAM", "Analytical")
         {
         }
@@ -34,7 +37,11 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytical Space", GH_ParamAccess.item);
+
+            GooSpaceParam gooSpaceParam = new GooSpaceParam();
+            gooSpaceParam.Optional = true;
+
+            inputParamManager.AddParameter(gooSpaceParam, "_spaces", "_spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -42,9 +49,10 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooConstructionLayerParam(), "ConstructionLayers", "ConstructionLayers", "SAM Analytical ConstructionLayers", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "Panels", GH_ParamAccess.list);
-            outputParamManager.AddNumberParameter("Areas", "Areas", "Areas", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSpaceParam(), "Spaces", "Spaces", "SAM Spaces", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooConstructionLayerParam(), "ConstructionLayers", "ConstructionLayers", "SAM Analytical ConstructionLayers", GH_ParamAccess.tree);
+            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "Panels", GH_ParamAccess.tree);
+            outputParamManager.AddNumberParameter("Areas", "Areas", "Areas", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -58,39 +66,53 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.SetDataList(0, null);
             dataAccess.SetDataList(1, null);
             dataAccess.SetDataList(2, null);
+            dataAccess.SetDataList(3, null);
 
             AdjacencyCluster adjacencyCluster = null;
-            if(!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
+            if (!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            Space space = null;
-            if (!dataAccess.GetData(1, ref space) || space == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            List<Space> spaces = new List<Space>();
+            dataAccess.GetDataList(1, spaces);
 
-            Dictionary<Panel, ConstructionLayer> dictionary = Analytical.Query.InternalConstructionLayerDictionary(space, adjacencyCluster);
-            if(dictionary != null)
-            {
-                List<double> areas = new List<double>();
-                List<Panel> panels = new List<Panel>();
-                List<ConstructionLayer> constructionLayers = new List<ConstructionLayer>();
+            if (spaces == null || spaces.Count == 0)
+                spaces = adjacencyCluster.GetSpaces();
 
-                foreach (KeyValuePair<Panel, ConstructionLayer> keyValuePair in dictionary)
+            if (spaces != null && spaces.Count != 0)
+            {
+                List<Space> spaces_Temp = new List<Space>();
+
+                DataTree<GooConstructionLayer> dataTree_ConstructionLayers = new DataTree<GooConstructionLayer>();
+                DataTree<GooPanel> dataTree_Panels = new DataTree<GooPanel>();
+                DataTree<double> dataTree_Areas = new DataTree<double>();
+
+                int count = 0;
+                foreach (Space space in spaces)
                 {
-                    constructionLayers.Add(keyValuePair.Value);
-                    panels.Add(keyValuePair.Key);
-                    areas.Add(keyValuePair.Key.GetArea());
-                    
+                    spaces_Temp.Add(space);
+
+                    GH_Path path = new GH_Path(count);
+
+                    Dictionary<Panel, ConstructionLayer> dictionary = Analytical.Query.InternalConstructionLayerDictionary(space, adjacencyCluster);
+                    if (dictionary != null)
+                    {
+                        foreach (KeyValuePair<Panel, ConstructionLayer> keyValuePair in dictionary)
+                        {
+                            dataTree_ConstructionLayers.Add(new GooConstructionLayer(keyValuePair.Value), path);
+                            dataTree_Panels.Add(new GooPanel(keyValuePair.Key), path);
+                            dataTree_Areas.Add(keyValuePair.Key.GetArea(), path);
+                        }
+                    }
+                    count++;
                 }
 
-                dataAccess.SetDataList(0, constructionLayers?.ConvertAll(x => new GooConstructionLayer(x)));
-                dataAccess.SetDataList(1, panels?.ConvertAll(x => new GooPanel(x)));
-                dataAccess.SetDataList(2, areas);
+                dataAccess.SetDataList(0, spaces.ConvertAll(x => new GooSpace(x)));
+                dataAccess.SetDataTree(1, dataTree_ConstructionLayers);
+                dataAccess.SetDataTree(2, dataTree_Panels);
+                dataAccess.SetDataTree(3, dataTree_Areas);
             }
         }
     }
