@@ -23,7 +23,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalSetConstruction()
           : base("SAMAnalytical.SetConstruction", "SAMAnalytical.SetConstruction",
-              "Rename Construction",
+              "Set Construction",
               "SAM", "Analytical")
         {
         }
@@ -33,15 +33,9 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            int index;
-
-            inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_construction", "SAM Analytical Panels", GH_ParamAccess.list);
-            index = inputParamManager.AddParameter(new GooConstructionParam(), "constructions_", "constructions_", "SAM Analytical Contructions", GH_ParamAccess.list);
-            inputParamManager[index].Optional = true;
-
-            inputParamManager.AddTextParameter("_csv", "_csv", "csv", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_sourceColumn", "_sourceColumn", "Source Column Name", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_destinationColumn", "_destinationColumn", "Destination Column Name", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooConstructionParam(), "_construction", "_construction", "SAM Analytical Panels", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -49,7 +43,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooAdjacencyClusterParam(), "AdjacencyCluster", "AdjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -60,119 +55,50 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            AdjacencyCluster adjacencyCluster = null;
+            if (!dataAccess.GetData(0, ref adjacencyCluster))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+
             List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(0, panels))
+            if (!dataAccess.GetDataList(1, panels))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            List<Construction> constructions = new List<Construction>();
-            dataAccess.GetDataList(1, constructions);
-            if (constructions == null)
-                constructions = new List<Construction>();
-
-            string csvOrPath = null;
-            if (!dataAccess.GetData(2, ref csvOrPath) || string.IsNullOrWhiteSpace(csvOrPath))
+            Construction construction = null;
+            if (!dataAccess.GetData(2, ref construction))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            string sourceColumn = null;
-            if (!dataAccess.GetData(3, ref sourceColumn) || string.IsNullOrWhiteSpace(sourceColumn))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            AdjacencyCluster adjacencyCluster_Result = new AdjacencyCluster(adjacencyCluster);
+            List<Panel> panels_Result = new List<Panel>();
 
-            string destinationColumn = null;
-            if (!dataAccess.GetData(4, ref destinationColumn) || string.IsNullOrWhiteSpace(destinationColumn))
+            foreach(Panel panel in panels)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            Core.DelimitedFileTable delimitedFileTable = null;
-            if (Core.Query.ValidFilePath(csvOrPath))
-            {
-                delimitedFileTable = new Core.DelimitedFileTable(new Core.DelimitedFileReader(Core.DelimitedFileType.Csv, csvOrPath));
-            }
-            else
-            {
-                string[] lines = csvOrPath.Split('\n');
-                delimitedFileTable = new Core.DelimitedFileTable(new Core.DelimitedFileReader(Core.DelimitedFileType.Csv, lines));
-            }
-
-            if (delimitedFileTable == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            int index_Source = delimitedFileTable.GetIndex(sourceColumn);
-            if (index_Source == -1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            int index_Destination = delimitedFileTable.GetIndex(destinationColumn);
-            if (index_Destination == -1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            List<Panel> result = new List<Panel>();
-            foreach (Panel panel in panels)
-            {
-                Construction construction = panel?.Construction;
-                if (construction == null)
+                if (panel == null)
                     continue;
 
-                string name = construction.Name;
-                if (name == null)
-                {
-                    //result.Add(construction);
+                Panel panel_AdjacencyCluster = adjacencyCluster_Result.GetObject<Panel>(panel.Guid);
+                if (panel_AdjacencyCluster == null)
                     continue;
-                }
 
-                string name_destination = null;
-                for (int i = 0; i < delimitedFileTable.Count; i++)
-                {
-                    string name_source = null;
-                    if (!delimitedFileTable.TryGetValue(i, index_Source, out name_source))
-                        continue;
-
-                    if (!name.Equals(name_source))
-                        continue;
-
-                    if (!delimitedFileTable.TryGetValue(i, index_Destination, out name_destination))
-                    {
-                        name_destination = null;
-                        continue;
-                    }
-
-                    break;
-                }
-
-                if (string.IsNullOrWhiteSpace(name_destination))
-                {
-                    //result.Add(construction);
+                panel_AdjacencyCluster = new Panel(panel_AdjacencyCluster, construction);
+                if (panel_AdjacencyCluster == null)
                     continue;
-                }
-                else
-                {
-                    Construction construction_New = constructions.Find(x => x.Name == name_destination);
-                    if (construction_New == null)
-                        construction_New = new Construction(construction, name_destination);
 
-                    result.Add(new Panel(panel, construction_New));
-                }
+                if (adjacencyCluster_Result.AddObject(panel_AdjacencyCluster))
+                    panels_Result.Add(panel_AdjacencyCluster);
             }
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster_Result));
+            dataAccess.SetDataList(1, panels_Result.ConvertAll(x => new GooPanel(x)));
         }
     }
 }

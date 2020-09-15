@@ -112,6 +112,7 @@
     <Compile Include="Component\SAMAnalyticalDefaultGasType.cs" />
     <Compile Include="Component\SAMAnalyticalNormals.cs" />
     <Compile Include="Component\SAMAnalyticalCheck.cs" />
+    <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster_Obsolete.cs" />
     <Compile Include="Component\SAMAnalyticalGetAdjacentSpaceNames.cs" />
@@ -142,7 +143,7 @@
     <Compile Include="Component\SAMAnalyticalOverlapPanels.cs" />
     <Compile Include="Component\SAMAnalyticalMovePanel.cs" />
     <Compile Include="Component\SAMAnalyticalPlaneIntersection.cs" />
-    <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />
+    <Compile Include="Component\SAMAnalyticalSetConstructionByCsv.cs" />
     <Compile Include="Component\SAMAnalyticalRenameConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByElevation.cs" />
     <Compile Include="Component\SAMAnalyticalApertureType.cs" />
