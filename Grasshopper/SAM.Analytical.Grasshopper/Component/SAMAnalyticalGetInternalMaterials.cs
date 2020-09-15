@@ -23,8 +23,8 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalGetInternalMaterials()
-          : base("SAMAnalytical.GetInternalConstructionLayers", "SAMAnalytical.GetInternalConstructionLayers",
-              "Gets Internal ConstructionLayers from SAM AdjacencyCluster",
+          : base("SAMAnalytical.GetInternalMaterials", "SAMAnalytical.GetInternalMaterials",
+              "Gets Internal Materials from SAM AdjacencyCluster",
               "SAM", "Analytical")
         {
         }
