@@ -14,13 +14,6 @@ namespace SAM.Geometry.Spatial
                 return double.NaN;
 
             return Tilt(normal);
-
-            //IClosedPlanar3D closedPlanar3D_Temp = closedPlanar3D;
-            //if (closedPlanar3D is Face3D)
-            //    closedPlanar3D_Temp = ((Face3D)closedPlanar3D).GetExternalEdge();
-
-            //if (!Spatial.Query.Clockwise(closedPlanar3D_Temp))
-            //    normal.Negate();
         }
 
         public static double Tilt(this Vector3D normal)

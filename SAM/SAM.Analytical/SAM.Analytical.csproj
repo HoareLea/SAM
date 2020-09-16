@@ -92,6 +92,14 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
+    <Compile Include="Modify\SetInternalEmissivity.cs" />
+    <Compile Include="Modify\SetExternalEmissivity.cs" />
+    <Compile Include="Modify\SetExternalLightReflectance.cs" />
+    <Compile Include="Modify\SetInternalLightReflectance.cs" />
+    <Compile Include="Modify\SetInternalSolarReflectance.cs" />
+    <Compile Include="Modify\SetExternalSolarReflectance.cs" />
+    <Compile Include="Modify\SetVapourDiffusionFactor.cs" />
+    <Compile Include="Modify\SetThermalTransmittanceCalculations.cs" />
     <Compile Include="Modify\UpdateSpace.cs" />
     <Compile Include="Modify\Remove.cs" />
     <Compile Include="Modify\AddSpace.cs" />
@@ -100,6 +108,7 @@
     <Compile Include="Query\ApertureConstructions.cs" />
     <Compile Include="Query\ApertureHost.cs" />
     <Compile Include="Query\ApertureHosts.cs" />
+    <Compile Include="Query\InternalEmissivity.cs" />
     <Compile Include="Query\FirstMaterial.cs" />
     <Compile Include="Query\FirstConstructionLayer.cs" />
     <Compile Include="Query\NusseltNumber.cs" />
@@ -114,6 +123,13 @@
     <Compile Include="Query\InternalConstructionLayer.cs" />
     <Compile Include="Query\ExternalConstructionLayer.cs" />
     <Compile Include="Query\GasMaterial.cs" />
+    <Compile Include="Query\ExternalSolarReflectance.cs" />
+    <Compile Include="Query\InternalSolarReflectance.cs" />
+    <Compile Include="Query\ExternalLightReflectance.cs" />
+    <Compile Include="Query\InternalLightReflectance.cs" />
+    <Compile Include="Query\ExternalEmissivity.cs" />
+    <Compile Include="Query\ThermalTransmittanceCalculations.cs" />
+    <Compile Include="Query\VapurDiffusionFactor.cs" />
     <Compile Include="Query\Volume.cs" />
     <Compile Include="Query\OffsetAperturesOnEdge.cs" />
     <Compile Include="Query\ExposedToSun.cs" />

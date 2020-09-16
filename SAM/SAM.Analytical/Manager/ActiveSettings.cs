@@ -48,6 +48,15 @@ namespace SAM.Analytical
             public const string ParameterName_Area = "ParameterName_Area";
             public const string ParameterName_Volume = "ParameterName_Volume";
 
+            public const string ParameterName_VapourDiffusionFactor = "ParameterName_VapourDiffusionFactor";
+            public const string ParameterName_ExternalSolarReflectance = "ParameterName_ExternalSolarReflectance";
+            public const string ParameterName_InternalSolarReflectance = "ParameterName_InternalSolarReflectance";
+            public const string ParameterName_ExternalLightReflectance = "ParameterName_ExternalLightReflectance";
+            public const string ParameterName_InternalLightReflectance = "ParameterName_InternalLightReflectance";
+            public const string ParameterName_ExternalEmissivity = "ParameterName_ExternalEmissivity";
+            public const string ParameterName_InternalEmissivity = "ParameterName_InternalEmissivity";
+            public const string ParameterName_ThermalTransmittanceCalculations = "ParameterName_ThermalTransmittanceCalculations";
+
             public const string GasMaterial_Air = "GasMaterial_Air";
             public const string GasMaterial_Argon = "GasMaterial_Argon";
             public const string GasMaterial_Krypton = "GasMaterial_Krypton";
@@ -95,6 +104,14 @@ namespace SAM.Analytical
             result.Add(Name.ParameterName_Area, "SAM_Area");
             result.Add(Name.ParameterName_Volume, "SAM_Volume");
 
+            result.Add(Name.ParameterName_VapourDiffusionFactor, "SAM_Material_VapourDiffusionFactor");
+            result.Add(Name.ParameterName_ExternalSolarReflectance, "SAM_Material_ExternalSolarReflectance");
+            result.Add(Name.ParameterName_InternalSolarReflectance, "SAM_Material_InternalSolarReflectance");
+            result.Add(Name.ParameterName_ExternalLightReflectance, "SAM_Material_ExternalLightReflectance");
+            result.Add(Name.ParameterName_InternalLightReflectance, "SAM_Material_InternalLightReflectance");
+            result.Add(Name.ParameterName_ExternalEmissivity, "SAM_Material_ExternalEmissivity");
+            result.Add(Name.ParameterName_InternalEmissivity, "SAM_Material_InternalEmissivity");
+            result.Add(Name.ParameterName_ThermalTransmittanceCalculations, "SAM_Material_IngnoreInUvalue");
 
             //Default Constructions
             result.Add(Name.Construction_Ceiling, new Construction(new System.Guid("6ff47aad-ec17-4806-8e81-e84b10d5756a"), "Generic"));

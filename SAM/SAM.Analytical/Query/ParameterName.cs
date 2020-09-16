@@ -274,5 +274,141 @@ namespace SAM.Analytical
         {
             return ParameterName_FacingExternalGlazing(ActiveSetting.Setting);
         }
+
+        public static string ParameterName_VapourDiffusionFactor(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_VapourDiffusionFactor, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_VapourDiffusionFactor()
+        {
+            return ParameterName_VapourDiffusionFactor(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_ExternalSolarReflectance(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_ExternalSolarReflectance, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_ExternalSolarReflectance()
+        {
+            return ParameterName_ExternalSolarReflectance(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_InternalSolarReflectance(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_InternalSolarReflectance, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_InternalSolarReflectance()
+        {
+            return ParameterName_InternalSolarReflectance(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_ExternalLightReflectance(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_ExternalLightReflectance, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_ExternalLightReflectance()
+        {
+            return ParameterName_ExternalLightReflectance(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_InternalLightReflectance(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_InternalLightReflectance, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_InternalLightReflectance()
+        {
+            return ParameterName_InternalLightReflectance(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_ExternalEmissivity(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_ExternalEmissivity, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_ExternalEmissivity()
+        {
+            return ParameterName_ExternalEmissivity(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_InternalEmissivity(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_InternalEmissivity, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_InternalEmissivity()
+        {
+            return ParameterName_InternalEmissivity(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_ThermalTransmittanceCalculations(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_ThermalTransmittanceCalculations, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_ThermalTransmittanceCalculations()
+        {
+            return ParameterName_ThermalTransmittanceCalculations(ActiveSetting.Setting);
+        }
     }
 }

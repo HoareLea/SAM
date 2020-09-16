@@ -13,7 +13,6 @@ namespace SAM.Core
         private double thermalConductivity = double.NaN;
         private double specificHeatCapacity = double.NaN;
         private double density = double.NaN;
-        private double vapourDiffusionFactor = double.NaN;
         
         public Material(string name)
             : base(name)
@@ -127,17 +126,6 @@ namespace SAM.Core
             }
         }
 
-        /// <summary>
-        /// The specific moisture diffusion resistance of the material [-]
-        /// </summary>
-        public double VapourDiffusionFactor
-        {
-            get
-            {
-                return vapourDiffusionFactor;
-            }
-        }
-
         public MaterialType MaterialType
         {
             get
@@ -169,9 +157,6 @@ namespace SAM.Core
             if (jObject.ContainsKey("Description"))
                 description = jObject.Value<string>("Description");
 
-            if (jObject.ContainsKey("VapourDiffusionFactor"))
-                vapourDiffusionFactor = jObject.Value<double>("VapourDiffusionFactor");
-
             if(jObject.ContainsKey("ThermalConductivity"))
                 thermalConductivity = jObject.Value<double>("ThermalConductivity");
 
@@ -198,9 +183,6 @@ namespace SAM.Core
 
             if (description != null)
                 jObject.Add("Description", description);
-
-            if (!double.IsNaN(vapourDiffusionFactor))
-                jObject.Add("VapourDiffusionFactor", vapourDiffusionFactor);
 
             if (!double.IsNaN(thermalConductivity))
                 jObject.Add("ThermalConductivity", thermalConductivity);
