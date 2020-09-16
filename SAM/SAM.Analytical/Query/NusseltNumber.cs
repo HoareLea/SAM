@@ -12,7 +12,7 @@ namespace SAM.Analytical
         /// <param name="temperatureDifference">Temperature difference between glass surfaces bounding the fluid space</param>
         /// <param name="width">Width of the space</param>
         /// <param name="meanTemperature">Mean Temperature</param>
-        /// <param name="angle">Angle in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction</param>
+        /// <param name="angle">Angle of heat flow direction in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction</param>
         /// <returns>Nusselt Number (Nu) [-]</returns>
         public static double NusseltNumber(this FluidMaterial fluidMaterial, double temperatureDifference, double width, double meanTemperature, double angle)
         {
@@ -42,15 +42,29 @@ namespace SAM.Analytical
             }
             else if(angle > 0 && angle < System.Math.PI / 4)
             {
-                a = 0.035 + ((angle / (System.Math.PI / 4)) * (0.1 - 0.035));
-                n = 0.38 - ((angle / (System.Math.PI / 4)) * (0.38 - 0.31));
+                double linearEquation_a;
+                double linearEquation_b;
+
+                linearEquation_a = (0.035 - 0.1) / (0 - 45);
+                linearEquation_b = 0.035 - linearEquation_a * 0;
+                a = linearEquation_a * angle + linearEquation_b;
+
+                linearEquation_a = (0.38 - 0.31) / (0 - 45);
+                linearEquation_b = 0.038 - linearEquation_a * 0;
+                n = linearEquation_a * angle + linearEquation_b;
             }
             else if(angle > System.Math.PI / 4 && angle < System.Math.PI / 2)
             {
-                double angle_Temp = (System.Math.PI / 2) - angle;
+                double linearEquation_a;
+                double linearEquation_b;
 
-                a = 0.1 + ((angle_Temp / (System.Math.PI / 4)) * (0.16 - 0.1));
-                n = 0.31 - ((angle_Temp / (System.Math.PI / 4)) * (0.31 - 0.28));
+                linearEquation_a = (0.1 - 0.16) / (45 - 90);
+                linearEquation_b = 0.1 - linearEquation_a * 45;
+                a = linearEquation_a * angle + linearEquation_b;
+
+                linearEquation_a = (0.31 - 0.28) / (45 - 90);
+                linearEquation_b = 0.31 - linearEquation_a * 45;
+                n = linearEquation_a * angle + linearEquation_b;
             }
 
             if (double.IsNaN(a) || double.IsNaN(n))
