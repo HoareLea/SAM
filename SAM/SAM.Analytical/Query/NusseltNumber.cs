@@ -10,7 +10,7 @@ namespace SAM.Analytical
         /// </summary>
         /// <param name="fluidMaterial">SAM Fluid Material</param>
         /// <param name="temperatureDifference">Temperature difference between glass surfaces bounding the fluid space</param>
-        /// <param name="width">Width of the space</param>
+        /// <param name="width">Width of the space , default 0.0012m</param>
         /// <param name="meanTemperature">Mean Temperature</param>
         /// <param name="angle">Angle of heat flow direction in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction</param>
         /// <returns>Nusselt Number (Nu) [-]</returns>
@@ -25,22 +25,29 @@ namespace SAM.Analytical
             double a = double.NaN;
             double n = double.NaN;
 
-            if(angle == 0)
+            //roof deg = 0, rad = 0
+            if (angle == 0)
+            {
+                a = 0.16;
+                n = 0.28;
+            }
+
+            //tilted roof,wall deg = 45, rad = 0.7854
+            else if (angle == System.Math.PI / 4)
+            {
+                a = 0.10;
+                n = 0.31;
+            }
+
+            //wall deg = 90, rad = 1.5708
+            else if (angle == System.Math.PI / 2)
             {
                 a = 0.035;
                 n = 0.38;
             }
-            else if(angle == System.Math.PI / 2)
-            {
-                a = 0.016;
-                n = 0.28;
-            }
-            else if(angle == System.Math.PI / 4)
-            {
-                a = 0.01;
-                n = 0.31;
-            }
-            else if(angle > 0 && angle < System.Math.PI / 4)
+
+            //tilted 0<roof,wall <deg = 45, rad = 0.7854
+            else if (angle > 0 && angle < System.Math.PI / 4)
             {
                 double linearEquation_a;
                 double linearEquation_b;
@@ -50,10 +57,12 @@ namespace SAM.Analytical
                 a = linearEquation_a * angle + linearEquation_b;
 
                 linearEquation_a = (0.38 - 0.31) / (0 - System.Math.PI / 4);
-                linearEquation_b = 0.038 - linearEquation_a * 0;
+                linearEquation_b = 0.38 - linearEquation_a * 0;
                 n = linearEquation_a * angle + linearEquation_b;
             }
-            else if(angle > System.Math.PI / 4 && angle < System.Math.PI / 2)
+
+            //tilted 45 < roof,wall <deg = 90, rad = 1.5708
+            else if (angle > System.Math.PI / 4 && angle < System.Math.PI / 2)
             {
                 double linearEquation_a;
                 double linearEquation_b;
