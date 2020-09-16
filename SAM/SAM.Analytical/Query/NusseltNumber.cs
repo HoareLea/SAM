@@ -45,11 +45,11 @@ namespace SAM.Analytical
                 double linearEquation_a;
                 double linearEquation_b;
 
-                linearEquation_a = (0.035 - 0.1) / (0 - 45);
+                linearEquation_a = (0.035 - 0.1) / (0 - System.Math.PI / 4);
                 linearEquation_b = 0.035 - linearEquation_a * 0;
                 a = linearEquation_a * angle + linearEquation_b;
 
-                linearEquation_a = (0.38 - 0.31) / (0 - 45);
+                linearEquation_a = (0.38 - 0.31) / (0 - System.Math.PI / 4);
                 linearEquation_b = 0.038 - linearEquation_a * 0;
                 n = linearEquation_a * angle + linearEquation_b;
             }
@@ -58,12 +58,12 @@ namespace SAM.Analytical
                 double linearEquation_a;
                 double linearEquation_b;
 
-                linearEquation_a = (0.1 - 0.16) / (45 - 90);
-                linearEquation_b = 0.1 - linearEquation_a * 45;
+                linearEquation_a = (0.1 - 0.16) / (System.Math.PI / 4 - System.Math.PI / 2);
+                linearEquation_b = 0.1 - linearEquation_a * System.Math.PI / 4;
                 a = linearEquation_a * angle + linearEquation_b;
 
-                linearEquation_a = (0.31 - 0.28) / (45 - 90);
-                linearEquation_b = 0.31 - linearEquation_a * 45;
+                linearEquation_a = (0.31 - 0.28) / (System.Math.PI / 4 - System.Math.PI / 2);
+                linearEquation_b = 0.31 - linearEquation_a * System.Math.PI / 4;
                 n = linearEquation_a * angle + linearEquation_b;
             }
 
