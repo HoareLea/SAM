@@ -51,7 +51,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddTextParameter("Value", "Value", "Value", GH_ParamAccess.item);
+            int index = outputParamManager.AddParameter(new GooTextParam(), "Value", "Value", "Value", GH_ParamAccess.item);
+            outputParamManager.HideParameter(index);
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace SAM.Analytical.Grasshopper
                 if (length < 10)
                     length = 10;
 
-                height = 10;
+                height = 1;
             }
 
             Point3D point3D = space.Location;
@@ -104,7 +105,7 @@ namespace SAM.Analytical.Grasshopper
 
             Rhino.Display.Text3d text3D = new Rhino.Display.Text3d(value, plane.ToRhino(), height);
 
-            dataAccess.SetData(0, text3D);
+            dataAccess.SetData(0, new GooText(text3D));
         }
     }
 }
