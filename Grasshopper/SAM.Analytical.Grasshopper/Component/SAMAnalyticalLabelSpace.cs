@@ -76,7 +76,7 @@ namespace SAM.Analytical.Grasshopper
                 name = "Name";
 
             string value = null;
-            if (space.TryGetValue(name, out value, true))
+            if (!space.TryGetValue(name, out value, true))
                 value = "???";
 
             double height = double.NaN;

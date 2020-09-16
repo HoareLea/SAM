@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooText : GH_Goo<Rhino.Display.Text3d>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooText : GH_GeometricGoo<Rhino.Display.Text3d>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooText()
             : base()
@@ -37,6 +37,17 @@ namespace SAM.Analytical.Grasshopper
         public override string TypeName => typeof(Rhino.Display.Text3d).Name;
 
         public override string TypeDescription => typeof(Rhino.Display.Text3d).Name;
+
+        public override BoundingBox Boundingbox
+        {
+            get
+            {
+                if (Value == null)
+                    return BoundingBox.Empty;
+
+                return Value.BoundingBox;
+            }
+        }
 
         public override IGH_Goo Duplicate()
         {
@@ -85,6 +96,26 @@ namespace SAM.Analytical.Grasshopper
         public override string ToString()
         {
             return Value?.Text;
+        }
+
+        public override IGH_GeometricGoo DuplicateGeometry()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override BoundingBox GetBoundingBox(Transform xform)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IGH_GeometricGoo Transform(Transform xform)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
+        {
+            throw new NotImplementedException();
         }
     }
 
