@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel;
+﻿using Eto.Drawing;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
 using Rhino.DocObjects;
@@ -9,14 +10,14 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooText : GH_GeometricGoo<Rhino.Display.Text3d>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooText3D : GH_GeometricGoo<Rhino.Display.Text3d>, IGH_PreviewData, IGH_BakeAwareData
     {
-        public GooText()
+        public GooText3D()
             : base()
         {
         }
 
-        public GooText(Rhino.Display.Text3d text3D)
+        public GooText3D(Rhino.Display.Text3d text3D)
         {
             Value = text3D;
         }
@@ -51,7 +52,7 @@ namespace SAM.Analytical.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GooText(Value);
+            return new GooText3D(Value);
         }
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
@@ -71,14 +72,13 @@ namespace SAM.Analytical.Grasshopper
         {
             obj_guid = Guid.Empty;
 
-
             if (Value == null)
                 return false;
 
             if (att == null)
                 att = doc.CreateDefaultAttributes();
 
-            obj_guid = doc.Objects.AddText(Value);
+            obj_guid = doc.Objects.AddText(Value, att);
 
             return obj_guid != Guid.Empty;
         }
@@ -100,26 +100,65 @@ namespace SAM.Analytical.Grasshopper
 
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            throw new NotImplementedException();
+            return new GooText3D(Duplicate(Value));
         }
 
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            throw new NotImplementedException();
+            if (Value == null)
+                return BoundingBox.Empty;
+
+            BoundingBox boundingBox = Value.BoundingBox;
+
+            Point3d[] point3ds = xform.TransformList(boundingBox.GetCorners());
+
+            return new BoundingBox(point3ds);
         }
 
         public override IGH_GeometricGoo Transform(Transform xform)
         {
-            throw new NotImplementedException();
+            Rhino.Display.Text3d text3d = Duplicate(Value);
+            if (text3d == null)
+                return new GooText3D(null);
+
+            Plane plane = text3d.TextPlane;
+            Point3d point3d = plane.PointAt(1, 1);
+
+            plane.Transform(xform);
+            point3d.Transform(xform);
+
+            double distance = point3d.DistanceTo(plane.Origin);
+
+            text3d.TextPlane = plane;
+            text3d.Height *= distance / System.Math.Sqrt(2);
+
+            GooText3D gooText3D = new GooText3D(text3d);
+            gooText3D.Value.Bold = Value.Bold;
+            gooText3D.Value.Italic = Value.Italic;
+            gooText3D.Value.FontFace = Value.FontFace;
+            return gooText3D;
         }
 
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
-            throw new NotImplementedException();
+            return DuplicateGeometry();
+        }
+
+        private static Rhino.Display.Text3d Duplicate(Rhino.Display.Text3d text3d)
+        {
+            if (text3d == null)
+                return null;
+
+            Rhino.Display.Text3d result = new Rhino.Display.Text3d(text3d.Text, text3d.TextPlane, text3d.Height);
+            result.Bold = text3d.Bold;
+            result.Italic = text3d.Italic;
+            result.FontFace = text3d.FontFace;
+
+            return result;
         }
     }
 
-    public class GooTextParam : GH_PersistentParam<GooText>
+    public class GooText3DParam : GH_PersistentParam<GooText3D>
     {
         public override Guid ComponentGuid => new Guid("d986bbd2-fc9b-42b5-85b8-3bf5d7edc899");
 
@@ -127,17 +166,17 @@ namespace SAM.Analytical.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        public GooTextParam()
+        public GooText3DParam()
             : base(typeof(Rhino.Display.Text3d).Name, typeof(Rhino.Display.Text3d).Name, typeof(Rhino.Display.Text3d).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GooText> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GooText3D> values)
         {
             throw new NotImplementedException();
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GooText value)
+        protected override GH_GetterResult Prompt_Singular(ref GooText3D value)
         {
             throw new NotImplementedException();
         }
