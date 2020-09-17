@@ -75,6 +75,7 @@
     <Compile Include="Classes\ConstructionLayer.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\GasMaterial.cs" />
+    <Compile Include="Create\MaterialLibrary.cs" />
     <Compile Include="Create\TransparentMaterial.cs" />
     <Compile Include="Create\OpaqueMaterial.cs" />
     <Compile Include="Create\ConstructionLayers.cs" />
@@ -96,7 +97,9 @@
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
     <Compile Include="Modify\SetHeatTransferCoefficient.cs" />
-    <Compile Include="Modify\SetIDefaultThickness.cs" />
+    <Compile Include="Modify\SetSolarTransmittance.cs" />
+    <Compile Include="Modify\SetLightTransmittance.cs" />
+    <Compile Include="Modify\SetDefaultThickness.cs" />
     <Compile Include="Modify\SetInternalEmissivity.cs" />
     <Compile Include="Modify\SetExternalEmissivity.cs" />
     <Compile Include="Modify\SetExternalLightReflectance.cs" />
@@ -118,6 +121,8 @@
     <Compile Include="Query\InternalEmissivity.cs" />
     <Compile Include="Query\FirstMaterial.cs" />
     <Compile Include="Query\FirstConstructionLayer.cs" />
+    <Compile Include="Query\SolarTransmittance.cs" />
+    <Compile Include="Query\LightTransmittance.cs" />
     <Compile Include="Query\NusseltNumber.cs" />
     <Compile Include="Query\GrashofNumber.cs" />
     <Compile Include="Query\PrandtlNumber.cs" />

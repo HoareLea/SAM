@@ -462,5 +462,141 @@ namespace SAM.Analytical
         {
             return ParameterName_HeatTransferCoefficient(ActiveSetting.Setting);
         }
+
+        public static string ParameterName_SolarTransmittance()
+        {
+            return ParameterName_SolarTransmittance(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_SolarTransmittance(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_SolarTransmittance, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_LightTransmittance()
+        {
+            return ParameterName_LightTransmittance(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_LightTransmittance(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_LightTransmittance, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_MaterialType()
+        {
+            return ParameterName_MaterialType(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_MaterialType(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_MaterialType, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_MaterialName()
+        {
+            return ParameterName_MaterialName(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_MaterialName(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_MaterialName, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_MaterialDescription()
+        {
+            return ParameterName_MaterialDescription(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_MaterialDescription(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_MaterialDescription, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_ThermalConductivity()
+        {
+            return ParameterName_ThermalConductivity(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_ThermalConductivity(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_ThermalConductivity, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_SpecificHeatCapacity()
+        {
+            return ParameterName_SpecificHeatCapacity(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_SpecificHeatCapacity(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_SpecificHeatCapacity, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_Density()
+        {
+            return ParameterName_Density(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_Density(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_Density, out result))
+                return result;
+
+            return null;
+        }
     }
 }

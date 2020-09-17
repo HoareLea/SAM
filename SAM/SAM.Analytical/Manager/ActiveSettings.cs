@@ -59,6 +59,14 @@ namespace SAM.Analytical
             public const string ParameterName_IsBlind = "ParameterName_IsBlind";
             public const string ParameterName_DefaultThickness = "ParameterName_DefaultThickness";
             public const string ParameterName_HeatTransferCoefficient = "ParameterName_HeatTransferCoefficient";
+            public const string ParameterName_MaterialType = "ParameterName_MaterialType";
+            public const string ParameterName_MaterialName = "ParameterName_MaterialName";
+            public const string ParameterName_MaterialDescription = "ParameterName_MaterialDescription";
+            public const string ParameterName_ThermalConductivity = "ParameterName_ThermalConductivity";
+            public const string ParameterName_SolarTransmittance = "ParameterName_SolarTransmittance";
+            public const string ParameterName_LightTransmittance = "ParameterName_LightTransmittance";
+            public const string ParameterName_SpecificHeatCapacity = "ParameterName_SpecificHeatCapacity";
+            public const string ParameterName_Density = "ParameterName_Density";
 
             public const string GasMaterial_Air = "GasMaterial_Air";
             public const string GasMaterial_Argon = "GasMaterial_Argon";
@@ -90,6 +98,8 @@ namespace SAM.Analytical
         {
             Setting result = new Setting(Assembly.GetExecutingAssembly());
 
+
+            //Panels and Spaces Parameters
             result.Add(Name.ParameterName_PanelType, "SAM_BuildingElementType");
             result.Add(Name.ParameterName_Height, "SAM_BuildingElementHeight");
             result.Add(Name.ParameterName_Width, "SAM_BuildingElementWidth");
@@ -107,6 +117,7 @@ namespace SAM.Analytical
             result.Add(Name.ParameterName_Area, "SAM_Area");
             result.Add(Name.ParameterName_Volume, "SAM_Volume");
 
+            //Materials Parameters
             result.Add(Name.ParameterName_VapourDiffusionFactor, "SAM_Material_VapourDiffusionFactor");
             result.Add(Name.ParameterName_ExternalSolarReflectance, "SAM_Material_ExternalSolarReflectance");
             result.Add(Name.ParameterName_InternalSolarReflectance, "SAM_Material_InternalSolarReflectance");
@@ -118,6 +129,15 @@ namespace SAM.Analytical
             result.Add(Name.ParameterName_IsBlind, "SAM_Material_IsBlind");
             result.Add(Name.ParameterName_DefaultThickness, "SAM_Material_Width");
             result.Add(Name.ParameterName_HeatTransferCoefficient, "SAM_Material_ConvectionCoefficient");
+            result.Add(Name.ParameterName_MaterialType, "SAM_Material_Type");
+            result.Add(Name.ParameterName_MaterialName, "SAM_Material_Name");
+            result.Add(Name.ParameterName_MaterialDescription, "SAM_Material_Description");
+            result.Add(Name.ParameterName_ThermalConductivity, "SAM_Material_Conductivity");
+            result.Add(Name.ParameterName_LightTransmittance, "SAM_Material_LightTransmittance");
+            result.Add(Name.ParameterName_SolarTransmittance, "SAM_Material_SolarTransmittance");
+            result.Add(Name.ParameterName_SpecificHeatCapacity, "SAM_Material_SpecificHeat");
+            result.Add(Name.ParameterName_Density, "SAM_Material_Density");
+
 
             //Default Constructions
             result.Add(Name.Construction_Ceiling, new Construction(new System.Guid("6ff47aad-ec17-4806-8e81-e84b10d5756a"), "Generic"));

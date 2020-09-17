@@ -54,9 +54,9 @@ namespace SAM.Core
             Read(delimitedFileReader, headerCount);
         }
 
-        public DelimitedFileTable(List<DelimitedFileRow> DelimitedFileRowList, int HeaderCount = 0)
+        public DelimitedFileTable(List<DelimitedFileRow> DelimitedFileRowList, int headerCount = 0)
         {
-            Read(DelimitedFileRowList, HeaderCount);
+            Read(DelimitedFileRowList, headerCount);
         }
 
         public DelimitedFileTable(object[,] data, int headerCount = 0)
@@ -220,6 +220,32 @@ namespace SAM.Core
             return -1;
         }
 
+        public int GetIndex(object value, int headerIndex)
+        {
+            if (header == null && header.Count >= headerIndex)
+                return -1;
+
+            object[] values = header[headerIndex];
+            if (values == null || values.Length == 0)
+                return -1;
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                if(values[i] == null)
+                {
+                    if (value == null)
+                        return i;
+                    else
+                        continue;
+                }
+
+                if (values[i].Equals(value))
+                    return i;
+            }
+
+            return -1;
+        }
+
         public bool TryGetValue<T>(int row, int column, out T value)
         {
             value = default(T);
@@ -232,6 +258,17 @@ namespace SAM.Core
 
             value = (T)values[row][column];
             return true;
+        }
+
+        public bool TryConvert<T>(int row, int column, out T value)
+        {
+            value = default;
+
+            object @object_value;
+            if (!TryGetValue(row, column, out object_value))
+                return false;
+
+            return Query.TryConvert<T>(@object_value, out value);
         }
 
         public string ToString(int row, int column)
