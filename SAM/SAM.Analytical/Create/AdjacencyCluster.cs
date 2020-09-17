@@ -326,7 +326,7 @@ namespace SAM.Analytical
                     List<Segment2D> segment2Ds = new List<Segment2D>();
                     foreach(IClosed2D closed2D in face2D.Edge2Ds)
                     {
-                        ISegmentable2D segmentable2D = (closed2D as Polygon2D)?.SimplifyBySAM_Angle();
+                        ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
                         if(segmentable2D == null)
                             segmentable2D = closed2D as ISegmentable2D;
                         
