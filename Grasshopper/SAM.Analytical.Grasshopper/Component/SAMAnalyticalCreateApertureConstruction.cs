@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper.Documentation;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
@@ -35,10 +36,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, Analytical.Query.ApertureConstructionName(ApertureType.Window, true));
-            int index = inputParamManager.AddGenericParameter("_apertureType", "_apertureType", "Aperture Type", GH_ParamAccess.item);
-
-            Param_GenericObject genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(ApertureType.Window.ToString()));
+            inputParamManager.AddTextParameter("_apertureType", "_apertureType", "Aperture Type", GH_ParamAccess.item, ApertureType.Window.ToString());
         }
 
         /// <summary>

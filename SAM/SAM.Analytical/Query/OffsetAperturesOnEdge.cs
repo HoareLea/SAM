@@ -47,7 +47,8 @@ namespace SAM.Analytical
 
                 List<Point2D> point2Ds_Intersections = Geometry.Planar.Query.Intersections(externalEdge, externalEdge_Aperture);
                 if (point2Ds_Intersections == null || point2Ds_Intersections.Count == 0)
-                    continue;
+                    if(!externalEdge_Aperture.Inside(externalEdge))
+                    continue;                    
 
                 polygon2Ds = Geometry.Planar.Query.Intersection(externalEdge_Aperture, externalEdge, tolerance);
                 if (polygon2Ds == null || polygon2Ds.Count == 0)

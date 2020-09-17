@@ -76,7 +76,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("ApertureType", "ApertureType", "SAM Analytical ApertureType", GH_ParamAccess.item);
+            outputParamManager.AddTextParameter("ApertureType", "ApertureType", "SAM Analytical ApertureType", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, apertureType);
+            dataAccess.SetData(0, apertureType.ToString());
         }
     }
 }
