@@ -74,6 +74,9 @@
     <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Classes\ConstructionLayer.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
+    <Compile Include="Create\GasMaterial.cs" />
+    <Compile Include="Create\TransparentMaterial.cs" />
+    <Compile Include="Create\OpaqueMaterial.cs" />
     <Compile Include="Create\ConstructionLayers.cs" />
     <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Panels.cs" />
@@ -92,14 +95,17 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
+    <Compile Include="Modify\SetHeatTransferCoefficient.cs" />
+    <Compile Include="Modify\SetIDefaultThickness.cs" />
     <Compile Include="Modify\SetInternalEmissivity.cs" />
     <Compile Include="Modify\SetExternalEmissivity.cs" />
     <Compile Include="Modify\SetExternalLightReflectance.cs" />
     <Compile Include="Modify\SetInternalLightReflectance.cs" />
     <Compile Include="Modify\SetInternalSolarReflectance.cs" />
     <Compile Include="Modify\SetExternalSolarReflectance.cs" />
+    <Compile Include="Modify\SetIsBlind.cs" />
     <Compile Include="Modify\SetVapourDiffusionFactor.cs" />
-    <Compile Include="Modify\SetThermalTransmittanceCalculations.cs" />
+    <Compile Include="Modify\SetIgnoreThermalTransmittanceCalculations.cs" />
     <Compile Include="Modify\UpdateSpace.cs" />
     <Compile Include="Modify\Remove.cs" />
     <Compile Include="Modify\AddSpace.cs" />
@@ -108,6 +114,7 @@
     <Compile Include="Query\ApertureConstructions.cs" />
     <Compile Include="Query\ApertureHost.cs" />
     <Compile Include="Query\ApertureHosts.cs" />
+    <Compile Include="Query\DefaultThickness.cs" />
     <Compile Include="Query\InternalEmissivity.cs" />
     <Compile Include="Query\FirstMaterial.cs" />
     <Compile Include="Query\FirstConstructionLayer.cs" />
@@ -128,7 +135,8 @@
     <Compile Include="Query\ExternalLightReflectance.cs" />
     <Compile Include="Query\InternalLightReflectance.cs" />
     <Compile Include="Query\ExternalEmissivity.cs" />
-    <Compile Include="Query\ThermalTransmittanceCalculations.cs" />
+    <Compile Include="Query\IsBlind.cs" />
+    <Compile Include="Query\IgnoreThermalTransmittanceCalculations.cs" />
     <Compile Include="Query\VapurDiffusionFactor.cs" />
     <Compile Include="Query\Volume.cs" />
     <Compile Include="Query\OffsetAperturesOnEdge.cs" />

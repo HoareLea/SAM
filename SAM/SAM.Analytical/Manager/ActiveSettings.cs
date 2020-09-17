@@ -55,7 +55,10 @@ namespace SAM.Analytical
             public const string ParameterName_InternalLightReflectance = "ParameterName_InternalLightReflectance";
             public const string ParameterName_ExternalEmissivity = "ParameterName_ExternalEmissivity";
             public const string ParameterName_InternalEmissivity = "ParameterName_InternalEmissivity";
-            public const string ParameterName_ThermalTransmittanceCalculations = "ParameterName_ThermalTransmittanceCalculations";
+            public const string ParameterName_IgnoreThermalTransmittanceCalculations = "ParameterName_IgnoreThermalTransmittanceCalculations";
+            public const string ParameterName_IsBlind = "ParameterName_IsBlind";
+            public const string ParameterName_DefaultThickness = "ParameterName_DefaultThickness";
+            public const string ParameterName_HeatTransferCoefficient = "ParameterName_HeatTransferCoefficient";
 
             public const string GasMaterial_Air = "GasMaterial_Air";
             public const string GasMaterial_Argon = "GasMaterial_Argon";
@@ -111,7 +114,10 @@ namespace SAM.Analytical
             result.Add(Name.ParameterName_InternalLightReflectance, "SAM_Material_InternalLightReflectance");
             result.Add(Name.ParameterName_ExternalEmissivity, "SAM_Material_ExternalEmissivity");
             result.Add(Name.ParameterName_InternalEmissivity, "SAM_Material_InternalEmissivity");
-            result.Add(Name.ParameterName_ThermalTransmittanceCalculations, "SAM_Material_IngnoreInUvalue");
+            result.Add(Name.ParameterName_IgnoreThermalTransmittanceCalculations, "SAM_Material_IngnoreInUvalue");
+            result.Add(Name.ParameterName_IsBlind, "SAM_Material_IsBlind");
+            result.Add(Name.ParameterName_DefaultThickness, "SAM_Material_Width");
+            result.Add(Name.ParameterName_HeatTransferCoefficient, "SAM_Material_ConvectionCoefficient");
 
             //Default Constructions
             result.Add(Name.Construction_Ceiling, new Construction(new System.Guid("6ff47aad-ec17-4806-8e81-e84b10d5756a"), "Generic"));

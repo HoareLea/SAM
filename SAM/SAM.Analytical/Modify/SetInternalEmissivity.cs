@@ -5,23 +5,42 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static bool SetInternalEmissivity(this Material material, double internalEmissivity)
+        public static bool SetInternalEmissivity(this OpaqueMaterial opaqueMaterial, double internalEmissivity)
         {
-            if (material == null)
+            if (opaqueMaterial == null)
                 return false;
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             string parameterName = Query.ParameterName_InternalEmissivity();
              
 
-            if (material.SetParameter(assembly, parameterName, internalEmissivity))
+            if (opaqueMaterial.SetParameter(assembly, parameterName, internalEmissivity))
                 return true;
 
             ParameterSet parameterSet = new ParameterSet(assembly);
             if (!parameterSet.Add(parameterName, internalEmissivity))
                 return false;
 
-            return material.Add(parameterSet);
+            return opaqueMaterial.Add(parameterSet);
+        }
+
+        public static bool SetInternalEmissivity(this TransparentMaterial transparentMaterial, double internalEmissivity)
+        {
+            if (transparentMaterial == null)
+                return false;
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string parameterName = Query.ParameterName_InternalEmissivity();
+
+
+            if (transparentMaterial.SetParameter(assembly, parameterName, internalEmissivity))
+                return true;
+
+            ParameterSet parameterSet = new ParameterSet(assembly);
+            if (!parameterSet.Add(parameterName, internalEmissivity))
+                return false;
+
+            return transparentMaterial.Add(parameterSet);
         }
     }
 }

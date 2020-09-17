@@ -5,23 +5,42 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static bool SetInternalSolarReflectance(this Material material, double internalSolarReflectance)
+        public static bool SetInternalSolarReflectance(this OpaqueMaterial opaqueMaterial, double internalSolarReflectance)
         {
-            if (material == null)
+            if (opaqueMaterial == null)
                 return false;
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             string parameterName = Query.ParameterName_InternalSolarReflectance();
              
 
-            if (material.SetParameter(assembly, parameterName, internalSolarReflectance))
+            if (opaqueMaterial.SetParameter(assembly, parameterName, internalSolarReflectance))
                 return true;
 
             ParameterSet parameterSet = new ParameterSet(assembly);
             if (!parameterSet.Add(parameterName, internalSolarReflectance))
                 return false;
 
-            return material.Add(parameterSet);
+            return opaqueMaterial.Add(parameterSet);
+        }
+
+        public static bool SetInternalSolarReflectance(this TransparentMaterial transparentMaterial, double internalSolarReflectance)
+        {
+            if (transparentMaterial == null)
+                return false;
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string parameterName = Query.ParameterName_InternalSolarReflectance();
+
+
+            if (transparentMaterial.SetParameter(assembly, parameterName, internalSolarReflectance))
+                return true;
+
+            ParameterSet parameterSet = new ParameterSet(assembly);
+            if (!parameterSet.Add(parameterName, internalSolarReflectance))
+                return false;
+
+            return transparentMaterial.Add(parameterSet);
         }
     }
 }

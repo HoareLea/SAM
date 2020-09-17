@@ -5,23 +5,42 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static bool SetExternalLightReflectance(this Material material, double externalLightReflectance)
+        public static bool SetExternalLightReflectance(this OpaqueMaterial opaqueMaterial, double externalLightReflectance)
         {
-            if (material == null)
+            if (opaqueMaterial == null)
                 return false;
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             string parameterName = Query.ParameterName_ExternalLightReflectance();
              
 
-            if (material.SetParameter(assembly, parameterName, externalLightReflectance))
+            if (opaqueMaterial.SetParameter(assembly, parameterName, externalLightReflectance))
                 return true;
 
             ParameterSet parameterSet = new ParameterSet(assembly);
             if (!parameterSet.Add(parameterName, externalLightReflectance))
                 return false;
 
-            return material.Add(parameterSet);
+            return opaqueMaterial.Add(parameterSet);
+        }
+
+        public static bool SetExternalLightReflectance(this TransparentMaterial transparentMaterial, double externalLightReflectance)
+        {
+            if (transparentMaterial == null)
+                return false;
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string parameterName = Query.ParameterName_ExternalLightReflectance();
+
+
+            if (transparentMaterial.SetParameter(assembly, parameterName, externalLightReflectance))
+                return true;
+
+            ParameterSet parameterSet = new ParameterSet(assembly);
+            if (!parameterSet.Add(parameterName, externalLightReflectance))
+                return false;
+
+            return transparentMaterial.Add(parameterSet);
         }
     }
 }

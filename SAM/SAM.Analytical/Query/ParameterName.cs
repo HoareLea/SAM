@@ -207,6 +207,7 @@ namespace SAM.Analytical
         {
             return ParameterName_SpaceName(ActiveSetting.Setting);
         }
+
         public static string ParameterName_Area(this Setting setting)
         {
             if (setting == null)
@@ -394,21 +395,72 @@ namespace SAM.Analytical
             return ParameterName_InternalEmissivity(ActiveSetting.Setting);
         }
 
-        public static string ParameterName_ThermalTransmittanceCalculations(this Setting setting)
+        public static string ParameterName_IgnoreThermalTransmittanceCalculations(this Setting setting)
         {
             if (setting == null)
                 return null;
 
             string result;
-            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_ThermalTransmittanceCalculations, out result))
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_IgnoreThermalTransmittanceCalculations, out result))
                 return result;
 
             return null;
         }
 
-        public static string ParameterName_ThermalTransmittanceCalculations()
+        public static string ParameterName_IgnoreThermalTransmittanceCalculations()
         {
-            return ParameterName_ThermalTransmittanceCalculations(ActiveSetting.Setting);
+            return ParameterName_IgnoreThermalTransmittanceCalculations(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_IsBlind(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_IsBlind, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_IsBlind()
+        {
+            return ParameterName_IsBlind(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_DefaultThickness(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_DefaultThickness, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_DefaultThickness()
+        {
+            return ParameterName_DefaultThickness(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_HeatTransferCoefficient(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_HeatTransferCoefficient, out result))
+                return result;
+
+            return null;
+        }
+
+        public static string ParameterName_HeatTransferCoefficient()
+        {
+            return ParameterName_HeatTransferCoefficient(ActiveSetting.Setting);
         }
     }
 }

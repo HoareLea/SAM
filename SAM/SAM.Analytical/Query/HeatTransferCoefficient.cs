@@ -24,5 +24,17 @@ namespace SAM.Analytical
 
             return nusseltNumber * (thermalConductivity / width);
         }
+
+        public static double HeatTransferCoefficient(this GasMaterial gasMaterial)
+        {
+            if (gasMaterial == null)
+                return double.NaN;
+
+            double result = double.NaN;
+            if (!Core.Query.TryGetValue(gasMaterial, ParameterName_HeatTransferCoefficient(), out result))
+                return double.NaN;
+
+            return result;
+        }
     }
 }
