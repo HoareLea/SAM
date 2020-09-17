@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -65,8 +66,26 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<ConstructionLayer> constructionLayers = new List<ConstructionLayer>();
-            dataAccess.GetDataList(1, constructionLayers);
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+            dataAccess.GetDataList(1, objectWrappers);
+
+            List<ConstructionLayer> constructionLayers = null;
+            if(objectWrappers != null)
+            {
+                constructionLayers = new List<ConstructionLayer>();
+                foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+                {
+                    if(objectWrapper.Value is ConstructionLayer)
+                    {
+                        constructionLayers.Add((ConstructionLayer)objectWrapper.Value);
+                    }
+                    if(objectWrapper.Value is GooConstructionLayer)
+                    {
+                        constructionLayers.Add(((GooConstructionLayer)objectWrapper.Value).Value);
+
+                    }
+                }
+            }
 
             dataAccess.SetData(0, new GooConstruction(new Construction(name, constructionLayers)));
         }

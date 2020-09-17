@@ -140,7 +140,7 @@ namespace SAM.Analytical
 
 
             //Default Constructions
-            result.Add(Name.Construction_Ceiling, new Construction(new System.Guid("6ff47aad-ec17-4806-8e81-e84b10d5756a"), "Generic"));
+            result.Add(Name.Construction_Ceiling, new Construction(new System.Guid("6ff47aad-ec17-4806-8e81-e84b10d5756a"), "Generic", Create.ConstructionLayers("C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C00_Concrete Reinforced_2300kg/m3_2.3W/mK", 0.1, "C00_Screed_1800kg/m3_1.15W/mK", 0.05, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C00_Chipboard Flooring_500kg/m3_0.13W/mK", 0.02, "C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK", 0.01)));
             result.Add(Name.Construction_CurtainWall, new Construction(new System.Guid("9ab5d49f-4db4-4930-8293-3945d430e572"), "SIM_EXT_GLZ", Create.ConstructionLayers("_Glazing Inner Pane_g0.78_Lt0.89", 0.006, "Ar0UP_Air__12mm_3.168W/m2K", 0.12, "_Side Lit Glazing Outer Pane_g0.41_Lt0.9", 0.006)));
             result.Add(Name.Construction_Floor, new Construction(new System.Guid("6b5cbfab-bc87-4d2c-98e0-d940c75295fa"), "SIM_EXT_GRD_FLR FLR01", Create.ConstructionLayers("C00_Gypsym Board_800.923kg/m3_0.161W/mK", 0.0127, "I00_Glass Fibre Insulation_11.998kg/m3_0.038W/mK", 0.13018, "C00_Concrete Block_1842.12kg/m3_1.315W/mK", 0.23, "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK", 1)));
             result.Add(Name.Construction_FloorExposed, new Construction(new System.Guid("18da6398-75b3-4e39-8505-cf26e1f7f875"), "SIM_EXT_SLD_FLR Exposed", Create.ConstructionLayers("C00_Chipboard Flooring_500kg/m3_0.13W/mK", 0.02, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C00_Concrete Reinforced_2300kg/m3_2.3W/mK", 0.1, "I00_Mineral Wool_700kg/m3_0.025W/mK", 0.0098)));

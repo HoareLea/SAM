@@ -26,6 +26,8 @@ namespace SAM.Analytical
 
             List<Polygon2D> polygon2Ds = Geometry.Planar.Query.Offset(externalEdge, -distance, tolerance);
             polygon2Ds.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
+            if (polygon2Ds == null || polygon2Ds.Count == 0)
+                return null;
 
             externalEdge = polygon2Ds.Last();
 

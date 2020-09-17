@@ -68,6 +68,27 @@ namespace SAM.Analytical.Grasshopper
 
             return null;
         }
+
+        public override bool CastFrom(object source)
+        {
+            if(source is IGH_Goo)
+            {
+                object value = (source as dynamic).Value;
+                ConstructionLayer constructionLayer = value as ConstructionLayer;
+                if(constructionLayer != null)
+                {
+                    Value = constructionLayer;
+                    return true;
+                }
+            }
+            
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Q>(ref Q target)
+        {
+            return base.CastTo(ref target);
+        }
     }
 
     public class GooConstructionLayerParam : GH_PersistentParam<GooConstructionLayer>

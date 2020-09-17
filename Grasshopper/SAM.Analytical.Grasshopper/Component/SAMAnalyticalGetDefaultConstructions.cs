@@ -77,6 +77,8 @@ namespace SAM.Analytical.Grasshopper
                 panelTypes = new List<PanelType>(Enum.GetValues(typeof(PanelType)).Cast<PanelType>());
             }
 
+            panelTypes?.RemoveAll(x => x == PanelType.Undefined || x == PanelType.Air);
+
             if(panelTypes == null || panelTypes.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
