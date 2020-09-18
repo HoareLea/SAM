@@ -4,9 +4,9 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static MaterialLibrary MaterialLibrary(string path, int headerIndex = 1, int headerCount = 9)
+        public static MaterialLibrary MaterialLibrary(string path, int headerIndex = 1, int headerCount = 7)
         {
-            if (string.IsNullOrWhiteSpace(path) || System.IO.File.Exists(path))
+            if (string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
                 return null;
 
             DelimitedFileTable delimitedFileTable = null;
@@ -26,31 +26,31 @@ namespace SAM.Analytical
             if (count == 0)
                 return result;
 
-            int index_MaterialType = delimitedFileTable.GetIndex(Query.ParameterName_MaterialType(), headerIndex);
+            int index_MaterialType = delimitedFileTable.GetIndex(Query.ParameterName_MaterialType());
             if (index_MaterialType == -1)
                 return result;
 
-            int index_MaterialName = delimitedFileTable.GetIndex(Query.ParameterName_MaterialName(), headerIndex);
+            int index_MaterialName = delimitedFileTable.GetIndex(Query.ParameterName_MaterialName());
             if (index_MaterialName == -1)
                 return result;
 
-            int index_MaterialDescription = delimitedFileTable.GetIndex(Query.ParameterName_MaterialDescription(), headerIndex);
-            int index_DefaultThickness = delimitedFileTable.GetIndex(Query.ParameterName_DefaultThickness(), headerIndex);
-            int index_ThermalConductivity = delimitedFileTable.GetIndex(Query.ParameterName_ThermalConductivity(), headerIndex);
-            int index_SpecificHeatCapacity = delimitedFileTable.GetIndex(Query.ParameterName_SpecificHeatCapacity(), headerIndex);
-            int index_Density = delimitedFileTable.GetIndex(Query.ParameterName_Density(), headerIndex);
-            int index_VapourDiffusionFactor = delimitedFileTable.GetIndex(Query.ParameterName_VapourDiffusionFactor(), headerIndex);
-            int index_ExternalSolarReflectance = delimitedFileTable.GetIndex(Query.ParameterName_ExternalSolarReflectance(), headerIndex);
-            int index_InternalSolarReflectance = delimitedFileTable.GetIndex(Query.ParameterName_InternalSolarReflectance(), headerIndex);
-            int index_ExternalLightReflectance = delimitedFileTable.GetIndex(Query.ParameterName_ExternalLightReflectance(), headerIndex);
-            int index_InternalLightReflectance = delimitedFileTable.GetIndex(Query.ParameterName_InternalLightReflectance(), headerIndex);
-            int index_ExternalEmissivity = delimitedFileTable.GetIndex(Query.ParameterName_ExternalEmissivity(), headerIndex);
-            int index_InternalEmissivity = delimitedFileTable.GetIndex(Query.ParameterName_InternalEmissivity(), headerIndex);
-            int index_IgnoreThermalTransmittanceCalculations = delimitedFileTable.GetIndex(Query.ParameterName_IgnoreThermalTransmittanceCalculations(), headerIndex);
-            int index_SolarTransmittance = delimitedFileTable.GetIndex(Query.ParameterName_SolarTransmittance(), headerIndex);
-            int index_LightTransmittance = delimitedFileTable.GetIndex(Query.ParameterName_LightTransmittance(), headerIndex);
-            int index_IsBlind = delimitedFileTable.GetIndex(Query.ParameterName_IsBlind(), headerIndex);
-            int index_HeatTransferCoefficient = delimitedFileTable.GetIndex(Query.ParameterName_HeatTransferCoefficient(), headerIndex);
+            int index_MaterialDescription = delimitedFileTable.GetIndex(Query.ParameterName_MaterialDescription());
+            int index_DefaultThickness = delimitedFileTable.GetIndex(Query.ParameterName_DefaultThickness());
+            int index_ThermalConductivity = delimitedFileTable.GetIndex(Query.ParameterName_ThermalConductivity());
+            int index_SpecificHeatCapacity = delimitedFileTable.GetIndex(Query.ParameterName_SpecificHeatCapacity());
+            int index_Density = delimitedFileTable.GetIndex(Query.ParameterName_Density());
+            int index_VapourDiffusionFactor = delimitedFileTable.GetIndex(Query.ParameterName_VapourDiffusionFactor());
+            int index_ExternalSolarReflectance = delimitedFileTable.GetIndex(Query.ParameterName_ExternalSolarReflectance());
+            int index_InternalSolarReflectance = delimitedFileTable.GetIndex(Query.ParameterName_InternalSolarReflectance());
+            int index_ExternalLightReflectance = delimitedFileTable.GetIndex(Query.ParameterName_ExternalLightReflectance());
+            int index_InternalLightReflectance = delimitedFileTable.GetIndex(Query.ParameterName_InternalLightReflectance());
+            int index_ExternalEmissivity = delimitedFileTable.GetIndex(Query.ParameterName_ExternalEmissivity());
+            int index_InternalEmissivity = delimitedFileTable.GetIndex(Query.ParameterName_InternalEmissivity());
+            int index_IgnoreThermalTransmittanceCalculations = delimitedFileTable.GetIndex(Query.ParameterName_IgnoreThermalTransmittanceCalculations());
+            int index_SolarTransmittance = delimitedFileTable.GetIndex(Query.ParameterName_SolarTransmittance());
+            int index_LightTransmittance = delimitedFileTable.GetIndex(Query.ParameterName_LightTransmittance());
+            int index_IsBlind = delimitedFileTable.GetIndex(Query.ParameterName_IsBlind());
+            int index_HeatTransferCoefficient = delimitedFileTable.GetIndex(Query.ParameterName_HeatTransferCoefficient());
 
             string opaqueName = typeof(OpaqueMaterial).Name.ToUpper();
             string transparentName = typeof(TransparentMaterial).Name.ToUpper();
