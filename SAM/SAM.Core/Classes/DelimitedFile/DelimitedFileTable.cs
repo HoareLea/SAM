@@ -49,22 +49,22 @@ namespace SAM.Core
             }
         }
 
-        public DelimitedFileTable(IDelimitedFileReader delimitedFileReader, int headerCount = 0)
+        public DelimitedFileTable(IDelimitedFileReader delimitedFileReader, int namesIndex = 0, int headerCount = 0)
         {
-            Read(delimitedFileReader, headerCount);
+            Read(delimitedFileReader, namesIndex, headerCount);
         }
 
-        public DelimitedFileTable(List<DelimitedFileRow> DelimitedFileRowList, int headerCount = 0)
+        public DelimitedFileTable(List<DelimitedFileRow> DelimitedFileRowList, int namesIndex = 0, int headerCount = 0)
         {
-            Read(DelimitedFileRowList, headerCount);
+            Read(DelimitedFileRowList, namesIndex, headerCount);
         }
 
-        public DelimitedFileTable(object[,] data, int headerCount = 0)
+        public DelimitedFileTable(object[,] data, int namesIndex = 0, int headerCount = 0)
         {
-            Read(data, headerCount);
+            Read(data, namesIndex, headerCount);
         }
 
-        public bool Read(object[,] data, int headerCount = 0)
+        public bool Read(object[,] data, int namesIndex = 0, int headerCount = 0)
         {
             if (data == null)
                 return false;
@@ -83,7 +83,7 @@ namespace SAM.Core
 
             names = new string[aColumnsCount];
             for (int i = aColumnsStart; i < aColumnsCount + aColumnsStart; i++)
-                names[i - aColumnsStart] = data[aRowsStart, i] as string;
+                names[i - aColumnsStart] = data[namesIndex, i] as string;
 
             if (aRowsCount == 1)
                 return true;
@@ -101,8 +101,10 @@ namespace SAM.Core
                 }
             }
 
+            int min = Math.Min(aRowsStart, namesIndex);
+
             values = new List<object[]>();
-            for (int i = headerCount + aRowsStart + 1; i < aRowsCount + aRowsStart; i++)
+            for (int i = headerCount + min + 1; i < aRowsCount + min; i++)
             {
                 object[] aValues = new object[aColumnsCount];
                 for (int j = aColumnsStart; j < aColumnsCount + aColumnsStart; j++)
@@ -113,18 +115,15 @@ namespace SAM.Core
             return true;
         }
 
-        public bool Read(List<DelimitedFileRow> delimitedFileRows, int headerCount = 0)
+        public bool Read(List<DelimitedFileRow> delimitedFileRows, int namesIndex = 0, int headerCount = 0)
         {
             int count = delimitedFileRows.Count;
 
-            if (count == 0)
+            if (count <= namesIndex)
                 return true;
 
-            if (delimitedFileRows[0] != null)
-                names = delimitedFileRows[0].ToArray();
-
-            if (count == 1)
-                return true;
+            if (delimitedFileRows[namesIndex] != null)
+                names = delimitedFileRows[namesIndex].ToArray();
 
             header = new List<object[]>();
             int min = Math.Min(headerCount + 1, count);
@@ -132,6 +131,7 @@ namespace SAM.Core
                 if (delimitedFileRows[i] != null)
                     header.Add(delimitedFileRows[i].ToArray());
 
+            min = Math.Min(min, namesIndex);
             values = new List<object[]>();
             for (int i = min; i < count; i++)
                 if (delimitedFileRows[i] != null)
@@ -140,7 +140,7 @@ namespace SAM.Core
             return true;
         }
 
-        public bool Read(IDelimitedFileReader delimitedFileReader, int headerCount = 0)
+        public bool Read(IDelimitedFileReader delimitedFileReader, int namesIndex = 0, int headerCount = 0)
         {
             if (delimitedFileReader == null)
                 return false;
@@ -149,7 +149,7 @@ namespace SAM.Core
             if (aDelimitedFileRowList == null)
                 return false;
 
-            return Read(aDelimitedFileRowList, headerCount);
+            return Read(aDelimitedFileRowList, namesIndex, headerCount);
         }
 
         public bool Write(IDelimitedFileWriter delimitedFileWriter)

@@ -4,7 +4,7 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static MaterialLibrary MaterialLibrary(string path, int headerIndex = 1, int headerCount = 7)
+        public static MaterialLibrary MaterialLibrary(string path, int namesIndex = 0, int headerCount = 7)
         {
             if (string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
                 return null;
@@ -13,7 +13,7 @@ namespace SAM.Analytical
 
             using (DelimitedFileReader delimitedFileReader = new DelimitedFileReader(DelimitedFileType.Csv, path))
             {
-                delimitedFileTable = new DelimitedFileTable(delimitedFileReader, headerCount);
+                delimitedFileTable = new DelimitedFileTable(delimitedFileReader, namesIndex, headerCount);
             }
 
             if (delimitedFileTable == null)

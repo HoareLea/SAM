@@ -59,7 +59,26 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            MaterialLibrary result = Create.MaterialLibrary(path);
+            if(!System.IO.File.Exists(path))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            string[] lines = System.IO.File.ReadAllLines(path);
+            if(lines == null || lines.Length == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            int namesIndex = 0;
+            if (lines[0] != null && lines[0].ToUpper().Contains("FILEPATH"))
+                namesIndex = 1;
+            
+            lines = null;
+
+            MaterialLibrary result = Create.MaterialLibrary(path, namesIndex);
 
             dataAccess.SetData(0, new GooMaterialLibrary(result));
         }
