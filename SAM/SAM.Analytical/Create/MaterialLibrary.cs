@@ -73,6 +73,8 @@ namespace SAM.Analytical
 
                 double defaultThickness = double.NaN;
                 delimitedFileTable.TryConvert(i, index_DefaultThickness, out defaultThickness);
+                if (!double.IsNaN(defaultThickness))
+                    defaultThickness = defaultThickness / 1000;
 
                 double vapourDiffusionFactor = double.NaN;
                 delimitedFileTable.TryConvert(i, index_VapourDiffusionFactor, out vapourDiffusionFactor);
