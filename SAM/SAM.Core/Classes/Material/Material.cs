@@ -59,6 +59,7 @@ namespace SAM.Core
         public Material(JObject jObject)
             : base(jObject)
         {
+            
         }
 
         public Material(Material material)
@@ -67,6 +68,10 @@ namespace SAM.Core
             group = material.group;
             displayName = material.displayName;
             description = material.description;
+
+            thermalConductivity = material.thermalConductivity;
+            specificHeatCapacity = material.specificHeatCapacity;
+            density = material.density;
         }
 
         public string Group
