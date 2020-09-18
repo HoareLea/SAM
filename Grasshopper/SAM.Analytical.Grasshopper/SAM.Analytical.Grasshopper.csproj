@@ -164,6 +164,7 @@
     <Compile Include="Component\SAMAnalyticalCreateLevels.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateObjects.cs" />
     <Compile Include="Component\SAMAnalyticalRelatedObjects.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateMaterialLibrary.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToRhino\Breps.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
