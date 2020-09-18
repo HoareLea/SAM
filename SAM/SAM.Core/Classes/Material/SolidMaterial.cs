@@ -33,6 +33,7 @@ namespace SAM.Core
         public SolidMaterial(JObject jObject)
             : base(jObject)
         {
+
         }
 
         public SolidMaterial(SolidMaterial solidMaterial)

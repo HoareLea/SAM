@@ -27,6 +27,7 @@ namespace SAM.Core
         public TransparentMaterial(JObject jObject)
             : base(jObject)
         {
+            
         }
 
         public TransparentMaterial(TransparentMaterial transparentMaterial)
