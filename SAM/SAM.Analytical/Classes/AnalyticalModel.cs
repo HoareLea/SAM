@@ -54,6 +54,9 @@ namespace SAM.Analytical
 
             if (analyticalModel.adjacencyCluster != null)
                 adjacencyCluster = new AdjacencyCluster(analyticalModel.adjacencyCluster);
+
+            if (analyticalModel.materialLibrary != null)
+                materialLibrary = new MaterialLibrary(analyticalModel.materialLibrary);
         }
 
         public AnalyticalModel(AnalyticalModel analyticalModel, AdjacencyCluster adjacencyCluster)
@@ -69,6 +72,9 @@ namespace SAM.Analytical
 
             if (analyticalModel.address != null)
                 address = new Address(analyticalModel.address);
+
+            if (analyticalModel.materialLibrary != null)
+                materialLibrary = new MaterialLibrary(analyticalModel.materialLibrary);
 
             if (adjacencyCluster != null)
                 this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
