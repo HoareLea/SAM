@@ -159,11 +159,11 @@ namespace SAM.Analytical
             result.Add(Name.Construction_WallInternal, new Construction(new System.Guid("625d9ed6-64fa-4877-bb56-b84ba118c900"), "SIM_INT_SLD_Partition", Create.ConstructionLayers("0_WhitePaint_0.001kg/m3_999W/mK", 0.0001, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125)));
 
             //Default Aperture Constructions
-            result.Add(Name.ApertureConstruction_ExternalDoors, new ApertureConstruction(new System.Guid("5ad2e36d-6a2b-4cf1-af02-1ce62e7d2288"), "SIM_EXT_SLD", ApertureType.Door));
-            result.Add(Name.ApertureConstruction_ExternalWindows, new ApertureConstruction(new System.Guid("f70c4ec7-931b-47ed-a95b-1b3df1b9d885"), "SIM_EXT_GLZ", ApertureType.Window));
-            result.Add(Name.ApertureConstruction_InternalDoors, new ApertureConstruction(new System.Guid("1dcdad32-63ec-4a01-945d-39548be20491"), "SIM_INT_SLD", ApertureType.Door));
-            result.Add(Name.ApertureConstruction_InternalWindows, new ApertureConstruction(new System.Guid("3e43ecb2-638b-4d8b-9046-ba3d8455cd3f"), "SIM_INT_GLZ", ApertureType.Window));
-            result.Add(Name.ApertureConstruction_Skylight, new ApertureConstruction(new System.Guid("6f6dc032-6fa5-43fa-bfef-de5937e95599"), "SIM_EXT_GLZ_SKY DF01", ApertureType.Window));
+            result.Add(Name.ApertureConstruction_ExternalDoors, new ApertureConstruction(new System.Guid("5ad2e36d-6a2b-4cf1-af02-1ce62e7d2288"), "SIM_EXT_SLD", ApertureType.Door, Create.ConstructionLayers(), Create.ConstructionLayers()));
+            result.Add(Name.ApertureConstruction_ExternalWindows, new ApertureConstruction(new System.Guid("f70c4ec7-931b-47ed-a95b-1b3df1b9d885"), "SIM_EXT_GLZ", ApertureType.Window, Create.ConstructionLayers(), Create.ConstructionLayers()));
+            result.Add(Name.ApertureConstruction_InternalDoors, new ApertureConstruction(new System.Guid("1dcdad32-63ec-4a01-945d-39548be20491"), "SIM_INT_SLD", ApertureType.Door, Create.ConstructionLayers(), Create.ConstructionLayers()));
+            result.Add(Name.ApertureConstruction_InternalWindows, new ApertureConstruction(new System.Guid("3e43ecb2-638b-4d8b-9046-ba3d8455cd3f"), "SIM_INT_GLZ", ApertureType.Window, Create.ConstructionLayers(), Create.ConstructionLayers()));
+            result.Add(Name.ApertureConstruction_Skylight, new ApertureConstruction(new System.Guid("6f6dc032-6fa5-43fa-bfef-de5937e95599"), "SIM_EXT_GLZ_SKY DF01", ApertureType.Window, Create.ConstructionLayers(), Create.ConstructionLayers()));
 
             //Default Gas Materials
             result.Add(Name.GasMaterial_Air, new GasMaterial(new System.Guid("b701be87-3012-450d-a6c5-582dcff33e61"), "Default Dry Air Gas", "Dry Air", "Dry Air Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 2.496e-2, 1.232, 1008, 1.761e-5));

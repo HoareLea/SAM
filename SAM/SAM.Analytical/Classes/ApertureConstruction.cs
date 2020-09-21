@@ -1,14 +1,15 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
     public class ApertureConstruction : SAMType
     {
         private ApertureType apertureType;
-        private Construction frameConstruction;
-        private Construction paneConstruction;
+        private List<ConstructionLayer> frameConstructionLayers;
+        private List<ConstructionLayer> paneConstructionLayers;
 
         public ApertureConstruction(string name, ApertureType apertureType)
             : base(name)
@@ -22,12 +23,24 @@ namespace SAM.Analytical
             this.apertureType = apertureType;
         }
 
+        public ApertureConstruction(Guid guid, string name, ApertureType apertureType, IEnumerable<ConstructionLayer> paneConstructionLayers, IEnumerable<ConstructionLayer> frameConstructionLayers = null)
+             : base(guid, name)
+        {
+            this.apertureType = apertureType;
+
+            if (paneConstructionLayers != null)
+                this.paneConstructionLayers = new List<ConstructionLayer>(paneConstructionLayers);
+
+            if (frameConstructionLayers != null)
+                this.frameConstructionLayers = new List<ConstructionLayer>(frameConstructionLayers);
+        }
+
         public ApertureConstruction(ApertureConstruction apertureConstruction)
             : base(apertureConstruction)
         {
             apertureType = apertureConstruction.apertureType;
-            frameConstruction = apertureConstruction.frameConstruction;
-            paneConstruction = apertureConstruction.paneConstruction;
+            frameConstructionLayers = apertureConstruction.frameConstructionLayers;
+            paneConstructionLayers = apertureConstruction.paneConstructionLayers;
         }
 
         public ApertureConstruction(JObject jObject)
@@ -36,25 +49,25 @@ namespace SAM.Analytical
             FromJObject(jObject);
         }
 
-        public Construction FrameConstruction
+        public List<ConstructionLayer> FrameConstructionLayers
         {
             get
             {
-                if (frameConstruction == null)
+                if (frameConstructionLayers == null)
                     return null;
 
-                return new Construction(frameConstruction);
+                return frameConstructionLayers.ConvertAll(x => x.Clone());
             }
         }
 
-        public Construction PaneConstruction
+        public List<ConstructionLayer> PaneConstructionLayers
         {
             get
             {
-                if (paneConstruction == null)
+                if (paneConstructionLayers == null)
                     return null;
 
-                return new Construction(paneConstruction);
+                return paneConstructionLayers.ConvertAll(x => x.Clone());
             }
         }
 
@@ -71,11 +84,11 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            if (jObject.ContainsKey("FrameConstruction"))
-                frameConstruction = new Construction(jObject.Value<JObject>("FrameConstruction"));
+            if (frameConstructionLayers != null)
+                jObject.Add("FrameConstructionLayers", Core.Create.JArray(frameConstructionLayers));
 
-            if (jObject.ContainsKey("PaneConstruction"))
-                paneConstruction = new Construction(jObject.Value<JObject>("PaneConstruction"));
+            if (paneConstructionLayers != null)
+                jObject.Add("PaneConstructionLayers", Core.Create.JArray(paneConstructionLayers));
 
             if (jObject.ContainsKey("ApertureType"))
                 Enum.TryParse(jObject.Value<string>("ApertureType"), out apertureType);
@@ -89,11 +102,11 @@ namespace SAM.Analytical
             if (jObject == null)
                 return jObject;
 
-            if (frameConstruction != null)
-                jObject.Add("FrameConstruction", frameConstruction.ToJObject());
+            if (paneConstructionLayers != null)
+                jObject.Add("PaneConstructionLayers", Core.Create.JArray(paneConstructionLayers));
 
-            if (paneConstruction != null)
-                jObject.Add("PaneConstruction", paneConstruction.ToJObject());
+            if (frameConstructionLayers != null)
+                jObject.Add("FrameConstructionLayers", Core.Create.JArray(frameConstructionLayers));
 
             jObject.Add("ApertureType", apertureType.ToString());
 
