@@ -117,6 +117,11 @@
     <Compile Include="Query\ApertureConstructions.cs" />
     <Compile Include="Query\ApertureHost.cs" />
     <Compile Include="Query\ApertureHosts.cs" />
+    <Compile Include="Query\AirspaceConvectiveHeatTransferCoefficient.cs" />
+    <Compile Include="Query\AirspaceIntersurfaceEmittance.cs" />
+    <Compile Include="Query\AirspaceRadiativeCoefficient.cs" />
+    <Compile Include="Query\AirspaceThermalResistance.cs" />
+    <Compile Include="Query\BlackBodySurfaceRadiativeCoefficient.cs" />
     <Compile Include="Query\DefaultThickness.cs" />
     <Compile Include="Query\InternalEmissivity.cs" />
     <Compile Include="Query\FirstMaterial.cs" />
