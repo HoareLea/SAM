@@ -169,6 +169,9 @@ namespace SAM.Analytical
             //result.Add(Name.ApertureConstruction_ExternalWindows, new ApertureConstruction(new System.Guid("f70c4ec7-931b-47ed-a95b-1b3df1b9d885"), "SIM_EXT_GLZ_Blinds", ApertureType.Window, Create.ConstructionLayers("_Glazing Inner Pane_g0.78_Lt0.89", 0.006, "Ag90UP_Argon__12mm_1.403W/m2K", 0.012, "_Side Lit Glazing Outer Pane_g0.41_Lt0.9", 0.006, "Ar90UP_Air__16mm_1.614W/m2K", 0.016, "B00_Soltis-ferrari-92-1010_g0.25_Lt0.1", 0.001), Create.ConstructionLayers("C00_Frame Notional building_7800kg/m3_0.176W/mK", 0.050)));
             //Vehicle Door for SIM_EXT_SLD_Vehicle
             //result.Add(Name.ApertureConstruction_ExternalDoors, new ApertureConstruction(new System.Guid("5ad2e36d-6a2b-4cf1-af02-1ce62e7d2288"), "SIM_EXT_SLD_Vehicle", ApertureType.Door, Create.ConstructionLayers("C00_Steel_7800kg/m3_60W/mK", 0.0006, "C00_EPS_15kg/m3_0.04W/mK", 0.020,"C00_Steel_7800kg/m3_60W/mK", 0.0006), Create.ConstructionLayers("C00_Steel_7800kg/m3_60W/mK", 0.0006, "C00_EPS_15kg/m3_0.04W/mK", 0.020, "C00_Steel_7800kg/m3_60W/mK", 0.0006)));
+            //SIM_EXT_SLD Adiabatic
+            //result.Add(Name.Construction_WallExternal, new Construction(new System.Guid("8f424c58-6570-4b9b-b753-e7584b7b4494"), "SIM_EXT_SLD", Create.ConstructionLayers("0_WhitePaint_0.001kg/m3_999W/mK", 0.0001, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "C00_Cement particleboard_1200kg/m3_0.23W/mK", 0.012, "I01_Mineral Wool_20kg/m3_0.025W/mK" , 0.08, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Rainscreen_7800kg/m3_50W/mK", 0.003)));
+
 
             //Default Gas Materials
             result.Add(Name.GasMaterial_Air, new GasMaterial(new System.Guid("b701be87-3012-450d-a6c5-582dcff33e61"), "Default Dry Air Gas", "Dry Air", "Dry Air Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 2.496e-2, 1.232, 1008, 1.761e-5));
