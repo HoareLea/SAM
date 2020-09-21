@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace SAM.Analytical
+﻿namespace SAM.Analytical
 {
     public static partial class Query
     {
@@ -11,6 +8,14 @@ namespace SAM.Analytical
                 return double.NaN;
 
             return Geometry.Spatial.Query.Tilt(panel.GetFace3D());
+        }
+
+        public static double Tilt(this Aperture aperture)
+        {
+            if (aperture == null)
+                return double.NaN;
+
+            return Geometry.Spatial.Query.Tilt(aperture.GetFace3D());
         }
     }
 }

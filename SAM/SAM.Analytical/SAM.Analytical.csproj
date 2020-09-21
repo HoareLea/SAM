@@ -126,6 +126,7 @@
     <Compile Include="Query\InternalEmissivity.cs" />
     <Compile Include="Query\FirstMaterial.cs" />
     <Compile Include="Query\FirstConstructionLayer.cs" />
+    <Compile Include="Query\Apertures.cs" />
     <Compile Include="Query\SolarTransmittance.cs" />
     <Compile Include="Query\LightTransmittance.cs" />
     <Compile Include="Query\NusseltNumber.cs" />
