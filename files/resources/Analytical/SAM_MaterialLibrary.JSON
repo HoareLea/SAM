@@ -1,0 +1,3357 @@
+{
+  "_type": "SAM.Core.MaterialLibrary,SAM.Core",
+  "Name": "Opaque",
+  "Guid": "2522a6c2-9c8b-40af-9274-236de6e626de",
+  "Materials": [
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "CO290UP_CO2__12mm_2.08W/m2K",
+      "Guid": "160884eb-aee2-4a0e-82c0-3d173bcf71ce",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.012
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.08
+            }
+          ]
+        }
+      ],
+      "DisplayName": "CO290UP_CO2__12mm_2.08W/m2K",
+      "Description": "CO2, 12 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "CO290UP_CO2__16mm_1.614W/m2K",
+      "Guid": "86e67f14-aa61-4eec-8483-b7e83f85e4fd",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.016
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.614
+            }
+          ]
+        }
+      ],
+      "DisplayName": "CO290UP_CO2__16mm_1.614W/m2K",
+      "Description": "CO2, 16 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "CO290UP_CO2__20mm_1.665W/m2K",
+      "Guid": "42703b8a-d109-4c83-ad90-271ac404b28b",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.02
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.665
+            }
+          ]
+        }
+      ],
+      "DisplayName": "CO290UP_CO2__20mm_1.665W/m2K",
+      "Description": "CO2, 20 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "CO290UP_CO2__6mm_4.16W/m2K",
+      "Guid": "a7746738-6961-4c50-98f8-c2d53cd5ece7",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.006
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 4.16
+            }
+          ]
+        }
+      ],
+      "DisplayName": "CO290UP_CO2__6mm_4.16W/m2K",
+      "Description": "CO2, 6 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "SF690UP_SF6__12mm_3.165W/m2K",
+      "Guid": "0c1c977a-80e4-403c-bfd7-13eea4c96a08",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.012
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.165
+            }
+          ]
+        }
+      ],
+      "DisplayName": "SF690UP_SF6__12mm_3.165W/m2K",
+      "Description": "SF6, 12 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "SF690UP_SF6__16mm_3.296W/m2K",
+      "Guid": "658366b5-22b6-4e0d-828d-d79732311e28",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.016
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.296
+            }
+          ]
+        }
+      ],
+      "DisplayName": "SF690UP_SF6__16mm_3.296W/m2K",
+      "Description": "SF6, 16 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "SF690UP_SF6__20mm_3.4W/m2K",
+      "Guid": "280a8547-d71a-4d4b-b860-a68f1041a97e",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.02
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.4
+            }
+          ]
+        }
+      ],
+      "DisplayName": "SF690UP_SF6__20mm_3.4W/m2K",
+      "Description": "SF6, 20 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "SF690UP_SF6__6mm_2.873W/m2K",
+      "Guid": "66f5ad92-871c-46f3-a8ee-798754087994",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.006
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.873
+            }
+          ]
+        }
+      ],
+      "DisplayName": "SF690UP_SF6__6mm_2.873W/m2K",
+      "Description": "SF6, 6 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Kr90UP_Krypton__10mm_0.934W/m2K",
+      "Guid": "ed994085-661c-440a-9dc9-f71ece52227a",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.01
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 0.934
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Kr90UP_Krypton__10mm_0.934W/m2K",
+      "Description": "Krypton Vertical 10mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Kr90UP_Krypton__6mm_1.5W/m2K",
+      "Guid": "c1165dca-49fd-41d3-8879-c6a0e9e068bc",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.006
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.5
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Kr90UP_Krypton__6mm_1.5W/m2K",
+      "Description": "Krypton 6 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Kr0UP_Krypton__6mm_1.899W/m2K",
+      "Guid": "7748cbc0-e0d2-4578-9ac4-62b15b8be98d",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.006
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.899
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Kr0UP_Krypton__6mm_1.899W/m2K",
+      "Description": "Krypton 6mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Kr90UP_Krypton__8mm_1.125W/m2K",
+      "Guid": "8bf34189-8979-4514-a121-52b9a3d97681",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.008
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.125
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Kr90UP_Krypton__8mm_1.125W/m2K",
+      "Description": "Krypton 8 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Kr0UP_Krypton__8mm_1.813W/m2K",
+      "Guid": "58f03476-3e27-489f-a2b8-531dbbc2bd3a",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.008
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.813
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Kr0UP_Krypton__8mm_1.813W/m2K",
+      "Description": "Krypton 8 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Kr90UP_Krypton__12mm_0.958W/m2K",
+      "Guid": "f7c97130-4774-4663-8aa8-273c6783e263",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.012
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 0.958
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Kr90UP_Krypton__12mm_0.958W/m2K",
+      "Description": "Krypton, 12 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Kr0UP_Krypton__12mm_1.699W/m2K",
+      "Guid": "4bca175e-e107-43c9-8594-1addbdd04fc0",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.012
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.699
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Kr0UP_Krypton__12mm_1.699W/m2K",
+      "Description": "Krypton, 12 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Kr90UP_Krypton__16mm_0.997W/m2K",
+      "Guid": "b78a2b76-a02d-4508-ac43-21bb7572998a",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.016
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 0.997
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Kr90UP_Krypton__16mm_0.997W/m2K",
+      "Description": "Krypton, 16 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Kr90UP_Krypton__20mm_1.197W/m2K",
+      "Guid": "40a5193f-b773-4dbb-835a-3b2d2930e5ad",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.02
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.197
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Kr90UP_Krypton__20mm_1.197W/m2K",
+      "Description": "Krypton, 20 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Kr90UP_Krypton__3mm_3W/m2K",
+      "Guid": "264da90f-0920-4ff7-bf3e-405bed19fd49",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.003
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.0
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Kr90UP_Krypton__3mm_3W/m2K",
+      "Description": "Krypton, 20 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__6mm_4.16W/m2K",
+      "Guid": "83e71039-155c-4144-bbb3-0f0710c55bcf",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.006
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 4.16
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__6mm_4.16W/m2K",
+      "Description": "Air, 6 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0UP_Air__6mm_4.16W/m2K",
+      "Guid": "d5d19b12-52eb-4560-95aa-d4c1f1ed5c26",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.006
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 4.16
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0UP_Air__6mm_4.16W/m2K",
+      "Description": "Air, 6 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__12mm_2.08W/m2K",
+      "Guid": "6365377d-e9a9-4665-9e18-af8c87c0883f",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.012
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.08
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__12mm_2.08W/m2K",
+      "Description": "Air, 12 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0UP_Air__12mm_3.168W/m2K",
+      "Guid": "96919759-0b08-4a85-8fff-d73e9d6649c3",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.012
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.168
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0UP_Air__12mm_3.168W/m2K",
+      "Description": "Air, 12 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__16mm_1.614W/m2K",
+      "Guid": "b29c6ee5-2d40-4e33-b5fb-1d6088b9523d",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.016
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.614
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__16mm_1.614W/m2K",
+      "Description": "Air, 16 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0UP_Air__16mm_3.026W/m2K",
+      "Guid": "05b3e734-4852-4d5e-8e0a-9ebd4ad06d66",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.016
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.026
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0UP_Air__16mm_3.026W/m2K",
+      "Description": "Air, 16 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__20mm_1.665W/m2K",
+      "Guid": "4537d794-1db8-48cf-aec0-596e6a0f9497",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.02
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.665
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__20mm_1.665W/m2K",
+      "Description": "Air, 20 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__200mm_2.298W/m2K",
+      "Guid": "55e46e47-f35b-4f7f-92f9-9b86348e6be5",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.2
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.298
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__200mm_2.298W/m2K",
+      "Description": "Air, 200 mm, for acoustical windows, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__24mm_1.708W/m2K",
+      "Guid": "1e7c0bec-24b8-4445-970c-5f084ec1d6b2",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.024
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.708
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__24mm_1.708W/m2K",
+      "Description": "Air, 24 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__30mm_1.762W/m2K",
+      "Guid": "fd9dd8b6-c247-4e8c-8323-1a9749f0eace",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.03
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.762
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__30mm_1.762W/m2K",
+      "Description": "Air, 30 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0UP_Air__15mm_1.95W/m2K",
+      "Guid": "ba1f936b-a6f8-4ccf-968f-94e43874e2e7",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.015
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.95
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0UP_Air__15mm_1.95W/m2K",
+      "Description": "Air layer, 15 mm, roof, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__17mm_1.471W/m2K",
+      "Guid": "861936af-9554-4f6d-b226-ed6e738e1b35",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.017
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.471
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__17mm_1.471W/m2K",
+      "Description": "Air layer of 15 mm in a wall, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0UP_Air__25mm_1.95W/m2K",
+      "Guid": "a95627d6-a0e8-4c93-9454-ee8b3b6e4640",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.025
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.95
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0UP_Air__25mm_1.95W/m2K",
+      "Description": "Air layer, 25 mm, roof, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__25mm_1.25W/m2K",
+      "Guid": "8206eb78-2552-415e-885a-a931ed67cf2e",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.025
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.25
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__25mm_1.25W/m2K",
+      "Description": "Air layer, 25 mm, wall, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0Dn_Air__25mm_1W/m2K",
+      "Guid": "e65e3216-ce3e-4c49-8f93-6019ce4b54c6",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.025
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.0
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0Dn_Air__25mm_1W/m2K",
+      "Description": "Air layer, 25 mm, floor, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0Dn_Air__35mm_0.714W/m2K",
+      "Guid": "b434b6bd-647a-4820-927d-76b5ed3ec0af",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.035
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 0.714
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0Dn_Air__35mm_0.714W/m2K",
+      "Description": "Air layer, 35 mm, floor, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0Dn_Air__50mm_0.5W/m2K",
+      "Guid": "bc86e2ad-345c-4fc0-bc54-59cb7bc50428",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 0.5
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0Dn_Air__50mm_0.5W/m2K",
+      "Description": "Air Layer, 50 mm, floor, principal direction of heat is downwards, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0UP_Air__50mm_1.95W/m2K",
+      "Guid": "edf13cee-2a2e-4937-aa24-314c775df0e4",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.95
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0UP_Air__50mm_1.95W/m2K",
+      "Description": "Air Layer, 50 mm, roof, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__50mm_1.25W/m2K",
+      "Guid": "1028beb9-5460-4e3e-805b-26c785bc9514",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.25
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__50mm_1.25W/m2K",
+      "Description": "Air Layer, 50 mm, wall, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0Dn_Air__7mm_3.571W/m2K",
+      "Guid": "241b1a62-7490-4faf-a091-8493bdccdef8",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.007
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.571
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0Dn_Air__7mm_3.571W/m2K",
+      "Description": "Air Layer, 7 mm, wall, roof or floor, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__400mm_1.95W/m2K",
+      "Guid": "b2b6d012-f136-4096-b800-79aa0b002ab0",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.4
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.95
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__400mm_1.95W/m2K",
+      "Description": "Air void, 400 mm, typically used in intermediate floors, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_Air__1000mm_3.333W/m2K",
+      "Guid": "d546c825-7135-451e-9eaf-2bcfe960ba9d",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.333
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_Air__1000mm_3.333W/m2K",
+      "Description": "Cold loft Space, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0Dn_Air__400mm_0.18W/m2K",
+      "Guid": "9f277b80-693f-4897-8fce-15c97b693d6d",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.4
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 0.18
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0Dn_Air__400mm_0.18W/m2K",
+      "Description": "Internal service void, 400 mm, layer of air in an intermedeiate floor between two heated parts of a building, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar0UP_Air__200mm_1.95W/m2K",
+      "Guid": "1b5b1e97-f230-4a17-8a15-f1f6f276ade7",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.2
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.95
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar0UP_Air__200mm_1.95W/m2K",
+      "Description": "Loft space, R=0.2, SLD"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ag90UP_Argon__12mm_1.403W/m2K",
+      "Guid": "d5d15222-c242-44b2-b5ec-134bcc429bd7",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.012
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.403
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ag90UP_Argon__12mm_1.403W/m2K",
+      "Description": "Argon, 12 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ag0UP_Argon__12mm_2.24W/m2K",
+      "Guid": "c14b26e2-80ae-4835-8c36-3e138ac9d983",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.012
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.24
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ag0UP_Argon__12mm_2.24W/m2K",
+      "Description": "Argon, 12 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ag90UP_Argon__16mm_1.16W/m2K",
+      "Guid": "a8557700-2e92-40eb-9e3c-38553c8bf660",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.016
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.16
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ag90UP_Argon__16mm_1.16W/m2K",
+      "Description": "Argon, 16 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ag0UP_Argon__16mm_2.139W/m2K",
+      "Guid": "88dfcfb6-7bcc-436a-9a4a-aa32c02104aa",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.016
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.139
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ag0UP_Argon__16mm_2.139W/m2K",
+      "Description": "Argon, 16 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ag90UP_Argon__20mm_1.197W/m2K",
+      "Guid": "3d95c738-e8f5-4c00-aad6-a499d2ea915c",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.02
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.197
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ag90UP_Argon__20mm_1.197W/m2K",
+      "Description": "Argon, 20 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ag0UP_Argon__20mm_2.064W/m2K",
+      "Guid": "1449c681-da11-4339-be9b-40b37360513d",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.02
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.064
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ag0UP_Argon__20mm_2.064W/m2K",
+      "Description": "Argon, 20 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ag90UP_Argon__6mm_2.807W/m2K",
+      "Guid": "6c0cb417-aad9-4c04-a95c-882b321395c3",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.006
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.807
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ag90UP_Argon__6mm_2.807W/m2K",
+      "Description": "Argon, 6 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ag0UP_Argon__6mm_2.807W/m2K",
+      "Guid": "d3db0237-69d6-40c1-8f4f-51df5fa6e1f5",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.006
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.807
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ag0UP_Argon__6mm_2.807W/m2K",
+      "Description": "Argon, 6 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_CO2__12mm_2.08W/m2K",
+      "Guid": "2b913cf6-b04d-4150-8d58-6489dc3fadf8",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.012
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.08
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_CO2__12mm_2.08W/m2K",
+      "Description": "CO2, 12 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_CO2__16mm_1.614W/m2K",
+      "Guid": "5a98a501-d87f-47ff-becd-606a56fd01ec",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.016
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.614
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_CO2__16mm_1.614W/m2K",
+      "Description": "CO2, 16 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_CO2__20mm_1.665W/m2K",
+      "Guid": "8291f224-28d9-4c6c-bdf8-a788d3980e33",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.02
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.665
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_CO2__20mm_1.665W/m2K",
+      "Description": "CO2, 20 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_CO2__6mm_4.16W/m2K",
+      "Guid": "1c13fa0f-ced1-43a0-add1-daef7a7f136e",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.006
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 4.16
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_CO2__6mm_4.16W/m2K",
+      "Description": "CO2, 6 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_SF6__12mm_3.165W/m2K",
+      "Guid": "b9a48c62-7da5-4e6c-bfd2-7acd06fba741",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.012
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.165
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_SF6__12mm_3.165W/m2K",
+      "Description": "SF6, 12 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_SF6__16mm_3.296W/m2K",
+      "Guid": "8a61d75b-5524-48d4-bca4-769d5015e51b",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.016
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.296
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_SF6__16mm_3.296W/m2K",
+      "Description": "SF6, 16 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_SF6__20mm_3.4W/m2K",
+      "Guid": "38fd211a-90e0-4ad6-8a60-4457debe083e",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.02
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 3.4
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_SF6__20mm_3.4W/m2K",
+      "Description": "SF6, 20 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90UP_SF6__6mm_2.873W/m2K",
+      "Guid": "c2fb4f1e-a451-4f5e-b0b8-67c5aadb26c2",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.006
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 2.873
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90UP_SF6__6mm_2.873W/m2K",
+      "Description": "SF6, 6 mm, Glazed"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ag90Up_Argon__8.85mm_1.9W/m2K",
+      "Guid": "4a1e2783-0f0f-4b3c-8b31-7ac5eb7b2793",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.00885
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.9
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ag90Up_Argon__8.85mm_1.9W/m2K",
+      "Description": "12 mm Argon Side Lit, PartL"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
+      "Guid": "54f708b8-4abf-45ab-99a4-13f327cb40b7",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 0.5
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90Dn_Air__50mm_0.5W/m2K",
+      "Description": "50 mm floor, PartL"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90Up_Air__50mm_1.25W/m2K",
+      "Guid": "24e2c055-f1fb-4c61-b81b-9760c971c823",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.25
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90Up_Air__50mm_1.25W/m2K",
+      "Description": "50 mm wall, PartL"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ar90Up_Air__50mm_1.95W/m2K",
+      "Guid": "60fbd978-ddce-4abb-80fa-9c34cda630df",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.95
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ar90Up_Air__50mm_1.95W/m2K",
+      "Description": "50 mm ceiling, Upward Flow, PartL"
+    },
+    {
+      "_type": "SAM.Core.GasMaterial,SAM.Core",
+      "Name": "Ag90Up_Argon__11.38mm_1.48W/m2K",
+      "Guid": "9c9ca8cf-0938-40b2-b1cc-f585d57ecba6",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.011380000000000001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ConvectionCoefficient",
+              "Value": 1.48
+            }
+          ]
+        }
+      ],
+      "DisplayName": "Ag90Up_Argon__11.38mm_1.48W/m2K",
+      "Description": "PartL"
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "S00_Pilkington66/33_g0.82_Lt0.9",
+      "Guid": "2bbc40b5-c09d-41d0-97d1-d85e048488f4",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.004
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 99999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.82
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.9
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "S00_Pilkington66/33_g0.82_Lt0.9",
+      "Description": "Solar Glass Pilkington 66/33",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Bronze-tinted glass_g0.33_Lt0.38",
+      "Guid": "a6a2ca8f-3490-4980-9517-5eef925abee8",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.33
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.38
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Bronze-tinted glass_g0.33_Lt0.38",
+      "Description": "100 mm bronze-tinted glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Bronze-tinted glass_g0.65_Lt0.69",
+      "Guid": "dfaf74d3-e563-4bf0-846b-135ee59b875a",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.65
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.69
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.06
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.06
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Bronze-tinted glass_g0.65_Lt0.69",
+      "Description": "3 mm bronze-tinted glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Bronze-tinted glass_g0.48_Lt0.53",
+      "Guid": "1fe98459-3118-42ac-8003-646326dee85d",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.48
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.53
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.06
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.06
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Bronze-tinted glass_g0.48_Lt0.53",
+      "Description": "6 mm bronze-tinted glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "C_Clear glass_g0.74_Lt0",
+      "Guid": "06568644-f356-4130-80d3-91564cfc572b",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.74
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.09
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.09
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "C_Clear glass_g0.74_Lt0",
+      "Description": "10 mm clear glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "C_Clear glass_g0.65_Lt0.84",
+      "Guid": "4ff6938f-8ea2-4bd0-a04c-339b04ffda51",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.65
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.06
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.06
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "C_Clear glass_g0.65_Lt0.84",
+      "Description": "12 mm clear glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "C_Clear glass_g0.85_Lt0.9",
+      "Guid": "3336cdf3-70eb-492f-92fb-b0eb848849df",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.9
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "C_Clear glass_g0.85_Lt0.9",
+      "Description": "2.5 mm clear glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "C_Clear glass_g0.84_Lt0.9",
+      "Guid": "6ba5288a-9bbe-4405-95aa-dbdcc613676f",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.9
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "C_Clear glass_g0.84_Lt0.9",
+      "Description": "3 mm clear glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "C_Clear glass_g0.82_Lt0.89",
+      "Guid": "df71a2a3-e0e3-47bb-9764-d8e8c3401a0d",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.82
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.89
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.09
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.09
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "C_Clear glass_g0.82_Lt0.89",
+      "Description": "4 mm clear glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "C_Clear glass_g0.78_Lt0.88",
+      "Guid": "c3f93fc0-ed63-4c33-8095-7733265ff466",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.78
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.88
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "C_Clear glass_g0.78_Lt0.88",
+      "Description": "6 mm clear glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "C_Clear glass_g0.79_Lt0",
+      "Guid": "695e7583-11c1-4f43-9dc0-6830e0efa6a2",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.79
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.09
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.09
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "C_Clear glass_g0.79_Lt0",
+      "Description": "6 mm glass (clear)",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Glass_g0.56_Lt0",
+      "Guid": "999b8856-8509-4a09-a0ee-621bbd2bc377",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.56
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.1
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Glass_g0.56_Lt0",
+      "Description": "100 mm glass (low-e)",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Glass_g0.62_Lt0.85",
+      "Guid": "5c295741-abff-4186-874b-1856e2710f90",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.62
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.1
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Glass_g0.62_Lt0.85",
+      "Description": "4 mm glass (low-e)",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Glass_g0.81_Lt0.85",
+      "Guid": "697b0fef-3234-4345-813b-38c5bad7fe53",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.81
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.09
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.09
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.1
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.1
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.1
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Glass_g0.81_Lt0.85",
+      "Description": "6 mm glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Glass_g0.6_Lt0.84",
+      "Guid": "dc3c2743-4da5-4a1c-826e-dcf93f98f591",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.6
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Glass_g0.6_Lt0.84",
+      "Description": "6 mm glass (low-e)",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Grey-tinted glass_g0.63_Lt0.61",
+      "Guid": "e07468a0-e42e-4ccf-ae6a-5589a62aeafe",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.63
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.61
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.06
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.06
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.06
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.06
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Grey-tinted glass_g0.63_Lt0.61",
+      "Description": "3 mm grey-tinted glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Grey-tinted glass_g0.46_Lt0.43",
+      "Guid": "be306ede-52ad-4ea2-a3e6-9f9964505d42",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.46
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.43
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Grey-tinted glass_g0.46_Lt0.43",
+      "Description": "6 mm grey-tinted glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Tinted glass_g0.57_Lt0.63",
+      "Guid": "3b320a06-7a27-42cb-af49-960d0910e1e3",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.57
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.63
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.38
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.38
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Tinted glass_g0.57_Lt0.63",
+      "Description": "4 mm tinted glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Tinted glass_g0.47_Lt0.53",
+      "Guid": "484a41e6-b44c-4eea-b6a4-023db4d38ebc",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.47
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.53
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.38
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.38
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Tinted glass_g0.47_Lt0.53",
+      "Description": "6 mm tinted glass",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Frame Wood_g0_Lt0",
+      "Guid": "92b61e1b-3a1d-4ac4-b573-061bbc48918e",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Frame Wood_g0_Lt0",
+      "Description": "Wood frame, thermally improved spacer",
+      "ThermalConductivity": 0.27
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Frame Metal_g0_Lt0",
+      "Guid": "4277f592-4d05-4b1a-8cb6-ca402d33ac81",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Frame Metal_g0_Lt0",
+      "Description": "Metal frame, thermal break, thermal improved spacer",
+      "ThermalConductivity": 2.04
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Frame Plastic_g0_Lt0",
+      "Guid": "b22d810d-77c6-4f38-a8f9-1547fbc711c7",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.0
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Frame Plastic_g0_Lt0",
+      "Description": "Plastic frame, 2 hollow chambers",
+      "ThermalConductivity": 0.4
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Glazing Inner Pane_g0.78_Lt0.89",
+      "Guid": "2a182472-1be4-4b1d-bbbe-8133c6e3fd3b",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.78
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.89
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.07
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.08
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Glazing Inner Pane_g0.78_Lt0.89",
+      "Description": "Side or Roof lir, PartL",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Side Lit Glazing Outer Pane_g0.41_Lt0.9",
+      "Guid": "aac57e16-7f75-47b7-9669-cbf971960527",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.41
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.9
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.29
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.41
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.05
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.04
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.04
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Side Lit Glazing Outer Pane_g0.41_Lt0.9",
+      "Description": "PartL",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "_Roof Lit Glazing Outer Pane_g0.58_Lt0.67",
+      "Guid": "07828287-d502-45c7-a503-070232f93792",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 9999.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.58
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.67
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.19
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.23
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.25
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.28
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.84
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.21
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": false
+            }
+          ]
+        }
+      ],
+      "DisplayName": "_Roof Lit Glazing Outer Pane_g0.58_Lt0.67",
+      "Description": "PartL",
+      "ThermalConductivity": 1.0
+    },
+    {
+      "_type": "SAM.Core.TransparentMaterial,SAM.Core",
+      "Name": "B00_Soltis-ferrari-92-1010_g0.25_Lt0.1",
+      "Guid": "ab5f5e88-ec06-46ed-8914-a540437eee17",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_Material_Width",
+              "Value": 0.001
+            },
+            {
+              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Value": 1.0
+            },
+            {
+              "Name": "SAM_Material_SolarTransmittance",
+              "Value": 0.25
+            },
+            {
+              "Name": "SAM_Material_LightTransmittance",
+              "Value": 0.1
+            },
+            {
+              "Name": "SAM_Material_ExternalSolarReflectance",
+              "Value": 0.57
+            },
+            {
+              "Name": "SAM_Material_InternalSolarReflectance",
+              "Value": 0.57
+            },
+            {
+              "Name": "SAM_Material_ExternalLightReflectance",
+              "Value": 0.57
+            },
+            {
+              "Name": "SAM_Material_InternalLightReflectance",
+              "Value": 0.57
+            },
+            {
+              "Name": "SAM_Material_ExternalEmissivity",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_InternalEmissivity",
+              "Value": 0.85
+            },
+            {
+              "Name": "SAM_Material_IsBlind",
+              "Value": true
+            }
+          ]
+        }
+      ],
+      "DisplayName": "B00_Soltis-ferrari-92-1010_g0.25_Lt0.1",
+      "Description": "Soltis-ferrari-92-1010",
+      "ThermalConductivity": 1.0
+    }
+  ]
+}
