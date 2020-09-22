@@ -26,7 +26,11 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(resourcesDirectoryName))
                 return null;
 
-            return System.IO.Path.Combine(ExecutingAssemblyDirectory(), resourcesDirectoryName, assembly.GetName().Name);
+            string name = assembly.GetName().Name;
+            if (name.StartsWith("SAM."))
+                name = name.Substring(4);
+
+            return System.IO.Path.Combine(ExecutingAssemblyDirectory(), resourcesDirectoryName, name);
         }
 
         public static string ResourcesDirectory(Assembly assembly)

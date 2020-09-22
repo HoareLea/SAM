@@ -26,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalGetDefaultMaterialLibrary()
-          : base("SAMAnalytical.GetDefaultConstructions", "SAMAnalytical.GetDefaultMaterialLibrary",
+          : base("SAMAnalytical.GetDefaultMaterialLibrary", "SAMAnalytical.GetDefaultMaterialLibrary",
               "Get Default SAM MaterialLibrary",
               "SAM", "Analytical")
         {

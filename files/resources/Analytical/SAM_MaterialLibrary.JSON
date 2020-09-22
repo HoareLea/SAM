@@ -1,6 +1,6 @@
 {
   "_type": "SAM.Core.MaterialLibrary,SAM.Core",
-  "Name": "Opaque",
+  "Name": "SAM_DefaultMaterialLibrary ver00",
   "Guid": "2522a6c2-9c8b-40af-9274-236de6e626de",
   "Materials": [
     {
