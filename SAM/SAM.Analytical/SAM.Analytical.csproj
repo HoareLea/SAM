@@ -92,7 +92,7 @@
     <Compile Include="Classes\Panel.cs" />
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
-    <Compile Include="Manager\ActiveSettings.cs" />
+    <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
@@ -121,7 +121,10 @@
     <Compile Include="Query\AirspaceIntersurfaceEmittance.cs" />
     <Compile Include="Query\AirspaceRadiativeCoefficient.cs" />
     <Compile Include="Query\AirspaceThermalResistance.cs" />
+    <Compile Include="Query\Materials.cs" />
     <Compile Include="Query\BlackBodySurfaceRadiativeCoefficient.cs" />
+    <Compile Include="Query\DefaultMaterialLibraryPath.cs" />
+    <Compile Include="Query\DefaultMaterialLibrary.cs" />
     <Compile Include="Query\DefaultThickness.cs" />
     <Compile Include="Query\InternalEmissivity.cs" />
     <Compile Include="Query\FirstMaterial.cs" />
@@ -183,8 +186,8 @@
     <Compile Include="Query\ApertureConstructionName.cs" />
     <Compile Include="Query\MergeOverlapPanels.cs" />
     <Compile Include="Query\PanelGroup.cs" />
-    <Compile Include="Query\ConstructionName.cs" />
-    <Compile Include="Query\Construction.cs" />
+    <Compile Include="Query\DefaultConstructionName.cs" />
+    <Compile Include="Query\DefaultConstruction.cs" />
     <Compile Include="Query\IsValid.cs" />
     <Compile Include="Query\Height.cs" />
     <Compile Include="Query\Width.cs" />

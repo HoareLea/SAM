@@ -85,7 +85,7 @@ namespace SAM.Analytical.Grasshopper
             Panel panel_New = new Panel(panel, panelType);
             if(setDefaultConstruction)
             {
-                Construction construction = Analytical.Query.Construction(panelType);
+                Construction construction = Analytical.Query.DefaultConstruction(panelType);
                 panel_New = new Panel(panel_New, construction);
             }
 

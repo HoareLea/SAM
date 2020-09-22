@@ -1,5 +1,7 @@
 ﻿
 using Newtonsoft.Json.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SAM.Core
@@ -18,6 +20,19 @@ namespace SAM.Core
                 return null;
 
             return new MaterialLibrary(jObject);
+        }
+
+        public static MaterialLibrary MaterialLibrary(string name, IEnumerable<IMaterial> materials)
+        {
+            MaterialLibrary result = new MaterialLibrary(name);
+
+            if (materials == null)
+                return result;
+
+            foreach (IMaterial material in materials)
+                result.Add(material);
+
+            return result;
         }
     }
 }

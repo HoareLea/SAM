@@ -203,7 +203,7 @@ namespace SAM.Analytical.Grasshopper
             if (surface == null)
                 return GH_GetterResult.cancel;
 
-            List<Panel> panels = Create.Panels(Geometry.Grasshopper.Convert.ToSAM(surface), PanelType.WallExternal, Analytical.Query.Construction(PanelType.WallExternal), Core.Tolerance.MacroDistance);
+            List<Panel> panels = Create.Panels(Geometry.Grasshopper.Convert.ToSAM(surface), PanelType.WallExternal, Analytical.Query.DefaultConstruction(PanelType.WallExternal), Core.Tolerance.MacroDistance);
             if (panels == null || panels.Count == 0)
                 return GH_GetterResult.cancel;
 

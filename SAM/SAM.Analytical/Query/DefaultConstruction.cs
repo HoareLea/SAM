@@ -10,7 +10,7 @@ namespace SAM.Analytical
         /// <param name="panelType">SAM Analytical PanelType</param>
         /// <returns name="construction"> Default SAM Analytical Construction</returns>
         /// <search>Default SAM Analytical Construction, PanelType</search> 
-        public static Construction Construction(this PanelType panelType)
+        public static Construction DefaultConstruction(this PanelType panelType)
         {
             Setting setting = ActiveSetting.Setting;
 

@@ -112,6 +112,8 @@
     <Compile Include="Interfaces\Base\ISAMObject.cs" />
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\SetParameter.cs" />
+    <Compile Include="Query\ResourcesDirectory.cs" />
+    <Compile Include="Query\ResourcesDirectoryName.cs" />
     <Compile Include="Query\IndexesOf.cs" />
     <Compile Include="Query\LatestVersion.cs" />
     <Compile Include="Query\CurrentVersion.cs" />

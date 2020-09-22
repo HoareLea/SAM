@@ -73,6 +73,8 @@ namespace SAM.Analytical
             public const string GasMaterial_Krypton = "GasMaterial_Krypton";
             public const string GasMaterial_Xenon = "GasMaterial_Xenon";
             public const string GasMaterial_SulfurHexaFluoride = "GasMaterial_SulfurHexaFluoride";
+
+            public const string FileName_DefaultMaterialLibrary = "FileName_DefaultMaterialLibrary";
         }
 
         private static Setting setting = Load();
@@ -138,7 +140,6 @@ namespace SAM.Analytical
             result.Add(Name.ParameterName_SpecificHeatCapacity, "SAM_Material_SpecificHeat");
             result.Add(Name.ParameterName_Density, "SAM_Material_Density");
 
-
             //Default Constructions
             result.Add(Name.Construction_Ceiling, new Construction(new System.Guid("6ff47aad-ec17-4806-8e81-e84b10d5756a"), "Generic", Create.ConstructionLayers("C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C00_Concrete Reinforced_2300kg/m3_2.3W/mK", 0.1, "C00_Screed_1800kg/m3_1.15W/mK", 0.05, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C00_Chipboard Flooring_500kg/m3_0.13W/mK", 0.02, "C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK", 0.01)));
             result.Add(Name.Construction_CurtainWall, new Construction(new System.Guid("9ab5d49f-4db4-4930-8293-3945d430e572"), "SIM_EXT_GLZ", Create.ConstructionLayers("_Glazing Inner Pane_g0.78_Lt0.89", 0.006, "Ar0UP_Air__12mm_3.168W/m2K", 0.12, "_Side Lit Glazing Outer Pane_g0.41_Lt0.9", 0.006)));
@@ -180,6 +181,8 @@ namespace SAM.Analytical
             result.Add(Name.GasMaterial_Xenon, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Xenon Gas", "Xenon", "Xenon Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 0.0529, 5.689, 161, 2.226e-5));
             result.Add(Name.GasMaterial_SulfurHexaFluoride, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Sulfur HexaFluoride Gas", "Sulfur HexaFluoride (SF6) [EN 673:1997 Table 1 - Gas Properties]", "SulfurHexa Fluoride Material with properties at 10°C", 0.01275, 6.36, 614, 1.459e-5));
 
+            result.Add(Name.FileName_DefaultMaterialLibrary, "SAM_MaterialLibrary.JSON");
+            
             return result;
         }
     }

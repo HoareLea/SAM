@@ -85,7 +85,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetDataList(0, panelTypes.ConvertAll(x => new GooConstruction(Analytical.Query.Construction(x))));
+            dataAccess.SetDataList(0, panelTypes.ConvertAll(x => new GooConstruction(Analytical.Query.DefaultConstruction(x))));
         }
     }
 }

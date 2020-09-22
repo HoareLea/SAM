@@ -4,7 +4,7 @@
     {
         public static string ConstructionName(this PanelType panelType)
         {
-            Construction construction = Construction(panelType);
+            Construction construction = DefaultConstruction(panelType);
             if (construction == null)
                 return null;
 

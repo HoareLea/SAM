@@ -140,7 +140,7 @@ namespace SAM.Analytical
                 if (!update)
                     continue;
 
-                Construction construction = Query.Construction(panelType);
+                Construction construction = Query.DefaultConstruction(panelType);
                 Panel panel_New = new Panel(panel, construction);
                 adjacencyCluster.AddObject(panel_New);
                 result[panel_New.Guid] = panel_New;

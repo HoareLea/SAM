@@ -60,7 +60,7 @@ namespace SAM.Analytical
             {
                 string value = null;
 
-                value = Construction(panelType)?.Name;
+                value = DefaultConstruction(panelType)?.Name;
                 if (text.Equals(value))
                     return panelType;
 

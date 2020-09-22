@@ -28,6 +28,21 @@ namespace SAM.Analytical
                 this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
         }
 
+        public AnalyticalModel(string name, string description, Location location, AdjacencyCluster adjacencyCluster, MaterialLibrary materialLibrary)
+                : base(name)
+        {
+            this.description = description;
+
+            if (location != null)
+                this.location = new Location(location);
+
+            if (adjacencyCluster != null)
+                this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+
+            if (materialLibrary != null)
+                this.materialLibrary = new MaterialLibrary(materialLibrary);
+        }
+
         public AnalyticalModel(Guid guid, string name)
             : base(guid, name)
         {

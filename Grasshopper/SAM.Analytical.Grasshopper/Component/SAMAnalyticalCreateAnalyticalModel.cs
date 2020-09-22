@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,9 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddParameter(new GooPanelParam(), "panels_", "panels_", "SAM Analytical Panels", GH_ParamAccess.list);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddParameter(new GooMaterialLibraryParam(), "materialLibrary_", "materialLibrary_", "SAM Material Library", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
         }
 
@@ -97,6 +101,16 @@ namespace SAM.Analytical.Grasshopper
                 foreach (Panel panel in panels)
                     adjacencyCluster.AddObject(panel);
             }
+
+            MaterialLibrary materialLibrary = null;
+            dataAccess.GetData(5, ref materialLibrary);
+
+            if (materialLibrary == null)
+                materialLibrary = Analytical.Query.DefaultMaterialLibrary();
+
+            IEnumerable<IMaterial> materials = Analytical.Query.Materials(adjacencyCluster, materialLibrary);
+            materialLibrary = Core.Create.MaterialLibrary("Default Material Library", materials);
+
 
             dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(name, description, location, null, adjacencyCluster)));
         }

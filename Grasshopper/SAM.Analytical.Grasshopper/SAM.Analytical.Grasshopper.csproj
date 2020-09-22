@@ -104,6 +104,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByAperture.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalGetDefaultMaterialLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalLabelSpace.cs" />
     <Compile Include="Component\SAMAnalyticalLabelPanel.cs" />
     <Compile Include="Component\SAMAnalyticalCreateApertureConstruction.cs" />

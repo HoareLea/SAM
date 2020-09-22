@@ -21,10 +21,10 @@ namespace SAM.Analytical
             Plane plane_Min_Flipped = new Plane(plane_Min);
             plane_Min_Flipped.FlipZ();
 
-            Construction construction_Wall = Query.Construction(PanelType.Wall);
-            Construction construction_Floor = Query.Construction(PanelType.Floor);
-            Construction construction_FloorExposed = Query.Construction(PanelType.FloorExposed);
-            Construction construction_Roof = Query.Construction(PanelType.Roof);
+            Construction construction_Wall = Query.DefaultConstruction(PanelType.Wall);
+            Construction construction_Floor = Query.DefaultConstruction(PanelType.Floor);
+            Construction construction_FloorExposed = Query.DefaultConstruction(PanelType.FloorExposed);
+            Construction construction_Roof = Query.DefaultConstruction(PanelType.Roof);
 
             List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segmentable2Ds, tolerance);
             if(polygon2Ds != null && polygon2Ds.Count != 0)
@@ -289,9 +289,9 @@ namespace SAM.Analytical
 
             tuples.Add(new Tuple<double, List<Face2D>>(elevations[elevations.Count - 1], face2Ds[elevations[elevations.Count - 1]]));
 
-            Construction construction_Wall = Query.Construction(PanelType.Wall);
-            Construction construction_Floor = Query.Construction(PanelType.Floor);
-            Construction construction_Roof = Query.Construction(PanelType.Roof);
+            Construction construction_Wall = Query.DefaultConstruction(PanelType.Wall);
+            Construction construction_Floor = Query.DefaultConstruction(PanelType.Floor);
+            Construction construction_Roof = Query.DefaultConstruction(PanelType.Roof);
 
             Plane plane = Plane.WorldXY;
 
