@@ -1,9 +1,12 @@
-﻿namespace SAM.Core
+﻿using System.ComponentModel;
+
+namespace SAM.Core
 {
+    [Description("Delimited File Type")]
     public enum DelimitedFileType
     {
-        Undefined,
-        Csv,
-        TabDelimited
+        [Description("Undefined")] Undefined,
+        [Description("Csv")] Csv,
+        [Description("Tab Delimited")] TabDelimited
     }
 }

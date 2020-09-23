@@ -2,6 +2,7 @@
 
 namespace SAM.Core
 {
+    [Description("Country Code")]
     public enum CountryCode
     {
         [Description("Undefined")] Undefined = -1,
