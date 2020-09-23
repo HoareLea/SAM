@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Classes\Library\SAMLibrary.cs" />
     <Compile Include="Classes\Material\SolidMaterial.cs" />
     <Compile Include="Classes\Material\FluidMaterial.cs" />
     <Compile Include="Classes\Material\GasMaterial.cs" />
@@ -158,7 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\Comparison\" />
-    <Folder Include="Classes\Library\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
