@@ -11,12 +11,12 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddAperturesByGeometry : GH_SAMComponent
+    public class SAMAnalyticalAddAperturesByGeometryAndApertureType : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("64ee6364-37ba-4554-9ec2-39980afa92c3");
+        public override Guid ComponentGuid => new Guid("14802f03-04a2-4179-8305-6b43f5fc19d4");
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -26,8 +26,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAddAperturesByGeometry()
-          : base("SAMAnalytical.AddAperturesByGeometry", "SAMAnalytical.AddAperturesByGeometry",
+        public SAMAnalyticalAddAperturesByGeometryAndApertureType()
+          : base("SAMAnalytical.AddAperturesByGeometryAndApertureType", "SAMAnalytical.AddAperturesByGeometryAndApertureType",
               "Add Apertures to SAM Analytical Object: ie Panel, AdjacencyCluster or Analytical Model",
               "SAM", "Analytical")
         {
@@ -41,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddGenericParameter("_geometry", "_geometry", "Geometry incl Rhino geometry", GH_ParamAccess.list);
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
 
-            int index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
+            int index = inputParamManager.AddTextParameter("_apertureType_", "_apertureType_", "SAM Analytical ApertureType", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
             inputParamManager.AddNumberParameter("maxDistance_", "maxDistance_", "Maximal Distance", GH_ParamAccess.item, 0.1);
@@ -121,8 +121,15 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            ApertureConstruction apertureConstruction = null;
-            dataAccess.GetData(2, ref apertureConstruction);
+            ApertureType apertureType = ApertureType.Window;
+
+            string apertureTypeString = null;
+            dataAccess.GetData(2, ref apertureTypeString);
+            if(!string.IsNullOrWhiteSpace(apertureTypeString))
+            {
+                if (!Enum.TryParse(apertureTypeString, out apertureType))
+                    apertureType = ApertureType.Window;
+            }
 
             double maxDistance = Core.Tolerance.MacroDistance;
             dataAccess.GetData(3, ref maxDistance);
@@ -145,9 +152,7 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
                 {
-                    ApertureConstruction apertureConstruction_Temp = apertureConstruction;
-                    if (apertureConstruction_Temp == null)
-                        apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, ApertureType.Window);
+                    ApertureConstruction apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, apertureType);
 
                     Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
                     if (aperture != null)
@@ -205,9 +210,7 @@ namespace SAM.Analytical.Grasshopper
                         if (!panel.ApertureHost(tuple.Item2, minArea, maxDistance))
                             continue;
 
-                        ApertureConstruction apertureConstruction_Temp = apertureConstruction;
-                        if (apertureConstruction_Temp == null)
-                            apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, ApertureType.Window);
+                        ApertureConstruction apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, apertureType);
 
                         if (apertureConstruction_Temp == null)
                             continue;
