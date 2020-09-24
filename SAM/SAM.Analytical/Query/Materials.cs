@@ -41,7 +41,7 @@ namespace SAM.Analytical
 
                 foreach (ConstructionLayer constructionLayer in constructionLayers)
                 {
-                    IMaterial material = materialLibrary.GetMaterial(constructionLayer.Name);
+                    IMaterial material = constructionLayer.Material(materialLibrary);
                     if (material == null || dictionary_Materials.ContainsKey(material.Name))
                         continue;
 
@@ -58,7 +58,7 @@ namespace SAM.Analytical
                 {
                     foreach (ConstructionLayer constructionLayer in constructionLayers)
                     {
-                        IMaterial material = materialLibrary.GetMaterial(constructionLayer.Name);
+                        IMaterial material = constructionLayer.Material(materialLibrary);
                         if (material == null || dictionary_Materials.ContainsKey(material.Name))
                             continue;
 
@@ -71,7 +71,7 @@ namespace SAM.Analytical
                 {
                     foreach (ConstructionLayer constructionLayer in constructionLayers)
                     {
-                        IMaterial material = materialLibrary.GetMaterial(constructionLayer.Name);
+                        IMaterial material = constructionLayer.Material(materialLibrary);
                         if (material == null || dictionary_Materials.ContainsKey(material.Name))
                             continue;
 

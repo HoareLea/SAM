@@ -88,19 +88,19 @@ namespace SAM.Core.Grasshopper
                 if (materialLibrary_Source == null)
                     continue;
 
-                List<IMaterial> materials = materialLibrary_Source.Materials;
+                List<IMaterial> materials = materialLibrary_Source.GetObjects<IMaterial>();
                 if (materials == null || materials.Count == 0)
                     continue;
 
                 foreach(IMaterial material in materials)
                 {
-                    IMaterial material_Existing = materialLibrary.GetMaterial(material.Name);
+                    IMaterial material_Existing = materialLibrary.GetObject<IMaterial>(material.Name);
                     if (material_Existing != null)
                     {
                         if (!overwrite)
                             continue;
 
-                        materialLibrary.Remove(material_Existing.Guid);
+                        materialLibrary.Remove(material_Existing);
                     }
 
                     materialLibrary.Add(material);

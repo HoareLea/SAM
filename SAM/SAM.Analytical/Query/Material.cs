@@ -9,7 +9,7 @@ namespace SAM.Analytical
             if (constructionLayer == null || materialLibrary == null)
                 return null;
 
-            return materialLibrary.GetMaterial(constructionLayer.Name);
+            return materialLibrary.GetObject<IMaterial>(constructionLayer.Name);
         }
     }
 }
