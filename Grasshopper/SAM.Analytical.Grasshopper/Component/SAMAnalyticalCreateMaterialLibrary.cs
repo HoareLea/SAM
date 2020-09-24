@@ -34,6 +34,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddTextParameter("path_", "_path_", "Path to csv file", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_name_", "_name_", "SAM Material Library Name", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -75,10 +76,12 @@ namespace SAM.Analytical.Grasshopper
             int namesIndex = 0;
             if (lines[0] != null && lines[0].ToUpper().Contains("FILEPATH"))
                 namesIndex = 1;
-            
-            lines = null;
 
-            MaterialLibrary result = Create.MaterialLibrary(path, namesIndex);
+
+            string name = null;
+            dataAccess.GetData(1, ref name);
+
+            MaterialLibrary result = Create.MaterialLibrary(path, name, namesIndex);
 
             dataAccess.SetData(0, new GooMaterialLibrary(result));
         }

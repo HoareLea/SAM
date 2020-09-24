@@ -6,8 +6,14 @@ namespace SAM.Analytical
     {
         public static PanelType PanelType(this object @object)
         {
+            if (@object == null)
+                return Analytical.PanelType.Undefined;
+            
             if (@object is PanelType)
                 return (PanelType)@object;
+
+            if (@object is Construction)
+                return PanelType((Construction)@object);
 
             PanelType result;
             if (@object is string)
@@ -55,7 +61,7 @@ namespace SAM.Analytical
         {
             if (string.IsNullOrWhiteSpace(text))
                 return Analytical.PanelType.Undefined;
-            
+
             foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
             {
                 string value = null;
@@ -70,6 +76,18 @@ namespace SAM.Analytical
             }
 
             return Analytical.PanelType.Undefined;
+        }
+
+        public static PanelType PanelType(Construction construction)
+        {
+            if (construction == null)
+                return Analytical.PanelType.Undefined;
+
+            object result = null;
+            if (!Core.Query.TryGetValue(construction, ParameterName_PanelType(), out result))
+                return Analytical.PanelType.Undefined;
+
+            return PanelType(result);
         }
     }
 }

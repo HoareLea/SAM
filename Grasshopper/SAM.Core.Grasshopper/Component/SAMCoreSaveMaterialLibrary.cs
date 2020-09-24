@@ -33,6 +33,7 @@ namespace SAM.Core.Grasshopper
         {
             inputParamManager.AddParameter(new GooMaterialLibraryParam(), "_materialLibrary", "_materialLibrary", "SAM Material Library", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_path", "_path", "Path", GH_ParamAccess.item);
+            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -52,6 +53,16 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            bool run = false;
+            if (!dataAccess.GetData(6, ref run))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                dataAccess.SetData(2, false);
+                return;
+            }
+            if (!run)
+                return;
+
             MaterialLibrary materialLibrary = null;
             if (!dataAccess.GetData(0, ref materialLibrary) || materialLibrary == null)
             {

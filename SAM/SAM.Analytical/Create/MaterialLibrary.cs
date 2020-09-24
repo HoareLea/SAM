@@ -4,7 +4,7 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static MaterialLibrary MaterialLibrary(string path, int namesIndex = 0, int headerCount = 7)
+        public static MaterialLibrary MaterialLibrary(string path, string name = null, int namesIndex = 0, int headerCount = 7)
         {
             if (string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
                 return null;
@@ -19,8 +19,10 @@ namespace SAM.Analytical
             if (delimitedFileTable == null)
                 return null;
 
+            if (name == null)
+                name = System.IO.Path.GetFileNameWithoutExtension(path);
 
-            MaterialLibrary result = new MaterialLibrary(System.IO.Path.GetFileNameWithoutExtension(path));
+            MaterialLibrary result = new MaterialLibrary(name);
 
             int count = delimitedFileTable.Count;
             if (count == 0)
@@ -64,8 +66,8 @@ namespace SAM.Analytical
 
                 materialTypeString = materialTypeString.Trim().ToUpper();
 
-                string name = null;
-                if (!delimitedFileTable.TryConvert(i, index_MaterialName, out name) || string.IsNullOrWhiteSpace(name))
+                string materialName = null;
+                if (!delimitedFileTable.TryConvert(i, index_MaterialName, out materialName) || string.IsNullOrWhiteSpace(materialName))
                     continue;
 
                 string description = null;
@@ -116,7 +118,7 @@ namespace SAM.Analytical
                     if (!delimitedFileTable.TryConvert(i, index_IgnoreThermalTransmittanceCalculations, out ignoreThermalTransmittanceCalculations))
                         ignoreThermalTransmittanceCalculations = false;
 
-                    material = OpaqueMaterial(name, null, name, description, thermalConductivity, specificHeatCapacity, density, defaultThickness, vapourDiffusionFactor, externalSolarReflectance, internalSolarReflectance, externalLightReflectance, internalLightReflectance, externalEmissivity, internalEmissivity, ignoreThermalTransmittanceCalculations);
+                    material = OpaqueMaterial(materialName, null, materialName, description, thermalConductivity, specificHeatCapacity, density, defaultThickness, vapourDiffusionFactor, externalSolarReflectance, internalSolarReflectance, externalLightReflectance, internalLightReflectance, externalEmissivity, internalEmissivity, ignoreThermalTransmittanceCalculations);
 
                 }
                 else if (transparentName.Contains(materialTypeString))
@@ -154,7 +156,7 @@ namespace SAM.Analytical
                     if (!delimitedFileTable.TryConvert(i, index_IsBlind, out isBlind))
                         isBlind = false;
 
-                    material = TransparentMaterial(name, null, name, description, thermalConductivity, defaultThickness, vapourDiffusionFactor, solarTransmittance, lightTransmittance, externalSolarReflectance, internalSolarReflectance, externalLightReflectance, internalLightReflectance, externalEmissivity, internalEmissivity, isBlind);
+                    material = TransparentMaterial(materialName, null, materialName, description, thermalConductivity, defaultThickness, vapourDiffusionFactor, solarTransmittance, lightTransmittance, externalSolarReflectance, internalSolarReflectance, externalLightReflectance, internalLightReflectance, externalEmissivity, internalEmissivity, isBlind);
                 }
                 else if (gasName.Contains(materialTypeString))
                 {
@@ -163,7 +165,7 @@ namespace SAM.Analytical
                     double heatTransferCoefficient = double.NaN;
                     delimitedFileTable.TryConvert(i, index_HeatTransferCoefficient, out heatTransferCoefficient);
 
-                    material = GasMaterial(name, null, name, description, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
+                    material = GasMaterial(materialName, null, materialName, description, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
                 }
 
                 if (material == null)
