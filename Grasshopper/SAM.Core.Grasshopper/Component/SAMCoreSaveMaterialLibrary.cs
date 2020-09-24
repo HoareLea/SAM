@@ -53,11 +53,12 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            dataAccess.SetData(1, false);
+
             bool run = false;
-            if (!dataAccess.GetData(6, ref run))
+            if (!dataAccess.GetData(2, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(2, false);
                 return;
             }
             if (!run)

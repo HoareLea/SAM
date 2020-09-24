@@ -33,8 +33,11 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
+            int index;
+
             inputParamManager.AddTextParameter("path_", "_path_", "Path to csv file", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_name_", "_name_", "SAM Material Library Name", GH_ParamAccess.item);
+            index = inputParamManager.AddTextParameter("_name_", "_name_", "SAM Material Library Name", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
         }
 
         /// <summary>
