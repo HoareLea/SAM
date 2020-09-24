@@ -1,11 +1,14 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Math
 {
+
+    /// <summary>
+    /// Equation in format a(n)*x^(n) + a(n-1)*x^(n-1) + a(n-2)*x^(n-2) + [...] + a(1)*x +a(0) = 0
+    /// </summary>
     public class PolynomialEquation : IJSAMObject
     {
         private double[] variables;
@@ -41,11 +44,28 @@ namespace SAM.Math
 
         public double Calculate(double value)
         {
+            int count = variables.Length;
+            
             double result = 0;
-            for (int i = 0; i < variables.Length; i++)
-                result += System.Math.Pow(value, i) * variables[i];
+            for (int i = 0; i < count; i++)
+                result += System.Math.Pow(value, count - i) * variables[i];
 
             return result;
+        }
+
+        public List<double> Variables
+        {
+            get
+            {
+                if (variables == null)
+                    return null;
+
+                List<double> result = new List<double>();
+                foreach (double variable in variables)
+                    result.Add(variable);
+
+                return result;
+            }
         }
 
         public virtual bool FromJObject(JObject jObject)

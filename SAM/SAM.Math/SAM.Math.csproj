@@ -51,10 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Matrix.cs" />
-    <Compile Include="Classes\Matrix2D.cs" />
-    <Compile Include="Classes\Matrix4D.cs" />
-    <Compile Include="Classes\Matrix3D.cs" />
+    <Compile Include="Classes\Matrix\Matrix.cs" />
+    <Compile Include="Classes\Matrix\Matrix2D.cs" />
+    <Compile Include="Classes\Matrix\Matrix4D.cs" />
+    <Compile Include="Classes\Matrix\Matrix3D.cs" />
+    <Compile Include="Classes\Equation\PolynomialEquation.cs" />
     <Compile Include="Convert\ToMathNet\Matrix.cs" />
     <Compile Include="Convert\ToSAM\Matrix.cs" />
     <Compile Include="Create\Matrix.cs" />
