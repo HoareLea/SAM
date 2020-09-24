@@ -34,7 +34,7 @@ namespace SAM.Core
             {
                 objects = new Dictionary<string, IJSAMObject>();
 
-                foreach (IJSAMObject jSAMObject in objects.Values)
+                foreach (IJSAMObject jSAMObject in sAMLibrary.objects.Values)
                     Add(jSAMObject);
             }
         }

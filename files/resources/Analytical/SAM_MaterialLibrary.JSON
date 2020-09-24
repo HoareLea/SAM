@@ -1,12 +1,12 @@
 {
   "_type": "SAM.Core.MaterialLibrary,SAM.Core",
-  "Name": "SAM Default Material Library ver01",
-  "Guid": "7e7b809a-7c2e-43fe-9644-1f82a44e353d",
-  "Materials": [
+  "Name": "SAM Default Material Library ver02",
+  "Guid": "14610287-9f53-4bae-9508-b9ab2505cd23",
+  "Objects": [
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Concrete_SAM_1600kg/m3_0.52W/mK",
-      "Guid": "a0d71bba-1048-4257-8630-c6598bcb0c0c",
+      "Guid": "f7955850-5feb-4449-a987-ad179ab22636",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -61,7 +61,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Aluminium_2800kg/m3_160W/mK",
-      "Guid": "e5632cb2-ea36-4559-8a4f-d834baf40fbb",
+      "Guid": "969ffc7b-f36b-4eca-b54c-d5352ccbfedc",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -116,7 +116,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Asbestos_Cement_700kg/m3_0.36W/mK",
-      "Guid": "46054aec-ac8b-46d7-9f64-530c357da0c8",
+      "Guid": "265ece33-cbc7-431e-8b17-f4b2c614f9bb",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -171,7 +171,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Asphalt_2100kg/m3_0.7W/mK",
-      "Guid": "767bc6da-9da7-43dd-8b32-f483670e1945",
+      "Guid": "a0eb545f-b701-4811-8ef5-47b0b08d277e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -226,7 +226,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Bitumen_1050kg/m3_0.17W/mK",
-      "Guid": "12ae63f2-9582-48e0-8af0-5d47ade9b6f9",
+      "Guid": "02ce5cd6-ab7d-4c9c-a0fd-19501ce3dc05",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -281,7 +281,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Bitumen_1100kg/m3_0.23W/mK",
-      "Guid": "b2f3b08f-5f38-42bf-ae85-4300b6f6a794",
+      "Guid": "289a4b83-d06b-4229-a084-6ecae2fa9f34",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -336,7 +336,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Bldg paper Felt_1.23kg/m3_0.13W/mK",
-      "Guid": "9525d9d0-8130-4056-bc66-499d038b2b5b",
+      "Guid": "cdf55576-6044-4e9e-b740-e8486957c927",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -391,7 +391,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Brick_1700kg/m3_0.77W/mK",
-      "Guid": "82ae06fb-dece-4570-a30e-3099c726a85a",
+      "Guid": "feaa86f3-fd5c-433c-8b02-af10e9f31210",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -446,7 +446,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Brick_1700kg/m3_0.56W/mK",
-      "Guid": "1acbf4ff-69b6-4717-8e20-d3fd65e69e3b",
+      "Guid": "dab3d328-8683-40aa-a287-f82382aba4af",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -501,7 +501,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C02_Brick_1700kg/m3_0.56W/mK",
-      "Guid": "76221688-2ca9-4190-8fe2-0a80ecce0a7d",
+      "Guid": "5c2f6e38-025a-4cb4-bb2e-2aecdb221d57",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -556,7 +556,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C03_Brick_1700kg/m3_0.77W/mK",
-      "Guid": "a4b50119-0950-4d99-9656-6a71b780f466",
+      "Guid": "782f93fa-167d-4ed4-a969-cee06b5861dd",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -611,7 +611,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Carpet_20kg/m3_0.1W/mK",
-      "Guid": "d56d9eda-7c69-4d37-b5bb-b7e5adca68ef",
+      "Guid": "b25c89f4-26fa-4193-a9ae-3dc40848a5ae",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -666,7 +666,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Carpet & Rubber Pad_20kg/m3_0.1W/mK",
-      "Guid": "c820b029-aa21-4a14-9f58-ecb9cc342665",
+      "Guid": "02fdc621-728c-4e71-9c9f-c88cfba193e2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -721,7 +721,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Carpet_20kg/m3_0.058W/mK",
-      "Guid": "7d7fb25f-cc4f-41b2-87d0-6196b17e8cec",
+      "Guid": "f8cdf277-928b-4e32-93a6-e174fd18b721",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -776,7 +776,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Cast Concrete_2000kg/m3_1.35W/mK",
-      "Guid": "ba1823ef-8921-4c58-9a87-0bb3a8a56972",
+      "Guid": "56f11ef7-d730-42c9-be27-5edace227244",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -831,7 +831,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Ceiling tile_250kg/m3_0.09W/mK",
-      "Guid": "6542894a-3628-4473-9fd4-974769c60774",
+      "Guid": "1a2320ed-1233-400d-bed3-05b8d2b4bc44",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -886,7 +886,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Cellular Glass_1kg/m3_0.04W/mK",
-      "Guid": "f30a33a9-2310-451b-a661-18519f84236a",
+      "Guid": "27f60be6-b64f-4b6b-afb4-4937786e976d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -941,7 +941,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Cellulose_48kg/m3_0.04W/mK",
-      "Guid": "66959a44-9627-413e-90b9-576c6851d98a",
+      "Guid": "fe62b947-38a5-455f-abe7-382df73a24aa",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -996,7 +996,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Cement particleboard_1200kg/m3_0.23W/mK",
-      "Guid": "2385552d-0e7d-44a9-aa89-266705614dca",
+      "Guid": "1e1d3d45-6a54-4f2f-9105-cf4be92c5c5f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1051,7 +1051,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Ceramic Tiles_2300kg/m3_1.3W/mK",
-      "Guid": "c9e08b9b-b141-4992-be33-29d715db462f",
+      "Guid": "1d881e0c-2d0f-4be2-b733-0db9754d5d89",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1106,7 +1106,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Chipboard_500kg/m3_0.13W/mK",
-      "Guid": "3357e9c4-7122-4005-acdb-7187cb265e7c",
+      "Guid": "62aaeca4-a841-44d6-8c01-3c5effd8cf11",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1161,7 +1161,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Clay Soil_1000kg/m3_1.5W/mK",
-      "Guid": "6c051d56-356c-4504-951f-ee17e5cf9c42",
+      "Guid": "b4a7afd8-cb0f-4471-9f7a-7b33cfa86bdc",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1216,7 +1216,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Clay Underfloor_1500kg/m3_1.5W/mK",
-      "Guid": "0bb3006e-2cbd-45f0-8922-9589796844cf",
+      "Guid": "395c563a-7c03-4383-b4c0-301f4f1e4ba2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1271,7 +1271,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Cob_1700kg/m3_0.45W/mK",
-      "Guid": "8636f2d8-33f3-418d-824f-bba320dd486c",
+      "Guid": "a8ff3e3f-0ad5-4db2-a11a-d8a245c1a47e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1326,7 +1326,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Concrete HW_2243kg/m3_2W/mK",
-      "Guid": "8a3cf70f-66e2-4733-98c9-2fe0d483d4e4",
+      "Guid": "b57ad7e9-b042-453c-b7aa-ac8bac3d88b0",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1381,7 +1381,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Concrete Reinforced_2300kg/m3_2.3W/mK",
-      "Guid": "63bf4b9c-5213-4374-ad60-b4a1eccf57d5",
+      "Guid": "d254a8c7-6053-4c38-8e94-ee57daca3657",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1436,7 +1436,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Concrete Reinforced_2400kg/m3_2.5W/mK",
-      "Guid": "dbf3e179-884c-42c1-8fd2-37fce8cc7832",
+      "Guid": "42bdcab9-1daf-4862-9f29-47eeaf705c46",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1491,7 +1491,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Concrete roof tiles_2100kg/m3_1.5W/mK",
-      "Guid": "ad4a426a-ccde-49c8-a7b3-0de05a5907e3",
+      "Guid": "c2af29a7-de7b-410c-9500-17ea5c460635",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1546,7 +1546,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Concrete_roof/slab_2000kg/m3_1.35W/mK",
-      "Guid": "693df9ef-80a2-478c-aa9a-25a61a273b86",
+      "Guid": "8841e8b2-f5e2-4a47-a978-e4217fd9d5ca",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1601,7 +1601,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Concrete_1800kg/m3_1.13W/mK",
-      "Guid": "7e807d8c-450a-4c01-ab55-de431424faf8",
+      "Guid": "e81a8e8e-7412-4e66-baf1-51c7f997ab19",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1656,7 +1656,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Concrete_2000kg/m3_1.33W/mK",
-      "Guid": "ab80f2c3-5ca2-4aae-879f-7d6192606410",
+      "Guid": "a43d657c-816f-4593-8bd9-836d5fe68b38",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1711,7 +1711,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C02_Concrete_2200kg/m3_1.59W/mK",
-      "Guid": "63fccac0-d87f-4203-9ab5-85b7deca7218",
+      "Guid": "342fca0c-5cdb-4e45-85a9-c36d27589616",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1766,7 +1766,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C03_Concrete_2400kg/m3_1.93W/mK",
-      "Guid": "df199e4d-e53b-45d7-b1de-7ea4feeeebfc",
+      "Guid": "91c88b0c-1f75-4725-90d8-8160204b56d4",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1821,7 +1821,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C04_Concrete_1800kg/m3_0.96W/mK",
-      "Guid": "1bdae9f2-7f5d-4d51-b0c0-3a1a0b388fdc",
+      "Guid": "ef109177-ce58-46fb-9571-e114ce28f75d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1876,7 +1876,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_EPS_15kg/m3_0.04W/mK",
-      "Guid": "38790a64-8ddc-4265-9a0b-abca48bebb8a",
+      "Guid": "27aa9686-0ac4-463e-92c5-1e4e830ea783",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1931,7 +1931,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Expanded Clay_500kg/m3_0.1W/mK",
-      "Guid": "faa85b07-3885-47ae-8da9-513fb6423c9d",
+      "Guid": "98058d04-e04e-4765-8815-c4ff0e09ffa9",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1986,7 +1986,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Extruded polystyrene_40kg/m3_0.027W/mK",
-      "Guid": "8624d855-355b-4312-826a-527042ba3d73",
+      "Guid": "5df816ce-dee5-4e12-ac75-383912a5d0a1",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2041,7 +2041,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Extruded polystyrene_40kg/m3_0.027W/mK",
-      "Guid": "9673f9b2-1682-467e-9256-7b68e2f76c88",
+      "Guid": "8e260f54-0432-4388-807b-87cc32dabb6b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2096,7 +2096,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Felt_1121kg/m3_1W/mK",
-      "Guid": "4cc45538-808b-4682-a805-25a9cb67d810",
+      "Guid": "1d321bdd-e862-479f-99f4-19ecc0a54978",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2151,7 +2151,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Felt_1100kg/m3_0.2W/mK",
-      "Guid": "609e3047-94aa-49ea-bed9-e69c0565b619",
+      "Guid": "74eb91a2-9578-42a6-9ed3-c11286210a6d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2206,7 +2206,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Flooring Screed_1200kg/m3_0.41W/mK",
-      "Guid": "bd930019-e8d1-4eb7-8f44-11ceeb61e416",
+      "Guid": "71a4c9e4-0380-4df1-95f5-8e3dc67a8c05",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2261,7 +2261,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Glass pane_1000kg/m3_1W/mK",
-      "Guid": "60f823ab-b1c9-4c1c-9984-e412dd44a88d",
+      "Guid": "74fed6a0-64a5-4025-bf79-71e9e53c410d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2316,7 +2316,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I00_Glass wool_12kg/m3_0.04W/mK",
-      "Guid": "48b7d56d-baea-4387-ab14-f6045e737bab",
+      "Guid": "84b2ccf5-2d77-4840-95ae-2f8e0186b9df",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2371,7 +2371,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Gravel_881kg/m3_2W/mK",
-      "Guid": "dd531417-5a1e-4d28-8682-9ddadd51a449",
+      "Guid": "a63fb8c4-ae48-4994-982a-147832c38ae0",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2426,7 +2426,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Gypsym_1200kg/m3_0.43W/mK",
-      "Guid": "b5818a85-1721-47ca-9c39-e10c689623a3",
+      "Guid": "deda5c63-422f-4b01-9c9b-903654fb93c0",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2481,7 +2481,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Gypsym_600kg/m3_0.18W/mK",
-      "Guid": "f73999ab-85f8-4b99-aba1-e978255ee3bd",
+      "Guid": "6d038f61-183b-4026-8419-9d0418fbd8d8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2536,7 +2536,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C02_Gypsym_900kg/m3_0.3W/mK",
-      "Guid": "7d9c9a42-14f2-4048-ad09-83fef5153ab1",
+      "Guid": "8f59d62b-44aa-4388-914e-be662ee25f62",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2591,7 +2591,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Light aggregate block_1400kg/m3_0.57W/mK",
-      "Guid": "06cf8bc8-21f1-43ff-9004-88ce1c90d409",
+      "Guid": "919807a0-a0d6-4a66-b371-c3dc5f939cad",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2646,7 +2646,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Lightweight concrete_600kg/m3_0.22W/mK",
-      "Guid": "ada94b50-11cb-49c2-8003-4ddd23a0d61c",
+      "Guid": "762a9bd1-4355-4a68-a029-7e4f16c75707",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2701,7 +2701,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Limestone_2200kg/m3_1.7W/mK",
-      "Guid": "c697307d-0e4a-4941-879c-27955ae57daf",
+      "Guid": "b73e281c-0538-48c1-924d-36f5df7dfa3f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2756,7 +2756,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Limestone_1800kg/m3_1.1W/mK",
-      "Guid": "72f139d5-d30e-4958-85d3-cd3603e16a61",
+      "Guid": "21e0670b-e70e-418f-aef1-99abdc9e8e42",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2811,7 +2811,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Linoleum tile_1000kg/m3_0.3W/mK",
-      "Guid": "fa7ff8b1-0195-4ba5-b826-9b67bc232ce1",
+      "Guid": "86fd1a12-7f63-42c3-9039-09d495fd92aa",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2866,7 +2866,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Mild Steel_7800kg/m3_50W/mK",
-      "Guid": "e3b5e54f-508e-46c5-9407-ccb8762f0843",
+      "Guid": "149bc925-1579-4962-a5a7-232c6c3855d9",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2921,7 +2921,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I00_Mineral Wool quilt_12kg/m3_0.04W/mK",
-      "Guid": "039b58c6-e8c3-4aec-a34e-4567965e572d",
+      "Guid": "ee9b6bcb-9d02-4f1c-baa2-d95cd1845f8f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2976,7 +2976,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I00_Mineral Wool batt_25kg/m3_0.038W/mK",
-      "Guid": "d3d03061-a8d1-4bbb-ae47-dcf433d80bd0",
+      "Guid": "5f8dee68-24c9-4f59-8973-514807a93b41",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3031,7 +3031,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I01_Mineral Wool batt_24kg/m3_0.04W/mK",
-      "Guid": "d5ffda9f-741d-48b1-8941-5e872e6dcd8d",
+      "Guid": "fffeb7ac-ebf6-4852-baa8-8361e8ac2edb",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3086,7 +3086,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I02_Mineral Wool in timber frame_25kg/m3_0.038W/mK",
-      "Guid": "345e8030-ad78-4901-97f4-f5d60d481e74",
+      "Guid": "3d749f77-98b6-480d-9118-c1ea378b8e2e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3141,7 +3141,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I00_Mineral Wool_50kg/m3_0.036W/mK",
-      "Guid": "a1b5ff13-4724-46e0-9c75-472faef6622f",
+      "Guid": "200dc6ae-3c7d-40ee-9dfb-40dd9638eb0f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3196,7 +3196,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Mortar in inner leaf_1750kg/m3_0.88W/mK",
-      "Guid": "c57d97cb-6c14-42be-8f7b-ac2f0ed30217",
+      "Guid": "b1d57454-6963-4875-ba50-83c52dc22195",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3251,7 +3251,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Mortar in outer leaf_1750kg/m3_0.94W/mK",
-      "Guid": "9088a860-84c8-4fd6-a693-14225f22da3e",
+      "Guid": "672f11c7-f78c-4961-97fc-4f21ded9e928",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3306,7 +3306,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_OSB_650kg/m3_0.13W/mK",
-      "Guid": "77f55800-7a92-4113-b610-cad2a449d50e",
+      "Guid": "49a1b47d-1cd5-493b-83c8-ced0e4bcfeba",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3361,7 +3361,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_PF_30kg/m3_0.025W/mK",
-      "Guid": "76e58ce2-517b-4619-b808-95887d84ce25",
+      "Guid": "a55e748a-32df-44f1-b99f-daf580d558cc",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3416,7 +3416,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_PF_30kg/m3_0.02W/mK",
-      "Guid": "251058e9-cda8-4774-ad53-457a5be12514",
+      "Guid": "546415d8-e490-47a9-bd61-cf5dfeb0a2db",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3471,7 +3471,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C02_PF_30kg/m3_0.025W/mK",
-      "Guid": "32e3a2c8-68c6-4ab4-b0d5-8263cdda70cd",
+      "Guid": "6ffee394-68e4-4976-81ff-a1d0da86d4f1",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3526,7 +3526,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_PIR_30kg/m3_0.019W/mK",
-      "Guid": "eda52b71-0302-4647-af09-74b6ff092fcc",
+      "Guid": "09548603-29e0-4846-852b-d4bd5850f19b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3581,7 +3581,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_PIR_30kg/m3_0.023W/mK",
-      "Guid": "c1b166b1-a61b-4554-816c-6d1c2f86d651",
+      "Guid": "2865c7a8-4531-4cfe-aed0-438e476aeff2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3636,7 +3636,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Plaster_1300kg/m3_0.57W/mK",
-      "Guid": "c2b84b2d-d1f6-4d65-b0cb-f9b073734471",
+      "Guid": "8a12d312-0653-4157-834b-abdd8cf5366e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3691,7 +3691,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Plaster_600kg/m3_0.18W/mK",
-      "Guid": "3f59277d-1dc3-40d9-bb6c-cbd018abf2af",
+      "Guid": "1201b167-4ce5-40b7-9eee-87e6308984c2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3746,7 +3746,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Plasterboard_900kg/m3_0.21W/mK",
-      "Guid": "18791042-e1e4-4166-8fb8-98282a68963b",
+      "Guid": "eecdd2be-3d5e-4ff0-a812-a268b7da9472",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3801,7 +3801,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
-      "Guid": "1d22109d-20b2-4a75-8a52-7f7dfa27fb3c",
+      "Guid": "5f7c8c27-5b06-4cc0-b129-d3cd5fb92b0c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3856,7 +3856,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C02_Platerboard_900kg/m3_0.25W/mK",
-      "Guid": "813a263c-e23a-447e-9c72-8f6e6aee8449",
+      "Guid": "7465b0d3-a6a8-4a2b-ae0f-1ca579300a29",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3911,7 +3911,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Plywood_500kg/m3_0.13W/mK",
-      "Guid": "8d8e577b-c982-4558-9121-41513fd9b0ee",
+      "Guid": "903f82c7-5cf1-4f73-9cc6-c8c45e298720",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3966,7 +3966,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Polyester fibre_50kg/m3_0.04W/mK",
-      "Guid": "6f654d4c-cdd3-4a8f-ab77-43d45cec1b80",
+      "Guid": "75517c3f-db96-4497-9c83-bac54343e353",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4021,7 +4021,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Polythene_500kg/m3_0.25W/mK",
-      "Guid": "73cce7aa-1add-483d-86b6-9404e5e67a9b",
+      "Guid": "a9016644-48c4-40e0-b119-a068628a2673",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4076,7 +4076,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_PUR_30kg/m3_0.022W/mK",
-      "Guid": "d038b11c-b282-40e5-a5f0-90d28ba9682e",
+      "Guid": "3a0ec770-c7ca-499c-8826-54fe6b23606d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4131,7 +4131,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_PUR_30kg/m3_0.026W/mK",
-      "Guid": "b013200e-d493-433b-bb78-a730d7314651",
+      "Guid": "98a03949-7ab1-4fd6-931b-6c361300e9ca",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4186,7 +4186,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Render External_1300kg/m3_0.57W/mK",
-      "Guid": "078cd198-d0c2-4497-b7b1-4b6373fa3cd5",
+      "Guid": "9bd39539-ed43-4eec-b985-dafceed61ad5",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4241,7 +4241,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Rubber Tile_240kg/m3_0.055W/mK",
-      "Guid": "b711ad22-f268-42f7-9214-32a1babc1db3",
+      "Guid": "1f495e58-9e80-432d-932f-f88afbd9b3d2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4296,7 +4296,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Sandstone_2600kg/m3_2.3W/mK",
-      "Guid": "ac859bab-5bd0-4c08-9057-17633b98489d",
+      "Guid": "98cb8a2a-7b14-4b5c-a1f8-965b6534c53e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4351,7 +4351,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Sheep's wool_25kg/m3_0.04W/mK",
-      "Guid": "fe32017c-16e4-4cd0-9750-abf55e390ebe",
+      "Guid": "774c1ee3-985e-47c0-b048-5a9eb279a29c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4406,7 +4406,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Slate_1602kg/m3_1W/mK",
-      "Guid": "25f5b9fe-3fb3-4093-b0bd-5f522001a94c",
+      "Guid": "db4bab36-c77e-4b4b-a2f5-fcf36b690c9a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4461,7 +4461,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Soil_1250kg/m3_1.5W/mK",
-      "Guid": "4b15284d-7487-4c57-bb0d-3df05b5d741c",
+      "Guid": "88e0da09-3839-4671-8599-d9d98f3d482e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4516,7 +4516,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Stainless steel_7900kg/m3_17W/mK",
-      "Guid": "78143703-5451-4796-a6d6-69025f219731",
+      "Guid": "903e5296-3f47-48c7-8f26-ca2ff3b9e188",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4571,7 +4571,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Steel Siding_7689kg/m3_45W/mK",
-      "Guid": "46eceaef-a32c-4b47-a4b0-634b26987c5a",
+      "Guid": "c217c78e-6f5a-48f1-8d72-70058460fca4",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4626,7 +4626,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Stone Chippings_2000kg/m3_2W/mK",
-      "Guid": "1e0aed5b-a763-44d5-ac7a-1fb7c87e1fc1",
+      "Guid": "e4a51a0d-a2ca-4da5-9241-4cf47dc10736",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4681,7 +4681,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Stone_881kg/m3_1W/mK",
-      "Guid": "cf864149-3d6b-4db0-a601-6342957f7ba5",
+      "Guid": "4302bf4e-003e-4d0c-bc48-6c9e29f75e72",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4736,7 +4736,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Stone_2243kg/m3_2W/mK",
-      "Guid": "2c57d461-4d30-4cb6-9baa-ba8d14db2c89",
+      "Guid": "aa397a9d-b9da-485f-be46-e853ab9a2d57",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4791,7 +4791,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Straw bale_25kg/m3_0.05W/mK",
-      "Guid": "1b1df075-7de1-4107-ab34-b137357d41ed",
+      "Guid": "5f86a674-1b88-44cb-afb0-f0f56c948b62",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4846,7 +4846,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Terazzo_2243kg/m3_2W/mK",
-      "Guid": "b10e174b-4e95-485b-a98e-e468fa226c28",
+      "Guid": "251cc338-e3b2-4fca-95ef-fd497342745f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4901,7 +4901,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Timber stud_500kg/m3_0.13W/mK",
-      "Guid": "ae04c45c-cdd8-4487-b0cf-6cf6059ead3f",
+      "Guid": "e26cd793-e2ad-4a85-a092-5e3297ce5299",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4956,7 +4956,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Wool wood stlab_50kg/m3_0.13W/mK",
-      "Guid": "a94aeab4-268c-4d2c-8b99-00a074173117",
+      "Guid": "48f17c03-8cc7-4aac-a855-7e74d360b1b1",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5011,7 +5011,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Wood_593kg/m3_0.13W/mK",
-      "Guid": "e41bca96-4ba9-42b3-a6e3-20763d650799",
+      "Guid": "d131dfde-f196-489e-a25f-c0974c15eac1",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5066,7 +5066,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C01_Wood_700kg/m3_0.18W/mK",
-      "Guid": "179b1c69-8baa-4968-b9a9-3d5f3cdc1d1f",
+      "Guid": "fe8ce833-da7f-4ebf-bb5a-3c3cdf52b789",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5121,7 +5121,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C02_Wood_721kg/m3_0.18W/mK",
-      "Guid": "e8dab28f-c8ac-4b0f-bf97-11b85296fe87",
+      "Guid": "5ae233d1-9513-4620-bf0a-08b30469a75b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5176,7 +5176,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C03_Wood_500kg/m3_0.13W/mK",
-      "Guid": "36860a55-37a0-45ca-928f-bdc08131fb0c",
+      "Guid": "0d7e3542-ea7d-49e0-9dce-369c3d64c92d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5231,7 +5231,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C04_Wood_593kg/m3_0.13W/mK",
-      "Guid": "daa1e384-a59b-4bf4-8d4b-a2b46b157d12",
+      "Guid": "63429fe3-0383-4e73-8e91-3f1e1bb23f41",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5286,7 +5286,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C05_Wood_513kg/m3_0.13W/mK",
-      "Guid": "3b689c6d-a65b-416e-b8ee-bbaf228a3fe9",
+      "Guid": "26e86b65-6d3c-4e35-a9a5-06f261a95338",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5341,7 +5341,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C06_Wood_593kg/m3_0.13W/mK",
-      "Guid": "4c81c750-fe9b-40a5-9303-60a541683907",
+      "Guid": "176ddb81-8d18-4bc9-abb0-45d1d0b156cf",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5396,7 +5396,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Frame Notional building_7800kg/m3_0.176W/mK",
-      "Guid": "49d8cde0-825d-4c7d-959d-864f9b760b8b",
+      "Guid": "0a13179a-97a1-43cd-ab03-927b181ace6a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5451,7 +5451,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Hardwood_2100kg/m3_0.18W/mK",
-      "Guid": "c8851abd-7188-44d2-9233-d0fc90b2e8cc",
+      "Guid": "312269d4-69cd-42fd-bfb2-4bb4c2063e58",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5506,7 +5506,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Chipboard Flooring_500kg/m3_0.13W/mK",
-      "Guid": "992c15a5-f334-4466-a8df-baad20058d61",
+      "Guid": "69387bec-f425-467d-ab5f-45ef25af08bb",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5561,7 +5561,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Cement particleboard_1100kg/m3_0.23W/mK",
-      "Guid": "047efa24-b5af-4321-af82-8e2471b4d5d3",
+      "Guid": "19facbf4-d13b-4285-aa3d-38089f455c3a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5616,7 +5616,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Rainscreen_7800kg/m3_50W/mK",
-      "Guid": "d3474460-8831-49b9-a3c7-530d280e706f",
+      "Guid": "5293ae7d-da6b-4e1d-aa24-411a9fe2d571",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5671,7 +5671,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Screed_1800kg/m3_1.15W/mK",
-      "Guid": "a2bf8567-3841-4f62-bc24-5244415f6446",
+      "Guid": "fb904255-e479-439a-8719-e9cbee55dd73",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5726,7 +5726,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK",
-      "Guid": "cd5a6a8e-7996-4098-a1ee-9a1acc199c81",
+      "Guid": "cf53e8c6-4229-4527-8c27-81b028bf3321",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5781,7 +5781,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Concrete_2400kg/m3_2W/mK",
-      "Guid": "285e288c-abac-4496-a4f4-2682e8854941",
+      "Guid": "4dcd14bd-e9b4-4601-a8c5-9dd20a8c5531",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5836,7 +5836,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Membrane_1100kg/m3_1W/mK",
-      "Guid": "dc438379-7441-4643-a110-480aca9184e1",
+      "Guid": "b925106b-0665-474d-95cd-a7a4c494b41e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5891,7 +5891,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Steel_7800kg/m3_43W/mK",
-      "Guid": "fdc28b7e-0ad2-44e1-a083-e2a55fa2758a",
+      "Guid": "abe45498-8100-46c0-9e15-83813893ac37",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5946,7 +5946,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK",
-      "Guid": "345df9ff-88a5-4137-a887-5a045a832c98",
+      "Guid": "26e426ba-0a1e-43fd-858c-853c90cb394d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6001,7 +6001,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Concrete_2400kg/m3_2.362W/mK",
-      "Guid": "d82d3bc7-2fa4-4e97-b860-c36c9e63deac",
+      "Guid": "babb003b-e771-42f3-bb0b-2fc357e3db45",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6056,7 +6056,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_SHW or PV Panel_480kg/m3_0.01W/mK",
-      "Guid": "7ae07e45-6ac0-4254-9896-b53746e0ef9c",
+      "Guid": "e1257c92-c518-42c8-b840-014ef685cfc6",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6111,7 +6111,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I00_Glass Fibre Insulation_11.998kg/m3_0.038W/mK",
-      "Guid": "ba4b3f67-c92a-4886-bb99-4e4c5fb8914e",
+      "Guid": "2b5361cb-da6a-41c0-b7b4-4e94d88bff86",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6166,7 +6166,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Concrete Block_1842.12kg/m3_1.315W/mK",
-      "Guid": "916fe7d2-cd20-41dd-8e32-7bc7808cace3",
+      "Guid": "8aaf7565-be01-4090-a8a4-bb79cd4da713",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6221,7 +6221,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Gypsym Board_800.923kg/m3_0.161W/mK",
-      "Guid": "397aad2c-11e7-4e55-b48c-c55e7ce183ff",
+      "Guid": "41078343-e6da-438d-9a55-076ceb3277b3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6276,7 +6276,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "C00_Steel_7800kg/m3_60W/mK",
-      "Guid": "8413f99e-ea6b-4912-a378-139e8a23c848",
+      "Guid": "826378a8-511a-4a2f-9455-a96a9bb5ffd7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6331,7 +6331,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I00_Mineral Wool_700kg/m3_0.025W/mK",
-      "Guid": "3374ab64-848d-43db-9996-4259e14fb2d3",
+      "Guid": "d7a6f688-ee53-4b91-9817-df2770fd4462",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6386,7 +6386,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I01_Mineral Wool_20kg/m3_0.025W/mK",
-      "Guid": "a86d798c-207f-4712-8c79-4b1bd8e0d819",
+      "Guid": "ce5e1261-b7e6-4c3e-ba62-b13b17720811",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6441,7 +6441,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I02_Mineral Wool_40kg/m3_0.03W/mK",
-      "Guid": "00ecaf6c-a86d-45fd-a9d0-89518cf0c73a",
+      "Guid": "7e27e530-5ffe-4a98-ba82-a02081c330c3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6496,7 +6496,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "I03_Mineral Wool_43.25kg/m3_0.035W/mK",
-      "Guid": "4b84e43b-f176-4fd8-8bad-417f5397f0dc",
+      "Guid": "aaa4ec1d-fae7-4d1e-849c-4a85d0f727e9",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6551,7 +6551,7 @@
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
       "Name": "F00_WhitePaint_0.001kg/m3_999W/mK",
-      "Guid": "dc2b1d73-6607-4bca-a2b5-5a54b6b1147d",
+      "Guid": "dfd88128-391a-43e7-9f59-3ba390a3942e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6606,7 +6606,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Kr90UP_Krypton__10mm_0.934W/m2K",
-      "Guid": "98b4ed72-d5ce-4758-ad33-8cae0fe1a583",
+      "Guid": "cb5a71b0-911b-43dd-82d2-02fcd6e7b140",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6634,7 +6634,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Kr90UP_Krypton__6mm_1.5W/m2K",
-      "Guid": "8b25ac7b-9c14-43c6-aef1-0497bf409b21",
+      "Guid": "2d4381cf-1b7d-490c-9194-8c119912aa64",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6662,7 +6662,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Kr0UP_Krypton__6mm_1.899W/m2K",
-      "Guid": "2ce9aa89-a358-4602-927f-1313362edafd",
+      "Guid": "d62b2b68-60cf-4062-b8b9-710039601e29",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6690,7 +6690,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Kr90UP_Krypton__8mm_1.125W/m2K",
-      "Guid": "b88025fe-dcaa-4391-8a34-45db181e62d2",
+      "Guid": "e401a706-62d5-4120-979f-8a6071f1add5",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6718,7 +6718,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Kr0UP_Krypton__8mm_1.813W/m2K",
-      "Guid": "b3b5ab8c-f584-4346-b7b0-3bfd52366af4",
+      "Guid": "4edb1ff8-10fd-4e74-8888-2fdb8511c410",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6746,7 +6746,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Kr90UP_Krypton__12mm_0.958W/m2K",
-      "Guid": "1d4ba3e5-4975-409f-b000-a04eabed4112",
+      "Guid": "1e0de8e6-400b-4751-9a9c-6c9c0c77f541",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6774,7 +6774,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Kr0UP_Krypton__12mm_1.699W/m2K",
-      "Guid": "6802e83e-17da-46f5-a90b-7969ecce49fa",
+      "Guid": "85c18397-8b4e-4aeb-9186-8569bf5386ab",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6802,7 +6802,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Kr90UP_Krypton__16mm_0.997W/m2K",
-      "Guid": "80687220-7a0b-4288-9f17-c9fdfe994f89",
+      "Guid": "1d884951-915b-4530-9daa-fb5c3e489b23",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6830,7 +6830,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Kr90UP_Krypton__20mm_1.197W/m2K",
-      "Guid": "d6c345ae-6133-4725-9b49-b0645b4484ae",
+      "Guid": "47504d0c-a466-45c1-a5d3-eb7d570754f2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6858,7 +6858,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Kr90UP_Krypton__3mm_3W/m2K",
-      "Guid": "98b3cfa7-c0b7-456a-b7fc-60623e5e19cf",
+      "Guid": "90376b89-a7d6-4cf2-b36f-0c3886f0c2c6",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6886,7 +6886,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__6mm_4.16W/m2K",
-      "Guid": "9736204a-774f-4f60-ba74-9c6f0c114c95",
+      "Guid": "147fe87f-ceb3-4f1f-82d3-ce4c86234f7f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6914,7 +6914,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0UP_Air__6mm_4.16W/m2K",
-      "Guid": "13a43802-cf65-4247-b52e-a64f572d5c78",
+      "Guid": "a83c4713-62af-48e3-b10f-0f444d8616e8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6942,7 +6942,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__12mm_2.08W/m2K",
-      "Guid": "7d26a31d-8673-4de8-abcf-bbb62dc66d2f",
+      "Guid": "e058aa8b-045e-4c53-bdd1-33cebc278951",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6970,7 +6970,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0UP_Air__12mm_3.168W/m2K",
-      "Guid": "28ed23a1-3a01-43d3-be5b-e0844a2335c6",
+      "Guid": "04d3631b-dad3-4d18-8744-cee2f9341a61",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -6998,7 +6998,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__16mm_1.614W/m2K",
-      "Guid": "84055671-97e9-4d51-bb72-e4011bbf4cb1",
+      "Guid": "fe9605a1-7741-46fb-a597-b576d48071f4",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7026,7 +7026,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0UP_Air__16mm_3.026W/m2K",
-      "Guid": "6281f8c6-5960-45b3-98d9-da57dcf38bfa",
+      "Guid": "381ae404-bf9f-4f7d-a239-2a04c3cc37b4",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7054,7 +7054,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__20mm_1.665W/m2K",
-      "Guid": "f49b66ba-336e-4437-a20a-4135259e3333",
+      "Guid": "fa36a0e9-d113-45b5-a131-e552ca38ff6d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7082,7 +7082,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__200mm_2.298W/m2K",
-      "Guid": "8d5c4428-12d0-4671-9db1-3883de75c585",
+      "Guid": "ce39a7c8-dcdf-495c-827d-d19ddc33b8a2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7110,7 +7110,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__24mm_1.708W/m2K",
-      "Guid": "317c1332-2433-4c56-b635-6d8c8f282d80",
+      "Guid": "594f0657-b1fc-40b8-9586-2841f1f0cacd",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7138,7 +7138,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__30mm_1.762W/m2K",
-      "Guid": "6efb5c3a-e57d-40ad-9457-a35773cd0c64",
+      "Guid": "75ff5f94-37e2-4b89-b738-3b86b8c7a2ce",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7166,7 +7166,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0UP_Air__15mm_1.95W/m2K",
-      "Guid": "c397773d-ed77-443b-874a-310a65892f18",
+      "Guid": "a7803ba5-cf03-496b-b517-afb71907badd",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7194,7 +7194,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__17mm_1.471W/m2K",
-      "Guid": "dcd48255-40cd-4c73-8f42-bca65760d115",
+      "Guid": "0fd9446f-1ea5-4f39-b3be-5148c453b92e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7222,7 +7222,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0UP_Air__25mm_1.95W/m2K",
-      "Guid": "75f5b7b0-52a0-4f28-9b9a-33a36f77e0cd",
+      "Guid": "757570d6-97f2-491d-a8e3-fb3e92ffc1b9",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7250,7 +7250,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__25mm_1.25W/m2K",
-      "Guid": "0a2eaade-b452-49ab-8a32-de3334dc643d",
+      "Guid": "4df8e8c3-36a2-4d5c-b85e-93c2e215da9c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7278,7 +7278,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0Dn_Air__25mm_1W/m2K",
-      "Guid": "b286ba38-94dc-49a3-8a1d-96accc41bc34",
+      "Guid": "e9f5af82-b23f-407e-a869-9f27be4c9b62",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7306,7 +7306,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0Dn_Air__35mm_0.714W/m2K",
-      "Guid": "f3c8b35e-ef16-4379-9f2e-7842f8f4106f",
+      "Guid": "7077bdfe-71f4-4830-9be1-3c6f7820cb24",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7334,7 +7334,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0Dn_Air__50mm_0.5W/m2K",
-      "Guid": "e207599d-af9b-4259-af9b-9853029c9ed9",
+      "Guid": "9c43557b-961f-4271-8269-85e58950258b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7362,7 +7362,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0UP_Air__50mm_1.95W/m2K",
-      "Guid": "93472b2f-f0c8-412e-8655-c464633b2921",
+      "Guid": "66ed1896-aa4e-4f37-b7e9-e4ad4018ad77",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7390,7 +7390,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__50mm_1.25W/m2K",
-      "Guid": "afe01313-cf08-4e5c-910a-09dffc568857",
+      "Guid": "d438f25e-dda1-48b6-80be-e080004fbcb5",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7418,7 +7418,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0Dn_Air__7mm_3.571W/m2K",
-      "Guid": "920541d9-b5fa-4f80-a492-dcd22a93311f",
+      "Guid": "01d6a401-d904-410b-8bbe-f20a0d190261",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7446,7 +7446,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__400mm_1.95W/m2K",
-      "Guid": "a52f0a6d-4d28-4843-9ca2-652e39d86416",
+      "Guid": "4c7882d0-4c9a-4a5e-9c0b-e074cf882c0a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7474,7 +7474,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90UP_Air__1000mm_3.333W/m2K",
-      "Guid": "0c3a0a52-1c91-45f6-9781-22ed94877633",
+      "Guid": "db6b24f0-95e3-40cb-ad2f-7e61752c8ad2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7502,7 +7502,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0Dn_Air__400mm_0.18W/m2K",
-      "Guid": "37f0b5ad-2baa-4002-8a49-93e3902d9477",
+      "Guid": "cbea5c94-15eb-4c77-bd9b-50d58aaf1c43",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7530,7 +7530,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar0UP_Air__200mm_1.95W/m2K",
-      "Guid": "78cf64d4-60fa-45cb-9a19-549108787984",
+      "Guid": "f17a77b2-a8d0-4ef9-8cbd-8cc8a44a6cc3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7558,7 +7558,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ag90UP_Argon__12mm_1.403W/m2K",
-      "Guid": "4a69ae1a-6b07-4476-9266-a595102409e2",
+      "Guid": "f917b23c-ac1f-4173-8b89-81ba8a85b6e9",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7586,7 +7586,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ag0UP_Argon__12mm_2.24W/m2K",
-      "Guid": "1162ed8d-ca8c-452d-9788-0cdeb20da22a",
+      "Guid": "d8da1603-1f8c-4086-9775-9d881a6f5991",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7614,7 +7614,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ag90UP_Argon__16mm_1.16W/m2K",
-      "Guid": "28e2122b-1f93-4eeb-88bf-4d5c9834a0ce",
+      "Guid": "8e6763e2-854b-42a8-95de-457b280a7bde",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7642,7 +7642,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ag0UP_Argon__16mm_2.139W/m2K",
-      "Guid": "e8c8df89-c777-4f75-8484-645c0967e29c",
+      "Guid": "2afea2a2-e14d-4f09-a35b-0776ecbbd418",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7670,7 +7670,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ag90UP_Argon__20mm_1.197W/m2K",
-      "Guid": "5b27e50e-0dd3-4a03-afaa-2d0b783992e4",
+      "Guid": "7626ebfe-8871-4c26-af66-16c60e12e1d6",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7698,7 +7698,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ag0UP_Argon__20mm_2.064W/m2K",
-      "Guid": "0735728a-2652-486c-ba06-5164edf2de6f",
+      "Guid": "f1b5eb9a-69c1-498e-ac89-28c292d50631",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7726,7 +7726,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ag90UP_Argon__6mm_2.807W/m2K",
-      "Guid": "d8e8d2da-4aa0-4931-8515-fd047b009288",
+      "Guid": "9cc4451c-2b32-4e5e-96aa-56559770c0e2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7754,7 +7754,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ag0UP_Argon__6mm_2.807W/m2K",
-      "Guid": "83e16ce9-e545-4ffa-aa11-47625526f09a",
+      "Guid": "bc52a4e3-a828-453d-b847-dd21808ae14f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7782,7 +7782,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "CO290UP_CO2__12mm_2.08W/m2K",
-      "Guid": "cb3a7714-a4a4-46b8-890c-6a7e14f060d8",
+      "Guid": "5848d8be-6b50-445b-a15f-cbc363ecf1ad",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7810,7 +7810,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "CO290UP_CO2__16mm_1.614W/m2K",
-      "Guid": "49e44a87-6546-4339-93a4-d607c4868170",
+      "Guid": "0eb97d7c-e188-46e5-8697-dc1df0fac097",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7838,7 +7838,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "CO290UP_CO2__20mm_1.665W/m2K",
-      "Guid": "a54ea548-d4ed-4e28-be64-668abe3687ff",
+      "Guid": "63c40eca-f386-4832-aadd-a6b461cacb0c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7866,7 +7866,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "CO290UP_CO2__6mm_4.16W/m2K",
-      "Guid": "8344cf76-c63b-412c-b132-935652d2c8f1",
+      "Guid": "7a85ad80-ffd9-4c0a-859f-799f5acb30f6",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7894,7 +7894,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "SF690UP_SF6__12mm_3.165W/m2K",
-      "Guid": "80ab060a-c231-4812-a40b-0f49040db07f",
+      "Guid": "5ea91792-f9b1-44ab-89ef-15db22ecee92",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7922,7 +7922,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "SF690UP_SF6__16mm_3.296W/m2K",
-      "Guid": "b4d6b1cb-be89-40b2-81e9-c9ffef2cd02e",
+      "Guid": "2e238c9c-0abb-4795-add8-5ad639ce3329",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7950,7 +7950,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "SF690UP_SF6__20mm_3.4W/m2K",
-      "Guid": "19bc2fc7-ab77-496b-a512-00cfb8452e56",
+      "Guid": "33cc3fcc-6d7b-4858-a767-098e19babdc8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -7978,7 +7978,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "SF690UP_SF6__6mm_2.873W/m2K",
-      "Guid": "66076feb-60c0-4e39-b12a-5753d67767df",
+      "Guid": "8b86aab6-3e24-4f2f-89eb-19f26c4b10a0",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8006,7 +8006,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ag90Up_Argon__8.85mm_1.9W/m2K",
-      "Guid": "8473eccd-e0e6-4dd6-9033-44eeb269aa51",
+      "Guid": "f490753a-3c49-4d54-8853-0ba887763667",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8034,7 +8034,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
-      "Guid": "3f524aad-cd02-4c53-92a3-9a239d0bef0c",
+      "Guid": "02129f0a-35c4-486c-9c44-5a2f5a2b820d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8062,7 +8062,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90Up_Air__50mm_1.25W/m2K",
-      "Guid": "ffaf2a4e-fe00-44c2-bcc4-0e25947deff4",
+      "Guid": "645e1123-29b3-4400-81d2-eefadb7256bb",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8090,7 +8090,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ar90Up_Air__50mm_1.95W/m2K",
-      "Guid": "950c3328-72f0-4ed3-aee9-f06ac1052a78",
+      "Guid": "e642dc3f-22df-456b-bd60-e63742af3139",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8118,7 +8118,7 @@
     {
       "_type": "SAM.Core.GasMaterial,SAM.Core",
       "Name": "Ag90Up_Argon__11.38mm_1.48W/m2K",
-      "Guid": "4f5ff725-5e3b-4279-9206-02faf5e10d87",
+      "Guid": "0dbec164-a30c-41c5-ae70-4556aa980e7a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8146,7 +8146,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "S00_Pilkington66/33_g0.82_Lt0.9",
-      "Guid": "792485e1-fb99-49af-92a7-b2fdba7c685a",
+      "Guid": "6a27cd90-8569-46af-9045-346ff3d4aca8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8207,7 +8207,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Bronze-tinted glass_g0.33_Lt0.38",
-      "Guid": "785ffd85-0ff9-4040-b362-94b1622b2e5a",
+      "Guid": "1799e186-f499-44ed-b3ff-35c43745de8d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8268,7 +8268,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Bronze-tinted glass_g0.65_Lt0.69",
-      "Guid": "d83ad6cd-348f-41ce-8314-96e1e430fc1f",
+      "Guid": "3847738a-45be-4d3c-a972-67d2493a5716",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8329,7 +8329,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Bronze-tinted glass_g0.48_Lt0.53",
-      "Guid": "21586687-1242-42fc-ae9f-eef1e1ca665d",
+      "Guid": "e0c20854-cbe7-4080-aeb0-df71e2754875",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8390,7 +8390,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "C_Clear glass_g0.74_Lt0",
-      "Guid": "ec848be1-d314-4003-86b2-d7b295ffa9b7",
+      "Guid": "102771bc-16a7-404f-b473-3aadb60fd2d7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8451,7 +8451,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "C_Clear glass_g0.65_Lt0.84",
-      "Guid": "8d977022-deef-468b-bf6f-b1b7e4c0803e",
+      "Guid": "193a7156-476e-4452-81e1-007a9448a9c7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8512,7 +8512,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "C_Clear glass_g0.85_Lt0.9",
-      "Guid": "1ba72412-e29c-4e25-9c30-c809d79718b9",
+      "Guid": "a026586f-0406-4d65-ad82-fcab4819e660",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8573,7 +8573,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "C_Clear glass_g0.84_Lt0.9",
-      "Guid": "9bc09ed5-7fcd-4475-b2ff-14ae622ba14d",
+      "Guid": "2618835a-0bc4-4964-8ed2-8ea0429080f7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8634,7 +8634,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "C_Clear glass_g0.82_Lt0.89",
-      "Guid": "c10ebd8c-dc56-4e58-83e7-b65c15cef041",
+      "Guid": "8988e780-dd9e-427c-a1d1-276199aaaf09",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8695,7 +8695,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "C_Clear glass_g0.78_Lt0.88",
-      "Guid": "031449cf-ab06-4a8f-b50c-def6b4485076",
+      "Guid": "8d1132e6-5ccd-4049-bf8d-4d3bdc3e1725",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8756,7 +8756,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "C_Clear glass_g0.79_Lt0",
-      "Guid": "3e11ae8b-ce93-4e96-9d15-1f92d7e7a1cd",
+      "Guid": "2ac318bd-814c-4413-86a2-8df40b8b276c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8817,7 +8817,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Glass_g0.56_Lt0",
-      "Guid": "a9facce9-4614-42a6-8e60-cbc3079af5db",
+      "Guid": "ee098b9a-3686-4e62-bcf6-6fa987e0df54",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8878,7 +8878,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Glass_g0.62_Lt0.85",
-      "Guid": "00b4056d-3bfb-4a72-a3af-dae0b09634c0",
+      "Guid": "c4e9ec9d-c404-446a-b4d1-bad065809761",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -8939,7 +8939,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Glass_g0.81_Lt0.85",
-      "Guid": "61249eee-e197-4409-8b2f-1e1ab7d29d05",
+      "Guid": "7b65b301-9ad7-4055-9fa6-d7db5a15bc25",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9000,7 +9000,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Glass_g0.6_Lt0.84",
-      "Guid": "74d4a95b-4144-45ba-a21a-8ff4ab9dae90",
+      "Guid": "694c997d-14cb-47ea-b211-7c916de07c0a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9061,7 +9061,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Grey-tinted glass_g0.63_Lt0.61",
-      "Guid": "23400d8e-f351-40e9-9951-34e4af3cb654",
+      "Guid": "c7d6b2b6-a100-4f0c-a89c-2fcbed068694",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9122,7 +9122,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Grey-tinted glass_g0.46_Lt0.43",
-      "Guid": "d7b91a07-ff7f-44da-9aeb-d7bc7ad4aa64",
+      "Guid": "0a24c182-5a94-488a-8d0a-09f22749d9e0",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9183,7 +9183,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Tinted glass_g0.57_Lt0.63",
-      "Guid": "1e03a7e1-1fff-4ae1-a017-6105605cd82b",
+      "Guid": "8e8fd0c7-0f7e-41dc-b13b-3905a68ca47b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9244,7 +9244,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Tinted glass_g0.47_Lt0.53",
-      "Guid": "d8d09ea1-aaab-41e5-b1e3-cc49a74fc167",
+      "Guid": "75b7b5e2-d976-4aa2-b945-116f8c1b942a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9305,7 +9305,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Frame Wood_g0_Lt0",
-      "Guid": "6069e283-b5ba-4aae-838a-82bc3bc7d9a6",
+      "Guid": "acdb0bfd-dc6a-40e0-b3cf-a476162a0e31",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9366,7 +9366,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Frame Metal_g0_Lt0",
-      "Guid": "90cd3854-3256-4a4b-82fd-44c1fa4f6e47",
+      "Guid": "428942c4-dc7b-4073-a051-1d7bfce32c01",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9427,7 +9427,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Frame Plastic_g0_Lt0",
-      "Guid": "b1344646-7555-47a3-9efd-f0ef26abfb8e",
+      "Guid": "ebfc13ab-ae99-4643-a858-8f3b593589f2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9488,7 +9488,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Glazing Inner Pane_g0.78_Lt0.89",
-      "Guid": "b277e0e8-40f1-455b-9cc0-a8fa4e58f7da",
+      "Guid": "18abc31b-b385-437b-8391-eca509a4bfea",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9549,7 +9549,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Side Lit Glazing Outer Pane_g0.41_Lt0.9",
-      "Guid": "f65a9300-4d7c-49c5-9b77-dcb37ea71337",
+      "Guid": "25d3a290-c77e-4f22-9424-fa4c0d67bc4a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9610,7 +9610,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "_Roof Lit Glazing Outer Pane_g0.58_Lt0.67",
-      "Guid": "068e2e35-7194-4fce-aad8-e2cbfd8a870a",
+      "Guid": "769b413d-d33b-4f69-b2b3-a2a885ef4740",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -9671,7 +9671,7 @@
     {
       "_type": "SAM.Core.TransparentMaterial,SAM.Core",
       "Name": "B00_Soltis-ferrari-92-1010_g0.25_Lt0.1",
-      "Guid": "1be76c54-638a-4ee7-bd56-85dc12f73305",
+      "Guid": "e4cf0903-0b91-4640-ad25-68f43b9151df",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
