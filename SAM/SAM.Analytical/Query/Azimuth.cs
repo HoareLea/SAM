@@ -2,6 +2,11 @@
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Azimuth of the panel expressed in degrees. Reference direction for calculated Azimuth i WorldY
+        /// </summary>
+        /// <param name="panel">Panel</param>
+        /// <returns>Azimuth expressed in degrees</returns>
         public static double Azimuth(this Panel panel)
         {
             if (panel == null)
