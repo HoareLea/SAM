@@ -20,7 +20,7 @@ namespace SAM.Core.Grasshopper
         /// AboutInfo
         /// </summary>
         public SAMCoreLogToFile()
-          : base("SAM.LogToFile", "SAM.LogToFile",
+          : base("LogToFile", "LogToFile",
               "Save SAM Log",
               "SAM", "Core")
         {
