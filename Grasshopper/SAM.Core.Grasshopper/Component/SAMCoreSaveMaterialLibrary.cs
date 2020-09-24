@@ -4,12 +4,15 @@ using System;
 
 namespace SAM.Core.Grasshopper
 {
+    [Obsolete("Obsolete since 2020-09-24")]
     public class SAMCoreSaveMaterialLibrary : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
         public override Guid ComponentGuid => new Guid("c327b43f-e2bd-458f-91a4-bfea48f42b68");
+
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         /// <summary>
         /// Provides an Icon for the component.

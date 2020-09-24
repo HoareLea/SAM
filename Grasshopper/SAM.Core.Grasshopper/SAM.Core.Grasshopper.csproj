@@ -91,7 +91,7 @@
     <Compile Include="Component\SAMCoreCreateTransparentMaterial.cs" />
     <Compile Include="Component\SAMCoreCreateOpaqueMaterial.cs" />
     <Compile Include="Component\SAMCoreCreateGasMaterial.cs" />
-    <Compile Include="Component\SAMCoreSaveLog.cs" />
+    <Compile Include="Component\SAMCoreLogToFile.cs" />
     <Compile Include="Component\SAMVersion.cs" />
     <Compile Include="Component\SAMCoreColorToUint.cs" />
     <Compile Include="Component\SAMCoreRemoveGroup.cs" />

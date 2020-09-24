@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreSaveLog : GH_SAMComponent
+    public class SAMCoreLogToFile : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,8 +19,8 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// AboutInfo
         /// </summary>
-        public SAMCoreSaveLog()
-          : base("SAM.SaveLog", "SAM.SaveLog",
+        public SAMCoreLogToFile()
+          : base("SAM.LogToFile", "SAM.LogToFile",
               "Save SAM Log",
               "SAM", "Core")
         {
