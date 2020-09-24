@@ -216,6 +216,16 @@ namespace SAM.Analytical
             }
         }
 
+        public double GetTilt()
+        {
+            return Query.Tilt(this);
+        }
+
+        public double GetAzimuth()
+        {
+            return Query.Azimuth(this);
+        }
+
         public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
         {
             planarBoundary3D.Snap(point3Ds, maxDistance);
