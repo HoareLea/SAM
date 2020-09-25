@@ -40,6 +40,30 @@
             return UniqueName(apertureType, name, id);
         }
 
+        public static string UniqueName(this Construction construction, int id = -1)
+        {
+            if (construction == null)
+                return null;
+
+            string name = construction.Name;
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            return UniqueName(construction.PanelType(), name, id);
+        }
+
+        public static string UniqueName(this ApertureConstruction apertureCondtruction, int id = -1)
+        {
+            if (apertureCondtruction == null)
+                return null;
+
+            string name = apertureCondtruction.Name;
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            return UniqueName(apertureCondtruction.ApertureType, name, id);
+        }
+
         public static string UniqueName(this PanelType panelType, string name, int id = -1)
         {
             if (string.IsNullOrWhiteSpace(name))
