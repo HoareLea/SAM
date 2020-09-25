@@ -201,11 +201,11 @@ namespace SAM.Analytical
             construction.SetPanelType(PanelType.UndergroundWall);
             result.Add(Name.Construction_UndergroundWall, construction);
 
-            construction = new Construction(new System.Guid("5c3039ff-c4af-4953-bbf0-5c84bdd8044c"), "SIM_EXT_SLD", Create.ConstructionLayers("F00_WhitePaint_0.001kg/m3_999W/mK", 0.0001, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "C00_Cement particleboard_1200kg/m3_0.23W/mK", 0.012, "I01_Mineral Wool_20kg/m3_0.025W/mK", 0.08, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Rainscreen_7800kg/m3_50W/mK", 0.003));
+            construction = new Construction(new System.Guid("5c3039ff-c4af-4953-bbf0-5c84bdd8044c"), "SIM_EXT_SLD", Create.ConstructionLayers("F00_WhitePaint_0.001kg/m3_999W/mK", 0.0001, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Cement particleboard_1200kg/m3_0.23W/mK", 0.012, "I01_Mineral Wool_20kg/m3_0.025W/mK", 0.08, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Rainscreen_7800kg/m3_50W/mK", 0.003));
             construction.SetPanelType(PanelType.Wall);
             result.Add(Name.Construction_Wall, construction);
 
-            construction = new Construction(new System.Guid("8f424c58-6570-4b9b-b753-e7584b7b4494"), "SIM_EXT_SLD", Create.ConstructionLayers("F00_WhitePaint_0.001kg/m3_999W/mK", 0.0001, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "C00_Cement particleboard_1200kg/m3_0.23W/mK", 0.012, "I01_Mineral Wool_20kg/m3_0.025W/mK", 0.08, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Rainscreen_7800kg/m3_50W/mK", 0.003));
+            construction = new Construction(new System.Guid("8f424c58-6570-4b9b-b753-e7584b7b4494"), "SIM_EXT_SLD", Create.ConstructionLayers("F00_WhitePaint_0.001kg/m3_999W/mK", 0.0001, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Cement particleboard_1200kg/m3_0.23W/mK", 0.012, "I01_Mineral Wool_20kg/m3_0.025W/mK", 0.08, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Rainscreen_7800kg/m3_50W/mK", 0.003));
             construction.SetPanelType(PanelType.WallExternal);
             result.Add(Name.Construction_WallExternal, construction);
 
