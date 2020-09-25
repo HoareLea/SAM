@@ -24,5 +24,25 @@ namespace SAM.Analytical
 
             return construction.Add(parameterSet);
         }
+
+        public static bool SetPanelType(this Construction construction, PanelType panelType, Setting setting)
+        {
+            if (construction == null)
+                return false;
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string parameterName = Query.ParameterName_PanelType(setting);
+
+            string value = panelType.ToString();
+
+            if (construction.SetParameter(assembly, parameterName, value))
+                return true;
+
+            ParameterSet parameterSet = new ParameterSet(assembly);
+            if (!parameterSet.Add(parameterName, value))
+                return false;
+
+            return construction.Add(parameterSet);
+        }
     }
 }
