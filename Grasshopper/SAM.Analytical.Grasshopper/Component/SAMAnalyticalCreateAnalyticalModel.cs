@@ -102,7 +102,7 @@ namespace SAM.Analytical.Grasshopper
                     adjacencyCluster.AddObject(panel);
             }
 
-            MaterialLibrary materialLibrary = null;
+            Core.MaterialLibrary materialLibrary = null;
             dataAccess.GetData(5, ref materialLibrary);
 
             if (materialLibrary == null)

@@ -4,7 +4,7 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static MaterialLibrary MaterialLibrary(string path, string name = null, int namesIndex = 0, int headerCount = 7)
+        public static Core.MaterialLibrary MaterialLibrary(string path, string name = null, int namesIndex = 0, int headerCount = 7)
         {
             if (string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
                 return null;
@@ -22,7 +22,7 @@ namespace SAM.Analytical
             if (name == null)
                 name = System.IO.Path.GetFileNameWithoutExtension(path);
 
-            MaterialLibrary result = new MaterialLibrary(name);
+            Core.MaterialLibrary result = new Core.MaterialLibrary(name);
 
             int count = delimitedFileTable.Count;
             if (count == 0)

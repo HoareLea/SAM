@@ -9,13 +9,13 @@ namespace SAM.Analytical
         /// </summary>
         /// <returns name="MaterialLibrary"> Default SAM MaterialLibrary</returns>
         /// <search>Default SAM Analytical Construction, PanelType</search> 
-        public static MaterialLibrary DefaultMaterialLibrary()
+        public static Core.MaterialLibrary DefaultMaterialLibrary()
         {
             string path = DefaultMaterialLibraryPath();
             if (string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
                 return null;
 
-            MaterialLibrary result = Core.Create.MaterialLibrary(path);
+            Core.MaterialLibrary result = Core.Create.MaterialLibrary(path);
 
             return result;
         }
