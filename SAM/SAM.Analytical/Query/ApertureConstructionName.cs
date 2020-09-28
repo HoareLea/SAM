@@ -4,7 +4,7 @@
     {
         public static string ApertureConstructionName(this ApertureType apertureType, bool external = true)
         {
-            ApertureConstruction apertureConstruction = ApertureConstruction(apertureType, external);
+            ApertureConstruction apertureConstruction = DefaultApertureConstruction(apertureType, external);
             if (apertureConstruction == null)
                 return null;
 

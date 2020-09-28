@@ -76,7 +76,7 @@ namespace SAM.Analytical
                     return null;
             }
 
-            return ApertureConstruction(apertureType_Temp, external);
+            return DefaultApertureConstruction(apertureType_Temp, external);
         }
     }
 }
