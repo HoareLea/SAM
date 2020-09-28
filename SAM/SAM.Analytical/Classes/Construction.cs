@@ -46,7 +46,13 @@ namespace SAM.Analytical
         public Construction(Construction construction)
             : base(construction)
         {
-            constructionLayers = construction.constructionLayers?.ConvertAll(x => x.Clone());
+            constructionLayers = construction?.constructionLayers?.ConvertAll(x => x.Clone());
+        }
+
+        public Construction(Construction construction, Guid guid)
+            : base(construction, guid)
+        {
+            constructionLayers = construction?.constructionLayers?.ConvertAll(x => x.Clone());
         }
 
         public Construction(Construction construction, string name)
