@@ -97,7 +97,14 @@ namespace SAM.Analytical.Grasshopper
                             continue;
 
                         aperture_New = new Aperture(aperture_Old, apertureConstruction);
+
+                        if (aperture_New == null)
+                            continue;
+
                         apertures_Result.Add(aperture_New);
+
+                        panel.RemoveAperture(aperture_Old.Guid);
+                        panel.AddAperture(aperture_New);
                     }
 
                     if (aperture_New == null)

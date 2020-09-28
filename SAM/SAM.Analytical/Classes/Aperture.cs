@@ -46,7 +46,7 @@ namespace SAM.Analytical
         }
 
         public Aperture(Aperture aperture, ApertureConstruction apertureConstruction)
-            :base(aperture, apertureConstruction)
+            :base(aperture.Name, aperture, apertureConstruction)
         {
             planarBoundary3D = new PlanarBoundary3D(aperture.planarBoundary3D);
         }
