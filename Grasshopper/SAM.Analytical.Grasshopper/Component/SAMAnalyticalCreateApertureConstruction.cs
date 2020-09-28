@@ -48,8 +48,8 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddParameter(gooConstructionLayerParam, "paneConstructionLayers_", "paneConstructionLayers_", "SAM Pane Contruction Layers", GH_ParamAccess.list);
 
             gooConstructionLayerParam = new GooConstructionLayerParam();
-            gooConstructionLayerParam.Optional = true;
-            inputParamManager.AddParameter(gooConstructionLayerParam, "_frameConstructionLayers_", "_frameConstructionLayers_", "SAM Frame Contruction Layers", GH_ParamAccess.list);
+            gooConstructionLayerParam.PersistentData.AppendRange(apertureConstruction.FrameConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
+            inputParamManager.AddParameter(new GooConstructionLayerParam(), "frameConstructionLayers_", "frameConstructionLayers_", "SAM Frame Contruction Layers", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -106,7 +106,11 @@ namespace SAM.Analytical.Grasshopper
             }
 
             objectWrappers = new List<GH_ObjectWrapper>();
-            dataAccess.GetDataList(3, objectWrappers);
+            if (!dataAccess.GetDataList(3, objectWrappers))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
             List<ConstructionLayer> frameConstructionLayers = null;
 

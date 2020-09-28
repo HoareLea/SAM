@@ -75,6 +75,7 @@ namespace SAM.Analytical
             public const string GasMaterial_SulfurHexaFluoride = "GasMaterial_SulfurHexaFluoride";
 
             public const string FileName_DefaultMaterialLibrary = "FileName_DefaultMaterialLibrary";
+            public const string FileName_DefaultConstructions = "FileName_DefaultConstructions";
         }
 
         private static Setting setting = Load();
@@ -237,7 +238,8 @@ namespace SAM.Analytical
             result.Add(Name.GasMaterial_SulfurHexaFluoride, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Sulfur HexaFluoride Gas", "Sulfur HexaFluoride (SF6) [EN 673:1997 Table 1 - Gas Properties]", "SulfurHexa Fluoride Material with properties at 10°C", 0.01275, 6.36, 614, 1.459e-5));
 
             result.Add(Name.FileName_DefaultMaterialLibrary, "SAM_MaterialLibrary.JSON");
-            
+            result.Add(Name.FileName_DefaultConstructions, "SAM_Constructions.JSON");
+
             return result;
         }
     }
