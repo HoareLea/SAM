@@ -80,9 +80,10 @@ namespace SAM.Analytical.Grasshopper
                 if (materialLibrary == null)
                     materialLibrary = Analytical.Query.DefaultMaterialLibrary();
 
-                for (int i = 0; i < names.Count - thicknesses.Count; i++)
+                int count = thicknesses.Count;
+                for (int i = 0; i < names.Count - count; i++)
                 {
-                    IMaterial material = materialLibrary.GetObject<IMaterial>(names[i + thicknesses.Count]);
+                    IMaterial material = materialLibrary.GetObject<IMaterial>(names[i + count]);
                     if(material == null)
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
