@@ -4,7 +4,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static ApertureConstruction ApertureConstruction(this ApertureType apertureType, bool external = true)
+        public static ApertureConstruction DefaultApertureConstruction(this ApertureType apertureType, bool external = true)
         {
             Setting setting = ActiveSetting.Setting;
 
@@ -33,15 +33,15 @@ namespace SAM.Analytical
             return apertureConstruction;
         }
 
-        public static ApertureConstruction ApertureConstruction(this Panel panel, ApertureType apertureType)
+        public static ApertureConstruction DefaultApertureConstruction(this Panel panel, ApertureType apertureType)
         {
             if (panel == null)
                 return null;
 
-            return ApertureConstruction(panel.PanelType, apertureType);
+            return DefaultApertureConstruction(panel.PanelType, apertureType);
         }
 
-        public static ApertureConstruction ApertureConstruction(this PanelType panelType, ApertureType apertureType)
+        public static ApertureConstruction DefaultApertureConstruction(this PanelType panelType, ApertureType apertureType)
         {
             ApertureType apertureType_Temp = apertureType;
 

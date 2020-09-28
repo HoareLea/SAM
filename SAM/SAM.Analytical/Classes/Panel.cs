@@ -645,6 +645,20 @@ namespace SAM.Analytical
             return false;
         }
 
+        public Aperture GetAperture(Guid guid)
+        {
+            if (apertures == null || apertures.Count == 0)
+                return null;
+
+            for (int i = 0; i < apertures.Count; i++)
+            {
+                if (apertures[i].Guid.Equals(guid))
+                    return new Aperture(apertures[i]);
+            }
+
+            return null;
+        }
+
         public bool HasAperture(Guid guid)
         {
             if (apertures == null || apertures.Count == 0)

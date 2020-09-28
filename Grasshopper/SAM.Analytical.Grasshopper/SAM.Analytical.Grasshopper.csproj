@@ -117,6 +117,7 @@
     <Compile Include="Component\SAMAnalyticalDefaultGasType.cs" />
     <Compile Include="Component\SAMAnalyticalNormals.cs" />
     <Compile Include="Component\SAMAnalyticalCheck.cs" />
+    <Compile Include="Component\SAMAnalyticalSetApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster_Obsolete.cs" />

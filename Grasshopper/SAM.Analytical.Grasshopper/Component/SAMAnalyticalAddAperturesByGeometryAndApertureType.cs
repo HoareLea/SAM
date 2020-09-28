@@ -152,7 +152,7 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
                 {
-                    ApertureConstruction apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, apertureType);
+                    ApertureConstruction apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, apertureType);
 
                     Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
                     if (aperture != null)
@@ -210,7 +210,7 @@ namespace SAM.Analytical.Grasshopper
                         if (!panel.ApertureHost(tuple.Item2, minArea, maxDistance))
                             continue;
 
-                        ApertureConstruction apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, apertureType);
+                        ApertureConstruction apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, apertureType);
 
                         if (apertureConstruction_Temp == null)
                             continue;

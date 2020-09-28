@@ -87,7 +87,7 @@ namespace SAM.Analytical.Grasshopper
 
                 ApertureConstruction apertureConstruction_Temp = apertureConstruction;
                 if (apertureConstruction_Temp == null)
-                    apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel, ApertureType.Window);
+                    apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
 
                 Aperture aperture = panel.AddAperture(apertureConstruction_Temp, ratio);
 
@@ -129,7 +129,7 @@ namespace SAM.Analytical.Grasshopper
 
                     ApertureConstruction apertureConstruction_Temp = apertureConstruction;
                     if (apertureConstruction_Temp == null)
-                        apertureConstruction_Temp = Analytical.Query.ApertureConstruction(panel_New, ApertureType.Window);
+                        apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel_New, ApertureType.Window);
 
                     Aperture aperture = panel_New.AddAperture(apertureConstruction_Temp, ratio);
                     if (aperture == null)
