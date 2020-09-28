@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -33,9 +34,16 @@ namespace SAM.Analytical.Grasshopper
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
-        {           
+        {
+            int index = -1;
+            
             inputParamManager.AddTextParameter("_names", "_names", "Contruction Layer Name", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("_thicknesses", "_thicknesses", "Contruction Layer Thicknesses", GH_ParamAccess.list);
+            index = inputParamManager.AddNumberParameter("_thicknesses_", "_thicknesses_", "Contruction Layer Thicknesses", GH_ParamAccess.list);
+            inputParamManager[index].Optional = true;
+
+            GooMaterialLibraryParam gooMaterialLibraryParam = new GooMaterialLibraryParam();
+            gooMaterialLibraryParam.Optional = true;
+            inputParamManager.AddParameter(gooMaterialLibraryParam, "_materialLibrary_", "_materialLibrary_", "SAM Material Library", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -62,10 +70,34 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<double> thicknesses = new List<double>();
-            if (!dataAccess.GetDataList(1, thicknesses))
+            dataAccess.GetDataList(1, thicknesses);
+
+            if(names.Count != thicknesses.Count)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                MaterialLibrary materialLibrary = null;
+                dataAccess.GetData(2, ref materialLibrary);
+
+                if (materialLibrary == null)
+                    materialLibrary = Analytical.Query.DefaultMaterialLibrary();
+
+                for (int i = 0; i < names.Count - thicknesses.Count; i++)
+                {
+                    IMaterial material = materialLibrary.GetObject<IMaterial>(names[i + thicknesses.Count]);
+                    if(material == null)
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                        return;
+                    }
+
+                    double thickness = material.DefaultThickness();
+                    if(double.IsNaN(thickness))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                        return;
+                    }
+
+                    thicknesses.Add(thickness);
+                }
             }
 
             object[] objects = new object[names.Count + thicknesses.Count];
