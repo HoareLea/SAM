@@ -48,8 +48,9 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddParameter(gooConstructionLayerParam, "paneConstructionLayers_", "paneConstructionLayers_", "SAM Pane Contruction Layers", GH_ParamAccess.list);
 
             gooConstructionLayerParam = new GooConstructionLayerParam();
+            gooConstructionLayerParam.Optional = true;
             gooConstructionLayerParam.PersistentData.AppendRange(apertureConstruction.FrameConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
-            inputParamManager.AddParameter(new GooConstructionLayerParam(), "frameConstructionLayers_", "frameConstructionLayers_", "SAM Frame Contruction Layers", GH_ParamAccess.list);
+            inputParamManager.AddParameter(gooConstructionLayerParam, "frameConstructionLayers_", "frameConstructionLayers_", "SAM Frame Contruction Layers", GH_ParamAccess.list);
         }
 
         /// <summary>
