@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("_ratios", "_ratios", "Ratios", GH_ParamAccess.list);
-            inputParamManager.AddIntervalParameter("_azimuths", "_azimuths", "Azimuths Domains/Intervals", GH_ParamAccess.list);
+            inputParamManager.AddIntervalParameter("_azimuths", "_azimuths", "Azimuths Domains/Intervals if single number given ie. 90 it will be 0 to 90, so you need to make 90 To 90 in case just signle angle is required", GH_ParamAccess.list);
 
             int index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
