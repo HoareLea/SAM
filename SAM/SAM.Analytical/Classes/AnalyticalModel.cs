@@ -192,6 +192,11 @@ namespace SAM.Analytical
             return materialLibrary.Add(material.Clone());
         }
 
+        public void OffsetAperturesOnEdge(double distance, double tolerance = Tolerance.Distance)
+        {
+            adjacencyCluster?.OffsetAperturesOnEdge(distance, tolerance);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
