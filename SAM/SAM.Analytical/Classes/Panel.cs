@@ -738,5 +738,13 @@ namespace SAM.Analytical
         {
             return Query.Ground(panelType);
         }
+
+        public bool HasApertures
+        {
+            get
+            {
+                return apertures != null && apertures.Count != 0;
+            }
+        }
     }
 }

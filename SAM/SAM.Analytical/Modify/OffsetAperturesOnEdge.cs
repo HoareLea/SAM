@@ -9,16 +9,19 @@ namespace SAM.Analytical
             if (adjacencyCluster == null)
                 return;
 
-            List<Aperture> result = new List<Aperture>();
-
             List<Panel> panels = adjacencyCluster.GetPanels();
             if (panels == null || panels.Count == 0)
                 return;
 
             foreach(Panel panel in panels)
             {
-                panel.OffsetAperturesOnEdge(distance, tolerance);
-                adjacencyCluster.AddObject(panel);
+                if(panel != null && panel.HasApertures)
+                {
+                    Panel panel_New = new Panel(panel);
+
+                    panel_New.OffsetAperturesOnEdge(distance, tolerance);
+                    adjacencyCluster.AddObject(panel_New);
+                }
             }
         }
     }
