@@ -97,6 +97,7 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
+    <Compile Include="Modify\OffsetAperturesOnEdge.cs" />
     <Compile Include="Modify\SetHeatTransferCoefficient.cs" />
     <Compile Include="Modify\UpdateConstructionsPanelTypes.cs" />
     <Compile Include="Modify\SetPanelType.cs" />
