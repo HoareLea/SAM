@@ -121,6 +121,8 @@
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\DefaultConstructionLibraryPath.cs" />
     <Compile Include="Query\DefaultConstructionLibrary.cs" />
+    <Compile Include="Query\DefaultGasMaterialLibraryPath.cs" />
+    <Compile Include="Query\DefaultGasMaterialLibrary.cs" />
     <Compile Include="Query\Opaque.cs" />
     <Compile Include="Query\UniqueName.cs" />
     <Compile Include="Query\FrameApertureConstructionUniqueName.cs" />
@@ -154,7 +156,7 @@
     <Compile Include="Query\ExternalMaterial.cs" />
     <Compile Include="Query\InternalConstructionLayer.cs" />
     <Compile Include="Query\ExternalConstructionLayer.cs" />
-    <Compile Include="Query\GasMaterial.cs" />
+    <Compile Include="Query\DeafultGasMaterial.cs" />
     <Compile Include="Query\ExternalSolarReflectance.cs" />
     <Compile Include="Query\InternalSolarReflectance.cs" />
     <Compile Include="Query\ExternalLightReflectance.cs" />

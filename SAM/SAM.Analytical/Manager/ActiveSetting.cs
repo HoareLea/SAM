@@ -50,17 +50,14 @@ namespace SAM.Analytical
             public const string ParameterName_SpecificHeatCapacity = "ParameterName_SpecificHeatCapacity";
             public const string ParameterName_Density = "ParameterName_Density";
 
-            public const string GasMaterial_Air = "GasMaterial_Air";
-            public const string GasMaterial_Argon = "GasMaterial_Argon";
-            public const string GasMaterial_Krypton = "GasMaterial_Krypton";
-            public const string GasMaterial_Xenon = "GasMaterial_Xenon";
-            public const string GasMaterial_SulfurHexaFluoride = "GasMaterial_SulfurHexaFluoride";
-
             public const string FileName_DefaultMaterialLibrary = "FileName_DefaultMaterialLibrary";
             public const string Library_DefaultMaterialLibrary = "Library_DefaultMaterialLibrary";
             
             public const string FileName_DefaultConstructionLibrary = "FileName_DefaultConstructionLibrary";
             public const string Library_DefaultConstructionLibrary = "Library_DefaultConstructionLibrary";
+
+            public const string FileName_DefaultGasMaterialLibrary = "FileName_DefaultGasMaterialLibrary";
+            public const string Library_DefaultGasMaterialLibrary = "Library_DefaultGasMaterialLibrary";
         }
 
         private static Setting setting = Load();
@@ -142,17 +139,10 @@ namespace SAM.Analytical
             //SIM_EXT_SLD Adiabatic
             //result.Add(Name.Construction_WallExternal, new Construction(new System.Guid("8f424c58-6570-4b9b-b753-e7584b7b4494"), "SIM_EXT_SLD", Create.ConstructionLayers("F00_WhitePaint_0.001kg/m3_999W/mK", 0.0001, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "C00_Cement particleboard_1200kg/m3_0.23W/mK", 0.012, "I01_Mineral Wool_20kg/m3_0.025W/mK" , 0.08, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Rainscreen_7800kg/m3_50W/mK", 0.003)));
 
-
-            //Default Gas Materials
-            result.Add(Name.GasMaterial_Air, new GasMaterial(new System.Guid("b701be87-3012-450d-a6c5-582dcff33e61"), "Default Dry Air Gas", "Dry Air", "Dry Air Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 2.496e-2, 1.232, 1008, 1.761e-5));
-            result.Add(Name.GasMaterial_Argon, new GasMaterial(new System.Guid("da58562e-38b1-4ab2-86f9-08832591e029"), "Default Argon Gas", "Argon", "Argon Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 0.01684, 1.699, 519, 2.164e-5));
-            result.Add(Name.GasMaterial_Krypton, new GasMaterial(new System.Guid("448c7b25-8696-455a-af09-5c0f305c441a"), "Default Krypton Gas", "Krypton", "Krypton Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 0.9e-2, 3.56, 0.245e3, 2.4e-5));
-            result.Add(Name.GasMaterial_Xenon, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Xenon Gas", "Xenon", "Xenon Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 0.0529, 5.689, 161, 2.226e-5));
-            result.Add(Name.GasMaterial_SulfurHexaFluoride, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Sulfur HexaFluoride Gas", "Sulfur HexaFluoride (SF6) [EN 673:1997 Table 1 - Gas Properties]", "SulfurHexa Fluoride Material with properties at 10°C", 0.01275, 6.36, 614, 1.459e-5));
-
             //File Names
             result.Add(Name.FileName_DefaultMaterialLibrary, "SAM_MaterialLibrary.JSON");
             result.Add(Name.FileName_DefaultConstructionLibrary, "SAM_ConstructionLibrary.JSON");
+            result.Add(Name.FileName_DefaultGasMaterialLibrary, "SAM_GasMaterialLibrary.JSON");
 
             string path = null;
 
@@ -163,6 +153,10 @@ namespace SAM.Analytical
             path = Query.DefaultMaterialLibraryPath(result);
             if (System.IO.File.Exists(path))
                 result.Add(Name.Library_DefaultMaterialLibrary, Core.Create.IJSAMObject<MaterialLibrary>(System.IO.File.ReadAllText(path)));
+
+            path = Query.DefaultGasMaterialLibraryPath(result);
+            if (System.IO.File.Exists(path))
+                result.Add(Name.Library_DefaultGasMaterialLibrary, Core.Create.IJSAMObject<MaterialLibrary>(System.IO.File.ReadAllText(path)));
 
             return result;
         }

@@ -106,7 +106,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            GasMaterial gasMaterial = Analytical.Query.GasMaterial(defaultGasType);
+            GasMaterial gasMaterial = Analytical.Query.DefaultGasMaterial(defaultGasType);
 
             double HeatTransferCoefficient = Analytical.Query.HeatTransferCoefficient(gasMaterial, temperatureDifference, width, meanTemperature, angle);
 
