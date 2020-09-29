@@ -69,5 +69,14 @@ namespace SAM.Analytical
         {
             return GetObjects<ApertureConstruction>();
         }
+
+        public List<ApertureConstruction> GetApertureConstructions(ApertureType apertureType)
+        {
+            List<ApertureConstruction> apertureConstructions = GetObjects<ApertureConstruction>();
+            if (apertureConstructions == null)
+                return null;
+
+            return apertureConstructions.FindAll(x => x.ApertureType.Equals(apertureType));
+        }
     }
 }
