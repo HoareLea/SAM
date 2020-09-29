@@ -7,24 +7,6 @@ namespace SAM.Analytical
     {
         public static class Name
         {
-            public const string Construction_Undefined = "Construction_Undefined";
-            public const string Construction_WallInternal = "Construction_WallInternal";
-            public const string Construction_WallExternal = "Construction_WallExternal";
-            public const string Construction_SlabOnGrade = "Construction_SlabOnGrade";
-            public const string Construction_FloorInternal = "Construction_FloorInternal";
-            public const string Construction_Roof = "Construction_Roof";
-            public const string Construction_Ceiling = "Construction_Ceiling";
-            public const string Construction_CurtainWall = "Construction_CurtainWall";
-            public const string Construction_Floor = "Construction_Floor";
-            public const string Construction_FloorExposed = "Construction_FloorExposed";
-            public const string Construction_FloorRaised = "Construction_FloorRaised";
-            public const string Construction_Shade = "Construction_Shade";
-            public const string Construction_SolarPanel = "Construction_SolarPanel";
-            public const string Construction_UndergroundCeiling = "Construction_UndergroundCeiling";
-            public const string Construction_UndergroundSlab = "Construction_UndergroundSlab";
-            public const string Construction_UndergroundWall = "Construction_UndergroundWall";
-            public const string Construction_Wall = "Construction_Wall";
-
             public const string ApertureConstruction_ExternalWindows = "ApertureConstruction_ExternalWindows";
             public const string ApertureConstruction_InternalWindows = "ApertureConstruction_InternalWindows";
             public const string ApertureConstruction_ExternalDoors = "ApertureConstruction_ExternalDoors";
@@ -146,78 +128,6 @@ namespace SAM.Analytical
             result.Add(Name.ParameterName_Density, "SAM_Material_Density");
 
 
-            //Default Constructions
-            Construction construction;
-
-            construction = new Construction(new System.Guid("6ff47aad-ec17-4806-8e81-e84b10d5756a"), "Generic", Create.ConstructionLayers("C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C00_Concrete Reinforced_2300kg/m3_2.3W/mK", 0.1, "C00_Screed_1800kg/m3_1.15W/mK", 0.05, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C00_Chipboard Flooring_500kg/m3_0.13W/mK", 0.02, "C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK", 0.01));
-            construction.SetPanelType(PanelType.Ceiling, result);
-            result.Add(Name.Construction_Ceiling, construction);
-
-            construction = new Construction(new System.Guid("9ab5d49f-4db4-4930-8293-3945d430e572"), "SIM_EXT_GLZ", Create.ConstructionLayers("_Glazing Inner Pane_6mm_g0.78_Lt0.89", 0.006, "Ar0UP_Air__12mm_3.168W/m2K", 0.12, "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9", 0.006));
-            construction.SetPanelType(PanelType.CurtainWall, result);
-            result.Add(Name.Construction_CurtainWall, construction);
-
-            construction = new Construction(new System.Guid("6b5cbfab-bc87-4d2c-98e0-d940c75295fa"), "SIM_EXT_GRD_FLR FLR01", Create.ConstructionLayers("C00_Gypsym Board_800.923kg/m3_0.161W/mK", 0.0127, "I00_Glass Fibre Insulation_11.998kg/m3_0.038W/mK", 0.13018, "C00_Concrete Block_1842.12kg/m3_1.315W/mK", 0.23, "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK", 1));
-            construction.SetPanelType(PanelType.Floor, result);
-            result.Add(Name.Construction_Floor, construction);
-
-            construction = new Construction(new System.Guid("18da6398-75b3-4e39-8505-cf26e1f7f875"), "SIM_EXT_SLD_FLR Exposed", Create.ConstructionLayers("C00_Chipboard Flooring_500kg/m3_0.13W/mK", 0.02, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C00_Concrete Reinforced_2300kg/m3_2.3W/mK", 0.1, "I00_Mineral Wool_700kg/m3_0.025W/mK", 0.0098));
-            construction.SetPanelType(PanelType.FloorExposed, result);
-            result.Add(Name.Construction_FloorExposed, construction);
-
-            construction = new Construction(new System.Guid("d5521200-8376-49b2-a9ed-ad914f380022"), "SIM_INT_SLD_FLR FLR02", Create.ConstructionLayers("C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK", 0.01, "C00_Chipboard Flooring_500kg/m3_0.13W/mK", 0.02, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C00_Screed_1800kg/m3_1.15W/mK", 0.05, "C00_Concrete Reinforced_2300kg/m3_2.3W/mK", 0.1, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125));
-            construction.SetPanelType(PanelType.FloorInternal, result);
-            result.Add(Name.Construction_FloorInternal, construction);
-
-            construction = new Construction(new System.Guid("3290e9b5-323d-40b2-9be4-312894681119"), "SIM_INT_SLD_FLR FLR02", Create.ConstructionLayers("C00_Chipboard Flooring_500kg/m3_0.13W/mK", 0.02, "Ar90Dn_Air__50mm_0.5W/m2K", 0.05, "C00_Concrete Reinforced_2300kg/m3_2.3W/mK", 0.1, "I00_Mineral Wool_700kg/m3_0.025W/mK", 0.0098));
-            construction.SetPanelType(PanelType.FloorRaised, result);
-            result.Add(Name.Construction_FloorRaised, construction);
-
-            construction = new Construction(new System.Guid("6ebe9f3b-b20d-4583-a5db-3f17d8106016"), "SIM_EXT_SLD_Roof DA01", Create.ConstructionLayers("C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.95W/m2K", 0.05, "C00_Concrete_2400kg/m3_2W/mK", 0.1, "C00_Membrane_1100kg/m3_1W/mK", 0.001, "I02_Mineral Wool_40kg/m3_0.03W/mK", 0.154));
-            construction.SetPanelType(PanelType.Roof, result);
-            result.Add(Name.Construction_Roof, construction);
-
-            construction = new Construction(new System.Guid("4acfae60-42c4-4b00-ba12-bc0329987b51"), "SIM_EXT_SHD", Create.ConstructionLayers("C00_Mild Steel_7800kg/m3_50W/mK", 0.006));
-            construction.SetPanelType(PanelType.Shade, result);
-            result.Add(Name.Construction_Shade, construction);
-
-            construction = new Construction(new System.Guid("6892f46e-396e-46ef-bf00-42a91e2f3d49"), "SIM_EXT_GRD_FLR FLR01", Create.ConstructionLayers("C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK", 0.0127, "C00_Concrete_2400kg/m3_2.362W/mK", 0.2, "I03_Mineral Wool_43.25kg/m3_0.035W/mK", 0.14, "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK", 1));
-            construction.SetPanelType(PanelType.SlabOnGrade, result);
-            result.Add(Name.Construction_SlabOnGrade, construction);
-
-            construction = new Construction(new System.Guid("28b83556-a292-4c0a-b5dc-2d6fe85eb728"), "SIM_EXT_SOL_Roof", Create.ConstructionLayers("C00_SHW or PV Panel_480kg/m3_0.01W/mK", 0.006));
-            construction.SetPanelType(PanelType.SolarPanel, result);
-            result.Add(Name.Construction_SolarPanel, construction);
-
-            construction = new Construction(new System.Guid("cac8e3ad-50bd-4323-b0c8-2f3128c591c7"), "SIM_EXT_SHD_Roof SD01", Create.ConstructionLayers("C00_Mild Steel_7800kg/m3_50W/mK", 0.006));
-            construction.SetPanelType(PanelType.Undefined, result);
-            result.Add(Name.Construction_Undefined, construction);
-
-            construction = new Construction(new System.Guid("595f988a-89cc-47fb-b3d1-b8df1f76002d"), "SIM_INT_SLD_FLR Parking", Create.ConstructionLayers("C00_Plasterboard_900kg/m3_0.21W/mK", 0.0095, "I00_Glass Fibre Insulation_11.998kg/m3_0.038W/mK", 0.16, "C00_Concrete Block_1842.12kg/m3_1.315W/mK", 0.23, "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK", 1));
-            construction.SetPanelType(PanelType.UndergroundCeiling, result);
-            result.Add(Name.Construction_UndergroundCeiling, construction);
-
-            construction = new Construction(new System.Guid("b4a6da31-169c-4781-a1cb-39e9900f7d35"), "SIM_EXT_GRD_FLR FLR01", Create.ConstructionLayers("C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK", 0.0127, "C00_Concrete_2400kg/m3_2.362W/mK", 0.2, "I03_Mineral Wool_43.25kg/m3_0.035W/mK", 0.14, "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK", 1));
-            construction.SetPanelType(PanelType.UndergroundSlab, result);
-            result.Add(Name.Construction_UndergroundSlab, construction);
-
-            construction = new Construction(new System.Guid("99972a36-6fb2-4565-9337-3b163d056c9c"), "SIM_EXT_GRD", Create.ConstructionLayers("C00_Gypsym Board_800.923kg/m3_0.161W/mK", 0.0127, "I00_Glass Fibre Insulation_11.998kg / m3_0.038W / mK", 0.13018, "C00_Concrete Block_1842.12kg/m3_1.315W/mK", 0.23, "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK", 1));
-            construction.SetPanelType(PanelType.UndergroundWall, result);
-            result.Add(Name.Construction_UndergroundWall, construction);
-
-            construction = new Construction(new System.Guid("5c3039ff-c4af-4953-bbf0-5c84bdd8044c"), "SIM_EXT_SLD", Create.ConstructionLayers("F00_WhitePaint_0.001kg/m3_999W/mK", 0.0001, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Cement particleboard_1200kg/m3_0.23W/mK", 0.012, "I01_Mineral Wool_20kg/m3_0.025W/mK", 0.08, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Rainscreen_7800kg/m3_50W/mK", 0.003));
-            construction.SetPanelType(PanelType.Wall, result);
-            result.Add(Name.Construction_Wall, construction);
-
-            construction = new Construction(new System.Guid("8f424c58-6570-4b9b-b753-e7584b7b4494"), "SIM_EXT_SLD", Create.ConstructionLayers("F00_WhitePaint_0.001kg/m3_999W/mK", 0.0001, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Cement particleboard_1200kg/m3_0.23W/mK", 0.012, "I01_Mineral Wool_20kg/m3_0.025W/mK", 0.08, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C00_Rainscreen_7800kg/m3_50W/mK", 0.003));
-            construction.SetPanelType(PanelType.WallExternal, result);
-            result.Add(Name.Construction_WallExternal, construction);
-
-            construction = new Construction(new System.Guid("625d9ed6-64fa-4877-bb56-b84ba118c900"), "SIM_INT_SLD_Partition", Create.ConstructionLayers("F00_WhitePaint_0.001kg/m3_999W/mK", 0.0001, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125, "Ar90Up_Air__50mm_1.25W/m2K", 0.05, "C01_Plasterboard_700kg/m3_0.21W/mK", 0.0125));
-            construction.SetPanelType(PanelType.WallInternal, result);
-            result.Add(Name.Construction_WallInternal, construction);
-
-
             //Default Aperture Constructions
             result.Add(Name.ApertureConstruction_ExternalDoors, new ApertureConstruction(new System.Guid("5ad2e36d-6a2b-4cf1-af02-1ce62e7d2288"), "SIM_EXT_SLD", ApertureType.Door, Create.ConstructionLayers("C00_Hardwood_2100kg/m3_0.18W/mK", 0.050), Create.ConstructionLayers("C00_Hardwood_2100kg/m3_0.18W/mK", 0.050)));
             result.Add(Name.ApertureConstruction_ExternalWindows, new ApertureConstruction(new System.Guid("f70c4ec7-931b-47ed-a95b-1b3df1b9d885"), "SIM_EXT_GLZ", ApertureType.Window, Create.ConstructionLayers("_Glazing Inner Pane_6mm_g0.78_Lt0.89", 0.006, "Ag90UP_Argon__12mm_1.403W/m2K", 0.012, "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9", 0.006), Create.ConstructionLayers("C00_Frame Notional building_7800kg/m3_0.176W/mK", 0.050)));
@@ -240,6 +150,7 @@ namespace SAM.Analytical
             result.Add(Name.GasMaterial_Xenon, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Xenon Gas", "Xenon", "Xenon Material with properties at 10°C [EN 673:1997 Table 1 - Gas Properties]", 0.0529, 5.689, 161, 2.226e-5));
             result.Add(Name.GasMaterial_SulfurHexaFluoride, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Sulfur HexaFluoride Gas", "Sulfur HexaFluoride (SF6) [EN 673:1997 Table 1 - Gas Properties]", "SulfurHexa Fluoride Material with properties at 10°C", 0.01275, 6.36, 614, 1.459e-5));
 
+            //File Names
             result.Add(Name.FileName_DefaultMaterialLibrary, "SAM_MaterialLibrary.JSON");
             result.Add(Name.FileName_DefaultConstructionLibrary, "SAM_ConstructionLibrary.JSON");
 

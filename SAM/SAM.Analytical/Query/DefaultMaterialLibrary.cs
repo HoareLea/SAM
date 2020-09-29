@@ -7,17 +7,15 @@ namespace SAM.Analytical
         /// <summary>
         /// Returns Default SAM Analytical MaterialLibrary
         /// </summary>
-        /// <returns name="MaterialLibrary"> Default SAM MaterialLibrary</returns>
-        /// <search>Default SAM Analytical Construction, PanelType</search> 
-        public static Core.MaterialLibrary DefaultMaterialLibrary()
+        /// <returns name="MaterialLibrary"> Default SAM Analytical MaterialLibrary</returns>
+        /// <search>Default SAM Analytical MaterialLibrary</search> 
+        public static MaterialLibrary DefaultMaterialLibrary()
         {
-            string path = DefaultMaterialLibraryPath();
-            if (string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
-                return null;
+            MaterialLibrary result = null;
+            if (ActiveSetting.Setting.TryGetValue(ActiveSetting.Name.Library_DefaultMaterialLibrary, out result))
+                return result;
 
-            Core.MaterialLibrary result = Core.Create.MaterialLibrary(path);
-
-            return result;
+            return null;
         }
     }
 }
