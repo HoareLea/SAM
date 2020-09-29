@@ -29,6 +29,10 @@ namespace SAM.Analytical
 
             foreach (Panel panel in panels)
             {
+                Construction construction = panel.Construction;
+                if (construction == null)
+                    continue;
+                
                 PanelType panelType = panel.PanelType;
 
                 bool update = false;
@@ -38,28 +42,28 @@ namespace SAM.Analytical
                 switch (panelType)
                 {
                     case PanelType.Air:
-                        update = panel.Construction != null;
+                        update = construction != null;
                         break;
                     case PanelType.Ceiling:
                         panelType = Query.PanelType(panel.Normal);
                         switch (panelType.PanelGroup())
                         {
                             case PanelGroup.Wall:
-                                update = !panel.Construction.Name.StartsWith(wallExternalConstructionPrefix);
+                                update = !construction.Name.StartsWith(wallExternalConstructionPrefix);
                                 panelType = PanelType.WallExternal;
                                 break;
                             case PanelGroup.Floor:
-                                update = !panel.Construction.Name.StartsWith(floorExposedConstructionPrefix);
+                                update = !construction.Name.StartsWith(floorExposedConstructionPrefix);
                                 panelType = PanelType.FloorExposed;
                                 break;
                             case PanelGroup.Roof:
-                                update = !panel.Construction.Name.StartsWith(roofExternalConstructionPrefix);
+                                update = !construction.Name.StartsWith(roofExternalConstructionPrefix);
                                 panelType = PanelType.Roof;
                                 break;
                         }
                         break;
                     case PanelType.CurtainWall:
-                        update = !panel.Construction.Name.StartsWith(wallExternalConstructionPrefix);
+                        update = !construction.Name.StartsWith(wallExternalConstructionPrefix);
                         panelType = PanelType.Roof;
                         break;
                     case PanelType.Wall:
@@ -67,23 +71,23 @@ namespace SAM.Analytical
 
                         if (elevation <= 0)
                         {
-                            update = !panel.Construction.Name.StartsWith(wallExternalConstructionPrefix);
+                            update = !construction.Name.StartsWith(wallExternalConstructionPrefix);
                             panelType = PanelType.UndergroundWall;
                         }
                         else
                         {
-                            update = !panel.Construction.Name.StartsWith(wallExternalConstructionPrefix);
+                            update = !construction.Name.StartsWith(wallExternalConstructionPrefix);
                             panelType = PanelType.WallExternal;
                         }
                         break;
                     case PanelType.WallExternal:
-                        update = !panel.Construction.Name.StartsWith(wallExternalConstructionPrefix);
+                        update = !construction.Name.StartsWith(wallExternalConstructionPrefix);
                         break;
                     case PanelType.WallInternal:
                         update = !panel.Construction.Name.StartsWith(wallInternalConstructionPrefix);
                         break;
                     case PanelType.Roof:
-                        update = !panel.Construction.Name.StartsWith(roofExternalConstructionPrefix);
+                        update = !construction.Name.StartsWith(roofExternalConstructionPrefix);
                         break;
                     case PanelType.Floor:
                         PanelType panelType_Normal = Query.PanelType(panel.Normal);
@@ -93,12 +97,12 @@ namespace SAM.Analytical
 
                             if (elevation == 0)
                             {
-                                update = !panel.Construction.Name.StartsWith(slabOnGradeConstructionPrefix);
+                                update = !construction.Name.StartsWith(slabOnGradeConstructionPrefix);
                                 panelType = PanelType.SlabOnGrade;
                             }
                             else if (elevation < 0)
                             {
-                                update = !panel.Construction.Name.StartsWith(slabOnGradeConstructionPrefix);
+                                update = !construction.Name.StartsWith(slabOnGradeConstructionPrefix);
                                 panelType = PanelType.SlabOnGrade;
                             }
                             else
@@ -112,35 +116,35 @@ namespace SAM.Analytical
                         }
                         break;
                     case PanelType.SlabOnGrade:
-                        update = !panel.Construction.Name.StartsWith(slabOnGradeConstructionPrefix);
+                        update = !construction.Name.StartsWith(slabOnGradeConstructionPrefix);
                         break;
                     case PanelType.UndergroundSlab:
-                        update = !panel.Construction.Name.StartsWith(slabOnGradeConstructionPrefix);
+                        update = !construction.Name.StartsWith(slabOnGradeConstructionPrefix);
                         break;
                     case PanelType.FloorInternal:
-                        update = !panel.Construction.Name.StartsWith(floorInternalConstructionPrefix);
+                        update = !construction.Name.StartsWith(floorInternalConstructionPrefix);
                         break;
                     case PanelType.UndergroundCeiling:
-                        update = !panel.Construction.Name.StartsWith(floorInternalConstructionPrefix);
+                        update = !construction.Name.StartsWith(floorInternalConstructionPrefix);
                         break;
                     case PanelType.FloorExposed:
-                        update = !panel.Construction.Name.StartsWith(floorExposedConstructionPrefix) || panel.Construction.Name.Contains("_GRD_");
+                        update = !construction.Name.StartsWith(floorExposedConstructionPrefix) || panel.Construction.Name.Contains("_GRD_");
                         break;
                     case PanelType.FloorRaised:
-                        update = !panel.Construction.Name.StartsWith(floorInternalConstructionPrefix);
+                        update = !construction.Name.StartsWith(floorInternalConstructionPrefix);
                         break;
                     case PanelType.Shade:
-                        update = !panel.Construction.Name.Contains("_SHD_");
+                        update = !construction.Name.Contains("_SHD_");
                         break;
                     case PanelType.UndergroundWall:
-                        update = !panel.Construction.Name.StartsWith(wallExternalConstructionPrefix) || !panel.Construction.Name.Contains("_GRD_");
+                        update = !construction.Name.StartsWith(wallExternalConstructionPrefix) || !panel.Construction.Name.Contains("_GRD_");
                         break;
                 }
 
                 if (!update)
                     continue;
 
-                Construction construction = Query.DefaultConstruction(panelType);
+                construction = Query.DefaultConstruction(panelType);
                 Panel panel_New = new Panel(panel, construction);
                 adjacencyCluster.AddObject(panel_New);
                 result[panel_New.Guid] = panel_New;
