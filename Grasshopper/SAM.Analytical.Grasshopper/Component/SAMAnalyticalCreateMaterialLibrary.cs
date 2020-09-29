@@ -84,7 +84,7 @@ namespace SAM.Analytical.Grasshopper
             string name = null;
             dataAccess.GetData(1, ref name);
 
-            Core.MaterialLibrary result = Create.MaterialLibrary(path, name, namesIndex);
+            MaterialLibrary result = Create.MaterialLibrary(path, name, namesIndex);
 
             dataAccess.SetData(0, new GooMaterialLibrary(result));
         }

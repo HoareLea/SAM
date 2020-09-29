@@ -96,6 +96,7 @@
     <Compile Include="Classes\GooApertureConstruction.cs" />
     <Compile Include="Classes\GooConstruction.cs" />
     <Compile Include="Classes\GooConstructionLayer.cs" />
+    <Compile Include="Classes\GooConstructionLibrary.cs" />
     <Compile Include="Classes\GooText3D.cs" />
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Component\SAMAnalyticalUpdateObjects.cs" />
     <Compile Include="Component\SAMAnalyticalRelatedObjects.cs" />
     <Compile Include="Component\SAMAnalyticalCreateMaterialLibrary.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateConstructionLibrary.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToRhino\Breps.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
