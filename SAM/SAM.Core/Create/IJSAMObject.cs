@@ -38,8 +38,17 @@ namespace SAM.Core
 
             JObject jObject = jToken as JObject;
             if (jObject == null)
-                return default;
+            {
+                JArray jArray = jToken as JArray;
+                if (jArray == null || jArray.Count == 0)
+                    return default;
 
+                jObject = jArray[0] as JObject;
+            }
+
+            if (jObject == null)
+                return default;
+                
             return IJSAMObject<T>(jObject);
         }
 
