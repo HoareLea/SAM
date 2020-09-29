@@ -251,9 +251,9 @@ namespace SAM.Analytical
 
             path = Query.DefaultMaterialLibraryPath(result);
             if (System.IO.File.Exists(path))
-                result.Add();
+                result.Add(Name.Library_DefaultMaterialLibrary, Core.Create.IJSAMObject<MaterialLibrary>(System.IO.File.ReadAllText(path)));
 
-                return result;
+            return result;
         }
     }
 }

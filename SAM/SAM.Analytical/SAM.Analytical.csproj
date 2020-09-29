@@ -73,6 +73,7 @@
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Classes\ConstructionLayer.cs" />
+    <Compile Include="Classes\ApertureConstructionLibrary.cs" />
     <Compile Include="Classes\ConstructionLibrary.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\GasMaterial.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Modify\UpdateConstructions.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\DefaultConstructionLibraryPath.cs" />
+    <Compile Include="Query\DefaultConstructionLibrary.cs" />
     <Compile Include="Query\Opaque.cs" />
     <Compile Include="Query\UniqueName.cs" />
     <Compile Include="Query\FrameApertureConstructionUniqueName.cs" />
