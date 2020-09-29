@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddTextParameter("_apertureTypes_", "_apertureTypes_", "SAM Analytical ApertureTypes", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddBooleanParameter("_external_", "_external_", "External Aperture", GH_ParamAccess.item);
+            index = inputParamManager.AddBooleanParameter("_panelTypes_", "_panelTypes_", "SAM Analytical PanelTypes", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
         }
 
@@ -59,18 +59,20 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<string> panelTypeStrings = new List<string>();
-            dataAccess.GetDataList(0, panelTypeStrings);
+            List<string> values = null;
+
+            values = new List<string>();
+            dataAccess.GetDataList(0, values);
 
             List<ApertureType> apertureTypes = null;
-            if(panelTypeStrings != null && panelTypeStrings.Count > 0)
+            if (values != null && values.Count > 0)
             {
                 apertureTypes = new List<ApertureType>();
 
-                foreach(string panelTypeString in panelTypeStrings)
+                foreach (string value in values)
                 {
                     ApertureType apertureType;
-                    if (Enum.TryParse(panelTypeString, out apertureType))
+                    if (Enum.TryParse(value, out apertureType))
                         apertureTypes.Add(apertureType);
                 }
             }
@@ -79,32 +81,54 @@ namespace SAM.Analytical.Grasshopper
                 apertureTypes = new List<ApertureType>(Enum.GetValues(typeof(ApertureType)).Cast<ApertureType>());
             }
 
-            List<bool> externals = new List<bool>();
-            bool external = true;
-            if(!dataAccess.GetData(1, ref external))
-            {
-                externals.Add(true);
-                externals.Add(false);
-            }
-            else
-            {
-                externals.Add(external);
-            }
-
             apertureTypes?.RemoveAll(x => x == ApertureType.Undefined);
 
-            if(apertureTypes == null || apertureTypes.Count == 0)
+            if (apertureTypes == null || apertureTypes.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            values = new List<string>();
+            dataAccess.GetDataList(1, values);
+
+            List<PanelType> panelTypes = null;
+            if (values != null && values.Count > 0)
+            {
+                panelTypes = new List<PanelType>();
+
+                foreach (string value in values)
+                {
+                    PanelType panelType;
+                    if (Enum.TryParse(value, out panelType))
+                        panelTypes.Add(panelType);
+                }
+            }
+            else
+            {
+                panelTypes = new List<PanelType>(Enum.GetValues(typeof(PanelType)).Cast<PanelType>());
+            }
+
+            panelTypes?.RemoveAll(x => x == PanelType.Undefined);
+
+            if (panelTypes == null || panelTypes.Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            List<ApertureConstruction> apertureConstructions = new List<ApertureConstruction>();
+
             List<GooApertureConstruction> gooApertureConstructions = new List<GooApertureConstruction>();
             foreach (ApertureType apertureType in apertureTypes)
-                foreach (bool external_Temp in externals)
-                    gooApertureConstructions.Add(new GooApertureConstruction(Analytical.Query.DefaultApertureConstruction(apertureType, external_Temp)));
+                foreach (PanelType panelType in panelTypes)
+                {
+                    ApertureConstruction apertureConstruction = Analytical.Query.DefaultApertureConstruction(panelType, apertureType);
+                    if (apertureConstructions.Find(x => x.Guid.Equals(apertureConstruction.Guid)) == null)
+                        apertureConstructions.Add(apertureConstruction);
+                }
 
-            dataAccess.SetDataList(0, gooApertureConstructions);
+            dataAccess.SetDataList(0, apertureConstructions?.ConvertAll(x => new GooApertureConstruction(x)));
         }
     }
 }

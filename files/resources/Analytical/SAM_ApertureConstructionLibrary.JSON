@@ -1,0 +1,127 @@
+{
+  "_type": "SAM.Analytical.ApertureConstructionLibrary,SAM.Analytical",
+  "Name": "Default SAM ApertureConstruction Library ver00",
+  "Guid": "91f22b17-3875-4ccd-8f6a-09e8efca82b4",
+  "Objects": [
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ_SKY DF01",
+      "Guid": "6f6dc032-6fa5-43fa-bfef-de5937e95599",
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
+          "Thickness": 0.006
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ag90UP_Argon__12mm_1.403W/m2K",
+          "Thickness": 0.012
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Roof Lit Glazing Outer Pane_6mm_g0.58_Lt0.67",
+          "Thickness": 0.006
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Frame Notional building_7800kg/m3_0.176W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Window"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_INT_GLZ",
+      "Guid": "3e43ecb2-638b-4d8b-9046-ba3d8455cd3f",
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C_Clear glass_10mm_g0.74_Lt0.87",
+          "Thickness": 0.01
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Frame Notional building_7800kg/m3_0.176W/mK",
+          "Thickness": 0.03
+        }
+      ],
+      "ApertureType": "Window"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_INT_SLD",
+      "Guid": "1dcdad32-63ec-4a01-945d-39548be20491",
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C03_Wood_500kg/m3_0.13W/mK",
+          "Thickness": 0.03
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C03_Wood_500kg/m3_0.13W/mK",
+          "Thickness": 0.03
+        }
+      ],
+      "ApertureType": "Door"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "f70c4ec7-931b-47ed-a95b-1b3df1b9d885",
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
+          "Thickness": 0.006
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ag90UP_Argon__12mm_1.403W/m2K",
+          "Thickness": 0.012
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9",
+          "Thickness": 0.006
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Frame Notional building_7800kg/m3_0.176W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Window"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_EXT_SLD",
+      "Guid": "5ad2e36d-6a2b-4cf1-af02-1ce62e7d2288",
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Hardwood_2100kg/m3_0.18W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Hardwood_2100kg/m3_0.18W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Door"
+    }
+  ]
+}
