@@ -75,7 +75,10 @@ namespace SAM.Analytical
             public const string GasMaterial_SulfurHexaFluoride = "GasMaterial_SulfurHexaFluoride";
 
             public const string FileName_DefaultMaterialLibrary = "FileName_DefaultMaterialLibrary";
-            public const string FileName_DefaultConstructions = "FileName_DefaultConstructions";
+            public const string Library_DefaultMaterialLibrary = "Library_DefaultMaterialLibrary";
+            
+            public const string FileName_DefaultConstructionLibrary = "FileName_DefaultConstructionLibrary";
+            public const string Library_DefaultConstructionLibrary = "Library_DefaultConstructionLibrary";
         }
 
         private static Setting setting = Load();
@@ -238,9 +241,19 @@ namespace SAM.Analytical
             result.Add(Name.GasMaterial_SulfurHexaFluoride, new GasMaterial(new System.Guid("78dcd953-2c44-441d-a677-4903c4fe08cd"), "Default Sulfur HexaFluoride Gas", "Sulfur HexaFluoride (SF6) [EN 673:1997 Table 1 - Gas Properties]", "SulfurHexa Fluoride Material with properties at 10°C", 0.01275, 6.36, 614, 1.459e-5));
 
             result.Add(Name.FileName_DefaultMaterialLibrary, "SAM_MaterialLibrary.JSON");
-            result.Add(Name.FileName_DefaultConstructions, "SAM_Constructions.JSON");
+            result.Add(Name.FileName_DefaultConstructionLibrary, "SAM_ConstructionLibrary.JSON");
 
-            return result;
+            string path = null;
+
+            path = Query.DefaultConstructionLibraryPath(result);
+            if (System.IO.File.Exists(path))
+                result.Add(Name.Library_DefaultConstructionLibrary, Core.Create.IJSAMObject<ConstructionLibrary>(System.IO.File.ReadAllText(path)));
+
+            path = Query.DefaultMaterialLibraryPath(result);
+            if (System.IO.File.Exists(path))
+                result.Add();
+
+                return result;
         }
     }
 }

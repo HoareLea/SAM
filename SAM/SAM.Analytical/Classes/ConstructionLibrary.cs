@@ -2,6 +2,7 @@
 using SAM.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -72,13 +73,30 @@ namespace SAM.Analytical
             return jSAMObject is Construction;
         }
 
-        public List<Construction> GetConstructions
+        public List<Construction> GetConstructions()
         {
+            return GetObjects<Construction>();
+        }
 
-            get
-            {
-                return GetObjects<Construction>();
-            }
+        public List<Construction> GetConstructions(PanelType panelType)
+        {
+            List<Construction> constructions = GetConstructions();
+            if (constructions == null || constructions.Count == 0)
+                return null;
+
+            return constructions.FindAll(x => x.PanelType() == panelType);
+        }
+
+        public List<Construction> GetConstructions(IEnumerable<PanelType> panelTypes)
+        {
+            if (panelTypes == null || panelTypes.Count() == 0)
+                return null;
+            
+            List<Construction> constructions = GetConstructions();
+            if (constructions == null || constructions.Count == 0)
+                return null;
+
+            return constructions.FindAll(x => panelTypes.Contains(x.PanelType()));
         }
     }
 }
