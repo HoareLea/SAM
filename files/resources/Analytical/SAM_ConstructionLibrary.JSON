@@ -1,489 +1,702 @@
-[
-  {
-    "_type": "SAM.Analytical.ConstructionLibrary,SAM.Analytical",
-    "Name": "Default SAM Construction Library ver00",
-    "Guid": "9cdb994b-e7d0-4217-acb6-7a3f1a69e2dc",
-    "Objects": [
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "Generic",
-        "Guid": "6ff47aad-ec17-4806-8e81-e84b10d5756a",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "Ceiling"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
-            "Thickness": 0.0125
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
-            "Thickness": 0.05
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Concrete Reinforced_2300kg/m3_2.3W/mK",
-            "Thickness": 0.1
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Screed_1800kg/m3_1.15W/mK",
-            "Thickness": 0.05
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
-            "Thickness": 0.05
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Chipboard Flooring_500kg/m3_0.13W/mK",
-            "Thickness": 0.02
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK",
-            "Thickness": 0.01
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_EXT_GLZ",
-        "Guid": "9ab5d49f-4db4-4930-8293-3945d430e572",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "CurtainWall"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
-            "Thickness": 0.006
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "Ar0UP_Air__12mm_3.168W/m2K",
-            "Thickness": 0.12
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9",
-            "Thickness": 0.006
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_EXT_GRD_FLR FLR01",
-        "Guid": "b4a6da31-169c-4781-a1cb-39e9900f7d35",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "UndergroundSlab"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK",
-            "Thickness": 0.0127
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Concrete_2400kg/m3_2.362W/mK",
-            "Thickness": 0.2
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "I03_Mineral Wool_43.25kg/m3_0.035W/mK",
-            "Thickness": 0.14
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK",
-            "Thickness": 1.0
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_EXT_SLD_FLR Exposed",
-        "Guid": "18da6398-75b3-4e39-8505-cf26e1f7f875",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "FloorExposed"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Chipboard Flooring_500kg/m3_0.13W/mK",
-            "Thickness": 0.02
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
-            "Thickness": 0.05
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Concrete Reinforced_2300kg/m3_2.3W/mK",
-            "Thickness": 0.1
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "I00_Mineral Wool_700kg/m3_0.025W/mK",
-            "Thickness": 0.0098
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_INT_SLD_FLR FLR02",
-        "Guid": "3290e9b5-323d-40b2-9be4-312894681119",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "FloorRaised"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Chipboard Flooring_500kg/m3_0.13W/mK",
-            "Thickness": 0.02
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
-            "Thickness": 0.05
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Concrete Reinforced_2300kg/m3_2.3W/mK",
-            "Thickness": 0.1
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "I00_Mineral Wool_700kg/m3_0.025W/mK",
-            "Thickness": 0.0098
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_EXT_SLD_Roof DA01",
-        "Guid": "6ebe9f3b-b20d-4583-a5db-3f17d8106016",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "Roof"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
-            "Thickness": 0.0125
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "Ar90Up_Air__50mm_1.95W/m2K",
-            "Thickness": 0.05
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Concrete_2400kg/m3_2W/mK",
-            "Thickness": 0.1
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Membrane_1100kg/m3_1W/mK",
-            "Thickness": 0.001
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "I02_Mineral Wool_40kg/m3_0.03W/mK",
-            "Thickness": 0.154
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_EXT_SHD",
-        "Guid": "4acfae60-42c4-4b00-ba12-bc0329987b51",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "Shade"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Mild Steel_7800kg/m3_50W/mK",
-            "Thickness": 0.006
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_EXT_SOL_Roof",
-        "Guid": "28b83556-a292-4c0a-b5dc-2d6fe85eb728",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "SolarPanel"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_SHW or PV Panel_480kg/m3_0.01W/mK",
-            "Thickness": 0.006
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_INT_SLD_FLR Parking",
-        "Guid": "595f988a-89cc-47fb-b3d1-b8df1f76002d",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "UndergroundCeiling"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Plasterboard_900kg/m3_0.21W/mK",
-            "Thickness": 0.0095
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "I00_Glass Fibre Insulation_11.998kg/m3_0.038W/mK",
-            "Thickness": 0.16
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Concrete Block_1842.12kg/m3_1.315W/mK",
-            "Thickness": 0.23
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK",
-            "Thickness": 1.0
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_EXT_GRD",
-        "Guid": "99972a36-6fb2-4565-9337-3b163d056c9c",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "UndergroundWall"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Gypsym Board_800.923kg/m3_0.161W/mK",
-            "Thickness": 0.0127
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "I00_Glass Fibre Insulation_11.998kg / m3_0.038W / mK",
-            "Thickness": 0.13018
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Concrete Block_1842.12kg/m3_1.315W/mK",
-            "Thickness": 0.23
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK",
-            "Thickness": 1.0
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_EXT_SLD",
-        "Guid": "8f424c58-6570-4b9b-b753-e7584b7b4494",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "WallExternal"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "F00_WhitePaint_0.001kg/m3_999W/mK",
-            "Thickness": 0.0001
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
-            "Thickness": 0.0125
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "Ar90Up_Air__50mm_1.25W/m2K",
-            "Thickness": 0.05
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Cement particleboard_1200kg/m3_0.23W/mK",
-            "Thickness": 0.012
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "I01_Mineral Wool_20kg/m3_0.025W/mK",
-            "Thickness": 0.08
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "Ar90Up_Air__50mm_1.25W/m2K",
-            "Thickness": 0.05
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C00_Rainscreen_7800kg/m3_50W/mK",
-            "Thickness": 0.003
-          }
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Construction,SAM.Analytical",
-        "Name": "SIM_INT_SLD_Partition",
-        "Guid": "625d9ed6-64fa-4877-bb56-b84ba118c900",
-        "ParameterSets": [
-          {
-            "_type": "SAM.Core.ParameterSet",
-            "Name": "SAM.Analytical",
-            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-            "Parameters": [
-              {
-                "Name": "SAM_BuildingElementType",
-                "Value": "WallInternal"
-              }
-            ]
-          }
-        ],
-        "ConstructionLayers": [
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "F00_WhitePaint_0.001kg/m3_999W/mK",
-            "Thickness": 0.0001
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
-            "Thickness": 0.0125
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "Ar90Up_Air__50mm_1.25W/m2K",
-            "Thickness": 0.05
-          },
-          {
-            "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-            "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
-            "Thickness": 0.0125
-          }
-        ]
-      }
-    ]
-  }
-]
+{
+  "_type": "SAM.Analytical.ConstructionLibrary,SAM.Analytical",
+  "Name": "Default SAM Construction Library ver00",
+  "Guid": "127ece3e-4796-4736-a7b3-57a0d164f509",
+  "Objects": [
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "Generic",
+      "Guid": "6ff47aad-ec17-4806-8e81-e84b10d5756a",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "Ceiling"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
+          "Thickness": 0.0125
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete Reinforced_2300kg/m3_2.3W/mK",
+          "Thickness": 0.1
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Screed_1800kg/m3_1.15W/mK",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Chipboard Flooring_500kg/m3_0.13W/mK",
+          "Thickness": 0.02
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK",
+          "Thickness": 0.01
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "9ab5d49f-4db4-4930-8293-3945d430e572",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "CurtainWall"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
+          "Thickness": 0.006
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar0UP_Air__12mm_3.168W/m2K",
+          "Thickness": 0.12
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9",
+          "Thickness": 0.006
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_GRD_FLR FLR01",
+      "Guid": "6b5cbfab-bc87-4d2c-98e0-d940c75295fa",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "Floor"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Gypsym Board_800.923kg/m3_0.161W/mK",
+          "Thickness": 0.0127
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I00_Glass Fibre Insulation_11.998kg/m3_0.038W/mK",
+          "Thickness": 0.13018
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete Block_1842.12kg/m3_1.315W/mK",
+          "Thickness": 0.23
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK",
+          "Thickness": 1.0
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_SLD_FLR Exposed",
+      "Guid": "18da6398-75b3-4e39-8505-cf26e1f7f875",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "FloorExposed"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Chipboard Flooring_500kg/m3_0.13W/mK",
+          "Thickness": 0.02
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete Reinforced_2300kg/m3_2.3W/mK",
+          "Thickness": 0.1
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I00_Mineral Wool_700kg/m3_0.025W/mK",
+          "Thickness": 0.0098
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_INT_SLD_FLR FLR02",
+      "Guid": "d5521200-8376-49b2-a9ed-ad914f380022",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "FloorInternal"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK",
+          "Thickness": 0.01
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Chipboard Flooring_500kg/m3_0.13W/mK",
+          "Thickness": 0.02
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Screed_1800kg/m3_1.15W/mK",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete Reinforced_2300kg/m3_2.3W/mK",
+          "Thickness": 0.1
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
+          "Thickness": 0.0125
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_INT_SLD_FLR FLR02",
+      "Guid": "3290e9b5-323d-40b2-9be4-312894681119",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "FloorRaised"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Chipboard Flooring_500kg/m3_0.13W/mK",
+          "Thickness": 0.02
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Dn_Air__50mm_0.5W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete Reinforced_2300kg/m3_2.3W/mK",
+          "Thickness": 0.1
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I00_Mineral Wool_700kg/m3_0.025W/mK",
+          "Thickness": 0.0098
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_SLD_Roof DA01",
+      "Guid": "6ebe9f3b-b20d-4583-a5db-3f17d8106016",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "Roof"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
+          "Thickness": 0.0125
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Up_Air__50mm_1.95W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete_2400kg/m3_2W/mK",
+          "Thickness": 0.1
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Membrane_1100kg/m3_1W/mK",
+          "Thickness": 0.001
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I02_Mineral Wool_40kg/m3_0.03W/mK",
+          "Thickness": 0.154
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_SHD",
+      "Guid": "4acfae60-42c4-4b00-ba12-bc0329987b51",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "Shade"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Mild Steel_7800kg/m3_50W/mK",
+          "Thickness": 0.006
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_GRD_FLR FLR01",
+      "Guid": "6892f46e-396e-46ef-bf00-42a91e2f3d49",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "SlabOnGrade"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK",
+          "Thickness": 0.0127
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete_2400kg/m3_2.362W/mK",
+          "Thickness": 0.2
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I03_Mineral Wool_43.25kg/m3_0.035W/mK",
+          "Thickness": 0.14
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK",
+          "Thickness": 1.0
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_SOL_Roof",
+      "Guid": "28b83556-a292-4c0a-b5dc-2d6fe85eb728",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "SolarPanel"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_SHW or PV Panel_480kg/m3_0.01W/mK",
+          "Thickness": 0.006
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_SHD_Roof SD01",
+      "Guid": "cac8e3ad-50bd-4323-b0c8-2f3128c591c7",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "Undefined"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Mild Steel_7800kg/m3_50W/mK",
+          "Thickness": 0.006
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_INT_SLD_FLR Parking",
+      "Guid": "595f988a-89cc-47fb-b3d1-b8df1f76002d",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "UndergroundCeiling"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Plasterboard_900kg/m3_0.21W/mK",
+          "Thickness": 0.0095
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I00_Glass Fibre Insulation_11.998kg/m3_0.038W/mK",
+          "Thickness": 0.16
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete Block_1842.12kg/m3_1.315W/mK",
+          "Thickness": 0.23
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK",
+          "Thickness": 1.0
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_GRD_FLR FLR01",
+      "Guid": "b4a6da31-169c-4781-a1cb-39e9900f7d35",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "UndergroundSlab"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Carpet and Rubber pad_288.332kg/m3_0.059W/mK",
+          "Thickness": 0.0127
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete_2400kg/m3_2.362W/mK",
+          "Thickness": 0.2
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I03_Mineral Wool_43.25kg/m3_0.035W/mK",
+          "Thickness": 0.14
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK",
+          "Thickness": 1.0
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_GRD",
+      "Guid": "99972a36-6fb2-4565-9337-3b163d056c9c",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "UndergroundWall"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Gypsym Board_800.923kg/m3_0.161W/mK",
+          "Thickness": 0.0127
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I00_Glass Fibre Insulation_11.998kg / m3_0.038W / mK",
+          "Thickness": 0.13018
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete Block_1842.12kg/m3_1.315W/mK",
+          "Thickness": 0.23
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK",
+          "Thickness": 1.0
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_SLD",
+      "Guid": "5c3039ff-c4af-4953-bbf0-5c84bdd8044c",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "Wall"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "F00_WhitePaint_0.001kg/m3_999W/mK",
+          "Thickness": 0.0001
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
+          "Thickness": 0.0125
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Up_Air__50mm_1.25W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Cement particleboard_1200kg/m3_0.23W/mK",
+          "Thickness": 0.012
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I01_Mineral Wool_20kg/m3_0.025W/mK",
+          "Thickness": 0.08
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Up_Air__50mm_1.25W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Rainscreen_7800kg/m3_50W/mK",
+          "Thickness": 0.003
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_SLD",
+      "Guid": "8f424c58-6570-4b9b-b753-e7584b7b4494",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "WallExternal"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "F00_WhitePaint_0.001kg/m3_999W/mK",
+          "Thickness": 0.0001
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
+          "Thickness": 0.0125
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Up_Air__50mm_1.25W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Cement particleboard_1200kg/m3_0.23W/mK",
+          "Thickness": 0.012
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I01_Mineral Wool_20kg/m3_0.025W/mK",
+          "Thickness": 0.08
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Up_Air__50mm_1.25W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Rainscreen_7800kg/m3_50W/mK",
+          "Thickness": 0.003
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_INT_SLD_Partition",
+      "Guid": "625d9ed6-64fa-4877-bb56-b84ba118c900",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "WallInternal"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "F00_WhitePaint_0.001kg/m3_999W/mK",
+          "Thickness": 0.0001
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
+          "Thickness": 0.0125
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Up_Air__50mm_1.25W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
+          "Thickness": 0.0125
+        }
+      ]
+    }
+  ]
+}

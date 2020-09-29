@@ -55,14 +55,7 @@ namespace SAM.Analytical
             if (construction == null)
                 return null;
 
-            string uniqueName = construction.UniqueName();
-            if (string.IsNullOrWhiteSpace(uniqueName))
-                uniqueName = construction.Name;
-
-            if (string.IsNullOrWhiteSpace(uniqueName))
-                uniqueName = construction.Guid.ToString();
-
-            return uniqueName;
+            return construction.Guid.ToString();
         }
 
         public override bool IsValid(IJSAMObject jSAMObject)

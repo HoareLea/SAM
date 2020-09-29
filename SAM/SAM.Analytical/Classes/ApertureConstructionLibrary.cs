@@ -54,14 +54,7 @@ namespace SAM.Analytical
             if (apertureConstruction == null)
                 return null;
 
-            string uniqueName = apertureConstruction.UniqueName();
-            if (string.IsNullOrWhiteSpace(uniqueName))
-                uniqueName = apertureConstruction.Name;
-
-            if (string.IsNullOrWhiteSpace(uniqueName))
-                uniqueName = apertureConstruction.Guid.ToString();
-
-            return uniqueName;
+            return apertureConstruction.Guid.ToString();
         }
 
         public override bool IsValid(IJSAMObject jSAMObject)
