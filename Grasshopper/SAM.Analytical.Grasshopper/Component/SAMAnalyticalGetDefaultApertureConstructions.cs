@@ -124,6 +124,9 @@ namespace SAM.Analytical.Grasshopper
                 foreach (PanelType panelType in panelTypes)
                 {
                     ApertureConstruction apertureConstruction = Analytical.Query.DefaultApertureConstruction(panelType, apertureType);
+                    if (apertureConstruction == null)
+                        continue; 
+
                     if (apertureConstructions.Find(x => x.Guid.Equals(apertureConstruction.Guid)) == null)
                         apertureConstructions.Add(apertureConstruction);
                 }
