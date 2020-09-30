@@ -21,7 +21,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreCreateOpaqueMaterial()
           : base("SAMCore.CreateOpaqueMaterial", "SAMCore.CreateOpaqueMaterial",
-              "Create Gas Material",
+              "Create Opaque Material",
               "SAM", "Core")
         {
         }

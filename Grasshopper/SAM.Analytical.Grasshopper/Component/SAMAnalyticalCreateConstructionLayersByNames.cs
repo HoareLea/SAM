@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateConstructionLayers : GH_SAMComponent
+    public class SAMAnalyticalCreateConstructionLayersByNames : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -23,9 +23,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreateConstructionLayers()
-          : base("SAMAnalytical.CreateConstructionLayers", "SAMAnalyticalCreate.ConstructionLayers",
-              "Create Construction Layers",
+        public SAMAnalyticalCreateConstructionLayersByNames()
+          : base("SAMAnalytical.CreateConstructionLayersByNames", "SAMAnalyticalCreate.ConstructionLayersByNames",
+              "Create Construction Layers By Material Names",
               "SAM", "Analytical")
         {
         }

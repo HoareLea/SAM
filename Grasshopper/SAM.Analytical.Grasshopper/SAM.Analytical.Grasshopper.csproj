@@ -107,13 +107,16 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionLibrary - Copy.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateApertureConstructionLibrary.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateConstructionLayersByMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateGasMaterial.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateTransparentMaterial.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructions.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultMaterialLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalLabelSpace.cs" />
     <Compile Include="Component\SAMAnalyticalLabelPanel.cs" />
     <Compile Include="Component\SAMAnalyticalCreateApertureConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionLayers.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateConstructionLayersByNames.cs" />
     <Compile Include="Component\SAMAnalyticalGetInternalMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalGetInternalConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultConstructions.cs" />
@@ -173,6 +176,7 @@
     <Compile Include="Component\SAMAnalyticalRelatedObjects.cs" />
     <Compile Include="Component\SAMAnalyticalCreateMaterialLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstructionLibrary.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateOpaqueMaterial.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToRhino\Breps.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
