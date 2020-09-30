@@ -48,13 +48,13 @@ namespace SAM.Analytical
             bool external = true;
             switch (panelType)
             {
-                case Analytical.PanelType.Undefined:
                 case Analytical.PanelType.Roof:
                     ApertureConstruction apertureConstruction;
                     if (!ActiveSetting.Setting.TryGetValue(ActiveSetting.Name.ApertureConstruction_Skylight, out apertureConstruction))
                         return null;
                     return apertureConstruction;
 
+                case Analytical.PanelType.Undefined:
                 case Analytical.PanelType.CurtainWall:
                 case Analytical.PanelType.Wall:
                 case Analytical.PanelType.Floor:

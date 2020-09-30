@@ -7,27 +7,28 @@ namespace SAM.Analytical
     {
         public static bool SetPanelType(this Construction construction, PanelType panelType)
         {
-            if (construction == null)
-                return false;
-
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            string parameterName = Query.ParameterName_PanelType();
-
-            string value = panelType.ToString();
-
-            if (construction.SetParameter(assembly, parameterName, value))
-                return true;
-
-            ParameterSet parameterSet = new ParameterSet(assembly);
-            if (!parameterSet.Add(parameterName, value))
-                return false;
-
-            return construction.Add(parameterSet);
+            return SetPanelType(construction as SAMObject, panelType);
         }
 
         public static bool SetPanelType(this Construction construction, PanelType panelType, Setting setting)
         {
-            if (construction == null)
+            return SetPanelType(construction as SAMObject, panelType, setting);
+        }
+
+        public static bool SetPanelType(this ApertureConstruction apertureConstruction, PanelType panelType)
+        {
+            return SetPanelType(apertureConstruction as SAMObject, panelType);
+        }
+
+        public static bool SetPanelType(this ApertureConstruction apertureConstruction, PanelType panelType, Setting setting)
+        {
+            return SetPanelType(apertureConstruction as SAMObject, panelType, setting);
+        }
+
+
+        private static bool SetPanelType(this SAMObject sAMObject, PanelType panelType, Setting setting)
+        {
+            if (sAMObject == null)
                 return false;
 
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -35,14 +36,34 @@ namespace SAM.Analytical
 
             string value = panelType.ToString();
 
-            if (construction.SetParameter(assembly, parameterName, value))
+            if (sAMObject.SetParameter(assembly, parameterName, value))
                 return true;
 
             ParameterSet parameterSet = new ParameterSet(assembly);
             if (!parameterSet.Add(parameterName, value))
                 return false;
 
-            return construction.Add(parameterSet);
+            return sAMObject.Add(parameterSet);
+        }
+
+        private static bool SetPanelType(this SAMObject sAMObject, PanelType panelType)
+        {
+            if (sAMObject == null)
+                return false;
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string parameterName = Query.ParameterName_PanelType();
+
+            string value = panelType.ToString();
+
+            if (sAMObject.SetParameter(assembly, parameterName, value))
+                return true;
+
+            ParameterSet parameterSet = new ParameterSet(assembly);
+            if (!parameterSet.Add(parameterName, value))
+                return false;
+
+            return sAMObject.Add(parameterSet);
         }
     }
 }

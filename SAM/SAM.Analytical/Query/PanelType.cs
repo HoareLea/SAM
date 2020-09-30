@@ -15,6 +15,9 @@ namespace SAM.Analytical
             if (@object is Construction)
                 return PanelType((Construction)@object);
 
+            if (@object is ApertureConstruction)
+                return PanelType((ApertureConstruction)@object);
+
             PanelType result;
             if (@object is string)
             {
@@ -85,6 +88,18 @@ namespace SAM.Analytical
 
             object result = null;
             if (!Core.Query.TryGetValue(construction, ParameterName_PanelType(), out result))
+                return Analytical.PanelType.Undefined;
+
+            return PanelType(result);
+        }
+
+        public static PanelType PanelType(ApertureConstruction apertureConstruction)
+        {
+            if (apertureConstruction == null)
+                return Analytical.PanelType.Undefined;
+
+            object result = null;
+            if (!Core.Query.TryGetValue(apertureConstruction, ParameterName_PanelType(), out result))
                 return Analytical.PanelType.Undefined;
 
             return PanelType(result);
