@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddTextParameter("_apertureTypes_", "_apertureTypes_", "SAM Analytical ApertureTypes", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddBooleanParameter("_panelTypes_", "_panelTypes_", "SAM Analytical PanelTypes", GH_ParamAccess.list);
+            index = inputParamManager.AddTextParameter("_panelTypes_", "_panelTypes_", "SAM Analytical PanelTypes", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
         }
 
