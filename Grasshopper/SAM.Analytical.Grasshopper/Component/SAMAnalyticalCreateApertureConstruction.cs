@@ -25,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalCreateApertureConstruction()
-          : base("SAMAnalytical.CreateApertureConstruction", "SAMAnalyticalCreate.ApertureConstruction",
+          : base("SAMAnalytical.CreateApertureConstruction", "SAMAnalytical.CreateApertureConstruction",
               "Create Aperture Construction",
               "SAM", "Analytical")
         {
