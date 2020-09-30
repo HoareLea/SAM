@@ -88,9 +88,9 @@
     <Compile Include="Component\SAMCoreLoadMaterialLibrary.cs" />
     <Compile Include="Component\SAMCoreSaveMaterialLibrary.cs" />
     <Compile Include="Component\SAMCoreCreateMaterialLibrary.cs" />
-    <Compile Include="Component\SAMCoreCreateTransparentMaterial.cs" />
-    <Compile Include="Component\SAMCoreCreateOpaqueMaterial.cs" />
-    <Compile Include="Component\SAMCoreCreateGasMaterial.cs" />
+    <Compile Include="Component\SAMCoreCreateTransparentMaterial_Obsolete.cs" />
+    <Compile Include="Component\SAMCoreCreateOpaqueMaterial_Obsolete.cs" />
+    <Compile Include="Component\SAMCoreCreateGasMaterial_Obsolete.cs" />
     <Compile Include="Component\SAMCoreLogToFile.cs" />
     <Compile Include="Component\SAMVersion.cs" />
     <Compile Include="Component\SAMCoreColorToUint.cs" />

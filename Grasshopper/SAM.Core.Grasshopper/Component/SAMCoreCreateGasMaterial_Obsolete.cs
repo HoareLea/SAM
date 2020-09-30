@@ -2,14 +2,17 @@
 using SAM.Core.Grasshopper.Properties;
 using System;
 
-namespace SAM.Core.Grasshopper
+namespace SAM.Core.Grasshopper.Obsolete
 {
+    [Obsolete("Obsolete since 2020-09-30")]
     public class SAMCoreCreateGasMaterial : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
         public override Guid ComponentGuid => new Guid("f5d634b2-3ac9-48fc-b6a8-51a5154c0e5d");
+
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         /// <summary>
         /// Provides an Icon for the component.

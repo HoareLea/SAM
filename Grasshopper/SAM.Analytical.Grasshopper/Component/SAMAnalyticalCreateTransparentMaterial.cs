@@ -32,12 +32,19 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            string defaultString = null;
+            int index;
             
             inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_group_", "_group_", "Group", GH_ParamAccess.item, defaultString);
-            inputParamManager.AddTextParameter("_displayName_", "_displayName_", "Display Name", GH_ParamAccess.item, defaultString);
-            inputParamManager.AddTextParameter("_description_", "_description_", "Description", GH_ParamAccess.item, defaultString);
+
+            index = inputParamManager.AddTextParameter("_group_", "_group_", "Group", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddTextParameter("_displayName_", "_displayName_", "Display Name", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddTextParameter("_description_", "_description_", "Description", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
             inputParamManager.AddNumberParameter("_thermalConductivity_", "_thermalConductivity_", "Thermal Conductivity [W/mK]", GH_ParamAccess.item, double.NaN);
             inputParamManager.AddNumberParameter("_defaultThickness_", "_defaultThickness_", "Default Thickness [m]", GH_ParamAccess.item, double.NaN);
             inputParamManager.AddNumberParameter("_vapourDiffusionFactor_", "_vapourDiffusionFactor_", "Vapour Diffusion Factor [-]", GH_ParamAccess.item, double.NaN);

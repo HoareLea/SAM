@@ -32,10 +32,19 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
+            int index;
+
             inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_group_", "_group_", "Group", GH_ParamAccess.item, default(string));
-            inputParamManager.AddTextParameter("_displayName_", "_displayName_", "Display Name", GH_ParamAccess.item, default(string));
-            inputParamManager.AddTextParameter("_description_", "_description_", "Description", GH_ParamAccess.item, default(string));
+
+            index = inputParamManager.AddTextParameter("_group_", "_group_", "Group", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddTextParameter("_displayName_", "_displayName_", "Display Name", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddTextParameter("_description_", "_description_", "Description", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
             inputParamManager.AddNumberParameter("_thermalConductivity_", "_thermalConductivity_", "Thermal Conductivity [W/mK]", GH_ParamAccess.item, double.NaN);
             inputParamManager.AddNumberParameter("_specificHeatCapacity_", "_specificHeatCapacity_", "Specific Heat Capacity [J/kgK]", GH_ParamAccess.item, double.NaN);
             inputParamManager.AddNumberParameter("_density_", "_density_", "Density [kg/m3]", GH_ParamAccess.item, double.NaN);
