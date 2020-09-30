@@ -46,7 +46,7 @@ namespace SAM.Analytical
         public ApertureConstruction(JObject jObject)
             : base(jObject)
         {
-            FromJObject(jObject);
+
         }
 
         public List<ConstructionLayer> FrameConstructionLayers
@@ -84,11 +84,11 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            if (frameConstructionLayers != null)
-                jObject.Add("FrameConstructionLayers", Core.Create.JArray(frameConstructionLayers));
+            if (jObject.ContainsKey("FrameConstructionLayers"))
+                frameConstructionLayers = Core.Create.IJSAMObjects<ConstructionLayer>(jObject.Value<JArray>("FrameConstructionLayers"));
 
-            if (paneConstructionLayers != null)
-                jObject.Add("PaneConstructionLayers", Core.Create.JArray(paneConstructionLayers));
+            if (jObject.ContainsKey("PaneConstructionLayers"))
+                paneConstructionLayers = Core.Create.IJSAMObjects<ConstructionLayer>(jObject.Value<JArray>("PaneConstructionLayers"));
 
             if (jObject.ContainsKey("ApertureType"))
                 Enum.TryParse(jObject.Value<string>("ApertureType"), out apertureType);
