@@ -75,6 +75,7 @@
     <Compile Include="Classes\ConstructionLayer.cs" />
     <Compile Include="Classes\ApertureConstructionLibrary.cs" />
     <Compile Include="Classes\ConstructionLibrary.cs" />
+    <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\GasMaterial.cs" />
     <Compile Include="Create\MaterialLibrary.cs" />
