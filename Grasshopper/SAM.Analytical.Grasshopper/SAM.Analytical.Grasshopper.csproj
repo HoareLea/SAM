@@ -112,6 +112,7 @@
     <Compile Include="Component\SAMAnalyticalCreateGasMaterial.cs" />
     <Compile Include="Component\SAMAnalyticalCreateTransparentMaterial.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructions.cs" />
+    <Compile Include="Component\SAMAnalyticalGetDefaultGasMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultMaterialLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalLabelSpace.cs" />
     <Compile Include="Component\SAMAnalyticalLabelPanel.cs" />
