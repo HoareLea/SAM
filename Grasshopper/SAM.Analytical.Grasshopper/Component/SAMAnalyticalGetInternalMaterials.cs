@@ -42,7 +42,10 @@ namespace SAM.Analytical.Grasshopper
             gooSpaceParam.Optional = true;
 
             inputParamManager.AddParameter(gooSpaceParam, "_spaces_", "_spaces_", "SAM Analytical Spaces", GH_ParamAccess.list);
-            inputParamManager.AddParameter(new GooMaterialLibraryParam(), "_materialLibrary", "_materialLibrary", "SAM MaterialLibrary", GH_ParamAccess.item);
+
+            GooMaterialLibraryParam gooMaterialLibraryParam = new GooMaterialLibraryParam();
+            gooMaterialLibraryParam.Optional = true;
+            inputParamManager.AddParameter(gooMaterialLibraryParam, "_materialLibrary", "_materialLibrary", "SAM MaterialLibrary", GH_ParamAccess.item);
         }
         
         /// <summary>
@@ -78,11 +81,9 @@ namespace SAM.Analytical.Grasshopper
                 spaces = adjacencyCluster.GetSpaces();
 
             MaterialLibrary materialLibrary = null;
-            if (!dataAccess.GetData(2, ref materialLibrary) || materialLibrary == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            dataAccess.GetData(2, ref materialLibrary);
+            if (materialLibrary == null)
+                materialLibrary = Analytical.Query.DefaultMaterialLibrary();
 
             if(spaces != null && spaces.Count != 0)
             {
