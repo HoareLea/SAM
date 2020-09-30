@@ -119,6 +119,8 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\UpdateConstructions.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\DefaultApertureConstructionLibrary.cs" />
+    <Compile Include="Query\DefaultApertureConstructionLibraryPath.cs" />
     <Compile Include="Query\DefaultConstructionLibraryPath.cs" />
     <Compile Include="Query\DefaultConstructionLibrary.cs" />
     <Compile Include="Query\DefaultGasMaterialLibraryPath.cs" />
@@ -196,7 +198,7 @@
     <Compile Include="Query\SnapByPlanes.cs" />
     <Compile Include="Query\SnapByPoints.cs" />
     <Compile Include="Query\DefaultApertureConstruction.cs" />
-    <Compile Include="Query\ApertureConstructionName.cs" />
+    <Compile Include="Query\DefaultApertureConstructionName.cs" />
     <Compile Include="Query\MergeOverlapPanels.cs" />
     <Compile Include="Query\PanelGroup.cs" />
     <Compile Include="Query\DefaultConstructionName.cs" />

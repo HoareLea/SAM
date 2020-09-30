@@ -78,5 +78,50 @@ namespace SAM.Analytical
 
             return apertureConstructions.FindAll(x => x.ApertureType.Equals(apertureType));
         }
+
+        public List<ApertureConstruction> GetApertureConstructions(ApertureType apertureType, PanelType panelType)
+        {
+            List<ApertureConstruction> apertureConstructions = GetApertureConstructions(apertureType);
+            if (apertureConstructions == null)
+                return null;
+
+            return apertureConstructions.FindAll(x => x.PanelType() == panelType);
+        }
+
+        public List<ApertureConstruction> GetApertureConstructions(ApertureType apertureType, PanelGroup panelGroup)
+        {
+            List<ApertureConstruction> apertureConstructions = GetApertureConstructions(apertureType);
+            if (apertureConstructions == null)
+                return null;
+
+            return apertureConstructions.FindAll(x => x.PanelType().PanelGroup() == panelGroup);
+        }
+
+        public List<ApertureConstruction> GetApertureConstructions(string text, TextComparisonType textComparisonType, bool caseSensitive = true, ApertureType apertureType = ApertureType.Undefined)
+        {
+            if (text == null)
+                return null;
+
+            List<ApertureConstruction> apertureConstructions = null;
+            if (apertureType == ApertureType.Undefined)
+                apertureConstructions = GetApertureConstructions();
+            else
+                apertureConstructions = GetApertureConstructions(apertureType);
+
+            if (apertureConstructions == null)
+                return null;
+
+            List<ApertureConstruction> result = new List<ApertureConstruction>();
+            foreach(ApertureConstruction apertureConstruction in apertureConstructions)
+            {
+                if (apertureConstruction == null)
+                    continue;
+
+                if (Core.Query.Compare(apertureConstruction.Name, text, textComparisonType, caseSensitive))
+                    result.Add(apertureConstruction);
+            }
+
+            return result;
+        }
     }
 }

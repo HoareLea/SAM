@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            ApertureConstruction apertureConstruction = Analytical.Query.DefaultApertureConstruction(ApertureType.Window, true);
+            ApertureConstruction apertureConstruction = Analytical.Query.DefaultApertureConstruction(PanelType.WallExternal, ApertureType.Window);
 
             inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, apertureConstruction.Name);
             inputParamManager.AddTextParameter("_apertureType", "_apertureType", "Aperture Type", GH_ParamAccess.item, apertureConstruction.ApertureType.ToString());
