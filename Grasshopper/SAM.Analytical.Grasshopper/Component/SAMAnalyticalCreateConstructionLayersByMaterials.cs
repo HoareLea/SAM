@@ -92,7 +92,7 @@ namespace SAM.Analytical.Grasshopper
 
             object[] objects = new object[materials.Count + thicknesses.Count];
             for (int i = 0; i < materials.Count; i++)
-                objects[i] = materials[i];
+                objects[i] = materials[i].Name;
 
             for (int i = 0; i < thicknesses.Count; i++)
                 objects[materials.Count + i] = thicknesses[i];
