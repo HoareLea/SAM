@@ -533,7 +533,7 @@
         },
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-          "Name": "I00_Glass Fibre Insulation_11.998kg / m3_0.038W / mK",
+          "Name": "I00_Glass Fibre Insulation_11.998kg/m3_0.038W/mK",
           "Thickness": 0.13018
         },
         {

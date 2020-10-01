@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAM.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -77,10 +78,10 @@ namespace SAM.Analytical
                             {
                                 elevation = Query.MaxElevation(panel);
 
-                                if (elevation == elevation_Ground)
+                                if (System.Math.Abs(elevation - elevation_Ground) < Tolerance.MacroDistance)
                                     panelType = PanelType.SlabOnGrade;
                                 else if (elevation < elevation_Ground)
-                                    panelType = PanelType.SlabOnGrade;
+                                    panelType = PanelType.UndergroundSlab;
                                 else
                                     panelType = PanelType.FloorExposed;
                             }
