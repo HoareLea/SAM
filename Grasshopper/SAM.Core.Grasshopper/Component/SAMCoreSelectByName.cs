@@ -131,10 +131,13 @@ namespace SAM.Core.Grasshopper
                 values.Add(name);
             }
 
-            menu.Items.Clear();
+            if(menu != null)
+            {
+                menu.Items.Clear();
 
-            foreach (string value in values)
-                Menu_AppendItem(menu, value, Menu_Changed, true, value.Equals(this.value)).Tag = value;
+                foreach (string value in values)
+                    Menu_AppendItem(menu, value, Menu_Changed, true, value.Equals(this.value)).Tag = value;
+            }
 
             List<ISAMObject> result = new List<ISAMObject>();
             foreach (ISAMObject sAMObject in sAMObjects)
