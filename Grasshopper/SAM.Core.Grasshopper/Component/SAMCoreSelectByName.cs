@@ -25,7 +25,7 @@ namespace SAM.Core.Grasshopper
         private List<string> values;
         private string value;
 
-        private ToolStripDropDown menu;
+        //private ToolStripDropDown menu;
 
         /// <summary>
         /// AboutInfo
@@ -66,7 +66,7 @@ namespace SAM.Core.Grasshopper
 
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            this.menu = menu;
+            //this.menu = menu;
             
             foreach (string value in values)
                 Menu_AppendItem(menu, value, Menu_Changed, true, value.Equals(this.value)).Tag = value;
@@ -131,13 +131,15 @@ namespace SAM.Core.Grasshopper
                 values.Add(name);
             }
 
-            if(menu != null)
-            {
-                menu.Items.Clear();
+            this.values = new List<string>(values);
 
-                foreach (string value in values)
-                    Menu_AppendItem(menu, value, Menu_Changed, true, value.Equals(this.value)).Tag = value;
-            }
+            //if(menu != null)
+            //{
+            //    menu.Items.Clear();
+
+            //    foreach (string value in values)
+            //        Menu_AppendItem(menu, value, Menu_Changed, true, value.Equals(this.value)).Tag = value;
+            //}
 
             List<ISAMObject> result = new List<ISAMObject>();
             foreach (ISAMObject sAMObject in sAMObjects)
