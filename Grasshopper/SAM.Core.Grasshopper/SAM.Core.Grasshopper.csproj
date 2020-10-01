@@ -86,6 +86,7 @@
     <Compile Include="Component\SAMCoreAddMaterials.cs" />
     <Compile Include="Component\SAMCoreCopyMaterials.cs" />
     <Compile Include="Component\SAMCoreLoadMaterialLibrary.cs" />
+    <Compile Include="Component\SAMCoreSelectByName.cs" />
     <Compile Include="Component\SAMCoreSaveMaterialLibrary.cs" />
     <Compile Include="Component\SAMCoreCreateMaterialLibrary.cs" />
     <Compile Include="Component\SAMCoreCreateTransparentMaterial_Obsolete.cs" />
