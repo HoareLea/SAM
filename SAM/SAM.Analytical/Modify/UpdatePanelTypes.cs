@@ -90,6 +90,12 @@ namespace SAM.Analytical
                                 panelType = PanelType.Roof;
                             }
                             break;
+
+                        case PanelType.Roof:
+                            elevation = Query.MaxElevation(panel);
+                            if (elevation < elevation_Ground)
+                                panelType = PanelType.UndergroundCeiling;
+                            break;
                     }                 
 
                 }
