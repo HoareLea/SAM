@@ -75,15 +75,16 @@ namespace SAM.Analytical.Grasshopper
                 constructionLayers = new List<ConstructionLayer>();
                 foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
                 {
-                    if(objectWrapper.Value is ConstructionLayer)
-                    {
-                        constructionLayers.Add((ConstructionLayer)objectWrapper.Value);
-                    }
-                    if(objectWrapper.Value is GooConstructionLayer)
-                    {
-                        constructionLayers.Add(((GooConstructionLayer)objectWrapper.Value).Value);
+                    ConstructionLayer constructionLayer = null;
+                    if (objectWrapper.Value is ConstructionLayer)
+                        constructionLayer = (ConstructionLayer)objectWrapper.Value;
+                    else if (objectWrapper.Value is GooConstructionLayer)
+                        constructionLayer = ((GooConstructionLayer)objectWrapper.Value).Value;
 
-                    }
+                    if (constructionLayer == null)
+                        continue;
+
+                    constructionLayers.Add(constructionLayer);
                 }
             }
 

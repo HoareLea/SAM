@@ -100,10 +100,16 @@ namespace SAM.Analytical.Grasshopper
             List<ConstructionLayer> paneConstructionLayers = new List<ConstructionLayer>();
             foreach (GH_ObjectWrapper objectWrapper_ConstructionLayer in objectWrappers)
             {
+                ConstructionLayer constructionLayer = null;
                 if (objectWrapper_ConstructionLayer.Value is ConstructionLayer)
-                    paneConstructionLayers.Add((ConstructionLayer)objectWrapper_ConstructionLayer.Value);
+                    constructionLayer = (ConstructionLayer)objectWrapper_ConstructionLayer.Value;
                 else if (objectWrapper_ConstructionLayer.Value is GooConstructionLayer)
-                    paneConstructionLayers.Add(((GooConstructionLayer)objectWrapper_ConstructionLayer.Value).Value);
+                    constructionLayer = ((GooConstructionLayer)objectWrapper_ConstructionLayer.Value).Value;
+
+                if (constructionLayer == null)
+                    continue;
+
+                paneConstructionLayers.Add(constructionLayer);
             }
 
             objectWrappers = new List<GH_ObjectWrapper>();
@@ -120,10 +126,16 @@ namespace SAM.Analytical.Grasshopper
                 frameConstructionLayers = new List<ConstructionLayer>();
                 foreach (GH_ObjectWrapper objectWrapper_ConstructionLayer in objectWrappers)
                 {
+                    ConstructionLayer constructionLayer = null;
                     if (objectWrapper_ConstructionLayer.Value is ConstructionLayer)
-                        frameConstructionLayers.Add((ConstructionLayer)objectWrapper_ConstructionLayer.Value);
+                        constructionLayer = (ConstructionLayer)objectWrapper_ConstructionLayer.Value;
                     else if (objectWrapper_ConstructionLayer.Value is GooConstructionLayer)
-                        frameConstructionLayers.Add(((GooConstructionLayer)objectWrapper_ConstructionLayer.Value).Value);
+                       constructionLayer = ((GooConstructionLayer)objectWrapper_ConstructionLayer.Value).Value;
+
+                    if (constructionLayer == null)
+                        continue;
+
+                    frameConstructionLayers.Add(constructionLayer); 
                 }
             }
 
