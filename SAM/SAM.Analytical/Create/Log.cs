@@ -357,8 +357,15 @@ namespace SAM.Analytical
             string name = panel.Name;
             if(string.IsNullOrEmpty(name))
             {
-                result.Add(string.Format("Panel (Guid: {1}) has no name.", name, panel.Guid), LogRecordType.Warning);
-                name = "???";
+                if (panel.PanelType != PanelType.Air)
+                {
+                    result.Add(string.Format("Panel (Guid: {1}) has no name.", name, panel.Guid), LogRecordType.Warning);
+                    name = "???";
+                } 
+                else
+                {
+                    name = "Air";
+                }
             }
 
             PanelType panelType = panel.PanelType;
@@ -407,6 +414,9 @@ namespace SAM.Analytical
             List<Aperture> apertures = panel.Apertures;
             if(apertures != null && apertures.Count > 0)
             {
+                if(panelType == PanelType.Air)
+                    result.Add(string.Format("{0} Panel (Guid: {1}) with PanelType Air hosts Apertures", name, panel.Guid), LogRecordType.Error);
+                
                 double area_Apertures = 0;
                 foreach(Aperture aperture in apertures)
                 {
