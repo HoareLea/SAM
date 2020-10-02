@@ -365,6 +365,8 @@ namespace SAM.Analytical
             if(panelType == PanelType.Undefined)
                 result.Add(string.Format("Panel Type for {0} Panel (Guid: {1}) is not assigned.", name, panel.Guid), LogRecordType.Error);
 
+            double area = double.NaN;
+            
             PlanarBoundary3D planarBoundary3D = panel.PlanarBoundary3D;
             if(planarBoundary3D == null)
             {
@@ -372,7 +374,7 @@ namespace SAM.Analytical
             }
             else
             {
-                double area = panel.GetArea();
+                area = panel.GetArea();
                 if(double.IsNaN(area) || area < Tolerance.MacroDistance)
                     result.Add(string.Format("{0} Panel (Guid: {1}) area is less than {2}.", name, panel.Guid, Tolerance.MacroDistance), LogRecordType.Warning);
 
@@ -400,6 +402,32 @@ namespace SAM.Analytical
                             result.Add(string.Format("PanelType of {0} Panel (Guid: {1}) does not match with assigned {2} Construction (Guid: {3}).", name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
                     }
                 }
+            }
+
+            List<Aperture> apertures = panel.Apertures;
+            if(apertures != null && apertures.Count > 0)
+            {
+                double area_Apertures = 0;
+                foreach(Aperture aperture in apertures)
+                {
+                    string name_Aperture = aperture.Name;
+                    if (string.IsNullOrWhiteSpace(name_Aperture))
+                        name_Aperture = "???";
+                    
+                    Core.Modify.AddRange(result, aperture?.Log());
+
+                    double area_Aperture = aperture.GetArea();
+                    if (!double.IsNaN(area_Aperture))
+                    {
+                        if (!double.IsNaN(area) && area < area_Aperture)
+                            result.Add(string.Format("{0} aperture (Guid: {1}) is greater than {2} panel (Guid: {3}) area", name_Aperture, aperture.Guid, name, panel.Guid), LogRecordType.Error);
+
+                        area_Apertures += area_Aperture;
+                    }
+                }
+
+                if(!double.IsNaN(area) && area < area_Apertures)
+                    result.Add(string.Format("Overall area of apertures is greater than {0} panel (Guid: {1}) area", name, panel.Guid), LogRecordType.Error);
             }
 
             return result;
