@@ -66,13 +66,9 @@ namespace SAM.Core
             return jSAMObject is IMaterial;
         }
 
-        public List<IMaterial> GetMaterials
+        public List<IMaterial> GetMaterials()
         {
-
-            get
-            {
-                return GetObjects<IMaterial>();
-            }
+            return GetObjects<IMaterial>();
         }
     }
 }
