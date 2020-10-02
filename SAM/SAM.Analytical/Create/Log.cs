@@ -424,6 +424,9 @@ namespace SAM.Analytical
 
                         area_Apertures += area_Aperture;
                     }
+
+                    if (!Query.IsValid(panel, aperture))
+                        result.Add(string.Format("Geometry of {0} aperture (Guid: {1}) is invalid for {2} host panel (Guid: {3})", name_Aperture, aperture.Guid, name, panel.Guid), LogRecordType.Error);
                 }
 
                 if(!double.IsNaN(area) && area < area_Apertures)
