@@ -426,6 +426,19 @@ namespace SAM.Analytical
             if(panelType == PanelType.Undefined)
                 result.Add(string.Format("Panel Type for {0} Panel (Guid: {1}) is not assigned.", name, panel.Guid), LogRecordType.Error);
 
+            PlanarBoundary3D planarBoundary3D = panel.PlanarBoundary3D;
+            if(planarBoundary3D == null)
+            {
+                result.Add(string.Format("{0} Panel (Guid: {1}) has no geometry assigned.", name, panel.Guid), LogRecordType.Error);
+            }
+            else
+            {
+                double area = panel.GetArea();
+                if(double.IsNaN(area) || area < Tolerance.MacroDistance)
+                    result.Add(string.Format("{0} Panel (Guid: {1}) area is less than {2}.", name, panel.Guid, Tolerance.MacroDistance), LogRecordType.Warning);
+
+            }
+
             Construction construction = panel.Construction;
             if(construction == null)
             {
