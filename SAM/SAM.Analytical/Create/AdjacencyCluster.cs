@@ -314,10 +314,15 @@ namespace SAM.Analytical
 
                 List<Face2D> face2Ds_Top = face2Ds[elevation_Top];
 
+                double elevation_Middle = elevation_Bottom + ((elevation_Top - elevation_Bottom) / 2);
+
                 int count = 1;
                 foreach (Face2D face2D in face2Ds_Top)
                 {
-                    Space space = new Space(string.Format("Cell {0}.{1}", tuples.Count - i, count), plane_Bottom.Convert(face2D.GetInternalPoint2D()));
+                    Point3D location = plane_Bottom.Convert(face2D.GetInternalPoint2D());
+                    location = new Point3D(location.X, location.Y, elevation_Middle);
+
+                    Space space = new Space(string.Format("Cell {0}.{1}", tuples.Count - i, count), location);
                     count++;
 
                     if (space != null)
