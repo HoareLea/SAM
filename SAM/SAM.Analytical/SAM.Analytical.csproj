@@ -100,6 +100,7 @@
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
     <Compile Include="Modify\OffsetAperturesOnEdge.cs" />
+    <Compile Include="Modify\ReplaceTransparentPanels.cs" />
     <Compile Include="Modify\SetHeatTransferCoefficient.cs" />
     <Compile Include="Modify\UpdateConstructionsPanelTypes.cs" />
     <Compile Include="Modify\SetPanelType.cs" />
@@ -115,11 +116,14 @@
     <Compile Include="Modify\SetIsBlind.cs" />
     <Compile Include="Modify\SetVapourDiffusionFactor.cs" />
     <Compile Include="Modify\SetIgnoreThermalTransmittanceCalculations.cs" />
+    <Compile Include="Modify\ReplaceConstruction.cs" />
     <Compile Include="Modify\UpdateSpace.cs" />
     <Compile Include="Modify\Remove.cs" />
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\UpdateConstructions.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\Constructions.cs" />
+    <Compile Include="Query\TransparentPanels.cs" />
     <Compile Include="Query\DefaultApertureConstructionLibrary.cs" />
     <Compile Include="Query\DefaultApertureConstructionLibraryPath.cs" />
     <Compile Include="Query\DefaultConstructionLibraryPath.cs" />

@@ -197,6 +197,16 @@ namespace SAM.Analytical
             adjacencyCluster?.OffsetAperturesOnEdge(distance, tolerance);
         }
 
+        public List<Panel> ReplaceConstruction(IEnumerable<Guid> guids, Construction construction, ApertureConstruction apertureConstruction = null, double offset = 0)
+        {
+            return adjacencyCluster?.ReplaceConstruction(guids, construction, apertureConstruction, offset);
+        }
+
+        public List<Panel> ReplaceTransparentPanels(double offset = 0)
+        {
+            return adjacencyCluster?.ReplaceTransparentPanels(materialLibrary, offset);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
