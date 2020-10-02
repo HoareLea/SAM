@@ -35,7 +35,7 @@ namespace SAM.Analytical
 
             foreach (Construction construction in dictionary_Construction.Values)
             {
-                List<ConstructionLayer> constructionLayers = construction.ConstructionLayers;
+                List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
                 if (constructionLayers == null)
                     continue;
 
