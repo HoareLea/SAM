@@ -23,11 +23,7 @@ namespace SAM.Analytical
             else
             {
                 foreach(Panel panel in panels)
-                {
-                    Log log_Panel= panel.Log();
-                    if (log_Panel != null)
-                        result.AddRange(log_Panel);
-                }
+                    Core.Modify.AddRange(result, panel?.Log());
             }
 
             List<Space> spaces = adjacencyCluster.GetSpaces();
@@ -39,6 +35,8 @@ namespace SAM.Analytical
 
             foreach(Space space in spaces)
             {
+                Core.Modify.AddRange(result, space?.Log());
+
                 Shell shell = adjacencyCluster.Shell(space);
                 if(shell == null || !shell.IsClosed())
                 {
@@ -47,10 +45,10 @@ namespace SAM.Analytical
                 }
 
                 List<Space> spaces_InRange = spaces.FindAll(x => shell.InRange(x.Location));
-                if(spaces_InRange == null || spaces_InRange.Count > 1)
+                if (spaces_InRange == null || spaces_InRange.Count > 1)
                 {
-                    result.Add("There are more than one space enclosed in single shell: {0}", LogRecordType.Warning, string.Join(", ",spaces_InRange.ConvertAll(x => x.Name)));
-                   continue;
+                    result.Add("There are more than one space enclosed in single shell: {0}", LogRecordType.Warning, string.Join(", ", spaces_InRange.ConvertAll(x => x.Name)));
+                    continue;
                 }
                 
                 List<Panel> panels_Space = adjacencyCluster.GetPanels(space);
@@ -88,22 +86,14 @@ namespace SAM.Analytical
             else
             {
                 foreach(Construction construction in constructions)
-                {
-                    Log log_Construction = construction.Log();
-                    if (log_Construction != null)
-                        result.AddRange(log_Construction);
-                }
+                    Core.Modify.AddRange(result, construction?.Log());
             }
 
             List<ApertureConstruction> apertureConstructions = adjacencyCluster.GetApertureConstructions();
             if (apertureConstructions != null && apertureConstructions.Count > 0)
             {
                 foreach (ApertureConstruction apertureConstruction in apertureConstructions)
-                {
-                    Log log_Construction = apertureConstruction.Log();
-                    if (log_Construction != null)
-                        result.AddRange(log_Construction);
-                }
+                    Core.Modify.AddRange(result, apertureConstruction?.Log());
             }
 
             return result;
@@ -121,26 +111,15 @@ namespace SAM.Analytical
 
 
             if(adjacencyCluster == null)
-            {
                 result.Add("AdjacencyCluster missing in AnalyticalModel", LogRecordType.Error);
-            }
             else
-            {
-                Log log_AdjacencyCluster = adjacencyCluster.Log();
-                if (log_AdjacencyCluster != null)
-                    result.AddRange(log_AdjacencyCluster);
-            }
+                Core.Modify.AddRange(result, adjacencyCluster?.Log());
 
             if(materialLibrary == null)
-            {
                 result.Add("MaterialLibrary missing in AnalyticalModel", LogRecordType.Error);
-            }
             else
-            {
-                Log log_MaterialLibrary = materialLibrary.Log();
-                if (log_MaterialLibrary != null)
-                    result.AddRange(log_MaterialLibrary);
-            }
+                Core.Modify.AddRange(result, materialLibrary?.Log());
+
 
             if(adjacencyCluster != null)
             {
@@ -148,33 +127,21 @@ namespace SAM.Analytical
                 if(constructions != null && materialLibrary != null)
                 {
                     foreach(Construction construction in constructions)
-                    {
-                        Log log_Construction = construction.Log(materialLibrary);
-                        if (log_Construction != null)
-                            result.AddRange(log_Construction);
-                    }
+                        Core.Modify.AddRange(result, construction?.Log(materialLibrary));
                 }
 
                 List<ApertureConstruction> apertureConstructions = adjacencyCluster.ApertureConstructions();
                 if (apertureConstructions != null && materialLibrary != null)
                 {
                     foreach (ApertureConstruction apertureConstruction in apertureConstructions)
-                    {
-                        Log log_Construction = apertureConstruction.Log(materialLibrary);
-                        if (log_Construction != null)
-                            result.AddRange(log_Construction);
-                    }
+                        Core.Modify.AddRange(result, apertureConstruction?.Log(materialLibrary));
                 }
 
                 List<Panel> panels = adjacencyCluster.GetPanels();
                 if(panels != null && panels.Count > 0)
                 {
                     foreach (Panel panel in panels)
-                    {
-                        Log log_Panel= panel.Log(materialLibrary);
-                        if (log_Panel != null)
-                            result.AddRange(log_Panel);
-                    }
+                        Core.Modify.AddRange(result, panel?.Log(materialLibrary));
                 }
 
             }
@@ -198,11 +165,7 @@ namespace SAM.Analytical
             }
             
             foreach(IMaterial material in materials)
-            {
-                Log log_Material = material.Log();
-                if (log_Material != null)
-                    result.AddRange(log_Material);
-            }
+                Core.Modify.AddRange(result, material?.Log());
 
             return result;
         }
@@ -216,11 +179,7 @@ namespace SAM.Analytical
 
             List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
-            {
-                Log log_ConstructionLayers = constructionLayers.Log(construction.Name, construction.Guid);
-                if (log_ConstructionLayers != null)
-                    result.AddRange(log_ConstructionLayers);
-            }
+                Core.Modify.AddRange(result, constructionLayers?.Log(construction.Name, construction.Guid));
 
             return result;
         }
@@ -234,11 +193,7 @@ namespace SAM.Analytical
 
             List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
-            {
-                Log log_ConstructionLayers = constructionLayers.Log(materialLibrary, construction.Name, construction.Guid);
-                if (log_ConstructionLayers != null)
-                    result.AddRange(log_ConstructionLayers);
-            }
+                Core.Modify.AddRange(result, constructionLayers?.Log(materialLibrary, construction.Name, construction.Guid));
 
             return result;
         }
@@ -254,19 +209,11 @@ namespace SAM.Analytical
 
             constructionLayers = apertureConstruction?.PaneConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
-            {
-                Log log_ConstructionLayers = constructionLayers.Log(apertureConstruction.Name, apertureConstruction.Guid);
-                if (log_ConstructionLayers != null)
-                    result.AddRange(log_ConstructionLayers);
-            }
+                Core.Modify.AddRange(result, constructionLayers?.Log(apertureConstruction.Name, apertureConstruction.Guid));
 
             constructionLayers = apertureConstruction?.FrameConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
-            {
-                Log log_ConstructionLayers = constructionLayers.Log(apertureConstruction.Name, apertureConstruction.Guid);
-                if (log_ConstructionLayers != null)
-                    result.AddRange(log_ConstructionLayers);
-            }
+                Core.Modify.AddRange(result, constructionLayers?.Log(apertureConstruction.Name, apertureConstruction.Guid));
 
             return result;
         }
@@ -282,19 +229,11 @@ namespace SAM.Analytical
 
             constructionLayers = apertureConstruction?.PaneConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
-            {
-                Log log_ConstructionLayers = constructionLayers.Log(materialLibrary, apertureConstruction.Name, apertureConstruction.Guid);
-                if (log_ConstructionLayers != null)
-                    result.AddRange(log_ConstructionLayers);
-            }
+                Core.Modify.AddRange(result, constructionLayers?.Log(materialLibrary, apertureConstruction.Name, apertureConstruction.Guid));
 
             constructionLayers = apertureConstruction?.FrameConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
-            {
-                Log log_ConstructionLayers = constructionLayers.Log(materialLibrary, apertureConstruction.Name, apertureConstruction.Guid);
-                if (log_ConstructionLayers != null)
-                    result.AddRange(log_ConstructionLayers);
-            }
+                Core.Modify.AddRange(result, constructionLayers?.Log(materialLibrary, apertureConstruction.Name, apertureConstruction.Guid));
 
             return result;
         }
@@ -510,6 +449,56 @@ namespace SAM.Analytical
                 return null;
 
             Log result = new Log();
+
+            string name = aperture.Name;
+            if (string.IsNullOrEmpty(name))
+            {
+                result.Add(string.Format("Aperture (Guid: {1}) has no name.", name, aperture.Guid), LogRecordType.Warning);
+                name = "???";
+            }
+
+            ApertureType apertureType = aperture.ApertureType;
+            if (apertureType == ApertureType.Undefined)
+                result.Add(string.Format("Aperture Type for {0} Panel (Guid: {1}) is not assigned.", name, aperture.Guid), LogRecordType.Error);
+
+            PlanarBoundary3D planarBoundary3D = aperture.PlanarBoundary3D;
+            if (planarBoundary3D == null)
+            {
+                result.Add(string.Format("{0} Aperture (Guid: {1}) has no geometry assigned.", name, aperture.Guid), LogRecordType.Error);
+            }
+            else
+            {
+                double area = aperture.GetArea();
+                if (double.IsNaN(area) || area < Tolerance.MacroDistance)
+                    result.Add(string.Format("{0} Aperture (Guid: {1}) area is less than {2}.", name, aperture.Guid, Tolerance.MacroDistance), LogRecordType.Warning);
+            }
+
+
+            ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
+            if(apertureConstruction == null)
+                result.Add(string.Format("{0} Aperture (Guid: {1}) has no ApertureConstruction assigned.", name, aperture.Guid), LogRecordType.Error);
+
+            return result;
+        }
+
+        public static Log Log(this Space space)
+        {
+            if (space == null)
+                return null;
+
+            Log result = new Log();
+
+            string name = space.Name;
+            if (string.IsNullOrEmpty(name))
+            {
+                result.Add(string.Format("Space (Guid: {1}) has no name.", name, space.Guid), LogRecordType.Warning);
+                name = "???";
+            }
+
+            Point3D location = space.Location;
+            if(location == null)
+                result.Add(string.Format("{0} Space (Guid: {1}) has no location assigned.", name, space.Guid), LogRecordType.Warning);
+
 
             return result;
         }

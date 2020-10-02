@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Modify\AddRange.cs" />
     <Compile Include="Classes\Library\SAMLibrary.cs" />
     <Compile Include="Classes\Material\SolidMaterial.cs" />
     <Compile Include="Classes\Material\FluidMaterial.cs" />
