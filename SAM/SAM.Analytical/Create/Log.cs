@@ -20,6 +20,15 @@ namespace SAM.Analytical
                 result.Add("AdjacencyCluster has no panels.", LogRecordType.Warning);
                 return result;
             }
+            else
+            {
+                foreach(Panel panel in panels)
+                {
+                    Log log_Panel= panel.Log();
+                    if (log_Panel != null)
+                        result.AddRange(log_Panel);
+                }
+            }
 
             List<Space> spaces = adjacencyCluster.GetSpaces();
             if(spaces == null || spaces.Count == 0)
@@ -156,6 +165,18 @@ namespace SAM.Analytical
                             result.AddRange(log_Construction);
                     }
                 }
+
+                List<Panel> panels = adjacencyCluster.GetPanels();
+                if(panels != null && panels.Count > 0)
+                {
+                    foreach (Panel panel in panels)
+                    {
+                        Log log_Panel= panel.Log(materialLibrary);
+                        if (log_Panel != null)
+                            result.AddRange(log_Panel);
+                    }
+                }
+
             }
 
             return result;
@@ -282,8 +303,6 @@ namespace SAM.Analytical
         {
             if (material == null)
                 return null;
-            
-            //TODO: Implement Checks for Material
 
             Log result = new Log();
 
@@ -385,6 +404,99 @@ namespace SAM.Analytical
                 if (double.IsNaN(opaqueMaterial.InternalEmissivity()))
                     result.Add(string.Format("Internal Emissivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
             }
+
+            return result;
+        }
+
+        public static Log Log(this Panel panel)
+        {
+            if (panel == null)
+                return null;
+
+            Log result = new Log();
+
+            string name = panel.Name;
+            if(string.IsNullOrEmpty(name))
+            {
+                result.Add(string.Format("Panel (Guid: {1}) has no name.", name, panel.Guid), LogRecordType.Warning);
+                name = "???";
+            }
+
+            PanelType panelType = panel.PanelType;
+            if(panelType == PanelType.Undefined)
+                result.Add(string.Format("Panel Type for {0} Panel (Guid: {1}) is not assigned.", name, panel.Guid), LogRecordType.Error);
+
+            Construction construction = panel.Construction;
+            if(construction == null)
+            {
+                if (panelType != PanelType.Air)
+                    result.Add(string.Format("{0} Panel (Guid: {1}) has no construction assigned.", name, panel.Guid), LogRecordType.Error);
+            }
+            else
+            {
+                PanelGroup panelGroup_Construction = construction.PanelType().PanelGroup();
+                if(panelGroup_Construction != PanelGroup.Undefined)
+                {
+                    PanelGroup panelGroup_Panel = panelType.PanelGroup();
+                    if (panelGroup_Panel != PanelGroup.Undefined)
+                    {
+                        string name_Construction = construction.Name;
+                        if (string.IsNullOrWhiteSpace(name_Construction))
+                            name_Construction = "???";
+                        
+                        if(panelGroup_Construction != panelGroup_Panel)
+                            result.Add(string.Format("PanelType of {0} Panel (Guid: {1}) does not match with assigned {2} Construction (Guid: {3}).", name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static Log Log(this Panel panel, MaterialLibrary materialLibrary)
+        {
+            if (panel == null || materialLibrary == null)
+                return null;
+
+            string name = panel.Name;
+            if (string.IsNullOrEmpty(name))
+                name = "???";
+
+            Log result = new Log();
+
+            Construction construction = panel.Construction;
+            if(construction != null)
+            {
+                string name_Construction = panel.Construction.Name;
+                if (string.IsNullOrWhiteSpace(name_Construction))
+                    name_Construction = "???";
+
+                MaterialType materialType = Query.MaterialType(construction.ConstructionLayers, materialLibrary);
+                if (materialType != MaterialType.Undefined)
+                {
+                    string parameterName_Transparent = Query.ParameterName_Transparent();
+
+                    bool transparent;
+                    panel.TryGetValue(parameterName_Transparent, out transparent, true);
+                    if ((transparent && materialType != MaterialType.Transparent) || (!transparent && materialType == MaterialType.Transparent))
+                        result.Add(string.Format("{0} parameter value for {1} panel (Guid: {2}) does not match witch assigned {3} construction (Guid: {4})", parameterName_Transparent, name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
+
+                    PanelType panelType = panel.PanelType;
+                    if(panelType == PanelType.CurtainWall && materialType != MaterialType.Transparent)
+                        result.Add(string.Format("Assigned {3} construction (Guid: {4}) to {1} Courtain Wall panel (Guid: {2}) is not Transparent", parameterName_Transparent, name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
+
+                }
+            }
+
+            return result;
+        }
+
+        public static Log Log(this Aperture aperture)
+        {
+            if (aperture == null)
+                return null;
+
+            Log result = new Log();
 
             return result;
         }
