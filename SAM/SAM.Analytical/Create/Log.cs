@@ -289,19 +289,101 @@ namespace SAM.Analytical
 
             string name = material.Name;
             if(string.IsNullOrWhiteSpace(name))
+            {
                 result.Add(string.Format("Material (Guid: {0}) has no name assigned", material.Guid), LogRecordType.Warning);
+                name = "???";
+            }
+                
 
             if (material is GasMaterial)
             {
                 GasMaterial gasMaterial = (GasMaterial)material;
+
+                if (double.IsNaN(gasMaterial.DefaultThickness()))
+                    result.Add(string.Format("Default Thickness for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
+
+                if (double.IsNaN(gasMaterial.VapurDiffusionFactor()))
+                    result.Add(string.Format("Vapur Diffusion Factor for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(gasMaterial.HeatTransferCoefficient()))
+                    result.Add(string.Format("Heat Transfer Coefficient for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
             }
             else if (material is TransparentMaterial)
             {
                 TransparentMaterial transparentMaterial = (TransparentMaterial)material;
+
+                if (double.IsNaN(transparentMaterial.DefaultThickness()))
+                    result.Add(string.Format("Default Thickness for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
+
+                if (double.IsNaN(transparentMaterial.ThermalConductivity))
+                    result.Add(string.Format("Thermal Conductivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(transparentMaterial.VapurDiffusionFactor()))
+                    result.Add(string.Format("Vapur Diffusion Factor for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(transparentMaterial.VapurDiffusionFactor()))
+                    result.Add(string.Format("Vapur Diffusion Factor for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+                
+                if (double.IsNaN(transparentMaterial.SolarTransmittance()))
+                    result.Add(string.Format("Solar Transmittance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+                
+                if (double.IsNaN(transparentMaterial.LightTransmittance()))
+                    result.Add(string.Format("Light Transmittance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(transparentMaterial.ExternalSolarReflectance()))
+                    result.Add(string.Format("External Solar Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(transparentMaterial.InternalSolarReflectance()))
+                    result.Add(string.Format("Internal Solar Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(transparentMaterial.ExternalLightReflectance()))
+                    result.Add(string.Format("External Light Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(transparentMaterial.InternalLightReflectance()))
+                    result.Add(string.Format("Internal Light Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(transparentMaterial.ExternalEmissivity()))
+                    result.Add(string.Format("External Emissivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(transparentMaterial.InternalEmissivity()))
+                    result.Add(string.Format("Internal Emissivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
             }
             else if (material is OpaqueMaterial)
             {
                 OpaqueMaterial opaqueMaterial = (OpaqueMaterial)material;
+
+                if (double.IsNaN(opaqueMaterial.DefaultThickness()))
+                    result.Add(string.Format("Default Thickness for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
+
+                if (double.IsNaN(opaqueMaterial.ThermalConductivity))
+                    result.Add(string.Format("Thermal Conductivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(opaqueMaterial.SpecificHeatCapacity))
+                    result.Add(string.Format("Specific Heat Capacity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(opaqueMaterial.Density))
+                    result.Add(string.Format("Density for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(opaqueMaterial.VapurDiffusionFactor()))
+                    result.Add(string.Format("Vapur Diffusion Factor for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(opaqueMaterial.ExternalSolarReflectance()))
+                    result.Add(string.Format("External Solar Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+                 
+                if (double.IsNaN(opaqueMaterial.InternalSolarReflectance()))
+                    result.Add(string.Format("Internal Solar Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(opaqueMaterial.ExternalLightReflectance()))
+                    result.Add(string.Format("External Light Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(opaqueMaterial.InternalLightReflectance()))
+                    result.Add(string.Format("Internal Light Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(opaqueMaterial.ExternalEmissivity()))
+                    result.Add(string.Format("External Emissivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+
+                if (double.IsNaN(opaqueMaterial.InternalEmissivity()))
+                    result.Add(string.Format("Internal Emissivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
             }
 
             return result;
