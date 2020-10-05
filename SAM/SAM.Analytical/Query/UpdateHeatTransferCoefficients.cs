@@ -37,7 +37,7 @@ namespace SAM.Analytical
                     if (construction == null)
                         continue;
 
-                    IEnumerable<GasMaterial> gasMaterials = tuple.Item1.Materials<GasMaterial>(materialLibrary);
+                    IEnumerable<GasMaterial> gasMaterials = construction.Materials<GasMaterial>(materialLibrary);
                     if (gasMaterials == null || gasMaterials.Count() == 0)
                         continue;
 
