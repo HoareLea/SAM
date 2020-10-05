@@ -1,7 +1,6 @@
 ﻿using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace SAM.Analytical
 {
@@ -26,19 +25,25 @@ namespace SAM.Analytical
 
                 foreach(Panel panel in panels)
                 {
-                    HashSet<System.Guid> guids_Removed = new HashSet<System.Guid>();
+                    if (!panel.HasApertures)
+                        continue;
+                    
+                    List<System.Guid> guids_Apertures = new List<System.Guid>();
                     foreach(System.Guid guid in guids_Temp)
-                    {
-                        if(panel.HasAperture(guid))
-                        {
-                            Panel panel_New = new Panel(panel);
-                            if (panel_New.RemoveAperture(guid))
-                            {
-                                guids_Removed.Add(guid);
-                                adjacencyCluster.AddObject(panel_New);
-                            }
-                        }
-                    }
+                        if (panel.HasAperture(guid))
+                            guids_Apertures.Add(guid);
+
+                    if (guids_Apertures.Count == 0)
+                        continue;
+
+                    HashSet<System.Guid> guids_Removed = new HashSet<System.Guid>();
+
+                    Panel panel_New = new Panel(panel);
+                    foreach (System.Guid guid in guids_Apertures)
+                        if (panel_New.RemoveAperture(guid))
+                            guids_Removed.Add(guid);
+
+                    adjacencyCluster.AddObject(panel_New);
 
                     foreach (System.Guid guid in guids_Removed)
                     {
