@@ -3,7 +3,7 @@
     public static partial class Query
     {
         /// <summary>
-        /// Azimuth of the panel expressed in degrees. Reference direction for calculated Azimuth i WorldY
+        /// Azimuth of the panel expressed in degrees. Reference direction for calculated Azimuth and WorldY
         /// </summary>
         /// <param name="panel">Panel</param>
         /// <returns>Azimuth expressed in degrees</returns>

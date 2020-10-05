@@ -74,6 +74,18 @@ namespace SAM.Core
             density = material.density;
         }
 
+        public Material(string name, Guid guid, Material material, string displayName, string description)
+            : base(name, guid, material)
+        {
+            group = material.group;
+            this.displayName = displayName;
+            this.description = description;
+
+            thermalConductivity = material.thermalConductivity;
+            specificHeatCapacity = material.specificHeatCapacity;
+            density = material.density;
+        }
+
         public string Group
         {
             get

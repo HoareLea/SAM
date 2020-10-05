@@ -2,6 +2,7 @@
 using SAM.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -59,6 +60,12 @@ namespace SAM.Analytical
             : base(construction, name)
         {
             constructionLayers = construction.constructionLayers?.ConvertAll(x => x.Clone());
+        }
+
+        public Construction(Construction construction, IEnumerable<ConstructionLayer> constructionLayers)
+            : base(construction)
+        {
+            this.constructionLayers = constructionLayers?.ToList().ConvertAll(x => x.Clone());
         }
 
         public Construction(JObject jObject)

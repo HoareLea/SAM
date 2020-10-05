@@ -43,6 +43,12 @@ namespace SAM.Core
 
         }
 
+        public FluidMaterial(string name, Guid guid, FluidMaterial fluidMaterial, string displayName, string description)
+            : base(name, guid, fluidMaterial, displayName, description)
+        {
+            dynamicViscosity = fluidMaterial.dynamicViscosity;
+        }
+
         /// <summary>
         ///  Dynamic Viscosity of Fluid [kg/(m*s)]
         /// </summary>

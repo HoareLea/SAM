@@ -87,5 +87,48 @@ namespace SAM.Analytical
         {
             return Materials(adjacencyCluster?.GetPanels(), materialLibrary);
         }
+
+        public static IEnumerable<IMaterial> Materials(this Construction construction, MaterialLibrary materialLibrary, MaterialType materialType = Core.MaterialType.Undefined)
+        {
+            if (construction == null || materialLibrary == null)
+                return null;
+
+            List<ConstructionLayer> constructionLayers = construction.ConstructionLayers;
+            if (constructionLayers == null)
+                return null;
+
+            List<IMaterial> result = new List<IMaterial>();
+            foreach(ConstructionLayer constructionLayer in constructionLayers)
+            {
+                Material material = constructionLayer.Material(materialLibrary) as Material;
+                if(material != null)
+                {
+                    if (materialType == Core.MaterialType.Undefined || materialType == material.MaterialType)
+                        result.Add(material);
+                }
+            }
+
+            return result;
+        }
+
+        public static IEnumerable<T> Materials<T>(this Construction construction, MaterialLibrary materialLibrary) where T: IMaterial
+        {
+            if (construction == null || materialLibrary == null)
+                return null;
+
+            List<ConstructionLayer> constructionLayers = construction.ConstructionLayers;
+            if (constructionLayers == null)
+                return null;
+
+            List<T> result = new List<T>();
+            foreach (ConstructionLayer constructionLayer in constructionLayers)
+            {
+                IMaterial material = constructionLayer.Material(materialLibrary);
+                if (material is T)
+                    result.Add((T)material);
+            }
+
+            return result;
+        }
     }
 }

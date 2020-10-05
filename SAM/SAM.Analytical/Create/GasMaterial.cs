@@ -13,5 +13,17 @@ namespace SAM.Analytical
 
             return gasMaterial;
         }
+
+        public static GasMaterial GasMaterial(this GasMaterial gasMaterial, string name, string displayName, string description, double defaultThickness, double heatTransferCoefficient)
+        {
+            if (gasMaterial == null)
+                return null;
+            
+            GasMaterial result = new GasMaterial(name, System.Guid.NewGuid(), gasMaterial, displayName, description);
+            result.SetDefaultThickness(defaultThickness);
+            result.SetHeatTransferCoefficient(heatTransferCoefficient);
+
+            return result;
+        }
     }
 }

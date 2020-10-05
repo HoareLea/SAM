@@ -122,6 +122,8 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\UpdateConstructions.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\UpdateHeatTransferCoefficients.cs" />
+    <Compile Include="Query\HasMaterial.cs" />
     <Compile Include="Query\Constructions.cs" />
     <Compile Include="Query\TransparentPanels.cs" />
     <Compile Include="Query\DefaultApertureConstructionLibrary.cs" />

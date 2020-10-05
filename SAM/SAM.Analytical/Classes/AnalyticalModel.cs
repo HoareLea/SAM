@@ -2,6 +2,7 @@
 using SAM.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -90,6 +91,25 @@ namespace SAM.Analytical
 
             if (analyticalModel.materialLibrary != null)
                 materialLibrary = new MaterialLibrary(analyticalModel.materialLibrary);
+
+            if (adjacencyCluster != null)
+                this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+        }
+
+        public AnalyticalModel(AnalyticalModel analyticalModel, AdjacencyCluster adjacencyCluster, MaterialLibrary materialLibrary)
+            : base(analyticalModel)
+        {
+            if (analyticalModel == null)
+                return;
+
+            if (analyticalModel.location != null)
+                location = new Location(analyticalModel.location);
+
+            if (analyticalModel.address != null)
+                address = new Address(analyticalModel.address);
+
+            if (materialLibrary != null)
+                this.materialLibrary = new MaterialLibrary(materialLibrary);
 
             if (adjacencyCluster != null)
                 this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
