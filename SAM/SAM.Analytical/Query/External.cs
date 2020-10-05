@@ -14,6 +14,7 @@
                 case Analytical.PanelType.SolarPanel:
                 case Analytical.PanelType.SlabOnGrade:
                 case Analytical.PanelType.UndergroundWall:
+                case Analytical.PanelType.UndergroundCeiling:
                 case Analytical.PanelType.WallExternal:
                 case Analytical.PanelType.UndergroundSlab:
                     return true;

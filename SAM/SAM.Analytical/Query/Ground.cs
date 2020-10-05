@@ -8,6 +8,7 @@
             {
                 case Analytical.PanelType.SlabOnGrade:
                 case Analytical.PanelType.UndergroundWall:
+                case Analytical.PanelType.UndergroundCeiling:
                 case Analytical.PanelType.UndergroundSlab:
                     return true;
                 default:

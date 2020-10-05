@@ -102,6 +102,7 @@ namespace SAM.Analytical
                 case PanelType.SlabOnGrade:
                 case PanelType.UndergroundSlab:
                 case PanelType.UndergroundWall:
+                case PanelType.UndergroundCeiling:
                     return true;
                 default:
                     return false;

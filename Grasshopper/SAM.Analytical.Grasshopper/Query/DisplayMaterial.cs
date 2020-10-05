@@ -2,6 +2,11 @@
 {
     public static partial class Query
     {
+        /// <summary>
+        /// This is used to disply Panels in Rhino depends on PanelType. Here we used default colors. 
+        /// </summary>
+        /// <param name="panelType"></param>
+        /// <returns></returns>
         public static Rhino.Display.DisplayMaterial DisplayMaterial(this PanelType panelType)
         {
             System.Drawing.Color color = System.Drawing.Color.Empty;

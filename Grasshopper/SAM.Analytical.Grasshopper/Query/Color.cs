@@ -47,6 +47,9 @@
                     case PanelType.UndergroundWall:
                         return System.Drawing.Color.Red;
 
+                    case PanelType.UndergroundCeiling:
+                        return System.Drawing.Color.Red;
+
                     case PanelType.SlabOnGrade:
                         return System.Drawing.Color.Red;
 
