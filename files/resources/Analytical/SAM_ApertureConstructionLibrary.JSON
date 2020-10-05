@@ -187,6 +187,49 @@
         }
       ],
       "ApertureType": "Window"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "ebf1ccd7-9126-428a-a738-6c9db2230343",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "SAM_BuildingElementType",
+              "Value": "Floor"
+            }
+          ]
+        }
+      ],
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
+          "Thickness": 0.006
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar0Dn_Air__7mm_3.571W/m2K",
+          "Thickness": 0.007
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9",
+          "Thickness": 0.006
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Frame Notional building_7800kg/m3_0.176W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Window"
     }
   ]
 }
