@@ -204,7 +204,15 @@ namespace SAM.Analytical
 
         public List<Panel> ReplaceTransparentPanels(double offset = 0)
         {
-            return adjacencyCluster?.ReplaceTransparentPanels(materialLibrary, offset);
+            List<Panel> result = adjacencyCluster?.ReplaceTransparentPanels(materialLibrary, offset);
+            if(result != null && result.Count > 0)
+            {
+                IEnumerable<IMaterial> materials = Query.Materials(result, Query.DefaultMaterialLibrary());
+                if (materials != null)
+                    foreach (IMaterial material in materials)
+                        materialLibrary.Add(material);
+            }
+            return result;
         }
 
         public override bool FromJObject(JObject jObject)
