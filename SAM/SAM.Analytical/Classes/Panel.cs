@@ -686,6 +686,19 @@ namespace SAM.Analytical
             }
         }
 
+        public List<Aperture> GetApertures(ApertureConstruction apertureConstruction)
+        {
+            if (apertures == null || apertureConstruction == null)
+                return null;
+
+            List<Aperture> result = new List<Aperture>();
+            foreach (Aperture aperture in apertures)
+                if (aperture != null && aperture.SAMTypeGuid == apertureConstruction.Guid)
+                    result.Add(aperture.Clone());
+
+            return result;
+        }
+
         public double GetThinnessRatio()
         {
             return Geometry.Planar.Query.ThinnessRatio(planarBoundary3D.ExternalEdge2DLoop.GetClosed2D());

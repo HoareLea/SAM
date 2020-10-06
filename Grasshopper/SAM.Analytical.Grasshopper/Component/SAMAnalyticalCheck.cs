@@ -57,15 +57,6 @@ namespace SAM.Analytical.Grasshopper
             if (!dataAccess.GetData(0, ref sAMObject))
                 return;
 
-            //if (sAMObject is AnalyticalModel)
-            //    sAMObject = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-
-            //if (!(sAMObject is Panel) && !(sAMObject is Aperture) && !(sAMObject is Space) && !(sAMObject is AdjacencyCluster) && !(sAMObject is AnalyticalModel))
-            //{
-            //    dataAccess.SetData(0, null);
-            //    return;
-            //}
-
             Log log = null;
             try
             {

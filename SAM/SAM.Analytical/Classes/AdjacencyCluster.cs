@@ -193,6 +193,42 @@ namespace SAM.Analytical
             return GetObjects<Space>();
         }
 
+        public List<Aperture> GetApertures()
+        {
+            List<Panel> panels = GetPanels();
+            if (panels == null)
+                return null;
+
+            List<Aperture> result = new List<Aperture>();
+            foreach (Panel panel in panels)
+                if(panel.HasApertures)
+                    result.AddRange(panel.Apertures);
+
+            return result;
+        }
+
+        public List<Aperture> GetApertures(ApertureConstruction apertureConstruction)
+        {
+            if (apertureConstruction == null)
+                return null;
+
+            List<Panel> panels = GetPanels();
+            if (panels == null)
+                return null;
+
+            List<Aperture> result = new List<Aperture>();
+            foreach (Panel panel in panels)
+            {
+                List<Aperture> apertures_Panel = panel?.GetApertures(apertureConstruction);
+                if (apertures_Panel == null || apertures_Panel.Count == 0)
+                    continue;
+
+                result.AddRange(apertures_Panel);
+            }
+
+            return result;
+        }
+
         public List<Construction> GetConstructions()
         {
             List<Panel> panels = GetPanels();

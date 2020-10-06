@@ -35,9 +35,10 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                GH_SAMParam[] result = new GH_SAMParam[2];
+                GH_SAMParam[] result = new GH_SAMParam[3];
                 result[0] = new GH_SAMParam(new GooAnalyticalModelParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
-                result[1] = new GH_SAMParam(new GooConstructionParam() { Name = "Constructions", NickName = "Constructions", Description = "modified SAM Analytical Constructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                result[1] = new GH_SAMParam(new GooConstructionParam() { Name = "Constructions", NickName = "Constructions", Description = "Modified SAM Analytical Constructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                result[2] = new GH_SAMParam(new GooConstructionParam() { Name = "ApertureConstructions", NickName = "ApertureConstructions", Description = "Modified SAM Analytical ApertureConstructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
                 return result;
             }
         }
@@ -62,7 +63,8 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Construction> constructions = null;
-            AnalyticalModel analyticalModel_Result = analyticalModel.UpdateHeatTransferCoefficients(out constructions);
+            List<ApertureConstruction> apertureConstructions = null;
+            AnalyticalModel analyticalModel_Result = analyticalModel.UpdateHeatTransferCoefficients(out constructions, out apertureConstructions);
 
             int index = -1;
 
@@ -73,6 +75,10 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("Constructions");
             if (index != -1)
                 dataAccess.SetDataList(index, constructions?.ConvertAll(x => new GooConstruction(x)));
+
+            index = Params.IndexOfOutputParam("ApertureConstructions");
+            if (index != -1)
+                dataAccess.SetDataList(index, apertureConstructions?.ConvertAll(x => new GooApertureConstruction(x)));
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using SAM.Core;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -31,14 +30,20 @@ namespace SAM.Analytical
 
         public static bool HasMaterial(this Construction construction, MaterialLibrary materialLibrary, MaterialType materialType)
         {
-            if (construction == null || materialLibrary == null)
+            return HasMaterial(construction.ConstructionLayers, materialLibrary, materialType);
+        }
+
+        public static bool HasMaterial(this ApertureConstruction apertureConstruction, MaterialLibrary materialLibrary, MaterialType materialType)
+        {
+            return HasMaterial(apertureConstruction.PaneConstructionLayers, materialLibrary, materialType) || HasMaterial(apertureConstruction.FrameConstructionLayers, materialLibrary, materialType);
+        }
+
+        public static bool HasMaterial(this IEnumerable<ConstructionLayer> constructionLayers, MaterialLibrary materialLibrary, MaterialType materialType)
+        {
+            if (constructionLayers == null || materialLibrary == null)
                 return false;
 
-            List<ConstructionLayer> constructionLayers = construction.ConstructionLayers;
-            if (constructionLayers == null)
-                return false;
-
-            foreach(ConstructionLayer constructionLayer in constructionLayers)
+            foreach (ConstructionLayer constructionLayer in constructionLayers)
             {
                 Material material = constructionLayer.Material(materialLibrary) as Material;
                 if (material != null && material.MaterialType == materialType)

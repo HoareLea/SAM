@@ -2,6 +2,7 @@
 using SAM.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -41,6 +42,15 @@ namespace SAM.Analytical
             apertureType = apertureConstruction.apertureType;
             frameConstructionLayers = apertureConstruction.frameConstructionLayers;
             paneConstructionLayers = apertureConstruction.paneConstructionLayers;
+        }
+
+        public ApertureConstruction(ApertureConstruction apertureConstruction, IEnumerable<ConstructionLayer> paneConstructionLayers, IEnumerable<ConstructionLayer> frameConstructionLayers = null)
+            : base(apertureConstruction)
+        {
+            apertureType = apertureConstruction.apertureType;
+
+            this.frameConstructionLayers = frameConstructionLayers?.ToList().ConvertAll(x => x.Clone());
+            this.paneConstructionLayers = paneConstructionLayers?.ToList().ConvertAll(x => x.Clone());
         }
 
         public ApertureConstruction(JObject jObject)

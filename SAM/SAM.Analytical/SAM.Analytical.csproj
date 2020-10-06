@@ -117,6 +117,7 @@
     <Compile Include="Modify\SetVapourDiffusionFactor.cs" />
     <Compile Include="Modify\SetIgnoreThermalTransmittanceCalculations.cs" />
     <Compile Include="Modify\ReplaceConstruction.cs" />
+    <Compile Include="Modify\UpdateApertures.cs" />
     <Compile Include="Modify\UpdateSpace.cs" />
     <Compile Include="Modify\Remove.cs" />
     <Compile Include="Modify\AddSpace.cs" />
