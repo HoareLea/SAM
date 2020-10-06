@@ -556,11 +556,26 @@ namespace SAM.Analytical
 
             Log result = new Log();
 
+            MaterialType materialType = constructionLayers.MaterialType(materialLibrary);
+
             foreach (ConstructionLayer constructionLayer in constructionLayers)
             {
                 IMaterial material = constructionLayer.Material(materialLibrary);
                 if (material == null)
                     result.Add(string.Format("Material Library does not contain Material {0} for {1} (Guid: {2})", constructionLayer.Name, name_Temp, guid), LogRecordType.Error);
+
+                if(material is GasMaterial)
+                {
+                    GasMaterial gasMaterial = (GasMaterial)material;
+                    DefaultGasType defaultGasType = Query.DefaultGasType(gasMaterial);
+                    if(defaultGasType == DefaultGasType.Undefined)
+                        result.Add(string.Format("{0} gas material is not recogionzed in {1} (Guid: {2}). Heat Transfer Coefficient may not be calculated properly.", constructionLayer.Name, name_Temp, guid), LogRecordType.Warning);
+                    else if(materialType == MaterialType.Opaque && defaultGasType != DefaultGasType.Air)
+                        result.Add(string.Format("{0} Construction Layer for Opaque {1} (Guid: {2}) in not recognized as air type. Heat Transfer Coefficient may not be calculated properly.", constructionLayer.Name, name_Temp, guid), LogRecordType.Warning);
+
+                    if (defaultGasType != DefaultGasType.Undefined)
+                        result.Add(string.Format("Gas Material {0} for {1} (Guid: {2}) recognized as {3}", constructionLayer.Name, name_Temp, guid, Core.Query.Description(defaultGasType)), LogRecordType.Message);
+                }
             }
 
             return result;
