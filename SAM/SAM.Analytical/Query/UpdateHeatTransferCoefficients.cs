@@ -58,7 +58,7 @@ namespace SAM.Analytical
                 double tilt = 0;
                 double area = 0;
 
-                foreach (Panel panel in panels)
+                foreach (Panel panel in tuple.Item2)
                 {
                     double area_Panel = panel.GetArea();
 
@@ -109,8 +109,10 @@ namespace SAM.Analytical
                         heatTransferCoefficient = AirspaceConvectiveHeatTransferCoefficient(tilt, thickness);
                     else
                         heatTransferCoefficient = HeatTransferCoefficient(gasMaterial_Default, 10, thickness, 283.15, tilt);
-                    
-                    string name = gasMaterial_Default.Name + "Tilt: " + tilt_degree.ToString();
+
+                    heatTransferCoefficient = System.Math.Round(heatTransferCoefficient, 3);
+
+                    string name = string.Format("{0}_{1}mm_{2}W/m2K_{3}deg", Core.Query.Description(defaultGasType), thickness * 1000, heatTransferCoefficient, tilt_degree); //gasMaterial_Default.Name + "_"+ "Tilt: " + tilt_degree.ToString();
 
                     GasMaterial gasMaterial_New = materialLibrary.GetObject<GasMaterial>(name);
                     if (gasMaterial_New == null)
