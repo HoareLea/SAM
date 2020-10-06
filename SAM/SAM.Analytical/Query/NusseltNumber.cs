@@ -14,7 +14,7 @@ namespace SAM.Analytical
         /// <param name="meanTemperature">Mean Temperature</param>
         /// <param name="angle">Angle of heat flow direction in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction</param>
         /// <returns>Nusselt Number (Nu) [-]</returns>
-        public static double NusseltNumber(this FluidMaterial fluidMaterial, double temperatureDifference, double width, double meanTemperature, double angle)
+        public static double NusseltNumber(this FluidMaterial fluidMaterial, double temperatureDifference, double width, double meanTemperature, double angle, double tolerance = Tolerance.Angle)
         {
             if (fluidMaterial == null || double.IsNaN(temperatureDifference) || double.IsNaN(width) || double.IsNaN(meanTemperature))
                 return double.NaN;
@@ -26,28 +26,28 @@ namespace SAM.Analytical
             double n = double.NaN;
 
             //roof deg = 0, rad = 0
-            if (angle == 0)
+            if (angle < tolerance)
             {
                 a = 0.16;
                 n = 0.28;
             }
 
             //tilted roof,wall deg = 45, rad = 0.7854
-            else if (angle == System.Math.PI / 4)
+            else if (System.Math.Abs(angle - System.Math.PI / 4) < tolerance)
             {
                 a = 0.10;
                 n = 0.31;
             }
 
             //wall deg = 90, rad = 1.5708
-            else if (angle == System.Math.PI / 2)
+            else if (System.Math.Abs(angle - System.Math.PI / 2) < tolerance)
             {
                 a = 0.035;
                 n = 0.38;
             }
 
             //tilted 0<roof,wall <deg = 45, rad = 0.7854
-            else if (angle > 0 && angle < System.Math.PI / 4)
+            else if (angle - tolerance > 0 && angle + tolerance < System.Math.PI / 4)
             {
                 double linearEquation_a;
                 double linearEquation_b;
@@ -61,8 +61,8 @@ namespace SAM.Analytical
                 n = linearEquation_a * angle + linearEquation_b;
             }
 
-            //tilted 45 < roof,wall <deg = 90, rad = 1.5708
-            else if (angle > System.Math.PI / 4 && angle < System.Math.PI / 2)
+            //tilted 45 < roof,wall < 90 deg, rad = 1.5708
+            else if (angle + tolerance > System.Math.PI / 4 && angle - tolerance < System.Math.PI / 2)
             {
                 double linearEquation_a;
                 double linearEquation_b;
@@ -79,7 +79,7 @@ namespace SAM.Analytical
             if (double.IsNaN(a) || double.IsNaN(n))
                 return double.NaN;
 
-            return NusseltNumber(fluidMaterial, temperatureDifference, width, meanTemperature, a, n);
+            return NusseltNumber_ConstantAndExponent(fluidMaterial, temperatureDifference, width, meanTemperature, a, n);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace SAM.Analytical
         /// <param name="constant">Constant (A) value for equation Nu = A(Gr * Pr)^n</param>
         /// <param name="exponent">Exponent (n) value for equation Nu = A(Gr * Pr)^n</param>
         /// <returns>Nusselt Number (Nu) [-]</returns>
-        public static double NusseltNumber(this FluidMaterial fluidMaterial, double temperatureDifference, double width, double meanTemperature, double constant, double exponent)
+        public static double NusseltNumber_ConstantAndExponent(this FluidMaterial fluidMaterial, double temperatureDifference, double width, double meanTemperature, double constant, double exponent)
         {
             if (fluidMaterial == null || double.IsNaN(temperatureDifference) || double.IsNaN(width) || double.IsNaN(meanTemperature))
                 return double.NaN;
