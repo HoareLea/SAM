@@ -1,4 +1,5 @@
 ﻿using SAM.Core;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -7,7 +8,7 @@ namespace SAM.Analytical
     {
         public static GasMaterial DefaultGasMaterial(this DefaultGasType defaultGasType)
         {
-            if (defaultGasType == DefaultGasType.Undefined)
+            if (defaultGasType == Analytical.DefaultGasType.Undefined)
                 return null;
 
             MaterialLibrary materialLibrary = DefaultGasMaterialLibrary();
@@ -43,6 +44,18 @@ namespace SAM.Analytical
             }
 
             return null;
+        }
+
+        public static GasMaterial DefaultGasMaterial(this GasMaterial gasMaterial)
+        {
+            if (gasMaterial == null)
+                return null;
+
+            DefaultGasType defaultGasType = Query.DefaultGasType(gasMaterial);
+            if (defaultGasType == Analytical.DefaultGasType.Undefined)
+                return null;
+
+            return DefaultGasMaterial(defaultGasType);
         }
     }
 }

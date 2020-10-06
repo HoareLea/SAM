@@ -122,6 +122,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\UpdateConstructions.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\DefaultGasType.cs" />
     <Compile Include="Query\UpdateHeatTransferCoefficients.cs" />
     <Compile Include="Query\HasMaterial.cs" />
     <Compile Include="Query\Constructions.cs" />
@@ -165,7 +166,7 @@
     <Compile Include="Query\ExternalMaterial.cs" />
     <Compile Include="Query\InternalConstructionLayer.cs" />
     <Compile Include="Query\ExternalConstructionLayer.cs" />
-    <Compile Include="Query\DeafultGasMaterial.cs" />
+    <Compile Include="Query\DefaultGasMaterial.cs" />
     <Compile Include="Query\ExternalSolarReflectance.cs" />
     <Compile Include="Query\InternalSolarReflectance.cs" />
     <Compile Include="Query\ExternalLightReflectance.cs" />

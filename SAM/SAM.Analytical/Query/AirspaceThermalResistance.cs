@@ -3,7 +3,7 @@
     public static partial class Query
     {
         /// <summary>
-        /// Thermal Resistance of airspace according to BS EN ISO 6946:2017 [m2K/W]
+        /// Thermal Resistance of airspace in Opaque Construction according to BS EN ISO 6946:2017 [m2K/W]
         /// </summary>
         /// <param name="angle">Angle of heat flow direction in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction</param>
         /// <param name="thickness">Air Gap Spacing [m]</param>

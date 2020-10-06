@@ -6,7 +6,7 @@ namespace SAM.Analytical
     public static partial class Query
     {
         /// <summary>
-        /// Calculates the airspace conduction/convection coefficient according to BS EN ISO 6946:2017 [W/(m2K)]
+        /// Calculates the airspace conduction/convection coefficient in Opaque Construction according to BS EN ISO 6946:2017 [W/(m2K)]
         /// </summary>
         /// <param name="angle">Angle of heat flow direction in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction</param>
         /// <param name="thickness">Air Gap Spacing [m]</param>

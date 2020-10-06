@@ -75,7 +75,11 @@ namespace SAM.Analytical
 
                 Construction construction = tuple.Item1;
                 List<ConstructionLayer> constructionLayers = new List<ConstructionLayer>();
-                foreach (ConstructionLayer constructionLayer in tuple.Item1.ConstructionLayers)
+
+                List<ConstructionLayer> constructionLayers_Old = tuple.Item1.ConstructionLayers;
+                MaterialType materialType = constructionLayers_Old.MaterialType(materialLibrary);
+                
+                foreach (ConstructionLayer constructionLayer in constructionLayers_Old)
                 {
                     GasMaterial gasMaterial = constructionLayer.Material(materialLibrary) as GasMaterial;
                     if (gasMaterial == null)
@@ -84,15 +88,34 @@ namespace SAM.Analytical
                         continue;
                     }
 
+                    DefaultGasType defaultGasType = Query.DefaultGasType(gasMaterial);
+                    if(defaultGasType == Analytical.DefaultGasType.Undefined)
+                    {
+                        constructionLayers.Add(constructionLayer.Clone());
+                        continue;
+                    }
+
+                    GasMaterial gasMaterial_Default = DefaultGasMaterial(defaultGasType);
+                    if (gasMaterial_Default == null)
+                    {
+                        constructionLayers.Add(constructionLayer.Clone());
+                        continue;
+                    }
 
                     double thickness = constructionLayer.Thickness;
-                    double heatTransferCoefficient = Query.HeatTransferCoefficient(gasMaterial, 10, thickness, 283.15, tilt);
-                    string name = gasMaterial.Name + "Tilt: " + tilt_degree.ToString();
+
+                    double heatTransferCoefficient = double.NaN;
+                    if(materialType == Core.MaterialType.Opaque && defaultGasType == Analytical.DefaultGasType.Air)
+                        heatTransferCoefficient = AirspaceConvectiveHeatTransferCoefficient(tilt, thickness);
+                    else
+                        heatTransferCoefficient = HeatTransferCoefficient(gasMaterial_Default, 10, thickness, 283.15, tilt);
+                    
+                    string name = gasMaterial_Default.Name + "Tilt: " + tilt_degree.ToString();
 
                     GasMaterial gasMaterial_New = materialLibrary.GetObject<GasMaterial>(name);
                     if (gasMaterial_New == null)
                     {
-                        gasMaterial_New = Create.GasMaterial(gasMaterial, name, name, name, thickness, heatTransferCoefficient);
+                        gasMaterial_New = Create.GasMaterial(gasMaterial_Default, name, name, name, thickness, heatTransferCoefficient);
                         materialLibrary.Add(gasMaterial_New);
                     }
 
