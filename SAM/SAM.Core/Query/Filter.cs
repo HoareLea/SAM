@@ -1,12 +1,33 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core
 {
     public static partial class Query
     {
+        public static Log Filter(this Log log, IEnumerable<LogRecordType> logRecordTypes)
+        {
+            if (log == null || logRecordTypes == null)
+                return null;
+
+            Log result = new Log(log.Name);
+            foreach(LogRecord logRecord in log)
+            {
+                if (logRecord == null)
+                    continue;
+
+                if (logRecordTypes.Contains(logRecord.LogRecordType))
+                    result.Add(logRecord);
+            }
+
+            return result;
+        }
+
+        public static Log Filter(this Log log, LogRecordType logRecordType)
+        {
+            return Filter(log, new LogRecordType[] { logRecordType });
+        }
+
         public static List<object> Filter(this RelationCluster relationCluster_In, RelationCluster relationCluster_Out, IEnumerable<object> objects)
         {
             if (relationCluster_In == null || objects == null)

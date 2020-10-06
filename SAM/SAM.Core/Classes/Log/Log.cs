@@ -34,6 +34,17 @@ namespace SAM.Core
             return logRecord;
         }
 
+        public LogRecord Add(LogRecord logRecord)
+        {
+            if (logRecord == null)
+                return null;
+
+            LogRecord result = logRecord.Clone();
+            logRecords.Add(result);
+
+            return result;
+        }
+
         public LogRecord Add(string format, LogRecordType logRecordType, params object[] values)
         {
             LogRecord logRecord = new LogRecord(format, logRecordType, values);

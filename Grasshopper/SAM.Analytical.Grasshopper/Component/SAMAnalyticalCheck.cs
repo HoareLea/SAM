@@ -44,6 +44,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new GooLogParam(), "Log", "Log", "SAM Log", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooLogParam(), "Messages", "Messages", "SAM Log with Messages", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
@@ -73,6 +74,7 @@ namespace SAM.Analytical.Grasshopper
             catch 
             {
                 dataAccess.SetData(0, null);
+                dataAccess.SetData(1, null);
                 return;
             }
 
@@ -84,7 +86,8 @@ namespace SAM.Analytical.Grasshopper
             if (log.Count() == 0)
                 log.Add("All good! You can switch off your computer and go home now.");
 
-            dataAccess.SetData(0, log);
+            dataAccess.SetData(0, log.Filter(new LogRecordType[] { LogRecordType.Error, LogRecordType.Warning, LogRecordType.Undefined }));
+            dataAccess.SetData(1, log.Filter(new LogRecordType[] { LogRecordType.Message }));
         }
     }
 }
