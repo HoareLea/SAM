@@ -16,7 +16,10 @@ namespace SAM.Analytical
 
             List<Aperture> result = new List<Aperture>();
 
-            List<Panel> panels = new List<Panel>();
+            List<Panel> panels = adjacencyCluster.GetPanels();
+            if (panels == null)
+                return result;
+
             foreach(Panel panel in panels)
             {
                 if (!panel.HasApertures)

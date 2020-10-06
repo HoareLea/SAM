@@ -83,7 +83,7 @@ namespace SAM.Core
         {
             get
             {
-                return LogRecordType;
+                return logRecordType;
             }
         }
 

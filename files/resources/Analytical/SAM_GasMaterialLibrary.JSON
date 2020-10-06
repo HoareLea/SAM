@@ -12,6 +12,7 @@
       "ThermalConductivity": 0.02496,
       "SpecificHeatCapacity": 1008.0,
       "Density": 1.232,
+      "DynamicViscosity": 0.00001761,
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -35,6 +36,7 @@
       "ThermalConductivity": 0.0529,
       "SpecificHeatCapacity": 161.0,
       "Density": 5.689,
+      "DynamicViscosity": 0.00002226,
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -58,6 +60,7 @@
       "ThermalConductivity": 0.01684,
       "SpecificHeatCapacity": 519.0,
       "Density": 1.699,
+      "DynamicViscosity": 0.00002164,
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -81,6 +84,7 @@
       "ThermalConductivity": 0.009,
       "SpecificHeatCapacity": 245.0,
       "Density": 3.56,
+      "DynamicViscosity": 0.00002400,
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -104,6 +108,7 @@
       "ThermalConductivity": 0.01275,
       "SpecificHeatCapacity": 614.0,
       "Density": 6.36,
+      "DynamicViscosity": 0.00001459,
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",

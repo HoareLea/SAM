@@ -40,7 +40,7 @@ namespace SAM.Core
         public FluidMaterial(FluidMaterial fluidMaterial)
             : base(fluidMaterial)
         {
-
+            dynamicViscosity = fluidMaterial.dynamicViscosity;
         }
 
         public FluidMaterial(string name, Guid guid, FluidMaterial fluidMaterial, string displayName, string description)
@@ -65,6 +65,9 @@ namespace SAM.Core
             if (!base.FromJObject(jObject))
                 return false;
 
+            if (jObject.ContainsKey("DynamicViscosity"))
+                dynamicViscosity = jObject.Value<double>("DynamicViscosity");
+
             return true;
         }
 
@@ -73,6 +76,9 @@ namespace SAM.Core
             JObject jObject = base.ToJObject();
             if (jObject == null)
                 return jObject;
+
+            if (!double.IsNaN(dynamicViscosity))
+                jObject.Add("DynamicViscosity", dynamicViscosity);
 
             return jObject;
         }
