@@ -220,6 +220,19 @@ namespace SAM.Core
             return -1;
         }
 
+        public List<int> GetIndexes(string columnText, TextComparisonType textComparisonType, bool caseSensitive = true)
+        {
+            if (columnText == null)
+                return null;
+
+            List<int> result = new List<int>();
+            for (int i = 0; i < names.Length; i++)
+                if (Query.Compare(names[i], columnText, textComparisonType, caseSensitive))
+                    result.Add(i);
+
+            return result;
+        }
+
         public int GetIndex(object value, int headerIndex)
         {
             if (header == null && header.Count >= headerIndex)
