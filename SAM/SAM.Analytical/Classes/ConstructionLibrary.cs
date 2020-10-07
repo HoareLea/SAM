@@ -80,6 +80,15 @@ namespace SAM.Analytical
             return constructions.FindAll(x => x.PanelType() == panelType);
         }
 
+        public List<Construction> GetConstructions(PanelGroup panelGroup)
+        {
+            List<Construction> constructions = GetConstructions();
+            if (constructions == null || constructions.Count == 0)
+                return null;
+
+            return constructions.FindAll(x => x.PanelType().PanelGroup() == panelGroup);
+        }
+
         public List<Construction> GetConstructions(IEnumerable<PanelType> panelTypes)
         {
             if (panelTypes == null || panelTypes.Count() == 0)
