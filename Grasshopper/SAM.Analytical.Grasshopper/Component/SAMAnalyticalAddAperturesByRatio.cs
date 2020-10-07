@@ -79,10 +79,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             if (sAMObject is Panel)
-            {
-                if (((Panel)sAMObject).PanelType != PanelType.WallExternal)
-                    return;
-                
+            {                
                 Panel panel = new Panel((Panel)sAMObject);
 
                 ApertureConstruction apertureConstruction_Temp = apertureConstruction;
