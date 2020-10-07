@@ -30,6 +30,8 @@ namespace SAM.Core
             if (name.StartsWith("SAM."))
                 name = name.Substring(4);
 
+            name = name.Replace(".", @"\");
+
             return System.IO.Path.Combine(ExecutingAssemblyDirectory(), resourcesDirectoryName, name);
         }
 
