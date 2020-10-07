@@ -72,7 +72,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Architectural.Level> levels = Create.Levels(panels, tolerance);
+            List<Architectural.Level> levels = Create.Levels(panels, false, tolerance);
             if (levels != null)
                 dataAccess.SetDataList(0, levels.ConvertAll(x => new GooLevel(x)));
         }

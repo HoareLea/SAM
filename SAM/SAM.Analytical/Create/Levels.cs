@@ -4,7 +4,7 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static List<Architectural.Level> Levels(this List<Panel> panels, double tolerance = Core.Tolerance.MacroDistance)
+        public static List<Architectural.Level> Levels(this List<Panel> panels, bool includeOtherPanels = false, double tolerance = Core.Tolerance.MacroDistance)
         {
             if (panels == null)
                 return null;
@@ -13,7 +13,12 @@ namespace SAM.Analytical
             foreach(Panel panel in panels)
             {
                 if (panel == null)
-                    return null;
+                    continue;
+
+                PanelType panelType = panel.PanelType;
+
+                if (!includeOtherPanels && panelType != PanelType.Air && panelType.PanelGroup() == PanelGroup.Other)
+                    continue;
 
                 double elevation = panel.MinElevation();
                 if (double.IsNaN(elevation))
@@ -31,9 +36,9 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<Architectural.Level> Levels(this AdjacencyCluster adjacencyCluster, double tolerance = Core.Tolerance.MacroDistance)
+        public static List<Architectural.Level> Levels(this AdjacencyCluster adjacencyCluster, bool includeOtherPanels = false, double tolerance = Core.Tolerance.MacroDistance)
         {
-            return Levels(adjacencyCluster?.GetPanels(), tolerance);
+            return Levels(adjacencyCluster?.GetPanels(), includeOtherPanels, tolerance);
         }
     }
 }
