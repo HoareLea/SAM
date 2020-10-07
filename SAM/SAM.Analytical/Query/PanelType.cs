@@ -18,6 +18,9 @@ namespace SAM.Analytical
             if (@object is ApertureConstruction)
                 return PanelType((ApertureConstruction)@object);
 
+            if (@object is Geometry.Spatial.Vector3D)
+                return PanelType((Geometry.Spatial.Vector3D)@object);
+
             PanelType result;
             if (@object is string)
             {
