@@ -135,16 +135,12 @@
         {
             if (string.IsNullOrWhiteSpace(name))
                 return null;
-            
-            string result = prefix;
+
+            string result = null;
+            if (!string.IsNullOrWhiteSpace(prefix) && !name.StartsWith(prefix))
+                result = string.Format("{0}: {1}", prefix, name);
+
             if (result == null)
-                return null;
-
-            result += ": ";
-
-            if (!name.StartsWith(result))
-                result += name;
-            else
                 result = name;
 
             result.Trim();
