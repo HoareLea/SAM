@@ -23,7 +23,42 @@ namespace SAM.Analytical
             else
             {
                 foreach(Panel panel in panels)
+                {
                     Core.Modify.AddRange(result, panel?.Log());
+
+                    List<Aperture> apertures = panel.Apertures;
+                    if(apertures != null && apertures.Count != 0)
+                    {
+                        PanelGroup panelGroup_Panel = panel.PanelType.PanelGroup();
+                        if(panelGroup_Panel != PanelGroup.Undefined)
+                        {
+                            foreach (Aperture aperture in apertures)
+                            {
+                                ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
+                                if (apertureConstruction == null)
+                                    continue;
+
+                                PanelGroup panelGroup_ApertureConstruction = apertureConstruction.PanelType().PanelGroup();
+                                if(panelGroup_ApertureConstruction != PanelGroup.Undefined)
+                                {
+                                    string apertureName = aperture.Name;
+                                    if(string.IsNullOrEmpty(apertureName))
+                                        apertureName = "???";
+
+                                    string apertureConstructionName= apertureConstruction.Name;
+                                    if (string.IsNullOrEmpty(apertureConstructionName))
+                                        apertureConstructionName = "???";
+
+                                    if (panelGroup_ApertureConstruction != panelGroup_Panel)
+                                        result.Add(string.Format("PanelType of {0} Panel (Guid: {1}) does not match with assigned {2} ApertureConstruction (Guid: {3}) for {4} Aperture (Guid: {5}).", panel.Name, panel.Guid, apertureConstructionName, apertureConstruction.Guid, apertureName, aperture.Guid), LogRecordType.Warning);
+                                }
+                            }
+                        }
+                        
+
+                    }
+                }
+                    
             }
 
             List<Space> spaces = adjacencyCluster.GetSpaces();

@@ -188,6 +188,34 @@ namespace SAM.Analytical
             return result;
         }
 
+        public List<Panel> GetPanels(ApertureConstruction apertureConstruction)
+        {
+            if (apertureConstruction == null)
+                return null;
+
+            List<Panel> panels = GetPanels();
+            if (panels == null)
+                return null;
+
+            List<Panel> result = new List<Panel>();
+            foreach (Panel panel in panels)
+            {
+                if (panel == null)
+                    continue;
+
+                List<Aperture> apertures = panel.Apertures;
+                if (apertures == null || apertures.Count == 0)
+                    continue;
+
+                if (apertures.Find(x => x.SAMTypeGuid == apertureConstruction.Guid) == null)
+                    continue;
+
+                result.Add(panel);
+            }
+
+            return result;
+        }
+
         public List<Space> GetSpaces()
         {
             return GetObjects<Space>();
