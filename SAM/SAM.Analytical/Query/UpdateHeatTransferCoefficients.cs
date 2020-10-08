@@ -106,6 +106,78 @@ namespace SAM.Analytical
             return result;
         }
 
+        private static AnalyticalModel UpdateHeatTransferCoefficients_Constructions_New(this AnalyticalModel analyticalModel, out List<Construction> constructions)
+        {
+            constructions = null;
+
+            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
+            if (adjacencyCluster == null)
+                return null;
+
+            MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
+            if (materialLibrary == null)
+                return null;
+
+            if (adjacencyCluster == null || materialLibrary == null)
+                return null;
+
+            List<Construction> constructions_All = adjacencyCluster.GetConstructions();
+            if (constructions_All == null)
+                return null;
+
+            foreach(Construction construction in constructions_All)
+            {
+                if (construction == null)
+                    continue;
+
+                if (!construction.HasMaterial(materialLibrary, Core.MaterialType.Gas))
+                    continue;
+
+                List<Panel> panels = adjacencyCluster.GetPanels(construction);
+                if (panels == null || panels.Count == 0)
+                    continue;
+
+                double tilt = 0;
+                double area = 0;
+
+                foreach (Panel panel in panels)
+                {
+                    double area_Panel = panel.GetArea();
+
+                    tilt += panel.Tilt() * System.Math.PI / 180 * area_Panel;
+                    area += area_Panel;
+                }
+
+                if (area == 0)
+                    continue;
+
+                tilt = tilt / area;
+
+                List<ConstructionLayer> constructionLayers_Out = null;
+
+                List<ConstructionLayer> constructionLayers_In = construction.ConstructionLayers;
+                List<GasMaterial> gasMaterials = null;
+
+                if (!UpdateHeatTransferCoefficients(constructionLayers_In, tilt, materialLibrary, out gasMaterials, out constructionLayers_Out))
+                    continue;
+
+                gasMaterials?.ForEach(x => materialLibrary.Add(x));
+
+                Construction construction_New = new Construction(construction, constructionLayers_Out);
+                foreach (Panel panel in panels)
+                {
+                    Panel panel_New = new Panel(panel, construction_New);
+                    adjacencyCluster.AddObject(panel_New);
+                }
+
+                constructions.Add(construction_New);
+            }
+
+            AnalyticalModel result = new AnalyticalModel(analyticalModel, adjacencyCluster, materialLibrary);
+
+            return result;
+        }
+
         private static AnalyticalModel UpdateHeatTransferCoefficients_ApertureConstructions(this AnalyticalModel analyticalModel, out List<ApertureConstruction> apertureConstructions)
         {
             apertureConstructions = null;
@@ -198,8 +270,6 @@ namespace SAM.Analytical
             constructionLayers_Out = new List<ConstructionLayer>();
             gasMaterials = new List<GasMaterial>();
 
-            double tilt_degree = System.Math.Round(tilt * 180 / System.Math.PI, 0);
-
             bool result = false;
             foreach (ConstructionLayer constructionLayer in constructionLayers_In)
             {
@@ -240,7 +310,12 @@ namespace SAM.Analytical
 
                 heatTransferCoefficient = System.Math.Round(heatTransferCoefficient, 3);
 
-                string name = string.Format("{0}_{1}mm_{2}W/m2K_{3}deg", Core.Query.Description(defaultGasType), thickness * 1000, heatTransferCoefficient, tilt_degree); //gasMaterial_Default.Name + "_"+ "Tilt: " + tilt_degree.ToString();
+                string name = GetMaterialName(defaultGasType, thickness, heatTransferCoefficient, tilt);// string.Format("{0}_{1}mm_{2}W/m2K_{3}deg", Core.Query.Description(defaultGasType), thickness * 1000, heatTransferCoefficient, tilt_degree); //gasMaterial_Default.Name + "_"+ "Tilt: " + tilt_degree.ToString();
+                if (string.IsNullOrEmpty(name))
+                {
+                    constructionLayers_Out.Add(constructionLayer.Clone());
+                    continue;
+                }
 
                 GasMaterial gasMaterial_New = materialLibrary.GetObject<GasMaterial>(name);
                 if (gasMaterial_New == null)
@@ -262,6 +337,32 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+    
+        private static string GetMaterialName(DefaultGasType defaultGasType, double thickness, double heatTransferCoefficient, double tilt)
+        {
+            if (double.IsNaN(thickness) || double.IsNaN(heatTransferCoefficient) || double.IsNaN(tilt))
+                return null;
+            
+            double tilt_Degree = System.Math.Round(tilt * 180 / System.Math.PI, 0);
+            double thickness_Millimetres = System.Math.Round(thickness * 1000, 0);
+            double heatTransferCoefficient_Rounded = System.Math.Round(heatTransferCoefficient, 3);
+
+            return string.Format("{0}_{1}mm_{2}W/m2K_{3}deg", Core.Query.Description(defaultGasType), thickness_Millimetres, heatTransferCoefficient_Rounded, tilt_Degree);
+        }
+
+        private static string GetConstructionName(Construction construction, double tilt)
+        {
+            if (construction == null)
+                return null;
+
+            string name = construction.Name;
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            double tilt_Degree = System.Math.Round(tilt * 180 / System.Math.PI, 0);
+
+            return string.Format("{0}_{1}deg", name, tilt_Degree);
         }
     }
 }
