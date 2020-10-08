@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
             inputParamManager.AddParameter(new GooApertureParam(), "_apertures", "_apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
             inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction", "_apertureConstruction", "SAM Analytical ApertureConstruction", GH_ParamAccess.item);
         }
@@ -43,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooAdjacencyClusterParam(), "AdjacencyCluster", "AdjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "AdjacencyCluster", "AdjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
             outputParamManager.AddParameter(new GooApertureParam(), "Apertures", "Apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
         }
 
@@ -55,8 +56,8 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            AdjacencyCluster adjacencyCluster = null;
-            if (!dataAccess.GetData(0, ref adjacencyCluster))
+            SAMObject sAMObject = null;
+            if (!dataAccess.GetData(0, ref sAMObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -72,6 +73,17 @@ namespace SAM.Analytical.Grasshopper
 
             ApertureConstruction apertureConstruction = null;
             if (!dataAccess.GetData(2, ref apertureConstruction))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            AdjacencyCluster adjacencyCluster = sAMObject as AdjacencyCluster;
+            AnalyticalModel analyticalModel = sAMObject as AnalyticalModel;
+            if (adjacencyCluster == null)
+                adjacencyCluster = analyticalModel?.AdjacencyCluster;
+
+            if(adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -118,7 +130,11 @@ namespace SAM.Analytical.Grasshopper
                     adjacencyCluster_Result.AddObject(panel);
             }
 
-            dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster_Result));
+            if(analyticalModel != null)
+                dataAccess.SetData(0, new AnalyticalModel(analyticalModel, adjacencyCluster_Result));
+            else if(adjacencyCluster != null)
+                dataAccess.SetData(0, adjacencyCluster_Result);
+
             dataAccess.SetDataList(1, apertures_Result.ConvertAll(x => new GooAperture(x)));
         }
     }
