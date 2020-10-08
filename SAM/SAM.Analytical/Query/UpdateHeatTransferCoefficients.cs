@@ -245,6 +245,7 @@ namespace SAM.Analytical
                         {
                             ApertureConstruction apertureConstruction_New = new ApertureConstruction(apertureConstruction, paneConstructionLayers, frameConstructionLayers);
                             adjacencyCluster.UpdateApertures(apertures.ConvertAll(x => new Aperture(x, apertureConstruction_New)));
+                            apertureConstructions.Add(apertureConstruction_New);
                         }
                     }
                     else
@@ -274,6 +275,7 @@ namespace SAM.Analytical
                                 ApertureConstruction apertureConstruction_New = new ApertureConstruction(apertureConstruction, name);
                                 apertureConstruction_New = new ApertureConstruction(apertureConstruction_New, paneConstructionLayers, frameConstructionLayers);
                                 adjacencyCluster.UpdateApertures(keyValuePair.Value.ConvertAll(x => new Aperture(x, apertureConstruction_New)));
+                                apertureConstructions.Add(apertureConstruction_New);
                             }
 
                         }
@@ -316,8 +318,8 @@ namespace SAM.Analytical
                     if (paneUpdate || frameUpdate)
                     {
                         ApertureConstruction apertureConstruction_New = new ApertureConstruction(apertureConstruction, paneConstructionLayers, frameConstructionLayers);
-                        apertures = apertures.ConvertAll(x => new Aperture(x, apertureConstruction_New));
-                        adjacencyCluster.UpdateApertures(apertures);
+                        adjacencyCluster.UpdateApertures(apertures.ConvertAll(x => new Aperture(x, apertureConstruction_New)));
+                        apertureConstructions.Add(apertureConstruction_New);
                     }
                 }
             }

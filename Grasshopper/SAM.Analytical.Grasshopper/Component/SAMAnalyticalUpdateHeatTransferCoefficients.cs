@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
                 
                 GH_SAMParam[] result = new GH_SAMParam[3];
                 
-                result[0] = new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel, it checks panel tilt for each construction and if tilt varies it duplicates construction and assign corrected for each tilt, if values set to false it will take wighted average for Panels and use this tilt for constructions ", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
+                result[0] = new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
 
                 param_Boolean = new Param_Boolean() { Name = "_duplicateConstructions", NickName = "_duplicateConstructions", Description = "Duplicate Constructions", Access = GH_ParamAccess.item};
                 param_Boolean.PersistentData.Append(new GH_Boolean(true));
@@ -52,7 +52,7 @@ namespace SAM.Analytical.Grasshopper
                 GH_SAMParam[] result = new GH_SAMParam[3];
                 result[0] = new GH_SAMParam(new GooAnalyticalModelParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
                 result[1] = new GH_SAMParam(new GooConstructionParam() { Name = "Constructions", NickName = "Constructions", Description = "Modified SAM Analytical Constructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
-                result[2] = new GH_SAMParam(new GooConstructionParam() { Name = "ApertureConstructions", NickName = "ApertureConstructions", Description = "Modified SAM Analytical ApertureConstructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                result[2] = new GH_SAMParam(new GooApertureConstructionParam() { Name = "ApertureConstructions", NickName = "ApertureConstructions", Description = "Modified SAM Analytical ApertureConstructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
                 return result;
             }
         }
@@ -62,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateHeatTransferCoefficients()
           : base("SAMAdjacencyCluster.UpdateHeatTransferCoefficients", "SAMAdjacencyCluster.UpdateHeatTransferCoefficients",
-              "Updates Constructions Gas Material HeatTransferCoefficients",
+              "Updates Constructions Gas Material HeatTransferCoefficients, , it checks panel tilt for each construction and if tilt varies it duplicates construction and assign corrected for each tilt, if values set to false it will take wighted average for Panels and use this tilt for constructions ",
               "SAM", "Analytical")
         {
         }
