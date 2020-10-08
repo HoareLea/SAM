@@ -593,24 +593,26 @@ namespace SAM.Analytical
 
             MaterialType materialType = constructionLayers.MaterialType(materialLibrary);
 
+            int index = 0;
             foreach (ConstructionLayer constructionLayer in constructionLayers)
             {
                 IMaterial material = constructionLayer.Material(materialLibrary);
                 if (material == null)
-                    result.Add(string.Format("Material Library does not contain Material {0} for {1} (Guid: {2})", constructionLayer.Name, name_Temp, guid), LogRecordType.Error);
+                    result.Add(string.Format("Material Library does not contain Material {0} for {1} (Guid: {2}) (Construction Layer Index: {3})", constructionLayer.Name, name_Temp, guid, index), LogRecordType.Error);
 
                 if(material is GasMaterial)
                 {
                     GasMaterial gasMaterial = (GasMaterial)material;
                     DefaultGasType defaultGasType = Query.DefaultGasType(gasMaterial);
                     if(defaultGasType == DefaultGasType.Undefined)
-                        result.Add(string.Format("{0} gas material is not recogionzed in {1} (Guid: {2}). Heat Transfer Coefficient may not be calculated properly.", constructionLayer.Name, name_Temp, guid), LogRecordType.Warning);
+                        result.Add(string.Format("{0} gas material is not recogionzed in {1} (Guid: {2}) (Construction Layer Index: {3}). Heat Transfer Coefficient may not be calculated properly.", constructionLayer.Name, name_Temp, guid, index), LogRecordType.Warning);
                     else if(materialType == MaterialType.Opaque && defaultGasType != DefaultGasType.Air)
-                        result.Add(string.Format("{0} Construction Layer for Opaque {1} (Guid: {2}) in not recognized as air type. Heat Transfer Coefficient may not be calculated properly.", constructionLayer.Name, name_Temp, guid), LogRecordType.Warning);
+                        result.Add(string.Format("{0} Construction Layer for Opaque {1} (Guid: {2}) (Construction Layer Index: {3}) in not recognized as air type. Heat Transfer Coefficient may not be calculated properly.", constructionLayer.Name, name_Temp, guid, index), LogRecordType.Warning);
 
                     if (defaultGasType != DefaultGasType.Undefined)
-                        result.Add(string.Format("Gas Material {0} for {1} (Guid: {2}) recognized as {3}", constructionLayer.Name, name_Temp, guid, Core.Query.Description(defaultGasType)), LogRecordType.Message);
+                        result.Add(string.Format("Gas Material {0} for {1} (Guid: {2}) recognized as {3} (Construction Layer Index: {4})", constructionLayer.Name, name_Temp, guid, Core.Query.Description(defaultGasType), index), LogRecordType.Message);
                 }
+                index++;
             }
 
             return result;

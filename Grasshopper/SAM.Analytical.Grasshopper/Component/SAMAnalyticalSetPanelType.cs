@@ -3,6 +3,7 @@ using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -36,6 +37,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_panelType", "_panelType", "SAM Analytical Panel Type", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("_setDefaultConstruction_", "_setDefaultConstruction_", "Set Default Construction", GH_ParamAccess.item, false);
+            inputParamManager.AddBooleanParameter("_setDefaultApertureConstruction_", "_setDefaultApertureConstruction_", "Set Default Aperture Construction", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -75,6 +77,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            bool setDefaultApertureConstruction = false;
+            if (!dataAccess.GetData(3, ref setDefaultApertureConstruction))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             object value = objectWrapper.Value;
 
             if (value is GH_String)
@@ -87,6 +96,25 @@ namespace SAM.Analytical.Grasshopper
             {
                 Construction construction = Analytical.Query.DefaultConstruction(panelType);
                 panel_New = new Panel(panel_New, construction);
+            }
+
+            if(setDefaultApertureConstruction)
+            {
+                List<Aperture> apertures = panel_New.Apertures;
+                if(apertures != null && apertures.Count != 0)
+                {
+                    foreach(Aperture aperture in apertures)
+                    {
+                        ApertureConstruction apertureConstruction = Analytical.Query.DefaultApertureConstruction(panel_New.PanelType, aperture.ApertureType);
+                        if (apertureConstruction == null)
+                            continue;
+
+                        panel_New.RemoveAperture(aperture.Guid);
+
+                        Aperture aperture_New = new Aperture(aperture, apertureConstruction);
+                        panel_New.AddAperture(aperture_New);
+                    }
+                }
             }
 
             dataAccess.SetData(0, new GooPanel(panel_New));
