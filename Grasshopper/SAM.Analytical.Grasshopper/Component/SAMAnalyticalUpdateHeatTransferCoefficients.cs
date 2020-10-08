@@ -1,4 +1,6 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -25,8 +27,10 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                GH_SAMParam[] result = new GH_SAMParam[1];
+                GH_SAMParam[] result = new GH_SAMParam[3];
                 result[0] = new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
+                result[1] = new GH_SAMParam(new Param_Boolean() { Name = "_duplicateConstructions", NickName = "_duplicateConstructions", Description = "Duplicate Constructions", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary);
+                result[2] = new GH_SAMParam(new Param_Boolean() { Name = "_duplicateApertureConstructions", NickName = "_duplicateApertureConstructions", Description = "Duplicate Aperture Constructions", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary);
                 return result;
             }
         }
@@ -62,9 +66,17 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            bool duplicateConstructions = true;
+            if (!dataAccess.GetData(1, ref duplicateConstructions))
+                duplicateConstructions = true;
+
+            bool duplicateApertureConstructions = true;
+            if (!dataAccess.GetData(1, ref duplicateApertureConstructions))
+                duplicateApertureConstructions = true;
+
             List<Construction> constructions = null;
             List<ApertureConstruction> apertureConstructions = null;
-            AnalyticalModel analyticalModel_Result = analyticalModel.UpdateHeatTransferCoefficients(out constructions, out apertureConstructions);
+            AnalyticalModel analyticalModel_Result = analyticalModel.UpdateHeatTransferCoefficients(duplicateConstructions, duplicateApertureConstructions, out constructions, out apertureConstructions);
 
             int index = -1;
 

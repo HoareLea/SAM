@@ -24,6 +24,13 @@ namespace SAM.Analytical
             this.apertureType = apertureType;
         }
 
+        public ApertureConstruction(ApertureConstruction apertureConstruction, string name)
+            : base(apertureConstruction, name)
+        {
+            frameConstructionLayers = apertureConstruction.FrameConstructionLayers;
+            paneConstructionLayers = apertureConstruction.PaneConstructionLayers;
+        }
+
         public ApertureConstruction(Guid guid, string name, ApertureType apertureType, IEnumerable<ConstructionLayer> paneConstructionLayers, IEnumerable<ConstructionLayer> frameConstructionLayers = null)
              : base(guid, name)
         {
@@ -40,8 +47,8 @@ namespace SAM.Analytical
             : base(apertureConstruction)
         {
             apertureType = apertureConstruction.apertureType;
-            frameConstructionLayers = apertureConstruction.frameConstructionLayers;
-            paneConstructionLayers = apertureConstruction.paneConstructionLayers;
+            frameConstructionLayers = apertureConstruction.FrameConstructionLayers;
+            paneConstructionLayers = apertureConstruction.PaneConstructionLayers;
         }
 
         public ApertureConstruction(ApertureConstruction apertureConstruction, IEnumerable<ConstructionLayer> paneConstructionLayers, IEnumerable<ConstructionLayer> frameConstructionLayers = null)
