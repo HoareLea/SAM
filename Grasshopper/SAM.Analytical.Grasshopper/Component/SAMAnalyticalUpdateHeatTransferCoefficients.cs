@@ -27,10 +27,20 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
+                Param_Boolean param_Boolean = null;
+                
                 GH_SAMParam[] result = new GH_SAMParam[3];
-                result[0] = new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
-                result[1] = new GH_SAMParam(new Param_Boolean() { Name = "_duplicateConstructions", NickName = "_duplicateConstructions", Description = "Duplicate Constructions", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary);
-                result[2] = new GH_SAMParam(new Param_Boolean() { Name = "_duplicateApertureConstructions", NickName = "_duplicateApertureConstructions", Description = "Duplicate Aperture Constructions", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary);
+                
+                result[0] = new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel, it checks panel tilt for each construction and if tilt varies it duplicates construction and assign corrected for each tilt, if values set to false it will take wighted average for Panels and use this tilt for constructions ", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
+
+                param_Boolean = new Param_Boolean() { Name = "_duplicateConstructions", NickName = "_duplicateConstructions", Description = "Duplicate Constructions", Access = GH_ParamAccess.item};
+                param_Boolean.PersistentData.Append(new GH_Boolean(true));
+                result[1] = new GH_SAMParam(param_Boolean, ParamVisibility.Binding);
+
+                param_Boolean = new Param_Boolean() { Name = "_duplicateApertureConstructions", NickName = "_duplicateApertureConstructions", Description = "Duplicate Aperture Constructions", Access = GH_ParamAccess.item };
+                param_Boolean.PersistentData.Append(new GH_Boolean(true));
+                result[2] = new GH_SAMParam(param_Boolean, ParamVisibility.Binding);
+                
                 return result;
             }
         }
@@ -71,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
                 duplicateConstructions = true;
 
             bool duplicateApertureConstructions = true;
-            if (!dataAccess.GetData(1, ref duplicateApertureConstructions))
+            if (!dataAccess.GetData(2, ref duplicateApertureConstructions))
                 duplicateApertureConstructions = true;
 
             List<Construction> constructions = null;

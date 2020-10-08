@@ -36,7 +36,9 @@ namespace SAM.Analytical
             if (constructions_All == null)
                 return null;
 
-            foreach(Construction construction in constructions_All)
+            constructions = new List<Construction>();
+
+            foreach (Construction construction in constructions_All)
             {
                 if (construction == null)
                     continue;
@@ -183,7 +185,9 @@ namespace SAM.Analytical
             if (apertureConstructions_All == null)
                 return null;
 
-            foreach(ApertureConstruction apertureConstruction in apertureConstructions_All)
+            apertureConstructions = new List<ApertureConstruction>();
+
+            foreach (ApertureConstruction apertureConstruction in apertureConstructions_All)
             {
                 if (apertureConstruction == null)
                     continue;
@@ -223,10 +227,14 @@ namespace SAM.Analytical
 
                     if (dictionary.Count == 1)
                     {
+                        paneConstructionLayers = null;
+
                         gasMaterials = null;
                         paneUpdate = UpdateHeatTransferCoefficients(apertureConstruction.PaneConstructionLayers, dictionary.Keys.First(), materialLibrary, out gasMaterials, out paneConstructionLayers);
                         if (paneUpdate)
                             gasMaterials?.ForEach(x => materialLibrary.Add(x));
+
+                        frameConstructionLayers = null;
 
                         gasMaterials = null;
                         frameUpdate = UpdateHeatTransferCoefficients(apertureConstruction.FrameConstructionLayers, dictionary.Keys.First(), materialLibrary, out gasMaterials, out frameConstructionLayers);
@@ -236,8 +244,7 @@ namespace SAM.Analytical
                         if (paneUpdate || frameUpdate)
                         {
                             ApertureConstruction apertureConstruction_New = new ApertureConstruction(apertureConstruction, paneConstructionLayers, frameConstructionLayers);
-                            apertures = apertures.ConvertAll(x => new Aperture(x, apertureConstruction_New));
-                            adjacencyCluster.UpdateApertures(apertures);
+                            adjacencyCluster.UpdateApertures(apertures.ConvertAll(x => new Aperture(x, apertureConstruction_New)));
                         }
                     }
                     else
@@ -248,13 +255,17 @@ namespace SAM.Analytical
                             if (string.IsNullOrWhiteSpace(name))
                                 continue;
 
+                            paneConstructionLayers = null;
+
                             gasMaterials = null;
-                            paneUpdate = UpdateHeatTransferCoefficients(apertureConstruction.PaneConstructionLayers, dictionary.Keys.First(), materialLibrary, out gasMaterials, out paneConstructionLayers);
+                            paneUpdate = UpdateHeatTransferCoefficients(apertureConstruction.PaneConstructionLayers, keyValuePair.Key, materialLibrary, out gasMaterials, out paneConstructionLayers);
                             if (paneUpdate)
                                 gasMaterials?.ForEach(x => materialLibrary.Add(x));
 
+                            frameConstructionLayers = null;
+
                             gasMaterials = null;
-                            frameUpdate = UpdateHeatTransferCoefficients(apertureConstruction.FrameConstructionLayers, dictionary.Keys.First(), materialLibrary, out gasMaterials, out frameConstructionLayers);
+                            frameUpdate = UpdateHeatTransferCoefficients(apertureConstruction.FrameConstructionLayers, keyValuePair.Key, materialLibrary, out gasMaterials, out frameConstructionLayers);
                             if (frameUpdate)
                                 gasMaterials?.ForEach(x => materialLibrary.Add(x));
 
@@ -262,8 +273,7 @@ namespace SAM.Analytical
                             {
                                 ApertureConstruction apertureConstruction_New = new ApertureConstruction(apertureConstruction, name);
                                 apertureConstruction_New = new ApertureConstruction(apertureConstruction_New, paneConstructionLayers, frameConstructionLayers);
-                                apertures = apertures.ConvertAll(x => new Aperture(x, apertureConstruction_New));
-                                adjacencyCluster.UpdateApertures(apertures);
+                                adjacencyCluster.UpdateApertures(keyValuePair.Value.ConvertAll(x => new Aperture(x, apertureConstruction_New)));
                             }
 
                         }

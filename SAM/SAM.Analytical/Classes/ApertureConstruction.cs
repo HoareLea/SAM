@@ -27,6 +27,7 @@ namespace SAM.Analytical
         public ApertureConstruction(ApertureConstruction apertureConstruction, string name)
             : base(apertureConstruction, name)
         {
+            apertureType = apertureConstruction.apertureType;
             frameConstructionLayers = apertureConstruction.FrameConstructionLayers;
             paneConstructionLayers = apertureConstruction.PaneConstructionLayers;
         }
