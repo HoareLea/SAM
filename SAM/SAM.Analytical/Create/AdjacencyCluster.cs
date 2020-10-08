@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Planar;
+﻿using SAM.Core;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,13 @@ namespace SAM.Analytical
 
             AdjacencyCluster adjacencyCluster = new AdjacencyCluster();
 
-            Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0,0, elevation_Min)) as Plane;
+            Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Min)) as Plane;
             Plane plane_Max = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
 
             Plane plane_Min_Flipped = new Plane(plane_Min);
             plane_Min_Flipped.FlipZ();
+
+            Plane plane_Location = plane_Min.GetMoved(new Vector3D(0, 0, Tolerance.MacroDistance * 2)) as Plane;
 
             Construction construction_Wall = Query.DefaultConstruction(PanelType.Wall);
             Construction construction_Floor = Query.DefaultConstruction(PanelType.Floor);
@@ -36,7 +39,7 @@ namespace SAM.Analytical
                     if (polygon2D == null)
                         polygon2D = polygon2Ds[i];
 
-                    Space space = new Space(string.Format("Cell {0}", i + 1), plane_Min.Convert(polygon2D.GetInternalPoint2D()));
+                    Space space = new Space(string.Format("Cell {0}", i + 1), plane_Location.Convert(polygon2D.GetInternalPoint2D()));
                     adjacencyCluster.AddObject(space);
 
                     List<Segment2D> segment2Ds = polygon2D.GetSegments();
@@ -161,7 +164,7 @@ namespace SAM.Analytical
                     if (boundingBox3D == null)
                         continue;
 
-                    double elevation = SAM.Core.Query.Round(boundingBox3D.Min.Z, tolerance);
+                    double elevation = Core.Query.Round(boundingBox3D.Min.Z, tolerance);
                     plane_Default.Move(new Vector3D(0, 0, elevation));
 
                     Face2D face2D = plane_Default.Convert(plane_Default.Project(face3D));
@@ -314,13 +317,13 @@ namespace SAM.Analytical
 
                 List<Face2D> face2Ds_Top = face2Ds[elevation_Top];
 
-                double elevation_Middle = elevation_Bottom + ((elevation_Top - elevation_Bottom) / 2);
+                double elevation_Location = elevation_Bottom + Tolerance.MacroDistance * 2;
 
                 int count = 1;
                 foreach (Face2D face2D in face2Ds_Top)
                 {
                     Point3D location = plane_Bottom.Convert(face2D.GetInternalPoint2D());
-                    location = new Point3D(location.X, location.Y, elevation_Middle);
+                    location = new Point3D(location.X, location.Y, elevation_Location);
 
                     Space space = new Space(string.Format("Cell {0}.{1}", tuples.Count - i, count), location);
                     count++;
