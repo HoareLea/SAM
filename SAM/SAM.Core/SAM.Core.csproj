@@ -49,6 +49,12 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Attributes\Enum\Types.cs" />
+    <Compile Include="Attributes\Parameter\ParameterDisplayName.cs" />
+    <Compile Include="Attributes\Parameter\DoubleParameterType.cs" />
+    <Compile Include="Attributes\Parameter\ParameterType.cs" />
+    <Compile Include="Attributes\Parameter\ParameterName.cs" />
+    <Compile Include="Enums\ParameterType.cs" />
     <Compile Include="Modify\AddRange.cs" />
     <Compile Include="Classes\Library\SAMLibrary.cs" />
     <Compile Include="Classes\Material\SolidMaterial.cs" />
@@ -115,6 +121,9 @@
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\SetParameter.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
+    <Compile Include="Query\CustomAttribute.cs" />
+    <Compile Include="Query\Enums.cs" />
+    <Compile Include="Query\IsValid.cs" />
     <Compile Include="Query\ResourcesDirectory.cs" />
     <Compile Include="Query\ResourcesDirectoryName.cs" />
     <Compile Include="Query\IndexesOf.cs" />

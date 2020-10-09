@@ -3,6 +3,7 @@ using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
@@ -97,17 +98,28 @@ namespace SAM.Core.Grasshopper
             object value = null;
             if (!Core.Query.TryGetValue(@object, name, out value))
             {
-                if (@object is SAMObject)
+                bool hasValue = false;
+                if(@object is SAMObject)
                 {
-                    SAMObject sAMObject = (SAMObject)@object;
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Property or Method for: {3} not found. {0}:{1} Guid: {2}", sAMObject.GetType().Name, sAMObject.Name, sAMObject.Guid.ToString(), name));
-                }
-                else
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Property or Method {0} not found", name));
+                    List<Enum> enums = Core.Query.Enums(@object.GetType(), name);
+                    if (enums != null && enums.Count != 0)
+                        hasValue = ((SAMObject)@object).TryGetValue(enums[0], out value);
                 }
 
-                return;
+                if(!hasValue)
+                {
+                    if (@object is SAMObject)
+                    {
+                        SAMObject sAMObject = (SAMObject)@object;
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Property or Method for: {3} not found. {0}:{1} Guid: {2}", sAMObject.GetType().Name, sAMObject.Name, sAMObject.Guid.ToString(), name));
+                    }
+                    else
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Property or Method {0} not found", name));
+                    }
+
+                    return;
+                }
             }
 
             if (value is SAMObject)

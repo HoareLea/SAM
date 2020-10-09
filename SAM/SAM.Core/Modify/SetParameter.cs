@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace SAM.Core
@@ -114,11 +113,22 @@ namespace SAM.Core
             if (sAMObject == null || string.IsNullOrWhiteSpace(name) || assembly == null)
                 return false;
 
+            bool @new = false; 
+
             ParameterSet parameterSet = sAMObject.GetParameterSet(assembly);
             if (parameterSet == null)
+            {
+                parameterSet = new ParameterSet(assembly);
+                @new = true;
+            }
+
+            if (!parameterSet.Add(name, value as dynamic))
                 return false;
 
-            return parameterSet.Add(name, value as dynamic);
+            if (@new)
+                return sAMObject.Add(parameterSet);
+
+            return true;
         }
     }
 }

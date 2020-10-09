@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace SAM.Core
@@ -116,6 +117,57 @@ namespace SAM.Core
             {
                 return guid;
             }
+        }
+
+        public bool TryGetValue(Enum @enum, out object value)
+        {
+            value = null;
+            
+            if (!Query.IsValid(GetType(), @enum))
+                return false;
+
+            string name = Attributes.ParameterName.Get(@enum);
+            if (string.IsNullOrEmpty(name))
+                return false;
+
+            object result = null;
+            if (!Query.TryGetValue(this, name, out result))
+                return false;
+
+            value = result;
+            return true;
+        }
+        
+        public object GetValue(Enum @enum)
+        {
+            object result = null;
+            if (!TryGetValue(@enum, out result))
+                return null;
+
+            return result;
+        }
+
+        public bool SetValue(Enum @enum, object value)
+        {
+            if (!Query.IsValid(GetType(), @enum))
+                return false;
+
+            string name = Attributes.ParameterName.Get(@enum);
+            if (string.IsNullOrEmpty(name))
+                return false;
+
+            object value_Temp = value;
+            
+            Attributes.ParameterType parameterType = Query.CustomAttribute<Attributes.ParameterType>(@enum);
+            if (parameterType != null)
+            {
+                if (!parameterType.IsValid(value))
+                    return false;
+
+                value_Temp = parameterType.Convert(value);
+            }
+                
+            return Modify.SetParameter(this, name, value_Temp as dynamic);
         }
 
         public ParameterSet GetParameterSet(string name)
