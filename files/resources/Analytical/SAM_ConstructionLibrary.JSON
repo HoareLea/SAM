@@ -430,7 +430,7 @@
     },
     {
       "_type": "SAM.Analytical.Construction,SAM.Analytical",
-      "Name": "SIM_INT_SLD_FLR Parking",
+      "Name": "SIM_EXT_GRD_Roof DGRD01",
       "Guid": "595f988a-89cc-47fb-b3d1-b8df1f76002d",
       "ParameterSets": [
         {
