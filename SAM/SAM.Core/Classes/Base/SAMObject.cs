@@ -126,7 +126,14 @@ namespace SAM.Core
             if (!Query.IsValid(GetType(), @enum))
                 return false;
 
-            string name = Attributes.ParameterName.Get(@enum);
+            Attributes.ParameterProperties parameterProperties = Attributes.ParameterProperties.Get(@enum);
+            if (parameterProperties == null)
+                return false;
+
+            if (!parameterProperties.ReadAccess())
+                return false;
+
+            string name = parameterProperties.Name;
             if (string.IsNullOrEmpty(name))
                 return false;
 
@@ -136,6 +143,23 @@ namespace SAM.Core
 
             value = result;
             return true;
+        }
+
+        public bool TryGetValue<T>(Enum @enum, out T value)
+        {
+            value = default;
+
+            object result;
+            if (!TryGetValue(@enum, out result))
+                return false;
+
+            if (result is T)
+            {
+                value = (T)result;
+                return true;
+            }
+
+            return false;
         }
         
         public object GetValue(Enum @enum)
@@ -152,7 +176,14 @@ namespace SAM.Core
             if (!Query.IsValid(GetType(), @enum))
                 return false;
 
-            string name = Attributes.ParameterName.Get(@enum);
+            Attributes.ParameterProperties parameterProperties = Attributes.ParameterProperties.Get(@enum);
+            if (parameterProperties == null)
+                return false;
+
+            if (!parameterProperties.WriteAccess())
+                return false;
+
+            string name = parameterProperties.Name;
             if (string.IsNullOrEmpty(name))
                 return false;
 

@@ -14,7 +14,7 @@ namespace SAM.Core
             if (memberInfos == null || memberInfos.Length == 0)
                 return default;
 
-            return Attribute.GetCustomAttribute(memberInfos[0], typeof(T)) as T;
+            return CustomAttribute<T>(memberInfos[0]);
         }
 
         public static T CustomAttribute<T>(Type type, string text) where T : Attribute
@@ -26,7 +26,25 @@ namespace SAM.Core
             if (memberInfos == null || memberInfos.Length == 0)
                 return default;
 
-            return Attribute.GetCustomAttribute(memberInfos[0], typeof(T)) as T;
+            return CustomAttribute<T>(memberInfos[0]);
+        }
+
+        public static T CustomAttribute<T>(this MemberInfo memberInfo) where T : Attribute
+        {
+            if (memberInfo == null)
+                return default;
+            
+            Attribute[] attributes = Attribute.GetCustomAttributes(memberInfo);
+            if (attributes == null || attributes.Length == 0)
+                return default;
+
+            foreach (Attribute attribute in attributes)
+            {
+                if (attribute is T)
+                    return (T)attribute;
+            }
+
+            return default;
         }
     }
 }

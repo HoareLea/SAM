@@ -49,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             foreach (InternalConditionParameter internalConditionParameter in Enum.GetValues(typeof(InternalConditionParameter)))
-                Menu_AppendItem(menu, Core.Attributes.ParameterName.Get(internalConditionParameter), Menu_Changed, true, internalConditionParameter == this.internalConditionParameter).Tag = internalConditionParameter;
+                Menu_AppendItem(menu, Core.Attributes.ParameterProperties.Get(internalConditionParameter).DisplayName, Menu_Changed, true, internalConditionParameter == this.internalConditionParameter).Tag = internalConditionParameter;
         }
 
         private void Menu_Changed(object sender, EventArgs e)

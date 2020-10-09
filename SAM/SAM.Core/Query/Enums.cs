@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAM.Core.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -24,28 +25,11 @@ namespace SAM.Core
 
                 foreach(Type type_Temp in types)
                 {
-                    if (type_Temp == null)
+                    ParameterTypes parameterTypes = ParameterTypes.Get(type_Temp);
+                    if (parameterTypes == null)
                         continue;
 
-                    if (!type_Temp.IsEnum)
-                        continue;
-
-                    object[] objects = type_Temp.GetCustomAttributes(typeof(Attributes.Types), true);
-                    if (objects == null || objects.Length == 0)
-                        continue;
-
-                    Attributes.Types types_Attribute = null;
-                    foreach(object @object in objects)
-                    {
-                        types_Attribute = @object as Attributes.Types;
-                        if (types_Attribute != null)
-                            break;
-                    }
-
-                    if (types_Attribute == null)
-                        continue;
-
-                    if (!types_Attribute.IsValid(type))
+                    if (!parameterTypes.IsValid(type))
                         continue;
 
                     foreach(Enum @enum in Enum.GetValues(type_Temp))
@@ -55,8 +39,12 @@ namespace SAM.Core
                             result.Add(@enum);
                             continue;
                         }
-                        
-                        string name = Attributes.ParameterName.Get(@enum);
+
+                        ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
+                        if (parameterProperties == null)
+                            continue;
+
+                        string name = parameterProperties.Name;
                         if (string.IsNullOrEmpty(name))
                             continue;
 
