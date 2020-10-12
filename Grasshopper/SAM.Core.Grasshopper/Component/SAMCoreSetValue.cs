@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters.Hints;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -92,6 +93,8 @@ namespace SAM.Core.Grasshopper
             }
 
             object value = objectWrapper.Value;
+            if(value is IGH_Goo)
+                value = (value as dynamic).Value;
 
             sAMObject = sAMObject.Clone();
 

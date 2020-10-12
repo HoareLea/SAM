@@ -19,7 +19,16 @@ namespace SAM.Core
                 if (assembly == null)
                     continue;
 
-                Type[] types = assembly.GetTypes();
+                Type[] types = null;
+                try
+                {
+                    types = assembly.GetTypes();
+                }
+                catch (ReflectionTypeLoadException reflectionTypeLoadException)
+                {
+                    types = reflectionTypeLoadException.Types.Where(t => t != null)?.ToArray();
+                }
+                    
                 if (types == null || types.Length == 0)
                     continue;
 
