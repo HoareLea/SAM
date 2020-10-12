@@ -1,14 +1,13 @@
 ﻿using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace SAM.Core
 {
     public static partial class Query
     {
-        public static List<Enum> Enums(Type type, string value)
+        public static List<Enum> Enums(Type type, string value, bool notPublic = false)
         {
             if (type == null || string.IsNullOrEmpty(value))
                 return null;
@@ -26,7 +25,7 @@ namespace SAM.Core
                 }
                 catch (ReflectionTypeLoadException reflectionTypeLoadException)
                 {
-                    types = reflectionTypeLoadException.Types.Where(t => t != null)?.ToArray();
+                    types = reflectionTypeLoadException.Types;
                 }
                     
                 if (types == null || types.Length == 0)
@@ -34,6 +33,12 @@ namespace SAM.Core
 
                 foreach(Type type_Temp in types)
                 {
+                    if (type_Temp == null)
+                        continue;
+
+                    if (!notPublic && type_Temp.IsNotPublic)
+                        continue;
+                    
                     ParameterTypes parameterTypes = ParameterTypes.Get(type_Temp);
                     if (parameterTypes == null)
                         continue;
