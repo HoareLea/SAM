@@ -114,8 +114,12 @@ namespace SAM.Core.Grasshopper
 
                 if (typeof(IGH_Goo).IsAssignableFrom(type_Source))
                 {
-                    Value = (source as dynamic).Value;
-                    return true;
+                    object @object = (source as dynamic).Value;
+                    if (@object is T)
+                    {
+                        Value = (T)@object;
+                        return true;
+                    }
                 }
             }
 
