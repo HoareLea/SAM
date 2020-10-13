@@ -571,6 +571,9 @@ namespace SAM.Analytical
                                 foreach (Polygon2D polygon2D_Temp in polygon2Ds)
                                 {
                                     double area_Temp = polygon2D_Temp.GetArea();
+                                    if (area_Temp == 0)
+                                        continue;
+
                                     if (minArea != 0 && area_Temp <= minArea)
                                         continue;
 
