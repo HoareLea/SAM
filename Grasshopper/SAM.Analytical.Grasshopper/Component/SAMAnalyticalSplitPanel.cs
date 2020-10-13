@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_elevation", "_elevation", "Elevation or Plane", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_elevations", "_elevations", "Elevations or Planes", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -65,52 +65,48 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            GH_ObjectWrapper objectWrapper = null;
-            if(!dataAccess.GetData(1, ref objectWrapper) || objectWrapper == null)
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+            if(!dataAccess.GetDataList(1, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            object @object = objectWrapper.Value;
-
-            if (@object is IGH_Goo)
+            List<Plane> planes = new List<Plane>();
+            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                try
+                object @object = objectWrapper.Value;
+
+                if (@object is IGH_Goo)
                 {
-                    @object = (@object as dynamic).Value;
+                    try
+                    {
+                        @object = (@object as dynamic).Value;
+                    }
+                    catch (Exception exception)
+                    {
+                        @object = null;
+                    }
                 }
-                catch (Exception exception)
-                {
-                    @object = null;
-                }
+
+                if (@object == null)
+                    continue;
+
+
+                Plane plane = null;
+
+                if (Core.Query.IsNumeric(@object))
+                    plane = Geometry.Spatial.Create.Plane((double)@object);
+                else if (@object is Plane)
+                    plane = (Plane)@object;
+                else if (@object is GH_Plane)
+                    plane = ((GH_Plane)@object).ToSAM();
+
+                if (plane != null)
+                    planes.Add(plane);
             }
 
-            if(@object == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            List<Panel> result = null;
-
-            if (Core.Query.IsNumeric(@object))
-            {
-                result = Analytical.Query.Cut(panel, (double)@object);
-            }
-            else if (@object is Plane)
-            {
-                result = Analytical.Query.Cut(panel, (Plane)@object);
-            }
-            else if (@object is GH_Plane)
-            {
-                result = Analytical.Query.Cut(panel, ((GH_Plane)@object).ToSAM());
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            List<Panel> result = Analytical.Query.Cut(panel, planes);
 
             if (result == null || result.Count == 0)
                 result = new List<Panel>() { panel.Clone() };

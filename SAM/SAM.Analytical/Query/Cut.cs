@@ -1,6 +1,7 @@
 ﻿using SAM.Core;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -47,6 +48,44 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+
+        public static List<Panel> Cut(this Panel panel, IEnumerable<Plane> planes, double tolerance = Tolerance.Distance)
+        {
+            if (panel == null || planes == null)
+                return null;
+
+            List<Panel> result = new List<Panel>() { panel.Clone() };
+
+            if (planes.Count() == 0)
+                return result;
+
+            foreach (Plane plane in planes)
+            {
+                Dictionary<System.Guid, Panel> dictionary = new Dictionary<System.Guid, Panel>();
+                foreach (Panel panel_Temp in result)
+                {
+                    List<Panel> panels_Temp = Cut(panel_Temp, plane, tolerance);
+                    if (panels_Temp != null)
+                        panels_Temp.ForEach(x => dictionary[x.Guid] = x);
+                }
+
+                result = dictionary.Values.ToList();
+            }
+
+            return result;
+        }
+
+        public static List<Panel> Cut(this Panel panel, IEnumerable<double> elevations, double tolerance = Tolerance.Distance)
+        {
+            if (panel == null || elevations == null)
+                return null;
+
+            List<Plane> planes = elevations.ToList().ConvertAll(x => Geometry.Spatial.Create.Plane(x));
+            if (planes == null)
+                return null;
+
+            return Cut(panel, planes, tolerance);
         }
     }
 }
