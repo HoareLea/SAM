@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCutPanel : GH_SAMComponent
+    public class SAMAnalyticalSplitPanel : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -26,9 +26,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCutPanel()
-          : base("SAMAnalytical.CutPanel", "SAMAnalytical.CutPanel",
-              "Cut SAM Analytical Panel",
+        public SAMAnalyticalSplitPanel()
+          : base("SAMAnalytical.SplitPanel", "SAMAnalytical.SplitPanel",
+              "Split SAM Analytical Panel by Elevation or Plane, *aperture will be splited as well",
               "SAM", "Analytical")
         {
         }
@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_elevation", "_elevation", "Elevation or Plane", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace SAM.Analytical.Grasshopper
             if (result == null || result.Count == 0)
                 result = new List<Panel>() { panel.Clone() };
 
-            dataAccess.SetData(0, result?.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(0, result?.ConvertAll(x => new GooPanel(x)));
         }
     }
 }

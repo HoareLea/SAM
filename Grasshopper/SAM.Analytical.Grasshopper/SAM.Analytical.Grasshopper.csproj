@@ -197,7 +197,7 @@
     <Compile Include="Convert\ToRhino\Brep.cs" />
     <Compile Include="Query\DisplayMaterial.cs" />
     <Compile Include="Query\Color.cs" />
-    <Compile Include="Component\SAMAnalyticalCutPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalSplitPanel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">

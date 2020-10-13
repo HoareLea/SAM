@@ -36,13 +36,12 @@ namespace SAM.Analytical
                 return result;
             }
 
-            List<Aperture> apertures = panel.Apertures;
             foreach(Face3D face3D_New in face3Ds)
             {
                 if (face3D_New == null)
                     continue;
 
-                Panel panel_New = new Panel(System.Guid.NewGuid(), panel, face3D_New, apertures, true, double.MaxValue, double.MaxValue);
+                Panel panel_New = new Panel(System.Guid.NewGuid(), panel, face3D_New, null, true, 0, double.MaxValue);
 
                 result.Add(panel_New);
             }
