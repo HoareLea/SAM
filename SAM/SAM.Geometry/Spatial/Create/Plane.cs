@@ -20,5 +20,10 @@ namespace SAM.Geometry.Spatial
 
             return new Plane(origin, axisX, axisY);
         }
+
+        public static Plane Plane(double elevation)
+        {
+            return Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
+        }
     }
 }

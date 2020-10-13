@@ -126,6 +126,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\UpdateConstructions.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\Cut.cs" />
     <Compile Include="Query\DefaultGasType.cs" />
     <Compile Include="Query\UpdateHeatTransferCoefficients.cs" />
     <Compile Include="Query\HasMaterial.cs" />
