@@ -37,6 +37,7 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
             inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            inputParamManager.AddNumberParameter("_tolerance_", "_tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
         }
 
         /// <summary>
@@ -69,7 +70,14 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Panel result = Analytical.Query.Extend(panel, panels);
+            double tolerance = Core.Tolerance.Distance;
+            if (!dataAccess.GetData(2, ref tolerance))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+                Panel result = Analytical.Query.Extend(panel, panels, tolerance);
 
             dataAccess.SetData(0, result);
         }
