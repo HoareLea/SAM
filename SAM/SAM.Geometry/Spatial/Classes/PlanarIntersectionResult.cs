@@ -221,8 +221,8 @@ namespace SAM.Geometry.Spatial
             Vector3D tangent = plane_1.Normal.CrossProduct(plane_2.Normal).Unit;
 
             //d-values from plane equation: ax+by+cz+d=0
-            double d1 = -plane_1.Normal.DotProduct(new Vector3D(plane_1.Origin.X, plane_1.Origin.X, plane_1.Origin.Z));
-            double d2 = -plane_2.Normal.DotProduct(new Vector3D(plane_2.Origin.X, plane_2.Origin.X, plane_2.Origin.Z));
+            double d1 = -plane_1.Normal.DotProduct(new Vector3D(plane_1.Origin.X, plane_1.Origin.Y, plane_1.Origin.Z));
+            double d2 = -plane_2.Normal.DotProduct(new Vector3D(plane_2.Origin.X, plane_2.Origin.Y, plane_2.Origin.Z));
 
             Point3D orgin;
 
