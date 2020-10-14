@@ -40,5 +40,26 @@ namespace SAM.Geometry.Spatial
 
             return false;
         }
+
+        public static bool On(this Plane plane, ISegmentable3D segmentable3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (plane == null || segmentable3D == null)
+                return false;
+
+            List<Point3D> point3Ds = segmentable3D.GetPoints();
+            if (point3Ds == null || point3Ds.Count == 0)
+                return false;
+
+            foreach(Point3D point3D in point3Ds)
+            {
+                if (point3D == null)
+                    continue;
+
+                if (!plane.On(point3D, tolerance))
+                    return false;
+            }
+
+            return true;
+        }
     }
 }

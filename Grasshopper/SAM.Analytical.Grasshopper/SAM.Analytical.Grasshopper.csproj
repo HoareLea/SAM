@@ -127,6 +127,7 @@
     <Compile Include="Component\SAMAnalyticalHeatFlowDirection.cs" />
     <Compile Include="Component\SAMAnalyticalDefaultGasType.cs" />
     <Compile Include="Component\SAMAnalyticalGetPanelsByConstruction.cs" />
+    <Compile Include="Component\SAMAnalyticalExtendPanel.cs" />
     <Compile Include="Component\SAMAnalyticalNormals.cs" />
     <Compile Include="Component\SAMAnalyticalCheck.cs" />
     <Compile Include="Component\SAMAnalyticalSetApertureConstruction.cs" />

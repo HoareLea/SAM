@@ -96,11 +96,23 @@ namespace SAM.Analytical.Grasshopper
                 Plane plane = null;
 
                 if (Core.Query.IsNumeric(@object))
+                {
                     plane = Geometry.Spatial.Create.Plane((double)@object);
+                }
                 else if (@object is Plane)
+                {
                     plane = (Plane)@object;
+                }
                 else if (@object is GH_Plane)
+                {
                     plane = ((GH_Plane)@object).ToSAM();
+                }
+                else if (@object is string)
+                {
+                    double value;
+                    if (double.TryParse((string)@object, out value))
+                        plane = Geometry.Spatial.Create.Plane(value);
+                }
 
                 if (plane != null)
                     planes.Add(plane);
