@@ -43,6 +43,7 @@ namespace SAM.Analytical
                 if (point3Ds == null || point3Ds.Count == 0)
                     continue;
 
+                point3Ds = point3Ds.ConvertAll(x => plane.Project(x));
                 point3Ds = point3Ds.ConvertAll(x => line3D.Project(x));
 
                 Point3D point3D_1 = null;
