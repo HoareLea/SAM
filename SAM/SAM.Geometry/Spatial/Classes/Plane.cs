@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 
@@ -411,6 +412,15 @@ namespace SAM.Geometry.Spatial
         public Point3D Project(Point3D point3D)
         {
             return Closest(point3D);
+        }
+
+        public Point3D Project(Point3D point3D, Vector3D vector3D, double tolerance = Tolerance.Distance)
+        {
+            PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(this, point3D, vector3D, tolerance);
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                return null;
+
+            return planarIntersectionResult.GetGeometry3D<Point3D>();
         }
 
         public Segment3D Project(Segment3D segment3D)
