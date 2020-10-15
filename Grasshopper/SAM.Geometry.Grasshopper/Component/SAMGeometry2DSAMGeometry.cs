@@ -8,6 +8,17 @@ namespace SAM.Geometry.Grasshopper
 {
     public class SAMGeometry2DSAMGeometry : GH_SAMComponent
     {
+
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid => new Guid("7d24437d-df27-4144-b66e-82d8a8491b2d");
+
+        /// <summary>
+        /// The latest version of this component
+        /// </summary>
+        public override string LatestComponentVersion => "1.0.0";
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
@@ -98,12 +109,5 @@ namespace SAM.Geometry.Grasshopper
             }
         }
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("7d24437d-df27-4144-b66e-82d8a8491b2d"); }
-        }
     }
 }

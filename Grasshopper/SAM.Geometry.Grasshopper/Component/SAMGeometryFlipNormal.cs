@@ -19,6 +19,11 @@ namespace SAM.Geometry.Grasshopper
         public override Guid ComponentGuid => new Guid("ffe03932-08df-4561-8924-e734b2ed7318");
 
         /// <summary>
+        /// The latest version of this component
+        /// </summary>
+        public override string LatestComponentVersion => "1.0.0";
+
+        /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMGeometryFlipNormal()

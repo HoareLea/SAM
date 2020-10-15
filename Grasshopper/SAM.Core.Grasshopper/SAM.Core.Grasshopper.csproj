@@ -117,7 +117,9 @@
     <Compile Include="Component\SAMCoreGetValue.cs" />
     <Compile Include="Convert\ToSAM\GH_SAMParam.cs" />
     <Compile Include="Create\GH_SAMParam.cs" />
+    <Compile Include="Query\Obsolete.cs" />
     <Compile Include="Enums\ParamVisibility.cs" />
+    <Compile Include="Interfaces\IGH_SAMComponent.cs" />
     <Compile Include="Interfaces\IGooParameter.cs" />
     <Compile Include="Interfaces\IGooSAMObject.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />

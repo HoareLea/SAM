@@ -4,14 +4,24 @@ using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
-    public abstract class GH_SAMComponent : GH_Component
+    public abstract class GH_SAMComponent : GH_Component, IGH_SAMComponent
     {
         public GH_SAMComponent(string name, string nickname, string description, string category, string subCategory)
             : base(name, nickname, description, category, subCategory)
         {
-            Message = Core.Query.CurrentVersion();
+            SetValue("SAM_SAMVersion", Core.Query.CurrentVersion());
+            SetValue("SAM_ComponentVersion", LatestComponentVersion);
         }
-        
+
+        public override bool Obsolete
+        {
+
+            get
+            {
+                return Query.Obsolete(this);
+            }
+        }
+
         public virtual void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
             base.AppendAdditionalMenuItems(menu);
@@ -22,6 +32,30 @@ namespace SAM.Core.Grasshopper
         public virtual void OnSourceCodeClick(object sender = null, object e = null)
         {
             Process.Start("https://github.com/HoareLea/SAM");
+        }
+
+        public string ComponentVersion
+        {
+            get
+            {
+                return GetValue("SAM_ComponentVersion", null);
+            }
+        }
+
+        public string SAMVersion
+        {
+            get
+            {
+               return GetValue("SAM_SAMVersion", null);
+            }
+        }
+
+        public abstract string LatestComponentVersion { get;  }
+
+        public override void AddedToDocument(GH_Document document)
+        {
+            base.AddedToDocument(document);
+            Message = ComponentVersion;
         }
     }
 }

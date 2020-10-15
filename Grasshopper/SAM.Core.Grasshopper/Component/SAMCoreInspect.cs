@@ -6,17 +6,23 @@ using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreInspect : GH_Component, IGH_VariableParameterComponent
+    public class SAMCoreInspect : GH_Component, IGH_VariableParameterComponent, IGH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
         public override Guid ComponentGuid => new Guid("fe77c7c9-e24b-44d3-9e0b-d40a061cecbe");
+
+        /// <summary>
+        /// The latest version of this component
+        /// </summary>
+        public string LatestComponentVersion => "1.0.0";
 
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
@@ -24,6 +30,15 @@ namespace SAM.Core.Grasshopper
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Inspect;
+
+        public override bool Obsolete
+        {
+
+            get
+            {
+                return Query.Obsolete(this);
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -33,7 +48,8 @@ namespace SAM.Core.Grasshopper
               "Inspect Object",
               "SAM", "Core")
         {
-            Message = Core.Query.CurrentVersion();
+            SetValue("SAM_SAMVersion", Core.Query.CurrentVersion());
+            SetValue("SAM_ComponentVersion", LatestComponentVersion);
         }
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
@@ -47,6 +63,10 @@ namespace SAM.Core.Grasshopper
             Menu_AppendItem(menu, "Get common parameters", Menu_PopulateOutputsWithCommonParameters, hasInputData, false);
             Menu_AppendItem(menu, "Get all parameters", Menu_PopulateOutputsWithAllParameters, hasInputData, false);
             Menu_AppendItem(menu, "Remove unconnected parameters", Menu_RemoveUnconnectedParameters, hasOutputParameters, false);
+
+            base.AppendAdditionalMenuItems(menu);
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Source code", OnSourceCodeClick, Resources.SAM_Small);
         }
 
         void PopulateOutputParameters(IEnumerable<GooParameterParam> gooParameterParams)
@@ -288,5 +308,33 @@ namespace SAM.Core.Grasshopper
         bool IGH_VariableParameterComponent.DestroyParameter(GH_ParameterSide side, int index) => true;
         
         void IGH_VariableParameterComponent.VariableParameterMaintenance() { }
+
+
+        public virtual void OnSourceCodeClick(object sender = null, object e = null)
+        {
+            Process.Start("https://github.com/HoareLea/SAM");
+        }
+
+        public string ComponentVersion
+        {
+            get
+            {
+                return GetValue("SAM_ComponentVersion", null);
+            }
+        }
+
+        public string SAMVersion
+        {
+            get
+            {
+                return GetValue("SAM_SAMVersion", null);
+            }
+        }
+
+        public override void AddedToDocument(GH_Document document)
+        {
+            base.AddedToDocument(document);
+            Message = ComponentVersion;
+        }
     }
 }
