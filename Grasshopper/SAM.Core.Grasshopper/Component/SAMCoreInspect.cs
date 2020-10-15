@@ -50,8 +50,6 @@ namespace SAM.Core.Grasshopper
         {
             SetValue("SAM_SAMVersion", Core.Query.CurrentVersion());
             SetValue("SAM_ComponentVersion", LatestComponentVersion);
-
-            Message = LatestComponentVersion;
         }
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
@@ -331,6 +329,12 @@ namespace SAM.Core.Grasshopper
             {
                 return GetValue("SAM_SAMVersion", null);
             }
+        }
+
+        public override void AddedToDocument(GH_Document document)
+        {
+            base.AddedToDocument(document);
+            Message = ComponentVersion;
         }
     }
 }
