@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Rhino.Render.Fields;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -6,6 +7,7 @@ using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -25,11 +27,6 @@ namespace SAM.Analytical.Grasshopper
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
-
-        private string text;
-        private double height;
-        Rhino.Geometry.Plane plane;
-
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -85,34 +82,9 @@ namespace SAM.Analytical.Grasshopper
             if (string.IsNullOrEmpty(name))
                 name = "Name";
 
+            string text;
             if (!panel.TryGetValue(name, out text, true))
-                text = "???";
-
-            height = double.NaN;
-            if (!dataAccess.GetData(2, ref height))
-            {
-                int length = text.Length;
-                if (length < 10)
-                    length = 10;
-
-                BoundingBox2D boundingBox2D = panel.GetFace3D().ExternalEdge2D.GetBoundingBox();
-                double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
-
-                height = max / (length * 2);
-            }
-
-            Point3D point3D = panel.GetInternalPoint3D();
-            if(point3D == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Could not find proper location of label");
-                return;
-            }
-
-            Vector3D normal = panel.Normal;
-            if (normal.Z < 0)
-                normal.Negate();
-
-            plane = new Plane(point3D, normal).ToRhino();
+                text = "???";            
 
             dataAccess.SetData(0, text);
         }
@@ -120,8 +92,49 @@ namespace SAM.Analytical.Grasshopper
         #region IGH_PreviewObject
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            args.Display.Draw3dText(new Rhino.Display.Text3d(text, plane, height), System.Drawing.Color.Black);
-            base.DrawViewportMeshes(args);
+            double height = double.NaN;
+            global::Grasshopper.Kernel.Types.IGH_Goo goo = Params.Input[2].VolatileData.AllData(true)?.First();
+            if (goo != null)
+                height = (goo as dynamic).Value;
+
+            string name = null;
+            goo = Params.Input[1].VolatileData.AllData(true)?.First();
+            if (goo != null)
+                name = (goo as dynamic).Value;
+
+            foreach (GooPanel gooPanel in Params.Input[0].VolatileData.AllData(true))
+            {
+                Panel panel = gooPanel.Value;
+                if (panel == null)
+                    continue;
+
+                string text;
+                if (!panel.TryGetValue(name, out text, true))
+                    text = "???";
+
+                Vector3D normal = panel.Normal;
+                if (normal.Z < 0)
+                    normal.Negate();
+
+                Point3D point3D = panel.GetInternalPoint3D();
+
+                Rhino.Geometry.Plane plane = new Plane(point3D, normal).ToRhino();
+
+                if (double.IsNaN(height))
+                {
+                    int length = text.Length;
+                    if (length < 10)
+                        length = 10;
+
+                    BoundingBox2D boundingBox2D = panel.GetFace3D().ExternalEdge2D.GetBoundingBox();
+                    double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
+
+                    height = max / (length * 2);
+                }
+
+                args.Display.Draw3dText(new Rhino.Display.Text3d(gooPanel?.Value?.Name, plane, height), System.Drawing.Color.Black);
+                base.DrawViewportMeshes(args);
+            }
         }
         #endregion
     }
