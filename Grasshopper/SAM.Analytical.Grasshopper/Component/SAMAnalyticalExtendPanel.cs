@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooPanelParam(), "_panelsToBeExtended", "_panelsToBeExtended", "SAM Analytical Panels To Be Extended", GH_ParamAccess.list);
             inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_tolerance_", "_tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
         }
@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -56,8 +56,8 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Panel panel = null;
-            if (!dataAccess.GetData(0, ref panel))
+            List<Panel> panels_ToBeExtended = new List<Panel>();
+            if (!dataAccess.GetDataList(0, panels_ToBeExtended))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -77,9 +77,9 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-                Panel result = Analytical.Query.Extend(panel, panels, tolerance);
+            List<Panel> result = Analytical.Query.Extend(panels_ToBeExtended, panels, tolerance);
 
-            dataAccess.SetData(0, result);
+            dataAccess.SetDataList(0, result?.ConvertAll(x => new GooPanel(x)));
         }
     }
 }

@@ -107,5 +107,72 @@ namespace SAM.Analytical
 
             return new Panel(panel.Guid, panel, face3D, null, true, 0, double.MaxValue);
         }
+
+        public static List<Panel> Extend(this IEnumerable<Panel> panels_ToBeExtended, IEnumerable<Panel> panels, double tolerance = Core.Tolerance.Distance)
+        {
+            if (panels_ToBeExtended == null || panels == null || panels_ToBeExtended.Count() == 0 || panels.Count() == 0)
+                return null;
+
+            List<Panel> panels_Temp = new List<Panel>();
+            foreach(Panel panel in panels_ToBeExtended)
+            {
+                Panel panel_Temp = Extend(panel, panels, tolerance);
+                if (panels_Temp != null)
+                    panels_Temp.Add(panel_Temp);
+            }
+
+            List<Plane> planes =  panels_Temp.ConvertAll(x => x.Plane);
+
+            List<Panel> panels_Cut = new List<Panel>();
+            foreach(Panel panel in panels_Temp)
+            {
+                List<Panel> panels_Cut_Temp = panel.Cut(planes, tolerance);
+                if (panels_Cut_Temp == null || panels_Cut_Temp.Count == 0)
+                    panels_Cut.Add(panel);
+                else
+                    panels_Cut.AddRange(panels_Cut_Temp);
+            }
+
+
+            List<Face3D> face3Ds = panels_Cut.ConvertAll(x => x.GetFace3D());
+
+            Vector3D vector3D = Vector3D.WorldZ.GetNegated();
+
+
+            List<Panel> result = new List<Panel>();
+            foreach(Panel panel in panels_Cut)
+            {
+                Point3D point3D = panel.GetInternalPoint3D();
+
+                bool remove = false;
+                for(int i=0; i < face3Ds.Count; i++)
+                {
+                    Face3D face3D = face3Ds[i];
+                    if (face3D == null)
+                        continue;
+
+                    PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(face3D, point3D, vector3D, tolerance);
+                    if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                        continue;
+
+                    Point3D point3D_Intersection = planarIntersectionResult.GetGeometry3D<Point3D>();
+                    if (point3D_Intersection == null)
+                        continue;
+
+                    if(point3D.Z > point3D_Intersection.Z && System.Math.Abs(point3D.Z - point3D_Intersection.Z) > tolerance)
+                    {
+                        remove = true;
+                        break;
+                    }
+                }
+
+                if (remove)
+                    continue;
+
+                result.Add(panel);
+            }
+
+            return result;
+        }
     }
 }
