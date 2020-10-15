@@ -11,8 +11,6 @@ namespace SAM.Core.Grasshopper
         {
             SetValue("SAM_SAMVersion", Core.Query.CurrentVersion());
             SetValue("SAM_ComponentVersion", LatestComponentVersion);
-
-            Message = LatestComponentVersion;
         }
 
         public override bool Obsolete
@@ -53,5 +51,11 @@ namespace SAM.Core.Grasshopper
         }
 
         public abstract string LatestComponentVersion { get;  }
+
+        public override void AddedToDocument(GH_Document document)
+        {
+            base.AddedToDocument(document);
+            Message = ComponentVersion;
+        }
     }
 }
