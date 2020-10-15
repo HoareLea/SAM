@@ -18,6 +18,8 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.HL_Logo24;
 
+        public override string LatestComponentVersion => "1.0.0";
+
         private AboutInfoType aboutInfoType = AboutInfoType.HoareLea;
 
         /// <summary>

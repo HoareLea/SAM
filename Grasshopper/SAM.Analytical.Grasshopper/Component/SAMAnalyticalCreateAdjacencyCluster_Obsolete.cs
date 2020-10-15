@@ -16,6 +16,11 @@ namespace SAM.Analytical.Grasshopper.Obsolete
         /// </summary>
         public override Guid ComponentGuid => new Guid("a70a669c-5431-4af1-94b0-6270f455d24f");
 
+        /// <summary>
+        /// The latest version of this component
+        /// </summary>
+        public override string LatestComponentVersion => "1.0.0";
+
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         /// <summary>

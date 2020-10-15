@@ -14,6 +14,11 @@ namespace SAM.Core.Grasshopper
         public override Guid ComponentGuid => new Guid("4232f771-1d7f-4bf9-a07c-3ac868a82812");
 
         /// <summary>
+        /// The latest version of this component
+        /// </summary>
+        public override string LatestComponentVersion => "1.0.0";
+
+        /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
