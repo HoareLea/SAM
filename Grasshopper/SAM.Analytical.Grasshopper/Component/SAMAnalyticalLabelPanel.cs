@@ -9,7 +9,7 @@ using System;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalLabelPanel : GH_SAMComponent
+    public class SAMAnalyticalLabelPanel : GH_SAMComponent, IGH_PreviewObject
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -25,6 +25,11 @@ namespace SAM.Analytical.Grasshopper
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        private string text;
+        private double height;
+        Rhino.Geometry.Plane plane;
+
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -56,7 +61,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            int index = outputParamManager.AddParameter(new GooText3DParam(), "Value", "Value", "Value", GH_ParamAccess.item);
+            int index = outputParamManager.AddTextParameter("Value", "Value", "Value", GH_ParamAccess.item);
             outputParamManager.HideParameter(index);
         }
 
@@ -80,14 +85,13 @@ namespace SAM.Analytical.Grasshopper
             if (string.IsNullOrEmpty(name))
                 name = "Name";
 
-            string value = null;
-            if (!panel.TryGetValue(name, out value, true))
-                value = "???";
+            if (!panel.TryGetValue(name, out text, true))
+                text = "???";
 
-            double height = double.NaN;
+            height = double.NaN;
             if (!dataAccess.GetData(2, ref height))
             {
-                int length = value.Length;
+                int length = text.Length;
                 if (length < 10)
                     length = 10;
 
@@ -108,11 +112,17 @@ namespace SAM.Analytical.Grasshopper
             if (normal.Z < 0)
                 normal.Negate();
 
-            Plane plane = new Plane(point3D, normal);
+            plane = new Plane(point3D, normal).ToRhino();
 
-            Rhino.Display.Text3d text3D = new Rhino.Display.Text3d(value, plane.ToRhino(), height);
-
-            dataAccess.SetData(0, new GooText3D(text3D));
+            dataAccess.SetData(0, text);
         }
+
+        #region IGH_PreviewObject
+        public override void DrawViewportMeshes(IGH_PreviewArgs args)
+        {
+            args.Display.Draw3dText(new Rhino.Display.Text3d(text, plane, height), System.Drawing.Color.Black);
+            base.DrawViewportMeshes(args);
+        }
+        #endregion
     }
 }
