@@ -129,15 +129,20 @@ namespace SAM.Analytical.Grasshopper
 
                 Vector3D normal = panel.PlanarBoundary3D?.GetFace3D()?.GetPlane()?.Normal;
                 normal.Round(Tolerance.Distance);
-                if (normal.Z < 0)
-                    normal.Negate();
 
                 Point3D point3D = panel.GetInternalPoint3D();
 
                 Rhino.Geometry.Plane plane = new Plane(point3D, normal).ToRhino();
                 Rhino.Geometry.Vector3d normal_Rhino = normal.ToRhino();
                 if (normal.Z >= 0)
+                {
                     plane.Rotate(System.Math.PI, normal_Rhino);
+                }
+                else
+                {
+                    plane.Flip();
+                    plane.Rotate(-System.Math.PI / 2, normal_Rhino);
+                }
 
                 double height_Temp = height;
                 if (double.IsNaN(height_Temp))

@@ -58,7 +58,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            int index = outputParamManager.AddParameter(new GooText3DParam(), "Value", "Value", "Value", GH_ParamAccess.item);
+            int index = outputParamManager.AddTextParameter("Value", "Value", "Value", GH_ParamAccess.item);
         }
 
         /// <summary>
