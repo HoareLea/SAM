@@ -244,6 +244,8 @@ namespace SAM.Analytical.Grasshopper
             layer_ApertureType.Name = "ApertureType";
             layer_ApertureType.ParentLayerId = layer_SAM.Id;
 
+            int currentIndex = layerTable.CurrentLayerIndex;
+
             List<Guid> guids = new List<Guid>();
             foreach (var value in VolatileData.AllData(true))
             {
@@ -254,7 +256,9 @@ namespace SAM.Analytical.Grasshopper
                 Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_PanelType.Id, panel.PanelType.ToString());
 
                 ObjectAttributes objectAttributes = new ObjectAttributes();
-                objectAttributes.LayerIndex = layer.Index;
+                //objectAttributes.LayerIndex = layer.Index;
+
+                layerTable.SetCurrentLayerIndex(layer.Index, true);
 
                 Guid guid = default;
                 if(Modify.BakeGeometry(panel, doc, objectAttributes, out guid))
@@ -269,13 +273,17 @@ namespace SAM.Analytical.Grasshopper
                     layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureType.Id, aperture.ApertureType.ToString());
 
                     objectAttributes = new ObjectAttributes();
-                    objectAttributes.LayerIndex = layer.Index;
+                    //objectAttributes.LayerIndex = layer.Index;
+
+                    layerTable.SetCurrentLayerIndex(layer.Index, true);
 
                     guid = default;
                     if (Modify.BakeGeometry(panel, doc, objectAttributes, out guid))
                         guids.Add(guid);
                 }
             }
+
+            layerTable.SetCurrentLayerIndex(currentIndex, true);
         }
 
         public override void AppendAdditionalMenuItems(System.Windows.Forms.ToolStripDropDown menu)
