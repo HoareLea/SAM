@@ -289,9 +289,77 @@ namespace SAM.Analytical.Grasshopper
             layerTable.SetCurrentLayerIndex(currentIndex, true);
         }
 
+        public void BakeGeometry_ByConstruction(RhinoDoc doc)
+        {
+            Rhino.DocObjects.Tables.LayerTable layerTable = doc.Layers;
+
+            Layer layer_SAM = Core.Grasshopper.Modify.AddSAMLayer(layerTable);
+
+            int index = -1;
+
+            index = layerTable.Add();
+            Layer layer_Construction = layerTable[index];
+            layer_Construction.Name = "Construction";
+            layer_Construction.ParentLayerId = layer_SAM.Id;
+
+            index = layerTable.Add();
+            Layer layer_ApertureConstruction = layerTable[index];
+            layer_ApertureConstruction.Name = "ApertureConstruction";
+            layer_ApertureConstruction.ParentLayerId = layer_SAM.Id;
+
+            int currentIndex = layerTable.CurrentLayerIndex;
+
+            ObjectAttributes objectAttributes = doc.CreateDefaultAttributes();
+
+            Random random = new Random();
+
+            List<Guid> guids = new List<Guid>();
+            foreach (var value in VolatileData.AllData(true))
+            {
+                Panel panel = (value as GooPanel)?.Value;
+                if (panel == null)
+                    continue;
+
+                PanelType panelType = panel.PanelType;
+
+                System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+
+                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Construction.Id, panel.Name, color);
+
+                layerTable.SetCurrentLayerIndex(layer.Index, true);
+
+                Guid guid = default;
+                if (Modify.BakeGeometry(panel, doc, objectAttributes, out guid))
+                    guids.Add(guid);
+
+                List<Aperture> apertures = panel.Apertures;
+                if (apertures == null || apertures.Count == 0)
+                    continue;
+
+                foreach (Aperture aperture in apertures)
+                {
+                    if (aperture == null || string.IsNullOrWhiteSpace(aperture.Name))
+                        continue;
+
+                    color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+
+                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureConstruction.Id, aperture.Name, color);
+
+                    layerTable.SetCurrentLayerIndex(layer.Index, true);
+
+                    guid = default;
+                    if (Modify.BakeGeometry(aperture, doc, objectAttributes, out guid))
+                        guids.Add(guid);
+                }
+            }
+
+            layerTable.SetCurrentLayerIndex(currentIndex, true);
+        }
+
         public override void AppendAdditionalMenuItems(System.Windows.Forms.ToolStripDropDown menu)
         {
-            Menu_AppendItem(menu, "Bake By PanelType", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, VolatileData.AllData(true).Any());
 
             base.AppendAdditionalMenuItems(menu);
         }
@@ -299,6 +367,11 @@ namespace SAM.Analytical.Grasshopper
         private void Menu_BakeByPanelType(object sender, EventArgs e)
         {
             BakeGeometry_ByPanelType(RhinoDoc.ActiveDoc);
+        }
+
+        private void Menu_BakeByConstruction(object sender, EventArgs e)
+        {
+            BakeGeometry_ByConstruction(RhinoDoc.ActiveDoc);
         }
     }
 }
