@@ -246,6 +246,8 @@ namespace SAM.Analytical.Grasshopper
 
             int currentIndex = layerTable.CurrentLayerIndex;
 
+            ObjectAttributes objectAttributes = doc.CreateDefaultAttributes();
+
             List<Guid> guids = new List<Guid>();
             foreach (var value in VolatileData.AllData(true))
             {
@@ -253,10 +255,9 @@ namespace SAM.Analytical.Grasshopper
                 if (panel == null)
                     continue;
 
-                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_PanelType.Id, panel.PanelType.ToString());
+                PanelType panelType = panel.PanelType;
 
-                ObjectAttributes objectAttributes = new ObjectAttributes();
-                //objectAttributes.LayerIndex = layer.Index;
+                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
 
                 layerTable.SetCurrentLayerIndex(layer.Index, true);
 
@@ -270,15 +271,17 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach(Aperture aperture in apertures)
                 {
-                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureType.Id, aperture.ApertureType.ToString());
+                    if (aperture == null)
+                        continue;
 
-                    objectAttributes = new ObjectAttributes();
-                    //objectAttributes.LayerIndex = layer.Index;
+                    ApertureType apertureType = aperture.ApertureType;
+
+                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Query.Color(apertureType));
 
                     layerTable.SetCurrentLayerIndex(layer.Index, true);
 
                     guid = default;
-                    if (Modify.BakeGeometry(panel, doc, objectAttributes, out guid))
+                    if (Modify.BakeGeometry(aperture, doc, objectAttributes, out guid))
                         guids.Add(guid);
                 }
             }

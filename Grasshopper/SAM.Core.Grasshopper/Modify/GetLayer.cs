@@ -5,7 +5,7 @@ namespace SAM.Core.Grasshopper
 {
     public static partial class Modify
     {
-        public static Layer GetLayer(this LayerTable layerTable, System.Guid parentId, string name)
+        public static Layer GetLayer(this LayerTable layerTable, System.Guid parentId, string name, System.Drawing.Color color)
         {
             if (layerTable == null || string.IsNullOrWhiteSpace(name))
                 return null;
@@ -15,8 +15,10 @@ namespace SAM.Core.Grasshopper
             {
                 index = layerTable.Add();
                 layerTable[index].Name = name;
-                layerTable[index].ParentLayerId = parentId; 
             }
+
+            layerTable[index].ParentLayerId = parentId;
+            layerTable[index].Color = color;
 
             return layerTable[index];
         }
