@@ -136,7 +136,8 @@ namespace SAM.Analytical.Grasshopper
                 Rhino.Geometry.Vector3d normal_Rhino = normal.ToRhino();
                 if (normal.Z >= 0)
                 {
-                    plane.Rotate(System.Math.PI, normal_Rhino);
+                    if (normal.Z != 1)
+                        plane.Rotate(System.Math.PI, normal_Rhino);
                 }
                 else
                 {
