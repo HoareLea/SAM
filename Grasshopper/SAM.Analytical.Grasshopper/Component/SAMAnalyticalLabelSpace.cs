@@ -133,7 +133,7 @@ namespace SAM.Analytical.Grasshopper
 
                 Rhino.Geometry.Plane plane = new Plane(point3D, normal).ToRhino();
                 Rhino.Geometry.Vector3d normal_Rhino = normal.ToRhino();
-                plane.Rotate(System.Math.PI, normal_Rhino);
+                //plane.Rotate(System.Math.PI, normal_Rhino);
 
                 double height_Temp = height;
                 if (double.IsNaN(height_Temp))
