@@ -23,5 +23,17 @@ namespace SAM.Analytical
 
             return result;
         }
+
+        public static double Area(this Space space)
+        {
+            if (space == null)
+                return double.NaN;
+
+            double result = double.NaN;
+            if (!Core.Query.TryGetValue(space, ParameterName_Area(), out result))
+                return double.NaN;
+
+            return result;
+        }
     }
 }

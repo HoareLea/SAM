@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -6,10 +7,11 @@ using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalLabelSpace : GH_SAMComponent
+    public class SAMAnalyticalLabelSpace : GH_SAMComponent, IGH_PreviewObject
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -57,7 +59,6 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             int index = outputParamManager.AddParameter(new GooText3DParam(), "Value", "Value", "Value", GH_ParamAccess.item);
-            outputParamManager.HideParameter(index);
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             Space space = null;
-            if(!dataAccess.GetData(0, ref space))
+            if (!dataAccess.GetData(0, ref space))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -80,37 +81,87 @@ namespace SAM.Analytical.Grasshopper
             if (string.IsNullOrEmpty(name))
                 name = "Name";
 
-            string value = null;
-            if (!space.TryGetValue(name, out value, true))
-                value = "???";
+            string text;
+            if (!space.TryGetValue(name, out text, true))
+                text = "???";
+
+            double value = double.NaN;
+            if (double.TryParse(text, out value))
+                text = value.Round(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+
+            dataAccess.SetData(0, text);
+        }
+
+        #region IGH_PreviewObject
+        public override void DrawViewportMeshes(IGH_PreviewArgs args)
+        {
+            string name = null;
+            global::Grasshopper.Kernel.Types.IGH_Goo goo = Params.Input[1].VolatileData.AllData(true)?.First();
+            if (goo != null)
+                name = (goo as dynamic).Value;
 
             double height = double.NaN;
-            if (!dataAccess.GetData(2, ref height))
-            {
-                int length = value.Length;
-                if (length < 10)
-                    length = 10;
 
-                height = 1;
-            }
-
-            Point3D point3D = space.Location;
-            if(point3D == null)
+            if (Params.Input.Count > 2)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Could not find proper location of label");
-                return;
+                IGH_StructureEnumerator structureEnumerator = Params.Input[2].VolatileData.AllData(true);
+                if (structureEnumerator != null && structureEnumerator.Count() > 0)
+                {
+                    goo = structureEnumerator.First();
+                    if (goo != null)
+                        height = (goo as dynamic).Value;
+                }
             }
 
             Vector3D normal = Plane.WorldXY.Normal;
-            if (normal.Z < 0)
-                normal.Negate();
 
-            Plane plane = new Plane(point3D, normal);
+            foreach (GooSpace gooSpace in Params.Input[0].VolatileData.AllData(true))
+            {
+                Space space = gooSpace.Value;
+                if (space == null)
+                    continue;
 
+                string text;
+                if (!space.TryGetValue(name, out text, true))
+                    text = "???";
 
-            Rhino.Display.Text3d text3D = new Rhino.Display.Text3d(value, plane.ToRhino(), height);
+                double value = double.NaN;
+                if (double.TryParse(text, out value))
+                    text = value.Round(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
 
-            dataAccess.SetData(0, new GooText3D(text3D));
+                Point3D point3D = space.Location;
+
+                Rhino.Geometry.Plane plane = new Plane(point3D, normal).ToRhino();
+                Rhino.Geometry.Vector3d normal_Rhino = normal.ToRhino();
+                plane.Rotate(System.Math.PI, normal_Rhino);
+
+                double height_Temp = height;
+                if (double.IsNaN(height_Temp))
+                {
+                    double area = Analytical.Query.Area(space);
+                    if(double.IsNaN(area))
+                    {
+                        height_Temp = 1;
+                    }
+                    else
+                    {
+                        double max = System.Math.Sqrt(area);
+
+                        int length = text.Length;
+                        if (length < 10)
+                            length = 10;
+
+                        height_Temp = max / (length * 2);
+                    }
+                }
+
+                Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = Rhino.DocObjects.TextHorizontalAlignment.Center;
+                Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = Rhino.DocObjects.TextVerticalAlignment.Middle;
+
+                args.Display.Draw3dText(text, System.Drawing.Color.Black, plane, height_Temp, "RhSS", false, true, textHorizontalAlignment, textVerticalAlignment);
+                base.DrawViewportMeshes(args);
+            }
         }
+        #endregion
     }
 }
