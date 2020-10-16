@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Rhino.Render.Fields;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -59,7 +60,6 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             int index = outputParamManager.AddTextParameter("Value", "Value", "Value", GH_ParamAccess.item);
-            outputParamManager.HideParameter(index);
         }
 
         /// <summary>
@@ -84,7 +84,11 @@ namespace SAM.Analytical.Grasshopper
 
             string text;
             if (!panel.TryGetValue(name, out text, true))
-                text = "???";            
+                text = "???";
+
+            double value = double.NaN;
+            if(double.TryParse(text, out value))
+                text = value.Round(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
 
             dataAccess.SetData(0, text);
         }
@@ -92,15 +96,23 @@ namespace SAM.Analytical.Grasshopper
         #region IGH_PreviewObject
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            double height = double.NaN;
-            global::Grasshopper.Kernel.Types.IGH_Goo goo = Params.Input[2].VolatileData.AllData(true)?.First();
-            if (goo != null)
-                height = (goo as dynamic).Value;
-
             string name = null;
-            goo = Params.Input[1].VolatileData.AllData(true)?.First();
+            global::Grasshopper.Kernel.Types.IGH_Goo goo = Params.Input[1].VolatileData.AllData(true)?.First();
             if (goo != null)
                 name = (goo as dynamic).Value;
+
+            double height = double.NaN;
+
+            if(Params.Input.Count > 2)
+            {
+                IGH_StructureEnumerator structureEnumerator = Params.Input[2].VolatileData.AllData(true);
+                if(structureEnumerator != null && structureEnumerator.Count() > 0)
+                {
+                    goo = structureEnumerator.First();
+                    if (goo != null)
+                        height = (goo as dynamic).Value;
+                }
+            }
 
             foreach (GooPanel gooPanel in Params.Input[0].VolatileData.AllData(true))
             {
@@ -112,15 +124,24 @@ namespace SAM.Analytical.Grasshopper
                 if (!panel.TryGetValue(name, out text, true))
                     text = "???";
 
-                Vector3D normal = panel.Normal;
+                double value = double.NaN;
+                if (double.TryParse(text, out value))
+                    text = value.Round(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+
+                Vector3D normal = panel.PlanarBoundary3D?.GetFace3D()?.GetPlane()?.Normal;
+                normal.Round(Tolerance.Distance);
                 if (normal.Z < 0)
                     normal.Negate();
 
                 Point3D point3D = panel.GetInternalPoint3D();
 
                 Rhino.Geometry.Plane plane = new Plane(point3D, normal).ToRhino();
+                Rhino.Geometry.Vector3d normal_Rhino = normal.ToRhino();
+                if (normal.Z >= 0)
+                    plane.Rotate(System.Math.PI, normal_Rhino);
 
-                if (double.IsNaN(height))
+                double height_Temp = height;
+                if (double.IsNaN(height_Temp))
                 {
                     int length = text.Length;
                     if (length < 10)
@@ -129,10 +150,14 @@ namespace SAM.Analytical.Grasshopper
                     BoundingBox2D boundingBox2D = panel.GetFace3D().ExternalEdge2D.GetBoundingBox();
                     double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
 
-                    height = max / (length * 2);
+                    height_Temp = max / (length * 2);
                 }
 
-                args.Display.Draw3dText(new Rhino.Display.Text3d(gooPanel?.Value?.Name, plane, height), System.Drawing.Color.Black);
+                Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = Rhino.DocObjects.TextHorizontalAlignment.Center;
+                Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = Rhino.DocObjects.TextVerticalAlignment.Middle;
+
+                //args.Display.Draw3dText(new Rhino.Display.Text3d(gooPanel?.Value?.Name, plane, height), System.Drawing.Color.Black);
+                args.Display.Draw3dText(text, System.Drawing.Color.Black, plane, height_Temp, "RhSS", false, true, textHorizontalAlignment, textVerticalAlignment);
                 base.DrawViewportMeshes(args);
             }
         }

@@ -15,7 +15,14 @@ namespace SAM.Core
                 return true;
             }
 
-            if(result is bool)
+            if(typeof(T) == typeof(string))
+            {
+                if (@object != null)
+                    result = (T)(object)@object.ToString();
+                
+                return true;
+            }
+            else if(typeof(T) == typeof(bool))
             {
                 if(@object is string)
                 {
@@ -36,7 +43,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if(result is int)
+            else if(typeof(T) == typeof(int))
             {
                 if (@object is string)
                 {
@@ -53,7 +60,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (result is double)
+            else if (typeof(T) == typeof(double))
             {
                 if (@object is string)
                 {
@@ -88,7 +95,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (result is uint)
+            else if (typeof(T) == typeof(uint))
             {
                 if (@object is string)
                 {
@@ -105,7 +112,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (result is short)
+            else if (typeof(T) == typeof(short))
             {
                 if (@object is string)
                 {
@@ -122,7 +129,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (result is int)
+            else if (typeof(T) == typeof(int))
             {
                 if (@object is string)
                 {
@@ -139,7 +146,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (result is long)
+            else if (typeof(T) == typeof(long))
             {
                 if (@object is string)
                 {
@@ -156,7 +163,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if(result is Guid)
+            else if(typeof(T) == typeof(Guid))
             {
                 if(@object is string)
                 {
@@ -168,7 +175,7 @@ namespace SAM.Core
                     }
                 }
             }
-            else if(result is DateTime)
+            else if(typeof(T) == typeof(DateTime))
             {
                 if (@object is string)
                 {

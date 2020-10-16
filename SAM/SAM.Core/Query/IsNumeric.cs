@@ -9,8 +9,14 @@ namespace SAM.Core
             if (@object == null)
                 return false;
 
-            Type type = @object.GetType();
+            if (@object is Type)
+                return IsNumeric((Type)@object);
 
+            return IsNumeric(@object.GetType());
+        }
+
+        public static bool IsNumeric(this Type type)
+        {
             switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Byte:
