@@ -23,13 +23,13 @@ namespace SAM.Analytical
                 if (panels == null || panels.Count == 0)
                     return result;
 
-                foreach(Panel panel in panels)
+                foreach (Panel panel in panels)
                 {
                     if (!panel.HasApertures)
                         continue;
-                    
+
                     List<System.Guid> guids_Apertures = new List<System.Guid>();
-                    foreach(System.Guid guid in guids_Temp)
+                    foreach (System.Guid guid in guids_Temp)
                         if (panel.HasAperture(guid))
                             guids_Apertures.Add(guid);
 
@@ -54,9 +54,9 @@ namespace SAM.Analytical
             }
             else
             {
-                foreach(System.Guid guid in guids_Temp)
+                foreach (System.Guid guid in guids_Temp)
                 {
-                    if(adjacencyCluster.RemoveObject(type, guid))
+                    if (adjacencyCluster.RemoveObject(type, guid))
                         result.Add(guid);
                 }
             }
@@ -74,8 +74,8 @@ namespace SAM.Analytical
                 return null;
 
             List<System.Guid> result = new List<System.Guid>();
-            foreach(KeyValuePair<System.Type, List<SAMObject>> keyValuePair in dictionary)
-            {               
+            foreach (KeyValuePair<System.Type, List<SAMObject>> keyValuePair in dictionary)
+            {
                 List<System.Guid> guids = Remove(adjacencyCluster, keyValuePair.Key, keyValuePair.Value.ConvertAll(x => x.Guid));
                 if (guids != null && guids.Count != 0)
                     result.AddRange(guids);
@@ -84,7 +84,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<System.Guid> Remove<T>(this AdjacencyCluster adjacencyCluster, IEnumerable<T> objects) where T: SAMObject
+        public static List<System.Guid> Remove<T>(this AdjacencyCluster adjacencyCluster, IEnumerable<T> objects) where T : SAMObject
         {
             if (adjacencyCluster == null || objects == null)
                 return null;

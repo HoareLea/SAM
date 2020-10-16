@@ -4,7 +4,6 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Linq;
@@ -47,10 +46,9 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytical Space", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_name_", "_name_", "Parameter Name", GH_ParamAccess.item, "Name");
-            
+
             index = inputParamManager.AddNumberParameter("_height_", "_height_", "Text Height", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
-
         }
 
         /// <summary>
@@ -93,6 +91,7 @@ namespace SAM.Analytical.Grasshopper
         }
 
         #region IGH_PreviewObject
+
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
             string name = null;
@@ -133,13 +132,12 @@ namespace SAM.Analytical.Grasshopper
 
                 Rhino.Geometry.Plane plane = new Plane(point3D, normal).ToRhino();
                 Rhino.Geometry.Vector3d normal_Rhino = normal.ToRhino();
-                //plane.Rotate(System.Math.PI, normal_Rhino);
 
                 double height_Temp = height;
                 if (double.IsNaN(height_Temp))
                 {
                     double area = Analytical.Query.Area(space);
-                    if(double.IsNaN(area))
+                    if (double.IsNaN(area))
                     {
                         height_Temp = 1;
                     }
@@ -162,6 +160,7 @@ namespace SAM.Analytical.Grasshopper
                 base.DrawViewportMeshes(args);
             }
         }
-        #endregion
+
+        #endregion IGH_PreviewObject
     }
 }

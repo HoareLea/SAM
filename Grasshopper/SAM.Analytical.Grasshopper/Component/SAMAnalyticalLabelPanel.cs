@@ -47,10 +47,9 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_name_", "_name_", "Parameter Name", GH_ParamAccess.item, "Name");
-            
+
             index = inputParamManager.AddNumberParameter("_height_", "_height_", "Text Height", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
-
         }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             Panel panel = null;
-            if(!dataAccess.GetData(0, ref panel))
+            if (!dataAccess.GetData(0, ref panel))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -86,13 +85,14 @@ namespace SAM.Analytical.Grasshopper
                 text = "???";
 
             double value = double.NaN;
-            if(double.TryParse(text, out value))
+            if (double.TryParse(text, out value))
                 text = value.Round(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
 
             dataAccess.SetData(0, text);
         }
 
         #region IGH_PreviewObject
+
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
             string name = null;
@@ -102,10 +102,10 @@ namespace SAM.Analytical.Grasshopper
 
             double height = double.NaN;
 
-            if(Params.Input.Count > 2)
+            if (Params.Input.Count > 2)
             {
                 IGH_StructureEnumerator structureEnumerator = Params.Input[2].VolatileData.AllData(true);
-                if(structureEnumerator != null && structureEnumerator.Count() > 0)
+                if (structureEnumerator != null && structureEnumerator.Count() > 0)
                 {
                     goo = structureEnumerator.First();
                     if (goo != null)
@@ -166,6 +166,7 @@ namespace SAM.Analytical.Grasshopper
                 base.DrawViewportMeshes(args);
             }
         }
-        #endregion
+
+        #endregion IGH_PreviewObject
     }
 }

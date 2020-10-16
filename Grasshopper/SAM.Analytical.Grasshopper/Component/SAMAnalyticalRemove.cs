@@ -64,7 +64,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             SAMObject sAMObject = null;
-            if(!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -77,15 +77,15 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if(sAMObject is Panel)
+            if (sAMObject is Panel)
             {
                 Panel result = new Panel((Panel)sAMObject);
                 List<Guid> guids = new List<Guid>();
 
                 List<Aperture> apertures = sAMObjects.FindAll(x => x is Aperture).ConvertAll(x => (Aperture)x);
-                if(apertures != null)
+                if (apertures != null)
                 {
-                    foreach(Aperture aperture in apertures)
+                    foreach (Aperture aperture in apertures)
                         if (result.RemoveAperture(aperture.Guid))
                             guids.Add(aperture.Guid);
                 }
@@ -114,7 +114,6 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetDataList(1, guids);
                 return;
             }
-
         }
     }
 }
