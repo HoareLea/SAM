@@ -117,6 +117,10 @@
     <Compile Include="Component\SAMCoreGetValue.cs" />
     <Compile Include="Convert\ToSAM\GH_SAMParam.cs" />
     <Compile Include="Create\GH_SAMParam.cs" />
+    <Compile Include="Modify\GetLayer.cs" />
+    <Compile Include="Modify\AddSAMLayer.cs" />
+    <Compile Include="Query\Layers.cs" />
+    <Compile Include="Query\Layer.cs" />
     <Compile Include="Query\Obsolete.cs" />
     <Compile Include="Enums\ParamVisibility.cs" />
     <Compile Include="Interfaces\IGH_SAMComponent.cs" />
@@ -173,6 +177,7 @@
   <ItemGroup>
     <None Include="Resources\SAM_Inspect.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

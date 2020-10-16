@@ -89,11 +89,7 @@ namespace SAM.Analytical.Grasshopper
         {
             obj_guid = Guid.Empty;
             
-            Face3D face3D = Value?.GetFace3D();
-            if (face3D == null)
-                return false;
-
-            return Geometry.Grasshopper.Modify.BakeGeometry(face3D, doc, att, out obj_guid);
+            return Modify.BakeGeometry(Value, doc, att, out obj_guid);
         }
 
         public override bool CastFrom(object source)

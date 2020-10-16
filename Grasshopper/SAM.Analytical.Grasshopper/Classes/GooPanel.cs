@@ -111,7 +111,7 @@ namespace SAM.Analytical.Grasshopper
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            return Geometry.Grasshopper.Modify.BakeGeometry(Value.GetFace3D(), doc, att, out obj_guid);
+            return Modify.BakeGeometry(Value, doc, att, out obj_guid);
         }
 
         public override bool CastFrom(object source)
@@ -219,11 +219,75 @@ namespace SAM.Analytical.Grasshopper
         public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
         {
             foreach (var value in VolatileData.AllData(true))
-            {
+            {               
                 Guid uuid = default;
                 (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
                 obj_ids.Add(uuid);
             }
+        }
+
+        public void BakeGeometry_ByPanelType(RhinoDoc doc)
+        {
+            Rhino.DocObjects.Tables.LayerTable layerTable = doc.Layers;
+
+            Layer layer_SAM = Core.Grasshopper.Modify.AddSAMLayer(layerTable);
+
+            int index = -1;
+
+            index = layerTable.Add();
+            Layer layer_PanelType = layerTable[index];
+            layer_PanelType.Name = "PanelType";
+            layer_PanelType.ParentLayerId = layer_SAM.Id;
+
+            index = layerTable.Add();
+            Layer layer_ApertureType = layerTable[index];
+            layer_ApertureType.Name = "ApertureType";
+            layer_ApertureType.ParentLayerId = layer_SAM.Id;
+
+            List<Guid> guids = new List<Guid>();
+            foreach (var value in VolatileData.AllData(true))
+            {
+                Panel panel = (value as GooPanel)?.Value;
+                if (panel == null)
+                    continue;
+
+                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_PanelType.Id, panel.PanelType.ToString());
+
+                ObjectAttributes objectAttributes = new ObjectAttributes();
+                objectAttributes.LayerIndex = layer.Index;
+
+                Guid guid = default;
+                if(Modify.BakeGeometry(panel, doc, objectAttributes, out guid))
+                    guids.Add(guid);
+
+                List<Aperture> apertures = panel.Apertures;
+                if (apertures == null || apertures.Count == 0)
+                    continue;
+
+                foreach(Aperture aperture in apertures)
+                {
+                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureType.Id, aperture.ApertureType.ToString());
+
+                    objectAttributes = new ObjectAttributes();
+                    objectAttributes.LayerIndex = layer.Index;
+
+                    guid = default;
+                    if (Modify.BakeGeometry(panel, doc, objectAttributes, out guid))
+                        guids.Add(guid);
+                }
+            }
+        }
+
+        public override void AppendAdditionalMenuItems(System.Windows.Forms.ToolStripDropDown menu)
+        {
+            Menu_AppendItem(menu, "Bake By PanelType", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
+
+            base.AppendAdditionalMenuItems(menu);
+        }
+
+        private void Menu_BakeByPanelType(object sender, EventArgs e)
+        {
+            BakeGeometry_ByPanelType(RhinoDoc.ActiveDoc);
         }
     }
 }
