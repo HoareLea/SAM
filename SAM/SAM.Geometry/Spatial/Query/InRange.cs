@@ -139,14 +139,14 @@ namespace SAM.Geometry.Spatial
                     Point3D point3D = null;
 
                     point3D = segment3D[0];
-                    if (boundingBox3D_Shell.InRange(point3D, tolerance) && shell.InRange(point3D, tolerance))
+                    if (boundingBox3D_Shell.InRange(point3D, tolerance) && (shell.InRange(point3D, tolerance) || shell.Inside(point3D, tolerance)))
                     {
                         add = true;
                         break;
                     }
 
                     point3D = segment3D[1];
-                    if (boundingBox3D_Shell.InRange(point3D, tolerance) && shell.InRange(point3D, tolerance))
+                    if (boundingBox3D_Shell.InRange(point3D, tolerance) && (shell.InRange(point3D, tolerance) || shell.Inside(point3D, tolerance))
                     {
                         add = true;
                         break;
