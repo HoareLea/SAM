@@ -101,6 +101,10 @@ namespace SAM.Analytical
             if (polygon2D.GetArea() < panel.GetArea())
                 return null;
 
+            Polygon2D polygon2D_Temp = Geometry.Planar.Query.Snap(polygon2D, segment2Ds, tolerance);
+            if (polygon2D_Temp != null)
+                polygon2D = polygon2D_Temp;
+
             face3D = Face3D.Create(plane, polygon2D, face3D.InternalEdge2Ds, true);
             if (face3D == null)
                 return null;

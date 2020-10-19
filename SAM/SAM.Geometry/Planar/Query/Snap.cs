@@ -57,5 +57,62 @@ namespace SAM.Geometry.Planar
 
             return geometries.ToList().ConvertAll(x => x.ToSAM(tolerance));
         }
+    
+        public static Polygon2D Snap(this Polygon2D polygon2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = SAM.Core.Tolerance.Distance)
+        {
+            if (polygon2D == null || segmentable2Ds == null)
+                return null;
+
+            List<Point2D> point2Ds = polygon2D?.Points;
+            if (point2Ds == null || point2Ds.Count == 0)
+                return null;
+
+            List<Segment2D> segment2Ds = new List<Segment2D>();
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
+            {
+                if (segmentable2D == null)
+                    continue;
+
+                List<Segment2D> segment2Ds_Temp = segmentable2D.GetSegments();
+                if (segment2Ds_Temp != null && segment2Ds_Temp.Count > 0)
+                    segment2Ds.AddRange(segment2Ds_Temp);
+            }
+
+            for (int j = 0; j < point2Ds.Count; j++)
+            {
+                Point2D point2D = point2Ds[j];
+
+                Segment2D segment2D = null;
+
+                segment2D = segment2Ds.Find(x => x[0].AlmostEquals(point2D, tolerance));
+                if (segment2D != null)
+                {
+                    point2Ds[j] = segment2D[0];
+                    continue;
+                }
+
+                segment2D = segment2Ds.Find(x => x[1].AlmostEquals(point2D, tolerance));
+                if (segment2D != null)
+                {
+                    point2Ds[j] = segment2D[1];
+                    continue;
+                }
+
+                double distance = double.MaxValue;
+                foreach (Segment2D segment2D_Temp in segment2Ds)
+                {
+                    Point2D point2D_Temp = segment2D_Temp.Closest(point2D);
+                    double distance_Temp = point2D_Temp.Distance(point2D);
+                    if (distance_Temp < distance)
+                    {
+                        point2Ds[j] = point2D_Temp;
+                        distance = distance_Temp;
+                    }
+
+                }
+            }
+
+            return new Polygon2D(point2Ds);
+        }
     }
 }

@@ -40,50 +40,6 @@ namespace SAM.Geometry.Planar
                         result.AddRange(polygon2Ds);
             }
 
-            
-            for(int i =0; i < result.Count; i++)
-            {
-                List<Point2D> point2Ds = result[i]?.Points;
-                if (point2Ds == null || point2Ds.Count == 0)
-                    continue;
-
-                for(int j=0; j < point2Ds.Count; j++)
-                {
-                    Point2D point2D = point2Ds[j];
-
-                    Segment2D segment2D = null;
-
-                    segment2D = segment2Ds.Find(x => x[0].AlmostEquals(point2D, tolerance));
-                    if(segment2D != null)
-                    {
-                        point2Ds[j] = segment2D[0];
-                        continue;
-                    }
-
-                    segment2D = segment2Ds.Find(x => x[1].AlmostEquals(point2D, tolerance));
-                    if (segment2D != null)
-                    {
-                        point2Ds[j] = segment2D[1];
-                        continue;
-                    }
-
-                    double distance = double.MaxValue;
-                    foreach(Segment2D segment2D_Temp in segment2Ds)
-                    {
-                        Point2D point2D_Temp = segment2D_Temp.Closest(point2D);
-                        double distance_Temp = point2D_Temp.Distance(point2D);
-                        if(distance_Temp < distance)
-                        {
-                            point2Ds[j] = point2D_Temp;
-                            distance = distance_Temp;
-                        }
-
-                    }
-                }
-
-                result[i] = new Polygon2D(point2Ds);
-            }
-
             return result;
         }
     }
