@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SAM.Geometry.Planar
 {
@@ -18,11 +19,12 @@ namespace SAM.Geometry.Planar
             while (edges_Current.Count > 0)
             {
                 List<IClosed2D> edges_Excluded = null;
-                Face2D face = Face2D.Create(edges_Current, out edges_Excluded, orientInternalEdges);
-                if (face == null)
+                Face2D face2D = Face2D.Create(edges_Current, out edges_Excluded, orientInternalEdges);
+                if (face2D == null)
                     break;
 
-                face2Ds.Add(face);
+                if (face2D.GetInternalPoint2D() != null)
+                    face2Ds.Add(face2D);
 
                 edges_Current = edges_Excluded;
             }
