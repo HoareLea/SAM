@@ -193,6 +193,9 @@ namespace SAM.Geometry
 
         public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
+            if (point2D == null)
+                return false;
+            
             if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
                 return externalEdge2D.Inside(point2D) && !externalEdge2D.On(point2D, tolerance);
 

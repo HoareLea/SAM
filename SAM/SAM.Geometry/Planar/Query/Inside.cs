@@ -8,7 +8,7 @@ namespace SAM.Geometry.Planar
     {
         public static bool Inside(this IEnumerable<Point2D> point2Ds, Point2D point2D)
         {
-            if (point2Ds == null)
+            if (point2Ds == null || point2D == null)
                 return false;
 
             int aCount = point2Ds.Count();

@@ -108,6 +108,9 @@ namespace SAM.Geometry.Planar
 
         public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
+            if (point2D == null)
+                return false;
+            
             bool result = Query.Inside(points, point2D);
             if (!result)
                 return result;
