@@ -129,6 +129,7 @@
     <Compile Include="Query\Cut.cs" />
     <Compile Include="Query\DefaultGasType.cs" />
     <Compile Include="Query\Extend.cs" />
+    <Compile Include="Query\InRange.cs" />
     <Compile Include="Query\UpdateHeatTransferCoefficients.cs" />
     <Compile Include="Query\HasMaterial.cs" />
     <Compile Include="Query\Constructions.cs" />

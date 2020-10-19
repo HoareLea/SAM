@@ -105,7 +105,7 @@ namespace SAM.Geometry.Grasshopper
                         closedPlanar3Ds.Add((IClosedPlanar3D)geometry3D);
                 }
                 if (closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
-                    result.Add(Spatial.Face3D.Create(closedPlanar3Ds));
+                    result.Add(Face3D.Create(closedPlanar3Ds));
             }
 
             return result;
