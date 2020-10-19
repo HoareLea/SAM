@@ -184,8 +184,6 @@ namespace SAM.Geometry.Spatial
             if (shell == null || face3Ds == null)
                 return null;
 
-            BoundingBox3D boundingBox3D_Shell = shell.GetBoundingBox();
-
             Dictionary<ISegmentable3D, Face3D> dictionary = new Dictionary<ISegmentable3D, Face3D>();
             foreach(Face3D face3D in face3Ds)
             {

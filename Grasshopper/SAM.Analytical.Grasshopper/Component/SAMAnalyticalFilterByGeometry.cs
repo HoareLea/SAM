@@ -45,6 +45,9 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             index = inputParamManager.AddBrepParameter("_brep", "_brep", "Brep", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddBooleanParameter("_insideOnly", "_insideOnly", "Inside Only", GH_ParamAccess.item, false);
             index = inputParamManager.AddNumberParameter("_tolerance", "_tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
         }
 
@@ -74,12 +77,19 @@ namespace SAM.Analytical.Grasshopper
             Rhino.Geometry.Brep brep = null;
             if (!dataAccess.GetData(1, ref brep))
             {
+                dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
+                return;
+            }
+
+            bool insideOnly = false;
+            if (!dataAccess.GetData(2, ref insideOnly))
+            {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             double tolerance = double.NaN;
-            if (!dataAccess.GetData(2, ref tolerance))
+            if (!dataAccess.GetData(3, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -92,7 +102,12 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> panels_Result = Analytical.Query.InRange(panels, shell, tolerance);
+            List<Panel> panels_Result = null;
+
+            if (insideOnly)
+                panels_Result = Analytical.Query.Inside(panels, shell, Core.Tolerance.MacroDistance, tolerance);
+            else
+                panels_Result = Analytical.Query.InRange(panels, shell, tolerance);
 
             dataAccess.SetDataList(0, panels_Result?.ConvertAll(x => new GooPanel(x)));
         }

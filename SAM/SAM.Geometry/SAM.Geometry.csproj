@@ -177,6 +177,7 @@
     <Compile Include="Spatial\Create\Point3D.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Inside.cs" />
     <Compile Include="Spatial\Query\Cut.cs" />
     <Compile Include="Spatial\Query\SplitByConcaveEdges.cs" />
     <Compile Include="Spatial\Query\Tilt.cs" />
