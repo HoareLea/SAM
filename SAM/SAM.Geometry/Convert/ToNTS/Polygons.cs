@@ -17,8 +17,8 @@ namespace SAM.Geometry
             if (segment2Ds.Count() == 0)
                 return new List<Polygon>();
 
-            //return ToNTS_Polygons(segment2Ds.ToList().ConvertAll(x => x.ToNTS(tolerance)), tolerance);
-            return ToNTS_Polygons(segment2Ds.ToList().ConvertAll(x => x.ToNTS()), tolerance);
+            return ToNTS_Polygons(segment2Ds.ToList().ConvertAll(x => x.ToNTS(tolerance)), tolerance);
+            //return ToNTS_Polygons(segment2Ds.ToList().ConvertAll(x => x.ToNTS()), tolerance);
         }
 
         public static List<Polygon> ToNTS_Polygons(this IEnumerable<NetTopologySuite.Geometries.Geometry> geometries, double tolerance = Core.Tolerance.MicroDistance)
