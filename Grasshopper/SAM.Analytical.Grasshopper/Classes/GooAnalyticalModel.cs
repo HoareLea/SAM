@@ -7,6 +7,7 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -144,6 +145,34 @@ namespace SAM.Analytical.Grasshopper
                 (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
                 obj_ids.Add(uuid);
             }
+        }
+
+        public void BakeGeometry_ByPanelType(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByPanelType(doc, VolatileData, true, Core.Tolerance.Distance);
+        }
+
+        public void BakeGeometry_ByConstruction(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByConstruction(doc, VolatileData, true, Core.Tolerance.Distance);
+        }
+
+        public override void AppendAdditionalMenuItems(System.Windows.Forms.ToolStripDropDown menu)
+        {
+            Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, VolatileData.AllData(true).Any());
+
+            base.AppendAdditionalMenuItems(menu);
+        }
+
+        private void Menu_BakeByPanelType(object sender, EventArgs e)
+        {
+            BakeGeometry_ByPanelType(RhinoDoc.ActiveDoc);
+        }
+
+        private void Menu_BakeByConstruction(object sender, EventArgs e)
+        {
+            BakeGeometry_ByConstruction(RhinoDoc.ActiveDoc);
         }
     }
 }
