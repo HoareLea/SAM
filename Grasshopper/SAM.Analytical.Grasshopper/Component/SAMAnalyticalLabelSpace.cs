@@ -1,11 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Rhino.Display;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
@@ -90,9 +92,30 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.SetData(0, text);
         }
 
-        #region IGH_PreviewObject
+        public override Rhino.Geometry.BoundingBox ClippingBox
+        {
+            get
+            {
+                Rhino.Geometry.BoundingBox boundingBox = base.ClippingBox;
 
-        public override void DrawViewportMeshes(IGH_PreviewArgs args)
+                List<Text3d> text3ds = GetText3ds();
+                if (text3ds != null && text3ds.Count != 0)
+                {
+                    foreach (Text3d text3d in text3ds)
+                    {
+                        if (text3d == null)
+                            continue;
+
+                        boundingBox.Union(text3d.BoundingBox);
+                    }
+
+                }
+
+                return boundingBox;
+            }
+        }
+
+        private List<Text3d> GetText3ds()
         {
             string name = null;
             global::Grasshopper.Kernel.Types.IGH_Goo goo = Params.Input[1].VolatileData.AllData(true)?.First();
@@ -113,6 +136,8 @@ namespace SAM.Analytical.Grasshopper
             }
 
             Vector3D normal = Plane.WorldXY.Normal;
+
+            List<Text3d> result = new List<Text3d>();
 
             foreach (GooSpace gooSpace in Params.Input[0].VolatileData.AllData(true))
             {
@@ -155,10 +180,36 @@ namespace SAM.Analytical.Grasshopper
 
                 Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = Rhino.DocObjects.TextHorizontalAlignment.Center;
                 Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = Rhino.DocObjects.TextVerticalAlignment.Middle;
+                Text3d text3d = new Text3d(text, plane, height_Temp);
+                text3d.HorizontalAlignment = textHorizontalAlignment;
+                text3d.VerticalAlignment = textVerticalAlignment;
+                text3d.FontFace = "RhSS";
+                text3d.Italic = true;
+                text3d.Bold = false;
 
-                args.Display.Draw3dText(text, System.Drawing.Color.Black, plane, height_Temp, "RhSS", false, true, textHorizontalAlignment, textVerticalAlignment);
-                base.DrawViewportMeshes(args);
+                result.Add(text3d);
             }
+
+            return result;
+        }
+
+        #region IGH_PreviewObject
+
+        public override void DrawViewportMeshes(IGH_PreviewArgs args)
+        {
+            List<Text3d> text3ds = GetText3ds();
+            if (text3ds != null)
+            {
+                foreach(Text3d text3d in text3ds)
+                {
+                    if (text3d == null)
+                        continue;
+
+                    args.Display.Draw3dText(text3d, System.Drawing.Color.Black);
+                }
+            }
+            
+            base.DrawViewportMeshes(args);
         }
 
         #endregion IGH_PreviewObject
