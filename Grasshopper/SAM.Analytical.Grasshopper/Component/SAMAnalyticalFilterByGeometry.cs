@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalFilterByGeometry()
           : base("SAMAnalytical.FilterByGeometry", "SAMAnalytical.FilterByGeometry",
-              "Filter Analytical Objects By Geometry",
+              "Filter Analytical Objects By Geometry, output Panels that are inside closed brep",
               "SAM", "Analytical")
         {
         }
@@ -47,7 +47,7 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddBrepParameter("_brep", "_brep", "Brep", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddBooleanParameter("_insideOnly", "_insideOnly", "Inside Only", GH_ParamAccess.item, false);
+            index = inputParamManager.AddBooleanParameter("_insideOnly", "_insideOnly", "Inside Only", GH_ParamAccess.item, true);
             index = inputParamManager.AddNumberParameter("_tolerance", "_tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
         }
 
