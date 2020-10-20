@@ -38,9 +38,13 @@ namespace SAM.Analytical.Grasshopper
 
         public static void BakeGeometry_ByPanelType(this RhinoDoc rhinoDoc, IEnumerable<Panel> panels, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
-            Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc.Layers;
+            Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
+            if (layerTable == null)
+                return;
 
             Layer layer_SAM = Core.Grasshopper.Modify.AddSAMLayer(layerTable);
+            if (layer_SAM == null)
+                return;
 
             int index = -1;
 
