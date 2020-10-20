@@ -71,7 +71,7 @@ namespace SAM.Analytical.Grasshopper
                 layerTable.SetCurrentLayerIndex(layer.Index, true);
 
                 Guid guid = default;
-                if (Modify.BakeGeometry(panel, rhinoDoc, objectAttributes, out guid))
+                if (Modify.BakeGeometry(panel, rhinoDoc, objectAttributes, out guid, cutApertures, tolerance))
                     guids.Add(guid);
 
                 List<Aperture> apertures = panel.Apertures;
