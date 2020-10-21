@@ -117,10 +117,13 @@
     <Compile Include="Component\SAMCoreGetValue.cs" />
     <Compile Include="Convert\ToSAM\GH_SAMParam.cs" />
     <Compile Include="Create\GH_SAMParam.cs" />
+    <Compile Include="Modify\AppendNewComponentAdditionalMenuItem.cs" />
     <Compile Include="Modify\GetLayer.cs" />
     <Compile Include="Modify\AddSAMLayer.cs" />
+    <Compile Include="Query\Copy.cs" />
     <Compile Include="Query\Layers.cs" />
     <Compile Include="Query\Layer.cs" />
+    <Compile Include="Query\HasComponentVersion.cs" />
     <Compile Include="Query\Obsolete.cs" />
     <Compile Include="Enums\ParamVisibility.cs" />
     <Compile Include="Interfaces\IGH_SAMComponent.cs" />
@@ -135,7 +138,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Query\TryGetValue.cs" />
-    <Compile Include="Query\Duplicate.cs" />
+    <Compile Include="Query\Clone.cs" />
     <Compile Include="Query\GenericSubclassOf.cs" />
     <Compile Include="Query\DataTree.cs" />
   </ItemGroup>

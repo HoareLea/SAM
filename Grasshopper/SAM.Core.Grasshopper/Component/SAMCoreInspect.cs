@@ -67,7 +67,10 @@ namespace SAM.Core.Grasshopper
             base.AppendAdditionalMenuItems(menu);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Source code", OnSourceCodeClick, Resources.SAM_Small);
+            Modify.AppendNewComponentAdditionalMenuItem(this, menu);
         }
+
+
 
         void PopulateOutputParameters(IEnumerable<GooParameterParam> gooParameterParams)
         {
