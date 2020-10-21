@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -27,11 +28,17 @@ namespace SAM.Core.Grasshopper
             base.AppendAdditionalMenuItems(menu);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Source code", OnSourceCodeClick, Properties.Resources.SAM_Small);
+            Menu_AppendItem(menu, "Test", OnTestClick, Properties.Resources.SAM_Small);
         }
 
         public virtual void OnSourceCodeClick(object sender = null, object e = null)
         {
             Process.Start("https://github.com/HoareLea/SAM");
+        }
+
+        public virtual void OnTestClick(object sender = null, object e = null)
+        {
+            PlaceLatest();
         }
 
         public string ComponentVersion
@@ -56,6 +63,16 @@ namespace SAM.Core.Grasshopper
         {
             base.AddedToDocument(document);
             Message = ComponentVersion;
+        }
+
+        public void PlaceLatest()
+        {
+            System.Drawing.RectangleF rectangle = Attributes.Bounds;
+            System.Drawing.PointF location = rectangle.Location;
+
+            GH_SAMComponent gH_SAMComponent = Activator.CreateInstance(GetType()) as GH_SAMComponent;
+
+            bool result = global::Grasshopper.Instances.ActiveCanvas.InstantiateNewObject(gH_SAMComponent.ComponentGuid, location, false);
         }
     }
 }
