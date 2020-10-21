@@ -134,5 +134,30 @@ namespace SAM.Geometry.Planar
 
             return default;
         }
+    
+        public static bool Closest(this Segment2D segment2D_1, Segment2D segment2D_2, out Point2D point2D_1, out Point2D point2D_2, double tolerance = Core.Tolerance.Distance)
+        {
+            point2D_1 = null;
+            point2D_2 = null;
+
+            if (segment2D_1 == null || segment2D_2 == null)
+                return false;
+
+            Point2D point2D = segment2D_1.Intersection(segment2D_2, true, tolerance);
+            if (point2D != null)
+            {
+                point2D_1 = point2D;
+                point2D_2 = new Point2D(point2D);
+                return true;
+            }
+
+            point2D_1 = segment2D_1.Closest(segment2D_2[0]);
+            point2D_2 = segment2D_1.Closest(segment2D_2[1]);
+            if (segment2D_2[1].Distance(point2D_2) < segment2D_2[0].Distance(point2D_1))
+                point2D_1 = point2D_2;
+
+            point2D_2 = segment2D_2.Closest(point2D_1);
+            return true;
+        }
     }
 }
