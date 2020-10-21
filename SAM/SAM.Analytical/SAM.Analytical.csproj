@@ -105,6 +105,7 @@
     <Compile Include="Modify\OffsetAperturesOnEdge.cs" />
     <Compile Include="Modify\ReplaceTransparentPanels.cs" />
     <Compile Include="Modify\SetHeatTransferCoefficient.cs" />
+    <Compile Include="Modify\SetDescription.cs" />
     <Compile Include="Modify\UpdateConstructionsPanelTypes.cs" />
     <Compile Include="Modify\SetPanelType.cs" />
     <Compile Include="Modify\SetSolarTransmittance.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Query\DefaultGasType.cs" />
     <Compile Include="Query\Extend.cs" />
     <Compile Include="Query\InRange.cs" />
+    <Compile Include="Query\Description.cs" />
     <Compile Include="Query\UpdateHeatTransferCoefficients.cs" />
     <Compile Include="Query\HasMaterial.cs" />
     <Compile Include="Query\Constructions.cs" />

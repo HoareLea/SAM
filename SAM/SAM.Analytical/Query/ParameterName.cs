@@ -598,5 +598,22 @@ namespace SAM.Analytical
 
             return null;
         }
+
+        public static string ParameterName_Description()
+        {
+            return ParameterName_Description(ActiveSetting.Setting);
+        }
+
+        public static string ParameterName_Description(this Setting setting)
+        {
+            if (setting == null)
+                return null;
+
+            string result;
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_Description, out result))
+                return result;
+
+            return null;
+        }
     }
 }

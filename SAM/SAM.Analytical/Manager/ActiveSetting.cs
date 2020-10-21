@@ -29,6 +29,7 @@ namespace SAM.Analytical
             public const string ParameterName_FacingExternalGlazing = "ParameterName_FacingExternalGlazing";
             public const string ParameterName_Area = "ParameterName_Area";
             public const string ParameterName_Volume = "ParameterName_Volume";
+            public const string ParameterName_Description = "ParameterName_Description";
 
             public const string ParameterName_VapourDiffusionFactor = "ParameterName_VapourDiffusionFactor";
             public const string ParameterName_ExternalSolarReflectance = "ParameterName_ExternalSolarReflectance";
@@ -104,6 +105,7 @@ namespace SAM.Analytical
             result.Add(Name.ParameterName_FacingExternalGlazing, "SAM_FacingExternalGlazing");
             result.Add(Name.ParameterName_Area, "SAM_Area");
             result.Add(Name.ParameterName_Volume, "SAM_Volume");
+            result.Add(Name.ParameterName_Description, "SAM_BuildingElementDescription");
 
 
             //Materials Parameters
