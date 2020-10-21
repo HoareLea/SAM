@@ -1,7 +1,7 @@
 ﻿using Grasshopper;
 using Grasshopper.Kernel;
+using System;
 using System.Diagnostics;
-using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -46,11 +46,7 @@ namespace SAM.Core.Grasshopper
 
                 string link_Temp = string.Format(@"{0}/{1}/blob/master/Grasshopper/{2}/Component/{3}.cs", link, project, name, gH_SAMComponent.GetType().Name);
 
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(link_Temp);
-                req.AllowAutoRedirect = false;
-
-                HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-                if (res.StatusCode == HttpStatusCode.OK)
+                if (Core.Query.IsValid(new Uri(link_Temp)))
                     link = link_Temp;
             }
 

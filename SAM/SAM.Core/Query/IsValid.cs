@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace SAM.Core
 {
@@ -23,6 +24,24 @@ namespace SAM.Core
             }
 
             return false;
+        }
+
+        public static bool IsValid(this Uri uri)
+        {
+            if (uri == null)
+                return false;
+            
+            HttpWebRequest httpWebRequest = WebRequest.Create(uri) as HttpWebRequest;
+            if (httpWebRequest == null)
+                return false;
+
+            httpWebRequest.AllowAutoRedirect = false;
+
+            HttpWebResponse httpWebResponse = httpWebRequest.GetResponse() as HttpWebResponse;
+            if (httpWebResponse == null)
+                return false;
+
+            return httpWebResponse.StatusCode == HttpStatusCode.OK;
         }
     }
 }
