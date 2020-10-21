@@ -55,21 +55,21 @@ namespace SAM.Analytical
             return ParameterName_Thickness(ActiveSetting.Setting);
         }
 
-        public static string ParameterName_PanelType(this Setting setting)
+        public static string ParameterName_Type(this Setting setting)
         {
             if (setting == null)
                 return null;
 
             string result;
-            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_PanelType, out result))
+            if (setting.TryGetValue(ActiveSetting.Name.ParameterName_Type, out result))
                 return result;
 
             return null;
         }
 
-        public static string ParameterName_PanelType()
+        public static string ParameterName_Type()
         {
-            return ParameterName_PanelType(ActiveSetting.Setting);
+            return ParameterName_Type(ActiveSetting.Setting);
         }
 
         public static string ParameterName_Color(this Setting setting)

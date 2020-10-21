@@ -20,7 +20,13 @@ namespace SAM.Analytical
                 value = value.Replace(" ", string.Empty).ToUpper();
                 foreach (ApertureType apertureType in Enum.GetValues(typeof(ApertureType)))
                 {
-                    string value_Type = apertureType.ToString().ToUpper();
+                    string value_Type = null;
+
+                    value_Type = Query.Text(apertureType);
+                    if (!string.IsNullOrWhiteSpace(value_Type) && value_Type.ToUpper().Equals(value))
+                        return result;
+
+                    value_Type = apertureType.ToString().ToUpper();
                     if (value_Type.Equals(value))
                         return result;
                 }

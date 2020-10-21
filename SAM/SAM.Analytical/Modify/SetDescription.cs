@@ -23,5 +23,24 @@ namespace SAM.Analytical
 
             return construction.Add(parameterSet);
         }
+
+        public static bool SetDescription(this ApertureConstruction apertureConstruction, string description)
+        {
+            if (apertureConstruction == null)
+                return false;
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string parameterName = Query.ParameterName_Description();
+
+
+            if (apertureConstruction.SetParameter(assembly, parameterName, description))
+                return true;
+
+            ParameterSet parameterSet = new ParameterSet(assembly);
+            if (!parameterSet.Add(parameterName, description))
+                return false;
+
+            return apertureConstruction.Add(parameterSet);
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace SAM.Analytical
             public const string ApertureConstruction_InternalDoors = "ApertureConstruction_InternalDoors";
             public const string ApertureConstruction_Skylight = "ApertureConstruction_Skylight";
 
-            public const string ParameterName_PanelType = "ParameterName_PanelType";
+            public const string ParameterName_Type = "ParameterName_Type";
             public const string ParameterName_Height = "ParameterName_Height";
             public const string ParameterName_Width = "ParameterName_Width";
             public const string ParameterName_Thickness = "ParameterName_Thickness";
@@ -89,7 +89,7 @@ namespace SAM.Analytical
 
 
             //Panels and Spaces Parameters
-            result.Add(Name.ParameterName_PanelType, "SAM_BuildingElementType");
+            result.Add(Name.ParameterName_Type, "SAM_BuildingElementType");
             result.Add(Name.ParameterName_Height, "SAM_BuildingElementHeight");
             result.Add(Name.ParameterName_Width, "SAM_BuildingElementWidth");
             result.Add(Name.ParameterName_Thickness, "SAM_BuildingElementThickness");

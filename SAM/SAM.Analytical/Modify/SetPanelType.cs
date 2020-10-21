@@ -32,7 +32,7 @@ namespace SAM.Analytical
                 return false;
 
             Assembly assembly = Assembly.GetExecutingAssembly();
-            string parameterName = Query.ParameterName_PanelType(setting);
+            string parameterName = Query.ParameterName_Type(setting);
 
             string value = panelType.ToString();
 
@@ -52,7 +52,7 @@ namespace SAM.Analytical
                 return false;
 
             Assembly assembly = Assembly.GetExecutingAssembly();
-            string parameterName = Query.ParameterName_PanelType();
+            string parameterName = Query.ParameterName_Type();
 
             string value = panelType.ToString();
 

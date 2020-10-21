@@ -90,7 +90,7 @@ namespace SAM.Analytical
                 return Analytical.PanelType.Undefined;
 
             object result = null;
-            if (!Core.Query.TryGetValue(construction, ParameterName_PanelType(), out result))
+            if (!Core.Query.TryGetValue(construction, ParameterName_Type(), out result))
                 return Analytical.PanelType.Undefined;
 
             return PanelType(result);
@@ -102,7 +102,7 @@ namespace SAM.Analytical
                 return Analytical.PanelType.Undefined;
 
             object result = null;
-            if (!Core.Query.TryGetValue(apertureConstruction, ParameterName_PanelType(), out result))
+            if (!Core.Query.TryGetValue(apertureConstruction, ParameterName_Type(), out result))
                 return Analytical.PanelType.Undefined;
 
             return PanelType(result);
