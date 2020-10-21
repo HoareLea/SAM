@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -16,7 +15,6 @@ namespace SAM.Core.Grasshopper
 
         public override bool Obsolete
         {
-
             get
             {
                 return Query.Obsolete(this);
@@ -27,13 +25,10 @@ namespace SAM.Core.Grasshopper
         {
             base.AppendAdditionalMenuItems(menu);
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Source code", OnSourceCodeClick, Properties.Resources.SAM_Small);
-            Modify.AppendNewComponentAdditionalMenuItem(this, menu);
-        }
+            //Menu_AppendItem(menu, "Source code", OnSourceCodeClick, Properties.Resources.SAM_Small);
 
-        public virtual void OnSourceCodeClick(object sender = null, object e = null)
-        {
-            Process.Start("https://github.com/HoareLea/SAM");
+            Modify.AppendSourceCodeAdditionalMenuItem(this, menu);
+            Modify.AppendNewComponentAdditionalMenuItem(this, menu);
         }
 
         public string ComponentVersion
