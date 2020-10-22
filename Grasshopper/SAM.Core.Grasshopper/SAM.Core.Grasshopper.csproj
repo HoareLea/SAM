@@ -199,7 +199,7 @@ if not exist "%25SAM_DIR%25" mkdir "%25SAM_DIR%25"
 copy "$(TargetDir)*.dll" "%25SAM_DIR%25"
 copy "%25SAM_DIR%25\$(ProjectName).dll" "%25SAM_DIR%25\$(ProjectName).gha"
 
-copy "$(SolutionDir)\files\SAM.ghlink" "$(APPDATA)\Grasshopper\Libraries\SAM.ghlink"
+copy "$(SolutionDir)\files\Grasshopper\SAM.ghlink" "$(APPDATA)\Grasshopper\Libraries\SAM.ghlink"
 
 xcopy "$(SolutionDir)\files" "$(APPDATA)\SAM\" /Y /I /E/S
 
