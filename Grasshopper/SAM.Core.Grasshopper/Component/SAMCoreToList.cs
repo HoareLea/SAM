@@ -69,6 +69,9 @@ namespace SAM.Core.Grasshopper
             if (dataAccess.GetData(0, ref text))
                 result = Query.DataTree(text, separator);
 
+            if (result == null)
+                result = new DataTree<string>();
+
             dataAccess.SetDataTree(0, result);
         }
     }
