@@ -13,7 +13,7 @@ namespace SAM.Core.Grasshopper
 
             System.Drawing.PointF location = gH_Component.Attributes.Bounds.Location;
 
-            GH_SAMComponent result = Activator.CreateInstance(gH_Component.GetType()) as GH_SAMComponent;
+            GH_Component result = Activator.CreateInstance(gH_Component.GetType()) as GH_Component;
             if (result == null)
                 return null;
 

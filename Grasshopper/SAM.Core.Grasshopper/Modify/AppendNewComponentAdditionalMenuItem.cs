@@ -36,11 +36,11 @@ namespace SAM.Core.Grasshopper
             if (toolStripMenuItem == null || !(toolStripMenuItem.Tag is System.Guid))
                 return;
 
-            GH_SAMComponent gH_SAMComponent = Instances.ActiveCanvas.Document.FindComponent((System.Guid)toolStripMenuItem.Tag) as GH_SAMComponent;
-            if (gH_SAMComponent == null)
+            GH_Component gH_Component = Instances.ActiveCanvas.Document.FindComponent((System.Guid)toolStripMenuItem.Tag) as GH_Component;
+            if (gH_Component == null)
                 return;
 
-            Query.Copy(gH_SAMComponent);
+            Query.Copy(gH_Component);
         }
     }
 }
