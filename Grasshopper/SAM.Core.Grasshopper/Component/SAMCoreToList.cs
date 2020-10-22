@@ -15,7 +15,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,7 +27,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreToList()
           : base("ToList", "ToList",
-              "Converts csv string to list",
+              "Converts text to list using given separator",
               "SAM", "Core")
         {
         }
@@ -37,7 +37,8 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddTextParameter("_csvtext", "_csvtext", "csv string", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_text", "_text", "Text as single string", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_separator", "_separator", "Separator", GH_ParamAccess.item, Core.Query.Separator(DelimitedFileType.Csv).ToString());
         }
 
         /// <summary>
@@ -58,9 +59,15 @@ namespace SAM.Core.Grasshopper
         {
             DataTree<string> result = null;
 
+            char separator = Core.Query.Separator(DelimitedFileType.Csv);
+
+            string separatorString = null;
+            if (dataAccess.GetData(1, ref separatorString) && !string.IsNullOrEmpty(separatorString))
+                separator = separatorString[0];
+
             string text = null;
             if (dataAccess.GetData(0, ref text))
-                result = Query.DataTree(text, DelimitedFileType.Csv);
+                result = Query.DataTree(text, separator);
 
             dataAccess.SetDataTree(0, result);
         }

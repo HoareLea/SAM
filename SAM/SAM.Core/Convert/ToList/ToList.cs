@@ -6,12 +6,17 @@ namespace SAM.Core
     {
         public static List<string[]> ToList(this string text, DelimitedFileType delimitedFileType = DelimitedFileType.Csv)
         {
+            return ToList(text, Query.Separator(delimitedFileType));
+        }
+
+        public static List<string[]> ToList(this string text, char separator = ',')
+        {
             if (string.IsNullOrEmpty(text))
                 return null;
 
             string[] lines = text.Split('\n');
 
-            DelimitedFileTable delimitedFileTable = new DelimitedFileTable(new DelimitedFileReader(Query.Separator(delimitedFileType), lines));
+            DelimitedFileTable delimitedFileTable = new DelimitedFileTable(new DelimitedFileReader(separator, lines));
 
             List<string> columnNames = delimitedFileTable.GetColumnNames();
 
