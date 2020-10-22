@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper;
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 
@@ -55,14 +56,13 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            string text = null;
-            if (!dataAccess.GetData(0, ref text))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            DataTree<string> result = null;
 
-            dataAccess.SetDataTree(0, Query.DataTree(text, DelimitedFileType.Csv));
+            string text = null;
+            if (dataAccess.GetData(0, ref text))
+                result = Query.DataTree(text, DelimitedFileType.Csv);
+
+            dataAccess.SetDataTree(0, result);
         }
     }
 }
