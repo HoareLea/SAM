@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core.Attributes
 {
@@ -9,6 +11,34 @@ namespace SAM.Core.Attributes
         public ParameterTypes(params Type[] values)
         {
             this.values = values;
+        }
+
+        public virtual bool IsValid(Type type)
+        {
+            if (values == null || values.Length == 0)
+                return false;
+
+            foreach (Type type_Temp in values)
+            {
+                if (type_Temp == null)
+                    continue;
+
+                if (type.Equals(type_Temp))
+                    return true;
+
+                if (type_Temp.IsAssignableFrom(type))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public Type[] Values
+        {
+            get
+            {
+                return values?.ToArray();
+            }
         }
 
         public static Type[] Get(Enum @enum)
@@ -40,23 +70,6 @@ namespace SAM.Core.Attributes
             }
 
             return null;
-        }
-
-        public virtual bool IsValid(Type type)
-        {
-            if (values == null || values.Length == 0)
-                return false;
-
-            foreach (Type type_Temp in values)
-            {
-                if (type_Temp == null)
-                    continue;
-
-                if (type_Temp.IsAssignableFrom(type))
-                    return true;
-            }
-
-            return false;
         }
     }
 }

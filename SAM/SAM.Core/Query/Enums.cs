@@ -1,7 +1,6 @@
 ﻿using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace SAM.Core
 {
@@ -12,59 +11,34 @@ namespace SAM.Core
             if (type == null || string.IsNullOrEmpty(value))
                 return null;
 
+            Dictionary<Type, ParameterTypes> dictionary = ParameterTypesDictionary(null, true, notPublic);
+            if (dictionary == null)
+                return null;
+
             List<Enum> result = new List<Enum>();
-            foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (KeyValuePair<Type, ParameterTypes> keyValuePair in dictionary)
             {
-                if (assembly == null)
+                if (!keyValuePair.Value.IsValid(type))
                     continue;
 
-                Type[] types = null;
-                try
+                foreach (Enum @enum in Enum.GetValues(keyValuePair.Key))
                 {
-                    types = assembly.GetTypes();
-                }
-                catch (ReflectionTypeLoadException reflectionTypeLoadException)
-                {
-                    types = reflectionTypeLoadException.Types;
-                }
-                    
-                if (types == null || types.Length == 0)
-                    continue;
-
-                foreach(Type type_Temp in types)
-                {
-                    if (type_Temp == null)
-                        continue;
-
-                    if (!notPublic && type_Temp.IsNotPublic)
-                        continue;
-                    
-                    ParameterTypes parameterTypes = ParameterTypes.Get(type_Temp);
-                    if (parameterTypes == null)
-                        continue;
-
-                    if (!parameterTypes.IsValid(type))
-                        continue;
-
-                    foreach(Enum @enum in Enum.GetValues(type_Temp))
+                    if (@enum.ToString().Equals(value))
                     {
-                        if(@enum.ToString().Equals(value))
-                        {
-                            result.Add(@enum);
-                            continue;
-                        }
-
-                        ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
-                        if (parameterProperties == null)
-                            continue;
-
-                        string name = parameterProperties.Name;
-                        if (string.IsNullOrEmpty(name))
-                            continue;
-
-                        if (name.Equals(value))
-                            result.Add(@enum);
+                        result.Add(@enum);
+                        continue;
                     }
+
+                    ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
+                    if (parameterProperties == null)
+                        continue;
+
+                    string name = parameterProperties.Name;
+                    if (string.IsNullOrEmpty(name))
+                        continue;
+
+                    if (name.Equals(value))
+                        result.Add(@enum);
                 }
             }
 

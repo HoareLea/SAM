@@ -1,11 +1,14 @@
-﻿namespace SAM.Analytical
+﻿using System.ComponentModel;
+
+namespace SAM.Analytical
 {
+    [Description("Panel Group")]
     public enum PanelGroup
     {
-        Undefined,
-        Floor,
-        Roof,
-        Wall,
-        Other
+        [Description("Undefined")] Undefined,
+        [Description("Floor")] Floor,
+        [Description("Roof")] Roof,
+        [Description("Wall")] Wall,
+        [Description("Other")] Other
     }
 }

@@ -12,7 +12,6 @@ namespace SAM.Analytical
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             string parameterName = Query.ParameterName_HeatTransferCoefficient();
-             
 
             if (gasMaterial.SetParameter(assembly, parameterName, heatTransferCoefficient))
                 return true;
