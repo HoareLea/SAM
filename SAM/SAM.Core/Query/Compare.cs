@@ -1,4 +1,6 @@
-﻿namespace SAM.Core
+﻿using System.Collections.Generic;
+
+namespace SAM.Core
 {
     public static partial class Query
     {
@@ -95,6 +97,30 @@
             return false;
         }
 
+        public static List<bool> Compare(this IEnumerable<string> values, string value, TextComparisonType textComparisonType, bool caseSensitive = true)
+        {
+            if (values == null)
+                return null;
+
+            List<bool> result = new List<bool>();
+            foreach (string value_Temp in values)
+                result.Add(Compare(value_Temp, value, textComparisonType, caseSensitive));
+
+            return result;
+        }
+
+        public static List<bool> Compare(this IEnumerable<double> values, double value, NumberComparisonType numberComparisonType)
+        {
+            if (values == null)
+                return null;
+
+            List<bool> result = new List<bool>();
+            foreach (double value_Temp in values)
+                result.Add(Compare(value_Temp, value, numberComparisonType));
+
+            return result;
+        }
+        
         public static bool Compare(this object @object, string name, double value, NumberComparisonType numberComparisonType)
         {
             if (string.IsNullOrEmpty(name) || @object == null)
@@ -139,8 +165,11 @@
                 return false;
 
             if(value == null)
-                return Compare(null, value, textComparisonType, caseSensitive);
-
+            {
+                string value_Temp = null;
+                return Compare(value_Temp, value, textComparisonType, caseSensitive);
+            }
+                
             if (value_Existing is string)
                 return Compare((string)value_Existing, value, textComparisonType, caseSensitive);
 

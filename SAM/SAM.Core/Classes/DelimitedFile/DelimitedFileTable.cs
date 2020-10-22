@@ -387,111 +387,6 @@ namespace SAM.Core
             return aDelimitedFileTable;
         }
 
-        public DelimitedFileTable Filter(string columnName, object value)
-        {
-            if (names == null)
-                return null;
-
-            DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
-            aDelimitedFileTable.names = names;
-
-            if (values == null)
-                return aDelimitedFileTable;
-
-            aDelimitedFileTable.values = new List<object[]>();
-
-            if (values.Count == 0)
-                return aDelimitedFileTable;
-
-            int aIndex = GetIndex(columnName);
-            if (aIndex == -1)
-                return aDelimitedFileTable;
-
-            foreach (object[] aValues_Row in values)
-            {
-                if (aValues_Row == null || aValues_Row.Length <= aIndex)
-                    continue;
-
-                object aValue = aValues_Row[aIndex];
-
-                if (value == null && aValue == null)
-                {
-                    aDelimitedFileTable.values.Add(aValues_Row);
-                    continue;
-                }
-
-                if (value == null || aValue == null)
-                    continue;
-
-                if (value.Equals(aValue))
-                {
-                    aDelimitedFileTable.values.Add(aValues_Row);
-                    continue;
-                }
-            }
-
-            return aDelimitedFileTable;
-        }
-
-        public DelimitedFileTable Filter(string columnName, object value, bool tryToConvert)
-        {
-            if (names == null)
-                return null;
-
-            DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
-            aDelimitedFileTable.names = names;
-
-            if (values == null)
-                return aDelimitedFileTable;
-
-            aDelimitedFileTable.values = new List<object[]>();
-
-            if (values.Count == 0)
-                return aDelimitedFileTable;
-
-            int aIndex = GetIndex(columnName);
-            if (aIndex == -1)
-                return aDelimitedFileTable;
-
-            foreach (object[] aValues_Row in values)
-            {
-                if (aValues_Row == null || aValues_Row.Length <= aIndex)
-                    continue;
-
-                object aValue = aValues_Row[aIndex];
-
-                if (value == null && aValue == null)
-                {
-                    aDelimitedFileTable.values.Add(aValues_Row);
-                    continue;
-                }
-
-                if (value == null || aValue == null)
-                    continue;
-
-                if (value.Equals(aValue))
-                {
-                    aDelimitedFileTable.values.Add(aValues_Row);
-                    continue;
-                }
-
-                if (!tryToConvert)
-                    continue;
-
-                Type aType_1 = value.GetType();
-                Type aType_2 = aValue.GetType();
-
-                if (aType_1 == aType_2)
-                    continue;
-
-                if (aType_1 == typeof(string))
-                {
-                }
-            }
-
-            return aDelimitedFileTable;
-        }
-
         public DelimitedFileTable Filter(IEnumerable<int> rowIndexes)
         {
             DelimitedFileTable aDelimitedFileTable = new DelimitedFileTable();
@@ -503,6 +398,98 @@ namespace SAM.Core
                 aDelimitedFileTable.values.Add(values[aIndex]);
 
             return aDelimitedFileTable;
+        }
+
+        public DelimitedFileTable Filter(string columnName, TextComparisonType textComparisonType, string text, bool caseSensitive = true, bool tryConvert = true)
+        {
+            if (names == null)
+                return null;
+
+            DelimitedFileTable delimitedFileTable = new DelimitedFileTable();
+            delimitedFileTable.names = names;
+
+            if (values == null)
+                return delimitedFileTable;
+
+            delimitedFileTable.values = new List<object[]>();
+
+            if (values.Count == 0)
+                return delimitedFileTable;
+
+            int index = GetIndex(columnName);
+            if (index == -1)
+                return delimitedFileTable;
+
+            foreach (object[] values_Row in values)
+            {
+                if (values_Row == null || values_Row.Length <= index)
+                    continue;
+
+                object value = values_Row[index];
+
+                if (tryConvert)
+                {
+                    string @string = null;
+                    if (Query.TryConvert(value, out @string))
+                        value = @string;
+                }
+
+                if (!(value is string || value == null))
+                    continue;
+
+                if (!Query.Compare(value as string, text, textComparisonType, caseSensitive))
+                    continue;
+
+                delimitedFileTable.values.Add(values_Row);
+            }
+
+            return delimitedFileTable;
+        }
+
+        public DelimitedFileTable Filter(string columnName, NumberComparisonType numberComparisonType, double value, bool tryConvert = true)
+        {
+            if (names == null)
+                return null;
+
+            DelimitedFileTable delimitedFileTable = new DelimitedFileTable();
+            delimitedFileTable.names = names;
+
+            if (values == null)
+                return delimitedFileTable;
+
+            delimitedFileTable.values = new List<object[]>();
+
+            if (values.Count == 0)
+                return delimitedFileTable;
+
+            int index = GetIndex(columnName);
+            if (index == -1)
+                return delimitedFileTable;
+
+            foreach (object[] values_Row in values)
+            {
+                if (values_Row == null || values_Row.Length <= index)
+                    continue;
+
+                object value_Temp = values_Row[index];
+
+                if (tryConvert)
+                {
+                    double @double = double.NaN;
+                    if (Query.TryConvert(value, out @double))
+                        value = @double;
+                }
+
+                if (!(value_Temp is double))
+                    continue;
+
+                if (!Query.Compare((double)value_Temp, value, numberComparisonType))
+                    continue;
+
+                delimitedFileTable.values.Add(values_Row);
+            }
+
+            return delimitedFileTable;
         }
 
         protected virtual void Dispose(bool disposing)

@@ -89,6 +89,7 @@
     <Compile Include="Enums\HeatFlowDirection.cs" />
     <Compile Include="Enums\DefaultGasType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
+    <Compile Include="Enums\Parameter\ConstructionParameter.cs" />
     <Compile Include="Enums\Parameter\SpaceParameter.cs" />
     <Compile Include="Enums\Parameter\InternalConditionParameter.cs" />
     <Compile Include="Enums\PanelType.cs" />
