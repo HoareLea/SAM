@@ -34,7 +34,11 @@ namespace SAM.Analytical
                 {
                     string value_Type = panelType.ToString().ToUpper();
                     if (value_Type.Equals(value))
-                        return result;
+                        return panelType;
+
+                    value_Type = Text(panelType)?.Replace(" ", string.Empty).ToUpper();
+                    if (!string.IsNullOrEmpty(value_Type) && value_Type.Equals(value))
+                        return panelType;
                 }
 
                 return Analytical.PanelType.Undefined;
