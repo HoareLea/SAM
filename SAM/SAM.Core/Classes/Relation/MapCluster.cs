@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace SAM.Core
@@ -31,6 +33,35 @@ namespace SAM.Core
                 return false;
 
             return Add(type_1.FullName, type_2.FullName, name_1, name_2);
+        }
+
+        public List<Type> Add(Enum @enum, Type type, string name)
+        {
+            if (type == null || string.IsNullOrEmpty(name))
+                return null;
+
+            AssociatedTypes associatedTypes = AssociatedTypes.Get(@enum.GetType());
+            if (associatedTypes == null)
+                return null;
+
+            Type[] types = associatedTypes.Types;
+            if (types == null || types.Length == 0)
+                return null;
+
+            string name_Temp = @enum.ToString();
+            ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
+            if(parameterProperties != null)
+                name_Temp = parameterProperties.Name;
+
+            if (name_Temp == null)
+                return null;
+
+            List<Type> result = new List<Type>();
+            foreach (Type type_Temp in types)
+                if (Add(type_Temp, type, name_Temp, name))
+                    result.Add(type_Temp);
+
+            return result;
         }
         
         public bool Add(string typeName_1, string typeName_2, string name_1, string name_2)

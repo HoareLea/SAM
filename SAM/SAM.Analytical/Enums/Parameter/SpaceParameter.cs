@@ -3,7 +3,7 @@ using SAM.Core.Attributes;
 
 namespace SAM.Analytical
 {
-    [ParameterTypes(typeof(Space)), Description("Space Parameter")]
+    [AssociatedTypes(typeof(Space)), Description("Space Parameter")]
     public enum SpaceParameter
     {
         [ParameterProperties("Design Heating Load", "Design Heating Load"), DoubleParameterType(0)] DesignHeatingLoad,

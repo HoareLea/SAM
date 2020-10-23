@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
-    <Compile Include="Attributes\Enum\ParameterTypes.cs" />
+    <Compile Include="Attributes\Enum\AssociatedTypes.cs" />
     <Compile Include="Attributes\Parameter\DoubleParameterType.cs" />
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterType.cs" />

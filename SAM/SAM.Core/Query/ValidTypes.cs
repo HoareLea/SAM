@@ -8,7 +8,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static List<Type> ValidTypes(this Attributes.ParameterTypes parameterTypes, IEnumerable<Type> types)
+        public static List<Type> ValidTypes(this Attributes.AssociatedTypes parameterTypes, IEnumerable<Type> types)
         {
             if (parameterTypes == null || types == null)
                 return null;

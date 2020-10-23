@@ -1,24 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 
 namespace SAM.Core.Attributes
 {
-    public class ParameterTypes : Attribute
+    [AttributeUsage(AttributeTargets.Enum, AllowMultiple = false)]
+    public class AssociatedTypes : Attribute, IEnumerable
     {
-        private Type[] values;
+        private Type[] types;
 
-        public ParameterTypes(params Type[] values)
+        public AssociatedTypes(params Type[] values)
         {
-            this.values = values;
+            this.types = values;
         }
 
         public virtual bool IsValid(Type type)
         {
-            if (values == null || values.Length == 0)
+            if (types == null || types.Length == 0)
                 return false;
 
-            foreach (Type type_Temp in values)
+            foreach (Type type_Temp in types)
             {
                 if (type_Temp == null)
                     continue;
@@ -33,11 +34,11 @@ namespace SAM.Core.Attributes
             return false;
         }
 
-        public Type[] Values
+        public Type[] Types
         {
             get
             {
-                return values?.ToArray();
+                return types?.ToArray();
             }
         }
 
@@ -46,11 +47,11 @@ namespace SAM.Core.Attributes
             if (@enum == null)
                 return null;
 
-            ParameterTypes types_Temp = GetCustomAttribute(@enum.GetType(), typeof(ParameterTypes)) as ParameterTypes;
-            return types_Temp?.values;
+            AssociatedTypes types_Temp = GetCustomAttribute(@enum.GetType(), typeof(AssociatedTypes)) as AssociatedTypes;
+            return types_Temp?.types;
         }
 
-        public static ParameterTypes Get(Type type)
+        public static AssociatedTypes Get(Type type)
         {
             if (type == null)
                 return null;
@@ -58,18 +59,23 @@ namespace SAM.Core.Attributes
             if (!type.IsEnum)
                 return null;
 
-            object[] objects = type.GetCustomAttributes(typeof(ParameterTypes), true);
+            object[] objects = type.GetCustomAttributes(typeof(AssociatedTypes), true);
             if (objects == null || objects.Length == 0)
                 return null;
 
             foreach (object @object in objects)
             {
-                ParameterTypes parameterTypes = @object as ParameterTypes;
+                AssociatedTypes parameterTypes = @object as AssociatedTypes;
                 if (parameterTypes != null)
                     return parameterTypes;
             }
 
             return null;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return types?.GetEnumerator();
         }
     }
 }

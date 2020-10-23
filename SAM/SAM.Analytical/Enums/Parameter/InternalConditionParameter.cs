@@ -3,7 +3,7 @@ using SAM.Core.Attributes;
 
 namespace SAM.Analytical
 {
-    [ParameterTypes(typeof(InternalCondition)), Description("Internal Condition Parameter")]
+    [AssociatedTypes(typeof(InternalCondition)), Description("Internal Condition Parameter")]
     public enum InternalConditionParameter
     {
         [ParameterProperties("SAM_NoPeople", "Number Of People"), DoubleParameterType(0)] NumberOfPeople,

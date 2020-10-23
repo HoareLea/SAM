@@ -11,12 +11,12 @@ namespace SAM.Core
             if (type == null || string.IsNullOrEmpty(value))
                 return null;
 
-            Dictionary<Type, ParameterTypes> dictionary = ParameterTypesDictionary(null, true, notPublic);
+            Dictionary<Type, AssociatedTypes> dictionary = ParameterTypesDictionary(null, true, notPublic);
             if (dictionary == null)
                 return null;
 
             List<Enum> result = new List<Enum>();
-            foreach (KeyValuePair<Type, ParameterTypes> keyValuePair in dictionary)
+            foreach (KeyValuePair<Type, AssociatedTypes> keyValuePair in dictionary)
             {
                 if (!keyValuePair.Value.IsValid(type))
                     continue;

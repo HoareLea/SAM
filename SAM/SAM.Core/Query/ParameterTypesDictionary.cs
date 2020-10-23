@@ -7,9 +7,9 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static Dictionary<Type, ParameterTypes> ParameterTypesDictionary(IEnumerable<Type> types = null, bool enumsOnly = true, bool notPublic = false)
+        public static Dictionary<Type, AssociatedTypes> ParameterTypesDictionary(IEnumerable<Type> types = null, bool enumsOnly = true, bool notPublic = false)
         {
-            Dictionary<Type, ParameterTypes> result = new Dictionary<Type, ParameterTypes>();
+            Dictionary<Type, AssociatedTypes> result = new Dictionary<Type, AssociatedTypes>();
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (assembly == null)
@@ -39,18 +39,18 @@ namespace SAM.Core
                     if (!notPublic && type_Temp.IsNotPublic)
                         continue;
 
-                    ParameterTypes parameterTypes = ParameterTypes.Get(type_Temp);
-                    if (parameterTypes == null)
+                    AssociatedTypes associatedTypes = AssociatedTypes.Get(type_Temp);
+                    if (associatedTypes == null)
                         continue;
 
                     if(types != null)
                     {
-                        List<Type> types_Valid = parameterTypes.ValidTypes(types);
+                        List<Type> types_Valid = associatedTypes.ValidTypes(types);
                         if (types_Valid == null || types_Valid.Count == 0)
                             continue;
                     }
 
-                    result[type_Temp] = parameterTypes;
+                    result[type_Temp] = associatedTypes;
                 }
             }
 

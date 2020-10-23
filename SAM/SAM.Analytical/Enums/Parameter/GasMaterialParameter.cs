@@ -3,7 +3,7 @@ using SAM.Core.Attributes;
 
 namespace SAM.Analytical
 {
-    [ParameterTypes(typeof(Core.GasMaterial)), Description("GasMaterial Parameter")]
+    [AssociatedTypes(typeof(Core.GasMaterial)), Description("GasMaterial Parameter")]
     public enum GasMaterialParameter
     {
         [ParameterProperties("Heat Transfer Coefficient", "Heat Transfer Coefficient"), DoubleParameterType(0)] HeatTransferCoefficient,

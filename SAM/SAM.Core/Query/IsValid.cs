@@ -10,7 +10,7 @@ namespace SAM.Core
             if (type == null || @enum == null)
                 return false;
 
-            Type[] types = Attributes.ParameterTypes.Get(@enum);
+            Type[] types = Attributes.AssociatedTypes.Get(@enum);
             if (types == null || types.Length == 0)
                 return false;
 

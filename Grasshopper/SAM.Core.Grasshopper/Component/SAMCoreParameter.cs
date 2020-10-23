@@ -80,7 +80,7 @@ namespace SAM.Core.Grasshopper
                 return;
 
 
-            Dictionary<Type, ParameterTypes> dictionary = Core.Query.ParameterTypesDictionary(types, true, false);
+            Dictionary<Type, AssociatedTypes> dictionary = Core.Query.ParameterTypesDictionary(types, true, false);
             if (dictionary == null)
                 return;
 

@@ -56,7 +56,7 @@ namespace SAM.Core.Grasshopper
 
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            Dictionary<Type, ParameterTypes> dictionary = Core.Query.ParameterTypesDictionary(null, true, false);
+            Dictionary<Type, AssociatedTypes> dictionary = Core.Query.ParameterTypesDictionary(null, true, false);
             if (dictionary == null)
                 return;
 

@@ -2,6 +2,8 @@
 
 namespace SAM.Core.Attributes
 {
+
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class ParameterType : Attribute
     {
         private Core.ParameterType value;
@@ -85,6 +87,7 @@ namespace SAM.Core.Attributes
 
             return null;
         }
+
 
         public static Core.ParameterType Get(Type type, string text)
         {
