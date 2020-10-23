@@ -5,7 +5,6 @@ namespace SAM.Core.Attributes
     public class ParameterProperties : Attribute
     {
         private string name = null;
-        private string displayName = null;
         private string description = null;
         private AccessType accessType = AccessType.ReadWrite;
 
@@ -14,23 +13,16 @@ namespace SAM.Core.Attributes
             this.name = name;
         }
 
-        public ParameterProperties(string name, string displayName)
-        {
-            this.name = name;
-            this.displayName = displayName;
-        }
 
-        public ParameterProperties(string name, string displayName, string description)
+        public ParameterProperties(string name, string description)
         {
             this.name = name;
-            this.displayName = displayName;
             this.description = description;
         }
 
-        public ParameterProperties(string name, string displayName, string description, AccessType accessType)
+        public ParameterProperties(string name, string description, AccessType accessType)
         {
             this.name = name;
-            this.displayName = displayName;
             this.description = description;
             this.accessType = accessType;
         }
@@ -40,14 +32,6 @@ namespace SAM.Core.Attributes
             get
             {
                 return name;
-            }
-        }
-
-        public string DisplayName
-        {
-            get
-            {
-                return displayName;
             }
         }
 

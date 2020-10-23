@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Core.Attributes;
+using System;
 using System.Linq;
 using System.Reflection;
 
@@ -26,6 +28,22 @@ namespace SAM.Core
                 name = assembly.ManifestModule.Name;
 
             return name;
+        }
+
+        public static string Name(this Enum @enum)
+        {
+            string result = null;
+
+            ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
+            if(parameterProperties != null)
+            {
+                result = parameterProperties.Name;
+            }
+
+            if (result == null)
+                result = @enum.ToString();
+
+            return result;
         }
     }
 }

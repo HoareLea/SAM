@@ -92,7 +92,7 @@ namespace SAM.Core.Grasshopper
                     if(parameterProperties != null)
                     {
                         bool enabled = Core.Query.FullTypeName(type).Equals(typeFullName_Selected) && @enum.ToString().Equals(name_Selected);
-                        Menu_AppendItem(menu, parameterProperties.DisplayName, Menu_Changed, true, enabled).Tag = @enum;
+                        Menu_AppendItem(menu, parameterProperties.Name, Menu_Changed, true, enabled).Tag = @enum;
                     }
                 }
                     
