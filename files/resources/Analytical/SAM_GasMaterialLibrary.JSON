@@ -20,7 +20,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Name": "Vapour Diffusion Factor",
               "Value": 1.0
             }
           ]
@@ -44,7 +44,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Name": "Vapour Diffusion Factor",
               "Value": 1.0
             }
           ]
@@ -68,7 +68,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Name": "Vapour Diffusion Factor",
               "Value": 1.0
             }
           ]
@@ -92,7 +92,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Name": "Vapour Diffusion Factor",
               "Value": 1.0
             }
           ]
@@ -116,7 +116,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "SAM_Material_VapourDiffusionFactor",
+              "Name": "Vapour Diffusion Factor",
               "Value": 1.0
             }
           ]

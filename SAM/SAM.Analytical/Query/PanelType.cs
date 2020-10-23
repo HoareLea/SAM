@@ -88,10 +88,13 @@ namespace SAM.Analytical
             return Analytical.PanelType.Undefined;
         }
 
+        [Obsolete]
         public static PanelType PanelType(Construction construction)
         {
             if (construction == null)
                 return Analytical.PanelType.Undefined;
+
+            return construction.GetValue<PanelType>(ConstructionParameter.DefaultPanelType);
 
             object result = null;
             if (!Core.Query.TryGetValue(construction, ParameterName_Type(), out result))
@@ -100,10 +103,13 @@ namespace SAM.Analytical
             return PanelType(result);
         }
 
+        [Obsolete]
         public static PanelType PanelType(ApertureConstruction apertureConstruction)
         {
             if (apertureConstruction == null)
                 return Analytical.PanelType.Undefined;
+
+            return apertureConstruction.GetValue<PanelType>(ConstructionParameter.DefaultPanelType);
 
             object result = null;
             if (!Core.Query.TryGetValue(apertureConstruction, ParameterName_Type(), out result))

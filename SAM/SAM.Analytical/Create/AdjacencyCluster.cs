@@ -394,11 +394,13 @@ namespace SAM.Analytical
                     double height = elevation_Top - elevation_Bottom;
                     double volume = area * height;
                     
-                    Core.ParameterSet parameterSet_Space = new Core.ParameterSet(typeof(Space).Assembly);
+                    ParameterSet parameterSet_Space = new ParameterSet(typeof(Space).Assembly);
                     parameterSet_Space.Add(Query.ParameterName_Area(), area);
                     parameterSet_Space.Add(Query.ParameterName_Volume(), volume);
 
                     space.Add(parameterSet_Space);
+                    space.SetValue(SpaceParameter.Area, area);
+                    space.SetValue(SpaceParameter.Volume, volume);
                 }
             }
 

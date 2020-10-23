@@ -11,7 +11,7 @@ namespace SAM.Analytical
                 return double.NaN;
 
             double volume = double.NaN;
-            if (Core.Query.TryGetValue(space, ParameterName_Volume(), out volume))
+            if (space.TryGetValue(SpaceParameter.Volume, out volume))
                 return volume;
 
             //TODO: Find better way to calculate volume from panels

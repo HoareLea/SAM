@@ -1,10 +1,12 @@
 ﻿using SAM.Core;
+using System;
 using System.Reflection;
 
 namespace SAM.Analytical
 {
     public static partial class Modify
     {
+        [Obsolete]
         public static bool SetInternalEmissivity(this OpaqueMaterial opaqueMaterial, double internalEmissivity)
         {
             if (opaqueMaterial == null)
@@ -21,9 +23,13 @@ namespace SAM.Analytical
             if (!parameterSet.Add(parameterName, internalEmissivity))
                 return false;
 
+            //TODO: Use SetValue Insetad SetInternalEmissivity
+            opaqueMaterial.SetValue(OpaqueMaterialParameter.InternalEmissivity, internalEmissivity);
+
             return opaqueMaterial.Add(parameterSet);
         }
 
+        [Obsolete]
         public static bool SetInternalEmissivity(this TransparentMaterial transparentMaterial, double internalEmissivity)
         {
             if (transparentMaterial == null)
@@ -39,6 +45,9 @@ namespace SAM.Analytical
             ParameterSet parameterSet = new ParameterSet(assembly);
             if (!parameterSet.Add(parameterName, internalEmissivity))
                 return false;
+
+            //TODO: Use SetValue Insetad SetInternalEmissivity
+            transparentMaterial.SetValue(TransparentMaterialParameter.InternalEmissivity, internalEmissivity);
 
             return transparentMaterial.Add(parameterSet);
         }

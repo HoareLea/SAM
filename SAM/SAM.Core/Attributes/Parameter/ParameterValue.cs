@@ -17,23 +17,23 @@ namespace SAM.Core.Attributes
         {
             switch(this.parameterType)
             {
-                case Core.ParameterType.Double:
+                case ParameterType.Double:
                     return Query.IsNumeric(value);
                 
-                case Core.ParameterType.String:
-                    return value == null || value is string;
+                case ParameterType.String:
+                    return value == null || value is string || value is Enum;
                 
-                case Core.ParameterType.Boolean:
+                case ParameterType.Boolean:
                     bool @bool;
                     return !Query.TryConvert(value, out @bool);
                 
-                case Core.ParameterType.Integer:
-                    return value is int;
+                case ParameterType.Integer:
+                    return value is int || value is Enum;
                 
-                case Core.ParameterType.IJSAMObject:
+                case ParameterType.IJSAMObject:
                     return value == null || value is IJSAMObject;
                 
-                case Core.ParameterType.Guid:
+                case ParameterType.Guid:
                     if (value is Guid)
                         return true;
                     
@@ -43,7 +43,7 @@ namespace SAM.Core.Attributes
                     Guid guid;
                     return Guid.TryParse(value.ToString(), out guid);
                 
-                case Core.ParameterType.Undefined:
+                case ParameterType.Undefined:
                     return true;
             }
 
@@ -52,36 +52,36 @@ namespace SAM.Core.Attributes
 
         public virtual object Convert(object value)
         {
-            switch (this.parameterType)
+            switch (parameterType)
             {
-                case Core.ParameterType.Double:
+                case ParameterType.Double:
                     return System.Convert.ToDouble(value);
                 
-                case Core.ParameterType.String:
+                case ParameterType.String:
                     return value.ToString();
                 
-                case Core.ParameterType.Boolean:
+                case ParameterType.Boolean:
                     bool @bool;
                     if (!Query.TryConvert(value, out @bool))
                         return null;
                     return @bool;
                 
-                case Core.ParameterType.Integer:
+                case ParameterType.Integer:
                     int @int;
                     if (!Query.TryConvert(value, out @int))
                         return null;
                     return @int;
                 
-                case Core.ParameterType.IJSAMObject:
+                case ParameterType.IJSAMObject:
                     return value as IJSAMObject;
                 
-                case Core.ParameterType.Guid:
+                case ParameterType.Guid:
                     Guid guid;
                     if (!Query.TryConvert(value, out guid))
                         return null;
                     return guid;
                 
-                case Core.ParameterType.Undefined:
+                case ParameterType.Undefined:
                     return value;
             }
 
@@ -102,7 +102,7 @@ namespace SAM.Core.Attributes
         {
             ParameterValue parameterType = Query.CustomAttribute<ParameterValue>(@enum);
             if (parameterType == null)
-                return Core.ParameterType.Undefined;
+                return ParameterType.Undefined;
 
             return parameterType.parameterType;
         }

@@ -1,31 +1,41 @@
 ﻿using SAM.Core;
+using System;
 using System.Reflection;
 
 namespace SAM.Analytical
 {
     public static partial class Modify
     {
+        [Obsolete]
         public static bool SetPanelType(this Construction construction, PanelType panelType)
         {
+            return construction.SetValue(ConstructionParameter.DefaultPanelType, panelType);
+
             return SetPanelType(construction as SAMObject, panelType);
         }
 
+        [Obsolete]
         public static bool SetPanelType(this Construction construction, PanelType panelType, Setting setting)
         {
-            return SetPanelType(construction as SAMObject, panelType, setting);
+            return construction.SetValue(ConstructionParameter.DefaultPanelType, panelType);
+            //return SetPanelType(construction as SAMObject, panelType, setting);
         }
 
+        [Obsolete]
         public static bool SetPanelType(this ApertureConstruction apertureConstruction, PanelType panelType)
         {
-            return SetPanelType(apertureConstruction as SAMObject, panelType);
+            return apertureConstruction.SetValue(ApertureConstructionParameter.DefaultPanelType, panelType);
+            //return SetPanelType(apertureConstruction as SAMObject, panelType);
         }
 
+        [Obsolete]
         public static bool SetPanelType(this ApertureConstruction apertureConstruction, PanelType panelType, Setting setting)
         {
-            return SetPanelType(apertureConstruction as SAMObject, panelType, setting);
+            return apertureConstruction.SetValue(ApertureConstructionParameter.DefaultPanelType, panelType);
+            //return SetPanelType(apertureConstruction as SAMObject, panelType, setting);
         }
 
-
+        [Obsolete]
         private static bool SetPanelType(this SAMObject sAMObject, PanelType panelType, Setting setting)
         {
             if (sAMObject == null)
@@ -46,6 +56,7 @@ namespace SAM.Analytical
             return sAMObject.Add(parameterSet);
         }
 
+        [Obsolete]
         private static bool SetPanelType(this SAMObject sAMObject, PanelType panelType)
         {
             if (sAMObject == null)

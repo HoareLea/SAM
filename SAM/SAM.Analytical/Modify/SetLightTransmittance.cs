@@ -1,10 +1,12 @@
 ﻿using SAM.Core;
+using System;
 using System.Reflection;
 
 namespace SAM.Analytical
 {
     public static partial class Modify
     {
+        [Obsolete]
         public static bool SetLightTransmittance(this TransparentMaterial transparentMaterial, double lightTransmittance)
         {
             if (transparentMaterial == null)
@@ -20,6 +22,9 @@ namespace SAM.Analytical
             ParameterSet parameterSet = new ParameterSet(assembly);
             if (!parameterSet.Add(parameterName, lightTransmittance))
                 return false;
+
+            //TODO: Use SetValue Insetad SetLightTransmittance
+            transparentMaterial.SetValue(TransparentMaterialParameter.LightTransmittance, lightTransmittance);
 
             return transparentMaterial.Add(parameterSet);
         }

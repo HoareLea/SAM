@@ -7,6 +7,6 @@ namespace SAM.Analytical
     public enum GasMaterialParameter
     {
         [ParameterProperties("Heat Transfer Coefficient", "Heat Transfer Coefficient"), DoubleParameterValue(0)] HeatTransferCoefficient,
-        [ParameterProperties("SAM_Material_Width", "Default Thickness"), DoubleParameterValue(0)] DefaultThickness,
+        
     }
 }

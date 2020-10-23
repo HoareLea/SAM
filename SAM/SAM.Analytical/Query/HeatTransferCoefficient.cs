@@ -1,4 +1,5 @@
 ﻿using SAM.Core;
+using System;
 
 namespace SAM.Analytical
 {
@@ -30,10 +31,13 @@ namespace SAM.Analytical
             return nusseltNumber * (thermalConductivity / width);
         }
 
+        [Obsolete]
         public static double HeatTransferCoefficient(this GasMaterial gasMaterial)
         {
             if (gasMaterial == null)
                 return double.NaN;
+
+            return gasMaterial.GetValue<double>(GasMaterialParameter.HeatTransferCoefficient);
 
             double result = double.NaN;
             if (!Core.Query.TryGetValue(gasMaterial, ParameterName_HeatTransferCoefficient(), out result))

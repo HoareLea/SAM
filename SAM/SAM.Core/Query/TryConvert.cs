@@ -59,6 +59,11 @@ namespace SAM.Core
                     result = (T)(object)(System.Convert.ToInt32(@object));
                     return true;
                 }
+                else if(@object is Enum)
+                {
+                    result = (T)(object)(int)@object;
+                    return true;
+                }
             }
             else if (typeof(T) == typeof(double))
             {
@@ -180,7 +185,7 @@ namespace SAM.Core
                 if (@object is string)
                 {
                     DateTime dateTime;
-                    if (System.DateTime.TryParse((string)@object, out dateTime))
+                    if (DateTime.TryParse((string)@object, out dateTime))
                     {
                         result = (T)(object)dateTime;
                         return true;
@@ -210,6 +215,56 @@ namespace SAM.Core
                 {
                     result = (T)(object)JObject.Parse((string)@object);
                     return true;
+                }
+            }
+            else if(result is Enum)
+            {
+                if (@object is string)
+                {
+                    string @string = (string)@object;
+
+                    Type type = result.GetType();
+
+                    Array array = Enum.GetValues(type);
+                    if(array != null)
+                    {
+                        foreach(Enum @enum in array)
+                        {
+                            if(@enum.ToString().Equals(@string))
+                            {
+                                result = (T)(object)@enum;
+                                return true;
+                            }
+                        }
+                    }
+
+                    int @int;
+                    if(int.TryParse(@string, out @int))
+                    {
+                        if(Enum.IsDefined(type, @int))
+                        {
+                            result = (T)(object)@int;
+                            return true;
+                        }
+                    }
+                }
+                else if (@object is int)
+                {
+                    int @int = default;
+                    if (Enum.IsDefined(result.GetType(), @int))
+                    {
+                        result = (T)(object)@int;
+                        return true;
+                    }
+                }
+                else if (IsNumeric(@object))
+                {
+                    int @int = System.Convert.ToInt32(@object);
+                    if (Enum.IsDefined(result.GetType(), @int))
+                    {
+                        result = (T)(object)@int;
+                        return true;
+                    }
                 }
             }
 

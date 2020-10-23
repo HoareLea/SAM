@@ -6,7 +6,11 @@ namespace SAM.Analytical
     [AssociatedTypes(typeof(Construction)), Description("Construction Parameter")]
     public enum ConstructionParameter
     {
-        [ParameterProperties("SAM_BuildingElementType", "Type Name"), ParameterValue(Core.ParameterType.String)] TypeName,
-        [ParameterProperties("SAM_BuildingElementDescription", "Description"), ParameterValue(Core.ParameterType.String)] Description,
+        [ParameterProperties("Dafault Panel Type", "Dafault Panel Type"), ParameterValue(Core.ParameterType.String)] DefaultPanelType,
+        [ParameterProperties("Description", "Description"), ParameterValue(Core.ParameterType.String)] Description,
+
+        //TODO: To be removed
+        //[ParameterProperties("SAM_BuildingElementType", "Building Element Type"), ParameterValue(Core.ParameterType.String)] BuildingElementType,
+        //[ParameterProperties("SAM_BuildingElementDescription", "Description"), ParameterValue(Core.ParameterType.String)] BuildingElementDescription,
     }
 }

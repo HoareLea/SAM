@@ -145,7 +145,7 @@ namespace SAM.Core
             return true;
         }
 
-        public bool TryGetValue<T>(Enum @enum, out T value)
+        public bool TryGetValue<T>(Enum @enum, out T value, bool tryConvert = true)
         {
             value = default;
 
@@ -159,7 +159,10 @@ namespace SAM.Core
                 return true;
             }
 
-            return false;
+            if (!tryConvert)
+                return false;
+
+            return Query.TryConvert(result, out value);
         }
         
         public object GetValue(Enum @enum)
@@ -167,6 +170,15 @@ namespace SAM.Core
             object result = null;
             if (!TryGetValue(@enum, out result))
                 return null;
+
+            return result;
+        }
+
+        public T GetValue<T>(Enum @enum)
+        {
+            T result = default;
+            if (!TryGetValue(@enum, out result, true))
+                return default;
 
             return result;
         }
