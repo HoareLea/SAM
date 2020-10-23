@@ -50,9 +50,9 @@
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
     <Compile Include="Attributes\Enum\AssociatedTypes.cs" />
-    <Compile Include="Attributes\Parameter\DoubleParameterType.cs" />
+    <Compile Include="Attributes\Parameter\DoubleParameterValue.cs" />
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
-    <Compile Include="Attributes\Parameter\ParameterType.cs" />
+    <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Enums\AccessType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
     <Compile Include="Modify\AddRange.cs" />

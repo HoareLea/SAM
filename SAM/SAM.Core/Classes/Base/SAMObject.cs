@@ -189,13 +189,13 @@ namespace SAM.Core
 
             object value_Temp = value;
             
-            Attributes.ParameterType parameterType = Query.CustomAttribute<Attributes.ParameterType>(@enum);
-            if (parameterType != null)
+            Attributes.ParameterValue parameterValue = Query.CustomAttribute<Attributes.ParameterValue>(@enum);
+            if (parameterValue != null)
             {
-                if (!parameterType.IsValid(value))
+                if (!parameterValue.IsValid(value))
                     return false;
 
-                value_Temp = parameterType.Convert(value);
+                value_Temp = parameterValue.Convert(value);
             }
                 
             return Modify.SetParameter(this, name, value_Temp as dynamic);

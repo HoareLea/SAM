@@ -4,18 +4,18 @@ namespace SAM.Core.Attributes
 {
 
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public class ParameterType : Attribute
+    public class ParameterValue : Attribute
     {
-        private Core.ParameterType value;
+        private ParameterType parameterType;
 
-        public ParameterType(Core.ParameterType value)
+        public ParameterValue(ParameterType parameterType)
         {
-            this.value = value;
+            this.parameterType = parameterType;
         }
 
         public virtual bool IsValid(object value)
         {
-            switch(this.value)
+            switch(this.parameterType)
             {
                 case Core.ParameterType.Double:
                     return Query.IsNumeric(value);
@@ -52,7 +52,7 @@ namespace SAM.Core.Attributes
 
         public virtual object Convert(object value)
         {
-            switch (this.value)
+            switch (this.parameterType)
             {
                 case Core.ParameterType.Double:
                     return System.Convert.ToDouble(value);
@@ -89,22 +89,22 @@ namespace SAM.Core.Attributes
         }
 
 
-        public static Core.ParameterType Get(Type type, string text)
+        public static ParameterType Get(Type type, string text)
         {
-            ParameterType parameterType = Query.CustomAttribute<ParameterType>(type, text);
+            ParameterValue parameterType = Query.CustomAttribute<ParameterValue>(type, text);
             if (parameterType == null)
-                return Core.ParameterType.Undefined;
+                return ParameterType.Undefined;
 
-            return parameterType.value;
+            return parameterType.parameterType;
         }
 
-        public static Core.ParameterType Get(Enum @enum)
+        public static ParameterType Get(Enum @enum)
         {
-            ParameterType parameterType = Query.CustomAttribute<ParameterType>(@enum);
+            ParameterValue parameterType = Query.CustomAttribute<ParameterValue>(@enum);
             if (parameterType == null)
                 return Core.ParameterType.Undefined;
 
-            return parameterType.value;
+            return parameterType.parameterType;
         }
     }
 }
