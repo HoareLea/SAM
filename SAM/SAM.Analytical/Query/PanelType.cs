@@ -109,7 +109,7 @@ namespace SAM.Analytical
             if (apertureConstruction == null)
                 return Analytical.PanelType.Undefined;
 
-            return apertureConstruction.GetValue<PanelType>(ConstructionParameter.DefaultPanelType);
+            return apertureConstruction.GetValue<PanelType>(ApertureConstructionParameter.DefaultPanelType);
 
             object result = null;
             if (!Core.Query.TryGetValue(apertureConstruction, ParameterName_Type(), out result))

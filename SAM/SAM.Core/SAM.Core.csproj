@@ -50,6 +50,8 @@
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
     <Compile Include="Attributes\Enum\AssociatedTypes.cs" />
+    <Compile Include="Attributes\Parameter\NullableParameterValue.cs" />
+    <Compile Include="Attributes\Parameter\SAMObjectParameterValue.cs" />
     <Compile Include="Attributes\Parameter\DoubleParameterValue.cs" />
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />

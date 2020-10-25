@@ -138,7 +138,7 @@ namespace SAM.Core
                 return false;
 
             object result = null;
-            if (!Query.TryGetValue(this, name, out result))
+            if (!Query.TryGetValue(this, name, out result, false, false, true))
                 return false;
 
             value = result;

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -205,8 +206,18 @@ namespace SAM.Core
             {
                 if(@object is string)
                 {
-                    result = (T)(object)Convert.ToSAM((string)@object);
-                    return true;
+                    List<IJSAMObject> sAMObjects = Convert.ToSAM((string)@object);
+                    if(sAMObjects != null && sAMObjects.Count != 0)
+                    {
+                        IJSAMObject jSAMObject = sAMObjects.Find(x => x is T);
+                        if(jSAMObject != null)
+                        {
+                            result = (T)jSAMObject;
+                            return true;
+                        }
+                    }
+                    
+
                 }
             }
             else if(typeof(JObject).IsAssignableFrom(typeof(T)))

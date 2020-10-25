@@ -45,18 +45,23 @@ namespace SAM.Core
 
         public static bool TryGetValue(this object @object, string name, out object value)
         {
+            return TryGetValue(@object, name, out value, true, true, true);
+        }
+
+        public static bool TryGetValue(this object @object, string name, out object value, bool property, bool method, bool propertySets)
+        {
             value = null;
 
             if (@object == null || string.IsNullOrWhiteSpace(name))
                 return false;
 
-            if (TryGetValue_Property(@object, name, out value))
+            if (property && TryGetValue_Property(@object, name, out value))
                 return true;
 
-            if (TryGetValue_Method(@object, name, out value))
+            if (method && TryGetValue_Method(@object, name, out value))
                 return true;
 
-            if (TryGetValue_PropertySets(@object, name, out value))
+            if (propertySets && TryGetValue_PropertySets(@object, name, out value))
                 return true;
 
             return false;
