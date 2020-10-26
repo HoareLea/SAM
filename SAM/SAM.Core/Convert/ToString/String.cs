@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace SAM.Core
@@ -40,6 +41,11 @@ namespace SAM.Core
             System.IO.File.WriteAllText(path, @string);
 
             return @string;
+        }
+
+        public static string ToString(Color color)
+        {
+            return color.Name;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Drawing;
 
 namespace SAM.Core
 {
@@ -38,6 +39,14 @@ namespace SAM.Core
             this.blue = blue;
         }
 
+        public string Name
+        {
+            get
+            {
+                return ToColor().Name;
+            }
+        }
+
         public byte Alpha
         {
             get
@@ -75,7 +84,7 @@ namespace SAM.Core
             return new SAMColor(this);
         }
 
-        public System.Drawing.Color ToColor()
+        public Color ToColor()
         {
             return System.Drawing.Color.FromArgb(alpha, red, green, blue);
         }
@@ -85,10 +94,18 @@ namespace SAM.Core
             if (jObject == null)
                 return false;
 
-            alpha = jObject.Value<byte>("Alpha");
-            red = jObject.Value<byte>("Red");
-            green = jObject.Value<byte>("Green");
-            blue = jObject.Value<byte>("Blue");
+            Color color = Color.Empty;
+            if (jObject.ContainsKey("Name"))
+                color = Convert.ToColor(jObject.Value<string>("Name"));
+
+            if(color.Equals(Color.Empty))
+            {
+                alpha = jObject.Value<byte>("Alpha");
+                red = jObject.Value<byte>("Red");
+                green = jObject.Value<byte>("Green");
+                blue = jObject.Value<byte>("Blue");
+            }
+
             return true;
         }
 
@@ -96,12 +113,26 @@ namespace SAM.Core
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Query.FullTypeName(this));
-            jObject.Add("Alpha", alpha);
-            jObject.Add("Red", red);
-            jObject.Add("Green", green);
-            jObject.Add("Blue", blue);
+
+            string name = Name;
+            if(string.IsNullOrWhiteSpace(name))
+            {
+                jObject.Add("Alpha", alpha);
+                jObject.Add("Red", red);
+                jObject.Add("Green", green);
+                jObject.Add("Blue", blue);
+            }
+            else
+            {
+                jObject.Add("Name", name);
+            }
 
             return jObject;
+        }
+
+        public override string ToString()
+        {
+            return ToColor().Name;
         }
     }
 }

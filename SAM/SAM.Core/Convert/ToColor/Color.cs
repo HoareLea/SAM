@@ -20,5 +20,17 @@ namespace SAM.Core
             byte r = (byte)(@uint >> 0);
             return Color.FromArgb(alpha, r, g, b);
         }
+
+        public static Color ToColor(string @string)
+        {
+            if (string.IsNullOrWhiteSpace(@string))
+                return Color.Empty;
+
+            object @object = new ColorConverter().ConvertFromString(@string);
+            if (!(@object is Color))
+                return Color.Empty;
+
+            return (Color)@object;
+        }
     }
 }
