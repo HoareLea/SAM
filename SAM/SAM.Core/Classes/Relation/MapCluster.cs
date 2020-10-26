@@ -3,12 +3,13 @@ using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace SAM.Core
 {
     public class MapCluster : SAMObject, IJSAMObject
     {
+        private Dictionary<string, Type> dictionary;
+
         private List<Tuple<string, string, string, string>> tuples;
 
         public MapCluster(MapCluster mapCluster)
@@ -32,7 +33,13 @@ namespace SAM.Core
             if (type_1 == null || type_2 == null || string.IsNullOrEmpty(name_1) || string.IsNullOrEmpty(name_2))
                 return false;
 
-            return Add(GetId(type_1), GetId(type_2), name_1, name_2);
+            bool result = Add(GetId(type_1), GetId(type_2), name_1, name_2);
+            if(result)
+            {
+                AddType(type_1);
+                AddType(type_2);
+            }
+            return result;
         }
 
         public List<Type> Add(Enum @enum, Type type, string name)
@@ -105,7 +112,9 @@ namespace SAM.Core
             if (string.IsNullOrEmpty(id_1) || string.IsNullOrEmpty(id_2) || string.IsNullOrEmpty(name_1))
                 return null;
 
-            return tuples.Find(x => x.Item1.Equals(id_1) && x.Item2.Equals(id_2) && x.Item3.Equals(name_1))?.Item4;
+            return GetNames(id_1, id_2, name_1)?.FirstOrDefault();
+
+            //return tuples.Find(x => x.Item1.Equals(id_1) && x.Item2.Equals(id_2) && x.Item3.Equals(name_1))?.Item4;
         }
 
         public string GetName(Type type_1, Type type_2, string name_1)
@@ -126,10 +135,9 @@ namespace SAM.Core
 
         public List<string> GetNames(string id_1, string id_2)
         {
-            if (string.IsNullOrWhiteSpace(id_1) || string.IsNullOrWhiteSpace(id_2))
-                return null;
+            return GetNames(id_1, id_2, null);
 
-            return tuples.FindAll(x => x.Item1.Equals(id_1) && x.Item2.Equals(id_2)).ConvertAll(x => x.Item3);
+            //return tuples.FindAll(x => x.Item1.Equals(id_1) && x.Item2.Equals(id_2))?.ConvertAll(x => x.Item3);
         }
 
         public override JObject ToJObject()
@@ -182,16 +190,80 @@ namespace SAM.Core
             return true;
         }
 
-        private static string GetId(Type type)
+        private List<string> GetNames(string id_1, string id_2, string name_1)
         {
-            string fullName = Query.FullTypeName(type);
-            if (string.IsNullOrWhiteSpace(fullName))
-                fullName = type.FullName;
+            if (string.IsNullOrWhiteSpace(id_1) || string.IsNullOrWhiteSpace(id_2))
+                return null;
 
-            return string.Format("::{0}", fullName);
+            Type type_1 = GetType(id_1, false);
+            Type type_2 = GetType(id_2, false);
+
+            List<string> result = new List<string>();
+            foreach (Tuple<string, string, string, string> tuple in tuples)
+            {
+                bool valid;
+
+                valid = false;
+                if (type_1 != null)
+                {
+                    Type type_1_Tuple = GetType(tuple.Item1);
+                    if (type_1_Tuple != null)
+                        valid = type_1.Equals(type_1_Tuple) || type_1_Tuple.IsAssignableFrom(type_1);
+                }
+
+                if (!valid)
+                    valid = tuple.Item1.Equals(id_1);
+
+                if (!valid)
+                    continue;
+
+                valid = false;
+                if (type_2 != null)
+                {
+                    Type type_2_Tuple = GetType(tuple.Item2);
+                    if (type_2_Tuple != null)
+                        valid = type_2.Equals(type_2_Tuple) || type_2_Tuple.IsAssignableFrom(type_2);
+                }
+
+                if (!valid)
+                    valid = tuple.Item2.Equals(id_2);
+
+                if (!valid)
+                    continue;
+
+                if(name_1 != null)
+                {
+                    if(tuple.Item3.Equals(name_1))
+                    {
+                        result.Add(tuple.Item4);
+                        return result;
+                    }
+
+                    continue;
+                }
+                else
+                {
+                    result.Add(tuple.Item3);
+                }
+            }
+
+            return result;
         }
 
-        private static Type GetType(string id)
+        private bool AddType(Type type)
+        {
+            string id = GetId(type);
+            if (string.IsNullOrEmpty(id) || !id.StartsWith("::"))
+                return false;
+
+            if (dictionary == null)
+                dictionary = new Dictionary<string, Type>();
+
+            dictionary[id] = type;
+            return true;
+        }
+
+        private Type GetType(string id, bool includeInDictionary = true)
         {
             if (string.IsNullOrEmpty(id))
                 return null;
@@ -199,7 +271,34 @@ namespace SAM.Core
             if (!id.StartsWith("::"))
                 return null;
 
-            return Type.GetType(id.Substring(2), false);
+            Type result = null;
+            if (dictionary != null)
+                if (!dictionary.TryGetValue(id, out result))
+                    result = null;
+
+            if (result != null)
+                return result;
+
+            result = Type.GetType(id.Substring(2), false);
+
+            if(includeInDictionary)
+            {
+                if (dictionary == null)
+                    dictionary = new Dictionary<string, Type>();
+
+                dictionary[id] = result;
+            }
+
+            return result;
+        }
+
+        private static string GetId(Type type)
+        {
+            string fullName = Query.FullTypeName(type);
+            if (string.IsNullOrWhiteSpace(fullName))
+                fullName = type.FullName;
+
+            return string.Format("::{0}", fullName);
         }
     }
 }

@@ -81,6 +81,14 @@ namespace SAM.Analytical
             }
         }
 
+        public double GetThickness()
+        {
+            if (constructionLayers == null || constructionLayers.Count == 0)
+                return double.NaN;
+
+            return constructionLayers.ConvertAll(x => x.Thickness).Sum();
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
