@@ -32,7 +32,15 @@ namespace SAM.Core
             if (type_1 == null || type_2 == null || string.IsNullOrEmpty(name_1) || string.IsNullOrEmpty(name_2))
                 return false;
 
-            return Add(type_1.FullName, type_2.FullName, name_1, name_2);
+            string fullName_1 = Query.FullTypeName(type_1);
+            if (string.IsNullOrWhiteSpace(fullName_1))
+                fullName_1 = type_1.FullName;
+
+            string fullName_2 = Query.FullTypeName(type_2);
+            if (string.IsNullOrWhiteSpace(fullName_2))
+                fullName_2 = type_2.FullName;
+
+            return Add(fullName_1, fullName_2, name_1, name_2);
         }
 
         public List<Type> Add(Enum @enum, Type type, string name)
@@ -113,7 +121,15 @@ namespace SAM.Core
             if (type_1 == null || type_2 == null || string.IsNullOrEmpty(name_1))
                 return null;
 
-            return GetName(type_1.FullName, type_2.FullName, name_1);
+            string fullName_1 = Query.FullTypeName(type_1);
+            if (string.IsNullOrWhiteSpace(fullName_1))
+                fullName_1 = type_1.FullName;
+
+            string fullName_2 = Query.FullTypeName(type_2);
+            if (string.IsNullOrWhiteSpace(fullName_2))
+                fullName_2 = type_2.FullName;
+
+            return GetName(fullName_1, fullName_2, name_1);
         }
 
         public List<string> GetNames(Type type_1, Type type_2)
@@ -121,7 +137,15 @@ namespace SAM.Core
             if (type_1 == null || type_2 == null)
                 return null;
 
-            return GetNames(type_1.FullName, type_2.FullName);
+            string fullName_1 = Query.FullTypeName(type_1);
+            if (string.IsNullOrWhiteSpace(fullName_1))
+                fullName_1 = type_1.FullName;
+
+            string fullName_2 = Query.FullTypeName(type_2);
+            if (string.IsNullOrWhiteSpace(fullName_2))
+                fullName_2 = type_2.FullName;
+
+            return GetNames(fullName_1, fullName_2);
         }
 
         public List<string> GetNames(string typeName_1, string typeName_2)
