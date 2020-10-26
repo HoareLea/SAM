@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace SAM.Core.Attributes
 {
@@ -42,9 +43,23 @@ namespace SAM.Core.Attributes
                 
                     Guid guid;
                     return Guid.TryParse(value.ToString(), out guid);
-                
+
+                case ParameterType.DateTime:
+                    if (value is DateTime || value is int || value is long)
+                        return true;
+
+                    if (value == null)
+                        return false;
+
+                    DateTime dateTime;
+                    return DateTime.TryParse(value.ToString(), out dateTime);
+
+                case ParameterType.Color:
+                    return value is Color || value is SAMColor;
+
                 case ParameterType.Undefined:
                     return true;
+
             }
 
             return false;
@@ -80,7 +95,23 @@ namespace SAM.Core.Attributes
                     if (!Query.TryConvert(value, out guid))
                         return null;
                     return guid;
-                
+
+                case ParameterType.DateTime:
+                    DateTime dateTime;
+                    if (!Query.TryConvert(value, out dateTime))
+                        return null;
+                    return dateTime;
+
+                case ParameterType.Color:
+                    if (value is SAMColor)
+                        return value;
+
+                    SAMColor sAMColor = null;
+                    if (value is Color)
+                        sAMColor = new SAMColor((Color)value);
+
+                    return sAMColor;
+
                 case ParameterType.Undefined:
                     return value;
             }

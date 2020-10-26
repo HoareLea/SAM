@@ -15,7 +15,7 @@ namespace SAM.Core
                 result = (T)@object;
                 return true;
             }
-
+            
             if(typeof(T) == typeof(string))
             {
                 if (@object != null)
@@ -197,8 +197,25 @@ namespace SAM.Core
                     if(@object is double)
                         result = (T)(object)DateTime.FromOADate((double)@object);
                     else
-                        result = (T)(object) (new DateTime(System.Convert.ToInt64(@object)));
+                        result = (T)(object)new DateTime(System.Convert.ToInt64(@object));
 
+                    return true;
+                }
+            }
+            else if (typeof(T) == typeof(System.Drawing.Color))
+            {
+                if (@object is string)
+                {
+                    SAMColor sAMColor;
+                    if (TryConvert(@object, out sAMColor) && sAMColor != null)
+                    {
+                        result = (T)(object)sAMColor.ToColor();
+                        return true;
+                    }
+                }
+                else if (@object is SAMColor)
+                {
+                    result = (T)(object)((SAMColor)@object).ToColor();
                     return true;
                 }
             }
@@ -216,8 +233,14 @@ namespace SAM.Core
                             return true;
                         }
                     }
-                    
-
+                }
+                else if(typeof(T) == typeof(SAMColor))
+                {
+                    if (@object is System.Drawing.Color)
+                    {
+                        result = (T)(object)new SAMColor((System.Drawing.Color)@object);
+                        return true;
+                    }
                 }
             }
             else if(typeof(JObject).IsAssignableFrom(typeof(T)))
@@ -225,6 +248,15 @@ namespace SAM.Core
                 if(@object is string)
                 {
                     result = (T)(object)JObject.Parse((string)@object);
+                    return true;
+                }
+            }
+            else if(@object is JToken)
+            {
+                double value;
+                if (TryConvert(((JValue)@object).Value, out value))
+                {
+                    result = (T)(object)value;
                     return true;
                 }
             }

@@ -8,9 +8,6 @@ namespace SAM.Analytical
     {
         [ParameterProperties("Dafault Panel Type", "Dafault Panel Type"), ParameterValue(Core.ParameterType.String)] DefaultPanelType,
         [ParameterProperties("Description", "Description"), ParameterValue(Core.ParameterType.String)] Description,
-
-        //TODO: To be removed
-        //[ParameterProperties("SAM_BuildingElementType", "Building Element Type"), ParameterValue(Core.ParameterType.String)] BuildingElementType,
-        //[ParameterProperties("SAM_BuildingElementDescription", "Description"), ParameterValue(Core.ParameterType.String)] BuildingElementDescription,
+        [ParameterProperties("Color", "Color"), ParameterValue(Core.ParameterType.Color)] Color,
     }
 }

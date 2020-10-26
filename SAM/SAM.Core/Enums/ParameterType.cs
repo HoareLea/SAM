@@ -8,6 +8,8 @@
         Guid,
         IJSAMObject, 
         Integer,
-        Boolean
+        Boolean,
+        DateTime,
+        Color
     }
 }
