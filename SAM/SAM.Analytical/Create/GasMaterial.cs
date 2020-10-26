@@ -7,9 +7,9 @@ namespace SAM.Analytical
         public static GasMaterial GasMaterial(string name, string group, string displayName, string description, double defaultThickness, double vapourDiffusionFactor, double heatTransferCoefficient)
         {
             GasMaterial gasMaterial = new GasMaterial(name, group, displayName, description, double.NaN, double.NaN, double.NaN, double.NaN);
-            gasMaterial.SetDefaultThickness(defaultThickness);
-            gasMaterial.SetVapourDiffusionFactor(vapourDiffusionFactor);
-            gasMaterial.SetHeatTransferCoefficient(heatTransferCoefficient);
+            gasMaterial.SetValue(MaterialParameter.DefaultThickness, defaultThickness);
+            gasMaterial.SetValue(MaterialParameter.VapourDiffusionFactor, vapourDiffusionFactor);
+            gasMaterial.SetValue(GasMaterialParameter.HeatTransferCoefficient, heatTransferCoefficient);
 
             return gasMaterial;
         }
@@ -20,8 +20,8 @@ namespace SAM.Analytical
                 return null;
             
             GasMaterial result = new GasMaterial(name, System.Guid.NewGuid(), gasMaterial, displayName, description);
-            result.SetDefaultThickness(defaultThickness);
-            result.SetHeatTransferCoefficient(heatTransferCoefficient);
+            result.SetValue(MaterialParameter.DefaultThickness, defaultThickness);
+            result.SetValue(GasMaterialParameter.HeatTransferCoefficient, heatTransferCoefficient);
 
             return result;
         }

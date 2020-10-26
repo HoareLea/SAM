@@ -32,15 +32,7 @@ namespace SAM.Core
             if (type_1 == null || type_2 == null || string.IsNullOrEmpty(name_1) || string.IsNullOrEmpty(name_2))
                 return false;
 
-            string fullName_1 = Query.FullTypeName(type_1);
-            if (string.IsNullOrWhiteSpace(fullName_1))
-                fullName_1 = type_1.FullName;
-
-            string fullName_2 = Query.FullTypeName(type_2);
-            if (string.IsNullOrWhiteSpace(fullName_2))
-                fullName_2 = type_2.FullName;
-
-            return Add(fullName_1, fullName_2, name_1, name_2);
+            return Add(GetId(type_1), GetId(type_2), name_1, name_2);
         }
 
         public List<Type> Add(Enum @enum, Type type, string name)
@@ -72,48 +64,48 @@ namespace SAM.Core
             return result;
         }
         
-        public bool Add(string typeName_1, string typeName_2, string name_1, string name_2)
+        public bool Add(string id_1, string id_2, string name_1, string name_2)
         {
-            if (string.IsNullOrEmpty(typeName_1) || string.IsNullOrEmpty(typeName_2) || string.IsNullOrEmpty(name_1) || string.IsNullOrEmpty(name_2))
+            if (string.IsNullOrEmpty(id_1) || string.IsNullOrEmpty(id_2) || string.IsNullOrEmpty(name_1) || string.IsNullOrEmpty(name_2))
                 return false;
 
-            List<Tuple<string, string, string, string>> tuples_Temp = tuples.FindAll(x => x.Item1.Equals(typeName_1));
+            List<Tuple<string, string, string, string>> tuples_Temp = tuples.FindAll(x => x.Item1.Equals(id_1));
             if (tuples_Temp.Count == 0)
             {
-                tuples.Add(new Tuple<string, string, string, string>(typeName_1, typeName_2, name_1, name_2));
+                tuples.Add(new Tuple<string, string, string, string>(id_1, id_2, name_1, name_2));
                 return true;
             }
 
-            tuples_Temp = tuples_Temp.FindAll(x => x.Item2.Equals(typeName_2));
+            tuples_Temp = tuples_Temp.FindAll(x => x.Item2.Equals(id_2));
             if (tuples_Temp.Count == 0)
             {
-                tuples.Add(new Tuple<string, string, string, string>(typeName_1, typeName_2, name_1, name_2));
+                tuples.Add(new Tuple<string, string, string, string>(id_1, id_2, name_1, name_2));
                 return true;
             }
 
             tuples_Temp = tuples_Temp.FindAll(x => x.Item3.Equals(name_1));
             if (tuples_Temp.Count == 0)
             {
-                tuples.Add(new Tuple<string, string, string, string>(typeName_1, typeName_2, name_1, name_2));
+                tuples.Add(new Tuple<string, string, string, string>(id_1, id_2, name_1, name_2));
                 return true;
             }
 
             tuples_Temp = tuples_Temp.FindAll(x => x.Item4.Equals(name_2));
             if (tuples_Temp.Count == 0)
             {
-                tuples.Add(new Tuple<string, string, string, string>(typeName_1, typeName_2, name_1, name_2));
+                tuples.Add(new Tuple<string, string, string, string>(id_1, id_2, name_1, name_2));
                 return true;
             }
 
             return false;
         }
 
-        public string GetName(string typeName_1, string typeName_2, string name_1)
+        public string GetName(string id_1, string id_2, string name_1)
         {
-            if (string.IsNullOrEmpty(typeName_1) || string.IsNullOrEmpty(typeName_2) || string.IsNullOrEmpty(name_1))
+            if (string.IsNullOrEmpty(id_1) || string.IsNullOrEmpty(id_2) || string.IsNullOrEmpty(name_1))
                 return null;
 
-            return tuples.Find(x => x.Item1.Equals(typeName_1) && x.Item2.Equals(typeName_2) && x.Item3.Equals(name_1))?.Item4;
+            return tuples.Find(x => x.Item1.Equals(id_1) && x.Item2.Equals(id_2) && x.Item3.Equals(name_1))?.Item4;
         }
 
         public string GetName(Type type_1, Type type_2, string name_1)
@@ -121,15 +113,7 @@ namespace SAM.Core
             if (type_1 == null || type_2 == null || string.IsNullOrEmpty(name_1))
                 return null;
 
-            string fullName_1 = Query.FullTypeName(type_1);
-            if (string.IsNullOrWhiteSpace(fullName_1))
-                fullName_1 = type_1.FullName;
-
-            string fullName_2 = Query.FullTypeName(type_2);
-            if (string.IsNullOrWhiteSpace(fullName_2))
-                fullName_2 = type_2.FullName;
-
-            return GetName(fullName_1, fullName_2, name_1);
+            return GetName(GetId(type_1), GetId(type_2), name_1);
         }
 
         public List<string> GetNames(Type type_1, Type type_2)
@@ -137,23 +121,15 @@ namespace SAM.Core
             if (type_1 == null || type_2 == null)
                 return null;
 
-            string fullName_1 = Query.FullTypeName(type_1);
-            if (string.IsNullOrWhiteSpace(fullName_1))
-                fullName_1 = type_1.FullName;
-
-            string fullName_2 = Query.FullTypeName(type_2);
-            if (string.IsNullOrWhiteSpace(fullName_2))
-                fullName_2 = type_2.FullName;
-
-            return GetNames(fullName_1, fullName_2);
+            return GetNames(GetId(type_1), GetId(type_2));
         }
 
-        public List<string> GetNames(string typeName_1, string typeName_2)
+        public List<string> GetNames(string id_1, string id_2)
         {
-            if (string.IsNullOrWhiteSpace(typeName_1) || string.IsNullOrWhiteSpace(typeName_2))
+            if (string.IsNullOrWhiteSpace(id_1) || string.IsNullOrWhiteSpace(id_2))
                 return null;
 
-            return tuples.FindAll(x => x.Item1.Equals(typeName_1) && x.Item2.Equals(typeName_2)).ConvertAll(x => x.Item3);
+            return tuples.FindAll(x => x.Item1.Equals(id_1) && x.Item2.Equals(id_2)).ConvertAll(x => x.Item3);
         }
 
         public override JObject ToJObject()
@@ -204,6 +180,26 @@ namespace SAM.Core
             }
 
             return true;
+        }
+
+        private static string GetId(Type type)
+        {
+            string fullName = Query.FullTypeName(type);
+            if (string.IsNullOrWhiteSpace(fullName))
+                fullName = type.FullName;
+
+            return string.Format("::{0}", fullName);
+        }
+
+        private static Type GetType(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return null;
+
+            if (!id.StartsWith("::"))
+                return null;
+
+            return Type.GetType(id.Substring(2), false);
         }
     }
 }
