@@ -239,8 +239,7 @@ namespace SAM.Analytical.Grasshopper
             });
 
             guids.RemoveAll(x => x == Guid.Empty);
-            if (guids != null && guids.Count > 0)
-                obj_ids.AddRange(guids);
+            obj_ids.AddRange(obj_ids);
         }
 
         public void BakeGeometry_ByPanelType(RhinoDoc doc)
