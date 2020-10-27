@@ -10,6 +10,7 @@ using SAM.Geometry.Grasshopper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -218,12 +219,27 @@ namespace SAM.Analytical.Grasshopper
 
         public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
         {
-            foreach (var value in VolatileData.AllData(true))
-            {               
-                Guid uuid = default;
-                (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
-                obj_ids.Add(uuid);
+            List<Guid> guids = new List<Guid>();
+            List<GooPanel> gooPanels = new List<GooPanel>();
+            foreach(var value in VolatileData.AllData(true))
+            {
+                GooPanel gooPanel = value as GooPanel;
+                if (gooPanel == null)
+                    continue;
+
+                guids.Add(Guid.Empty);
+                gooPanels.Add(gooPanel);
             }
+
+            Parallel.For(0, gooPanels.Count, (int i) =>
+            {
+                Guid guid = default;
+                gooPanels[i].BakeGeometry(doc, att, out guid);
+                guids[i] = guid;
+            });
+
+            guids.RemoveAll(x => x == Guid.Empty);
+            obj_ids.AddRange(obj_ids);
         }
 
         public void BakeGeometry_ByPanelType(RhinoDoc doc)
