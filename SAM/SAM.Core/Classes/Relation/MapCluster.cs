@@ -109,20 +109,28 @@ namespace SAM.Core
 
         public string GetName(string id_1, string id_2, string name_1)
         {
-            if (string.IsNullOrEmpty(id_1) || string.IsNullOrEmpty(id_2) || string.IsNullOrEmpty(name_1))
+            return GetName(id_1, id_2, name_1, 2);
+        }
+
+        public string GetName(string id_1, string id_2, string name, int index)
+        {
+            if (string.IsNullOrEmpty(id_1) || string.IsNullOrEmpty(id_2) || string.IsNullOrEmpty(name))
                 return null;
 
-            return GetNames(id_1, id_2, name_1)?.FirstOrDefault();
-
-            //return tuples.Find(x => x.Item1.Equals(id_1) && x.Item2.Equals(id_2) && x.Item3.Equals(name_1))?.Item4;
+            return GetNames(id_1, id_2, name, index)?.FirstOrDefault();
         }
 
         public string GetName(Type type_1, Type type_2, string name_1)
         {
-            if (type_1 == null || type_2 == null || string.IsNullOrEmpty(name_1))
+            return GetName(GetId(type_1), GetId(type_2), name_1, 2);
+        }
+
+        public string GetName(Type type_1, Type type_2, string name, int index)
+        {
+            if (type_1 == null || type_2 == null || string.IsNullOrEmpty(name))
                 return null;
 
-            return GetName(GetId(type_1), GetId(type_2), name_1);
+            return GetName(GetId(type_1), GetId(type_2), name, index);
         }
 
         public List<string> GetNames(Type type_1, Type type_2)
@@ -133,11 +141,24 @@ namespace SAM.Core
             return GetNames(GetId(type_1), GetId(type_2));
         }
 
+        public List<string> GetNames(Type type_1, Type type_2, int index)
+        {
+            if (type_1 == null || type_2 == null)
+                return null;
+
+            return GetNames(GetId(type_1), GetId(type_2), index);
+        }
+
+
+
         public List<string> GetNames(string id_1, string id_2)
         {
-            return GetNames(id_1, id_2, null);
+            return GetNames(id_1, id_2, null, 1);
+        }
 
-            //return tuples.FindAll(x => x.Item1.Equals(id_1) && x.Item2.Equals(id_2))?.ConvertAll(x => x.Item3);
+        public List<string> GetNames(string id_1, string id_2, int index)
+        {
+            return GetNames(id_1, id_2, null, index);
         }
 
         public override JObject ToJObject()
@@ -190,7 +211,7 @@ namespace SAM.Core
             return true;
         }
 
-        private List<string> GetNames(string id_1, string id_2, string name_1)
+        private List<string> GetNames(string id_1, string id_2, string name, int index)
         {
             if (string.IsNullOrWhiteSpace(id_1) || string.IsNullOrWhiteSpace(id_2))
                 return null;
@@ -231,11 +252,24 @@ namespace SAM.Core
                 if (!valid)
                     continue;
 
-                if(name_1 != null)
+                if(name != null)
                 {
-                    if(tuple.Item3.Equals(name_1))
+                    string name_Input = null;
+                    string name_Output = null;
+                    if (index == 1)
                     {
-                        result.Add(tuple.Item4);
+                        name_Input = tuple.Item4;
+                        name_Output = tuple.Item3;
+                    }
+                    else
+                    {
+                        name_Input = tuple.Item3;
+                        name_Output = tuple.Item4;
+                    }
+                        
+                    if(name_Input.Equals(name))
+                    {
+                        result.Add(name_Output);
                         return result;
                     }
 
@@ -243,7 +277,13 @@ namespace SAM.Core
                 }
                 else
                 {
-                    result.Add(tuple.Item3);
+                    string name_Output = null;
+                    if (index == 1)
+                        name_Output = tuple.Item3;
+                    else
+                        name_Output = tuple.Item4;
+
+                    result.Add(name_Output);
                 }
             }
 
