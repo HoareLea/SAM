@@ -149,8 +149,6 @@ namespace SAM.Core
             return GetNames(GetId(type_1), GetId(type_2), index);
         }
 
-
-
         public List<string> GetNames(string id_1, string id_2)
         {
             return GetNames(id_1, id_2, null, 1);
@@ -210,6 +208,7 @@ namespace SAM.Core
 
             return true;
         }
+
 
         private List<string> GetNames(string id_1, string id_2, string name, int index)
         {
