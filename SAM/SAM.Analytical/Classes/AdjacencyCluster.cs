@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
@@ -339,12 +340,23 @@ namespace SAM.Analytical
             spaces.ForEach(x => tuples.Add(new Tuple<Space, Geometry.Spatial.Shell>(x, this.Shell(x))));
             tuples.RemoveAll(x => x.Item2 == null);
 
+
+            int count = point3Ds.Count();
+
             List<List<Space>> result = new List<List<Space>>();
-            foreach(Geometry.Spatial.Point3D point3D in point3Ds)
+            if (count == 0)
+                return result;
+
+
+            for (int i = 0; i < count; i++)
+                result.Add(null);
+
+            Parallel.For(0, count, (int i) =>
             {
-                List<Tuple<Space, Geometry.Spatial.Shell>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(point3D, tolerance) || x.Item2.Inside(point3D, silverSpacing, tolerance));                   
-                result.Add(tuples_Temp?.ConvertAll(x => x.Item1));
-            }
+                Geometry.Spatial.Point3D point3D = point3Ds.ElementAt(i);
+                List<Tuple<Space, Geometry.Spatial.Shell>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(point3D, tolerance) || x.Item2.Inside(point3D, silverSpacing, tolerance));
+                result[i] = tuples_Temp?.ConvertAll(x => x.Item1);
+            });
 
             return result;
         }
