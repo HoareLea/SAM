@@ -6,7 +6,9 @@ namespace SAM.Analytical
     {
         public static MaterialLibrary MaterialLibrary(
             string path, 
-            string parameterName_MaterialDescription, 
+            string parameterName_Type,
+            string parameterName_Name,
+            string parameterName_Description, 
             string parameterName_DefaultThickness, 
             string parameterName_ThermalConductivity, 
             string parameterName_SpecificHeatCapacity, 
@@ -49,15 +51,15 @@ namespace SAM.Analytical
             if (count == 0)
                 return result;
 
-            int index_MaterialType = delimitedFileTable.GetIndex(Query.ParameterName_MaterialType());
+            int index_MaterialType = delimitedFileTable.GetIndex(parameterName_Type);
             if (index_MaterialType == -1)
                 return result;
 
-            int index_MaterialName = delimitedFileTable.GetIndex(Query.ParameterName_MaterialName());
+            int index_MaterialName = delimitedFileTable.GetIndex(parameterName_Name);
             if (index_MaterialName == -1)
                 return result;
 
-            int index_MaterialDescription = delimitedFileTable.GetIndex(parameterName_MaterialDescription);
+            int index_MaterialDescription = delimitedFileTable.GetIndex(parameterName_Description);
             int index_DefaultThickness = delimitedFileTable.GetIndex(parameterName_DefaultThickness);
             int index_ThermalConductivity = delimitedFileTable.GetIndex(parameterName_ThermalConductivity);
             int index_SpecificHeatCapacity = delimitedFileTable.GetIndex(parameterName_SpecificHeatCapacity);

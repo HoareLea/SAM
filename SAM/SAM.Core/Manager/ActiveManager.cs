@@ -1,10 +1,13 @@
-﻿using System;
+﻿using SAM.Core.Attributes;
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace SAM.Core
 {
     public static partial class ActiveManager
     {
+        private static Dictionary<Type, AssociatedTypes> associatedTypesDictionary;
         private static Manager manager = Load();
 
         private static Manager Load()
@@ -96,6 +99,71 @@ namespace SAM.Core
         public static bool Write()
         {
             return manager.Write();
+        }
+
+
+        public static List<Type> GetParameterTypes()
+        {
+            if (associatedTypesDictionary == null)
+                associatedTypesDictionary = Query.AssociatedTypesDictionary();
+
+
+            List<Type> result = new List<Type>();
+            foreach (KeyValuePair<Type, AssociatedTypes> keyValuePair in associatedTypesDictionary)
+            {
+                if (keyValuePair.Key == null || keyValuePair.Value == null)
+                    continue;
+
+                result.Add(keyValuePair.Key);
+            }
+            return result;
+        }
+        
+        public static List<Type> GetParameterTypes(Type type)
+        {
+            if (type == null)
+                return null;
+
+            if (associatedTypesDictionary == null)
+                associatedTypesDictionary = Query.AssociatedTypesDictionary();
+
+            if (associatedTypesDictionary == null || associatedTypesDictionary.Count == 0)
+                return null;
+
+            List<Type> result = new List<Type>();
+            foreach(KeyValuePair<Type, AssociatedTypes> keyValuePair in associatedTypesDictionary)
+            {
+                if (keyValuePair.Key == null || keyValuePair.Value == null)
+                    continue;
+
+                if (keyValuePair.Value.IsValid(type))
+                    result.Add(keyValuePair.Key);
+            }
+
+            return result;
+        }
+
+        public static List<Enum> GetParameterEnums(Type type)
+        {
+            if (type == null)
+                return null;
+
+            List<Type> types = GetParameterTypes(type);
+            if (types == null)
+                return null;
+
+            List<Enum> result = new List<Enum>();
+            foreach(Type type_Temp in types)
+            {
+                foreach (Enum @enum in Enum.GetValues(type_Temp))
+                    result.Add(@enum);
+            }
+            return result;
+        }
+
+        public static List<Enum> GetParameterEnums(SAMObject sAMObject)
+        {
+            return GetParameterEnums(sAMObject?.GetType());
         }
     }
 }

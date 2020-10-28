@@ -7,7 +7,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static Dictionary<Type, AssociatedTypes> ParameterTypesDictionary(IEnumerable<Type> types = null, bool enumsOnly = true, bool notPublic = false)
+        public static Dictionary<Type, AssociatedTypes> AssociatedTypesDictionary(IEnumerable<Type> types = null, bool enumsOnly = true, bool notPublic = false)
         {
             Dictionary<Type, AssociatedTypes> result = new Dictionary<Type, AssociatedTypes>();
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())

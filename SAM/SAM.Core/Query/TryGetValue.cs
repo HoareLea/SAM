@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace SAM.Core
 {
@@ -67,6 +68,29 @@ namespace SAM.Core
             return false;
         }
 
+        public static bool TryGetValue(this SAMObject sAMObject, string name, Assembly defaultAssembly, out object value, bool findAny = true)
+        {
+            value = null;
+
+            if (sAMObject == null)
+                return false;
+
+            ParameterSet parameterSet = sAMObject.GetParameterSet(defaultAssembly);
+            if (parameterSet == null)
+                return false;
+
+            if(parameterSet.Contains(name))
+            {
+                value = parameterSet.ToObject(name);
+                return true;
+            }
+
+            if (!findAny)
+                return false;
+
+            return TryGetValue_PropertySets(sAMObject, name, out value);
+        }
+
         public static bool TryGetValue(this object @object, string name, out object value, bool UserFriendlyName)
         {
             value = null;
@@ -131,7 +155,7 @@ namespace SAM.Core
             return false;
         }
 
-        private static bool TryGetValue_Method(this object @object, System.Reflection.MethodInfo methodInfo, out object value)
+        private static bool TryGetValue_Method(this object @object, MethodInfo methodInfo, out object value)
         {
             value = null;
 

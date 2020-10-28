@@ -292,60 +292,57 @@ namespace SAM.Analytical
             {
                 GasMaterial gasMaterial = (GasMaterial)material;
 
-                if (double.IsNaN(gasMaterial.DefaultThickness()))
+                if (double.IsNaN(gasMaterial.GetValue<double>(MaterialParameter.DefaultThickness)))
                     result.Add(string.Format("Default Thickness for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
 
-                if (double.IsNaN(gasMaterial.VapurDiffusionFactor()))
+                if (double.IsNaN(gasMaterial.GetValue<double>(MaterialParameter.VapourDiffusionFactor)))
                     result.Add(string.Format("Vapur Diffusion Factor for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(gasMaterial.HeatTransferCoefficient()))
+                if (double.IsNaN(gasMaterial.GetValue<double>(GasMaterialParameter.HeatTransferCoefficient)))
                     result.Add(string.Format("Heat Transfer Coefficient for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
             }
             else if (material is TransparentMaterial)
             {
                 TransparentMaterial transparentMaterial = (TransparentMaterial)material;
 
-                if (double.IsNaN(transparentMaterial.DefaultThickness()))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(MaterialParameter.DefaultThickness)))
                     result.Add(string.Format("Default Thickness for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
 
                 if (double.IsNaN(transparentMaterial.ThermalConductivity))
                     result.Add(string.Format("Thermal Conductivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(transparentMaterial.VapurDiffusionFactor()))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(MaterialParameter.VapourDiffusionFactor)))
                     result.Add(string.Format("Vapur Diffusion Factor for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(transparentMaterial.VapurDiffusionFactor()))
-                    result.Add(string.Format("Vapur Diffusion Factor for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
-                
-                if (double.IsNaN(transparentMaterial.SolarTransmittance()))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(TransparentMaterialParameter.SolarTransmittance)))
                     result.Add(string.Format("Solar Transmittance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
                 
-                if (double.IsNaN(transparentMaterial.LightTransmittance()))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(TransparentMaterialParameter.LightTransmittance)))
                     result.Add(string.Format("Light Transmittance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(transparentMaterial.ExternalSolarReflectance()))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(TransparentMaterialParameter.ExternalSolarReflectance)))
                     result.Add(string.Format("External Solar Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(transparentMaterial.InternalSolarReflectance()))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(TransparentMaterialParameter.InternalSolarReflectance)))
                     result.Add(string.Format("Internal Solar Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(transparentMaterial.ExternalLightReflectance()))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(TransparentMaterialParameter.ExternalLightReflectance)))
                     result.Add(string.Format("External Light Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(transparentMaterial.InternalLightReflectance()))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(TransparentMaterialParameter.InternalLightReflectance)))
                     result.Add(string.Format("Internal Light Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(transparentMaterial.ExternalEmissivity()))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(TransparentMaterialParameter.ExternalEmissivity)))
                     result.Add(string.Format("External Emissivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(transparentMaterial.InternalEmissivity()))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(TransparentMaterialParameter.InternalEmissivity)))
                     result.Add(string.Format("Internal Emissivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
             }
             else if (material is OpaqueMaterial)
             {
                 OpaqueMaterial opaqueMaterial = (OpaqueMaterial)material;
 
-                if (double.IsNaN(opaqueMaterial.DefaultThickness()))
+                if (double.IsNaN(opaqueMaterial.GetValue<double>(MaterialParameter.DefaultThickness)))
                     result.Add(string.Format("Default Thickness for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
 
                 if (double.IsNaN(opaqueMaterial.ThermalConductivity))
@@ -357,25 +354,25 @@ namespace SAM.Analytical
                 if (double.IsNaN(opaqueMaterial.Density))
                     result.Add(string.Format("Density for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(opaqueMaterial.VapurDiffusionFactor()))
+                if (double.IsNaN(opaqueMaterial.GetValue<double>(MaterialParameter.VapourDiffusionFactor)))
                     result.Add(string.Format("Vapur Diffusion Factor for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(opaqueMaterial.ExternalSolarReflectance()))
+                if (double.IsNaN(opaqueMaterial.GetValue<double>(OpaqueMaterialParameter.ExternalSolarReflectance)))
                     result.Add(string.Format("External Solar Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
                  
-                if (double.IsNaN(opaqueMaterial.InternalSolarReflectance()))
+                if (double.IsNaN(opaqueMaterial.GetValue<double>(OpaqueMaterialParameter.InternalSolarReflectance)))
                     result.Add(string.Format("Internal Solar Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(opaqueMaterial.ExternalLightReflectance()))
+                if (double.IsNaN(opaqueMaterial.GetValue<double>(OpaqueMaterialParameter.ExternalLightReflectance)))
                     result.Add(string.Format("External Light Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(opaqueMaterial.InternalLightReflectance()))
+                if (double.IsNaN(opaqueMaterial.GetValue<double>(OpaqueMaterialParameter.InternalLightReflectance)))
                     result.Add(string.Format("Internal Light Reflectance for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(opaqueMaterial.ExternalEmissivity()))
+                if (double.IsNaN(opaqueMaterial.GetValue<double>(OpaqueMaterialParameter.ExternalEmissivity)))
                     result.Add(string.Format("External Emissivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
-                if (double.IsNaN(opaqueMaterial.InternalEmissivity()))
+                if (double.IsNaN(opaqueMaterial.GetValue<double>(OpaqueMaterialParameter.InternalEmissivity)))
                     result.Add(string.Format("Internal Emissivity for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
             }
 
@@ -502,16 +499,17 @@ namespace SAM.Analytical
                 MaterialType materialType = Query.MaterialType(construction.ConstructionLayers, materialLibrary);
                 if (materialType != MaterialType.Undefined)
                 {
-                    string parameterName_Transparent = Query.ParameterName_Transparent();
+                    //string parameterName_Transparent = Query.ParameterName_Transparent();
 
                     bool transparent;
-                    panel.TryGetValue(parameterName_Transparent, out transparent, true);
+                    if(panel.TryGetValue(PanelParameter.Transparent, out transparent))
+                    //panel.TryGetValue(parameterName_Transparent, out transparent, true);
                     if ((transparent && materialType != MaterialType.Transparent) || (!transparent && materialType == MaterialType.Transparent))
-                        result.Add(string.Format("{0} parameter value for {1} panel (Guid: {2}) does not match witch assigned {3} construction (Guid: {4})", parameterName_Transparent, name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
+                        result.Add(string.Format("{0} parameter value for {1} panel (Guid: {2}) does not match witch assigned {3} construction (Guid: {4})", PanelParameter.Transparent.Name(), name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
 
                     PanelType panelType = panel.PanelType;
                     if(panelType == PanelType.CurtainWall && materialType != MaterialType.Transparent)
-                        result.Add(string.Format("Assigned {3} construction (Guid: {4}) to {1} Courtain Wall panel (Guid: {2}) is not Transparent", parameterName_Transparent, name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
+                        result.Add(string.Format("Assigned {3} construction (Guid: {4}) to {1} Courtain Wall panel (Guid: {2}) is not Transparent", PanelParameter.Transparent.Name(), name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
 
                 }
             }

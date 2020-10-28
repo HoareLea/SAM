@@ -77,14 +77,14 @@ namespace SAM.Analytical.Grasshopper
                 int count = thicknesses.Count;
                 for (int i = 0; i < materials.Count - count; i++)
                 {
-                    IMaterial material = materials[i + count];
+                    Material material = materials[i + count] as Material;
                     if(material == null)
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                         return;
                     }
 
-                    double thickness = material.DefaultThickness();
+                    double thickness = material.GetValue<double>(MaterialParameter.DefaultThickness);
                     if(double.IsNaN(thickness))
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

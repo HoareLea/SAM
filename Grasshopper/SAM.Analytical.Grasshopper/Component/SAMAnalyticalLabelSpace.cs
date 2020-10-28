@@ -161,7 +161,7 @@ namespace SAM.Analytical.Grasshopper
                 double height_Temp = height;
                 if (double.IsNaN(height_Temp))
                 {
-                    double area = Analytical.Query.Area(space);
+                    double area = space.GetValue<double>(SpaceParameter.Area);;
                     if (double.IsNaN(area))
                     {
                         height_Temp = 1;

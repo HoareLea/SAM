@@ -11,7 +11,7 @@ namespace SAM.Analytical
         {
             return construction.SetValue(ConstructionParameter.DefaultPanelType, panelType);
 
-            return SetPanelType(construction as SAMObject, panelType);
+            //return SetPanelType(construction as SAMObject, panelType);
         }
 
         [Obsolete]
@@ -35,46 +35,46 @@ namespace SAM.Analytical
             //return SetPanelType(apertureConstruction as SAMObject, panelType, setting);
         }
 
-        [Obsolete]
-        private static bool SetPanelType(this SAMObject sAMObject, PanelType panelType, Setting setting)
-        {
-            if (sAMObject == null)
-                return false;
+        //[Obsolete]
+        //private static bool SetPanelType(this SAMObject sAMObject, PanelType panelType, Setting setting)
+        //{
+        //    if (sAMObject == null)
+        //        return false;
 
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            string parameterName = Query.ParameterName_Type(setting);
+        //    Assembly assembly = Assembly.GetExecutingAssembly();
+        //    string parameterName = Query.ParameterName_Type(setting);
 
-            string value = panelType.ToString();
+        //    string value = panelType.ToString();
 
-            if (sAMObject.SetParameter(assembly, parameterName, value))
-                return true;
+        //    if (sAMObject.SetParameter(assembly, parameterName, value))
+        //        return true;
 
-            ParameterSet parameterSet = new ParameterSet(assembly);
-            if (!parameterSet.Add(parameterName, value))
-                return false;
+        //    ParameterSet parameterSet = new ParameterSet(assembly);
+        //    if (!parameterSet.Add(parameterName, value))
+        //        return false;
 
-            return sAMObject.Add(parameterSet);
-        }
+        //    return sAMObject.Add(parameterSet);
+        //}
 
-        [Obsolete]
-        private static bool SetPanelType(this SAMObject sAMObject, PanelType panelType)
-        {
-            if (sAMObject == null)
-                return false;
+        //[Obsolete]
+        //private static bool SetPanelType(this SAMObject sAMObject, PanelType panelType)
+        //{
+        //    if (sAMObject == null)
+        //        return false;
 
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            string parameterName = Query.ParameterName_Type();
+        //    Assembly assembly = Assembly.GetExecutingAssembly();
+        //    string parameterName = Query.ParameterName_Type();
 
-            string value = panelType.ToString();
+        //    string value = panelType.ToString();
 
-            if (sAMObject.SetParameter(assembly, parameterName, value))
-                return true;
+        //    if (sAMObject.SetParameter(assembly, parameterName, value))
+        //        return true;
 
-            ParameterSet parameterSet = new ParameterSet(assembly);
-            if (!parameterSet.Add(parameterName, value))
-                return false;
+        //    ParameterSet parameterSet = new ParameterSet(assembly);
+        //    if (!parameterSet.Add(parameterName, value))
+        //        return false;
 
-            return sAMObject.Add(parameterSet);
-        }
+        //    return sAMObject.Add(parameterSet);
+        //}
     }
 }

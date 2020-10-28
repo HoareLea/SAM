@@ -11,5 +11,7 @@ namespace SAM.Analytical
         [ParameterProperties("Specified Supply Airflow", "Supply Airflow"), DoubleParameterValue(0)] SupplyAirflow,
         [ParameterProperties("Volume", "Volume"), DoubleParameterValue(0)] Volume,
         [ParameterProperties("Area", "Area"), DoubleParameterValue(0)] Area,
+        [ParameterProperties("Facing External", "Facing External"), ParameterValue(Core.ParameterType.Boolean)] FacingExternal,
+        [ParameterProperties("Facing External Glazing", "Facing External Glazing"), ParameterValue(Core.ParameterType.Boolean)] FacingExternalGlazing,
     }
 }

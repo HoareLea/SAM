@@ -133,6 +133,11 @@ namespace SAM.Core
             return GetName(GetId(type_1), GetId(type_2), name, index);
         }
 
+        public string GetName(Type type_1, Type type_2, Enum @enum)
+        {
+            return GetName(type_1, type_2, @enum.Name());
+        }
+
         public List<string> GetNames(Type type_1, Type type_2)
         {
             if (type_1 == null || type_2 == null)

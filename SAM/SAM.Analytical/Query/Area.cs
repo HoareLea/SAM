@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -20,18 +21,6 @@ namespace SAM.Analytical
 
                 result += panel.GetArea();
             }
-
-            return result;
-        }
-
-        public static double Area(this Space space)
-        {
-            if (space == null)
-                return double.NaN;
-
-            double result = double.NaN;
-            if (!Core.Query.TryGetValue(space, ParameterName_Area(), out result))
-                return double.NaN;
 
             return result;
         }

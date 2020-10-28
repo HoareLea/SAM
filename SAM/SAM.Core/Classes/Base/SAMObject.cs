@@ -138,7 +138,7 @@ namespace SAM.Core
                 return false;
 
             object result = null;
-            if (!Query.TryGetValue(this, name, out result, false, false, true))
+            if (!Query.TryGetValue(this, name, @enum.GetType().Assembly, out result))
                 return false;
 
             value = result;
@@ -210,7 +210,7 @@ namespace SAM.Core
                 value_Temp = parameterValue.Convert(value);
             }
                 
-            return Modify.SetParameter(this, name, value_Temp as dynamic);
+            return Modify.SetParameter(this, @enum.GetType().Assembly, name, value_Temp as dynamic);
         }
 
         public ParameterSet GetParameterSet(string name)
