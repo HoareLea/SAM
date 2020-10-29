@@ -16,7 +16,7 @@ namespace SAM.Core.Attributes
 
         public virtual bool IsValid(object value)
         {
-            switch(this.parameterType)
+            switch(parameterType)
             {
                 case ParameterType.Double:
                     return Query.IsNumeric(value);
@@ -73,7 +73,7 @@ namespace SAM.Core.Attributes
                     return System.Convert.ToDouble(value);
                 
                 case ParameterType.String:
-                    return value.ToString();
+                    return value?.ToString();
                 
                 case ParameterType.Boolean:
                     bool @bool;
@@ -117,6 +117,14 @@ namespace SAM.Core.Attributes
             }
 
             return null;
+        }
+
+        public ParameterType ParameterType
+        {
+            get
+            {
+                return parameterType;
+            }
         }
 
 

@@ -209,7 +209,21 @@ namespace SAM.Core
 
                 value_Temp = parameterValue.Convert(value);
             }
-                
+
+            if(value_Temp == null)
+            {
+                switch(parameterValue.ParameterType)
+                {
+                    case ParameterType.IJSAMObject:
+                        SAMObject sAMObject = null;
+                        return Modify.SetParameter(this, @enum.GetType().Assembly, name, sAMObject);
+
+                    case ParameterType.String:
+                        string @string = null;
+                        return Modify.SetParameter(this, @enum.GetType().Assembly, name, @string);
+                }
+            }
+
             return Modify.SetParameter(this, @enum.GetType().Assembly, name, value_Temp as dynamic);
         }
 

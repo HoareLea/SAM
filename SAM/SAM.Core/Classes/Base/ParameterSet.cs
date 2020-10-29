@@ -155,6 +155,15 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Add(string name)
+        {
+            if (dictionary == null || name == null)
+                return false;
+
+            dictionary[name] = null;
+            return true;
+        }
+
         public bool Copy(ParameterSet parameterSet)
         {
             if (parameterSet == null)

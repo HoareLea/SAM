@@ -113,22 +113,19 @@ namespace SAM.Core
             if (sAMObject == null || string.IsNullOrWhiteSpace(name) || assembly == null)
                 return false;
 
-            bool @new = false; 
+            bool @new = false;
 
             ParameterSet parameterSet = sAMObject.GetParameterSet(assembly);
             if (parameterSet == null)
             {
                 parameterSet = new ParameterSet(assembly);
-                @new = true;
+                sAMObject.Add(parameterSet);
             }
 
-            if (!parameterSet.Add(name, value as dynamic))
-                return false;
+            if (value == null)
+                return parameterSet.Add(name);
 
-            if (@new)
-                return sAMObject.Add(parameterSet);
-
-            return true;
+            return parameterSet.Add(name, value as dynamic);
         }
     }
 }
