@@ -55,7 +55,7 @@ namespace SAM.Core.Attributes
                     return DateTime.TryParse(value.ToString(), out dateTime);
 
                 case ParameterType.Color:
-                    return value is Color || value is SAMColor;
+                    return value is Color || value is SAMColor || value is int || value is uint;
 
                 case ParameterType.Undefined:
                     return true;
@@ -109,6 +109,10 @@ namespace SAM.Core.Attributes
                     SAMColor sAMColor = null;
                     if (value is Color)
                         sAMColor = new SAMColor((Color)value);
+                    else if (value is int)
+                        sAMColor = new SAMColor(Core.Convert.ToColor((int)value));
+                    else if(value is uint)
+                        sAMColor = new SAMColor(Core.Convert.ToColor((uint)value));
 
                     return sAMColor;
 

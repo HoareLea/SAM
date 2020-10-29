@@ -13,11 +13,11 @@ namespace SAM.Core
             return Color.FromArgb(a, r, g, b);
         }
 
-        public static Color ToColor(this uint @uint, byte alpha)
+        public static Color ToColor(this int @int, byte alpha = 255)
         {
-            byte b = (byte)(@uint >> 16);
-            byte g = (byte)(@uint >> 8);
-            byte r = (byte)(@uint >> 0);
+            byte b = (byte)(@int >> 16);
+            byte g = (byte)(@int >> 8);
+            byte r = (byte)(@int >> 0);
             return Color.FromArgb(alpha, r, g, b);
         }
 

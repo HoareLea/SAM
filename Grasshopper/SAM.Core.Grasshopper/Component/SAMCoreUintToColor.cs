@@ -70,9 +70,9 @@ namespace SAM.Core.Grasshopper
 
             System.Drawing.Color color;
             if (alpha == int.MinValue)
-                color = Core.Convert.ToColor(System.Convert.ToUInt32(@int), 255);
+                color = Core.Convert.ToColor(@int, 255);
             else
-                color = Core.Convert.ToColor(System.Convert.ToUInt32(@int), System.Convert.ToByte(alpha));
+                color = Core.Convert.ToColor(@int, System.Convert.ToByte(alpha));
 
             dataAccess.SetData(0, color);
         }

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace SAM.Core
 {
@@ -25,7 +26,10 @@ namespace SAM.Core
             }
             else if(typeof(T) == typeof(bool))
             {
-                if(@object is string)
+                if (@object == null)
+                    return false;
+
+                if (@object is string)
                 {
                     bool @bool;
                     if(bool.TryParse((string)@object, out @bool))
@@ -46,6 +50,9 @@ namespace SAM.Core
             }
             else if(typeof(T) == typeof(int))
             {
+                if (@object == null)
+                    return false;
+                
                 if (@object is string)
                 {
                     int @int;
@@ -68,6 +75,9 @@ namespace SAM.Core
             }
             else if (typeof(T) == typeof(double))
             {
+                if (@object == null)
+                    return false;
+                
                 if (@object is string)
                 {
                     double @double;
@@ -103,6 +113,9 @@ namespace SAM.Core
             }
             else if (typeof(T) == typeof(uint))
             {
+                if (@object == null)
+                    return false;
+                
                 if (@object is string)
                 {
                     uint @uint;
@@ -117,9 +130,17 @@ namespace SAM.Core
                     result = (T)(object)(System.Convert.ToUInt32(@object));
                     return true;
                 }
+                else if(@object is SAMColor)
+                {
+                    result = (T)(object)Convert.ToUint(((SAMColor)@object).ToColor());
+                    return true;
+                }
             }
             else if (typeof(T) == typeof(short))
             {
+                if (@object == null)
+                    return false;
+                
                 if (@object is string)
                 {
                     short @short;
@@ -137,6 +158,9 @@ namespace SAM.Core
             }
             else if (typeof(T) == typeof(int))
             {
+                if (@object == null)
+                    return false;
+
                 if (@object is string)
                 {
                     int @int;
@@ -154,6 +178,9 @@ namespace SAM.Core
             }
             else if (typeof(T) == typeof(long))
             {
+                if (@object == null)
+                    return false;
+                
                 if (@object is string)
                 {
                     long @long;
@@ -171,6 +198,9 @@ namespace SAM.Core
             }
             else if(typeof(T) == typeof(Guid))
             {
+                if (@object == null)
+                    return false;
+                
                 if(@object is string)
                 {
                     Guid guid;
@@ -183,6 +213,9 @@ namespace SAM.Core
             }
             else if(typeof(T) == typeof(DateTime))
             {
+                if (@object == null)
+                    return false;
+
                 if (@object is string)
                 {
                     DateTime dateTime;
@@ -204,6 +237,9 @@ namespace SAM.Core
             }
             else if (typeof(T) == typeof(System.Drawing.Color))
             {
+                if (@object == null)
+                    return false;
+
                 if (@object is string)
                 {
                     SAMColor sAMColor;
@@ -216,6 +252,16 @@ namespace SAM.Core
                 else if (@object is SAMColor)
                 {
                     result = (T)(object)((SAMColor)@object).ToColor();
+                    return true;
+                }
+                else if(@object is int)
+                {
+                    result = (T)(object)Convert.ToColor((int)@object);
+                    return true;
+                }
+                else if (@object is uint)
+                {
+                    result = (T)(object)Convert.ToColor((uint)@object);
                     return true;
                 }
             }
@@ -241,6 +287,16 @@ namespace SAM.Core
                         result = (T)(object)new SAMColor((System.Drawing.Color)@object);
                         return true;
                     }
+                    else if(@object is int)
+                    {
+                        result = (T)(object)new SAMColor(Convert.ToColor((int)@object));
+                        return true;
+                    }
+                    else if (@object is uint)
+                    {
+                        result = (T)(object)new SAMColor(Convert.ToColor((uint)@object));
+                        return true;
+                    }
                 }
             }
             else if(typeof(JObject).IsAssignableFrom(typeof(T)))
@@ -262,6 +318,9 @@ namespace SAM.Core
             }
             else if(result is Enum)
             {
+                if (@object == null)
+                    return false;
+
                 if (@object is string)
                 {
                     string @string = (string)@object;
