@@ -12,16 +12,28 @@ namespace SAM.Analytical
             if (@object is PanelType)
                 return (PanelType)@object;
 
-            if (@object is Construction)
-                return PanelType((Construction)@object);
-
-            if (@object is ApertureConstruction)
-                return PanelType((ApertureConstruction)@object);
-
             if (@object is Geometry.Spatial.Vector3D)
                 return PanelType((Geometry.Spatial.Vector3D)@object);
 
             PanelType result;
+
+            if (@object is Construction)
+            {
+                if (((Construction)@object).TryGetValue(ConstructionParameter.DefaultPanelType, out result))
+                    return result;
+
+                return Analytical.PanelType.Undefined;
+            }
+                
+
+            if (@object is ApertureConstruction)
+            {
+                if (((ApertureConstruction)@object).TryGetValue(ApertureConstructionParameter.DefaultPanelType, out result))
+                    return result;
+
+                return Analytical.PanelType.Undefined;
+            }
+
             if (@object is string)
             {
                 string value = (string)@object;
