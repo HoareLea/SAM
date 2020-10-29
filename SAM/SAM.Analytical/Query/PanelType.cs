@@ -19,8 +19,12 @@ namespace SAM.Analytical
 
             if (@object is Construction)
             {
-                if (((Construction)@object).TryGetValue(ConstructionParameter.DefaultPanelType, out result))
+                string text;
+                if (((Construction)@object).TryGetValue(ConstructionParameter.DefaultPanelType, out text) && !string.IsNullOrWhiteSpace(text))
+                {
+                    result = PanelType(text, false);
                     return result;
+                }
 
                 return Analytical.PanelType.Undefined;
             }
@@ -28,8 +32,12 @@ namespace SAM.Analytical
 
             if (@object is ApertureConstruction)
             {
-                if (((ApertureConstruction)@object).TryGetValue(ApertureConstructionParameter.DefaultPanelType, out result))
+                string text;
+                if (((ApertureConstruction)@object).TryGetValue(ApertureConstructionParameter.DefaultPanelType, out text) && !string.IsNullOrWhiteSpace(text))
+                {
+                    result = PanelType(text, false);
                     return result;
+                }
 
                 return Analytical.PanelType.Undefined;
             }
@@ -79,18 +87,25 @@ namespace SAM.Analytical
             return Analytical.PanelType.Roof;
         }
 
-        public static PanelType PanelType(string text)
+        public static PanelType PanelType(string text, bool includeDefaultConstructionNames = true)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return Analytical.PanelType.Undefined;
+
+            PanelType result = Analytical.PanelType.Undefined;
+            if (Enum.TryParse(text, out result))
+                return result;
 
             foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
             {
                 string value = null;
 
-                value = DefaultConstruction(panelType)?.Name;
-                if (text.Equals(value))
-                    return panelType;
+                if(includeDefaultConstructionNames)
+                {
+                    value = DefaultConstruction(panelType)?.Name;
+                    if (text.Equals(value))
+                        return panelType;
+                }
 
                 value = Text(panelType);
                 if (text.Equals(value))

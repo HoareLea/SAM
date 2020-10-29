@@ -113,7 +113,6 @@
     <Compile Include="Modify\OffsetAperturesOnEdge.cs" />
     <Compile Include="Modify\ReplaceTransparentPanels.cs" />
     <Compile Include="Modify\UpdateConstructionsPanelTypes.cs" />
-    <Compile Include="Modify\SetPanelType.cs" />
     <Compile Include="Modify\ReplaceConstruction.cs" />
     <Compile Include="Modify\UpdateApertures.cs" />
     <Compile Include="Modify\UpdateSpace.cs" />

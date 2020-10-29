@@ -41,7 +41,7 @@ namespace SAM.Analytical
                 foreach(PanelType panelType in panelTypes)
                 {
                     Construction construction_PanelType = new Construction(construction, Guid.NewGuid());
-                    construction_PanelType.SetPanelType(panelType);
+                    construction_PanelType.SetValue(ConstructionParameter.DefaultPanelType, panelType.Text());
                     
                     List<Panel> panels_PanelType = panels.FindAll(x => x.PanelType == panelType);
                     foreach(Panel panel in panels_PanelType)
