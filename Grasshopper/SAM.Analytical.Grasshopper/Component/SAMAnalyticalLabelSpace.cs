@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Rhino.Display;
+using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -135,7 +136,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            Vector3D normal = Plane.WorldXY.Normal;
+            Vector3D normal = SAM.Geometry.Spatial.Plane.WorldXY.Normal;
 
             List<Text3d> result = new List<Text3d>();
 
@@ -155,13 +156,13 @@ namespace SAM.Analytical.Grasshopper
 
                 Point3D point3D = space.Location;
 
-                Rhino.Geometry.Plane plane = new Plane(point3D, normal).ToRhino();
+                Rhino.Geometry.Plane plane = new SAM.Geometry.Spatial.Plane(point3D, normal).ToRhino();
                 Rhino.Geometry.Vector3d normal_Rhino = normal.ToRhino();
 
                 double height_Temp = height;
                 if (double.IsNaN(height_Temp))
                 {
-                    double area = space.GetValue<double>(SpaceParameter.Area);;
+                    double area = space.GetValue<double>(SpaceParameter.Area);
                     if (double.IsNaN(area))
                     {
                         height_Temp = 1;
@@ -179,7 +180,7 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = Rhino.DocObjects.TextHorizontalAlignment.Center;
-                Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = Rhino.DocObjects.TextVerticalAlignment.Middle;
+                Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = Rhino.DocObjects.TextVerticalAlignment.MiddleOfTop;
                 Text3d text3d = new Text3d(text, plane, height_Temp);
                 text3d.HorizontalAlignment = textHorizontalAlignment;
                 text3d.VerticalAlignment = textVerticalAlignment;
@@ -200,11 +201,13 @@ namespace SAM.Analytical.Grasshopper
             List<Text3d> text3ds = GetText3ds();
             if (text3ds != null)
             {
-                foreach(Text3d text3d in text3ds)
+                Point3d cameraLocation = Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation;
+                foreach (Text3d text3d in text3ds)
                 {
                     if (text3d == null)
                         continue;
-
+                    Point3d point = text3d.TextPlane.Origin;
+                    if (point.DistanceTo(cameraLocation) > 40) continue;
                     args.Display.Draw3dText(text3d, System.Drawing.Color.Black);
                 }
             }

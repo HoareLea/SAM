@@ -100,6 +100,16 @@ namespace SAM.Core
             return false;
         }
 
+        public T GetValue<T>(string name)
+        {
+            T result;
+
+            if (!TryGetValue(name, out result))
+                return default;
+
+            return result;
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!FromJObject(jObject))

@@ -7,6 +7,7 @@ using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,7 +82,14 @@ namespace SAM.Analytical.Grasshopper
             if (displayMaterial == null)
                 displayMaterial = args.Material;
 
+            Point3d cameraLocation = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation;
+
             GooSAMGeometry gooSAMGeometry = new GooSAMGeometry(Value.GetFace3D());
+
+            Point3d point = Value.GetFace3D().InternalPoint3D().ToRhino();
+            if (point.DistanceTo(cameraLocation) < 8 || point.DistanceTo(cameraLocation) > 15)
+                return;
+
             gooSAMGeometry.DrawViewportMeshes(args, displayMaterial);
 
             ////TODO Play with  text values on model
@@ -199,7 +207,7 @@ namespace SAM.Analytical.Grasshopper
             if (rhinoObject == null)
                 return GH_GetterResult.cancel;
 
-            Surface surface = objRef.Surface();
+            Rhino.Geometry.Surface surface = objRef.Surface();
             if (surface == null)
                 return GH_GetterResult.cancel;
 
