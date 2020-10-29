@@ -56,11 +56,7 @@ namespace SAM.Core.Grasshopper
 
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            Dictionary<Type, AssociatedTypes> dictionary = Core.Query.AssociatedTypesDictionary(null, true, false);
-            if (dictionary == null)
-                return;
-
-            HashSet<Type> types = Core.Query.UniqueTypes(dictionary.Values);
+            HashSet<Type> types = Core.Query.UniqueTypes(ActiveManager.GetAssociatedTypes());
             if (types == null)
                 return;
 

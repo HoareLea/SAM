@@ -118,6 +118,22 @@ namespace SAM.Core
             }
             return result;
         }
+
+        public static List<AssociatedTypes> GetAssociatedTypes()
+        {
+            if (associatedTypesDictionary == null)
+                associatedTypesDictionary = Query.AssociatedTypesDictionary();
+
+            List<AssociatedTypes> result = new List<AssociatedTypes>();
+            foreach (KeyValuePair<Type, AssociatedTypes> keyValuePair in associatedTypesDictionary)
+            {
+                if (keyValuePair.Value == null || keyValuePair.Value == null)
+                    continue;
+
+                result.Add(keyValuePair.Value);
+            }
+            return result;
+        }
         
         public static List<Type> GetParameterTypes(Type type)
         {
