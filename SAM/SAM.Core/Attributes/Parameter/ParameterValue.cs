@@ -26,7 +26,7 @@ namespace SAM.Core.Attributes
                 
                 case ParameterType.Boolean:
                     bool @bool;
-                    return !Query.TryConvert(value, out @bool);
+                    return Query.TryConvert(value, out @bool);
                 
                 case ParameterType.Integer:
                     return value is int || value is Enum;
