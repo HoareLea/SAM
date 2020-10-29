@@ -85,6 +85,12 @@ namespace SAM.Core.Grasshopper
             if (Value == null)
                 return false;
 
+            if(Value is Y)
+            {
+                target = (Y)Value;
+                return true;
+            }
+
             if (Value.GetType().IsAssignableFrom(typeof(Y)))
             {
                 target = (Y)Value;

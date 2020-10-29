@@ -44,22 +44,22 @@ namespace SAM.Core.Grasshopper
         public override bool Write(GH_IWriter writer)
         {
             if(typeFullName_Input == null)
-                writer.SetString("TypeFullName", string.Empty);
+                writer.SetString("SAMCoreParameter_TypeFullName", string.Empty);
             else
-                writer.SetString("TypeFullName", typeFullName_Selected);
+                writer.SetString("SAMCoreParameter_TypeFullName", typeFullName_Selected);
 
             if (name_Selected == null)
-                writer.SetString("Name", string.Empty);
+                writer.SetString("SAMCoreParameter_Name", string.Empty);
             else
-                writer.SetString("Name", name_Selected);
+                writer.SetString("SAMCoreParameter_Name", name_Selected);
 
             return base.Write(writer);
         }
 
         public override bool Read(GH_IReader reader)
         {
-            reader.TryGetString("TypeFullName", ref typeFullName_Selected);
-            reader.TryGetString("Name", ref name_Selected);
+            reader.TryGetString("SAMCoreParameter_TypeFullName", ref typeFullName_Selected);
+            reader.TryGetString("SAMCoreParameter_Name", ref name_Selected);
 
             return base.Read(reader);
         }
