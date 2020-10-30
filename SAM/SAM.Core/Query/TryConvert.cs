@@ -242,12 +242,32 @@ namespace SAM.Core
 
                 if (@object is string)
                 {
-                    SAMColor sAMColor;
-                    if (TryConvert(@object, out sAMColor) && sAMColor != null)
+                    string @string = (string)@object;
+                    if(@string.StartsWith("##"))
                     {
-                        result = (T)(object)sAMColor.ToColor();
+                        result = (T)(object)Convert.ToColor(@string);
+                        if (!result.Equals(System.Drawing.Color.Empty))
+                            return true; 
+                    }
+
+                    int @int;
+                    if(int.TryParse(@string, out @int))
+                    {
+                        result = (T)(object)Convert.ToColor(@int);
                         return true;
                     }
+
+                    uint @uint;
+                    if (uint.TryParse(@string, out @uint))
+                    {
+                        result = (T)(object)Convert.ToColor(@uint);
+                        return true;
+                    }
+
+                    result = (T)(object)Convert.ToColor(@string);
+                    if (!result.Equals(System.Drawing.Color.Empty))
+                        return true;
+
                 }
                 else if (@object is SAMColor)
                 {
@@ -280,21 +300,19 @@ namespace SAM.Core
                         }
                     }
                 }
-                else if(typeof(T) == typeof(SAMColor))
+                
+                if(typeof(T) == typeof(SAMColor))
                 {
-                    if (@object is System.Drawing.Color)
+                    System.Drawing.Color color = System.Drawing.Color.Empty;
+                    if (TryConvert(@object, out color))
                     {
-                        result = (T)(object)new SAMColor((System.Drawing.Color)@object);
-                        return true;
-                    }
-                    else if(@object is int)
-                    {
-                        result = (T)(object)new SAMColor(Convert.ToColor((int)@object));
-                        return true;
-                    }
-                    else if (@object is uint)
-                    {
-                        result = (T)(object)new SAMColor(Convert.ToColor((uint)@object));
+                        if (color == System.Drawing.Color.Empty)
+                        {
+                            result = default;
+                            return true;
+                        }
+                            
+                        result = (T)(object)new SAMColor(color);
                         return true;
                     }
                 }

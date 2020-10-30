@@ -14,6 +14,7 @@ namespace SAM.Core.Attributes
             this.parameterType = parameterType;
         }
 
+        //TODO: IsValid replace by TryConvert to avoid double conversion
         public virtual bool IsValid(object value)
         {
             switch(parameterType)
@@ -55,7 +56,8 @@ namespace SAM.Core.Attributes
                     return DateTime.TryParse(value.ToString(), out dateTime);
 
                 case ParameterType.Color:
-                    return value is Color || value is SAMColor || value is int || value is uint;
+                    SAMColor sAMColor = null;
+                    return Query.TryConvert(value, out sAMColor);
 
                 case ParameterType.Undefined:
                     return true;
@@ -103,17 +105,9 @@ namespace SAM.Core.Attributes
                     return dateTime;
 
                 case ParameterType.Color:
-                    if (value is SAMColor)
-                        return value;
-
                     SAMColor sAMColor = null;
-                    if (value is Color)
-                        sAMColor = new SAMColor((Color)value);
-                    else if (value is int)
-                        sAMColor = new SAMColor(Core.Convert.ToColor((int)value));
-                    else if(value is uint)
-                        sAMColor = new SAMColor(Core.Convert.ToColor((uint)value));
-
+                    if (!Query.TryConvert(value, out sAMColor))
+                        return null;
                     return sAMColor;
 
                 case ParameterType.Undefined:
