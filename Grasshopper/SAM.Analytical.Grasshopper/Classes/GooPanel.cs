@@ -284,7 +284,7 @@ namespace SAM.Analytical.Grasshopper
         {
             if (sender is ToolStripMenuItem item && item.Tag is bool)
             {
-                showAll = (bool)item.Tag;
+                showAll = !(bool)item.Tag;
                 ExpirePreview(true);
             }
         }
