@@ -81,19 +81,27 @@ namespace SAM.Analytical.Grasshopper
             if (Value == null)
                 return;
 
+            Face3D face3D = Value.GetFace3D();
+            if (face3D == null)
+                return;
+
+            Point3D point3D_CameraLocation = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation.ToSAM();
+            if (point3D_CameraLocation == null)
+                return;
+
+            double distance = face3D.Distance(point3D_CameraLocation);
+            if (distance < 8 && distance > 15)
+                return;
+
             Rhino.Display.DisplayMaterial displayMaterial = Query.DisplayMaterial(Value.PanelType);
             if (displayMaterial == null)
                 displayMaterial = args.Material;
 
-            Point3d cameraLocation = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation;
-
-            GooSAMGeometry gooSAMGeometry = new GooSAMGeometry(Value.GetFace3D());
-
-            Point3d point = Value.GetFace3D().InternalPoint3D().ToRhino();
-            if (point.DistanceTo(cameraLocation) < 8 || point.DistanceTo(cameraLocation) > 15)
+            Brep brep = Geometry.Grasshopper.Convert.ToRhino_Brep(face3D);
+            if (brep == null)
                 return;
 
-            gooSAMGeometry.DrawViewportMeshes(args, displayMaterial);
+            args.Pipeline.DrawBrepShaded(brep, displayMaterial);
 
             List<Aperture> apertures = Value.Apertures;
             if (apertures != null)
