@@ -6,6 +6,7 @@ using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Grasshopper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,79 +82,54 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            if (Value == null)
+            List<Panel> panels = Value?.GetPanels();
+            if (panels == null)
                 return;
 
-            List<Panel> panels = Value.GetPanels();
-            if(panels != null && panels.Count != 0)
+            foreach (Panel panel in panels)
             {
-                foreach (Panel panel in panels)
-                {
-                    GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(panel.PlanarBoundary3D);
-                    gooPlanarBoundary3D.DrawViewportWires(args);
-                }
-            }
+                List<Space> spaces = Value.GetSpaces(panel);
+                if (spaces != null && spaces.Count > 1)
+                    continue;
 
-            List<Space> spaces = Value.GetSpaces();
-            if (spaces != null && spaces.Count != 0)
-            {
-                foreach (Space space in spaces)
+                PlanarBoundary3D planarBoundary3D = panel.PlanarBoundary3D;
+                if (planarBoundary3D == null)
+                    return;
+
+                Dictionary<BoundaryEdge3DLoop, System.Drawing.Color> aDictionary = new Dictionary<BoundaryEdge3DLoop, System.Drawing.Color>();
+
+                //Assign Color for Edges
+                aDictionary[planarBoundary3D.GetExternalEdge3DLoop()] = System.Drawing.Color.DarkRed;
+
+                IEnumerable<BoundaryEdge3DLoop> edge3DLoops = planarBoundary3D.GetInternalEdge3DLoops();
+                if (edge3DLoops != null)
                 {
-                    GooSpace gooSpace = new GooSpace(space);
-                    gooSpace.DrawViewportWires(args);
+                    foreach (BoundaryEdge3DLoop edge3DLoop in edge3DLoops)
+                        aDictionary[edge3DLoop] = System.Drawing.Color.BlueViolet;
+                }
+
+                foreach (KeyValuePair<BoundaryEdge3DLoop, System.Drawing.Color> keyValuePair in aDictionary)
+                {
+                    List<BoundaryEdge3D> edge3Ds = keyValuePair.Key.BoundaryEdge3Ds;
+                    if (edge3Ds == null || edge3Ds.Count == 0)
+                        continue;
+
+                    List<Point3d> point3ds = edge3Ds.ConvertAll(x => x.Curve3D.GetStart().ToRhino());
+                    if (point3ds.Count == 0)
+                        continue;
+
+                    point3ds.Add(point3ds[0]);
+
+                    args.Pipeline.DrawPolyline(point3ds, keyValuePair.Value);
                 }
             }
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
-        {
-            DrawViewportMeshes(args, args.Material, Core.Tolerance.Distance);
-        }
-
-        public void DrawViewportMeshes(GH_PreviewMeshArgs args, DisplayMaterial displayMaterial, double tolerance = Core.Tolerance.Distance)
-        {
-            if (Value == null)
-                return;
-            
-            List<Panel> panels = Value.GetPanels();
+        {         
+            List<Panel> panels = Value?.GetPanels();
             if (panels == null)
-                panels = new List<Panel>();
-
-            //List<Space> spaces = Value.GetSpaces();
-            //if (spaces != null && spaces.Count > 0)
-            //{
-            //    foreach (Space space in spaces)
-            //    {
-            //        GooSpace gooSpace = new GooSpace(space);
-            //        gooSpace.DrawViewportMeshes(args);
-
-            //        List<Panel> panels_Related = Value.GetRelatedObjects<Panel>(space);
-            //        if (panels_Related == null || panels_Related.Count == 0)
-            //            continue;
-
-            //        panels.RemoveAll(x => panels_Related.Contains(x));
-            //        List<Brep> breps = new List<Brep>();
-            //        foreach(Panel panel in panels_Related)
-            //        {
-            //            Brep brep = panel.ToRhino();
-            //            if (brep == null)
-            //                continue;
-
-            //            breps.Add(brep);
-            //        }
-
-            //        if (breps == null || breps.Count == 0)
-            //            continue;
-
-            //        Brep[] breps_Join = Brep.JoinBreps(breps, tolerance);
-
-            //        if (breps_Join != null)
-            //        {
-            //            foreach (Brep brep in breps_Join)
-            //                args.Pipeline.DrawBrepShaded(brep, displayMaterial);
-            //        }
-            //    }   
-            //}
+                return;
 
             foreach (Panel panel in panels)
             {
@@ -165,10 +141,7 @@ namespace SAM.Analytical.Grasshopper
                 if (brep == null)
                     continue;
 
-                args.Pipeline.DrawBrepShaded(brep, displayMaterial);
-
-                //GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(panel.PlanarBoundary3D);
-                //gooPlanarBoundary3D.DrawViewportMeshes(args);
+                args.Pipeline.DrawBrepShaded(brep, args.Material);
             }
         }
 
