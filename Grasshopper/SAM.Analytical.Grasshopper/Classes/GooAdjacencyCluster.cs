@@ -10,6 +10,7 @@ using SAM.Geometry.Grasshopper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -82,20 +83,50 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
+            List<Space> spaces = Value?.GetSpaces();
+            if(spaces != null)
+            {
+                foreach(Space space in spaces)
+                {
+                    Point3d? point3d = space?.Location?.ToRhino();
+                    if (point3d == null || !point3d.HasValue)
+                        continue;
+
+                    args.Pipeline.DrawPoint(point3d.Value);
+                }
+            }
+
             List<Panel> panels = Value?.GetPanels();
             if (panels == null)
                 return;
 
+            Geometry.Spatial.BoundingBox3D boundingBox3D = null;
+            if(args.Viewport.IsValidFrustum)
+            {
+                BoundingBox boundingBox = args.Viewport.GetFrustumBoundingBox();
+                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { boundingBox.Min.ToSAM(), boundingBox.Max.ToSAM()});
+            }
+
             foreach (Panel panel in panels)
             {
-                List<Space> spaces = Value.GetSpaces(panel);
-                if (spaces != null && spaces.Count > 1)
+                List<Space> spaces_Panel = Value.GetSpaces(panel);
+                if (spaces_Panel != null && spaces_Panel.Count > 1)
                     continue;
 
                 PlanarBoundary3D planarBoundary3D = panel.PlanarBoundary3D;
                 if (planarBoundary3D == null)
-                    return;
+                    continue;
 
+                if(boundingBox3D != null)
+                {
+                    Geometry.Spatial.BoundingBox3D boundingBox3D_Temp = planarBoundary3D.GetBoundingBox();
+                    if(boundingBox3D_Temp != null)
+                    {
+                        if (!boundingBox3D.Inside(boundingBox3D_Temp) && !boundingBox3D.Intersect(boundingBox3D_Temp))
+                            continue;
+                    }
+                }
+                
                 Dictionary<BoundaryEdge3DLoop, System.Drawing.Color> aDictionary = new Dictionary<BoundaryEdge3DLoop, System.Drawing.Color>();
 
                 //Assign Color for Edges
@@ -131,13 +162,48 @@ namespace SAM.Analytical.Grasshopper
             if (panels == null)
                 return;
 
-            foreach (Panel panel in panels)
+            Geometry.Spatial.BoundingBox3D boundingBox3D = null;
+            if (args.Viewport.IsValidFrustum)
             {
+                BoundingBox boundingBox = args.Viewport.GetFrustumBoundingBox();
+                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { boundingBox.Min.ToSAM(), boundingBox.Max.ToSAM() });
+            }
+
+            List<PlanarBoundary3D> planarBoundary3Ds = new List<PlanarBoundary3D>();
+            for (int i = 0; i < panels.Count; i++)
+                planarBoundary3Ds.Add(null);
+
+            Parallel.For(0, panels.Count, (int i) => 
+            {
+                Panel panel = panels[i];
+                
                 List<Space> spaces = Value.GetSpaces(panel);
                 if (spaces != null && spaces.Count > 1)
-                    continue;
+                    return;
 
-                Brep brep = panel.PlanarBoundary3D.ToRhino();
+                PlanarBoundary3D planarBoundary3D = panel.PlanarBoundary3D;
+                if (planarBoundary3D == null)
+                    return;
+
+                if (boundingBox3D != null)
+                {
+                    Geometry.Spatial.BoundingBox3D boundingBox3D_Temp = planarBoundary3D.GetBoundingBox();
+                    if (boundingBox3D_Temp != null)
+                    {
+                        if (!boundingBox3D.Inside(boundingBox3D_Temp) && !boundingBox3D.Intersect(boundingBox3D_Temp))
+                            return;
+                    }
+                }
+
+                planarBoundary3Ds[i] = planarBoundary3D;
+            });
+
+            foreach(PlanarBoundary3D planarBoundary3D in planarBoundary3Ds)
+            {
+                if (planarBoundary3D == null)
+                    continue;
+                
+                Brep brep = planarBoundary3D.ToRhino();
                 if (brep == null)
                     continue;
 
