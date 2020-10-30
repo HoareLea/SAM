@@ -22,11 +22,25 @@ namespace SAM.Core
         }
 
         public static Color ToColor(string @string)
-        {
+        {   
             if (string.IsNullOrWhiteSpace(@string))
                 return Color.Empty;
 
-            object @object = new ColorConverter().ConvertFromString(@string);
+            string @string_Temp = @string;
+
+            if(@string.IsHex())
+                @string_Temp = "#" + @string;
+
+            object @object = null;
+            try
+            {
+                @object = new ColorConverter().ConvertFromString(@string_Temp);
+            }
+            catch
+            {
+                return Color.Empty;
+            }
+            
             if (!(@object is Color))
                 return Color.Empty;
 

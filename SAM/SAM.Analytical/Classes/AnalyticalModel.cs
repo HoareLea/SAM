@@ -230,7 +230,7 @@ namespace SAM.Analytical
                 IEnumerable<IMaterial> materials = Query.Materials(result, Query.DefaultMaterialLibrary());
                 if (materials != null)
                     foreach (IMaterial material in materials)
-                        materialLibrary.Add(material);
+                        AddMaterial(material);
             }
             return result;
         }

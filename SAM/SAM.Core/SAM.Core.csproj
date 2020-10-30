@@ -125,6 +125,7 @@
     <Compile Include="Query\AlmostEqual.cs" />
     <Compile Include="Query\CustomAttribute.cs" />
     <Compile Include="Query\Enums.cs" />
+    <Compile Include="Query\IsHex.cs" />
     <Compile Include="Query\IsValid.cs" />
     <Compile Include="Query\ValidTypes.cs" />
     <Compile Include="Query\ParameterTypesDictionary.cs" />
