@@ -161,8 +161,14 @@ namespace SAM.Analytical.Grasshopper
                 if (spaces != null && spaces.Count > 1)
                     continue;
 
-                GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(panel.PlanarBoundary3D);
-                gooPlanarBoundary3D.DrawViewportMeshes(args);
+                Brep brep = panel.PlanarBoundary3D.ToRhino();
+                if (brep == null)
+                    continue;
+
+                args.Pipeline.DrawBrepShaded(brep, displayMaterial);
+
+                //GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(panel.PlanarBoundary3D);
+                //gooPlanarBoundary3D.DrawViewportMeshes(args);
             }
         }
 
