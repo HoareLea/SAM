@@ -237,7 +237,7 @@ namespace SAM.Analytical
                 if(!double.IsNaN(thickness_ConstructionLayers))
                 {
                     if(System.Math.Abs(thickness - thickness_ConstructionLayers) > Tolerance.MacroDistance)
-                        result.Add(string.Format("Parameter {0} in {1} Construction (Guid: {2}) has different value ({3}) than thickness of its ConstructionLayers ({4})", ConstructionParameter.DefaultThickness.Name(), construction.Name, construction.Guid, thickness, thickness_ConstructionLayers), LogRecordType.Message);
+                        result.Add(string.Format("Parameter {0} in {1} Construction (Guid: {2}) has different value ({3}) than thickness of its ConstructionLayers ({4})", ConstructionParameter.DefaultThickness.Name(), construction.Name, construction.Guid, thickness, thickness_ConstructionLayers), LogRecordType.Warning);
                 }
             }
 
@@ -510,13 +510,12 @@ namespace SAM.Analytical
                 MaterialType materialType = Query.MaterialType(construction.ConstructionLayers, materialLibrary);
                 if (materialType != MaterialType.Undefined)
                 {
-                    //string parameterName_Transparent = Query.ParameterName_Transparent();
-
                     bool transparent;
                     if(panel.TryGetValue(PanelParameter.Transparent, out transparent))
-                    //panel.TryGetValue(parameterName_Transparent, out transparent, true);
-                    if ((transparent && materialType != MaterialType.Transparent) || (!transparent && materialType == MaterialType.Transparent))
-                        result.Add(string.Format("{0} parameter value for {1} panel (Guid: {2}) does not match witch assigned {3} construction (Guid: {4})", PanelParameter.Transparent.Name(), name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
+                    {
+                        if ((transparent && materialType != MaterialType.Transparent) || (!transparent && materialType == MaterialType.Transparent))
+                            result.Add(string.Format("{0} parameter value for {1} panel (Guid: {2}) does not match witch assigned {3} construction (Guid: {4})", PanelParameter.Transparent.Name(), name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
+                    }
 
                     PanelType panelType = panel.PanelType;
                     if(panelType == PanelType.CurtainWall && materialType != MaterialType.Transparent)
