@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel;
+﻿using GH_IO.Serialization;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
 using Rhino.Commands;
@@ -85,13 +86,16 @@ namespace SAM.Analytical.Grasshopper
             if (face3D == null)
                 return;
 
-            Point3D point3D_CameraLocation = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation.ToSAM();
-            if (point3D_CameraLocation == null)
-                return;
+            if(!ShowAll)
+            {
+                Point3D point3D_CameraLocation = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation.ToSAM();
+                if (point3D_CameraLocation == null)
+                    return;
 
-            double distance = face3D.Distance(point3D_CameraLocation);
-            if (distance < 8 && distance > 15)
-                return;
+                double distance = face3D.Distance(point3D_CameraLocation);
+                if (distance < 8 || distance > 15)
+                    return;
+            }
 
             Rhino.Display.DisplayMaterial displayMaterial = Query.DisplayMaterial(Value.PanelType);
             if (displayMaterial == null)
@@ -302,6 +306,19 @@ namespace SAM.Analytical.Grasshopper
             BakeGeometry_ByConstruction(RhinoDoc.ActiveDoc);
         }
 
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean(GetType().FullName, showAll);
 
+            return base.Write(writer);
+        }
+
+        public override bool Read(GH_IReader reader)
+        {
+            if(reader != null)
+                reader.TryGetBoolean(GetType().FullName, ref showAll);
+            
+            return base.Read(reader);
+        }
     }
 }
