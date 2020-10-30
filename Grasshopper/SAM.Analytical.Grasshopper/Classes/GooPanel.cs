@@ -11,11 +11,14 @@ using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
     public class GooPanel : GooSAMObject<Panel>, IGH_PreviewData, IGH_BakeAwareData
     {
+        public bool ShowAll = true;
+        
         public GooPanel()
             : base()
         {
@@ -92,20 +95,11 @@ namespace SAM.Analytical.Grasshopper
 
             gooSAMGeometry.DrawViewportMeshes(args, displayMaterial);
 
-            ////TODO Play with  text values on model
-            //TextEntity textEntity = new TextEntity
-            //{
-            //    Plane = Value.GetFace3D().GetPlane().ToRhino(),
-            //    PlainText = Value.Name,
-            //    Justification = TextJustification.MiddleCenter
-            //};
-            //args.Pipeline.DrawText(textEntity, System.Drawing.Color.Red);
-
             List<Aperture> apertures = Value.Apertures;
             if (apertures != null)
             {
                 foreach (Aperture aperture in apertures)
-                    foreach (Geometry.Spatial.IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdge3Ds())
+                    foreach (IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdge3Ds())
                     {
                         Rhino.Display.DisplayMaterial displayMaterial_Aperture = Query.DisplayMaterial(aperture.ApertureConstruction.ApertureType);
                         if (displayMaterial_Aperture == null)
@@ -160,6 +154,8 @@ namespace SAM.Analytical.Grasshopper
 
     public class GooPanelParam : GH_PersistentParam<GooPanel>, IGH_PreviewObject, IGH_BakeAwareObject
     {
+        private bool showAll = true;
+        
         public override Guid ComponentGuid => new Guid("278B438C-43EA-4423-999F-B6A906870939");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
@@ -172,9 +168,33 @@ namespace SAM.Analytical.Grasshopper
 
         public bool IsBakeCapable => true;
 
-        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args) => Preview_DrawMeshes(args);
+        void IGH_PreviewObject.DrawViewportMeshes(IGH_PreviewArgs args)
+        {
+            foreach (var variable in VolatileData.AllData(true))
+            {
+                GooPanel gooPanel = variable as GooPanel;
+                if (gooPanel == null)
+                    continue;
 
-        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
+                gooPanel.ShowAll = showAll;
+            }
+
+            Preview_DrawMeshes(args);
+        }
+
+        void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args)
+        {
+            foreach (var variable in VolatileData.AllData(true))
+            {
+                GooPanel gooPanel = variable as GooPanel;
+                if (gooPanel == null)
+                    continue;
+
+                gooPanel.ShowAll = showAll;
+            }
+
+            Preview_DrawWires(args);
+        }
 
         public GooPanelParam()
             : base(typeof(Panel).Name, typeof(Panel).Name, typeof(Panel).FullName.Replace(".", " "), "Params", "SAM")
@@ -246,6 +266,9 @@ namespace SAM.Analytical.Grasshopper
 
         public override void AppendAdditionalMenuItems(System.Windows.Forms.ToolStripDropDown menu)
         {
+
+            Menu_AppendItem(menu, "Show All", Menu_ShowAll, VolatileData.AllData(true).Any(), showAll).Tag = showAll;
+
             Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, VolatileData.AllData(true).Any());
 
@@ -257,9 +280,20 @@ namespace SAM.Analytical.Grasshopper
             BakeGeometry_ByPanelType(RhinoDoc.ActiveDoc);
         }
 
+        private void Menu_ShowAll(object sender, EventArgs e)
+        {
+            if (sender is ToolStripMenuItem item && item.Tag is bool)
+            {
+                showAll = (bool)item.Tag;
+                ExpirePreview(true);
+            }
+        }
+
         private void Menu_BakeByConstruction(object sender, EventArgs e)
         {
             BakeGeometry_ByConstruction(RhinoDoc.ActiveDoc);
         }
+
+
     }
 }
