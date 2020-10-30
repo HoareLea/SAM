@@ -119,44 +119,48 @@ namespace SAM.Analytical.Grasshopper
             if (panels == null)
                 panels = new List<Panel>();
 
-            List<Space> spaces = Value.GetSpaces();
-            if (spaces != null && spaces.Count > 0)
-            {
-                foreach (Space space in spaces)
-                {
-                    GooSpace gooSpace = new GooSpace(space);
-                    gooSpace.DrawViewportMeshes(args);
+            //List<Space> spaces = Value.GetSpaces();
+            //if (spaces != null && spaces.Count > 0)
+            //{
+            //    foreach (Space space in spaces)
+            //    {
+            //        GooSpace gooSpace = new GooSpace(space);
+            //        gooSpace.DrawViewportMeshes(args);
 
-                    List<Panel> panels_Related = Value.GetRelatedObjects<Panel>(space);
-                    if (panels_Related == null || panels_Related.Count == 0)
-                        continue;
+            //        List<Panel> panels_Related = Value.GetRelatedObjects<Panel>(space);
+            //        if (panels_Related == null || panels_Related.Count == 0)
+            //            continue;
 
-                    panels.RemoveAll(x => panels_Related.Contains(x));
-                    List<Brep> breps = new List<Brep>();
-                    foreach(Panel panel in panels_Related)
-                    {
-                        Brep brep = panel.ToRhino();
-                        if (brep == null)
-                            continue;
+            //        panels.RemoveAll(x => panels_Related.Contains(x));
+            //        List<Brep> breps = new List<Brep>();
+            //        foreach(Panel panel in panels_Related)
+            //        {
+            //            Brep brep = panel.ToRhino();
+            //            if (brep == null)
+            //                continue;
 
-                        breps.Add(brep);
-                    }
+            //            breps.Add(brep);
+            //        }
 
-                    if (breps == null || breps.Count == 0)
-                        continue;
+            //        if (breps == null || breps.Count == 0)
+            //            continue;
 
-                    Brep[] breps_Join = Brep.JoinBreps(breps, tolerance);
+            //        Brep[] breps_Join = Brep.JoinBreps(breps, tolerance);
 
-                    if (breps_Join != null)
-                    {
-                        foreach (Brep brep in breps_Join)
-                            args.Pipeline.DrawBrepShaded(brep, displayMaterial);
-                    }
-                }   
-            }
+            //        if (breps_Join != null)
+            //        {
+            //            foreach (Brep brep in breps_Join)
+            //                args.Pipeline.DrawBrepShaded(brep, displayMaterial);
+            //        }
+            //    }   
+            //}
 
             foreach (Panel panel in panels)
             {
+                List<Space> spaces = Value.GetSpaces(panel);
+                if (spaces != null && spaces.Count > 1)
+                    continue;
+
                 GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(panel.PlanarBoundary3D);
                 gooPlanarBoundary3D.DrawViewportMeshes(args);
             }
