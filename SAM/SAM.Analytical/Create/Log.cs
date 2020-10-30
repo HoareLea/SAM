@@ -230,6 +230,17 @@ namespace SAM.Analytical
             if (constructionLayers != null && constructionLayers.Count > 0)
                 Core.Modify.AddRange(result, constructionLayers?.Log(materialLibrary, construction.Name, construction.Guid));
 
+            double thickness;
+            if(construction.TryGetValue(ConstructionParameter.DefaultThickness, out thickness))
+            {
+                double thickness_ConstructionLayers = construction.GetThickness();
+                if(!double.IsNaN(thickness_ConstructionLayers))
+                {
+                    if(System.Math.Abs(thickness - thickness_ConstructionLayers) > Tolerance.MacroDistance)
+                        result.Add(string.Format("Parameter {0} in {1} Construction (Guid: {2}) has different value ({3}) than thickness of its ConstructionLayers ({4})", ConstructionParameter.DefaultThickness.Name(), construction.Name, construction.Guid, thickness, thickness_ConstructionLayers), LogRecordType.Message);
+                }
+            }
+
             return result;
         }
 
