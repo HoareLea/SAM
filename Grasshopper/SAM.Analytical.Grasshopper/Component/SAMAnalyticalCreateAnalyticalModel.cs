@@ -116,8 +116,7 @@ namespace SAM.Analytical.Grasshopper
             IEnumerable<IMaterial> materials = Analytical.Query.Materials(adjacencyCluster, materialLibrary);
             materialLibrary = Core.Create.MaterialLibrary("Default Material Library", materials);
 
-
-            dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(name, description, location, adjacencyCluster, materialLibrary)));
+            dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(name, description, location, null, adjacencyCluster, materialLibrary)));
         }
     }
 }
