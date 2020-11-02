@@ -38,7 +38,7 @@ namespace SAM.Analytical
                 if (string.IsNullOrWhiteSpace(name_Destination))
                     name_Destination = name_Template;
 
-                Construction construction = constructionLibrary.GetObjects<Construction>(name_Template, TextComparisonType.Equals, true)?.FirstOrDefault();
+                Construction construction = constructionLibrary.GetConstructions(name_Template, TextComparisonType.Equals, true)?.FirstOrDefault();
                 if (construction == null)
                     continue;
 

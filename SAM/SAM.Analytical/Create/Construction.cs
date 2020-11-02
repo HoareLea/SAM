@@ -11,7 +11,7 @@ namespace SAM.Analytical
             if (constructionLibrary == null || string.IsNullOrWhiteSpace(sourceName) || string.IsNullOrWhiteSpace(destinationName))
                 return null;
 
-            List<Construction> constructions = constructionLibrary.GetObjects<Construction>(sourceName, TextComparisonType.Equals, true);
+            List<Construction> constructions = constructionLibrary.GetConstructions(sourceName, TextComparisonType.Equals, true);
             if (constructions == null || constructions.Count == 0)
                 return null;
 

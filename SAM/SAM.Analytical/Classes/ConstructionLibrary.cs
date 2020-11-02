@@ -100,5 +100,17 @@ namespace SAM.Analytical
 
             return constructions.FindAll(x => panelTypes.Contains(x.PanelType()));
         }
+
+        public List<Construction> GetConstructions(string text, TextComparisonType textComparisonType = TextComparisonType.Equals, bool caseSensitive = true)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return null;
+            
+            List<Construction> constructions = GetConstructions();
+            if (constructions == null || constructions.Count == 0)
+                return null;
+
+            return constructions.FindAll(x => Core.Query.Compare(x.Name, text, textComparisonType, caseSensitive));
+        }
     }
 }

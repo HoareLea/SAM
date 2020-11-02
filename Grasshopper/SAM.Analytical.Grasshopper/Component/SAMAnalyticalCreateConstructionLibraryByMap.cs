@@ -39,9 +39,9 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddTextParameter("_csvOrPath", "_csvOrPath", "Map File Path or csv text", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_sourceColumnName", "_sourceColumnName", "Column Name for Source Names of Constructions", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_templateColumnName", "_templateColumnName", "Column Name for Template Names of Constructions", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_destinationColumnName", "_destinationColumnName", "Column Name for Destination Names of Constructions", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_sourceColumnName_", "_sourceColumnName_", "Column Name for Source Names of Constructions", GH_ParamAccess.item, "Name");
+            inputParamManager.AddTextParameter("_templateColumnName_", "_templateColumnName_", "Column Name for Template Names of Constructions", GH_ParamAccess.item, "template Family");
+            inputParamManager.AddTextParameter("_destinationColumnName_", "_destinationColumnName_", "Column Name for Destination Names of Constructions", GH_ParamAccess.item, "New Name Family");
 
             GooConstructionLibraryParam gooConstructionLibraryParam = new GooConstructionLibraryParam();
             gooConstructionLibraryParam.Optional = true;

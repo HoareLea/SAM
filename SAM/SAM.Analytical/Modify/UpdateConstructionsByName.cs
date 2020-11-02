@@ -22,7 +22,7 @@ namespace SAM.Analytical
                 if (string.IsNullOrWhiteSpace(name_Source))
                     continue;
 
-                List<Construction> constructions = constructionLibrary.GetObjects<Construction>(name_Source, textComparisonType, caseSensitive);
+                List<Construction> constructions = constructionLibrary.GetConstructions(name_Source, textComparisonType, caseSensitive);
                 if (constructions == null || constructions.Count == 0)
                     continue;
 
@@ -53,7 +53,7 @@ namespace SAM.Analytical
                 return null;
 
             Dictionary<System.Guid, Construction> dictionary = new Dictionary<System.Guid, Construction>();
-            for(int i=0; i <= panels.Count; i++)
+            for(int i=0; i < panels.Count; i++)
             {
                 Construction construction_Source = panels[i].Construction;
                 if (construction_Source == null)
@@ -63,7 +63,7 @@ namespace SAM.Analytical
                 if (string.IsNullOrWhiteSpace(name_Source))
                     continue;
 
-                List<Construction> constructions = constructionLibrary.GetObjects<Construction>(name_Source, textComparisonType, caseSensitive);
+                List<Construction> constructions = constructionLibrary.GetConstructions(name_Source, textComparisonType, caseSensitive);
                 if (constructions == null || constructions.Count == 0)
                     continue;
 
