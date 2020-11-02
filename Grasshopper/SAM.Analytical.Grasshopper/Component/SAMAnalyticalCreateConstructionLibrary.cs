@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateConstructionLibraryByName : GH_SAMComponent
+    public class SAMAnalyticalCreateConstructionLibrary : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -26,9 +26,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreateConstructionLibraryByName()
-          : base("SAMAnalytical.CreateConstructionLibraryByName", "SAMAnalytical.CreateConstructionLibraryByName",
-              "Create SAM Construction Library By Name",
+        public SAMAnalyticalCreateConstructionLibrary()
+          : base("SAMAnalytical.CreateConstructionLibrary", "SAMAnalytical.CreateConstructionLibrary",
+              "Create SAM Construction Library",
               "SAM", "Analytical")
         {
         }

@@ -189,7 +189,7 @@ namespace SAM.Core
                 if (row >= values.Count)
                     return null;
 
-                int aIndex = GetIndex(columnName);
+                int aIndex = GetColumnIndex(columnName);
                 if (aIndex == -1)
                     return null;
 
@@ -208,7 +208,7 @@ namespace SAM.Core
             }
         }
 
-        public int GetIndex(string columnName)
+        public int GetColumnIndex(string columnName)
         {
             if (names == null || columnName == null)
                 return -1;
@@ -220,7 +220,7 @@ namespace SAM.Core
             return -1;
         }
 
-        public List<int> GetIndexes(string columnText, TextComparisonType textComparisonType, bool caseSensitive = true)
+        public List<int> GetColumnIndexes(string columnText, TextComparisonType textComparisonType, bool caseSensitive = true)
         {
             if (columnText == null)
                 return null;
@@ -233,7 +233,22 @@ namespace SAM.Core
             return result;
         }
 
-        public int GetIndex(object value, int headerIndex)
+        public List<int> GetRowIndexes(int columnIndex, string text, TextComparisonType textComparisonType, bool caseSensitive = true)
+        {
+            if (columnIndex >= ColumnCount || columnIndex < 0)
+                return null;
+
+            List<int> result = new List<int>();
+            for(int i=0; i < RowCount; i++)
+            {
+                string value = ToString(i, columnIndex);
+                if (Query.Compare(value, text, textComparisonType, caseSensitive))
+                    result.Add(i);
+            }
+            return result;
+        }
+
+        public int GetColumnIndex(object value, int headerIndex)
         {
             if (header == null && header.Count >= headerIndex)
                 return -1;
@@ -299,7 +314,7 @@ namespace SAM.Core
             return aValue.ToString();
         }
 
-        public int Count
+        public int RowCount
         {
             get
             {
@@ -307,6 +322,17 @@ namespace SAM.Core
                     return -1;
 
                 return values.Count;
+            }
+        }
+
+        public int ColumnCount
+        {
+            get
+            {
+                if (names == null)
+                    return -1;
+
+                return names.Length;
             }
         }
 
@@ -341,7 +367,7 @@ namespace SAM.Core
 
         public IEnumerable<object> GetUnqueValues(string columnName)
         {
-            int aIndex = GetIndex(columnName);
+            int aIndex = GetColumnIndex(columnName);
             if (aIndex == -1)
                 return null;
 
@@ -368,7 +394,7 @@ namespace SAM.Core
             if (values.Count == 0 || columnNames.Length == 0)
                 return aDelimitedFileTable;
 
-            List<int> aIndexList = columnNames.ToList().ConvertAll(x => GetIndex(x));
+            List<int> aIndexList = columnNames.ToList().ConvertAll(x => GetColumnIndex(x));
 
             foreach (object[] aValues_Row_Old in values)
             {
@@ -416,7 +442,7 @@ namespace SAM.Core
             if (values.Count == 0)
                 return delimitedFileTable;
 
-            int index = GetIndex(columnName);
+            int index = GetColumnIndex(columnName);
             if (index == -1)
                 return delimitedFileTable;
 
@@ -462,7 +488,7 @@ namespace SAM.Core
             if (values.Count == 0)
                 return delimitedFileTable;
 
-            int index = GetIndex(columnName);
+            int index = GetColumnIndex(columnName);
             if (index == -1)
                 return delimitedFileTable;
 

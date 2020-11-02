@@ -23,8 +23,8 @@ namespace SAM.Core
             List<string[]> result = new List<string[]>();
             foreach (string columnName in columnNames)
             {
-                string[] values = new string[delimitedFileTable.Count];
-                for (int i = 0; i < delimitedFileTable.Count; i++)
+                string[] values = new string[delimitedFileTable.RowCount];
+                for (int i = 0; i < delimitedFileTable.RowCount; i++)
                 {
                     object value = delimitedFileTable[i, columnName];
                     if (value != null)

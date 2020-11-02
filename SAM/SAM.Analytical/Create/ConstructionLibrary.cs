@@ -5,29 +5,21 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static ConstructionLibrary ConstructionLibrary(this ConstructionLibrary constructionLibrary, DelimitedFileTable delimitedFileTable, string columnName_Source, string columnName_Template, string columnName_Destination = null)
+        public static ConstructionLibrary ConstructionLibrary(this ConstructionLibrary constructionLibrary, DelimitedFileTable delimitedFileTable, string columnName_Source, string columnName_Destination = null)
         {
-            if (constructionLibrary == null || delimitedFileTable == null || string.IsNullOrWhiteSpace(columnName_Source) || string.IsNullOrWhiteSpace(columnName_Template))
+            if (constructionLibrary == null || delimitedFileTable == null || string.IsNullOrWhiteSpace(columnName_Source))
                 return null;
 
-            int index_Source = delimitedFileTable.GetIndex(columnName_Source);
+            int index_Source = delimitedFileTable.GetColumnIndex(columnName_Source);
             if (index_Source == -1)
                 return null;
 
-            int index_Template = delimitedFileTable.GetIndex(columnName_Template);
-            if (index_Template == -1)
-                return null;
-
-            int index_Destination = delimitedFileTable.GetIndex(columnName_Destination);
+            int index_Destination = delimitedFileTable.GetColumnIndex(columnName_Destination);
 
             ConstructionLibrary result = new ConstructionLibrary(constructionLibrary.Name);
-            for(int i =0; i < delimitedFileTable.Count; i++)
+            for(int i =0; i < delimitedFileTable.RowCount; i++)
             {
-                string name_Source = delimitedFileTable.ToString(i, index_Source);
-                if (string.IsNullOrWhiteSpace(name_Source))
-                    continue;
-
-                string name_Template = delimitedFileTable.ToString(i, index_Template);
+                string name_Template = delimitedFileTable.ToString(i, index_Source);
                 if (string.IsNullOrWhiteSpace(name_Template))
                     continue;
 

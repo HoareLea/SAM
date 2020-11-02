@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,8 +39,15 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
+            int index = -1;
+
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Model ot Adjacency Cluster", GH_ParamAccess.list);
-            int index = inputParamManager.AddParameter(new GooConstructionLibraryParam(), "constructionLibrary_", "constructionLibrary_", "SAM Analytical ConstructionLibrary", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_csvOrPath", "_csvOrPath", "Map File Path or csv text", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_sourceColumnName_", "_sourceColumnName_", "Column Name for Source Names of Constructions", GH_ParamAccess.item, "Name");
+            inputParamManager.AddTextParameter("_templateColumnName_", "_templateColumnName_", "Column Name for Template Names of Constructions", GH_ParamAccess.item, "template Family");
+            inputParamManager.AddTextParameter("_destinationColumnName_", "_destinationColumnName_", "Column Name for Destination Names of Constructions", GH_ParamAccess.item, "New Name Family");
+
+            index = inputParamManager.AddParameter(new GooConstructionLibraryParam(), "constructionLibrary_", "constructionLibrary_", "SAM Analytical ConstructionLibrary", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
         }
 
@@ -49,7 +56,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Analytical", "Analytical", "SAM Analytical Model or Adjacency Cluster", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Analyticals", "Analyticals", "SAM Analytical Model, Panels or Adjacency Cluster", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooConstructionLibraryParam(), "ConstructionLibrary", "ConstructionLibrary", "SAM Analytical ConstructionLibrary", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -67,37 +75,103 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            string csvOrPath = null;
+            if (!dataAccess.GetData(1, ref csvOrPath) || csvOrPath == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            string sourceColumnName = null;
+            if (!dataAccess.GetData(2, ref sourceColumnName) || string.IsNullOrWhiteSpace(sourceColumnName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            string templateColumnName = null;
+            if (!dataAccess.GetData(3, ref templateColumnName) || string.IsNullOrWhiteSpace(templateColumnName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            string destinationColumnName = null;
+            if (!dataAccess.GetData(4, ref destinationColumnName) || string.IsNullOrWhiteSpace(destinationColumnName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             ConstructionLibrary constructionLibrary = null;
-            dataAccess.GetData(1, ref constructionLibrary);
+            dataAccess.GetData(5, ref constructionLibrary);
             if (constructionLibrary == null)
                 constructionLibrary = Analytical.Query.DefaultConstructionLibrary();
 
+            DelimitedFileTable delimitedFileTable = null;
+            if (Core.Query.ValidFilePath(csvOrPath))
+            {
+                delimitedFileTable = new DelimitedFileTable(new DelimitedFileReader(DelimitedFileType.Csv, csvOrPath));
+            }
+            else
+            {
+                string[] lines = csvOrPath.Split('\n');
+                delimitedFileTable = new DelimitedFileTable(new DelimitedFileReader(DelimitedFileType.Csv, lines));
+            }
+
+            List<Panel> panels = new List<Panel>();
 
             List<SAMObject> result = new List<SAMObject>();
+            List<ConstructionLibrary> constructionLibraries = new List<ConstructionLibrary>();
             foreach (SAMObject sAMObject in sAMObjects)
             {
                 if (sAMObject is Panel)
                 {
-                    List<Panel> panels = new List<Panel>() { ((Panel)sAMObject).Clone() };
-                    Analytical.Modify.UpdateConstructionsByName(panels, constructionLibrary);
-                    panels.ForEach(x => result.Add(x));
+                    panels.Add((Panel)sAMObject);
                 }
                 else if (sAMObject is AdjacencyCluster)
                 {
-                    AdjacencyCluster adjacencyCluster = (AdjacencyCluster)sAMObject.Clone();
-                    Analytical.Modify.UpdateConstructionsByName(adjacencyCluster, constructionLibrary);
+                    AdjacencyCluster adjacencyCluster = (AdjacencyCluster)sAMObject;
+                    ConstructionLibrary constructionLibrary_Temp = null; 
+                    List <Panel> panels_Temp = adjacencyCluster.GetPanels();
+                    if(panels_Temp != null)
+                    {
+                        adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
+                        constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
+                        foreach(Panel panel in panels_Temp)
+                            adjacencyCluster.AddObject(panel);
+                    }
+
                     result.Add(adjacencyCluster);
+                    constructionLibraries.Add(constructionLibrary_Temp);
                 }
                 else if (sAMObject is AnalyticalModel)
                 {
                     AdjacencyCluster adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-                    Analytical.Modify.UpdateConstructionsByName(adjacencyCluster, constructionLibrary);
+                    ConstructionLibrary constructionLibrary_Temp = null;
+                    List<Panel> panels_Temp = adjacencyCluster.GetPanels();
+                    if (panels_Temp != null)
+                    {
+                        adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
+                        constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
+                        foreach (Panel panel in panels_Temp)
+                            adjacencyCluster.AddObject(panel);
+                    }
+
                     result.Add(new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster));
+                    constructionLibraries.Add(constructionLibrary_Temp);
                 }
             }
 
+            if(panels != null && panels.Count != 0)
+            {
+                ConstructionLibrary constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels, constructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
+                panels.ForEach(x => result.Add(x));
+                constructionLibraries.Add(constructionLibrary_Temp);
+            }
 
             dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
+            dataAccess.SetDataList(1, constructionLibraries.ConvertAll(x => new GooConstructionLibrary(x)));
         }
     }
 }

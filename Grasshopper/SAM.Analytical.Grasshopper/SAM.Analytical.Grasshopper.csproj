@@ -108,7 +108,6 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionLibraryByMap.cs" />
     <Compile Include="Component\SAMAnalyticalCreateInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByGeometry.cs" />
     <Compile Include="Component\SAMAnalyticalInternalConditionParameter.cs" />
@@ -184,7 +183,7 @@
     <Compile Include="Component\SAMAnalyticalCreateLevels.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateObjects.cs" />
     <Compile Include="Component\SAMAnalyticalRelatedObjects.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionLibraryByName.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalCreateOpaqueMaterial.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToRhino\Breps.cs" />

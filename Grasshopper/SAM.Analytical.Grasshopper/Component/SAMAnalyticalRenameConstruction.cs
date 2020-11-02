@@ -105,14 +105,14 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            int index_Source = delimitedFileTable.GetIndex(sourceColumn);
+            int index_Source = delimitedFileTable.GetColumnIndex(sourceColumn);
             if (index_Source == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            int index_Destination = delimitedFileTable.GetIndex(destinationColumn);
+            int index_Destination = delimitedFileTable.GetColumnIndex(destinationColumn);
             if (index_Destination == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -130,7 +130,7 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 string name_destination = null;
-                for (int i = 0; i < delimitedFileTable.Count; i++)
+                for (int i = 0; i < delimitedFileTable.RowCount; i++)
                 {
                     string name_source = null;
                     if (!delimitedFileTable.TryGetValue(i, index_Source, out name_source))
