@@ -7,17 +7,17 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateConstructionsByName : GH_SAMComponent
+    public class SAMAnalyticalUpdateConstructionsByMap : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("dc48a5c6-f59e-4e70-a72c-a14f5d5c3251");
+        public override Guid ComponentGuid => new Guid("cfbea99b-9a95-4ac7-ac9e-c3d5b2d850c1");
 
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,8 +27,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalUpdateConstructionsByName()
-          : base("SAMAnalytical.UpdateConstructionsByName", "SAMAnalytical.UpdateConstructionsByName",
+        public SAMAnalyticalUpdateConstructionsByMap()
+          : base("SAMAnalytical.UpdateConstructionsByMap", "SAMAnalytical.UpdateConstructionsByMap",
               "Update Constructions in SAM Adjacency Cluster or List of Panels",
               "SAM", "Analytical")
         {
@@ -42,6 +42,11 @@ namespace SAM.Analytical.Grasshopper
             int index = -1;
 
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Model ot Adjacency Cluster", GH_ParamAccess.list);
+            inputParamManager.AddTextParameter("_csvOrPath", "_csvOrPath", "Map File Path or csv text", GH_ParamAccess.item);
+            inputParamManager.AddTextParameter("_sourceColumnName_", "_sourceColumnName_", "Column Name for Source Names of Constructions", GH_ParamAccess.item, "Name");
+            inputParamManager.AddTextParameter("_templateColumnName_", "_templateColumnName_", "Column Name for Template Names of Constructions", GH_ParamAccess.item, "template Family");
+            inputParamManager.AddTextParameter("_destinationColumnName_", "_destinationColumnName_", "Column Name for Destination Names of Constructions", GH_ParamAccess.item, "New Name Family");
+
             index = inputParamManager.AddParameter(new GooConstructionLibraryParam(), "constructionLibrary_", "constructionLibrary_", "SAM Analytical ConstructionLibrary", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
         }
@@ -70,10 +75,49 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            string csvOrPath = null;
+            if (!dataAccess.GetData(1, ref csvOrPath) || csvOrPath == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            string sourceColumnName = null;
+            if (!dataAccess.GetData(2, ref sourceColumnName) || string.IsNullOrWhiteSpace(sourceColumnName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            string templateColumnName = null;
+            if (!dataAccess.GetData(3, ref templateColumnName) || string.IsNullOrWhiteSpace(templateColumnName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            string destinationColumnName = null;
+            if (!dataAccess.GetData(4, ref destinationColumnName) || string.IsNullOrWhiteSpace(destinationColumnName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             ConstructionLibrary constructionLibrary = null;
-            dataAccess.GetData(1, ref constructionLibrary);
+            dataAccess.GetData(5, ref constructionLibrary);
             if (constructionLibrary == null)
                 constructionLibrary = Analytical.Query.DefaultConstructionLibrary();
+
+            DelimitedFileTable delimitedFileTable = null;
+            if (Core.Query.ValidFilePath(csvOrPath))
+            {
+                delimitedFileTable = new DelimitedFileTable(new DelimitedFileReader(DelimitedFileType.Csv, csvOrPath));
+            }
+            else
+            {
+                string[] lines = csvOrPath.Split('\n');
+                delimitedFileTable = new DelimitedFileTable(new DelimitedFileReader(DelimitedFileType.Csv, lines));
+            }
 
             List<Panel> panels = new List<Panel>();
 
@@ -93,7 +137,7 @@ namespace SAM.Analytical.Grasshopper
                     if(panels_Temp != null)
                     {
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
-                        constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary);
+                        constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
                         foreach(Panel panel in panels_Temp)
                             adjacencyCluster.AddObject(panel);
                     }
@@ -109,7 +153,7 @@ namespace SAM.Analytical.Grasshopper
                     if (panels_Temp != null)
                     {
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
-                        constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary);
+                        constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
                         foreach (Panel panel in panels_Temp)
                             adjacencyCluster.AddObject(panel);
                     }
@@ -121,7 +165,7 @@ namespace SAM.Analytical.Grasshopper
 
             if(panels != null && panels.Count != 0)
             {
-                ConstructionLibrary constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels, constructionLibrary);
+                ConstructionLibrary constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels, constructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
                 panels.ForEach(x => result.Add(x));
                 constructionLibraries.Add(constructionLibrary_Temp);
             }

@@ -5,14 +5,42 @@ using System.Linq;
 namespace SAM.Analytical
 {
     public static partial class Modify
-    {           
+    {
+        public static ConstructionLibrary UpdateConstructionsByName(this List<Panel> panels, ConstructionLibrary constructionLibrary)
+        {
+            if (panels == null || constructionLibrary == null)
+                return null;
+
+            ConstructionLibrary result = new ConstructionLibrary(constructionLibrary.Name);
+            for (int i = 0; i < panels.Count; i++)
+            {
+                string name = panels[i].Construction?.Name;
+                if (string.IsNullOrWhiteSpace(name))
+                    continue;
+
+                Construction construction = result.GetConstructions(name)?.FirstOrDefault();
+                if (construction == null)
+                {
+                    construction = constructionLibrary.GetConstructions(name, TextComparisonType.Equals, true)?.FirstOrDefault();
+                    if (construction == null)
+                        continue;
+
+                    result.Add(construction);
+                }
+
+                panels[i] = new Panel(panels[i], construction);
+            }
+            return result;
+        }
+
+
         public static ConstructionLibrary UpdateConstructionsByName(
-            this List<Panel> panels, 
-            ConstructionLibrary constructionLibrary, 
-            DelimitedFileTable delimitedFileTable, 
-            string columnName_Source, 
-            string columnName_Template, 
-            string columnName_Destination = null)
+        this List<Panel> panels,
+        ConstructionLibrary constructionLibrary,
+        DelimitedFileTable delimitedFileTable,
+        string columnName_Source,
+        string columnName_Template,
+        string columnName_Destination = null)
         {
             if (panels == null || constructionLibrary == null || delimitedFileTable == null)
                 return null;
@@ -28,7 +56,7 @@ namespace SAM.Analytical
             int index_Destination = delimitedFileTable.GetColumnIndex(columnName_Destination);
 
             ConstructionLibrary result = new ConstructionLibrary(constructionLibrary.Name);
-            for(int i=0; i < panels.Count; i++)
+            for (int i = 0; i < panels.Count; i++)
             {
                 string name = panels[i].Construction?.Name;
                 if (string.IsNullOrWhiteSpace(name))
@@ -45,7 +73,7 @@ namespace SAM.Analytical
                     continue;
 
                 string name_Destination = name_Template;
-                if(index_Destination != -1)
+                if (index_Destination != -1)
                 {
                     name_Destination = delimitedFileTable.ToString(index, index_Destination);
                     if (string.IsNullOrWhiteSpace(name_Destination))
@@ -53,7 +81,7 @@ namespace SAM.Analytical
                 }
 
                 Construction construction = result.GetConstructions(name_Destination)?.FirstOrDefault();
-                if(construction == null)
+                if (construction == null)
                 {
                     Construction construction_Temp = constructionLibrary.GetConstructions(name_Template, TextComparisonType.Equals, true)?.FirstOrDefault();
                     if (construction_Temp == null)

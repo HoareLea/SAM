@@ -133,6 +133,7 @@
     <Compile Include="Component\SAMAnalyticalCheck.cs" />
     <Compile Include="Component\SAMAnalyticalSetApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByMap.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateHeatTransferCoefficients.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByName.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
