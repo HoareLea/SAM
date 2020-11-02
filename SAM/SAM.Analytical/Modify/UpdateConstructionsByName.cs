@@ -52,7 +52,7 @@ namespace SAM.Analytical
                         name_Destination = name_Template;
                 }
 
-                Construction construction = result.GetConstructions(name_Destination).FirstOrDefault();
+                Construction construction = result.GetConstructions(name_Destination)?.FirstOrDefault();
                 if(construction == null)
                 {
                     Construction construction_Temp = constructionLibrary.GetConstructions(name_Template, TextComparisonType.Equals, true)?.FirstOrDefault();
