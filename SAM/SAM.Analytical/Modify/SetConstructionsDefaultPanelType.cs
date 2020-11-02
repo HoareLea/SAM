@@ -7,7 +7,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Construction> UpdateConstructionsPanelTypes(this AdjacencyCluster adjacencyCluster)
+        public static List<Construction> SetConstructionsDefaultPanelType(this AdjacencyCluster adjacencyCluster)
         {
             if (adjacencyCluster == null)
                 return null;

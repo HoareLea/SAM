@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateConstructions : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalSetDefaultConstructionByPanelType : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -51,9 +51,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
-        public SAMAnalyticalUpdateConstructions()
-          : base("SAMAdjacencyCluster.UpdateConstructions", "SAMAdjacencyCluster.UpdateConstructions",
-              "Updates Constructions for Adjacency Cluster",
+        public SAMAnalyticalSetDefaultConstructionByPanelType()
+          : base("SAMAdjacencyCluster.SetDefaultConstructionByPanelType", "SAMAdjacencyCluster.SetDefaultConstructionByPanelType",
+              "Sets Default Constructions By PanelType for Adjacency Cluster",
               "SAM", "Analytical")
         {
         }
@@ -72,7 +72,7 @@ namespace SAM.Analytical.Grasshopper
 
             AdjacencyCluster adjacencyCluster_Result = new AdjacencyCluster(adjacencyCluster);
 
-            panels = adjacencyCluster_Result.UpdateConstructions(panels?.ConvertAll(x => x.Guid))?.ToList();
+            panels = adjacencyCluster_Result.SetDefaultConstructionByPanelType(panels?.ConvertAll(x => x.Guid))?.ToList();
 
             int index = -1;
 

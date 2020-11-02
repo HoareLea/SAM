@@ -78,6 +78,8 @@
     <Compile Include="Classes\InternalCondition.cs" />
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
+    <Compile Include="Create\ConstructionLibrary.cs" />
+    <Compile Include="Create\Construction.cs" />
     <Compile Include="Create\GasMaterial.cs" />
     <Compile Include="Create\MaterialLibrary.cs" />
     <Compile Include="Create\TransparentMaterial.cs" />
@@ -112,13 +114,15 @@
     <Compile Include="Modify\AddAperture.cs" />
     <Compile Include="Modify\OffsetAperturesOnEdge.cs" />
     <Compile Include="Modify\ReplaceTransparentPanels.cs" />
-    <Compile Include="Modify\UpdateConstructionsPanelTypes.cs" />
+    <Compile Include="Modify\SetConstructionsDefaultPanelType.cs" />
     <Compile Include="Modify\ReplaceConstruction.cs" />
     <Compile Include="Modify\UpdateApertures.cs" />
+    <Compile Include="Modify\UpdateConstructionsByName.cs" />
+    <Compile Include="Modify\UpdateConstruction.cs" />
     <Compile Include="Modify\UpdateSpace.cs" />
     <Compile Include="Modify\Remove.cs" />
     <Compile Include="Modify\AddSpace.cs" />
-    <Compile Include="Modify\UpdateConstructions.cs" />
+    <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\Cut.cs" />
     <Compile Include="Query\DefaultGasType.cs" />
@@ -172,7 +176,6 @@
     <Compile Include="Create\Rectangle2D.cs" />
     <Compile Include="Query\Internal.cs" />
     <Compile Include="Query\Panels.cs" />
-    <Compile Include="Modify\SetConstructionByName.cs" />
     <Compile Include="Query\External.cs" />
     <Compile Include="Query\SplitByConcaveEdges.cs" />
     <Compile Include="Query\Tilt.cs" />

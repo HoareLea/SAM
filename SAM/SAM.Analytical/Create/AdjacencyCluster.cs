@@ -98,7 +98,7 @@ namespace SAM.Analytical
             }
 
             adjacencyCluster.UpdatePanelTypes(elevation_Ground);
-            adjacencyCluster.UpdateConstructions();
+            adjacencyCluster.SetDefaultConstructionByPanelType();
 
             return adjacencyCluster;
         }
@@ -418,7 +418,7 @@ namespace SAM.Analytical
             }
 
             result.UpdatePanelTypes(elevation_Ground);
-            result.UpdateConstructions();
+            result.SetDefaultConstructionByPanelType();
 
             return result;
         }

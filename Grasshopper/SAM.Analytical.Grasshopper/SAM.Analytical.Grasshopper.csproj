@@ -108,6 +108,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateConstructionLibraryByMap.cs" />
     <Compile Include="Component\SAMAnalyticalCreateInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByGeometry.cs" />
     <Compile Include="Component\SAMAnalyticalInternalConditionParameter.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Component\SAMAnalyticalSetApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateHeatTransferCoefficients.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByName.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster_Obsolete.cs" />
     <Compile Include="Component\SAMAnalyticalGetAdjacentSpaceNames.cs" />
@@ -145,7 +147,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalRemove.cs" />
     <Compile Include="Component\SAMAnalyticalFilter.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateConstructions.cs" />
+    <Compile Include="Component\SAMAnalyticalSetDefaultConstructionByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalUpdatePanelTypes_Obsolete.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpaceByLocationAndName.cs" />
     <Compile Include="Component\SAMAnalyticalExternalVector3D.cs" />
@@ -182,7 +184,7 @@
     <Compile Include="Component\SAMAnalyticalCreateLevels.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateObjects.cs" />
     <Compile Include="Component\SAMAnalyticalRelatedObjects.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionLibrary.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateConstructionLibraryByName.cs" />
     <Compile Include="Component\SAMAnalyticalCreateOpaqueMaterial.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToRhino\Breps.cs" />

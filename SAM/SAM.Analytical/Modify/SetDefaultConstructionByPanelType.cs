@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static IEnumerable<Panel> UpdateConstructions(this AdjacencyCluster adjacencyCluster, IEnumerable<Guid> guids = null)
+        public static IEnumerable<Panel> SetDefaultConstructionByPanelType(this AdjacencyCluster adjacencyCluster, IEnumerable<Guid> guids = null)
         {
             if (adjacencyCluster == null)
                 return null;
