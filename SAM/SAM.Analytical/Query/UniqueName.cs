@@ -118,10 +118,10 @@
             switch (apertureType)
             {
                 case Analytical.ApertureType.Window:
-                    prefix = "Window";
+                    prefix = "Windows";
                     break;
                 case Analytical.ApertureType.Door:
-                    prefix = "Door";
+                    prefix = "Doors";
                     break;
                 case Analytical.ApertureType.Undefined:
                     prefix = "Undefined";

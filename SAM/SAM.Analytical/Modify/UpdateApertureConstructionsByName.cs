@@ -26,10 +26,10 @@ namespace SAM.Analytical
                     if (string.IsNullOrWhiteSpace(name))
                         continue;
 
-                    ApertureConstruction apertureConstruction = result.GetApertureConstructions(name, TextComparisonType.Equals, true)?.FirstOrDefault();
+                    ApertureConstruction apertureConstruction = result.GetApertureConstructions(name, TextComparisonType.Equals, true, aperture.ApertureType)?.FirstOrDefault();
                     if (apertureConstruction == null)
                     {
-                        apertureConstruction = apertureConstructionLibrary.GetApertureConstructions(name, TextComparisonType.Equals, true)?.FirstOrDefault();
+                        apertureConstruction = apertureConstructionLibrary.GetApertureConstructions(name, TextComparisonType.Equals, true, aperture.ApertureType)?.FirstOrDefault();
                         if (apertureConstruction == null)
                             continue;
 
@@ -61,10 +61,10 @@ namespace SAM.Analytical
                 if (string.IsNullOrWhiteSpace(name))
                     continue;
 
-                ApertureConstruction apertureConstruction = result.GetApertureConstructions(name, TextComparisonType.Equals, true)?.FirstOrDefault();
+                ApertureConstruction apertureConstruction = result.GetApertureConstructions(name, TextComparisonType.Equals, true, aperture.ApertureType)?.FirstOrDefault();
                 if (apertureConstruction == null)
                 {
-                    apertureConstruction = apertureConstructionLibrary.GetApertureConstructions(name, TextComparisonType.Equals, true)?.FirstOrDefault();
+                    apertureConstruction = apertureConstructionLibrary.GetApertureConstructions(name, TextComparisonType.Equals, true, aperture.ApertureType)?.FirstOrDefault();
                     if (apertureConstruction == null)
                         continue;
 
@@ -114,33 +114,40 @@ namespace SAM.Analytical
                 if (indexes == null || indexes.Count == 0)
                     continue;
 
-                int index = indexes[0];
-
-                string name_Template = delimitedFileTable.ToString(index, index_Template);
-                if (string.IsNullOrWhiteSpace(name_Template))
-                    continue;
-
-                string name_Destination = name_Template;
-                if (index_Destination != -1)
+                ApertureConstruction apertureConstruction = null;
+                for (int j = 0; j < indexes.Count; j++)
                 {
-                    name_Destination = delimitedFileTable.ToString(index, index_Destination);
-                    if (string.IsNullOrWhiteSpace(name_Destination))
-                        name_Destination = name_Template;
-                }
+                    int index = indexes[j];
 
-                ApertureConstruction apertureConstruction = result.GetApertureConstructions(name_Destination, TextComparisonType.Equals, true)?.FirstOrDefault();
-                if (apertureConstruction == null)
-                {
-                    ApertureConstruction apertureConstruction_Temp = apertureConstructionLibrary.GetApertureConstructions(name_Template, TextComparisonType.Equals, true)?.FirstOrDefault();
-                    if (apertureConstruction_Temp == null)
+                    string name_Template = delimitedFileTable.ToString(index, index_Template);
+                    if (string.IsNullOrWhiteSpace(name_Template))
                         continue;
 
-                    if (name_Destination.Equals(name_Template))
-                        apertureConstruction = apertureConstruction_Temp;
-                    else
-                        apertureConstruction = new ApertureConstruction(apertureConstruction_Temp, name_Destination);
+                    string name_Destination = name_Template;
+                    if (index_Destination != -1)
+                    {
+                        name_Destination = delimitedFileTable.ToString(index, index_Destination);
+                        if (string.IsNullOrWhiteSpace(name_Destination))
+                            name_Destination = name_Template;
+                    }
 
-                    result.Add(apertureConstruction);
+                    apertureConstruction = result.GetApertureConstructions(name_Destination, TextComparisonType.Equals, true, aperture.ApertureType)?.FirstOrDefault();
+                    if (apertureConstruction == null)
+                    {
+                        ApertureConstruction apertureConstruction_Temp = apertureConstructionLibrary.GetApertureConstructions(name_Template, TextComparisonType.Equals, true, aperture.ApertureType)?.FirstOrDefault();
+                        if (apertureConstruction_Temp == null)
+                            continue;
+
+                        if (name_Destination.Equals(name_Template))
+                            apertureConstruction = apertureConstruction_Temp;
+                        else
+                            apertureConstruction = new ApertureConstruction(apertureConstruction_Temp, name_Destination);
+
+                        result.Add(apertureConstruction);
+                    }
+
+                    if (apertureConstruction != null)
+                        break;
                 }
 
                 if (apertureConstruction == null)
