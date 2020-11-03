@@ -129,6 +129,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Panel> panels = new List<Panel>();
+            List<Aperture> apertures = new List<Aperture>();
             List<Construction> constructions = new List<Construction>();
             List<ApertureConstruction> apertureConstructions = new List<ApertureConstruction>();
 
@@ -140,6 +141,10 @@ namespace SAM.Analytical.Grasshopper
                 if (sAMObject is Panel)
                 {
                     panels.Add((Panel)sAMObject);
+                }
+                else if(sAMObject is Aperture)
+                {
+                    apertures.Add((Aperture)sAMObject);
                 }
                 else if (sAMObject is AdjacencyCluster)
                 {
@@ -198,6 +203,13 @@ namespace SAM.Analytical.Grasshopper
                 apertureConstructionLibraries.Add(apertureConstructionLibrary_Temp);
             }
 
+            if (apertures != null && apertures.Count != 0)
+            {
+                ApertureConstructionLibrary apertureConstructionLibrary_Temp = Analytical.Modify.UpdateApertureConstructionsByName(apertures, apertureConstructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
+                apertures.ForEach(x => result.Add(x));
+                apertureConstructionLibraries.Add(apertureConstructionLibrary_Temp);
+            }
+
             if (constructions != null && constructions.Count != 0)
             {
                 ConstructionLibrary constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(constructions, constructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
@@ -208,7 +220,7 @@ namespace SAM.Analytical.Grasshopper
             if (apertureConstructions != null && apertureConstructions.Count != 0)
             {
                 ApertureConstructionLibrary apertureConstructionLibrary_Temp = Analytical.Modify.UpdateApertureConstructionsByName(apertureConstructions, apertureConstructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
-                constructions.ForEach(x => result.Add(x));
+                apertureConstructions.ForEach(x => result.Add(x));
                 apertureConstructionLibraries.Add(apertureConstructionLibrary_Temp);
             }
 

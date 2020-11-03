@@ -86,6 +86,7 @@ namespace SAM.Analytical.Grasshopper
                 apertureConstructionLibrary = Analytical.Query.DefaultApertureConstructionLibrary();
 
             List<Panel> panels = new List<Panel>();
+            List<Aperture> apertures = new List<Aperture>();
 
             List<SAMObject> result = new List<SAMObject>();
             List<ConstructionLibrary> constructionLibraries = new List<ConstructionLibrary>();
@@ -95,6 +96,10 @@ namespace SAM.Analytical.Grasshopper
                 if (sAMObject is Panel)
                 {
                     panels.Add((Panel)sAMObject);
+                }
+                else if (sAMObject is Aperture)
+                {
+                    apertures.Add((Aperture)sAMObject);
                 }
                 else if (sAMObject is AdjacencyCluster)
                 {
@@ -142,6 +147,13 @@ namespace SAM.Analytical.Grasshopper
                 ApertureConstructionLibrary apertureConstructionLibrary_Temp = Analytical.Modify.UpdateApertureConstructionsByName(panels, apertureConstructionLibrary);
                 panels.ForEach(x => result.Add(x));
                 constructionLibraries.Add(constructionLibrary_Temp);
+            }
+
+            if (apertures != null && apertures.Count != 0)
+            {
+                ApertureConstructionLibrary apertureConstructionLibrary_Temp = Analytical.Modify.UpdateApertureConstructionsByName(panels, apertureConstructionLibrary);
+                apertures.ForEach(x => result.Add(x));
+                apertureConstructionLibraries.Add(apertureConstructionLibrary_Temp);
             }
 
             dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
