@@ -120,6 +120,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Panel> panels = new List<Panel>();
+            List<Construction> constructions = new List<Construction>();
 
             List<SAMObject> result = new List<SAMObject>();
             List<ConstructionLibrary> constructionLibraries = new List<ConstructionLibrary>();
@@ -161,12 +162,23 @@ namespace SAM.Analytical.Grasshopper
                     result.Add(new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster));
                     constructionLibraries.Add(constructionLibrary_Temp);
                 }
+                else if(sAMObject is Construction)
+                {
+                    constructions.Add((Construction)sAMObject);
+                }
             }
 
             if(panels != null && panels.Count != 0)
             {
                 ConstructionLibrary constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels, constructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
                 panels.ForEach(x => result.Add(x));
+                constructionLibraries.Add(constructionLibrary_Temp);
+            }
+
+            if (constructions != null && constructions.Count != 0)
+            {
+                ConstructionLibrary constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(constructions, constructionLibrary, delimitedFileTable, sourceColumnName, templateColumnName, destinationColumnName);
+                constructions.ForEach(x => result.Add(x));
                 constructionLibraries.Add(constructionLibrary_Temp);
             }
 
