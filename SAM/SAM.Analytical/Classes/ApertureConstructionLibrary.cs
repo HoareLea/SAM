@@ -117,7 +117,7 @@ namespace SAM.Analytical
                 if (apertureConstruction == null)
                     continue;
 
-                if (Core.Query.Compare(apertureConstruction.Name, text, textComparisonType, caseSensitive))
+                if (Core.Query.Compare(apertureConstruction.Name, text, textComparisonType, caseSensitive) || Core.Query.Compare(apertureConstruction.UniqueName(), text, textComparisonType, caseSensitive))
                     result.Add(apertureConstruction);
             }
 
