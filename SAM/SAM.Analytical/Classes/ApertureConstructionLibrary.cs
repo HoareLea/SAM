@@ -97,7 +97,7 @@ namespace SAM.Analytical
             return apertureConstructions.FindAll(x => x.PanelType().PanelGroup() == panelGroup);
         }
 
-        public List<ApertureConstruction> GetApertureConstructions(string text, TextComparisonType textComparisonType, bool caseSensitive = true, ApertureType apertureType = ApertureType.Undefined)
+        public List<ApertureConstruction> GetApertureConstructions(string text, TextComparisonType textComparisonType = TextComparisonType.Equals, bool caseSensitive = true, ApertureType apertureType = ApertureType.Undefined)
         {
             if (text == null)
                 return null;
