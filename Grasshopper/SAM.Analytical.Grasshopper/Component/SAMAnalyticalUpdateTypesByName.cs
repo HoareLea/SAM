@@ -7,12 +7,12 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateConstructionsByName : GH_SAMComponent
+    public class SAMAnalyticalUpdateTypesByName : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("dc48a5c6-f59e-4e70-a72c-a14f5d5c3251");
+        public override Guid ComponentGuid => new Guid("2599da0e-40c4-490e-b13d-37db83724923");
 
         /// <summary>
         /// The latest version of this component
@@ -27,9 +27,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalUpdateConstructionsByName()
-          : base("SAMAnalytical.UpdateConstructionsByName", "SAMAnalytical.UpdateConstructionsByName",
-              "Update Constructions in SAM Adjacency Cluster or List of Panels",
+        public SAMAnalyticalUpdateTypesByName()
+          : base("SAMAnalytical.UpdateTypesByName", "SAMAnalytical.UpdateTypesByName",
+              "Update Constructions and ApertureConstructions in SAM Adjacency Cluster or List of Panels",
               "SAM", "Analytical")
         {
         }
@@ -45,6 +45,9 @@ namespace SAM.Analytical.Grasshopper
             
             index = inputParamManager.AddParameter(new GooConstructionLibraryParam(), "constructionLibrary_", "constructionLibrary_", "SAM Analytical ConstructionLibrary", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddParameter(new GooApertureConstructionLibraryParam(), "apertureConstructionLibrary_", "apertureConstructionLibrary_", "SAM Analytical ApertureConstructionLibrary", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
         }
 
         /// <summary>
@@ -54,6 +57,7 @@ namespace SAM.Analytical.Grasshopper
         {
             outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Analyticals", "Analyticals", "SAM Analytical Model, Panels or Adjacency Cluster", GH_ParamAccess.list);
             outputParamManager.AddParameter(new GooConstructionLibraryParam(), "ConstructionLibrary", "ConstructionLibrary", "SAM Analytical ConstructionLibrary", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooApertureConstructionLibraryParam(), "ApertureConstructionLibrary", "ApertureConstructionLibrary", "SAM Analytical ApertureConstructionLibrary", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -76,10 +80,16 @@ namespace SAM.Analytical.Grasshopper
             if (constructionLibrary == null)
                 constructionLibrary = Analytical.Query.DefaultConstructionLibrary();
 
+            ApertureConstructionLibrary apertureConstructionLibrary = null;
+            dataAccess.GetData(2, ref apertureConstructionLibrary);
+            if (apertureConstructionLibrary == null)
+                apertureConstructionLibrary = Analytical.Query.DefaultApertureConstructionLibrary();
+
             List<Panel> panels = new List<Panel>();
 
             List<SAMObject> result = new List<SAMObject>();
             List<ConstructionLibrary> constructionLibraries = new List<ConstructionLibrary>();
+            List<ApertureConstructionLibrary> apertureConstructionLibraries = new List<ApertureConstructionLibrary>();
             foreach (SAMObject sAMObject in sAMObjects)
             {
                 if (sAMObject is Panel)
@@ -89,46 +99,54 @@ namespace SAM.Analytical.Grasshopper
                 else if (sAMObject is AdjacencyCluster)
                 {
                     AdjacencyCluster adjacencyCluster = (AdjacencyCluster)sAMObject;
-                    ConstructionLibrary constructionLibrary_Temp = null; 
+                    ConstructionLibrary constructionLibrary_Temp = null;
+                    ApertureConstructionLibrary apertureConstructionLibrary_Temp = null;
                     List <Panel> panels_Temp = adjacencyCluster.GetPanels();
                     if(panels_Temp != null)
                     {
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
                         constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary);
-                        foreach(Panel panel in panels_Temp)
+                        apertureConstructionLibrary_Temp = Analytical.Modify.UpdateApertureConstructionsByName(panels_Temp, apertureConstructionLibrary);
+                        foreach (Panel panel in panels_Temp)
                             adjacencyCluster.AddObject(panel);
                     }
 
                     result.Add(adjacencyCluster);
                     constructionLibraries.Add(constructionLibrary_Temp);
+                    apertureConstructionLibraries.Add(apertureConstructionLibrary_Temp);
                 }
                 else if (sAMObject is AnalyticalModel)
                 {
                     AdjacencyCluster adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
                     ConstructionLibrary constructionLibrary_Temp = null;
+                    ApertureConstructionLibrary apertureConstructionLibrary_Temp = null;
                     List<Panel> panels_Temp = adjacencyCluster.GetPanels();
                     if (panels_Temp != null)
                     {
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
                         constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary);
+                        apertureConstructionLibrary_Temp = Analytical.Modify.UpdateApertureConstructionsByName(panels_Temp, apertureConstructionLibrary);
                         foreach (Panel panel in panels_Temp)
                             adjacencyCluster.AddObject(panel);
                     }
 
                     result.Add(new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster));
                     constructionLibraries.Add(constructionLibrary_Temp);
+                    apertureConstructionLibraries.Add(apertureConstructionLibrary_Temp);
                 }
             }
 
             if(panels != null && panels.Count != 0)
             {
                 ConstructionLibrary constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels, constructionLibrary);
+                ApertureConstructionLibrary apertureConstructionLibrary_Temp = Analytical.Modify.UpdateApertureConstructionsByName(panels, apertureConstructionLibrary);
                 panels.ForEach(x => result.Add(x));
                 constructionLibraries.Add(constructionLibrary_Temp);
             }
 
             dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
             dataAccess.SetDataList(1, constructionLibraries.ConvertAll(x => new GooConstructionLibrary(x)));
+            dataAccess.SetDataList(2, apertureConstructionLibraries.ConvertAll(x => new GooApertureConstructionLibrary(x)));
         }
     }
 }
