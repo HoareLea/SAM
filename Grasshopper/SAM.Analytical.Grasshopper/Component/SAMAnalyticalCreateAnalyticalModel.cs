@@ -111,7 +111,7 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.GetData(5, ref materialLibrary);
 
             if (materialLibrary == null)
-                materialLibrary = ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary);
+                materialLibrary = Analytical.ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary);
 
             IEnumerable<IMaterial> materials = Analytical.Query.Materials(adjacencyCluster, materialLibrary);
             materialLibrary = Core.Create.MaterialLibrary("Default Material Library", materials);

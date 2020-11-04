@@ -20,7 +20,7 @@ namespace SAM.Analytical
                 return null;
 
             string fileName;
-            if (!setting.TryGetValue(AnalyticalSettingParameter.DefaultMaterialLibrary, out fileName) || string.IsNullOrWhiteSpace(fileName))
+            if (!setting.TryGetValue(AnalyticalSettingParameter.DefaultMaterialLibraryFileName, out fileName) || string.IsNullOrWhiteSpace(fileName))
                 return null;
 
             return System.IO.Path.Combine(resourcesDirectory, fileName);
