@@ -135,7 +135,12 @@ namespace SAM.Analytical.Grasshopper
                             adjacencyCluster.AddObject(panel);
                     }
 
-                    result.Add(new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster));
+                    MaterialLibrary materialLibrary = ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary);
+
+                    IEnumerable<IMaterial> materials = Analytical.Query.Materials(adjacencyCluster, materialLibrary);
+                    materialLibrary = Core.Create.MaterialLibrary("Default Material Library", materials);
+
+                    result.Add(new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster, materialLibrary));
                     constructionLibraries.Add(constructionLibrary_Temp);
                     apertureConstructionLibraries.Add(apertureConstructionLibrary_Temp);
                 }
