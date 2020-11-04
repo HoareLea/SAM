@@ -61,20 +61,18 @@ namespace SAM.Analytical
             if (face3D == null)
                 return null;
 
-            ISegmentable3D segmentable3D = face3D.GetExternalEdge3D() as ISegmentable3D;
-            if (segmentable3D == null)
+            IClosed2D closed2D = plane.Convert(face3D.GetExternalEdge3D());
+            if (closed2D == null)
                 return null;
 
-            List<Segment3D> segment3Ds = segmentable3D.GetSegments();
-            if (segment3Ds == null || segment3Ds.Count == 0)
+            List<Segment2D> segment2Ds_Panel = (closed2D as ISegmentable2D)?.GetSegments();
+            if (segment2Ds_Panel == null || segment2Ds_Panel.Count == 0)
                 return null;
 
-            List<Segment2D> segment2Ds = new List<Segment2D>();
-            foreach(Segment3D segment3D in segment3Ds)
+            List <Segment2D> segment2Ds = new List<Segment2D>();
+            for(int i = 0; i < segment2Ds_Panel.Count; i++)
             {
-                Segment2D segment2D = plane.Convert(segment3D);
-                if (segment2D == null)
-                    continue;
+                Segment2D segment2D = segment2Ds_Panel[i];
 
                 Vector2D vector2D_1 = Geometry.Planar.Query.TraceFirst(segment2D[0], segment2D.Direction.GetNegated(), segment2Ds_Panels);
                 Vector2D vector2D_2 = Geometry.Planar.Query.TraceFirst(segment2D[1], segment2D.Direction, segment2Ds_Panels);
@@ -91,6 +89,11 @@ namespace SAM.Analytical
             segment2Ds.AddRange(segment2Ds_Panels);
 
             List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance);
+            if (polygon2Ds == null || polygon2Ds.Count == 0)
+                return null;
+
+            polygon2Ds.RemoveAll(x => x == null || !closed2D.Inside(x.InternalPoint2D(tolerance), tolerance));
+
             polygon2Ds = Geometry.Planar.Query.Union(polygon2Ds, tolerance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
