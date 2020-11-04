@@ -92,7 +92,7 @@ namespace SAM.Analytical
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
 
-            polygon2Ds.RemoveAll(x => x == null || !closed2D.Inside(x.InternalPoint2D(tolerance), tolerance));
+            //polygon2Ds.RemoveAll(x => x == null || !closed2D.Inside(x.InternalPoint2D(tolerance), tolerance));
 
             polygon2Ds = Geometry.Planar.Query.Union(polygon2Ds, tolerance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
