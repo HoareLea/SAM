@@ -110,12 +110,12 @@ namespace SAM.Analytical.Grasshopper
             ConstructionLibrary constructionLibrary = null;
             dataAccess.GetData(5, ref constructionLibrary);
             if (constructionLibrary == null)
-                constructionLibrary = Analytical.Query.DefaultConstructionLibrary();
+                constructionLibrary = ActiveSetting.Setting.GetValue<ConstructionLibrary>(AnalyticalSettingParameter.DefaultConstructionLibrary);
 
             ApertureConstructionLibrary apertureConstructionLibrary = null;
             dataAccess.GetData(6, ref apertureConstructionLibrary);
             if (apertureConstructionLibrary == null)
-                apertureConstructionLibrary = Analytical.Query.DefaultApertureConstructionLibrary();
+                apertureConstructionLibrary = ActiveSetting.Setting.GetValue<ApertureConstructionLibrary>(AnalyticalSettingParameter.DefaultApertureConstructionLibrary);
 
             DelimitedFileTable delimitedFileTable = null;
             if (Core.Query.ValidFilePath(csvOrPath))

@@ -88,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
             MaterialLibrary materialLibrary = null;
             dataAccess.GetData(2, ref materialLibrary);
             if (materialLibrary == null)
-                materialLibrary = Analytical.Query.DefaultMaterialLibrary();
+                materialLibrary = ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary);
 
             if(spaces != null && spaces.Count != 0)
             {

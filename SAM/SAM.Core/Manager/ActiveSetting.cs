@@ -4,11 +4,6 @@ namespace SAM.Core
 {
     public static partial class ActiveSetting
     {
-        public static class Name
-        {
-            public const string DirectoryName_Resources = "DirectoryName_Resources";
-        }
-
         private static Setting setting = Load();
 
         private static Setting Load()
@@ -31,8 +26,7 @@ namespace SAM.Core
         public static Setting GetDefault()
         {
             Setting result = new Setting(Assembly.GetExecutingAssembly());
-
-            result.Add(Name.DirectoryName_Resources, "resources");
+            result.SetValue(CoreSettingParameter.ResourcesDirectoryName, "resources");
 
             return result;
         }

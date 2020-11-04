@@ -45,7 +45,7 @@ namespace SAM.Analytical
 
         public static ApertureConstruction DefaultApertureConstruction(this PanelType panelType, ApertureType apertureType)
         {
-            ApertureConstructionLibrary apertureConstructionLibrary = DefaultApertureConstructionLibrary();
+            ApertureConstructionLibrary apertureConstructionLibrary = ActiveSetting.Setting.GetValue<ApertureConstructionLibrary>(AnalyticalSettingParameter.DefaultApertureConstructionLibrary);
             if (apertureConstructionLibrary == null)
                 return null;
 
@@ -57,42 +57,6 @@ namespace SAM.Analytical
                 return null;
 
             return apertureConstructions.FirstOrDefault();
-
-            
-            //ApertureType apertureType_Temp = apertureType;
-
-            //bool external = true;
-            //switch (panelType)
-            //{
-            //    case Analytical.PanelType.Roof:
-            //        ApertureConstruction apertureConstruction;
-            //        if (!ActiveSetting.Setting.TryGetValue(ActiveSetting.Name.ApertureConstruction_Skylight, out apertureConstruction))
-            //            return null;
-            //        return apertureConstruction;
-
-            //    case Analytical.PanelType.Undefined:
-            //    case Analytical.PanelType.CurtainWall:
-            //    case Analytical.PanelType.Wall:
-            //    case Analytical.PanelType.Floor:
-            //    case Analytical.PanelType.FloorExposed:
-            //    case Analytical.PanelType.FloorRaised:
-            //    case Analytical.PanelType.Shade:
-            //    case Analytical.PanelType.SolarPanel:
-            //    case Analytical.PanelType.WallExternal:
-            //        external = true;
-            //        break;
-
-            //    case Analytical.PanelType.WallInternal:
-            //    case Analytical.PanelType.FloorInternal:
-            //    case Analytical.PanelType.Ceiling:
-            //        external = false;
-            //        break;
-
-            //    default:
-            //        return null;
-            //}
-
-            //return DefaultApertureConstruction(apertureType_Temp, external);
         }
     }
 }

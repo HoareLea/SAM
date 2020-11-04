@@ -83,7 +83,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(2, ref materialLibrary);
 
                 if (materialLibrary == null)
-                    materialLibrary = Analytical.Query.DefaultMaterialLibrary();
+                    materialLibrary = ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary);
 
                 int count = thicknesses.Count;
                 for (int i = 0; i < names.Count - count; i++)

@@ -257,6 +257,14 @@ namespace SAM.Analytical
             }
         }
 
+        public PanelGroup PanelGroup
+        {
+            get
+            {
+                return panelType.PanelGroup();
+            }
+        }
+
         public double Distance(Point3D point3D)
         {
             return GetFace3D().Distance(point3D);

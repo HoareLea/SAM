@@ -74,7 +74,7 @@ namespace SAM.Analytical.Grasshopper
             ConstructionLibrary constructionLibrary = null;
             dataAccess.GetData(1, ref constructionLibrary);
             if (constructionLibrary == null)
-                constructionLibrary = Analytical.Query.DefaultConstructionLibrary();
+                constructionLibrary = ActiveSetting.Setting.GetValue<ConstructionLibrary>(AnalyticalSettingParameter.DefaultConstructionLibrary);
 
             List<Panel> panels = new List<Panel>();
 

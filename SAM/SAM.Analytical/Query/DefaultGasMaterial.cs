@@ -1,5 +1,4 @@
 ﻿using SAM.Core;
-using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -11,7 +10,7 @@ namespace SAM.Analytical
             if (defaultGasType == Analytical.DefaultGasType.Undefined)
                 return null;
 
-            MaterialLibrary materialLibrary = DefaultGasMaterialLibrary();
+            MaterialLibrary materialLibrary = ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultGasMaterialLibrary);
             if (materialLibrary == null)
                 return null;
 

@@ -230,7 +230,7 @@ namespace SAM.Analytical
             List<Panel> result = adjacencyCluster?.ReplaceTransparentPanels(materialLibrary, offset);
             if(result != null && result.Count > 0)
             {
-                IEnumerable<IMaterial> materials = Query.Materials(result, Query.DefaultMaterialLibrary());
+                IEnumerable<IMaterial> materials = Query.Materials(result, ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary));
                 if (materials != null)
                     foreach (IMaterial material in materials)
                         AddMaterial(material);

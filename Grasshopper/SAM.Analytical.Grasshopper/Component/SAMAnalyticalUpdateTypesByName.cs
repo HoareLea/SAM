@@ -78,12 +78,12 @@ namespace SAM.Analytical.Grasshopper
             ConstructionLibrary constructionLibrary = null;
             dataAccess.GetData(1, ref constructionLibrary);
             if (constructionLibrary == null)
-                constructionLibrary = Analytical.Query.DefaultConstructionLibrary();
+                constructionLibrary = ActiveSetting.Setting.GetValue<ConstructionLibrary>(AnalyticalSettingParameter.DefaultConstructionLibrary); ;
 
             ApertureConstructionLibrary apertureConstructionLibrary = null;
             dataAccess.GetData(2, ref apertureConstructionLibrary);
             if (apertureConstructionLibrary == null)
-                apertureConstructionLibrary = Analytical.Query.DefaultApertureConstructionLibrary();
+                apertureConstructionLibrary = ActiveSetting.Setting.GetValue<ApertureConstructionLibrary>(AnalyticalSettingParameter.DefaultApertureConstructionLibrary);
 
             List<Panel> panels = new List<Panel>();
             List<Aperture> apertures = new List<Aperture>();

@@ -16,7 +16,7 @@ namespace SAM.Analytical
                 return null;
             
             string fileName;
-            if (!setting.TryGetValue(ActiveSetting.Name.FileName_DefaultApertureConstructionLibrary, out fileName) || string.IsNullOrWhiteSpace(fileName))
+            if (!setting.TryGetValue(AnalyticalSettingParameter.DefaultApertureConstructionLibraryFileName, out fileName) || string.IsNullOrWhiteSpace(fileName))
                 return null;
 
             if (string.IsNullOrWhiteSpace(fileName))

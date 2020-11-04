@@ -57,6 +57,7 @@
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Enums\AccessType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
+    <Compile Include="Enums\Parameter\CoreSettingParameter.cs" />
     <Compile Include="Modify\AddRange.cs" />
     <Compile Include="Classes\Library\SAMLibrary.cs" />
     <Compile Include="Classes\Material\SolidMaterial.cs" />
@@ -133,7 +134,6 @@
     <Compile Include="Query\WriteAccess.cs" />
     <Compile Include="Query\ReadAccess.cs" />
     <Compile Include="Query\ResourcesDirectory.cs" />
-    <Compile Include="Query\ResourcesDirectoryName.cs" />
     <Compile Include="Query\IndexesOf.cs" />
     <Compile Include="Query\LatestVersion.cs" />
     <Compile Include="Query\CurrentVersion.cs" />

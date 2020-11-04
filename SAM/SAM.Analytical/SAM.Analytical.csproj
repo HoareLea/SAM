@@ -95,6 +95,7 @@
     <Compile Include="Enums\Parameter\PanelParameter.cs" />
     <Compile Include="Enums\Parameter\ApertureConstructionParameter.cs" />
     <Compile Include="Enums\Parameter\ConstructionParameter.cs" />
+    <Compile Include="Enums\Parameter\AnalyticalSettingParameter.cs" />
     <Compile Include="Enums\Parameter\TransparentMaterialParameter.cs" />
     <Compile Include="Enums\Parameter\OpaqueMaterialParameter.cs" />
     <Compile Include="Enums\Parameter\MaterialParameter.cs" />
@@ -133,12 +134,9 @@
     <Compile Include="Query\HasMaterial.cs" />
     <Compile Include="Query\Constructions.cs" />
     <Compile Include="Query\TransparentPanels.cs" />
-    <Compile Include="Query\DefaultApertureConstructionLibrary.cs" />
     <Compile Include="Query\DefaultApertureConstructionLibraryPath.cs" />
     <Compile Include="Query\DefaultConstructionLibraryPath.cs" />
-    <Compile Include="Query\DefaultConstructionLibrary.cs" />
     <Compile Include="Query\DefaultGasMaterialLibraryPath.cs" />
-    <Compile Include="Query\DefaultGasMaterialLibrary.cs" />
     <Compile Include="Query\Opaque.cs" />
     <Compile Include="Query\UniqueName.cs" />
     <Compile Include="Query\FrameApertureConstructionUniqueName.cs" />
@@ -153,7 +151,6 @@
     <Compile Include="Query\Materials.cs" />
     <Compile Include="Query\BlackBodySurfaceRadiativeCoefficient.cs" />
     <Compile Include="Query\DefaultMaterialLibraryPath.cs" />
-    <Compile Include="Query\DefaultMaterialLibrary.cs" />
     <Compile Include="Query\FirstMaterial.cs" />
     <Compile Include="Query\FirstConstructionLayer.cs" />
     <Compile Include="Query\Apertures.cs" />

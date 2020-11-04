@@ -9,7 +9,7 @@ namespace SAM.Core
             if (setting == null)
                 return null;
 
-            return System.IO.Path.Combine(ExecutingAssemblyDirectory(), ResourcesDirectoryName(setting));
+            return System.IO.Path.Combine(ExecutingAssemblyDirectory(), setting?.GetValue<string>(CoreSettingParameter.ResourcesDirectoryName));
         }
 
         public static string ResourcesDirectory()
@@ -22,7 +22,7 @@ namespace SAM.Core
             if (setting == null)
                 return null;
 
-            string resourcesDirectoryName = ResourcesDirectoryName(setting);
+            string resourcesDirectoryName = setting?.GetValue<string>(CoreSettingParameter.ResourcesDirectoryName);
             if (string.IsNullOrWhiteSpace(resourcesDirectoryName))
                 return null;
 
