@@ -64,12 +64,14 @@ namespace SAM.Analytical
 
                 //Extending Segments in both ways
                 List<Segment2D> segment2Ds = new List<Segment2D>();
+                List<Segment2D> segment2Ds_Main = new List<Segment2D>();
                 foreach (Tuple<Panel, double, double, List<Segment2D>> tuple in tuples)
                 {
                     if (tuple.Item4 == null || tuple.Item4.Count == 0)
                         continue;
                     
                     Segment2D segment2D = tuple.Item4[0];
+                    segment2Ds_Main.Add(segment2D);
 
                     Vector2D vector2D = segment2D.Direction * distance;
 
@@ -103,7 +105,7 @@ namespace SAM.Analytical
                                 if (segment2D == null || segment2D.GetLength() >= distance + tolerance)
                                     continue;
 
-                                if (segment2Ds.Find(x => x.Similar(segment2D, tolerance)) != null)
+                                if (segment2Ds_Main.Find(x => x.Similar(segment2D, tolerance)) != null)
                                     continue;
 
                                 segment2Ds_ToBeRemoved.Add(segment2Ds_Temp[0]);
@@ -144,13 +146,16 @@ namespace SAM.Analytical
                         if (!segmnet2D_Old.Direction.SameHalf(segmnet2D_New.Direction))
                             segmnet2D_New.Reverse();
 
-                        if (segmnet2D_New.AlmostSimilar(segmnet2D_Old, tolerance))
-                            continue;
-
-                        updated = true;
-
                         tuple.Item4.Clear();
+
+                        if (segmnet2D_New.AlmostSimilar(segmnet2D_Old, tolerance))
+                        {
+                            tuple.Item4.Add(segmnet2D_Old);
+                            continue;
+                        }
+
                         tuple.Item4.Add(segmnet2D_New);
+                        updated = true;
                     }
                 }
 
