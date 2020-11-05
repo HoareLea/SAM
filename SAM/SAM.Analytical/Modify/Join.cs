@@ -128,6 +128,8 @@ namespace SAM.Analytical
                             continue;
                         }
 
+                        segment2Ds_Temp.ForEach(x => segment2Ds.Remove(x));
+
                         List<Point2D> point2Ds = segment2Ds_Temp.Point2Ds(tolerance);
 
                         Point2D point2D_1 = null;
