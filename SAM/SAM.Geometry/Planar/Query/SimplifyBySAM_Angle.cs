@@ -4,6 +4,45 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
+        public static bool SimplifyBySAM_Angle(this List<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance, double maxAngle = Core.Tolerance.Angle)
+        {
+            if (segment2Ds == null || segment2Ds.Count == 0)
+                return false;
+
+            bool result = false;
+
+            List<Point2D> point2Ds = segment2Ds.Point2Ds(tolerance);
+            foreach(Point2D point2D in point2Ds)
+            {
+                List<Segment2D> segment2Ds_Temp = segment2Ds.FindAll(x => x[0].AlmostEquals(point2D) || x[1].AlmostEquals(point2D));
+                if (segment2Ds == null || segment2Ds_Temp.Count != 2)
+                    continue;
+
+                if (segment2Ds[0].Direction.SmallestAngle(segment2Ds[1].Direction) >= maxAngle)
+                    continue;
+
+                List<Point2D> point2Ds_Temp = segment2Ds_Temp.Point2Ds(tolerance).FindAll(x => !x.AlmostEquals(point2D));
+                if (point2Ds_Temp == null || point2Ds_Temp.Count != 2)
+                    continue;
+
+                Segment2D segment2D = new Segment2D(point2Ds_Temp[0], point2Ds_Temp[1]);
+
+                Segment2D segment2D_Temp = segment2Ds_Temp[0];
+                if (segment2D_Temp.GetLength() < segment2Ds_Temp[1].GetLength())
+                    segment2D_Temp = segment2Ds_Temp[1];
+
+                if (!segment2D.Direction.SameHalf(segment2D_Temp.Direction))
+                    segment2D.Reverse();
+
+                segment2Ds_Temp.ForEach(x => segment2Ds.Remove(x));
+                segment2Ds.Add(segment2D);
+                result = true;
+            }
+
+            return result;
+        }
+
+
         public static bool SimplifyBySAM_Angle(this List<Point2D> point2Ds, bool closed, double maxAngle = Core.Tolerance.Angle)
         {
             if (point2Ds == null || point2Ds.Count < 3)

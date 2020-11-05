@@ -109,6 +109,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalCreateInternalCondition.cs" />
+    <Compile Include="Component\SAMAnalyticalJoinPanels.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByGeometry.cs" />
     <Compile Include="Component\SAMAnalyticalInternalConditionParameter.cs" />
     <Compile Include="Component\SAMAnalyticalCreateApertureConstructionLibrary.cs" />

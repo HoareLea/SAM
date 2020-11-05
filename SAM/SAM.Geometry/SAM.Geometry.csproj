@@ -141,6 +141,7 @@
     <Compile Include="Planar\Query\Average.cs" />
     <Compile Include="Planar\Query\InRange.cs" />
     <Compile Include="Planar\Query\InternalPoint2D.cs" />
+    <Compile Include="Planar\Query\Point2Ds.cs" />
     <Compile Include="Planar\Query\Polygons.cs" />
     <Compile Include="Planar\Query\Inside.cs" />
     <Compile Include="Planar\Query\Area.cs" />

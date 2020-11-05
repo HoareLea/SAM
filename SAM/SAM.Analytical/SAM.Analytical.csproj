@@ -82,6 +82,7 @@
     <Compile Include="Create\Construction.cs" />
     <Compile Include="Create\GasMaterial.cs" />
     <Compile Include="Create\MaterialLibrary.cs" />
+    <Compile Include="Create\Panel.cs" />
     <Compile Include="Create\TransparentMaterial.cs" />
     <Compile Include="Create\OpaqueMaterial.cs" />
     <Compile Include="Create\ConstructionLayers.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
+    <Compile Include="Modify\Join.cs" />
     <Compile Include="Modify\OffsetAperturesOnEdge.cs" />
     <Compile Include="Modify\ReplaceTransparentPanels.cs" />
     <Compile Include="Modify\SetConstructionsDefaultPanelType.cs" />

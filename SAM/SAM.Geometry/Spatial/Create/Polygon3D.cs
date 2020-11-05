@@ -36,5 +36,15 @@ namespace SAM.Geometry.Spatial
 
             return new Polygon3D(plane, point2Ds);
         }
+
+        public static Polygon3D Polygon3D(this Segment3D segment3D, double height)
+        {
+            if (segment3D == null || double.IsNaN(height))
+                return null;
+
+            Vector3D vector3D = Spatial.Vector3D.WorldZ * height;
+
+            return new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], (Point3D)segment3D[1].GetMoved(vector3D), (Point3D)segment3D[0].GetMoved(vector3D) });
+        }
     }
 }
