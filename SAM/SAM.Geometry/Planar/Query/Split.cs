@@ -28,17 +28,27 @@ namespace SAM.Geometry.Planar
                 {
                     Segment2D segment2D_2 = segment2Ds.ElementAt(j);
 
+                    if (segment2D_1.AlmostSimilar(segment2D_2, tolerance))
+                        continue;
+
                     Point2D point2D_Closest1;
                     Point2D point2D_Closest2;
 
                     List<Point2D> point2Ds_Intersection = new List<Point2D>();
-                    if (segment2D_1.On(segment2D_2[0]))
+
+                    if (segment2D_1.On(segment2D_2[0], tolerance))
                         point2Ds_Intersection.Add(segment2D_2[0]);
-                    
-                    if(segment2D_1.On(segment2D_2[1]))
+
+                    if (segment2D_2.On(segment2D_1[0], tolerance))
+                        point2Ds_Intersection.Add(segment2D_1[0]);
+
+                    if (segment2D_1.On(segment2D_2[1], tolerance))
                         point2Ds_Intersection.Add(segment2D_2[1]);
 
-                    if(point2Ds_Intersection.Count == 0)
+                    if (segment2D_2.On(segment2D_1[1], tolerance))
+                        point2Ds_Intersection.Add(segment2D_1[1]);
+
+                    if (point2Ds_Intersection.Count == 0)
                     {
                         Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, out point2D_Closest1, out point2D_Closest2, tolerance);
                         if (point2D_Intersection == null || point2D_Intersection.IsNaN())
@@ -99,7 +109,16 @@ namespace SAM.Geometry.Planar
                 Modify.SortByDistance(points, segment2D_Temp[0]);
 
                 for (int j = 0; j < points.Count - 1; j++)
-                    result.Add(new Segment2D(points[j], points[j + 1]));
+                {
+                    Point2D point2D_1 = points[j];
+                    Point2D point2D_2 = points[j + 1];
+
+                    Segment2D segment2D = result.Find(x => (x[0].AlmostEquals(point2D_1, tolerance) && x[1].AlmostEquals(point2D_2, tolerance)) || (x[1].AlmostEquals(point2D_1, tolerance) && x[0].AlmostEquals(point2D_2, tolerance)));
+                    if (segment2D != null)
+                        continue;
+
+                    result.Add(new Segment2D(point2D_1, point2D_2));
+                }
             }
 
             return result;
