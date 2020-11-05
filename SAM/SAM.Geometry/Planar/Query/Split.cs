@@ -95,6 +95,8 @@ namespace SAM.Geometry.Planar
             for (int i = 0; i < count; i++)
             {
                 Segment2D segment2D_Temp = segment2Ds.ElementAt(i);
+                if (result.Find(x => x.AlmostSimilar(segment2D_Temp, tolerance)) != null)
+                    continue;
 
                 List<Point2D> points;
                 if (!dictionary.TryGetValue(i, out points))
