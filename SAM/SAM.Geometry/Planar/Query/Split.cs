@@ -1,5 +1,4 @@
 ﻿using NetTopologySuite.Geometries;
-using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,84 +10,99 @@ namespace SAM.Geometry.Planar
         /// Split Segment2Ds
         /// </summary>
         /// <returns>List Segment2D</returns>
-        /// <param name="segment2Ds">Sermnets2Ds</param>
-        /// <param name="tolerance">tolerance (default = 0) .</param>
+        /// <param name="segment2Ds">Segments2Ds</param>
+        /// <param name="tolerance">tolerance</param>
         public static List<Segment2D> Split(this IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segment2Ds == null)
                 return null;
 
-            int aCount = segment2Ds.Count();
+            int count = segment2Ds.Count();
 
-            Dictionary<int, List<Point2D>> aPointDictionary = new Dictionary<int, List<Point2D>>();
+            Dictionary<int, List<Point2D>> dictionary = new Dictionary<int, List<Point2D>>();
 
-            for (int i = 0; i < aCount - 1; i++)
+            for (int i = 0; i < count - 1; i++)
             {
                 Segment2D segment2D_1 = segment2Ds.ElementAt(i);
-                for (int j = i + 1; j < aCount; j++)
+                for (int j = i + 1; j < count; j++)
                 {
                     Segment2D segment2D_2 = segment2Ds.ElementAt(j);
 
                     Point2D point2D_Closest1;
                     Point2D point2D_Closest2;
 
-                    Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, out point2D_Closest1, out point2D_Closest2, tolerance);
-                    if (point2D_Intersection == null || point2D_Intersection.IsNaN())
-                        continue;
+                    List<Point2D> point2Ds_Intersection = new List<Point2D>();
+                    if (segment2D_1.On(segment2D_2[0]))
+                        point2Ds_Intersection.Add(segment2D_2[0]);
+                    
+                    if(segment2D_1.On(segment2D_2[1]))
+                        point2Ds_Intersection.Add(segment2D_2[1]);
 
-                    if (point2D_Closest1 != null && point2D_Closest2 != null)
-                        if (point2D_Closest1.Distance(point2D_Closest2) > tolerance)
+                    if(point2Ds_Intersection.Count == 0)
+                    {
+                        Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, out point2D_Closest1, out point2D_Closest2, tolerance);
+                        if (point2D_Intersection == null || point2D_Intersection.IsNaN())
                             continue;
 
-                    List<Point2D> aPointList;
+                        if (point2D_Closest1 != null && point2D_Closest2 != null)
+                            if (point2D_Closest1.Distance(point2D_Closest2) > tolerance)
+                                continue;
 
-                    if (point2D_Intersection.Distance(segment2D_1.Start) > tolerance && point2D_Intersection.Distance(segment2D_1.End) > tolerance)
-                    {
-                        if (!aPointDictionary.TryGetValue(i, out aPointList))
-                        {
-                            aPointList = new List<Point2D>();
-                            aPointDictionary[i] = aPointList;
-                        }
-
-                        Modify.Add(aPointList, point2D_Intersection, tolerance);
+                        point2Ds_Intersection.Add(point2D_Intersection);
                     }
 
-                    if (point2D_Intersection.Distance(segment2D_2.Start) > tolerance && point2D_Intersection.Distance(segment2D_2.End) > tolerance)
+                    foreach(Point2D point2D_Intersection in point2Ds_Intersection)
                     {
-                        if (!aPointDictionary.TryGetValue(j, out aPointList))
+                        List<Point2D> points;
+
+                        if (point2D_Intersection.Distance(segment2D_1.Start) > tolerance && point2D_Intersection.Distance(segment2D_1.End) > tolerance)
                         {
-                            aPointList = new List<Point2D>();
-                            aPointDictionary[j] = aPointList;
+                            if (!dictionary.TryGetValue(i, out points))
+                            {
+                                points = new List<Point2D>();
+                                dictionary[i] = points;
+                            }
+
+                            Modify.Add(points, point2D_Intersection, tolerance);
                         }
 
-                        Modify.Add(aPointList, point2D_Intersection, tolerance);
+                        if (point2D_Intersection.Distance(segment2D_2.Start) > tolerance && point2D_Intersection.Distance(segment2D_2.End) > tolerance)
+                        {
+                            if (!dictionary.TryGetValue(j, out points))
+                            {
+                                points = new List<Point2D>();
+                                dictionary[j] = points;
+                            }
+
+                            Modify.Add(points, point2D_Intersection, tolerance);
+                        }
                     }
                 }
             }
 
-            List<Segment2D> aResult = new List<Segment2D>();
+            List<Segment2D> result = new List<Segment2D>();
 
-            for (int i = 0; i < aCount; i++)
+            for (int i = 0; i < count; i++)
             {
                 Segment2D segment2D_Temp = segment2Ds.ElementAt(i);
 
-                List<Point2D> aPointList;
-                if (!aPointDictionary.TryGetValue(i, out aPointList))
+                List<Point2D> points;
+                if (!dictionary.TryGetValue(i, out points))
                 {
-                    aResult.Add(segment2D_Temp);
+                    result.Add(segment2D_Temp);
                     continue;
                 }
 
-                Modify.Add(aPointList, segment2D_Temp[0], tolerance);
-                Modify.Add(aPointList, segment2D_Temp[1], tolerance);
+                Modify.Add(points, segment2D_Temp[0], tolerance);
+                Modify.Add(points, segment2D_Temp[1], tolerance);
 
-                Modify.SortByDistance(aPointList, segment2D_Temp[0]);
+                Modify.SortByDistance(points, segment2D_Temp[0]);
 
-                for (int j = 0; j < aPointList.Count - 1; j++)
-                    aResult.Add(new Segment2D(aPointList[j], aPointList[j + 1]));
+                for (int j = 0; j < points.Count - 1; j++)
+                    result.Add(new Segment2D(points[j], points[j + 1]));
             }
 
-            return aResult;
+            return result;
         }
 
         public static List<Segment2D> Split(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
