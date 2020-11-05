@@ -75,8 +75,16 @@ namespace SAM.Analytical
 
                     Vector2D vector2D = segment2D.Direction * distance;
 
-                    tuple.Item4.Add(new Segment2D(segment2D[1], segment2D[1].GetMoved(vector2D)));
-                    tuple.Item4.Add(new Segment2D(segment2D[0], segment2D[0].GetMoved(vector2D.GetNegated())));
+                    Segment2D segment2D_Temp = null;
+
+                    segment2D_Temp = new Segment2D(segment2D[1], segment2D[1].GetMoved(vector2D));
+                    if(tuples.Find(x => x.Item4 != null && x.Item4.Count != 0 && x.Item4[0].On(segment2D_Temp[0]) && x.Item4[0].On(segment2D_Temp[1])) == null)
+                        tuple.Item4.Add(segment2D_Temp);
+
+                    segment2D_Temp = new Segment2D(segment2D[0], segment2D[0].GetMoved(vector2D.GetNegated()));
+                    if (tuples.Find(x => x.Item4 != null && x.Item4.Count != 0 && x.Item4[0].On(segment2D_Temp[0]) && x.Item4[0].On(segment2D_Temp[1])) == null)
+                        tuple.Item4.Add(segment2D_Temp);
+
                     segment2Ds.AddRange(tuple.Item4);
                 }
 
