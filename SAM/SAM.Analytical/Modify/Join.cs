@@ -125,6 +125,9 @@ namespace SAM.Analytical
                     //Reorganizing input data
                     foreach (Tuple<Panel, double, double, List<Segment2D>> tuple in tuples)
                     {
+                        if (tuple.Item4 == null || tuple.Item4.Count == 0)
+                            continue;
+
                         List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
                         foreach(Segment2D segment2D in tuple.Item4)
                             segment2Ds_Temp.AddRange(segment2Ds.FindAll(x => segment2D.On(x.Mid())));
