@@ -187,7 +187,7 @@ namespace SAM.Analytical
                 Segment2D segment2D_1 = segment2Ds_Old[i];
                 List<Point2D> point2Ds_1 = segment2D_1.GetPoints();
 
-                for (int j= i + 1; j < segment2Ds_Old.Count - 1; j++)
+                for (int j= i + 1; j < segment2Ds_Old.Count; j++)
                 {
                     Segment2D segment2D_2 = segment2Ds_Old[j];
                     List<Point2D> point2Ds_2 = segment2D_2.GetPoints();
@@ -232,11 +232,11 @@ namespace SAM.Analytical
 
                 Tuple<Point2D, List<Segment2D>> tuple_1 = tuples_Connections.Find(x => x.Item1.AlmostEquals(segment2D_Old[0], tolerance));
                 if(tuple_1 != null && tuple_1.Item2 != null && tuple_1.Item2.Count > 1)
-                    segment2D_New[0] = segment2D_Old[0];
+                    segment2D_New = new Segment2D(segment2D_Old[0], segment2D_New[1]);
 
                 Tuple<Point2D, List<Segment2D>> tuple_2 = tuples_Connections.Find(x => x.Item1.AlmostEquals(segment2D_Old[1], tolerance));
                 if (tuple_2 != null && tuple_2.Item2 != null && tuple_2.Item2.Count > 1)
-                    segment2D_New[1] = segment2D_Old[1];
+                    segment2D_New = new Segment2D(segment2D_New[0], segment2D_Old[1]);
 
                 if (segment2D_Old.AlmostSimilar(segment2D_New, tolerance))
                     continue;
