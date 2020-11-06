@@ -322,7 +322,7 @@ namespace SAM.Analytical
 
                     //Removing overlaps for segment2D
                     tuples_Overlap = tuples.FindAll(x => x.Item4.On(segment2D[0]) && x.Item4.On(segment2D[1]));
-                    if (tuples_Overlap.Count > 0)
+                    if (tuples_Overlap.Count > 1)
                     {
                         Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, null);
                         tuples_All[tuples_All.IndexOf(tuple)] = tuple_New;
@@ -332,7 +332,7 @@ namespace SAM.Analytical
 
                     //Removing overlaps for segment2D
                     tuples_Overlap = tuples.FindAll(x => segment2D.On(x.Item4[0]) && segment2D.On(x.Item4[1]));
-                    if (tuples_Overlap.Count > 0)
+                    if (tuples_Overlap.Count > 1)
                     {
                         foreach (Tuple<Panel, double, double, Segment2D> tuple_Overlap in tuples_Overlap)
                         {
