@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using SAM.Geometry.Planar;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SAM.Analytical
 {
@@ -191,15 +192,16 @@ namespace SAM.Analytical
                     Segment2D segment2D_2 = segment2Ds_Old[j];
                     List<Point2D> point2Ds_2 = segment2D_2.GetPoints();
 
-                    foreach(Point2D point2D_1 in point2Ds_1)
-                    {
-                        if (point2Ds_2.Find(x => x.AlmostEquals(point2D_1)) == null)
-                            continue;
+                    List<Point2D> point2Ds = new List<Point2D>();
+                    point2Ds_1.FindAll(x => segment2D_2.On(x, tolerance)).ForEach(x => Geometry.Planar.Modify.Add(point2Ds, x, tolerance));
+                    point2Ds_2.FindAll(x => segment2D_1.On(x, tolerance)).ForEach(x => Geometry.Planar.Modify.Add(point2Ds, x, tolerance));
 
-                        Tuple<Point2D, List<Segment2D>> tuple = tuples_Connections.Find(x => x.Item1.AlmostEquals(point2D_1, tolerance));
+                    foreach (Point2D point2D in point2Ds)
+                    {
+                        Tuple<Point2D, List<Segment2D>> tuple = tuples_Connections.Find(x => x.Item1.AlmostEquals(point2D, tolerance));
                         if (tuple == null)
                         {
-                            tuple = new Tuple<Point2D, List<Segment2D>>(point2D_1, new List<Segment2D>());
+                            tuple = new Tuple<Point2D, List<Segment2D>>(point2D, new List<Segment2D>());
                             tuples_Connections.Add(tuple);
                         }
 
