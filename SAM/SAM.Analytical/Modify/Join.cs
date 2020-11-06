@@ -458,21 +458,56 @@ namespace SAM.Analytical
                 //Filtering panels have been removed (tuple which segment2D is null)
                 List<Tuple<Panel, double, double, Segment2D>> tuples = tuples_All.FindAll(x => x.Item4 != null && x.Item4.GetLength() > tolerance);
 
+                List<Segment2D> segment2Ds = tuples.ConvertAll(x => x.Item4);
+                segment2Ds = segment2Ds.Split(tolerance);
+                
                 foreach (Tuple<Panel, double, double, Segment2D> tuple in tuples)
                 {
                     Segment2D segment2D = tuple.Item4;
-                    if (segment2D.GetLength() >= distance)
+
+                    List<Segment2D> segment2Ds_Split = segment2Ds.FindAll(x => segment2D.On(x.Mid(), tolerance));
+                    if (segment2Ds_Split == null || segment2Ds_Split.Count == 0)
                         continue;
 
+                    List<Point2D> point2Ds = segment2Ds_Split.Point2Ds(tolerance);
+                    if (point2Ds.Count < 2)
+                        continue;
+
+                    if (point2Ds.Count == 2 && segment2D.GetLength() >= distance)
+                        continue;
+
+                    int i = -1;
                     //Iterating through each end point of segment2D
                     foreach (Point2D point2D in segment2D.GetPoints())
                     {
+                        i++;
+                        point2Ds.SortByDistance(point2D);
+
+                        if(point2Ds[1].Distance(point2D) >= distance)
+                            continue;
+
                         //Checking if point is connected with other segments (panels). If connected then skip
                         List<Tuple<Panel, double, double, Segment2D>> tuples_Temp = tuples.FindAll(x => x.Item4.On(point2D, tolerance));
                         if (tuples_Temp == null || tuples_Temp.Count != 1)
                             continue;
 
-                        Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, null);
+                        Segment2D segment2D_New = null;
+                        if (i == 0)
+                            segment2D_New = new Segment2D(point2Ds[1], segment2D[1]);
+                        else
+                            segment2D_New = new Segment2D(segment2D[0], point2Ds[1]);
+
+                        if(segment2D_New.GetLength() > tolerance)
+                        {
+                            if (!segment2D_New.Direction.SameHalf(segment2D.Direction))
+                                segment2D_New.Reverse();
+                        }
+                        else
+                        {
+                            segment2D_New = null;
+                        }
+
+                        Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, segment2D_New);
                         tuples_All[tuples_All.IndexOf(tuple)] = tuple_New;
 
                         updated = true;
