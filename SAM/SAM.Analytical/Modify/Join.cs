@@ -8,6 +8,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
+        [Obsolete]
         public static List<Guid> Join_Obsolete(this List<Panel> panels, double distance, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
@@ -440,6 +441,42 @@ namespace SAM.Analytical
 
                         if (updated)
                             break;
+                    }
+
+                    if (updated)
+                        break;
+                }
+
+            } while (updated);
+
+            //Removing short, not connected panels
+            updated = false;
+            do
+            {
+                updated = false;
+                
+                //Filtering panels have been removed (tuple which segment2D is null)
+                List<Tuple<Panel, double, double, Segment2D>> tuples = tuples_All.FindAll(x => x.Item4 != null && x.Item4.GetLength() > tolerance);
+
+                foreach (Tuple<Panel, double, double, Segment2D> tuple in tuples)
+                {
+                    Segment2D segment2D = tuple.Item4;
+                    if (segment2D.GetLength() >= distance)
+                        continue;
+
+                    //Iterating through each end point of segment2D
+                    foreach (Point2D point2D in segment2D.GetPoints())
+                    {
+                        //Checking if point is connected with other segments (panels). If connected then skip
+                        List<Tuple<Panel, double, double, Segment2D>> tuples_Temp = tuples.FindAll(x => x.Item4.On(point2D, tolerance));
+                        if (tuples_Temp == null || tuples_Temp.Count != 1)
+                            continue;
+
+                        Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, null);
+                        tuples_All[tuples_All.IndexOf(tuple)] = tuple_New;
+
+                        updated = true;
+                        break;
                     }
 
                     if (updated)
