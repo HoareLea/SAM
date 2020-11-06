@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using SAM.Geometry.Planar;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -175,7 +176,44 @@ namespace SAM.Analytical
             } while (updated);
 
             List<Guid> result = new List<Guid>();
-            foreach(Tuple<Panel, double, double, List<Segment2D>> tuple in tuples)
+            if (tuples == null || tuples.Count == 0 || dictionary == null || dictionary.Count == 0)
+                return result;
+
+            List<Tuple<Point2D, List<Segment2D>>> tuples_Connections = new List<Tuple<Point2D, List<Segment2D>>>();
+            List<Segment2D> segment2Ds_Old = dictionary.Values.ToList();
+            for(int i=0; i < segment2Ds_Old.Count; i++)
+            {
+                Segment2D segment2D_1 = segment2Ds_Old[i];
+                List<Point2D> point2Ds_1 = segment2D_1.GetPoints();
+
+                for (int j= i + 1; j < segment2Ds_Old.Count - 1; j++)
+                {
+                    Segment2D segment2D_2 = segment2Ds_Old[j];
+                    List<Point2D> point2Ds_2 = segment2D_2.GetPoints();
+
+                    foreach(Point2D point2D_1 in point2Ds_1)
+                    {
+                        if (point2Ds_2.Find(x => x.AlmostEquals(point2D_1)) == null)
+                            continue;
+
+                        Tuple<Point2D, List<Segment2D>> tuple = tuples_Connections.Find(x => x.Item1.AlmostEquals(point2D_1, tolerance));
+                        if (tuple == null)
+                        {
+                            tuple = new Tuple<Point2D, List<Segment2D>>(point2D_1, new List<Segment2D>());
+                            tuples_Connections.Add(tuple);
+                        }
+
+                        if (tuple.Item2.Find(x => x.AlmostSimilar(segment2D_2)) == null)
+                            tuple.Item2.Add(segment2D_2);
+
+                        if (tuple.Item2.Find(x => x.AlmostSimilar(segment2D_1)) == null)
+                            tuple.Item2.Add(segment2D_1);
+                    }
+                }
+            }
+
+            
+            foreach (Tuple<Panel, double, double, List<Segment2D>> tuple in tuples)
             {
                 List<Segment2D> segment2Ds = tuple.Item4;
                 if(segment2Ds == null || segment2Ds.Count == 0)
@@ -187,6 +225,16 @@ namespace SAM.Analytical
 
                 Segment2D segment2D_Old = dictionary[tuple.Item1];
                 Segment2D segment2D_New = tuple.Item4[0];
+                if (!segment2D_Old.Direction.SameHalf(segment2D_New.Direction))
+                    segment2D_New.Reverse();
+
+                Tuple<Point2D, List<Segment2D>> tuple_1 = tuples_Connections.Find(x => x.Item1.AlmostEquals(segment2D_Old[0], tolerance));
+                if(tuple_1 != null && tuple_1.Item2 != null && tuple_1.Item2.Count > 1)
+                    segment2D_New[0] = segment2D_Old[0];
+
+                Tuple<Point2D, List<Segment2D>> tuple_2 = tuples_Connections.Find(x => x.Item1.AlmostEquals(segment2D_Old[1], tolerance));
+                if (tuple_2 != null && tuple_2.Item2 != null && tuple_2.Item2.Count > 1)
+                    segment2D_New[1] = segment2D_Old[1];
 
                 if (segment2D_Old.AlmostSimilar(segment2D_New, tolerance))
                     continue;
