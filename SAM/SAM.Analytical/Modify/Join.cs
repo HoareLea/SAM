@@ -304,12 +304,13 @@ namespace SAM.Analytical
                 tuples_All.Add(new Tuple<Panel, double, double, Segment2D>(panel, boundingBox3D.Min.Z, boundingBox3D.Max.Z, segment2D));
             }
 
-
+            //Looping through all panels data till panels cannot be join anymore. Every change will stop current iteration and start from beginning
             bool updated = false;
             do
             {
                 updated = false;
 
+                //Filtering panels have been removed (tuple which segment2D is null)
                 List<Tuple<Panel, double, double, Segment2D>> tuples = tuples_All.FindAll(x => x.Item4 != null && x.Item4.GetLength() > tolerance);
 
                 foreach (Tuple<Panel, double, double, Segment2D> tuple in tuples)
@@ -318,6 +319,7 @@ namespace SAM.Analytical
 
                     List<Tuple<Panel, double, double, Segment2D>> tuples_Overlap = null;
 
+                    //Removing overlaps for segment2D
                     tuples_Overlap = tuples.FindAll(x => x.Item4.On(segment2D[0]) && x.Item4.On(segment2D[1]));
                     if (tuples_Overlap.Count > 0)
                     {
@@ -327,6 +329,7 @@ namespace SAM.Analytical
                         break;
                     }
 
+                    //Removing overlaps for segment2D
                     tuples_Overlap = tuples.FindAll(x => segment2D.On(x.Item4[0]) && segment2D.On(x.Item4[1]));
                     if (tuples_Overlap.Count > 0)
                     {
@@ -340,18 +343,22 @@ namespace SAM.Analytical
                         break; ;
                     }
 
+                    //Iterating through each end point of segment2D
                     foreach (Point2D point2D in segment2D.GetPoints())
                     {
+                        //Checking if point is connected with other segments (panels). If connected then skip
                         List<Tuple<Panel, double, double, Segment2D>> tuples_Temp = tuples.FindAll(x => x.Item4.On(point2D, tolerance));
                         if (tuples_Temp == null || tuples_Temp.Count != 1)
                             continue;
 
+                        //Looking for all segments which are not further than provided distance
                         tuples_Temp = tuples.FindAll(x => x.Item4.Distance(point2D) < distance + tolerance);
                         if (tuples_Temp == null || tuples_Temp.Count < 2)
                             continue;
 
                         tuples_Temp.Remove(tuple);
 
+                        //Looking for intersection points
                         List<Tuple<Segment2D, Point2D>> tuples_Segment2D_Intersection = new List<Tuple<Segment2D, Point2D>>();
                         foreach (Tuple<Panel, double, double, Segment2D> tuple_Temp in tuples_Temp)
                         {
@@ -384,6 +391,7 @@ namespace SAM.Analytical
                         if (tuple_Intersection == null)
                             continue;
 
+                        //Adjusting segments to intersection point has been found
                         Segment2D segment2D_Intersection = tuple_Segment2D_Intersection.Item1;
                         Point2D point2D_Intersection = tuple_Segment2D_Intersection.Item2;
 
@@ -440,6 +448,8 @@ namespace SAM.Analytical
 
             } while (updated);
 
+
+            //Preparing output data
             List<Guid> result = new List<Guid>();
             foreach (Tuple<Panel, double, double, Segment2D> tuple in tuples_All)
             {
