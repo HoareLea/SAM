@@ -107,7 +107,7 @@ namespace SAM.Geometry
                 return null;
 
             if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
-                return externalEdge2D.GetInternalPoint2D();
+                return externalEdge2D.GetInternalPoint2D(tolerance);
 
             Point2D result = externalEdge2D.GetCentroid();
             if (Inside(result))
@@ -144,12 +144,12 @@ namespace SAM.Geometry
             return null;
         }
 
-        public double Distance(Point2D point2D)
+        public double Distance(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null)
                 return double.NaN;
 
-            if (Inside(point2D))
+            if (Inside(point2D, tolerance))
                 return 0;
 
             if (!(externalEdge2D is ISegmentable2D))
@@ -197,13 +197,13 @@ namespace SAM.Geometry
                 return false;
             
             if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
-                return externalEdge2D.Inside(point2D) && !externalEdge2D.On(point2D, tolerance);
+                return externalEdge2D.Inside(point2D, tolerance) && !externalEdge2D.On(point2D, tolerance);
 
-            bool result = externalEdge2D.Inside(point2D) && internalEdge2Ds.TrueForAll(x => !x.Inside(point2D));
+            bool result = externalEdge2D.Inside(point2D, tolerance) && internalEdge2Ds.TrueForAll(x => !x.Inside(point2D, tolerance));
             if (!result)
                 return result;
 
-            return !externalEdge2D.On(point2D) && internalEdge2Ds.TrueForAll(x => !x.On(point2D));
+            return !externalEdge2D.On(point2D, tolerance) && internalEdge2Ds.TrueForAll(x => !x.On(point2D, tolerance));
         }
 
         public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
