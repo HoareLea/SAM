@@ -33,22 +33,25 @@ namespace SAM.Geometry.Planar
             if (keepFull)
                 segment2Ds_KeepFull = new List<Segment2D>();
 
+            Segment2D segment2D = null;
+
             value = origin.X;
+            segment2D = null;
             segment2Ds_Temp = new List<Segment2D>();
             while (value >= boundingBox2D.Min.X)
             {
                 if (value <= boundingBox2D.Max.X)
                 {
-                    Segment2D segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
+                    segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
                     segment2Ds_Temp.Add(segment2D);
                 }
 
                 value -= x;
             }
 
-            if(segment2Ds_KeepFull != null)
+            if(segment2Ds_KeepFull != null && segment2D != null)
             {
-                Segment2D segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
+                segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
                 segment2Ds_Temp.Add(segment2D);
                 segment2Ds_KeepFull.Add(segment2D);
             }
@@ -60,40 +63,42 @@ namespace SAM.Geometry.Planar
             }
                 
             value = origin.X + x;
-            while(value <= boundingBox2D.Max.X)
+            segment2D = null;
+            while (value <= boundingBox2D.Max.X)
             {
                 if(value >= boundingBox2D.Min.X)
                 {
-                    Segment2D segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
+                    segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
                     result.Add(segment2D);
                 }
 
                 value += x;
             }
 
-            if (segment2Ds_KeepFull != null)
+            if (segment2Ds_KeepFull != null && segment2D != null)
             {
-                Segment2D segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
+                segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
                 result.Add(segment2D);
                 segment2Ds_KeepFull.Add(segment2D);
             }
 
             value = origin.Y;
+            segment2D = null;
             segment2Ds_Temp = new List<Segment2D>();
             while (value >= boundingBox2D.Min.Y)
             {
                 if (value <= boundingBox2D.Max.Y)
                 {
-                    Segment2D segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
+                    segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
                     segment2Ds_Temp.Add(segment2D);
                 }
 
                 value -= x;
             }
 
-            if (segment2Ds_KeepFull != null)
+            if (segment2Ds_KeepFull != null && segment2D != null)
             {
-                Segment2D segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
+                segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
                 segment2Ds_Temp.Add(segment2D);
                 segment2Ds_KeepFull.Add(segment2D);
             }
@@ -105,23 +110,27 @@ namespace SAM.Geometry.Planar
             }
 
             value = origin.Y + y;
+            segment2D = null;
             while (value <= boundingBox2D.Max.Y)
             {
                 if (value >= boundingBox2D.Min.Y)
                 {
-                    Segment2D segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
+                    segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
                     result.Add(segment2D);
                 }
 
                 value += x;
             }
 
-            if (segment2Ds_KeepFull != null)
+            if (segment2Ds_KeepFull != null && segment2D != null)
             {
-                Segment2D segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
+                segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
                 result.Add(segment2D);
                 segment2Ds_KeepFull.Add(segment2D);
+            }
 
+            if(segment2Ds_KeepFull != null)
+            {
                 BoundingBox2D boundingBox2D_KeepFull = new BoundingBox2D(segment2Ds_KeepFull.ConvertAll(segment2D_KeepFull => segment2D_KeepFull.GetBoundingBox()));
                 result = Query.Extend(result, boundingBox2D_KeepFull);
             }
