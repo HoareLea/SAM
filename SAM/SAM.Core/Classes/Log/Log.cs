@@ -39,7 +39,7 @@ namespace SAM.Core
             if (logRecord == null)
                 return null;
 
-            LogRecord result = logRecord.Clone();
+            LogRecord result = new LogRecord(logRecord);
             logRecords.Add(result);
 
             return result;
@@ -60,7 +60,10 @@ namespace SAM.Core
             List<LogRecord> result = new List<LogRecord>();
             foreach (LogRecord logRecord in logRecords)
             {
-                LogRecord logRecord_New = logRecord?.Clone();
+                if (logRecord == null)
+                    continue;
+                
+                LogRecord logRecord_New = new LogRecord(logRecord);
                 if (logRecord_New == null)
                     continue;
 

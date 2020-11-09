@@ -23,7 +23,7 @@ namespace SAM.Analytical
                 this.constructionLayers = new List<ConstructionLayer>();
                 foreach (ConstructionLayer constructionLayer in constructionLayers)
                     if (constructionLayer != null)
-                        this.constructionLayers.Add(constructionLayer.Clone());
+                        this.constructionLayers.Add(new ConstructionLayer(constructionLayer));
             }
         }
 
@@ -35,7 +35,7 @@ namespace SAM.Analytical
                 this.constructionLayers = new List<ConstructionLayer>();
                 foreach (ConstructionLayer constructionLayer in constructionLayers)
                     if (constructionLayer != null)
-                        this.constructionLayers.Add(constructionLayer.Clone());
+                        this.constructionLayers.Add(new ConstructionLayer(constructionLayer));
             }
         }
 
@@ -47,25 +47,25 @@ namespace SAM.Analytical
         public Construction(Construction construction)
             : base(construction)
         {
-            constructionLayers = construction?.constructionLayers?.ConvertAll(x => x.Clone());
+            constructionLayers = construction?.constructionLayers?.ConvertAll(x => new ConstructionLayer(x));
         }
 
         public Construction(Construction construction, Guid guid)
             : base(construction, guid)
         {
-            constructionLayers = construction?.constructionLayers?.ConvertAll(x => x.Clone());
+            constructionLayers = construction?.constructionLayers?.ConvertAll(x => new ConstructionLayer(x));
         }
 
         public Construction(Construction construction, string name)
             : base(construction, name)
         {
-            constructionLayers = construction.constructionLayers?.ConvertAll(x => x.Clone());
+            constructionLayers = construction.constructionLayers?.ConvertAll(x => new ConstructionLayer(x));
         }
 
         public Construction(Construction construction, IEnumerable<ConstructionLayer> constructionLayers)
             : base(construction)
         {
-            this.constructionLayers = constructionLayers?.ToList().ConvertAll(x => x.Clone());
+            this.constructionLayers = constructionLayers?.ToList().ConvertAll(x => new ConstructionLayer(x));
         }
 
         public Construction(JObject jObject)
@@ -77,7 +77,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return constructionLayers?.ConvertAll(x => x.Clone());
+                return constructionLayers?.ConvertAll(x => new ConstructionLayer(x));
             }
         }
 

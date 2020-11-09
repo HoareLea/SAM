@@ -73,7 +73,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            materialLibrary = materialLibrary.Clone();
+            materialLibrary = new MaterialLibrary(materialLibrary);
 
             if (materialLibraries == null || materialLibraries.Count == 0)
             {

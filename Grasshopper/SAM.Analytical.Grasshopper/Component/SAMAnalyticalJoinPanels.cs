@@ -87,7 +87,7 @@ namespace SAM.Analytical.Grasshopper
             if (!dataAccess.GetData(1, ref maxDistance))
                 return;
 
-            List<Panel> panels_Result = panels.ConvertAll(x => x.Clone());
+            List<Panel> panels_Result = panels.ConvertAll(x => new Panel(x));
 
             List<Guid> guids = panels_Result.Join(maxDistance);
             if (guids == null)
@@ -101,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
                 Panel panel = panels_Result.Find(x => x.Guid == guid);
                 if (panel == null)
                 {
-                    panels_Removed.Add(panels.Find(x => x.Guid == guid).Clone());
+                    panels_Removed.Add(new Panel(panels.Find(x => x.Guid == guid)));
                     continue;
                 }
 

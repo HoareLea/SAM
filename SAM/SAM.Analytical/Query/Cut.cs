@@ -33,7 +33,7 @@ namespace SAM.Analytical
             List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D, plane, tolerance);
             if (face3Ds == null || face3Ds.Count == 0)
             {
-                result.Add(panel.Clone());
+                result.Add(new Panel(panel));
                 return result;
             }
 
@@ -55,7 +55,7 @@ namespace SAM.Analytical
             if (panel == null || planes == null)
                 return null;
 
-            List<Panel> result = new List<Panel>() { panel.Clone() };
+            List<Panel> result = new List<Panel>() { new Panel(panel) };
 
             if (planes.Count() == 0)
                 return result;

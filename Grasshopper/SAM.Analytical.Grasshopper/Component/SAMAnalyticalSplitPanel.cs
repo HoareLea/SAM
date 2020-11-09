@@ -126,7 +126,7 @@ namespace SAM.Analytical.Grasshopper
             List<Panel> result = Analytical.Query.Cut(panel, planes);
 
             if (result == null || result.Count == 0)
-                result = new List<Panel>() { panel.Clone() };
+                result = new List<Panel>() { new Panel(panel) };
 
             dataAccess.SetDataList(0, result?.ConvertAll(x => new GooPanel(x)));
         }

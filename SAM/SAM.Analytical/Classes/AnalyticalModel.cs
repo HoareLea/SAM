@@ -149,7 +149,10 @@ namespace SAM.Analytical
         {
             get
             {
-                return materialLibrary?.Clone();
+                if (materialLibrary == null)
+                    return null;
+
+                return new MaterialLibrary(materialLibrary);
             }
         }
 

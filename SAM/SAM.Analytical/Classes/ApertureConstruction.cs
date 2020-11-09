@@ -57,8 +57,8 @@ namespace SAM.Analytical
         {
             apertureType = apertureConstruction.apertureType;
 
-            this.frameConstructionLayers = frameConstructionLayers?.ToList().ConvertAll(x => x.Clone());
-            this.paneConstructionLayers = paneConstructionLayers?.ToList().ConvertAll(x => x.Clone());
+            this.frameConstructionLayers = frameConstructionLayers?.ToList().ConvertAll(x => new ConstructionLayer(x));
+            this.paneConstructionLayers = paneConstructionLayers?.ToList().ConvertAll(x => new ConstructionLayer(x));
         }
 
         public ApertureConstruction(JObject jObject)
@@ -74,7 +74,7 @@ namespace SAM.Analytical
                 if (frameConstructionLayers == null)
                     return null;
 
-                return frameConstructionLayers.ConvertAll(x => x.Clone());
+                return frameConstructionLayers.ConvertAll(x => new ConstructionLayer(x));
             }
         }
 
@@ -85,7 +85,7 @@ namespace SAM.Analytical
                 if (paneConstructionLayers == null)
                     return null;
 
-                return paneConstructionLayers.ConvertAll(x => x.Clone());
+                return paneConstructionLayers.ConvertAll(x => new ConstructionLayer(x));
             }
         }
 

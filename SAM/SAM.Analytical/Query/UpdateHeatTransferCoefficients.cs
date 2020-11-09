@@ -349,28 +349,28 @@ namespace SAM.Analytical
             {
                 if(constructionLayer == null)
                 {
-                    constructionLayers_Out.Add(constructionLayer.Clone());
+                    constructionLayers_Out.Add(new ConstructionLayer(constructionLayer));
                     continue;
                 }
 
                 GasMaterial gasMaterial = constructionLayer.Material(materialLibrary) as GasMaterial;
                 if (gasMaterial == null)
                 {
-                    constructionLayers_Out.Add(constructionLayer.Clone());
+                    constructionLayers_Out.Add(new ConstructionLayer(constructionLayer));
                     continue;
                 }
 
                 DefaultGasType defaultGasType = Query.DefaultGasType(gasMaterial);
                 if (defaultGasType == Analytical.DefaultGasType.Undefined)
                 {
-                    constructionLayers_Out.Add(constructionLayer.Clone());
+                    constructionLayers_Out.Add(new ConstructionLayer(constructionLayer));
                     continue;
                 }
 
                 GasMaterial gasMaterial_Default = DefaultGasMaterial(defaultGasType);
                 if (gasMaterial_Default == null)
                 {
-                    constructionLayers_Out.Add(constructionLayer.Clone());
+                    constructionLayers_Out.Add(new ConstructionLayer(constructionLayer));
                     continue;
                 }
 
@@ -387,7 +387,7 @@ namespace SAM.Analytical
                 string name = GetMaterialName(defaultGasType, thickness, heatTransferCoefficient, tilt);// string.Format("{0}_{1}mm_{2}W/m2K_{3}deg", Core.Query.Description(defaultGasType), thickness * 1000, heatTransferCoefficient, tilt_degree); //gasMaterial_Default.Name + "_"+ "Tilt: " + tilt_degree.ToString();
                 if (string.IsNullOrEmpty(name))
                 {
-                    constructionLayers_Out.Add(constructionLayer.Clone());
+                    constructionLayers_Out.Add(new ConstructionLayer(constructionLayer));
                     continue;
                 }
 
