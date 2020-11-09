@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace SAM.Geometry.Planar
 {
@@ -43,7 +42,7 @@ namespace SAM.Geometry.Planar
                 if (faces2D_Inside.Count != 0)
                     continue;
 
-                result.Add(face2D);                
+                result.Add(face2D);
             }
 
             return result;

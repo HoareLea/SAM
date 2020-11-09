@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Segment3D> Grid(this IEnumerable<Panel> panels, double x, double y, Plane plane = null, Point3D point3D = null, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
+        public static List<Segment3D> Grid(this IEnumerable<Panel> panels, double x, double y, Plane plane = null, Point3D point3D = null, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, bool keepFull = false)
         {
             if (panels == null || double.IsNaN(x) || double.IsNaN(y))
                 return null;
@@ -24,7 +24,7 @@ namespace SAM.Analytical
                 closedPlanar3Ds.Add(closedPlanar3D);
             }
 
-            return Geometry.Spatial.Query.Grid(closedPlanar3Ds, x, y, plane, point3D, tolerance_Angle, tolerance_Distance);
+            return Geometry.Spatial.Query.Grid(closedPlanar3Ds, x, y, plane, point3D, tolerance_Angle, tolerance_Distance, keepFull);
         }
     }
 }

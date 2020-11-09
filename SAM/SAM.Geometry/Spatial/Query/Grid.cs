@@ -6,7 +6,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static List<Segment3D> Grid(this IEnumerable<IClosedPlanar3D> closedPlanar3Ds, double x, double y, Plane plane = null, Point3D point3D = null, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
+        public static List<Segment3D> Grid(this IEnumerable<IClosedPlanar3D> closedPlanar3Ds, double x, double y, Plane plane = null, Point3D point3D = null, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, bool keepFull = false)
         {
             if (closedPlanar3Ds == null || double.IsNaN(x) || double.IsNaN(y))
                 return null;
@@ -63,7 +63,7 @@ namespace SAM.Geometry.Spatial
             if (point2D == null)
                 point2D = plane.Convert(plane.Origin);
 
-            List<Segment2D> segment2Ds = Planar.Query.Grid(point2D, boundable2Ds, x, y);
+            List<Segment2D> segment2Ds = Planar.Query.Grid(point2D, boundable2Ds, x, y, keepFull);
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return result;
 
