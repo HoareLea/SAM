@@ -283,6 +283,9 @@ namespace SAM.Geometry.Spatial
             if (plane == null || closedPlanar3D == null)
                 return null;
 
+            if (closedPlanar3D is Face3D)
+                return Create(plane, (Face3D)closedPlanar3D, tolerance_Angle, tolerance_Distance);
+
             PlanarIntersectionResult planarIntersectionResult = Create(plane, closedPlanar3D.GetPlane(), tolerance_Angle);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return new PlanarIntersectionResult(plane);

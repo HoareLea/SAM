@@ -21,7 +21,7 @@ namespace SAM.Geometry.Spatial
                     if (boundingBox3D == null)
                         continue;
 
-                    if (z < boundingBox3D.Min.Z)
+                    if (z > boundingBox3D.Min.Z)
                         z = boundingBox3D.Min.Z;
                 }
 

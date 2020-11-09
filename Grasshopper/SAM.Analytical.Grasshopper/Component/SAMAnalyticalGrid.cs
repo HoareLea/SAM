@@ -42,11 +42,17 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Object", GH_ParamAccess.list);
-            inputParamManager.AddPlaneParameter("plane_", "plane_", "Plane", GH_ParamAccess.item);
-            inputParamManager.AddPointParameter("origin_", "origin_", "Origin Point", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_x", "_x", "Grid size on X Axis", GH_ParamAccess.item, 0.2);
-            inputParamManager.AddNumberParameter("_y", "_y", "Grid size on Y Axis", GH_ParamAccess.item, 0.2);
+            int index = -1;
+
+            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_SAManalytical", "_SAManalytical", "SAM Analytical Object", GH_ParamAccess.list);
+            index = inputParamManager.AddPlaneParameter("plane_", "plane_", "GH Plane", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddPointParameter("origin_", "origin_", "GH Origin Point", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            inputParamManager.AddNumberParameter("_x_", "_x_", "Grid size on X Axis", GH_ParamAccess.item, 0.2);
+            inputParamManager.AddNumberParameter("_y_", "_y_", "Grid size on Y Axis", GH_ParamAccess.item, 0.2);
         }
 
         /// <summary>
