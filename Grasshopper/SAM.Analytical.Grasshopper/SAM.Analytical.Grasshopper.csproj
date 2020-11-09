@@ -132,6 +132,7 @@
     <Compile Include="Component\SAMAnalyticalExtendPanel.cs" />
     <Compile Include="Component\SAMAnalyticalNormals.cs" />
     <Compile Include="Component\SAMAnalyticalCheck.cs" />
+    <Compile Include="Component\SAMAnalyticalGrid.cs" />
     <Compile Include="Component\SAMAnalyticalSetApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateTypesByMap.cs" />

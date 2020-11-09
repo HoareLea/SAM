@@ -135,6 +135,7 @@
     <Compile Include="Planar\Modify\Mirror.cs" />
     <Compile Include="Planar\Query\Clone.cs" />
     <Compile Include="Planar\Query\InternalVector2Ds.cs" />
+    <Compile Include="Planar\Query\Grid.cs" />
     <Compile Include="Planar\Query\Move.cs" />
     <Compile Include="Planar\Query\Orient.cs" />
     <Compile Include="Planar\Query\Orientations.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Spatial\Create\Point3D.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Grid.cs" />
     <Compile Include="Spatial\Query\Rectangular.cs" />
     <Compile Include="Spatial\Query\Inside.cs" />
     <Compile Include="Spatial\Query\Cut.cs" />
