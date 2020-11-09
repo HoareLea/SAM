@@ -60,10 +60,7 @@ namespace SAM.Core
         {
             get
             {
-                if (sAMType == null)
-                    return null;
-
-                return new SAMType(sAMType);
+                return sAMType?.Clone();
             }
         }
 

@@ -93,7 +93,7 @@ namespace SAM.Geometry.Planar
 
             if (segment2Ds_KeepFull != null)
             {
-                Segment2D segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
+                Segment2D segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
                 segment2Ds_Temp.Add(segment2D);
                 segment2Ds_KeepFull.Add(segment2D);
             }
@@ -118,7 +118,7 @@ namespace SAM.Geometry.Planar
 
             if (segment2Ds_KeepFull != null)
             {
-                Segment2D segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
+                Segment2D segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
                 result.Add(segment2D);
                 segment2Ds_KeepFull.Add(segment2D);
 
