@@ -181,5 +181,85 @@ namespace SAM.Analytical
 
             return result;
         }
+    
+        public static Panel Extend(this Panel panel, Plane plane, double tolerance = Core.Tolerance.Distance)
+        {
+            if (plane == null)
+                return null;
+
+            Plane plane_Panel = panel.Plane;
+
+            PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, plane_Panel, tolerance);
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                return null;
+
+            Line3D line3D = planarIntersectionResult.GetGeometry3D<Line3D>();
+            if (line3D == null)
+                return null;
+
+            IClosedPlanar3D closedPlanar3D = panel?.GetFace3D()?.GetExternalEdge3D();
+            if (closedPlanar3D == null)
+                return null;
+
+            ISegmentable2D segmentable2D = plane.Convert(closedPlanar3D) as ISegmentable2D;
+            if (segmentable2D == null)
+                return null; ;
+
+            ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+            if (segmentable3D == null)
+                return null;
+
+            List<Point3D> point3Ds = segmentable3D.GetPoints();
+            if (point3Ds == null || point3Ds.Count == 0)
+                return null;
+
+            List<Point3D> point3Ds_Projected = point3Ds.ConvertAll(x => line3D.Project(x));
+
+            List<Segment2D> segment2Ds = new List<Segment2D>();
+            List<Point2D> point2Ds = new List<Point2D>();
+            for(int i =0; i < point3Ds.Count; i++)
+            {
+                if (point3Ds[i] == null || point3Ds_Projected[i] == null)
+                    continue;
+
+                if (point3Ds[i].AlmostEquals(point3Ds_Projected[i], tolerance))
+                    continue;
+
+                Segment2D segment2D = new Segment2D(plane_Panel.Convert(point3Ds[i]), plane_Panel.Convert(point3Ds_Projected[i]));
+                List<Point2D> point2Ds_Intersections = Geometry.Planar.Query.Intersections(segment2D, segmentable2D, tolerance);
+                if (point2Ds_Intersections == null || point2Ds_Intersections.Count < 2)
+                    continue;
+
+                point2Ds.Add(segment2D[0]);
+                point2Ds.Add(segment2D[1]);
+                segment2Ds.Add(segment2D);
+            }
+
+            if (segment2Ds == null || segment2Ds.Count == 0)
+                return new Panel(panel);
+
+            Point2D point2D_1 = null;
+            Point2D point2D_2 = null;
+            Geometry.Planar.Query.ExtremePoints(point2Ds, out point2D_1, out point2D_2);
+            if (point2D_1 == null || point2D_2 == null)
+                return new Panel(panel);
+
+            if (!point2D_1.AlmostEquals(point2D_2, tolerance))
+                segment2Ds.Add(new Segment2D(point2D_1, point2D_2));
+
+            segment2Ds.AddRange(segmentable2D.GetSegments());
+
+            List<Polygon2D> polygon2Ds = Geometry.Planar.Query.ExternalPolygon2Ds(segment2Ds, tolerance);
+            if (polygon2Ds == null || polygon2Ds.Count == 0)
+                return new Panel(panel);
+
+            polygon2Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+
+            Polygon2D polygon2D = polygon2Ds.First();
+            if (polygon2D.Orientation() != segmentable2D.GetPoints().Orientation())
+                polygon2D.Reverse();
+
+            return new Panel(panel.Guid, panel, new Face3D(plane_Panel.Convert(polygon2D)));
+        }
     }
 }

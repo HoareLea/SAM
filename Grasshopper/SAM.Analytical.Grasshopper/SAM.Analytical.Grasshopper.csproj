@@ -108,6 +108,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalExtendPanelByPlane.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateGeometry.cs" />
     <Compile Include="Component\SAMAnalyticalCreateInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalJoinPanels.cs" />
@@ -130,7 +131,7 @@
     <Compile Include="Component\SAMAnalyticalHeatFlowDirection.cs" />
     <Compile Include="Component\SAMAnalyticalDefaultGasType.cs" />
     <Compile Include="Component\SAMAnalyticalGetPanelsByConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalExtendPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalExtendPanelByPanels.cs" />
     <Compile Include="Component\SAMAnalyticalNormals.cs" />
     <Compile Include="Component\SAMAnalyticalCheck.cs" />
     <Compile Include="Component\SAMAnalyticalGrid.cs" />

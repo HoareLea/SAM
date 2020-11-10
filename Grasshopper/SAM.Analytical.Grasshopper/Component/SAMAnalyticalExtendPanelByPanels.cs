@@ -1,14 +1,12 @@
 ﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
-using SAM.Geometry.Grasshopper;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalExtendPanel : GH_SAMComponent
+    public class SAMAnalyticalExtendPanelByPanels : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,14 +18,14 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalExtendPanel()
-          : base("SAMAnalytical.ExtendPanel", "SAMAnalytical.ExtendPanel",
-              "Extend SAM Analytical Panel",
+        public SAMAnalyticalExtendPanelByPanels()
+          : base("SAMAnalytical.ExtendPanelByPanels", "SAMAnalytical.ExtendPanelByPanels",
+              "Extend SAM Analytical Panel By Given Panels",
               "SAM", "Analytical")
         {
         }
