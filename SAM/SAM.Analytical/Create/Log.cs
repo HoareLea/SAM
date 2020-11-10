@@ -480,6 +480,22 @@ namespace SAM.Analytical
 
                     if (!Query.IsValid(panel, aperture))
                         result.Add(string.Format("Geometry of {0} aperture (Guid: {1}) is invalid for {2} host panel (Guid: {3})", name_Aperture, aperture.Guid, name, panel.Guid), LogRecordType.Error);
+
+                    ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
+                    if(apertureConstruction == null)
+                    {
+                        result.Add(string.Format("{0} aperture (Guid: {1}) in {2} host panel (Guid: {3}) has no ApertureConstruction", name_Aperture, aperture.Guid, name, panel.Guid), LogRecordType.Error);
+                    }
+                    else
+                    {
+                        string text;
+                        if (apertureConstruction.TryGetValue(ApertureConstructionParameter.DefaultPanelType, out text) && !string.IsNullOrWhiteSpace(text))
+                        {
+                            PanelType panelType_ApertureConstruction = Query.PanelType(text, false);
+                            if(panelType_ApertureConstruction != PanelType.Undefined && panelType_ApertureConstruction.PanelGroup() != panelType.PanelGroup())
+                                result.Add(string.Format("ApertureConstruction for {0} aperture (Guid: {1}) has diiferent Default Panel Type than its {2} host panel (Guid: {3}) has ", name_Aperture, aperture.Guid, name, panel.Guid), LogRecordType.Warning);
+                        }
+                    }
                 }
 
                 if(!double.IsNaN(area) && area < area_Apertures)

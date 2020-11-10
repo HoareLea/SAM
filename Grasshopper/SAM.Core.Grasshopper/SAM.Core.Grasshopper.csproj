@@ -206,8 +206,9 @@ copy "$(SolutionDir)\files\Grasshopper\SAM.ghlink" "$(APPDATA)\Grasshopper\Libra
 
 xcopy "$(SolutionDir)\files" "$(APPDATA)\SAM\" /Y /I /E/S
 
+if Exist "$(SolutionDir)\files\Grasshopper\UserObjects" (
 xcopy "$(SolutionDir)\files\Grasshopper\UserObjects" "$(APPDATA)\Grasshopper\UserObjects\SAM" /Y /I /E/S
-
+)
 ::erase "%25SAM_DIR%25$(ProjectName).dll"
 ::erase "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
