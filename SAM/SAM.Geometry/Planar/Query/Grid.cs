@@ -52,7 +52,6 @@ namespace SAM.Geometry.Planar
             if(segment2Ds_KeepFull != null && segment2D != null)
             {
                 segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
-                segment2Ds_Temp.Add(segment2D);
                 segment2Ds_KeepFull.Add(segment2D);
             }
 
@@ -78,7 +77,6 @@ namespace SAM.Geometry.Planar
             if (segment2Ds_KeepFull != null && segment2D != null)
             {
                 segment2D = new Segment2D(new Point2D(value, boundingBox2D.Min.Y), new Point2D(value, boundingBox2D.Max.Y));
-                result.Add(segment2D);
                 segment2Ds_KeepFull.Add(segment2D);
             }
 
@@ -99,7 +97,6 @@ namespace SAM.Geometry.Planar
             if (segment2Ds_KeepFull != null && segment2D != null)
             {
                 segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
-                segment2Ds_Temp.Add(segment2D);
                 segment2Ds_KeepFull.Add(segment2D);
             }
 
@@ -125,14 +122,21 @@ namespace SAM.Geometry.Planar
             if (segment2Ds_KeepFull != null && segment2D != null)
             {
                 segment2D = new Segment2D(new Point2D(boundingBox2D.Min.X, value), new Point2D(boundingBox2D.Max.X, value));
-                result.Add(segment2D);
                 segment2Ds_KeepFull.Add(segment2D);
             }
 
             if(segment2Ds_KeepFull != null)
             {
                 BoundingBox2D boundingBox2D_KeepFull = new BoundingBox2D(segment2Ds_KeepFull.ConvertAll(segment2D_KeepFull => segment2D_KeepFull.GetBoundingBox()));
-                result = Query.Extend(result, boundingBox2D_KeepFull);
+                if(boundingBox2D_KeepFull != null)
+                {
+                    result = Query.Extend(result, boundingBox2D_KeepFull);
+                    foreach(Segment2D segment2D_KeepFull in boundingBox2D_KeepFull.GetSegments())
+                    {
+                        if (result.Find(segment2D_Temp => segment2D_Temp.AlmostSimilar(segment2D_KeepFull)) == null)
+                            result.Add(segment2D_KeepFull);
+                    }
+                }
             }
 
             return result;
