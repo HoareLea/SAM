@@ -217,6 +217,19 @@ namespace SAM.Analytical
             return result;
         }
 
+        public Panel GetPanel(Aperture aperture)
+        {
+            List<Panel> panels = GetObjects<Panel>();
+            if (panels == null || panels.Count == 0)
+                return null;
+
+            foreach (Panel panel in panels)
+                if (panel.HasAperture(aperture.Guid))
+                    return panel;
+
+            return null;
+        }
+
         public List<Space> GetSpaces()
         {
             return GetObjects<Space>();

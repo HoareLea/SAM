@@ -136,6 +136,7 @@
     <Compile Include="Component\SAMAnalyticalGrid.cs" />
     <Compile Include="Component\SAMAnalyticalSetApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateTypesByMap.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByMap.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateTypesByName.cs" />
