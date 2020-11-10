@@ -201,9 +201,9 @@ namespace SAM.Analytical
             if (closedPlanar3D == null)
                 return null;
 
-            ISegmentable2D segmentable2D = plane.Convert(closedPlanar3D) as ISegmentable2D;
+            ISegmentable2D segmentable2D = plane_Panel.Convert(closedPlanar3D) as ISegmentable2D;
             if (segmentable2D == null)
-                return null; ;
+                return null;
 
             ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
             if (segmentable3D == null)
@@ -216,7 +216,6 @@ namespace SAM.Analytical
             List<Point3D> point3Ds_Projected = point3Ds.ConvertAll(x => line3D.Project(x));
 
             List<Segment2D> segment2Ds = new List<Segment2D>();
-            List<Point2D> point2Ds = new List<Point2D>();
             for(int i =0; i < point3Ds.Count; i++)
             {
                 if (point3Ds[i] == null || point3Ds_Projected[i] == null)
@@ -227,16 +226,16 @@ namespace SAM.Analytical
 
                 Segment2D segment2D = new Segment2D(plane_Panel.Convert(point3Ds[i]), plane_Panel.Convert(point3Ds_Projected[i]));
                 List<Point2D> point2Ds_Intersections = Geometry.Planar.Query.Intersections(segment2D, segmentable2D, tolerance);
-                if (point2Ds_Intersections == null || point2Ds_Intersections.Count < 2)
+                if (point2Ds_Intersections == null || point2Ds_Intersections.Count >= 2)
                     continue;
 
-                point2Ds.Add(segment2D[0]);
-                point2Ds.Add(segment2D[1]);
                 segment2Ds.Add(segment2D);
             }
 
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return new Panel(panel);
+
+            List<Point2D> point2Ds = point3Ds_Projected.ConvertAll(x => plane_Panel.Convert(x));
 
             Point2D point2D_1 = null;
             Point2D point2D_2 = null;
