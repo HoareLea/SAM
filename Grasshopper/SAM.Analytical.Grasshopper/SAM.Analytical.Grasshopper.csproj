@@ -108,6 +108,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateGeometry.cs" />
     <Compile Include="Component\SAMAnalyticalCreateInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalJoinPanels.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByGeometry.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Convert\ToGrasshopper\GH_Breps.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
     <Compile Include="Convert\ToRhino\Brep.cs" />
+    <Compile Include="Query\TryConvertToPanelGeometries.cs" />
     <Compile Include="Query\DisplayMaterial.cs" />
     <Compile Include="Query\Color.cs" />
     <Compile Include="Component\SAMAnalyticalSplitPanel.cs" />

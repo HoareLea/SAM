@@ -656,6 +656,11 @@ namespace SAM.Analytical
             return false;
         }
 
+        public void RemoveApertures()
+        {
+            apertures = null;
+        }
+
         public Aperture GetAperture(Guid guid)
         {
             if (apertures == null || apertures.Count == 0)

@@ -76,8 +76,8 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            bool simplyfy = false;
-            if (!dataAccess.GetData<bool>(3, ref simplyfy))
+            bool simplify = false;
+            if (!dataAccess.GetData<bool>(3, ref simplify))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -91,23 +91,10 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<ISAMGeometry3D> geometry3Ds = null;
-            if (@object is IGH_GeometricGoo)
+            if(!Query.TryConvertToPanelGeometries(@object, out geometry3Ds, simplify))
             {
-                geometry3Ds = ((IGH_GeometricGoo)@object).ToSAM(simplyfy).Cast<ISAMGeometry3D>().ToList();
-            }
-            else if (@object is GH_ObjectWrapper)
-            {
-                GH_ObjectWrapper objectWrapper_Temp = ((GH_ObjectWrapper)@object);
-                if (objectWrapper_Temp.Value is ISAMGeometry3D)
-                    geometry3Ds = new List<ISAMGeometry3D>() { (ISAMGeometry3D)objectWrapper_Temp.Value };
-            }
-            else if (@object is IGH_Goo)
-            {
-                Geometry.ISAMGeometry sAMGeometry = (@object as dynamic).Value as Geometry.ISAMGeometry;
-                if (sAMGeometry is ISAMGeometry3D)
-                    geometry3Ds = new List<ISAMGeometry3D>() { (ISAMGeometry3D)sAMGeometry };
-                else if (sAMGeometry is Geometry.Planar.ISAMGeometry2D)
-                    geometry3Ds = new List<ISAMGeometry3D>() { Plane.WorldXY.Convert(sAMGeometry as dynamic) };
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
             }
 
             if (geometry3Ds == null || geometry3Ds.Count() == 0)
