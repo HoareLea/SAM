@@ -2,14 +2,11 @@
 
 namespace SAM.Geometry.Grasshopper
 {
-    public static partial class Query
+    public static partial class Modify
     {
-        public static bool Reduce(this Mesh mesh, MeshType meshType, bool allowDistortion, int desiredPolygonCount, int accuracy, bool normalizeSize)
+        public static bool Convert(this Mesh mesh, MeshType meshType)
         {
             if (mesh == null)
-                return false;
-
-            if (!mesh.Reduce(desiredPolygonCount, allowDistortion, accuracy, normalizeSize))
                 return false;
 
             switch (meshType)
@@ -21,10 +18,7 @@ namespace SAM.Geometry.Grasshopper
                     mesh.Faces.ConvertQuadsToTriangles();
                     break;
             }
-
-            mesh.Normals.ComputeNormals();
-            mesh.FaceNormals.ComputeFaceNormals();
-            mesh.Compact();
+                
             return true;
         }
     }

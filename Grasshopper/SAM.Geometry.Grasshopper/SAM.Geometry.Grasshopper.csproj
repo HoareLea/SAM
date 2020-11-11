@@ -121,7 +121,9 @@
     <Compile Include="Enum\MeshType.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Modify\BakeGeometry.cs" />
-    <Compile Include="Query\Reduce.cs" />
+    <Compile Include="Modify\Convert.cs" />
+    <Compile Include="Modify\Reduce.cs" />
+    <Compile Include="Query\Close.cs" />
     <Compile Include="Template\TemplateComponent.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -195,6 +197,7 @@
   <ItemGroup>
     <None Include="Resources\SAM_Geometry.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
