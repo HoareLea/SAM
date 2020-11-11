@@ -119,6 +119,25 @@ namespace SAM.Core
             }
         }
 
+        public bool RemoveValue(Enum @enum)
+        {
+            if (!Query.IsValid(GetType(), @enum))
+                return false;
+
+            Attributes.ParameterProperties parameterProperties = Attributes.ParameterProperties.Get(@enum);
+            if (parameterProperties == null)
+                return false;
+
+            if (!parameterProperties.WriteAccess())
+                return false;
+
+            string name = parameterProperties.Name;
+            if (string.IsNullOrEmpty(name))
+                return false;
+
+            return Modify.RemoveValue(this, name, @enum.GetType().Assembly);
+        }
+
         public bool TryGetValue(Enum @enum, out object value)
         {
             value = null;

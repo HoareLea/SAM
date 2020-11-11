@@ -122,6 +122,7 @@
     <Compile Include="Interfaces\Base\IJSAMObject.cs" />
     <Compile Include="Interfaces\Base\ISAMObject.cs" />
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
+    <Compile Include="Modify\RemoveValue.cs" />
     <Compile Include="Modify\SetParameter.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
     <Compile Include="Query\CustomAttribute.cs" />

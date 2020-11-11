@@ -135,6 +135,7 @@ namespace SAM.Core
             return false;
         }
 
+        
         private static bool TryGetValue_Property(this object @object, string name, out object value)
         {
             value = null;
