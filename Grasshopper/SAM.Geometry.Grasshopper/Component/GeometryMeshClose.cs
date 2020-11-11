@@ -66,18 +66,6 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            bool allowDistortion = true;
-            dataAccess.GetData(1, ref allowDistortion);
-
-            int deisredPolygonCount = 0;
-            dataAccess.GetData(2, ref deisredPolygonCount);
-
-            int accuracy = 0;
-            dataAccess.GetData(3, ref accuracy);
-
-            bool normalizedSize = true;
-            dataAccess.GetData(1, ref normalizedSize);
-
             Mesh mesh_Result = null;
             bool result = Query.TryClose(mesh, out mesh_Result);
 
