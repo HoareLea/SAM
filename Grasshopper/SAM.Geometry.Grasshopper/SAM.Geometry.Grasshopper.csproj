@@ -93,6 +93,7 @@
     <Compile Include="Classes\GooTransform3D.cs" />
     <Compile Include="Classes\GooSAMGeometry.cs" />
     <Compile Include="Component\CreateSAMTransform3DOriginToPlane.cs" />
+    <Compile Include="Component\GeometryMeshClose.cs" />
     <Compile Include="Component\GeometryModifyIntersection.cs" />
     <Compile Include="Component\GeometryMeshReduce.cs" />
     <Compile Include="Component\GeometryModifyUnion.cs" />
