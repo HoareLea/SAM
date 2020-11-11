@@ -123,7 +123,7 @@
     <Compile Include="Interfaces\Base\ISAMObject.cs" />
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\RemoveValue.cs" />
-    <Compile Include="Modify\SetParameter.cs" />
+    <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
     <Compile Include="Query\CustomAttribute.cs" />
     <Compile Include="Query\Enums.cs" />

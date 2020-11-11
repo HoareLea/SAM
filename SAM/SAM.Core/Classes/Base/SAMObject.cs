@@ -235,15 +235,15 @@ namespace SAM.Core
                 {
                     case ParameterType.IJSAMObject:
                         SAMObject sAMObject = null;
-                        return Modify.SetParameter(this, @enum.GetType().Assembly, name, sAMObject);
+                        return Modify.SetValue(this, @enum.GetType().Assembly, name, sAMObject);
 
                     case ParameterType.String:
                         string @string = null;
-                        return Modify.SetParameter(this, @enum.GetType().Assembly, name, @string);
+                        return Modify.SetValue(this, @enum.GetType().Assembly, name, @string);
                 }
             }
 
-            return Modify.SetParameter(this, @enum.GetType().Assembly, name, value_Temp as dynamic);
+            return Modify.SetValue(this, @enum.GetType().Assembly, name, value_Temp as dynamic);
         }
 
         public ParameterSet GetParameterSet(string name)
