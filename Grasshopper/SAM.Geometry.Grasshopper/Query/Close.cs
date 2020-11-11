@@ -11,8 +11,7 @@ namespace SAM.Geometry.Grasshopper
             if (mesh_Input == null)
                 return false;
 
-            mesh_Output = new Mesh();
-            mesh_Output.CopyFrom(mesh_Input);
+            mesh_Output = mesh_Input.DuplicateMesh();
 
             if (mesh_Input.IsClosed)
                 return true;
