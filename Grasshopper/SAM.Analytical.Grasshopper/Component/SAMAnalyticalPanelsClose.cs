@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
-            inputParamManager.AddGenericParameter("_elevation", "_elevation", "Elevation or Plane", GH_ParamAccess.list);
+            inputParamManager.AddGenericParameter("_elevation", "_elevation", "Elevation or Plane", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -108,6 +108,10 @@ namespace SAM.Analytical.Grasshopper
             {
                 plane = (Plane)@object;
             }
+            else if (@object is Rhino.Geometry.Plane)
+            {
+                plane = ((Rhino.Geometry.Plane)@object).ToSAM();
+            }
             else if (@object is GH_Plane)
             {
                 plane = ((GH_Plane)@object).ToSAM();
@@ -119,7 +123,7 @@ namespace SAM.Analytical.Grasshopper
                     plane = Geometry.Spatial.Create.Plane(value);
             }
 
-            if (plane != null)
+            if (plane == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
