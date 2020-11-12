@@ -18,6 +18,13 @@ namespace SAM.Geometry.Spatial
                 if (closedPlanar3D == null)
                     continue;
 
+                if (closedPlanar3D is Face3D)
+                {
+                    closedPlanar3D = ((Face3D)closedPlanar3D).GetExternalEdge3D();
+                    if (closedPlanar3D == null)
+                        continue;
+                }
+
                 ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
                 if (segmentable3D == null)
                     continue;
@@ -25,13 +32,6 @@ namespace SAM.Geometry.Spatial
                 Plane plane_Temp = closedPlanar3D.GetPlane();
                 if (plane_Temp == null)
                     continue;
-
-                if (closedPlanar3D is Face3D)
-                {
-                    closedPlanar3D = ((Face3D)closedPlanar3D).GetExternalEdge3D();
-                    if (closedPlanar3D == null)
-                        continue;
-                }
 
                 PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, plane_Temp);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)

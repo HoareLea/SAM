@@ -51,7 +51,7 @@ namespace SAM.Analytical
                 if (polygon3D == null)
                     continue;
 
-                new Panel(construction, panelType, new Face3D(polygon3D));
+                result.Add(new Panel(construction, panelType, new Face3D(polygon3D)));
             }
 
             return result;

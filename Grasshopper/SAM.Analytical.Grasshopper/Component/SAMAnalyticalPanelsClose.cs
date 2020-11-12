@@ -130,6 +130,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Panel> panels_Close = panels.FindAll(x => x.Intersect(plane)).Close(plane);
+
             List<Panel> panels_Upper = new List<Panel>();
             List<Panel> panels_Lower = new List<Panel>();
 
@@ -159,7 +160,7 @@ namespace SAM.Analytical.Grasshopper
 
 
 
-            dataAccess.SetDataList(0, panels_Close.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(0, panels_Close?.ConvertAll(x => new GooPanel(x)));
             dataAccess.SetDataList(1, panels_Upper.ConvertAll(x => new GooPanel(x)));
             dataAccess.SetDataList(2, panels_Lower.ConvertAll(x => new GooPanel(x)));
         }
