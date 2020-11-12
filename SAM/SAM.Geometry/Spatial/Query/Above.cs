@@ -2,6 +2,13 @@
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Check if given point is above plane
+        /// </summary>
+        /// <param name="plane"></param>
+        /// <param name="point3D"></param>
+        /// <param name="tolerance"></param>
+        /// <returns></returns>
         public static bool Above(this Plane plane, Point3D point3D, double tolerance = 0)
         {
             if (point3D == null)

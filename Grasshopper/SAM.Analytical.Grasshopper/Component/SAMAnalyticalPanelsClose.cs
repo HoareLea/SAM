@@ -55,6 +55,8 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "Panels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "UpperPanels", "UpperPanels", "Upper SAM Analytical Panels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "LowerPanels", "LowerPanels", "Lower SAM Analytical Panels", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
@@ -123,9 +125,39 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            panels = panels.Close(plane);
+            List<Panel> panels_Close = panels.FindAll(x => x.Intersect(plane)).Close(plane);
+            List<Panel> panels_Upper = new List<Panel>();
+            List<Panel> panels_Lower = new List<Panel>();
 
-            dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
+            foreach(Panel panel in panels)
+            {
+                if (panel == null)
+                    continue;
+
+                List<Panel> panels_Cut = Analytical.Query.Cut(new Panel(panel), plane);
+                if (panels_Cut == null)
+                    panels_Cut = new List<Panel>();
+
+                if (panels_Cut.Count == 0)
+                    panels_Cut.Add(panel);
+
+                foreach(Panel panel_Cut in panels_Cut)
+                {
+                    Point3D point3D = panel_Cut.GetInternalPoint3D();
+
+                    if (plane.Above(point3D) || plane.On(point3D))
+                        panels_Upper.Add(panel_Cut);
+                    else
+                        panels_Lower.Add(panel_Cut);
+
+                }
+            }
+
+
+
+            dataAccess.SetDataList(0, panels_Close.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(1, panels_Upper.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(2, panels_Lower.ConvertAll(x => new GooPanel(x)));
         }
     }
 }
