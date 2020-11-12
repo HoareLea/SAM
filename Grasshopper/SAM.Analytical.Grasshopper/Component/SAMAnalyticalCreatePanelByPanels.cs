@@ -8,12 +8,10 @@ using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalPanelsClose : GH_SAMComponent
+    public class SAMAnalyticalCreatePanelByPanels : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -33,9 +31,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalPanelsClose()
-          : base("SAMAnalytical.PanelsClose", "SAMAnalytical.PanelsClose",
-              "Close Panels",
+        public SAMAnalyticalCreatePanelByPanels()
+          : base("SAMAnalytical.CreatePanelByPanels", "SAMAnalytical.CreatePanelByPanels",
+              "New Panel will be generated from provided Panels and Plane or Elevation., ie Floor from Wall Panels",
               "SAM", "Analytical")
         {
         }
@@ -54,7 +52,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "Panels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "New Created Panels", GH_ParamAccess.list);
             outputParamManager.AddParameter(new GooPanelParam(), "UpperPanels", "UpperPanels", "Upper SAM Analytical Panels", GH_ParamAccess.list);
             outputParamManager.AddParameter(new GooPanelParam(), "LowerPanels", "LowerPanels", "Lower SAM Analytical Panels", GH_ParamAccess.list);
         }
