@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -53,6 +53,8 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "UpperPanels", "UpperPanels", "Upper SAM Analytical Panels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "LowerPanels", "LowerPanels", "Lower SAM Analytical Panels", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -85,6 +87,8 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Panel> result = new List<Panel>();
+            List<Panel> result_Upper = new List<Panel>();
+            List<Panel> result_Lower = new List<Panel>();
             foreach (Panel panel in panels)
             {
                 double min = panel.MinElevation();
@@ -97,9 +101,19 @@ namespace SAM.Analytical.Grasshopper
 
                     result.Add(panel);
                 }
+                else
+                {
+                    if (min >= elevation)
+                        result_Upper.Add(panel);
+                    else
+                        result_Lower.Add(panel);
+
+                }
             }
 
             dataAccess.SetDataList(0, result.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(1, result_Upper.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(2, result_Lower.ConvertAll(x => new GooPanel(x)));
         }
     }
 }
