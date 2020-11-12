@@ -43,7 +43,7 @@ namespace SAM.Analytical
                 if (point3Ds == null || point3Ds.Count == 0)
                     continue;
 
-                point3Ds = point3Ds.ConvertAll(x => plane.Project(x, Vector3D.WorldZ, tolerance));
+                //point3Ds = point3Ds.ConvertAll(x => plane.Project(x, Vector3D.WorldZ, tolerance));
                 point3Ds = point3Ds.ConvertAll(x => line3D.Project(x));
 
                 Point3D point3D_1 = null;
@@ -88,11 +88,16 @@ namespace SAM.Analytical
 
             segment2Ds.AddRange(segment2Ds_Panels);
 
+            if (segment2Ds == null || segment2Ds.Count == 0)
+                return null;
+
+            segment2Ds.Snap(true, tolerance);
+
+            segment2Ds = segment2Ds.Split(tolerance);
+
             List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
-
-            //polygon2Ds.RemoveAll(x => x == null || !closed2D.Inside(x.InternalPoint2D(tolerance), tolerance));
 
             polygon2Ds = Geometry.Planar.Query.Union(polygon2Ds, tolerance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
