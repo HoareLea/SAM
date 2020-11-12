@@ -4,15 +4,15 @@ using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
-    public static partial class Query
+    public static partial class Create
     {
-        public static List<Polygon3D> Close(this IEnumerable<IClosedPlanar3D> closedPlanar3Ds, Plane plane, double tolerance = Core.Tolerance.Distance)
+        public static List<Polygon3D> Polygon3Ds(this IEnumerable<IClosedPlanar3D> closedPlanar3Ds, Plane plane, bool checkIntersection = true, double tolerance = Core.Tolerance.Distance)
         {
             if (closedPlanar3Ds == null || plane == null)
                 return null;
 
             List<Segment2D> segment2Ds = new List<Segment2D>();
-            for(int i=0; i < closedPlanar3Ds.Count(); i++)
+            for (int i = 0; i < closedPlanar3Ds.Count(); i++)
             {
                 IClosedPlanar3D closedPlanar3D = closedPlanar3Ds.ElementAt(i);
                 if (closedPlanar3D == null)
@@ -33,7 +33,15 @@ namespace SAM.Geometry.Spatial
                 if (plane_Temp == null)
                     continue;
 
-                PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, plane_Temp);
+                PlanarIntersectionResult planarIntersectionResult = null;
+                if(checkIntersection)
+                {
+                    planarIntersectionResult = PlanarIntersectionResult.Create(plane, closedPlanar3D);
+                    if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                        continue;
+                }
+
+                planarIntersectionResult = PlanarIntersectionResult.Create(plane, plane_Temp);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 
@@ -49,7 +57,7 @@ namespace SAM.Geometry.Spatial
 
                 Point3D point3D_1 = null;
                 Point3D point3D_2 = null;
-                ExtremePoints(point3Ds, out point3D_1, out point3D_2);
+                Query.ExtremePoints(point3Ds, out point3D_1, out point3D_2);
                 if (point3D_1 == null || point3D_2 == null || point3D_1.AlmostEquals(point3D_2, tolerance))
                     continue;
 
@@ -71,7 +79,7 @@ namespace SAM.Geometry.Spatial
 
             List<Polygon3D> result = new List<Polygon3D>();
 
-            foreach(Polygon2D polygon2D in polygon2Ds)
+            foreach (Polygon2D polygon2D in polygon2Ds)
             {
                 Polygon2D polygon2D_Temp = Planar.Query.Snap(polygon2Ds[0], segment2Ds, tolerance);
                 if (polygon2D_Temp != null)

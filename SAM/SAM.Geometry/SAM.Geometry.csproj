@@ -176,11 +176,11 @@
     <Compile Include="Spatial\Classes\Rectangle3D.cs" />
     <Compile Include="Spatial\Classes\Shell.cs" />
     <Compile Include="Spatial\Classes\Transform3D.cs" />
+    <Compile Include="Spatial\Create\Polygon3Ds.cs" />
     <Compile Include="Spatial\Create\Vector3D.cs" />
     <Compile Include="Spatial\Create\Point3D.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
-    <Compile Include="Spatial\Query\Close.cs" />
     <Compile Include="Spatial\Query\Grid.cs" />
     <Compile Include="Spatial\Query\Rectangular.cs" />
     <Compile Include="Spatial\Query\Inside.cs" />

@@ -128,7 +128,6 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
-    <Compile Include="Query\Close.cs" />
     <Compile Include="Query\Cut.cs" />
     <Compile Include="Query\DefaultGasType.cs" />
     <Compile Include="Query\Extend.cs" />
