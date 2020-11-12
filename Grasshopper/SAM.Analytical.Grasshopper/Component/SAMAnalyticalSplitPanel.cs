@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -53,6 +53,8 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "Panels", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "UpperPanels", "UpperPanels", "Panels above given Elevation", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "LowerPanels", "LowerPanels", "Panels below given Elevation", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -128,7 +130,23 @@ namespace SAM.Analytical.Grasshopper
             if (result == null || result.Count == 0)
                 result = new List<Panel>() { new Panel(panel) };
 
+            List<Panel> result_Upper = new List<Panel>();
+            List<Panel> result_Lower = new List<Panel>();
+            foreach (Panel panel_Temp in result)
+            {
+                Point3D point3D = panel_Temp.GetInternalPoint3D();
+                if (point3D == null)
+                    continue;
+
+                if (planes.TrueForAll(x => x.Above(point3D) || x.On(point3D)))
+                    result_Upper.Add(panel_Temp);
+                else
+                    result_Lower.Add(panel_Temp);
+            }
+            
             dataAccess.SetDataList(0, result?.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(1, result_Upper?.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(2, result_Lower?.ConvertAll(x => new GooPanel(x)));
         }
     }
 }
