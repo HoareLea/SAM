@@ -58,7 +58,7 @@ namespace SAM.Geometry.Spatial
             if (face2D == null)
                 return null;
 
-            List<Segment2D> segment2Ds = segment3Ds.ConvertAll(x => plane_Face3D.Convert(x));
+            List<Segment2D> segment2Ds = segment3Ds.ConvertAll(x => plane_Face3D.Convert(plane_Face3D.Project(x)));
             if (segment2Ds == null)
                 return null;
 

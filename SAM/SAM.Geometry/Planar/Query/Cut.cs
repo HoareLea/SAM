@@ -90,6 +90,8 @@ namespace SAM.Geometry.Planar
 
             segment2Ds_Temp.AddRange(segment2Ds);
 
+            segment2Ds_Temp = segment2Ds_Temp.Split(tolerance);
+
             List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds_Temp, tolerance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
