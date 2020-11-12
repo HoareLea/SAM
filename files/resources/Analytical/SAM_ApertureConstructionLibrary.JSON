@@ -1,6 +1,6 @@
 {
   "_type": "SAM.Analytical.ApertureConstructionLibrary,SAM.Analytical",
-  "Name": "Default SAM ApertureConstruction Library ver00",
+  "Name": "Default SAM ApertureConstruction Library ver01",
   "Guid": "ead9d0c5-37c0-4cab-87f1-dfa9ac94ba0f",
   "Objects": [
     {
@@ -32,6 +32,125 @@
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
           "Name": "C00_Hardwood_2100kg/m3_0.18W/mK",
           "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Door"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "5ad2e36d-6a2b-4cf1-af02-1ce62e7d2289",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "WallExternal"
+            }
+          ]
+        }
+      ],
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
+          "Thickness": 0.006
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar0UP_Air__12mm_3.168W/m2K",
+          "Thickness": 0.12
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9",
+          "Thickness": 0.006
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Frame Notional building_7800kg/m3_0.176W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Door"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_INT_GLZ",
+      "Guid": "5ad2e36d-6a2b-4cf1-af02-1ce62e7d2290",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "WallInternal"
+            }
+          ]
+        }
+      ],
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
+          "Thickness": 0.006
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar0UP_Air__12mm_3.168W/m2K",
+          "Thickness": 0.12
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9",
+          "Thickness": 0.006
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Frame Notional building_7800kg/m3_0.176W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Door"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_INT_SLD",
+      "Guid": "1dcdad32-63ec-4a01-945d-39548be20491",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "WallInternal"
+            }
+          ]
+        }
+      ],
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C03_Wood_500kg/m3_0.13W/mK",
+          "Thickness": 0.03
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C03_Wood_500kg/m3_0.13W/mK",
+          "Thickness": 0.03
         }
       ],
       "ApertureType": "Door"
@@ -78,39 +197,6 @@
         }
       ],
       "ApertureType": "Window"
-    },
-    {
-      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
-      "Name": "SIM_INT_SLD",
-      "Guid": "1dcdad32-63ec-4a01-945d-39548be20491",
-      "ParameterSets": [
-        {
-          "_type": "SAM.Core.ParameterSet",
-          "Name": "SAM.Analytical",
-          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-          "Parameters": [
-            {
-              "Name": "Dafault Panel Type",
-              "Value": "WallInternal"
-            }
-          ]
-        }
-      ],
-      "PaneConstructionLayers": [
-        {
-          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-          "Name": "C03_Wood_500kg/m3_0.13W/mK",
-          "Thickness": 0.03
-        }
-      ],
-      "FrameConstructionLayers": [
-        {
-          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-          "Name": "C03_Wood_500kg/m3_0.13W/mK",
-          "Thickness": 0.03
-        }
-      ],
-      "ApertureType": "Door"
     },
     {
       "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
@@ -227,6 +313,72 @@
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
           "Name": "C00_Frame Notional building_7800kg/m3_0.176W/mK",
           "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Window"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_EXT_SLD",
+      "Guid": "5ba48602-b8fd-4483-a876-3e3f3f4951df",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "WallExternal"
+            }
+          ]
+        }
+      ],
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Hardwood_2100kg/m3_0.18W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Hardwood_2100kg/m3_0.18W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Window"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_INT_SLD",
+      "Guid": "c22743a1-83b3-491f-974c-816500b5f304",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "WallInternal"
+            }
+          ]
+        }
+      ],
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C03_Wood_500kg/m3_0.13W/mK",
+          "Thickness": 0.03
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C03_Wood_500kg/m3_0.13W/mK",
+          "Thickness": 0.03
         }
       ],
       "ApertureType": "Window"
