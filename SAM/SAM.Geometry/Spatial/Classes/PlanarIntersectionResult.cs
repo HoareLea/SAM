@@ -286,7 +286,9 @@ namespace SAM.Geometry.Spatial
             if (closedPlanar3D is Face3D)
                 return Create(plane, (Face3D)closedPlanar3D, tolerance_Angle, tolerance_Distance);
 
-            PlanarIntersectionResult planarIntersectionResult = Create(plane, closedPlanar3D.GetPlane(), tolerance_Angle);
+            Plane plane_ClosedPlanar3D = closedPlanar3D.GetPlane();
+
+            PlanarIntersectionResult planarIntersectionResult = Create(plane, plane_ClosedPlanar3D, tolerance_Angle);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return new PlanarIntersectionResult(plane);
 
@@ -304,63 +306,67 @@ namespace SAM.Geometry.Spatial
             if (planarIntersectionResults_All == null || planarIntersectionResults_All.Count == 0)
                 return new PlanarIntersectionResult(plane);
 
-            List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
             List<Point3D> point3Ds = new List<Point3D>();
-
             foreach (PlanarIntersectionResult planarIntersectionResult_Temp in planarIntersectionResults_All)
             {
                 Point3D point3D = planarIntersectionResult_Temp.GetGeometry3D<Point3D>();
-                if (point3D == null)
+                if(point3D != null)
                 {
-                    Segment3D segment3D = planarIntersectionResult_Temp.GetGeometry3D<Segment3D>();
-                    if (segment3D == null)
-                        continue;
-
-                    geometry3Ds.Add(segment3D);
+                    Modify.Add(point3Ds, point3D, tolerance_Distance);
                     continue;
                 }
 
-                point3Ds.Add(point3D);
-            }
-
-            if (point3Ds != null && point3Ds.Count > 1)
-            {
-                Point3D point3D_1 = null;
-                Point3D point3D_2 = null;
-
-                Query.ExtremePoints(point3Ds, out point3D_1, out point3D_2);
-                if (point3D_1 != null)
+                Segment3D segment3D = planarIntersectionResult_Temp.GetGeometry3D<Segment3D>();
+                if (segment3D != null)
                 {
-                    Modify.SortByDistance(point3Ds, point3D_1);
-                    int index = 0;
-                    int count = point3Ds.Count - 2;
-                    while (index <= count)
-                    {
-                        point3D_1 = point3Ds[index];
-                        point3D_2 = point3Ds[index + 1];
-                        index++;
-                        if (point3D_1.Distance(point3D_2) < tolerance_Distance)
-                        {
-                            geometry3Ds.Add(point3D_1);
-                        }
-                        else
-                        {
-                            geometry3Ds.Add(new Segment3D(point3D_1, point3D_2));
-                            index++;
-                        }
-                    }
+                    Modify.Add(point3Ds, segment3D[0], tolerance_Distance);
+                    Modify.Add(point3Ds, segment3D[1], tolerance_Distance);
+                    continue;
                 }
             }
 
-            List<Segment3D> segment3Ds = geometry3Ds.FindAll(x => x is Segment3D).Cast<Segment3D>().ToList();
-            Modify.RemoveAlmostSimilar(segment3Ds, tolerance_Distance);
+            if(point3Ds == null || point3Ds.Count == 0)
+                return new PlanarIntersectionResult(plane);
 
-            point3Ds = geometry3Ds.FindAll(x => x is Point3D).Cast<Point3D>().Distinct().ToList();
-            point3Ds.RemoveAll(x => segment3Ds.Find(y => y.On(x, tolerance_Distance)) != null);
+            if(point3Ds.Count == 1)
+                return new PlanarIntersectionResult(plane, point3Ds[0]);
 
-            geometry3Ds = new List<ISAMGeometry3D>();
-            geometry3Ds.AddRange(segment3Ds);
-            geometry3Ds.AddRange(point3Ds);
+            List<Point2D> point2Ds = point3Ds.ConvertAll(x => plane_ClosedPlanar3D.Convert(x));
+            IClosed2D closed2D = plane_ClosedPlanar3D.Convert(closedPlanar3D);
+
+            List<Segment2D> segment2Ds_Result = new List<Segment2D>();
+            List<Point2D> point2Ds_Result = new List<Point2D>();
+            for(int i = 0; i < point2Ds.Count - 1; i++)
+            {
+                Point2D point2D_Mid = point2Ds[i].Mid(point2Ds[i + 1]);
+
+                if (closed2D.Inside(point2D_Mid, tolerance_Distance) || closed2D.On(point2D_Mid, tolerance_Distance))
+                {
+                    segment2Ds_Result.Add(new Segment2D(point2Ds[i], point2Ds[i + 1]));
+                    continue;
+                }
+
+                if(segment2Ds_Result.Count == 0)
+                {
+                    point2Ds.Add(point2Ds[i]);
+                }
+
+                if(i == point2Ds.Count - 2)
+                {
+                    point2Ds.Add(point2Ds[i]);
+                }
+
+                if (segment2Ds_Result.Count == 0)
+                    continue;
+
+                Segment2D segment2D = segment2Ds_Result.Last();
+                if (!segment2D[1].AlmostEquals(point2Ds[i], tolerance_Distance))
+                    point2Ds.Add(point2Ds[i]);
+            }
+
+            List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
+            geometry3Ds.AddRange(segment2Ds_Result.ConvertAll(x => plane_ClosedPlanar3D.Convert(x)));
+            geometry3Ds.AddRange(point2Ds_Result.ConvertAll(x => plane_ClosedPlanar3D.Convert(x)));
 
             return new PlanarIntersectionResult(plane, geometry3Ds);
         }

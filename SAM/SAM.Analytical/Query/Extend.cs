@@ -145,11 +145,9 @@ namespace SAM.Analytical
                     panels_Cut.AddRange(panels_Cut_Temp);
             }
 
-
             List<Face3D> face3Ds = panels_Cut.ConvertAll(x => x.GetFace3D());
 
             Vector3D vector3D = Vector3D.WorldZ.GetNegated();
-
 
             List<Panel> result = new List<Panel>();
             foreach(Panel panel in panels_Cut)
