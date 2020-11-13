@@ -181,6 +181,7 @@
     <Compile Include="Spatial\Create\Point3D.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Between.cs" />
     <Compile Include="Spatial\Query\Grid.cs" />
     <Compile Include="Spatial\Query\Rectangular.cs" />
     <Compile Include="Spatial\Query\Inside.cs" />
