@@ -282,11 +282,19 @@ namespace SAM.Core.Grasshopper
                     {
                         dataAccess.SetData(i, new GooParameter(result.ToString()));
                     }
+                    else if(result is int || result is long)
+                    {
+                        int value;
+                        if (Core.Query.TryConvert(result, out value))
+                            dataAccess.SetData(i, new GH_Number(value));
+                        else
+                            dataAccess.SetData(i, new GooParameter(result));
+                    }
                     else if (Core.Query.IsNumeric(result))
                     {
                         double value;
                         if (Core.Query.TryConvert(result, out value))
-                            dataAccess.SetData(i, new GH_Number((double)value));
+                            dataAccess.SetData(i, new GH_Number(value));
                         else
                             dataAccess.SetData(i, new GooParameter(result));
                     }
