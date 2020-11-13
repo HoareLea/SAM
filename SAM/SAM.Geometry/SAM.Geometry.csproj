@@ -127,7 +127,6 @@
     <Compile Include="Planar\Modify\InsertClosest.cs" />
     <Compile Include="Planar\Modify\Draw.cs" />
     <Compile Include="Planar\Modify\Move.cs" />
-    <Compile Include="Planar\Modify\Snap.cs" />
     <Compile Include="Planar\Modify\JoinInRange.cs" />
     <Compile Include="Planar\Modify\JoinByIntersections.cs" />
     <Compile Include="Planar\Modify\Scale.cs" />

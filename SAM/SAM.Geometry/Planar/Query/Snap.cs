@@ -143,5 +143,95 @@ namespace SAM.Geometry.Planar
 
             return new Polygon2D(point2Ds_Result);
         }
+
+        /// <summary>
+        /// Snap points for each segment in given tolerance. Points will be snapped to average points in range of tolerance
+        /// </summary>
+        /// <param name="segment2Ds">List of Segments to be snapped</param>
+        /// <param name="includeIntersection">Intersection point will be applied if there is only two segments to be snapped</param>
+        /// <param name="tolerance">Snapping tolerance</param>
+        /// <returns></returns>
+        public static List<Segment2D> Snap(this IEnumerable<Segment2D> segment2Ds, bool includeIntersection = true, double tolerance = Core.Tolerance.MacroDistance)
+        {
+            if (segment2Ds == null)
+                return null;
+
+            List<Segment2D> result = new List<Segment2D>();
+            foreach(Segment2D segment2D in segment2Ds)
+            {
+                if(segment2D == null)
+                {
+                    result.Add(null);
+                    continue;
+                }
+                result.Add(new Segment2D(segment2D));
+            }
+
+            HashSet<Point2D> point2Ds_Unique = new HashSet<Point2D>();
+            for (int i = 0; i < result.Count; i++)
+            {
+                List<Point2D> point2Ds_Segment2D = result[i].GetPoints();
+                foreach (Point2D point2D_Segment2D in point2Ds_Segment2D)
+                {
+                    if (point2Ds_Unique.Contains(point2D_Segment2D))
+                        continue;
+
+                    point2Ds_Unique.Add(point2D_Segment2D);
+
+                    Dictionary<int, List<int>> dictionary = new Dictionary<int, List<int>>();
+                    List<Point2D> point2Ds = new List<Point2D>();
+                    for (int j = 0; j < result.Count; j++)
+                    {
+                        List<int> indexes = new List<int>();
+
+                        if (result[j][0].Distance(point2D_Segment2D) <= tolerance)
+                        {
+                            indexes.Add(0);
+                            point2Ds.Add(result[j][0]);
+                        }
+
+                        if (result[j][1].Distance(point2D_Segment2D) <= tolerance)
+                        {
+                            indexes.Add(1);
+                            point2Ds.Add(result[j][1]);
+                        }
+
+                        if (indexes.Count == 0)
+                            continue;
+
+                        dictionary[j] = indexes;
+
+                    }
+
+                    Point2D point2D_New = null;
+                    if (point2Ds.Count == 1)
+                    {
+                        point2D_New = point2Ds[0];
+                    }
+                    else if (point2Ds.Count == 2 && includeIntersection)
+                    {
+                        IEnumerable<int> indexes = dictionary.Keys;
+                        if (indexes.Count() == 2)
+                            point2D_New = result[indexes.ElementAt(0)].Intersection(result[indexes.ElementAt(1)], false, tolerance);
+                    }
+
+                    if (point2D_New == null)
+                        point2D_New = Query.Average(point2Ds);
+
+
+                    foreach (KeyValuePair<int, List<int>> keyValuePair in dictionary)
+                    {
+                        if (keyValuePair.Value.Contains(0))
+                            result[keyValuePair.Key] = new Segment2D(point2D_New, result[keyValuePair.Key][1]);
+
+                        if (keyValuePair.Value.Contains(1))
+                            result[keyValuePair.Key] = new Segment2D(result[keyValuePair.Key][0], point2D_New);
+                    }
+                }
+            }
+
+            result.RemoveAll(x => x.GetLength() <= tolerance);
+            return result;
+        }
     }
 }

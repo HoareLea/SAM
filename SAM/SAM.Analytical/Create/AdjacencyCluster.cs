@@ -46,7 +46,7 @@ namespace SAM.Analytical
                     if (segment2Ds == null || segment2Ds.Count < 3)
                         continue;
 
-                    Geometry.Planar.Modify.Snap(segment2Ds, true, tolerance);
+                    segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, tolerance);
 
                     foreach(Segment2D segment2D in segment2Ds)
                     {
@@ -347,7 +347,7 @@ namespace SAM.Analytical
                     if (segment2Ds == null || segment2Ds.Count < 3)
                         continue;
 
-                    Geometry.Planar.Modify.Snap(segment2Ds, true, tolerance);
+                    segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, tolerance);
 
                     Panel panel;
 
