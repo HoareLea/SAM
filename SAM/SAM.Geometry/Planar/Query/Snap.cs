@@ -58,7 +58,7 @@ namespace SAM.Geometry.Planar
             return geometries.ToList().ConvertAll(x => x.ToSAM(tolerance));
         }
     
-        public static Polygon2D Snap(this Polygon2D polygon2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = SAM.Core.Tolerance.Distance)
+        public static Polygon2D Snap(this Polygon2D polygon2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon2D == null || segmentable2Ds == null)
                 return null;
@@ -113,6 +113,35 @@ namespace SAM.Geometry.Planar
             }
 
             return new Polygon2D(point2Ds);
+        }
+
+        public static Polygon2D Snap(this Polygon2D polygon2D, IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point2Ds == null)
+                return null;
+
+            List<Point2D> point2Ds_Result = polygon2D?.Points;
+            if (point2Ds == null || point2Ds_Result.Count == 0)
+                return null;
+
+            for (int j = 0; j < point2Ds_Result.Count; j++)
+            {
+                double distance = double.MaxValue;
+                foreach (Point2D point2D_Temp in point2Ds)
+                {
+                    if (point2D_Temp == null)
+                        continue;
+
+                    double distance_Temp = point2D_Temp.Distance(point2Ds_Result[j]);
+                    if (distance_Temp > 0 && distance_Temp <= tolerance && distance > distance_Temp)
+                    {
+                        point2Ds_Result[j] = point2D_Temp;
+                        distance = distance_Temp;
+                    }
+                }
+            }
+
+            return new Polygon2D(point2Ds_Result);
         }
     }
 }

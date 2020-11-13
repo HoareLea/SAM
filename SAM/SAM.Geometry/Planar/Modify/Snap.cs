@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
     public static partial class Modify
     {
         /// <summary>
-        /// Snap points for reach segment in given tolerance. Points will be snapped to average points in range of tolerance
+        /// Snap points for each segment in given tolerance. Points will be snapped to average points in range of tolerance
         /// </summary>
         /// <param name="segment2Ds">List of Segments to be snapped</param>
         /// <param name="includeIntersection">Intersection point will be applied if there is only two segments to be snapped</param>

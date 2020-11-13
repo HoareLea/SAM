@@ -2,13 +2,13 @@
 {
     public static partial class Query
     {
-        public static bool Rectangular(this IClosedPlanar3D closedPlanar3D)
+        public static bool Rectangular(this IClosedPlanar3D closedPlanar3D, double tolerance = Core.Tolerance.Distance)
         {
             if (closedPlanar3D == null)
                 return false;
 
             if (closedPlanar3D is Face3D)
-                return Rectangular(((Face3D)closedPlanar3D).GetExternalEdge3D());
+                return Rectangular(((Face3D)closedPlanar3D).GetExternalEdge3D(), tolerance);
 
             if (!(closedPlanar3D is ISegmentable3D))
                 return false;
@@ -19,7 +19,7 @@
             if (closed2D == null)
                 return false;
 
-            return Planar.Query.Rectangular(closed2D);
+            return Planar.Query.Rectangular(closed2D, tolerance);
         }
     }
 }
