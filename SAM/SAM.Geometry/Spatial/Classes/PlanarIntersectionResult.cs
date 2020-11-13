@@ -278,6 +278,22 @@ namespace SAM.Geometry.Spatial
             return new PlanarIntersectionResult(plane_1, new Line3D(orgin, tangent));
         }
 
+        public static PlanarIntersectionResult Create(Plane plane, ISegmentable3D segmentable3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if (segmentable3D is IClosedPlanar3D)
+                return Create(plane, (IClosedPlanar3D)segmentable3D, tolerance_Angle, tolerance_Distance);
+
+            List<PlanarIntersectionResult> planarIntersectionResults = segmentable3D.GetSegments()?.ConvertAll(x => Create(plane, x)).FindAll(x => x.Intersecting);
+            if (planarIntersectionResults == null || planarIntersectionResults.Count == 0)
+                return new PlanarIntersectionResult(plane);
+
+            List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
+            foreach (PlanarIntersectionResult planarIntersectionResult in planarIntersectionResults)
+                geometry3Ds.AddRange(planarIntersectionResult.Geometry3Ds);
+
+            return new PlanarIntersectionResult(plane, geometry3Ds);
+        }
+
         public static PlanarIntersectionResult Create(Plane plane, IClosedPlanar3D closedPlanar3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (plane == null || closedPlanar3D == null)

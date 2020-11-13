@@ -2,13 +2,9 @@
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
-using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace SAM.Analytical.Grasshopper
 {
