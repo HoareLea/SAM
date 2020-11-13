@@ -141,25 +141,25 @@ namespace SAM.Geometry.Spatial
             Point3D start = GetStart();
             Point3D end = GetEnd();
 
-            double A = point3D.X - start.X;
-            double B = point3D.Y - start.Y;
-            double E = point3D.Z - start.Z;
-            double C = end.X - start.X;
-            double D = end.Y - start.Y;
-            double F = end.Z - start.Z;
+            double a = point3D.X - start.X;
+            double b = point3D.Y - start.Y;
+            double e = point3D.Z - start.Z;
+            double c = end.X - start.X;
+            double d = end.Y - start.Y;
+            double f = end.Z - start.Z;
 
-            double aDot = A * C + B * D + E * F;
-            double aLen_sq = C * C + D * D + F * F;
-            double aParameter = -1;
-            if (aLen_sq != 0)
-                aParameter = aDot / aLen_sq;
+            double dot = a * c + b * d + e * f;
+            double squareLength = c * c + d * d + f * f;
+            double parameter = -1;
+            if (squareLength != 0)
+                parameter = dot / squareLength;
 
-            if (aParameter < 0)
+            if (parameter < 0)
                 return start;
-            else if (aParameter > 1)
+            else if (parameter > 1)
                 return end;
             else
-                return new Point3D(start.X + aParameter * C, start.Y + aParameter * D, start.Z + aParameter * F);
+                return new Point3D(start.X + parameter * c, start.Y + parameter * d, start.Z + parameter * f);
         }
 
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
