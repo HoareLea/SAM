@@ -134,7 +134,28 @@ namespace SAM.Core
             }
             return result;
         }
-        
+
+        public static Dictionary<Type, AssociatedTypes> GetAssociatedTypesDictionary(IEnumerable<Type> types = null)
+        {
+            if (associatedTypesDictionary == null)
+                associatedTypesDictionary = Query.AssociatedTypesDictionary();
+
+            Dictionary<Type, AssociatedTypes> result = new Dictionary<Type, AssociatedTypes>();
+            foreach (KeyValuePair<Type, AssociatedTypes> keyValuePair in associatedTypesDictionary)
+            {
+                if (types != null)
+                {
+                    List<Type> types_Valid = keyValuePair.Value?.ValidTypes(types);
+                    if (types_Valid == null || types_Valid.Count == 0)
+                        continue;
+                }
+
+                result[keyValuePair.Key] = keyValuePair.Value;
+            }
+
+            return result;
+        }
+
         public static List<Type> GetParameterTypes(Type type)
         {
             if (type == null)

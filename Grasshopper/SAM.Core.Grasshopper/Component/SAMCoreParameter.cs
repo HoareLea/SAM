@@ -80,7 +80,7 @@ namespace SAM.Core.Grasshopper
                 return;
 
 
-            Dictionary<Type, AssociatedTypes> dictionary = Core.Query.AssociatedTypesDictionary(types, true, false);
+            Dictionary<Type, AssociatedTypes> dictionary = ActiveManager.GetAssociatedTypesDictionary(types);
             if (dictionary == null)
                 return;
 
