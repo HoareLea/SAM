@@ -114,6 +114,18 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            if(!includeInternalEdges)
+            {
+                for (int i=0; i < geometry3Ds.Count; i++)
+                {
+                    Face3D face3D = geometry3Ds[i] as Face3D;
+                    if (face3D == null)
+                        continue;
+
+                    geometry3Ds[i] = new Face3D(face3D.GetExternalEdge3D());
+                }
+            }
+            
             List<Panel> panels = Create.Panels(geometry3Ds, panel.PanelType, panel.Construction, minArea, tolerance);
             if (panels == null || panels.Count == 0)
             {
@@ -121,11 +133,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Face3D face3D = panels[0].GetFace3D();
-            if (face3D != null && !includeInternalEdges)
-                face3D = new Face3D(face3D.ExternalEdge2D);
-
-            panels[0] = new Panel(panel.Guid, panel, face3D, null, true, minArea);
+            panels[0] = new Panel(panel.Guid, panel, panels[0].GetFace3D(), null, true, minArea);
             if (!copyApertures)
                 panels[0].RemoveApertures();
 
@@ -133,11 +141,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 for (int i = 1; i < panels.Count; i++)
                 {
-                    face3D = panels[i].GetFace3D();
-                    if (face3D != null && !includeInternalEdges)
-                        face3D = new Face3D(face3D.ExternalEdge2D);
-
-                    panels[i] = new Panel(panels[i].Guid, panel, face3D, null, true, minArea);
+                    panels[i] = new Panel(panels[i].Guid, panel, panels[i].GetFace3D(), null, true, minArea);
                     if (!copyApertures)
                         panels[i].RemoveApertures();
                 }
