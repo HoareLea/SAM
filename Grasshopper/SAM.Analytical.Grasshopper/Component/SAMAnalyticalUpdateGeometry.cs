@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -44,6 +44,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_geometry", "_geometry", "Geometry", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("_copyApertures_", "_copyApertures_", "Copy apertures if possible", GH_ParamAccess.item, true);
+            inputParamManager.AddBooleanParameter("_includeInternalEdges_", "_includeInternalEdges_", "Include internal Edges if exist", GH_ParamAccess.item, true);
 
             inputParamManager.AddBooleanParameter("simplify_", "simplify_", "Simplify", GH_ParamAccess.item, true);
             inputParamManager.AddNumberParameter("minArea_", "minArea_", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
@@ -72,7 +73,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             bool simplify = true;
-            if (!dataAccess.GetData(3, ref simplify))
+            if (!dataAccess.GetData(4, ref simplify))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -86,14 +87,14 @@ namespace SAM.Analytical.Grasshopper
             }
 
             double minArea = double.NaN;
-            if (!dataAccess.GetData(4, ref minArea))
+            if (!dataAccess.GetData(5, ref minArea))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             double tolerance = double.NaN;
-            if (!dataAccess.GetData(5, ref tolerance))
+            if (!dataAccess.GetData(6, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -106,6 +107,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            bool includeInternalEdges = true;
+            if (!dataAccess.GetData(3, ref includeInternalEdges))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             List<Panel> panels = Create.Panels(geometry3Ds, panel.PanelType, panel.Construction, minArea, tolerance);
             if (panels == null || panels.Count == 0)
             {
@@ -113,7 +121,11 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            panels[0] = new Panel(panel.Guid, panel, panels[0].GetFace3D(), null, true, minArea);
+            Face3D face3D = panels[0].GetFace3D();
+            if (face3D != null && !includeInternalEdges)
+                face3D = new Face3D(face3D.ExternalEdge2D);
+
+            panels[0] = new Panel(panel.Guid, panel, face3D, null, true, minArea);
             if (!copyApertures)
                 panels[0].RemoveApertures();
 
@@ -121,7 +133,11 @@ namespace SAM.Analytical.Grasshopper
             {
                 for (int i = 1; i < panels.Count; i++)
                 {
-                    panels[i] = new Panel(panels[i].Guid, panel, panels[i].GetFace3D(), null, true, minArea);
+                    face3D = panels[i].GetFace3D();
+                    if (face3D != null && !includeInternalEdges)
+                        face3D = new Face3D(face3D.ExternalEdge2D);
+
+                    panels[i] = new Panel(panels[i].Guid, panel, face3D, null, true, minArea);
                     if (!copyApertures)
                         panels[i].RemoveApertures();
                 }
