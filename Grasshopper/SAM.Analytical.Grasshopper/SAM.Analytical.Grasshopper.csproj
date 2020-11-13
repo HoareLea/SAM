@@ -110,6 +110,7 @@
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalExtendPanelByPlane.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelByPanels.cs" />
+    <Compile Include="Component\SAMAnalyticalRemoveInternalEdges.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateGeometry.cs" />
     <Compile Include="Component\SAMAnalyticalCreateInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalJoinPanels.cs" />
