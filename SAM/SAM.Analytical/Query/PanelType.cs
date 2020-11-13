@@ -70,12 +70,10 @@ namespace SAM.Analytical
             return Analytical.PanelType.Undefined;
         }
 
-        public static PanelType PanelType(Geometry.Spatial.Vector3D normal)
+        public static PanelType PanelType(Geometry.Spatial.Vector3D normal, double tolerance = Core.Tolerance.Angle)
         {
             if (normal == null)
                 return Analytical.PanelType.Undefined;
-
-            double tolerance = 0.1;
 
             double value = normal.Unit.DotProduct(Geometry.Spatial.Vector3D.WorldZ);
             if (value < tolerance && value > -tolerance)
