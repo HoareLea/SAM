@@ -40,7 +40,7 @@ namespace SAM.Geometry.Planar
             return point2Ds.ToList();
         }
 
-        public static List<Point2D> Intersections(this ISegmentable2D segmentable2D, IEnumerable<Segment2D> segment2Ds)
+        public static List<Point2D> Intersections(this ISegmentable2D segmentable2D, IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segmentable2D == null || segment2Ds == null)
                 return null;
@@ -52,7 +52,7 @@ namespace SAM.Geometry.Planar
             HashSet<Point2D> point2Ds = new HashSet<Point2D>();
             foreach (Segment2D segment2D in segment2Ds)
             {
-                List<Point2D> point2Ds_Temp = Intersections(segmentable2D, segment2D);
+                List<Point2D> point2Ds_Temp = Intersections(segmentable2D, segment2D, tolerance);
                 if (point2Ds_Temp == null || point2Ds_Temp.Count == 0)
                     continue;
 

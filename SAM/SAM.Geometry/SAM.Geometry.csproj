@@ -163,6 +163,7 @@
     <Compile Include="Planar\Modify\OrientByEnds.cs" />
     <Compile Include="Planar\Modify\Join.cs" />
     <Compile Include="Planar\Query\Cut.cs" />
+    <Compile Include="Planar\Query\Triangulate.cs" />
     <Compile Include="Planar\Query\Trim.cs" />
     <Compile Include="Planar\Query\Split.cs" />
     <Compile Include="Planar\Query\RemoveAngle.cs" />
