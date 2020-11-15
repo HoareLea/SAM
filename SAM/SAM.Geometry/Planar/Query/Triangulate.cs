@@ -49,5 +49,48 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
+
+        public static List<Triangle2D> Triangulate(this Polyline2D polyline2D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (polyline2D == null)
+                return null;
+
+            if (!polyline2D.IsClosed(tolerance))
+                return null;
+
+            return new Polygon2D(polyline2D.Points).Triangulate(tolerance);
+        }
+
+        public static List<Triangle2D> Triangulate(this Rectangle2D rectangle2D)
+        {
+            List<Segment2D> segment2Ds = rectangle2D?.GetSegments();
+            if (segment2Ds == null || segment2Ds.Count != 4)
+                return null;
+
+            List<Triangle2D> result = new List<Triangle2D>();
+            result.Add(new Triangle2D(segment2Ds[0][0], segment2Ds[0][1], segment2Ds[1][1]));
+            result.Add(new Triangle2D(segment2Ds[2][0], segment2Ds[2][1], segment2Ds[3][1]));
+            return result;
+        }
+
+        public static List<Triangle2D> Triangulate(this BoundingBox2D boundingBox2D)
+        {
+            List<Segment2D> segment2Ds = boundingBox2D?.GetSegments();
+            if (segment2Ds == null || segment2Ds.Count != 4)
+                return null;
+
+            List<Triangle2D> result = new List<Triangle2D>();
+            result.Add(new Triangle2D(segment2Ds[0][0], segment2Ds[0][1], segment2Ds[1][1]));
+            result.Add(new Triangle2D(segment2Ds[2][0], segment2Ds[2][1], segment2Ds[3][1]));
+            return result;
+        }
+
+        public static List<Triangle2D> Triangulate(this Triangle2D triangle2D)
+        {
+            if (triangle2D == null)
+                return null;
+            
+            return new List<Triangle2D>() { new Triangle2D(triangle2D) };
+        }
     }
 }
