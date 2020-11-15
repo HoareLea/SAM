@@ -42,7 +42,7 @@ namespace SAM.Geometry.Grasshopper
         {
             inputParamManager.AddGenericParameter("_geometry", "Geo", "Geometry", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_tolerance_", "tolrnc", "Split Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
-            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
+            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
         }
 
         /// <summary>

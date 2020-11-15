@@ -42,7 +42,7 @@ namespace SAM.Geometry.Grasshopper
             inputParamManager.AddGenericParameter("_geometry", "Geo", "Geometry", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_points", "Points", "snapping Points", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_maxDistance_", "mDis", "Max Distance to snap Geometry points", GH_ParamAccess.item, 1);
-            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
+            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
         }
 
         /// <summary>

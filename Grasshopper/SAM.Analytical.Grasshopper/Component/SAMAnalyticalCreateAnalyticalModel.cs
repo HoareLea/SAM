@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddTextParameter("_description_", "_description_", "SAM Description", GH_ParamAccess.item, string.Empty);
             inputParamManager.AddParameter(new GooLocationParam(), "_location", "_location", "SAM Location", GH_ParamAccess.item);
 
-            index = inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "adjacencyCluster_", "adjacencyCluster_", "SAM Adjacency Cluster", GH_ParamAccess.item);
+            index = inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Adjacency Cluster", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddParameter(new GooPanelParam(), "panels_", "panels_", "SAM Analytical Panels", GH_ParamAccess.list);

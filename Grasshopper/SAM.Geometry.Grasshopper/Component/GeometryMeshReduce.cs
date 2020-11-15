@@ -41,10 +41,10 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddMeshParameter("_mesh", "_mesh", "Rhino Mesh", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_distortion_", "_distortion_", "Allow Distortion", GH_ParamAccess.item, true);
-            inputParamManager.AddIntegerParameter("_count", "_count", "Desired Polygon Count", GH_ParamAccess.item);
-            inputParamManager.AddIntegerParameter("_accuracy", "_accuracy", "Accuracy", GH_ParamAccess.item, 10);
-            inputParamManager.AddBooleanParameter("_normalizedSize", "_normalizedSize", "Normalized Size", GH_ParamAccess.item, true);
+            inputParamManager.AddBooleanParameter("_distortion_", "_distortion_", "Allow Distortion towards desire count", GH_ParamAccess.item, true);
+            inputParamManager.AddIntegerParameter("_count_", "_count_", "Desired Polygon Count", GH_ParamAccess.item, 44);
+            inputParamManager.AddIntegerParameter("_accuracy_", "_accuracy_", "Accuracy lowest 1 to 10 highest", GH_ParamAccess.item, 10);
+            inputParamManager.AddBooleanParameter("_normalizedSize_", "_normalizedSize", "Normalized Face Size", GH_ParamAccess.item, true);
 
         }
 

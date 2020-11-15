@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -52,7 +52,7 @@ namespace SAM.Core.Grasshopper
             index = inputParamManager.AddTextParameter("path_", "path_", "Csv file path", GH_ParamAccess.item, path);
             inputParamManager[index].Optional = true;
 
-            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run, set to True to export JSON to given path", GH_ParamAccess.item, false);
+            inputParamManager.AddBooleanParameter("_run", "_run", "Run, set to True to export JSON to given path", GH_ParamAccess.item, false);
         }
 
         /// <summary>

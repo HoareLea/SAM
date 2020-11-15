@@ -48,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddNumberParameter("_offset", "_offset", "Offset", GH_ParamAccess.item, Tolerance.Distance);
             inputParamManager.AddNumberParameter("_minArea", "_minArea", "Minimal Area", GH_ParamAccess.item, Tolerance.MacroDistance);
             inputParamManager.AddNumberParameter("_tolerance", "_tolerance", "Tolerance", GH_ParamAccess.item, Tolerance.MacroDistance);
-            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
+            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
         }
 
         /// <summary>

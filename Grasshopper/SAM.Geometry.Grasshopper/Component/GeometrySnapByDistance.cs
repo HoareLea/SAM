@@ -43,7 +43,7 @@ namespace SAM.Geometry.Grasshopper
             inputParamManager.AddGenericParameter("_Face3D_1", "F_1", "SAM Geometry Face3D", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_Face3D_2", "F_2", "SAM Geometry Face3D", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_snapDistance", "SnDist", "Snapping Distance", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
+            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
         }
 
         /// <summary>

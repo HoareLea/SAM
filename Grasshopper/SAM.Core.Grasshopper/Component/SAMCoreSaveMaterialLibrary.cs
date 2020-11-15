@@ -41,7 +41,7 @@ namespace SAM.Core.Grasshopper
         {
             inputParamManager.AddParameter(new GooMaterialLibraryParam(), "_materialLibrary", "_materialLibrary", "SAM Material Library", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_path", "_path", "Path", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
+            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
         }
 
         /// <summary>

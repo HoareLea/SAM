@@ -48,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddNumberParameter("_offset_", "_offset_", "Offset", GH_ParamAccess.item, Core.Tolerance.Distance);
             inputParamManager.AddBooleanParameter("_defaultConstruction_", "_defaultConstruction_", "Set default Construtcion for Panels", GH_ParamAccess.item, false);
             inputParamManager.AddNumberParameter("_tolerance_", "_tolerance_", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
-            inputParamManager.AddBooleanParameter("_run_", "_run_", "Run", GH_ParamAccess.item, false);
+            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
         }
 
         /// <summary>
