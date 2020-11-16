@@ -77,13 +77,15 @@ namespace SAM.Geometry.Spatial
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
 
+            polygon2Ds = polygon2Ds.Union(tolerance);
+
             List<Polygon3D> result = new List<Polygon3D>();
 
             foreach (Polygon2D polygon2D in polygon2Ds)
             {
-                Polygon2D polygon2D_Temp = Planar.Query.Snap(polygon2Ds[0], segment2Ds, tolerance);
+                Polygon2D polygon2D_Temp = Planar.Query.Snap(polygon2D, segment2Ds, tolerance);
                 if (polygon2D_Temp != null)
-                    polygon2D_Temp = polygon2Ds[0];
+                    polygon2D_Temp = polygon2D;
 
                 result.Add(plane.Convert(polygon2D_Temp));
             }
