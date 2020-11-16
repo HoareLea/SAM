@@ -88,13 +88,16 @@ namespace SAM.Geometry.Planar
             if (segment2Ds_Temp.Count < 2)
                 return null;
 
-            segment2Ds_Temp.AddRange(segment2Ds);
+            List<Segment2D> segment2Ds_Split = new List<Segment2D>(segment2Ds_Temp);
+            segment2Ds_Split.AddRange(segment2Ds);
+            segment2Ds_Split = segment2Ds_Split.Split(tolerance);
 
-            segment2Ds_Temp = segment2Ds_Temp.Split(tolerance);
-
-            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds_Temp, tolerance);
+            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds_Split, tolerance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
+
+            for(int i=0; i < polygon2Ds.Count; i++)
+                polygon2Ds[i] = Snap(polygon2Ds[i], segment2Ds_Temp, tolerance);
 
             return Create.Face2Ds(polygon2Ds);
 
