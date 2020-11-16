@@ -44,7 +44,7 @@ namespace SAM.Geometry.Grasshopper
             inputParamManager.AddBooleanParameter("_distortion_", "_distortion_", "Allow Distortion towards desire count", GH_ParamAccess.item, true);
             inputParamManager.AddIntegerParameter("_count_", "_count_", "Desired Polygon Count", GH_ParamAccess.item, 44);
             inputParamManager.AddIntegerParameter("_accuracy_", "_accuracy_", "Accuracy lowest 1 to 10 highest", GH_ParamAccess.item, 10);
-            inputParamManager.AddBooleanParameter("_normalizedSize_", "_normalizedSize", "Normalized Face Size", GH_ParamAccess.item, true);
+            inputParamManager.AddBooleanParameter("_normalizedSize_", "_normalizedSize", "Normalized Face Size", GH_ParamAccess.item, false);
 
         }
 
@@ -65,7 +65,7 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Mesh mesh = null;
+            Mesh mesh = new Mesh();
             if (!dataAccess.GetData(0, ref mesh))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -82,12 +82,12 @@ namespace SAM.Geometry.Grasshopper
             dataAccess.GetData(3, ref accuracy);
 
             bool normalizedSize = true;
-            dataAccess.GetData(1, ref normalizedSize);
+            dataAccess.GetData(4, ref normalizedSize);
 
-            Mesh result = mesh.DuplicateMesh();
-            Modify.Reduce(result, allowDistortion, deisredPolygonCount, accuracy, normalizedSize);
+            //Mesh result = mesh.DuplicateMesh();
+            Modify.Reduce(mesh, allowDistortion, deisredPolygonCount, accuracy, normalizedSize);
 
-            dataAccess.SetData(0, result);
+            dataAccess.SetData(0, mesh);
         }
     }
 }
