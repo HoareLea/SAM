@@ -76,7 +76,7 @@ namespace SAM.Analytical
                 return Analytical.PanelType.Undefined;
 
             double value = normal.Unit.DotProduct(Geometry.Spatial.Vector3D.WorldZ);
-            if (value < tolerance && value > -tolerance)
+            if (System.Math.Abs(value) <= tolerance)
                 return Analytical.PanelType.Wall;
 
             if (value < 0)
