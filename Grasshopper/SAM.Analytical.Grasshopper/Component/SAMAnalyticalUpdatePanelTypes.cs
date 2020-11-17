@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
                 GH_SAMParam[] result = new GH_SAMParam[3];
                 result[0] = new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "_adjacencyCluster", NickName = "_adjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
                 result[1] = new GH_SAMParam(new GooPanelParam() { Name = "_panels_", NickName = "_panels_", Description = "SAM Analytical Panels to be modifed", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding);
-                result[2] = new GH_SAMParam(new GooPanelParam() { Name = "elevation_Ground_", NickName = "elevation_Ground_", Description = "Ground Elevation", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding);
+                result[2] = new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "elevation_Ground_", NickName = "elevation_Ground_", Description = "Ground Elevation", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding);
                 return result;
             }
         }
@@ -54,7 +54,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdatePanelTypes()
           : base("SAMAdjacencyCluster.UpdatePanelTypes", "SAMAdjacencyCluster.UpdatePanelTypes",
-              "Updates PanelTypes for Adjacency Cluster",
+              "Updates PanelTypes for Adjacency Cluster, default ground elevation = 0 m",
               "SAM", "Analytical")
         {
         }
