@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -32,6 +33,43 @@ namespace SAM.Core
                 }
                 result.Add(values);
             }
+            return result;
+        }
+
+        public static List<T> ToList<T>(this JArray jArray, bool skipInvalid = false, bool tryConvert = false)
+        {
+            if (jArray == null)
+                return null;
+
+            List<T> result = new List<T>();
+            foreach(object @object in jArray)
+            {
+                if (@object is T)
+                {
+                    result.Add((T)@object);
+                    continue;
+                }
+                    
+                if(!tryConvert)
+                {
+                    if(!skipInvalid)
+                        result.Add(default);
+                    
+                    continue;
+                }    
+
+                T value = default;
+                if (!Query.TryConvert(@object, out value))
+                {
+                    if (skipInvalid)
+                        continue;
+
+                    value = default;
+                }
+                    
+                result.Add(value);
+            }
+
             return result;
         }
     }
