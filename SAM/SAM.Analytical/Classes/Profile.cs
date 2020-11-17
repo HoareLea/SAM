@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -17,6 +18,30 @@ namespace SAM.Analytical
         public Profile(string name)
             : base(name)
         {
+        }
+
+        public Profile(string name, params double[] values)
+            : base(name)
+        {
+            if (values == null)
+                return;
+
+            this.values = new double[values.Length];
+            for (int i = 0; i < values.Length; i++)
+                this.values[i] = values[i];
+        }
+
+        public Profile(string name, IEnumerable<double> values)
+            : base(name)
+        {
+            if (values == null)
+                return;
+
+            int count = values.Count();
+
+            this.values = new double[count];
+            for (int i = 0; i < count; i++)
+                this.values[i] = values.ElementAt(i);
         }
 
         public Profile(JObject jObject)
@@ -46,10 +71,15 @@ namespace SAM.Analytical
                 if (values == null)
                     return double.NaN;
 
-                if (index < values.Length)
+                int count = values.Length;
+
+                if (index < count)
                     return values[index];
 
-                return values[(index % values.Length) - 1];
+                if (count == 1)
+                    return values[0];
+
+                return values[(index % count) - 1];
 
             }
         }
