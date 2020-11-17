@@ -83,11 +83,6 @@ namespace SAM.Core.Grasshopper
             }
 
             List<Enum> enums = Core.Query.Enums(sAMObject.GetType(), name);
-            if(enums == null || enums.Count == 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
 
             GH_ObjectWrapper objectWrapper = null;
             if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper == null)
@@ -103,7 +98,17 @@ namespace SAM.Core.Grasshopper
 
             sAMObject = sAMObject.Clone();
 
-            bool result = sAMObject.SetValue(enums[0], value);
+            bool result = false;
+            if(enums != null && enums.Count > 0)
+            {
+                foreach (Enum @enum in enums)
+                    if (sAMObject.SetValue(@enum, value))
+                        result = true;
+            }
+            else
+            {
+                result = Core.Modify.SetValue(sAMObject, name, value as dynamic);
+            }
             
             dataAccess.SetData(0, sAMObject);
             dataAccess.SetData(1, result);
