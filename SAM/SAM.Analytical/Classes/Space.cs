@@ -7,17 +7,20 @@ namespace SAM.Analytical
     public class Space : SAMObject
     {
         private Geometry.Spatial.Point3D location;
+        private InternalCondition internalCondition;
 
         public Space(Space space)
             : base(space)
         {
-            this.location = space.Location;
+            location = space.Location;
+            internalCondition = space.InternalCondition;
         }
 
         public Space(Guid guid, Space space)
         : base(guid, space)
         {
-            this.location = space.Location;
+            location = space.Location;
+            internalCondition = space.InternalCondition;
         }
 
         public Space(Guid guid, string name, Geometry.Spatial.Point3D location)
@@ -64,12 +67,35 @@ namespace SAM.Analytical
             return location != null && location.IsValid();
         }
 
+        public InternalCondition InternalCondition
+        {
+            get
+            {
+                if (internalCondition == null)
+                    return null;
+
+                return new InternalCondition(internalCondition);
+            }
+
+            set
+            {
+                if (value == null)
+                    internalCondition = null;
+
+                internalCondition = new InternalCondition(value);
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
                 return false;
 
             location = new Geometry.Spatial.Point3D(jObject.Value<JObject>("Location"));
+
+            if(jObject.ContainsKey("InternalCondition"))
+                internalCondition = new InternalCondition(jObject.Value<JObject>("InternalCondition"));
+
             return true;
         }
 
@@ -81,6 +107,9 @@ namespace SAM.Analytical
 
             if (location != null)
                 jObject.Add("Location", location.ToJObject());
+
+            if(internalCondition != null)
+                jObject.Add("InternalCondition", internalCondition.ToJObject());
 
             return jObject;
         }

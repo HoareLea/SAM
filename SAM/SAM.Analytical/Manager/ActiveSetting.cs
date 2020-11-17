@@ -33,6 +33,7 @@ namespace SAM.Analytical
             result.SetValue(AnalyticalSettingParameter.DefaultConstructionLibraryFileName, "SAM_ConstructionLibrary.JSON");
             result.SetValue(AnalyticalSettingParameter.DefaultApertureConstructionLibraryFileName, "SAM_ApertureConstructionLibrary.JSON");
             result.SetValue(AnalyticalSettingParameter.DefaultGasMaterialLibraryFileName, "SAM_GasMaterialLibrary.JSON");
+            result.SetValue(AnalyticalSettingParameter.DefaultInternalConditionLibraryFileName, "SAM_InternalConditionLibrary.JSON");
 
 
             string path = null;
@@ -52,6 +53,10 @@ namespace SAM.Analytical
             path = Query.DefaultApertureConstructionLibraryPath(result);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultApertureConstructionLibrary, Core.Create.IJSAMObject<ApertureConstructionLibrary>(System.IO.File.ReadAllText(path)));
+
+            path = Query.DefaultInternalConditionLibraryPath(result);
+            if (System.IO.File.Exists(path))
+                result.SetValue(AnalyticalSettingParameter.DefaultInternalConditionLibrary, Core.Create.IJSAMObject<InternalConditionLibrary>(System.IO.File.ReadAllText(path)));
 
             return result;
         }

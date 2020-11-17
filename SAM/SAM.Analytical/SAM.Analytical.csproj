@@ -74,6 +74,7 @@
     <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Classes\ConstructionLayer.cs" />
     <Compile Include="Classes\ApertureConstructionLibrary.cs" />
+    <Compile Include="Classes\InternalConditionLibrary.cs" />
     <Compile Include="Classes\ConstructionLibrary.cs" />
     <Compile Include="Classes\InternalCondition.cs" />
     <Compile Include="Create\ApertureConstruction.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
+    <Compile Include="Modify\SetInternalCondition.cs" />
     <Compile Include="Modify\Join.cs" />
     <Compile Include="Modify\OffsetAperturesOnEdge.cs" />
     <Compile Include="Modify\ReplaceTransparentPanels.cs" />
@@ -129,6 +131,7 @@
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\Cut.cs" />
+    <Compile Include="Query\DefaultInternalConditionLibraryPath.cs" />
     <Compile Include="Query\DefaultGasType.cs" />
     <Compile Include="Query\Extend.cs" />
     <Compile Include="Query\Grid.cs" />

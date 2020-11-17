@@ -94,6 +94,7 @@
     <Compile Include="Classes\GooAperture.cs" />
     <Compile Include="Classes\GooAnalyticalModel.cs" />
     <Compile Include="Classes\GooApertureConstruction.cs" />
+    <Compile Include="Classes\GooInternalConditionLibrary.cs" />
     <Compile Include="Classes\GooInternalCondition.cs" />
     <Compile Include="Classes\GooConstruction.cs" />
     <Compile Include="Classes\GooConstructionLayer.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalExtendPanelByPlane.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelByPanels.cs" />
     <Compile Include="Component\SAMAnalyticalRemoveInternalEdges.cs" />

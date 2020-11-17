@@ -1,0 +1,53 @@
+{
+  "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
+  "Name": "AAA",
+  "Guid": "9c095cfa-88c9-4ffa-b7b3-6dab3ff31bbc",
+  "Objects": [
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "Office",
+      "Guid": "81e11bf4-9b80-426b-84e8-de3047fc1ab9",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Number Of People",
+              "Value": 3.0
+            },
+            {
+              "Name": "Lighting Gain",
+              "Value": 100.0
+            },
+            {
+              "Name": "Design Lux Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "Office Latent Profile"
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "Office Sensible Profile"
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "Office Occupancy Profile"
+            },
+            {
+              "Name": "Occupant Latent Gain",
+              "Value": 300.0
+            },
+            {
+              "Name": "Occupant Sensible Gain",
+              "Value": 150.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
