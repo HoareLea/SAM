@@ -11,5 +11,10 @@
         {
             return Core.Query.Description(apertureType);
         }
+
+        public static string Text(this ProfileType profileType)
+        {
+            return Core.Query.Description(profileType);
+        }
     }
 }

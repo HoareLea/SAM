@@ -7,17 +7,26 @@ namespace SAM.Analytical
 {
     public class Profile : SAMObject
     {
+        private string group = ProfileType.Other.Text();
         private double[] values;
 
         public Profile(Profile profile)
             : base(profile)
         {
             values = profile.Values;
+            group = profile.group;
         }
 
-        public Profile(string name)
+        public Profile(string name, string group)
             : base(name)
         {
+            this.group = group;
+        }
+
+        public Profile(string name, ProfileType profileType)
+            : base(name)
+        {
+            this.group = profileType.Text();
         }
 
         public Profile(string name, params double[] values)
@@ -64,6 +73,22 @@ namespace SAM.Analytical
             }
         }
 
+        public string Group
+        {
+            get
+            {
+                return group;
+            }
+        }
+
+        public ProfileType ProfileType
+        {
+            get
+            {
+                return Query.ProfileType(group);
+            }
+        }
+
         public double this[int index]
         {
             get
@@ -90,6 +115,10 @@ namespace SAM.Analytical
                 return false;
 
             values = jObject.Value<JArray>("Values")?.ToList<double>()?.ToArray();
+
+            if (jObject.ContainsKey("Group"))
+                group = jObject.Value<string>("Group");
+
             return true;
         }
 
@@ -105,6 +134,8 @@ namespace SAM.Analytical
 
             jObject.Add("Values", jArray);
 
+            if (group != null)
+                jObject.Add("Group", group);
             return jObject;
         }
     }
