@@ -1,9 +1,7 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Parameters.Hints;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
