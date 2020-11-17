@@ -88,8 +88,8 @@ namespace SAM.Analytical.Grasshopper
             if (!dataAccess.GetDataList(2, spaces_Input))
                 spaces_Input = null;
 
-                InternalConditionLibrary internalConditionLibrary = null;
-            dataAccess.GetData(1, ref internalConditionLibrary);
+            InternalConditionLibrary internalConditionLibrary = null;
+            dataAccess.GetData(3, ref internalConditionLibrary);
             if (internalConditionLibrary == null)
                 internalConditionLibrary = ActiveSetting.Setting.GetValue<InternalConditionLibrary>(AnalyticalSettingParameter.DefaultInternalConditionLibrary);
 
@@ -113,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
                     if (spaces_Temp != null)
                     {
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
-                        foreach(Space space in spaces_Temp)
+                        foreach (Space space in spaces_Temp)
                         {
                             if (spaces_Input != null && spaces_Input.Find(x => x.Guid == space.Guid) == null)
                                 continue;
@@ -150,7 +150,7 @@ namespace SAM.Analytical.Grasshopper
 
             if (spaces != null && spaces.Count != 0)
             {
-                foreach(Space space in spaces)
+                foreach (Space space in spaces)
                 {
                     result.Add(space);
 
