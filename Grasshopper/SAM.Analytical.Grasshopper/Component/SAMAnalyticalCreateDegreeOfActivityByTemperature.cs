@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateDegreeOfActivityByTemperature()
           : base("SAMAnalytical.CreateDegreeOfActivityByTemperature", "SAMAnalytical.CreateDegreeOfActivityByTemperature",
-              "Create SAM Analytical DegreeOfActivity By RoomTemperature",
+              "Create SAM Analytical DegreeOfActivity By RoomTemperature according to VDI 2078, EN 13779; Activity Level I (seating, relaxed), Activity Level II (seating office, school, lab), Activity Level II (standing, light activity, shop, lab, light industry), Activity Level IV (standing, moderate activity, lab assistant, working with machinery); I=100 W/p, II=125 W/p, III=170 W/p, IV=210 W/p",
               "SAM", "Analytical")
         {
         }
@@ -44,13 +44,13 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
             
-            index = inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item, string.Empty);
+            index = inputParamManager.AddTextParameter("name_", "name_", "Name ,default = Activity level", GH_ParamAccess.item, string.Empty);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddIntegerParameter("_activityLevel", "_activityLevel", "Activity level [1 - 4]", GH_ParamAccess.item, 1);
+            index = inputParamManager.AddIntegerParameter("_activityLevel_", "_activityLevel_", "Activity level [1 - 4], I=100 W/p, II=125 W/p, III=170 W/p, IV=210 W/p ", GH_ParamAccess.item, 1);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddNumberParameter("temperature_", "temperature_", "Temperature [C]", GH_ParamAccess.item, 24);
+            index = inputParamManager.AddNumberParameter("temperature_", "temperature_", "Temperature [degC], will range between 16-28 default = 24 degC", GH_ParamAccess.item, 24);
             inputParamManager[index].Optional = true;
         }
 
