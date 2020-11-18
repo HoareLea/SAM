@@ -24,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        private InternalConditionParameter internalConditionParameter = InternalConditionParameter.NumberOfPeople;
+        private InternalConditionParameter internalConditionParameter = InternalConditionParameter.Occupancy;
 
         /// <summary>
         /// Panel Type

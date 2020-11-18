@@ -24,16 +24,15 @@
             this.min = min;
         }
 
-        public override bool IsValid(object value)
+        public override bool TryConvert(object object_In, out object object_Out)
         {
-            bool result = base.IsValid(value);
-            if (!result)
-                return result;
+            if (!base.TryConvert(object_In, out object_Out))
+                return false;
 
             if (double.IsNaN(min) && double.IsNaN(max))
                 return true;
-            
-            double @double = System.Convert.ToDouble(value);
+
+            double @double = (double)object_Out;
 
             if (!double.IsNaN(min) && @double < min)
                 return false;

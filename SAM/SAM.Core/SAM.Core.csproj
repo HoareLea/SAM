@@ -55,6 +55,7 @@
     <Compile Include="Attributes\Parameter\DoubleParameterValue.cs" />
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
+    <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Enums\AccessType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
     <Compile Include="Enums\Parameter\CoreSettingParameter.cs" />

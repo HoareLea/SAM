@@ -112,6 +112,7 @@
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalCreateDegreeOfActivityByTemperature.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultDegreeOfActivityLibrary.cs" />
+    <Compile Include="Component\SAMAnalyticalGetDefaultInternalConditionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalSetOccupancyGains.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalExtendPanelByPlane.cs" />

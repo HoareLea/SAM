@@ -219,19 +219,17 @@ namespace SAM.Core
                 return false;
 
             object value_Temp = value;
-            
+
             Attributes.ParameterValue parameterValue = Query.CustomAttribute<Attributes.ParameterValue>(@enum);
             if (parameterValue != null)
             {
-                if (!parameterValue.IsValid(value))
+                if (!parameterValue.TryConvert(value, out value_Temp))
                     return false;
-
-                value_Temp = parameterValue.Convert(value);
             }
 
-            if(value_Temp == null)
+            if (value_Temp == null)
             {
-                switch(parameterValue.ParameterType)
+                switch (parameterValue.ParameterType)
                 {
                     case ParameterType.IJSAMObject:
                         SAMObject sAMObject = null;

@@ -24,12 +24,14 @@
             }
         }
 
-        public override bool IsValid(object value)
+        public override bool TryConvert(object object_In, out object object_Out)
         {
-            if (value == null)
-                return nullable;
+            object_Out = default;
 
-            return base.IsValid(value);
+            if (object_In == null || !nullable)
+                return false;
+
+            return base.TryConvert(object_In, out object_Out);
         }
     }
 }

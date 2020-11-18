@@ -40,16 +40,17 @@ namespace SAM.Core.Attributes
             }
         }
 
-        public override bool IsValid(object value)
+        public override bool TryConvert(object object_In, out object object_Out)
         {
-            bool result = base.IsValid(value);
-            if (!result)
-                return result;
+            if (!base.TryConvert(object_In, out object_Out))
+                return false;
 
             if (types == null || types.Length == 0)
                 return true;
 
-            Type type = value.GetType();
+            Type type = object_Out?.GetType();
+            if (type == null)
+                return true;
 
             foreach (Type type_Temp in types)
             {
@@ -64,6 +65,7 @@ namespace SAM.Core.Attributes
             }
 
             return false;
+
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public static partial class Modify
     {
-        public static bool SetOccupantGains(this InternalCondition internalCondition, DegreeOfActivity degreeOfActivity)
+        public static bool SetOccupancyGains(this InternalCondition internalCondition, DegreeOfActivity degreeOfActivity)
         {
             if (internalCondition == null || degreeOfActivity == null)
                 return false;
@@ -13,7 +13,7 @@
             double latent = degreeOfActivity.Latent;
             if (!double.IsNaN(latent))
             {
-                internalCondition.SetValue(InternalConditionParameter.OccupantLatentGain, latent);
+                internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGain, latent);
                 result = true;
             }
                 
@@ -21,14 +21,14 @@
             double sensible = degreeOfActivity.Sensible;
             if (!double.IsNaN(sensible))
             {
-                internalCondition.SetValue(InternalConditionParameter.OccupantSensibleGain, sensible);
+                internalCondition.SetValue(InternalConditionParameter.OccupancySensibleGain, sensible);
                 result = true;
             }
 
             return result;
         }
 
-        public static bool SetOccupantGains(this Space space, DegreeOfActivity degreeOfActivity)
+        public static bool SetOccupancyGains(this Space space, DegreeOfActivity degreeOfActivity)
         {
             if (space == null || degreeOfActivity == null)
                 return false;
@@ -37,7 +37,7 @@
             if (internalCondition == null)
                 internalCondition = new InternalCondition(space.Name);
 
-            if (!internalCondition.SetOccupantGains(degreeOfActivity))
+            if (!internalCondition.SetOccupancyGains(degreeOfActivity))
                 return false;
 
             space.InternalCondition = internalCondition;

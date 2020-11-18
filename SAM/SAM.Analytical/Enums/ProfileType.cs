@@ -10,7 +10,6 @@ namespace SAM.Analytical
         [Description("Equipment Sensible")] EquipmentSensible,
         [Description("Equipment Latent")] EquipmentLatent,
         [Description("Lighting")] Lighting,
-        [Description("Natural Ventilation Outdoor Air")] NaturalVentilationOutdoorAir,
         [Description("Infiltration")] Infiltration,
         [Description("Pollutant")] Pollutant,
         [Description("Heating")] Heating,

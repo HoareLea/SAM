@@ -81,13 +81,13 @@ namespace SAM.Analytical.Grasshopper
                 if(sAMObjects[i] is InternalCondition)
                 {
                     InternalCondition internalCondition = new InternalCondition((InternalCondition)sAMObjects[i]);
-                    if (internalCondition.SetOccupantGains(degreeOfActivity))
+                    if (internalCondition.SetOccupancyGains(degreeOfActivity))
                         sAMObjects[i] = internalCondition;
                 }
                 else if(sAMObjects[i] is Space)
                 {
                     Space space = new Space((Space)sAMObjects[i]);
-                    if (space.SetOccupantGains(degreeOfActivity))
+                    if (space.SetOccupancyGains(degreeOfActivity))
                         sAMObjects[i] = space;
                 }
             }

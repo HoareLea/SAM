@@ -14,107 +14,96 @@ namespace SAM.Core.Attributes
             this.parameterType = parameterType;
         }
 
-        //TODO: IsValid replace by TryConvert to avoid double conversion
-        public virtual bool IsValid(object value)
+        public virtual bool TryConvert(object object_In, out object object_Out)
         {
-            switch(parameterType)
-            {
-                case ParameterType.Double:
-                    return Query.IsNumeric(value);
-                
-                case ParameterType.String:
-                    return value == null || value is string || value is Enum;
-                
-                case ParameterType.Boolean:
-                    bool @bool;
-                    return Query.TryConvert(value, out @bool);
-                
-                case ParameterType.Integer:
-                    return value is int || value is Enum;
-                
-                case ParameterType.IJSAMObject:
-                    return value == null || value is IJSAMObject;
-                
-                case ParameterType.Guid:
-                    if (value is Guid)
-                        return true;
-                    
-                    if (value == null)
-                        return false;
-                
-                    Guid guid;
-                    return Guid.TryParse(value.ToString(), out guid);
+            object_Out = default;
 
-                case ParameterType.DateTime:
-                    if (value is DateTime || value is int || value is long)
-                        return true;
-
-                    if (value == null)
-                        return false;
-
-                    DateTime dateTime;
-                    return DateTime.TryParse(value.ToString(), out dateTime);
-
-                case ParameterType.Color:
-                    SAMColor sAMColor = null;
-                    return Query.TryConvert(value, out sAMColor);
-
-                case ParameterType.Undefined:
-                    return true;
-
-            }
-
-            return false;
-        }
-
-        public virtual object Convert(object value)
-        {
             switch (parameterType)
             {
                 case ParameterType.Double:
-                    return System.Convert.ToDouble(value);
-                
+                    if (object_In == null)
+                        return false;
+                    
+                    double @double;
+                    if (!Query.TryConvert(object_In, out @double))
+                        return false;
+
+                    object_Out = @double;
+                    return true;
+
                 case ParameterType.String:
-                    return value?.ToString();
-                
+                    string @string;
+                    if (!Query.TryConvert(object_In, out @string))
+                        return false;
+
+                    object_Out = @string;
+                    return true;
+
                 case ParameterType.Boolean:
+                    if (object_In == null)
+                        return false;
+
                     bool @bool;
-                    if (!Query.TryConvert(value, out @bool))
-                        return null;
-                    return @bool;
-                
+                    if (!Query.TryConvert(object_In, out @bool))
+                        return false;
+
+                    object_Out = @bool;
+                    return true;
+
                 case ParameterType.Integer:
+                    if (object_In == null)
+                        return false;
+
                     int @int;
-                    if (!Query.TryConvert(value, out @int))
-                        return null;
-                    return @int;
-                
+                    if (!Query.TryConvert(object_In, out @int))
+                        return false;
+
+                    object_Out = @int;
+                    return true;
+
                 case ParameterType.IJSAMObject:
-                    return value as IJSAMObject;
-                
+                    if (!(object_In is IJSAMObject))
+                        return false;
+
+                    object_Out = object_In;
+                    return true;
+
                 case ParameterType.Guid:
-                    Guid guid;
-                    if (!Query.TryConvert(value, out guid))
-                        return null;
-                    return guid;
+                    if (object_In == null)
+                        return false;
+
+                    int @guid;
+                    if (!Query.TryConvert(object_In, out @guid))
+                        return false;
+
+                    object_Out = @guid;
+                    return true;
 
                 case ParameterType.DateTime:
-                    DateTime dateTime;
-                    if (!Query.TryConvert(value, out dateTime))
-                        return null;
-                    return dateTime;
+                    if (object_In == null)
+                        return false;
+
+                    int @dateTime;
+                    if (!Query.TryConvert(object_In, out @dateTime))
+                        return false;
+
+                    object_Out = @dateTime;
+                    return true;
 
                 case ParameterType.Color:
                     SAMColor sAMColor = null;
-                    if (!Query.TryConvert(value, out sAMColor))
-                        return null;
-                    return sAMColor;
+                    if (!Query.TryConvert(object_In, out sAMColor))
+                        return false;
+
+                    object_Out = sAMColor;
+                    return true;
 
                 case ParameterType.Undefined:
-                    return value;
+                    object_Out = object_In;
+                    return true;
             }
 
-            return null;
+            return false;
         }
 
         public ParameterType ParameterType

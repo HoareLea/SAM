@@ -1,12 +1,12 @@
 {
   "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
   "Name": "Default SAM InternalCondition Library ver00",
-  "Guid": "9c095cfa-88c9-4ffa-b7b3-6dab3ff31bbc",
+  "Guid": "f774ec80-e881-4d02-a377-e0b9015e6719",
   "Objects": [
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "Office",
-      "Guid": "81e11bf4-9b80-426b-84e8-de3047fc1ab9",
+      "Name": "Sxx_External",
+      "Guid": "9a63b305-b07a-421a-ae01-656176064bbc",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -14,36 +14,2912 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Number Of People",
-              "Value": 3.0
-            },
-            {
-              "Name": "Lighting Gain",
-              "Value": 100.0
-            },
-            {
-              "Name": "Design Lux Level",
-              "Value": 200.0
-            },
-            {
-              "Name": "Equipment Latent Profile Name",
-              "Value": "Office Latent Profile"
-            },
-            {
-              "Name": "Equipment Sensible Profile Name",
-              "Value": "Office Sensible Profile"
+              "Name": "Occupancy",
+              "Value": 0.0
             },
             {
               "Name": "Occupancy Profile Name",
-              "Value": "Office Occupancy Profile"
+              "Value": ""
             },
             {
-              "Name": "Occupant Latent Gain",
+              "Name": "Occupancy Sensible Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.0
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S00_Unconditioned",
+      "Guid": "e52a0dcc-125d-44ab-b718-2b8446b61d8b",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S01_Auditorium",
+      "Guid": "ebf82ef6-c047-4c28-ad35-a74e02e9ba1d",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 0.85
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 65.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 30.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 15.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_6to19_26"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S03_Bedroom",
+      "Guid": "e3b4ffd4-673b-429a-bcb3-1468bb54caa7",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 10.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 67.2
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 57.8
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "7to24"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_1to24_26"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S04_Breakout",
+      "Guid": "c3a0d401-b94e-41c8-9b84-b5ec77397605",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 2.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
               "Value": 300.0
             },
             {
-              "Name": "Occupant Sensible Gain",
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S05_CarPark",
+      "Guid": "0bb17793-abb0-4a13-8ea7-90e66a7f3a0c",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_6"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S06_ChangingDry",
+      "Guid": "e4e0da37-19b5-4a69-a11f-b845d73e3fcb",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 5.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S07_ChangingWet",
+      "Guid": "a8b91260-80b3-4ddd-94a5-85b76c81c19b",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 5.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S08_Circulation",
+      "Guid": "571e9efe-1c1a-4a54-ae81-523d5e742e03",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 100.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_20"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S10_ClassRoom",
+      "Guid": "f8989794-4bf2-4a47-864a-281b4ac5ce67",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 1.5
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S12_Comms",
+      "Guid": "09675698-5571-465d-8781-7d8245d759e1",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 1500.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 300.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_20"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S13_Copier",
+      "Guid": "79e3788e-2a77-4cd2-a773-4e24a76042dc",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 40.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S15_DomBath",
+      "Guid": "39a95c90-b54e-45bb-8890-206fc4bb900a",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_24"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S17_DomCirculation",
+      "Guid": "82e348f2-cabc-4bd4-b9b8-a76e9c2a1a13",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 100.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_18"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S24_EatingDrinking",
+      "Guid": "4540b225-0a19-4e30-a502-b7c8a0c64391",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 10.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 15.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S25_ElecPlant",
+      "Guid": "91af993a-b645-4b44-b64d-e048ff948aa1",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 80.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 140.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Equipment Sensible Gain",
+              "Value": 3500.0
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_1to24_26"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S27_FirstAid",
+      "Guid": "38a718ff-50d2-45c7-b14c-6a51c145c743",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 10.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 15.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S29_Foyer",
+      "Guid": "cc392584-3b0d-4592-b88d-73b29c75d837",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 10.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 15.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_6to19_26"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S31_Kitchen",
+      "Guid": "56797b07-d659-4497-817e-22d0cc58fe76",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 10.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 170.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 255.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 10.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S32_Kitchenette",
+      "Guid": "874a0d98-0a8c-4ef0-a717-9da44ba10c39",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 10.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 15.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S35_MechPlant",
+      "Guid": "f5d63810-5cbe-493e-a259-a0f342842ac7",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 80.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 140.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 15.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_6"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S36_Meeting",
+      "Guid": "f7a105e3-f49e-4512-8f7b-b1c9d6613318",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 2.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_7to19_23"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S39_OfficeOpen",
+      "Guid": "2a09e6e3-2de7-42e8-a2cb-1595bd62e9f0",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 13.3
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 25.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_7to19_25"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S37_OfficeCell",
+      "Guid": "b9eb5eff-cd06-4c80-8168-7fb174d7593e",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 7.5
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_7to19_25"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S57_OfficeCellNV",
+      "Guid": "0f8de92d-9810-4388-8e6d-813069927c2a",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 7.5
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S46_Servery",
+      "Guid": "3460cd9e-538a-472f-8d05-4ead79dca1c3",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 10.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 80.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 140.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 500.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S47_StairsEscape",
+      "Guid": "cf6e34f5-228d-481c-aa18-1922533a4997",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
               "Value": 150.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_18"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S48_Store",
+      "Guid": "7d48ac38-b96e-410e-ad24-4440b49e45f8",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 100.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_18"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S50_Toilet",
+      "Guid": "fd842915-9ebf-4dee-88f2-e7edc94e24d6",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_20"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S52_Waste",
+      "Guid": "2649e693-07ac-4169-8ffd-88ba0299b776",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 100.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_6"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S55_PGR",
+      "Guid": "875efb2a-e00b-44da-a6d5-e29b5e013361",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 2.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 25.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S56_AcademicStudio",
+      "Guid": "5c98b2fb-c87f-4a56-9f29-d60e6350139c",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 7.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S54_Rehearsal",
+      "Guid": "d2c9179c-df19-4494-8793-ddf7d9d499e5",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 5.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 90.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 160.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 15.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 300.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_7to19_23"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S58_ClassRoomIT",
+      "Guid": "4729540e-b728-4637-87e0-14ceafb9ee87",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 1.5
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 40.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S54_Koxs",
+      "Guid": "5c794f4c-51a9-4459-812d-2dadafecb4e4",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
             }
           ]
         }
