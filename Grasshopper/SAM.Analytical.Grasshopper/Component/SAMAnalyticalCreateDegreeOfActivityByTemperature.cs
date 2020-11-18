@@ -44,13 +44,13 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
             
-            index = inputParamManager.AddTextParameter("name_", "name_", "Name ,default = Activity level", GH_ParamAccess.item, string.Empty);
+            index = inputParamManager.AddTextParameter("_name_", "_name_", "Name ,default = Activity level", GH_ParamAccess.item, string.Empty);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddIntegerParameter("_activityLevel_", "_activityLevel_", "Activity level [1 - 4], I=100 W/p, II=125 W/p, III=170 W/p, IV=210 W/p ", GH_ParamAccess.item, 1);
+            index = inputParamManager.AddIntegerParameter("_activityLevel_", "_activityLevel_", "Activity level [1 - 4], I=100 W/p, II=125 W/p, III=170 W/p, IV=210 W/p ", GH_ParamAccess.item, 2);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddNumberParameter("temperature_", "temperature_", "Temperature [degC], will range between 16-28 default = 24 degC", GH_ParamAccess.item, 24);
+            index = inputParamManager.AddNumberParameter("_temperature_", "_temperature_", "Temperature [degC], will range between 16-28 default = 24 degC", GH_ParamAccess.item, 24);
             inputParamManager[index].Optional = true;
         }
 

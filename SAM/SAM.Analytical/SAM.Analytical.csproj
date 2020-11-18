@@ -121,6 +121,7 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
+    <Compile Include="Modify\SetOccupantGains.cs" />
     <Compile Include="Modify\SetInternalCondition.cs" />
     <Compile Include="Modify\Join.cs" />
     <Compile Include="Modify\OffsetAperturesOnEdge.cs" />

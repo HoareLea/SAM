@@ -17,6 +17,12 @@
             double senisble = double.NaN;
             double latent = double.NaN;
 
+            if (temperature < 16)
+                temperature = 16;
+
+            if (temperature > 28)
+                temperature = 28;
+
             switch(activityLevel)
             {
                 case ActivityLevel.First:
