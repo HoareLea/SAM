@@ -80,7 +80,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            List<Enum> enums = Core.Query.Enums(sAMObject.GetType(), name);
+            List<Enum> enums = ActiveManager.GetParameterEnums(sAMObject, name);
 
             GH_ObjectWrapper objectWrapper = null;
             if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper == null)

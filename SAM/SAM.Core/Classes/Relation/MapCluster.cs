@@ -24,8 +24,9 @@ namespace SAM.Core
         }
 
         public MapCluster(JObject jObject)
+            : base(jObject)
         {
-            FromJObject(jObject);
+
         }
 
         public bool Add(Type type_1, Type type_2, string name_1, string name_2)

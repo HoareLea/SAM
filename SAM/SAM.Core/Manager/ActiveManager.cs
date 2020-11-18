@@ -180,7 +180,7 @@ namespace SAM.Core
             return result;
         }
 
-        public static List<Enum> GetParameterEnums(Type type)
+        public static List<Enum> GetParameterEnums(Type type, string name = null)
         {
             if (type == null)
                 return null;
@@ -190,17 +190,40 @@ namespace SAM.Core
                 return null;
 
             List<Enum> result = new List<Enum>();
-            foreach(Type type_Temp in types)
+            foreach (Type type_Temp in types)
             {
                 foreach (Enum @enum in Enum.GetValues(type_Temp))
-                    result.Add(@enum);
+                {
+                    if(name == null)
+                    {
+                        result.Add(@enum);
+                        continue;
+                    }
+
+                    if (@enum.ToString().Equals(name))
+                    {
+                        result.Add(@enum);
+                        continue;
+                    }
+
+                    ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
+                    if (parameterProperties == null)
+                        continue;
+
+                    string name_Temp = parameterProperties.Name;
+                    if (string.IsNullOrEmpty(name_Temp))
+                        continue;
+
+                    if (name.Equals(name_Temp))
+                        result.Add(@enum);
+                }
             }
             return result;
         }
 
-        public static List<Enum> GetParameterEnums(SAMObject sAMObject)
+        public static List<Enum> GetParameterEnums(SAMObject sAMObject, string name = null)
         {
-            return GetParameterEnums(sAMObject?.GetType());
+            return GetParameterEnums(sAMObject?.GetType(), name);
         }
     }
 }

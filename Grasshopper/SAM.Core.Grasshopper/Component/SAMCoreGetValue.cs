@@ -104,11 +104,20 @@ namespace SAM.Core.Grasshopper
             if (!Core.Query.TryGetValue(@object, name, out value))
             {
                 bool hasValue = false;
-                if(@object is SAMObject)
+                if (@object is SAMObject)
                 {
-                    List<Enum> enums = Core.Query.Enums(@object.GetType(), name);
+                    List<Enum> enums = ActiveManager.GetParameterEnums(@object.GetType(), name);
                     if (enums != null && enums.Count != 0)
-                        hasValue = ((SAMObject)@object).TryGetValue(enums[0], out value);
+                    {
+                        foreach (Enum @enum in enums)
+                        {
+                            if (((SAMObject)@object).TryGetValue(enums[0], out value))
+                            {
+                                hasValue = true;
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 if(!hasValue)
