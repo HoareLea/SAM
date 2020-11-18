@@ -74,16 +74,19 @@
     <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Classes\ConstructionLayer.cs" />
     <Compile Include="Classes\ApertureConstructionLibrary.cs" />
+    <Compile Include="Classes\DegreeOfActivityLibrary.cs" />
     <Compile Include="Classes\InternalConditionLibrary.cs" />
     <Compile Include="Classes\ConstructionLibrary.cs" />
     <Compile Include="Classes\InternalCondition.cs" />
     <Compile Include="Classes\Profile.cs" />
+    <Compile Include="Classes\DegreeOfActivity.cs" />
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\ConstructionLibrary.cs" />
     <Compile Include="Create\Construction.cs" />
     <Compile Include="Create\GasMaterial.cs" />
     <Compile Include="Create\MaterialLibrary.cs" />
+    <Compile Include="Create\DegreeOfActivity.cs" />
     <Compile Include="Create\Panel.cs" />
     <Compile Include="Create\TransparentMaterial.cs" />
     <Compile Include="Create\OpaqueMaterial.cs" />
@@ -94,6 +97,7 @@
     <Compile Include="Enums\HeatFlowDirection.cs" />
     <Compile Include="Enums\DefaultGasType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
+    <Compile Include="Enums\ActivityLevel.cs" />
     <Compile Include="Enums\ProfileType.cs" />
     <Compile Include="Enums\Parameter\AnalyticalModelParameter.cs" />
     <Compile Include="Enums\Parameter\PanelParameter.cs" />
@@ -133,6 +137,7 @@
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\Cut.cs" />
+    <Compile Include="Query\DefaultDegreeOfActivityLibraryPath.cs" />
     <Compile Include="Query\DefaultInternalConditionLibraryPath.cs" />
     <Compile Include="Query\DefaultGasType.cs" />
     <Compile Include="Query\Extend.cs" />

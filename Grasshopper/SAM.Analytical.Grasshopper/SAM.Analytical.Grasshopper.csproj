@@ -94,6 +94,7 @@
     <Compile Include="Classes\GooAperture.cs" />
     <Compile Include="Classes\GooAnalyticalModel.cs" />
     <Compile Include="Classes\GooApertureConstruction.cs" />
+    <Compile Include="Classes\GooDegreeOfActivityLibrary.cs" />
     <Compile Include="Classes\GooInternalConditionLibrary.cs" />
     <Compile Include="Classes\GooInternalCondition.cs" />
     <Compile Include="Classes\GooConstruction.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateDegreeOfActivityByTemperature.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalExtendPanelByPlane.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelByPanels.cs" />
@@ -199,6 +201,7 @@
     <Compile Include="Component\SAMAnalyticalCreateOpaqueMaterial.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToRhino\Breps.cs" />
+    <Compile Include="Classes\GooDegreeOfActivity.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Modify\BakeGeometry_ByConstruction.cs" />
     <Compile Include="Modify\BakeGeometry_ByPanelType.cs" />

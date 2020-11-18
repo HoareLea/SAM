@@ -1,6 +1,6 @@
 {
   "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
-  "Name": "AAA",
+  "Name": "Default SAM InternalCondition Library ver00",
   "Guid": "9c095cfa-88c9-4ffa-b7b3-6dab3ff31bbc",
   "Objects": [
     {

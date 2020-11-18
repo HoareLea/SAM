@@ -1,0 +1,133 @@
+{
+  "_type": "SAM.Analytical.DegreeOfActivityLibrary,SAM.Analytical",
+  "Name": "Default SAM DegreeOfActivity Library ver00",
+  "Guid": "b2638c97-a9cc-41ec-bac5-a71ea89fb8e3",
+  "Objects": [
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Seated at theatre (matinee)",
+      "Guid": "ad37bf6d-81e5-41ef-b3be-18829cbdf65b",
+      "Sensible": 65.0,
+      "Latent": 30.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Seated at theatre (night)",
+      "Guid": "975c3cd7-442a-4e1c-8d3a-d308a605cda7",
+      "Sensible": 70.0,
+      "Latent": 35.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Seated, very light",
+      "Guid": "e5499155-1ae7-4ad7-97d4-102c725ba3dc",
+      "Sensible": 67.0,
+      "Latent": 58.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Moderate office work",
+      "Guid": "fe2e40f5-2382-482f-b1b3-41df74e18732",
+      "Sensible": 75.0,
+      "Latent": 55.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Standing, light work",
+      "Guid": "4e5e8363-21f6-40db-abfe-1587a57ba36e",
+      "Sensible": 75.0,
+      "Latent": 55.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Walking or standing",
+      "Guid": "252b8aed-aec9-48a7-b154-8d2366f5f5be",
+      "Sensible": 75.0,
+      "Latent": 70.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Sedentary work",
+      "Guid": "021a28ea-62b9-427e-825a-7bac7537e454",
+      "Sensible": 80.0,
+      "Latent": 80.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Light bench work",
+      "Guid": "94441d28-95e2-451b-bf07-eec919b4d3df",
+      "Sensible": 80.0,
+      "Latent": 140.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Moderate dancing",
+      "Guid": "0888bf4a-40ae-455d-9fe9-a3d3d275736b",
+      "Sensible": 90.0,
+      "Latent": 160.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Walking, light march",
+      "Guid": "c2e924dd-9c13-4e1c-a181-483d27c2f41a",
+      "Sensible": 110.0,
+      "Latent": 185.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Bowling",
+      "Guid": "fc7a9cc6-07bd-472a-bfa7-2e44b3857df8",
+      "Sensible": 170.0,
+      "Latent": 255.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Heavy work",
+      "Guid": "1110811a-7b98-45b0-aee9-0aa58a03e3d4",
+      "Sensible": 170.0,
+      "Latent": 255.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Heavy machine work",
+      "Guid": "d0b1ab8c-18f0-4459-be43-8bf212ef9ca7",
+      "Sensible": 185.0,
+      "Latent": 285.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Athletics",
+      "Guid": "2364cb56-38eb-4bae-bf52-a8b94f138a78",
+      "Sensible": 210.0,
+      "Latent": 315.0
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Activity Level I (24C)",
+      "Guid": "77a3ce2e-1674-49b7-bce8-0b3449ab5aed",
+      "Sensible": 69.800000000000011,
+      "Latent": 30.199999999999989
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Activity Level II (26C)",
+      "Guid": "3c39522e-8d27-44d6-a7a7-886e3a4b8db9",
+      "Sensible": 67.2,
+      "Latent": 57.8
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Activity Level III (26C)",
+      "Guid": "7f99d354-9eef-45c4-b0a3-641a191ad713",
+      "Sensible": 76.4,
+      "Latent": 93.6
+    },
+    {
+      "_type": "SAM.Analytical.DegreeOfActivity,SAM.Analytical",
+      "Name": "Activity Level IV (26C)",
+      "Guid": "26d7b846-9ede-4381-8823-8a908a55a146",
+      "Sensible": 91.4,
+      "Latent": 118.6
+    }
+  ]
+}
