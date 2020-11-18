@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace SAM.Core
@@ -8,7 +9,7 @@ namespace SAM.Core
     {
         public static bool SetValue(this SAMObject sAMObject, string name, string value)
         {
-            return SetValue(sAMObject, sAMObject?.GetType().Assembly, name, value as object);
+            return SetValue(sAMObject, null, name, value as object);
         }
 
         public static bool SetValue(this SAMObject sAMObject, string name, Guid value)
@@ -110,16 +111,40 @@ namespace SAM.Core
 
         private static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, object value)
         {
-            if (sAMObject == null || string.IsNullOrWhiteSpace(name) || assembly == null)
+            if (sAMObject == null || string.IsNullOrWhiteSpace(name))
                 return false;
 
-            bool @new = false;
+            ParameterSet parameterSet = null;
 
-            ParameterSet parameterSet = sAMObject.GetParameterSet(assembly);
-            if (parameterSet == null)
+            if (assembly == null)
             {
-                parameterSet = new ParameterSet(assembly);
-                sAMObject.Add(parameterSet);
+                List<ParameterSet> parameterSets = sAMObject.GetParamaterSets();
+                if(parameterSets != null)
+                {
+                    foreach(ParameterSet parameterSet_Temp in parameterSets)
+                    {
+                        if(parameterSet_Temp.Contains(name))
+                        {
+                            parameterSet = parameterSet_Temp;
+                            break;
+                        }
+                    }
+                }
+
+                if (parameterSet == null)
+                {
+                    parameterSet = new ParameterSet(sAMObject.GetType().Assembly);
+                    sAMObject.Add(parameterSet);
+                }
+            }
+            else
+            {
+                parameterSet = sAMObject.GetParameterSet(assembly);
+                if (parameterSet == null)
+                {
+                    parameterSet = new ParameterSet(assembly);
+                    sAMObject.Add(parameterSet);
+                }
             }
 
             if (value == null)
