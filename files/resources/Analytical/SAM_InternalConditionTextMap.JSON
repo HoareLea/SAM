@@ -5,13 +5,13 @@
   "Map": [
     [
       "S00_Unconditioned",
-      "Lift",
-      "Riser",
-      "Shaft",
-      "Unconditioned",
-      "Unoccupied",
-      "UU",
-      "Void"
+      "lift",
+      "riser",
+      "shaft",
+      "unconditioned",
+      "unoccupied",
+      "uu",
+      "void"
     ],
     [
       "S01_Auditorium",
@@ -19,29 +19,36 @@
       "cinema",
       "lecture",
       "seminar",
-      "theatre"
+      "theatre",
+      "concert hall",
+      "conference hall",
+      "audience sits"
     ],
     [
       "S02_Bathroom",
-      "bathroom"
+      "bathroom",
+      "accessible bathroom"
     ],
     [
       "S03_Bedroom",
-      "Bedroom"
+      "bedroom",
+      "sleeping room",
+      "guestroom",
+      "master bedroom"
     ],
     [
       "S04_Breakout",
-      "Breakout",
-      "Collaboration"
+      "breakout",
+      "collaboration"
     ],
     [
       "S05_CarPark",
-      "Car",
-      "Car Park"
+      "car",
+      "car park"
     ],
     [
       "S06_ChangingDry",
-      "Change",
+      "change",
       "lockers",
       "chagning"
     ],
@@ -51,13 +58,13 @@
     ],
     [
       "S08_Circulation",
-      "Circ",
-      "Circulation",
-      "Corridor"
+      "circ",
+      "circulation",
+      "corridor"
     ],
     [
       "S09_ClassHighLoad",
-      "ClassHighLoad"
+      "classHighLoad"
     ],
     [
       "S10_ClassRoom",
@@ -65,7 +72,10 @@
       "class",
       "teaching",
       "learning",
-      "classroom"
+      "classroom",
+      "education",
+      "community learning",
+      "sensory room"
     ],
     [
       "S11_CommonRoom",
@@ -75,26 +85,28 @@
     ],
     [
       "S12_Comms",
-      "Comms",
-      "IT",
-      "LAN",
-      "Server",
-      "UPS"
+      "comms",
+      "it",
+      "lan",
+      "server",
+      "ups"
     ],
     [
       "S13_Copier",
-      "Printer",
-      "Copier",
-      "Print",
-      "Repro"
+      "printer",
+      "copier",
+      "print",
+      "repro",
+      "printing room"
     ],
     [
       "S14_DataCentre",
-      "DataCentre"
+      "datacentre",
+      "data centre"
     ],
     [
       "S15_DomBath",
-      "Domestic"
+      "domestic bath"
     ],
     [
       "S16_DomBed",
@@ -102,238 +114,280 @@
     ],
     [
       "S17_DomCirculation",
-      "DomCirculation"
+      "dom circulation",
+      "domestic circulation",
+      "domestic"
     ],
     [
       "S18_DomDining",
-      "DomDining"
+      "dom dining",
+      "domestic dining",
+      "domestic"
     ],
     [
       "S19_DomKitchen",
-      "DomKitchen"
+      "dom kitchen",
+      "domestic kitchen",
+      "domestic"
     ],
     [
       "S20_DomLiving",
-      "DomLiving"
+      "dom living",
+      "domestic living",
+      "domestic"
     ],
     [
       "S21_DomStore",
-      "DomStore"
+      "dom store",
+      "domestic store",
+      "domestic"
     ],
     [
       "S22_DomToilet",
-      "DomToilet"
+      "dom toilet",
+      "domestic toilet",
+      "domestic"
     ],
     [
       "S23_DrySptHall",
-      "Gymnasium",
-      "Sport Hall"
+      "gymnasium",
+      "sport hall"
     ],
     [
       "S24_EatingDrinking",
-      "Caf�",
-      "Cafe",
-      "Canteen",
-      "Cantine",
-      "Foodhall",
-      "Foodcourt",
-      "Pub",
-      "Bar",
-      "Restaurant"
+      "caf�",
+      "cafe",
+      "canteen",
+      "cantine",
+      "foodhall",
+      "foodcourt",
+      "pub",
+      "bar",
+      "restaurant",
+      "food",
+      "dining"
     ],
     [
       "S25_ElecPlant",
-      "Elec",
-      "Substation",
-      "Switchroom",
-      "Transformer"
+      "elec",
+      "substation",
+      "switchroom",
+      "transformer"
     ],
     [
       "S26_Exhibition",
-      "Gallery",
-      "Museum",
-      "Art",
-      "Display"
+      "gallery",
+      "museum",
+      "art",
+      "display"
     ],
     [
       "S27_FirstAid",
-      "First Aid",
-      "Triage",
-      "Medical"
+      "first aid",
+      "triage",
+      "medical"
     ],
     [
       "S28_FitGym",
-      "Gym",
-      "Fitness"
+      "gym",
+      "fitness",
+      "athletic",
+      "exercise room"
     ],
     [
       "S29_Foyer",
-      "Atrium",
-      "Entrance",
-      "Foyer",
-      "Lobby",
-      "Vestibule"
+      "atrium",
+      "entrance",
+      "foyer",
+      "lobby",
+      "vestibule"
     ],
     [
       "S30_IndustProcess",
-      "IndustProcess"
+      "indust process"
     ],
     [
       "S31_Kitchen",
-      "Kitchen"
+      "kitchen",
+      "cooking area",
+      "cook",
+      "cookhouse",
+      "cookery"
     ],
     [
       "S32_Kitchenette",
-      "Tea",
-      "Coffee",
-      "Kitchenette"
+      "tea",
+      "coffee",
+      "kitchenette"
     ],
     [
       "S33_Lab",
-      "Lab"
+      "lab",
+      "laboratory",
+      "research room",
+      "chemical",
+      "drug"
     ],
     [
       "S34_Laundry",
-      "Laundry"
+      "laundry",
+      "washing",
+      "launderette",
+      "wash house",
+      "wash room"
     ],
     [
       "S35_MechPlant",
-      "AHU",
-      "Boiler",
-      "Machine Room",
-      "Mech",
-      "Plant",
-      "Plantroom",
+      "ahu",
+      "boiler",
+      "machine room",
+      "mech",
+      "mechanical",
+      "plant",
+      "plantroom",
       "technical"
     ],
     [
       "S36_Meeting",
-      "Board",
-      "MTG",
-      "Conference",
-      "Interview",
-      "VC",
-      "Meeting"
+      "board",
+      "mtg",
+      "conference",
+      "interview",
+      "vc",
+      "meeting",
+      "meeting room"
     ],
     [
       "S37_OfficeCell",
-      "Cellular"
+      "cellular",
+      "office cellular"
     ],
     [
       "S38_OfficeHighLoad",
-      "Call",
-      "Trading"
+      "call",
+      "trading"
     ],
     [
       "S39_OfficeOpen",
-      "Office",
-      "Open Plan Office",
-      "Open Space",
-      "Openspace",
-      "Working"
+      "office",
+      "open plan office",
+      "open space",
+      "openspace",
+      "working"
     ],
     [
       "S40_Prayer",
-      "Prayer"
+      "prayer",
+      "prayer room"
     ],
     [
       "S41_Reception",
-      "Reception"
+      "reception"
     ],
     [
       "S42_Retail",
-      "Retail"
+      "retail",
+      "market",
+      "trade"
     ],
     [
       "S43_RetailChill",
-      "RetailChill"
+      "retail chill",
+      "retailchill"
     ],
     [
       "S44_RetailElectric",
-      "RetailElectric"
+      "retail electric",
+      "retailelectric"
     ],
     [
       "S45_RetailWarehouse",
-      "RetailWarehouse"
+      "retail warehouse",
+      "retailwarehouse"
     ],
     [
       "S46_Servery",
-      "Servery"
+      "servery"
     ],
     [
       "S47_StairsEscape",
-      "Escape",
+      "escape",
       "staircase",
       "staircases"
     ],
     [
       "S48_Store",
-      "Cleaner",
-      "Cleaner's",
-      "Cupboard",
-      "Pantry",
-      "Storage",
-      "Store"
+      "cleaner",
+      "cleaners",
+      "cupboard",
+      "pantry",
+      "storage",
+      "store"
     ],
     [
       "S49_Swim",
-      "Swim",
-      "Pool",
-      "Hydro"
+      "swim",
+      "pool",
+      "hydro",
+      "swimming pool"
     ],
     [
       "S50_Toilet",
-      "aWC",
-      "Dis",
-      "Disable",
-      "Female",
-      "Lavatories",
-      "Lavatory",
-      "Male",
-      "Mens",
-      "Rest Room",
-      "RestRoom",
-      "Toilet",
-      "Urinal",
-      "WC"
+      "wc",
+      "disable",
+      "dis",
+      "female",
+      "lavatories",
+      "lavatory",
+      "male",
+      "mens",
+      "rest room",
+      "restroom",
+      "toilet",
+      "urinal",
+      "wcs"
     ],
     [
       "S51_Waiting",
-      "Waiting"
+      "waiting",
+      "waiting room"
     ],
     [
       "S52_Waste",
-      "Bins",
-      "Refuse",
-      "Rubbish",
-      "Trash",
-      "Waste",
-      "Garbage",
-      "Recycle"
+      "bins",
+      "refuse",
+      "rubbish",
+      "trash",
+      "waste",
+      "garbage",
+      "recycle",
+      "wasteroom",
+      "waste room"
     ],
     [
       "S53_Workshop",
-      "Workshop"
+      "workshop"
     ],
     [
       "S54_Rehearsal",
-      "Rehearsal",
-      "Rehersal",
-      "Studio"
+      "rehearsal",
+      "rehersal",
+      "studio"
     ],
     [
       "S55_PGR",
-      "PGR"
+      "pgr"
     ],
     [
       "S56_AcademicStudio",
-      "AcademicStudio"
+      "academicstudio",
+      "academic studio"
     ],
     [
       "Sxx_External",
-      "Buffer",
-      "Excluded",
-      "External"
+      "buffer",
+      "excluded",
+      "external"
     ]
   ]
 }
