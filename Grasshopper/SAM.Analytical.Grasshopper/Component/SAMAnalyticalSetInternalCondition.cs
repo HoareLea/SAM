@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Model ot Adjacency Cluster", GH_ParamAccess.list);
 
-            inputParamManager.AddTextParameter("_name", "_name", "InternalCondition Name", GH_ParamAccess.item, "Office");
+            inputParamManager.AddTextParameter("_name", "_name", "InternalCondition Name", GH_ParamAccess.item, "S39_OfficeOpen");
 
             index = inputParamManager.AddParameter(new GooSpaceParam(), "spaces_", "spaces_", "SAM Analytical Spaces", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
