@@ -19,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -97,7 +97,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMObjectParam<ISAMObject>(), "_objects", "_objects", "Objects", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_objects", "_objects", "Objects", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMObjectParam<ISAMObject>(), "Objects", "Objects", "Objects", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Objects", "Objects", "Objects", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<ISAMObject> sAMObjects = new List<ISAMObject>();
+            List<SAMObject> sAMObjects = new List<SAMObject>();
             if(!dataAccess.GetDataList(0, sAMObjects) || sAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -124,7 +124,7 @@ namespace SAM.Core.Grasshopper
             }
 
             HashSet<string> values = new HashSet<string>();
-            foreach(ISAMObject sAMObject in sAMObjects)
+            foreach(SAMObject sAMObject in sAMObjects)
             {
                 string name = null;
                 if (!Core.Query.TryGetValue(sAMObject, "Name", out name))
@@ -146,8 +146,8 @@ namespace SAM.Core.Grasshopper
             //        Menu_AppendItem(menu, value, Menu_Changed, true, value.Equals(this.value)).Tag = value;
             //}
 
-            List<ISAMObject> result = new List<ISAMObject>();
-            foreach (ISAMObject sAMObject in sAMObjects)
+            List<SAMObject> result = new List<SAMObject>();
+            foreach (SAMObject sAMObject in sAMObjects)
             {
                 string name = null;
                 if (!Core.Query.TryGetValue(sAMObject, "Name", out name))
@@ -157,7 +157,7 @@ namespace SAM.Core.Grasshopper
                     result.Add(sAMObject);
             }
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMObject<ISAMObject>(x)));
+            dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
         }
     }
 }

@@ -4,6 +4,7 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -17,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
