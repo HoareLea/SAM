@@ -207,14 +207,7 @@ namespace SAM.Core
 
         public bool Write(string path)
         {
-            JObject jObject = ToJObject();
-            if (jObject == null)
-                return false;
-
-            string json = jObject.ToString();
-
-            File.WriteAllText(path, json);
-            return true;
+            return Query.Write(this, path);
         }
 
         public bool Append(string path)

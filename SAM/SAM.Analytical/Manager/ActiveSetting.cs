@@ -35,6 +35,7 @@ namespace SAM.Analytical
             result.SetValue(AnalyticalSettingParameter.DefaultGasMaterialLibraryFileName, "SAM_GasMaterialLibrary.JSON");
             result.SetValue(AnalyticalSettingParameter.DefaultInternalConditionLibraryFileName, "SAM_InternalConditionLibrary.JSON");
             result.SetValue(AnalyticalSettingParameter.DefaultDegreeOfActivityLibraryFileName, "SAM_DegreeOfActivityLibrary.JSON");
+            result.SetValue(AnalyticalSettingParameter.InternaConditionTextMaplFileName, "SAM_InternalConditionTextMap.JSON");
 
             string path = null;
 
@@ -61,6 +62,10 @@ namespace SAM.Analytical
             path = Query.DefaultDegreeOfActivityLibraryPath(result);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultDegreeOfActivityLibrary, Core.Create.IJSAMObject<DegreeOfActivityLibrary>(System.IO.File.ReadAllText(path)));
+
+            path = Query.InternalConditionTextMapPath(result);
+            if (System.IO.File.Exists(path))
+                result.SetValue(AnalyticalSettingParameter.InternalConditionTextMap, Core.Create.IJSAMObject<TextMap>(System.IO.File.ReadAllText(path)));
 
             return result;
         }

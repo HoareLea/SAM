@@ -111,6 +111,8 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalCreateDegreeOfActivityByTemperature.cs" />
+    <Compile Include="Component\SAMAnalyticalGetSortedKeys.cs" />
+    <Compile Include="Component\SAMAnalyticalGetInternalConditionTextMap.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultDegreeOfActivityLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultInternalConditionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalSetOccupancyGains.cs" />

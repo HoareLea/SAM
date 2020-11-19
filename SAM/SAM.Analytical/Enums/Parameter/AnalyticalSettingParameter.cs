@@ -13,6 +13,7 @@ namespace SAM.Analytical
         [ParameterProperties("Default ApertureConstructionLibrary", "Default ApertureConstructionLibrary"), SAMObjectParameterValue(typeof(ApertureConstructionLibrary))] DefaultApertureConstructionLibrary,
         [ParameterProperties("Default InternalConditionLibrary", "Default InternalConditionLibrary"), SAMObjectParameterValue(typeof(InternalConditionLibrary))] DefaultInternalConditionLibrary,
         [ParameterProperties("Default DegreeOfActivityLibrary", "Default DegreeOfActivityLibrary"), SAMObjectParameterValue(typeof(DegreeOfActivityLibrary))] DefaultDegreeOfActivityLibrary,
+        [ParameterProperties("InternalCondition TextMap", "InternalCondition TextMap"), SAMObjectParameterValue(typeof(TextMap))] InternalConditionTextMap,
 
         [ParameterProperties("Default MaterialLibrary File Name", "Default MaterialLibrary File Name"), ParameterValue(ParameterType.String)] DefaultMaterialLibraryFileName,
         [ParameterProperties("Default Gas MaterialLibrary File Name", "Default Gas MaterialLibrary File Name"), ParameterValue(ParameterType.String)] DefaultGasMaterialLibraryFileName,
@@ -20,5 +21,6 @@ namespace SAM.Analytical
         [ParameterProperties("Default ApertureConstructionLibrary File Name", "Default ApertureConstructionLibrary File Name"), ParameterValue(ParameterType.String)] DefaultApertureConstructionLibraryFileName,
         [ParameterProperties("Default InternalConditionLibrary File Name", "Default InternalConditionLibrary File Name"), ParameterValue(ParameterType.String)] DefaultInternalConditionLibraryFileName,
         [ParameterProperties("Default DegreeOfActivityLibrary File Name", "Default DegreeOfActivityLibrary File Name"), ParameterValue(ParameterType.String)] DefaultDegreeOfActivityLibraryFileName,
+        [ParameterProperties("InternaCondition TextMap File Name", "InternaCondition TextMap File Name"), ParameterValue(ParameterType.String)] InternaConditionTextMaplFileName
     }
 }
