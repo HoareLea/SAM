@@ -110,6 +110,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalMapInternalCondtions.cs" />
     <Compile Include="Component\SAMAnalyticalCreateDegreeOfActivityByTemperature.cs" />
     <Compile Include="Component\SAMAnalyticalGetSortedKeys.cs" />
     <Compile Include="Component\SAMAnalyticalGetInternalConditionTextMap.cs" />

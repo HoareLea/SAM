@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static InternalCondition MapInternalCondition(this Space space, InternalConditionLibrary internalConditionLibrary, TextMap textMap)
+        public static InternalCondition MapInternalCondition(this Space space, InternalConditionLibrary internalConditionLibrary, TextMap textMap, bool overrideNotFound = false)
         {
             if (space == null || internalConditionLibrary == null || textMap == null)
                 return null;
@@ -24,7 +24,7 @@ namespace SAM.Analytical
                 return null;
 
             InternalCondition internalCondition = internalConditions[0];
-            if (internalCondition == null)
+            if (!overrideNotFound && internalCondition == null)
                 return null;
 
             space.InternalCondition = internalCondition;
