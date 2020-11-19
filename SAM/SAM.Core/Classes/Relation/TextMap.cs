@@ -4,23 +4,23 @@ using System.Collections.Generic;
 
 namespace SAM.Core
 {
-    public class TextMapCluster : SAMObject, IJSAMObject
+    public class TextMap : SAMObject, IJSAMObject
     {
         private Dictionary<string, HashSet<string>> dictionary;
 
-        public TextMapCluster(string name)
+        public TextMap(string name)
             : base(name)
         {
 
         }
 
-        public TextMapCluster(TextMapCluster textMapCluster)
-            : base(textMapCluster)
+        public TextMap(TextMap textMap)
+            : base(textMap)
         {
-            if(textMapCluster.dictionary != null)
+            if(textMap.dictionary != null)
             {
                 dictionary = new Dictionary<string, HashSet<string>>();
-                foreach (KeyValuePair<string, HashSet<string>> keyValuePair in textMapCluster.dictionary)
+                foreach (KeyValuePair<string, HashSet<string>> keyValuePair in textMap.dictionary)
                 {
                     HashSet<string> values = new HashSet<string>();
                     foreach (string value in keyValuePair.Value)
@@ -31,7 +31,7 @@ namespace SAM.Core
             }
         }
 
-        public TextMapCluster(JObject jObject)
+        public TextMap(JObject jObject)
             : base(jObject)
         {
 

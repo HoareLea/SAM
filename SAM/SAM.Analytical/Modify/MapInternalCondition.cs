@@ -6,16 +6,16 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static InternalCondition MapInternalCondition(this Space space, InternalConditionLibrary internalConditionLibrary, TextMapCluster textMapCluster)
+        public static InternalCondition MapInternalCondition(this Space space, InternalConditionLibrary internalConditionLibrary, TextMap textMap)
         {
-            if (space == null || internalConditionLibrary == null || textMapCluster == null)
+            if (space == null || internalConditionLibrary == null || textMap == null)
                 return null;
 
             string name = space.Name;
             if (string.IsNullOrWhiteSpace(name))
                 return null;
 
-            HashSet<string> names_InternalCondition = textMapCluster.GetSortedKeys(name);
+            HashSet<string> names_InternalCondition = textMap.GetSortedKeys(name);
             if (names_InternalCondition == null || names_InternalCondition.Count == 0)
                 return null;
 
