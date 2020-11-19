@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
             
             int index;
 
-            index = inputParamManager.AddParameter(new GooTextMapParam(), "_textMap", "_textMap", "SAM Core TextMap", GH_ParamAccess.item);
+            index = inputParamManager.AddParameter(new GooTextMapParam(), "_textMap_", "_textMap_", "SAM Core TextMap", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddParameter(new GooInternalConditionLibraryParam(), "_internalConditionLibrary_", "_internalConditionLibrary_", "SAM Analytical InternalConditionLibrary", GH_ParamAccess.item);

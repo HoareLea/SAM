@@ -81,8 +81,8 @@ namespace SAM.Analytical
             {
                 if (value == null)
                     internalCondition = null;
-
-                internalCondition = new InternalCondition(value);
+                else
+                    internalCondition = new InternalCondition(value);
             }
         }
 
