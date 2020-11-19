@@ -5,18 +5,13 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static string DefaultConstructionLibraryPath()
-        {
-            return DefaultConstructionLibraryPath(ActiveSetting.Setting);
-        }
-
-        public static string DefaultConstructionLibraryPath(Setting setting)
+        public static string DefaultPath(this Setting setting, AnalyticalSettingParameter analyticalSettingParameter)
         {
             if (setting == null)
                 return null;
             
             string fileName;
-            if (!setting.TryGetValue(AnalyticalSettingParameter.DefaultConstructionLibraryFileName, out fileName) || string.IsNullOrWhiteSpace(fileName))
+            if (!setting.TryGetValue(analyticalSettingParameter, out fileName) || string.IsNullOrWhiteSpace(fileName))
                 return null;
 
             if (string.IsNullOrWhiteSpace(fileName))

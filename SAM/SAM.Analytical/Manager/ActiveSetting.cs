@@ -39,31 +39,31 @@ namespace SAM.Analytical
 
             string path = null;
 
-            path = Query.DefaultConstructionLibraryPath(result);
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultConstructionLibraryFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultConstructionLibrary, Core.Create.IJSAMObject<ConstructionLibrary>(System.IO.File.ReadAllText(path)));
 
-            path = Query.DefaultMaterialLibraryPath(result);
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultMaterialLibraryFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultMaterialLibrary, Core.Create.IJSAMObject<MaterialLibrary>(System.IO.File.ReadAllText(path)));
 
-            path = Query.DefaultGasMaterialLibraryPath(result);
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultGasMaterialLibraryFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultGasMaterialLibrary, Core.Create.IJSAMObject<MaterialLibrary>(System.IO.File.ReadAllText(path)));
 
-            path = Query.DefaultApertureConstructionLibraryPath(result);
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultApertureConstructionLibraryFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultApertureConstructionLibrary, Core.Create.IJSAMObject<ApertureConstructionLibrary>(System.IO.File.ReadAllText(path)));
 
-            path = Query.DefaultInternalConditionLibraryPath(result);
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultInternalConditionLibraryFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultInternalConditionLibrary, Core.Create.IJSAMObject<InternalConditionLibrary>(System.IO.File.ReadAllText(path)));
 
-            path = Query.DefaultDegreeOfActivityLibraryPath(result);
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultDegreeOfActivityLibraryFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultDegreeOfActivityLibrary, Core.Create.IJSAMObject<DegreeOfActivityLibrary>(System.IO.File.ReadAllText(path)));
 
-            path = Query.InternalConditionTextMapPath(result);
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.InternaConditionTextMaplFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.InternalConditionTextMap, Core.Create.IJSAMObject<TextMap>(System.IO.File.ReadAllText(path)));
 

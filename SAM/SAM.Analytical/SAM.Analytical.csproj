@@ -142,9 +142,7 @@
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\Cut.cs" />
-    <Compile Include="Query\InternalConditionTextMapPath.cs" />
-    <Compile Include="Query\DefaultDegreeOfActivityLibraryPath.cs" />
-    <Compile Include="Query\DefaultInternalConditionLibraryPath.cs" />
+    <Compile Include="Query\DefaultPath.cs" />
     <Compile Include="Query\DefaultGasType.cs" />
     <Compile Include="Query\Extend.cs" />
     <Compile Include="Query\Grid.cs" />
@@ -155,9 +153,6 @@
     <Compile Include="Query\HasMaterial.cs" />
     <Compile Include="Query\Constructions.cs" />
     <Compile Include="Query\TransparentPanels.cs" />
-    <Compile Include="Query\DefaultApertureConstructionLibraryPath.cs" />
-    <Compile Include="Query\DefaultConstructionLibraryPath.cs" />
-    <Compile Include="Query\DefaultGasMaterialLibraryPath.cs" />
     <Compile Include="Query\Opaque.cs" />
     <Compile Include="Query\UniqueName.cs" />
     <Compile Include="Query\FrameApertureConstructionUniqueName.cs" />
@@ -171,7 +166,6 @@
     <Compile Include="Query\AirspaceThermalResistance.cs" />
     <Compile Include="Query\Materials.cs" />
     <Compile Include="Query\BlackBodySurfaceRadiativeCoefficient.cs" />
-    <Compile Include="Query\DefaultMaterialLibraryPath.cs" />
     <Compile Include="Query\FirstMaterial.cs" />
     <Compile Include="Query\FirstConstructionLayer.cs" />
     <Compile Include="Query\Apertures.cs" />
