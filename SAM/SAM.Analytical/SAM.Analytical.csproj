@@ -118,6 +118,7 @@
     <Compile Include="Classes\Panel.cs" />
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
+    <Compile Include="Classes\ProfileLibrary.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
