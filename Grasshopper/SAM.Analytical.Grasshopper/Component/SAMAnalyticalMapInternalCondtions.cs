@@ -49,6 +49,9 @@ namespace SAM.Analytical.Grasshopper
 
             index = inputParamManager.AddBooleanParameter("_overrideNotFound_", "_overrideNotFound_", "Override with null if InternalCondition not found", GH_ParamAccess.item, false);
             inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddParameter(new GooInternalConditionParam(), "_defaultInternalCondition_", "_defaultInternalCondition_", "Default InternalCondition applied if override not found", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
         }
 
         /// <summary>
@@ -69,7 +72,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             SAMObject sAMObject = null;
-            if(!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -91,28 +94,32 @@ namespace SAM.Analytical.Grasshopper
             if (!dataAccess.GetData(3, ref overrideNotFound))
                 overrideNotFound = false;
 
+            InternalCondition internalCondition_Default = null;
+            if (!dataAccess.GetData(4, ref internalCondition_Default))
+                internalCondition_Default = null;
+
             List<InternalCondition> internalConditions = new List<InternalCondition>();
-            
-            if(sAMObject is Space)
+
+            if (sAMObject is Space)
             {
                 Space space = new Space((Space)sAMObject);
-                InternalCondition internalCondition = space.MapInternalCondition(internalConditionLibrary, textMap, overrideNotFound);
+                InternalCondition internalCondition = space.MapInternalCondition(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
                 if (space.InternalCondition != internalCondition)
                     internalConditions.Add(internalCondition);
             }
-            else if(sAMObject is AdjacencyCluster)
+            else if (sAMObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-                internalConditions = adjacencyCluster.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound);
+                internalConditions = adjacencyCluster.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
                 sAMObject = adjacencyCluster;
             }
-            else if(sAMObject is AnalyticalModel)
+            else if (sAMObject is AnalyticalModel)
             {
                 AdjacencyCluster adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-                if(adjacencyCluster != null)
+                if (adjacencyCluster != null)
                 {
                     adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-                    internalConditions = adjacencyCluster.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound);
+                    internalConditions = adjacencyCluster.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
                     sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
                 }
             }
