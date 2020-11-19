@@ -26,12 +26,14 @@ namespace SAM.Analytical
         public Profile(string name, ProfileType profileType)
             : base(name)
         {
-            this.group = profileType.Text();
+            group = profileType.Text();
         }
 
-        public Profile(string name, params double[] values)
+        public Profile(string name, ProfileType profileType, params double[] values)
             : base(name)
         {
+            group = profileType.Text();
+
             if (values == null)
                 return;
 
