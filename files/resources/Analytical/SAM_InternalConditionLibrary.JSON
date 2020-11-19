@@ -1,12 +1,12 @@
 {
   "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
   "Name": "Default SAM InternalCondition Library ver00",
-  "Guid": "f774ec80-e881-4d02-a377-e0b9015e6719",
+  "Guid": "05d36fe4-e252-4195-ae4b-3970e680a91a",
   "Objects": [
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "Sxx_External",
-      "Guid": "9a63b305-b07a-421a-ae01-656176064bbc",
+      "Guid": "44b015c7-052a-4638-91eb-a5946d586609",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -80,7 +80,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S00_Unconditioned",
-      "Guid": "e52a0dcc-125d-44ab-b718-2b8446b61d8b",
+      "Guid": "4bb45fd0-d8d1-497a-8c9c-ff6764a4f449",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -154,7 +154,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S01_Auditorium",
-      "Guid": "ebf82ef6-c047-4c28-ad35-a74e02e9ba1d",
+      "Guid": "f7980a61-5204-46dd-aadf-1582d0169a87",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -239,8 +239,90 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S02_Bathroom",
+      "Guid": "0f6a74f5-35e4-412c-b842-3ebe98f84353",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_20"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S03_Bedroom",
-      "Guid": "e3b4ffd4-673b-429a-bcb3-1468bb54caa7",
+      "Guid": "71c39634-f8c0-45db-88de-a7938160ee23",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -326,7 +408,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S04_Breakout",
-      "Guid": "c3a0d401-b94e-41c8-9b84-b5ec77397605",
+      "Guid": "8d0b434a-dec4-4f16-9481-8323be2c32f2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -412,7 +494,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S05_CarPark",
-      "Guid": "0bb17793-abb0-4a13-8ea7-90e66a7f3a0c",
+      "Guid": "eaf99fdc-bb04-40f9-93ae-1340f820cd4d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -486,7 +568,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S06_ChangingDry",
-      "Guid": "e4e0da37-19b5-4a69-a11f-b845d73e3fcb",
+      "Guid": "0cf99014-7f3b-4933-82da-b7344a63fb3f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -572,7 +654,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S07_ChangingWet",
-      "Guid": "a8b91260-80b3-4ddd-94a5-85b76c81c19b",
+      "Guid": "36a24507-2ec9-4f73-a44b-c2ca6b232be8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -658,7 +740,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S08_Circulation",
-      "Guid": "571e9efe-1c1a-4a54-ae81-523d5e742e03",
+      "Guid": "e5c4e4cd-6ed6-47fb-8b0b-ab82b273d96e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -740,7 +822,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S10_ClassRoom",
-      "Guid": "f8989794-4bf2-4a47-864a-281b4ac5ce67",
+      "Guid": "cbffb645-4e67-4797-b5fd-3b05993756e1",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -825,8 +907,94 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S11_CommonRoom",
+      "Guid": "daa36c9e-2921-4904-a860-c42fb1f92de4",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 2.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 300.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S12_Comms",
-      "Guid": "09675698-5571-465d-8781-7d8245d759e1",
+      "Guid": "ff89a3e7-805f-44e3-9c45-9964f57e93bf",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -908,7 +1076,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S13_Copier",
-      "Guid": "79e3788e-2a77-4cd2-a773-4e24a76042dc",
+      "Guid": "0c42cae6-aef6-411f-b6cd-6733b414804b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -990,7 +1158,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S15_DomBath",
-      "Guid": "39a95c90-b54e-45bb-8890-206fc4bb900a",
+      "Guid": "ceea29d0-f647-4d67-99ea-0694210aa03c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1072,7 +1240,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S17_DomCirculation",
-      "Guid": "82e348f2-cabc-4bd4-b9b8-a76e9c2a1a13",
+      "Guid": "2b49fb49-e4cb-4c68-984a-1313b6a1eb1c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1154,7 +1322,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S24_EatingDrinking",
-      "Guid": "4540b225-0a19-4e30-a502-b7c8a0c64391",
+      "Guid": "77b64a63-9e61-4e3e-8efb-50415b74c1f8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1240,7 +1408,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S25_ElecPlant",
-      "Guid": "91af993a-b645-4b44-b64d-e048ff948aa1",
+      "Guid": "3c3a2bc4-f205-4bfc-a88a-7d8d1b207135",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1326,7 +1494,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S27_FirstAid",
-      "Guid": "38a718ff-50d2-45c7-b14c-6a51c145c743",
+      "Guid": "160735ef-4c74-49fd-9500-3752cd52b366",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1411,8 +1579,94 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S28_FitGym",
+      "Guid": "5a90878a-2d36-4dbb-ad02-b6f163f8c44d",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 1.5
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Lighting Efficiency",
+              "Value": 1.6
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": ""
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S29_Foyer",
-      "Guid": "cc392584-3b0d-4592-b88d-73b29c75d837",
+      "Guid": "e2c88a17-f81d-4413-809b-d5b1fd8b84da",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1498,7 +1752,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S31_Kitchen",
-      "Guid": "56797b07-d659-4497-817e-22d0cc58fe76",
+      "Guid": "57c9f178-261d-457c-a8ef-2ca1b635b95a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1584,7 +1838,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S32_Kitchenette",
-      "Guid": "874a0d98-0a8c-4ef0-a717-9da44ba10c39",
+      "Guid": "ab7bc011-0392-4516-933e-f018f649dbaa",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1670,7 +1924,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S35_MechPlant",
-      "Guid": "f5d63810-5cbe-493e-a259-a0f342842ac7",
+      "Guid": "be585249-da2a-46ed-b0e7-665d058f2464",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1752,7 +2006,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S36_Meeting",
-      "Guid": "f7a105e3-f49e-4512-8f7b-b1c9d6613318",
+      "Guid": "caa7f2ab-2808-4fad-8191-9290d94b1e68",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1838,7 +2092,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S39_OfficeOpen",
-      "Guid": "2a09e6e3-2de7-42e8-a2cb-1595bd62e9f0",
+      "Guid": "44c909b1-f6df-4d2c-8438-ae1d43cc9646",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1924,7 +2178,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S37_OfficeCell",
-      "Guid": "b9eb5eff-cd06-4c80-8168-7fb174d7593e",
+      "Guid": "55e6b318-4730-4df6-b4a0-138aa359c915",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2010,7 +2264,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S57_OfficeCellNV",
-      "Guid": "0f8de92d-9810-4388-8e6d-813069927c2a",
+      "Guid": "e761a43d-25fe-4a9f-935a-9dc2c971ce8e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2096,7 +2350,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S46_Servery",
-      "Guid": "3460cd9e-538a-472f-8d05-4ead79dca1c3",
+      "Guid": "72c6b882-77bf-47f7-8e35-2e038b2d6807",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2182,7 +2436,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S47_StairsEscape",
-      "Guid": "cf6e34f5-228d-481c-aa18-1922533a4997",
+      "Guid": "4b4d6b2c-a1dc-4f62-acd6-d555aa50f2ba",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2264,7 +2518,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S48_Store",
-      "Guid": "7d48ac38-b96e-410e-ad24-4440b49e45f8",
+      "Guid": "8f91f250-a2cb-4802-a4a0-8b81e6526fb9",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2346,7 +2600,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S50_Toilet",
-      "Guid": "fd842915-9ebf-4dee-88f2-e7edc94e24d6",
+      "Guid": "31a0d614-bf9e-4ddf-9a91-a909e0ca6b06",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2428,7 +2682,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S52_Waste",
-      "Guid": "2649e693-07ac-4169-8ffd-88ba0299b776",
+      "Guid": "f0ef6cf1-5d57-4db3-9155-12fee3812ce7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2510,7 +2764,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S55_PGR",
-      "Guid": "875efb2a-e00b-44da-a6d5-e29b5e013361",
+      "Guid": "4cc75e64-7927-49c3-91ac-22d77788b860",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2596,7 +2850,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S56_AcademicStudio",
-      "Guid": "5c98b2fb-c87f-4a56-9f29-d60e6350139c",
+      "Guid": "a717f819-b45e-4c24-9607-38e014bf35d7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2682,7 +2936,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S54_Rehearsal",
-      "Guid": "d2c9179c-df19-4494-8793-ddf7d9d499e5",
+      "Guid": "bc207069-fac9-4549-b5ea-c2ce4b9aead0",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2768,7 +3022,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S58_ClassRoomIT",
-      "Guid": "4729540e-b728-4637-87e0-14ceafb9ee87",
+      "Guid": "600efbc8-c761-4f17-a752-3024f769cfcf",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2854,7 +3108,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S54_Koxs",
-      "Guid": "5c794f4c-51a9-4459-812d-2dadafecb4e4",
+      "Guid": "d6462c47-ad6e-4167-96e2-46996eaa7eea",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",

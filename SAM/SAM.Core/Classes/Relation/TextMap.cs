@@ -113,23 +113,56 @@ namespace SAM.Core
             if (dictionary == null || string.IsNullOrEmpty(text))
                 return null;
 
-            string[] values_1 = null;
-            if (caseSensitive)
-                values_1 = text.Split(' ');
-            else
-                values_1 = text.ToLower().Split(' ');
+            string text_Temp = text.Trim();
+            if (!caseSensitive)
+                text_Temp = text_Temp.ToLower();
 
-            if(!caseSensitive)
-                for(int i=0; i < values_1.Length; i++)
-                    values_1[i] = values_1[i].ToLower();
+            string[] values_1 = text_Temp.Split(' ');
+
+            HashSet<string> hashSet = new HashSet<string>();
+            foreach (KeyValuePair<string, HashSet<string>> keyValuePair in dictionary)
+            {
+                foreach(string value in keyValuePair.Value)
+                {
+                    if (string.IsNullOrEmpty(value))
+                        continue;
+
+                    string[] values = value.Split(' ');
+                    for(int i = 0; i < values.Length; i++)
+                    {
+                        string value_Temp = values[i]?.Trim().ToLower();
+                        if (!string.IsNullOrWhiteSpace(value_Temp))
+                            hashSet.Add(value_Temp);
+                    }
+                }
+            }
+
+            List<string> values_Temp = new List<string>();
+            for (int i = 0; i < values_1.Length; i++)
+            {
+                string value_1 = values_1[i]?.Trim().ToLower();
+                if (string.IsNullOrEmpty(value_1))
+                    continue;
+
+                foreach (string value_2 in hashSet)
+                    if (value_2.Contains(value_1) || value_1.Contains(value_2))
+                    {
+                        values_Temp.Add(value_1);
+                        break;
+                    }
+            }
+
+            text_Temp = string.Join(" ", values_Temp);
+            values_1 = text_Temp.Split(' ');
+
 
             SortedDictionary<int, HashSet<string>> sortedDictionary = new SortedDictionary<int, HashSet<string>>();
             foreach (KeyValuePair<string, HashSet<string>> keyValuePair in dictionary)
             {
-                int count_Key = 0;
+                int count_Key = int.MaxValue;
                 foreach (string value in keyValuePair.Value)
                 {
-                    if(text.Equals(value))
+                    if (text.Equals(value))
                     {
                         if (!sortedDictionary.ContainsKey(-2))
                             sortedDictionary[-2] = new HashSet<string>();
@@ -138,7 +171,11 @@ namespace SAM.Core
                         break;
                     }
 
-                    if (!caseSensitive && text.ToLower().Equals(value.ToLower()))
+                    string value_Temp = value.Trim();
+                    if (!caseSensitive)
+                        value_Temp = value_Temp.ToLower();
+
+                    if (text_Temp.Equals(value_Temp))
                     {
                         if (!sortedDictionary.ContainsKey(-1))
                             sortedDictionary[-1] = new HashSet<string>();
@@ -147,11 +184,7 @@ namespace SAM.Core
                         break;
                     }
 
-                    string[] values_2 = null;
-                    if (caseSensitive)
-                        values_2 = value.Split(' ');
-                    else
-                        values_2 = value.ToLower().Split(' ');
+                    string[] values_2 = value_Temp.Split(' ');
 
                     int count_Value = 0;
                     for (int i=0; i < values_1.Length; i++)
@@ -191,12 +224,13 @@ namespace SAM.Core
                     if (count_Value == 0)
                         continue;
 
-                    count_Value = value.Length - count_Value;
-                    if (count_Key < count_Value)
+                    //count_Value = value_Temp.Length - count_Value;
+                    count_Value = Math.Max(text.Length, value.Length) - count_Value;
+                    if (count_Key > count_Value)
                         count_Key = count_Value;
                 }
 
-                if (count_Key == 0)
+                if (count_Key == int.MaxValue)
                     continue;
 
                 if (!sortedDictionary.ContainsKey(count_Key))
@@ -206,8 +240,8 @@ namespace SAM.Core
             }
 
             HashSet<string> result = new HashSet<string>();
-            foreach(HashSet<string> hashSet in sortedDictionary.Values)
-                foreach (string value in hashSet)
+            foreach(HashSet<string> hashSet_Temp in sortedDictionary.Values)
+                foreach (string value in hashSet_Temp)
                     result.Add(value);
 
             return result;

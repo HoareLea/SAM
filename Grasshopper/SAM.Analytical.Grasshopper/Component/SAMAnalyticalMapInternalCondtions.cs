@@ -63,6 +63,7 @@ namespace SAM.Analytical.Grasshopper
         {
             outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Analytical", "Analytical", "SAM Analytical", GH_ParamAccess.item);
             outputParamManager.AddParameter(new GooInternalConditionParam(), "InternalCondition", "InternalCondition", "SAM Analytical InternalCondition", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSpaceParam(), "unassignedSpaces", "unassignedSpaces", "SAM Analytical Spaces has not been assigned", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -98,6 +99,7 @@ namespace SAM.Analytical.Grasshopper
                 internalCondition_Default = null;
 
             List<InternalCondition> internalConditions = new List<InternalCondition>();
+            List<Space> spaces_Unassigned = new List<Space>();
 
             if (sAMObject is Space)
             {
@@ -105,11 +107,18 @@ namespace SAM.Analytical.Grasshopper
                 InternalCondition internalCondition = space.MapInternalCondition(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
                 if (space.InternalCondition != internalCondition)
                     internalConditions.Add(internalCondition);
+                else
+                    spaces_Unassigned.Add(space);
             }
             else if (sAMObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
                 internalConditions = adjacencyCluster.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
+                List<Space> spaces = adjacencyCluster.GetSpaces();
+                for (int i = 0; i < internalConditions.Count; i++)
+                    if (internalConditions[i] == spaces[i].InternalCondition)
+                        spaces_Unassigned.Add(spaces[i]);
+
                 sAMObject = adjacencyCluster;
             }
             else if (sAMObject is AnalyticalModel)
@@ -119,6 +128,11 @@ namespace SAM.Analytical.Grasshopper
                 {
                     adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
                     internalConditions = adjacencyCluster.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
+                    List<Space> spaces = adjacencyCluster.GetSpaces();
+                    for (int i = 0; i < internalConditions.Count; i++)
+                        if (internalConditions[i] == spaces[i].InternalCondition)
+                            spaces_Unassigned.Add(spaces[i]);
+
                     sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
                 }
             }
@@ -126,6 +140,7 @@ namespace SAM.Analytical.Grasshopper
 
             dataAccess.SetData(0, new GooSAMObject<SAMObject>(sAMObject));
             dataAccess.SetDataList(1, internalConditions?.ConvertAll(x => new GooInternalCondition(x)));
+            dataAccess.SetDataList(2, spaces_Unassigned?.ConvertAll(x => new GooSpace(x)));
         }
     }
 }
