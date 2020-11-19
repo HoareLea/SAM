@@ -40,9 +40,11 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooTextMapParam(), "_textMap", "_textMap", "SAM Core TextMap", GH_ParamAccess.item);
-
+            
             int index;
+
+            index = inputParamManager.AddParameter(new GooTextMapParam(), "_textMap", "_textMap", "SAM Core TextMap", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddParameter(new GooInternalConditionLibraryParam(), "_internalConditionLibrary_", "_internalConditionLibrary_", "SAM Analytical InternalConditionLibrary", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
@@ -80,10 +82,7 @@ namespace SAM.Analytical.Grasshopper
 
             TextMap textMap = null;
             if (!dataAccess.GetData(1, ref textMap) || textMap == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+                textMap = ActiveSetting.Setting.GetValue<TextMap>(AnalyticalSettingParameter.InternalConditionTextMap);
 
             InternalConditionLibrary internalConditionLibrary = null;
             dataAccess.GetData(2, ref internalConditionLibrary);
