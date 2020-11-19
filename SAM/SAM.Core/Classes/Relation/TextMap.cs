@@ -76,6 +76,17 @@ namespace SAM.Core
             return result;
         }
 
+        public IEnumerable<string> Keys
+        {
+            get
+            {
+                if (dictionary == null)
+                    return null;
+
+                return dictionary.Keys;
+            }
+        }
+
         public List<string> GetKeys(string text, TextComparisonType textComparisonType = TextComparisonType.Contains, bool caseSensitive = false)
         {
             if (dictionary == null)

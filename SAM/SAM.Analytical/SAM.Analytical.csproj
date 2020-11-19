@@ -140,6 +140,7 @@
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\Cut.cs" />
+    <Compile Include="Query\InternalConditionTextMapPath.cs" />
     <Compile Include="Query\DefaultDegreeOfActivityLibraryPath.cs" />
     <Compile Include="Query\DefaultInternalConditionLibraryPath.cs" />
     <Compile Include="Query\DefaultGasType.cs" />
