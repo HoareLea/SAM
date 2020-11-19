@@ -34,22 +34,22 @@ namespace SAM.Core
             return result;
         }
 
-        public static ParameterSet ParameterSet(this object @object, Type type_destination, MapCluster mapCluster)
+        public static ParameterSet ParameterSet(this object @object, Type type_destination, TypeMap typeMap)
         {
-            if (@object == null || mapCluster == null)
+            if (@object == null || typeMap == null)
                 return null;
             
-            return ParameterSet(@object, @object.GetType().Assembly, type_destination, mapCluster);
+            return ParameterSet(@object, @object.GetType().Assembly, type_destination, typeMap);
         }
 
-        public static ParameterSet ParameterSet(this object @object, Assembly assembly, Type type_destination, MapCluster mapCluster)
+        public static ParameterSet ParameterSet(this object @object, Assembly assembly, Type type_destination, TypeMap typeMap)
         {
-            if (@object == null || mapCluster == null || assembly == null)
+            if (@object == null || typeMap == null || assembly == null)
                 return null;
 
             Type type_source = @object.GetType();
 
-            List<string> names = mapCluster.GetNames(type_source, type_destination.GetType());
+            List<string> names = typeMap.GetNames(type_source, type_destination.GetType());
             if (names == null)
                 return null;
 
@@ -57,7 +57,7 @@ namespace SAM.Core
 
             foreach (string name in names)
             {
-                string name_destination = mapCluster.GetName(type_source, type_destination, name);
+                string name_destination = typeMap.GetName(type_source, type_destination, name);
                 if (string.IsNullOrWhiteSpace(name_destination))
                     continue;
 
@@ -72,12 +72,12 @@ namespace SAM.Core
             return result;
         }
 
-        public static ParameterSet ParameterSet(this object @object, Assembly assembly, string typeName_1, string typeName_2, MapCluster mapCluster)
+        public static ParameterSet ParameterSet(this object @object, Assembly assembly, string typeName_1, string typeName_2, TypeMap typeMap)
         {
-            if (@object == null || assembly == null || mapCluster == null || string.IsNullOrWhiteSpace(typeName_1) || string.IsNullOrWhiteSpace(typeName_2))
+            if (@object == null || assembly == null || typeMap == null || string.IsNullOrWhiteSpace(typeName_1) || string.IsNullOrWhiteSpace(typeName_2))
                 return null;
 
-            List<string> names = mapCluster.GetNames(typeName_1, typeName_2);
+            List<string> names = typeMap.GetNames(typeName_1, typeName_2);
             if (names == null)
                 return null;
 
@@ -85,7 +85,7 @@ namespace SAM.Core
 
             foreach (string name in names)
             {
-                string name_destination = mapCluster.GetName(typeName_1, typeName_2, name);
+                string name_destination = typeMap.GetName(typeName_1, typeName_2, name);
                 if (string.IsNullOrWhiteSpace(name_destination))
                     continue;
 

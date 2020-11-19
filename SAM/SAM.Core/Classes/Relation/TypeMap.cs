@@ -6,24 +6,24 @@ using System.Linq;
 
 namespace SAM.Core
 {
-    public class MapCluster : SAMObject, IJSAMObject
+    public class TypeMap : SAMObject, IJSAMObject
     {
         private Dictionary<string, Type> dictionary;
 
         private List<Tuple<string, string, string, string>> tuples;
 
-        public MapCluster(MapCluster mapCluster)
-            :base(mapCluster)
+        public TypeMap(TypeMap typeMap)
+            :base(typeMap)
         {
-            tuples = mapCluster.tuples.ConvertAll(x => new Tuple<string, string, string, string>(x.Item1, x.Item2, x.Item3, x.Item4));
+            tuples = typeMap.tuples.ConvertAll(x => new Tuple<string, string, string, string>(x.Item1, x.Item2, x.Item3, x.Item4));
         }
         
-        public MapCluster()
+        public TypeMap()
         {
             tuples = new List<Tuple<string, string, string, string>>();
         }
 
-        public MapCluster(JObject jObject)
+        public TypeMap(JObject jObject)
             : base(jObject)
         {
 
