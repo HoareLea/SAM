@@ -15,23 +15,24 @@ namespace SAM.Analytical
             if (string.IsNullOrWhiteSpace(name))
                 return null;
 
+            InternalCondition result = null;
+
             HashSet<string> names_InternalCondition = textMap.GetSortedKeys(name);
-            if (names_InternalCondition == null || names_InternalCondition.Count == 0)
+            if (names_InternalCondition != null && names_InternalCondition.Count != 0)
+            {
+                List<InternalCondition> internalConditions = internalConditionLibrary.GetInternalConditions(names_InternalCondition.First());
+                if (internalConditions != null && internalConditions.Count != 0)
+                    result = internalConditions[0];
+            }
+
+            if (!overrideNotFound && result == null)
                 return null;
 
-            List<InternalCondition> internalConditions = internalConditionLibrary.GetInternalConditions(names_InternalCondition.First());
-            if (internalConditions == null || internalConditions.Count == 0)
-                return null;
+            if (result == null)
+                result = internalCondition_Default;
 
-            InternalCondition internalCondition = internalConditions[0];
-            if (!overrideNotFound && internalCondition == null)
-                return null;
-
-            if (internalCondition == null)
-                internalCondition = internalCondition_Default;
-
-            space.InternalCondition = internalCondition;
-            return internalCondition;
+            space.InternalCondition = result;
+            return result;
         }
     }
 }
