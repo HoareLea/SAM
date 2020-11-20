@@ -46,7 +46,7 @@ namespace SAM.Analytical
                     continue;
 
                 IEnumerable<Profile> profiles = internalCondition.GetProfiles(profileLibrary, includeProfileGroup);
-                if (profiles != null)
+                if (profiles == null)
                     continue;
 
                 foreach(Profile profile in profiles)

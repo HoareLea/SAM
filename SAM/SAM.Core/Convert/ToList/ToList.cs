@@ -44,13 +44,25 @@ namespace SAM.Core
             List<T> result = new List<T>();
             foreach(object @object in jArray)
             {
-                if (@object is T)
+                object object_Temp = @object;
+
+                if (object_Temp is T)
                 {
-                    result.Add((T)@object);
+                    result.Add((T)object_Temp);
                     continue;
                 }
-                    
-                if(!tryConvert)
+
+                if (@object is JValue)
+                {
+                    object_Temp = ((JValue)@object).Value;
+                    if (object_Temp is T)
+                    {
+                        result.Add((T)object_Temp);
+                        continue;
+                    }
+                }
+
+                if (!tryConvert)
                 {
                     if(!skipInvalid)
                         result.Add(default);
@@ -59,7 +71,7 @@ namespace SAM.Core
                 }    
 
                 T value = default;
-                if (!Query.TryConvert(@object, out value))
+                if (!Query.TryConvert(object_Temp, out value))
                 {
                     if (skipInvalid)
                         continue;

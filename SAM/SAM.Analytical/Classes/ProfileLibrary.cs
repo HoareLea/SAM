@@ -114,6 +114,15 @@ namespace SAM.Analytical
             if (!includeProfileGroup)
                 return null;
 
+            profiles = GetProfiles(profileType.ProfileGroup());
+            if (profiles == null || profiles.Count == 0)
+                return null;
+
+            foreach(Profile profile in profiles)
+            {
+                if (name.Equals(profile.Name))
+                    return profile;
+            }
 
             return null;
         }
