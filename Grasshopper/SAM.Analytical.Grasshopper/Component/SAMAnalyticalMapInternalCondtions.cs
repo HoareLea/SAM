@@ -109,6 +109,8 @@ namespace SAM.Analytical.Grasshopper
                     internalConditions.Add(internalCondition);
                 else
                     spaces_Unassigned.Add(space);
+
+                sAMObject = space;
             }
             else if (sAMObject is AdjacencyCluster)
             {
