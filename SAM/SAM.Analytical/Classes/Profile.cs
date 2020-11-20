@@ -7,39 +7,46 @@ namespace SAM.Analytical
 {
     public class Profile : SAMObject
     {
-        private string group = ProfileType.Other.Text();
+        private string category;
         private double[] values;
 
         public Profile(Profile profile)
             : base(profile)
         {
             values = profile.Values;
-            group = profile.group;
+            category = profile.category;
         }
 
-        public Profile(string name, string group)
+        public Profile(string name, string category)
             : base(name)
         {
-            this.group = group;
+            this.category = category;
         }
 
         public Profile(string name, ProfileType profileType)
             : base(name)
         {
-            group = profileType.Text();
+            category = profileType.Text();
+        }
+
+        public Profile(string name, ProfileGroup profileGroup)
+            : base(name)
+        {
+            category = profileGroup.Text();
         }
 
         public Profile(string name, ProfileType profileType, params double[] values)
             : base(name)
         {
-            group = profileType.Text();
+            category = profileType.Text();
+            this.values = Core.Query.Clone(values);
+        }
 
-            if (values == null)
-                return;
-
-            this.values = new double[values.Length];
-            for (int i = 0; i < values.Length; i++)
-                this.values[i] = values[i];
+        public Profile(string name, ProfileGroup profileGroup, params double[] values)
+            : base(name)
+        {
+            category = profileGroup.Text();
+            this.values = Core.Query.Clone(values);
         }
 
         public Profile(string name, IEnumerable<double> values)
@@ -64,22 +71,15 @@ namespace SAM.Analytical
         {
             get
             {
-                if (values == null)
-                    return null;
-
-                double[] result = new double[values.Length];
-                for (int i = 0; i < result.Length; i++)
-                    result[i] = values[i];
-                
-                return result;
+                return Core.Query.Clone(values);
             }
         }
 
-        public string Group
+        public string Category
         {
             get
             {
-                return group;
+                return category;
             }
         }
 
@@ -87,7 +87,15 @@ namespace SAM.Analytical
         {
             get
             {
-                return Query.ProfileType(group);
+                return Query.Enum<ProfileType>(category);
+            }
+        }
+
+        public ProfileGroup ProfileGroup
+        {
+            get
+            {
+                return Query.Enum<ProfileGroup>(category);
             }
         }
 
@@ -116,11 +124,10 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
+            if (jObject.ContainsKey("Category"))
+                category = jObject.Value<string>("Category");
+
             values = jObject.Value<JArray>("Values")?.ToList<double>()?.ToArray();
-
-            if (jObject.ContainsKey("Group"))
-                group = jObject.Value<string>("Group");
-
             return true;
         }
 
@@ -130,14 +137,15 @@ namespace SAM.Analytical
             if (jObject == null)
                 return jObject;
 
+            if (category != null)
+                jObject.Add("Category", category);
+
             JArray jArray = new JArray();
             foreach (double value in values)
                 jArray.Add(value);
 
             jObject.Add("Values", jArray);
 
-            if (group != null)
-                jObject.Add("Group", group);
             return jObject;
         }
     }

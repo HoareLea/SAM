@@ -29,7 +29,7 @@ namespace SAM.Analytical
                 return null;
 
             Dictionary<PanelGroup, List<Panel>> dictionary = new Dictionary<PanelGroup, List<Panel>>();
-            foreach (PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
+            foreach (PanelGroup panelGroup in System.Enum.GetValues(typeof(PanelGroup)))
                 dictionary[panelGroup] = new List<Panel>();
 
             foreach (Panel panel in panels)
@@ -42,7 +42,7 @@ namespace SAM.Analytical
 
             List<Panel> result = new List<Panel>();
 
-            foreach (PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
+            foreach (PanelGroup panelGroup in System.Enum.GetValues(typeof(PanelGroup)))
             {
                 List<Panel> panels_Temp = MergeCoplanarPanels(dictionary[panelGroup], offset, ref redundantPanels, validateConstruction, minArea, tolerance);
                 if (panels_Temp != null && panels_Temp.Count > 0)

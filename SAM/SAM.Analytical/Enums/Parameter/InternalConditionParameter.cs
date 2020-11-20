@@ -19,6 +19,7 @@ namespace SAM.Analytical
         [ParameterProperties("Equipment Latent Profile Name", "Equipment Latent Profile Name"), ParameterValue(Core.ParameterType.String)] EquipmentLatentProfileName,
         [ParameterProperties("Equipment Latent Gain", "Equipment Latent Gain [W]"), ParameterValue(Core.ParameterType.Double)] EquipmentLatentGain,
         [ParameterProperties("Equipment Latent Gain Per Area", "Equipment Latent Gain Per Area [W/m2]"), ParameterValue(Core.ParameterType.Double)] EquipmentLatentGainPerArea,
+        [ParameterProperties("Lighting Gain Per Area", "Lighting Gain Per Area [W/m2]"), ParameterValue(Core.ParameterType.Double)] LightingGainPerArea,
         [ParameterProperties("Lighting Gain", "Lighting Gain [W]"), ParameterValue(Core.ParameterType.Double)] LightingGain,
         [ParameterProperties("Lighting Level", "Lighting Level [lux]"), DoubleParameterValue(0)] LightingLevel,
         [ParameterProperties("Lighting Profile Name", "Lighting Profile Name"), ParameterValue(Core.ParameterType.String)] LightingProfileName,

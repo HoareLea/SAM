@@ -161,7 +161,7 @@ namespace SAM.Analytical
                 }
             }
 
-            AnalyticalModel result = new AnalyticalModel(analyticalModel, adjacencyCluster, materialLibrary);
+            AnalyticalModel result = new AnalyticalModel(analyticalModel, adjacencyCluster, materialLibrary, analyticalModel.ProfileLibrary);
 
             return result;
         }
@@ -324,7 +324,7 @@ namespace SAM.Analytical
                 }
             }
 
-            AnalyticalModel result = new AnalyticalModel(analyticalModel, adjacencyCluster, materialLibrary);
+            AnalyticalModel result = new AnalyticalModel(analyticalModel, adjacencyCluster, materialLibrary, analyticalModel.ProfileLibrary);
 
             return result;
         }

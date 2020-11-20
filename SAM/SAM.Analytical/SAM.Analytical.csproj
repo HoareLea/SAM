@@ -99,6 +99,7 @@
     <Compile Include="Enums\DefaultGasType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
     <Compile Include="Enums\ActivityLevel.cs" />
+    <Compile Include="Enums\ProfileGroup.cs" />
     <Compile Include="Enums\ProfileType.cs" />
     <Compile Include="Enums\Parameter\AnalyticalModelParameter.cs" />
     <Compile Include="Enums\Parameter\PanelParameter.cs" />
@@ -148,7 +149,9 @@
     <Compile Include="Query\Grid.cs" />
     <Compile Include="Query\InRange.cs" />
     <Compile Include="Query\Intersect.cs" />
-    <Compile Include="Query\ProfileType.cs" />
+    <Compile Include="Query\Enum.cs" />
+    <Compile Include="Query\ProfileGroup.cs" />
+    <Compile Include="Query\Profiles.cs" />
     <Compile Include="Query\UpdateHeatTransferCoefficients.cs" />
     <Compile Include="Query\HasMaterial.cs" />
     <Compile Include="Query\Constructions.cs" />

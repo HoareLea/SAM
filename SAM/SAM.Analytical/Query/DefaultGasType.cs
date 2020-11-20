@@ -23,7 +23,7 @@ namespace SAM.Analytical
             names.RemoveAll(x => string.IsNullOrWhiteSpace(x));
 
             DefaultGasType defaultGasType = Analytical.DefaultGasType.Undefined;
-            foreach (DefaultGasType defaultGasType_Temp in Enum.GetValues(typeof(DefaultGasType)))
+            foreach (DefaultGasType defaultGasType_Temp in System.Enum.GetValues(typeof(DefaultGasType)))
             {
                 string name = defaultGasType_Temp.ToString().ToUpper();
                 List<string> names_DefaultGasType = names.FindAll(x => Core.Query.Compare(x, name, TextComparisonType.Contains, false));

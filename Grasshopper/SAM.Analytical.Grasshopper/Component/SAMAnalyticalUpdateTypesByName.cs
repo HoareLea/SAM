@@ -122,7 +122,9 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else if (sAMObject is AnalyticalModel)
                 {
-                    AdjacencyCluster adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
+                    AnalyticalModel analyticalModel = (AnalyticalModel)sAMObject;
+
+                    AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
                     ConstructionLibrary constructionLibrary_Temp = null;
                     ApertureConstructionLibrary apertureConstructionLibrary_Temp = null;
                     List<Panel> panels_Temp = adjacencyCluster.GetPanels();
@@ -140,7 +142,7 @@ namespace SAM.Analytical.Grasshopper
                     IEnumerable<IMaterial> materials = Analytical.Query.Materials(adjacencyCluster, materialLibrary);
                     materialLibrary = Core.Create.MaterialLibrary("Default Material Library", materials);
 
-                    result.Add(new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster, materialLibrary));
+                    result.Add(new AnalyticalModel(analyticalModel, adjacencyCluster, materialLibrary, analyticalModel.ProfileLibrary));
                     constructionLibraries.Add(constructionLibrary_Temp);
                     apertureConstructionLibraries.Add(apertureConstructionLibrary_Temp);
                 }

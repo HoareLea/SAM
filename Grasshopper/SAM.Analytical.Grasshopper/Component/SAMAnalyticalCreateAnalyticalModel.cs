@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -52,6 +52,9 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddParameter(new GooMaterialLibraryParam(), "materialLibrary_", "materialLibrary_", "SAM Material Library", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddParameter(new GooProfileLibraryParam(), "profileLibrary_", "profileLibrary_", "SAM Profile Library", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
         }
 
@@ -107,7 +110,7 @@ namespace SAM.Analytical.Grasshopper
                     adjacencyCluster.AddObject(panel);
             }
 
-            Core.MaterialLibrary materialLibrary = null;
+            MaterialLibrary materialLibrary = null;
             dataAccess.GetData(5, ref materialLibrary);
 
             if (materialLibrary == null)
@@ -116,7 +119,16 @@ namespace SAM.Analytical.Grasshopper
             IEnumerable<IMaterial> materials = Analytical.Query.Materials(adjacencyCluster, materialLibrary);
             materialLibrary = Core.Create.MaterialLibrary("Default Material Library", materials);
 
-            dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(name, description, location, null, adjacencyCluster, materialLibrary)));
+            ProfileLibrary profileLibrary = null;
+            dataAccess.GetData(6, ref profileLibrary);
+
+            if (profileLibrary == null)
+                profileLibrary = ActiveSetting.Setting.GetValue<ProfileLibrary>(AnalyticalSettingParameter.DefaultProfileLibrary);
+
+            IEnumerable<Profile> profiles = Analytical.Query.Profiles(adjacencyCluster, profileLibrary);
+            profileLibrary = new ProfileLibrary("Default Material Library", profiles);
+
+            dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(name, description, location, null, adjacencyCluster, materialLibrary, profileLibrary)));
         }
     }
 }

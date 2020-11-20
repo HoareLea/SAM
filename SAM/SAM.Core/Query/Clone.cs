@@ -102,5 +102,18 @@ namespace SAM.Core
             return default;
 
         }
+
+        public static T[] Clone<T>(this T[] array)
+        {
+            if (array == null)
+                return null;
+
+            T[] result = new T[array.Length];
+            
+            for (int i = 0; i < array.Length; i++)
+                result[i] = array[i];
+
+            return result;
+        }
     }
 }

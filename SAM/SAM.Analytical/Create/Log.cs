@@ -143,6 +143,7 @@ namespace SAM.Analytical
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
             MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
+            ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
 
             if(adjacencyCluster == null)
@@ -153,10 +154,15 @@ namespace SAM.Analytical
             if(materialLibrary == null)
                 result.Add("MaterialLibrary missing in AnalyticalModel", LogRecordType.Error);
             else
-                Core.Modify.AddRange(result, materialLibrary?.Log());
+                Core.Modify.AddRange(result, materialLibrary.Log());
+
+            if (profileLibrary == null)
+                result.Add("ProfileLibrary missing in AnalyticalModel", LogRecordType.Error);
+            else
+                Core.Modify.AddRange(result, profileLibrary.Log());
 
 
-            if(adjacencyCluster != null)
+            if (adjacencyCluster != null)
             {
                 List<Construction> constructions = adjacencyCluster.GetConstructions();
                 if(constructions != null && materialLibrary != null)
@@ -173,12 +179,18 @@ namespace SAM.Analytical
                 }
 
                 List<Panel> panels = adjacencyCluster.GetPanels();
-                if(panels != null && panels.Count > 0)
+                if(panels != null && panels.Count != 0)
                 {
                     foreach (Panel panel in panels)
                         Core.Modify.AddRange(result, panel?.Log(materialLibrary));
                 }
 
+                List<Space> spaces = adjacencyCluster.GetSpaces();
+                if(spaces != null && spaces.Count != 0)
+                {
+                    foreach (Space space in spaces)
+                        Core.Modify.AddRange(result, space?.Log(profileLibrary));
+                }
             }
 
             return result;
@@ -201,6 +213,27 @@ namespace SAM.Analytical
             
             foreach(IMaterial material in materials)
                 Core.Modify.AddRange(result, material?.Log());
+
+            return result;
+        }
+
+        public static Log Log(this ProfileLibrary profileLibrary)
+        {
+            if (profileLibrary == null)
+                return null;
+
+            Log result = new Log();
+
+            List<Profile> profiles = profileLibrary.GetProfiles();
+
+            if (profiles == null || profiles.Count == 0)
+            {
+                result.Add("Profile Library has no Materials.", LogRecordType.Message);
+                return result;
+            }
+
+            foreach (Profile profile in profiles)
+                Core.Modify.AddRange(result, profile?.Log());
 
             return result;
         }
@@ -505,6 +538,16 @@ namespace SAM.Analytical
             return result;
         }
 
+        public static Log Log(this Profile profile)
+        {
+            if (profile == null)
+                return null;
+
+            Log result = new Log();
+
+            return result;
+        }
+
         public static Log Log(this Panel panel, MaterialLibrary materialLibrary)
         {
             if (panel == null || materialLibrary == null)
@@ -595,10 +638,46 @@ namespace SAM.Analytical
                 name = "???";
             }
 
-            Point3D location = space.Location;
-            if(location == null)
-                result.Add(string.Format("{0} Space (Guid: {1}) has no location assigned.", name, space.Guid), LogRecordType.Warning);
+            InternalCondition internalCondition = space.InternalCondition;
+            if(internalCondition == null)
+                result.Add(string.Format("{0} Space (Guid: {1}) has no InternalCondition assigned.", name, space.Guid), LogRecordType.Warning);
 
+            return result;
+        }
+
+        public static Log Log(this Space space, ProfileLibrary profileLibrary)
+        {
+            if (space == null || profileLibrary == null)
+                return null;
+
+            Log result = new Log();
+
+            Core.Modify.AddRange(result, space.InternalCondition?.Log(profileLibrary));
+
+            return result;
+        }
+
+        public static Log Log(this InternalCondition internalCondition, ProfileLibrary profileLibrary)
+        {
+            if (internalCondition == null || profileLibrary == null)
+                return null;
+
+            Dictionary<ProfileType, string> dictionary = internalCondition.GetProfileTypeDictionary();
+            if (dictionary == null)
+                return null;
+
+            string name = internalCondition.Name;
+            if (string.IsNullOrEmpty(name))
+                name = "???";
+
+            Log result = new Log();
+
+            foreach(KeyValuePair<ProfileType, string> keyValuePair in dictionary)
+            {
+                Profile profile = internalCondition.GetProfile(keyValuePair.Key, profileLibrary);
+                if (profile == null)
+                    result.Add(string.Format("Cannot find valid {0} profile for {1} InternalCondition (Guid: {2})", keyValuePair.Key.Text(), name, internalCondition.Guid));
+            }
 
             return result;
         }

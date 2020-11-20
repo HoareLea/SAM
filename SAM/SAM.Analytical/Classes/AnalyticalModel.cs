@@ -13,6 +13,7 @@ namespace SAM.Analytical
         private Address address;
         private AdjacencyCluster adjacencyCluster;
         private MaterialLibrary materialLibrary;
+        private ProfileLibrary profileLibrary;
 
         public AnalyticalModel(string name, string description, Location location, Address address, AdjacencyCluster adjacencyCluster)
             : base(name)
@@ -29,7 +30,7 @@ namespace SAM.Analytical
                 this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
         }
 
-        public AnalyticalModel(string name, string description, Location location, Address address, AdjacencyCluster adjacencyCluster, MaterialLibrary materialLibrary)
+        public AnalyticalModel(string name, string description, Location location, Address address, AdjacencyCluster adjacencyCluster, MaterialLibrary materialLibrary, ProfileLibrary profileLibrary)
                 : base(name)
         {
             this.description = description;
@@ -45,6 +46,9 @@ namespace SAM.Analytical
 
             if (materialLibrary != null)
                 this.materialLibrary = new MaterialLibrary(materialLibrary);
+
+            if (profileLibrary != null)
+                this.profileLibrary = new ProfileLibrary(profileLibrary);
         }
 
         public AnalyticalModel(Guid guid, string name)
@@ -76,6 +80,9 @@ namespace SAM.Analytical
 
             if (analyticalModel.materialLibrary != null)
                 materialLibrary = new MaterialLibrary(analyticalModel.materialLibrary);
+
+            if (analyticalModel.profileLibrary != null)
+                profileLibrary = new ProfileLibrary(analyticalModel.profileLibrary);
         }
 
         public AnalyticalModel(AnalyticalModel analyticalModel, AdjacencyCluster adjacencyCluster)
@@ -95,11 +102,14 @@ namespace SAM.Analytical
             if (analyticalModel.materialLibrary != null)
                 materialLibrary = new MaterialLibrary(analyticalModel.materialLibrary);
 
+            if (analyticalModel.profileLibrary != null)
+                profileLibrary = new ProfileLibrary(analyticalModel.profileLibrary);
+
             if (adjacencyCluster != null)
                 this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
         }
 
-        public AnalyticalModel(AnalyticalModel analyticalModel, AdjacencyCluster adjacencyCluster, MaterialLibrary materialLibrary)
+        public AnalyticalModel(AnalyticalModel analyticalModel, AdjacencyCluster adjacencyCluster, MaterialLibrary materialLibrary, ProfileLibrary profileLibrary)
             : base(analyticalModel)
         {
             if (analyticalModel == null)
@@ -110,6 +120,9 @@ namespace SAM.Analytical
 
             if (analyticalModel.address != null)
                 address = new Address(analyticalModel.address);
+
+            if (profileLibrary != null)
+                this.profileLibrary = new ProfileLibrary(profileLibrary);
 
             if (materialLibrary != null)
                 this.materialLibrary = new MaterialLibrary(materialLibrary);
@@ -153,6 +166,17 @@ namespace SAM.Analytical
                     return null;
 
                 return new MaterialLibrary(materialLibrary);
+            }
+        }
+
+        public ProfileLibrary ProfileLibrary
+        {
+            get
+            {
+                if (profileLibrary == null)
+                    return null;
+
+                return new ProfileLibrary(profileLibrary);
             }
         }
 
@@ -218,6 +242,17 @@ namespace SAM.Analytical
             return materialLibrary.Add(material.Clone());
         }
 
+        public bool AddProfile(Profile profile)
+        {
+            if (profile == null)
+                return false;
+
+            if (profileLibrary == null)
+                profileLibrary = new ProfileLibrary("Default Profile Libarary");
+
+            return profileLibrary.Add(profile.Clone());
+        }
+
         public void OffsetAperturesOnEdge(double distance, double tolerance = Tolerance.Distance)
         {
             adjacencyCluster?.OffsetAperturesOnEdge(distance, tolerance);
@@ -261,6 +296,9 @@ namespace SAM.Analytical
             if (jObject.ContainsKey("MaterialLibrary"))
                 materialLibrary = new MaterialLibrary(jObject.Value<JObject>("MaterialLibrary"));
 
+            if (jObject.ContainsKey("ProfileLibrary"))
+                profileLibrary = new ProfileLibrary(jObject.Value<JObject>("ProfileLibrary"));
+
             return true;
         }
 
@@ -284,6 +322,9 @@ namespace SAM.Analytical
 
             if (materialLibrary != null)
                 jObject.Add("MaterialLibrary", materialLibrary.ToJObject());
+
+            if (profileLibrary != null)
+                jObject.Add("ProfileLibrary", profileLibrary.ToJObject());
 
             return jObject;
         }

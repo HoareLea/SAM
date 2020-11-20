@@ -32,6 +32,16 @@ namespace SAM.Analytical
 
         }
 
+        public ProfileLibrary(string name, IEnumerable<Profile> profiles)
+            : base(name)
+        {
+            if(profiles != null)
+            {
+                foreach (Profile profile in profiles)
+                    Add(profile);
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
@@ -55,7 +65,22 @@ namespace SAM.Analytical
             if (profile == null)
                 return null;
 
-            return string.Format("{0}::{1}", profile.ProfileType.ToString(), profile.Name);
+            string name = profile.Name;
+            string category = profile.Category;
+
+            if (name == null && category == null)
+                return null;
+
+            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(name))
+                return string.Empty;
+            
+            if (string.IsNullOrEmpty(category))
+                return name;
+
+            if (string.IsNullOrEmpty(name))
+                return category;
+
+            return string.Format("{0}::{1}", category, name);
         }
 
         public override bool IsValid(IJSAMObject jSAMObject)
@@ -71,12 +96,49 @@ namespace SAM.Analytical
             return GetObjects<Profile>();
         }
 
-        public List<Profile> GetProfiles(ProfileType[] profileTypes)
+        public Profile GetProfile(string name, ProfileType profileType, bool includeProfileGroup = false)
+        {
+            if (string.IsNullOrEmpty(name) || profileType == ProfileType.Undefined)
+                return null;
+
+            List<Profile> profiles = GetProfiles(profileType);
+            if(profiles != null)
+            {
+                foreach(Profile profile in profiles)
+                {
+                    if (name.Equals(profile.Name))
+                        return profile;
+                }
+            }
+
+            if (!includeProfileGroup)
+                return null;
+
+
+            return null;
+        }
+        
+        public List<Profile> GetProfiles(params ProfileType[] profileTypes)
         {
             if (profileTypes == null)
                 return null;
             
             return GetObjects<Profile>()?.FindAll(x => profileTypes.Contains(x.ProfileType));
+        }
+
+        public List<Profile> GetProfiles(ProfileGroup profileGroup, bool includeProfileTypes = false)
+        {
+            if (profileGroup == ProfileGroup.Undefined)
+                return null;
+
+            List<Profile> profiles = GetObjects<Profile>();
+            if (profiles == null)
+                return null;
+
+            if (!includeProfileTypes)
+                return profiles.FindAll(x => x.ProfileGroup.Equals(profileGroup));
+
+            return profiles.FindAll(x => x.ProfileGroup.Equals(profileGroup) || Query.ProfileGroup(x.ProfileType) == profileGroup);
         }
 
         public List<Profile> GetProfiles(string text, TextComparisonType textComparisonType = TextComparisonType.Equals, bool caseSensitive = true)

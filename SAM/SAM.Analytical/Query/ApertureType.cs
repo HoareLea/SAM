@@ -14,11 +14,11 @@ namespace SAM.Analytical
             {
                 string value = (string)@object;
 
-                if (Enum.TryParse(value, out result))
+                if (System.Enum.TryParse(value, out result))
                     return result;
 
                 value = value.Replace(" ", string.Empty).ToUpper();
-                foreach (ApertureType apertureType in Enum.GetValues(typeof(ApertureType)))
+                foreach (ApertureType apertureType in System.Enum.GetValues(typeof(ApertureType)))
                 {
                     string value_Type = null;
 

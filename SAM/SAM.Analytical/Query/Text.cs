@@ -1,20 +1,12 @@
-﻿namespace SAM.Analytical
+﻿using System;
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static string Text(this PanelType panelType)
+        public static string Text(this Enum @enum)
         {
-            return Core.Query.Description(panelType);
-        }
-
-        public static string Text(this ApertureType apertureType)
-        {
-            return Core.Query.Description(apertureType);
-        }
-
-        public static string Text(this ProfileType profileType)
-        {
-            return Core.Query.Description(profileType);
+            return Core.Query.Description(@enum);
         }
     }
 }
