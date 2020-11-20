@@ -43,7 +43,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<Panel> Panels(this IEnumerable<Panel> panels, Plane plane, Construction construction = null, bool checkIntersection = true, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> Panels(this IEnumerable<Panel> panels, Plane plane, PanelType panelType = PanelType.Undefined, bool checkIntersection = true, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null || plane == null)
                 return null;
@@ -65,20 +65,10 @@ namespace SAM.Analytical
             if (polygon3Ds == null || polygon3Ds.Count == 0)
                 return null;
 
-            PanelType panelType = PanelType.Undefined;
-            if (construction != null)
-            {
-                string value;
-                if (construction.TryGetValue(ConstructionParameter.DefaultPanelType, out value))
-                    panelType = Query.PanelType(value, false);
-            }
-
-            if (panelType == PanelType.Undefined)
+            if(panelType == PanelType.Undefined)
                 panelType = Query.PanelType(polygon3Ds.Find(x => x != null)?.GetPlane().Normal);
 
-            if (construction == null)
-                construction = Query.DefaultConstruction(panelType);
-
+            Construction construction = Query.DefaultConstruction(panelType);
             if (construction == null)
                 return null;
 

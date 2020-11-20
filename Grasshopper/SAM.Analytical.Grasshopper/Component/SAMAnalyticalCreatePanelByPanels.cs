@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,6 +45,9 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
             inputParamManager.AddGenericParameter("_elevation", "_elevation", "Elevation or Plane", GH_ParamAccess.item);
+
+            int index = inputParamManager.AddGenericParameter("panelType_", "panelType_", "PanelType", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
         }
 
         /// <summary>
@@ -127,7 +130,19 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> panels_Result = Create.Panels(panels, plane, null, true);
+            PanelType panelType = PanelType.Undefined;
+
+            objectWrapper = null;
+            dataAccess.GetData(2, ref objectWrapper);
+            if (objectWrapper != null)
+            {
+                if (objectWrapper.Value is GH_String)
+                    panelType = Analytical.Query.PanelType(((GH_String)objectWrapper.Value).Value);
+                else
+                    panelType = Analytical.Query.PanelType(objectWrapper.Value);
+            }
+
+            List<Panel> panels_Result = Create.Panels(panels, plane, panelType, true);
 
             List<Panel> panels_Upper = new List<Panel>();
             List<Panel> panels_Lower = new List<Panel>();
