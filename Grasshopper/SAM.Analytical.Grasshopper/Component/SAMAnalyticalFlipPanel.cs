@@ -63,7 +63,7 @@ namespace SAM.Analytical.Grasshopper
             Panel panel = null;
             if (!dataAccess.GetData(0, ref panel))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Connect valid SAM Panel");
                 return;
             }
 

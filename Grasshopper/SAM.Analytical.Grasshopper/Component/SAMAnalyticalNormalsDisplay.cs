@@ -12,7 +12,7 @@ using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalNormals : GH_SAMComponent
+    public class SAMAnalyticalNormalsDisplay : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -22,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,8 +32,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalNormals()
-          : base("SAMAnalytical.Normals", "SAMAnalytical.Normals",
+        public SAMAnalyticalNormalsDisplay()
+          : base("SAMAnalytical.NormalsDisplay", "SAMAnalytical.NormalsDisplay",
               "Gets Internal Point and Normal Vector for SAM Analytical Object please connect to GH 'Vector Display' component",
               "SAM", "Analytical")
         {
