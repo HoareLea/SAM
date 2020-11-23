@@ -75,6 +75,17 @@ namespace SAM.Analytical
             }
         }
 
+        public int Count
+        {
+            get
+            {
+                if (values == null)
+                    return -1;
+
+                return values.Length;
+            }
+        }
+
         public string Category
         {
             get
