@@ -125,11 +125,22 @@ namespace SAM.Analytical
 
 
                 List<Tuple<Polygon, Panel>> tuples_Polygon = new List<Tuple<Polygon, Panel>>();
+                List<Point2D> point2Ds = new List<Point2D>(); //Snap Points
                 foreach (Tuple<double, Panel> tuple_Temp in tuples_Offset)
                 {
                     Panel panel = tuple_Temp.Item2;
 
-                    Face3D face3D = plane.Project(panel.GetFace3D());
+                    Face3D face3D = panel.GetFace3D();
+                    foreach(IClosedPlanar3D closedPlanar3D in face3D.GetEdge3Ds())
+                    {
+                        ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+                        if (segmentable3D == null)
+                            continue;
+
+                        segmentable3D.GetPoints()?.ForEach(x => Geometry.Planar.Modify.Add(point2Ds, plane.Convert(x), tolerance));
+                    }
+
+                    face3D = plane.Project(face3D);
 
                     Face2D face2D = plane.Convert(face3D);
 
@@ -175,7 +186,6 @@ namespace SAM.Analytical
                             }
                         }
 
-                        
                         if (tuples_Polygon_Contains_Unused.Count != 0)
                             tuples_Polygon_Contains = tuples_Polygon_Contains_Unused;
 
@@ -210,7 +220,7 @@ namespace SAM.Analytical
                         if (polygon_Temp.IsEmpty || !polygon_Temp.IsValid)
                             continue;
 
-                        Face3D face3D = new Face3D(plane, polygon_Temp.ToSAM());
+                        Face3D face3D = new Face3D(plane, polygon_Temp.ToSAM(point2Ds, Core.Tolerance.MicroDistance));
                         Guid guid = panel_Old.Guid;
                         if (guids.Contains(guid))
                             guid = Guid.NewGuid();

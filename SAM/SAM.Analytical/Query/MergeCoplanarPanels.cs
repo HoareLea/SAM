@@ -136,9 +136,20 @@ namespace SAM.Analytical
                 panels_Offset.Add(panel);
 
                 List<Tuple<Polygon, Panel>> tuples_Polygon = new List<Tuple<Polygon, Panel>>();
+                List<Point2D> point2Ds = new List<Point2D>(); //Snap Points
                 foreach (Panel panel_Temp in panels_Offset)
                 {
-                    Face2D face2D = plane.Convert(plane.Project(panel_Temp.GetFace3D()));
+                    Face3D face3D = panel.GetFace3D();
+                    foreach (IClosedPlanar3D closedPlanar3D in face3D.GetEdge3Ds())
+                    {
+                        ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+                        if (segmentable3D == null)
+                            continue;
+
+                        segmentable3D.GetPoints()?.ForEach(x => Geometry.Planar.Modify.Add(point2Ds, plane.Convert(x), tolerance));
+                    }
+
+                    Face2D face2D = plane.Convert(plane.Project(face3D));
 
                     //tuples_Polygon.Add(new Tuple<Polygon, Panel>(face2D.ToNTS(), panel_Temp));
                     tuples_Polygon.Add(new Tuple<Polygon, Panel>(face2D.ToNTS(tolerance), panel_Temp));
@@ -175,7 +186,7 @@ namespace SAM.Analytical
                     Polygon polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon, tolerance);
                     polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_TopologyPreservingSimplifier(polygon_Temp, tolerance);
 
-                    Face2D face2D = polygon_Temp.ToSAM(minArea, Core.Tolerance.MicroDistance);
+                    Face2D face2D = polygon_Temp.ToSAM(point2Ds, minArea, Core.Tolerance.MicroDistance);
                     if (face2D == null)
                         continue;
 

@@ -37,5 +37,34 @@ namespace SAM.Geometry.Spatial
 
             throw new NotImplementedException();
         }
+
+        public static Polygon3D Snap(this Polygon3D polygon3D, IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3Ds == null)
+                return null;
+
+            List<Point3D> point3Ds_Result = polygon3D?.GetPoints();
+            if (point3Ds == null || point3Ds_Result.Count == 0)
+                return null;
+
+            for (int j = 0; j < point3Ds_Result.Count; j++)
+            {
+                double distance = double.MaxValue;
+                foreach (Point3D point3D_Temp in point3Ds)
+                {
+                    if (point3D_Temp == null)
+                        continue;
+
+                    double distance_Temp = point3D_Temp.Distance(point3Ds_Result[j]);
+                    if (distance_Temp > 0 && distance_Temp <= tolerance && distance > distance_Temp)
+                    {
+                        point3Ds_Result[j] = point3D_Temp;
+                        distance = distance_Temp;
+                    }
+                }
+            }
+
+            return new Polygon3D(point3Ds_Result);
+        }
     }
 }
