@@ -291,8 +291,36 @@ namespace SAM.Analytical
 
                 tuples.RemoveAll(x => tuples_Face3D.Contains(x));
 
+                Face3D face3D = null;
+
+                List <Point2D> point2Ds = new List<Point2D>();
+                List<Tuple<Polygon, Panel>> tuples_Polygon = new List<Tuple<Polygon, Panel>>();
+                foreach (Tuple<Face3D, Panel> tuple_Face3D in tuples_Face3D)
+                {
+                    face3D = tuple_Face3D.Item1;
+                    foreach (IClosedPlanar3D closedPlanar3D in face3D.GetEdge3Ds())
+                    {
+                        ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+                        if (segmentable3D == null)
+                            continue;
+
+                        segmentable3D.GetPoints()?.ForEach(x => Geometry.Planar.Modify.Add(point2Ds, plane.Convert(x), tolerance));
+                    }
+
+                    tuples_Polygon.Add(new Tuple<Polygon, Panel>(plane.Convert(plane.Project(tuple_Face3D.Item1)).ToNTS(tolerance), tuple_Face3D.Item2));
+                }
+
+                face3D = tuple.Item1;
+                foreach (IClosedPlanar3D closedPlanar3D in face3D.GetEdge3Ds())
+                {
+                    ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+                    if (segmentable3D == null)
+                        continue;
+
+                    segmentable3D.GetPoints()?.ForEach(x => Geometry.Planar.Modify.Add(point2Ds, plane.Convert(x), tolerance));
+                }
+
                 Polygon polygon = plane.Convert(tuple.Item1).ToNTS(tolerance);
-                List<Tuple<Polygon, Panel>> tuples_Polygon = tuples_Face3D.ConvertAll(x => new Tuple<Polygon, Panel>(plane.Convert(plane.Project(x.Item1)).ToNTS(tolerance), x.Item2));
                 tuples_Polygon.Add(new Tuple<Polygon, Panel>(polygon, tuple.Item2));
 
                 List<Polygon> polygons = tuples_Polygon.ConvertAll(x => x.Item1).ToNTS_Polygons(tolerance);
@@ -328,13 +356,17 @@ namespace SAM.Analytical
                     if (polygon_Old.Shell.IsCCW != polygon_Simplify.Shell.IsCCW)
                         polygon_Simplify = (Polygon)polygon_Simplify.Reverse();
 
-                    Face3D face3D = plane.Convert(polygon_Simplify.ToSAM(tolerance));
-                    if (face3D == null)
+                    Face2D face2D = polygon_Simplify.ToSAM(tolerance)?.Snap(point2Ds, tolerance);
+                    if (face2D == null)
+                        continue;
+
+                    Face3D face3D_Temp = plane.Convert(face2D);
+                    if (face3D_Temp == null)
                         continue;
 
                     Plane plane_Old = panel_Old.Plane;
 
-                    face3D = plane_Old.Convert(plane_Old.Convert(face3D));
+                    face3D_Temp = plane_Old.Convert(plane_Old.Convert(face3D_Temp));
 
                     //Adding Apertures from redundant Panels
                     List<Aperture> apertures = new List<Aperture>();
@@ -354,7 +386,7 @@ namespace SAM.Analytical
                         }
                     }
 
-                    Panel panel_New = new Panel(guid, panel_Old, face3D, apertures);
+                    Panel panel_New = new Panel(guid, panel_Old, face3D_Temp, apertures);
 
                     result.Add(panel_New);
                 }
