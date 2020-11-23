@@ -105,7 +105,7 @@ namespace SAM.Analytical
                     {
                         case PanelType.Shade:
                         case PanelType.SolarPanel:
-                        case PanelType.Air:
+                        //case PanelType.Air:
                             panelType = Query.PanelType(panel.Normal);
                             switch (panelType.PanelGroup())
                             {
