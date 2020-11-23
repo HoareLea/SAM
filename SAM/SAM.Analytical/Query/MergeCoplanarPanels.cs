@@ -139,7 +139,7 @@ namespace SAM.Analytical
                 List<Point2D> point2Ds = new List<Point2D>(); //Snap Points
                 foreach (Panel panel_Temp in panels_Offset)
                 {
-                    Face3D face3D = panel.GetFace3D();
+                    Face3D face3D = panel_Temp.GetFace3D();
                     foreach (IClosedPlanar3D closedPlanar3D in face3D.GetEdge3Ds())
                     {
                         ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
