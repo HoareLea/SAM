@@ -220,7 +220,11 @@ namespace SAM.Analytical
                         if (polygon_Temp.IsEmpty || !polygon_Temp.IsValid)
                             continue;
 
-                        Face3D face3D = new Face3D(plane, polygon_Temp.ToSAM(point2Ds, Core.Tolerance.MicroDistance));
+                        Face2D face2D = polygon_Temp.ToSAM(Core.Tolerance.MicroDistance)?.Snap(point2Ds, tolerance);
+                        if (face2D == null)
+                            continue;
+
+                        Face3D face3D = new Face3D(plane, face2D);
                         Guid guid = panel_Old.Guid;
                         if (guids.Contains(guid))
                             guid = Guid.NewGuid();

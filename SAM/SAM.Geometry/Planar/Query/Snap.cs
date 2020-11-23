@@ -124,24 +124,75 @@ namespace SAM.Geometry.Planar
             if (point2Ds == null || point2Ds_Result.Count == 0)
                 return null;
 
-            for (int j = 0; j < point2Ds_Result.Count; j++)
+            point2Ds_Result = Snap(point2Ds_Result, point2Ds, tolerance);
+            if (point2Ds_Result == null)
+                return null;
+
+            return new Polygon2D(point2Ds_Result);
+        }
+
+        public static Face2D Snap(this Face2D face2D, IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point2Ds == null)
+                return null;
+
+            IClosed2D externalEdge = face2D?.ExternalEdge2D;
+            if (externalEdge == null || !(externalEdge is ISegmentable2D))
+                return null;
+
+            List<Point2D> point2Ds_Edge = Snap(((ISegmentable2D)externalEdge).GetPoints(), point2Ds, tolerance);
+            if (point2Ds_Edge == null)
+                return null;
+
+            externalEdge = new Polygon2D(point2Ds_Edge);
+
+            List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
+            if(internalEdges != null)
+            {
+                
+                for(int i =0; i < internalEdges.Count; i++)
+                {
+                    if (externalEdge == null || !(externalEdge is ISegmentable2D))
+                        continue;
+
+                    point2Ds_Edge = Snap(((ISegmentable2D)internalEdges[i]).GetPoints(), point2Ds, tolerance);
+                    if (point2Ds_Edge == null)
+                        continue;
+
+                    internalEdges[i] = new Polygon2D(point2Ds_Edge);
+                }
+            }
+
+            return Face2D.Create(externalEdge, internalEdges, false);
+        }
+
+        public static List<Point2D> Snap(this IEnumerable<Point2D> point2Ds_ToBeSnapped, IEnumerable<Point2D> point2Ds_Snap, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point2Ds_Snap == null)
+                return null;
+
+            List<Point2D> result = point2Ds_ToBeSnapped?.ToList();
+            if (result == null)
+                return null;
+
+            for (int j = 0; j < result.Count; j++)
             {
                 double distance = double.MaxValue;
-                foreach (Point2D point2D_Temp in point2Ds)
+                foreach (Point2D point2D_Temp in point2Ds_Snap)
                 {
                     if (point2D_Temp == null)
                         continue;
 
-                    double distance_Temp = point2D_Temp.Distance(point2Ds_Result[j]);
+                    double distance_Temp = point2D_Temp.Distance(result[j]);
                     if (distance_Temp > 0 && distance_Temp <= tolerance && distance > distance_Temp)
                     {
-                        point2Ds_Result[j] = point2D_Temp;
+                        result[j] = point2D_Temp;
                         distance = distance_Temp;
                     }
                 }
             }
 
-            return new Polygon2D(point2Ds_Result);
+            return result;
         }
 
         /// <summary>

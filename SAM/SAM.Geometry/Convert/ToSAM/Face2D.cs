@@ -6,20 +6,13 @@ namespace SAM.Geometry
 {
     public static partial class Convert
     {
-        public static Face2D ToSAM(this Polygon polygon, double tolerance = Core.Tolerance.Distance)
-        {
-            IEnumerable<Point2D> point2Ds = null;
-            return ToSAM(polygon, point2Ds, tolerance);
-        }
-
         /// <summary>
-        /// Converts NTS Polygon to SAM Face2D and snap it to given point2Ds
+        /// Converts NTS Polygon to SAM Face2D
         /// </summary>
         /// <param name="polygon">Polygon to be converted</param>
-        /// <param name="point2Ds">Snap point2Ds result Face2D will be snapped to</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns>Face2D</returns>
-        public static Face2D ToSAM(this Polygon polygon, IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.Distance)
+        public static Face2D ToSAM(this Polygon polygon, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon == null || polygon.IsEmpty)
                 return null;
@@ -47,9 +40,6 @@ namespace SAM.Geometry
                     if (polygon2D_Temp == null || polygon2D_Temp.GetArea() < tolerance)
                         continue;
 
-                    if(point2Ds != null)
-                        polygon2D_Temp.Snap(point2Ds, tolerance);
-
                     polygon2Ds.Add(polygon2D_Temp);
                 }
             }
@@ -57,21 +47,14 @@ namespace SAM.Geometry
             return Face2D.Create(polygon2D, polygon2Ds, true);
         }
 
-        public static Face2D ToSAM(this Polygon polygon, double minArea, double tolerance = Core.Tolerance.Distance)
-        {
-            IEnumerable<Point2D> point2Ds = null;
-            return ToSAM(polygon, point2Ds, minArea, tolerance);
-        }
-
         /// <summary>
-        /// Converts NTS Polygon to SAM Face2D and snap it to given point2Ds
+        /// Converts NTS Polygon to SAM Face2D
         /// </summary>
         /// <param name="polygon">Polygon to be converted</param>
-        /// <param name="point2Ds">Snap point2Ds result Face2D will be snapped to</param>
         /// <param name="minArea">Minimal area of the edge loop</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns>Face2D</returns>
-        public static Face2D ToSAM(this Polygon polygon, IEnumerable<Point2D> point2Ds, double minArea, double tolerance = Core.Tolerance.Distance)
+        public static Face2D ToSAM(this Polygon polygon, double minArea, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon == null || polygon.IsEmpty)
                 return null;
@@ -98,9 +81,6 @@ namespace SAM.Geometry
                     Polygon2D polygon2D_Temp = linearRing_Temp.ToSAM(tolerance);
                     if (polygon2D_Temp == null || polygon2D_Temp.GetArea() < minArea)
                         continue;
-
-                    if (point2Ds != null)
-                        polygon2D_Temp.Snap(point2Ds, tolerance);
 
                     polygon2Ds.Add(polygon2D_Temp);
                 }
