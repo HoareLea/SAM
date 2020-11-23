@@ -19,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -105,7 +105,8 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Objects", "Objects", "Objects", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "In", "In", "In", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Out", "Out", "Out", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -146,18 +147,27 @@ namespace SAM.Core.Grasshopper
             //        Menu_AppendItem(menu, value, Menu_Changed, true, value.Equals(this.value)).Tag = value;
             //}
 
-            List<SAMObject> result = new List<SAMObject>();
+            List<SAMObject> result_In = new List<SAMObject>();
+            List<SAMObject> result_Out = new List<SAMObject>();
             foreach (SAMObject sAMObject in sAMObjects)
             {
                 string name = null;
                 if (!Core.Query.TryGetValue(sAMObject, "Name", out name))
+                {
+                    result_Out.Add(sAMObject);
                     continue;
+                }
 
-                if (value.Equals(name))
-                    result.Add(sAMObject);
+                if (!value.Equals(name))
+                {
+                    result_Out.Add(sAMObject);
+                    continue;
+                }
+                result_In.Add(sAMObject);
             }
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
+            dataAccess.SetDataList(0, result_In.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
+            dataAccess.SetDataList(1, result_Out.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
         }
     }
 }
