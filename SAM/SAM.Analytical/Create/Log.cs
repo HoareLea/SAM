@@ -245,9 +245,18 @@ namespace SAM.Analytical
 
             Log result = new Log();
 
+            string name = construction.Name;
+            if (string.IsNullOrEmpty(name))
+            {
+                result.Add(string.Format("apertureConstruction (Guid: {1}) has no name.", name, construction.Guid), LogRecordType.Warning);
+                name = "???";
+            }
+
             List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
                 Core.Modify.AddRange(result, constructionLayers?.Log(construction.Name, construction.Guid));
+            else
+                result.Add(string.Format("{0} Construction (Guid: {1}) has no ConstructionLayers.", name, construction.Guid), LogRecordType.Warning);
 
             return result;
         }
@@ -284,15 +293,26 @@ namespace SAM.Analytical
 
             Log result = new Log();
 
+            string name = apertureConstruction.Name;
+            if (string.IsNullOrEmpty(name))
+            {
+                result.Add(string.Format("apertureConstruction (Guid: {1}) has no name.", name, apertureConstruction.Guid), LogRecordType.Warning);
+                name = "???";
+            }
+
             List<ConstructionLayer> constructionLayers = null;
 
             constructionLayers = apertureConstruction?.PaneConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
                 Core.Modify.AddRange(result, constructionLayers?.Log(apertureConstruction.Name, apertureConstruction.Guid));
+            else
+                result.Add(string.Format("{0} ApertureConstruction (Guid: {1}) has no Pane ConstructionLayers.", name, apertureConstruction.Guid), LogRecordType.Warning);
 
             constructionLayers = apertureConstruction?.FrameConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
                 Core.Modify.AddRange(result, constructionLayers?.Log(apertureConstruction.Name, apertureConstruction.Guid));
+            else
+                result.Add(string.Format("{0} ApertureConstruction (Guid: {1}) has no Frame ConstructionLayers.", name, apertureConstruction.Guid), LogRecordType.Warning);
 
             return result;
         }
