@@ -293,7 +293,7 @@ namespace SAM.Analytical
 
                 Face3D face3D = null;
 
-                List <Point2D> point2Ds = new List<Point2D>();
+                List <Point2D> point2Ds = new List<Point2D>(); //Snap Points <- New Face3Ds will be snapped to these points
                 List<Tuple<Polygon, Panel>> tuples_Polygon = new List<Tuple<Polygon, Panel>>();
                 foreach (Tuple<Face3D, Panel> tuple_Face3D in tuples_Face3D)
                 {
