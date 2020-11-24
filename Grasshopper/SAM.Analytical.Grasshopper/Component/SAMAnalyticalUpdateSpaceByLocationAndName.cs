@@ -84,12 +84,10 @@ namespace SAM.Analytical.Grasshopper
             {
                 if (objectWrapper.Value is GH_Point)
                     location = ((GH_Point)objectWrapper.Value).Value.ToSAM();
-                else if(objectWrapper.Value is GH_Point3D)
+                else if (objectWrapper.Value is GH_Point3D)
                     location = ((GH_Point3D)objectWrapper.Value).ToSAM();
-                else if(objectWrapper.Value is GooSAMGeometry)
-                {
-                    //location = (GooSAMGeometry)(objectWrapper.Value) as Point3D;
-                }
+                else if (objectWrapper.Value is GooSAMGeometry)
+                    location = ((GooSAMGeometry)objectWrapper.Value).Value as Point3D;
             }
 
             if (name == null)
