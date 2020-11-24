@@ -81,6 +81,8 @@ namespace SAM.Analytical
             Shell shell = null;
 
             Dictionary<Panel, Vector3D> dictionary = adjacencyCluster.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
+            if (dictionary == null)
+                return null;
 
             List<Panel> result = new List<Panel>();
             foreach (KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
