@@ -9,6 +9,7 @@ namespace SAM.Analytical
         /// Update panels (plane) normals to point out outside direction
         /// </summary>
         /// <param name="adjacencyCluster">SAM AdjacencyCluster</param>
+        /// <param name="includeApertures">Update normals for Apertures</param>
         /// <param name="silverSpacing">Silver Spacing Tolerance</param>
         /// <param name="tolerance">Distance tolerance</param>
         /// <returns></returns>
