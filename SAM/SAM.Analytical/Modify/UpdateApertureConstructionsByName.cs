@@ -20,6 +20,7 @@ namespace SAM.Analytical
                 if (apertures == null || apertures.Count == 0)
                     continue;
 
+                bool updated = false;
                 foreach(Aperture aperture in apertures)
                 {
                     string name = aperture?.ApertureConstruction?.Name;
@@ -39,10 +40,19 @@ namespace SAM.Analytical
                     if (apertureConstruction == null)
                         continue;
 
+                    if(!updated)
+                    {
+                        updated = true;
+                        panel = new Panel(panel);
+                    }
+
                     panel.RemoveAperture(aperture.Guid);
                     Aperture aperture_New = new Aperture(aperture, apertureConstruction);
                     panel.AddAperture(aperture_New);
                 }
+
+                if (updated)
+                    panels[i] = panel;
             }
             return result;
         }
@@ -188,6 +198,7 @@ namespace SAM.Analytical
                 if (apertures == null || apertures.Count == 0)
                     continue;
 
+                bool updated = false;
                 foreach (Aperture aperture in apertures)
                 {
                     string name = aperture?.ApertureConstruction?.Name;
@@ -230,10 +241,19 @@ namespace SAM.Analytical
                     if (apertureConstruction == null)
                         continue;
 
+                    if (!updated)
+                    {
+                        updated = true;
+                        panel = new Panel(panel);
+                    }
+
                     panel.RemoveAperture(aperture.Guid);
                     Aperture aperture_New = new Aperture(aperture, apertureConstruction);
                     panel.AddAperture(aperture_New);
                 }
+
+                if (updated)
+                    panels[i] = panel;
             }
             return result;
         }

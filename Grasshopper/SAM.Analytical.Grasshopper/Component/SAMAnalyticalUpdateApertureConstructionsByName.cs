@@ -93,10 +93,10 @@ namespace SAM.Analytical.Grasshopper
                     List <Panel> panels_Temp = adjacencyCluster.GetPanels();
                     if(panels_Temp != null)
                     {
-                        adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
+                        adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
                         apertureConstructionLibrary_Temp = Analytical.Modify.UpdateApertureConstructionsByName(panels_Temp, apertureConstructionLibrary);
-                        foreach(Panel panel in panels_Temp)
-                            adjacencyCluster.AddObject(panel);
+                        foreach(Panel panel_Temp in panels_Temp)
+                            adjacencyCluster.AddObject(panel_Temp);
                     }
 
                     result.Add(adjacencyCluster);
