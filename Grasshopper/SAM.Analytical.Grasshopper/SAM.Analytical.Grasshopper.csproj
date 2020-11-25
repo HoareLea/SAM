@@ -115,6 +115,7 @@
     <Compile Include="Component\SAMAnalyticalCopyConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalFlipPanel.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultProfileLibrary.cs" />
+    <Compile Include="Component\SAMAnalyticalPanelTypeByText.cs" />
     <Compile Include="Component\SAMAnalyticalMapInternalCondtions.cs" />
     <Compile Include="Component\SAMAnalyticalCreateDegreeOfActivityByTemperature.cs" />
     <Compile Include="Component\SAMAnalyticalGetSortedKeys.cs" />
