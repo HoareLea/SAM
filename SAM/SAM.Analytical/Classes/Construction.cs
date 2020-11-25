@@ -81,6 +81,11 @@ namespace SAM.Analytical
             }
         }
 
+        public bool HasConstructionLayers()
+        {
+            return constructionLayers != null && constructionLayers.Count != 0;
+        }
+
         public double GetThickness()
         {
             if (constructionLayers == null || constructionLayers.Count == 0)
