@@ -86,7 +86,7 @@ namespace SAM.Analytical.Grasshopper
             if (!dataAccess.GetData(3, ref pane))
                 pane = true;
 
-            ApertureConstruction result = apertureConstruction_Destination;
+            ApertureConstruction result = new ApertureConstruction(apertureConstruction_Destination);
 
             if (frame)
                 result = new ApertureConstruction(result, result.PaneConstructionLayers, apertureConstruction_Source.FrameConstructionLayers);

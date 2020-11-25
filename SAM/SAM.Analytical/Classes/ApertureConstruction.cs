@@ -36,12 +36,8 @@ namespace SAM.Analytical
              : base(guid, name)
         {
             this.apertureType = apertureType;
-
-            if (paneConstructionLayers != null)
-                this.paneConstructionLayers = new List<ConstructionLayer>(paneConstructionLayers);
-
-            if (frameConstructionLayers != null)
-                this.frameConstructionLayers = new List<ConstructionLayer>(frameConstructionLayers);
+            this.paneConstructionLayers = paneConstructionLayers?.ToList().ConvertAll(x => new ConstructionLayer(x));
+            this.frameConstructionLayers = frameConstructionLayers?.ToList().ConvertAll(x => new ConstructionLayer(x));
         }
 
         public ApertureConstruction(ApertureConstruction apertureConstruction)
@@ -71,10 +67,7 @@ namespace SAM.Analytical
         {
             get
             {
-                if (frameConstructionLayers == null)
-                    return null;
-
-                return frameConstructionLayers.ConvertAll(x => new ConstructionLayer(x));
+                return frameConstructionLayers?.ConvertAll(x => new ConstructionLayer(x));
             }
         }
 
@@ -82,10 +75,7 @@ namespace SAM.Analytical
         {
             get
             {
-                if (paneConstructionLayers == null)
-                    return null;
-
-                return paneConstructionLayers.ConvertAll(x => new ConstructionLayer(x));
+                return paneConstructionLayers?.ConvertAll(x => new ConstructionLayer(x));
             }
         }
 

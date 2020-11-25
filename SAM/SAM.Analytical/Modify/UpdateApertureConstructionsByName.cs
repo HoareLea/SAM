@@ -33,7 +33,7 @@ namespace SAM.Analytical
                         if (apertureConstruction == null)
                             continue;
 
-                        result.Add(apertureConstruction);
+                        result.Add(new ApertureConstruction(apertureConstruction));
                     }
 
                     if (apertureConstruction == null)
@@ -68,7 +68,7 @@ namespace SAM.Analytical
                     if (apertureConstruction == null)
                         continue;
 
-                    result.Add(apertureConstruction);
+                    result.Add(new ApertureConstruction(apertureConstruction));
                 }
 
                 if (apertureConstruction == null)
@@ -139,7 +139,7 @@ namespace SAM.Analytical
                             continue;
 
                         if (name_Destination.Equals(name_Template))
-                            apertureConstruction = apertureConstruction_Temp;
+                            apertureConstruction = new ApertureConstruction(apertureConstruction_Temp);
                         else
                             apertureConstruction = new ApertureConstruction(apertureConstruction_Temp, name_Destination);
 
@@ -220,7 +220,7 @@ namespace SAM.Analytical
                             continue;
 
                         if (name_Destination.Equals(name_Template))
-                            apertureConstruction = apertureConstruction_Temp;
+                            apertureConstruction = new ApertureConstruction(apertureConstruction_Temp);
                         else
                             apertureConstruction = new ApertureConstruction(apertureConstruction_Temp, name_Destination);
 
@@ -292,7 +292,7 @@ namespace SAM.Analytical
                         continue;
 
                     if (name_Destination.Equals(name_Template))
-                        apertureConstruction = apertureConstruction_Temp;
+                        apertureConstruction = new ApertureConstruction(apertureConstruction_Temp);
                     else
                         apertureConstruction = new ApertureConstruction(apertureConstruction_Temp, name_Destination);
 
