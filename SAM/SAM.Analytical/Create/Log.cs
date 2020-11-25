@@ -94,11 +94,18 @@ namespace SAM.Analytical
                 }
 
                 if(panels_Space.Count < 4)
-                    result.Add("Space {0} (Guid: {1}) has less than 4 panels.", LogRecordType.Warning, space.Name, space.Guid);
+                    result.Add("Space {0} (Guid: {1}) has less than 4 panels.", LogRecordType.Message, space.Name, space.Guid);
 
                 Panel panel_Floor = panels_Space.Find(x => Query.PanelGroup(x.PanelType) == PanelGroup.Floor);
                 if(panel_Floor == null)
-                    result.Add("Space {0} (Guid: {1}) has no floor panels.", LogRecordType.Warning, space.Name, space.Guid);
+                {
+                    Panel panel_Air = panels_Space.Find(x => x.PanelType == PanelType.Air);
+                    if (panel_Air != null)
+                        result.Add("Space {0} (Guid: {1}) has no floor panels but has air panels.", LogRecordType.Message, space.Name, space.Guid);
+                    else
+                        result.Add("Space {0} (Guid: {1}) has no floor panels and air panels.", LogRecordType.Message, space.Name, space.Guid);
+                }
+                    
 
                 foreach(Panel panel in panels_Space)
                 {
@@ -279,7 +286,7 @@ namespace SAM.Analytical
                 if(!double.IsNaN(thickness_ConstructionLayers))
                 {
                     if(System.Math.Abs(thickness - thickness_ConstructionLayers) > Tolerance.MacroDistance)
-                        result.Add(string.Format("Parameter {0} in {1} Construction (Guid: {2}) has different value ({3}) than thickness of its ConstructionLayers ({4})", ConstructionParameter.DefaultThickness.Name(), construction.Name, construction.Guid, thickness, thickness_ConstructionLayers), LogRecordType.Warning);
+                        result.Add(string.Format("Parameter {0} in {1} Construction (Guid: {2}) has different value ({3}) than thickness of its ConstructionLayers ({4})", ConstructionParameter.DefaultThickness.Name(), construction.Name, construction.Guid, thickness, thickness_ConstructionLayers), LogRecordType.Message);
                 }
             }
 
