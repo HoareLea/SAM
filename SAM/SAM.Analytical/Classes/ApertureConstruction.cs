@@ -89,6 +89,16 @@ namespace SAM.Analytical
             }
         }
 
+        public bool HasFrameConstructionLayers()
+        {
+            return frameConstructionLayers != null && frameConstructionLayers.Count != 0;
+        }
+
+        public bool HasPaneConstructionLayers()
+        {
+            return paneConstructionLayers != null && paneConstructionLayers.Count != 0;
+        }
+
         public ApertureType ApertureType
         {
             get
