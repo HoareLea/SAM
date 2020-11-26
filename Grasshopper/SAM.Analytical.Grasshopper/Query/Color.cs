@@ -132,6 +132,10 @@
                 case PanelType.WallInternal:
                     color = System.Drawing.ColorTranslator.FromHtml("#008000");
                     break;
+
+                case PanelType.Air:
+                    color = System.Drawing.ColorTranslator.FromHtml("#FFFF00");
+                    break;
             }
 
             return color;
