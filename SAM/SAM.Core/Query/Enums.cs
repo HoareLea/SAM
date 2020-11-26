@@ -21,7 +21,7 @@ namespace SAM.Core
                 if (!keyValuePair.Value.IsValid(type))
                     continue;
 
-                foreach (Enum @enum in Enum.GetValues(keyValuePair.Key))
+                foreach (Enum @enum in System.Enum.GetValues(keyValuePair.Key))
                 {
                     if (@enum.ToString().Equals(value))
                     {
@@ -60,7 +60,7 @@ namespace SAM.Core
                 if (!keyValuePair.Value.IsValid(type))
                     continue;
 
-                foreach (Enum @enum in Enum.GetValues(keyValuePair.Key))
+                foreach (Enum @enum in System.Enum.GetValues(keyValuePair.Key))
                 {
                     ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
                     if (parameterProperties == null)

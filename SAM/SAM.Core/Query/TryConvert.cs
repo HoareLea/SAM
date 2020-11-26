@@ -345,7 +345,7 @@ namespace SAM.Core
 
                     Type type = result.GetType();
 
-                    Array array = Enum.GetValues(type);
+                    Array array = System.Enum.GetValues(type);
                     if(array != null)
                     {
                         foreach(Enum @enum in array)
@@ -361,7 +361,7 @@ namespace SAM.Core
                     int @int;
                     if(int.TryParse(@string, out @int))
                     {
-                        if(Enum.IsDefined(type, @int))
+                        if(System.Enum.IsDefined(type, @int))
                         {
                             result = (T)(object)@int;
                             return true;
@@ -371,7 +371,7 @@ namespace SAM.Core
                 else if (@object is int)
                 {
                     int @int = default;
-                    if (Enum.IsDefined(result.GetType(), @int))
+                    if (System.Enum.IsDefined(result.GetType(), @int))
                     {
                         result = (T)(object)@int;
                         return true;
@@ -380,7 +380,7 @@ namespace SAM.Core
                 else if (IsNumeric(@object))
                 {
                     int @int = System.Convert.ToInt32(@object);
-                    if (Enum.IsDefined(result.GetType(), @int))
+                    if (System.Enum.IsDefined(result.GetType(), @int))
                     {
                         result = (T)(object)@int;
                         return true;

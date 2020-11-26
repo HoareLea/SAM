@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SAM.Analytical
+namespace SAM.Core
 {
     public static partial class Query
     {
@@ -23,7 +23,7 @@ namespace SAM.Analytical
 
             foreach (T @enum in array)
             {
-                text_Temp = @enum.Text();
+                text_Temp = @enum.Description();
                 texts.Add(text_Temp);
                 if (text_Temp.Equals(text))
                     return @enum;

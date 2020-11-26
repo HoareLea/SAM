@@ -155,7 +155,6 @@
     <Compile Include="Query\Grid.cs" />
     <Compile Include="Query\InRange.cs" />
     <Compile Include="Query\Intersect.cs" />
-    <Compile Include="Query\Enum.cs" />
     <Compile Include="Query\ProfileGroup.cs" />
     <Compile Include="Query\Profiles.cs" />
     <Compile Include="Query\UpdateHeatTransferCoefficients.cs" />

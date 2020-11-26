@@ -98,7 +98,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return Query.Enum<ProfileType>(category);
+                return Core.Query.Enum<ProfileType>(category);
             }
         }
 
@@ -106,7 +106,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return Query.Enum<ProfileGroup>(category);
+                return Core.Query.Enum<ProfileGroup>(category);
             }
         }
 
