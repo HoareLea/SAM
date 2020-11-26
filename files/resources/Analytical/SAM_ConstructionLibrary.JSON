@@ -1,6 +1,6 @@
 {
   "_type": "SAM.Analytical.ConstructionLibrary,SAM.Analytical",
-  "Name": "Default SAM Construction Library ver00",
+  "Name": "Default SAM Construction Library ver01",
   "Guid": "127ece3e-4796-4736-a7b3-57a0d164f509",
   "Objects": [
     {
@@ -71,16 +71,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "CurtainWall"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 128,
-                  "Green": 192,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -115,16 +106,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "Floor"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 162,
-                  "Green": 82,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -164,16 +146,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "FloorExposed"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 64,
-                  "Green": 180,
-                  "Blue": 255
-                }
+            }
           ]
         }
       ],
@@ -213,16 +186,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "FloorInternal"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 128,
-                  "Green": 255,
-                  "Blue": 255
-                }
+            }
           ]
         }
       ],
@@ -277,16 +241,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "FloorRaised"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 0,
-                  "Green": 0,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -315,7 +270,7 @@
     },
     {
       "_type": "SAM.Analytical.Construction,SAM.Analytical",
-      "Name": "SIM_EXT_SLD_Roof DA01",
+      "Name": "SIM_EXT_SLD_Roof",
       "Guid": "6ebe9f3b-b20d-4583-a5db-3f17d8106016",
       "ParameterSets": [
         {
@@ -326,16 +281,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "Roof"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 128,
-                  "Green": 0,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -369,6 +315,81 @@
     },
     {
       "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ_Roof",
+      "Guid": "030ad3d0-794c-4e6f-a6f9-6ae5527f0c94",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "Roof"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
+          "Thickness": 0.006
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar0UP_Air__12mm_3.168W/m2K",
+          "Thickness": 0.12
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9",
+          "Thickness": 0.006
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_EXT_GRD_Roof",
+      "Guid": "7f88fa6a-5b2e-45b7-8dc4-c6b51be11479",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "UndergroundCeiling"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Plasterboard_900kg/m3_0.21W/mK",
+          "Thickness": 0.0095
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I00_Glass Fibre Insulation_11.998kg/m3_0.038W/mK",
+          "Thickness": 0.16
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Concrete Block_1842.12kg/m3_1.315W/mK",
+          "Thickness": 0.23
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Notional/Reference Soil_1250kg/m3_1.5W/mK",
+          "Thickness": 1.0
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
       "Name": "SIM_EXT_SHD",
       "Guid": "4acfae60-42c4-4b00-ba12-bc0329987b51",
       "ParameterSets": [
@@ -380,16 +401,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "Shade"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 255,
-                  "Green": 180,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -414,16 +426,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "SlabOnGrade"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 255,
-                  "Green": 150,
-                  "Blue": 100
-                }
+            }
           ]
         }
       ],
@@ -463,16 +466,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "SolarPanel"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 0,
-                  "Green": 0,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -497,16 +491,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "Undefined"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 255,
-                  "Green": 180,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -531,16 +516,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "UndergroundCeiling"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 64,
-                  "Green": 128,
-                  "Blue": 128
-                }
+            }
           ]
         }
       ],
@@ -580,16 +556,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "UndergroundSlab"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 255,
-                  "Green": 150,
-                  "Blue": 100
-                }
+            }
           ]
         }
       ],
@@ -629,16 +596,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "UndergroundWall"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 165,
-                  "Green": 82,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -678,16 +636,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "Wall"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 255,
-                  "Green": 180,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -742,16 +691,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "WallExternal"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 255,
-                  "Green": 180,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -806,16 +746,7 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "WallInternal"
-            },
-              {
-                "Name": "Color",
-                "Value": {
-                  "_type": "SAM.Core.SAMColor,SAM.Core",
-                  "Alpha": 0,
-                  "Red": 0,
-                  "Green": 128,
-                  "Blue": 0
-                }
+            }
           ]
         }
       ],
@@ -839,6 +770,81 @@
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
           "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
           "Thickness": 0.0125
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_INT_SLD_Core",
+      "Guid": "625d9ed6-64fa-4877-bb56-b84ba118c901",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "WallInternal"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "F00_WhitePaint_0.1kg/m3_999W/mK",
+          "Thickness": 0.0001
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
+          "Thickness": 0.0125
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar90Up_Air__50mm_1.25W/m2K",
+          "Thickness": 0.05
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C01_Plasterboard_700kg/m3_0.21W/mK",
+          "Thickness": 0.0125
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.Construction,SAM.Analytical",
+      "Name": "SIM_INT_GLZ",
+      "Guid": "625d9ed6-64fa-4877-bb56-b84ba118c902",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "WallInternal"
+            }
+          ]
+        }
+      ],
+      "ConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
+          "Thickness": 0.006
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ag90UP_Argon__12mm_1.403W/m2K",
+          "Thickness": 0.012
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Roof Lit Glazing Outer Pane_6mm_g0.58_Lt0.67",
+          "Thickness": 0.006
         }
       ]
     }
