@@ -71,7 +71,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "CurtainWall"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 128,
+                  "Green": 192,
+                  "Blue": 0
+                }
           ]
         }
       ],
@@ -106,7 +115,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "Floor"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 162,
+                  "Green": 82,
+                  "Blue": 0
+                }
           ]
         }
       ],
@@ -146,7 +164,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "FloorExposed"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 64,
+                  "Green": 180,
+                  "Blue": 255
+                }
           ]
         }
       ],
@@ -186,7 +213,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "FloorInternal"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 128,
+                  "Green": 255,
+                  "Blue": 255
+                }
           ]
         }
       ],
@@ -241,7 +277,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "FloorRaised"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 0,
+                  "Green": 0,
+                  "Blue": 0
+                }
           ]
         }
       ],
@@ -281,7 +326,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "Roof"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 128,
+                  "Green": 0,
+                  "Blue": 0
+                }
           ]
         }
       ],
@@ -326,7 +380,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "Shade"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 255,
+                  "Green": 180,
+                  "Blue": 0
+                }
           ]
         }
       ],
@@ -351,7 +414,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "SlabOnGrade"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 255,
+                  "Green": 150,
+                  "Blue": 100
+                }
           ]
         }
       ],
@@ -391,7 +463,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "SolarPanel"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 0,
+                  "Green": 0,
+                  "Blue": 0
+                }
           ]
         }
       ],
@@ -416,7 +497,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "Undefined"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 255,
+                  "Green": 180,
+                  "Blue": 0
+                }
           ]
         }
       ],
@@ -441,7 +531,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "UndergroundCeiling"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 64,
+                  "Green": 128,
+                  "Blue": 128
+                }
           ]
         }
       ],
@@ -481,7 +580,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "UndergroundSlab"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 255,
+                  "Green": 150,
+                  "Blue": 100
+                }
           ]
         }
       ],
@@ -521,7 +629,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "UndergroundWall"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 165,
+                  "Green": 82,
+                  "Blue": 0
+                }
           ]
         }
       ],
@@ -561,7 +678,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "Wall"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 255,
+                  "Green": 180,
+                  "Blue": 0
+                }
           ]
         }
       ],
@@ -616,7 +742,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "WallExternal"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 255,
+                  "Green": 180,
+                  "Blue": 0
+                }
           ]
         }
       ],
@@ -671,7 +806,16 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "WallInternal"
-            }
+            },
+              {
+                "Name": "Color",
+                "Value": {
+                  "_type": "SAM.Core.SAMColor,SAM.Core",
+                  "Alpha": 0,
+                  "Red": 0,
+                  "Green": 128,
+                  "Blue": 0
+                }
           ]
         }
       ],

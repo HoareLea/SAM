@@ -43,7 +43,14 @@ namespace SAM.Core
         {
             get
             {
-                return ToColor().Name;
+                Color color = ToColor();
+                if (color.IsEmpty)
+                    return null;
+
+                if (!color.IsNamedColor)
+                    return null;
+
+                return color.Name;
             }
         }
 
