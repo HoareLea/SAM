@@ -340,7 +340,15 @@ namespace SAM.Analytical
             return dictionary.Values.ToList();
         }
 
-        public List<List<Space>> GetSpaces(IEnumerable<Geometry.Spatial.Point3D> point3Ds, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        /// <summary>
+        /// Gets spaces for given points
+        /// </summary>
+        /// <param name="point3Ds">Points to be checked</param>
+        /// <param name="spaceLocation"> consider points as space locatioon (if point3D is on shell of adjacent spaces take upper space)</param>
+        /// <param name="silverSpacing">Silver spacing tolerance</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>List of List of spaces</returns>
+        public List<List<Space>> GetSpaces(IEnumerable<Geometry.Spatial.Point3D> point3Ds, bool spaceLocation = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds == null)
                 return null;
@@ -368,6 +376,11 @@ namespace SAM.Analytical
             {
                 Geometry.Spatial.Point3D point3D = point3Ds.ElementAt(i);
                 List<Tuple<Space, Geometry.Spatial.Shell>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(point3D, tolerance) || x.Item2.Inside(point3D, silverSpacing, tolerance));
+                
+                //Handling cases where Space Location is on the floor
+                if (spaceLocation && tuples_Temp.Count > 1)
+                    tuples_Temp = tuples.FindAll(x => x.Item2.InRange(point3D.GetMoved(Geometry.Spatial.Vector3D.WorldZ * silverSpacing) as Geometry.Spatial.Point3D, tolerance));
+
                 result[i] = tuples_Temp?.ConvertAll(x => x.Item1);
             });
 
@@ -379,12 +392,20 @@ namespace SAM.Analytical
             return GetRelatedObjects<Space>(panel);
         }
 
-        public List<Space> GetSpaces(Geometry.Spatial.Point3D point3D, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        /// <summary>
+        /// Gets spaces for given point
+        /// </summary>
+        /// <param name="point3D">Poins to be checked</param>
+        /// <param name="spaceLocation"> consider point as space locatioon (if point3D is on shell of adjacent spaces take upper space)</param>
+        /// <param name="silverSpacing">Silver spacing tolerance</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>List of List of spaces</returns>
+        public List<Space> GetSpaces(Geometry.Spatial.Point3D point3D, bool spaceLocation = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (point3D == null)
                 return null;
 
-            return GetSpaces(new Geometry.Spatial.Point3D[] { point3D }, silverSpacing, tolerance)?.FirstOrDefault();
+            return GetSpaces(new Geometry.Spatial.Point3D[] { point3D }, spaceLocation, silverSpacing, tolerance)?.FirstOrDefault();
         }
 
         public AdjacencyCluster Filter(IEnumerable<Space> spaces)
