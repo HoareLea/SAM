@@ -51,6 +51,8 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new GooAdjacencyClusterParam(), "AdjacencyCluster", "AdjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooPanelParam(), "In", "In", "SAM Analytical Panels left in SAMAnlayticalCluster", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooPanelParam(), "Out", "Out", "SAM Analytical Panels removed from SAMAnlayticalCluster", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -79,26 +81,41 @@ namespace SAM.Analytical.Grasshopper
             adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
 
             List<Panel> panels = adjacencyCluster.GetPanels();
-            if(panels != null && panels.Count != 0)
+            List<Panel> panels_In = null;
+            List<Panel> panels_Out = null;
+            if (panels != null && panels.Count != 0)
             {
-                foreach(Panel panel in panels)
+                panels_In = new List<Panel>();
+                panels_Out = new List<Panel>();
+
+                foreach (Panel panel in panels)
                 {
                     if (panel == null)
                         continue;
 
                     double area = panel.GetArea();
                     if (area > minArea)
+                    {
+                        panels_In.Add(new Panel(panel));
                         continue;
+                    }
+                        
 
                     double thinnessRatio = panel.GetThinnessRatio();
                     if (thinnessRatio > minThinnessRatio)
+                    {
+                        panels_In.Add(new Panel(panel));
                         continue;
+                    }
 
                     adjacencyCluster.RemoveObject<Panel>(panel.Guid);
+                    panels_Out.Add(new Panel(panel));
                 }
             }
 
             dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
+            dataAccess.SetData(1, panels_In?.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetData(2, panels_Out?.ConvertAll(x => new GooPanel(x)));
         }
     }
 }
