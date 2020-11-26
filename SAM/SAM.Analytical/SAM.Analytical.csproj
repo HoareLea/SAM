@@ -72,6 +72,7 @@
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
+    <Compile Include="Classes\Emitter.cs" />
     <Compile Include="Classes\ConstructionLayer.cs" />
     <Compile Include="Classes\ApertureConstructionLibrary.cs" />
     <Compile Include="Classes\DegreeOfActivityLibrary.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Create\MaterialLibrary.cs" />
     <Compile Include="Create\DegreeOfActivity.cs" />
     <Compile Include="Create\InternalCondition.cs" />
+    <Compile Include="Create\Emitter.cs" />
     <Compile Include="Create\Panel.cs" />
     <Compile Include="Create\TransparentMaterial.cs" />
     <Compile Include="Create\OpaqueMaterial.cs" />
@@ -95,11 +97,13 @@
     <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\ApertureType.cs" />
+    <Compile Include="Enums\EmitterType.cs" />
     <Compile Include="Enums\HeatFlowDirection.cs" />
     <Compile Include="Enums\DefaultGasType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
     <Compile Include="Enums\ActivityLevel.cs" />
     <Compile Include="Enums\ProfileGroup.cs" />
+    <Compile Include="Enums\EmitterCategory.cs" />
     <Compile Include="Enums\ProfileType.cs" />
     <Compile Include="Enums\Parameter\AnalyticalModelParameter.cs" />
     <Compile Include="Enums\Parameter\PanelParameter.cs" />
@@ -142,6 +146,8 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\EmitterTypes.cs" />
+    <Compile Include="Query\EmitterCategory.cs" />
     <Compile Include="Query\Cut.cs" />
     <Compile Include="Query\DefaultPath.cs" />
     <Compile Include="Query\DefaultGasType.cs" />
