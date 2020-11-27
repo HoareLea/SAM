@@ -35,6 +35,26 @@ namespace SAM.Analytical
             category = profileGroup.Text();
         }
 
+        public Profile(string name, string category, params double[] values)
+            : base(name)
+        {
+            ProfileType profileType = category.Enum<ProfileType>();
+            if (profileType != ProfileType.Undefined)
+            {
+                this.category = profileType.Text();
+            }
+            else
+            {
+                ProfileGroup profileGroup = category.Enum<ProfileGroup>();
+                if (profileGroup != ProfileGroup.Undefined)
+                    this.category = profileGroup.Text();
+                else
+                    this.category = category;
+            }
+            
+            this.values = Core.Query.Clone(values);
+        }
+
         public Profile(string name, ProfileType profileType, params double[] values)
             : base(name)
         {
