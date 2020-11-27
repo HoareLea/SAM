@@ -1,12 +1,12 @@
 {
   "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
   "Name": "Default SAM InternalCondition Library ver00",
-  "Guid": "19e263bd-dba0-4b93-bd46-5651fb8347f6",
+  "Guid": "ecc65c27-a35a-40d7-b733-8122a0e5359d",
   "Objects": [
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "Sxx_External",
-      "Guid": "3c384af1-b5fb-458d-8b29-b19ac6eaf3ab",
+      "Guid": "081349cb-fd30-45cc-989a-48fcd228a363",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -22,11 +22,11 @@
               "Value": "OFF"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 0.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 0.0
             },
             {
@@ -80,7 +80,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S00_Unconditioned",
-      "Guid": "3a0b57bb-0e56-4234-b59e-39bbacb64bc2",
+      "Guid": "5501c9c7-ef71-42a5-8aad-98610aae9ebc",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -96,11 +96,11 @@
               "Value": "OFF"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 0.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 0.0
             },
             {
@@ -154,7 +154,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S01_Auditorium",
-      "Guid": "686fc333-4ff1-41d6-a6b7-7257b473ea85",
+      "Guid": "dbcc3039-5dc6-4cd2-9319-eb5b47960840",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -174,11 +174,11 @@
               "Value": "8to18"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 65.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 30.0
             },
             {
@@ -194,16 +194,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -240,7 +240,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S02_Bathroom",
-      "Guid": "7efb78e7-e4f0-4b47-9959-819cd0cbfe60",
+      "Guid": "ab4874cb-2a53-49ff-8237-8c2c725b601e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -256,11 +256,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -276,16 +276,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -322,7 +322,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S03_Bedroom",
-      "Guid": "99f91b6f-76a0-456e-bc8b-15be0a29f32a",
+      "Guid": "1041cdc6-5274-40ab-9a3c-1670d885ecbe",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -342,11 +342,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 67.2
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 57.8
             },
             {
@@ -362,16 +362,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "7to24"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -408,7 +408,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S04_Breakout",
-      "Guid": "ee8c6fab-9c58-46e4-a040-f5afa1ca840e",
+      "Guid": "29ff3a0d-1866-40df-9cf0-7652c7a98139",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -428,11 +428,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -448,16 +448,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 4.8
+            },
+            {
               "Name": "Lighting Level",
               "Value": 300.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -494,7 +494,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S05_CarPark",
-      "Guid": "4f81c830-918d-42f5-b973-2aa971913104",
+      "Guid": "a6b475aa-5b66-49f4-94f1-e7926d3c3fa3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -510,11 +510,11 @@
               "Value": "OFF"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 0.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 0.0
             },
             {
@@ -528,6 +528,10 @@
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Profile Name",
@@ -568,7 +572,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S06_ChangingDry",
-      "Guid": "c9d73d0a-7f05-4799-aec8-53476002337e",
+      "Guid": "28ee54d7-cd9b-4b41-892a-5e311459088e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -588,11 +592,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 70.0
             },
             {
@@ -608,16 +612,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -654,7 +658,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S07_ChangingWet",
-      "Guid": "573502a9-7a7b-4139-a3ef-49f4716a62b5",
+      "Guid": "5dbb5055-0718-4268-91bb-3300a041c2f7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -674,11 +678,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 70.0
             },
             {
@@ -694,16 +698,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -740,7 +744,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S08_Circulation",
-      "Guid": "82eef044-1778-4d49-8b4a-6a1734075e79",
+      "Guid": "0df8fa4e-950f-4731-aa78-95e45565c990",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -756,11 +760,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 70.0
             },
             {
@@ -776,16 +780,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 1.6
+            },
+            {
               "Name": "Lighting Level",
               "Value": 100.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -822,7 +826,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S10_ClassRoom",
-      "Guid": "68be890f-1d3d-41bd-9814-563b7a240572",
+      "Guid": "e76b0afe-4894-489a-be5b-e08812d137f3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -842,11 +846,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -862,16 +866,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -908,7 +912,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S11_CommonRoom",
-      "Guid": "d18a954c-0adb-4f40-bcb0-9a40e6598d65",
+      "Guid": "e5066518-61bf-4a6c-8dbe-de319741638d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -928,11 +932,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -948,16 +952,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 4.8
+            },
+            {
               "Name": "Lighting Level",
               "Value": 300.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -994,7 +998,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S12_Comms",
-      "Guid": "e7b04abb-f2c8-4bcb-aa04-ad26abc8dd52",
+      "Guid": "5265213e-fd8f-4fea-b8a3-cca61e888ba5",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1010,11 +1014,11 @@
               "Value": "OFF"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -1030,16 +1034,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 4.8
+            },
+            {
               "Name": "Lighting Level",
               "Value": 300.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "Constant"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1076,7 +1080,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S13_Copier",
-      "Guid": "4ca1b247-469c-47bb-bbfe-85b89967f59c",
+      "Guid": "c200d972-6c46-45ea-be14-f8849e1e3f32",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1092,11 +1096,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 70.0
             },
             {
@@ -1112,16 +1116,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1158,7 +1162,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S15_DomBath",
-      "Guid": "8a274ccc-3b30-40bc-ac34-b035cf31cb05",
+      "Guid": "1cc769d6-50e4-4574-956e-3f5a52b91f5c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1174,11 +1178,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -1194,16 +1198,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1240,7 +1244,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S17_DomCirculation",
-      "Guid": "7896806c-08ac-449e-925e-75ac9cf44eb6",
+      "Guid": "34bf78d0-9632-4627-b92f-4d4bb83d8784",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1256,11 +1260,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 70.0
             },
             {
@@ -1276,16 +1280,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 1.6
+            },
+            {
               "Name": "Lighting Level",
               "Value": 100.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1322,7 +1326,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S24_EatingDrinking",
-      "Guid": "d0c63d72-8c9f-4a0a-84b2-d6f3ee3853e1",
+      "Guid": "038e2e58-bc48-4cfb-b4ae-fdfbc83ffcad",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1342,11 +1346,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -1362,16 +1366,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1408,7 +1412,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S25_ElecPlant",
-      "Guid": "8faa1545-d489-4318-a134-5e0225b728ff",
+      "Guid": "f6c1eb13-880c-43d1-8400-bd31c32f0d0d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1424,11 +1428,11 @@
               "Value": "OFF"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 80.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 140.0
             },
             {
@@ -1448,16 +1452,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "Constant"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1494,7 +1498,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S27_FirstAid",
-      "Guid": "219c6a3b-059d-4b62-986f-57b460bbc2f5",
+      "Guid": "c97c1fcb-2016-498a-82dd-bd3d65b76547",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1514,11 +1518,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -1534,16 +1538,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1580,7 +1584,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S28_FitGym",
-      "Guid": "a4ca8396-c7ab-47d3-8e32-22ae05ab2c72",
+      "Guid": "76e4d5a2-0fe5-4517-b289-02caf8de62c9",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1600,11 +1604,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -1620,16 +1624,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1666,7 +1670,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S29_Foyer",
-      "Guid": "8e2c216b-1a82-413a-bc4c-a78cb2f76fe1",
+      "Guid": "7dd76426-633f-4b1b-b9a1-ee48c5a4bb53",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1686,11 +1690,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 70.0
             },
             {
@@ -1706,16 +1710,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1752,7 +1756,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S31_Kitchen",
-      "Guid": "905d39be-c94c-449e-a8cc-d7f16da934e1",
+      "Guid": "d5305cfb-3f93-429b-9b70-83f9d5920148",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1772,11 +1776,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 170.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 255.0
             },
             {
@@ -1792,16 +1796,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1838,7 +1842,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S32_Kitchenette",
-      "Guid": "b3fa2964-97b8-44bb-b7cd-52996636f9da",
+      "Guid": "23a067aa-cbf9-4dd0-a0b6-c5c060657f79",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1858,11 +1862,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -1878,16 +1882,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -1924,7 +1928,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S35_MechPlant",
-      "Guid": "52a80c7c-e5cb-483f-b3be-101032f5ab86",
+      "Guid": "0561c72c-dd91-4bd2-aaa9-fb5c9741c8f3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1940,11 +1944,11 @@
               "Value": "OFF"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 80.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 140.0
             },
             {
@@ -1960,16 +1964,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "Constant"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2006,7 +2010,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S36_Meeting",
-      "Guid": "f4b4bde6-720a-41b0-8d7b-36515e93ee4b",
+      "Guid": "a161597f-aaa2-44c1-8ff6-8785bcc768b8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2026,11 +2030,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -2046,16 +2050,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2092,7 +2096,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S39_OfficeOpen",
-      "Guid": "1cead3f9-437e-4be0-a24b-01897491e8ae",
+      "Guid": "2f8840d0-ad93-4f15-ad9c-ebfaea380f4b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2112,11 +2116,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -2132,16 +2136,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2178,7 +2182,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S37_OfficeCell",
-      "Guid": "bfe5f268-ca2d-4c7b-a638-d103a166c149",
+      "Guid": "db69aa6d-60f9-4c5d-b5e0-52868635014d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2198,11 +2202,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -2218,16 +2222,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2264,7 +2268,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S57_OfficeCellNV",
-      "Guid": "563a6739-cbef-4473-9ac7-e45e53c5fc72",
+      "Guid": "075a488b-6a65-4d98-b457-e1ade50a26ec",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2284,11 +2288,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -2304,16 +2308,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2350,7 +2354,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S46_Servery",
-      "Guid": "8e113226-7359-4dbb-87e0-49c81bf33315",
+      "Guid": "a18da55f-d02b-4c9a-b08f-5f856b141cb6",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2370,11 +2374,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 80.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 140.0
             },
             {
@@ -2390,16 +2394,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2436,7 +2440,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S47_StairsEscape",
-      "Guid": "f21783c8-ba49-49d5-907c-b9715a971291",
+      "Guid": "51d81453-decf-4335-9e6c-f22661e72f47",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2452,11 +2456,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 70.0
             },
             {
@@ -2472,16 +2476,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 2.4
+            },
+            {
               "Name": "Lighting Level",
               "Value": 150.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2518,7 +2522,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S48_Store",
-      "Guid": "53b3da27-236a-4d22-ad44-81e5a2f26bba",
+      "Guid": "93145818-56fe-4e4a-8bc1-d9b103adb21e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2534,11 +2538,11 @@
               "Value": "OFF"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 70.0
             },
             {
@@ -2554,16 +2558,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 1.6
+            },
+            {
               "Name": "Lighting Level",
               "Value": 100.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "OFF"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2600,7 +2604,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S50_Toilet",
-      "Guid": "d50bf4ee-3b5b-4b61-abf2-bf8f8adc98bd",
+      "Guid": "ec585969-96a5-4a71-b9a5-0b1930280acc",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2616,11 +2620,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -2636,16 +2640,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 3.2
+            },
+            {
               "Name": "Lighting Level",
               "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2682,7 +2686,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S52_Waste",
-      "Guid": "f0675131-37bd-4883-afe9-6d2056ff98ed",
+      "Guid": "c3503f06-6da3-40a1-b697-e2abefc5383b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2698,11 +2702,11 @@
               "Value": "OFF"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 70.0
             },
             {
@@ -2718,16 +2722,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 1.6
+            },
+            {
               "Name": "Lighting Level",
               "Value": 100.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "OFF"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2764,7 +2768,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S55_PGR",
-      "Guid": "be2e65cf-012e-46e8-b41e-8a1f035f2d1e",
+      "Guid": "1bc438d9-467c-42b3-8d98-58b07727f72e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2784,11 +2788,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -2804,16 +2808,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2850,7 +2854,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S56_AcademicStudio",
-      "Guid": "fc7b865d-fd1d-4c9f-a3a6-90e651161081",
+      "Guid": "d93c2f3f-54a6-4f31-a160-d6f94cee9e01",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2870,11 +2874,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -2890,16 +2894,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2936,7 +2940,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S54_Rehearsal",
-      "Guid": "8d41c6f8-10bd-4481-b2f8-2e7587bc1746",
+      "Guid": "922cc92a-4320-4698-8f68-f50a1469bffc",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2956,11 +2960,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 90.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 160.0
             },
             {
@@ -2976,16 +2980,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 4.8
+            },
+            {
               "Name": "Lighting Level",
               "Value": 300.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -3022,7 +3026,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S58_ClassRoomIT",
-      "Guid": "b0163f09-f0d1-4890-87d8-cc4857a64ee2",
+      "Guid": "0639f7d9-c775-4013-a6b3-456743fefabb",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3042,11 +3046,11 @@
               "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 75.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 55.0
             },
             {
@@ -3062,16 +3066,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
               "Name": "Lighting Level",
               "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
               "Value": "8to18"
-            },
-            {
-              "Name": "Lighting Efficiency",
-              "Value": 1.6
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -3108,7 +3112,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S54_Koxs",
-      "Guid": "8d55cbe7-84cb-474a-8b02-c624f44de41c",
+      "Guid": "050109e3-f8e4-467f-b61a-96550c745316",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3124,11 +3128,11 @@
               "Value": "OFF"
             },
             {
-              "Name": "Occupancy Sensible Gain",
+              "Name": "Occupancy Sensible Gain Per Person",
               "Value": 0.0
             },
             {
-              "Name": "Occupancy Latent Gain",
+              "Name": "Occupancy Latent Gain Per Person",
               "Value": 0.0
             },
             {
