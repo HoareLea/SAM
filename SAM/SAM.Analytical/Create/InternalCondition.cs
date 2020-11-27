@@ -4,7 +4,6 @@
     {
         public static InternalCondition InternalCondition(
             string name, 
-            double occupancy,
             double occupancyPerArea,
             double occupancySensibleGain,
             double occupancyLatentGain,
@@ -31,7 +30,6 @@
             InternalCondition result = new InternalCondition(name);
 
             //Occupancy
-            result.SetValue(InternalConditionParameter.Occupancy, occupancy);
             result.SetValue(InternalConditionParameter.OccupancyPerArea, occupancyPerArea);
             result.SetValue(InternalConditionParameter.OccupancySensibleGain, occupancySensibleGain);
             result.SetValue(InternalConditionParameter.OccupancyLatentGain, occupancyLatentGain);
