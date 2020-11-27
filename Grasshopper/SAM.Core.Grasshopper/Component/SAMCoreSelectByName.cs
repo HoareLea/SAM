@@ -158,7 +158,7 @@ namespace SAM.Core.Grasshopper
                     continue;
                 }
 
-                if (!value.Equals(name))
+                if (value == null || !value.Equals(name))
                 {
                     result_Out.Add(sAMObject);
                     continue;
