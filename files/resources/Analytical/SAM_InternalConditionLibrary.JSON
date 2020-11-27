@@ -1,22 +1,18 @@
 {
   "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
   "Name": "Default SAM InternalCondition Library ver00",
-  "Guid": "ecc65c27-a35a-40d7-b733-8122a0e5359d",
+  "Guid": "5435abfa-e840-499c-be6f-dd5c8c4f6724",
   "Objects": [
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "Sxx_External",
-      "Guid": "081349cb-fd30-45cc-989a-48fcd228a363",
+      "Guid": "fcbe2a8a-daae-42f8-95e9-e8b50a35567b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -80,17 +76,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S00_Unconditioned",
-      "Guid": "5501c9c7-ef71-42a5-8aad-98610aae9ebc",
+      "Guid": "5106d004-f1e0-477e-8c4a-6f66ef2d4389",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -154,17 +146,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S01_Auditorium",
-      "Guid": "dbcc3039-5dc6-4cd2-9319-eb5b47960840",
+      "Guid": "a8003549-da86-4811-ae80-75d92a74ebf3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 0.85
@@ -240,17 +228,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S02_Bathroom",
-      "Guid": "ab4874cb-2a53-49ff-8237-8c2c725b601e",
+      "Guid": "7d3ed942-6f31-45d1-a8fd-e34c8a2dcd43",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -322,17 +306,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S03_Bedroom",
-      "Guid": "1041cdc6-5274-40ab-9a3c-1670d885ecbe",
+      "Guid": "36013897-5be2-4514-9993-06eb5680fc29",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 10.0
@@ -408,17 +388,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S04_Breakout",
-      "Guid": "29ff3a0d-1866-40df-9cf0-7652c7a98139",
+      "Guid": "dfd7b314-3e90-4ded-920e-6896dced02d6",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 2.0
@@ -494,17 +470,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S05_CarPark",
-      "Guid": "a6b475aa-5b66-49f4-94f1-e7926d3c3fa3",
+      "Guid": "4b098a48-ca4c-43b3-bc8f-9f5064820306",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -572,17 +544,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S06_ChangingDry",
-      "Guid": "28ee54d7-cd9b-4b41-892a-5e311459088e",
+      "Guid": "32bb83cc-cbe0-4f76-8667-b9ed118f2c59",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 5.0
@@ -658,17 +626,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S07_ChangingWet",
-      "Guid": "5dbb5055-0718-4268-91bb-3300a041c2f7",
+      "Guid": "1f9c2d19-e741-4f5a-a206-252955d7264f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 5.0
@@ -744,17 +708,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S08_Circulation",
-      "Guid": "0df8fa4e-950f-4731-aa78-95e45565c990",
+      "Guid": "cee2c412-20fb-4856-b28c-67bf743316f3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -826,17 +786,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S10_ClassRoom",
-      "Guid": "e76b0afe-4894-489a-be5b-e08812d137f3",
+      "Guid": "37489464-e2bc-4e21-9838-fc62368ec2d2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 1.5
@@ -912,17 +868,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S11_CommonRoom",
-      "Guid": "e5066518-61bf-4a6c-8dbe-de319741638d",
+      "Guid": "8a038686-b5f0-4428-b2e2-9a6575913ecc",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 2.0
@@ -998,17 +950,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S12_Comms",
-      "Guid": "5265213e-fd8f-4fea-b8a3-cca61e888ba5",
+      "Guid": "de5809d6-8492-48e1-8db2-a123171c35d7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -1080,17 +1028,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S13_Copier",
-      "Guid": "c200d972-6c46-45ea-be14-f8849e1e3f32",
+      "Guid": "50fabf49-87be-4792-a94f-139bcb75d507",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1162,17 +1106,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S15_DomBath",
-      "Guid": "1cc769d6-50e4-4574-956e-3f5a52b91f5c",
+      "Guid": "d42f17e9-6891-480d-9183-488fb5ddb1df",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1244,17 +1184,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S17_DomCirculation",
-      "Guid": "34bf78d0-9632-4627-b92f-4d4bb83d8784",
+      "Guid": "96b2da21-3743-4a25-b20c-a81f7f384626",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1326,17 +1262,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S24_EatingDrinking",
-      "Guid": "038e2e58-bc48-4cfb-b4ae-fdfbc83ffcad",
+      "Guid": "8d2413b3-bb54-4f01-b778-c9709eab95fe",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 10.0
@@ -1412,17 +1344,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S25_ElecPlant",
-      "Guid": "f6c1eb13-880c-43d1-8400-bd31c32f0d0d",
+      "Guid": "7988f98d-5dd8-412a-8587-ec4f6673454d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -1498,17 +1426,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S27_FirstAid",
-      "Guid": "c97c1fcb-2016-498a-82dd-bd3d65b76547",
+      "Guid": "a5f47bf5-23d0-4fae-8fc6-12670e950945",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 10.0
@@ -1584,17 +1508,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S28_FitGym",
-      "Guid": "76e4d5a2-0fe5-4517-b289-02caf8de62c9",
+      "Guid": "99c6118b-29dd-44f1-9545-3ba8da4396b0",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 1.5
@@ -1670,17 +1590,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S29_Foyer",
-      "Guid": "7dd76426-633f-4b1b-b9a1-ee48c5a4bb53",
+      "Guid": "a7d667af-1b28-41cc-95bd-2026a8c8af35",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 10.0
@@ -1756,17 +1672,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S31_Kitchen",
-      "Guid": "d5305cfb-3f93-429b-9b70-83f9d5920148",
+      "Guid": "0f50d073-a398-4f2d-92b1-69752adef8b1",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 10.0
@@ -1842,17 +1754,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S32_Kitchenette",
-      "Guid": "23a067aa-cbf9-4dd0-a0b6-c5c060657f79",
+      "Guid": "69414c71-1150-4e54-b9be-47be39be8505",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 10.0
@@ -1928,17 +1836,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S35_MechPlant",
-      "Guid": "0561c72c-dd91-4bd2-aaa9-fb5c9741c8f3",
+      "Guid": "bcaa7b18-5ce9-4bec-9c04-53ab3ceaaa48",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -2010,17 +1914,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S36_Meeting",
-      "Guid": "a161597f-aaa2-44c1-8ff6-8785bcc768b8",
+      "Guid": "49ee5217-2e14-4fe2-86fd-3493e2eb0bed",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 2.0
@@ -2096,17 +1996,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S39_OfficeOpen",
-      "Guid": "2f8840d0-ad93-4f15-ad9c-ebfaea380f4b",
+      "Guid": "1eda9340-790c-4ff7-9f08-65829b570b24",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 13.3
@@ -2182,17 +2078,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S37_OfficeCell",
-      "Guid": "db69aa6d-60f9-4c5d-b5e0-52868635014d",
+      "Guid": "ac3649d6-aadd-4097-8981-244b6c815b38",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 7.5
@@ -2268,17 +2160,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S57_OfficeCellNV",
-      "Guid": "075a488b-6a65-4d98-b457-e1ade50a26ec",
+      "Guid": "ada39ddc-3aba-42ce-af93-7331439ec5d5",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 7.5
@@ -2354,17 +2242,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S46_Servery",
-      "Guid": "a18da55f-d02b-4c9a-b08f-5f856b141cb6",
+      "Guid": "5285b4be-96c6-4b2b-91fb-1f144ee92d9d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 10.0
@@ -2440,17 +2324,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S47_StairsEscape",
-      "Guid": "51d81453-decf-4335-9e6c-f22661e72f47",
+      "Guid": "44f04470-40ec-4fa0-a852-0cba630bb23e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -2522,17 +2402,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S48_Store",
-      "Guid": "93145818-56fe-4e4a-8bc1-d9b103adb21e",
+      "Guid": "f1d6fd9e-5679-49ad-bc30-40f0679581f9",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -2604,17 +2480,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S50_Toilet",
-      "Guid": "ec585969-96a5-4a71-b9a5-0b1930280acc",
+      "Guid": "511c751d-de44-41ae-bacd-84ca42b3fb88",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -2686,17 +2558,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S52_Waste",
-      "Guid": "c3503f06-6da3-40a1-b697-e2abefc5383b",
+      "Guid": "95270dfa-2611-45b2-863e-b9e047435a82",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -2768,17 +2636,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S55_PGR",
-      "Guid": "1bc438d9-467c-42b3-8d98-58b07727f72e",
+      "Guid": "b5e74b90-1636-4ece-8ef8-21a942e4eb87",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 2.0
@@ -2854,17 +2718,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S56_AcademicStudio",
-      "Guid": "d93c2f3f-54a6-4f31-a160-d6f94cee9e01",
+      "Guid": "ab4893c0-37b4-4088-8ee0-88cd063814a8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 7.0
@@ -2940,17 +2800,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S54_Rehearsal",
-      "Guid": "922cc92a-4320-4698-8f68-f50a1469bffc",
+      "Guid": "cff315c7-e6c3-4d43-bb2a-15f4cfc48f94",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 5.0
@@ -3026,17 +2882,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S58_ClassRoomIT",
-      "Guid": "0639f7d9-c775-4013-a6b3-456743fefabb",
+      "Guid": "81c72353-463a-4862-99f0-b639accb9004",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Per Area",
               "Value": 1.5
@@ -3112,17 +2964,13 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S54_Koxs",
-      "Guid": "050109e3-f8e4-467f-b61a-96550c745316",
+      "Guid": "a6f9b1ee-5542-4f6f-8f74-d636ac6ad117",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy",
-              "Value": 0.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
