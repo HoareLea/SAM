@@ -73,8 +73,22 @@ namespace SAM.Analytical.Grasshopper
                 PanelType panelType = panel.PanelType;
 
                 System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+                
+                string layerName = panel.Name;                    
+                if (string.IsNullOrWhiteSpace(layerName))
+                {
+                    if (panelType == PanelType.Air)
+                    {
+                        layerName = "Air";
+                        color = Query.Color(PanelType.Air);
+                    }
+                    else
+                    {
+                        layerName = "???";
+                    }
+                }
 
-                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Construction.Id, panel.Name, color);
+                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Construction.Id, layerName, color);
 
                 layerTable.SetCurrentLayerIndex(layer.Index, true);
 
