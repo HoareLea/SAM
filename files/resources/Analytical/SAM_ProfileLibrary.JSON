@@ -283,7 +283,7 @@
       "Guid": "3c528d32-dbf5-436b-8af0-ec225cc47309",
       "Category": "Thermostat",
       "Values": [
-        0.0
+        -50.0
       ]
     },
     {
@@ -292,7 +292,7 @@
       "Guid": "ab3e0811-03d2-4518-8d12-55bb7df2821f",
       "Category": "Thermostat",
       "Values": [
-        0.0
+        150.0
       ]
     },
     {
