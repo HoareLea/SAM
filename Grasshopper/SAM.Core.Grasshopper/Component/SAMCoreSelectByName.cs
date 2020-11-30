@@ -83,7 +83,7 @@ namespace SAM.Core.Grasshopper
             {
                 string value_New = (string)item.Tag;
 
-                if (!value.Equals(value_New))
+                if (value != value_New)
                 {
                     //Do something with panelType
                     value = value_New;
