@@ -130,6 +130,28 @@ namespace SAM.Analytical
             }
         }
 
+        public double Max
+        {
+            get
+            {
+                if (values == null)
+                    return double.NaN;
+
+                return values.Max();
+            }
+        }
+
+        public double Min
+        {
+            get
+            {
+                if (values == null)
+                    return double.NaN;
+
+                return values.Min();
+            }
+        }
+
         public double this[int index]
         {
             get
