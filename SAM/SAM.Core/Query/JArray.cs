@@ -17,6 +17,7 @@ namespace SAM.Core
             if (File.Exists(pathOrJson))
                 json = File.ReadAllText(pathOrJson);
 
+
             JToken jToken = JToken.Parse(json);
             if (jToken == null)
                 return null;

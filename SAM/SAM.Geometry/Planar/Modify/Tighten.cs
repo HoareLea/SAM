@@ -46,7 +46,6 @@ namespace SAM.Geometry.Planar
                 if (update)
                     lineStrings[i] = new LineString(coordinates);
             }
-
         }
     }
 }
