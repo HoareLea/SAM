@@ -7,6 +7,7 @@ namespace SAM.Analytical
     public enum SpaceParameter
     {
         [ParameterProperties("Design Heating Load", "Design Heating Load"), DoubleParameterValue(0)] DesignHeatingLoad,
+        [ParameterProperties("Design Cooling Load", "Design Cooling Load"), DoubleParameterValue(0)] DesignCoolingLoad,
         [ParameterProperties("Specified Exhaust Airflow", "Extract Airflow"), DoubleParameterValue(0)] ExtractAirflow,
         [ParameterProperties("Specified Supply Airflow", "Supply Airflow"), DoubleParameterValue(0)] SupplyAirflow,
         [ParameterProperties("Volume", "Volume [m3]"), DoubleParameterValue(0)] Volume,
