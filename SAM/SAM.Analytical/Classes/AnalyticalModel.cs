@@ -242,6 +242,16 @@ namespace SAM.Analytical
             return materialLibrary.Add(material.Clone());
         }
 
+        public List<Space> GetSpaces()
+        {
+            return adjacencyCluster?.GetSpaces()?.ConvertAll(x => new Space(x));
+        }
+
+        public List<Panel> GetPanels()
+        {
+            return adjacencyCluster?.GetPanels()?.ConvertAll(x => new Panel(x));
+        }
+
         public bool AddProfile(Profile profile)
         {
             if (profile == null)
