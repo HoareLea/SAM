@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Diagnostics;
+using System;
 
 namespace SAM.Core
 {
@@ -22,19 +24,46 @@ namespace SAM.Core
             if (!Directory.Exists(Path.GetDirectoryName(pathDestination)))
                 return false;
 
-            using (FileStream fileStream_Source = new FileStream(pathSource, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            try
             {
-                using (FileStream fileStream_Destination = new FileStream(pathDestination, FileMode.Create))
+                using (FileStream fileStream_Source = new FileStream(pathSource, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    var buffer = new byte[0x10000];
-                    int bytes;
+                    using (FileStream fileStream_Destination = new FileStream(pathDestination, FileMode.Create))
+                    {
+                        var buffer = new byte[0x10000];
+                        int bytes;
 
-                    while ((bytes = fileStream_Source.Read(buffer, 0, buffer.Length)) > 0)
-                        fileStream_Destination.Write(buffer, 0, bytes);
+                        while ((bytes = fileStream_Source.Read(buffer, 0, buffer.Length)) > 0)
+                            fileStream_Destination.Write(buffer, 0, bytes);
+                    }
                 }
+
+                return true;
+            }
+            catch(Exception exception)
+            {
+                try
+                {
+                    using (Process process = new Process())
+                    {
+                        process.StartInfo.UseShellExecute = false;
+                        process.StartInfo.RedirectStandardOutput = true;
+                        process.StartInfo.FileName = "cmd.exe";
+                        process.StartInfo.Arguments = string.Format("/C copy \"{0}\" \"{1}\"", pathSource, pathDestination);
+                        process.Start();
+                        process.WaitForExit();
+                        process.Close();
+                    }
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+
             }
 
-            return true;
+            return false;
         }
     }
 }
