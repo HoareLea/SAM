@@ -21,6 +21,11 @@ namespace SAM.Core
             parameterSets = integerId.parameterSets?.Clone();
         }
 
+        public IntegerId(JObject jObject)
+        {
+            FromJObject(jObject);
+        }
+
         public int Id
         {
             get
