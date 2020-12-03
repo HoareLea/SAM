@@ -149,7 +149,8 @@ namespace SAM.Analytical.Grasshopper
                     
                 if(panel.HasApertures)
                 {
-                    foreach(Aperture aperture in panel.Apertures)
+                    panel = new Panel(panel);
+                    foreach (Aperture aperture in panel.Apertures)
                     {
                         Aperture aperture_Old = panel.GetAperture(aperture.Guid);
                         if (aperture_Old == null)
