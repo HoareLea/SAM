@@ -85,6 +85,21 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Contains(IJSAMObject jSAMObject)
+        {
+            if (jSAMObject == null || objects == null)
+                return false;
+
+            if (!IsValid(jSAMObject))
+                return false;
+
+            string uniqueId = GetUniqueId(jSAMObject);
+            if (uniqueId == null)
+                return false;
+
+            return objects.ContainsKey(uniqueId);
+        }
+
         public bool Update(IJSAMObject jSAMObject)
         {
             if (jSAMObject == null)

@@ -111,6 +111,44 @@ namespace SAM.Analytical
             return result;
         }
 
+        public static IEnumerable<IMaterial> Materials(this ApertureConstruction apertureConstruction, MaterialLibrary materialLibrary, MaterialType materialType = Core.MaterialType.Undefined)
+        {
+            if (apertureConstruction == null || materialLibrary == null)
+                return null;
+
+            List<ConstructionLayer> constructionLayers = null;
+            List<ConstructionLayer> constructionLayers_Temp = null;
+
+            constructionLayers_Temp = apertureConstruction.PaneConstructionLayers;
+            if (constructionLayers_Temp != null)
+                constructionLayers = constructionLayers_Temp;
+
+            constructionLayers_Temp = apertureConstruction.FrameConstructionLayers;
+            if (constructionLayers_Temp != null)
+            {
+                if (constructionLayers == null)
+                    constructionLayers = new List<ConstructionLayer>();
+
+                constructionLayers.AddRange(constructionLayers_Temp);
+            }
+
+            if (constructionLayers == null)
+                return null;
+
+            List<IMaterial> result = new List<IMaterial>();
+            foreach (ConstructionLayer constructionLayer in constructionLayers)
+            {
+                Material material = constructionLayer.Material(materialLibrary) as Material;
+                if (material != null)
+                {
+                    if (materialType == Core.MaterialType.Undefined || materialType == material.MaterialType)
+                        result.Add(material);
+                }
+            }
+
+            return result;
+        }
+
         public static IEnumerable<T> Materials<T>(this Construction construction, MaterialLibrary materialLibrary) where T: IMaterial
         {
             if (construction == null || materialLibrary == null)

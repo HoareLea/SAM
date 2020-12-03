@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,10 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddParameter(new GooConstructionLibraryParam(), "_constructionLibrary_", "_constructionLibrary_", "SAM Analytical Contruction Library", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddParameter(new GooApertureConstructionLibraryParam(), "_apertureConstructionLibrary_", "_apertureCconstructionLibrary_", "SAM Analytical Aperture Contruction Library", GH_ParamAccess.item);
+            index = inputParamManager.AddParameter(new GooApertureConstructionLibraryParam(), "_apertureConstructionLibrary_", "_apertureConstructionLibrary_", "SAM Analytical Aperture Contruction Library", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddParameter(new GooMaterialLibraryParam(), "_materialLibrary_", "_materialLibrary_", "SAM Material Library", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddBooleanParameter("_emptyOnly_", "_emptyOnly_", "Only Null or Constructions without ConctructionLayers", GH_ParamAccess.item, true);
@@ -88,8 +92,14 @@ namespace SAM.Analytical.Grasshopper
             if (apertureConstructionLibrary == null)
                 apertureConstructionLibrary = ActiveSetting.Setting.GetValue<ApertureConstructionLibrary>(AnalyticalSettingParameter.DefaultApertureConstructionLibrary);
 
+            MaterialLibrary materialLibrary = null;
+            dataAccess.GetData(3, ref apertureConstructionLibrary);
+
+            if (materialLibrary == null)
+                materialLibrary = ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary);
+
             bool emptyOnly = true;
-            dataAccess.GetData(3, ref emptyOnly);
+            dataAccess.GetData(4, ref emptyOnly);
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
             List<Panel> panels = adjacencyCluster?.GetPanels();
@@ -99,6 +109,8 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
                 return;
             }
+
+            MaterialLibrary materialLibrary_AnalyticalModel = analyticalModel.MaterialLibrary;
 
             for(int i=0; i < panels.Count; i++)//foreach(Panel panel in panels)
             {
@@ -123,6 +135,14 @@ namespace SAM.Analytical.Grasshopper
 
                 if (construction_New != null)
                 {
+                    IEnumerable<IMaterial> materials_Temp = Analytical.Query.Materials(construction_New, materialLibrary);
+                    if (materials_Temp != null)
+                    {
+                        foreach (IMaterial material in materials_Temp)
+                            if (!materialLibrary_AnalyticalModel.Contains(material))
+                                materialLibrary_AnalyticalModel.Add(material);
+                    }
+
                     panel = new Panel(panel, construction_New);
                     updated = true;
                 }
@@ -150,6 +170,14 @@ namespace SAM.Analytical.Grasshopper
 
                         if (apertureConstruction_New != null)
                         {
+                            IEnumerable<IMaterial> materials_Temp = Analytical.Query.Materials(apertureConstruction_New, materialLibrary);
+                            if (materials_Temp != null)
+                            {
+                                foreach (IMaterial material in materials_Temp)
+                                    if (!materialLibrary_AnalyticalModel.Contains(material))
+                                        materialLibrary_AnalyticalModel.Add(material);
+                            }
+
                             Aperture aperture_New = new Aperture(aperture_Old, apertureConstruction_New);
 
                             if (aperture_New == null)
@@ -167,7 +195,7 @@ namespace SAM.Analytical.Grasshopper
 
             }
 
-            dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(analyticalModel, adjacencyCluster)));
+            dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(analyticalModel, adjacencyCluster, materialLibrary_AnalyticalModel, analyticalModel.ProfileLibrary)));
         }
     }
 }
