@@ -260,11 +260,19 @@ namespace SAM.Analytical
                 name = "???";
             }
 
-            List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
-            if (constructionLayers != null && constructionLayers.Count > 0)
-                Core.Modify.AddRange(result, constructionLayers?.Log(construction.Name, construction.Guid));
-            else
-                result.Add(string.Format("{0} Construction (Guid: {1}) has no ConstructionLayers.", name, construction.Guid), LogRecordType.Warning);
+            PanelType panelType = PanelType.Undefined;
+            string text;
+            if (construction.TryGetValue(ConstructionParameter.DefaultPanelType, out text) && !string.IsNullOrWhiteSpace(text))
+                panelType = Query.PanelType(text, false);
+
+            if(panelType != PanelType.Air)
+            {
+                List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
+                if (constructionLayers != null && constructionLayers.Count > 0)
+                    Core.Modify.AddRange(result, constructionLayers?.Log(construction.Name, construction.Guid));
+                else
+                    result.Add(string.Format("{0} Construction (Guid: {1}) has no ConstructionLayers.", name, construction.Guid), LogRecordType.Warning);
+            }
 
             return result;
         }

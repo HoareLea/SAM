@@ -12,7 +12,7 @@ namespace SAM.Analytical
                 return null;
 
             if (guids != null)
-                spaces.RemoveAll(x => !guids.Contains(x.Guid));
+                spaces.RemoveAll(x => x == null || !guids.Contains(x.Guid));
 
             foreach(Space space in spaces)
             {

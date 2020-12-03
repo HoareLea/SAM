@@ -115,12 +115,17 @@ namespace SAM.Analytical.Grasshopper
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
                         foreach (Space space in spaces_Temp)
                         {
+                            if (space == null)
+                                continue;
+
                             if (spaces_Input != null && spaces_Input.Find(x => x.Guid == space.Guid) == null)
                                 continue;
 
-                            space.InternalCondition = internalCondition;
-                            spaces_Output.Add(space);
-                            adjacencyCluster.AddObject(space);
+                            Space space_New = new Space(space);
+
+                            space_New.InternalCondition = internalCondition;
+                            spaces_Output.Add(space_New);
+                            adjacencyCluster.AddObject(space_New);
                         }
                     }
 
@@ -135,12 +140,17 @@ namespace SAM.Analytical.Grasshopper
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
                         foreach (Space space in spaces_Temp)
                         {
+                            if (space == null)
+                                continue;
+
                             if (spaces_Input != null && spaces_Input.Find(x => x.Guid == space.Guid) == null)
                                 continue;
 
-                            space.InternalCondition = internalCondition;
-                            spaces_Output.Add(space);
-                            adjacencyCluster.AddObject(space);
+                            Space space_New = new Space(space);
+
+                            space_New.InternalCondition = internalCondition;
+                            spaces_Output.Add(space_New);
+                            adjacencyCluster.AddObject(space_New);
                         }
                     }
 
@@ -157,8 +167,10 @@ namespace SAM.Analytical.Grasshopper
                     if (spaces_Input != null && spaces_Input.Find(x => x.Guid == space.Guid) == null)
                         continue;
 
-                    space.InternalCondition = internalCondition;
-                    spaces_Output.Add(space);
+                    Space space_New = new Space(space);
+
+                    space_New.InternalCondition = internalCondition;
+                    spaces_Output.Add(space_New);
                 }
             }
 
