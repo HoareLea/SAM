@@ -143,6 +143,8 @@ namespace SAM.Analytical.Grasshopper
                                 materialLibrary_AnalyticalModel.Add(material);
                     }
 
+                    construction_New = new Construction(construction_Old, construction_New.ConstructionLayers);
+
                     panel = new Panel(panel, construction_New);
                     updated = true;
                 }
@@ -178,6 +180,8 @@ namespace SAM.Analytical.Grasshopper
                                     if (!materialLibrary_AnalyticalModel.Contains(material))
                                         materialLibrary_AnalyticalModel.Add(material);
                             }
+
+                            apertureConstruction_New = new ApertureConstruction(apertureConstruction_Old, apertureConstruction_New.PaneConstructionLayers, apertureConstruction_New.FrameConstructionLayers);
 
                             Aperture aperture_New = new Aperture(aperture_Old, apertureConstruction_New);
 
