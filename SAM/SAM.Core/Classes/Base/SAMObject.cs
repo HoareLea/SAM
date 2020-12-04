@@ -164,6 +164,38 @@ namespace SAM.Core
             return true;
         }
 
+        public bool TryGetValue(string name, out object value)
+        {
+            value = null;
+
+            object result = null;
+            if (!Query.TryGetValue(this, name, out result))
+                return false;
+
+            value = result;
+            return true;
+        }
+
+        public bool TryGetValue<T>(string name, out T value, bool tryConvert = true)
+        {
+            value = default;
+
+            object result;
+            if (!TryGetValue(name, out result))
+                return false;
+
+            if (result is T)
+            {
+                value = (T)result;
+                return true;
+            }
+
+            if (!tryConvert)
+                return false;
+
+            return Query.TryConvert(result, out value);
+        }
+
         public bool TryGetValue<T>(Enum @enum, out T value, bool tryConvert = true)
         {
             value = default;
