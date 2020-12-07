@@ -125,7 +125,7 @@
     <Compile Include="Component\SAMAnalyticalGetInternalConditionTextMap.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultDegreeOfActivityLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultInternalConditionLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalSetConstructionByPanelType.cs" />
+    <Compile Include="Component\SAMAnalyticalSetConstructionLayersByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalSetOccupancyGains.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalExtendPanelByPlane.cs" />
