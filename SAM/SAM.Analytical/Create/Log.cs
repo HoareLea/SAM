@@ -115,7 +115,7 @@ namespace SAM.Analytical
 
                     if(panel.PanelType == PanelType.Shade || panel.PanelType == PanelType.SolarPanel || panel.PanelType == PanelType.Undefined)
                     {
-                        result.Add("Panel {0} (Guid: {1}) has invalid PanelType assigned.", LogRecordType.Warning, panel.Name, panel.Guid);
+                        result.Add("Panel {0} (Guid: {1}) has assigned {2} PanelType and it also encloses {3} space (Guid: {4}).", LogRecordType.Warning, panel.Name, panel.Guid, panel.PanelType, space.Name, space.Guid);
                         return result;
                     }
                 }
