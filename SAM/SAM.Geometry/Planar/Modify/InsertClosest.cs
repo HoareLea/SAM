@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -41,6 +42,9 @@ namespace SAM.Geometry.Planar
 
             point2Ds.Clear();
             point2Ds.AddRange(segment2Ds.ConvertAll(x => x.Start));
+            if (!close)
+                point2Ds.Add(segment2Ds.Last()[1]);
+
             return point2D_Closest;
         }
     }

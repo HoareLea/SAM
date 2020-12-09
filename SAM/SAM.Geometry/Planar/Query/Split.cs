@@ -200,6 +200,29 @@ namespace SAM.Geometry.Planar
             return polygons.ConvertAll(x => x.ToSAM(tolerance));
         }
 
+        public static List<Polyline2D> Split(this Polyline2D polyline2D, Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (polyline2D == null || point2D == null)
+                return null;
+
+            Point2D point2D_Temp = polyline2D.InsertClosest(point2D, tolerance);
+            if (point2D_Temp == null)
+                return null;
+
+            int index = polyline2D.IndexOfClosestPoint2D(point2D_Temp);
+
+            List<Point2D> point2Ds = polyline2D.Points;
+
+            if (index == 0 || index == point2Ds.Count - 1)
+                return new List<Polyline2D>() { new Polyline2D(point2Ds) };
+
+            List<Polyline2D> result = new List<Polyline2D>();
+            result.Add(new Polyline2D(point2Ds.GetRange(0, index + 1)));
+            result.Add(new Polyline2D(point2Ds.GetRange(index, point2Ds.Count - index)));
+
+            return result;
+        }
+
         /// <summary>
         /// Generates additional points between two points where point2D_1 is first point on list and point2D_2 is last point.
         /// </summary>
