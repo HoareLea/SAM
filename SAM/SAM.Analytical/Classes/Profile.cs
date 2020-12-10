@@ -167,7 +167,7 @@ namespace SAM.Analytical
                 if (count == 1)
                     return values[0];
 
-                return values[(index % count) - 1];
+                return values[(index % count)];
 
             }
         }
