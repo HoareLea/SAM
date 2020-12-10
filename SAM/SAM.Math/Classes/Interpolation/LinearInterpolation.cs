@@ -87,7 +87,7 @@ namespace SAM.Math
                         if (keyValuePair.Value == key)
                             result.Add(key);
                         else
-                            result.Add(key + ((keyValuePair.Value - value) * ((x - key) / (keyValuePair.Value - key))));
+                            result.Add(value + ((keyValuePair.Value - value) * ((x - key) / (keyValuePair.Key - key))));
                     }
                 }
 
