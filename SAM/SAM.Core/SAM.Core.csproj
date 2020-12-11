@@ -55,11 +55,14 @@
     <Compile Include="Attributes\Parameter\DoubleParameterValue.cs" />
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
+    <Compile Include="Classes\Library\SystemTypeLibrary.cs" />
     <Compile Include="Classes\Relation\TextMap.cs" />
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Enums\AccessType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
     <Compile Include="Enums\Parameter\CoreSettingParameter.cs" />
+    <Compile Include="Interfaces\Base\ISystem.cs" />
+    <Compile Include="Interfaces\Base\ISystemType.cs" />
     <Compile Include="Modify\AddRange.cs" />
     <Compile Include="Classes\Library\SAMLibrary.cs" />
     <Compile Include="Classes\Material\SolidMaterial.cs" />

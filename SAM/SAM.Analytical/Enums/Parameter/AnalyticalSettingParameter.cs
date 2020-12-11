@@ -14,6 +14,7 @@ namespace SAM.Analytical
         [ParameterProperties("Default InternalConditionLibrary", "Default InternalConditionLibrary"), SAMObjectParameterValue(typeof(InternalConditionLibrary))] DefaultInternalConditionLibrary,
         [ParameterProperties("Default DegreeOfActivityLibrary", "Default DegreeOfActivityLibrary"), SAMObjectParameterValue(typeof(DegreeOfActivityLibrary))] DefaultDegreeOfActivityLibrary,
         [ParameterProperties("Default ProfileLibrary", "Default ProfileLibrary"), SAMObjectParameterValue(typeof(ProfileLibrary))] DefaultProfileLibrary,
+        [ParameterProperties("Default SystemTypeLibrary", "Default SystemTypeLibrary"), SAMObjectParameterValue(typeof(SystemTypeLibrary))] DefaultSystemTypeLibrary,
         [ParameterProperties("InternalCondition TextMap", "InternalCondition TextMap"), SAMObjectParameterValue(typeof(TextMap))] InternalConditionTextMap,
 
         [ParameterProperties("Default MaterialLibrary File Name", "Default MaterialLibrary File Name"), ParameterValue(ParameterType.String)] DefaultMaterialLibraryFileName,
@@ -23,6 +24,7 @@ namespace SAM.Analytical
         [ParameterProperties("Default InternalConditionLibrary File Name", "Default InternalConditionLibrary File Name"), ParameterValue(ParameterType.String)] DefaultInternalConditionLibraryFileName,
         [ParameterProperties("Default DegreeOfActivityLibrary File Name", "Default DegreeOfActivityLibrary File Name"), ParameterValue(ParameterType.String)] DefaultDegreeOfActivityLibraryFileName,
         [ParameterProperties("Default ProfileLibrary File Name", "Default ProfileLibrary File Name"), ParameterValue(ParameterType.String)] DefaultProfileLibraryFileName,
-        [ParameterProperties("InternaCondition TextMap File Name", "InternaCondition TextMap File Name"), ParameterValue(ParameterType.String)] InternaConditionTextMaplFileName
+        [ParameterProperties("InternaCondition TextMap File Name", "InternaCondition TextMap File Name"), ParameterValue(ParameterType.String)] InternaConditionTextMaplFileName,
+        [ParameterProperties("Default SystemTypeLibrary File Name", "Default SystemTypeLibrary File Name"), ParameterValue(ParameterType.String)] DefaultSystemTypeLibraryFileName,
     }
 }

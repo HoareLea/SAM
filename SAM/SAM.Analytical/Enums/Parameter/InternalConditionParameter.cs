@@ -36,5 +36,7 @@ namespace SAM.Analytical
         [ParameterProperties("Cooling Profile Name", "Cooling Profile Name"), ParameterValue(Core.ParameterType.String)] CoolingProfileName,
         [ParameterProperties("Humidification Profile Name", "Humidification Profile Name"), ParameterValue(Core.ParameterType.String)] HumidificationProfileName,
         [ParameterProperties("Dehumidification Profile Name", "Dehumidification Profile Name"), ParameterValue(Core.ParameterType.String)] DehumidificationProfileName,
+
+
     }
 }

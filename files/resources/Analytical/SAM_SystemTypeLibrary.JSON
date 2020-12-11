@@ -1,0 +1,537 @@
+{
+  "_type": "SAM.Core.SystemTypeLibrary,SAM.Core",
+  "Name": "Default SAM SystemType Library ver00",
+  "Guid": "fe93b8ed-a07f-45fa-8567-4a2d4a6c7352",
+  "Objects": [
+    {
+      "_type": "SAM.Analytical.VentilationSystemType,SAM.Analytical",
+      "Name": "CAV",
+      "Guid": "8a67d445-b1f9-436f-87ff-bb194a77d625",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Air Supply Method",
+              "Value": "Outside"
+            }
+          ]
+        }
+      ],
+      "Description": "Constant Air Volume"
+    },
+    {
+      "_type": "SAM.Analytical.VentilationSystemType,SAM.Analytical",
+      "Name": "DISP",
+      "Guid": "1377d9fb-cf86-4dda-89aa-040380616b59",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Air Supply Method",
+              "Value": "Outside"
+            },
+            {
+              "Name": "Temperature Difference",
+              "Value": 4.0
+            }
+          ]
+        }
+      ],
+      "Description": "Displacement Ventilation"
+    },
+    {
+      "_type": "SAM.Analytical.VentilationSystemType,SAM.Analytical",
+      "Name": "EOC",
+      "Guid": "3ccd2a7a-a3b3-42fd-9362-c821b5b9401b",
+      "Description": "Central Extract Only"
+    },
+    {
+      "_type": "SAM.Analytical.VentilationSystemType,SAM.Analytical",
+      "Name": "EOL",
+      "Guid": "bf4638a9-e244-4f9e-a6ad-65c1e6d79a9c",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Air Supply Method",
+              "Value": "Outside"
+            }
+          ]
+        }
+      ],
+      "Description": "Local Extract Only"
+    },
+    {
+      "_type": "SAM.Analytical.VentilationSystemType,SAM.Analytical",
+      "Name": "MV",
+      "Guid": "4ef36d1a-2ccd-45bc-84b6-9e7c5e40e0e4",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Air Supply Method",
+              "Value": "Outside"
+            }
+          ]
+        }
+      ],
+      "Description": "Supply And Extract Mechanical Ventilation"
+    },
+    {
+      "_type": "SAM.Analytical.VentilationSystemType,SAM.Analytical",
+      "Name": "MVRE",
+      "Guid": "fd654bd1-08c6-4b0e-b550-6ce13d625867",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Air Supply Method",
+              "Value": "Total"
+            }
+          ]
+        }
+      ],
+      "Description": "Mechanical Ventilation with Recirculation"
+    },
+    {
+      "_type": "SAM.Analytical.VentilationSystemType,SAM.Analytical",
+      "Name": "NV",
+      "Guid": "a2d3df07-33e4-4f20-9966-d60592ff9477",
+      "Description": "Natural Ventilation"
+    },
+    {
+      "_type": "SAM.Analytical.VentilationSystemType,SAM.Analytical",
+      "Name": "UV",
+      "Guid": "6d83aa34-d99a-4bf4-9dca-2de88f1255eb",
+      "Description": "Unconditioned"
+    },
+    {
+      "_type": "SAM.Analytical.VentilationSystemType,SAM.Analytical",
+      "Name": "VAV",
+      "Guid": "df18ed12-19e9-4f02-8d7c-be803dc5f379",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Air Supply Method",
+              "Value": "Total"
+            },
+            {
+              "Name": "Temperature Difference",
+              "Value": 10.0
+            }
+          ]
+        }
+      ],
+      "Description": "Variable Air Volume"
+    },
+    {
+      "_type": "SAM.Analytical.HeatingSystemType,SAM.Analytical",
+      "Name": "AHU",
+      "Guid": "c1de47d9-722e-4cc7-9369-af0d9629edc3",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 71.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 82.0
+            }
+          ]
+        }
+      ],
+      "Description": "Air Handling Unit"
+    },
+    {
+      "_type": "SAM.Analytical.HeatingSystemType,SAM.Analytical",
+      "Name": "CHB",
+      "Guid": "3a584737-d1b7-4147-8ed5-5358c8b32938",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Radiant Proportion",
+              "Value": 0.1
+            },
+            {
+              "Name": "View Coefficient",
+              "Value": 0.248
+            },
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 32.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 27.0
+            }
+          ]
+        }
+      ],
+      "Description": "Chilled Beam"
+    },
+    {
+      "_type": "SAM.Analytical.HeatingSystemType,SAM.Analytical",
+      "Name": "FCU",
+      "Guid": "cc05634b-f3ad-4cda-a900-d782dc8bf4c4",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 60.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 40.0
+            }
+          ]
+        }
+      ],
+      "Description": "Fan Coil"
+    },
+    {
+      "_type": "SAM.Analytical.HeatingSystemType,SAM.Analytical",
+      "Name": "RAD",
+      "Guid": "b1ac5c5f-21c3-485f-98ea-3ac95cdb3415",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 60.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 40.0
+            }
+          ]
+        }
+      ],
+      "Description": "Radiator"
+    },
+    {
+      "_type": "SAM.Analytical.HeatingSystemType,SAM.Analytical",
+      "Name": "RP",
+      "Guid": "d6e9e6ed-0d95-41bf-84f5-5a6c0ccc4def",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Radiant Proportion",
+              "Value": 0.67
+            },
+            {
+              "Name": "View Coefficient",
+              "Value": 0.519
+            },
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 32.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 27.0
+            }
+          ]
+        }
+      ],
+      "Description": "Radiant Panel"
+    },
+    {
+      "_type": "SAM.Analytical.HeatingSystemType,SAM.Analytical",
+      "Name": "TRH",
+      "Guid": "41271c97-c201-4cf2-a72e-ddfdb03cca93",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Radiant Proportion",
+              "Value": 0.1
+            },
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 60.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 40.0
+            }
+          ]
+        }
+      ],
+      "Description": "Trench Heating"
+    },
+    {
+      "_type": "SAM.Analytical.HeatingSystemType,SAM.Analytical",
+      "Name": "UFH",
+      "Guid": "251604df-0cba-48a8-ac7d-eba327086967",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 32.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 25.0
+            }
+          ]
+        }
+      ],
+      "Description": "Underfloor Heating"
+    },
+    {
+      "_type": "SAM.Analytical.HeatingSystemType,SAM.Analytical",
+      "Name": "UH",
+      "Guid": "7351ecb3-b983-431c-9b4f-b03032bc7dc8",
+      "Description": "Unheated"
+    },
+    {
+      "_type": "SAM.Analytical.CoolingSystemType,SAM.Analytical",
+      "Name": "AHU",
+      "Guid": "34566f82-efad-498b-bd56-421cad00187a",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 6.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 12.0
+            }
+          ]
+        }
+      ],
+      "Description": "Air Handling Unit"
+    },
+    {
+      "_type": "SAM.Analytical.CoolingSystemType,SAM.Analytical",
+      "Name": "CHB",
+      "Guid": "28f6218d-f454-4d09-81ae-32e3c20f3ffc",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Radiant Proportion",
+              "Value": 0.15
+            },
+            {
+              "Name": "View Coefficient",
+              "Value": 0.519
+            },
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 16.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 19.0
+            }
+          ]
+        }
+      ],
+      "Description": "Chilled Beam"
+    },
+    {
+      "_type": "SAM.Analytical.CoolingSystemType,SAM.Analytical",
+      "Name": "FCU",
+      "Guid": "af366ae5-be55-4f9a-979e-53e47f9c331b",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 6.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 12.0
+            },
+            {
+              "Name": "Temperature Difference",
+              "Value": 6.0
+            }
+          ]
+        }
+      ],
+      "Description": "Fan Coil"
+    },
+    {
+      "_type": "SAM.Analytical.CoolingSystemType,SAM.Analytical",
+      "Name": "RP",
+      "Guid": "a7525dd6-7a2f-4d70-bf93-b086488be604",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Radiant Proportion",
+              "Value": 0.58
+            },
+            {
+              "Name": "View Coefficient",
+              "Value": 0.519
+            },
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 16.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 19.0
+            }
+          ]
+        }
+      ],
+      "Description": "Radiant Panel"
+    },
+    {
+      "_type": "SAM.Analytical.CoolingSystemType,SAM.Analytical",
+      "Name": "TRC",
+      "Guid": "5030fd5e-8780-46bf-931b-ee7c7868f21e",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 16.0
+            },
+            {
+              "Name": "Temperature Difference",
+              "Value": 19.0
+            }
+          ]
+        }
+      ],
+      "Description": "Trench Cooling"
+    },
+    {
+      "_type": "SAM.Analytical.CoolingSystemType,SAM.Analytical",
+      "Name": "UC",
+      "Guid": "a0532585-7c37-43fc-9b99-cf426c14c97e",
+      "Description": "Uncooled"
+    },
+    {
+      "_type": "SAM.Analytical.CoolingSystemType,SAM.Analytical",
+      "Name": "UFC",
+      "Guid": "70c64b15-cc8c-4f23-b8a8-ec0957104d2c",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Radiant Proportion",
+              "Value": 0.58
+            },
+            {
+              "Name": "View Coefficient",
+              "Value": 0.496
+            },
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 16.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 19.0
+            },
+            {
+              "Name": "Temperature Difference",
+              "Value": 10.0
+            }
+          ]
+        }
+      ],
+      "Description": "Underfloor Cooling"
+    },
+    {
+      "_type": "SAM.Analytical.CoolingSystemType,SAM.Analytical",
+      "Name": "VRV",
+      "Guid": "2dc2d940-5c65-4cb9-97b3-5f749d87d9ca",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 15.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 19.0
+            },
+            {
+              "Name": "Supply Temperature",
+              "Value": 13.0
+            }
+          ]
+        }
+      ],
+      "Description": "variable Refrigerant Volume"
+    }
+  ]
+}
