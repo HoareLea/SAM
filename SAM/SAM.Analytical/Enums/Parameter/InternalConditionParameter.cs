@@ -37,6 +37,8 @@ namespace SAM.Analytical
         [ParameterProperties("Humidification Profile Name", "Humidification Profile Name"), ParameterValue(Core.ParameterType.String)] HumidificationProfileName,
         [ParameterProperties("Dehumidification Profile Name", "Dehumidification Profile Name"), ParameterValue(Core.ParameterType.String)] DehumidificationProfileName,
 
-
+        [ParameterProperties("Ventilation System Type Name", "Ventilation System Type Name"), ParameterValue(Core.ParameterType.String)] VentilationSystemTypeName,
+        [ParameterProperties("Cooling System Type Name", "Cooling System Type Name"), ParameterValue(Core.ParameterType.String)] CoolingSystemTypeName,
+        [ParameterProperties("Heating System Type Name", "Heating System Type Name"), ParameterValue(Core.ParameterType.String)] HeatingSystemTypeName,
     }
 }

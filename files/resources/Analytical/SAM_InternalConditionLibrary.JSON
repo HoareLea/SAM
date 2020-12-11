@@ -1,12 +1,12 @@
 {
   "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
   "Name": "Default SAM InternalCondition Library ver00",
-  "Guid": "5435abfa-e840-499c-be6f-dd5c8c4f6724",
+  "Guid": "416faf8d-584b-4901-a72e-1cf5955965d5",
   "Objects": [
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "Sxx_External",
-      "Guid": "fcbe2a8a-daae-42f8-95e9-e8b50a35567b",
+      "Guid": "20f5f137-25c4-4afd-bf5e-fff653342fde",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -68,6 +68,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -76,7 +88,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S00_Unconditioned",
-      "Guid": "5106d004-f1e0-477e-8c4a-6f66ef2d4389",
+      "Guid": "2b2238fb-358e-4c8c-865c-6bd3c9f47d48",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -138,6 +150,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -146,7 +170,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S01_Auditorium",
-      "Guid": "a8003549-da86-4811-ae80-75d92a74ebf3",
+      "Guid": "d17dc5b4-30dc-4acf-a8e4-46f13bb7b13f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -180,6 +204,14 @@
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Gain Per Area",
@@ -220,84 +252,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S02_Bathroom",
-      "Guid": "7d3ed942-6f31-45d1-a8fd-e34c8a2dcd43",
-      "ParameterSets": [
-        {
-          "_type": "SAM.Core.ParameterSet",
-          "Name": "SAM.Analytical",
-          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-          "Parameters": [
-            {
-              "Name": "Occupancy Profile Name",
-              "Value": "8to19"
             },
             {
-              "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 75.0
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
             },
             {
-              "Name": "Occupancy Latent Gain Per Person",
-              "Value": 55.0
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
             },
             {
-              "Name": "Equipment Sensible Profile Name",
-              "Value": "8to19"
-            },
-            {
-              "Name": "Equipment Sensible Gain Per Area",
-              "Value": 0.0
-            },
-            {
-              "Name": "Equipment Latent Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Lighting Gain Per Area",
-              "Value": 3.2
-            },
-            {
-              "Name": "Lighting Level",
-              "Value": 200.0
-            },
-            {
-              "Name": "Lighting Profile Name",
-              "Value": "8to18"
-            },
-            {
-              "Name": "Infiltration Air Changes Per Hour",
-              "Value": 0.2
-            },
-            {
-              "Name": "Infiltration Profile Name",
-              "Value": "Constant"
-            },
-            {
-              "Name": "Pollutant Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Heating Profile Name",
-              "Value": "HTG_7to19_20"
-            },
-            {
-              "Name": "Cooling Profile Name",
-              "Value": "No Cooling"
-            },
-            {
-              "Name": "Humidification Profile Name",
-              "Value": "No Humidification"
-            },
-            {
-              "Name": "Dehumidification Profile Name",
-              "Value": "No Dehumidification"
+              "Name": "Heating System Type Name",
+              "Value": "FCU"
             }
           ]
         }
@@ -306,7 +272,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S03_Bedroom",
-      "Guid": "36013897-5be2-4514-9993-06eb5680fc29",
+      "Guid": "b8bdf064-4e1f-41b5-9832-fbe4ccba1b4d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -323,11 +289,11 @@
             },
             {
               "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 67.2
+              "Value": 76.4
             },
             {
               "Name": "Occupancy Latent Gain Per Person",
-              "Value": 57.8
+              "Value": 93.6
             },
             {
               "Name": "Equipment Sensible Profile Name",
@@ -340,6 +306,14 @@
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Gain Per Area",
@@ -380,6 +354,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "EOL"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "FCU"
             }
           ]
         }
@@ -388,7 +374,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S04_Breakout",
-      "Guid": "dfd7b314-3e90-4ded-920e-6896dced02d6",
+      "Guid": "a0d9cbe8-a1da-4f72-95bc-2d61dde52def",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -424,8 +410,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 4.8
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -462,6 +456,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "AHU"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -470,7 +476,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S05_CarPark",
-      "Guid": "4b098a48-ca4c-43b3-bc8f-9f5064820306",
+      "Guid": "22457d3c-9c26-44ac-bd82-96b849b3cb6b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -500,10 +506,6 @@
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
-            },
-            {
-              "Name": "Lighting Gain Per Area",
-              "Value": 0.0
             },
             {
               "Name": "Lighting Profile Name",
@@ -536,6 +538,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -544,7 +558,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S06_ChangingDry",
-      "Guid": "32bb83cc-cbe0-4f76-8667-b9ed118f2c59",
+      "Guid": "09b479eb-fef1-41d6-9623-d2bda21ba42e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -580,8 +594,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 3.2
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -618,6 +640,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "EOL"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "RAD"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -626,7 +660,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S07_ChangingWet",
-      "Guid": "1f9c2d19-e741-4f5a-a206-252955d7264f",
+      "Guid": "36708eeb-6249-4568-949b-1f90711b763e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -662,8 +696,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 3.2
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -700,6 +742,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "EOL"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "RAD"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -708,7 +762,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S08_Circulation",
-      "Guid": "cee2c412-20fb-4856-b28c-67bf743316f3",
+      "Guid": "056021d3-017b-4c13-bdd6-1d6a7dd15c21",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -740,8 +794,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 1.6
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -778,6 +840,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "TRH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -785,8 +859,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S10_ClassRoom",
-      "Guid": "37489464-e2bc-4e21-9838-fc62368ec2d2",
+      "Name": "S09_ClassHighLoad",
+      "Guid": "137b87d3-a727-4092-b2c4-ee3587d8762e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -815,11 +889,19 @@
             },
             {
               "Name": "Equipment Sensible Gain Per Area",
-              "Value": 20.0
+              "Value": 40.0
             },
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Gain Per Area",
@@ -860,6 +942,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "TRH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "AHU"
             }
           ]
         }
@@ -867,168 +961,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S11_CommonRoom",
-      "Guid": "8a038686-b5f0-4428-b2e2-9a6575913ecc",
-      "ParameterSets": [
-        {
-          "_type": "SAM.Core.ParameterSet",
-          "Name": "SAM.Analytical",
-          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-          "Parameters": [
-            {
-              "Name": "Occupancy Per Area",
-              "Value": 2.0
-            },
-            {
-              "Name": "Occupancy Profile Name",
-              "Value": "8to19"
-            },
-            {
-              "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 75.0
-            },
-            {
-              "Name": "Occupancy Latent Gain Per Person",
-              "Value": 55.0
-            },
-            {
-              "Name": "Equipment Sensible Profile Name",
-              "Value": "8to19"
-            },
-            {
-              "Name": "Equipment Sensible Gain Per Area",
-              "Value": 20.0
-            },
-            {
-              "Name": "Equipment Latent Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Lighting Gain Per Area",
-              "Value": 4.8
-            },
-            {
-              "Name": "Lighting Level",
-              "Value": 300.0
-            },
-            {
-              "Name": "Lighting Profile Name",
-              "Value": "8to18"
-            },
-            {
-              "Name": "Infiltration Air Changes Per Hour",
-              "Value": 0.2
-            },
-            {
-              "Name": "Infiltration Profile Name",
-              "Value": "Constant"
-            },
-            {
-              "Name": "Pollutant Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Heating Profile Name",
-              "Value": "HTG_7to19_21"
-            },
-            {
-              "Name": "Cooling Profile Name",
-              "Value": "No Cooling"
-            },
-            {
-              "Name": "Humidification Profile Name",
-              "Value": "No Humidification"
-            },
-            {
-              "Name": "Dehumidification Profile Name",
-              "Value": "No Dehumidification"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S12_Comms",
-      "Guid": "de5809d6-8492-48e1-8db2-a123171c35d7",
-      "ParameterSets": [
-        {
-          "_type": "SAM.Core.ParameterSet",
-          "Name": "SAM.Analytical",
-          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-          "Parameters": [
-            {
-              "Name": "Occupancy Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 75.0
-            },
-            {
-              "Name": "Occupancy Latent Gain Per Person",
-              "Value": 55.0
-            },
-            {
-              "Name": "Equipment Sensible Profile Name",
-              "Value": "Constant"
-            },
-            {
-              "Name": "Equipment Sensible Gain Per Area",
-              "Value": 1500.0
-            },
-            {
-              "Name": "Equipment Latent Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Lighting Gain Per Area",
-              "Value": 4.8
-            },
-            {
-              "Name": "Lighting Level",
-              "Value": 300.0
-            },
-            {
-              "Name": "Lighting Profile Name",
-              "Value": "Constant"
-            },
-            {
-              "Name": "Infiltration Air Changes Per Hour",
-              "Value": 0.2
-            },
-            {
-              "Name": "Infiltration Profile Name",
-              "Value": "Constant"
-            },
-            {
-              "Name": "Pollutant Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Heating Profile Name",
-              "Value": "HTG_1to24_20"
-            },
-            {
-              "Name": "Cooling Profile Name",
-              "Value": "No Cooling"
-            },
-            {
-              "Name": "Humidification Profile Name",
-              "Value": "No Humidification"
-            },
-            {
-              "Name": "Dehumidification Profile Name",
-              "Value": "No Dehumidification"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S13_Copier",
-      "Guid": "50fabf49-87be-4792-a94f-139bcb75d507",
+      "Name": "S10_ClassRoom",
+      "Guid": "9aca9980-16ec-4343-accc-8b06ac97683b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1060,6 +994,14 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
               "Value": 8.0
             },
@@ -1098,6 +1040,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "MV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "RAD"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -1105,8 +1059,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S15_DomBath",
-      "Guid": "d42f17e9-6891-480d-9183-488fb5ddb1df",
+      "Name": "S11_CommonRoom",
+      "Guid": "47103807-415c-4335-a2ab-be2b07682757",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1138,8 +1092,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 3.2
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -1176,6 +1138,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "EOL"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -1183,8 +1157,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S17_DomCirculation",
-      "Guid": "96b2da21-3743-4a25-b20c-a81f7f384626",
+      "Name": "S12_Comms",
+      "Guid": "18c64ef5-acc9-4831-b857-0e95571b7431",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1216,8 +1190,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 1.6
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -1254,6 +1236,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -1261,18 +1255,14 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S24_EatingDrinking",
-      "Guid": "8d2413b3-bb54-4f01-b778-c9709eab95fe",
+      "Name": "S13_Copier",
+      "Guid": "dde3c0b6-981f-45a1-adc7-45a633ab815b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy Per Area",
-              "Value": 10.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1283,7 +1273,7 @@
             },
             {
               "Name": "Occupancy Latent Gain Per Person",
-              "Value": 55.0
+              "Value": 70.0
             },
             {
               "Name": "Equipment Sensible Profile Name",
@@ -1291,19 +1281,27 @@
             },
             {
               "Name": "Equipment Sensible Gain Per Area",
-              "Value": 15.0
+              "Value": 40.0
             },
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 3.2
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
-              "Value": 200.0
+              "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
@@ -1336,6 +1334,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "MV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "RAD"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -1343,8 +1353,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S25_ElecPlant",
-      "Guid": "7988f98d-5dd8-412a-8587-ec4f6673454d",
+      "Name": "S14_DataCentre",
+      "Guid": "641b8fbb-3f97-49d6-80cc-64fea917fe2f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1380,8 +1390,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 3.2
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -1418,6 +1436,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "FCU"
             }
           ]
         }
@@ -1425,18 +1455,14 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S27_FirstAid",
-      "Guid": "a5f47bf5-23d0-4fae-8fc6-12670e950945",
+      "Name": "S15_DomBath",
+      "Guid": "11501c68-ec5b-4325-bacf-4147af7cf59d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
-            {
-              "Name": "Occupancy Per Area",
-              "Value": 10.0
-            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1455,11 +1481,19 @@
             },
             {
               "Name": "Equipment Sensible Gain Per Area",
-              "Value": 15.0
+              "Value": 0.0
             },
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Gain Per Area",
@@ -1467,7 +1501,7 @@
             },
             {
               "Name": "Lighting Level",
-              "Value": 500.0
+              "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
@@ -1487,7 +1521,7 @@
             },
             {
               "Name": "Heating Profile Name",
-              "Value": "HTG_7to19_21"
+              "Value": "HTG_1to24_24"
             },
             {
               "Name": "Cooling Profile Name",
@@ -1500,6 +1534,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "EOL"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -1507,90 +1553,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S28_FitGym",
-      "Guid": "99c6118b-29dd-44f1-9545-3ba8da4396b0",
-      "ParameterSets": [
-        {
-          "_type": "SAM.Core.ParameterSet",
-          "Name": "SAM.Analytical",
-          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-          "Parameters": [
-            {
-              "Name": "Occupancy Per Area",
-              "Value": 1.5
-            },
-            {
-              "Name": "Occupancy Profile Name",
-              "Value": "8to19"
-            },
-            {
-              "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 75.0
-            },
-            {
-              "Name": "Occupancy Latent Gain Per Person",
-              "Value": 55.0
-            },
-            {
-              "Name": "Equipment Sensible Profile Name",
-              "Value": "8to19"
-            },
-            {
-              "Name": "Equipment Sensible Gain Per Area",
-              "Value": 20.0
-            },
-            {
-              "Name": "Equipment Latent Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Lighting Gain Per Area",
-              "Value": 8.0
-            },
-            {
-              "Name": "Lighting Level",
-              "Value": 500.0
-            },
-            {
-              "Name": "Lighting Profile Name",
-              "Value": "8to18"
-            },
-            {
-              "Name": "Infiltration Air Changes Per Hour",
-              "Value": 0.2
-            },
-            {
-              "Name": "Infiltration Profile Name",
-              "Value": "Constant"
-            },
-            {
-              "Name": "Pollutant Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Heating Profile Name",
-              "Value": "HTG_7to19_21"
-            },
-            {
-              "Name": "Cooling Profile Name",
-              "Value": "No Cooling"
-            },
-            {
-              "Name": "Humidification Profile Name",
-              "Value": "No Humidification"
-            },
-            {
-              "Name": "Dehumidification Profile Name",
-              "Value": "No Dehumidification"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S29_Foyer",
-      "Guid": "a7d667af-1b28-41cc-95bd-2026a8c8af35",
+      "Name": "S16_DomBed",
+      "Guid": "bb884f52-b31b-448b-8379-83adaa7f41bd",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1626,8 +1590,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 3.2
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -1664,6 +1636,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "FCU"
             }
           ]
         }
@@ -1671,8 +1655,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S31_Kitchen",
-      "Guid": "0f50d073-a398-4f2d-92b1-69752adef8b1",
+      "Name": "S17_DomCirculation",
+      "Guid": "3598eecf-c711-47a1-b0c7-b1c57333f719",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1680,40 +1664,44 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Occupancy Per Area",
-              "Value": 10.0
-            },
-            {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
             },
             {
               "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 170.0
+              "Value": 75.0
             },
             {
               "Name": "Occupancy Latent Gain Per Person",
-              "Value": 255.0
+              "Value": 70.0
             },
             {
               "Name": "Equipment Sensible Profile Name",
-              "Value": "8to19"
+              "Value": "OFF"
             },
             {
               "Name": "Equipment Sensible Gain Per Area",
-              "Value": 10.0
+              "Value": 0.0
             },
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 3.2
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
-              "Value": 200.0
+              "Value": 100.0
             },
             {
               "Name": "Lighting Profile Name",
@@ -1733,7 +1721,7 @@
             },
             {
               "Name": "Heating Profile Name",
-              "Value": "HTG_7to19_21"
+              "Value": "HTG_1to24_18"
             },
             {
               "Name": "Cooling Profile Name",
@@ -1746,6 +1734,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -1753,8 +1753,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S32_Kitchenette",
-      "Guid": "69414c71-1150-4e54-b9be-47be39be8505",
+      "Name": "S18_DomDining",
+      "Guid": "02c5982c-e92f-4c49-88f9-1105d671d7cf",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1790,8 +1790,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 3.2
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -1828,6 +1836,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "EOL"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -1835,8 +1855,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S35_MechPlant",
-      "Guid": "bcaa7b18-5ce9-4bec-9c04-53ab3ceaaa48",
+      "Name": "S19_DomKitchen",
+      "Guid": "2caac35a-5239-4c4a-a249-8312522db584",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1868,8 +1888,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 3.2
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -1906,6 +1934,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "NV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -1913,8 +1953,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S36_Meeting",
-      "Guid": "49ee5217-2e14-4fe2-86fd-3493e2eb0bed",
+      "Name": "S20_DomLiving",
+      "Guid": "a4341d1f-f15b-4778-b536-d7eec3f41c47",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1948,6 +1988,14 @@
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Gain Per Area",
@@ -1988,6 +2036,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "FCU"
             }
           ]
         }
@@ -1995,8 +2055,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S39_OfficeOpen",
-      "Guid": "1eda9340-790c-4ff7-9f08-65829b570b24",
+      "Name": "S21_DomStore",
+      "Guid": "a291d06c-ca8b-43f1-8ac8-855f718fd831",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2032,86 +2092,12 @@
               "Value": "OFF"
             },
             {
-              "Name": "Lighting Gain Per Area",
-              "Value": 8.0
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
             },
             {
-              "Name": "Lighting Level",
-              "Value": 500.0
-            },
-            {
-              "Name": "Lighting Profile Name",
-              "Value": "8to18"
-            },
-            {
-              "Name": "Infiltration Air Changes Per Hour",
-              "Value": 0.2
-            },
-            {
-              "Name": "Infiltration Profile Name",
-              "Value": "Constant"
-            },
-            {
-              "Name": "Pollutant Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Heating Profile Name",
-              "Value": "HTG_7to19_21"
-            },
-            {
-              "Name": "Cooling Profile Name",
-              "Value": "CLG_7to19_25"
-            },
-            {
-              "Name": "Humidification Profile Name",
-              "Value": "No Humidification"
-            },
-            {
-              "Name": "Dehumidification Profile Name",
-              "Value": "No Dehumidification"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S37_OfficeCell",
-      "Guid": "ac3649d6-aadd-4097-8981-244b6c815b38",
-      "ParameterSets": [
-        {
-          "_type": "SAM.Core.ParameterSet",
-          "Name": "SAM.Analytical",
-          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-          "Parameters": [
-            {
-              "Name": "Occupancy Per Area",
-              "Value": 7.5
-            },
-            {
-              "Name": "Occupancy Profile Name",
-              "Value": "8to19"
-            },
-            {
-              "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 75.0
-            },
-            {
-              "Name": "Occupancy Latent Gain Per Person",
-              "Value": 55.0
-            },
-            {
-              "Name": "Equipment Sensible Profile Name",
-              "Value": "8to19"
-            },
-            {
-              "Name": "Equipment Sensible Gain Per Area",
-              "Value": 20.0
-            },
-            {
-              "Name": "Equipment Latent Profile Name",
-              "Value": "OFF"
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Gain Per Area",
@@ -2152,6 +2138,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "FCU"
             }
           ]
         }
@@ -2159,8 +2157,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S57_OfficeCellNV",
-      "Guid": "ada39ddc-3aba-42ce-af93-7331439ec5d5",
+      "Name": "S22_DomToilet",
+      "Guid": "bbbb556b-f564-4748-a310-586159e0db01",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2194,6 +2192,116 @@
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_7to19_25"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S23_DrySptHall",
+      "Guid": "e0699f12-05df-41b4-bcaf-c36e4fd9b291",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 7.5
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Gain Per Area",
@@ -2234,6 +2342,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "NV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -2241,8 +2361,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S46_Servery",
-      "Guid": "5285b4be-96c6-4b2b-91fb-1f144ee92d9d",
+      "Name": "S24_EatingDrinking",
+      "Guid": "20149a2b-e9c1-46ae-aa77-ed6a822f4241",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2259,11 +2379,11 @@
             },
             {
               "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 80.0
+              "Value": 75.0
             },
             {
               "Name": "Occupancy Latent Gain Per Person",
-              "Value": 140.0
+              "Value": 55.0
             },
             {
               "Name": "Equipment Sensible Profile Name",
@@ -2271,11 +2391,19 @@
             },
             {
               "Name": "Equipment Sensible Gain Per Area",
-              "Value": 500.0
+              "Value": 15.0
             },
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Gain Per Area",
@@ -2283,7 +2411,7 @@
             },
             {
               "Name": "Lighting Level",
-              "Value": 500.0
+              "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
@@ -2316,6 +2444,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "NV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -2323,8 +2463,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S47_StairsEscape",
-      "Guid": "44f04470-40ec-4fa0-a852-0cba630bb23e",
+      "Name": "S25_ElecPlant",
+      "Guid": "3bd5c55c-6e6f-4405-a559-e03c325f9319",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2333,19 +2473,23 @@
           "Parameters": [
             {
               "Name": "Occupancy Profile Name",
-              "Value": "8to19"
+              "Value": "OFF"
             },
             {
               "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 75.0
+              "Value": 80.0
             },
             {
               "Name": "Occupancy Latent Gain Per Person",
-              "Value": 70.0
+              "Value": 140.0
             },
             {
               "Name": "Equipment Sensible Profile Name",
-              "Value": "OFF"
+              "Value": "Constant"
+            },
+            {
+              "Name": "Equipment Sensible Gain",
+              "Value": 3500.0
             },
             {
               "Name": "Equipment Sensible Gain Per Area",
@@ -2356,16 +2500,24 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 2.4
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
-              "Value": 150.0
+              "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
-              "Value": "8to18"
+              "Value": "Constant"
             },
             {
               "Name": "Infiltration Air Changes Per Hour",
@@ -2381,11 +2533,11 @@
             },
             {
               "Name": "Heating Profile Name",
-              "Value": "HTG_7to19_18"
+              "Value": "HTG_7to19_21"
             },
             {
               "Name": "Cooling Profile Name",
-              "Value": "No Cooling"
+              "Value": "CLG_1to24_26"
             },
             {
               "Name": "Humidification Profile Name",
@@ -2394,6 +2546,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "FCU"
             }
           ]
         }
@@ -2401,8 +2565,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S48_Store",
-      "Guid": "f1d6fd9e-5679-49ad-bc30-40f0679581f9",
+      "Name": "S26_Exhibition",
+      "Guid": "49b93c66-4443-4e7e-90cb-2966786369bb",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2434,8 +2598,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 1.6
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -2472,6 +2644,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -2479,14 +2663,18 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S50_Toilet",
-      "Guid": "511c751d-de44-41ae-bacd-84ca42b3fb88",
+      "Name": "S27_FirstAid",
+      "Guid": "9600e488-13ee-400f-924c-304ab4a77277",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 10.0
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -2505,19 +2693,27 @@
             },
             {
               "Name": "Equipment Sensible Gain Per Area",
-              "Value": 0.0
+              "Value": 15.0
             },
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 3.2
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
-              "Value": 200.0
+              "Value": 500.0
             },
             {
               "Name": "Lighting Profile Name",
@@ -2537,7 +2733,7 @@
             },
             {
               "Name": "Heating Profile Name",
-              "Value": "HTG_7to19_20"
+              "Value": "HTG_7to19_21"
             },
             {
               "Name": "Cooling Profile Name",
@@ -2550,6 +2746,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -2557,8 +2765,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S52_Waste",
-      "Guid": "95270dfa-2611-45b2-863e-b9e047435a82",
+      "Name": "S28_FitGym",
+      "Guid": "25e6fc5c-5ff8-47ce-86fb-e027b9c46684",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2590,8 +2798,16 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 1.6
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
@@ -2628,6 +2844,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -2635,8 +2863,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S55_PGR",
-      "Guid": "b5e74b90-1636-4ece-8ef8-21a942e4eb87",
+      "Name": "S29_Foyer",
+      "Guid": "646f1fc7-8101-412b-913f-3efc7268dd1c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2645,7 +2873,7 @@
           "Parameters": [
             {
               "Name": "Occupancy Per Area",
-              "Value": 2.0
+              "Value": 10.0
             },
             {
               "Name": "Occupancy Profile Name",
@@ -2657,7 +2885,7 @@
             },
             {
               "Name": "Occupancy Latent Gain Per Person",
-              "Value": 55.0
+              "Value": 70.0
             },
             {
               "Name": "Equipment Sensible Profile Name",
@@ -2665,11 +2893,19 @@
             },
             {
               "Name": "Equipment Sensible Gain Per Area",
-              "Value": 25.0
+              "Value": 15.0
             },
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Gain Per Area",
@@ -2677,7 +2913,7 @@
             },
             {
               "Name": "Lighting Level",
-              "Value": 500.0
+              "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
@@ -2701,7 +2937,7 @@
             },
             {
               "Name": "Cooling Profile Name",
-              "Value": "No Cooling"
+              "Value": "CLG_6to19_26"
             },
             {
               "Name": "Humidification Profile Name",
@@ -2710,6 +2946,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "FCU"
             }
           ]
         }
@@ -2717,8 +2965,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S56_AcademicStudio",
-      "Guid": "ab4893c0-37b4-4088-8ee0-88cd063814a8",
+      "Name": "S30_IndustProcess",
+      "Guid": "bdf1df15-a2f3-4f56-b213-2c4e233d6031",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2754,6 +3002,14 @@
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
               "Value": 8.0
             },
@@ -2792,6 +3048,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "TRH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -2799,8 +3067,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S54_Rehearsal",
-      "Guid": "cff315c7-e6c3-4d43-bb2a-15f4cfc48f94",
+      "Name": "S31_Kitchen",
+      "Guid": "42660ae5-04df-4d08-b149-2b140ac5e303",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2809,7 +3077,7 @@
           "Parameters": [
             {
               "Name": "Occupancy Per Area",
-              "Value": 5.0
+              "Value": 10.0
             },
             {
               "Name": "Occupancy Profile Name",
@@ -2817,11 +3085,11 @@
             },
             {
               "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 90.0
+              "Value": 170.0
             },
             {
               "Name": "Occupancy Latent Gain Per Person",
-              "Value": 160.0
+              "Value": 255.0
             },
             {
               "Name": "Equipment Sensible Profile Name",
@@ -2829,19 +3097,27 @@
             },
             {
               "Name": "Equipment Sensible Gain Per Area",
-              "Value": 15.0
+              "Value": 10.0
             },
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
             },
             {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
               "Name": "Lighting Gain Per Area",
-              "Value": 4.8
+              "Value": 8.0
             },
             {
               "Name": "Lighting Level",
-              "Value": 300.0
+              "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
@@ -2865,7 +3141,7 @@
             },
             {
               "Name": "Cooling Profile Name",
-              "Value": "CLG_7to19_23"
+              "Value": "No Cooling"
             },
             {
               "Name": "Humidification Profile Name",
@@ -2874,6 +3150,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "CAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "AHU"
             }
           ]
         }
@@ -2881,8 +3169,8 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S58_ClassRoomIT",
-      "Guid": "81c72353-463a-4862-99f0-b639accb9004",
+      "Name": "S32_Kitchenette",
+      "Guid": "1b819df7-8b80-4355-a069-75a82230b4e3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2891,7 +3179,7 @@
           "Parameters": [
             {
               "Name": "Occupancy Per Area",
-              "Value": 1.5
+              "Value": 10.0
             },
             {
               "Name": "Occupancy Profile Name",
@@ -2911,11 +3199,19 @@
             },
             {
               "Name": "Equipment Sensible Gain Per Area",
-              "Value": 40.0
+              "Value": 15.0
             },
             {
               "Name": "Equipment Latent Profile Name",
               "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
             },
             {
               "Name": "Lighting Gain Per Area",
@@ -2923,7 +3219,7 @@
             },
             {
               "Name": "Lighting Level",
-              "Value": 500.0
+              "Value": 200.0
             },
             {
               "Name": "Lighting Profile Name",
@@ -2956,6 +3252,18 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "EOL"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }
@@ -2963,8 +3271,90 @@
     },
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "S54_Koxs",
-      "Guid": "a6f9b1ee-5542-4f6f-8f74-d636ac6ad117",
+      "Name": "S33_Lab",
+      "Guid": "76e544b4-a854-4923-9a3e-1200f08ac7ab",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 67.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 58.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S34_Laundry",
+      "Guid": "323fb72d-81fe-4eef-a11b-8636ba4b840a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3026,6 +3416,1940 @@
             {
               "Name": "Dehumidification Profile Name",
               "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S35_MechPlant",
+      "Guid": "618bbfb3-a524-49d9-a021-f117d93765b4",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 80.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 140.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 15.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_6"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "NV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S36_Meeting",
+      "Guid": "0a8aafd6-ea15-40c1-884e-f1664bf6cd46",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 2.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_7to19_23"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "FCU"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S37_OfficeCell",
+      "Guid": "6c146fa0-a5b5-4cce-8545-57c2f52561f2",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 7.5
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_7to19_25"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S38_OfficeHighLoad",
+      "Guid": "a9fca082-89cb-42e4-b717-a463bd7e729f",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S39_OfficeOpen",
+      "Guid": "cbe70eab-8295-42c3-ba9e-7758a7d03f72",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 13.3
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 25.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_7to19_25"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "FCU"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S40_Prayer",
+      "Guid": "24976162-2612-4103-9d4f-d853ace7fd61",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S41_Reception",
+      "Guid": "b5a32ae8-5413-417d-ac5c-b502007ab957",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S42_Retail",
+      "Guid": "2a0bede0-cf19-4e11-95b4-3ec0669aacaf",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S43_RetailChill",
+      "Guid": "06db5a70-50b8-4a9c-a004-7b7b2a9a2d9b",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S44_RetailElectric",
+      "Guid": "5e7dd6d4-c681-42e4-8bd8-7114bc549b6e",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S45_RetailWarehouse",
+      "Guid": "88cc77e5-69ea-4ece-9e89-a45bf6170a7e",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S46_Servery",
+      "Guid": "cf18d638-683f-4d70-b771-c3aecae22a36",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 10.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 80.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 140.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 500.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "EOL"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S47_StairsEscape",
+      "Guid": "573a93a6-655c-4b31-bd81-cb240dda676c",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 150.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_18"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "RAD"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S48_Store",
+      "Guid": "7903e6b0-3a2c-4851-baa6-14096978eb19",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 100.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_18"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S49_Swim",
+      "Guid": "6871a61e-c9d9-42f0-a0bb-d7a4717b4bf5",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S50_Toilet",
+      "Guid": "9c37cf48-1345-4912-b645-1b9c37b820e5",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 200.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_20"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "EOL"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S51_Waiting",
+      "Guid": "ad22e9a9-16ba-424b-8b07-6b60143a8782",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S52_Waste",
+      "Guid": "16c5fdb1-eb7b-479b-be04-c497f6c4d800",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 70.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 100.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_1to24_6"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UFH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S53_Workshop",
+      "Guid": "1c2474cf-646c-4a37-a945-a17488063549",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "No Heating"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "UV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "UH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S54_Rehearsal",
+      "Guid": "6b7b26cb-272a-4d4a-9c2e-e1032b09c2c9",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 5.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 90.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 160.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 15.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 300.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "CLG_7to19_23"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "RAD"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "AHU"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+      "Name": "S56_AcademicStudio",
+      "Guid": "061bfefa-1d6d-497f-b506-faf1689758d4",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Occupancy Per Area",
+              "Value": 7.0
+            },
+            {
+              "Name": "Occupancy Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Occupancy Sensible Gain Per Person",
+              "Value": 75.0
+            },
+            {
+              "Name": "Occupancy Latent Gain Per Person",
+              "Value": 55.0
+            },
+            {
+              "Name": "Equipment Sensible Profile Name",
+              "Value": "8to19"
+            },
+            {
+              "Name": "Equipment Sensible Gain Per Area",
+              "Value": 20.0
+            },
+            {
+              "Name": "Equipment Latent Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Equipment Latent Gain",
+              "Value": 0.0
+            },
+            {
+              "Name": "Equipment Latent Gain Per Area",
+              "Value": 0.0
+            },
+            {
+              "Name": "Lighting Gain Per Area",
+              "Value": 8.0
+            },
+            {
+              "Name": "Lighting Level",
+              "Value": 500.0
+            },
+            {
+              "Name": "Lighting Profile Name",
+              "Value": "8to18"
+            },
+            {
+              "Name": "Infiltration Air Changes Per Hour",
+              "Value": 0.2
+            },
+            {
+              "Name": "Infiltration Profile Name",
+              "Value": "Constant"
+            },
+            {
+              "Name": "Pollutant Profile Name",
+              "Value": "OFF"
+            },
+            {
+              "Name": "Heating Profile Name",
+              "Value": "HTG_7to19_21"
+            },
+            {
+              "Name": "Cooling Profile Name",
+              "Value": "No Cooling"
+            },
+            {
+              "Name": "Humidification Profile Name",
+              "Value": "No Humidification"
+            },
+            {
+              "Name": "Dehumidification Profile Name",
+              "Value": "No Dehumidification"
+            },
+            {
+              "Name": "Ventilation System Type Name",
+              "Value": "VAV"
+            },
+            {
+              "Name": "Cooling System Type Name",
+              "Value": "TRH"
+            },
+            {
+              "Name": "Heating System Type Name",
+              "Value": "UC"
             }
           ]
         }

@@ -2,6 +2,7 @@
 using SAM.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -67,6 +68,20 @@ namespace SAM.Analytical
             return null;
         }
 
+        public string GetSystemTypeName<T>() where T: ISystemType
+        {
+            if (typeof(T) == typeof(VentilationSystemType))
+                return GetValue<string>(InternalConditionParameter.VentilationSystemTypeName);
+
+            if (typeof(T) == typeof(CoolingSystemType))
+                return GetValue<string>(InternalConditionParameter.CoolingSystemTypeName);
+
+            if (typeof(T) == typeof(HeatingSystemType))
+                return GetValue<string>(InternalConditionParameter.HeatingSystemTypeName);
+
+            return null;
+        }
+
         public IEnumerable<ProfileType> GetProfileTypes()
         {
             return GetProfileTypeDictionary()?.Keys;
@@ -128,6 +143,18 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+
+        public T GetSystemType<T>(SystemTypeLibrary systemTypeLibrary) where T: ISystemType
+        {
+            if (systemTypeLibrary == null)
+                return default;
+
+            string name = GetSystemTypeName<T>();
+            if (name == null)
+                return default;
+
+            return systemTypeLibrary.GetSystemTypes<T>(name).FirstOrDefault();
         }
 
         public override bool FromJObject(JObject jObject)
