@@ -64,7 +64,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Analytical", "Analytical", "SAM Analytical", GH_ParamAccess.item);
-            outputParamManager.AddParameter(new GooSystemTypeParam(), "MechanicalSystems", "MechanicalSystems", "MechanicalSystems", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSystemParam(), "MechanicalSystems", "MechanicalSystems", "MechanicalSystems", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -89,7 +89,8 @@ namespace SAM.Analytical.Grasshopper
                 systemTypeLibrary = ActiveSetting.Setting.GetValue<SystemTypeLibrary>(AnalyticalSettingParameter.DefaultSystemTypeLibrary);
 
             List<Space> spaces = new List<Space>();
-            dataAccess.GetDataList(2, spaces);
+            if (!dataAccess.GetDataList(2, spaces))
+                spaces = null;
 
             string supplyUnitName = null;
             dataAccess.GetData(3, ref supplyUnitName);

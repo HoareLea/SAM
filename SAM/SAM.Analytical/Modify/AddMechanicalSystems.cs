@@ -20,7 +20,7 @@ namespace SAM.Analytical
             Dictionary<VentilationSystemType, List<Space>> dictionary_Ventilation = new Dictionary<VentilationSystemType, List<Space>>();
             Dictionary<CoolingSystemType, List<Space>> dictionary_Cooling = new Dictionary<CoolingSystemType, List<Space>>();
             Dictionary<HeatingSystemType, List<Space>> dictionary_Heating = new Dictionary<HeatingSystemType, List<Space>>();
-            foreach (Space space in spaces)
+            foreach (Space space in spaces_Temp)
             {
                 InternalCondition internalCondition = space.InternalCondition;
                 if (internalCondition == null)
