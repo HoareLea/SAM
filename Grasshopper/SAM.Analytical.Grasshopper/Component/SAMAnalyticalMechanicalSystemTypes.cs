@@ -9,7 +9,7 @@ using System;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSystemTypes : GH_SAMComponent
+    public class SAMAnalyticalMechanicalSystemTypes : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalSystemTypes()
+        public SAMAnalyticalMechanicalSystemTypes()
           : base("SAMAnalytical.SystemTypes", "SAMAnalytical.SystemTypes",
               "Gets Analytical System Types",
               "SAM", "Analytical")

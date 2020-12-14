@@ -18,5 +18,11 @@ namespace SAM.Analytical
         [ParameterProperties("Level Name", "Level Name"), ParameterValue(Core.ParameterType.String)] LevelName,
         [ParameterProperties("Cooling Sizing Factor", "Cooling Sizing Factor"), DoubleParameterValue(0)] CoolingSizingFactor,
         [ParameterProperties("Heating Sizing Factor", "Heating Sizing Factor"), DoubleParameterValue(0)] HeatingSizingFactor,
+        [ParameterProperties("Ventilation Riser Name", "Ventilation Riser Name"), ParameterValue(Core.ParameterType.String)] VentilationRiserName,
+        [ParameterProperties("Heating Riser Name", "Heating Riser Name"), ParameterValue(Core.ParameterType.String)] HeatingRiserName,
+        [ParameterProperties("Cooling Riser Name", "Cooling Riser Name"), ParameterValue(Core.ParameterType.String)] CoolingRiserName,
+        [ParameterProperties("Ventilation Zone Name", "Ventilation Zone Name"), ParameterValue(Core.ParameterType.String)] VentilationZoneName,
+        [ParameterProperties("Heating Zone Name", "Heating Zone Name"), ParameterValue(Core.ParameterType.String)] HeatingZoneName,
+        [ParameterProperties("Cooling Zone Name", "Cooling Zone Name"), ParameterValue(Core.ParameterType.String)] CoolingZoneName,
     }
 }

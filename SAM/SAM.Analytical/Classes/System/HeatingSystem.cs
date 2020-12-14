@@ -1,21 +1,22 @@
 ﻿using Newtonsoft.Json.Linq;
+
 namespace SAM.Analytical
 {
-    public class CoolingSystem : MechanicalSystem
+    public class HeatingSystem : MechanicalSystem
     {
-        public CoolingSystem(string name, CoolingSystemType coolingSystemType)
-            : base(name, coolingSystemType)
+        public HeatingSystem(string name, HeatingSystemType heatingSystemType)
+            : base(name, heatingSystemType)
         {
 
         }
 
-        public CoolingSystem(CoolingSystem coolingSystem)
-            : base(coolingSystem)
+        public HeatingSystem(HeatingSystem heatingSystem)
+            : base(heatingSystem)
         {
 
         }
 
-        public CoolingSystem(JObject jObject)
+        public HeatingSystem(JObject jObject)
             : base(jObject)
         {
         }
