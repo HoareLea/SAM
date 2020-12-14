@@ -1,12 +1,12 @@
 {
   "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
   "Name": "Default SAM InternalCondition Library ver00",
-  "Guid": "416faf8d-584b-4901-a72e-1cf5955965d5",
+  "Guid": "f98b46ba-f937-4f91-a218-007c99c69464",
   "Objects": [
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "Sxx_External",
-      "Guid": "20f5f137-25c4-4afd-bf5e-fff653342fde",
+      "Guid": "50ce41b9-3086-4c1d-8628-343077199d1d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -75,11 +75,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -88,7 +88,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S00_Unconditioned",
-      "Guid": "2b2238fb-358e-4c8c-865c-6bd3c9f47d48",
+      "Guid": "d3fd816a-b97b-465f-997b-19e561a22a0c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -157,11 +157,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -170,7 +170,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S01_Auditorium",
-      "Guid": "d17dc5b4-30dc-4acf-a8e4-46f13bb7b13f",
+      "Guid": "56233203-c401-4082-9607-b7fe29c630c8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -259,11 +259,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "FCU"
+              "Value": "UFH"
             }
           ]
         }
@@ -272,7 +272,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S03_Bedroom",
-      "Guid": "b8bdf064-4e1f-41b5-9832-fbe4ccba1b4d",
+      "Guid": "ebe3a92c-15b4-4732-b181-6f3309847136",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -361,11 +361,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "FCU"
+              "Value": "UFH"
             }
           ]
         }
@@ -374,7 +374,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S04_Breakout",
-      "Guid": "a0d9cbe8-a1da-4f72-95bc-2d61dde52def",
+      "Guid": "f7558aac-1db8-4bfe-87be-8f37b0a4fb6f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -463,11 +463,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "AHU"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "AHU"
             }
           ]
         }
@@ -476,7 +476,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S05_CarPark",
-      "Guid": "22457d3c-9c26-44ac-bd82-96b849b3cb6b",
+      "Guid": "5743da72-a320-4eb1-a736-284d243ce32b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -545,11 +545,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -558,7 +558,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S06_ChangingDry",
-      "Guid": "09b479eb-fef1-41d6-9623-d2bda21ba42e",
+      "Guid": "8bb365c0-08ea-4031-9e9b-d21d77a7bab3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -647,11 +647,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "RAD"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "RAD"
             }
           ]
         }
@@ -660,7 +660,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S07_ChangingWet",
-      "Guid": "36708eeb-6249-4568-949b-1f90711b763e",
+      "Guid": "1c76d15c-16b0-4e15-a04e-e6bf9d1ef8d7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -749,11 +749,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "RAD"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "RAD"
             }
           ]
         }
@@ -762,7 +762,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S08_Circulation",
-      "Guid": "056021d3-017b-4c13-bdd6-1d6a7dd15c21",
+      "Guid": "2cdac580-b485-4565-9de5-2d527a1115c1",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -847,11 +847,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "TRH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "TRH"
             }
           ]
         }
@@ -860,7 +860,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S09_ClassHighLoad",
-      "Guid": "137b87d3-a727-4092-b2c4-ee3587d8762e",
+      "Guid": "93d188b2-c4da-4007-bd22-796994ccff28",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -949,11 +949,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "TRH"
+              "Value": "AHU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "AHU"
+              "Value": "TRH"
             }
           ]
         }
@@ -962,7 +962,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S10_ClassRoom",
-      "Guid": "9aca9980-16ec-4343-accc-8b06ac97683b",
+      "Guid": "1c7bc392-9b86-421a-864a-2d8ec0520819",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1047,11 +1047,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "RAD"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "RAD"
             }
           ]
         }
@@ -1060,7 +1060,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S11_CommonRoom",
-      "Guid": "47103807-415c-4335-a2ab-be2b07682757",
+      "Guid": "82811c76-3ff3-475a-a7d3-eb628120283a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1145,11 +1145,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -1158,7 +1158,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S12_Comms",
-      "Guid": "18c64ef5-acc9-4831-b857-0e95571b7431",
+      "Guid": "ab3a1e16-6265-4cbf-9f9a-ba442013575f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1243,11 +1243,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -1256,7 +1256,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S13_Copier",
-      "Guid": "dde3c0b6-981f-45a1-adc7-45a633ab815b",
+      "Guid": "0b3adc85-f247-43cf-bfd4-ce36ebad40f5",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1341,11 +1341,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "RAD"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "RAD"
             }
           ]
         }
@@ -1354,7 +1354,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S14_DataCentre",
-      "Guid": "641b8fbb-3f97-49d6-80cc-64fea917fe2f",
+      "Guid": "010d020c-9460-45dc-b099-7218d03b120e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1443,11 +1443,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "FCU"
+              "Value": "UFH"
             }
           ]
         }
@@ -1456,7 +1456,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S15_DomBath",
-      "Guid": "11501c68-ec5b-4325-bacf-4147af7cf59d",
+      "Guid": "1eda45db-ccab-4c48-9257-edd523825f4f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1541,11 +1541,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -1554,7 +1554,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S16_DomBed",
-      "Guid": "bb884f52-b31b-448b-8379-83adaa7f41bd",
+      "Guid": "5943a6a9-a6f9-41de-b328-bc74bc6d1b83",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1643,11 +1643,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "FCU"
+              "Value": "UFH"
             }
           ]
         }
@@ -1656,7 +1656,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S17_DomCirculation",
-      "Guid": "3598eecf-c711-47a1-b0c7-b1c57333f719",
+      "Guid": "9df42953-6520-4f8c-923a-fc8a58b79fd4",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1741,11 +1741,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -1754,7 +1754,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S18_DomDining",
-      "Guid": "02c5982c-e92f-4c49-88f9-1105d671d7cf",
+      "Guid": "1b48def8-49f2-4e8e-bc4e-8f742499308e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1843,11 +1843,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -1856,7 +1856,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S19_DomKitchen",
-      "Guid": "2caac35a-5239-4c4a-a249-8312522db584",
+      "Guid": "beb5eb7a-49ab-492a-aaf5-e7cb244ce5c7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1941,11 +1941,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -1954,7 +1954,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S20_DomLiving",
-      "Guid": "a4341d1f-f15b-4778-b536-d7eec3f41c47",
+      "Guid": "c517bf23-d1d2-4659-a338-aac3d5b548ab",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2043,11 +2043,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "FCU"
+              "Value": "UFH"
             }
           ]
         }
@@ -2056,7 +2056,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S21_DomStore",
-      "Guid": "a291d06c-ca8b-43f1-8ac8-855f718fd831",
+      "Guid": "1881b45c-c553-455d-bb19-1b444228427d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2145,11 +2145,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "FCU"
+              "Value": "UFH"
             }
           ]
         }
@@ -2158,7 +2158,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S22_DomToilet",
-      "Guid": "bbbb556b-f564-4748-a310-586159e0db01",
+      "Guid": "8bc5e7e9-819d-428f-a9ab-e761c84d6a1f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2247,11 +2247,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -2260,7 +2260,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S23_DrySptHall",
-      "Guid": "e0699f12-05df-41b4-bcaf-c36e4fd9b291",
+      "Guid": "2d672f36-7dc9-4ca9-a59e-632302425ca3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2349,11 +2349,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -2362,7 +2362,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S24_EatingDrinking",
-      "Guid": "20149a2b-e9c1-46ae-aa77-ed6a822f4241",
+      "Guid": "54c3da21-f722-4c3b-9567-6eb524960eca",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2451,11 +2451,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -2464,7 +2464,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S25_ElecPlant",
-      "Guid": "3bd5c55c-6e6f-4405-a559-e03c325f9319",
+      "Guid": "52abba55-2832-466c-8c37-7160d9a84b86",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2553,11 +2553,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "FCU"
+              "Value": "UFH"
             }
           ]
         }
@@ -2566,7 +2566,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S26_Exhibition",
-      "Guid": "49b93c66-4443-4e7e-90cb-2966786369bb",
+      "Guid": "af05de3e-101a-4c61-9ae3-7e72a3015620",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2651,11 +2651,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -2664,7 +2664,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S27_FirstAid",
-      "Guid": "9600e488-13ee-400f-924c-304ab4a77277",
+      "Guid": "01c5a00d-dabb-418e-a999-b78b16770045",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2753,11 +2753,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -2766,7 +2766,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S28_FitGym",
-      "Guid": "25e6fc5c-5ff8-47ce-86fb-e027b9c46684",
+      "Guid": "050be8b0-3632-470b-87e3-ebc001dd047e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2851,11 +2851,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -2864,7 +2864,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S29_Foyer",
-      "Guid": "646f1fc7-8101-412b-913f-3efc7268dd1c",
+      "Guid": "57038e61-d4cd-46a6-a147-5818dbef2cf4",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2953,11 +2953,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "FCU"
+              "Value": "UFH"
             }
           ]
         }
@@ -2966,7 +2966,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S30_IndustProcess",
-      "Guid": "bdf1df15-a2f3-4f56-b213-2c4e233d6031",
+      "Guid": "d5147dcf-8132-4aaf-a66b-2b918e3121c2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3055,11 +3055,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "TRH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "TRH"
             }
           ]
         }
@@ -3068,7 +3068,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S31_Kitchen",
-      "Guid": "42660ae5-04df-4d08-b149-2b140ac5e303",
+      "Guid": "611c73d0-5516-4fc0-b096-666e2f8c83ca",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3157,11 +3157,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "AHU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "AHU"
+              "Value": "UFH"
             }
           ]
         }
@@ -3170,7 +3170,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S32_Kitchenette",
-      "Guid": "1b819df7-8b80-4355-a069-75a82230b4e3",
+      "Guid": "5345b5ca-23f4-43ed-b207-12e7b9f8b99e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3259,11 +3259,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -3272,7 +3272,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S33_Lab",
-      "Guid": "76e544b4-a854-4923-9a3e-1200f08ac7ab",
+      "Guid": "4b217850-47a7-479f-b12b-f99da39a93af",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3341,11 +3341,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -3354,7 +3354,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S34_Laundry",
-      "Guid": "323fb72d-81fe-4eef-a11b-8636ba4b840a",
+      "Guid": "5416ad0b-6cf7-4fe8-86f4-09b0c4da910e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3423,11 +3423,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -3436,7 +3436,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S35_MechPlant",
-      "Guid": "618bbfb3-a524-49d9-a021-f117d93765b4",
+      "Guid": "ced544f9-3f69-4cca-91a8-5a929adc5a2e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3521,11 +3521,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -3534,7 +3534,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S36_Meeting",
-      "Guid": "0a8aafd6-ea15-40c1-884e-f1664bf6cd46",
+      "Guid": "f03c2364-a0e0-4703-bcf2-d8612e25bade",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3623,11 +3623,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "FCU"
+              "Value": "UFH"
             }
           ]
         }
@@ -3636,7 +3636,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S37_OfficeCell",
-      "Guid": "6c146fa0-a5b5-4cce-8545-57c2f52561f2",
+      "Guid": "7fdfc817-cdfe-4652-a000-fbed200461df",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3725,11 +3725,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -3738,7 +3738,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S38_OfficeHighLoad",
-      "Guid": "a9fca082-89cb-42e4-b717-a463bd7e729f",
+      "Guid": "1bb25e67-3d9f-4591-848c-d34a5673863c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3807,11 +3807,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -3820,7 +3820,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S39_OfficeOpen",
-      "Guid": "cbe70eab-8295-42c3-ba9e-7758a7d03f72",
+      "Guid": "70c02fb8-64cb-40de-a8ed-270b6b7ee76e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3909,11 +3909,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "FCU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "FCU"
+              "Value": "UFH"
             }
           ]
         }
@@ -3922,7 +3922,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S40_Prayer",
-      "Guid": "24976162-2612-4103-9d4f-d853ace7fd61",
+      "Guid": "d35ae568-5d85-4a12-975d-9a74317e5e4b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3991,11 +3991,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -4004,7 +4004,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S41_Reception",
-      "Guid": "b5a32ae8-5413-417d-ac5c-b502007ab957",
+      "Guid": "529e7a36-85f9-4df7-96b8-764f9a63c8d3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4073,11 +4073,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -4086,7 +4086,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S42_Retail",
-      "Guid": "2a0bede0-cf19-4e11-95b4-3ec0669aacaf",
+      "Guid": "5fae8bad-6532-4bc5-b5a0-0c4685c978f3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4155,11 +4155,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -4168,7 +4168,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S43_RetailChill",
-      "Guid": "06db5a70-50b8-4a9c-a004-7b7b2a9a2d9b",
+      "Guid": "3e9cde8d-b48a-4d2b-bd47-568ab125f1bf",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4237,11 +4237,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -4250,7 +4250,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S44_RetailElectric",
-      "Guid": "5e7dd6d4-c681-42e4-8bd8-7114bc549b6e",
+      "Guid": "e4f47dff-7084-4ead-9cb9-36d67b6bb86c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4319,11 +4319,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -4332,7 +4332,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S45_RetailWarehouse",
-      "Guid": "88cc77e5-69ea-4ece-9e89-a45bf6170a7e",
+      "Guid": "49a4f7ec-d1f7-4cfe-aab2-331157459f87",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4401,11 +4401,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -4414,7 +4414,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S46_Servery",
-      "Guid": "cf18d638-683f-4d70-b771-c3aecae22a36",
+      "Guid": "2dc95c60-9887-46d9-a1f7-f98c9ec52010",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4503,11 +4503,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -4516,7 +4516,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S47_StairsEscape",
-      "Guid": "573a93a6-655c-4b31-bd81-cb240dda676c",
+      "Guid": "b983d713-c944-483a-8f25-64df36a504e1",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4601,11 +4601,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "RAD"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "RAD"
             }
           ]
         }
@@ -4614,7 +4614,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S48_Store",
-      "Guid": "7903e6b0-3a2c-4851-baa6-14096978eb19",
+      "Guid": "8eb01a1f-8b70-428f-ab2d-0c17c6919c5b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4699,11 +4699,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -4712,7 +4712,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S49_Swim",
-      "Guid": "6871a61e-c9d9-42f0-a0bb-d7a4717b4bf5",
+      "Guid": "43cddd50-980e-44e8-a50c-fc95a8f08a0f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4781,11 +4781,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -4794,7 +4794,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S50_Toilet",
-      "Guid": "9c37cf48-1345-4912-b645-1b9c37b820e5",
+      "Guid": "e13f036e-f329-4154-a210-04a9a93e0bf5",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4879,11 +4879,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -4892,7 +4892,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S51_Waiting",
-      "Guid": "ad22e9a9-16ba-424b-8b07-6b60143a8782",
+      "Guid": "542e3c34-5bfb-4af1-b945-5b6ce5547a37",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4961,11 +4961,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -4974,7 +4974,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S52_Waste",
-      "Guid": "16c5fdb1-eb7b-479b-be04-c497f6c4d800",
+      "Guid": "64e92a84-5e25-473c-baaf-1f2e5f0cc30c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5059,11 +5059,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UFH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UFH"
             }
           ]
         }
@@ -5072,7 +5072,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S53_Workshop",
-      "Guid": "1c2474cf-646c-4a37-a945-a17488063549",
+      "Guid": "5e0cd40f-2289-40de-b92e-6ba4ab5f2060",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5141,11 +5141,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "UH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "UH"
             }
           ]
         }
@@ -5154,7 +5154,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S54_Rehearsal",
-      "Guid": "6b7b26cb-272a-4d4a-9c2e-e1032b09c2c9",
+      "Guid": "3670fcd4-0e49-47e4-8bf2-59bb4febc8d2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5243,11 +5243,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "RAD"
+              "Value": "AHU"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "AHU"
+              "Value": "RAD"
             }
           ]
         }
@@ -5256,7 +5256,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S56_AcademicStudio",
-      "Guid": "061bfefa-1d6d-497f-b506-faf1689758d4",
+      "Guid": "e6777820-5eb4-4918-8b87-570152b64539",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5345,11 +5345,11 @@
             },
             {
               "Name": "Cooling System Type Name",
-              "Value": "TRH"
+              "Value": "UC"
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UC"
+              "Value": "TRH"
             }
           ]
         }

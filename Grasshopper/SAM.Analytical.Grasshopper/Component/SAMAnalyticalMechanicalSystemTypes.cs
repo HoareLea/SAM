@@ -93,8 +93,8 @@ namespace SAM.Analytical.Grasshopper
             }
 
             dataAccess.SetData(0, new GooSystemType(internalCondition.GetSystemType<VentilationSystemType>(systemTypeLibrary)));
-            dataAccess.SetData(0, new GooSystemType(internalCondition.GetSystemType<HeatingSystemType>(systemTypeLibrary)));
-            dataAccess.SetData(0, new GooSystemType(internalCondition.GetSystemType<CoolingSystemType>(systemTypeLibrary)));
+            dataAccess.SetData(1, new GooSystemType(internalCondition.GetSystemType<HeatingSystemType>(systemTypeLibrary)));
+            dataAccess.SetData(2, new GooSystemType(internalCondition.GetSystemType<CoolingSystemType>(systemTypeLibrary)));
         }
     }
 }
