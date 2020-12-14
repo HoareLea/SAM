@@ -1,6 +1,6 @@
 ﻿namespace SAM.Core
 {
-    public interface ISystem : IJSAMObject
+    public interface ISystem : ISAMObject
     {
 
     }

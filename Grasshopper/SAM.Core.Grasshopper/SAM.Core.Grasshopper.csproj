@@ -75,6 +75,7 @@
     <Compile Include="Classes\GH_SAMParam.cs" />
     <Compile Include="Classes\GH_SAMVariableOutputParameterComponent.cs" />
     <Compile Include="Classes\GH_SAMComponent.cs" />
+    <Compile Include="Classes\GooSystemType.cs" />
     <Compile Include="Classes\GooSystemTypeLibrary.cs" />
     <Compile Include="Classes\GooTextMap.cs" />
     <Compile Include="Classes\GooMaterialLibrary.cs" />

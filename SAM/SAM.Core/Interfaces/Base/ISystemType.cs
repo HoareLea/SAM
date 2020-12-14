@@ -2,9 +2,8 @@
 
 namespace SAM.Core
 {
-    public interface ISystemType : IJSAMObject
+    public interface ISystemType : ISAMObject
     {
         string Description { get; }
-        string Name { get; }
     }
 }

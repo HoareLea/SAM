@@ -114,6 +114,7 @@
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalCopyApertureConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalCopyConstructionLayers.cs" />
+    <Compile Include="Component\SAMAnalyticalSystemTypes.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByPanelAreaAndThinnessRatio.cs" />
     <Compile Include="Component\SAMAnalyticalFlipPanel.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultSystemTypeLibrary.cs" />
