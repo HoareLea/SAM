@@ -2,7 +2,7 @@
 {
     public static partial class Create
     {
-        public static MechanicalSystem MechanicalSystem(MechanicalSystemType mechanicalSystemType, int index = -1, string supplyUnitName = null, string exhaustUnitName = null)
+        public static MechanicalSystem MechanicalSystem(MechanicalSystemType mechanicalSystemType, int index = -1)
         {
             if (mechanicalSystemType == null)
                 return null;
@@ -26,12 +26,6 @@
 
             if (result == null)
                 return null;
-
-            if (supplyUnitName != null)
-                result.SetValue(MechanicalSystemParameter.SupplyUnitName, supplyUnitName);
-
-            if (exhaustUnitName != null)
-                result.SetValue(MechanicalSystemParameter.ExhaustUnitName, exhaustUnitName);
 
             return result;
         }

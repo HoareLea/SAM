@@ -93,6 +93,7 @@
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\HeatingSystemType.cs" />
     <Compile Include="Create\CoolingSystemType.cs" />
+    <Compile Include="Create\VentilationSystem.cs" />
     <Compile Include="Create\MechanicalSystem.cs" />
     <Compile Include="Create\VentilationSystemType.cs" />
     <Compile Include="Create\ConstructionLibrary.cs" />
@@ -115,7 +116,7 @@
     <Compile Include="Enums\DefaultGasType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
     <Compile Include="Enums\ActivityLevel.cs" />
-    <Compile Include="Enums\Parameter\MechanicalSystemParameter.cs" />
+    <Compile Include="Enums\Parameter\VentilationSystemParameter.cs" />
     <Compile Include="Enums\Parameter\VentilationSystemTypeParameter.cs" />
     <Compile Include="Enums\Parameter\HeatingSystemTypeParameter.cs" />
     <Compile Include="Enums\Parameter\CoolingSystemTypeParameter.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAperture.cs" />
+    <Compile Include="Modify\AddVentilationSystem.cs" />
     <Compile Include="Modify\AddMechanicalSystems.cs" />
     <Compile Include="Modify\AddMechanicalSystem.cs" />
     <Compile Include="Modify\MapInternalConditions.cs" />
