@@ -3,7 +3,7 @@ using SAM.Core.Attributes;
 
 namespace SAM.Analytical
 {
-    [AssociatedTypes(typeof(MechanicalSystemParameter)), Description("Mechanical System Parameter")]
+    [AssociatedTypes(typeof(MechanicalSystem)), Description("Mechanical System Parameter")]
     public enum MechanicalSystemParameter
     {
         [ParameterProperties("Supply Unit Name", "Supply Unit Name"), ParameterValue(Core.ParameterType.String)] SupplyUnitName,

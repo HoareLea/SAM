@@ -115,7 +115,7 @@
     <Compile Include="Enums\DefaultGasType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
     <Compile Include="Enums\ActivityLevel.cs" />
-    <Compile Include="Enums\Parameter\MechanicalSystem.cs" />
+    <Compile Include="Enums\Parameter\MechanicalSystemParameter.cs" />
     <Compile Include="Enums\Parameter\VentilationSystemTypeParameter.cs" />
     <Compile Include="Enums\Parameter\HeatingSystemTypeParameter.cs" />
     <Compile Include="Enums\Parameter\CoolingSystemTypeParameter.cs" />

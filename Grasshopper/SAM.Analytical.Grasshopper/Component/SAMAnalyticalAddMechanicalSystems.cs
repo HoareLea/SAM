@@ -98,7 +98,7 @@ namespace SAM.Analytical.Grasshopper
                 supplyUnitName = "AHU1S";
 
             string exhaustUnitName = null;
-            dataAccess.GetData(3, ref exhaustUnitName);
+            dataAccess.GetData(4, ref exhaustUnitName);
             if (string.IsNullOrEmpty(exhaustUnitName))
                 exhaustUnitName = "AHU1E";
 

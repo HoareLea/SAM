@@ -31,7 +31,7 @@ namespace SAM.Analytical
             if (!base.IsValid(type))
                 return false;
 
-            return typeof(Panel).IsAssignableFrom(type) || typeof(Space).IsAssignableFrom(type);
+            return typeof(Panel).IsAssignableFrom(type) || typeof(Space).IsAssignableFrom(type) || typeof(MechanicalSystem).IsAssignableFrom(type);
         }
 
         public override Core.RelationCluster Clone()
