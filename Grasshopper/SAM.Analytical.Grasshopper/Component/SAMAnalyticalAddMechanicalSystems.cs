@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -55,6 +55,15 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddTextParameter("_exhaustUnitName_", "_exhaustUnitName_", "Exhaust Unit Name", GH_ParamAccess.item, "AHU1E");
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddTextParameter("_ventilationRiserName_", "_ventilationRiserName_", "Ventilation Riser Name", GH_ParamAccess.item, "RV1");
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddTextParameter("_heatingRiserName_", "_heatingRiserName_", "Heating Riser Name", GH_ParamAccess.item, "RH1");
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddTextParameter("_coolingRiserName_", "_coolingRiserName_", "Cooling Riser Name", GH_ParamAccess.item, "RC1");
             inputParamManager[index].Optional = true;
         }
 
@@ -102,6 +111,21 @@ namespace SAM.Analytical.Grasshopper
             if (string.IsNullOrEmpty(exhaustUnitName))
                 exhaustUnitName = "AHU1E";
 
+            string ventilationRiserName = null;
+            dataAccess.GetData(5, ref ventilationRiserName);
+            if (string.IsNullOrEmpty(ventilationRiserName))
+                ventilationRiserName = "RV1";
+
+            string heatingRiserName = null;
+            dataAccess.GetData(6, ref heatingRiserName);
+            if (string.IsNullOrEmpty(heatingRiserName))
+                heatingRiserName = "RH1";
+
+            string coolingRiserName = null;
+            dataAccess.GetData(7, ref coolingRiserName);
+            if (string.IsNullOrEmpty(coolingRiserName))
+                coolingRiserName = "RC1";
+
             List<MechanicalSystem> mechanicalSystems = null;
             if (sAMObject is AnalyticalModel)
             {
@@ -109,7 +133,7 @@ namespace SAM.Analytical.Grasshopper
                 if(adjacencyCluster != null)
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-                    mechanicalSystems = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName);
+                    mechanicalSystems = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName, ventilationRiserName, heatingRiserName, coolingRiserName);
                     if (mechanicalSystems != null && mechanicalSystems.Count > 0)
                         sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
                 }
@@ -117,7 +141,7 @@ namespace SAM.Analytical.Grasshopper
             else if (sAMObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-                mechanicalSystems = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName);
+                mechanicalSystems = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName, ventilationRiserName, heatingRiserName, coolingRiserName);
             }
 
             dataAccess.SetData(0, sAMObject);
