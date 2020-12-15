@@ -167,6 +167,8 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\ExhaustAirFlow.cs" />
+    <Compile Include="Query\SupplyAirFlow.cs" />
     <Compile Include="Query\EmitterTypes.cs" />
     <Compile Include="Query\EmitterCategory.cs" />
     <Compile Include="Query\Cut.cs" />
