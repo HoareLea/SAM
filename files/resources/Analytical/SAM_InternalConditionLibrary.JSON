@@ -1,12 +1,12 @@
 {
   "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
   "Name": "Default SAM InternalCondition Library ver00",
-  "Guid": "f98b46ba-f937-4f91-a218-007c99c69464",
+  "Guid": "83a56ded-4306-4a87-94b5-762cad7514f0",
   "Objects": [
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "Sxx_External",
-      "Guid": "50ce41b9-3086-4c1d-8628-343077199d1d",
+      "Guid": "dcda3546-045e-497e-aa90-0b1c2916cb0e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -80,6 +80,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -88,7 +96,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S00_Unconditioned",
-      "Guid": "d3fd816a-b97b-465f-997b-19e561a22a0c",
+      "Guid": "2893fc90-e8c7-446a-9bdb-a5a8509a0b5b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -162,6 +170,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -170,7 +186,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S01_Auditorium",
-      "Guid": "56233203-c401-4082-9607-b7fe29c630c8",
+      "Guid": "3f8bf917-9902-45b0-92ae-590bfbef9afb",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -264,6 +280,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -272,7 +296,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S03_Bedroom",
-      "Guid": "ebe3a92c-15b4-4732-b181-6f3309847136",
+      "Guid": "5f3d7090-2643-4a42-8784-22c00cc4d864",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -366,6 +390,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -374,7 +406,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S04_Breakout",
-      "Guid": "f7558aac-1db8-4bfe-87be-8f37b0a4fb6f",
+      "Guid": "b4b339d4-610c-4658-878f-ad300216a61a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -468,6 +500,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "AHU"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -476,7 +516,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S05_CarPark",
-      "Guid": "5743da72-a320-4eb1-a736-284d243ce32b",
+      "Guid": "fe25d973-505b-4635-b68e-ffb79dc59e1b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -550,6 +590,18 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 2.0
             }
           ]
         }
@@ -558,7 +610,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S06_ChangingDry",
-      "Guid": "8bb365c0-08ea-4031-9e9b-d21d77a7bab3",
+      "Guid": "b180ab59-fb7f-4b53-9a15-c9d74b101af6",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -652,6 +704,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "RAD"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 5.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 5.0
             }
           ]
         }
@@ -660,7 +728,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S07_ChangingWet",
-      "Guid": "1c76d15c-16b0-4e15-a04e-e6bf9d1ef8d7",
+      "Guid": "57be61aa-4f4a-4c1c-aa5e-d0d4fbbe5e26",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -754,6 +822,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "RAD"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 10.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 10.0
             }
           ]
         }
@@ -762,7 +846,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S08_Circulation",
-      "Guid": "2cdac580-b485-4565-9de5-2d527a1115c1",
+      "Guid": "bdf9714e-9476-4328-a1a9-14293e0f731e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -852,6 +936,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "TRH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -860,7 +952,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S09_ClassHighLoad",
-      "Guid": "93d188b2-c4da-4007-bd22-796994ccff28",
+      "Guid": "192d599d-7833-423d-8141-cb991693339e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -954,6 +1046,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "TRH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -962,7 +1062,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S10_ClassRoom",
-      "Guid": "1c7bc392-9b86-421a-864a-2d8ec0520819",
+      "Guid": "133fdcad-2f36-41b5-bb5d-46cde7434eea",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1052,6 +1152,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "RAD"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 3.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 3.0
             }
           ]
         }
@@ -1060,7 +1176,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S11_CommonRoom",
-      "Guid": "82811c76-3ff3-475a-a7d3-eb628120283a",
+      "Guid": "bfb80067-ee7d-4aec-8822-dcc0d2d03115",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1150,6 +1266,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 10.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 10.0
             }
           ]
         }
@@ -1158,7 +1290,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S12_Comms",
-      "Guid": "ab3a1e16-6265-4cbf-9f9a-ba442013575f",
+      "Guid": "d93547af-afe8-48d3-8105-6cdd19e18e5d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1248,6 +1380,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -1256,7 +1396,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S13_Copier",
-      "Guid": "0b3adc85-f247-43cf-bfd4-ce36ebad40f5",
+      "Guid": "ff9e8c68-857d-45b4-9111-6b13e717245d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1346,6 +1486,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "RAD"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 3.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 3.0
             }
           ]
         }
@@ -1354,7 +1510,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S14_DataCentre",
-      "Guid": "010d020c-9460-45dc-b099-7218d03b120e",
+      "Guid": "ce030ed1-4a38-4625-85d4-561d5939aa36",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1448,6 +1604,18 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 1.0
             }
           ]
         }
@@ -1456,7 +1624,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S15_DomBath",
-      "Guid": "1eda45db-ccab-4c48-9257-edd523825f4f",
+      "Guid": "25649dd0-5050-4dc1-9b9f-3d095cbde1cd",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1546,6 +1714,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 10.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 10.0
             }
           ]
         }
@@ -1554,7 +1738,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S16_DomBed",
-      "Guid": "5943a6a9-a6f9-41de-b328-bc74bc6d1b83",
+      "Guid": "f5c0f786-a1e6-45dc-8b11-32b5c7949715",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1648,6 +1832,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -1656,7 +1848,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S17_DomCirculation",
-      "Guid": "9df42953-6520-4f8c-923a-fc8a58b79fd4",
+      "Guid": "eb6b6a6f-e6f5-4f69-af8f-ee3218aee663",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1746,6 +1938,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -1754,7 +1954,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S18_DomDining",
-      "Guid": "1b48def8-49f2-4e8e-bc4e-8f742499308e",
+      "Guid": "a2443970-8333-4269-81ba-c4987bff42c4",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1848,6 +2048,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 5.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 5.0
             }
           ]
         }
@@ -1856,7 +2072,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S19_DomKitchen",
-      "Guid": "beb5eb7a-49ab-492a-aaf5-e7cb244ce5c7",
+      "Guid": "b3218668-9f3e-4cfc-9010-eed4c1a6011d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -1946,6 +2162,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 10.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 10.0
             }
           ]
         }
@@ -1954,7 +2186,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S20_DomLiving",
-      "Guid": "c517bf23-d1d2-4659-a338-aac3d5b548ab",
+      "Guid": "19408a8c-b5be-43fe-9a5b-c282ab1400b1",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2048,6 +2280,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -2056,7 +2296,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S21_DomStore",
-      "Guid": "1881b45c-c553-455d-bb19-1b444228427d",
+      "Guid": "e2336afe-0663-4f07-8611-76859c6a34b2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2150,6 +2390,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -2158,7 +2406,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S22_DomToilet",
-      "Guid": "8bc5e7e9-819d-428f-a9ab-e761c84d6a1f",
+      "Guid": "d1148b11-89f4-4833-a730-0e6df16be79a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2252,6 +2500,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.04
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.04
             }
           ]
         }
@@ -2260,7 +2516,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S23_DrySptHall",
-      "Guid": "2d672f36-7dc9-4ca9-a59e-632302425ca3",
+      "Guid": "3c066239-20d1-4402-898a-007ac7da905d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2354,6 +2610,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -2362,7 +2626,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S24_EatingDrinking",
-      "Guid": "54c3da21-f722-4c3b-9567-6eb524960eca",
+      "Guid": "5fb805bc-68b5-42d0-ad86-624085dfc602",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2456,6 +2720,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -2464,7 +2736,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S25_ElecPlant",
-      "Guid": "52abba55-2832-466c-8c37-7160d9a84b86",
+      "Guid": "a7c810fa-e680-454e-be27-8ad9c873a0bc",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2558,6 +2830,18 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 1.0
             }
           ]
         }
@@ -2566,7 +2850,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S26_Exhibition",
-      "Guid": "af05de3e-101a-4c61-9ae3-7e72a3015620",
+      "Guid": "0dab5f70-4956-4a71-942a-0a598f29eefe",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2656,6 +2940,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -2664,7 +2956,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S27_FirstAid",
-      "Guid": "01c5a00d-dabb-418e-a999-b78b16770045",
+      "Guid": "bbe79816-e66e-44a2-be99-88ab6fd6dad6",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2758,6 +3050,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -2766,7 +3066,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S28_FitGym",
-      "Guid": "050be8b0-3632-470b-87e3-ebc001dd047e",
+      "Guid": "4a0bdb2a-6c73-4e5c-a6b5-1d1e38cbee19",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2856,6 +3156,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 10.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 10.0
             }
           ]
         }
@@ -2864,7 +3180,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S29_Foyer",
-      "Guid": "57038e61-d4cd-46a6-a147-5818dbef2cf4",
+      "Guid": "ee9612ad-96ac-4cd3-9887-56a4432bb982",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -2958,6 +3274,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -2966,7 +3290,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S30_IndustProcess",
-      "Guid": "d5147dcf-8132-4aaf-a66b-2b918e3121c2",
+      "Guid": "d810f29a-c011-42c6-bd1a-bd0c433e64ba",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3060,6 +3384,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "TRH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -3068,7 +3400,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S31_Kitchen",
-      "Guid": "611c73d0-5516-4fc0-b096-666e2f8c83ca",
+      "Guid": "1d8dbed7-47b0-414b-a1db-2632356de6e0",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3162,6 +3494,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 10.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 10.0
             }
           ]
         }
@@ -3170,7 +3518,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S32_Kitchenette",
-      "Guid": "5345b5ca-23f4-43ed-b207-12e7b9f8b99e",
+      "Guid": "858390af-29ea-41ce-93f7-35c789c237a8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3264,6 +3612,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 5.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 5.0
             }
           ]
         }
@@ -3272,7 +3636,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S33_Lab",
-      "Guid": "4b217850-47a7-479f-b12b-f99da39a93af",
+      "Guid": "38609728-10bf-411f-a56e-76d48f4f78a7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3346,6 +3710,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -3354,7 +3726,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S34_Laundry",
-      "Guid": "5416ad0b-6cf7-4fe8-86f4-09b0c4da910e",
+      "Guid": "a33ff904-2899-4cd9-b3ca-f1c23e8e1ab0",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3428,6 +3800,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 5.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 5.0
             }
           ]
         }
@@ -3436,7 +3824,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S35_MechPlant",
-      "Guid": "ced544f9-3f69-4cca-91a8-5a929adc5a2e",
+      "Guid": "4bd5d2f0-7841-48a9-8041-a8efae8aad54",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3526,6 +3914,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 2.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 2.0
             }
           ]
         }
@@ -3534,7 +3938,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S36_Meeting",
-      "Guid": "f03c2364-a0e0-4703-bcf2-d8612e25bade",
+      "Guid": "c80ee3b9-2183-4c1f-988b-84498b63ff5e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3628,6 +4032,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -3636,7 +4048,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S37_OfficeCell",
-      "Guid": "7fdfc817-cdfe-4652-a000-fbed200461df",
+      "Guid": "06e910f4-209e-4139-895c-ca612996f111",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3730,6 +4142,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.04
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.04
             }
           ]
         }
@@ -3738,7 +4158,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S38_OfficeHighLoad",
-      "Guid": "1bb25e67-3d9f-4591-848c-d34a5673863c",
+      "Guid": "a3aa70bf-9a69-40c8-a515-f6b96240f328",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3812,6 +4232,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -3820,7 +4248,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S39_OfficeOpen",
-      "Guid": "70c02fb8-64cb-40de-a8ed-270b6b7ee76e",
+      "Guid": "33bb8230-dba5-4dcd-9d9e-4f920cb34209",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3914,6 +4342,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -3922,7 +4358,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S40_Prayer",
-      "Guid": "d35ae568-5d85-4a12-975d-9a74317e5e4b",
+      "Guid": "3cba9a68-0a3c-48c4-8a4e-ba33a2cbb275",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -3996,6 +4432,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -4004,7 +4448,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S41_Reception",
-      "Guid": "529e7a36-85f9-4df7-96b8-764f9a63c8d3",
+      "Guid": "c3a3428f-962f-4ede-b54a-b9bb08e5c528",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4078,6 +4522,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -4086,7 +4538,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S42_Retail",
-      "Guid": "5fae8bad-6532-4bc5-b5a0-0c4685c978f3",
+      "Guid": "1c7578d0-8416-4572-aa64-03179f56dc10",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4160,6 +4612,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -4168,7 +4628,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S43_RetailChill",
-      "Guid": "3e9cde8d-b48a-4d2b-bd47-568ab125f1bf",
+      "Guid": "e2ad6344-f7ad-40b4-b1a8-15334a137e6f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4242,6 +4702,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -4250,7 +4718,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S44_RetailElectric",
-      "Guid": "e4f47dff-7084-4ead-9cb9-36d67b6bb86c",
+      "Guid": "ac22dc3f-d143-4b9d-8560-f905e6895a48",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4324,6 +4792,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -4332,7 +4808,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S45_RetailWarehouse",
-      "Guid": "49a4f7ec-d1f7-4cfe-aab2-331157459f87",
+      "Guid": "4ff58e7d-aa89-45bc-8fb7-6bbb2bef8083",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4406,6 +4882,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -4414,7 +4898,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S46_Servery",
-      "Guid": "2dc95c60-9887-46d9-a1f7-f98c9ec52010",
+      "Guid": "7ccf94bb-01ea-4c42-adb0-76cca2249b4f",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4508,6 +4992,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 10.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 10.0
             }
           ]
         }
@@ -4516,7 +5016,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S47_StairsEscape",
-      "Guid": "b983d713-c944-483a-8f25-64df36a504e1",
+      "Guid": "7aa9c473-0cb8-4701-b3b2-b0bb89d2fd23",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4606,6 +5106,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "RAD"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -4614,7 +5122,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S48_Store",
-      "Guid": "8eb01a1f-8b70-428f-ab2d-0c17c6919c5b",
+      "Guid": "6e692396-aa46-4d25-8732-03dd3500a3ef",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4704,6 +5212,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -4712,7 +5228,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S49_Swim",
-      "Guid": "43cddd50-980e-44e8-a50c-fc95a8f08a0f",
+      "Guid": "75970931-6445-4f26-890c-fa09cc5d81c1",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4786,6 +5302,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -4794,7 +5318,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S50_Toilet",
-      "Guid": "e13f036e-f329-4154-a210-04a9a93e0bf5",
+      "Guid": "05007404-912c-4cbd-9a48-6069dd66cc89",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4884,6 +5408,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 8.5
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 10.0
             }
           ]
         }
@@ -4892,7 +5432,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S51_Waiting",
-      "Guid": "542e3c34-5bfb-4af1-b945-5b6ce5547a37",
+      "Guid": "64ddc94f-6374-46e9-bb94-4401c20077a5",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -4966,6 +5506,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -4974,7 +5522,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S52_Waste",
-      "Guid": "64e92a84-5e25-473c-baaf-1f2e5f0cc30c",
+      "Guid": "fa18519a-b2fc-4d69-a621-a17de7e82837",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5064,6 +5612,22 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UFH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Minimum Supply Air Changes Per Hour",
+              "Value": 2.0
+            },
+            {
+              "Name": "Minimum Exhaust Air Changes Per Hour",
+              "Value": 2.0
             }
           ]
         }
@@ -5072,7 +5636,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S53_Workshop",
-      "Guid": "5e0cd40f-2289-40de-b92e-6ba4ab5f2060",
+      "Guid": "fdebc66a-187c-41e0-a161-87b6a24e35e4",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5146,6 +5710,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "UH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.0
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.0
             }
           ]
         }
@@ -5154,7 +5726,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S54_Rehearsal",
-      "Guid": "3670fcd4-0e49-47e4-8bf2-59bb4febc8d2",
+      "Guid": "2c208ee4-56c1-48d1-857c-bccaa7232a4d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5248,6 +5820,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "RAD"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
@@ -5256,7 +5836,7 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S56_AcademicStudio",
-      "Guid": "e6777820-5eb4-4918-8b87-570152b64539",
+      "Guid": "b11bd017-2a61-4669-87aa-c5437b072443",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
@@ -5350,6 +5930,14 @@
             {
               "Name": "Heating System Type Name",
               "Value": "TRH"
+            },
+            {
+              "Name": "Supply Air Flow Per Person",
+              "Value": 0.012
+            },
+            {
+              "Name": "Exhaust Air Flow Per Person",
+              "Value": 0.012
             }
           ]
         }
