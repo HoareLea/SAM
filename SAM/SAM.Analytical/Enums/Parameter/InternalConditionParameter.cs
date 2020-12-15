@@ -40,5 +40,14 @@ namespace SAM.Analytical
         [ParameterProperties("Ventilation System Type Name", "Ventilation System Type Name"), ParameterValue(Core.ParameterType.String)] VentilationSystemTypeName,
         [ParameterProperties("Cooling System Type Name", "Cooling System Type Name"), ParameterValue(Core.ParameterType.String)] CoolingSystemTypeName,
         [ParameterProperties("Heating System Type Name", "Heating System Type Name"), ParameterValue(Core.ParameterType.String)] HeatingSystemTypeName,
+
+        [ParameterProperties("Supply Air Flow Per Person", "Supply Air Flow Per Person"), ParameterValue(Core.ParameterType.Double)] SupplyAirFlowPerPerson,
+        [ParameterProperties("Exhaust Air Flow Per Person", "Exhaust Air Flow Per Person"), ParameterValue(Core.ParameterType.Double)] ExhaustAirFlowPerPerson,
+        [ParameterProperties("Minimum Supply Air Changes Per Hour", "Minimum Supply Air Changes Per Hour [ACH]"), ParameterValue(Core.ParameterType.Double)] MinimumSupplyAirChangesPerHour,
+        [ParameterProperties("Minimum Exhaust Air Changes Per Hour", "Minimum Exhaust Air Changes Per Hour [ACH]"), ParameterValue(Core.ParameterType.Double)] MinimumExhaustAirChangesPerHour,
+        [ParameterProperties("Supply Air Flow Per Area", "Supply Air Flow Per Area"), ParameterValue(Core.ParameterType.Double)] SupplyAirFlowPerArea,
+        [ParameterProperties("Exhaust Air Flow Per Area", "Exhaust Air Flow Per Area"), ParameterValue(Core.ParameterType.Double)] ExhaustAirFlowPerArea,
+        [ParameterProperties("Supply Air Flow", "Supply Air Flow"), ParameterValue(Core.ParameterType.Double)] SupplyAirFlow,
+        [ParameterProperties("Exhaust Air Flow", "Exhaust Air Flow"), ParameterValue(Core.ParameterType.Double)] ExhaustAirFlow,
     }
 }
