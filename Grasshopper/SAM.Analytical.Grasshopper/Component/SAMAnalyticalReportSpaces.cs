@@ -3,9 +3,6 @@ using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
-using SAM.Geometry;
-using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,22 +58,29 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                GH_SAMParam[] result = new GH_SAMParam[10];
+                GH_SAMParam[] result = new GH_SAMParam[15];
 
                 result[0] = new GH_SAMParam(new GooPanelParam() { Name = "Name", NickName = "Name", Description = "Space Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
                 result[1] = new GH_SAMParam(new Param_Guid() { Name = "Guid", NickName = "Guid", Description = "Space Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                result[2] = new GH_SAMParam(new Param_Number() { Name = "Area", NickName = "Area", Description = "Space Area", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[3] = new GH_SAMParam(new Param_Number() { Name = "Volume", NickName = "Volume", Description = "Space Volume", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[4] = new GH_SAMParam(new Param_Number() { Name = "Occupancy", NickName = "Occupancy", Description = "Space Occupancy", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
 
-                result[2] = new GH_SAMParam(new GooPanelParam() { Name = "InternalConditionName", NickName = "InternalConditionName", Description = "InternalCondition Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
-                result[3] = new GH_SAMParam(new Param_Guid() { Name = "InternalConditionGuid", NickName = "InternalConditionGuid", Description = "InternalCondition Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                result[5] = new GH_SAMParam(new GooPanelParam() { Name = "InternalConditionName", NickName = "InternalConditionName", Description = "InternalCondition Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[6] = new GH_SAMParam(new Param_Guid() { Name = "InternalConditionGuid", NickName = "InternalConditionGuid", Description = "InternalCondition Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
 
-                result[4] = new GH_SAMParam(new GooPanelParam() { Name = "VentilationSystemTypeName", NickName = "VentilationSystemTypeName", Description = "VentilationSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
-                result[5] = new GH_SAMParam(new Param_Guid() { Name = "VentilationSystemTypenGuid", NickName = "VentilationSystemTypenGuid", Description = "VentilationSystemTypen Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                result[7] = new GH_SAMParam(new GooPanelParam() { Name = "VentilationSystemTypeName", NickName = "VentilationSystemTypeName", Description = "VentilationSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[8] = new GH_SAMParam(new Param_Guid() { Name = "VentilationSystemTypenGuid", NickName = "VentilationSystemTypenGuid", Description = "VentilationSystemTypen Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
 
-                result[6] = new GH_SAMParam(new GooPanelParam() { Name = "HeatingSystemTypeName", NickName = "HeatingSystemTypeName", Description = "HeatingSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
-                result[7] = new GH_SAMParam(new Param_Guid() { Name = "HeatingSystemTypenGuid", NickName = "HeatingSystemTypenGuid", Description = "HeatingSystemTypen Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                result[9] = new GH_SAMParam(new GooPanelParam() { Name = "HeatingSystemTypeName", NickName = "HeatingSystemTypeName", Description = "HeatingSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[10] = new GH_SAMParam(new Param_Guid() { Name = "HeatingSystemTypenGuid", NickName = "HeatingSystemTypenGuid", Description = "HeatingSystemTypen Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
 
-                result[8] = new GH_SAMParam(new GooPanelParam() { Name = "CoolingSystemTypeName", NickName = "CoolingSystemTypeName", Description = "CoolingSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
-                result[9] = new GH_SAMParam(new Param_Guid() { Name = "CoolingSystemTypenGuid", NickName = "CoolingSystemTypenGuid", Description = "CoolingSystemTypen Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                result[11] = new GH_SAMParam(new GooPanelParam() { Name = "CoolingSystemTypeName", NickName = "CoolingSystemTypeName", Description = "CoolingSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[12] = new GH_SAMParam(new Param_Guid() { Name = "CoolingSystemTypenGuid", NickName = "CoolingSystemTypenGuid", Description = "CoolingSystemTypen Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+
+                result[13] = new GH_SAMParam(new Param_String() { Name = "SupplyUnitName", NickName = "SupplyUnitName", Description = "Supply Unit Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[14] = new GH_SAMParam(new Param_String() { Name = "ExhaustUnitName", NickName = "ExhaustUnitName", Description = "Exhaust Unit Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                
                 return result;
             }
         }
@@ -109,9 +113,12 @@ namespace SAM.Analytical.Grasshopper
                 spaces = ((AdjacencyCluster)sAMObject).GetSpaces();
             else if (sAMObject is Space)
                 spaces = new List<Space>() { (Space)sAMObject };
-                
-            List<Guid> guids_Space = new List<Guid>();
+
             List<string> names_Space = new List<string>();
+            List<Guid> guids_Space = new List<Guid>();
+            List<double> areas = new List<double>();
+            List<double> volumes = new List<double>();
+            List<double> occupancies = new List<double>();
 
             List<string> names_InternalCondition= new List<string>();
             List<Guid> guids_InternalCondition = new List<Guid>();
@@ -125,10 +132,31 @@ namespace SAM.Analytical.Grasshopper
             List<string> names_CoolingSystemType = new List<string>();
             List<Guid> guids_CoolingSystemType = new List<Guid>();
 
+            List<string> names_SupplyUnit = new List<string>();
+            List<string> names_ExhaustUnit = new List<string>();
+
             foreach (Space space in spaces)
             {
+                string @string = null;
+                double @double = double.NaN;
+
                 guids_Space.Add(space == null ? Guid.Empty : space.Guid);
                 names_Space.Add(space?.Name);
+
+                if (space == null || !space.TryGetValue(SpaceParameter.Area, out @double))
+                    @double = double.NaN;
+
+                areas.Add(@double);
+
+                if (space == null || !space.TryGetValue(SpaceParameter.Volume, out @double))
+                    @double = double.NaN;
+
+                volumes.Add(@double);
+
+                if (space == null || !space.TryGetValue(SpaceParameter.Occupancy, out @double))
+                    @double = double.NaN;
+
+                occupancies.Add(@double);
 
                 InternalCondition internalCondition = space.InternalCondition;
 
@@ -139,16 +167,48 @@ namespace SAM.Analytical.Grasshopper
                 VentilationSystem ventilationSystem = adjacencyCluster?.GetRelatedObjects<VentilationSystem>(space)?.FirstOrDefault();
                 VentilationSystemType ventilationSystemType = ventilationSystem?.SAMType as VentilationSystemType;
                 guids_VentilationSystemType.Add(ventilationSystemType == null ? Guid.Empty : ventilationSystemType.Guid);
+
+                names_HeatingSystemType.Add(internalCondition?.GetSystemTypeName<HeatingSystemType>());
+                HeatingSystem heatingSystem = adjacencyCluster?.GetRelatedObjects<HeatingSystem>(space)?.FirstOrDefault();
+                HeatingSystemType heatingSystemType = heatingSystem?.SAMType as HeatingSystemType;
+                guids_HeatingSystemType.Add(heatingSystemType == null ? Guid.Empty : heatingSystemType.Guid);
+
+                names_CoolingSystemType.Add(internalCondition?.GetSystemTypeName<CoolingSystemType>());
+                CoolingSystem coolingSystem = adjacencyCluster?.GetRelatedObjects<CoolingSystem>(space)?.FirstOrDefault();
+                CoolingSystemType coolingSystemType = coolingSystem?.SAMType as CoolingSystemType;
+                guids_CoolingSystemType.Add(coolingSystemType == null ? Guid.Empty : coolingSystemType.Guid);
+
+                if (ventilationSystem == null || !ventilationSystem.TryGetValue(VentilationSystemParameter.SupplyUnitName, out @string))
+                    @string = null;
+
+                names_SupplyUnit.Add(@string);
+
+                if (ventilationSystem == null || !ventilationSystem.TryGetValue(VentilationSystemParameter.ExhaustUnitName, out @string))
+                    @string = null;
+
+                names_ExhaustUnit.Add(@string);
             }
 
             dataAccess.SetDataList(0, guids_Space);
             dataAccess.SetDataList(1, names_Space);
+            dataAccess.SetDataList(2, areas);
+            dataAccess.SetDataList(3, volumes);
+            dataAccess.SetDataList(4, occupancies);
 
-            dataAccess.SetDataList(2, guids_InternalCondition);
-            dataAccess.SetDataList(3, names_InternalCondition);
+            dataAccess.SetDataList(5, guids_InternalCondition);
+            dataAccess.SetDataList(6, names_InternalCondition);
 
-            dataAccess.SetDataList(4, guids_VentilationSystemType);
-            dataAccess.SetDataList(5, names_VentilationSystemType);
+            dataAccess.SetDataList(7, guids_VentilationSystemType);
+            dataAccess.SetDataList(8, names_VentilationSystemType);
+
+            dataAccess.SetDataList(9, guids_HeatingSystemType);
+            dataAccess.SetDataList(10, names_HeatingSystemType);
+
+            dataAccess.SetDataList(11, guids_CoolingSystemType);
+            dataAccess.SetDataList(12, names_CoolingSystemType);
+
+            dataAccess.SetDataList(13, names_SupplyUnit);
+            dataAccess.SetDataList(14, names_ExhaustUnit);
         }
     }
 }
