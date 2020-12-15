@@ -116,6 +116,7 @@
     <Compile Include="Component\SAMAnalyticalAirFlow.cs" />
     <Compile Include="Component\SAMAnalyticalCopyApertureConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalCopyConstructionLayers.cs" />
+    <Compile Include="Component\SAMAnalyticalReportSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateName.cs" />
     <Compile Include="Component\SAMAnalyticalMechanicalSystemTypes.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByPanelAreaAndThinnessRatio.cs" />
