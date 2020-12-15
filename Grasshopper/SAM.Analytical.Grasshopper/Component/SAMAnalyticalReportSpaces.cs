@@ -60,22 +60,22 @@ namespace SAM.Analytical.Grasshopper
             {
                 GH_SAMParam[] result = new GH_SAMParam[15];
 
-                result[0] = new GH_SAMParam(new GooPanelParam() { Name = "Name", NickName = "Name", Description = "Space Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[0] = new GH_SAMParam(new Param_String() { Name = "Name", NickName = "Name", Description = "Space Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
                 result[1] = new GH_SAMParam(new Param_Guid() { Name = "Guid", NickName = "Guid", Description = "Space Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
                 result[2] = new GH_SAMParam(new Param_Number() { Name = "Area", NickName = "Area", Description = "Space Area", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
                 result[3] = new GH_SAMParam(new Param_Number() { Name = "Volume", NickName = "Volume", Description = "Space Volume", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
                 result[4] = new GH_SAMParam(new Param_Number() { Name = "Occupancy", NickName = "Occupancy", Description = "Space Occupancy", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
 
-                result[5] = new GH_SAMParam(new GooPanelParam() { Name = "InternalConditionName", NickName = "InternalConditionName", Description = "InternalCondition Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[5] = new GH_SAMParam(new Param_String() { Name = "InternalConditionName", NickName = "InternalConditionName", Description = "InternalCondition Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
                 result[6] = new GH_SAMParam(new Param_Guid() { Name = "InternalConditionGuid", NickName = "InternalConditionGuid", Description = "InternalCondition Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
 
-                result[7] = new GH_SAMParam(new GooPanelParam() { Name = "VentilationSystemTypeName", NickName = "VentilationSystemTypeName", Description = "VentilationSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[7] = new GH_SAMParam(new Param_String() { Name = "VentilationSystemTypeName", NickName = "VentilationSystemTypeName", Description = "VentilationSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
                 result[8] = new GH_SAMParam(new Param_Guid() { Name = "VentilationSystemTypenGuid", NickName = "VentilationSystemTypenGuid", Description = "VentilationSystemTypen Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
 
-                result[9] = new GH_SAMParam(new GooPanelParam() { Name = "HeatingSystemTypeName", NickName = "HeatingSystemTypeName", Description = "HeatingSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[9] = new GH_SAMParam(new Param_String() { Name = "HeatingSystemTypeName", NickName = "HeatingSystemTypeName", Description = "HeatingSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
                 result[10] = new GH_SAMParam(new Param_Guid() { Name = "HeatingSystemTypenGuid", NickName = "HeatingSystemTypenGuid", Description = "HeatingSystemTypen Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
 
-                result[11] = new GH_SAMParam(new GooPanelParam() { Name = "CoolingSystemTypeName", NickName = "CoolingSystemTypeName", Description = "CoolingSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
+                result[11] = new GH_SAMParam(new Param_String() { Name = "CoolingSystemTypeName", NickName = "CoolingSystemTypeName", Description = "CoolingSystemType Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
                 result[12] = new GH_SAMParam(new Param_Guid() { Name = "CoolingSystemTypenGuid", NickName = "CoolingSystemTypenGuid", Description = "CoolingSystemTypen Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
 
                 result[13] = new GH_SAMParam(new Param_String() { Name = "SupplyUnitName", NickName = "SupplyUnitName", Description = "Supply Unit Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding);
@@ -110,7 +110,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Space> spaces = null;
             if (adjacencyCluster != null)
-                spaces = ((AdjacencyCluster)sAMObject).GetSpaces();
+                spaces = adjacencyCluster.GetSpaces();
             else if (sAMObject is Space)
                 spaces = new List<Space>() { (Space)sAMObject };
 
