@@ -142,6 +142,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
                 mechanicalSystems = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName, ventilationRiserName, heatingRiserName, coolingRiserName);
+                if (mechanicalSystems != null && mechanicalSystems.Count > 0)
+                    sAMObject = adjacencyCluster;
             }
 
             dataAccess.SetData(0, sAMObject);
