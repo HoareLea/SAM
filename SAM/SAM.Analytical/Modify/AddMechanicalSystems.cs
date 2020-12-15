@@ -83,7 +83,7 @@ namespace SAM.Analytical
                     continue;
 
                 string supplyUnitName_Temp = supplyUnitName;
-                string exhaustUnitName_Temp = supplyUnitName;
+                string exhaustUnitName_Temp = exhaustUnitName;
 
                 string name = ventilationSystemType.Name;
                 if (!string.IsNullOrWhiteSpace(name))
