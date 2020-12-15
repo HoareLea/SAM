@@ -6,7 +6,7 @@ namespace SAM.Analytical
     [AssociatedTypes(typeof(InternalCondition)), Description("Internal Condition Parameter")]
     public enum InternalConditionParameter
     {
-        [ParameterProperties("Occupancy Per Area", "Occupancy Per Area [p/m2]"), DoubleParameterValue(0)] OccupancyPerArea,
+        [ParameterProperties("Area Per Person", "Area Per Person [m2/p]"), DoubleParameterValue(0)] AreaPerPerson,
         [ParameterProperties("Occupancy Profile Name", "Occupancy Profile Name"), ParameterValue(Core.ParameterType.String)] OccupancyProfileName,
         [ParameterProperties("Occupancy Sensible Gain", "Occupancy Sensible Gain [W]"), ParameterValue(Core.ParameterType.Double)] OccupancySensibleGain,
         [ParameterProperties("Occupancy Latent Gain", "Occupancy Latent Gain [W]"), ParameterValue(Core.ParameterType.Double)] OccupancyLatentGain,

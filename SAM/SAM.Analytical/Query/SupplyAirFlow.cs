@@ -24,9 +24,9 @@
             {
                 if (!double.IsNaN(area))
                 {
-                    double occupancyPerArea = double.NaN;
-                    if (internalCondition.TryGetValue(InternalConditionParameter.OccupancyPerArea, out occupancyPerArea))
-                        occupancy = occupancyPerArea * area;
+                    double areaPerPerson = double.NaN;
+                    if (internalCondition.TryGetValue(InternalConditionParameter.AreaPerPerson, out areaPerPerson))
+                        occupancy = area / areaPerPerson;
                 }
             }
 
