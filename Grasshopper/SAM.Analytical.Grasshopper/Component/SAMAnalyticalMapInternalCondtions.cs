@@ -125,17 +125,19 @@ namespace SAM.Analytical.Grasshopper
             }
             else if (sAMObject is AnalyticalModel)
             {
-                AdjacencyCluster adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
+                AnalyticalModel analyticalModel = (AnalyticalModel)sAMObject;
+
+                AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
                 if (adjacencyCluster != null)
                 {
-                    adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
+                    adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
                     internalConditions = adjacencyCluster.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
                     List<Space> spaces = adjacencyCluster.GetSpaces();
                     for (int i = 0; i < internalConditions.Count; i++)
                         if (internalConditions[i] == spaces[i].InternalCondition)
                             spaces_Unassigned.Add(spaces[i]);
 
-                    sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
+                    sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
                 }
             }
 
