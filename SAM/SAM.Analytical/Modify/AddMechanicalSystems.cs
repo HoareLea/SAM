@@ -12,9 +12,20 @@ namespace SAM.Analytical
             List<Space> spaces_Temp = adjacencyCluster.GetSpaces();
             if (spaces != null)
             {
+                List<Space> spaces_Filtered = new List<Space>();
                 foreach (Space space in spaces)
-                    if (space != null)
-                        spaces_Temp.RemoveAll(x => x.Guid == space.Guid);
+                {
+                    if (space == null)
+                        continue;
+
+                    Space space_Filtered = spaces_Temp.Find(x => x.Guid == space.Guid);
+                    if (spaces_Filtered == null)
+                        continue;
+
+                    spaces_Filtered.Add(space_Filtered);
+                }
+
+                spaces_Temp = spaces_Filtered;
             }
 
             Dictionary<System.Guid, MechanicalSystemType> dictionary_MechanicalSystemType = new Dictionary<System.Guid, MechanicalSystemType>();
