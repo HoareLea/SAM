@@ -432,5 +432,31 @@ namespace SAM.Core
 
             return jObject;
         }
+
+        public System.Dynamic.ExpandoObject ToExpandoObject()
+        {
+            dynamic result = new System.Dynamic.ExpandoObject();
+            result._type = GetType().FullName;
+
+            if (name != null)
+                result.Name = name;
+
+            foreach (KeyValuePair<string, object> keyValuePair in dictionary)
+            {
+                dynamic parameter = new System.Dynamic.ExpandoObject();
+                parameter.Name = keyValuePair.Key;
+                if (keyValuePair.Value != null)
+                {
+                    if (keyValuePair.Value is IJSAMObject)
+                        parameter.Value = ((IJSAMObject)keyValuePair.Value).ToJObject(); //TODO: Replace with ToExpandoObject when implemented
+                    else if (keyValuePair.Value is JArray) //TODO: Replace with ToExpandoObject when implemented
+                        parameter.Value = (JArray)keyValuePair.Value;
+                    else
+                        parameter.Value = keyValuePair.Value as dynamic;
+                }
+            }
+
+            return result;
+        }
     }
 }

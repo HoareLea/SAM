@@ -1,7 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 
 namespace SAM.Core
 {
@@ -46,6 +49,24 @@ namespace SAM.Core
         public static string ToString(Color color)
         {
             return color.Name;
+        }
+
+        public static string ToString(JsonDocument jsonDocument)
+        {
+            if (jsonDocument == null)
+                return null;
+
+            string result = null;
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                Utf8JsonWriter utf8JsonWriter = new Utf8JsonWriter(memoryStream, new JsonWriterOptions { Indented = true });
+                jsonDocument.WriteTo(utf8JsonWriter);
+                utf8JsonWriter.Flush();
+                result =  Encoding.UTF8.GetString(memoryStream.ToArray());
+            }
+
+            return result;
         }
     }
 }

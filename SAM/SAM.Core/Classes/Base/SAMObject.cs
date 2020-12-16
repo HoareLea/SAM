@@ -335,5 +335,20 @@ namespace SAM.Core
 
             return jObject;
         }
+
+        public virtual System.Dynamic.ExpandoObject ToExpandoObject()
+        {
+            dynamic result = new System.Dynamic.ExpandoObject();
+            result._type = Query.FullTypeName(this);
+            if (name != null)
+                result.Name = name;
+
+            result.Guid = guid;
+
+            if (parameterSets != null)
+                result.ParameterSets = parameterSets.ConvertAll(x => x.ToExpandoObject());
+
+            return result;
+        }
     }
 }
