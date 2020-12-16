@@ -189,26 +189,67 @@ namespace SAM.Analytical.Grasshopper
                 names_ExhaustUnit.Add(@string);
             }
 
-            dataAccess.SetDataList(0, guids_Space);
-            dataAccess.SetDataList(1, names_Space);
-            dataAccess.SetDataList(2, areas);
-            dataAccess.SetDataList(3, volumes);
-            dataAccess.SetDataList(4, occupancies);
+            int index;
 
-            dataAccess.SetDataList(5, guids_InternalCondition);
-            dataAccess.SetDataList(6, names_InternalCondition);
+            index = Params.IndexOfOutputParam("Name");
+            if (index != -1)
+                dataAccess.SetDataList(index, names_Space);
 
-            dataAccess.SetDataList(7, guids_VentilationSystemType);
-            dataAccess.SetDataList(8, names_VentilationSystemType);
+            index = Params.IndexOfOutputParam("Guid");
+            if (index != -1)
+                dataAccess.SetDataList(index, guids_Space);
 
-            dataAccess.SetDataList(9, guids_HeatingSystemType);
-            dataAccess.SetDataList(10, names_HeatingSystemType);
+            index = Params.IndexOfOutputParam("Area");
+            if (index != -1)
+                dataAccess.SetDataList(index, areas);
 
-            dataAccess.SetDataList(11, guids_CoolingSystemType);
-            dataAccess.SetDataList(12, names_CoolingSystemType);
+            index = Params.IndexOfOutputParam("Volume");
+            if (index != -1)
+                dataAccess.SetDataList(index, volumes);
 
-            dataAccess.SetDataList(13, names_SupplyUnit);
-            dataAccess.SetDataList(14, names_ExhaustUnit);
+            index = Params.IndexOfOutputParam("Occupancy");
+            if (index != -1)
+                dataAccess.SetDataList(index, occupancies);
+
+            index = Params.IndexOfOutputParam("InternalConditionName");
+            if (index != -1)
+                dataAccess.SetDataList(index, names_InternalCondition);
+
+            index = Params.IndexOfOutputParam("InternalConditionGuid");
+            if (index != -1)
+                dataAccess.SetDataList(index, guids_InternalCondition);
+
+            index = Params.IndexOfOutputParam("VentilationSystemTypeName");
+            if (index != -1)
+                dataAccess.SetDataList(index, names_VentilationSystemType);
+
+            index = Params.IndexOfOutputParam("VentilationSystemTypenGuid");
+            if (index != -1)
+                dataAccess.SetDataList(index, guids_VentilationSystemType);
+
+            index = Params.IndexOfOutputParam("HeatingSystemTypeName");
+            if (index != -1)
+                dataAccess.SetDataList(index, names_HeatingSystemType);
+
+            index = Params.IndexOfOutputParam("HeatingSystemTypenGuid");
+            if (index != -1)
+                dataAccess.SetDataList(index, guids_HeatingSystemType);
+
+            index = Params.IndexOfOutputParam("CoolingSystemTypeName");
+            if (index != -1)
+                dataAccess.SetDataList(index, names_CoolingSystemType);
+
+            index = Params.IndexOfOutputParam("CoolingSystemTypeGuid");
+            if (index != -1)
+                dataAccess.SetDataList(index, guids_CoolingSystemType);
+
+            index = Params.IndexOfOutputParam("SupplyUnitName");
+            if (index != -1)
+                dataAccess.SetDataList(index, names_SupplyUnit);
+
+            index = Params.IndexOfOutputParam("ExhaustUnitName");
+            if (index != -1)
+                dataAccess.SetDataList(index, names_ExhaustUnit);
         }
     }
 }
