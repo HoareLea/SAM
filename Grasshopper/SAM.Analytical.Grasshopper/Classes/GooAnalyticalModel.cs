@@ -95,6 +95,13 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool CastTo<Y>(ref Y target)
         {
+            if (Value != null && typeof(Y).IsAssignableFrom(Value.GetType()))
+            {
+                target = (Y)(object)Value;
+                return true;
+            }
+                
+            
             return base.CastTo(ref target);
         }
     }

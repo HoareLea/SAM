@@ -161,6 +161,9 @@ namespace SAM.Analytical.Grasshopper
             else if (sAMObject is Space)
                 spaces = new List<Space>() { (Space)sAMObject };
 
+            if (spaces == null)
+                return;
+
             List<string> names_Space = new List<string>();
             List<Guid> guids_Space = new List<Guid>();
             List<double> areas = new List<double>();
@@ -434,7 +437,7 @@ namespace SAM.Analytical.Grasshopper
                 profile = internalCondition?.GetProfile(ProfileType.Humidification, analyticalModel?.ProfileLibrary);
                 guids_Humidification.Add(profile == null ? Guid.Empty : profile.Guid);
 
-                humidities.Add(profile.Max);
+                humidities.Add(profile == null ? double.NaN : profile.Max);
 
 
                 //Dehumidification
@@ -446,7 +449,7 @@ namespace SAM.Analytical.Grasshopper
                 profile = internalCondition?.GetProfile(ProfileType.Dehumidification, analyticalModel?.ProfileLibrary);
                 guids_Dehumidification.Add(profile == null ? Guid.Empty : profile.Guid);
 
-                dehumidities.Add(profile.Min);
+                dehumidities.Add(profile == null ? double.NaN : profile.Min);
 
 
                 names_InternalCondition.Add(internalCondition?.Name);

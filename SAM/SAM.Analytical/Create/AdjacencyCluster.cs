@@ -327,13 +327,17 @@ namespace SAM.Analytical
 
                 double elevation_Location = elevation_Bottom + Tolerance.MacroDistance * 2;
 
+                Architectural.Level level = Architectural.Create.Level(elevation_Bottom);
+
                 int count = 1;
                 foreach (Face2D face2D in face2Ds_Top)
                 {
                     Point3D location = plane_Bottom.Convert(face2D.GetInternalPoint2D());
                     location = new Point3D(location.X, location.Y, elevation_Location);
 
+                    //TODO: Default Name for Space
                     Space space = new Space(string.Format("Cell {0}.{1}", tuples.Count - i, count), location);
+                    space.SetValue(SpaceParameter.LevelName, level.Name);
                     count++;
 
                     if (space != null)
