@@ -16,7 +16,7 @@ namespace SAM.Analytical
 
             AdjacencyCluster adjacencyCluster = new AdjacencyCluster();
 
-            string levelName = string.Format("Level {0}m", System.Math.Round(elevation_Min, 1));
+            Architectural.Level level = Architectural.Create.Level(elevation_Min);
 
             Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Min)) as Plane;
             Plane plane_Max = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
@@ -42,7 +42,7 @@ namespace SAM.Analytical
                         polygon2D = polygon2Ds[i];
 
                     Space space = new Space(string.Format("Cell {0}", i + 1), plane_Location.Convert(polygon2D.GetInternalPoint2D()));
-                    space.SetValue(SpaceParameter.LevelName, levelName);
+                    space.SetValue(SpaceParameter.LevelName, level.Name);
 
                     double area = polygon2D.Area();
 
