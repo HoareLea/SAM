@@ -441,6 +441,9 @@ namespace SAM.Core
             if (name != null)
                 result.Name = name;
 
+            result.Guid = guid;
+
+            List<System.Dynamic.ExpandoObject> parameters = new List<System.Dynamic.ExpandoObject>();
             foreach (KeyValuePair<string, object> keyValuePair in dictionary)
             {
                 dynamic parameter = new System.Dynamic.ExpandoObject();
@@ -454,7 +457,10 @@ namespace SAM.Core
                     else
                         parameter.Value = keyValuePair.Value as dynamic;
                 }
+                parameters.Add(parameter);
             }
+
+            result.Parameters = parameters;
 
             return result;
         }

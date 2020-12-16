@@ -68,5 +68,13 @@ namespace SAM.Core
 
             return result;
         }
+
+        public static string ToString(this System.Dynamic.ExpandoObject expandoObject)
+        {
+            if (expandoObject == null)
+                return null;
+            
+            return ToString(expandoObject.ToJsonDocument());
+        }
     }
 }

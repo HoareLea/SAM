@@ -85,6 +85,7 @@
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Classes\Library\SystemTypeLibrary.cs" />
     <Compile Include="Classes\Relation\TextMap.cs" />
+    <Compile Include="Convert\ToJsonDocument\JsonDocument.cs" />
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Enums\AccessType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
