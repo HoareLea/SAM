@@ -143,22 +143,32 @@ namespace SAM.Analytical.Grasshopper
                 guids_Space.Add(space == null ? Guid.Empty : space.Guid);
                 names_Space.Add(space?.Name);
 
-                if (space == null || !space.TryGetValue(SpaceParameter.Area, out @double))
-                    @double = double.NaN;
+                double area = double.NaN;
+                if (space == null || !space.TryGetValue(SpaceParameter.Area, out area))
+                    area = double.NaN;
 
-                areas.Add(@double);
+                areas.Add(area);
 
                 if (space == null || !space.TryGetValue(SpaceParameter.Volume, out @double))
                     @double = double.NaN;
 
                 volumes.Add(@double);
 
-                if (space == null || !space.TryGetValue(SpaceParameter.Occupancy, out @double))
-                    @double = double.NaN;
+                InternalCondition internalCondition = space?.InternalCondition;
+                @double = double.NaN;
+                if(space != null)
+                {
+                    if(!space.TryGetValue(SpaceParameter.Occupancy, out @double) || double.IsNaN(@double))
+                    {
+                        if (!double.IsNaN(area) && internalCondition != null && internalCondition.TryGetValue(InternalConditionParameter.AreaPerPerson, out @double) && !double.IsNaN(@double))
+                        {
+                            if (@double != 0)
+                                @double = area / @double;
+                        }
+                    }
+                }
 
                 occupancies.Add(@double);
-
-                InternalCondition internalCondition = space.InternalCondition;
 
                 names_InternalCondition.Add(internalCondition?.Name);
                 guids_InternalCondition.Add(internalCondition == null ? Guid.Empty : internalCondition.Guid);
