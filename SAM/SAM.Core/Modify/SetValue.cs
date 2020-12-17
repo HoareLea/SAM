@@ -133,8 +133,12 @@ namespace SAM.Core
 
                 if (parameterSet == null)
                 {
-                    parameterSet = new ParameterSet(sAMObject.GetType().Assembly);
-                    sAMObject.Add(parameterSet);
+                    parameterSet = sAMObject.GetParameterSet(sAMObject.GetType().Assembly);
+                    if(parameterSet == null)
+                    {
+                        parameterSet = new ParameterSet(sAMObject.GetType().Assembly);
+                        sAMObject.Add(parameterSet);
+                    }
                 }
             }
             else

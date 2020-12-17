@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 
 namespace SAM.Core
 {
@@ -90,6 +91,11 @@ namespace SAM.Core
         public SAMObject(JObject jObject)
         {
             FromJObject(jObject);
+        }
+
+        public SAMObject(JsonElement jsonElement)
+        {
+            FromJsonElement(jsonElement);
         }
 
         public SAMObject(Guid guid)
@@ -336,19 +342,46 @@ namespace SAM.Core
             return jObject;
         }
 
-        public virtual System.Dynamic.ExpandoObject ToExpandoObject()
+        public virtual JsonElement ToJsonElement()
         {
-            dynamic result = new System.Dynamic.ExpandoObject();
-            result._type = Query.FullTypeName(this);
+            dynamic @dynamic = new System.Dynamic.ExpandoObject();
+
             if (name != null)
-                result.Name = name;
+                dynamic.Name = name;
 
-            result.Guid = guid;
+            @dynamic.Guid = guid;
 
-            if (parameterSets != null)
-                result.ParameterSets = parameterSets.ConvertAll(x => x.ToExpandoObject());
+            return Convert.ToJsonElement(@dynamic);
+        }
 
-            return result;
+        public virtual bool FromJsonElement(JsonElement jsonElement)
+        {
+            if (jsonElement.ValueKind != JsonValueKind.Object)
+                return false;
+
+            JsonElement jsonElement_Temp;
+
+            if (jsonElement.TryGetProperty("Name", out jsonElement_Temp))
+                name = jsonElement_Temp.GetString();
+
+            if (jsonElement.TryGetProperty("Guid", out jsonElement_Temp))
+                if (!jsonElement_Temp.TryGetGuid(out guid))
+                    guid = Guid.Empty;
+
+            if(jsonElement.TryGetProperty("ParameterSets", out jsonElement_Temp))
+            {
+                parameterSets = null;
+
+                if (jsonElement_Temp.ValueKind == JsonValueKind.Array)
+                {
+                    parameterSets = new List<ParameterSet>();
+                    JsonElement.ArrayEnumerator arrayEnumerator = jsonElement_Temp.EnumerateArray();
+                    while(arrayEnumerator.MoveNext())
+                        parameterSets.Add(new ParameterSet(arrayEnumerator.Current));
+                }
+            }
+
+            return true;
         }
     }
 }

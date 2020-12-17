@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json;
 
 namespace SAM.Core
 {
@@ -47,6 +48,10 @@ namespace SAM.Core
         public ParameterSet(JObject jObject)
         {
             FromJObject(jObject);
+        }
+        public ParameterSet(JsonElement jsonElement)
+        {
+            FromJsonElement(jsonElement);
         }
 
         public string Name
@@ -152,6 +157,15 @@ namespace SAM.Core
                 return false;
 
             dictionary[name] = jArray;
+            return true;
+        }
+
+        public bool Add(string name, Guid guid)
+        {
+            if (dictionary == null || name == null)
+                return false;
+
+            dictionary[name] = guid;
             return true;
         }
 
@@ -433,7 +447,96 @@ namespace SAM.Core
             return jObject;
         }
 
-        public System.Dynamic.ExpandoObject ToExpandoObject()
+        public bool FromJsonElement(JsonElement jsonElement)
+        {
+            if (jsonElement.ValueKind != JsonValueKind.Object)
+                return false;
+
+            JsonElement jsonElement_Temp;
+
+            if (jsonElement.TryGetProperty("Name", out jsonElement_Temp))
+                name = jsonElement_Temp.GetString();
+
+            if (jsonElement.TryGetProperty("Guid", out jsonElement_Temp))
+                if (!jsonElement_Temp.TryGetGuid(out guid))
+                    guid = Guid.Empty;
+
+            if (jsonElement.TryGetProperty("Parameters", out jsonElement_Temp))
+            {
+                if (jsonElement_Temp.ValueKind == JsonValueKind.Array)
+                {
+                    dictionary = new Dictionary<string, object>();
+                    JsonElement.ArrayEnumerator arrayEnumerator = jsonElement_Temp.EnumerateArray();
+                    while(arrayEnumerator.MoveNext())
+                    {
+                        if (arrayEnumerator.Current.ValueKind != JsonValueKind.Object)
+                            continue;
+
+                        if (!arrayEnumerator.Current.TryGetProperty("Name", out jsonElement_Temp))
+                            continue;
+
+                        string name = jsonElement_Temp.GetString();
+                        if (name == null)
+                            continue;
+
+                        if (arrayEnumerator.Current.TryGetProperty("Value", out jsonElement_Temp))
+                        {
+                            switch(jsonElement_Temp.ValueKind)
+                            {
+                                case JsonValueKind.Object:
+                                    break;
+                                case JsonValueKind.Number:
+                                    int @int;
+                                    if(jsonElement_Temp.TryGetInt32(out @int))
+                                    {
+                                        dictionary[name] = @int;
+                                        break;
+                                    }
+
+                                    double @double;
+                                    if (jsonElement_Temp.TryGetDouble(out @double))
+                                    {
+                                        dictionary[name] = @double;
+                                        break;
+                                    }
+
+                                    break;
+                                case JsonValueKind.False:
+                                    dictionary[name] = false;
+                                    break;
+                                case JsonValueKind.True:
+                                    dictionary[name] = true;
+                                    break;
+                                case JsonValueKind.String:
+
+                                    DateTime dateTime = DateTime.MinValue;
+                                    if(jsonElement_Temp.TryGetDateTime(out dateTime))
+                                    {
+                                        dictionary[name] = dateTime;
+                                        break;
+                                    }
+                                    Guid guid = Guid.Empty;
+                                    if (jsonElement_Temp.TryGetGuid(out guid))
+                                    {
+                                        dictionary[name] = guid;
+                                        break;
+                                    }
+
+                                    dictionary[name] = jsonElement_Temp.GetString();
+                                    break;
+
+                            }
+                        }
+
+                        
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public JsonElement ToJsonElement()
         {
             dynamic result = new System.Dynamic.ExpandoObject();
             result._type = GetType().FullName;
@@ -462,7 +565,7 @@ namespace SAM.Core
 
             result.Parameters = parameters;
 
-            return result;
+            return Convert.ToJsonElement(result);
         }
     }
 }
