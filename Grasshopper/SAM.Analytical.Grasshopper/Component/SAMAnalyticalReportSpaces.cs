@@ -260,14 +260,14 @@ namespace SAM.Analytical.Grasshopper
                 InternalCondition internalCondition = space?.InternalCondition;
 
                 double areaPerPerson = double.NaN;
-                if (internalCondition == null && !internalCondition.TryGetValue(InternalConditionParameter.AreaPerPerson, out @double))
+                if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.AreaPerPerson, out areaPerPerson))
                     areaPerPerson = double.NaN;
 
                 areaPerPersons.Add(areaPerPerson);
 
                 double occupancy = double.NaN;
                 if (space == null || !space.TryGetValue(SpaceParameter.Occupancy, out occupancy))
-                    @double = double.NaN;
+                    occupancy = double.NaN;
 
                 if (double.IsNaN(occupancy) && !double.IsNaN(areaPerPerson) && !double.IsNaN(area))
                 {
@@ -624,6 +624,30 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("CoolingProfileGuid");
             if (index != -1)
                 dataAccess.SetDataList(index, guids_Cooling);
+
+            index = Params.IndexOfOutputParam("Humidity");
+            if (index != -1)
+                dataAccess.SetDataList(index, humidities);
+
+            index = Params.IndexOfOutputParam("HumidificationProfileName");
+            if (index != -1)
+                dataAccess.SetDataList(index, names_Humidification);
+
+            index = Params.IndexOfOutputParam("HumidificationProfileGuid");
+            if (index != -1)
+                dataAccess.SetDataList(index, guids_Humidification);
+
+            index = Params.IndexOfOutputParam("Dehumidity");
+            if (index != -1)
+                dataAccess.SetDataList(index, dehumidities);
+
+            index = Params.IndexOfOutputParam("DehumidificationProfileName");
+            if (index != -1)
+                dataAccess.SetDataList(index, names_Dehumidification);
+
+            index = Params.IndexOfOutputParam("DehumidificationProfileGuid");
+            if (index != -1)
+                dataAccess.SetDataList(index, guids_Dehumidification);
 
             index = Params.IndexOfOutputParam("InternalConditionName");
             if (index != -1)
