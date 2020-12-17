@@ -217,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\Comparison\" />
+    <Folder Include="Convert\ToExpandoObject\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
@@ -49,9 +50,10 @@ namespace SAM.Core
         {
             FromJObject(jObject);
         }
-        public ParameterSet(JsonElement jsonElement)
+
+        public ParameterSet(System.Dynamic.ExpandoObject expandoObject)
         {
-            FromJsonElement(jsonElement);
+            FromExpandoObject(expandoObject);
         }
 
         public string Name
@@ -447,96 +449,7 @@ namespace SAM.Core
             return jObject;
         }
 
-        public bool FromJsonElement(JsonElement jsonElement)
-        {
-            if (jsonElement.ValueKind != JsonValueKind.Object)
-                return false;
-
-            JsonElement jsonElement_Temp;
-
-            if (jsonElement.TryGetProperty("Name", out jsonElement_Temp))
-                name = jsonElement_Temp.GetString();
-
-            if (jsonElement.TryGetProperty("Guid", out jsonElement_Temp))
-                if (!jsonElement_Temp.TryGetGuid(out guid))
-                    guid = Guid.Empty;
-
-            if (jsonElement.TryGetProperty("Parameters", out jsonElement_Temp))
-            {
-                if (jsonElement_Temp.ValueKind == JsonValueKind.Array)
-                {
-                    dictionary = new Dictionary<string, object>();
-                    JsonElement.ArrayEnumerator arrayEnumerator = jsonElement_Temp.EnumerateArray();
-                    while(arrayEnumerator.MoveNext())
-                    {
-                        if (arrayEnumerator.Current.ValueKind != JsonValueKind.Object)
-                            continue;
-
-                        if (!arrayEnumerator.Current.TryGetProperty("Name", out jsonElement_Temp))
-                            continue;
-
-                        string name = jsonElement_Temp.GetString();
-                        if (name == null)
-                            continue;
-
-                        if (arrayEnumerator.Current.TryGetProperty("Value", out jsonElement_Temp))
-                        {
-                            switch(jsonElement_Temp.ValueKind)
-                            {
-                                case JsonValueKind.Object:
-                                    break;
-                                case JsonValueKind.Number:
-                                    int @int;
-                                    if(jsonElement_Temp.TryGetInt32(out @int))
-                                    {
-                                        dictionary[name] = @int;
-                                        break;
-                                    }
-
-                                    double @double;
-                                    if (jsonElement_Temp.TryGetDouble(out @double))
-                                    {
-                                        dictionary[name] = @double;
-                                        break;
-                                    }
-
-                                    break;
-                                case JsonValueKind.False:
-                                    dictionary[name] = false;
-                                    break;
-                                case JsonValueKind.True:
-                                    dictionary[name] = true;
-                                    break;
-                                case JsonValueKind.String:
-
-                                    DateTime dateTime = DateTime.MinValue;
-                                    if(jsonElement_Temp.TryGetDateTime(out dateTime))
-                                    {
-                                        dictionary[name] = dateTime;
-                                        break;
-                                    }
-                                    Guid guid = Guid.Empty;
-                                    if (jsonElement_Temp.TryGetGuid(out guid))
-                                    {
-                                        dictionary[name] = guid;
-                                        break;
-                                    }
-
-                                    dictionary[name] = jsonElement_Temp.GetString();
-                                    break;
-
-                            }
-                        }
-
-                        
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        public JsonElement ToJsonElement()
+        public System.Dynamic.ExpandoObject ToExpandoObject()
         {
             dynamic result = new System.Dynamic.ExpandoObject();
             result._type = GetType().FullName;
@@ -565,7 +478,42 @@ namespace SAM.Core
 
             result.Parameters = parameters;
 
-            return Convert.ToJsonElement(result);
+            return result;
+        }
+
+        public bool FromExpandoObject(System.Dynamic.ExpandoObject expandoObject)
+        {
+            if (expandoObject == null)
+                return false;
+
+            IDictionary<string, object> dictionary = expandoObject;
+
+            if (dictionary.ContainsKey("Name"))
+                Query.TryConvert(dictionary["Name"], out name);
+
+            if (dictionary.ContainsKey("Guid"))
+                Query.TryConvert(dictionary["Guid"], out guid);
+
+            if (dictionary.ContainsKey("Parameters"))
+            {
+                IEnumerable enumerable = dictionary["Parameters"] as IEnumerable;
+                if(enumerable != null)
+                {
+                    this.dictionary = new Dictionary<string, object>();
+                    foreach(dynamic expandoObject_Parameter in enumerable)
+                    {
+                        string parameter_Name = null;
+                        Query.TryConvert(expandoObject_Parameter.Name, out parameter_Name);
+
+                        if (parameter_Name == null)
+                            continue;
+
+                        dictionary[parameter_Name] = expandoObject_Parameter.Value;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

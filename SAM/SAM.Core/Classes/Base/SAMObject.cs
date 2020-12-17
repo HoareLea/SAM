@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -91,11 +92,6 @@ namespace SAM.Core
         public SAMObject(JObject jObject)
         {
             FromJObject(jObject);
-        }
-
-        public SAMObject(JsonElement jsonElement)
-        {
-            FromJsonElement(jsonElement);
         }
 
         public SAMObject(Guid guid)
@@ -342,7 +338,7 @@ namespace SAM.Core
             return jObject;
         }
 
-        public virtual JsonElement ToJsonElement()
+        public virtual System.Dynamic.ExpandoObject ToExpandoObject()
         {
             dynamic @dynamic = new System.Dynamic.ExpandoObject();
 
@@ -351,33 +347,39 @@ namespace SAM.Core
 
             @dynamic.Guid = guid;
 
-            return Convert.ToJsonElement(@dynamic);
+            if(parameterSets != null)
+            {
+                List<System.Dynamic.ExpandoObject> expandoObjects = new List<System.Dynamic.ExpandoObject>();
+                foreach (ParameterSet parameterSet in parameterSets)
+                    expandoObjects.Add(parameterSet?.ToExpandoObject());
+
+                dynamic.ParameterSets = expandoObjects;
+            }
+            
+            return dynamic;
         }
 
-        public virtual bool FromJsonElement(JsonElement jsonElement)
+        public virtual bool FromExpandoObject(System.Dynamic.ExpandoObject expandoObject)
         {
-            if (jsonElement.ValueKind != JsonValueKind.Object)
+            if (expandoObject == null)
                 return false;
+            
+            IDictionary<string, object> dictionary = expandoObject;
 
-            JsonElement jsonElement_Temp;
+            if (dictionary.ContainsKey("Name"))
+                Query.TryConvert(dictionary["Name"], out name);
 
-            if (jsonElement.TryGetProperty("Name", out jsonElement_Temp))
-                name = jsonElement_Temp.GetString();
+            if (dictionary.ContainsKey("Guid"))
+                Query.TryConvert(dictionary["Guid"], out guid);
 
-            if (jsonElement.TryGetProperty("Guid", out jsonElement_Temp))
-                if (!jsonElement_Temp.TryGetGuid(out guid))
-                    guid = Guid.Empty;
-
-            if(jsonElement.TryGetProperty("ParameterSets", out jsonElement_Temp))
+            if (dictionary.ContainsKey("ParameterSets"))
             {
-                parameterSets = null;
-
-                if (jsonElement_Temp.ValueKind == JsonValueKind.Array)
+                IEnumerable enumerable = dictionary["ParameterSets"] as IEnumerable;
+                if (enumerable != null)
                 {
                     parameterSets = new List<ParameterSet>();
-                    JsonElement.ArrayEnumerator arrayEnumerator = jsonElement_Temp.EnumerateArray();
-                    while(arrayEnumerator.MoveNext())
-                        parameterSets.Add(new ParameterSet(arrayEnumerator.Current));
+                    foreach (System.Dynamic.ExpandoObject expandoObject_Temp in enumerable)
+                        parameterSets.Add(new ParameterSet(expandoObject_Temp));
                 }
             }
 
