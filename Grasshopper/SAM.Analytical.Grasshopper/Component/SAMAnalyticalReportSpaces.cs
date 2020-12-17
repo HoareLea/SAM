@@ -72,8 +72,10 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new Param_String() { Name = "InfiltrationProfileName", NickName = "InfiltrationProfileName", Description = "Infiltration Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_Guid() { Name = "InfiltrationProfileGuid", NickName = "InfiltrationProfileGuid", Description = "Infiltration Profile Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancySensibleGainPerPerson", NickName = "OccupancySensibleGainPerPerson", Description = "Occupancy Sensible Gain Per Person", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancyLatentGainPerPerson", NickName = "OccupancyLatentGainPerPerson", Description = "Occupancy Latent Gain Per Person", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancySensibleGainPerPerson", NickName = "OccupancySensibleGainPerPerson", Description = "Occupancy Sensible Gain Per Person", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancySensibleGainPerArea", NickName = "OccupancySensibleGainPerArea", Description = "Occupancy Sensible Gain Per Area", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancyLatentGainPerPerson", NickName = "OccupancyLatentGainPerPerson", Description = "Occupancy Latent Gain Per Person", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancyLatentGainPerArea", NickName = "OccupancyLatentGainPerArea", Description = "Occupancy Latent Gain Per Area", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancySensibleGain", NickName = "OccupancySensibleGain", Description = "Occupancy Sensible Gain", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancyLatentGain", NickName = "OccupancyLatentGain", Description = "Occupancy Latent Gain", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_String() { Name = "OccupancyProfileName", NickName = "OccupancyProfileName", Description = "Occupancy Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
@@ -179,7 +181,9 @@ namespace SAM.Analytical.Grasshopper
             List<double> occupancySensibleGains = new List<double>();
             List<double> occupancyLatentGains = new List<double>();
             List<double> occupancySensibleGainsPerPerson = new List<double>();
+            List<double> occupancySensibleGainsPerArea = new List<double>();
             List<double> occupancyLatentGainsPerPerson = new List<double>();
+            List<double> occupancyLatentGainsPerArea = new List<double>();
             List<string> names_Occupancy = new List<string>();
             List<Guid> guids_Occupancy = new List<Guid>();
 
@@ -301,12 +305,14 @@ namespace SAM.Analytical.Grasshopper
 
                 occupancySensibleGainsPerPerson.Add(@double);
                 occupancySensibleGains.Add(double.IsNaN(occupancy) || double.IsNaN(@double) ? double.NaN : @double * occupancy);
+                occupancySensibleGainsPerArea.Add(double.IsNaN(occupancySensibleGains.Last()) || double.IsNaN(area) || area == 0 ? double.NaN : occupancySensibleGains.Last() / area);
 
                 if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.OccupancyLatentGainPerPerson, out @double))
                     @double = double.NaN;
 
                 occupancyLatentGainsPerPerson.Add(@double);
                 occupancyLatentGains.Add(double.IsNaN(occupancy) || double.IsNaN(@double) ? double.NaN : @double * occupancy);
+                occupancyLatentGainsPerArea.Add(double.IsNaN(occupancyLatentGains.Last()) || double.IsNaN(area) || area == 0 ? double.NaN : occupancyLatentGains.Last() / area);
 
                 if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.OccupancyProfileName, out @string))
                     @string = null;
@@ -529,9 +535,17 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.SetDataList(index, occupancySensibleGainsPerPerson);
 
+            index = Params.IndexOfOutputParam("OccupancySensibleGainPerArea");
+            if (index != -1)
+                dataAccess.SetDataList(index, occupancySensibleGainsPerArea);
+
             index = Params.IndexOfOutputParam("OccupancyLatentGainPerPerson");
             if (index != -1)
                 dataAccess.SetDataList(index, occupancyLatentGainsPerPerson);
+
+            index = Params.IndexOfOutputParam("OccupancyLatentGainPerArea");
+            if (index != -1)
+                dataAccess.SetDataList(index, occupancyLatentGainsPerArea);
 
             index = Params.IndexOfOutputParam("OccupancySensibleGain");
             if (index != -1)
