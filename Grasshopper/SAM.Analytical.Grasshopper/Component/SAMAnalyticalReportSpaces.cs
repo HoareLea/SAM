@@ -269,20 +269,8 @@ namespace SAM.Analytical.Grasshopper
 
                 areaPerPersons.Add(areaPerPerson);
 
-                double occupancy = double.NaN;
-                if (space == null || !space.TryGetValue(SpaceParameter.Occupancy, out occupancy))
-                    occupancy = double.NaN;
-
-                if (double.IsNaN(occupancy) && !double.IsNaN(areaPerPerson) && !double.IsNaN(area))
-                {
-                    if (areaPerPerson == 0)
-                        occupancy = 0;
-                    else
-                        occupancy = area / areaPerPerson;
-                }
-
+                double occupancy = Analytical.Query.CalculatedOccupancy(space);
                 occupancies.Add(occupancy);
-
 
                 //Infiltration
                 if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.InfiltrationAirChangesPerHour, out @double))
@@ -300,19 +288,17 @@ namespace SAM.Analytical.Grasshopper
 
 
                 //Occupancy
-                if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.OccupancySensibleGainPerPerson, out @double))
-                    @double = double.NaN;
+                double occupancySensibleGain = Analytical.Query.CalculatedOccupancySensibleGain(space);
 
-                occupancySensibleGainsPerPerson.Add(@double);
-                occupancySensibleGains.Add(double.IsNaN(occupancy) || double.IsNaN(@double) ? double.NaN : @double * occupancy);
-                occupancySensibleGainsPerArea.Add(double.IsNaN(occupancySensibleGains.Last()) || double.IsNaN(area) || area == 0 ? double.NaN : occupancySensibleGains.Last() / area);
+                occupancySensibleGains.Add(occupancySensibleGain);
+                occupancySensibleGainsPerPerson.Add(double.IsNaN(occupancySensibleGain) || double.IsNaN(occupancy) || occupancy == 0 ? double.NaN : occupancySensibleGain / occupancy);
+                occupancySensibleGainsPerArea.Add(double.IsNaN(occupancySensibleGain) || double.IsNaN(area) || area == 0 ? double.NaN : occupancySensibleGain / area);
 
-                if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.OccupancyLatentGainPerPerson, out @double))
-                    @double = double.NaN;
-
-                occupancyLatentGainsPerPerson.Add(@double);
-                occupancyLatentGains.Add(double.IsNaN(occupancy) || double.IsNaN(@double) ? double.NaN : @double * occupancy);
-                occupancyLatentGainsPerArea.Add(double.IsNaN(occupancyLatentGains.Last()) || double.IsNaN(area) || area == 0 ? double.NaN : occupancyLatentGains.Last() / area);
+                double occupancyLatentGain = Analytical.Query.CalculatedOccupancyLatentGain(space);
+                
+                occupancySensibleGains.Add(occupancyLatentGain);
+                occupancySensibleGainsPerPerson.Add(double.IsNaN(occupancyLatentGain) || double.IsNaN(occupancy) || occupancy == 0 ? double.NaN : occupancyLatentGain / occupancy);
+                occupancySensibleGainsPerArea.Add(double.IsNaN(occupancyLatentGain) || double.IsNaN(area) || area == 0 ? double.NaN : occupancyLatentGain / area);
 
                 if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.OccupancyProfileName, out @string))
                     @string = null;
@@ -324,42 +310,13 @@ namespace SAM.Analytical.Grasshopper
 
 
                 //Equipment
-                double gain = double.NaN;
-                double gainPerArea = double.NaN;
+                double equipmentSensibleGain = Analytical.Query.CalculatedEquipmentSensibleGain(space);
+                equipmentSensibleGains.Add(equipmentSensibleGain);
+                equipmentSensibleGainsPerArea.Add(double.IsNaN(equipmentSensibleGain) || double.IsNaN(area) || area == 0 ? double.NaN : equipmentSensibleGain / area);
 
-                if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.EquipmentSensibleGainPerArea, out gainPerArea))
-                    gainPerArea = double.NaN;
-
-                if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.EquipmentSensibleGain, out gain))
-                    gain = double.NaN;
-
-                if(!double.IsNaN(gainPerArea) && !double.IsNaN(area))
-                {
-                    if (double.IsNaN(gain))
-                        gain = 0;
-
-                    gain += gainPerArea * area;
-                }
-
-                equipmentSensibleGainsPerArea.Add(double.IsNaN(area) || double.IsNaN(gain) ? double.NaN : gain / area);
-                equipmentSensibleGains.Add(gain);
-
-                if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.EquipmentLatentGainPerArea, out gainPerArea))
-                    gainPerArea = double.NaN;
-
-                if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.EquipmentLatentGain, out gain))
-                    gain = double.NaN;
-
-                if (!double.IsNaN(gainPerArea) && !double.IsNaN(area))
-                {
-                    if (double.IsNaN(gain))
-                        gain = 0;
-
-                    gain += gainPerArea * area;
-                }
-
-                equipmentLatentGainsPerArea.Add(double.IsNaN(area) || double.IsNaN(gain) ? double.NaN : gain / area);
-                equipmentLatentGains.Add(gain);
+                double equipmentLatentGain = Analytical.Query.CalculatedEquipmentLatentGain(space);
+                equipmentLatentGains.Add(equipmentLatentGain);
+                equipmentLatentGainsPerArea.Add(double.IsNaN(equipmentLatentGain) || double.IsNaN(area) || area == 0 ? double.NaN : equipmentLatentGain / area);
 
                 if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.EquipmentSensibleProfileName, out @string))
                     @string = null;
@@ -379,22 +336,9 @@ namespace SAM.Analytical.Grasshopper
 
 
                 //Lighting
-                if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.LightingGainPerArea, out gainPerArea))
-                    gainPerArea = double.NaN;
-
-                if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.LightingGain, out gain))
-                    gain = double.NaN;
-
-                if (!double.IsNaN(gainPerArea) && !double.IsNaN(area))
-                {
-                    if (double.IsNaN(gain))
-                        gain = 0;
-
-                    gain += gainPerArea * area;
-                }
-
-                lightingGainsPerArea.Add(double.IsNaN(area) || double.IsNaN(gain) ? double.NaN : gain / area);
-                lightingGains.Add(gain);
+                double lightingGain = Analytical.Query.CalculatedLightingGain(space);
+                lightingGains.Add(lightingGain);
+                lightingGainsPerArea.Add(double.IsNaN(lightingGain) || double.IsNaN(area) || area == 0 ? double.NaN : lightingGain / area);
 
                 if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.LightingLevel, out @double))
                     @double = double.NaN;
@@ -419,7 +363,7 @@ namespace SAM.Analytical.Grasshopper
                 profile = internalCondition?.GetProfile(ProfileType.Heating, analyticalModel?.ProfileLibrary);
                 guids_Heating.Add(profile == null ? Guid.Empty : profile.Guid);
 
-                heatingDesignTemperatures.Add(profile == null ? double.NaN : profile.Min);
+                heatingDesignTemperatures.Add(Analytical.Query.HeatingDesignTemperature(space, analyticalModel?.ProfileLibrary));
 
 
                 //Cooling
@@ -431,9 +375,9 @@ namespace SAM.Analytical.Grasshopper
                 profile = internalCondition?.GetProfile(ProfileType.Cooling, analyticalModel?.ProfileLibrary);
                 guids_Cooling.Add(profile == null ? Guid.Empty : profile.Guid);
 
-                coolingDesignTemperatures.Add(profile == null ? double.NaN : profile.Max);
+                coolingDesignTemperatures.Add(Analytical.Query.CoolingDesignTemperature(space, analyticalModel?.ProfileLibrary));
 
-                
+
                 //Humidification
                 if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.HumidificationProfileName, out @string))
                     @string = null;
