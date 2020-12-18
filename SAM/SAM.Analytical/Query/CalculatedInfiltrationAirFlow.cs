@@ -32,7 +32,7 @@
             if (airChangesPerHour == 0)
                 return 0;
 
-            return volume / airChangesPerHour / 3600;
+            return volume * airChangesPerHour / 3600;
         }
     }
 }
