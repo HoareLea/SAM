@@ -2,6 +2,11 @@
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Calculates Infiltration Air Flow [m3/s]
+        /// </summary>
+        /// <param name="space"></param>
+        /// <returns>Air Flow [m3/s]</returns>
         public static double CalculatedInfiltrationAirFlow(this Space space)
         {
             if (space == null)
@@ -27,7 +32,7 @@
             if (airChangesPerHour == 0)
                 return 0;
 
-            return volume / airChangesPerHour;
+            return volume / airChangesPerHour / 3600;
         }
     }
 }
