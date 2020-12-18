@@ -182,6 +182,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\CalculatedInfiltrationAirFlow.cs" />
     <Compile Include="Query\CalculatedPeoplePerArea.cs" />
     <Compile Include="Query\CalculatedOccupancyGain.cs" />
     <Compile Include="Query\CalculatedEquipmentLatentGain.cs" />
