@@ -10,6 +10,7 @@ namespace SAM.Weather
         private string description;
         private double latitude;
         private double longitude;
+        private double elevation;
         private WeatherDay[] weatherDays;
 
         public WeatherYear(WeatherYear weatherYear)
@@ -18,14 +19,16 @@ namespace SAM.Weather
             description = weatherYear.description;
             latitude = weatherYear.latitude;
             longitude = weatherYear.longitude;
+            elevation = weatherYear.elevation;
         }
 
-        public WeatherYear(string name, string description, double latitude, double longitude)
+        public WeatherYear(string name, string description, double latitude, double longitude, double elevation)
             : base(name)
         {
             this.description = description;
             this.latitude = latitude;
             this.longitude = longitude;
+            this.elevation = elevation;
         }
 
         public WeatherYear(JObject jObject)
@@ -51,6 +54,42 @@ namespace SAM.Weather
                     return;
 
                 weatherDays[i] = value;
+            }
+        }
+
+        public double Longitude
+        {
+            get
+            {
+                return longitude;
+            }
+            set
+            {
+                longitude = value;
+            }
+        }
+
+        public double Latitude
+        {
+            get
+            {
+                return latitude;
+            }
+            set
+            {
+                latitude = value;
+            }
+        }
+
+        public double Elevtion
+        {
+            get
+            {
+                return elevation;
+            }
+            set
+            {
+                elevation = value;
             }
         }
 

@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\EPWFile.cs" />
     <Compile Include="Classes\WeatherDay.cs" />
     <Compile Include="Classes\WeatherYear.cs" />
     <Compile Include="Enums\WeatherDataType.cs" />
