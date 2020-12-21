@@ -236,13 +236,16 @@ namespace SAM.Weather
                 weatherYears = new Dictionary<int, WeatherYear>();
 
             WeatherYear weatherYear = null;
-            if (weatherYears.TryGetValue(dateTime.Year, out weatherYear) || weatherYear == null)
+            if (!weatherYears.TryGetValue(dateTime.Year, out weatherYear) || weatherYear == null)
             {
                 weatherYear = new WeatherYear(latitude, longitude, elevation);
                 weatherYears[dateTime.Year] = weatherYear;
             }
 
-            return weatherYear.Add(dateTime.Day, dateTime.Hour, values);
+            int day = dateTime.DayOfYear - 1;
+            int hour = dateTime.Hour;
+
+            return weatherYear.Add(day, hour, values);
         }
 
         public bool Remove(int year)
@@ -304,7 +307,7 @@ namespace SAM.Weather
 
             bool @break = true;
 
-            for(int i=0; i < 10; i++)
+            for(int i=0; i <= 8; i++)
             {
                 if (TryGetLocationData(lines, i, out city, out state, out country, out dataSource, out wMONumber, out latitude, out longitude, out timeZone, out elevation))
                 {
@@ -317,20 +320,20 @@ namespace SAM.Weather
                 return null;
 
             string comments_1 = null;
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i <= 8; i++)
             {
                 if (TryGetValue(lines[i], Name.Comments_1, out comments_1))
                     break;
             }
 
             string comments_2 = null;
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i <= 8; i++)
             {
                 if (TryGetValue(lines[i], Name.Comments_2, out comments_2))
                     break;
             }
 
-            lines = lines.GetRange(10, lines.Count - 10);
+            lines = lines.GetRange(8, lines.Count - 8);
             if (lines.Count < 1)
                 return null;
 
@@ -457,6 +460,7 @@ namespace SAM.Weather
             return jObject;
         }
 
+        
         private string GetLocationString()
         {
             double latitude = Latitude;
@@ -473,7 +477,8 @@ namespace SAM.Weather
                 double.IsNaN(latitude) ? string.Empty : latitude.ToString(),
                 double.IsNaN(longitude) ? string.Empty : longitude.ToString(),
                 timeZone == int.MinValue ? string.Empty : timeZone.ToString(),
-                double.IsNaN(elevation) ? string.Empty : elevation.ToString()
+                double.IsNaN(elevation) ? string.Empty : elevation.ToString(),
+                string.Empty
             };
 
             return string.Join(",", values);
@@ -518,7 +523,7 @@ namespace SAM.Weather
         {
             string[] values = new string[] {
                 Name.DaylightSavings,
-                "No,0,0,0"
+                ",No,0,0,0"
             };
 
             return string.Join(",", values);
@@ -536,7 +541,7 @@ namespace SAM.Weather
                 comments_2 == null ? string.Empty : comments_2
             };
 
-            return string.Join("\n", new string[] { string.Join(",", comments_1), string.Join(",", comments_2) });
+            return string.Join("\n", new string[] { string.Join(",", values_1), string.Join(",", values_2) });
         }
 
         private string GetDataPeriodsString()
@@ -575,9 +580,9 @@ namespace SAM.Weather
                     continue;
 
                 DateTime dateTime = new DateTime(year, 1, 1);
-                dateTime.AddDays(i);
+                dateTime = dateTime.AddDays(i);
 
-                values[i] = GetDataString(year, dateTime.Month, i, weatherDay);
+                values[i] = GetDataString(year, dateTime.Month, dateTime.Day, weatherDay);
             }
 
             return string.Join("\n", values);
@@ -683,22 +688,22 @@ namespace SAM.Weather
             if (values == null || values.Length < 10)
                 return false;
 
-            city = values[1];
-            state = values[2];
-            country = values[3];
-            dataSource = values[4];
-            wMONumber = values[5];
+            city = values[0];
+            state = values[1];
+            country = values[2];
+            dataSource = values[3];
+            wMONumber = values[4];
 
-            if (!double.TryParse(values[6], out latitude))
+            if (!double.TryParse(values[5], out latitude))
                 latitude = double.NaN;
 
-            if (!double.TryParse(values[7], out longitude))
+            if (!double.TryParse(values[6], out longitude))
                 longitude = double.NaN;
 
-            if (!int.TryParse(values[8], out timeZone))
+            if (!int.TryParse(values[7], out timeZone))
                 timeZone = int.MinValue;
 
-            if (!double.TryParse(values[9], out elevation))
+            if (!double.TryParse(values[8], out elevation))
                 elevation = double.NaN;
 
             return true;
@@ -719,8 +724,9 @@ namespace SAM.Weather
                 return false;
 
             result = result.Substring(name_Temp.Length);
+            result = result.TrimStart();
             if (result.StartsWith(","))
-                result.Substring(1);
+                result = result.Substring(1).TrimStart();
 
             value = result;
             return true;
@@ -754,6 +760,10 @@ namespace SAM.Weather
             if (!int.TryParse(values[3], out hour))
                 return false;
 
+            hour = hour - 1;
+            if (hour < 0)
+                hour = 0;
+
             int minute = 0;
             if(values.Length > 4)
             {
@@ -762,8 +772,8 @@ namespace SAM.Weather
             }
 
             dateTime = new DateTime(year, month, day);
-            dateTime.AddHours(hour);
-            dateTime.AddMinutes(minute);
+            dateTime = dateTime.AddHours(hour);
+            dateTime = dateTime.AddMinutes(minute);
 
             if(values.Length > 23)
             {
