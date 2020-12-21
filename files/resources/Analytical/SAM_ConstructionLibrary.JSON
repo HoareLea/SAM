@@ -783,8 +783,8 @@
       "ConstructionLayers": [
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-          "Name": "F00_WhitePaint_0.1kg/m3_999W/mK",
-          "Thickness": 0.0001
+          "Name": "F00_WhitePaint_0.1kg/m3_0.2W/mK",
+          "Thickness": 0.0002
         },
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
@@ -838,8 +838,8 @@
       "ConstructionLayers": [
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-          "Name": "F00_WhitePaint_0.1kg/m3_999W/mK",
-          "Thickness": 0.0001
+          "Name": "F00_WhitePaint_0.1kg/m3_0.2W/mK",
+          "Thickness": 0.0002
         },
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
@@ -903,8 +903,8 @@
       "ConstructionLayers": [
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-          "Name": "F00_WhitePaint_0.1kg/m3_999W/mK",
-          "Thickness": 0.0001
+          "Name": "F00_WhitePaint_0.1kg/m3_0.2W/mK",
+          "Thickness": 0.0002
         },
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
@@ -953,8 +953,8 @@
       "ConstructionLayers": [
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
-          "Name": "F00_WhitePaint_0.1kg/m3_999W/mK",
-          "Thickness": 0.0001
+          "Name": "F00_WhitePaint_0.1kg/m3_0.2W/mK",
+          "Thickness": 0.0002
         },
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",

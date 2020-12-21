@@ -6550,7 +6550,7 @@
     },
     {
       "_type": "SAM.Core.OpaqueMaterial,SAM.Core",
-      "Name": "F00_WhitePaint_0.1kg/m3_999W/mK",
+      "Name": "F00_WhitePaint_0.1kg/m3_0.2W/mK",
       "Guid": "1bf11903-f03a-4e41-87df-c8b1386b9af5",
       "ParameterSets": [
         {
@@ -6597,9 +6597,9 @@
           ]
         }
       ],
-      "DisplayName": "F00_WhitePaint_0.1kg/m3_999W/mK",
+      "DisplayName": "F00_WhitePaint_0.1kg/m3_0.2W/mK",
       "Description": "WHITE PAINT  *3",
-      "ThermalConductivity": 999.0,
+      "ThermalConductivity": 0.2,
       "SpecificHeatCapacity": 100,
       "Density": 0.1
     },
