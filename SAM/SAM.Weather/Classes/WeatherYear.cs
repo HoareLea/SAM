@@ -13,6 +13,11 @@ namespace SAM.Weather
         private double elevation;
         private WeatherDay[] weatherDays;
 
+        public WeatherYear()
+        {
+
+        }
+
         public WeatherYear(WeatherYear weatherYear)
             : base(weatherYear)
         {
@@ -20,6 +25,36 @@ namespace SAM.Weather
             latitude = weatherYear.latitude;
             longitude = weatherYear.longitude;
             elevation = weatherYear.elevation;
+
+            if(weatherYear.weatherDays != null)
+            {
+                weatherDays = new WeatherDay[weatherYear.weatherDays.Length];
+                for (int i = 0; i < weatherYear.weatherDays.Length; i++)
+                    weatherDays[i] = weatherYear.weatherDays[i] == null ? null : new WeatherDay(weatherYear.weatherDays[i]);
+            }
+        }
+
+        public WeatherYear(double latitude, double longitude, double elevation)
+        {
+            this.longitude = longitude;
+            this.latitude = latitude;
+            this.elevation = elevation;
+        }
+        
+        public WeatherYear(string description, double latitude, double longitude, double elevation, WeatherYear weatherYear)
+            : base(weatherYear)
+        {
+            this.description = description;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.elevation = elevation;
+
+            if (weatherYear.weatherDays != null)
+            {
+                weatherDays = new WeatherDay[weatherYear.weatherDays.Length];
+                for (int i = 0; i < weatherYear.weatherDays.Length; i++)
+                    weatherDays[i] = weatherYear.weatherDays[i] == null ? null : new WeatherDay(weatherYear.weatherDays[i]);
+            }
         }
 
         public WeatherYear(string name, string description, double latitude, double longitude, double elevation)
@@ -53,8 +88,35 @@ namespace SAM.Weather
                 if (i < 0 || i >= 365)
                     return;
 
+                if (weatherDays == null)
+                    weatherDays = new WeatherDay[365];
+
                 weatherDays[i] = value;
             }
+        }
+
+        public bool Add(int day, int hour, Dictionary<string, double> values)
+        {
+            if (day < 0 || day >= 365)
+                return false;
+
+            if (hour < 0 || hour >= 24)
+                return false;
+
+            if (weatherDays == null)
+                weatherDays = new WeatherDay[365];
+
+            WeatherDay weatherDay = weatherDays[day];
+            if(weatherDay == null)
+            {
+                weatherDay = new WeatherDay();
+                weatherDays[day] = weatherDay;
+            }
+            
+            foreach(KeyValuePair<string, double> keyValuePair in values)
+                weatherDay[keyValuePair.Key, hour] = keyValuePair.Value;
+
+            return true;
         }
 
         public double Longitude
@@ -90,6 +152,18 @@ namespace SAM.Weather
             set
             {
                 elevation = value;
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+            set
+            {
+                description = value;
             }
         }
 

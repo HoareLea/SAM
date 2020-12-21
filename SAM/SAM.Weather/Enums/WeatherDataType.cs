@@ -21,6 +21,11 @@ namespace SAM.Weather
         [Description("Diffuse Solar Radiation")] DiffuseSolarRadiation,
 
         /// <summary>
+        /// Direct Solar Radiation [W/m2]
+        /// </summary>
+        [Description("Direct Solar Radiation")] DirectSolarRadiation,
+
+        /// <summary>
         /// Cloud Cover [0-1]
         /// </summary>
         [Description("Cloud Cover")] CloudCover,
@@ -29,6 +34,11 @@ namespace SAM.Weather
         /// Dry Bulb Temperature [C]
         /// </summary>
         [Description("Dry Bulb Temperature")] DryBulbTemperature,
+
+        /// <summary>
+        /// Wet Bulb Temperature [C]
+        /// </summary>
+        [Description("Wet Bulb Temperature")] WetBulbTemperature,
 
         /// <summary>
         /// Relative Humidity [%]
@@ -44,6 +54,11 @@ namespace SAM.Weather
         /// Wind Direction [Degree]
         /// </summary>
         [Description("Wind Direction")] WindDirection,
+
+        /// <summary>
+        /// Atmospheric Pressure [Pa]
+        /// </summary>
+        [Description("Atmospheric Pressure")] AtmosphericPressure,
 
     }
 }
