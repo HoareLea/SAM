@@ -72,7 +72,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\GooLevel.cs" />
+    <Compile Include="Classes\GooWeatherData.cs" />
     <Compile Include="Component\SAMWeatherLoadWeatherData.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
