@@ -93,6 +93,7 @@
     <Compile Include="Enums\Parameter\CoreSettingParameter.cs" />
     <Compile Include="Interfaces\Base\ISystem.cs" />
     <Compile Include="Interfaces\Base\ISystemType.cs" />
+    <Compile Include="Modify\Delete.cs" />
     <Compile Include="Modify\AddRange.cs" />
     <Compile Include="Classes\Library\SAMLibrary.cs" />
     <Compile Include="Classes\Material\SolidMaterial.cs" />
