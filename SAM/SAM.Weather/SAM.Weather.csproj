@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Create\" />
+    <Folder Include="Enums\Parameter\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

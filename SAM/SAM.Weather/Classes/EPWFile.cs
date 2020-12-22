@@ -213,6 +213,14 @@ namespace SAM.Weather
             return weatherYear == null ? null : new WeatherYear(weatherYear);
         }
 
+        public WeatherData WeatherData
+        {
+            get
+            {
+                return weatherData == null ? null : new WeatherData(weatherData);
+            }
+        }
+
         public bool Add(int year, WeatherYear weatherYear)
         {
             if (weatherData == null)
