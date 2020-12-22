@@ -5,27 +5,20 @@ using System.Linq;
 
 namespace SAM.Weather
 {
-    public class WeatherYear : SAMObject
+    public class WeatherYear : IJSAMObject
     {
-        private string description;
-        private double latitude;
-        private double longitude;
-        private double elevation;
+        private int year;
         private WeatherDay[] weatherDays;
 
-        public WeatherYear()
+        public WeatherYear(int year)
         {
-
+            this.year = year;
         }
 
         public WeatherYear(WeatherYear weatherYear)
-            : base(weatherYear)
         {
-            description = weatherYear.description;
-            latitude = weatherYear.latitude;
-            longitude = weatherYear.longitude;
-            elevation = weatherYear.elevation;
-
+            year = weatherYear.year;
+            
             if(weatherYear.weatherDays != null)
             {
                 weatherDays = new WeatherDay[weatherYear.weatherDays.Length];
@@ -34,41 +27,9 @@ namespace SAM.Weather
             }
         }
 
-        public WeatherYear(double latitude, double longitude, double elevation)
-        {
-            this.longitude = longitude;
-            this.latitude = latitude;
-            this.elevation = elevation;
-        }
-        
-        public WeatherYear(string description, double latitude, double longitude, double elevation, WeatherYear weatherYear)
-            : base(weatherYear)
-        {
-            this.description = description;
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.elevation = elevation;
-
-            if (weatherYear.weatherDays != null)
-            {
-                weatherDays = new WeatherDay[weatherYear.weatherDays.Length];
-                for (int i = 0; i < weatherYear.weatherDays.Length; i++)
-                    weatherDays[i] = weatherYear.weatherDays[i] == null ? null : new WeatherDay(weatherYear.weatherDays[i]);
-            }
-        }
-
-        public WeatherYear(string name, string description, double latitude, double longitude, double elevation)
-            : base(name)
-        {
-            this.description = description;
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.elevation = elevation;
-        }
-
         public WeatherYear(JObject jObject)
-            : base(jObject)
         {
+            FromJObject(jObject);
         }
 
         public WeatherDay this[int i]
@@ -119,51 +80,15 @@ namespace SAM.Weather
             return true;
         }
 
-        public double Longitude
+        public int Year
         {
             get
             {
-                return longitude;
+                return year;
             }
             set
             {
-                longitude = value;
-            }
-        }
-
-        public double Latitude
-        {
-            get
-            {
-                return latitude;
-            }
-            set
-            {
-                latitude = value;
-            }
-        }
-
-        public double Elevtion
-        {
-            get
-            {
-                return elevation;
-            }
-            set
-            {
-                elevation = value;
-            }
-        }
-
-        public string Description
-        {
-            get
-            {
-                return description;
-            }
-            set
-            {
-                description = value;
+                year = value;
             }
         }
 
@@ -195,21 +120,15 @@ namespace SAM.Weather
             return GetValues(weatherDataType.ToString());
         }
 
-        public override bool FromJObject(JObject jObject)
+        public bool FromJObject(JObject jObject)
         {
-            if (!base.FromJObject(jObject))
+            if (jObject == null)
                 return false;
 
-            if (jObject.ContainsKey("Description"))
-                description = jObject.Value<string>("Description");
+            if (jObject.ContainsKey("Year"))
+                year = jObject.Value<int>("Year");
 
-            if (jObject.ContainsKey("Latitude"))
-                latitude = jObject.Value<double>("Latitude");
-
-            if (jObject.ContainsKey("Longitude"))
-                longitude = jObject.Value<double>("Longitude");
-
-            if(jObject.ContainsKey("WeatherDays"))
+            if (jObject.ContainsKey("WeatherDays"))
             {
                 JArray jArray = jObject.Value<JArray>("WeatherDays");
                 if(jArray != null && jArray.Count == 365)
@@ -229,20 +148,12 @@ namespace SAM.Weather
             return true;
         }
 
-        public override JObject ToJObject()
+        public JObject ToJObject()
         {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
-                return jObject;
+            JObject jObject = new JObject();
 
-            if (description != null)
-                jObject.Add("Description", description);
-
-            if (double.IsNaN(latitude))
-                jObject.Add("Latitude", latitude);
-
-            if (double.IsNaN(longitude))
-                jObject.Add("Longitude", longitude);
+            if (year != int.MinValue)
+                jObject.Add("Year", year);
 
             if(weatherDays != null)
             {

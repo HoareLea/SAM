@@ -28,10 +28,7 @@ namespace SAM.Weather
         private int timeZone;
         private string comments_1;
         private string comments_2;
-        private double longitude;
-        private double latitude;
-        private double elevation;
-        private Dictionary<int, WeatherYear> weatherYears;
+        private WeatherData weatherData;
 
         public EPWFile()
         { 
@@ -48,9 +45,7 @@ namespace SAM.Weather
             this.timeZone = timeZone;
             this.comments_1 = comments_1;
             this.comments_2 = comments_2;
-            this.longitude = longitude;
-            this.latitude = latitude;
-            this.elevation = elevation;
+            weatherData = new WeatherData(latitude, longitude, elevation);
         }
 
         public EPWFile(JObject jObject)
@@ -130,17 +125,6 @@ namespace SAM.Weather
             }
         }
 
-        public IEnumerable<int> Years
-        {
-            get
-            {
-                if (weatherYears == null)
-                    return null;
-
-                return weatherYears.Keys;
-            }
-        }
-
         public string Comments_1
         {
             get
@@ -169,13 +153,17 @@ namespace SAM.Weather
         {
             get
             {
-                return longitude;
+                if (weatherData == null)
+                    return double.NaN;
+                
+                return weatherData.Longitude;
             }
             set
             {
-                longitude = value;
-                if (weatherYears != null)
-                    weatherYears.Values.ToList().ForEach(x => x.Longitude = value);
+                if (weatherData == null)
+                    return;
+
+                weatherData.Longitude = value;
             }
         }
 
@@ -183,13 +171,17 @@ namespace SAM.Weather
         {
             get
             {
-                return latitude;
+                if (weatherData == null)
+                    return double.NaN;
+
+                return weatherData.Latitude;
             }
             set
             {
-                latitude = value;
-                if (weatherYears != null)
-                    weatherYears.Values.ToList().ForEach(x => x.Latitude = value);
+                if (weatherData == null)
+                    return;
+
+                weatherData.Latitude = value;
             }
         }
 
@@ -197,34 +189,36 @@ namespace SAM.Weather
         {
             get
             {
-                return elevation;
+                if (weatherData == null)
+                    return double.NaN;
+
+                return weatherData.Latitude;
             }
             set
             {
-                elevation = value;
-                if (weatherYears != null)
-                    weatherYears.Values.ToList().ForEach(x => x.Elevtion = value);
+                if (weatherData == null)
+                    return;
+
+                weatherData.Latitude = value;
             }
         }
 
         public WeatherYear GetWeatherYear(int year)
         {
-            if (weatherYears == null || int.MinValue == year)
+            if (weatherData == null || int.MinValue == year)
                 return null;
 
-            if (!weatherYears.ContainsKey(year))
-                return null;
+            WeatherYear weatherYear = weatherData[year];
 
-            return new WeatherYear(weatherYears[year]);
+            return weatherYear == null ? null : new WeatherYear(weatherYear);
         }
 
         public bool Add(int year, WeatherYear weatherYear)
         {
-            if (weatherYears == null)
-                weatherYears = new Dictionary<int, WeatherYear>();
+            if (weatherData == null)
+                weatherData = new WeatherData();
 
-            weatherYears[year] = weatherYear == null ? null : new WeatherYear(weatherYear.Description, latitude, longitude, elevation, weatherYear);
-            return true;
+            return weatherData.Add(weatherYear);
         }
 
         public bool Add(DateTime dateTime, Dictionary<string, double> values)
@@ -232,28 +226,18 @@ namespace SAM.Weather
             if (dateTime == DateTime.MinValue)
                 return false;
 
-            if (weatherYears == null)
-                weatherYears = new Dictionary<int, WeatherYear>();
+            if (weatherData == null)
+                weatherData = new WeatherData();
 
-            WeatherYear weatherYear = null;
-            if (!weatherYears.TryGetValue(dateTime.Year, out weatherYear) || weatherYear == null)
-            {
-                weatherYear = new WeatherYear(latitude, longitude, elevation);
-                weatherYears[dateTime.Year] = weatherYear;
-            }
-
-            int day = dateTime.DayOfYear - 1;
-            int hour = dateTime.Hour;
-
-            return weatherYear.Add(day, hour, values);
+            return weatherData.Add(dateTime, values);
         }
 
         public bool Remove(int year)
         {
-            if (weatherYears == null)
+            if (weatherData == null)
                 return false;
 
-            return weatherYears.Remove(year);
+            return weatherData.Remove(year);
         }
 
         public bool Write(string path)
@@ -374,42 +358,14 @@ namespace SAM.Weather
             if (jObject.ContainsKey("TimeZone"))
                 timeZone = jObject.Value<int>("TimeZone");
 
-            if (jObject.ContainsKey("Longitude"))
-                longitude = jObject.Value<double>("Longitude");
-
-            if (jObject.ContainsKey("Latitude"))
-                latitude = jObject.Value<double>("Latitude");
-
-            if (jObject.ContainsKey("Elevation"))
-                elevation = jObject.Value<double>("Elevation");
-
             if (jObject.ContainsKey("Comments_1"))
                 comments_1 = jObject.Value<string>("Comments_1");
 
             if (jObject.ContainsKey("Comments_2"))
                 comments_2 = jObject.Value<string>("Comments_2");
 
-            if (jObject.ContainsKey("WeatherYears"))
-            {
-                JArray jArray = jObject.Value<JArray>("WeatherYears");
-                if(jArray != null)
-                {
-                    weatherYears = new Dictionary<int, WeatherYear>();
-                    foreach(JObject jObject_Temp in jArray)
-                    {
-                        if (jObject_Temp == null || !jObject_Temp.ContainsKey("Year"))
-                            continue;
-
-                        int year = jObject.Value<int>("Year");
-
-                        WeatherYear weatherYear = null;
-                        if(jObject.ContainsKey("WeatherYear"))
-                            weatherYear = new WeatherYear(jObject.Value<JObject>("WeatherYear"));
-
-                        weatherYears[year] = weatherYear;
-                    }
-                }
-            }
+            if (jObject.ContainsKey("WeatherData"))
+                weatherData = new WeatherData(jObject.Value<JObject>("WeatherData"));
 
             return true;
         }
@@ -443,19 +399,8 @@ namespace SAM.Weather
             if (comments_2 != null)
                 jObject.Add("Comments_2", comments_2);
 
-            if(weatherYears != null)
-            {
-                JArray jArray = new JArray();
-                foreach(KeyValuePair<int, WeatherYear> keyValuePair in weatherYears)
-                {
-                    JObject jObject_Temp = new JObject();
-                    jObject_Temp.Add("Year", keyValuePair.Key);
-                    if (keyValuePair.Value != null)
-                        jObject_Temp.Add("WeatherYear", keyValuePair.Value.ToJObject());
-                    jArray.Add(jObject_Temp);
-                }
-                jObject.Add("WeatherYears", jArray);
-            }
+            if (weatherData != null)
+                jObject.Add("WeatherData", weatherData.ToJObject());
 
             return jObject;
         }
@@ -556,12 +501,13 @@ namespace SAM.Weather
 
         private string GetDataString()
         {
-            if (weatherYears == null)
+            IEnumerable<int> years = weatherData?.Years;
+            if (years == null)
                 return null;
 
             List<string> values = new List<string>();
-            foreach(KeyValuePair<int, WeatherYear> keyValuePair in weatherYears)
-                values.Add(GetDataString(keyValuePair.Key, keyValuePair.Value));
+            foreach(int year in years)
+                values.Add(GetDataString(year, weatherData[year]));
 
             return string.Join("\n", values);
         }

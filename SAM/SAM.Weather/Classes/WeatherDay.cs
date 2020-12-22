@@ -121,6 +121,22 @@ namespace SAM.Weather
             }
         }
 
+        public IEnumerable<string> Keys
+        {
+            get
+            {
+                return dictionary == null ? null : dictionary.Keys;
+            }
+        }
+
+        public IEnumerable<double[]> Values
+        {
+            get
+            {
+                return dictionary == null ? null : dictionary.Values;
+            }
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)

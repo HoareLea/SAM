@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Classes\EPWFile.cs" />
     <Compile Include="Classes\WeatherDay.cs" />
+    <Compile Include="Classes\WeatherData.cs" />
     <Compile Include="Classes\WeatherYear.cs" />
     <Compile Include="Enums\WeatherDataType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
