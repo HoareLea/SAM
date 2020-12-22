@@ -36,7 +36,7 @@ namespace SAM.Weather
         [Description("Dry Bulb Temperature")] DryBulbTemperature,
 
         /// <summary>
-        /// Wet Bulb Temperature [C]
+        /// Wet Bulb Temperature (Dew Point Temperature) [C]
         /// </summary>
         [Description("Wet Bulb Temperature")] WetBulbTemperature,
 
@@ -59,6 +59,5 @@ namespace SAM.Weather
         /// Atmospheric Pressure [Pa]
         /// </summary>
         [Description("Atmospheric Pressure")] AtmosphericPressure,
-
     }
 }
