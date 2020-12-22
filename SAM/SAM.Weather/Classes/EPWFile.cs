@@ -29,13 +29,14 @@ namespace SAM.Weather
         private string comments_1;
         private string comments_2;
         private WeatherData weatherData;
+        private List<GroundTemperature> groundTemperatures;
 
         public EPWFile()
-        { 
-            
+        {
+
         }
         
-        public EPWFile(string country, string state, string city, string dataSource, string wMONumber, int timeZone, string comments_1, string comments_2, double longitude, double latitude, double elevation)
+        public EPWFile(string country, string state, string city, string dataSource, string wMONumber, int timeZone, string comments_1, string comments_2, double longitude, double latitude, double elevation, IEnumerable<GroundTemperature> groundTemperatures)
         {
             this.country = country;
             this.state = state;
@@ -46,6 +47,8 @@ namespace SAM.Weather
             this.comments_1 = comments_1;
             this.comments_2 = comments_2;
             weatherData = new WeatherData(latitude, longitude, elevation);
+
+            this.groundTemperatures = groundTemperatures == null ? null : groundTemperatures.ToList().ConvertAll(x => x == null ? null : new GroundTemperature(x));
         }
 
         public EPWFile(JObject jObject)
@@ -113,6 +116,9 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// TimeZone [h] minimum -12, maximum +12
+        /// </summary>
         public int TimeZone
         {
             get
@@ -149,6 +155,9 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Longitude [Degrees] minimum -180, maximum +180, - is West, + is East, degree minutes represented in decimal (i.e. 30 minutes is .5)
+        /// </summary>
         public double Longitude
         {
             get
@@ -167,6 +176,9 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Latitude [Degrees] minimum -90, maximum +90, + is North, - is South, degree minutes represented in decimal (i.e. 30 minutes is .5)
+        /// </summary>
         public double Latitude
         {
             get
@@ -185,6 +197,9 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Elevation [m], minimum -1000.0, maximum  +9999.9
+        /// </summary>
         public double Elevtion
         {
             get
@@ -211,6 +226,16 @@ namespace SAM.Weather
             WeatherYear weatherYear = weatherData[year];
 
             return weatherYear == null ? null : new WeatherYear(weatherYear);
+        }
+
+        public GroundTemperature GetGroundTemperature(double depth)
+        {
+            if (groundTemperatures == null || double.IsNaN(depth))
+                return null;
+
+            GroundTemperature groundTemperature = groundTemperatures.Find(x => x.Depth == depth);
+
+            return groundTemperature == null ? null : new GroundTemperature(groundTemperature);
         }
 
         public WeatherData WeatherData
@@ -311,6 +336,13 @@ namespace SAM.Weather
             if (@break)
                 return null;
 
+            List<GroundTemperature> groundTemperatures = null;
+            for (int i = 0; i <= 8; i++)
+            {
+                if (TryGetGroundTemperatures(lines, i, out groundTemperatures))
+                    break;
+            }
+
             string comments_1 = null;
             for (int i = 0; i <= 8; i++)
             {
@@ -329,7 +361,7 @@ namespace SAM.Weather
             if (lines.Count < 1)
                 return null;
 
-            EPWFile result = new EPWFile(country, state, city, dataSource, wMONumber, timeZone, comments_1, comments_2, longitude, latitude, elevation);
+            EPWFile result = new EPWFile(country, state, city, dataSource, wMONumber, timeZone, comments_1, comments_2, longitude, latitude, elevation, groundTemperatures);
             foreach(string line in lines)
             {
                 DateTime dateTime;
@@ -464,9 +496,32 @@ namespace SAM.Weather
 
         private string GetGroundTemperaturesString()
         {
+            List<string> values_GroundTemperatures = new List<string>();
+            
+            if(groundTemperatures != null)
+            {
+                values_GroundTemperatures.Add(groundTemperatures.Count.ToString());
+                foreach(GroundTemperature groundTemperature in groundTemperatures)
+                {
+                    List<string> value_Temp = new List<string>();
+                    value_Temp.Add(double.IsNaN(groundTemperature.Depth) ? string.Empty : groundTemperature.Depth.ToString());
+                    value_Temp.Add(double.IsNaN(groundTemperature.Conductivity) ? string.Empty : groundTemperature.Conductivity.ToString());
+                    value_Temp.Add(double.IsNaN(groundTemperature.Density) ? string.Empty : groundTemperature.Density.ToString());
+                    value_Temp.Add(double.IsNaN(groundTemperature.SpecificHeat) ? string.Empty : groundTemperature.SpecificHeat.ToString());
+                    foreach (double temperature in groundTemperature.Temperatures)
+                        value_Temp.Add(double.IsNaN(temperature) ? string.Empty : temperature.ToString());
+
+                    values_GroundTemperatures.Add(string.Join(",", value_Temp));
+                }
+            }
+            else
+            {
+                values_GroundTemperatures.Add(0.ToString());
+            }
+
             string[] values = new string[] {
                 Name.GroundTemperatures,
-                "3,.5,,,,22.93,23.29,22.47,21.24,18.08,15.68,14.10,13.66,14.57,16.49,19.02,21.32,2,,,,21.34,22.07,21.87,21.20,19.07,17.18,15.69,14.92,15.14,16.24,17.99,19.82,4,,,,20.02,20.78,20.92,20.66,19.44,18.16,17.00,16.21,16.05,16.55,17.58,18.83"
+                string.Join(",", values_GroundTemperatures)
             };
 
             return string.Join(",", values);
@@ -663,6 +718,130 @@ namespace SAM.Weather
             return true;
         }
     
+        private static bool TryGetGroundTemperatures(IEnumerable<string> lines, int index, out List<GroundTemperature> groundTemperatures)
+        {
+            groundTemperatures = null;
+
+            if (lines == null)
+                return false;
+
+            if (index < 0 || index >= lines.Count())
+                return false;
+
+            string line = lines.ElementAt(index);
+            if (string.IsNullOrWhiteSpace(line) || !TryGetValue(line, Name.GroundTemperatures, out line))
+                return false;
+
+            if (line == null)
+                return false;
+
+            string[] values = line.Split(',');
+            if (values == null || values.Length < 1)
+                return false;
+
+            int count = -1;
+            if (!int.TryParse(values[0], out count))
+                count = -1;
+
+            if (count == -1)
+                return true;
+
+            values = values.ToList().GetRange(1, values.Length - 1).ToArray();
+
+            groundTemperatures = new List<GroundTemperature>();
+            for (int i = 0; i <= count - 1; i++)
+            {
+                if (values.Length < 16)
+                    break;
+                
+                double depth = double.NaN;
+                if (!double.TryParse(values[0], out depth))
+                    depth = double.NaN;
+
+                double conductivity = double.NaN;
+                if (!double.TryParse(values[1], out conductivity))
+                    conductivity = double.NaN;
+
+                double density = double.NaN;
+                if (!double.TryParse(values[2], out density))
+                    density = double.NaN;
+
+                double specificHeat = double.NaN;
+                if (!double.TryParse(values[3], out specificHeat))
+                    specificHeat = double.NaN;
+
+                double temperature_1 = double.NaN;
+                if (!double.TryParse(values[4], out temperature_1))
+                    temperature_1 = double.NaN;
+
+                double temperature_2 = double.NaN;
+                if (!double.TryParse(values[5], out temperature_2))
+                    temperature_2 = double.NaN;
+
+                double temperature_3 = double.NaN;
+                if (!double.TryParse(values[6], out temperature_3))
+                    temperature_3 = double.NaN;
+
+                double temperature_4 = double.NaN;
+                if (!double.TryParse(values[7], out temperature_4))
+                    temperature_4 = double.NaN;
+
+                double temperature_5 = double.NaN;
+                if (!double.TryParse(values[8], out temperature_5))
+                    temperature_5 = double.NaN;
+
+                double temperature_6 = double.NaN;
+                if (!double.TryParse(values[9], out temperature_6))
+                    temperature_6 = double.NaN;
+
+                double temperature_7 = double.NaN;
+                if (!double.TryParse(values[10], out temperature_7))
+                    temperature_7 = double.NaN;
+
+                double temperature_8 = double.NaN;
+                if (!double.TryParse(values[11], out temperature_8))
+                    temperature_8 = double.NaN;
+
+                double temperature_9 = double.NaN;
+                if (!double.TryParse(values[12], out temperature_9))
+                    temperature_9 = double.NaN;
+
+                double temperature_10 = double.NaN;
+                if (!double.TryParse(values[13], out temperature_10))
+                    temperature_10 = double.NaN;
+
+                double temperature_11 = double.NaN;
+                if (!double.TryParse(values[14], out temperature_11))
+                    temperature_11 = double.NaN;
+
+                double temperature_12 = double.NaN;
+                if (!double.TryParse(values[15], out temperature_12))
+                    temperature_12 = double.NaN;
+
+                groundTemperatures.Add(new GroundTemperature(
+                    depth,
+                    conductivity,
+                    density,
+                    specificHeat,
+                    temperature_1,
+                    temperature_2,
+                    temperature_3,
+                    temperature_4,
+                    temperature_5,
+                    temperature_6,
+                    temperature_7,
+                    temperature_8,
+                    temperature_9,
+                    temperature_10,
+                    temperature_11,
+                    temperature_12));
+
+                values = values.ToList().GetRange(16, values.Length - 16).ToArray();
+            }
+
+            return true;
+        }
+        
         private static bool TryGetValue(string text, string name, out string value)
         {
             value = null;

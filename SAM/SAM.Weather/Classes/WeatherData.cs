@@ -131,6 +131,9 @@ namespace SAM.Weather
             return true;
         }
 
+        /// <summary>
+        /// Longitude [Degrees] minimum -180, maximum +180, - is West, + is East, degree minutes represented in decimal (i.e. 30 minutes is .5)
+        /// </summary>
         public double Longitude
         {
             get
@@ -143,6 +146,9 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Latitude [Degrees] minimum -90, maximum +90, + is North, - is South, degree minutes represented in decimal (i.e. 30 minutes is .5)
+        /// </summary>
         public double Latitude
         {
             get
@@ -155,6 +161,9 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Elevation [m], minimum -1000.0, maximum  +9999.9
+        /// </summary>
         public double Elevtion
         {
             get

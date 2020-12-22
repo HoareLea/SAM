@@ -196,5 +196,35 @@ namespace SAM.Weather
 
             return jObject;
         }
+
+        public double CalculatedGroundTemperature(int index)
+        {
+            double dryBulbTemperature = this[WeatherDataType.DryBulbTemperature, index];
+            if (double.IsNaN(dryBulbTemperature))
+                return double.NaN;
+
+            double globalRadiation = CalculatedGlobalRadiation(index);
+            if (double.IsNaN(globalRadiation))
+                return double.NaN;
+
+            return (0.02 * globalRadiation) + dryBulbTemperature;
+        }
+
+        public double CalculatedGlobalRadiation(int index)
+        {
+            double result = this[WeatherDataType.GlobalSolarRadiation, index];
+            if (!double.IsNaN(result))
+                return result;
+
+            double directSolarRadiation = this[WeatherDataType.DirectSolarRadiation, index];
+            if (double.IsNaN(directSolarRadiation))
+                return double.NaN;
+
+            double diffuseSolarRadiation = this[WeatherDataType.DiffuseSolarRadiation, index];
+            if (double.IsNaN(diffuseSolarRadiation))
+                return double.NaN;
+
+            return directSolarRadiation + diffuseSolarRadiation;
+        }
     }
 }
