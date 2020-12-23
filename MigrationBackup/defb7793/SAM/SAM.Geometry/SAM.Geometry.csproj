@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4CF184FD-B48A-41FC-ADBC-20218B44B03D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SAM.Geometry</RootNamespace>
+    <AssemblyName>SAM.Geometry</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>false</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\build\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\build\SAM.Geometry.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\build\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="clipper_library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\com.angusj.Clipper.6.4.2\lib\net40\clipper_library.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NetTopologySuite.2.1.0\lib\netstandard2.0\NetTopologySuite.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0-preview.7.20364.11\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Face.cs" />
+    <Compile Include="Convert\ToClipper\IntPoint.cs" />
+    <Compile Include="Convert\ToClipper\IntPoints.cs" />
+    <Compile Include="Convert\ToNTS\Point.cs" />
+    <Compile Include="Convert\ToNTS\Geometry.cs" />
+    <Compile Include="Convert\ToNTS\Coordinates.cs" />
+    <Compile Include="Convert\ToNTS\Coordinate.cs" />
+    <Compile Include="Convert\ToNTS\LinearRing.cs" />
+    <Compile Include="Convert\ToNTS\MultiPolygon.cs" />
+    <Compile Include="Convert\ToNTS\Polygons.cs" />
+    <Compile Include="Convert\ToNTS\Polygon.cs" />
+    <Compile Include="Convert\ToNTS\LineString.cs" />
+    <Compile Include="Convert\ToSAM\Face3D.cs" />
+    <Compile Include="Convert\ToSAM\Face2D.cs" />
+    <Compile Include="Convert\ToSAM\ISAMGeometry2D.cs" />
+    <Compile Include="Convert\ToSAM\Face2Ds.cs" />
+    <Compile Include="Convert\ToSAM\Polygon2Ds.cs" />
+    <Compile Include="Convert\ToSAM\Polyline2Ds.cs" />
+    <Compile Include="Convert\ToSAM\Polyline2D.cs" />
+    <Compile Include="Convert\ToSAM\Polygon2D.cs" />
+    <Compile Include="Convert\ToSAM\Point2D.cs" />
+    <Compile Include="Convert\ToSAM\Point2Ds.cs" />
+    <Compile Include="Create\ISAMGeometries.cs" />
+    <Compile Include="Create\JArray.cs" />
+    <Compile Include="Create\ISAMGeometry.cs" />
+    <Compile Include="Enums\Alignment.cs" />
+    <Compile Include="Enums\Corner.cs" />
+    <Compile Include="Enums\Orientation.cs" />
+    <Compile Include="Classes\SAMGeometry.cs" />
+    <Compile Include="Interfaces\IReversible.cs" />
+    <Compile Include="Interfaces\ISAMGeometry.cs" />
+    <Compile Include="Planar\Modify\District.cs" />
+    <Compile Include="Planar\Classes\BoundingBox2D.cs" />
+    <Compile Include="Planar\Classes\Circle2D.cs" />
+    <Compile Include="Planar\Classes\Face2D.cs" />
+    <Compile Include="Planar\Classes\PointGraph2D.cs" />
+    <Compile Include="Planar\Classes\Polycurve2D.cs" />
+    <Compile Include="Planar\Classes\PolycurveLoop2D.cs" />
+    <Compile Include="Planar\Classes\Polyline2D.cs" />
+    <Compile Include="Planar\Create\Rectangle2D.cs" />
+    <Compile Include="Planar\Create\Polyline2D.cs" />
+    <Compile Include="Planar\Create\Point2Ds.cs" />
+    <Compile Include="Planar\Create\Polygon2Ds.cs" />
+    <Compile Include="Planar\Create\Segment2Ds.cs" />
+    <Compile Include="Planar\Create\Face2Ds.cs" />
+    <Compile Include="Planar\Create\ICurve2D.cs" />
+    <Compile Include="Planar\Create\IClosed2D.cs" />
+    <Compile Include="Planar\Interfaces\IBoundable2D.cs" />
+    <Compile Include="Planar\Interfaces\IClosed2D.cs" />
+    <Compile Include="Planar\Interfaces\ICurve2D.cs" />
+    <Compile Include="Planar\Classes\Rectangle2D.cs" />
+    <Compile Include="Planar\Classes\Segment2D.cs" />
+    <Compile Include="Planar\Classes\Triangle2D.cs" />
+    <Compile Include="Planar\Interfaces\ICurvable2D.cs" />
+    <Compile Include="Planar\Interfaces\ISegmentable2D.cs" />
+    <Compile Include="Planar\Modify\Add.cs" />
+    <Compile Include="Planar\Modify\InsertClosest.cs" />
+    <Compile Include="Planar\Modify\Draw.cs" />
+    <Compile Include="Planar\Modify\Move.cs" />
+    <Compile Include="Planar\Modify\JoinInRange.cs" />
+    <Compile Include="Planar\Modify\JoinByIntersections.cs" />
+    <Compile Include="Planar\Modify\Scale.cs" />
+    <Compile Include="Planar\Modify\Tighten.cs" />
+    <Compile Include="Planar\Modify\Mirror.cs" />
+    <Compile Include="Planar\Query\Clone.cs" />
+    <Compile Include="Planar\Query\InternalVector2Ds.cs" />
+    <Compile Include="Planar\Query\Grid.cs" />
+    <Compile Include="Planar\Query\Move.cs" />
+    <Compile Include="Planar\Query\Orient.cs" />
+    <Compile Include="Planar\Query\Orientations.cs" />
+    <Compile Include="Planar\Query\Average.cs" />
+    <Compile Include="Planar\Query\InRange.cs" />
+    <Compile Include="Planar\Query\InternalPoint2D.cs" />
+    <Compile Include="Planar\Query\Point2Ds.cs" />
+    <Compile Include="Planar\Query\Polygons.cs" />
+    <Compile Include="Planar\Query\Inside.cs" />
+    <Compile Include="Planar\Query\Area.cs" />
+    <Compile Include="Planar\Query\MaxDistance.cs" />
+    <Compile Include="Planar\Query\Max.cs" />
+    <Compile Include="Planar\Query\Min.cs" />
+    <Compile Include="Planar\Query\Scale.cs" />
+    <Compile Include="Planar\Query\ThinnessRatio.cs" />
+    <Compile Include="Planar\Query\Perimeter.cs" />
+    <Compile Include="Planar\Query\Snap.cs" />
+    <Compile Include="Planar\Query\ExtendOrTrim.cs" />
+    <Compile Include="Planar\Query\Extend.cs" />
+    <Compile Include="Planar\Modify\RemoveAlmostSimilar.cs" />
+    <Compile Include="Planar\Query\SimplifyByNTS_TopologyPreservingSimplifier.cs" />
+    <Compile Include="Planar\Query\SimplifyByNTS_Snapper.cs" />
+    <Compile Include="Planar\Query\SimplifyByNTS_DouglasPeucker.cs" />
+    <Compile Include="Planar\Query\SimplifyBySAM_Length.cs" />
+    <Compile Include="Planar\Query\SimplifyBySAM_Angle.cs" />
+    <Compile Include="Planar\Modify\OrientByEnds.cs" />
+    <Compile Include="Planar\Modify\Join.cs" />
+    <Compile Include="Planar\Query\Cut.cs" />
+    <Compile Include="Planar\Query\Triangulate.cs" />
+    <Compile Include="Planar\Query\Trim.cs" />
+    <Compile Include="Planar\Query\Split.cs" />
+    <Compile Include="Planar\Query\RemoveAngle.cs" />
+    <Compile Include="Planar\Modify\SortByDistance.cs" />
+    <Compile Include="Planar\Modify\Reverse.cs" />
+    <Compile Include="Planar\Query\AlmostSimilar.cs" />
+    <Compile Include="Planar\Query\ObtuseAngles.cs" />
+    <Compile Include="Planar\Query\Determinants.cs" />
+    <Compile Include="Planar\Query\EqualsTopologically.cs" />
+    <Compile Include="Spatial\Classes\Rectangle3D.cs" />
+    <Compile Include="Spatial\Classes\Shell.cs" />
+    <Compile Include="Spatial\Classes\Transform3D.cs" />
+    <Compile Include="Spatial\Create\Polygon3Ds.cs" />
+    <Compile Include="Spatial\Create\Vector3D.cs" />
+    <Compile Include="Spatial\Create\Point3D.cs" />
+    <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
+    <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Between.cs" />
+    <Compile Include="Spatial\Query\Grid.cs" />
+    <Compile Include="Spatial\Query\NakedSegment3Ds.cs" />
+    <Compile Include="Spatial\Query\Rectangular.cs" />
+    <Compile Include="Spatial\Query\Inside.cs" />
+    <Compile Include="Spatial\Query\Cut.cs" />
+    <Compile Include="Spatial\Query\SplitByConcaveEdges.cs" />
+    <Compile Include="Spatial\Query\Tilt.cs" />
+    <Compile Include="Spatial\Query\Azimuth.cs" />
+    <Compile Include="Spatial\Query\InRange.cs" />
+    <Compile Include="Spatial\Query\Below.cs" />
+    <Compile Include="Spatial\Query\Above.cs" />
+    <Compile Include="Spatial\Query\Mid.cs" />
+    <Compile Include="Spatial\Query\InternalPoint3D.cs" />
+    <Compile Include="Spatial\Query\InternalPoint2D.cs" />
+    <Compile Include="Spatial\Query\SignedAngle.cs" />
+    <Compile Include="Spatial\Query\Clockwise.cs" />
+    <Compile Include="Spatial\Query\Point3Ds.cs" />
+    <Compile Include="Spatial\Query\AxisY.cs" />
+    <Compile Include="Spatial\Query\SimplifyByNTS_TopologyPreservingSimplifier.cs" />
+    <Compile Include="Spatial\Query\SplitByInternalEdges.cs" />
+    <Compile Include="Spatial\Query\ThinnessRatio.cs" />
+    <Compile Include="Spatial\Query\Permieter.cs" />
+    <Compile Include="Spatial\Query\AxisX.cs" />
+    <Compile Include="Spatial\Query\Angle.cs" />
+    <Compile Include="Spatial\Query\Transform.cs" />
+    <Compile Include="Spatial\Query\Overlap.cs" />
+    <Compile Include="Spatial\Query\ExtremePoints.cs" />
+    <Compile Include="Spatial\Query\Snap.cs" />
+    <Compile Include="Spatial\Query\On.cs" />
+    <Compile Include="Spatial\Query\Parallel.cs" />
+    <Compile Include="Planar\Query\ExternalPolygon2Ds.cs" />
+    <Compile Include="Planar\Query\SimplifyByClipper.cs" />
+    <Compile Include="Planar\Query\Intersect.cs" />
+    <Compile Include="Planar\Query\SelfIntersectionPoint3D.cs" />
+    <Compile Include="Planar\Query\SelfIntersectionPoint3Ds.cs" />
+    <Compile Include="Planar\Query\SelfIntersectionPolygon2Ds.cs" />
+    <Compile Include="Planar\Query\SelfIntersect.cs" />
+    <Compile Include="Planar\Query\Contains.cs" />
+    <Compile Include="Planar\Query\IndexOfClosestPoint2D.cs" />
+    <Compile Include="Planar\Query\SelfIntersectionSegment2Ds.cs" />
+    <Compile Include="Planar\Query\ClosestSegment2Ds.cs" />
+    <Compile Include="Planar\Query\MinDistance.cs" />
+    <Compile Include="Planar\Query\Offset.cs" />
+    <Compile Include="Planar\Query\ClosestDictionary.cs" />
+    <Compile Include="Planar\Query\Determinant.cs" />
+    <Compile Include="Planar\Query\Orientation.cs" />
+    <Compile Include="Planar\Query\Bounce.cs" />
+    <Compile Include="Planar\Query\IntersectionDictionary.cs" />
+    <Compile Include="Planar\Query\TraceDataFirst.cs" />
+    <Compile Include="Planar\Query\TraceFirst.cs" />
+    <Compile Include="Planar\Query\TraceData.cs" />
+    <Compile Include="Planar\Query\Trace.cs" />
+    <Compile Include="Planar\Query\Similar.cs" />
+    <Compile Include="Planar\Query\Centroid.cs" />
+    <Compile Include="Planar\Query\Difference.cs" />
+    <Compile Include="Planar\Query\Rectangular.cs" />
+    <Compile Include="Planar\Query\Mid.cs" />
+    <Compile Include="Planar\Query\SmallestAngle.cs" />
+    <Compile Include="Planar\Query\IsValid.cs" />
+    <Compile Include="Planar\Query\Point2D.cs" />
+    <Compile Include="Planar\Query\Parameter.cs" />
+    <Compile Include="Planar\Query\IndexesOfClosestSegment2D.cs" />
+    <Compile Include="Planar\Query\Intersection.cs" />
+    <Compile Include="Planar\Query\IntersectionSegment2Ds.cs" />
+    <Compile Include="Planar\Query\Union.cs" />
+    <Compile Include="Planar\Query\Collinear.cs" />
+    <Compile Include="Planar\Query\Segment2Ds.cs" />
+    <Compile Include="Planar\Query\IndexOfClosestSegment2D.cs" />
+    <Compile Include="Planar\Query\SmallestAngleVector.cs" />
+    <Compile Include="Planar\Query\ExtremePoints.cs" />
+    <Compile Include="Planar\Query\BottomLeft.cs" />
+    <Compile Include="Planar\Query\Intersections.cs" />
+    <Compile Include="Planar\Query\Angle.cs" />
+    <Compile Include="Planar\Query\On.cs" />
+    <Compile Include="Planar\Query\MidVector2D.cs" />
+    <Compile Include="Planar\Query\Distance.cs" />
+    <Compile Include="Planar\Query\Directions.cs" />
+    <Compile Include="Planar\Query\Closest.cs" />
+    <Compile Include="Planar\Query\ConvexHull.cs" />
+    <Compile Include="Query\Opposite.cs" />
+    <Compile Include="Spatial\Classes\PlanarIntersectionResult.cs" />
+    <Compile Include="Spatial\Interfaces\IIntersectionResult3D.cs" />
+    <Compile Include="Spatial\Classes\Line3D.cs" />
+    <Compile Include="Spatial\Create\Matrix.cs" />
+    <Compile Include="Spatial\Create\Plane.cs" />
+    <Compile Include="Spatial\Create\Face3Ds.cs" />
+    <Compile Include="Spatial\Create\Polygon3D.cs" />
+    <Compile Include="Spatial\Create\Point3Ds.cs" />
+    <Compile Include="Spatial\Create\ICurve3Ds.cs" />
+    <Compile Include="Spatial\Create\ICurve3D.cs" />
+    <Compile Include="Spatial\Modify\SimplifyByAngle.cs" />
+    <Compile Include="Spatial\Modify\Round.cs" />
+    <Compile Include="Spatial\Modify\SortByDistance.cs" />
+    <Compile Include="Spatial\Query\Average.cs" />
+    <Compile Include="Spatial\Query\Eigenvectors.cs" />
+    <Compile Include="Spatial\Query\AlmostSimilar.cs" />
+    <Compile Include="Spatial\Query\Centroid.cs" />
+    <Compile Include="Spatial\Query\Coplanar.cs" />
+    <Compile Include="Spatial\Query\Collinear.cs" />
+    <Compile Include="Spatial\Query\Explode.cs" />
+    <Compile Include="Spatial\Query\ClosedPlanar3Ds.cs" />
+    <Compile Include="Spatial\Query\Closest.cs" />
+    <Compile Include="Spatial\Query\SelfIntersect.cs" />
+    <Compile Include="Spatial\Query\SelfIntersectionPolygon3Ds.cs" />
+    <Compile Include="Spatial\Query\SmallestAngle.cs" />
+    <Compile Include="Spatial\Query\Vertical.cs" />
+    <Compile Include="Spatial\Query\Horizontal.cs" />
+    <Compile Include="Spatial\Query\IsValid.cs" />
+    <Compile Include="Spatial\Query\Normals.cs" />
+    <Compile Include="Spatial\Query\Normal.cs" />
+    <Compile Include="Spatial\Query\Location.cs" />
+    <Compile Include="Spatial\Query\Face3Ds.cs" />
+    <Compile Include="Spatial\Classes\BoundingBox3D.cs" />
+    <Compile Include="Spatial\Classes\Circle3D.cs" />
+    <Compile Include="Spatial\Classes\Polycurve3D.cs" />
+    <Compile Include="Spatial\Classes\PolycurveLoop3D.cs" />
+    <Compile Include="Spatial\Classes\Extrusion.cs" />
+    <Compile Include="Spatial\Classes\Polyline3D.cs" />
+    <Compile Include="Spatial\Classes\Sphere.cs" />
+    <Compile Include="Spatial\Classes\Surface.cs" />
+    <Compile Include="Spatial\Classes\Triangle3D.cs" />
+    <Compile Include="Spatial\Classes\Vector3D.cs" />
+    <Compile Include="Spatial\Interfaces\IBoundable3D.cs" />
+    <Compile Include="Spatial\Interfaces\IClosed3D.cs" />
+    <Compile Include="Spatial\Interfaces\IClosedPlanar3D.cs" />
+    <Compile Include="Spatial\Interfaces\ICurvable3D.cs" />
+    <Compile Include="Spatial\Interfaces\ISegmentable3D.cs" />
+    <Compile Include="Spatial\Interfaces\ICurve3D.cs" />
+    <Compile Include="Planar\Interfaces\ISAMGeometry2D.cs" />
+    <Compile Include="Planar\Classes\Line2D.cs" />
+    <Compile Include="Planar\Classes\Point2D.cs" />
+    <Compile Include="Planar\Classes\Polygon2D.cs" />
+    <Compile Include="Spatial\Classes\Plane.cs" />
+    <Compile Include="Spatial\Classes\Segment3D.cs" />
+    <Compile Include="Planar\Classes\Vector2D.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spatial\Classes\Face3D.cs" />
+    <Compile Include="Spatial\Interfaces\ISAMGeometry3D.cs" />
+    <Compile Include="Spatial\Classes\Point3D.cs" />
+    <Compile Include="Spatial\Classes\Polygon3D.cs" />
+    <Compile Include="Spatial\Interfaces\IPlanar3D.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAM.Core\SAM.Core.csproj">
+      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
+      <Name>SAM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Math\SAM.Math.csproj">
+      <Project>{255e428d-6969-4542-9846-67b7de87501b}</Project>
+      <Name>SAM.Math</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

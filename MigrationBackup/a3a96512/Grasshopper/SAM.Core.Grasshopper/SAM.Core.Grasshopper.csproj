@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Rhino7DefaultInstallDir>$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\7.0\Install', 'Path', null, RegistryView.Registry64))</Rhino7DefaultInstallDir>
+    <Rhino7DebugInstallDir>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\McNeel\Rhinoceros\7.0-WIP-Developer-Debug-trunk\Install', 'Path', null, RegistryView.Registry64))</Rhino7DebugInstallDir>
+    <Rhino7InstallDir>$([MSBuild]::ValueOrDefault('$(Rhino7DebugInstallDir)', '$(Rhino7DefaultInstallDir)'))</Rhino7InstallDir>
+    <Rhino7DefaultPluginsDir>$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\7.0\Install', 'Default Plug-ins Folder', null, RegistryView.Registry64))</Rhino7DefaultPluginsDir>
+    <Rhino7DebugPluginsDir>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\McNeel\Rhinoceros\7.0-WIP-Developer-Debug-trunk\Install', 'Default Plug-ins Folder', null, RegistryView.Registry64))</Rhino7DebugPluginsDir>
+    <Rhino7PluginsDir>$([MSBuild]::ValueOrDefault('$(Rhino7DebugPluginsDir)', '$(Rhino7DefaultPluginsDir)'))</Rhino7PluginsDir>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EA20D57F-BB3E-447A-80A2-14C04BAA665F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SAM.Core.Grasshopper</RootNamespace>
+    <AssemblyName>SAM.Core.Grasshopper</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\build\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\build\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Eto, Version=2.5.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RhinoCommon.6.32.20340.21001\lib\net45\Eto.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GH_IO, Version=6.32.20340.21000, Culture=neutral, PublicKeyToken=6a29997d2e6b4f97, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Grasshopper.6.32.20340.21001\lib\net45\GH_IO.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Grasshopper, Version=6.32.20340.21000, Culture=neutral, PublicKeyToken=dda4f5ec2cd80803, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Grasshopper.6.32.20340.21001\lib\net45\Grasshopper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.UI, Version=6.32.20340.21000, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RhinoCommon.6.32.20340.21001\lib\net45\Rhino.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RhinoCommon, Version=6.32.20340.21000, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RhinoCommon.6.32.20340.21001\lib\net45\RhinoCommon.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Text.Encodings.Web.5.0.0\lib\net461\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Text.Json.5.0.0\lib\net461\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\GH_SAMNullAttributes.cs" />
+    <Compile Include="Classes\GH_SAMParam.cs" />
+    <Compile Include="Classes\GH_SAMVariableOutputParameterComponent.cs" />
+    <Compile Include="Classes\GH_SAMComponent.cs" />
+    <Compile Include="Classes\GooSystem.cs" />
+    <Compile Include="Classes\GooSystemType.cs" />
+    <Compile Include="Classes\GooSystemTypeLibrary.cs" />
+    <Compile Include="Classes\GooTextMap.cs" />
+    <Compile Include="Classes\GooMaterialLibrary.cs" />
+    <Compile Include="Classes\GooMaterial.cs" />
+    <Compile Include="Classes\GooAddress.cs" />
+    <Compile Include="Classes\GooLog.cs" />
+    <Compile Include="Classes\GooLocation.cs" />
+    <Compile Include="Classes\GooRelationCluster.cs" />
+    <Compile Include="Classes\GooSAMObject.cs" />
+    <Compile Include="Classes\GooParameter.cs" />
+    <Compile Include="Component\SAMCoreAddMaterials.cs" />
+    <Compile Include="Component\SAMCoreCopyMaterials.cs" />
+    <Compile Include="Component\SAMCoreParameter.cs" />
+    <Compile Include="Component\SAMCoreParameterType.cs" />
+    <Compile Include="Component\SAMCoreSetValue.cs" />
+    <Compile Include="Component\SAMCoreLoadMaterialLibrary.cs" />
+    <Compile Include="Component\SAMCoreSelectByName.cs" />
+    <Compile Include="Component\SAMCoreSaveMaterialLibrary.cs" />
+    <Compile Include="Component\SAMCoreCreateMaterialLibrary.cs" />
+    <Compile Include="Component\SAMCoreCreateTransparentMaterial_Obsolete.cs" />
+    <Compile Include="Component\SAMCoreCreateOpaqueMaterial_Obsolete.cs" />
+    <Compile Include="Component\SAMCoreCreateGasMaterial_Obsolete.cs" />
+    <Compile Include="Component\SAMCoreLogToFile.cs" />
+    <Compile Include="Component\SAMVersion.cs" />
+    <Compile Include="Component\SAMCoreColorToUint.cs" />
+    <Compile Include="Component\SAMCoreRemoveGroup.cs" />
+    <Compile Include="Component\SAMCoreAddGroup.cs" />
+    <Compile Include="Component\SAMCoreTextComparisonType.cs" />
+    <Compile Include="Component\SAMCoreNumberComparisonType.cs" />
+    <Compile Include="Component\SAMCoreInspect.cs" />
+    <Compile Include="Component\SAMCoreCreateLocation.cs" />
+    <Compile Include="Component\SAMCoreFilter.cs" />
+    <Compile Include="Component\SAMCoreGetNames.cs" />
+    <Compile Include="Component\SAMCoreAddObjects.cs" />
+    <Compile Include="Component\SAMCoreRelatedObjects.cs" />
+    <Compile Include="Component\SAMCoreARGBToUint.cs" />
+    <Compile Include="Component\SAMCoreUintToColor.cs" />
+    <Compile Include="Component\SAMCoreUintToARGB.cs" />
+    <Compile Include="Component\SAMCoreToList.cs" />
+    <Compile Include="Component\SAMCoreToCsv.cs" />
+    <Compile Include="Component\SAMCoreToJson.cs" />
+    <Compile Include="Component\SAMCoreFromJson.cs" />
+    <Compile Include="Component\SAMCoreAbout.cs" />
+    <Compile Include="Component\SAMCoreGetValue.cs" />
+    <Compile Include="Convert\ToSAM\GH_SAMParam.cs" />
+    <Compile Include="Create\GH_SAMParam.cs" />
+    <Compile Include="Modify\AppendSourceCodeAdditionalMenuItem.cs" />
+    <Compile Include="Modify\AppendNewComponentAdditionalMenuItem.cs" />
+    <Compile Include="Modify\GetLayer.cs" />
+    <Compile Include="Modify\AddSAMLayer.cs" />
+    <Compile Include="Query\Copy.cs" />
+    <Compile Include="Query\Layers.cs" />
+    <Compile Include="Query\Layer.cs" />
+    <Compile Include="Query\HasComponentVersion.cs" />
+    <Compile Include="Query\Obsolete.cs" />
+    <Compile Include="Enums\ParamVisibility.cs" />
+    <Compile Include="Interfaces\IGH_SAMComponent.cs" />
+    <Compile Include="Interfaces\IGooParameter.cs" />
+    <Compile Include="Interfaces\IGooSAMObject.cs" />
+    <Compile Include="Kernel\AssemblyInfo.cs" />
+    <Compile Include="Kernel\AssemblyPriority.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Query\TryGetValue.cs" />
+    <Compile Include="Query\Clone.cs" />
+    <Compile Include="Query\GenericSubclassOf.cs" />
+    <Compile Include="Query\DataTree.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
+      <Project>{1C86B9AC-81B3-41D8-BA48-321F28AB94F4}</Project>
+      <Name>SAM.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Resources\SAM_Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HL_Logo24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Explode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_JSON.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Get.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Get.Filterpng.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Names.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Inspect.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)" "$(TargetDir)\$(ProjectName).gha"
+
+set SAM_DIR=$(APPDATA)\SAM\
+if not exist "%25SAM_DIR%25" mkdir "%25SAM_DIR%25"
+
+copy "$(TargetDir)*.dll" "%25SAM_DIR%25"
+copy "%25SAM_DIR%25\$(ProjectName).dll" "%25SAM_DIR%25\$(ProjectName).gha"
+
+copy "$(SolutionDir)\files\Grasshopper\SAM.ghlink" "$(APPDATA)\Grasshopper\Libraries\SAM.ghlink"
+
+
+xcopy "$(SolutionDir)\files" "$(APPDATA)\SAM\" /Y /I /E/S
+
+if Exist "$(SolutionDir)\files\Grasshopper\UserObjects" (
+xcopy "$(SolutionDir)\files\Grasshopper\UserObjects" "$(APPDATA)\Grasshopper\UserObjects\SAM" /Y /I /E/S
+)
+::erase "%25SAM_DIR%25$(ProjectName).dll"
+::erase "$(TargetPath)"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <FallbackCulture>en-US</FallbackCulture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartProgram>C:\Program Files\Rhino 6\System\Rhino.exe</StartProgram>
+    <StartArguments>
+    </StartArguments>
+    <StartAction>Program</StartAction>
+    <DocumentationFile>..\..\build\SAM.Core.Grasshopper.xml</DocumentationFile>
+  </PropertyGroup>
+  <Import Project="..\..\packages\RhinoCommon.6.32.20340.21001\build\net45\RhinoCommon.targets" Condition="Exists('..\..\packages\RhinoCommon.6.32.20340.21001\build\net45\RhinoCommon.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\RhinoCommon.6.32.20340.21001\build\net45\RhinoCommon.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\RhinoCommon.6.32.20340.21001\build\net45\RhinoCommon.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Grasshopper.6.32.20340.21001\build\net45\Grasshopper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Grasshopper.6.32.20340.21001\build\net45\Grasshopper.targets'))" />
+  </Target>
+  <Import Project="..\..\packages\Grasshopper.6.32.20340.21001\build\net45\Grasshopper.targets" Condition="Exists('..\..\packages\Grasshopper.6.32.20340.21001\build\net45\Grasshopper.targets')" />
+</Project>

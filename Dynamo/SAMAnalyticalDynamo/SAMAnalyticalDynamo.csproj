@@ -33,18 +33,6 @@
     <DocumentationFile>..\build\SAMAnalyticalDynamo.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DynamoServices, Version=2.6.1.8786, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DynamoVisualProgramming.DynamoServices.2.6.1.8786\lib\net47\DynamoServices.dll</HintPath>
-    </Reference>
-    <Reference Include="DynamoUnits, Version=2.6.1.8786, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.6.1.8786\lib\net47\DynamoUnits.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="ProtoGeometry, Version=2.6.0.8195, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.6.1.8786\lib\net47\ProtoGeometry.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -68,7 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">
@@ -87,6 +74,14 @@
       <Project>{31847a71-1b4c-4e40-a202-391922b39876}</Project>
       <Name>SAMGeometryDynamo</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DynamoVisualProgramming.ZeroTouchLibrary">
+      <Version>2.6.1.8786</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

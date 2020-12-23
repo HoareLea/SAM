@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{31847A71-1B4C-4E40-A202-391922B39876}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SAMGeometryDynamo</RootNamespace>
+    <AssemblyName>SAMGeometryDynamo</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>false</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\build\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\build\SAMGeometryDynamo.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\build\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\build\SAMGeometryDynamo.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DynamoServices, Version=2.6.1.8786, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DynamoVisualProgramming.DynamoServices.2.6.1.8786\lib\net47\DynamoServices.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoUnits, Version=2.6.1.8786, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.6.1.8786\lib\net47\DynamoUnits.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ProtoGeometry, Version=2.6.0.8195, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.6.1.8786\lib\net47\ProtoGeometry.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Component\ToSAMGeometry.cs" />
+    <Compile Include="Component\ToDynamoGeometry.cs" />
+    <Compile Include="Component\Planar\Point2D.cs" />
+    <Compile Include="Component\Spatial\Geometry3D.cs" />
+    <Compile Include="Convert\ToDynamo\DesignScriptEntity.cs" />
+    <Compile Include="Convert\ToDynamo\Curve.cs" />
+    <Compile Include="Convert\ToDynamo\Vector.cs" />
+    <Compile Include="Convert\ToDynamo\PolyCurve.cs" />
+    <Compile Include="Convert\ToDynamo\Polygon.cs" />
+    <Compile Include="Convert\ToDynamo\Line.cs" />
+    <Compile Include="Convert\ToDynamo\Point.cs" />
+    <Compile Include="Component\Spatial\Point3D.cs" />
+    <Compile Include="Component\Spatial\Polygon3D.cs" />
+    <Compile Include="Convert\ToSAM\Vector3D.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Convert\ToDynamo\Surface.cs" />
+    <Compile Include="Convert\ToSAM\Face3D.cs" />
+    <Compile Include="Convert\ToSAM\ISAMGeometry.cs" />
+    <Compile Include="Convert\ToSAM\Polygon3D.cs" />
+    <Compile Include="Convert\ToSAM\Point3D.cs" />
+    <Compile Include="Convert\ToSAM\Segment3D.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Resources\SAMGeometryDynamo.Convert.ToDynamoGeometry.Large.png" />
+    <None Include="Resources\SAMGeometryDynamo.Convert.ToDynamoGeometry.Small.png" />
+    <None Include="Resources\SAMGeometryDynamo.Convert.ToSAMGeometry.Large.png" />
+    <None Include="Resources\DefaultCustomNode.Small.png" />
+    <None Include="Resources\SAMGeometryDynamo.Convert.ToSAMGeometry.Small.png" />
+    <None Include="Resources\DefaultCustomNode.Large.png" />
+    <Content Include="SAMGeometryDynamo_DynamoCustomization.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SAMGeometryDynamoImages.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
+      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
+      <Name>SAM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj">
+      <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>
+      <Name>SAM.Geometry</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <Target Name="AfterBuild">
+    <!-- Get System.Drawing.dll -->
+    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v4.7.2">
+      <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
+    </GetReferenceAssemblyPaths>
+    <!-- Get assembly -->
+    <GetAssemblyIdentity AssemblyFiles="$(OutDir)$(TargetName).dll">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyInfo" />
+    </GetAssemblyIdentity>
+    <!-- Generate customization dll -->
+    <GenerateResource SdkToolsPath="$(TargetFrameworkSDKToolsDirectory)" UseSourcePath="true" Sources="$(ProjectDir)SAMGeometryDynamoImages.resx" OutputResources="$(ProjectDir)SAMGeometryDynamoImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
+    <AL SdkToolsPath="$(TargetFrameworkSDKToolsDirectory)" TargetType="library" EmbedResources="$(ProjectDir)SAMGeometryDynamoImages.resources" OutputAssembly="$(OutDir)SAMGeometryDynamo.customization.dll" Version="%(AssemblyInfo.Version)" />
+  </Target>
+</Project>
