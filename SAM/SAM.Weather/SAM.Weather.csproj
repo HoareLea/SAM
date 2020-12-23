@@ -79,9 +79,22 @@
     <Compile Include="Classes\WeatherDay.cs" />
     <Compile Include="Classes\WeatherData.cs" />
     <Compile Include="Classes\WeatherYear.cs" />
+    <Compile Include="Convert\ToEPW\EPW.cs" />
+    <Compile Include="Convert\ToSAM\WeatherData.cs" />
     <Compile Include="Enums\Parameter\WeatherDataParameter.cs" />
     <Compile Include="Enums\WeatherDataType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\CommentsString.cs" />
+    <Compile Include="Query\DataPeriodsString.cs" />
+    <Compile Include="Query\DaylightSavingsString.cs" />
+    <Compile Include="Query\GroundTemperaturesString.cs" />
+    <Compile Include="Query\TryGetGroundTemperatures.cs" />
+    <Compile Include="Query\TryGetData.cs" />
+    <Compile Include="Query\TryGetValue.cs" />
+    <Compile Include="Query\TryGetLocationData.cs" />
+    <Compile Include="Query\TypicalPeriodsString.cs" />
+    <Compile Include="Query\DesignConditionsString.cs" />
+    <Compile Include="Query\LocationString.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SAM.Core\SAM.Core.csproj">
@@ -94,7 +107,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Convert\" />
     <Folder Include="Create\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

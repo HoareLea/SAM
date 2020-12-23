@@ -179,7 +179,7 @@ namespace SAM.Weather
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
-            jObject.Add("_type", Query.FullTypeName(this));
+            jObject.Add("_type", Core.Query.FullTypeName(this));
 
             if(dictionary != null)
             {
