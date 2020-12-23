@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\EPWFile.cs" />
     <Compile Include="Classes\GroundTemperature.cs" />
     <Compile Include="Classes\WeatherDay.cs" />
     <Compile Include="Classes\WeatherData.cs" />
@@ -54,6 +53,7 @@
     <Compile Include="Enums\Parameter\WeatherDataParameter.cs" />
     <Compile Include="Enums\WeatherDataType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\DataString.cs" />
     <Compile Include="Query\CommentsString.cs" />
     <Compile Include="Query\DataPeriodsString.cs" />
     <Compile Include="Query\DaylightSavingsString.cs" />

@@ -45,11 +45,16 @@ namespace SAM.Weather
             if (@break)
                 return null;
 
-            List<GroundTemperature> groundTemperatures = null;
+            Core.SAMCollection<GroundTemperature> groundTemperatures = null;
             for (int i = 0; i <= 8; i++)
             {
-                if (Query.TryGetGroundTemperatures(lines, i, out groundTemperatures))
+                List<GroundTemperature> groundTemperatures_Temp = null;
+                if (Query.TryGetGroundTemperatures(lines, i, out groundTemperatures_Temp))
+                {
+                    groundTemperatures = new Core.SAMCollection<GroundTemperature>(groundTemperatures_Temp);
                     break;
+                }
+                    
             }
 
             string comments_1 = null;

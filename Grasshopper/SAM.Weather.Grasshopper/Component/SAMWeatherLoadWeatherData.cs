@@ -63,14 +63,14 @@ namespace SAM.Weather.Grasshopper
                 return;
             }
 
-            EPWFile ePWFile = EPWFile.Read(path);
-            if(ePWFile == null)
+            WeatherData weatherData = Convert.ToSAM(path);
+            if (weatherData == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not read EPW file");
                 return;
             }
 
-            dataAccess.SetData(0, new GooWeatherData(ePWFile.WeatherData));
+            dataAccess.SetData(0, new GooWeatherData(weatherData));
         }
     }
 }
