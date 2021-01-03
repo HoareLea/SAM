@@ -31,5 +31,21 @@ namespace SAM.Core.Grasshopper
 
             return result;
         }
+
+        public static DataTree<object> DataTree(this object[,] values)
+        {
+            if (values == null)
+                return null;
+
+            DataTree<object> result = new DataTree<object>();
+            for (int i = values.GetLowerBound(0); i <= values.GetUpperBound(0); i++)
+            {
+                GH_Path path = new GH_Path(i);
+                for (int j = values.GetLowerBound(1); j <= values.GetUpperBound(1); j++)
+                    result.Add(values[i, j], path);
+            }
+
+            return result;
+        }
     }
 }
