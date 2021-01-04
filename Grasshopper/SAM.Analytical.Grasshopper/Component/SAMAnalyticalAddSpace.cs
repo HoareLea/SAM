@@ -73,7 +73,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            global::Grasshopper.Kernel.Data.GH_Structure<GooPanel> structure_GooPanels; // <Panel> panels = new List<Panel>();
+            global::Grasshopper.Kernel.Data.GH_Structure<GooPanel> structure_GooPanels;
             if (!dataAccess.GetDataTree(2, out structure_GooPanels))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

@@ -112,6 +112,7 @@
     <Compile Include="Modify\GetLayer.cs" />
     <Compile Include="Modify\AddSAMLayer.cs" />
     <Compile Include="Query\Copy.cs" />
+    <Compile Include="Query\Objects.cs" />
     <Compile Include="Query\Layers.cs" />
     <Compile Include="Query\Layer.cs" />
     <Compile Include="Query\HasComponentVersion.cs" />
