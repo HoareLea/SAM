@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryPolycurveLoop2D : GH_SAMComponent
+    public class GeometryPolycurveLoop2D : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,12 +19,14 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
+
+        public override GH_Exposure Exposure => GH_Exposure.tertiary | GH_Exposure.obscure;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -38,21 +41,44 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddGenericParameter("_geometry", "Geo", "Geometry", GH_ParamAccess.list);
-            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new Param_GenericObject() { Name = "_geometries", NickName = "_geometries", Description = "Geometries", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                Param_Boolean param_Boolean = new Param_Boolean() { Name = "_run_", NickName = "_run_", Description = "Run", Access = GH_ParamAccess.item };
+                param_Boolean.PersistentData.Append(new GH_Boolean(false));
+
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Loops", "Lps", "SAM PolycurveLoop2Ds", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "InternalPoint", "IntrPt", "Internal Point", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "ExternalLoops", "ExtLps", "SAM External PolycurveLoop2Ds", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "Loops", NickName = "Lps", Description = "SAM Geometry Polygon2Ds", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "InternalPoint", NickName = "IntrPt", Description = "Internal SAM Geometry Point2D", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "ExternalLoops", NickName = "ExtLps", Description = "External SAM Geometry Polygon2Ds", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "InternalEdges", NickName = "IntEdgs", Description = "Internal/Adjacent Edges as SAM Geometry Segment2Ds", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Correctly imported?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+
+
+                //GH_SAMParam[] result = new GH_SAMParam[3];
+                //result[0] = new GH_SAMParam(new GooAnalyticalModelParam() { Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
+                //result[1] = new GH_SAMParam(new GooConstructionParam() { Name = "Constructions", NickName = "Constructions", Description = "Modified SAM Analytical Constructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                //result[2] = new GH_SAMParam(new GooApertureConstructionParam() { Name = "ApertureConstructions", NickName = "ApertureConstructions", Description = "Modified SAM Analytical ApertureConstructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
+                //return result;
+            }
         }
 
         /// <summary>
@@ -63,19 +89,30 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             bool run = false;
-            if (!dataAccess.GetData<bool>(1, ref run))
+
+            index = Params.IndexOfInputParam("_run_");
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(3, false);
-                return;
+                if (!dataAccess.GetData<bool>(index, ref run))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    dataAccess.SetData(3, false);
+                    return;
+                }
+                if (!run)
+                    return;
             }
-            if (!run)
+
+            index = Params.IndexOfInputParam("_geometries");
+            if (index == -1)
                 return;
 
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
-            if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
+            if (!dataAccess.GetDataList(index, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(3, false);
@@ -142,13 +179,31 @@ namespace SAM.Geometry.Grasshopper
 
             List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds);
 
-            dataAccess.SetDataList(0, polygon2Ds.ConvertAll(x => new GooSAMGeometry(x)));
-            dataAccess.SetDataList(1, polygon2Ds.ConvertAll(x => new GooSAMGeometry(x.GetInternalPoint2D())));
+            index = Params.IndexOfOutputParam("Loops");
+            if (index != -1)
+                dataAccess.SetDataList(index, polygon2Ds.ConvertAll(x => new GooSAMGeometry(x)));
 
-            List<Polygon2D> polygon2Ds_External = Planar.Query.Union(polygon2Ds);
-            dataAccess.SetDataList(2, polygon2Ds_External.ConvertAll(x => new GooSAMGeometry(x)));
+            index = Params.IndexOfOutputParam("InternalPoint");
+            if (index != -1)
+                dataAccess.SetDataList(index, polygon2Ds.ConvertAll(x => new GooSAMGeometry(x.GetInternalPoint2D())));
 
-            dataAccess.SetData(3, true);
+            index = Params.IndexOfOutputParam("ExternalLoops");
+            if (index != -1)
+            {
+                List<Polygon2D> polygon2Ds_External = Planar.Query.Union(polygon2Ds);
+                dataAccess.SetDataList(index, polygon2Ds_External.ConvertAll(x => new GooSAMGeometry(x)));
+            }
+
+            index = Params.IndexOfOutputParam("InternalEdges");
+            if (index != -1)
+            {
+                List<Segment2D> segment2Ds_External = Planar.Query.AdjacentSegment2Ds(polygon2Ds);
+                dataAccess.SetDataList(index, segment2Ds_External.ConvertAll(x => new GooSAMGeometry(x)));
+            }
+
+            index = Params.IndexOfOutputParam("Successful");
+            if (index != -1)
+                dataAccess.SetData(index, true);
         }
     }
 }

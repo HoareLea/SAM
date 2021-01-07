@@ -1,33 +1,40 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Segment2D> AdjacentSegment2Ds(this ISegmentable2D segmentable2D, Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        public static List<Segment2D> AdjacentSegment2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if (segmentable2D == null || point2D == null)
+            if (segmentable2Ds == null)
                 return null;
 
-            double min = double.MaxValue;
-            Dictionary<Segment2D, double> dictionary = new Dictionary<Segment2D, double>();
-            foreach (Segment2D segment2D in segmentable2D.GetSegments())
-            {
-                Point2D point2D_Closest = segment2D.Closest(point2D);
-                double distance = point2D.Distance(point2D_Closest);
-                dictionary[segment2D] = distance;
-                if (distance < min)
-                    min = distance;
-            }
-
-            List<double> distances = dictionary.Values.Distinct().ToList();
-            distances.RemoveAll(x => x > min + tolerance);
+            List<Segment2D> segment2Ds = segmentable2Ds.Segment2Ds();
+            if (segmentable2Ds == null)
+                return null;
 
             List<Segment2D> result = new List<Segment2D>();
-            foreach (KeyValuePair<Segment2D, double> keyValuePair in dictionary)
-                if (distances.Contains(keyValuePair.Value))
-                    result.Add(keyValuePair.Key);
+            
+            if (segment2Ds.Count < 2)
+                return result;
+
+            List<Segment2D> segment2Ds_Split = Split(segment2Ds, tolerance);
+            if (segment2Ds_Split.Count < 2)
+                return result;
+
+            foreach(Segment2D segment2D in segment2Ds_Split)
+            {
+                Point2D point2D = segment2D?.Mid();
+                if (point2D == null)
+                    continue;
+
+                List<Segment2D> segments2D_Temp = segment2Ds.FindAll(x => x.On(point2D, tolerance));
+                if (segments2D_Temp == null)
+                    continue;
+
+                if (segments2D_Temp.Count > 1)
+                    result.Add(segment2D);
+            }
 
             return result;
         }
