@@ -113,11 +113,13 @@ namespace SAM.Geometry.Spatial
             Vector3D vector3D_1 = new Vector3D(this, point3D_1);
             Vector3D vector3D_2 = new Vector3D(this, point3D_2);
 
-            double result =  System.Math.Acos(vector3D_1.DotProduct(vector3D_2) / (vector3D_1.Length * vector3D_2.Length));
+            double value = vector3D_1.DotProduct(vector3D_2) / (vector3D_1.Length * vector3D_2.Length);
+
+            double result =  System.Math.Acos(value);
             if (!double.IsNaN(result))
                 return result;
 
-            return result;
+            return value > 0 ? 0 : System.Math.PI;
         }
 
         public bool IsValid()

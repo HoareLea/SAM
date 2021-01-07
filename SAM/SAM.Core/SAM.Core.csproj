@@ -53,6 +53,7 @@
     <Compile Include="Attributes\Parameter\DoubleParameterValue.cs" />
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
+    <Compile Include="Classes\Range\IntegerRange.cs" />
     <Compile Include="Classes\Library\SystemTypeLibrary.cs" />
     <Compile Include="Classes\Relation\TextMap.cs" />
     <Compile Include="Convert\ToJsonDocument\JsonDocument.cs" />
