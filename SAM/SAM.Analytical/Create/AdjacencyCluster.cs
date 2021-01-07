@@ -111,7 +111,7 @@ namespace SAM.Analytical
             return adjacencyCluster;
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Face3D> face3Ds, double elevation_Ground = 0, double tolerance = Core.Tolerance.Distance)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Face3D> face3Ds, double elevation_Ground = 0, double tolerance = Tolerance.Distance)
         {
             if (face3Ds == null)
                 return null;
@@ -367,8 +367,11 @@ namespace SAM.Analytical
                     {
                         Segment3D segment3D_Top = plane_Top.Convert(segment2D);
                         Segment3D segment3D_Bottom = plane_Bottom.Convert(segment2D);
+
+                        Polygon3D polygon3D = Geometry.Spatial.Create.Polygon3D(new Point3D[] { segment3D_Top[0], segment3D_Top[1], segment3D_Bottom[1], segment3D_Bottom[0] }, tolerance); //new Polygon3D(new Point3D[] { segment3D_Top[0], segment3D_Top[1], segment3D_Bottom[1], segment3D_Bottom[0] });
+                        if (polygon3D == null)
+                            continue;
                         
-                        Polygon3D polygon3D = new Polygon3D(new Point3D[] { segment3D_Top[0], segment3D_Top[1], segment3D_Bottom[1], segment3D_Bottom[0] });
                         panel = new Panel(construction_Wall, PanelType.Wall, new Face3D(polygon3D));
 
                         tuples_Point3D.Add(new Tuple<Point3D, Panel, Space>(Geometry.Spatial.Query.Mid(plane_Bottom.Convert(segment2D)), panel, space));

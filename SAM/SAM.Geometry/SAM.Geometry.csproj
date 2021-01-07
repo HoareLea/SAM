@@ -112,6 +112,7 @@
     <Compile Include="Planar\Modify\Tighten.cs" />
     <Compile Include="Planar\Modify\Mirror.cs" />
     <Compile Include="Planar\Query\Clone.cs" />
+    <Compile Include="Planar\Query\AdjacentSegment2Ds.cs" />
     <Compile Include="Planar\Query\InternalVector2Ds.cs" />
     <Compile Include="Planar\Query\Grid.cs" />
     <Compile Include="Planar\Query\Move.cs" />
