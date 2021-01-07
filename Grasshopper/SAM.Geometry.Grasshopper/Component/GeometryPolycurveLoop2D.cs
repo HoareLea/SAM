@@ -71,13 +71,6 @@ namespace SAM.Geometry.Grasshopper
                 result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "InternalEdges", NickName = "IntEdgs", Description = "Internal/Adjacent Edges as SAM Geometry Segment2Ds", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Correctly imported?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
-
-
-                //GH_SAMParam[] result = new GH_SAMParam[3];
-                //result[0] = new GH_SAMParam(new GooAnalyticalModelParam() { Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
-                //result[1] = new GH_SAMParam(new GooConstructionParam() { Name = "Constructions", NickName = "Constructions", Description = "Modified SAM Analytical Constructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
-                //result[2] = new GH_SAMParam(new GooApertureConstructionParam() { Name = "ApertureConstructions", NickName = "ApertureConstructions", Description = "Modified SAM Analytical ApertureConstructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
-                //return result;
             }
         }
 
