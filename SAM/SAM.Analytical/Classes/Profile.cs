@@ -249,8 +249,8 @@ namespace SAM.Analytical
                 if (values == null || values.Count == 0)
                     return double.NaN;
 
-                int max = Max;
-                int index_Temp = index > max ? index % max - 1 : index;
+                int max = Max + 1;
+                int index_Temp = index >= max ? index % max : index;
 
                 foreach (KeyValuePair<int, Tuple<Range<int>, AnyOf<double, Profile>>> keyValuePair in values)
                 {
