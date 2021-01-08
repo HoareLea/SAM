@@ -387,7 +387,7 @@ namespace SAM.Analytical.Grasshopper
                 profile = internalCondition?.GetProfile(ProfileType.Humidification, analyticalModel?.ProfileLibrary);
                 guids_Humidification.Add(profile == null ? Guid.Empty : profile.Guid);
 
-                humidities.Add(profile == null ? double.NaN : profile.Max);
+                humidities.Add(profile == null ? double.NaN : profile.MaxValue);
 
 
                 //Dehumidification
@@ -399,7 +399,7 @@ namespace SAM.Analytical.Grasshopper
                 profile = internalCondition?.GetProfile(ProfileType.Dehumidification, analyticalModel?.ProfileLibrary);
                 guids_Dehumidification.Add(profile == null ? Guid.Empty : profile.Guid);
 
-                dehumidities.Add(profile == null ? double.NaN : profile.Min);
+                dehumidities.Add(profile == null ? double.NaN : profile.MinValue);
 
 
                 names_InternalCondition.Add(internalCondition?.Name);

@@ -137,6 +137,5 @@ namespace SAM.Core
         public static implicit operator string(AnyOf<T, K> value) => value?.ToString();
         public static implicit operator AnyOf<T, K>(T value) => new AnyOf<T, K>(value);
         public static implicit operator AnyOf<T, K>(K value) => new AnyOf<T, K>(value);
-
     }
 }

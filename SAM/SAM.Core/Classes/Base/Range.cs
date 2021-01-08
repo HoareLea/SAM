@@ -86,5 +86,31 @@ namespace SAM.Core
         {
             return !In(value);
         }
+
+        public override bool Equals(object @object)
+        {
+            if (ReferenceEquals(this, null))
+                return ReferenceEquals(@object, null) ? true : false;
+
+            return @object is Range<T> range && range.max.Equals(max) && range.min.Equals(min);
+        }
+
+        public override int GetHashCode()
+        {
+            return (min, max).GetHashCode();
+        }
+
+        public static bool operator ==(Range<T> range, object @object)
+        {
+            if (ReferenceEquals(range, null))
+                return ReferenceEquals(@object, null) ? true : false;
+
+            return range.Equals(@object);
+        }
+
+        public static bool operator !=(Range<T> range, object @object)
+        {
+            return !(range == @object);
+        }
     }
 }

@@ -13,7 +13,7 @@
 
             Profile profile = internalCondition?.GetProfile(ProfileType.Heating, profileLibrary);
 
-            return profile == null ? double.NaN : profile.Min;
+            return profile == null ? double.NaN : profile.MinValue;
         }
     }
 }
