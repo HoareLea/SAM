@@ -304,17 +304,17 @@ namespace SAM.Analytical
                 {
                     values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
 
-                    foreach(object @object in jArray)
+                    foreach(JToken jToken in jArray)
                     {
-                        if (@object is double)
+                        if (jToken.Type == JTokenType.Float)
                         {
-                            values[values.Keys.Max() + 1] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, (double)@object);
+                            values[values.Count == 0 ? 0 : values.Keys.Max() + 1] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, (double)jToken);
                         }
-                        else if(@object is JArray)
+                        else if(jToken.Type == JTokenType.Array)
                         {
-                            JArray jArray_Temp = (JArray)@object;
+                            JArray jArray_Temp = (JArray)jToken;
 
-                            JToken jToken;
+                            JToken jToken_Temp;
 
                             switch (jArray_Temp.Count)
                             {
@@ -322,20 +322,20 @@ namespace SAM.Analytical
                                     values[(int)jArray_Temp[0]] = null;
                                     break;
                                 case 2:
-                                    jToken = jArray_Temp[1];
-                                    if(jToken.Type == JTokenType.Float)
-                                        values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, (double)jToken);
-                                    else if (jToken.Type == JTokenType.Integer)
+                                    jToken_Temp = jArray_Temp[1];
+                                    if(jToken_Temp.Type == JTokenType.Float)
+                                        values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, (double)jToken_Temp);
+                                    else if (jToken_Temp.Type == JTokenType.Integer)
                                         values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>((int)jArray_Temp[0], (int)jArray_Temp[1]), null);
-                                    else if (jToken.Type == JTokenType.Object)
+                                    else if (jToken_Temp.Type == JTokenType.Object)
                                         values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, new Profile((JObject)jArray_Temp[1]));
                                     break;
                                 case 3:
-                                    jToken = jArray_Temp[2];
-                                    if (jToken.Type == JTokenType.Float)
-                                        values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>((int)jArray_Temp[0], (int)jArray_Temp[1]), (double)jToken);
-                                    else if(jToken.Type == JTokenType.Object)
-                                        values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>((int)jArray_Temp[0], (int)jArray_Temp[1]), new Profile((JObject)jToken));
+                                    jToken_Temp = jArray_Temp[2];
+                                    if (jToken_Temp.Type == JTokenType.Float)
+                                        values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>((int)jArray_Temp[0], (int)jArray_Temp[1]), (double)jToken_Temp);
+                                    else if(jToken_Temp.Type == JTokenType.Object)
+                                        values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>((int)jArray_Temp[0], (int)jArray_Temp[1]), new Profile((JObject)jToken_Temp));
                                     break;
                             }
                         }
