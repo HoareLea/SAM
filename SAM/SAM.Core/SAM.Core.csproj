@@ -53,7 +53,8 @@
     <Compile Include="Attributes\Parameter\DoubleParameterValue.cs" />
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
-    <Compile Include="Classes\Range\IntegerRange.cs" />
+    <Compile Include="Classes\Base\AnyOf.cs" />
+    <Compile Include="Classes\Base\Range.cs" />
     <Compile Include="Classes\Library\SystemTypeLibrary.cs" />
     <Compile Include="Classes\Relation\TextMap.cs" />
     <Compile Include="Convert\ToJsonDocument\JsonDocument.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Query\Enum.cs" />
     <Compile Include="Query\Enums.cs" />
     <Compile Include="Query\IsHex.cs" />
+    <Compile Include="Query\IsNullable.cs" />
     <Compile Include="Query\IsValid.cs" />
     <Compile Include="Query\Write.cs" />
     <Compile Include="Query\ValidTypes.cs" />
@@ -190,6 +192,7 @@
   <ItemGroup>
     <Folder Include="Classes\Comparison\" />
     <Folder Include="Convert\ToExpandoObject\" />
+    <Folder Include="Interfaces\Range\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
