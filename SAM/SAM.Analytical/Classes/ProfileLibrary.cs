@@ -96,6 +96,37 @@ namespace SAM.Analytical
             return GetObjects<Profile>();
         }
 
+        public Profile GetProfile(string name, ProfileGroup profileGroup, bool includeProfileType = false)
+        {
+            if (string.IsNullOrEmpty(name) || profileGroup == ProfileGroup.Undefined)
+                return null;
+
+            List<Profile> profiles = GetProfiles(profileGroup, false);
+            if (profiles != null)
+            {
+                foreach (Profile profile in profiles)
+                {
+                    if (name.Equals(profile.Name))
+                        return profile;
+                }
+            }
+
+            if (!includeProfileType)
+                return null;
+
+            profiles = GetProfiles(profileGroup, true);
+            if (profiles == null || profiles.Count == 0)
+                return null;
+
+            foreach (Profile profile in profiles)
+            {
+                if (name.Equals(profile.Name))
+                    return profile;
+            }
+
+            return null;
+        }
+
         public Profile GetProfile(string name, ProfileType profileType, bool includeProfileGroup = false)
         {
             if (string.IsNullOrEmpty(name) || profileType == ProfileType.Undefined)

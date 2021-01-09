@@ -72,6 +72,7 @@
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\HeatingSystemType.cs" />
     <Compile Include="Create\CoolingSystemType.cs" />
+    <Compile Include="Create\Profile.cs" />
     <Compile Include="Create\VentilationSystem.cs" />
     <Compile Include="Create\MechanicalSystem.cs" />
     <Compile Include="Create\VentilationSystemType.cs" />

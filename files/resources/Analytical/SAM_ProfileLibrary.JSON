@@ -9,7 +9,11 @@
       "Guid": "f39525de-82ea-4d8a-b1a4-5db7e54e8d0f",
       "Category": "Gain",
       "Values": [
-        1.0
+        [
+          0,
+          23,
+          1.0
+        ]
       ]
     },
     {
@@ -18,7 +22,11 @@
       "Guid": "c3d62b7e-0582-4255-9642-3d38600aa212",
       "Category": "Gain",
       "Values": [
-        0.0
+        [
+          0,
+          23,
+          0.0
+        ]
       ]
     },
     {
@@ -283,7 +291,11 @@
       "Guid": "3c528d32-dbf5-436b-8af0-ec225cc47309",
       "Category": "Thermostat",
       "Values": [
-        -50.0
+        [
+          0,
+          23,
+          -50.0
+        ]
       ]
     },
     {
@@ -292,7 +304,11 @@
       "Guid": "ab3e0811-03d2-4518-8d12-55bb7df2821f",
       "Category": "Thermostat",
       "Values": [
-        150.0
+        [
+          0,
+          23,
+          150.0
+        ]
       ]
     },
     {
@@ -301,7 +317,11 @@
       "Guid": "942376fe-f6dc-4807-bd2e-1d6b85a8d54a",
       "Category": "Thermostat",
       "Values": [
-        6.0
+        [
+          0,
+          23,
+          6.0
+        ]
       ]
     },
     {
@@ -310,7 +330,11 @@
       "Guid": "1b4bf2b2-ff63-49a1-97a0-8c2c74da7d0e",
       "Category": "Thermostat",
       "Values": [
-        15.0
+        [
+          0,
+          23,
+          15.0
+        ]
       ]
     },
     {
@@ -319,7 +343,11 @@
       "Guid": "ed1a6fd3-918a-4885-8e85-a5733181f21f",
       "Category": "Thermostat",
       "Values": [
-        18.0
+        [
+          0,
+          23,
+          18.0
+        ]
       ]
     },
     {
@@ -328,7 +356,11 @@
       "Guid": "6ae4d1d0-4fd2-401a-a44a-7cea3dbb602d",
       "Category": "Thermostat",
       "Values": [
-        20.0
+        [
+          0,
+          23,
+          20.0
+        ]
       ]
     },
     {
@@ -337,7 +369,11 @@
       "Guid": "178572c4-fedb-4229-9a6b-c4d123b85dd4",
       "Category": "Thermostat",
       "Values": [
-        21.0
+        [
+          0,
+          23,
+          21.0
+        ]
       ]
     },
     {
@@ -346,7 +382,11 @@
       "Guid": "693f1e75-ca21-4252-b422-4476e3f77983",
       "Category": "Thermostat",
       "Values": [
-        22.0
+        [
+          0,
+          23,
+          22.0
+        ]
       ]
     },
     {
@@ -355,7 +395,11 @@
       "Guid": "21210b31-d39d-4acc-a98e-bc4bbf7c17bf",
       "Category": "Thermostat",
       "Values": [
-        24.0
+        [
+          0,
+          23,
+          24.0
+        ]
       ]
     },
     {
@@ -524,7 +568,11 @@
       "Guid": "05860a8c-2f28-4e0c-8090-8d05d7f64e6b",
       "Category": "Thermostat",
       "Values": [
-        10.0
+        [
+          0,
+          23,
+          10.0
+        ]
       ]
     },
     {
@@ -533,7 +581,11 @@
       "Guid": "d613e57a-2335-40ea-8415-6fc2fd210a54",
       "Category": "Thermostat",
       "Values": [
-        21.0
+        [
+          0,
+          23,
+          21.0
+        ]
       ]
     },
     {
@@ -574,7 +626,11 @@
       "Guid": "49c3a88e-e3a6-4cb4-acb2-a4859f651b2a",
       "Category": "Thermostat",
       "Values": [
-        22.0
+        [
+          0,
+          23,
+          22.0
+        ]
       ]
     },
     {
@@ -583,7 +639,11 @@
       "Guid": "18b3ba4a-b476-4937-bd51-60ec914cb25b",
       "Category": "Thermostat",
       "Values": [
-        23.0
+        [
+          0,
+          23,
+          23.0
+        ]
       ]
     },
     {
@@ -784,7 +844,11 @@
       "Guid": "da6f67c0-dce9-46e0-aa34-f217831d08d7",
       "Category": "Thermostat",
       "Values": [
-        40.0
+        [
+          0,
+          23,
+          40.0
+        ]
       ]
     },
     {
@@ -793,7 +857,11 @@
       "Guid": "096c1c91-a77a-4917-8275-130ae1c3421a",
       "Category": "Humidistat",
       "Values": [
-        0.0
+        [
+          0,
+          23,
+          0.0
+        ]
       ]
     },
     {
@@ -802,7 +870,11 @@
       "Guid": "d26155d5-9fee-4ed9-92c0-d954e4be36b0",
       "Category": "Humidistat",
       "Values": [
-        100.0
+        [
+          0,
+          23,
+          100.0
+        ]
       ]
     },
     {

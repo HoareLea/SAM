@@ -88,6 +88,19 @@ namespace SAM.Analytical
             Update(values?.ToArray());
         }
 
+        public Profile(string name, double value, int min = 0, int max = 23)
+            : base(name)
+        {
+            int min_Temp = System.Math.Min(min, max);
+            int max_Temp = System.Math.Max(min, max);
+
+            values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
+            if (min == max)
+                values[min_Temp] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, value);
+            else
+                values[min_Temp] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>(min_Temp, max_Temp), value);
+        }
+
         public Profile(JObject jObject)
             : base(jObject)
         {

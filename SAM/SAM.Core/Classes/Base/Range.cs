@@ -35,6 +35,12 @@ namespace SAM.Core
             }
         }
 
+        public Range(Range<T> range)
+        {
+            min = range.min;
+            max = range.max;
+        }
+
         public Range(JObject jObject)
         {
             FromJObject(jObject);
