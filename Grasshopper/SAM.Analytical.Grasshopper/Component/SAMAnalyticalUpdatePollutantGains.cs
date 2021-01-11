@@ -54,8 +54,8 @@ namespace SAM.Analytical.Grasshopper
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
         public SAMAnalyticalUpdatePollutantGains()
-          : base("SAMAnalytical.UpdateInfiltrationGains", "SAMAnalytical.UpdateInfiltrationGains",
-              "Updates Infiltration Gains Properties for Spaces",
+          : base("SAMAnalytical.UpdatePollutantGains", "SAMAnalytical.UpdatePollutantGains",
+              "Updates Pollutant Gains Properties for Spaces",
               "SAM", "Analytical")
         {
         }
