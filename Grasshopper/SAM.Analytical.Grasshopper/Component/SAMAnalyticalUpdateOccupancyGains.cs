@@ -33,6 +33,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profile_", NickName = "_profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooDegreeOfActivityParam() { Name = "_degreeOfActivity_", NickName = "_degreeOfActivity_", Description = "SAM Analytical DegreeOfActivity", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_occupancySensibleGainPerPerson_", NickName = "_occupancySensibleGainPerPerson_", Description = "Occupancy Sensible Gain Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_occupancyLatentGainPerPerson_", NickName = "_occupancyLatentGainPerPerson_", Description = "Occupancy Latent Gain Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_areaPerPerson_", NickName = "_areaPerPerson_", Description = "Area Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -120,6 +121,11 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref areaPerPerson);
 
+            DegreeOfActivity degreeOfActivity = null;
+            index = Params.IndexOfInputParam("_degreeOfActivity_");
+            if (index != -1)
+                dataAccess.GetData(index, ref degreeOfActivity);
+
             ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
             if (profile != null)
@@ -143,17 +149,31 @@ namespace SAM.Analytical.Grasshopper
                 if (profile != null)
                     internalCondition.SetValue(InternalConditionParameter.OccupancyProfileName, profile.Name);
 
-                if(!double.IsNaN(occupancySensibleGainPerPerson))
-                    internalCondition.SetValue(InternalConditionParameter.OccupancySensibleGainPerPerson, occupancySensibleGainPerPerson);
+                if (!double.IsNaN(occupancy))
+                    space_Temp.SetValue(SpaceParameter.Occupancy, occupancy);
 
-                if (!double.IsNaN(occupancyLatentGainPerPerson))
-                    internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGainPerPerson, occupancyLatentGainPerPerson);
+                if (double.IsNaN(occupancySensibleGainPerPerson))
+                {
+                    if(degreeOfActivity != null)
+                        internalCondition.SetValue(InternalConditionParameter.OccupancySensibleGainPerPerson, degreeOfActivity.Sensible);
+                }
+                else
+                {
+                    internalCondition.SetValue(InternalConditionParameter.OccupancySensibleGainPerPerson, occupancySensibleGainPerPerson);
+                }
+
+                if (double.IsNaN(occupancyLatentGainPerPerson))
+                {
+                    if (degreeOfActivity != null)
+                        internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGainPerPerson, degreeOfActivity.Latent);
+                }
+                else
+                {
+                    internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGain, occupancyLatentGainPerPerson);
+                }
 
                 if (!double.IsNaN(areaPerPerson))
                     internalCondition.SetValue(InternalConditionParameter.AreaPerPerson, areaPerPerson);
-
-                if (!double.IsNaN(occupancy))
-                    space_Temp.SetValue(SpaceParameter.Occupancy, occupancy);
 
                 space_Temp.InternalCondition = internalCondition;
                 adjacencyCluster.AddObject(space_Temp);
