@@ -142,9 +142,11 @@ namespace SAM.Analytical.Grasshopper
                 if (space_Temp == null)
                     continue;
 
-                InternalCondition internalCondition = space.InternalCondition;
+                space_Temp = new Space(space_Temp);
+
+                InternalCondition internalCondition = space_Temp.InternalCondition;
                 if(internalCondition == null)
-                    internalCondition = new InternalCondition(space.Name);
+                    internalCondition = new InternalCondition(space_Temp.Name);
 
                 if (profile != null)
                     internalCondition.SetValue(InternalConditionParameter.OccupancyProfileName, profile.Name);
@@ -176,6 +178,7 @@ namespace SAM.Analytical.Grasshopper
                     internalCondition.SetValue(InternalConditionParameter.AreaPerPerson, areaPerPerson);
 
                 space_Temp.InternalCondition = internalCondition;
+                internalConditions.Add(internalCondition);
                 adjacencyCluster.AddObject(space_Temp);
             }
 

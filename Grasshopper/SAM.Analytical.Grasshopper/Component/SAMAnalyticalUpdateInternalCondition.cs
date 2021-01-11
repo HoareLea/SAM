@@ -40,7 +40,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingLevel_", NickName = "_lightingLevel_", Description = "Lighting Level", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentSensGainPerArea_", NickName = "_equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentLatGainPerArea_", NickName = "_equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_heatingSetPoint_", Description = "Heating SetPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
 
                 result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterHTGRadianProportion_", NickName = "_emitterHTGRadianProportion_", Description = "Heating Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
