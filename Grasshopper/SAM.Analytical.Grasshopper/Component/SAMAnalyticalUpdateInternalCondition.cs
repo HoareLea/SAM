@@ -3,6 +3,7 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -29,28 +30,65 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
+
+                ProfileLibrary profileLibrary = ActiveSetting.Setting.GetValue<ProfileLibrary>(AnalyticalSettingParameter.DefaultProfileLibrary);
+                DegreeOfActivityLibrary degreeOfActivityLibrary = ActiveSetting.Setting.GetValue<DegreeOfActivityLibrary>(AnalyticalSettingParameter.DefaultDegreeOfActivityLibrary);
+
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profile_", NickName = "_profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooDegreeOfActivityParam() { Name = "_degreeOfActivity_", NickName = "_degreeOfActivity_", Description = "SAM Analytical DegreeOfActivity", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_areaPerPerson_", NickName = "_areaPerPerson_", Description = "Area Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_occupancy_", NickName = "_occupancy_", Description = "Occupancy", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingGainPerArea_", NickName = "_lightingGainPerArea_", Description = "Lighting Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingLevel_", NickName = "_lightingLevel_", Description = "Lighting Level", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentSensGainPerArea_", NickName = "_equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentLatGainPerArea_", NickName = "_equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_heatingSetPoint_", Description = "Heating SetPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_coolingSetPoint_", Description = "Cooling SetPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_humidificationSetPoint_", Description = "Heating SetPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterHTGRadianProportion_", NickName = "_emitterHTGRadianProportion_", Description = "Heating Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterHTGViewCoefficient_", NickName = "_emitterHTGViewCoefficient_", Description = "Heating Emitter View Coefficient", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profileHeating_", NickName = "_profileCooling_", Description = "SAM Analytical Profile for Cooling", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterCLGRadianProportion_", NickName = "_emitterCLGRadianProportion_", Description = "Cooling Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterCLGViewCoefficient_", NickName = "_emitterHCLGViewCoefficient_", Description = "Cooling Emitter View Coefficient", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profileHumidification_", NickName = "_profileHumidification_", Description = "SAM Analytical Profile for Humidification", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profileDehumidification_", NickName = "_profileDehumidification_", Description = "SAM Analytical Profile for Dehumidification", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list};
+                result.Add(new GH_SAMParam(gooSpaceParam, ParamVisibility.Binding));
+
+                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "_profile_", NickName = "_profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item};
+                gooProfileParam.SetPersistentData(new GooProfile(profileLibrary.GetProfile("8to18", ProfileGroup.Gain, true)));
+                result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Binding));
+
+                GooDegreeOfActivityParam gooDegreeOfActivityParam = new GooDegreeOfActivityParam() { Name = "_degreeOfActivity_", NickName = "_degreeOfActivity_", Description = "SAM Analytical DegreeOfActivity", Access = GH_ParamAccess.item};
+                gooDegreeOfActivityParam.SetPersistentData(new GooDegreeOfActivity(degreeOfActivityLibrary.GetDegreeOfActivities("Moderate office work").FirstOrDefault()));
+                result.Add(new GH_SAMParam(gooDegreeOfActivityParam, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number number = null;
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_areaPerPerson_", NickName = "_areaPerPerson_", Description = "Area Per Person", Access = GH_ParamAccess.item};
+                number.SetPersistentData(10);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_occupancy_", NickName = "_occupancy_", Description = "Occupancy", Access = GH_ParamAccess.item, Optional = true};
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingGainPerArea_", NickName = "_lightingGainPerArea_", Description = "Lighting Gain Per Area", Access = GH_ParamAccess.item, Optional = true };
+                number.SetPersistentData(8);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingLevel_", NickName = "_lightingLevel_", Description = "Lighting Level", Access = GH_ParamAccess.item};
+                number.SetPersistentData(500);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentSensGainPerArea_", NickName = "_equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area", Access = GH_ParamAccess.item};
+                number.SetPersistentData(15);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentLatGainPerArea_", NickName = "_equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area", Access = GH_ParamAccess.item};
+                number.SetPersistentData(0);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_heatingSetPoint_", Description = "Heating SetPoint", Access = GH_ParamAccess.item };
+                number.SetPersistentData(21);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_coolingSetPoint_", NickName = "_coolingSetPoint_", Description = "Cooling SetPoint", Access = GH_ParamAccess.item};
+                number.SetPersistentData(24);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidificationSetPoint_", NickName = "_humidificationSetPoint_", Description = "Humidification SetPoint", Access = GH_ParamAccess.item};
+                number.SetPersistentData(0);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dehumidificationSetPoint_", NickName = "_dehumidificationSetPoint_", Description = "Dehumidification SetPoint", Access = GH_ParamAccess.item};
+                number.SetPersistentData(100);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
         }
@@ -60,8 +98,8 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooProfileParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "InternalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "InternalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -70,8 +108,8 @@ namespace SAM.Analytical.Grasshopper
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
         public SAMAnalyticalUpdateInternalCondition()
-          : base("SAMAnalytical.UpdateSetPoint", "SAMAnalytical.UpdateSetPoint",
-              "Updates SetPoint (Cooling, Heating, Humidification and Dehumidification ) Properties for Spaces",
+          : base("SAMAnalytical.UpdateInternalCondition", "SAMAnalytical.UpdateInternalCondition",
+              "Updates InternalCondition Properties for Spaces",
               "SAM", "Analytical")
         {
         }
@@ -109,59 +147,71 @@ namespace SAM.Analytical.Grasshopper
             if (spaces == null)
                 spaces = analyticalModel.GetSpaces();
 
-            Profile profile_Heating = null;
-            index = Params.IndexOfInputParam("_profileHeating_");
+            Profile profile = null;
+            index = Params.IndexOfInputParam("_profile_");
             if (index != -1)
-                dataAccess.GetData(index, ref profile_Heating);
+                dataAccess.GetData(index, ref profile);
 
-            double heatingEmitterRadiantProportion = double.NaN;
-            index = Params.IndexOfInputParam("_emitterHTGRadianProportion_");
+            DegreeOfActivity degreeOfActivity = null;
+            index = Params.IndexOfInputParam("_degreeOfActivity_");
             if (index != -1)
-                dataAccess.GetData(index, ref heatingEmitterRadiantProportion);
+                dataAccess.GetData(index, ref degreeOfActivity);
 
-            double heatingEmitterCoefficient = double.NaN;
-            index = Params.IndexOfInputParam("_emitterHTGViewCoefficient_");
+            double areaPerPerson = double.NaN;
+            index = Params.IndexOfInputParam("_areaPerPerson_");
             if (index != -1)
-                dataAccess.GetData(index, ref heatingEmitterCoefficient);
+                dataAccess.GetData(index, ref areaPerPerson);
 
-            Profile profile_Cooling = null;
-            index = Params.IndexOfInputParam("_profileCooling_");
+            double occupancy = double.NaN;
+            index = Params.IndexOfInputParam("_occupancy_");
             if (index != -1)
-                dataAccess.GetData(index, ref profile_Cooling);
+                dataAccess.GetData(index, ref occupancy);
 
-            double coolingEmitterRadiantProportion = double.NaN;
-            index = Params.IndexOfInputParam("_emitterCLGRadianProportion_");
+            double lightingGainPerArea = double.NaN;
+            index = Params.IndexOfInputParam("_lightingGainPerArea_");
             if (index != -1)
-                dataAccess.GetData(index, ref coolingEmitterRadiantProportion);
+                dataAccess.GetData(index, ref lightingGainPerArea);
 
-            double coolingEmitterCoefficient = double.NaN;
-            index = Params.IndexOfInputParam("_emitterCLGViewCoefficient_");
+            double lightingLevel = double.NaN;
+            index = Params.IndexOfInputParam("_lightingLevel_");
             if (index != -1)
-                dataAccess.GetData(index, ref coolingEmitterCoefficient);
+                dataAccess.GetData(index, ref lightingLevel);
 
-            Profile profile_Humidification = null;
-            index = Params.IndexOfInputParam("_profileHumidification_");
+            double equipmentSensGainPerArea = double.NaN;
+            index = Params.IndexOfInputParam("_equipmentSensGainPerArea_");
             if (index != -1)
-                dataAccess.GetData(index, ref profile_Humidification);
+                dataAccess.GetData(index, ref equipmentSensGainPerArea);
 
-            Profile profile_Dehumidification = null;
-            index = Params.IndexOfInputParam("_profileDehumidification_");
+            double equipmentLatGainPerArea = double.NaN;
+            index = Params.IndexOfInputParam("_equipmentLatGainPerArea_");
             if (index != -1)
-                dataAccess.GetData(index, ref profile_Dehumidification);
+                dataAccess.GetData(index, ref equipmentLatGainPerArea);
+
+            double heatingSetPoint = double.NaN;
+            index = Params.IndexOfInputParam("_heatingSetPoint_");
+            if (index != -1)
+                dataAccess.GetData(index, ref heatingSetPoint);
+
+            double coolingSetPoint = double.NaN;
+            index = Params.IndexOfInputParam("_coolingSetPoint_");
+            if (index != -1)
+                dataAccess.GetData(index, ref coolingSetPoint);
+
+            double humidificationSetPoint = double.NaN;
+            index = Params.IndexOfInputParam("_humidificationSetPoint_");
+            if (index != -1)
+                dataAccess.GetData(index, ref humidificationSetPoint);
+
+            double dehumidificationSetPoint = double.NaN;
+            index = Params.IndexOfInputParam("_dehumidificationSetPoint_");
+            if (index != -1)
+                dataAccess.GetData(index, ref dehumidificationSetPoint);
+
 
             ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
-            if (profile_Heating != null)
-                profileLibrary.Add(profile_Heating);
-
-            if (profile_Cooling != null)
-                profileLibrary.Add(profile_Cooling);
-
-            if (profile_Humidification != null)
-                profileLibrary.Add(profile_Humidification);
-
-            if (profile_Dehumidification != null)
-                profileLibrary.Add(profile_Dehumidification);
+            if (profile != null)
+                profileLibrary.Add(profile);
 
             List<InternalCondition> internalConditions = new List<InternalCondition>();
 
@@ -180,29 +230,52 @@ namespace SAM.Analytical.Grasshopper
                 if(internalCondition == null)
                     internalCondition = new InternalCondition(space_Temp.Name);
 
-                if (profile_Heating != null)
-                    internalCondition.SetValue(InternalConditionParameter.HeatingProfileName, profile_Heating.Name);
+                if (profile != null)
+                {
+                    internalCondition.SetValue(InternalConditionParameter.OccupancyProfileName, profile.Name);
+                    internalCondition.SetValue(InternalConditionParameter.LightingProfileName, profile.Name);
+                    internalCondition.SetValue(InternalConditionParameter.EquipmentSensibleProfileName, profile.Name);
+                    internalCondition.SetValue(InternalConditionParameter.EquipmentLatentProfileName, profile.Name);
+                    internalCondition.SetValue(InternalConditionParameter.HeatingProfileName, profile.Name);
+                    
+                }
 
-                if(!double.IsNaN(heatingEmitterRadiantProportion))
-                    internalCondition.SetValue(InternalConditionParameter.HeatingEmitterRadiantProportion, heatingEmitterRadiantProportion);
+                if(degreeOfActivity != null)
+                {
+                    internalCondition.SetValue(InternalConditionParameter.OccupancySensibleGainPerPerson, degreeOfActivity.Sensible);
+                    internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGainPerPerson, degreeOfActivity.Latent);
+                }
 
-                if (!double.IsNaN(heatingEmitterCoefficient))
-                    internalCondition.SetValue(InternalConditionParameter.HeatingEmitterCoefficient, heatingEmitterCoefficient);
+                if (double.IsNaN(occupancy))
+                {
+                    if (!double.IsNaN(areaPerPerson))
+                    {
+                        internalCondition.SetValue(InternalConditionParameter.AreaPerPerson, areaPerPerson);
+                        double area;
+                        if (space_Temp.TryGetValue(SpaceParameter.Area, out area) && double.IsNaN(area) && areaPerPerson != 0)
+                            space_Temp.SetValue(SpaceParameter.Occupancy, area / areaPerPerson);
+                    }
+                }
+                else
+                {
+                    space_Temp.SetValue(SpaceParameter.Occupancy, occupancy);
+                    double area;
+                    if (space_Temp.TryGetValue(SpaceParameter.Area, out area) && double.IsNaN(area) && occupancy != 0)
+                        internalCondition.SetValue(InternalConditionParameter.AreaPerPerson, area / occupancy);
+                }
 
-                if (profile_Cooling != null)
-                    internalCondition.SetValue(InternalConditionParameter.CoolingProfileName, profile_Cooling.Name);
+                if (!double.IsNaN(lightingGainPerArea))
+                    internalCondition.SetValue(InternalConditionParameter.LightingGainPerArea, lightingGainPerArea);
 
-                if (!double.IsNaN(coolingEmitterRadiantProportion))
-                    internalCondition.SetValue(InternalConditionParameter.CoolingEmitterRadiantProportion, coolingEmitterRadiantProportion);
+                if (!double.IsNaN(lightingLevel))
+                    internalCondition.SetValue(InternalConditionParameter.LightingLevel, lightingLevel);
 
-                if (!double.IsNaN(coolingEmitterCoefficient))
-                    internalCondition.SetValue(InternalConditionParameter.CoolingEmitterCoefficient, coolingEmitterCoefficient);
+                if (!double.IsNaN(equipmentSensGainPerArea))
+                    internalCondition.SetValue(InternalConditionParameter.EquipmentSensibleGainPerArea, equipmentSensGainPerArea);
 
-                if (profile_Humidification != null)
-                    internalCondition.SetValue(InternalConditionParameter.HumidificationProfileName, profile_Humidification.Name);
+                if (!double.IsNaN(equipmentLatGainPerArea))
+                    internalCondition.SetValue(InternalConditionParameter.EquipmentLatentGainPerArea, equipmentLatGainPerArea);
 
-                if (profile_Dehumidification != null)
-                    internalCondition.SetValue(InternalConditionParameter.DehumidificationProfileName, profile_Dehumidification.Name);
 
                 space_Temp.InternalCondition = internalCondition;
                 adjacencyCluster.AddObject(space_Temp);
