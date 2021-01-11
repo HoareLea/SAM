@@ -41,7 +41,8 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentSensGainPerArea_", NickName = "_equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentLatGainPerArea_", NickName = "_equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_heatingSetPoint_", Description = "Heating SetPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_coolingSetPoint_", Description = "Cooling SetPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_humidificationSetPoint_", Description = "Heating SetPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
                 result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterHTGRadianProportion_", NickName = "_emitterHTGRadianProportion_", Description = "Heating Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterHTGViewCoefficient_", NickName = "_emitterHTGViewCoefficient_", Description = "Heating Emitter View Coefficient", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -173,9 +174,11 @@ namespace SAM.Analytical.Grasshopper
                 if (space_Temp == null)
                     continue;
 
-                InternalCondition internalCondition = space.InternalCondition;
+                space_Temp = new Space(space_Temp);
+
+                InternalCondition internalCondition = space_Temp.InternalCondition;
                 if(internalCondition == null)
-                    internalCondition = new InternalCondition(space.Name);
+                    internalCondition = new InternalCondition(space_Temp.Name);
 
                 if (profile_Heating != null)
                     internalCondition.SetValue(InternalConditionParameter.HeatingProfileName, profile_Heating.Name);

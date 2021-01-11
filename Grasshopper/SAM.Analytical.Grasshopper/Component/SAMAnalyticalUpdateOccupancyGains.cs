@@ -151,9 +151,6 @@ namespace SAM.Analytical.Grasshopper
                 if (profile != null)
                     internalCondition.SetValue(InternalConditionParameter.OccupancyProfileName, profile.Name);
 
-                if (!double.IsNaN(occupancy))
-                    space_Temp.SetValue(SpaceParameter.Occupancy, occupancy);
-
                 if (double.IsNaN(occupancySensibleGainPerPerson))
                 {
                     if(degreeOfActivity != null)
@@ -174,8 +171,23 @@ namespace SAM.Analytical.Grasshopper
                     internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGain, occupancyLatentGainPerPerson);
                 }
 
-                if (!double.IsNaN(areaPerPerson))
-                    internalCondition.SetValue(InternalConditionParameter.AreaPerPerson, areaPerPerson);
+                if (double.IsNaN(occupancy))
+                {
+                    if (!double.IsNaN(areaPerPerson))
+                    {
+                        internalCondition.SetValue(InternalConditionParameter.AreaPerPerson, areaPerPerson);
+                        double area;
+                        if (space_Temp.TryGetValue(SpaceParameter.Area, out area) && double.IsNaN(area) && areaPerPerson != 0)
+                            space_Temp.SetValue(SpaceParameter.Occupancy, area / areaPerPerson);
+                    }
+                }
+                else
+                {
+                    space_Temp.SetValue(SpaceParameter.Occupancy, occupancy);
+                    double area;
+                    if (space_Temp.TryGetValue(SpaceParameter.Area, out area) && double.IsNaN(area) && occupancy != 0)
+                        internalCondition.SetValue(InternalConditionParameter.AreaPerPerson, area / occupancy);
+                }
 
                 space_Temp.InternalCondition = internalCondition;
                 internalConditions.Add(internalCondition);
