@@ -81,6 +81,7 @@
     <Compile Include="Component\SAMAnalyticalCopyApertureConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalCopyConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateEquipmentGains.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSetPoint.cs" />
     <Compile Include="Component\SAMAnalyticalUpdatePollutantGains.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateInfiltrationGains.cs" />
