@@ -160,6 +160,23 @@ namespace SAM.Analytical
             return GetObjects<Panel>();
         }
 
+        public IEnumerable<InternalCondition> GetInternalConditions()
+        {
+            List<Space> spaces = GetSpaces();
+            if (spaces == null)
+                return null;
+
+            Dictionary<Guid, InternalCondition> dictionary = new Dictionary<Guid, InternalCondition>();
+            foreach(Space space in spaces)
+            {
+                InternalCondition internalCondition = space.InternalCondition;
+                if (internalCondition != null)
+                    dictionary[internalCondition.Guid] = internalCondition;
+            }
+
+            return dictionary.Values;
+        }
+
         public List<Panel> GetPanels(Space space)
         {
             return GetRelatedObjects<Panel>(space);

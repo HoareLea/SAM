@@ -1,8 +1,8 @@
 ﻿namespace SAM.Core
 {
-    public interface IMaterial: IJSAMObject
+    public interface IMaterial: ISAMObject
     {
-        string Name { get; }
-        System.Guid Guid { get; }
+        //string Name { get; }
+        //System.Guid Guid { get; }
     }
 }

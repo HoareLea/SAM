@@ -80,6 +80,12 @@
     <Compile Include="Component\SAMAnalyticalAirFlow.cs" />
     <Compile Include="Component\SAMAnalyticalCopyApertureConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalCopyConstructionLayers.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateEquipmentGains.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateSetPoint.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdatePollutantGains.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateInfiltrationGains.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateLightingGains.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateOccupancyGains.cs" />
     <Compile Include="Component\SAMAnalyticalProfileGroup.cs" />
     <Compile Include="Component\SAMAnalyticalProfileType.cs" />
     <Compile Include="Component\SAMAnalyticalReportSpaces.cs" />
