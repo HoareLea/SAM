@@ -296,9 +296,9 @@ namespace SAM.Analytical.Grasshopper
 
                 double occupancyLatentGain = Analytical.Query.CalculatedOccupancyLatentGain(space);
                 
-                occupancySensibleGains.Add(occupancyLatentGain);
-                occupancySensibleGainsPerPerson.Add(double.IsNaN(occupancyLatentGain) || double.IsNaN(occupancy) || occupancy == 0 ? double.NaN : occupancyLatentGain / occupancy);
-                occupancySensibleGainsPerArea.Add(double.IsNaN(occupancyLatentGain) || double.IsNaN(area) || area == 0 ? double.NaN : occupancyLatentGain / area);
+                occupancyLatentGains.Add(occupancyLatentGain);
+                occupancyLatentGainsPerPerson.Add(double.IsNaN(occupancyLatentGain) || double.IsNaN(occupancy) || occupancy == 0 ? double.NaN : occupancyLatentGain / occupancy);
+                occupancyLatentGainsPerArea.Add(double.IsNaN(occupancyLatentGain) || double.IsNaN(area) || area == 0 ? double.NaN : occupancyLatentGain / area);
 
                 if (internalCondition == null || !internalCondition.TryGetValue(InternalConditionParameter.OccupancyProfileName, out @string))
                     @string = null;
