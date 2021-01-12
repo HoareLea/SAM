@@ -33,10 +33,10 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profile_", NickName = "_profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingGainPerArea_", NickName = "_lightingGainPerArea_", Description = "Lighting Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingGain_", NickName = "_lightingGain_", Description = "Lighting Gain", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingLevel_", NickName = "_lightingLevel_", Description = "Lighting Level", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingEfficiency_", NickName = "_lightingEfficiency_", Description = "Lighting Efficiency", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingGainPerArea_", NickName = "lightingGainPerArea_", Description = "Lighting Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingGain_", NickName = "lightingGain_", Description = "Lighting Gain", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingLevel_", NickName = "lightingLevel_", Description = "Lighting Level", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingEfficiency_", NickName = "lightingEfficiency_", Description = "Lighting Efficiency", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -101,22 +101,22 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref profile);
 
             double lightingGainPerArea = double.NaN;
-            index = Params.IndexOfInputParam("_lightingGainPerArea_");
+            index = Params.IndexOfInputParam("lightingGainPerArea_");
             if (index != -1)
                 dataAccess.GetData(index, ref lightingGainPerArea);
 
             double lightingGain = double.NaN;
-            index = Params.IndexOfInputParam("_lightingGain_");
+            index = Params.IndexOfInputParam("lightingGain_");
             if (index != -1)
                 dataAccess.GetData(index, ref lightingGain);
 
             double lightingLevel = double.NaN;
-            index = Params.IndexOfInputParam("_lightingLevel_");
+            index = Params.IndexOfInputParam("lightingLevel_");
             if (index != -1)
                 dataAccess.GetData(index, ref lightingLevel);
 
             double lightingEfficiency = double.NaN;
-            index = Params.IndexOfInputParam("_lightingEfficiency_");
+            index = Params.IndexOfInputParam("lightingEfficiency_");
             if (index != -1)
                 dataAccess.GetData(index, ref lightingEfficiency);
 

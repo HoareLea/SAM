@@ -32,12 +32,12 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profile_", NickName = "_profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooDegreeOfActivityParam() { Name = "_degreeOfActivity_", NickName = "_degreeOfActivity_", Description = "SAM Analytical DegreeOfActivity", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_occupancySensibleGainPerPerson_", NickName = "_occupancySensibleGainPerPerson_", Description = "Occupancy Sensible Gain Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_occupancyLatentGainPerPerson_", NickName = "_occupancyLatentGainPerPerson_", Description = "Occupancy Latent Gain Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_areaPerPerson_", NickName = "_areaPerPerson_", Description = "Area Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_occupancy_", NickName = "_occupancy_", Description = "Occupancy", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profile_", NickName = "profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooDegreeOfActivityParam() { Name = "degreeOfActivity_", NickName = "degreeOfActivity_", Description = "SAM Analytical DegreeOfActivity", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "occupancySensibleGainPerPerson_", NickName = "occupancySensibleGainPerPerson_", Description = "Occupancy Sensible Gain Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "occupancyLatentGainPerPerson_", NickName = "occupancyLatentGainPerPerson_", Description = "Occupancy Latent Gain Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "areaPerPerson_", NickName = "areaPerPerson_", Description = "Area Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "occupancy_", NickName = "occupancy_", Description = "Occupancy", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -102,27 +102,27 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref profile);
 
             double occupancySensibleGainPerPerson = double.NaN;
-            index = Params.IndexOfInputParam("_occupancySensibleGainPerPerson_");
+            index = Params.IndexOfInputParam("occupancySensibleGainPerPerson_");
             if (index != -1)
                 dataAccess.GetData(index, ref occupancySensibleGainPerPerson);
 
             double occupancyLatentGainPerPerson = double.NaN;
-            index = Params.IndexOfInputParam("_occupancyLatentGainPerPerson_");
+            index = Params.IndexOfInputParam("occupancyLatentGainPerPerson_");
             if (index != -1)
                 dataAccess.GetData(index, ref occupancyLatentGainPerPerson);
 
             double occupancy = double.NaN;
-            index = Params.IndexOfInputParam("_occupancy_");
+            index = Params.IndexOfInputParam("occupancy_");
             if (index != -1)
                 dataAccess.GetData(index, ref occupancy);
 
             double areaPerPerson = double.NaN;
-            index = Params.IndexOfInputParam("_areaPerPerson_");
+            index = Params.IndexOfInputParam("areaPerPerson_");
             if (index != -1)
                 dataAccess.GetData(index, ref areaPerPerson);
 
             DegreeOfActivity degreeOfActivity = null;
-            index = Params.IndexOfInputParam("_degreeOfActivity_");
+            index = Params.IndexOfInputParam("degreeOfActivity_");
             if (index != -1)
                 dataAccess.GetData(index, ref degreeOfActivity);
 

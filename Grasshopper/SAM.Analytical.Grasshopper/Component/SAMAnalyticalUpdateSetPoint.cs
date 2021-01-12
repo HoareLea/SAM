@@ -32,14 +32,14 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profileHeating_", NickName = "_profileHeating_", Description = "SAM Analytical Profile for Heating", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterHTGRadianProportion_", NickName = "_emitterHTGRadianProportion_", Description = "Heating Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterHTGViewCoefficient_", NickName = "_emitterHTGViewCoefficient_", Description = "Heating Emitter View Coefficient", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profileCooling_", NickName = "_profileCooling_", Description = "SAM Analytical Profile for Cooling", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterCLGRadianProportion_", NickName = "_emitterCLGRadianProportion_", Description = "Cooling Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_emitterCLGViewCoefficient_", NickName = "_emitterHCLGViewCoefficient_", Description = "Cooling Emitter View Coefficient", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profileHumidification_", NickName = "_profileHumidification_", Description = "SAM Analytical Profile for Humidification", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profileDehumidification_", NickName = "_profileDehumidification_", Description = "SAM Analytical Profile for Dehumidification", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileHeating_", NickName = "profileHeating_", Description = "SAM Analytical Profile for Heating", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "emitterHTGRadianProportion_", NickName = "emitterHTGRadianProportion_", Description = "Heating Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "emitterHTGViewCoefficient_", NickName = "emitterHTGViewCoefficient_", Description = "Heating Emitter View Coefficient", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileCooling_", NickName = "profileCooling_", Description = "SAM Analytical Profile for Cooling", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "emitterCLGRadianProportion_", NickName = "emitterCLGRadianProportion_", Description = "Cooling Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "emitterCLGViewCoefficient_", NickName = "emitterHCLGViewCoefficient_", Description = "Cooling Emitter View Coefficient", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileHumidification_", NickName = "profileHumidification_", Description = "SAM Analytical Profile for Humidification", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileDehumidification_", NickName = "profileDehumidification_", Description = "SAM Analytical Profile for Dehumidification", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -99,42 +99,42 @@ namespace SAM.Analytical.Grasshopper
                 spaces = analyticalModel.GetSpaces();
 
             Profile profile_Heating = null;
-            index = Params.IndexOfInputParam("_profileHeating_");
+            index = Params.IndexOfInputParam("profileHeating_");
             if (index != -1)
                 dataAccess.GetData(index, ref profile_Heating);
 
             double heatingEmitterRadiantProportion = double.NaN;
-            index = Params.IndexOfInputParam("_emitterHTGRadianProportion_");
+            index = Params.IndexOfInputParam("emitterHTGRadianProportion_");
             if (index != -1)
                 dataAccess.GetData(index, ref heatingEmitterRadiantProportion);
 
             double heatingEmitterCoefficient = double.NaN;
-            index = Params.IndexOfInputParam("_emitterHTGViewCoefficient_");
+            index = Params.IndexOfInputParam("emitterHTGViewCoefficient_");
             if (index != -1)
                 dataAccess.GetData(index, ref heatingEmitterCoefficient);
 
             Profile profile_Cooling = null;
-            index = Params.IndexOfInputParam("_profileCooling_");
+            index = Params.IndexOfInputParam("profileCooling_");
             if (index != -1)
                 dataAccess.GetData(index, ref profile_Cooling);
 
             double coolingEmitterRadiantProportion = double.NaN;
-            index = Params.IndexOfInputParam("_emitterCLGRadianProportion_");
+            index = Params.IndexOfInputParam("emitterCLGRadianProportion_");
             if (index != -1)
                 dataAccess.GetData(index, ref coolingEmitterRadiantProportion);
 
             double coolingEmitterCoefficient = double.NaN;
-            index = Params.IndexOfInputParam("_emitterCLGViewCoefficient_");
+            index = Params.IndexOfInputParam("emitterCLGViewCoefficient_");
             if (index != -1)
                 dataAccess.GetData(index, ref coolingEmitterCoefficient);
 
             Profile profile_Humidification = null;
-            index = Params.IndexOfInputParam("_profileHumidification_");
+            index = Params.IndexOfInputParam("profileHumidification_");
             if (index != -1)
                 dataAccess.GetData(index, ref profile_Humidification);
 
             Profile profile_Dehumidification = null;
-            index = Params.IndexOfInputParam("_profileDehumidification_");
+            index = Params.IndexOfInputParam("profileDehumidification_");
             if (index != -1)
                 dataAccess.GetData(index, ref profile_Dehumidification);
 

@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profile_", NickName = "_profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_infiltrationACH_", NickName = "_infiltrationACH_", Description = "Infiltration Air Changes Per Hour", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "infiltrationACH_", Description = "Infiltration Air Changes Per Hour", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -98,7 +98,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref profile);
 
             double infiltrationAirChangesPerHour = double.NaN;
-            index = Params.IndexOfInputParam("_infiltrationACH_");
+            index = Params.IndexOfInputParam("infiltrationACH_");
             if (index != -1)
                 dataAccess.GetData(index, ref infiltrationAirChangesPerHour);
 
