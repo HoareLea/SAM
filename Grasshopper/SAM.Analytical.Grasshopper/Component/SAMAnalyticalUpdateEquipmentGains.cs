@@ -31,13 +31,14 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profileSens_", NickName = "_profileSens_", Description = "SAM Analytical Profile for Equipment Sensible Gains", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profileLat_", NickName = "_profileLat_", Description = "SAM Analytical Profile for Equipment Latent Gains", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentSensGainPerArea_", NickName = "_equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentLatGainPerArea_", NickName = "_equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentSensGain_", NickName = "_equipmentSensGain_", Description = "Equipment Sensible Gain", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentLatGain_", NickName = "_equipmentLatGain_", Description = "Equipment Latent Gain", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileSens_", NickName = "profileSens_", Description = "SAM Analytical Profile for Equipment Sensible Gains", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileLat_", NickName = "profileLat_", Description = "SAM Analytical Profile for Equipment Latent Gains", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentSensGainPerArea_", NickName = "equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatGainPerArea_", NickName = "equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentSensGain_", NickName = "equipmentSensGain_", Description = "Equipment Sensible Gain", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatGain_", NickName = "equipmentLatGain_", Description = "Equipment Latent Gain", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "multipleSenisbleGainPerPerson_", NickName = "multipleSenisbleGainPerPerson_", Description = "Multiple Senisble Gain Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -84,7 +85,7 @@ namespace SAM.Analytical.Grasshopper
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
 
             List<Space> spaces = null;
-            index = Params.IndexOfInputParam("_spaces_");
+            index = Params.IndexOfInputParam("spaces_");
             if(index != -1)
             {
                 spaces = new List<Space>();
@@ -97,34 +98,39 @@ namespace SAM.Analytical.Grasshopper
                 spaces = analyticalModel.GetSpaces();
 
             Profile profile_Sensible = null;
-            index = Params.IndexOfInputParam("_profileSens_");
+            index = Params.IndexOfInputParam("profileSens_");
             if (index != -1)
                 dataAccess.GetData(index, ref profile_Sensible);
 
             Profile profile_Latent = null;
-            index = Params.IndexOfInputParam("_profileLat_");
+            index = Params.IndexOfInputParam("profileLat_");
             if (index != -1)
                 dataAccess.GetData(index, ref profile_Latent);
 
             double equipmentSensGainPerArea = double.NaN;
-            index = Params.IndexOfInputParam("_equipmentSensGainPerArea_");
+            index = Params.IndexOfInputParam("equipmentSensGainPerArea_");
             if (index != -1)
                 dataAccess.GetData(index, ref equipmentSensGainPerArea);
 
             double equipmentLatGainPerArea = double.NaN;
-            index = Params.IndexOfInputParam("_equipmentLatGainPerArea_");
+            index = Params.IndexOfInputParam("equipmentLatGainPerArea_");
             if (index != -1)
                 dataAccess.GetData(index, ref equipmentLatGainPerArea);
 
             double equipmentSensGain = double.NaN;
-            index = Params.IndexOfInputParam("_equipmentSensGain_");
+            index = Params.IndexOfInputParam("equipmentSensGain_");
             if (index != -1)
                 dataAccess.GetData(index, ref equipmentSensGain);
 
             double equipmentLatGain = double.NaN;
-            index = Params.IndexOfInputParam("_equipmentLatGain_");
+            index = Params.IndexOfInputParam("equipmentLatGain_");
             if (index != -1)
                 dataAccess.GetData(index, ref equipmentLatGain);
+
+            bool multipleSenisbleGainPerPerson = false;
+            index = Params.IndexOfInputParam("multipleSenisbleGainPerPerson_");
+            if (index != -1)
+                dataAccess.GetData(index, ref multipleSenisbleGainPerPerson);
 
             ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
@@ -164,7 +170,19 @@ namespace SAM.Analytical.Grasshopper
                     internalCondition.SetValue(InternalConditionParameter.EquipmentLatentGainPerArea, equipmentLatGainPerArea);
 
                 if (!double.IsNaN(equipmentSensGain))
-                    internalCondition.SetValue(InternalConditionParameter.EquipmentSensibleGain, equipmentSensGain);
+                {
+                    double equipmentSensGain_Temp = equipmentSensGain;
+                    if (multipleSenisbleGainPerPerson)
+                    {
+                        double occupancy = space.CalculatedOccupancy();
+                        if(!double.IsNaN(occupancy))
+                            equipmentSensGain_Temp = equipmentSensGain_Temp * occupancy;
+                        else
+                            equipmentSensGain_Temp = 0;
+                    }
+
+                    internalCondition.SetValue(InternalConditionParameter.EquipmentSensibleGain, equipmentSensGain_Temp);
+                }
 
                 if (!double.IsNaN(equipmentLatGain))
                     internalCondition.SetValue(InternalConditionParameter.EquipmentLatentGain, equipmentLatGain);
