@@ -1,5 +1,6 @@
 ﻿using Grasshopper;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -41,7 +42,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooAnalyticalModelParam(), "_analyticalModel", "_analyticalModel", "SAM Analytical AnalyticalModel", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObjects", "_analyticalObjects", "SAM Analytical Objects", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -67,8 +68,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            SAMObject sAMObject = null;
-            if (!dataAccess.GetData(1, ref sAMObject))
+            List<SAMObject> sAMObjects = new List<SAMObject>();
+            if (!dataAccess.GetDataList(1, sAMObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -78,100 +79,110 @@ namespace SAM.Analytical.Grasshopper
             if (adjacencyCluster == null)
                 return;
 
+            DataTree<GooSpace> dataTree = new DataTree<GooSpace>();
 
-
-            List<Space> result = new List<Space>();
-            if(sAMObject is InternalCondition)
+            for (int i=0; i < sAMObjects.Count; i++)
             {
-                List<Space> spaces = adjacencyCluster.GetSpaces();
-                if (spaces == null || spaces.Count == 0)
-                    return;
+                GH_Path path = new GH_Path(i);
 
-                foreach (Space space in spaces)
+                SAMObject sAMObject = sAMObjects[i];
+
+                if (sAMObject is InternalCondition)
                 {
-                    InternalCondition internalCondition = space?.InternalCondition;
-                    if (internalCondition == null)
-                        continue;
+                    List<Space> spaces = adjacencyCluster.GetSpaces();
+                    if (spaces == null || spaces.Count == 0)
+                        return;
 
-                    if (!internalCondition.Guid.Equals(sAMObject.Guid))
-                        continue;
-
-                    result.Add(space);
-                }
-            }
-            else if(sAMObject is Panel)
-            {
-                result = adjacencyCluster.GetSpaces((Panel)sAMObject);
-            }
-            else if(sAMObject is Aperture)
-            {
-                Panel panel = adjacencyCluster.GetPanel((Aperture)sAMObject);
-                if(panel != null)
-                    result = adjacencyCluster.GetSpaces(panel);
-            }
-            else if(sAMObject is ApertureConstruction)
-            {
-                List<Panel> panels = adjacencyCluster.GetPanels((ApertureConstruction)sAMObject);
-                if(panels != null && panels.Count != 0)
-                {
-                    Dictionary<Guid, Space> dictionary = new Dictionary<Guid, Space>();
-                    foreach(Panel panel in panels)
+                    foreach (Space space in spaces)
                     {
-                        List<Space> spaces = adjacencyCluster.GetSpaces(panel);
-                        if (spaces == null || spaces.Count == 0)
+                        InternalCondition internalCondition = space?.InternalCondition;
+                        if (internalCondition == null)
                             continue;
 
-                        spaces.ForEach(x => dictionary[x.Guid] = x);
-                    }
-
-                    result.AddRange(dictionary.Values);
-                }
-            }
-            else if(sAMObject is Construction)
-            {
-                List<Panel> panels = adjacencyCluster.GetPanels((Construction)sAMObject);
-                if (panels != null && panels.Count != 0)
-                {
-                    Dictionary<Guid, Space> dictionary = new Dictionary<Guid, Space>();
-                    foreach (Panel panel in panels)
-                    {
-                        List<Space> spaces = adjacencyCluster.GetSpaces(panel);
-                        if (spaces == null || spaces.Count == 0)
+                        if (!internalCondition.Guid.Equals(sAMObject.Guid))
                             continue;
 
-                        spaces.ForEach(x => dictionary[x.Guid] = x);
+                        dataTree.Add(new GooSpace(space), path);
                     }
-
-                    result.AddRange(dictionary.Values);
                 }
-            }
-            else if(sAMObject is Profile)
-            {
-                List<Space> spaces = adjacencyCluster.GetSpaces();
-                if (spaces == null || spaces.Count == 0)
-                    return;
-
-                ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
-
-                foreach (Space space in spaces)
+                else if (sAMObject is Panel)
                 {
-                    Dictionary<ProfileType, Profile> dictionary = space.InternalCondition?.GetProfileDictionary(profileLibrary, true);
-                    if (dictionary == null || dictionary.Count == 0)
-                        continue;
-
-                    foreach(Profile profile in dictionary.Values)
+                    List<Space> spaces = adjacencyCluster.GetSpaces((Panel)sAMObject);
+                    if(spaces != null)
+                        spaces?.ForEach(x => dataTree.Add(new GooSpace(x), path));
+                }
+                else if (sAMObject is Aperture)
+                {
+                    Panel panel = adjacencyCluster.GetPanel((Aperture)sAMObject);
+                    List<Space> spaces =  adjacencyCluster.GetSpaces(panel);
+                    if (spaces != null)
+                        spaces?.ForEach(x => dataTree.Add(new GooSpace(x), path));
+                }
+                else if (sAMObject is ApertureConstruction)
+                {
+                    List<Panel> panels = adjacencyCluster.GetPanels((ApertureConstruction)sAMObject);
+                    if (panels != null && panels.Count != 0)
                     {
-                        if(profile.Guid == sAMObject.Guid)
+                        Dictionary<Guid, Space> dictionary = new Dictionary<Guid, Space>();
+                        foreach (Panel panel in panels)
                         {
-                            result.Add(space);
-                            break;
+                            List<Space> spaces = adjacencyCluster.GetSpaces(panel);
+                            if (spaces == null || spaces.Count == 0)
+                                continue;
+
+                            spaces.ForEach(x => dictionary[x.Guid] = x);
+                        }
+
+                        foreach (Space space in dictionary.Values)
+                            dataTree.Add(new GooSpace(space), path);
+                    }
+                }
+                else if (sAMObject is Construction)
+                {
+                    List<Panel> panels = adjacencyCluster.GetPanels((Construction)sAMObject);
+                    if (panels != null && panels.Count != 0)
+                    {
+                        Dictionary<Guid, Space> dictionary = new Dictionary<Guid, Space>();
+                        foreach (Panel panel in panels)
+                        {
+                            List<Space> spaces = adjacencyCluster.GetSpaces(panel);
+                            if (spaces == null || spaces.Count == 0)
+                                continue;
+
+                            spaces.ForEach(x => dictionary[x.Guid] = x);
+                        }
+
+                        foreach (Space space in dictionary.Values)
+                            dataTree.Add(new GooSpace(space), path);
+                    }
+                }
+                else if (sAMObject is Profile)
+                {
+                    List<Space> spaces = adjacencyCluster.GetSpaces();
+                    if (spaces == null || spaces.Count == 0)
+                        return;
+
+                    ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
+
+                    foreach (Space space in spaces)
+                    {
+                        Dictionary<ProfileType, Profile> dictionary = space.InternalCondition?.GetProfileDictionary(profileLibrary, true);
+                        if (dictionary == null || dictionary.Count == 0)
+                            continue;
+
+                        foreach (Profile profile in dictionary.Values)
+                        {
+                            if (profile.Guid == sAMObject.Guid)
+                            {
+                                dataTree.Add(new GooSpace(space), path);
+                                break;
+                            }
                         }
                     }
                 }
+
             }
 
-            DataTree<GooSpace> dataTree = new DataTree<GooSpace>();
-            result.ForEach(x => dataTree.Add(new GooSpace(x)));
             dataAccess.SetDataTree(0, dataTree);
         }
     }
