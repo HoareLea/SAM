@@ -288,13 +288,13 @@ namespace SAM.Analytical.Grasshopper
 
 
                 //Occupancy
-                double occupancySensibleGain = Analytical.Query.CalculatedOccupancySensibleGain(space);
+                double occupancySensibleGain = Analytical.Query.OccupancySensibleGain(space);
 
                 occupancySensibleGains.Add(occupancySensibleGain);
                 occupancySensibleGainsPerPerson.Add(double.IsNaN(occupancySensibleGain) || double.IsNaN(occupancy) || occupancy == 0 ? double.NaN : occupancySensibleGain / occupancy);
                 occupancySensibleGainsPerArea.Add(double.IsNaN(occupancySensibleGain) || double.IsNaN(area) || area == 0 ? double.NaN : occupancySensibleGain / area);
 
-                double occupancyLatentGain = Analytical.Query.CalculatedOccupancyLatentGain(space);
+                double occupancyLatentGain = Analytical.Query.OccupancyLatentGain(space);
                 
                 occupancyLatentGains.Add(occupancyLatentGain);
                 occupancyLatentGainsPerPerson.Add(double.IsNaN(occupancyLatentGain) || double.IsNaN(occupancy) || occupancy == 0 ? double.NaN : occupancyLatentGain / occupancy);

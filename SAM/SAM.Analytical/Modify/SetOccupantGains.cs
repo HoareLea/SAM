@@ -13,7 +13,7 @@
             double latent = degreeOfActivity.Latent;
             if (!double.IsNaN(latent))
             {
-                internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGain, latent);
+                internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGainPerPerson, latent);
                 result = true;
             }
                 
@@ -21,7 +21,7 @@
             double sensible = degreeOfActivity.Sensible;
             if (!double.IsNaN(sensible))
             {
-                internalCondition.SetValue(InternalConditionParameter.OccupancySensibleGain, sensible);
+                internalCondition.SetValue(InternalConditionParameter.OccupancySensibleGainPerPerson, sensible);
                 result = true;
             }
 

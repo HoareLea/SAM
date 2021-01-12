@@ -156,8 +156,8 @@
     <Compile Include="Query\CalculatedEquipmentSensibleGain.cs" />
     <Compile Include="Query\CalculatedLightingGain.cs" />
     <Compile Include="Query\CalculatedPollutantGeneration.cs" />
-    <Compile Include="Query\CalculatedOccupancyLatentGain.cs" />
-    <Compile Include="Query\CalculatedOccupancySensibleGain.cs" />
+    <Compile Include="Query\OccupancyLatentGain.cs" />
+    <Compile Include="Query\OccupancySensibleGain.cs" />
     <Compile Include="Query\CalculatedOccupancy.cs" />
     <Compile Include="Query\CoolingDesignTemperature.cs" />
     <Compile Include="Query\HeatingDesignTemperature.cs" />

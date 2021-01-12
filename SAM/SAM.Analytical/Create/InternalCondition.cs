@@ -5,8 +5,8 @@
         public static InternalCondition InternalCondition(
             string name, 
             double areaPerPerson,
-            double occupancySensibleGain,
-            double occupancyLatentGain,
+            //double occupancySensibleGain,
+            //double occupancyLatentGain,
             string occupancyProfileName,
             double equipmentSensibleGain,
             string equipmentSensibleProfileName,
@@ -31,8 +31,8 @@
 
             //Occupancy
             result.SetValue(InternalConditionParameter.AreaPerPerson, areaPerPerson);
-            result.SetValue(InternalConditionParameter.OccupancySensibleGain, occupancySensibleGain);
-            result.SetValue(InternalConditionParameter.OccupancyLatentGain, occupancyLatentGain);
+            //result.SetValue(InternalConditionParameter.OccupancySensibleGain, occupancySensibleGain);
+            //result.SetValue(InternalConditionParameter.OccupancyLatentGain, occupancyLatentGain);
             result.SetValue(InternalConditionParameter.OccupancyProfileName, occupancyProfileName);
 
             //Equipment

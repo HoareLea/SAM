@@ -8,8 +8,6 @@ namespace SAM.Analytical
     {
         [ParameterProperties("Area Per Person", "Area Per Person [m2/p]"), DoubleParameterValue(0)] AreaPerPerson,
         [ParameterProperties("Occupancy Profile Name", "Occupancy Profile Name"), ParameterValue(Core.ParameterType.String)] OccupancyProfileName,
-        [ParameterProperties("Occupancy Sensible Gain", "Occupancy Sensible Gain [W]"), ParameterValue(Core.ParameterType.Double)] OccupancySensibleGain,
-        [ParameterProperties("Occupancy Latent Gain", "Occupancy Latent Gain [W]"), ParameterValue(Core.ParameterType.Double)] OccupancyLatentGain,
         [ParameterProperties("Occupancy Sensible Gain Per Person", "Occupancy Sensible Gain Per Person [W/p]"), ParameterValue(Core.ParameterType.Double)] OccupancySensibleGainPerPerson,
         [ParameterProperties("Occupancy Latent Gain Per Person", "Occupancy Latent Gain Per Person [W/p]"), ParameterValue(Core.ParameterType.Double)] OccupancyLatentGainPerPerson,
         [ParameterProperties("Equipment Sensible Profile Name", "Equipment Sensible Profile Name"), ParameterValue(Core.ParameterType.String)] EquipmentSensibleProfileName,

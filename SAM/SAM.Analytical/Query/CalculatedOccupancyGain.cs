@@ -7,9 +7,9 @@
             if (space == null)
                 return double.NaN;
 
-            double gain_1 = CalculatedOccupancyLatentGain(space);
+            double gain_1 = OccupancyLatentGain(space);
 
-            double gain_2 = CalculatedOccupancySensibleGain(space);
+            double gain_2 = OccupancySensibleGain(space);
 
             if (double.IsNaN(gain_1) && double.IsNaN(gain_2))
                 return double.NaN;
