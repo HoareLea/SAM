@@ -168,7 +168,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else
                 {
-                    internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGain, occupancyLatentGainPerPerson);
+                    internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGainPerPerson, occupancyLatentGainPerPerson);
                 }
 
                 if (double.IsNaN(occupancy))
