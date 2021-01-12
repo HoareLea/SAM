@@ -251,6 +251,11 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetPanels()?.ConvertAll(x => new Panel(x));
         }
 
+        public IEnumerable<InternalCondition> GetInternalConditions()
+        {
+            return adjacencyCluster?.GetInternalConditions();
+        }
+
         public bool AddProfile(Profile profile)
         {
             if (profile == null)

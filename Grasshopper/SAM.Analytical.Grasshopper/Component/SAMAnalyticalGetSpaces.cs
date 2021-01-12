@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper;
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -48,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSpaceParam(), "Spaces", "Spaces", "SAM Geometry Spaces", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSpaceParam(), "Spaces", "Spaces", "SAM Geometry Spaces", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -169,7 +170,9 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooSpace(x)));
+            DataTree<GooSpace> dataTree = new DataTree<GooSpace>();
+            result.ForEach(x => dataTree.Add(new GooSpace(x)));
+            dataAccess.SetDataTree(0, dataTree);
         }
     }
 }
