@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        public static double CalculatedOccupancyGain(this Space space)
+        public static double OccupancyGain(this Space space)
         {
             if (space == null)
                 return double.NaN;
