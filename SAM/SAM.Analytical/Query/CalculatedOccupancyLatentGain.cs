@@ -22,7 +22,7 @@
             }
 
             double gain_2 = double.NaN;
-            internalCondition.TryGetValue(InternalConditionParameter.EquipmentLatentGain, out gain_2);
+            internalCondition.TryGetValue(InternalConditionParameter.OccupancyLatentGain, out gain_2);
 
             if (double.IsNaN(gain_1) && double.IsNaN(gain_2))
                 return double.NaN;
