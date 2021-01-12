@@ -89,6 +89,9 @@ namespace SAM.Analytical.Grasshopper
                 number.SetPersistentData(100);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "_infiltrationACH_", Description = "Infiltration [ACH]", Access = GH_ParamAccess.item, Optional = true};
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
         }
@@ -207,11 +210,59 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref dehumidificationSetPoint);
 
+            double infiltration = double.NaN;
+            index = Params.IndexOfInputParam("infiltrationACH_");
+            if (index != -1)
+                dataAccess.GetData(index, ref infiltration);
 
+            if(double.IsNaN(infiltration))
+            {
+                infiltration = 0;
+
+                List<Panel> panels = adjacencyCluster.GetPanels();
+                if(panels != null && panels.Count != 0)
+                {
+                    foreach(Panel panel in panels)
+                    {
+                        List<Space> spaces_Adjacent = adjacencyCluster.GetSpaces(panel);
+                        if(spaces_Adjacent != null && spaces_Adjacent.Count == 1)
+                        {
+                            infiltration = 0.2;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            Profile profile_Heating = new Profile(string.Format("HTG_1to24_{0}", heatingSetPoint), heatingSetPoint, ProfileGroup.Thermostat);
+            Profile profile_Cooling = new Profile(string.Format("CLG_1to24_{0}", coolingSetPoint), coolingSetPoint, ProfileGroup.Thermostat);
+
+            Profile profile_Humidification = new Profile(string.Format("HUM_1to24_{0}", humidificationSetPoint), humidificationSetPoint, ProfileGroup.Humidistat);
+            Profile profile_Dehumidification = new Profile(string.Format("DHU_1to24_{0}", dehumidificationSetPoint), dehumidificationSetPoint, ProfileGroup.Humidistat);
+
+            Profile profile_Infiltartion = null;
+            if(!double.IsNaN(infiltration) && infiltration != 0)
+                profile_Infiltartion = new Profile(string.Format("INF_1to24_{0}", infiltration), infiltration, ProfileGroup.Gain);
+            
             ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
             if (profile != null)
                 profileLibrary.Add(profile);
+
+            if (profile_Heating != null)
+                profileLibrary.Add(profile_Heating);
+
+            if (profile_Cooling != null)
+                profileLibrary.Add(profile_Cooling);
+
+            if (profile_Humidification != null)
+                profileLibrary.Add(profile_Humidification);
+
+            if (profile_Dehumidification != null)
+                profileLibrary.Add(profile_Dehumidification);
+
+            if (profile_Infiltartion != null)
+                profileLibrary.Add(profile_Infiltartion);
 
             List<InternalCondition> internalConditions = new List<InternalCondition>();
 
@@ -236,11 +287,24 @@ namespace SAM.Analytical.Grasshopper
                     internalCondition.SetValue(InternalConditionParameter.LightingProfileName, profile.Name);
                     internalCondition.SetValue(InternalConditionParameter.EquipmentSensibleProfileName, profile.Name);
                     internalCondition.SetValue(InternalConditionParameter.EquipmentLatentProfileName, profile.Name);
-                    internalCondition.SetValue(InternalConditionParameter.HeatingProfileName, profile.Name);
-                    
                 }
 
-                if(degreeOfActivity != null)
+                if(profile_Heating != null)
+                    internalCondition.SetValue(InternalConditionParameter.HeatingProfileName, profile_Heating.Name);
+
+                if (profile_Cooling != null)
+                    internalCondition.SetValue(InternalConditionParameter.CoolingProfileName, profile_Cooling.Name);
+
+                if (profile_Humidification != null)
+                    internalCondition.SetValue(InternalConditionParameter.HumidificationProfileName, profile_Humidification.Name);
+
+                if (profile_Dehumidification != null)
+                    internalCondition.SetValue(InternalConditionParameter.DehumidificationProfileName, profile_Dehumidification.Name);
+
+                if(profile_Infiltartion != null)
+                    internalCondition.SetValue(InternalConditionParameter.InfiltrationProfileName, profile_Infiltartion.Name);
+
+                if (degreeOfActivity != null)
                 {
                     internalCondition.SetValue(InternalConditionParameter.OccupancySensibleGainPerPerson, degreeOfActivity.Sensible);
                     internalCondition.SetValue(InternalConditionParameter.OccupancyLatentGainPerPerson, degreeOfActivity.Latent);
@@ -276,6 +340,8 @@ namespace SAM.Analytical.Grasshopper
                 if (!double.IsNaN(equipmentLatGainPerArea))
                     internalCondition.SetValue(InternalConditionParameter.EquipmentLatentGainPerArea, equipmentLatGainPerArea);
 
+                if (!double.IsNaN(infiltration))
+                    internalCondition.SetValue(InternalConditionParameter.InfiltrationAirChangesPerHour, infiltration);
 
                 space_Temp.InternalCondition = internalCondition;
                 adjacencyCluster.AddObject(space_Temp);
