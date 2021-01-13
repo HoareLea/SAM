@@ -40,6 +40,9 @@ namespace SAM.Analytical.Grasshopper
                 GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list};
                 result.Add(new GH_SAMParam(gooSpaceParam, ParamVisibility.Binding));
 
+                global::Grasshopper.Kernel.Parameters.Param_String @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "name_", NickName = "name_", Description = "Internal Condition Name", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(@string, ParamVisibility.Binding));
+
                 GooProfileParam gooProfileParam = new GooProfileParam() { Name = "_profile_", NickName = "_profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item};
                 gooProfileParam.SetPersistentData(new GooProfile(profileLibrary.GetProfile("8to18", ProfileGroup.Gain, true)));
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Binding));
@@ -215,7 +218,12 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref infiltration);
 
-            if(double.IsNaN(infiltration))
+            string name = null;
+            index = Params.IndexOfInputParam("name_");
+            if(index != -1)
+                dataAccess.GetData(index, ref name);
+
+            if (double.IsNaN(infiltration))
             {
                 infiltration = 0;
 
@@ -280,6 +288,9 @@ namespace SAM.Analytical.Grasshopper
                 InternalCondition internalCondition = space_Temp.InternalCondition;
                 if(internalCondition == null)
                     internalCondition = new InternalCondition(space_Temp.Name);
+
+                if (!string.IsNullOrEmpty(name))
+                    internalCondition = new InternalCondition(name, Guid.NewGuid(), internalCondition);
 
                 if (profile != null)
                 {

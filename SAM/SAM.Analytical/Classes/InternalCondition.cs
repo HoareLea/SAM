@@ -26,6 +26,12 @@ namespace SAM.Analytical
 
         }
 
+        public InternalCondition(string name, Guid guid, InternalCondition internalCondition)
+            : base(name, guid, internalCondition)
+        {
+
+        }
+
         public InternalCondition(Guid guid, string name)
             : base(guid, name)
         {
