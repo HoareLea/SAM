@@ -95,6 +95,10 @@ namespace SAM.Analytical.Grasshopper
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "_infiltrationACH_", Description = "Infiltration [ACH]", Access = GH_ParamAccess.item, Optional = true};
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pollutantGPerPerson_", NickName = "_pollutantGPerPerson_", Description = "Pollutant Per Person [g/h/p]", Access = GH_ParamAccess.item };
+                number.SetPersistentData(13.92366);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
         }
@@ -223,6 +227,11 @@ namespace SAM.Analytical.Grasshopper
             if(index != -1)
                 dataAccess.GetData(index, ref name);
 
+            double pollutantGenerationPerPerson = double.NaN;
+            index = Params.IndexOfInputParam("_pollutantGPerPerson_");
+            if (index != -1)
+                dataAccess.GetData(index, ref pollutantGenerationPerPerson);
+
             if (double.IsNaN(infiltration))
             {
                 infiltration = 0;
@@ -298,6 +307,9 @@ namespace SAM.Analytical.Grasshopper
                     internalCondition.SetValue(InternalConditionParameter.LightingProfileName, profile.Name);
                     internalCondition.SetValue(InternalConditionParameter.EquipmentSensibleProfileName, profile.Name);
                     internalCondition.SetValue(InternalConditionParameter.EquipmentLatentProfileName, profile.Name);
+
+                    if(!double.IsNaN(pollutantGenerationPerPerson))
+                        internalCondition.SetValue(InternalConditionParameter.PollutantProfileName, profile.Name);
                 }
 
                 if(profile_Heating != null)
@@ -353,6 +365,9 @@ namespace SAM.Analytical.Grasshopper
 
                 if (!double.IsNaN(infiltration))
                     internalCondition.SetValue(InternalConditionParameter.InfiltrationAirChangesPerHour, infiltration);
+
+                if (!double.IsNaN(pollutantGenerationPerPerson))
+                    internalCondition.SetValue(InternalConditionParameter.PollutantGenerationPerPerson, pollutantGenerationPerPerson);
 
                 space_Temp.InternalCondition = internalCondition;
                 adjacencyCluster.AddObject(space_Temp);

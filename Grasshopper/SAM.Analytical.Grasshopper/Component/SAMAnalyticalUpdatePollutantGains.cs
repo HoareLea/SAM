@@ -33,7 +33,11 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profile_", NickName = "profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "pollutantGPerPerson_", NickName = "pollutantGPerPerson_", Description = "Pollutant Per Person [g/h/p]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pollutantGPerPerson_", NickName = "_pollutantGPerPerson_", Description = "Pollutant Per Person [g/h/p]", Access = GH_ParamAccess.item };
+                number.SetPersistentData(13.92366);
+                result.Add( new GH_SAMParam(number, ParamVisibility.Binding));
+
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "pollutantGPerArea_", NickName = "pollutantGPerArea_", Description = "Pollutant Per Person [g/h/m2]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
