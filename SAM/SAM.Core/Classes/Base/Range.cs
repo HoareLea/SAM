@@ -83,6 +83,11 @@ namespace SAM.Core
             return jObject;
         }
 
+        public override string ToString()
+        {
+            return string.Format("[{0}, {1}]", min, max);
+        }
+
         public bool In(T value)
         {
             return (value as dynamic) <= (max as dynamic) && (value as dynamic) >= (min as dynamic);
