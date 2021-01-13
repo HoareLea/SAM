@@ -3,16 +3,15 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateProfile : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalCreateProfileByValues : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("cdeb014d-3cde-4fa2-aff9-ae2f2507556d");
+        public override Guid ComponentGuid => new Guid("2547159f-d7d0-4a8b-bed2-e5d89c552647");
 
         /// <summary>
         /// The latest version of this component
@@ -32,9 +31,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Name of Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_names", NickName = "_names", Description = "Names of the profiles to be used", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_values", NickName = "_values", Description = "Values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_typeOrGroup", NickName = "_typeOrGroup", Description = "SAM Analytical ProfileType or ProfileGroup", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new GooProfileLibraryParam() { Name = "_profileLibrary_", NickName = "_profileLibrary_", Description = "SAM Analytical ProfileLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -52,9 +50,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
-        public SAMAnalyticalCreateProfile()
-          : base("SAMAnalytical.CreateProfile", "SAMAnalytical.CreateProfile",
-              "Creates SAM Analytical Profile",
+        public SAMAnalyticalCreateProfileByValues()
+          : base("SAMAnalytical.CreateProfileByValues", "SAMAnalytical.CreateProfileByValues",
+              "Creates SAM Analytical Profile By Values",
               "SAM", "Analytical")
         {
         }
@@ -84,8 +82,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<string> names = new List<string>();
-            if (!dataAccess.GetDataList(index, names) || names == null || names.Count == 0)
+            List<double> values = new List<double>();
+            if (!dataAccess.GetDataList(index, values) || values == null || values.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -138,9 +136,9 @@ namespace SAM.Analytical.Grasshopper
 
             Profile profile = null;
             if (profileType != ProfileType.Undefined)
-                profile = profileLibrary.Profile(name, profileType, names, true);
+                profile = Create.Profile(name, profileType, values);
             else
-                profile = profileLibrary.Profile(name, profileGroup, names, true);
+                profile = Create.Profile(name, profileGroup, values);
 
             index = Params.IndexOfOutputParam("Profile");
             if (index != -1)
