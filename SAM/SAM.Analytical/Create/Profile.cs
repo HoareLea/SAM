@@ -70,13 +70,38 @@ namespace SAM.Analytical
 
             Profile result = new Profile(name, category);
 
-            int count = values.Count();
-            int min = -1;
+            List<double> values_Temp = new List<double>(values);
 
-            for(int i=0; i < count; i++)
+            Core.Range<int> range = null;
+            double value = double.NaN;
+            while(values_Temp.Count > 0)
             {
+                double value_Temp = values_Temp[0];
+                values_Temp.RemoveAt(0);
 
+                if (range == null)
+                {
+                    range = new Core.Range<int>(0);
+                    value = value_Temp;
+                    continue;
+                }
+
+                if(value.Equals(value_Temp))
+                {
+                    range = new Core.Range<int>(range.Min, range.Max + 1);
+                    continue;
+                }
+                else
+                {
+                    result.Add(range, value);
+                    range = new Core.Range<int>(range.Max + 1);
+                    value = value_Temp;
+                    continue;
+                }
             }
+
+            if (range != null)
+                result.Add(range, value);
 
             return result;
         }

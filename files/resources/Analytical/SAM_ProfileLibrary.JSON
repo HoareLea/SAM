@@ -6,7 +6,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "Constant",
-      "Guid": "f39525de-82ea-4d8a-b1a4-5db7e54e8d0f",
+      "Guid": "72e154d7-6d4d-4ca0-8c7e-51769aeb31b0",
       "Category": "Gain",
       "Values": [
         [
@@ -19,7 +19,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "OFF",
-      "Guid": "c3d62b7e-0582-4255-9642-3d38600aa212",
+      "Guid": "5a6bcf27-6daa-42d1-a4e4-746992cb915d",
       "Category": "Gain",
       "Values": [
         [
@@ -32,263 +32,226 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "7to24",
-      "Guid": "7499d344-4032-492a-b0c4-47dae926f801",
+      "Guid": "2050f03e-6437-4042-995d-2f968991d877",
       "Category": "Gain",
       "Values": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
+        [
+          0,
+          6,
+          0.0
+        ],
+        [
+          7,
+          23,
+          1.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "7to19",
-      "Guid": "dc3fb89d-757d-4880-b643-598011fd64ab",
+      "Guid": "b352422b-941f-4dff-9676-26ae9cedac61",
       "Category": "Gain",
       "Values": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        [
+          0,
+          6,
+          0.0
+        ],
+        [
+          7,
+          18,
+          1.0
+        ],
+        [
+          19,
+          23,
+          0.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "8to18",
-      "Guid": "f85b93a4-1b95-442e-bfe3-be2c5b1aecd3",
+      "Guid": "347dc669-a710-4975-a8b6-a63b514a136c",
       "Category": "Gain",
       "Values": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.5,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        0.5,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        [
+          0,
+          6,
+          0.0
+        ],
+        [
+          7,
+          0.5
+        ],
+        [
+          8,
+          17,
+          1.0
+        ],
+        [
+          18,
+          0.5
+        ],
+        [
+          19,
+          23,
+          0.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "8to19",
-      "Guid": "e3e91c72-0e6e-4cbf-9783-e2f443d10003",
+      "Guid": "59c07370-acb4-4ff0-bd08-8bf2d90788bd",
       "Category": "Gain",
       "Values": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.5,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        0.5,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        [
+          0,
+          6,
+          0.0
+        ],
+        [
+          7,
+          0.5
+        ],
+        [
+          8,
+          18,
+          1.0
+        ],
+        [
+          19,
+          0.5
+        ],
+        [
+          20,
+          23,
+          0.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "10to24",
-      "Guid": "4ba5c0f0-6f88-4b4b-a4bc-317633e8588c",
+      "Guid": "23c88ca0-79ad-4d42-9112-eeeb1dbf85c8",
       "Category": "Gain",
       "Values": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
+        [
+          0,
+          9,
+          0.0
+        ],
+        [
+          10,
+          23,
+          1.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "20to21",
-      "Guid": "9db987c6-2e9c-47e4-aed1-40d3f0470cf9",
+      "Guid": "9c2972ac-776e-4b39-bb2a-2b9247c2864f",
       "Category": "Gain",
       "Values": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.01,
-        0.01,
-        0.03,
-        0.5,
-        1.0,
-        1.0,
-        0.06,
-        0.06
+        [
+          0,
+          15,
+          0.0
+        ],
+        [
+          16,
+          17,
+          0.01
+        ],
+        [
+          18,
+          0.03
+        ],
+        [
+          19,
+          0.5
+        ],
+        [
+          20,
+          21,
+          1.0
+        ],
+        [
+          22,
+          23,
+          0.06
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "21to22",
-      "Guid": "36cbc0d3-1cbb-42b3-bf69-906f7cfd8181",
+      "Guid": "d16f50e1-9052-4355-80d5-e2b1f00548a4",
       "Category": "Gain",
       "Values": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.01,
-        0.01,
-        0.03,
-        1.0,
-        0.06,
-        0.06,
-        1.0,
-        0.06
+        [
+          0,
+          15,
+          0.0
+        ],
+        [
+          16,
+          17,
+          0.01
+        ],
+        [
+          18,
+          0.03
+        ],
+        [
+          19,
+          1.0
+        ],
+        [
+          20,
+          21,
+          0.06
+        ],
+        [
+          22,
+          1.0
+        ],
+        [
+          23,
+          0.06
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "9to17",
-      "Guid": "01583771-0530-4561-9bda-6fd7b83ad25a",
+      "Guid": "f18fbd16-7136-4bdf-ad0f-e9479a5c7043",
       "Category": "Gain",
       "Values": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+        [
+          0,
+          8,
+          0.0
+        ],
+        [
+          9,
+          16,
+          1.0
+        ],
+        [
+          17,
+          23,
+          0.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "No Heating",
-      "Guid": "3c528d32-dbf5-436b-8af0-ec225cc47309",
+      "Guid": "d7b7b973-c337-4e4b-87bc-f8ab7e6c80ee",
       "Category": "Thermostat",
       "Values": [
         [
@@ -301,7 +264,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "No Cooling",
-      "Guid": "ab3e0811-03d2-4518-8d12-55bb7df2821f",
+      "Guid": "ab7fa8e0-9b72-418b-9e58-ddbe7be260e2",
       "Category": "Thermostat",
       "Values": [
         [
@@ -314,7 +277,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_1to24_6",
-      "Guid": "942376fe-f6dc-4807-bd2e-1d6b85a8d54a",
+      "Guid": "837b7722-ff4b-4dd0-8632-e9e1dd31b870",
       "Category": "Thermostat",
       "Values": [
         [
@@ -327,7 +290,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_1to24_15",
-      "Guid": "1b4bf2b2-ff63-49a1-97a0-8c2c74da7d0e",
+      "Guid": "b2f3d590-c8fe-483a-9921-e09c496e0242",
       "Category": "Thermostat",
       "Values": [
         [
@@ -340,7 +303,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_1to24_18",
-      "Guid": "ed1a6fd3-918a-4885-8e85-a5733181f21f",
+      "Guid": "5cd1c0e9-6f91-4e3a-9f93-a888d3c5e6f4",
       "Category": "Thermostat",
       "Values": [
         [
@@ -353,7 +316,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_1to24_20",
-      "Guid": "6ae4d1d0-4fd2-401a-a44a-7cea3dbb602d",
+      "Guid": "38ad0f54-ea7a-4c3b-ae9a-4bfb27689412",
       "Category": "Thermostat",
       "Values": [
         [
@@ -366,7 +329,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_1to24_21",
-      "Guid": "178572c4-fedb-4229-9a6b-c4d123b85dd4",
+      "Guid": "8007b662-bf03-4089-a10f-4d65e412dd3a",
       "Category": "Thermostat",
       "Values": [
         [
@@ -379,7 +342,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_1to24_22",
-      "Guid": "693f1e75-ca21-4252-b422-4476e3f77983",
+      "Guid": "1ee309f0-c7fe-4ee7-9289-1a28c4666c40",
       "Category": "Thermostat",
       "Values": [
         [
@@ -392,7 +355,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_1to24_24",
-      "Guid": "21210b31-d39d-4acc-a98e-bc4bbf7c17bf",
+      "Guid": "e00caa4b-eb1b-4959-8c83-808c6d11e635",
       "Category": "Thermostat",
       "Values": [
         [
@@ -405,167 +368,122 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_7to19_18",
-      "Guid": "8b3afd56-43da-4834-8283-3d4aa70e29da",
+      "Guid": "1db83a6b-e85b-4239-b3ea-4c2a8e9e10ef",
       "Category": "Thermostat",
       "Values": [
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        18.0,
-        18.0,
-        18.0,
-        18.0,
-        18.0,
-        18.0,
-        18.0,
-        18.0,
-        18.0,
-        18.0,
-        18.0,
-        18.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0
+        [
+          0,
+          6,
+          16.0
+        ],
+        [
+          7,
+          18,
+          18.0
+        ],
+        [
+          19,
+          23,
+          16.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_7to19_20",
-      "Guid": "a9e6515e-c608-4253-9c11-dd85b08a4f2a",
+      "Guid": "9e465b22-a35b-4fcb-9746-a19f7b596113",
       "Category": "Thermostat",
       "Values": [
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0
+        [
+          0,
+          6,
+          16.0
+        ],
+        [
+          7,
+          18,
+          20.0
+        ],
+        [
+          19,
+          23,
+          16.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_7to19_21",
-      "Guid": "e236816f-9e9c-46a3-967c-85ec1848feeb",
+      "Guid": "4aa92bbb-8660-4845-af67-3c463bc660c6",
       "Category": "Thermostat",
       "Values": [
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        21.0,
-        21.0,
-        21.0,
-        21.0,
-        21.0,
-        21.0,
-        21.0,
-        21.0,
-        21.0,
-        21.0,
-        21.0,
-        21.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0
+        [
+          0,
+          6,
+          16.0
+        ],
+        [
+          7,
+          18,
+          21.0
+        ],
+        [
+          19,
+          23,
+          16.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_7to19_24",
-      "Guid": "0bed3829-0bd2-4f4a-9d9e-ca2e124f1c1c",
+      "Guid": "fd633aa5-31ff-4325-917e-f785564312c2",
       "Category": "Thermostat",
       "Values": [
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0
+        [
+          0,
+          6,
+          16.0
+        ],
+        [
+          7,
+          18,
+          24.0
+        ],
+        [
+          19,
+          23,
+          16.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HTG_8to17_20",
-      "Guid": "4a3b681b-f894-42be-865e-b60f3b0886b2",
+      "Guid": "219fe5ce-55e8-4070-b73d-05c2764f9073",
       "Category": "Thermostat",
       "Values": [
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        20.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0,
-        16.0
+        [
+          0,
+          7,
+          16.0
+        ],
+        [
+          8,
+          17,
+          20.0
+        ],
+        [
+          18,
+          23,
+          16.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_1to24_10",
-      "Guid": "05860a8c-2f28-4e0c-8090-8d05d7f64e6b",
+      "Guid": "f7521656-1b87-4277-9992-3719b3272999",
       "Category": "Thermostat",
       "Values": [
         [
@@ -578,7 +496,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_1to24_21",
-      "Guid": "d613e57a-2335-40ea-8415-6fc2fd210a54",
+      "Guid": "1c976320-b2a9-4f31-997e-3d3abda83332",
       "Category": "Thermostat",
       "Values": [
         [
@@ -591,39 +509,30 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_6to19_26",
-      "Guid": "d539a8c1-a22a-407c-afe4-68078ee37983",
+      "Guid": "b62137b7-637c-454d-98ae-33726a355757",
       "Category": "Thermostat",
       "Values": [
-        150.0,
-        150.0,
-        150.0,
-        150.0,
-        150.0,
-        150.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        150.0,
-        150.0,
-        150.0,
-        150.0,
-        150.0
+        [
+          0,
+          5,
+          150.0
+        ],
+        [
+          6,
+          18,
+          26.0
+        ],
+        [
+          19,
+          23,
+          150.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_1to24_22",
-      "Guid": "49c3a88e-e3a6-4cb4-acb2-a4859f651b2a",
+      "Guid": "a2e51775-dbb8-4e8f-984e-dbcff3b1a02e",
       "Category": "Thermostat",
       "Values": [
         [
@@ -636,7 +545,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_1to24_23",
-      "Guid": "18b3ba4a-b476-4937-bd51-60ec914cb25b",
+      "Guid": "4c73d1e9-1ed6-4396-9f34-7a7ae7e25d67",
       "Category": "Thermostat",
       "Values": [
         [
@@ -649,199 +558,125 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_8to19_26",
-      "Guid": "9ea7a8cc-e14b-4bdd-8ac1-f3d20f130e3f",
+      "Guid": "865e9e95-0423-4d39-949b-104f530919f5",
       "Category": "Thermostat",
       "Values": [
-        150.0,
-        150.0,
-        150.0,
-        150.0,
-        150.0,
-        150.0,
-        150.0,
-        150.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        150.0,
-        150.0,
-        150.0,
-        150.0,
-        150.0
+        [
+          0,
+          7,
+          150.0
+        ],
+        [
+          8,
+          18,
+          26.0
+        ],
+        [
+          19,
+          23,
+          150.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_7to19_23",
-      "Guid": "60b5b46d-94b6-43b3-8fe3-ac7c8bbad068",
+      "Guid": "39d9fcd6-40d0-465f-8b96-e179a7ba8992",
       "Category": "Thermostat",
       "Values": [
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        23.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0
+        [
+          0,
+          6,
+          28.0
+        ],
+        [
+          7,
+          18,
+          23.0
+        ],
+        [
+          19,
+          23,
+          28.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_7to19_25",
-      "Guid": "7ae1a1e5-71d9-4fd5-9459-2fb0caeb341a",
+      "Guid": "ee0f2eea-951e-41a8-8dee-dda925a3c370",
       "Category": "Thermostat",
       "Values": [
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        25.0,
-        25.0,
-        25.0,
-        25.0,
-        25.0,
-        25.0,
-        25.0,
-        25.0,
-        25.0,
-        25.0,
-        25.0,
-        25.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0
+        [
+          0,
+          6,
+          28.0
+        ],
+        [
+          7,
+          18,
+          25.0
+        ],
+        [
+          19,
+          23,
+          28.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_1to24_24",
-      "Guid": "6b8c805d-b494-4ebb-9fb1-9e3c25a9a734",
+      "Guid": "c1081a8b-b341-495e-9dbf-316df4188499",
       "Category": "Thermostat",
       "Values": [
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0,
-        24.0
+        [
+          0,
+          23,
+          24.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_1to24_26",
-      "Guid": "df2603f3-3914-43f0-8af0-9e0dea95d9b7",
+      "Guid": "d6bb27d7-cc15-4759-930e-9fc58dd1b4b7",
       "Category": "Thermostat",
       "Values": [
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0
+        [
+          0,
+          23,
+          26.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_7to19_26",
-      "Guid": "9e7075aa-c829-47ef-a02d-5a9927cc9001",
+      "Guid": "7bbe139e-07f5-42c0-9dc7-1ca72e74762b",
       "Category": "Thermostat",
       "Values": [
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        26.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0,
-        28.0
+        [
+          0,
+          6,
+          28.0
+        ],
+        [
+          7,
+          18,
+          26.0
+        ],
+        [
+          19,
+          23,
+          28.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "CLG_1to24_40",
-      "Guid": "da6f67c0-dce9-46e0-aa34-f217831d08d7",
+      "Guid": "c95d7ec2-880b-4cf2-9069-cfd4e204346f",
       "Category": "Thermostat",
       "Values": [
         [
@@ -854,7 +689,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "No Humidification",
-      "Guid": "096c1c91-a77a-4917-8275-130ae1c3421a",
+      "Guid": "1be8c712-8202-4771-a657-0a0c91968e22",
       "Category": "Humidistat",
       "Values": [
         [
@@ -867,7 +702,7 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "No Dehumidification",
-      "Guid": "d26155d5-9fee-4ed9-92c0-d954e4be36b0",
+      "Guid": "1a5229cd-6e84-4ce7-8acc-12694e84bbed",
       "Category": "Humidistat",
       "Values": [
         [
@@ -880,129 +715,88 @@
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "DHU_7to19_65",
-      "Guid": "99d8eff8-6c6c-47f8-b776-47be9bd3d332",
+      "Guid": "4b256026-3e05-4124-8229-405e6ca3eb87",
       "Category": "Humidistat",
       "Values": [
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        65.0,
-        65.0,
-        65.0,
-        65.0,
-        65.0,
-        65.0,
-        65.0,
-        65.0,
-        65.0,
-        65.0,
-        65.0,
-        65.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0
+        [
+          0,
+          6,
+          100.0
+        ],
+        [
+          7,
+          18,
+          65.0
+        ],
+        [
+          19,
+          23,
+          100.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "DHU_7to19_55",
-      "Guid": "5f5545c2-af88-4704-ae88-f1ba18511925",
+      "Guid": "f5323bd6-0f68-4df9-8d54-771a83e989fd",
       "Category": "Humidistat",
       "Values": [
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        55.0,
-        55.0,
-        55.0,
-        55.0,
-        55.0,
-        55.0,
-        55.0,
-        55.0,
-        55.0,
-        55.0,
-        55.0,
-        55.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0
+        [
+          0,
+          6,
+          100.0
+        ],
+        [
+          7,
+          18,
+          55.0
+        ],
+        [
+          19,
+          23,
+          100.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "DHU_7to19_50",
-      "Guid": "f4aa7d7d-c2db-4ad4-971c-c512b8cdf536",
+      "Guid": "1269b442-f40f-497b-86b7-c6fd4c70c527",
       "Category": "Humidistat",
       "Values": [
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        50.0,
-        50.0,
-        50.0,
-        50.0,
-        50.0,
-        50.0,
-        50.0,
-        50.0,
-        50.0,
-        50.0,
-        50.0,
-        50.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0
+        [
+          0,
+          6,
+          100.0
+        ],
+        [
+          7,
+          18,
+          50.0
+        ],
+        [
+          19,
+          23,
+          100.0
+        ]
       ]
     },
     {
       "_type": "SAM.Analytical.Profile,SAM.Analytical",
       "Name": "HUM_8to24_45",
-      "Guid": "65ff3c0f-6fcf-4c05-b317-e469243a8d69",
+      "Guid": "ffdcdbe5-70ff-4e24-b159-12b28ecf8f95",
       "Category": "Humidistat",
       "Values": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0,
-        45.0
+        [
+          0,
+          6,
+          0.0
+        ],
+        [
+          7,
+          23,
+          45.0
+        ]
       ]
     }
   ]
