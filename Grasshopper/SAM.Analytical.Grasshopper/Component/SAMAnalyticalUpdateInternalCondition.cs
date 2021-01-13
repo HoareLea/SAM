@@ -53,14 +53,14 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = null;
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_areaPerPerson_", NickName = "_areaPerPerson_", Description = "Area Per Person, default = 10 m2/person", Access = GH_ParamAccess.item};
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_areaPerPerson_", NickName = "_areaPerPerson_", Description = "Area Per Person, default 10 m2/person", Access = GH_ParamAccess.item};
                 number.SetPersistentData(10);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_occupancy_", NickName = "_occupancy_", Description = "Occupancy(Number of People) will overide _areaPerPerson_ ", Access = GH_ParamAccess.item, Optional = true};
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingGainPerArea_", NickName = "_lightingGainPerArea_", Description = "Lighting Gain Per Area, default W/m2", Access = GH_ParamAccess.item, Optional = true };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingGainPerArea_", NickName = "_lightingGainPerArea_", Description = "Lighting Gain Per Area at specified profile, default 8 W/m2", Access = GH_ParamAccess.item, Optional = true };
                 number.SetPersistentData(8);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
@@ -68,34 +68,34 @@ namespace SAM.Analytical.Grasshopper
                 number.SetPersistentData(500);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentSensGainPerArea_", NickName = "_equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area", Access = GH_ParamAccess.item};
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentSensGainPerArea_", NickName = "_equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area at specified profile, default 15 W/m2", Access = GH_ParamAccess.item};
                 number.SetPersistentData(15);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentLatGainPerArea_", NickName = "_equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area", Access = GH_ParamAccess.item};
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_equipmentLatGainPerArea_", NickName = "_equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area at specified profile, default 0 W/m2", Access = GH_ParamAccess.item};
                 number.SetPersistentData(0);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_heatingSetPoint_", Description = "Heating SetPoint", Access = GH_ParamAccess.item };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_heatingSetPoint_", Description = "Heating SetPoint, default Constant 21 degC", Access = GH_ParamAccess.item };
                 number.SetPersistentData(21);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_coolingSetPoint_", NickName = "_coolingSetPoint_", Description = "Cooling SetPoint", Access = GH_ParamAccess.item};
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_coolingSetPoint_", NickName = "_coolingSetPoint_", Description = "Cooling SetPoint, default Constant 24 degC", Access = GH_ParamAccess.item};
                 number.SetPersistentData(24);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidificationSetPoint_", NickName = "_humidificationSetPoint_", Description = "Humidification SetPoint", Access = GH_ParamAccess.item};
-                number.SetPersistentData(0);
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidificationSetPoint_", NickName = "_humidificationSetPoint_", Description = "Humidification SetPoint, default Constant 40%", Access = GH_ParamAccess.item};
+                number.SetPersistentData(40);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dehumidificationSetPoint_", NickName = "_dehumidificationSetPoint_", Description = "Dehumidification SetPoint", Access = GH_ParamAccess.item};
-                number.SetPersistentData(100);
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dehumidificationSetPoint_", NickName = "_dehumidificationSetPoint_", Description = "Dehumidification SetPoint, default Constant 60%", Access = GH_ParamAccess.item};
+                number.SetPersistentData(60);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "_infiltrationACH_", Description = "Infiltration [ACH]", Access = GH_ParamAccess.item, Optional = true};
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "_infiltrationACH_", Description = "Infiltration, default Constant 0.2 ac/h for spaces with external Panels", Access = GH_ParamAccess.item, Optional = true};
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pollutantGPerHrPerPerson_", NickName = "_pollutantGPerHrPerPerson_", Description = "Pollutant Generation Per Hour Per Person [g/h/p]", Access = GH_ParamAccess.item };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pollutantGPerHrPerPerson_", NickName = "_pollutantGPerHrPerPerson_", Description = "Pollutant Generation Per Hour Per Person using Profile, default 37.5 g/hr/person see https://www.irbnet.de/daten/iconda/CIB6974.pdf]", Access = GH_ParamAccess.item };
                 number.SetPersistentData(37.5);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
@@ -108,7 +108,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical Model with ", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "InternalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
