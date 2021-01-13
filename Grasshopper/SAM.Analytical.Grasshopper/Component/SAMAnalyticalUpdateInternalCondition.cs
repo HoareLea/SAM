@@ -37,30 +37,30 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list};
+                GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces. If not provided all Spaces from Analytical Model will be used and modified", Access = GH_ParamAccess.list};
                 result.Add(new GH_SAMParam(gooSpaceParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "name_", NickName = "name_", Description = "Internal Condition Name", Access = GH_ParamAccess.item, Optional = true };
+                global::Grasshopper.Kernel.Parameters.Param_String @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "ICname_", NickName = "ICname_", Description = "new Internal Condition Name to allow name change", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(@string, ParamVisibility.Binding));
 
-                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "_profile_", NickName = "_profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item};
+                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "_profile_", NickName = "_profile_", Description = "SAM Analytical Profile for gains, in not provided default 24h profile: 8to18 profile will be used fro all gains", Access = GH_ParamAccess.item};
                 gooProfileParam.SetPersistentData(new GooProfile(profileLibrary.GetProfile("8to18", ProfileGroup.Gain, true)));
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Binding));
 
-                GooDegreeOfActivityParam gooDegreeOfActivityParam = new GooDegreeOfActivityParam() { Name = "_degreeOfActivity_", NickName = "_degreeOfActivity_", Description = "SAM Analytical DegreeOfActivity", Access = GH_ParamAccess.item};
+                GooDegreeOfActivityParam gooDegreeOfActivityParam = new GooDegreeOfActivityParam() { Name = "_degreeOfActivity_", NickName = "_degreeOfActivity_", Description = "SAM Analytical DegreeOfActivity, default: 'Moderate office work' Sens=75 & Lat=55 W/person", Access = GH_ParamAccess.item};
                 gooDegreeOfActivityParam.SetPersistentData(new GooDegreeOfActivity(degreeOfActivityLibrary.GetDegreeOfActivities("Moderate office work").FirstOrDefault()));
                 result.Add(new GH_SAMParam(gooDegreeOfActivityParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = null;
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_areaPerPerson_", NickName = "_areaPerPerson_", Description = "Area Per Person", Access = GH_ParamAccess.item};
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_areaPerPerson_", NickName = "_areaPerPerson_", Description = "Area Per Person, default = 10 m2/person", Access = GH_ParamAccess.item};
                 number.SetPersistentData(10);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_occupancy_", NickName = "_occupancy_", Description = "Occupancy", Access = GH_ParamAccess.item, Optional = true};
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_occupancy_", NickName = "_occupancy_", Description = "Occupancy(Number of People) will overide _areaPerPerson_ ", Access = GH_ParamAccess.item, Optional = true};
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingGainPerArea_", NickName = "_lightingGainPerArea_", Description = "Lighting Gain Per Area", Access = GH_ParamAccess.item, Optional = true };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_lightingGainPerArea_", NickName = "_lightingGainPerArea_", Description = "Lighting Gain Per Area, default W/m2", Access = GH_ParamAccess.item, Optional = true };
                 number.SetPersistentData(8);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
@@ -119,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateInternalCondition()
           : base("SAMAnalytical.UpdateInternalCondition", "SAMAnalytical.UpdateInternalCondition",
-              "Updates InternalCondition Properties for Spaces",
+              "Updates InternalCondition(IC) Properties for Spaces or Add new IC if is not included. In nothing connected there is default office type office predefine. This includes 8to18 Profile for gains and Constrant profile for SetPoints",
               "SAM", "Analytical")
         {
         }
