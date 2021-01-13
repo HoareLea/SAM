@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces. If not provided all Spaces from Analytical Model will be used and modified", Access = GH_ParamAccess.list};
+                GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces. If not provided all Spaces from Analytical Model will be used and modified", Access = GH_ParamAccess.list, Optional = true};
                 result.Add(new GH_SAMParam(gooSpaceParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_String @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "ICname_", NickName = "ICname_", Description = "new Internal Condition Name to allow name change", Access = GH_ParamAccess.item, Optional = true };
