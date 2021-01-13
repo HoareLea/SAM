@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreAddObjects : GH_SAMComponent
+    public class SAMCoreSAMLibraryAddObjects : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("ef4916c1-4cf3-4b10-872e-405dc8ae96c9");
+        public override Guid ComponentGuid => new Guid("d4f5697f-9768-4da3-a1a4-2b830fe5e54d");
 
         /// <summary>
         /// The latest version of this component
@@ -25,9 +25,9 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMCoreAddObjects()
-          : base("RelationCluster.AddObjects", "RelationCluster.AddObjects",
-              "Add Objects to RelationCluster",
+        public SAMCoreSAMLibraryAddObjects()
+          : base("SAMLibrary.AddObjects", "SAMLibrary.AddObjects",
+              "Add Objects to SAMLibrary",
               "SAM", "Core")
         {
         }
@@ -37,7 +37,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooRelationClusterParam(), "_relationCluster", "_relationCluster", "SAM RelationCluster", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooSAMObjectParam<SAMLibrary>(), "_sAMLibrary", "_sAMLibrary", "SAM Core Library", GH_ParamAccess.item);
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
         }
 
@@ -46,7 +46,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooRelationClusterParam(), "RelationCluster", "RelationCluster", "SAM RelationCluster", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooSAMObjectParam<SAMLibrary>(), "SAMLibrary", "SAMLibrary", "SAM Core Library", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -57,9 +57,9 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            RelationCluster relationCluster = null;
+            SAMLibrary sAMLibrary = null;
 
-            if (!dataAccess.GetData(0, ref relationCluster))
+            if (!dataAccess.GetData(0, ref sAMLibrary))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -72,13 +72,13 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            RelationCluster relationCluster_Result = relationCluster.Clone();
+            SAMLibrary sAMLibrary_Result = sAMLibrary.Clone();
 
             foreach(SAMObject sAMObject in sAMObjects)
-                relationCluster_Result.AddObject(sAMObject);
+                sAMLibrary_Result.Add(sAMObject);
 
 
-            dataAccess.SetData(0, relationCluster_Result);
+            dataAccess.SetData(0, sAMLibrary_Result);
         }
     }
 }

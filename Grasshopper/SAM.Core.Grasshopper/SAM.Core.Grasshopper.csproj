@@ -77,6 +77,7 @@
     <Compile Include="Component\SAMCoreFromFile.cs" />
     <Compile Include="Component\SAMCoreParameter.cs" />
     <Compile Include="Component\SAMCoreParameterType.cs" />
+    <Compile Include="Component\SAMCoreSAMLibraryAddObjects.cs" />
     <Compile Include="Component\SAMCoreSetValue.cs" />
     <Compile Include="Component\SAMCoreLoadMaterialLibrary.cs" />
     <Compile Include="Component\SAMCoreSelectByName.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="Component\SAMCoreCreateLocation.cs" />
     <Compile Include="Component\SAMCoreFilter.cs" />
     <Compile Include="Component\SAMCoreGetNames.cs" />
-    <Compile Include="Component\SAMCoreAddObjects.cs" />
+    <Compile Include="Component\SAMCoreRelationClusterAddObjects.cs" />
     <Compile Include="Component\SAMCoreRelatedObjects.cs" />
     <Compile Include="Component\SAMCoreARGBToUint.cs" />
     <Compile Include="Component\SAMCoreUintToColor.cs" />
