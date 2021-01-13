@@ -36,6 +36,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\net461\lib\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,13 +59,17 @@
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Classes\Base\AnyOf.cs" />
+    <Compile Include="Classes\Base\ZipArchiveInfo.cs" />
     <Compile Include="Classes\Base\Range.cs" />
     <Compile Include="Classes\Library\SystemTypeLibrary.cs" />
     <Compile Include="Classes\Relation\TextMap.cs" />
+    <Compile Include="Convert\ToFile\File.cs" />
     <Compile Include="Convert\ToJsonDocument\JsonDocument.cs" />
     <Compile Include="Convert\ToJsonElement\JsonElement.cs" />
     <Compile Include="Create\DelimitedFileTable.cs" />
+    <Compile Include="Create\ZipArchiveInfo.cs" />
     <Compile Include="Enums\AccessType.cs" />
+    <Compile Include="Enums\SAMFileType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
     <Compile Include="Enums\Parameter\CoreSettingParameter.cs" />
     <Compile Include="Interfaces\Base\ISystem.cs" />
@@ -137,6 +146,7 @@
     <Compile Include="Query\CustomAttribute.cs" />
     <Compile Include="Query\Enum.cs" />
     <Compile Include="Query\Enums.cs" />
+    <Compile Include="Query\SAMFileType.cs" />
     <Compile Include="Query\IsHex.cs" />
     <Compile Include="Query\IsNullable.cs" />
     <Compile Include="Query\IsValid.cs" />

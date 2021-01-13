@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.IO;
+using System.IO.Compression;
 
 namespace SAM.Core
 {
@@ -55,6 +57,27 @@ namespace SAM.Core
         public static IJSAMObject IJSAMObject(this string json)
         {
             return IJSAMObject<IJSAMObject>(json);
+        }
+
+        public static IJSAMObject IJSAMObject(this ZipArchiveEntry zipArchiveEntry)
+        {
+            if (zipArchiveEntry == null)
+                return null;
+
+            IJSAMObject result = null;
+            using (StreamReader streamReader = new StreamReader(zipArchiveEntry.Open()))
+                result = IJSAMObject(streamReader.ReadToEnd());
+
+            return result;
+        }
+
+        public static T IJSAMObject<T>(this ZipArchiveEntry zipArchiveEntry) where T : IJSAMObject
+        {
+            IJSAMObject jSAMObject = IJSAMObject(zipArchiveEntry);
+            if (jSAMObject is T)
+                return (T)jSAMObject;
+
+            return default;
         }
     }
 }

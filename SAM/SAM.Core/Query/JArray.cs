@@ -5,18 +5,10 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static JArray JArray(this string pathOrJson)
+        public static JArray JArray(this string json)
         {
-            if (pathOrJson == null)
+            if (string.IsNullOrWhiteSpace(json))
                 return null;
-
-            if (string.IsNullOrWhiteSpace(pathOrJson))
-                return new JArray();
-
-            string json = pathOrJson;
-            if (File.Exists(pathOrJson))
-                json = File.ReadAllText(pathOrJson);
-
 
             JToken jToken = JToken.Parse(json);
             if (jToken == null)

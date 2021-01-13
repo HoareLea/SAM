@@ -47,6 +47,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -73,6 +74,7 @@
     <Compile Include="Classes\GooParameter.cs" />
     <Compile Include="Component\SAMCoreAddMaterials.cs" />
     <Compile Include="Component\SAMCoreCopyMaterials.cs" />
+    <Compile Include="Component\SAMCoreFromFile.cs" />
     <Compile Include="Component\SAMCoreParameter.cs" />
     <Compile Include="Component\SAMCoreParameterType.cs" />
     <Compile Include="Component\SAMCoreSetValue.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="Component\SAMCoreCreateOpaqueMaterial_Obsolete.cs" />
     <Compile Include="Component\SAMCoreCreateGasMaterial_Obsolete.cs" />
     <Compile Include="Component\SAMCoreLogToFile.cs" />
+    <Compile Include="Component\SAMCoreToFile.cs" />
     <Compile Include="Component\SAMVersion.cs" />
     <Compile Include="Component\SAMCoreColorToUint.cs" />
     <Compile Include="Component\SAMCoreRemoveGroup.cs" />
