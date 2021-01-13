@@ -159,6 +159,33 @@ namespace SAM.Analytical
             return true;
         }
 
+        public bool Add(Range<int> range, double value)
+        {
+            if (range == null || double.IsNaN(value))
+                return false;
+
+            if (values == null)
+                values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
+
+            if (range.Min == range.Max)
+                return Add(range.Min, value);
+
+            values[range.Min] = new Tuple<Range<int>, AnyOf<double, Profile>>(range, value);
+            return true;
+        }
+
+        public bool Add(int index, double value)
+        {
+            if (index < 0 || double.IsNaN(value))
+                return false;
+
+            if (values == null)
+                values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
+
+            values[index] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, value);
+            return true;
+        }
+
         public double[] GetValues()
         {
             if (values == null)

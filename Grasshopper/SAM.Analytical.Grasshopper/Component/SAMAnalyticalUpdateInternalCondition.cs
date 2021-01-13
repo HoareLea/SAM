@@ -95,8 +95,8 @@ namespace SAM.Analytical.Grasshopper
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "_infiltrationACH_", Description = "Infiltration [ACH]", Access = GH_ParamAccess.item, Optional = true};
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pollutantGPerPerson_", NickName = "_pollutantGPerPerson_", Description = "Pollutant Per Person [g/h/p]", Access = GH_ParamAccess.item };
-                number.SetPersistentData(13.92366);
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pollutantGPerHrPerPerson_", NickName = "_pollutantGPerHrPerPerson_", Description = "Pollutant Generation Per Hour Per Person [g/h/p]", Access = GH_ParamAccess.item };
+                number.SetPersistentData(37.5);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 return result.ToArray();
