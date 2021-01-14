@@ -141,9 +141,9 @@ namespace SAM.Analytical.Grasshopper
 
                 if(!double.IsNaN(infiltrationAirChangesPerHour) || !double.IsNaN(airflowPerExtArea))
                 {
+                    double area_External = adjacencyCluster.ExternalPanelsArea(space, true);
                     if (!double.IsNaN(airflowPerExtArea))
                     {
-                        double area_External = adjacencyCluster.ExternalPanelsArea(space);
                         if (!double.IsNaN(area_External))
                             internalCondition.SetValue(InternalConditionParameter.InfiltrationAirChangesPerHour, airflowPerExtArea * area_External);
                     }
@@ -152,8 +152,7 @@ namespace SAM.Analytical.Grasshopper
                         bool apply = true;
                         if (toExternaFacing)
                         {
-                            List<Panel> panels_External = adjacencyCluster.GetExternalPanels(space);
-                            if (panels_External == null && panels_External.Count == 0)
+                            if (double.IsNaN(area_External) || area_External == 0)
                                 apply = false;
                         }
 
