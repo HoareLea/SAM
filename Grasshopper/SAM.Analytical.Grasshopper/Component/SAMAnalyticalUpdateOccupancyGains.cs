@@ -97,7 +97,7 @@ namespace SAM.Analytical.Grasshopper
                 spaces = analyticalModel.GetSpaces();
 
             Profile profile = null;
-            index = Params.IndexOfInputParam("_profile_");
+            index = Params.IndexOfInputParam("profile_");
             if (index != -1)
                 dataAccess.GetData(index, ref profile);
 
