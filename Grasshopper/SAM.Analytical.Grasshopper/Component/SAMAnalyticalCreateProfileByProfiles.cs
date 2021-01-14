@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -16,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Name of Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_names", NickName = "_names", Description = "Names of the profiles to be used", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_profiles", NickName = "_profiles", Description = "Names of the profiles or SAM Analytical Profiles to be used", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_typeOrGroup", NickName = "_typeOrGroup", Description = "SAM Analytical ProfileType or ProfileGroup", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add( new GH_SAMParam(new GooProfileLibraryParam() { Name = "_profileLibrary_", NickName = "_profileLibrary_", Description = "SAM Analytical ProfileLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
@@ -83,8 +84,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<string> names = new List<string>();
-            if (!dataAccess.GetDataList(index, names) || names == null || names.Count == 0)
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+            if (!dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null || objectWrappers.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -130,6 +131,34 @@ namespace SAM.Analytical.Grasshopper
                 profileLibrary = ActiveSetting.Setting.GetValue<ProfileLibrary>(AnalyticalSettingParameter.DefaultProfileLibrary);
 
             if(profileLibrary == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            List<string> names = new List<string>();
+            profileLibrary = new ProfileLibrary(profileLibrary);
+            foreach(GH_ObjectWrapper gH_ObjectWrapper in objectWrappers)
+            {
+                object @object = gH_ObjectWrapper?.Value;
+                if (@object == null)
+                    continue;
+
+                if(@object is string)
+                {
+                    names.Add((string)@object);
+                    continue;
+                }
+
+                if(gH_ObjectWrapper.Value is Profile)
+                {
+                    Profile profile_Temp = (Profile)gH_ObjectWrapper.Value;
+                    profileLibrary.Add(profile_Temp);
+                    names.Add(profile_Temp.Name);
+                }
+            }
+
+            if(names == null || names.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
