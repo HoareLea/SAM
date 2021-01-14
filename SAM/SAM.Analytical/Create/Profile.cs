@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -13,7 +12,7 @@ namespace SAM.Analytical
             List<Profile> profiles = new List<Profile>();
             foreach(string name_Profile in names)
             {
-                Profile profile = profileLibrary.GetProfile(name, profileType, includeProfileGroup);
+                Profile profile = profileLibrary.GetProfile(name_Profile, profileType, includeProfileGroup);
                 if (profile == null)
                     continue;
 
