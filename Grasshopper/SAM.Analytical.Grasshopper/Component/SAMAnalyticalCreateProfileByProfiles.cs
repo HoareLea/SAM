@@ -77,7 +77,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_names");
+            index = Params.IndexOfInputParam("_profiles");
             if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -144,13 +144,21 @@ namespace SAM.Analytical.Grasshopper
                 if (@object == null)
                     continue;
 
-                if(@object is string)
+                if(@object is GH_String)
+                {
+                    names.Add(((GH_String)@object).Value);
+                }
+                else if (gH_ObjectWrapper.Value is GooProfile)
+                {
+                    Profile profile_Temp  =((GooProfile)gH_ObjectWrapper.Value).Value;
+                    profileLibrary.Add(profile_Temp);
+                    names.Add(profile_Temp.Name);
+                }
+                else if(@object is string)
                 {
                     names.Add((string)@object);
-                    continue;
                 }
-
-                if(gH_ObjectWrapper.Value is Profile)
+                else if(gH_ObjectWrapper.Value is Profile)
                 {
                     Profile profile_Temp = (Profile)gH_ObjectWrapper.Value;
                     profileLibrary.Add(profile_Temp);
