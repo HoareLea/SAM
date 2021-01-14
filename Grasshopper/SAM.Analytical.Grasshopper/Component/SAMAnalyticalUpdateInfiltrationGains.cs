@@ -34,6 +34,8 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profile_", NickName = "_profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "infiltrationACH_", Description = "Infiltration Air Changes Per Hour", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "toExternalFacing_", NickName = "toExternalFacing_", Description = "If False then value for Infiltration Air Changes Per Hour will be applied to all spaces", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "airflowPerExtArea_", NickName = "airflowPerExtArea_", Description = "Airflow Per External Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -102,6 +104,16 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref infiltrationAirChangesPerHour);
 
+            bool toExternaFacing = true;
+            index = Params.IndexOfInputParam("toExternalFacing_");
+            if (index != -1)
+                dataAccess.GetData(index, ref toExternaFacing);
+
+            double airflowPerExtArea = double.NaN;
+            index = Params.IndexOfInputParam("airflowPerExtArea_");
+            if (index != -1)
+                dataAccess.GetData(index, ref airflowPerExtArea);
+
             ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
             if (profile != null)
@@ -127,8 +139,28 @@ namespace SAM.Analytical.Grasshopper
                 if (profile != null)
                     internalCondition.SetValue(InternalConditionParameter.InfiltrationProfileName, profile.Name);
 
-                if(!double.IsNaN(infiltrationAirChangesPerHour))
-                    internalCondition.SetValue(InternalConditionParameter.InfiltrationAirChangesPerHour, infiltrationAirChangesPerHour);
+                if(!double.IsNaN(infiltrationAirChangesPerHour) || !double.IsNaN(airflowPerExtArea))
+                {
+                    if (!double.IsNaN(airflowPerExtArea))
+                    {
+                        double area_External = adjacencyCluster.ExternalPanelsArea(space);
+                        if (!double.IsNaN(area_External))
+                            internalCondition.SetValue(InternalConditionParameter.InfiltrationAirChangesPerHour, airflowPerExtArea * area_External);
+                    }
+                    else
+                    {
+                        bool apply = true;
+                        if (toExternaFacing)
+                        {
+                            List<Panel> panels_External = adjacencyCluster.GetExternalPanels(space);
+                            if (panels_External == null && panels_External.Count == 0)
+                                apply = false;
+                        }
+
+                        if (apply)
+                            internalCondition.SetValue(InternalConditionParameter.InfiltrationAirChangesPerHour, infiltrationAirChangesPerHour);
+                    }
+                }
 
                 space_Temp.InternalCondition = internalCondition;
                 internalConditions.Add(internalCondition);

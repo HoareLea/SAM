@@ -147,6 +147,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\ExternalPanelsArea.cs" />
     <Compile Include="Query\OccupancyGainPerPerson.cs" />
     <Compile Include="Query\SAMObject.cs" />
     <Compile Include="Query\CalculatedInfiltrationAirFlow.cs" />

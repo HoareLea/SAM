@@ -128,6 +128,24 @@ namespace SAM.Analytical
             return panels.FindAll(x => External(x));
         }
 
+        public List<Panel> GetExternalPanels(Space space)
+        {
+            List<Panel> panels = GetPanels(space);
+            if (panels == null || panels.Count == 0)
+                return null;
+
+            return panels.FindAll(x => External(x));
+        }
+
+        public List<Panel> GetInternalPanels(Space space)
+        {
+            List<Panel> panels = GetPanels(space);
+            if (panels == null || panels.Count == 0)
+                return null;
+
+            return panels.FindAll(x => Internal(x));
+        }
+
         public List<Panel> GetShadingPanels()
         {
             List<Panel> panels = GetObjects<Panel>();
