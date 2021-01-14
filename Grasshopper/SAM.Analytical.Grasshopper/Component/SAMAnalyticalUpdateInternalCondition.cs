@@ -370,6 +370,7 @@ namespace SAM.Analytical.Grasshopper
                     internalCondition.SetValue(InternalConditionParameter.PollutantGenerationPerPerson, pollutantGenerationPerPerson);
 
                 space_Temp.InternalCondition = internalCondition;
+                internalConditions.Add(internalCondition);
                 adjacencyCluster.AddObject(space_Temp);
             }
 
