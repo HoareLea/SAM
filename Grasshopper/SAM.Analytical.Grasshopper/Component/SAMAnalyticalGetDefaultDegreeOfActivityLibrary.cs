@@ -2,10 +2,11 @@
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalGetDefaultDegreeOfActivityLibrary : GH_SAMComponent
+    public class SAMAnalyticalGetDefaultDegreeOfActivityLibrary : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -15,12 +16,14 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.tertiary | GH_Exposure.obscure;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -35,17 +38,26 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-
+            get
+            {
+                 return new GH_SAMParam[0];
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooDegreeOfActivityLibraryParam(), "DegreeOfActivityLibrary", "DegreeOfActivityLibrary", "SAM Analytical DegreeOfActivityLibrary", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooDegreeOfActivityLibraryParam() { Name = "DegreeOfActivityLibrary", NickName = "DegreeOfActivityLibrary", Description = "SAM Analytical DegreeOfActivityLibrary", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooDegreeOfActivityParam() { Name = "DegreeOfActivities", NickName = "DegreeOfActivities", Description = "SAM Analytical DegreeOfActivity", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -56,7 +68,17 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, new GooDegreeOfActivityLibrary(ActiveSetting.Setting.GetValue<DegreeOfActivityLibrary>(AnalyticalSettingParameter.DefaultDegreeOfActivityLibrary)));
+            DegreeOfActivityLibrary degreeOfActivityLibrary = ActiveSetting.Setting.GetValue<DegreeOfActivityLibrary>(AnalyticalSettingParameter.DefaultDegreeOfActivityLibrary);
+
+            int index;
+
+            index = Params.IndexOfOutputParam("DegreeOfActivityLibrary");
+            if (index != -1)
+                dataAccess.SetData(index, new GooDegreeOfActivityLibrary(degreeOfActivityLibrary));
+
+            index = Params.IndexOfOutputParam("DegreeOfActivities");
+            if (index != -1)
+                dataAccess.SetDataList(index, degreeOfActivityLibrary?.GetDegreeOfActivities()?.ConvertAll(x => new GooDegreeOfActivity(x)));
         }
     }
 }
