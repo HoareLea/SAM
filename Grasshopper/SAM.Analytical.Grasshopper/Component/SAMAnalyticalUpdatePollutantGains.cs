@@ -103,12 +103,12 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref profile);
 
             double pollutantGenerationPerPerson = double.NaN;
-            index = Params.IndexOfInputParam("pollutantGPerPerson_");
+            index = Params.IndexOfInputParam("_pollutantGPerPerson_");
             if (index != -1)
                 dataAccess.GetData(index, ref pollutantGenerationPerPerson);
 
             double pollutantGenerationPerArea = double.NaN;
-            index = Params.IndexOfInputParam("pollutantGPerArea_");
+            index = Params.IndexOfInputParam("pollutantGPerHrPerPerson_");
             if (index != -1)
                 dataAccess.GetData(index, ref pollutantGenerationPerArea);
 
