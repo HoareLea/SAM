@@ -205,6 +205,35 @@ namespace SAM.Analytical
             return result;
         }
 
+        public double[] GetYearlyValues()
+        {
+            int max = Max;
+            int min = Min;
+
+            double[] result = new double[8760];
+
+            for(int i = min; i <= max; i++)
+                result[i] = this[i];
+
+            int index;
+
+            index = min;
+            for(int i= max + 1; i < 8760; i++)
+            {
+                result[i] = result[index];
+                index++;
+            }
+
+            index = max;
+            for (int i = min - 1; i >= 0; i--)
+            {
+                result[i] = result[index];
+                index--;
+            }
+
+            return result;
+        }
+
         public Profile[] GetProfiles()
         {
             if (values == null)
@@ -349,7 +378,7 @@ namespace SAM.Analytical
                         
 
                     Profile profile_Temp = @object as Profile;
-                    if (profile == null)
+                    if (profile_Temp == null)
                         continue;
 
                     double result = profile_Temp[index_Temp - keyValuePair.Key];
