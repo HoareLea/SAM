@@ -67,42 +67,51 @@ namespace SAM.Analytical
             if (string.IsNullOrEmpty(name) || values == null)
                 return null;
 
+            Dictionary<Core.Range<int>, double> dictionary = Core.Query.RangeDictionary(values);
+            if (dictionary == null)
+                return null;
+
             Profile result = new Profile(name, category);
 
-            List<double> values_Temp = new List<double>(values);
-
-            Core.Range<int> range = null;
-            double value = double.NaN;
-            while(values_Temp.Count > 0)
-            {
-                double value_Temp = values_Temp[0];
-                values_Temp.RemoveAt(0);
-
-                if (range == null)
-                {
-                    range = new Core.Range<int>(0);
-                    value = value_Temp;
-                    continue;
-                }
-
-                if(value.Equals(value_Temp))
-                {
-                    range = new Core.Range<int>(range.Min, range.Max + 1);
-                    continue;
-                }
-                else
-                {
-                    result.Add(range, value);
-                    range = new Core.Range<int>(range.Max + 1);
-                    value = value_Temp;
-                    continue;
-                }
-            }
-
-            if (range != null)
-                result.Add(range, value);
+            foreach (KeyValuePair<Core.Range<int>, double> keyValuePair in dictionary)
+                result.Add(keyValuePair.Key, keyValuePair.Value);
 
             return result;
+
+            //List<double> values_Temp = new List<double>(values);
+
+            //Core.Range<int> range = null;
+            //double value = double.NaN;
+            //while(values_Temp.Count > 0)
+            //{
+            //    double value_Temp = values_Temp[0];
+            //    values_Temp.RemoveAt(0);
+
+            //    if (range == null)
+            //    {
+            //        range = new Core.Range<int>(0);
+            //        value = value_Temp;
+            //        continue;
+            //    }
+
+            //    if(value.Equals(value_Temp))
+            //    {
+            //        range = new Core.Range<int>(range.Min, range.Max + 1);
+            //        continue;
+            //    }
+            //    else
+            //    {
+            //        result.Add(range, value);
+            //        range = new Core.Range<int>(range.Max + 1);
+            //        value = value_Temp;
+            //        continue;
+            //    }
+            //}
+
+            //if (range != null)
+            //    result.Add(range, value);
+
+            //return result;
         }
     }
 }

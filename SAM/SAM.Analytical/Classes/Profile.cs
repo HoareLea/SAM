@@ -205,6 +205,21 @@ namespace SAM.Analytical
             return result;
         }
 
+        public Profile[] GetProfiles()
+        {
+            if (values == null)
+                return null;
+
+            List<Profile> profiles = new List<Profile>();
+            foreach(Tuple<Range<int>, AnyOf<double, Profile>> tuple in values.Values)
+            {
+                if (tuple != null && tuple.Item2?.Value is Profile)
+                    profiles.Add((Profile)tuple.Item2?.Value);
+            }
+
+            return profiles.ToArray();
+        }
+
         public int Count
         {
             get
@@ -297,50 +312,69 @@ namespace SAM.Analytical
             }
         }
 
+        public bool TryGetValue(int index, out Profile profile, out double value)
+        {
+            profile = null;
+            value = double.NaN;
+
+            if (values == null || values.Count == 0)
+                return false;
+
+            int max = Max + 1;
+            int index_Temp = index >= max ? index % max : index;
+
+            foreach (KeyValuePair<int, Tuple<Range<int>, AnyOf<double, Profile>>> keyValuePair in values)
+            {
+                if (keyValuePair.Key > index_Temp)
+                    return false;
+
+                Tuple<Range<int>, AnyOf<double, Profile>> tuple = keyValuePair.Value;
+
+                if (tuple == null)
+                    continue;
+
+                Range<int> range = tuple.Item1;
+
+                if ((keyValuePair.Key == index_Temp) || (range != null && range.In(index_Temp)))
+                {
+                    object @object = tuple.Item2?.Value;
+                    if (@object == null)
+                        continue;
+
+                    if (@object is double)
+                    {
+                        value = (double)@object;
+                        return true;
+                    }
+                        
+
+                    Profile profile_Temp = @object as Profile;
+                    if (profile == null)
+                        continue;
+
+                    double result = profile_Temp[index_Temp - keyValuePair.Key];
+                    if (double.IsNaN(result))
+                        continue;
+
+                    value = result;
+                    profile = profile_Temp;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public double this[int index]
         {
             get
             {
-                if (values == null || values.Count == 0)
+                Profile profile;
+                double result;
+                if (!TryGetValue(index, out profile, out result))
                     return double.NaN;
 
-                int max = Max + 1;
-                int index_Temp = index >= max ? index % max : index;
-
-                foreach (KeyValuePair<int, Tuple<Range<int>, AnyOf<double, Profile>>> keyValuePair in values)
-                {
-                    if (keyValuePair.Key > index_Temp)
-                        return double.NaN;
-
-                    Tuple<Range<int>, AnyOf<double, Profile>> tuple = keyValuePair.Value;
-
-                    if (tuple == null)
-                        continue;
-
-                    Range<int> range = tuple.Item1;
-
-                    if ((keyValuePair.Key == index_Temp) || (range != null && range.In(index_Temp)))
-                    {
-                        object @object = tuple.Item2?.Value;
-                        if (@object == null)
-                            continue;
-
-                        if (@object is double)
-                            return (double)@object;
-
-                        Profile profile = @object as Profile;
-                        if (profile == null)
-                            continue;
-
-                        double result = profile[index_Temp - keyValuePair.Key];
-                        if (double.IsNaN(result))
-                            continue;
-
-                        return result;
-                    }
-                }
-
-                return double.NaN;
+                return result;
             }
         }
 

@@ -69,6 +69,7 @@
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Create\ZipArchiveInfo.cs" />
     <Compile Include="Enums\AccessType.cs" />
+    <Compile Include="Enums\Week.cs" />
     <Compile Include="Enums\SAMFileType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
     <Compile Include="Enums\Parameter\CoreSettingParameter.cs" />
@@ -144,6 +145,9 @@
     <Compile Include="Query\Copy.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
     <Compile Include="Query\CustomAttribute.cs" />
+    <Compile Include="Query\Weekday.cs" />
+    <Compile Include="Query\Weekend.cs" />
+    <Compile Include="Query\RangeDictionary.cs" />
     <Compile Include="Query\Enum.cs" />
     <Compile Include="Query\Enums.cs" />
     <Compile Include="Query\SAMFileType.cs" />
