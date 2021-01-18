@@ -1,5 +1,6 @@
 ﻿using Grasshopper;
 using Grasshopper.Kernel;
+using System;
 
 namespace SAM.Core.Grasshopper
 {
@@ -11,7 +12,11 @@ namespace SAM.Core.Grasshopper
             try
             {
                 param.Attributes = new GH_SAMNullAttributes();
-                var newParam = GH_ComponentParamServer.CreateDuplicate(param);
+                IGH_Param newParam = GH_ComponentParamServer.CreateDuplicate(param);
+                //if(!newParam.GetType().Equals(param.GetType()))
+                //{
+                //    Type type = param.GetType();
+                //}
 
                 newParam.NewInstanceGuid();
 

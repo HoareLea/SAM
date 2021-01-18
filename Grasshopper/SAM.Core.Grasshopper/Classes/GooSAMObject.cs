@@ -148,10 +148,18 @@ namespace SAM.Core.Grasshopper
 
             try
             {
-                //target = (Y)Activator.CreateInstance(typeof(Y), Value);
-                target = Core.Create.Object<Y>(Value);
-                if (target != null)
-                    return true;
+                if(Value != null)
+                {
+                    //target = (Y)Activator.CreateInstance(typeof(Y), Value);
+
+                    if (typeof(Y).IsAssignableFrom(Value.GetType()))
+                        target = (Y)(object)Value.Clone();
+                    else
+                        target = Core.Create.Object<Y>(Value);
+
+                    if (target != null)
+                        return true;
+                }
             }
             catch
             {

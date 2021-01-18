@@ -1,6 +1,7 @@
 ﻿using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -47,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 
-                result.Add(new GH_SAMParam(new GooSAMObjectParam<SAMObject>()
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject()
                 {
                     Name = "_analytical",
                     NickName = "_analytical",
@@ -80,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooSAMObjectParam<SAMObject>() { Name = "Analytical", NickName = "Analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Analytical", NickName = "Analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "InternalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "UnassignedSpaces", NickName = "UnassignedSpaces", Description = "SAM Analytical Spaces has not been assigneds", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
@@ -103,7 +104,7 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            
+
             SAMObject sAMObject = null;
             if (!dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
@@ -191,7 +192,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfOutputParam("Analytical");
             if (index != -1)
-                dataAccess.SetData(index, new GooSAMObject<SAMObject>(sAMObject));
+                dataAccess.SetData(index, sAMObject);
 
             index = Params.IndexOfOutputParam("InternalConditions");
             if (index != -1)
