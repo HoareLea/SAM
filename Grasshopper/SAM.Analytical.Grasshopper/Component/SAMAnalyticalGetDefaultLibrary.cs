@@ -1,15 +1,30 @@
-﻿using Grasshopper.Kernel;
+﻿using GH_IO.Serialization;
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Attributes;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
     public class SAMAnalyticalGetDefaultLibrary : GH_SAMVariableOutputParameterComponent
     {
+        private static Enum[] enums = new Enum[] {
+            AnalyticalSettingParameter.DefaultApertureConstructionLibrary,
+            AnalyticalSettingParameter.DefaultConstructionLibrary,
+            AnalyticalSettingParameter.DefaultDegreeOfActivityLibrary,
+            AnalyticalSettingParameter.DefaultGasMaterialLibrary,
+            AnalyticalSettingParameter.DefaultInternalConditionLibrary,
+            AnalyticalSettingParameter.DefaultMaterialLibrary,
+            AnalyticalSettingParameter.DefaultProfileLibrary,
+            AnalyticalSettingParameter.DefaultSystemTypeLibrary
+        };
+
+        private static Enum defaulEnum = enums[5];
+
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
@@ -19,6 +34,8 @@ namespace SAM.Analytical.Grasshopper
         /// The latest version of this component
         /// </summary>
         public override string LatestComponentVersion => "1.0.0";
+
+        private string value = defaulEnum.ToString();
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,6 +54,47 @@ namespace SAM.Analytical.Grasshopper
         {
         }
 
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetString("Value", value);
+            return base.Write(writer);
+        }
+
+        public override bool Read(GH_IReader reader)
+        {
+            if (!reader.TryGetString("Value", ref value))
+                value = defaulEnum.ToString();
+
+            return base.Read(reader);
+        }
+
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            foreach (Enum @enum in enums)
+            {
+                ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
+                if (parameterProperties == null)
+                    continue;
+
+                string name = parameterProperties.Name;
+                if (string.IsNullOrWhiteSpace(name))
+                    continue;
+
+                Menu_AppendItem(menu, name, Menu_Changed, true, @enum.ToString() == value).Tag = @enum;
+            }
+                
+        }
+
+        private void Menu_Changed(object sender, EventArgs e)
+        {
+            if (sender is ToolStripMenuItem item && item.Tag is Enum)
+            {
+                //Do something with panelType
+                this.value = ((Enum)item.Tag).ToString();
+                ExpireSolution(true);
+            }
+        }
+
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
@@ -44,9 +102,7 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Library name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                return result.ToArray();
+                return new GH_SAMParam[0];
             }
         }
 
@@ -72,77 +128,21 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            int index = -1;
-
-            string name = null;
-
-            index = Params.IndexOfInputParam("_name");
-            if(index == -1 || !dataAccess.GetData(index, ref name) || string.IsNullOrWhiteSpace(name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            Dictionary<Type, AssociatedTypes> dictionary_AssociatedTypes = ActiveManager.GetAssociatedTypesDictionary(new Type[] { typeof(Setting) });
-            if (dictionary_AssociatedTypes == null)
-                return;
-
-            Dictionary<Enum, ParameterProperties> dictionary_ParameterProperties = new Dictionary<Enum, ParameterProperties>();
-            foreach (Type type in dictionary_AssociatedTypes.Keys)
-            {
-                foreach (Enum @enum in Enum.GetValues(type))
-                {
-                    ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
-                    if (parameterProperties != null)
-                        dictionary_ParameterProperties[@enum] = parameterProperties;
-                }
-
-            }
-
-            if(dictionary_ParameterProperties == null || dictionary_ParameterProperties.Count == 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            int index;
 
             object @object = null;
-            foreach(KeyValuePair<Enum, ParameterProperties> keyValuePair in dictionary_ParameterProperties)
+            foreach(Enum @enum in enums)
             {
-                if(name.Equals(keyValuePair.Key.ToString()))
+                if(@enum.ToString().Equals(value))
                 {
-                    @object = keyValuePair.Key;
-                    break;
-                }
-
-                if(name.Equals(keyValuePair.Value.Name))
-                {
-                    @object = keyValuePair.Key;
+                    @object = @enum;
                     break;
                 }
             }
 
             if(@object == null)
             {
-
-                string name_Temp = name.Trim().ToLower().Replace(" ", string.Empty);
-                int count = int.MaxValue;
-                foreach (KeyValuePair<Enum, ParameterProperties> keyValuePair in dictionary_ParameterProperties)
-                {
-                    if (!keyValuePair.Key.ToString().ToLower().Contains(name_Temp))
-                        continue;
-
-                    int count_Temp = keyValuePair.Key.ToString().Length - name_Temp.Length;
-                    if(count_Temp < count)
-                    {
-                        count = count_Temp;
-                        @object = keyValuePair.Key;
-                    }
-                }
-            }
-
-            if(@object == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cound not find library");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
             
