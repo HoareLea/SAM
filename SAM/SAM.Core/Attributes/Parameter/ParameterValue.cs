@@ -115,22 +115,27 @@ namespace SAM.Core.Attributes
         }
 
 
-        public static ParameterType Get(Type type, string text)
+        public static ParameterType GetParameterType(Type type, string text)
         {
-            ParameterValue parameterType = Query.CustomAttribute<ParameterValue>(type, text);
-            if (parameterType == null)
+            ParameterValue parameterValue = Query.CustomAttribute<ParameterValue>(type, text);
+            if (parameterValue == null)
                 return ParameterType.Undefined;
 
-            return parameterType.parameterType;
+            return parameterValue.parameterType;
         }
 
-        public static ParameterType Get(Enum @enum)
+        public static ParameterType GetParameterType(Enum @enum)
         {
-            ParameterValue parameterType = Query.CustomAttribute<ParameterValue>(@enum);
-            if (parameterType == null)
+            ParameterValue parameterValue = Query.CustomAttribute<ParameterValue>(@enum);
+            if (parameterValue == null)
                 return ParameterType.Undefined;
 
-            return parameterType.parameterType;
+            return parameterValue.parameterType;
+        }
+
+        public static T Get<T>(Enum @enum) where T : ParameterValue
+        {
+            return Query.CustomAttribute<T>(@enum);
         }
     }
 }

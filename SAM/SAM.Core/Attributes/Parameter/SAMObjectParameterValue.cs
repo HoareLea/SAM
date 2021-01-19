@@ -60,7 +60,7 @@ namespace SAM.Core.Attributes
                 if (type.Equals(type_Temp))
                     return true;
 
-                if (type_Temp.IsAssignableFrom(type))
+                if (inheritance && type_Temp.IsAssignableFrom(type))
                     return true;
             }
 

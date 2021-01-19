@@ -13,7 +13,6 @@ namespace SAM.Core.Attributes
             this.name = name;
         }
 
-
         public ParameterProperties(string name, string description)
         {
             this.name = name;
