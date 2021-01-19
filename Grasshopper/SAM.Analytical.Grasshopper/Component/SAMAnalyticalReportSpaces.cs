@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -33,8 +33,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalReportSpaces()
           : base("SAMAnalytical.ReportSpaces", "SAMAnalytical.ReportSpaces",
-              "Report Spaces",
-              "SAM", "Analytical")
+              "Report Spaces provide all information about space including assumptions from Internal Condition",
+              "SAM", "SAM_Communicate")
         {
         }
 
@@ -72,35 +72,35 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new Param_String() { Name = "InfiltrationProfileName", NickName = "InfiltrationProfileName", Description = "Infiltration Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_Guid() { Name = "InfiltrationProfileGuid", NickName = "InfiltrationProfileGuid", Description = "Infiltration Profile Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancySensibleGainPerPerson", NickName = "OccupancySensibleGainPerPerson", Description = "Occupancy Sensible Gain Per Person", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancySensibleGainPerArea", NickName = "OccupancySensibleGainPerArea", Description = "Occupancy Sensible Gain Per Area", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancyLatentGainPerPerson", NickName = "OccupancyLatentGainPerPerson", Description = "Occupancy Latent Gain Per Person", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancyLatentGainPerArea", NickName = "OccupancyLatentGainPerArea", Description = "Occupancy Latent Gain Per Area", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancySensibleGain", NickName = "OccupancySensibleGain", Description = "Occupancy Sensible Gain", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancyLatentGain", NickName = "OccupancyLatentGain", Description = "Occupancy Latent Gain", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancySensibleGainPerPerson", NickName = "OccupancySensibleGainPerPerson", Description = "Occupancy Sensible Gain Per Person, W/person", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancySensibleGainPerArea", NickName = "OccupancySensibleGainPerArea", Description = "Occupancy Sensible Gain Per Area, W/m2", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancyLatentGainPerPerson", NickName = "OccupancyLatentGainPerPerson", Description = "Occupancy Latent Gain Per Person, W/person", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancyLatentGainPerArea", NickName = "OccupancyLatentGainPerArea", Description = "Occupancy Latent Gain Per Area, W/m2", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancySensibleGain", NickName = "OccupancySensibleGain", Description = "Occupancy Sensible Gain, W", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OccupancyLatentGain", NickName = "OccupancyLatentGain", Description = "Occupancy Latent Gain, W", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_String() { Name = "OccupancyProfileName", NickName = "OccupancyProfileName", Description = "Occupancy Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_Guid() { Name = "OccupancyProfileGuid", NickName = "OccupancyProfileGuid", Description = "Occupancy Profile Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "EquipmentSensibleGainPerArea", NickName = "EquipmentSensibleGainPerArea", Description = "Equipment Sensible Gain Per Area", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "EquipmentLatentGainPerArea", NickName = "EquipmentLatentGainPerArea", Description = "Equipment Latent Gain Per Area", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "EquipmentSensibleGain", NickName = "EquipmentSensibleGain", Description = "Equipment Sensible Gain", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "EquipmentLatentGain", NickName = "EquipmentLatentGain", Description = "Equipment Latent Gain", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "EquipmentSensibleGainPerArea", NickName = "EquipmentSensibleGainPerArea", Description = "Equipment Sensible Gain Per Area, W/m2", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "EquipmentLatentGainPerArea", NickName = "EquipmentLatentGainPerArea", Description = "Equipment Latent Gain Per Area, W/m2", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "EquipmentSensibleGain", NickName = "EquipmentSensibleGain", Description = "Equipment Sensible Gain, W", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "EquipmentLatentGain", NickName = "EquipmentLatentGain", Description = "Equipment Latent Gain, W", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_String() { Name = "EquipmentSensibleProfileName", NickName = "EquipmentSensibleProfileName", Description = "Equipment Sensible Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_Guid() { Name = "EquipmentSensibleProfileGuid", NickName = "EquipmentSensibleProfileGuid", Description = "Equipment Sensible Profile Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_String() { Name = "EquipmentLatentProfileName", NickName = "EquipmentLatentProfileName", Description = "Equipment Latent Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_Guid() { Name = "EquipmentLatentProfileGuid", NickName = "EquipmentLatentProfileGuid", Description = "Equipment Latent Profile Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "LightingGainPerArea", NickName = "LightingGainPerArea", Description = "Lighting Gain Per Area", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "LightingLevel", NickName = "LightingLevel", Description = "Lighting Level", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "LightingGain", NickName = "LightingGain", Description = "Lighting Gain", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "LightingGainPerArea", NickName = "LightingGainPerArea", Description = "Lighting Gain Per Area, W/m2", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "LightingLevel", NickName = "LightingLevel", Description = "Lighting Level, lx", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "LightingGain", NickName = "LightingGain", Description = "Lighting Gain, W", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_String() { Name = "LightingProfileName", NickName = "LightingProfileName", Description = "Lighting Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_Guid() { Name = "LightingProfileGuid", NickName = "LightingProfileGuid", Description = "Lighting Profile Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "HeatingDesignTemperature", NickName = "HeatingDesignTemperature", Description = "Heating Design Temperature", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "HeatingDesignTemperature", NickName = "HeatingDesignTemperature", Description = "Heating Design Temperature, degC", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_String() { Name = "HeatingProfileName", NickName = "HeatingProfileName", Description = "Heating Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_Guid() { Name = "HeatingProfileGuid", NickName = "HeatingProfileGuid", Description = "Heating Profile Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "CoolingDesignTemperature", NickName = "CoolingDesignTemperature", Description = "Cooling Design Temperature", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "CoolingDesignTemperature", NickName = "CoolingDesignTemperature", Description = "Cooling Design Temperature, degC", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_String() { Name = "CoolingProfileName", NickName = "CoolingProfileName", Description = "Cooling Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new Param_Guid() { Name = "CoolingProfileGuid", NickName = "CoolingProfileGuid", Description = "Cooling Profile Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
@@ -125,10 +125,10 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new Param_Guid() { Name = "CoolingSystemTypeGuid", NickName = "CoolingSystemTypeGuid", Description = "CoolingSystemType Guid", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
                 result.Add(new GH_SAMParam(new Param_String() { Name = "SupplyUnitName", NickName = "SupplyUnitName", Description = "Supply Unit Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "SupplyAirFlow", NickName = "SupplyUnitName", Description = "Supply Unit Name", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "SupplyAirFlow", NickName = "SupplyAirFlow", Description = "Supply Air Flow, m3/s", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
                 result.Add(new GH_SAMParam(new Param_String() { Name = "ExhaustUnitName", NickName = "ExhaustUnitName", Description = "Exhaust Unit Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "ExhaustAirFlow", NickName = "ExhaustAirFlow", Description = "Exhaust Air Flow", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "ExhaustAirFlow", NickName = "ExhaustAirFlow", Description = "Exhaust Air Flow, m3/s", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }

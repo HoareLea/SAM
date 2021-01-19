@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,14 +31,19 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Space or Spaces. Default all spaces from Analytcial Model", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileSens_", NickName = "profileSens_", Description = "SAM Analytical Profile for Equipment Sensible Gains", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileLat_", NickName = "profileLat_", Description = "SAM Analytical Profile for Equipment Latent Gains", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentSensGainPerArea_", NickName = "equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatGainPerArea_", NickName = "equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentSensGain_", NickName = "equipmentSensGain_", Description = "Equipment Sensible Gain", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatGain_", NickName = "equipmentLatGain_", Description = "Equipment Latent Gain", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "multipleSenisbleGainPerPerson_", NickName = "multipleSenisbleGainPerPerson_", Description = "Multiple Senisble Gain Per Person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentSensGainPerArea_", NickName = "equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area, W/m2", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatGainPerArea_", NickName = "equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area, W/m2", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentSensGain_", NickName = "equipmentSensGain_", Description = "Equipment Sensible Gain, W", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatGain_", NickName = "equipmentLatGain_", Description = "Equipment Latent Gain, W", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+
+                //set default values 
+                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_multipleSenisbleGainPerPerson_", NickName = "_multipleSenisbleGainPerPerson_", Description = "Multiple Sensible Gain Per Person, Default = false", Access = GH_ParamAccess.item};
+                boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
+
                 return result.ToArray();
             }
         }
@@ -59,8 +64,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateEquipmentGains()
           : base("SAMAnalytical.UpdateEquipmentGains", "SAMAnalytical.UpdateEquipmentGains",
-              "Updates Equipment Gains Properties for Spaces",
-              "SAM", "Analytical")
+              "Updates Equipment Gains Properties in Internal Condition for Spaces. If both connected in W/2 and W sum will be calculated. There is option to set bool=True to muliply W per person. ie laptop per person. Connect selected Spaces or Space, default all Spaces.",
+              "SAM", "SAM_IC")
         {
         }
 
@@ -128,7 +133,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref equipmentLatGain);
 
             bool multipleSenisbleGainPerPerson = false;
-            index = Params.IndexOfInputParam("multipleSenisbleGainPerPerson_");
+            index = Params.IndexOfInputParam("_multipleSenisbleGainPerPerson_");
             if (index != -1)
                 dataAccess.GetData(index, ref multipleSenisbleGainPerPerson);
 

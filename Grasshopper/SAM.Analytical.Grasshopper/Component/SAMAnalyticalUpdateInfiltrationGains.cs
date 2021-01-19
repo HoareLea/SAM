@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,10 +32,15 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profile_", NickName = "_profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "infiltrationACH_", Description = "Infiltration Air Changes Per Hour", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "toExternalFacing_", NickName = "toExternalFacing_", Description = "If False then value for Infiltration Air Changes Per Hour will be applied to all spaces", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profile_", NickName = "profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "infiltrationACH_", Description = "Infiltration Air Changes Per Hour, ac/h", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                //result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "toExternalFacing_", NickName = "toExternalFacing_", Description = "If False then value for Infiltration Air Changes Per Hour will be applied to all spaces", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "airflowPerExtArea_", NickName = "airflowPerExtArea_", Description = "Airflow Per External Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "toExternalFacing_", NickName = "toExternalFacing_", Description = "If False then value for Infiltration Air Changes Per Hour will be applied to all spaces", Access = GH_ParamAccess.item };
+                boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
+
                 return result.ToArray();
             }
         }
@@ -56,8 +61,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateInfiltrationGains()
           : base("SAMAnalytical.UpdateInfiltrationGains", "SAMAnalytical.UpdateInfiltrationGains",
-              "Updates Infiltration Gains Properties for Spaces",
-              "SAM", "Analytical")
+              "Updates Infiltration in Internal Condition for Spaces",
+              "SAM", "SAM_IC")
         {
         }
 
