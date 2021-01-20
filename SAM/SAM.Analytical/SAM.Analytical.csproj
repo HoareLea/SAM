@@ -51,6 +51,7 @@
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
+    <Compile Include="Classes\SpaceSimulationResult.cs" />
     <Compile Include="Classes\System\HeatingSystem.cs" />
     <Compile Include="Classes\System\HeatingSystemType.cs" />
     <Compile Include="Classes\System\VentilationSystem.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Classes\DegreeOfActivity.cs" />
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
+    <Compile Include="Create\SpaceSimulationResult.cs" />
     <Compile Include="Create\HeatingSystemType.cs" />
     <Compile Include="Create\CoolingSystemType.cs" />
     <Compile Include="Create\Profile.cs" />
@@ -96,6 +98,8 @@
     <Compile Include="Enums\DefaultGasType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
     <Compile Include="Enums\ActivityLevel.cs" />
+    <Compile Include="Enums\Parameter\SpaceSimulationResultParameter.cs" />
+    <Compile Include="Enums\SizingMethod.cs" />
     <Compile Include="Enums\Parameter\VentilationSystemParameter.cs" />
     <Compile Include="Enums\Parameter\VentilationSystemTypeParameter.cs" />
     <Compile Include="Enums\Parameter\HeatingSystemTypeParameter.cs" />

@@ -74,6 +74,7 @@
     <Compile Include="Enums\ParameterType.cs" />
     <Compile Include="Enums\Parameter\CoreSettingParameter.cs" />
     <Compile Include="Interfaces\Base\ISystem.cs" />
+    <Compile Include="Interfaces\Base\IResult.cs" />
     <Compile Include="Interfaces\Base\ISystemType.cs" />
     <Compile Include="Modify\Delete.cs" />
     <Compile Include="Modify\AddRange.cs" />
