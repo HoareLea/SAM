@@ -407,6 +407,21 @@ namespace SAM.Analytical
             }
         }
 
+        public bool IsOff()
+        {
+            if (values == null || values.Count == 0)
+                return false;
+
+            int max = Max;
+            int min = Min;
+
+            for (int i = min; i < max; i++)
+                if (this[i] != 0)
+                    return false;
+
+            return true;
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

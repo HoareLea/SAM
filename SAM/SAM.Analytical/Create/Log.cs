@@ -745,7 +745,7 @@ namespace SAM.Analytical
                         if (!internalCondition.TryGetValue(InternalConditionParameter.EquipmentLatentGainPerArea, out value_2))
                             value_2 = double.NaN;
 
-                        if (double.IsNaN(value_1) && double.IsNaN(value_2) && profile != null)
+                        if (double.IsNaN(value_1) && double.IsNaN(value_2) && profile != null && !profile.IsOff())
                             result.Add("{0} InternalCondition (Guid: {1}) has {2} {3} (Guid: {4}) assigned but Equipment Latent Gain or Equipment Latent Gain Per Area have not been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileName, profileType.Text(), profile.Guid);
                         else if((!double.IsNaN(value_1) || !double.IsNaN(value_2)) && profile == null)
                             result.Add("{0} InternalCondition (Guid: {1}) has no {2} assigned but Equipment Latent Gain or Equipment Latent Gain Per Area has been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileType.Text());
@@ -760,7 +760,7 @@ namespace SAM.Analytical
                         if (!internalCondition.TryGetValue(InternalConditionParameter.EquipmentSensibleGainPerArea, out value_2))
                             value_2 = double.NaN;
 
-                        if (double.IsNaN(value_1) && double.IsNaN(value_2) && profile != null)
+                        if (double.IsNaN(value_1) && double.IsNaN(value_2) && profile != null && !profile.IsOff())
                             result.Add("{0} InternalCondition (Guid: {1}) has {2} {3} (Guid: {4}) assigned but Equipment Sensible Gain or Equipment Sensible Gain Per Area have not been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileName, profileType.Text(), profile.Guid);
                         else if ((!double.IsNaN(value_1) || !double.IsNaN(value_2)) && profile == null)
                             result.Add("{0} InternalCondition (Guid: {1}) has no {2} assigned but Equipment Sensible Gain or Equipment Sensible Gain Per Area has been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileType.Text());
@@ -772,7 +772,7 @@ namespace SAM.Analytical
                         if (!internalCondition.TryGetValue(InternalConditionParameter.InfiltrationAirChangesPerHour, out value_1))
                             value_1 = double.NaN;
 
-                        if(double.IsNaN(value_1) && profile != null)
+                        if(double.IsNaN(value_1) && profile != null && !profile.IsOff())
                             result.Add("{0} InternalCondition (Guid: {1}) has {2} {3} (Guid: {4}) assigned but Infiltration Air Changes Per Hour has not been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileName, profileType.Text(), profile.Guid);
                         else if(!double.IsNaN(value_1) && profile == null)
                             result.Add("{0} InternalCondition (Guid: {1}) has no {2} assigned but Infiltration Air Changes Per Hour has been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileType.Text());
@@ -787,7 +787,7 @@ namespace SAM.Analytical
                         if (!internalCondition.TryGetValue(InternalConditionParameter.LightingGainPerArea, out value_2))
                             value_2 = double.NaN;
 
-                        if (double.IsNaN(value_1) && double.IsNaN(value_2) && profile != null)
+                        if (double.IsNaN(value_1) && double.IsNaN(value_2) && profile != null && !profile.IsOff())
                             result.Add("{0} InternalCondition (Guid: {1}) has {2} {3} (Guid: {4}) assigned but Lighting Gain or Lighting Gain Per Area have not been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileName, profileType.Text(), profile.Guid);
                         else if ((!double.IsNaN(value_1) || !double.IsNaN(value_2)) && profile == null)
                             result.Add("{0} InternalCondition (Guid: {1}) has no {2} assigned but Lighting Gain or Lighting Gain Per Area has been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileType.Text());
@@ -802,7 +802,7 @@ namespace SAM.Analytical
                         if (!internalCondition.TryGetValue(InternalConditionParameter.OccupancySensibleGainPerPerson, out value_2))
                             value_2 = double.NaN;
 
-                        if (double.IsNaN(value_1) || double.IsNaN(value_2) && profile != null)
+                        if (double.IsNaN(value_1) || double.IsNaN(value_2) && profile != null && !profile.IsOff())
                             result.Add("{0} InternalCondition (Guid: {1}) has {2} {3} (Guid: {4}) assigned but Occupancy Latent Gain Per Person or Occupancy Sensible Gain Per Person have not been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileName, profileType.Text(), profile.Guid);
                         else if ((!double.IsNaN(value_1) || !double.IsNaN(value_2)) && profile == null)
                             result.Add("{0} InternalCondition (Guid: {1}) has no {2} assigned but Occupancy Latent Gain Per Person or Occupancy Sensible Gain Per Person has been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileType.Text());
@@ -817,7 +817,7 @@ namespace SAM.Analytical
                         if (!internalCondition.TryGetValue(InternalConditionParameter.PollutantGenerationPerPerson, out value_2))
                             value_2 = double.NaN;
 
-                        if (double.IsNaN(value_1) && double.IsNaN(value_2) && profile != null)
+                        if (double.IsNaN(value_1) && double.IsNaN(value_2) && profile != null && !profile.IsOff())
                             result.Add("{0} InternalCondition (Guid: {1}) has {2} {3} (Guid: {4}) assigned but Pollutant Generation Per Area or Pollutant Generation Per Person have not been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileName, profileType.Text(), profile.Guid);
                         else if ((!double.IsNaN(value_1) || !double.IsNaN(value_2)) && profile == null)
                             result.Add("{0} InternalCondition (Guid: {1}) has no {2} assigned but Pollutant Generation Per Area or Pollutant Generation Per Person has been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileType.Text());
