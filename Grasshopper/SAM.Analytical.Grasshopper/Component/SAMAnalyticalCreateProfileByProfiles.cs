@@ -24,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        public override GH_Exposure Exposure => GH_Exposure.tertiary | GH_Exposure.obscure;
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
         protected override GH_SAMParam[] Inputs
         {

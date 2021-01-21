@@ -173,7 +173,7 @@ namespace SAM.Core
             if (value_Existing is string)
                 return Compare((string)value_Existing, value, textComparisonType, caseSensitive);
 
-            return Compare(value_Existing.ToString(), value, textComparisonType, caseSensitive);
+            return Compare(value_Existing?.ToString(), value, textComparisonType, caseSensitive);
         }
     }
 }
