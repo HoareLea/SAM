@@ -18,7 +18,7 @@ namespace SAM.Analytical
                 return false;
 
             HashSet<string> names_InternalCondition = textMap.GetSortedKeys(name);
-            if (names_InternalCondition == null && names_InternalCondition.Count == 0)
+            if (names_InternalCondition == null || names_InternalCondition.Count == 0)
                 return false;
 
             List<InternalCondition> internalConditions = internalConditionLibrary.GetInternalConditions(names_InternalCondition.First());
