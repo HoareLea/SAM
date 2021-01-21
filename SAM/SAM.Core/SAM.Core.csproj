@@ -110,8 +110,8 @@
     <Compile Include="Classes\Log\LogRecord.cs" />
     <Compile Include="Classes\Relation\TypeMap.cs" />
     <Compile Include="Classes\Relation\RelationCluster.cs" />
-    <Compile Include="Convert\ToCsv\ToCsv.cs" />
-    <Compile Include="Convert\ToList\ToList.cs" />
+    <Compile Include="Convert\ToCsv\String.cs" />
+    <Compile Include="Convert\ToList\List.cs" />
     <Compile Include="Create\Object.cs" />
     <Compile Include="Enums\AboutInfoType.cs" />
     <Compile Include="Enums\CountryCode.cs" />

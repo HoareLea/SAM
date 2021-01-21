@@ -69,6 +69,7 @@
     <Compile Include="Classes\InternalCondition.cs" />
     <Compile Include="Classes\Profile.cs" />
     <Compile Include="Classes\DegreeOfActivity.cs" />
+    <Compile Include="Convert\ToDateTime\DateTime.cs" />
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\SpaceSimulationResult.cs" />

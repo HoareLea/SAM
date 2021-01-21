@@ -29,10 +29,14 @@ namespace SAM.Analytical
             List<InternalCondition> result = new List<InternalCondition>();
             foreach (Space space in spaces)
             {
-                InternalCondition internalCondition = space.MapInternalCondition(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
-                if (internalCondition != space.InternalCondition)
+                if (space == null)
+                    continue;
+
+                Space space_Temp = new Space(space);
+                InternalCondition internalCondition = space_Temp.MapInternalCondition(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
+                if (internalCondition != space_Temp.InternalCondition)
                 {
-                    adjacencyCluster.AddObject(space);
+                    adjacencyCluster.AddObject(space_Temp);
                     result.Add(internalCondition);
                     continue;
                 }

@@ -17,7 +17,7 @@ namespace SAM.Analytical
                 if (@object is string)
                     names.Add((string)@object);
                 else if (Core.Query.IsNumeric(@object))
-                    thicknesses.Add(Convert.ToDouble(@object));
+                    thicknesses.Add(System.Convert.ToDouble(@object));
             }
 
             if (names.Count != thicknesses.Count)
