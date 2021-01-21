@@ -27,7 +27,7 @@
             double relativeHumidity = double.NaN,
             double apertureFlowIn = double.NaN,
             double apertureFlowOut = double.NaN,
-            double pollutantGeneration = double.NaN)
+            double pollutant = double.NaN)
         {
             SpaceSimulationResult result = new SpaceSimulationResult(name, reference);
 
@@ -100,8 +100,8 @@
             if (!double.IsNaN(apertureFlowOut))
                 result.SetValue(SpaceSimulationResultParameter.ApertureFlowOut, apertureFlowOut);
 
-            if (!double.IsNaN(pollutantGeneration))
-                result.SetValue(SpaceSimulationResultParameter.PollutantGeneration, pollutantGeneration);
+            if (!double.IsNaN(pollutant))
+                result.SetValue(SpaceSimulationResultParameter.Pollutant, pollutant);
 
             return result;
         }

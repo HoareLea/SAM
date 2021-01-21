@@ -494,7 +494,8 @@ namespace SAM.Analytical
 
             Enum.TryParse(jObject.Value<string>("PanelType"), out this.panelType);
 
-            planarBoundary3D = new PlanarBoundary3D(jObject.Value<JObject>("PlanarBoundary3D"));
+            if (jObject.ContainsKey("PlanarBoundary3D"))
+                planarBoundary3D = new PlanarBoundary3D(jObject.Value<JObject>("PlanarBoundary3D"));
 
             if (jObject.ContainsKey("Apertures"))
                 apertures = Core.Create.IJSAMObjects<Aperture>(jObject.Value<JArray>("Apertures"));
@@ -509,7 +510,9 @@ namespace SAM.Analytical
                 return jObject;
 
             jObject.Add("PanelType", panelType.ToString());
-            jObject.Add("PlanarBoundary3D", planarBoundary3D.ToJObject());
+
+            if (planarBoundary3D != null)
+                jObject.Add("PlanarBoundary3D", planarBoundary3D.ToJObject());
 
             if (apertures != null)
                 jObject.Add("Apertures", Core.Create.JArray(apertures));
