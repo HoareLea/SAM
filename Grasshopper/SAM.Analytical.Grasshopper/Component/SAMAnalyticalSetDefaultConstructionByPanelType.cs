@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -30,10 +31,10 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                GH_SAMParam[] result = new GH_SAMParam[2];
-                result[0] = new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "_adjacencyCluster", NickName = "_adjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
-                result[1] = new GH_SAMParam(new GooPanelParam() { Name = "_panels_", NickName = "_panels_", Description = "SAM Analytical Panels to be modified", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding);
-                return result;
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels_", NickName = "_panels_", Description = "SAM Analytical Panels to be modified", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                return result.ToArray();
             }
         }
 
@@ -41,10 +42,10 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                GH_SAMParam[] result = new GH_SAMParam[2];
-                result[0] = new GH_SAMParam(new GooAdjacencyClusterParam() {Name = "AdjacencyCluster", NickName = "AdjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
-                result[1] = new GH_SAMParam(new GooPanelParam() { Name = "Panels", NickName = "Panels", Description = "modified SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
-                return result;
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Analytical", NickName = "Analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "Panels", NickName = "Panels", Description = "modified SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                return result.ToArray();
             }
         }
 
@@ -60,25 +61,44 @@ namespace SAM.Analytical.Grasshopper
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            AdjacencyCluster adjacencyCluster = null;
-            if (!dataAccess.GetData(0, ref adjacencyCluster))
+            int index;
+
+            SAMObject sAMObject = null;
+            index = Params.IndexOfInputParam("_analytical");
+            if (index == -1 || !dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_panels_");
             List<Panel> panels = new List<Panel>();
-            dataAccess.GetDataList(1, panels);
-
-            AdjacencyCluster adjacencyCluster_Result = new AdjacencyCluster(adjacencyCluster);
-
-            panels = adjacencyCluster_Result.SetDefaultConstructionByPanelType(panels?.ConvertAll(x => x.Guid))?.ToList();
-
-            int index = -1;
-
-            index = Params.IndexOfOutputParam("AdjacencyCluster");
             if (index != -1)
-                dataAccess.SetData(index, new GooAdjacencyCluster(adjacencyCluster_Result));
+                dataAccess.GetDataList(index, panels);
+
+            if(sAMObject is AdjacencyCluster)
+            {
+                AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
+                panels = adjacencyCluster.SetDefaultConstructionByPanelType(panels?.ConvertAll(x => x.Guid))?.ToList();
+                sAMObject = adjacencyCluster;
+            }
+            else if(sAMObject is AnalyticalModel)
+            {
+                AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
+                AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
+                if(adjacencyCluster != null)
+                {
+                    adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+                    panels = adjacencyCluster.SetDefaultConstructionByPanelType(panels?.ConvertAll(x => x.Guid))?.ToList();
+                    analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                }
+
+                sAMObject = analyticalModel;
+            }
+
+            index = Params.IndexOfOutputParam("Analytical");
+            if (index != -1)
+                dataAccess.SetData(index, sAMObject);
 
             index = Params.IndexOfOutputParam("Panels");
             if (index != -1)
