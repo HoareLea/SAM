@@ -148,14 +148,12 @@ namespace SAM.Analytical.Grasshopper
 
             if (sAMObject is Space)
             {
-                Space space = new Space((Space)sAMObject);
-                InternalCondition internalCondition = space.MapInternalCondition(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
-                if (space.InternalCondition != internalCondition)
-                    internalConditions.Add(internalCondition);
-                else
-                    spaces_Unassigned.Add(space);
+                List<Space> spaces = new List<Space>() { new Space((Space)sAMObject) };
+                internalConditions = spaces.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
+                if (internalConditions[0] == spaces[0].InternalCondition)
+                    spaces_Unassigned.Add(spaces[0]);
 
-                sAMObject = space;
+                sAMObject = spaces[0];
             }
             else if (sAMObject is AdjacencyCluster)
             {
@@ -168,7 +166,6 @@ namespace SAM.Analytical.Grasshopper
                     if (internalCondition == spaces[i].InternalCondition)
                         spaces_Unassigned.Add(spaces[i]);
                 }
-
 
                 sAMObject = adjacencyCluster;
             }

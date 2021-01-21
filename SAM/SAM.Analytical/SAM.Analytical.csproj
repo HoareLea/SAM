@@ -135,7 +135,6 @@
     <Compile Include="Modify\AddMechanicalSystems.cs" />
     <Compile Include="Modify\AddMechanicalSystem.cs" />
     <Compile Include="Modify\MapInternalConditions.cs" />
-    <Compile Include="Modify\MapInternalCondition.cs" />
     <Compile Include="Modify\SetOccupantGains.cs" />
     <Compile Include="Modify\SetInternalCondition.cs" />
     <Compile Include="Modify\Join.cs" />
@@ -152,6 +151,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\TryGetInternalCondition.cs" />
     <Compile Include="Query\ExternalPanelsArea.cs" />
     <Compile Include="Query\OccupancyGainPerPerson.cs" />
     <Compile Include="Query\SAMObject.cs" />

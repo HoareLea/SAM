@@ -11,8 +11,21 @@ namespace SAM.Analytical
                 return null;
 
             List<InternalCondition> result = new List<InternalCondition>();
-            foreach(Space space in spaces)
-                result.Add(space.MapInternalCondition(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default));
+            foreach (Space space in spaces)
+            {
+                InternalCondition internalCondition;
+                if (space == null || (!space.TryGetInternalCondition(internalConditionLibrary, textMap, out internalCondition) && !overrideNotFound))
+                {
+                    result.Add(null);
+                    continue;
+                }
+
+                if (internalCondition == null)
+                    internalCondition = internalCondition_Default;
+
+                space.InternalCondition = internalCondition;
+                result.Add(internalCondition);
+            }
 
             return result;
         }
@@ -29,19 +42,21 @@ namespace SAM.Analytical
             List<InternalCondition> result = new List<InternalCondition>();
             foreach (Space space in spaces)
             {
-                if (space == null)
-                    continue;
-
-                Space space_Temp = new Space(space);
-                InternalCondition internalCondition = space_Temp.MapInternalCondition(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
-                if (internalCondition != space_Temp.InternalCondition)
+                InternalCondition internalCondition;
+                if (space == null || (!space.TryGetInternalCondition(internalConditionLibrary, textMap, out internalCondition) && !overrideNotFound))
                 {
-                    adjacencyCluster.AddObject(space_Temp);
-                    result.Add(internalCondition);
+                    result.Add(null);
                     continue;
                 }
 
-                result.Add(null);
+                if (internalCondition == null)
+                    internalCondition = internalCondition_Default;
+
+                Space space_Temp = new Space(space);
+                space_Temp.InternalCondition = internalCondition;
+
+                adjacencyCluster.AddObject(space_Temp);
+                result.Add(internalCondition);
             }
 
             return result;
