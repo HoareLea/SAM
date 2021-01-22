@@ -85,7 +85,7 @@
     <Compile Include="Component\SAMAnalyticalCreateProfileByValues.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultConstructionLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalAddZone.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateZone.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateEquipmentGains.cs" />
