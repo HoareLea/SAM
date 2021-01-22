@@ -1,22 +1,30 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace SAM.Core
 {
-    public class GuidCollection : Collection<Guid>, ISAMObject
+    public class GuidCollection : SAMObject, IEnumerable<Guid>
     {
-        private string name;
-        private Guid guid;
-        private List<ParameterSet> parameterSets;
+        private List<Guid> guids = new List<Guid>();
+
+        public GuidCollection(Guid guid, string name)
+            : base(guid, name)
+        {
+
+        }
+
+        public GuidCollection(string name)
+            : base(name)
+        {
+
+        }
 
         public GuidCollection(string name, ParameterSet parameterSet)
+            : base(Guid.NewGuid(), name, new ParameterSet[] { parameterSet})
         {
-            guid = Guid.NewGuid();
-            this.name = name;
-            if (parameterSet != null)
-                parameterSets = new List<ParameterSet>() { parameterSet };
+
         }
         
         public GuidCollection(JObject jObject)
@@ -25,60 +33,59 @@ namespace SAM.Core
         }
 
         public GuidCollection(GuidCollection guidCollection)
+            : base(guidCollection)
         {
-            name = guidCollection.name;
-            guid = guidCollection.guid;
-            parameterSets = guidCollection.parameterSets?.Clone();
 
-            foreach (Guid guid in guidCollection)
-                Add(guid);
+            if (guidCollection?.guids != null)
+                guids = new List<Guid>(guidCollection.guids);
         }
 
         public GuidCollection()
+            : base()
         {
-            guid = Guid.NewGuid();
+
         }
 
         public GuidCollection(IEnumerable<Guid> guids)
+            : base()
         {
-            guid = Guid.NewGuid();
-            
+            foreach (Guid guid in guids)
+                this.guids.Add(guid);
+        }
+
+        public void Add(Guid guid)
+        {
+            guids.Add(guid);
+        }
+
+        public bool Remove(Guid guid)
+        {
+            return guids.Remove(guid);
+        }
+
+        public List<bool> Remove(IEnumerable<Guid> guids)
+        {
             if (guids == null)
-                return;
+                return null;
+
+            List<bool> result = new List<bool>();
 
             foreach (Guid guid in guids)
-                Add(guid);
-        }
+                result.Add(Remove(guid));
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
-
-        public Guid Guid
-        {
-            get
-            {
-                return guid;
-            }
+            return result;
         }
 
         public virtual bool FromJObject(JObject jObject)
         {
-            if (jObject == null)
+            if (!base.FromJObject(jObject))
                 return false;
-
-            name = Query.Name(jObject);
-            guid = Query.Guid(jObject);
-            parameterSets = Create.ParameterSets(jObject.Value<JArray>("ParameterSets"));
 
             if(jObject.ContainsKey("Collection"))
             {
+                guids = new List<Guid>();
                 foreach (JToken jToken in jObject.Value<JArray>("Collection"))
-                    Add(Query.Guid(jToken));
+                    guids.Add(Query.Guid(jToken));
             }
 
             return true;
@@ -86,15 +93,9 @@ namespace SAM.Core
 
         public virtual JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", Query.FullTypeName(this));
-            if (name != null)
-                jObject.Add("Name", name);
-
-            jObject.Add("Guid", guid);
-
-            if (parameterSets != null)
-                jObject.Add("ParameterSets", Create.JArray(parameterSets));
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
 
             JArray jArray = new JArray();
             foreach (Guid guid in this)
@@ -103,6 +104,16 @@ namespace SAM.Core
             jObject.Add("Collection", jArray);
 
             return jObject;
+        }
+
+        public IEnumerator<Guid> GetEnumerator()
+        {
+            return guids?.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return guids?.GetEnumerator();
         }
     }
 }

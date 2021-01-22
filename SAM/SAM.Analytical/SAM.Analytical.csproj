@@ -72,6 +72,7 @@
     <Compile Include="Convert\ToDateTime\DateTime.cs" />
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
+    <Compile Include="Create\GuidCollection.cs" />
     <Compile Include="Create\SpaceSimulationResult.cs" />
     <Compile Include="Create\HeatingSystemType.cs" />
     <Compile Include="Create\CoolingSystemType.cs" />
@@ -94,11 +95,13 @@
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\AirSupplyMethod.cs" />
     <Compile Include="Enums\ApertureType.cs" />
+    <Compile Include="Enums\AnalyticalZoneType.cs" />
     <Compile Include="Enums\EmitterType.cs" />
     <Compile Include="Enums\HeatFlowDirection.cs" />
     <Compile Include="Enums\DefaultGasType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
     <Compile Include="Enums\ActivityLevel.cs" />
+    <Compile Include="Enums\Parameter\AnalyticalZoneParameter.cs" />
     <Compile Include="Enums\Parameter\SpaceSimulationResultParameter.cs" />
     <Compile Include="Enums\SizingMethod.cs" />
     <Compile Include="Enums\Parameter\VentilationSystemParameter.cs" />
@@ -146,6 +149,7 @@
     <Compile Include="Modify\UpdateApertureConstructionsByName.cs" />
     <Compile Include="Modify\UpdateConstructionsByName.cs" />
     <Compile Include="Modify\UpdateConstruction.cs" />
+    <Compile Include="Modify\UpdateGroup.cs" />
     <Compile Include="Modify\UpdateSpace.cs" />
     <Compile Include="Modify\Remove.cs" />
     <Compile Include="Modify\AddSpace.cs" />

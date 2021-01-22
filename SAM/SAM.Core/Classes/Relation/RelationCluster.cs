@@ -220,7 +220,6 @@ namespace SAM.Core
 
                     result.Add(guid);
                 }
-                    
             }
 
             if (groups == null)
@@ -231,24 +230,99 @@ namespace SAM.Core
             return new GuidCollection(result);
         }
 
-        public bool RemoveFromGroup<T>(IEnumerable<T> objects, Guid guid)
+        public GuidCollection UpdateGroup(GuidCollection guidCollection)
+        {
+            if (guidCollection == null)
+                return null;
+
+            GuidCollection guidCollection_Temp = new GuidCollection(guidCollection);
+            foreach(Guid guid in guidCollection.ToList())
+            {
+                if (GetObject(guid) == null)
+                    guidCollection_Temp.Remove(guid);
+            }
+             
+            if(groups == null)
+            {
+                groups = new List<GuidCollection>() { guidCollection_Temp };
+                return new GuidCollection(guidCollection_Temp);
+            }
+
+            int index = groups.FindIndex(x => x.Guid == guidCollection_Temp.Guid);
+            if(index == -1)
+            {
+                groups.Add(guidCollection_Temp);
+                return new GuidCollection(guidCollection_Temp);
+            }
+
+            groups[index] = guidCollection_Temp;
+            return new GuidCollection(guidCollection_Temp);
+        }
+
+        public GuidCollection AddGroup(string name)
+        {
+            GuidCollection result = new GuidCollection(name);
+            
+            if (groups == null)
+                groups = new List<GuidCollection>();
+
+            groups.Add(result);
+
+            return new GuidCollection(result);
+        }
+
+        public List<bool> AddToGroup<T>(IEnumerable<T> objects, Guid guid, bool allowDuplicates = true)
         {
             if (groups == null || groups.Count == 0 || objects == null || objects.Count() == 0)
-                return false;
+                return null;
 
             GuidCollection guidCollection = groups.Find(x => x.Guid == guid);
             if (guidCollection == null)
-                return false;
+                return null;
 
-            bool result = false;
+            List<bool> result = new List<bool>();
+            foreach (T @object in objects)
+            {
+                Guid guid_Object = GetGuid(@object);
+                if (guid_Object == Guid.Empty)
+                {
+                    result.Add(false);
+                    continue;
+                }
+                
+                if(!allowDuplicates && guidCollection.Contains(guid_Object))
+                {
+                    result.Add(false);
+                    continue;
+                }
+
+                guidCollection.Add(guid_Object);
+                result.Add(true);
+            }
+
+            return result;
+        }
+
+        public List<bool> RemoveFromGroup<T>(IEnumerable<T> objects, Guid guid)
+        {
+            if (groups == null || groups.Count == 0 || objects == null || objects.Count() == 0)
+                return null;
+
+            GuidCollection guidCollection = groups.Find(x => x.Guid == guid);
+            if (guidCollection == null)
+                return null;
+
+            List<bool> result = new List<bool>();
             foreach(T @object in objects)
             {
                 Guid guid_Object = GetGuid(@object);
                 if (guid_Object == Guid.Empty)
+                {
+                    result.Add(false);
                     continue;
+                }
 
-                if (guidCollection.Remove(guid_Object))
-                    result = true;
+                result.Add(guidCollection.Remove(guid_Object));
             }
 
             return result;
@@ -266,6 +340,35 @@ namespace SAM.Core
             }
 
             return null;
+        }
+
+        public GuidCollection GetGroup(string name)
+        {
+            if (groups == null || name == null)
+                return null;
+
+            foreach (GuidCollection group in groups)
+            {
+                if (group?.Name == name)
+                    return new GuidCollection(group);
+            }
+
+            return null;
+        }
+
+        public List<GuidCollection> GetGroups(string name)
+        {
+            if (groups == null || name == null)
+                return null;
+
+            List<GuidCollection> result = new List<GuidCollection>();
+            foreach (GuidCollection group in groups)
+            {
+                if (group?.Name == name)
+                    result.Add(new GuidCollection(group));
+            }
+
+            return result;
         }
 
         public bool RemoveGroup(Guid guid)
@@ -598,8 +701,7 @@ namespace SAM.Core
 
             foreach (Dictionary<Guid, object> dictionary_Temp in dictionary_Objects.Values)
             {
-                object object_Temp = dictionary_Temp[guid];
-                if (object_Temp != null)
+                if (dictionary_Temp.TryGetValue(guid, out object object_Temp) && object_Temp != null)
                     return object_Temp;
             }
 
