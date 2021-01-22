@@ -77,6 +77,8 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMechanicalSystems.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
+    <Compile Include="Component\SAMAnalyticalGetZones.cs" />
+    <Compile Include="Component\SAMAnalyticalGetZone.cs" />
     <Compile Include="Component\SAMAnalyticalAirFlow.cs" />
     <Compile Include="Component\SAMAnalyticalCopyApertureConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalCopyConstructionLayers.cs" />

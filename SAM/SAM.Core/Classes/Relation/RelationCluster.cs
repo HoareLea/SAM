@@ -371,6 +371,27 @@ namespace SAM.Core
             return result;
         }
 
+        public List<GuidCollection> GetGroups(object @object)
+        {
+            if (groups == null)
+                return null;
+
+            Guid guid = GetGuid(@object);
+            if (guid == Guid.Empty)
+                return null;
+
+            List<GuidCollection> result = new List<GuidCollection>();
+            foreach(GuidCollection group in groups)
+            {
+                if (group == null || !group.Contains(guid))
+                    continue;
+
+                result.Add(new GuidCollection(group));
+            }
+
+            return result;
+        }
+
         public bool RemoveGroup(Guid guid)
         {
             if (groups == null || guid == Guid.Empty)
