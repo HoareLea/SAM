@@ -48,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooSpaceParam { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_name", NickName = "_name", Description = "Zone Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_analyticalZoneType", NickName = "_analyticalZoneType", Description = "SAM Analytical AnalyticalZoneType", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_zoneType", NickName = "_zoneType", Description = "SAM Analytical ZoneType", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -103,15 +103,15 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_analyticalZoneType");
-            string analyticalZoneType_Text = null;
-            if (index == -1 || !dataAccess.GetData(index, ref analyticalZoneType_Text) || string.IsNullOrWhiteSpace(analyticalZoneType_Text))
+            index = Params.IndexOfInputParam("_zoneType");
+            string zoneCategory = null;
+            if (index == -1 || !dataAccess.GetData(index, ref zoneCategory) || string.IsNullOrWhiteSpace(zoneCategory))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            if(!Enum.TryParse(analyticalZoneType_Text, out AnalyticalZoneType analyticalZoneType))
+            if(!Enum.TryParse(zoneCategory, out ZoneType zoneType))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -125,14 +125,14 @@ namespace SAM.Analytical.Grasshopper
                 if(adjacencyCluster != null)
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-                    guidCollection = Analytical.Modify.UpdateGroup(adjacencyCluster, name, analyticalZoneType, spaces.ToArray());
+                    guidCollection = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
                     sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
                 }
             }
             else if(sAMObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-                guidCollection = Analytical.Modify.UpdateGroup(adjacencyCluster, name, analyticalZoneType, spaces.ToArray());
+                guidCollection = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
                 sAMObject = adjacencyCluster;
             }
 

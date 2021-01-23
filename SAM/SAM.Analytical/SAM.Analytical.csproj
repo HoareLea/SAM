@@ -51,6 +51,7 @@
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
+    <Compile Include="Classes\Zone.cs" />
     <Compile Include="Classes\SpaceSimulationResult.cs" />
     <Compile Include="Classes\System\HeatingSystem.cs" />
     <Compile Include="Classes\System\HeatingSystemType.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="Convert\ToDateTime\DateTime.cs" />
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
-    <Compile Include="Create\GuidCollection.cs" />
+    <Compile Include="Create\Zone.cs" />
     <Compile Include="Create\SpaceSimulationResult.cs" />
     <Compile Include="Create\HeatingSystemType.cs" />
     <Compile Include="Create\CoolingSystemType.cs" />
@@ -95,13 +96,13 @@
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\AirSupplyMethod.cs" />
     <Compile Include="Enums\ApertureType.cs" />
-    <Compile Include="Enums\AnalyticalZoneType.cs" />
+    <Compile Include="Enums\ZoneType.cs" />
     <Compile Include="Enums\EmitterType.cs" />
     <Compile Include="Enums\HeatFlowDirection.cs" />
     <Compile Include="Enums\DefaultGasType.cs" />
     <Compile Include="Enums\PanelGroup.cs" />
     <Compile Include="Enums\ActivityLevel.cs" />
-    <Compile Include="Enums\Parameter\AnalyticalZoneParameter.cs" />
+    <Compile Include="Enums\Parameter\ZoneParameter.cs" />
     <Compile Include="Enums\Parameter\SpaceSimulationResultParameter.cs" />
     <Compile Include="Enums\SizingMethod.cs" />
     <Compile Include="Enums\Parameter\VentilationSystemParameter.cs" />
@@ -149,7 +150,7 @@
     <Compile Include="Modify\UpdateApertureConstructionsByName.cs" />
     <Compile Include="Modify\UpdateConstructionsByName.cs" />
     <Compile Include="Modify\UpdateConstruction.cs" />
-    <Compile Include="Modify\UpdateGroup.cs" />
+    <Compile Include="Modify\UpdateZone.cs" />
     <Compile Include="Modify\UpdateSpace.cs" />
     <Compile Include="Modify\Remove.cs" />
     <Compile Include="Modify\AddSpace.cs" />
@@ -217,7 +218,7 @@
     <Compile Include="Query\InternalConstructionLayer.cs" />
     <Compile Include="Query\ExternalConstructionLayer.cs" />
     <Compile Include="Query\DefaultGasMaterial.cs" />
-    <Compile Include="Query\Group.cs" />
+    <Compile Include="Query\Zone.cs" />
     <Compile Include="Query\Volume.cs" />
     <Compile Include="Query\OffsetAperturesOnEdge.cs" />
     <Compile Include="Query\ExposedToSun.cs" />

@@ -1,19 +1,18 @@
-﻿using SAM.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static GuidCollection UpdateGroup(this AdjacencyCluster adjacencyCluster, string name, AnalyticalZoneType analyticalZoneType, params Space[] spaces)
+        public static Zone UpdateZone(this AdjacencyCluster adjacencyCluster, string name, ZoneType zoneType, params Space[] spaces)
         {
             if (adjacencyCluster == null || name == null)
                 return null;
 
-            GuidCollection result = null;
+            Zone result = null;
 
-            List<GuidCollection> groups = adjacencyCluster.GetGroups(name);
-            result = groups?.Find(x => x.TryGetValue(AnalyticalZoneParameter.AnalyticalZoneType, out string analyticalZoneType_Text) && analyticalZoneType.Text().Equals(analyticalZoneType_Text));
+            List<Zone> zones = adjacencyCluster.GetGroups<Zone>(name);
+            result = zones?.Find(x => x.TryGetValue(ZoneParameter.ZoneCategory, out string zoneCategory) && zoneType.Text().Equals(zoneCategory));
             if(result == null)
             {
                 System.Guid guid;
@@ -21,7 +20,7 @@ namespace SAM.Analytical
                     guid = System.Guid.NewGuid();
                 while (adjacencyCluster.GetGroup(result.Guid) != null);
 
-                result = Create.GuidCollection(guid, name, analyticalZoneType);
+                result = Create.Zone(guid, name, zoneType);
                 if (result == null)
                     return null;
             }
@@ -31,7 +30,7 @@ namespace SAM.Analytical
                     if (space != null)
                         result.Add(space.Guid);
 
-            result = adjacencyCluster.UpdateGroup(result);
+            result = adjacencyCluster.UpdateGroup(result) as Zone;
             return result;
         }
     }

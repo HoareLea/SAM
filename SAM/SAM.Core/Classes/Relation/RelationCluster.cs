@@ -235,7 +235,7 @@ namespace SAM.Core
             if (guidCollection == null)
                 return null;
 
-            GuidCollection guidCollection_Temp = new GuidCollection(guidCollection);
+            GuidCollection guidCollection_Temp = guidCollection.Clone();
             foreach(Guid guid in guidCollection.ToList())
             {
                 if (GetObject(guid) == null)
@@ -245,18 +245,18 @@ namespace SAM.Core
             if(groups == null)
             {
                 groups = new List<GuidCollection>() { guidCollection_Temp };
-                return new GuidCollection(guidCollection_Temp);
+                return guidCollection_Temp.Clone();
             }
 
             int index = groups.FindIndex(x => x.Guid == guidCollection_Temp.Guid);
             if(index == -1)
             {
                 groups.Add(guidCollection_Temp);
-                return new GuidCollection(guidCollection_Temp);
+                return guidCollection_Temp.Clone();
             }
 
             groups[index] = guidCollection_Temp;
-            return new GuidCollection(guidCollection_Temp);
+            return guidCollection_Temp.Clone();
         }
 
         public GuidCollection AddGroup(string name)
@@ -371,6 +371,11 @@ namespace SAM.Core
             return result;
         }
 
+        public List<T> GetGroups<T>(string name) where T: GuidCollection
+        {
+            return GetGroups(name)?.FindAll(x => x is T).Cast<T>().ToList();
+        }
+
         public List<GuidCollection> GetGroups(object @object)
         {
             if (groups == null)
@@ -390,6 +395,11 @@ namespace SAM.Core
             }
 
             return result;
+        }
+
+        public List<T> GetGroups<T>(object @object) where T : GuidCollection
+        {
+            return GetGroups(@object)?.FindAll(x => x is T).Cast<T>().ToList();
         }
 
         public bool RemoveGroup(Guid guid)

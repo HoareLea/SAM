@@ -2,12 +2,13 @@
 
 namespace SAM.Analytical
 {
-    [Description("Analytical Zone Type.")]
-    public enum AnalyticalZoneType
+    [Description("Zone Type.")]
+    public enum ZoneType
     {
         [Description("Undefined")] Undefined,
         [Description("Heating")] Heating,
         [Description("Cooling")] Cooling,
         [Description("Ventilation")] Ventilation,
+        [Description("Other")] Other
     }
 }
