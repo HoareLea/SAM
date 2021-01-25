@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace SAM.Core
 {
@@ -12,10 +10,10 @@ namespace SAM.Core
                 return false;
 
             ParameterSet parameterSet = sAMObject.GetParameterSet(defaultAssembly);
-            if (parameterSet == null)
+            if (!findAny && parameterSet == null)
                 return false;
 
-            if (parameterSet.Contains(name))
+            if (parameterSet != null && parameterSet.Contains(name))
                 return parameterSet.Remove(name);
 
             if (!findAny)

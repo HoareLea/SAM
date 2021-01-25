@@ -140,6 +140,11 @@ namespace SAM.Core
             return Modify.RemoveValue(this, name, @enum.GetType().Assembly);
         }
 
+        public bool RemoveValue(string name, Assembly assembly = null)
+        {
+            return Modify.RemoveValue(this, name, assembly == null ? Assembly.GetExecutingAssembly(): assembly);
+        }
+
         public bool TryGetValue(Enum @enum, out object value)
         {
             value = null;

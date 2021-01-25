@@ -76,6 +76,7 @@
     <Compile Include="Component\SAMCoreAddMaterials.cs" />
     <Compile Include="Component\SAMCoreCopyMaterials.cs" />
     <Compile Include="Component\SAMCoreFromFile.cs" />
+    <Compile Include="Component\SAMCoreRemoveValue.cs" />
     <Compile Include="Component\SAMCoreParameter.cs" />
     <Compile Include="Component\SAMCoreParameterType.cs" />
     <Compile Include="Component\SAMCoreSAMLibraryAddObjects.cs" />
@@ -180,7 +181,7 @@
   <ItemGroup>
     <PackageReference Include="Grasshopper">
       <Version>6.32.20340.21001</Version>
-	  <ExcludeAssets>runtime</ExcludeAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
