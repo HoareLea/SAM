@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces, if nothing connected all spaces from AnalyticalModel will be used", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileHeating_", NickName = "profileHeating_", Description = "SAM Analytical Profile for Heating", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "emitterHTGRadianProportion_", NickName = "emitterHTGRadianProportion_", Description = "Heating Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "emitterHTGViewCoefficient_", NickName = "emitterHTGViewCoefficient_", Description = "Heating Emitter View Coefficient", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -60,8 +60,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateSetPoint()
           : base("SAMAnalytical.UpdateSetPoint", "SAMAnalytical.UpdateSetPoint",
-              "Updates SetPoint (Cooling, Heating, Humidification and Dehumidification ) Properties for Spaces",
-              "SAM", "Analytical")
+              "Updates SetPoint (Cooling, Heating, Humidification and Dehumidification ) Properties for Spaces \nIf nothing connect orignal Analytical Model will be outputed \nFor reference see https://edsl.myzen.co.uk/manuals/Building%20Simulator/",
+              "SAM", "SAM_IC")
         {
         }
 
