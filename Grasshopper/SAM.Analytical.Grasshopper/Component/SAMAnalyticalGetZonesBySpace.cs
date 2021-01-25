@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalGetZones : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalGetZonesBySpace : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -31,8 +31,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalGetZones()
-          : base("SAMAnalytical.GetZones", "SAMAnalytical.GetZones",
+        public SAMAnalyticalGetZonesBySpace()
+          : base("SAMAnalytical.GetZonesBySpace", "SAMAnalytical.GetZonesBySpace",
               "Get Space Zones (Groups) from Analytical Object",
               "SAM", "Analytical")
         {

@@ -79,7 +79,8 @@
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateOccupancy.cs" />
     <Compile Include="Component\SAMAnalyticalFixNames.cs" />
-    <Compile Include="Component\SAMAnalyticalGetZones.cs" />
+    <Compile Include="Component\SAMAnalyticalGetZonesByName.cs" />
+    <Compile Include="Component\SAMAnalyticalGetZonesBySpace.cs" />
     <Compile Include="Component\SAMAnalyticalGetZone.cs" />
     <Compile Include="Component\SAMAnalyticalAirFlow.cs" />
     <Compile Include="Component\SAMAnalyticalCopyApertureConstructionLayers.cs" />

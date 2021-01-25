@@ -391,7 +391,7 @@ namespace SAM.Core
                 if (group == null || !group.Contains(guid))
                     continue;
 
-                result.Add(new GuidCollection(group));
+                result.Add(group.Clone());
             }
 
             return result;
