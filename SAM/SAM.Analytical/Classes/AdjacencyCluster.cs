@@ -270,6 +270,22 @@ namespace SAM.Analytical
             return GetObjects<Space>();
         }
 
+        public List<Space> GetSpaces(Zone zone)
+        {
+            if (zone == null)
+                return null;
+
+            List<Space> result = new List<Space>();
+            foreach(Guid guid in zone)
+            {
+                Space space = GetObject<Space>(guid);
+                if (space != null)
+                    result.Add(space);
+            }
+
+            return result;
+        }
+
         public List<Aperture> GetApertures()
         {
             List<Panel> panels = GetPanels();

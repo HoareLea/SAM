@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalFixNames()
           : base("SAMAnalytical.FixNames", "SAMAnalytical.FixNames",
-              "Fix SAM Object Names by removing special characters",
+              "Fix SAM Object Names by removing special characters, right click and select langage to replace special character with standard ones",
               "SAM", "Analytical")
         {
         }
@@ -45,14 +45,14 @@ namespace SAM.Analytical.Grasshopper
         public override bool Write(GH_IWriter writer)
         {
             if (name != null)
-                writer.SetString("Name", name);
+                writer.SetString("Language_", name);
 
             return base.Write(writer);
         }
 
         public override bool Read(GH_IReader reader)
         {
-            if (!reader.TryGetString("Name", ref name))
+            if (!reader.TryGetString("Language_", ref name))
                 name = null;
 
             return base.Read(reader);
@@ -123,7 +123,11 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if(!string.IsNullOrEmpty(name))
+            if(string.IsNullOrEmpty(name))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Please select language to fix");
+            }
+            else
             {
                 if(sAMObject is AnalyticalModel || sAMObject is AdjacencyCluster)
                 {
@@ -157,6 +161,20 @@ namespace SAM.Analytical.Grasshopper
 
                             if (panel_New != panel)
                                 adjacencyCluster.AddObject(panel_New);
+                        }
+
+                        foreach(Space space in adjacencyCluster.GetSpaces())
+                        {
+                            InternalCondition internalCondition = Analytical.Query.ReplaceNameSpecialCharacters(space.InternalCondition, name);
+                            Space space_New = null;
+                            if (internalCondition.Name != space.InternalCondition.Name)
+                                space_New = new Space(space) { InternalCondition = internalCondition };
+                            else
+                                space_New = space;
+
+                            space_New = Analytical.Query.ReplaceNameSpecialCharacters(space_New, name);
+                            if (space_New != space)
+                                adjacencyCluster.AddObject(space_New);
                         }
                     }
 

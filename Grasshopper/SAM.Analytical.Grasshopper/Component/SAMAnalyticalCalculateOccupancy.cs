@@ -78,13 +78,8 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_spaces");
             List<Space> spaces = new List<Space>();
-            if (!dataAccess.GetDataList(index, spaces))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            dataAccess.GetDataList(index, spaces);
 
-           
             if(sAMObject is AnalyticalModel || sAMObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = null;
@@ -116,20 +111,20 @@ namespace SAM.Analytical.Grasshopper
                     {
                         if(!space.TryGetValue(SpaceParameter.Area, out double area) || double.IsNaN(area) || area == 0)
                         {
-                            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Space {0} (Guid: {1}) has no area", string.IsNullOrWhiteSpace(space.Name) ? "???" : space.Name, space.Guid));
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, string.Format("Space {0} (Guid: {1}) has no area", string.IsNullOrWhiteSpace(space.Name) ? "???" : space.Name, space.Guid));
                             continue;
                         }
 
                         InternalCondition internalCondition = space.InternalCondition;
                         if(internalCondition == null)
                         {
-                            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Space {0} (Guid: {1}) has no InternalCondition assigned", string.IsNullOrWhiteSpace(space.Name) ? "???" : space.Name, space.Guid));
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, string.Format("Space {0} (Guid: {1}) has no InternalCondition assigned", string.IsNullOrWhiteSpace(space.Name) ? "???" : space.Name, space.Guid));
                             continue;
                         }
 
                         if (!internalCondition.TryGetValue(InternalConditionParameter.AreaPerPerson, out double areaPerPerson) || double.IsNaN(areaPerPerson))
                         {
-                            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("InternalCondition {0} (Guid: {1}) for Space {2} (Guid: {3}) has invalid value for Area Per Person parameter", string.IsNullOrWhiteSpace(internalCondition.Name) ? "???" : internalCondition.Name, space.Guid, string.IsNullOrWhiteSpace(space.Name) ? "???" : space.Name, space.Guid));
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, string.Format("InternalCondition {0} (Guid: {1}) for Space {2} (Guid: {3}) has invalid value for Area Per Person parameter", string.IsNullOrWhiteSpace(internalCondition.Name) ? "???" : internalCondition.Name, space.Guid, string.IsNullOrWhiteSpace(space.Name) ? "???" : space.Name, space.Guid));
                             continue;
                         }
 

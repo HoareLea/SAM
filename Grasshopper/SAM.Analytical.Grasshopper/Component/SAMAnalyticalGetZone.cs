@@ -109,29 +109,30 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            GuidCollection guidCollection = null;
             List<Space> spaces = null;
+            Zone zone = null;
             if(sAMObject is AnalyticalModel)
             {
-                AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
-                AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
+                AdjacencyCluster adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
                 if(adjacencyCluster != null)
                 {
-                    adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-                    guidCollection = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
-                    sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                    zone = Analytical.Query.Zone(adjacencyCluster, name, zoneType);
+                    if (zone != null)
+                        spaces = adjacencyCluster.GetSpaces(zone);
+                   
                 }
             }
             else if(sAMObject is AdjacencyCluster)
             {
-                AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-                guidCollection = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
-                sAMObject = adjacencyCluster;
+                AdjacencyCluster adjacencyCluster = (AdjacencyCluster)sAMObject;
+                zone = Analytical.Query.Zone(adjacencyCluster, name, zoneType);
+                if (zone != null)
+                    spaces = adjacencyCluster.GetSpaces(zone);
             }
 
             index = Params.IndexOfOutputParam("Zone");
             if (index != -1)
-                dataAccess.SetData(index, sAMObject);
+                dataAccess.SetData(index, zone);
 
             index = Params.IndexOfOutputParam("Spaces");
             if (index != -1)

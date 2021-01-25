@@ -61,7 +61,7 @@ namespace SAM.Analytical.Grasshopper
 
         private void Menu_Changed(object sender, EventArgs e)
         {
-            if (sender is ToolStripMenuItem item && item.Tag is PanelType)
+            if (sender is ToolStripMenuItem item && item.Tag is ZoneType)
             {
                 //Do something with zoneType
                 this.zoneType = (ZoneType)item.Tag;

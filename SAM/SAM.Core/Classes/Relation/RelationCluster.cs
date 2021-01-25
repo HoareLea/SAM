@@ -52,7 +52,7 @@ namespace SAM.Core
                 dictionary_Relations[keyValuePair_1.Key] = dictionary;
             }
 
-            groups = relationCluster.groups?.ConvertAll(x => new GuidCollection(x));
+            groups = relationCluster.groups?.ConvertAll(x => x.Clone());
         }
 
         /// <summary>
@@ -365,7 +365,7 @@ namespace SAM.Core
             foreach (GuidCollection group in groups)
             {
                 if (group?.Name == name)
-                    result.Add(new GuidCollection(group));
+                    result.Add(group.Clone());
             }
 
             return result;
