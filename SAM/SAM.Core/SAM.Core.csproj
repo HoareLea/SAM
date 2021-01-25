@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -48,6 +49,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
@@ -63,6 +65,8 @@
     <Compile Include="Classes\Base\Range.cs" />
     <Compile Include="Classes\Library\SystemTypeLibrary.cs" />
     <Compile Include="Classes\Relation\TextMap.cs" />
+    <Compile Include="Convert\ToBitmapSource\BitmapSource.cs" />
+    <Compile Include="Convert\ToBitmap\Bitmap.cs" />
     <Compile Include="Convert\ToFile\File.cs" />
     <Compile Include="Convert\ToJsonDocument\JsonDocument.cs" />
     <Compile Include="Convert\ToJsonElement\JsonElement.cs" />
@@ -76,6 +80,7 @@
     <Compile Include="Interfaces\Base\ISystem.cs" />
     <Compile Include="Interfaces\Base\IResult.cs" />
     <Compile Include="Interfaces\Base\ISystemType.cs" />
+    <Compile Include="Modify\DeleteObject.cs" />
     <Compile Include="Modify\Delete.cs" />
     <Compile Include="Modify\AddRange.cs" />
     <Compile Include="Classes\Library\SAMLibrary.cs" />
