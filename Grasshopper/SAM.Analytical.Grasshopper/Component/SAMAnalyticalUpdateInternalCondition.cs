@@ -119,8 +119,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateInternalCondition()
           : base("SAMAnalytical.UpdateInternalCondition", "SAMAnalytical.UpdateInternalCondition",
-              "Updates InternalCondition(IC) Properties for Spaces or Add new IC if is not included. In nothing connected there is default office type office predefine. This includes 8to18 Profile for gains and Constrant profile for SetPoints",
-              "SAM", "Analytical")
+              "Updates InternalCondition(IC) Properties for Spaces or Add new IC if is not included. \nIf nothing connected - default type S37_OfficeCell will be assign.\n This includes 8to18 Profile for gains and Constrant profile for SetPoints",
+              "SAM", "SAM_IC")
         {
         }
 

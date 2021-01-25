@@ -18,7 +18,7 @@ namespace SAM.Analytical
                 System.Guid guid;
                 do
                     guid = System.Guid.NewGuid();
-                while (adjacencyCluster.GetGroup(result.Guid) != null);
+                while (adjacencyCluster.GetGroup(guid) != null);
 
                 result = Create.Zone(guid, name, zoneType);
                 if (result == null)

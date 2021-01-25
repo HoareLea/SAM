@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateZone()
           : base("SAMAnalytical.UpdateZone", "SAMAnalytical.UpdateZone",
-              "Update or Crea Zone (Group) in Analytical Object",
+              "Update or Create Zone (Group) in Analytical Object",
               "SAM", "Analytical")
         {
         }
