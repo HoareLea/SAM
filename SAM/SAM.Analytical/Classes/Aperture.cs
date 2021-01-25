@@ -38,6 +38,13 @@ namespace SAM.Analytical
                 planarBoundary3D = new PlanarBoundary3D(closedPlanar3D);
         }
 
+        public Aperture(string name, Aperture aperture, ApertureConstruction apertureConstruction)
+            : base(name, aperture, apertureConstruction)
+        {
+            if (aperture.planarBoundary3D != null)
+                planarBoundary3D = new PlanarBoundary3D(aperture.planarBoundary3D);
+        }
+
         public Aperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, Point3D location)
             : base(System.Guid.NewGuid(), apertureConstruction.Name, null, apertureConstruction)
         {
@@ -48,7 +55,8 @@ namespace SAM.Analytical
         public Aperture(Aperture aperture, ApertureConstruction apertureConstruction)
             :base(apertureConstruction.Name, aperture, apertureConstruction)
         {
-            planarBoundary3D = new PlanarBoundary3D(aperture.planarBoundary3D);
+            if (aperture.planarBoundary3D != null)
+                planarBoundary3D = new PlanarBoundary3D(aperture.planarBoundary3D);
         }
 
         public override bool FromJObject(JObject jObject)

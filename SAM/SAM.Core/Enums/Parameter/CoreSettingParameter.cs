@@ -7,5 +7,6 @@ namespace SAM.Core
     public enum CoreSettingParameter
     {
         [ParameterProperties("Resources Directory Name", "Resources Directory Name"), ParameterValue(ParameterType.String)] ResourcesDirectoryName,
+        [ParameterProperties("Special Character Maps Directory Name", "Special Character Maps Directory Name"), ParameterValue(ParameterType.String)] SpecialCharacterMapsDirectoryName,
     }
 }

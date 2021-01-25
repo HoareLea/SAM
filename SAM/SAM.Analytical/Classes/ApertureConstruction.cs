@@ -32,6 +32,14 @@ namespace SAM.Analytical
             paneConstructionLayers = apertureConstruction.PaneConstructionLayers;
         }
 
+        public ApertureConstruction(Guid guid, ApertureConstruction apertureConstruction, string name)
+            : base(guid, name, apertureConstruction)
+        {
+            apertureType = apertureConstruction.apertureType;
+            frameConstructionLayers = apertureConstruction.FrameConstructionLayers;
+            paneConstructionLayers = apertureConstruction.PaneConstructionLayers;
+        }
+
         public ApertureConstruction(Guid guid, string name, ApertureType apertureType, IEnumerable<ConstructionLayer> paneConstructionLayers, IEnumerable<ConstructionLayer> frameConstructionLayers = null)
              : base(guid, name)
         {

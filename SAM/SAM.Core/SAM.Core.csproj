@@ -148,6 +148,7 @@
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\RemoveValue.cs" />
     <Compile Include="Modify\SetValue.cs" />
+    <Compile Include="Query\ReplaceSpecialCharacters.cs" />
     <Compile Include="Query\Copy.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
     <Compile Include="Query\CustomAttribute.cs" />

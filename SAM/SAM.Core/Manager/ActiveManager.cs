@@ -1,6 +1,7 @@
 ﻿using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace SAM.Core
@@ -8,6 +9,7 @@ namespace SAM.Core
     public static partial class ActiveManager
     {
         private static Dictionary<Type, AssociatedTypes> associatedTypesDictionary;
+        private static Dictionary<string, TextMap> specialCharacterMapDictionary;
         private static Manager manager = Load();
 
         private static Manager Load()
@@ -151,6 +153,95 @@ namespace SAM.Core
                 }
 
                 result[keyValuePair.Key] = keyValuePair.Value;
+            }
+
+            return result;
+        }
+
+        public static TextMap GetSpecialCharacterMap(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
+
+            string name_Temp = name.Trim().ToUpper();
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
+
+            if (specialCharacterMapDictionary == null)
+                specialCharacterMapDictionary = new Dictionary<string, TextMap>();
+
+            TextMap result = null;
+            if (specialCharacterMapDictionary.TryGetValue(name_Temp, out result))
+                return result;
+
+            string directoryName = ActiveSetting.Setting?.GetValue<string>(CoreSettingParameter.SpecialCharacterMapsDirectoryName);
+            if (directoryName == null)
+                return null;
+
+            string directory = System.IO.Path.Combine(Query.ResourcesDirectory(Assembly.GetExecutingAssembly()), directoryName);
+            if (!System.IO.Directory.Exists(directory))
+                return null;
+
+            string[] paths = System.IO.Directory.GetFiles(directory);
+            if (paths == null || paths.Length == 0)
+                return null;
+
+            foreach(string path in paths)
+            {
+                if (path == null)
+                    continue;
+
+                string name_Path = System.IO.Path.GetFileNameWithoutExtension(path);
+                if (string.IsNullOrWhiteSpace(name_Path))
+                    continue;
+
+                name_Path = name_Path.Trim().ToUpper();
+                if (string.IsNullOrWhiteSpace(name_Path))
+                    continue;
+
+                if (!name_Temp.Equals(name_Path))
+                    continue;
+
+                result = Convert.ToSAM(path, SAMFileType.Json).FirstOrDefault() as TextMap;
+                if (result == null)
+                    continue;
+
+                specialCharacterMapDictionary[name_Temp] = result;
+                return result;
+            }
+
+            return null;
+        }
+
+        public static List<string> GetSpecialCharacterMapNames()
+        {
+            string directoryName = ActiveSetting.Setting?.GetValue<string>(CoreSettingParameter.SpecialCharacterMapsDirectoryName);
+            if (directoryName == null)
+                return null;
+
+            string directory = System.IO.Path.Combine(Query.ResourcesDirectory(Assembly.GetExecutingAssembly()), directoryName);
+            if (!System.IO.Directory.Exists(directory))
+                return null;
+
+            string[] paths = System.IO.Directory.GetFiles(directory);
+            if (paths == null || paths.Length == 0)
+                return null;
+
+            List<string> result = new List<string>();
+            foreach(string path in paths)
+            {
+                if (path == null)
+                    continue;
+
+                string name_Path = System.IO.Path.GetFileNameWithoutExtension(path);
+                if (string.IsNullOrWhiteSpace(name_Path))
+                    continue;
+
+                name_Path = name_Path.Trim().ToUpper();
+                if (string.IsNullOrWhiteSpace(name_Path))
+                    continue;
+
+                result.Add(name_Path);
             }
 
             return result;

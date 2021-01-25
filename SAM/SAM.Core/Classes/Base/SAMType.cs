@@ -26,6 +26,12 @@ namespace SAM.Core
         {
         }
 
+        public SAMType(Guid guid, string name, SAMType sAMType)
+            : base(name, guid, sAMType)
+        {
+
+        }
+
         public SAMType(SAMType sAMType, Guid guid)
             : base(guid, sAMType)
         {

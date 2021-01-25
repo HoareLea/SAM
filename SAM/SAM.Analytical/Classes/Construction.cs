@@ -62,6 +62,12 @@ namespace SAM.Analytical
             constructionLayers = construction.constructionLayers?.ConvertAll(x => new ConstructionLayer(x));
         }
 
+        public Construction(Guid guid, Construction construction, string name)
+            : base(guid, name, construction)
+        {
+            constructionLayers = construction.constructionLayers?.ConvertAll(x => new ConstructionLayer(x));
+        }
+
         public Construction(Construction construction, IEnumerable<ConstructionLayer> constructionLayers)
             : base(construction)
         {

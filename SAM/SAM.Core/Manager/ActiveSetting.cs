@@ -27,6 +27,7 @@ namespace SAM.Core
         {
             Setting result = new Setting(Assembly.GetExecutingAssembly());
             result.SetValue(CoreSettingParameter.ResourcesDirectoryName, "resources");
+            result.SetValue(CoreSettingParameter.SpecialCharacterMapsDirectoryName, "SpecialCharacterMaps");
 
             return result;
         }

@@ -156,6 +156,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\ReplaceNameSpecialCharacters.cs" />
     <Compile Include="Query\TryGetInternalCondition.cs" />
     <Compile Include="Query\ExternalPanelsArea.cs" />
     <Compile Include="Query\OccupancyGainPerPerson.cs" />
