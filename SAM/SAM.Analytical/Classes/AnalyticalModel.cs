@@ -251,6 +251,11 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetPanels()?.ConvertAll(x => new Panel(x));
         }
 
+        public List<Zone> GetZones()
+        {
+            return adjacencyCluster?.GetZones();
+        }
+
         public IEnumerable<InternalCondition> GetInternalConditions()
         {
             return adjacencyCluster?.GetInternalConditions();

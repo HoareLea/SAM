@@ -427,6 +427,11 @@ namespace SAM.Analytical
             return GetRelatedObjects<Space>(panel);
         }
 
+        public List<Zone> GetZones()
+        {
+            return Groups?.FindAll(x => x is Zone).ConvertAll(x => (Zone)x);
+        }
+
         /// <summary>
         /// Gets spaces for given point
         /// </summary>

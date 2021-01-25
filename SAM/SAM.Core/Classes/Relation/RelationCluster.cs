@@ -444,7 +444,7 @@ namespace SAM.Core
                 if (groups == null)
                     return null;
 
-                return groups.ConvertAll(x => new GuidCollection(x));
+                return groups.ConvertAll(x => x.Clone());
             }
         }
 
