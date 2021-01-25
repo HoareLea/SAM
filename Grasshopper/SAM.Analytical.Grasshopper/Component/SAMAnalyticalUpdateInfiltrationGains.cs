@@ -31,13 +31,13 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces, if nothing connected all spaces from AnalyticalModel will be used", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profile_", NickName = "profile_", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "infiltrationACH_", Description = "Infiltration Air Changes Per Hour, ac/h", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 //result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "toExternalFacing_", NickName = "toExternalFacing_", Description = "If False then value for Infiltration Air Changes Per Hour will be applied to all spaces", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "airflowPerExtArea_", NickName = "airflowPerExtArea_", Description = "Airflow Per External Area", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "airflowPerExtArea_", NickName = "airflowPerExtArea_", Description = "Airflow Per Exposed Panel Area, m3/s per m2  \n*typical building pressures of ~4 Pa between inside and outside, \n* 0.0001 (m3/s per m2 facade) - Tight building, \n* 0.0003 (m3/s per m2 facade) - Average building, \n* 0.0006 (m3/s per m2 facade) - Leaky building", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
 
-                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "toExternalFacing_", NickName = "toExternalFacing_", Description = "If False then value for Infiltration Air Changes Per Hour will be applied to all spaces", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "toExternalFacing_", NickName = "toExternalFacing_", Description = "If False then value for Infiltration Air Changes Per Hour will be applied to all spaces, \nif True only spaces with Exposed Panel ", Access = GH_ParamAccess.item };
                 boolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
 
@@ -61,7 +61,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateInfiltrationGains()
           : base("SAMAnalytical.UpdateInfiltrationGains", "SAMAnalytical.UpdateInfiltrationGains",
-              "Updates Infiltration in Internal Condition for Spaces",
+              "Updates Infiltration in Internal Condition for Spaces \nIf nothing connect orignal Analytical Model will be outputed",
               "SAM", "SAM_IC")
         {
         }
@@ -147,12 +147,21 @@ namespace SAM.Analytical.Grasshopper
                 if(!double.IsNaN(infiltrationAirChangesPerHour) || !double.IsNaN(airflowPerExtArea))
                 {
                     double value = 0;
+                    // m3/s = ac/h * ZoneVolume / 3600
+                    // ac/h = (m3/s * 3600) / ZoneVolume
+
+                    //Add recalucation from 4Pa to user input and defult UK 50Pa
+                    // m3/s = (m3/s) / (math.pow((_blowerPressure_/4),0.63))
 
                     double area_External = adjacencyCluster.ExternalPanelsArea(space, true);
                     if (!double.IsNaN(airflowPerExtArea))
                     {
-                        if (!double.IsNaN(area_External))
-                            value = airflowPerExtArea * area_External;
+                        double volume = double.NaN;
+                        if (!space.TryGetValue(SpaceParameter.Volume, out volume))
+                            volume = space.Volume(adjacencyCluster);
+
+                        if(!double.IsNaN(area_External) && !double.IsNaN(volume) && volume != 0)
+                            value = (airflowPerExtArea * area_External * 3600) / volume;
                     }
                     else
                     {
