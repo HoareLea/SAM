@@ -44,6 +44,7 @@ namespace SAM.Analytical
             : base(name, space)
         {
             this.location = location;
+            internalCondition = space.InternalCondition;
         }
 
         public Space(JObject jObject)
