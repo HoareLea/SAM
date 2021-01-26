@@ -36,8 +36,8 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalFixNames()
-          : base("SAMAnalytical.FixNames", "SAMAnalytical.FixNames",
-              "Fix SAM Object Names by removing special characters, right click and select langage to replace special character with standard ones",
+          : base("SAMAnalytical.FixNames", "SAMAnalytical.FixNames",  //SAMAnalytical.ModifyToISOBasicLatinAlphabet
+              "Fix/Modidy SAM Analytical Object Names (Spaces, Panel, Aperture, Construction) by removing special characters. \nreplace special character with ISO basic Latin alphabet https://en.wikipedia.org/wiki/ISO_basic_Latin_alphabet \n *Right click and select language.",
               "SAM", "Analytical")
         {
         }
