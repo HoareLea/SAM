@@ -9,18 +9,29 @@ namespace SAM.Analytical
             if (adjacencyCluster == null || name == null)
                 return null;
 
+            return UpdateZone(adjacencyCluster, name, zoneType.Text(), spaces);
+        }
+
+        public static Zone UpdateZone(this AdjacencyCluster adjacencyCluster, string name, string zoneCategory, params Space[] spaces)
+        {
+            if (adjacencyCluster == null || name == null)
+                return null;
+
             Zone result = null;
 
             List<Zone> zones = adjacencyCluster.GetGroups<Zone>(name);
-            result = zones?.Find(x => x.TryGetValue(ZoneParameter.ZoneCategory, out string zoneCategory) && zoneType.Text().Equals(zoneCategory));
-            if(result == null)
+
+            if (zoneCategory != null)
+                result = zones?.Find(x => x.TryGetValue(ZoneParameter.ZoneCategory, out string zoneCategory_Temp) && zoneCategory.Equals(zoneCategory_Temp));
+
+            if (result == null)
             {
                 System.Guid guid;
                 do
                     guid = System.Guid.NewGuid();
                 while (adjacencyCluster.GetGroup(guid) != null);
 
-                result = Create.Zone(guid, name, zoneType);
+                result = Create.Zone(guid, name, zoneCategory);
                 if (result == null)
                     return null;
             }

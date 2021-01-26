@@ -1,6 +1,4 @@
-﻿using SAM.Core;
-
-namespace SAM.Analytical
+﻿namespace SAM.Analytical
 {
     public static partial class Create
     {
@@ -9,8 +7,17 @@ namespace SAM.Analytical
             if (string.IsNullOrWhiteSpace(name))
                 return null;
 
+            return Zone(guid, name, zoneType.Text());
+        }
+
+        public static Zone Zone(System.Guid guid, string name, string zoneCategory)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
+
             Zone result = new Zone(guid, name);
-            result.SetValue(ZoneParameter.ZoneCategory, zoneType.Text());
+            if (zoneCategory != null)
+                result.SetValue(ZoneParameter.ZoneCategory, zoneCategory);
 
             return result;
         }
