@@ -88,13 +88,13 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_name_");
             string name = null;
-            if (index == -1)
+            if (index != -1)
                 if (!dataAccess.GetData(index, ref name))
                     name = null;
 
             index = Params.IndexOfInputParam("_zoneType_");
             string zoneCategory = null;
-            if (index == -1)
+            if (index != -1)
                 if (!dataAccess.GetData(index, ref zoneCategory))
                     zoneCategory = null;
 

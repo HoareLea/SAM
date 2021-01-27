@@ -494,11 +494,20 @@ namespace SAM.Core
             if (!IsValid(type))
                 return null;
 
-            object @object = dictionary_Objects[type.FullName]?[guid];
-            if (type.IsAssignableFrom(@object.GetType()))
-                return @object;
+            string fullName = type.FullName;
+            if (fullName == null)
+                return null;
 
-            return null;
+            if (dictionary_Objects == null || !dictionary_Objects.TryGetValue(fullName, out Dictionary<Guid, object> dictionary) || dictionary == null)
+                return null;
+
+            if (!dictionary.TryGetValue(guid, out object result) || result == null)
+                return null;
+
+            if (!type.IsAssignableFrom(result.GetType()))
+                return null;
+
+            return result;
         }
 
         public string GetTypeName(Guid guid)
