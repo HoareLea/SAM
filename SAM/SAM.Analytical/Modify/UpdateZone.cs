@@ -19,7 +19,7 @@ namespace SAM.Analytical
 
             Zone result = null;
 
-            List<Zone> zones = adjacencyCluster.GetGroups<Zone>(name);
+            List<Zone> zones = adjacencyCluster.GetObjects<Zone>()?.FindAll(x => x.Name == name);
 
             if (zoneCategory != null)
                 result = zones?.Find(x => x.TryGetValue(ZoneParameter.ZoneCategory, out string zoneCategory_Temp) && zoneCategory.Equals(zoneCategory_Temp));
@@ -29,20 +29,21 @@ namespace SAM.Analytical
                 System.Guid guid;
                 do
                     guid = System.Guid.NewGuid();
-                while (adjacencyCluster.GetGroup(guid) != null);
+                while (adjacencyCluster.GetObject<Zone>(guid) != null);
 
                 result = Create.Zone(guid, name, zoneCategory);
                 if (result == null)
                     return null;
+
+                adjacencyCluster.AddObject(result);
             }
 
             if (spaces != null)
                 foreach (Space space in spaces)
                     if (space != null)
-                        result.Add(space.Guid);
+                        adjacencyCluster.AddRelation(result, space);
 
-            result = adjacencyCluster.UpdateGroup(result) as Zone;
-            return result;
+            return Core.Query.Clone(result);
         }
     }
 }

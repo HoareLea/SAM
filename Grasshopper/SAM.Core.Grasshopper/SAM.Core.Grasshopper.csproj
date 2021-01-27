@@ -92,8 +92,6 @@
     <Compile Include="Component\SAMCoreToFile.cs" />
     <Compile Include="Component\SAMVersion.cs" />
     <Compile Include="Component\SAMCoreColorToUint.cs" />
-    <Compile Include="Component\SAMCoreRemoveGroup.cs" />
-    <Compile Include="Component\SAMCoreAddGroup.cs" />
     <Compile Include="Component\SAMCoreTextComparisonType.cs" />
     <Compile Include="Component\SAMCoreNumberComparisonType.cs" />
     <Compile Include="Component\SAMCoreInspect.cs" />

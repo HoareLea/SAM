@@ -105,7 +105,7 @@ namespace SAM.Analytical.Grasshopper
             else if(sAMObject is AdjacencyCluster)
                 adjacencyCluster = ((AdjacencyCluster)sAMObject);
 
-            List<Zone> zones = adjacencyCluster?.Groups?.FindAll(x => x is Zone).ConvertAll(x => (Zone)x);
+            List<Zone> zones = adjacencyCluster?.GetObjects<Zone>();
             if (name != null)
                 zones.RemoveAll(x => x.Name != name);
 
@@ -124,7 +124,7 @@ namespace SAM.Analytical.Grasshopper
                 foreach (Zone zone in zones)
                 {
                     GH_Path path = new GH_Path(count);
-                    List<Space> spaces = adjacencyCluster.GetObjects<Space>(zone);
+                    List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(zone);
                     if (spaces != null && spaces.Count > 0)
                         spaces.ForEach(x => dataTree_Spaces.Add(new GooSpace(x), path));
 

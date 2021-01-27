@@ -62,6 +62,7 @@
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Classes\Base\AnyOf.cs" />
+    <Compile Include="Classes\Base\Group.cs" />
     <Compile Include="Classes\Base\Result.cs" />
     <Compile Include="Classes\Base\ZipArchiveInfo.cs" />
     <Compile Include="Classes\Base\Range.cs" />

@@ -1,6 +1,4 @@
-﻿using SAM.Core;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -11,7 +9,7 @@ namespace SAM.Analytical
             if (adjacencyCluster == null || string.IsNullOrWhiteSpace(name))
                 return null;
 
-            List<Zone> zones = adjacencyCluster.GetGroups<Zone>(name);
+            List<Zone> zones = adjacencyCluster.GetObjects<Zone>()?.FindAll(x => name.Equals(x.Name));
             if (zones == null || zones.Count == 0)
                 return null;
 
