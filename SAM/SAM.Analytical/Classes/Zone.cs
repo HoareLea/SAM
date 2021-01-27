@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -22,6 +23,14 @@ namespace SAM.Analytical
             : base(zone)
         {
 
+        }
+
+        public override void Add(Guid guid)
+        {
+            if (this.Contains(guid))
+                return;
+
+            base.Add(guid);
         }
 
         public Zone(JObject jObject)

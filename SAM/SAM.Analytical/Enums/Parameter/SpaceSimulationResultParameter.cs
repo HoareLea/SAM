@@ -29,5 +29,13 @@ namespace SAM.Analytical
         [ParameterProperties("Volume", "Volume [m3]"), DoubleParameterValue(0)] Volume,
         [ParameterProperties("Area", "Area [m2]"), DoubleParameterValue(0)] Area,
         [ParameterProperties("Sizing Method", "Sizing Method"), ParameterValue(Core.ParameterType.String)] SizingMethod,
+
+        [ParameterProperties("Occupied Hours", "Occupied Hours"), IntegerParameterValue(0, 8760)] OccupiedHours,
+        [ParameterProperties("Occupied Hours [T>25]", "Occupied Hours For Resultant Temperature Greater Than 25"), IntegerParameterValue(0, 8760)] OccupiedHours25,
+        [ParameterProperties("Occupied Hours [T>28]", "Occupied Hours For Resultant Temperature Greater Than 28"), IntegerParameterValue(0, 8760)] OccupiedHours28,
+        [ParameterProperties("Max Dry Bulb Temperature", "Maximal Dry Bulb Temperature"), DoubleParameterValue()] MaxDryBulbTemperature,
+        [ParameterProperties("Min Dry Bulb Temperature", "Minimal Dry Bulb Temperature"), DoubleParameterValue()] MinDryBulbTemperature,
+        [ParameterProperties("Max Dry Bulb Temperature Index", "Maximal Dry Bulb Temperature Index"), DoubleParameterValue(0, 8759)] MaxDryBulbTemperatureIndex,
+        [ParameterProperties("Min Dry Bulb Temperature Index", "Minimal Dry Bulb Temperature Index"), DoubleParameterValue(0, 8759)] MinDryBulbTemperatureIndex,
     }
 }

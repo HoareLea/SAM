@@ -53,7 +53,7 @@ namespace SAM.Core
                 this.guids.Add(guid);
         }
 
-        public void Add(Guid guid)
+        public virtual void Add(Guid guid)
         {
             guids.Add(guid);
         }
