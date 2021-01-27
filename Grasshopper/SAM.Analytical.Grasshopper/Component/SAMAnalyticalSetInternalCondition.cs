@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -128,6 +129,9 @@ namespace SAM.Analytical.Grasshopper
             List<Space> spaces = new List<Space>();
 
             List<Space> spaces_Output = new List<Space>();
+
+            if (@object is IGH_Goo)
+                @object = ((dynamic)@object).Value;
 
             InternalCondition internalCondition = null;
 

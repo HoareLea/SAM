@@ -133,6 +133,8 @@ namespace SAM.Analytical.Grasshopper
                 GH_Path path = new GH_Path(i);
 
                 object @object = objects[i];
+                if (@object is IGH_Goo)
+                    @object = ((dynamic)@object).Value;
 
                 if (@object is InternalCondition)
                 {
@@ -239,7 +241,14 @@ namespace SAM.Analytical.Grasshopper
                 else if (@object is GH_Point)
                 {
                     Geometry.Spatial.Point3D point3D = Geometry.Grasshopper.Convert.ToSAM((GH_Point)@object);
-                    tuples.Add(new Tuple<GH_Path, Geometry.Spatial.Point3D>(path, (Geometry.Spatial.Point3D)@object));
+                    if (point3D != null)
+                        tuples.Add(new Tuple<GH_Path, Geometry.Spatial.Point3D>(path, point3D));
+                }
+                else if(@object is Rhino.Geometry.Point3d)
+                {
+                    Geometry.Spatial.Point3D point3D = Geometry.Grasshopper.Convert.ToSAM((Rhino.Geometry.Point3d)@object);
+                    if (point3D != null)
+                        tuples.Add(new Tuple<GH_Path, Geometry.Spatial.Point3D>(path, point3D));
                 }
             }
 
