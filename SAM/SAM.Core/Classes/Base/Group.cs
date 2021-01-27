@@ -1,30 +1,29 @@
 ﻿using Newtonsoft.Json.Linq;
-using SAM.Core;
 using System;
 
-namespace SAM.Analytical
+namespace SAM.Core
 {
-    public class Zone : Group
+    public class Group : SAMObject
     {
-        public Zone(string name)
+        public Group(string name)
             : base(name)
         {
 
         }
 
-        public Zone(Guid guid, string name)
+        public Group(Guid guid, string name)
             : base(guid, name)
         {
 
         }
 
-        public Zone(Zone zone)
-            : base(zone)
+        public Group(Group group)
+            : base(group)
         {
 
         }
 
-        public Zone(JObject jObject)
+        public Group(JObject jObject)
             : base(jObject)
         {
         }
@@ -39,7 +38,7 @@ namespace SAM.Analytical
 
         public override JObject ToJObject()
         {
-           JObject jObject = base.ToJObject();
+            JObject jObject = base.ToJObject();
             if (jObject == null)
                 return null;
 

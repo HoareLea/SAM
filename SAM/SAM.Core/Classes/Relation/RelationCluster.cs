@@ -10,7 +10,7 @@ namespace SAM.Core
         private Dictionary<string, Dictionary<Guid, object>> dictionary_Objects;
         private Dictionary<string, Dictionary<Guid, HashSet<Guid>>> dictionary_Relations;
 
-        private List<GuidCollection> groups;
+        //private List<GuidCollection> groups;
 
         public RelationCluster()
         {
@@ -51,8 +51,6 @@ namespace SAM.Core
 
                 dictionary_Relations[keyValuePair_1.Key] = dictionary;
             }
-
-            groups = relationCluster.groups?.ConvertAll(x => x.Clone());
         }
 
         /// <summary>
@@ -190,10 +188,7 @@ namespace SAM.Core
             if (!IsValid(@object))
                 return false;
 
-            string typeName = null;
-            Guid guid = Guid.Empty;
-
-            return TryAddObject(@object, out typeName, out guid);
+            return TryAddObject(@object, out string typeName, out Guid guid);
         }
 
         public bool AddObjects<T>(IEnumerable<T> objects)
@@ -207,246 +202,6 @@ namespace SAM.Core
             return true;
         }
 
-        public GuidCollection AddGroup<T>(IEnumerable<T> objects, string name = null, ParameterSet parameterSet = null)
-        {
-            GuidCollection result = new GuidCollection(name, parameterSet);
-            if(objects != null)
-            {
-                foreach(T @object in objects)
-                {
-                    Guid guid = GetGuid(@object);
-                    if (guid == Guid.Empty)
-                        continue;
-
-                    result.Add(guid);
-                }
-            }
-
-            if (groups == null)
-                groups = new List<GuidCollection>();
-
-            groups.Add(result);
-
-            return new GuidCollection(result);
-        }
-
-        public GuidCollection UpdateGroup(GuidCollection guidCollection)
-        {
-            if (guidCollection == null)
-                return null;
-
-            GuidCollection guidCollection_Temp = guidCollection.Clone();
-            foreach(Guid guid in guidCollection.ToList())
-            {
-                if (GetObject(guid) == null)
-                    guidCollection_Temp.Remove(guid);
-            }
-             
-            if(groups == null)
-            {
-                groups = new List<GuidCollection>() { guidCollection_Temp };
-                return guidCollection_Temp.Clone();
-            }
-
-            int index = groups.FindIndex(x => x.Guid == guidCollection_Temp.Guid);
-            if(index == -1)
-            {
-                groups.Add(guidCollection_Temp);
-                return guidCollection_Temp.Clone();
-            }
-
-            groups[index] = guidCollection_Temp;
-            return guidCollection_Temp.Clone();
-        }
-
-        public GuidCollection AddGroup(string name)
-        {
-            GuidCollection result = new GuidCollection(name);
-            
-            if (groups == null)
-                groups = new List<GuidCollection>();
-
-            groups.Add(result);
-
-            return new GuidCollection(result);
-        }
-
-        public List<bool> AddToGroup<T>(IEnumerable<T> objects, Guid guid, bool allowDuplicates = true)
-        {
-            if (groups == null || groups.Count == 0 || objects == null || objects.Count() == 0)
-                return null;
-
-            GuidCollection guidCollection = groups.Find(x => x.Guid == guid);
-            if (guidCollection == null)
-                return null;
-
-            List<bool> result = new List<bool>();
-            foreach (T @object in objects)
-            {
-                Guid guid_Object = GetGuid(@object);
-                if (guid_Object == Guid.Empty)
-                {
-                    result.Add(false);
-                    continue;
-                }
-                
-                if(!allowDuplicates && guidCollection.Contains(guid_Object))
-                {
-                    result.Add(false);
-                    continue;
-                }
-
-                guidCollection.Add(guid_Object);
-                result.Add(true);
-            }
-
-            return result;
-        }
-
-        public List<bool> RemoveFromGroup<T>(IEnumerable<T> objects, Guid guid)
-        {
-            if (groups == null || groups.Count == 0 || objects == null || objects.Count() == 0)
-                return null;
-
-            GuidCollection guidCollection = groups.Find(x => x.Guid == guid);
-            if (guidCollection == null)
-                return null;
-
-            List<bool> result = new List<bool>();
-            foreach(T @object in objects)
-            {
-                Guid guid_Object = GetGuid(@object);
-                if (guid_Object == Guid.Empty)
-                {
-                    result.Add(false);
-                    continue;
-                }
-
-                result.Add(guidCollection.Remove(guid_Object));
-            }
-
-            return result;
-        }
-
-        public GuidCollection GetGroup(Guid guid)
-        {
-            if (groups == null || guid == Guid.Empty)
-                return null;
-
-            foreach (GuidCollection group in groups)
-            {
-                if (group?.Guid == guid)
-                    return new GuidCollection(group);
-            }
-
-            return null;
-        }
-
-        public GuidCollection GetGroup(string name)
-        {
-            if (groups == null || name == null)
-                return null;
-
-            foreach (GuidCollection group in groups)
-            {
-                if (group?.Name == name)
-                    return new GuidCollection(group);
-            }
-
-            return null;
-        }
-
-        public List<GuidCollection> GetGroups(string name)
-        {
-            if (groups == null || name == null)
-                return null;
-
-            List<GuidCollection> result = new List<GuidCollection>();
-            foreach (GuidCollection group in groups)
-            {
-                if (group?.Name == name)
-                    result.Add(group.Clone());
-            }
-
-            return result;
-        }
-
-        public List<T> GetGroups<T>(string name) where T: GuidCollection
-        {
-            return GetGroups(name)?.FindAll(x => x is T).Cast<T>().ToList();
-        }
-
-        public List<GuidCollection> GetGroups(object @object)
-        {
-            if (groups == null)
-                return null;
-
-            Guid guid = GetGuid(@object);
-            if (guid == Guid.Empty)
-                return null;
-
-            List<GuidCollection> result = new List<GuidCollection>();
-            foreach(GuidCollection group in groups)
-            {
-                if (group == null || !group.Contains(guid))
-                    continue;
-
-                result.Add(group.Clone());
-            }
-
-            return result;
-        }
-
-        public List<T> GetGroups<T>(object @object) where T : GuidCollection
-        {
-            return GetGroups(@object)?.FindAll(x => x is T).Cast<T>().ToList();
-        }
-
-        public bool RemoveGroup(Guid guid)
-        {
-            if (groups == null || guid == Guid.Empty)
-                return false;
-
-            foreach(GuidCollection group in groups)
-            {
-                if (group?.Guid == guid)
-                    return groups.Remove(group);
-            }
-
-            return false;
-        }
-
-        public bool RemoveGroup(string name)
-        {
-            if (groups == null)
-                return false;
-
-            foreach (GuidCollection group in groups)
-            {
-                if (group == null)
-                    continue;
-
-                string name_Group = group.Name;
-                if(name_Group == null && name  == null)
-                    return groups.Remove(group);
-
-                if (name_Group.Equals(name))
-                    return groups.Remove(group);
-            }
-
-            return false;
-        }
-
-        public List<GuidCollection> Groups
-        {
-            get
-            {
-                if (groups == null)
-                    return null;
-
-                return groups.ConvertAll(x => x.Clone());
-            }
-        }
 
         public bool Join(RelationCluster relationCluster)
         {
@@ -473,15 +228,7 @@ namespace SAM.Core
                     }
 
                 }
-            }
-
-            if(relationCluster.groups != null)
-            {
-                if (groups == null)
-                    groups = new List<GuidCollection>();
-
-                groups.AddRange(relationCluster.groups.ConvertAll(x => new GuidCollection(x)));
-            }    
+            }  
 
             return true;
         }
@@ -582,12 +329,6 @@ namespace SAM.Core
 
             if (guid == Guid.Empty)
                 return false;
-
-            if (groups != null)
-            {
-                foreach (GuidCollection guidCollection in groups)
-                    guidCollection?.Remove(guid);
-            }
 
             return dictionary.Remove(guid);
         }
@@ -753,11 +494,20 @@ namespace SAM.Core
             if (!IsValid(type))
                 return null;
 
-            object @object = dictionary_Objects[type.FullName]?[guid];
-            if (type.IsAssignableFrom(@object.GetType()))
-                return @object;
+            string fullName = type.FullName;
+            if (fullName == null)
+                return null;
 
-            return null;
+            if (dictionary_Objects == null || !dictionary_Objects.TryGetValue(fullName, out Dictionary<Guid, object> dictionary) || dictionary == null)
+                return null;
+
+            if (!dictionary.TryGetValue(guid, out object result) || result == null)
+                return null;
+
+            if (!type.IsAssignableFrom(result.GetType()))
+                return null;
+
+            return result;
         }
 
         public string GetTypeName(Guid guid)
@@ -939,15 +689,6 @@ namespace SAM.Core
             }
             jObject.Add("Relations", jArray_Relations);
 
-            if(groups != null)
-            {
-                JArray jArray_Groups = new JArray();
-                foreach (GuidCollection group in groups)
-                    jArray_Groups.Add(group.ToJObject());
-
-                jObject.Add("Groups", jArray_Groups);
-            }
-
             return jObject;
         }
 
@@ -1049,18 +790,6 @@ namespace SAM.Core
                 }
             }
 
-            if(jObject.ContainsKey("Groups"))
-            {
-                JArray jArray_Groups = jObject.Value<JArray>("Groups");
-                if(jArray_Groups != null)
-                {
-                    groups = new List<GuidCollection>();
-                    foreach(JObject jObject_Group in jArray_Groups)
-                        if (jObject_Group != null)
-                            groups.Add(new GuidCollection(jObject_Group));
-                }
-            }
-
             return true;
         }
 
@@ -1087,12 +816,6 @@ namespace SAM.Core
             {
                 foreach (object relatedObject in relatedObjects)
                     RemoveRelation(@object, relatedObject);
-            }
-
-            if(groups != null)
-            {
-                foreach (GuidCollection group in groups)
-                    group?.Remove(guid);
             }
 
             return dictionary.Remove(guid);

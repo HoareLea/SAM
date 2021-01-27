@@ -117,7 +117,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            GuidCollection guidCollection = null;
+            Zone zone = null;
             if(sAMObject is AnalyticalModel)
             {
                 AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
@@ -125,14 +125,14 @@ namespace SAM.Analytical.Grasshopper
                 if(adjacencyCluster != null)
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-                    guidCollection = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
+                    zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
                     sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
                 }
             }
             else if(sAMObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-                guidCollection = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
+                zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
                 sAMObject = adjacencyCluster;
             }
 
@@ -142,7 +142,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfOutputParam("Zone");
             if (index != -1)
-                dataAccess.SetData(index, guidCollection);
+                dataAccess.SetData(index, zone);
         }
     }
 }

@@ -32,7 +32,8 @@ namespace SAM.Analytical
                 return false;
 
             return typeof(Panel).IsAssignableFrom(type) || 
-                typeof(Space).IsAssignableFrom(type) || 
+                typeof(Space).IsAssignableFrom(type) ||
+                typeof(Zone).IsAssignableFrom(type) ||
                 typeof(MechanicalSystem).IsAssignableFrom(type) || 
                 typeof(SpaceSimulationResult).IsAssignableFrom(type) ||
                 typeof(PanelSimulationResult).IsAssignableFrom(type) ||
@@ -280,13 +281,7 @@ namespace SAM.Analytical
             if (zone == null)
                 return null;
 
-            List<Space> result = new List<Space>();
-            foreach(Guid guid in zone)
-            {
-                Space space = GetObject<Space>(guid);
-                if (space != null)
-                    result.Add(space);
-            }
+            List<Space> result = GetRelatedObjects<Space>(zone);
 
             return result;
         }
@@ -450,7 +445,7 @@ namespace SAM.Analytical
 
         public List<Zone> GetZones()
         {
-            return Groups?.FindAll(x => x is Zone).ConvertAll(x => (Zone)x);
+            return GetObjects<Zone>();
         }
 
         /// <summary>
