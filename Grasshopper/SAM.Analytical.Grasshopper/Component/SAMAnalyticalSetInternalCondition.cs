@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSetInternalCondition : GH_SAMComponent
+    public class SAMAnalyticalSetInternalCondition : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,12 +18,14 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+                public override GH_Exposure Exposure => GH_Exposure.primary;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -38,28 +40,36 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = -1;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Objects such as AdjacencyCluster or AnalyticalModel or Space", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Model ot Adjacency Cluster", GH_ParamAccess.list);
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_name_", NickName = "_name_", Description = "Zone Name or SAM Analytical Zone", Access = GH_ParamAccess.item };
+                genericObject.SetPersistentData("S39_OfficeOpen");
+                result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
+                
+                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooInternalConditionLibraryParam { Name = "internalConditionLibrary_", NickName = "internalConditionLibrary_", Description = "SAM Analytical InternalConditionLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            inputParamManager.AddTextParameter("_name", "_name", "InternalCondition Name", GH_ParamAccess.item, "S39_OfficeOpen");
-
-            index = inputParamManager.AddParameter(new GooSpaceParam(), "spaces_", "spaces_", "SAM Analytical Spaces", GH_ParamAccess.list);
-            inputParamManager[index].Optional = true;
-
-            index = inputParamManager.AddParameter(new GooInternalConditionLibraryParam(), "_internalConditionLibrary", "_internalConditionLibrary", "SAM Analytical InternalConditionLibrary", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Analyticals", "Analyticals", "SAM Analytical Model, Panels or Adjacency Cluster", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooSpaceParam(), "Spaces", "Spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Analyticals", NickName = "Analyticals", Description = "SAM Analytical Objects such as AdjacencyCluster or AnalyticalModel or Space", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "Spaces", NickName = "Spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -70,26 +80,48 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_analyticals");
+            if(index == -1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            
             List<SAMObject> sAMObjects = new List<SAMObject>();
-            if (!dataAccess.GetDataList(0, sAMObjects))
+            if (!dataAccess.GetDataList(index, sAMObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            string name = null;
-            if (!dataAccess.GetData(1, ref name))
+            index = Params.IndexOfInputParam("_name_");
+            if(index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            object @object = null;
+            if (!dataAccess.GetData(index, ref @object))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            
+            
             List<Space> spaces_Input = new List<Space>();
-            if (!dataAccess.GetDataList(2, spaces_Input))
+            index = Params.IndexOfInputParam("spaces_");
+            if (index == -1 || !dataAccess.GetDataList(index, spaces_Input))
                 spaces_Input = null;
 
             InternalConditionLibrary internalConditionLibrary = null;
-            dataAccess.GetData(3, ref internalConditionLibrary);
+            index = Params.IndexOfInputParam("internalConditionLibrary_");
+            if (index != -1)
+                dataAccess.GetData(index, ref internalConditionLibrary);
+
             if (internalConditionLibrary == null)
                 internalConditionLibrary = ActiveSetting.Setting.GetValue<InternalConditionLibrary>(AnalyticalSettingParameter.DefaultInternalConditionLibrary);
 
@@ -97,7 +129,12 @@ namespace SAM.Analytical.Grasshopper
 
             List<Space> spaces_Output = new List<Space>();
 
-            InternalCondition internalCondition = internalConditionLibrary.GetInternalConditions(name)?.FirstOrDefault();
+            InternalCondition internalCondition = null;
+
+            if (@object is string)
+                internalCondition = internalConditionLibrary.GetInternalConditions((string)@object)?.FirstOrDefault();
+            else if (@object is InternalCondition)
+                internalCondition = new InternalCondition((InternalCondition)@object);
 
             List<SAMObject> result = new List<SAMObject>();
             foreach (SAMObject sAMObject in sAMObjects)
@@ -174,8 +211,13 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
-            dataAccess.SetDataList(1, spaces_Output?.ConvertAll(x => new GooSpace(x)));
+            index = Params.IndexOfOutputParam("Analyticals");
+            if (index != -1)
+                dataAccess.SetDataList(index, result.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
+
+            index = Params.IndexOfOutputParam("Spaces");
+            if (index != -1)
+                dataAccess.SetDataList(index, spaces_Output?.ConvertAll(x => new GooSpace(x)));
         }
     }
 }
