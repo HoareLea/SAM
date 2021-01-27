@@ -1,6 +1,7 @@
 ﻿using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalGetSpaces : GH_SAMComponent
+    public class SAMAnalyticalGetSpaces : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,12 +20,14 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -39,18 +42,29 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooAnalyticalModelParam(), "_analyticalModel", "_analyticalModel", "SAM Analytical AnalyticalModel", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObjects", "_analyticalObjects", "SAM Analytical Objects", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_objects", NickName = "_objects", Description = "Objects such as Point, SAM Analytical InternalCondition etc.", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSpaceParam(), "Spaces", "Spaces", "SAM Geometry Spaces", GH_ParamAccess.tree);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "Spaces", NickName = "Spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -61,33 +75,66 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_analytical");
+            if(index == -1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            
+            SAMObject sAMObject_Temp = null;
+            if(!dataAccess.GetData(index, ref sAMObject_Temp) || sAMObject_Temp == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+
+            AdjacencyCluster adjacencyCluster = null;
             AnalyticalModel analyticalModel = null;
-            if(!dataAccess.GetData(0, ref analyticalModel) || analyticalModel == null)
+            if (sAMObject_Temp is AdjacencyCluster)
+            {
+                adjacencyCluster = (AdjacencyCluster)sAMObject_Temp;
+            }
+            else if (sAMObject_Temp is AnalyticalModel)
+            {
+                analyticalModel = (AnalyticalModel)sAMObject_Temp;
+                adjacencyCluster = analyticalModel.AdjacencyCluster;
+            }
+                
+
+            if(adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            List<SAMObject> sAMObjects = new List<SAMObject>();
-            if (!dataAccess.GetDataList(1, sAMObjects))
+            index = Params.IndexOfInputParam("_objects");
+            if(index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-            if (adjacencyCluster == null)
+            List<object> objects = new List<object>();
+            if (!dataAccess.GetDataList(index, objects))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
+            }
 
             DataTree<GooSpace> dataTree = new DataTree<GooSpace>();
+            List<Tuple<GH_Path, Geometry.Spatial.Point3D>> tuples = new List<Tuple<GH_Path, Geometry.Spatial.Point3D>>();
 
-            for (int i=0; i < sAMObjects.Count; i++)
+            for (int i=0; i < objects.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
 
-                SAMObject sAMObject = sAMObjects[i];
+                object @object = objects[i];
 
-                if (sAMObject is InternalCondition)
+                if (@object is InternalCondition)
                 {
                     List<Space> spaces = adjacencyCluster.GetSpaces();
                     if (spaces == null || spaces.Count == 0)
@@ -99,28 +146,28 @@ namespace SAM.Analytical.Grasshopper
                         if (internalCondition == null)
                             continue;
 
-                        if (!internalCondition.Guid.Equals(sAMObject.Guid))
+                        if (!internalCondition.Guid.Equals(((InternalCondition)@object).Guid))
                             continue;
 
                         dataTree.Add(new GooSpace(space), path);
                     }
                 }
-                else if (sAMObject is Panel)
+                else if (@object is Panel)
                 {
-                    List<Space> spaces = adjacencyCluster.GetSpaces((Panel)sAMObject);
-                    if(spaces != null)
-                        spaces?.ForEach(x => dataTree.Add(new GooSpace(x), path));
-                }
-                else if (sAMObject is Aperture)
-                {
-                    Panel panel = adjacencyCluster.GetPanel((Aperture)sAMObject);
-                    List<Space> spaces =  adjacencyCluster.GetSpaces(panel);
+                    List<Space> spaces = adjacencyCluster.GetSpaces((Panel)@object);
                     if (spaces != null)
                         spaces?.ForEach(x => dataTree.Add(new GooSpace(x), path));
                 }
-                else if (sAMObject is ApertureConstruction)
+                else if (@object is Aperture)
                 {
-                    List<Panel> panels = adjacencyCluster.GetPanels((ApertureConstruction)sAMObject);
+                    Panel panel = adjacencyCluster.GetPanel((Aperture)@object);
+                    List<Space> spaces = adjacencyCluster.GetSpaces(panel);
+                    if (spaces != null)
+                        spaces?.ForEach(x => dataTree.Add(new GooSpace(x), path));
+                }
+                else if (@object is ApertureConstruction)
+                {
+                    List<Panel> panels = adjacencyCluster.GetPanels((ApertureConstruction)@object);
                     if (panels != null && panels.Count != 0)
                     {
                         Dictionary<Guid, Space> dictionary = new Dictionary<Guid, Space>();
@@ -137,9 +184,9 @@ namespace SAM.Analytical.Grasshopper
                             dataTree.Add(new GooSpace(space), path);
                     }
                 }
-                else if (sAMObject is Construction)
+                else if (@object is Construction)
                 {
-                    List<Panel> panels = adjacencyCluster.GetPanels((Construction)sAMObject);
+                    List<Panel> panels = adjacencyCluster.GetPanels((Construction)@object);
                     if (panels != null && panels.Count != 0)
                     {
                         Dictionary<Guid, Space> dictionary = new Dictionary<Guid, Space>();
@@ -156,7 +203,7 @@ namespace SAM.Analytical.Grasshopper
                             dataTree.Add(new GooSpace(space), path);
                     }
                 }
-                else if (sAMObject is Profile)
+                else if (@object is Profile && analyticalModel != null)
                 {
                     List<Space> spaces = adjacencyCluster.GetSpaces();
                     if (spaces == null || spaces.Count == 0)
@@ -172,7 +219,7 @@ namespace SAM.Analytical.Grasshopper
 
                         foreach (Profile profile in dictionary.Values)
                         {
-                            if (profile.Guid == sAMObject.Guid)
+                            if (profile.Guid == ((Profile)@object).Guid)
                             {
                                 dataTree.Add(new GooSpace(space), path);
                                 break;
@@ -180,10 +227,50 @@ namespace SAM.Analytical.Grasshopper
                         }
                     }
                 }
-
+                else if (@object is Geometry.Spatial.Point3D)
+                {
+                    tuples.Add(new Tuple<GH_Path, Geometry.Spatial.Point3D>(path, (Geometry.Spatial.Point3D)@object));
+                }
+                else if (@object is Geometry.Planar.Point2D)
+                {
+                    Geometry.Planar.Point2D point2D = (Geometry.Planar.Point2D)@object;
+                    tuples.Add(new Tuple<GH_Path, Geometry.Spatial.Point3D>(path, new Geometry.Spatial.Point3D(point2D.X, point2D.Y, 0)));
+                }
+                else if (@object is GH_Point)
+                {
+                    Geometry.Spatial.Point3D point3D = Geometry.Grasshopper.Convert.ToSAM((GH_Point)@object);
+                    tuples.Add(new Tuple<GH_Path, Geometry.Spatial.Point3D>(path, (Geometry.Spatial.Point3D)@object));
+                }
             }
 
-            dataAccess.SetDataTree(0, dataTree);
+            if(tuples != null && tuples.Count != 0)
+            {
+                Dictionary<Space, Geometry.Spatial.Shell> dictionary = adjacencyCluster?.ShellDictionary();
+                if(dictionary != null && dictionary.Count > 0)
+                {
+                    foreach (Tuple<GH_Path, Geometry.Spatial.Point3D> tuple in tuples)
+                    {
+                        Geometry.Spatial.Point3D point3D = tuple.Item2;
+                        if (point3D == null || tuple.Item1 == null)
+                            continue;
+
+                        foreach (KeyValuePair<Space, Geometry.Spatial.Shell> keyValuePair in dictionary)
+                        {
+                            if (keyValuePair.Key == null)
+                                continue;
+                            
+                            if (keyValuePair.Value.InRange(point3D) || keyValuePair.Value.Inside(point3D))
+                            {
+                                dataTree.Add( new GooSpace(keyValuePair.Key), tuple.Item1);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            index = Params.IndexOfOutputParam("Spaces");
+            if (index != -1)
+                dataAccess.SetDataTree(index, dataTree);
         }
     }
 }

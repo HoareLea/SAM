@@ -5,8 +5,9 @@ using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 
-namespace SAM.Analytical.Grasshopper
+namespace SAM.Analytical.Grasshopper.Obsolete
 {
+    [Obsolete("Obsolete since 2021-01-27")]
     public class SAMAnalyticalGetZone : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
@@ -24,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
