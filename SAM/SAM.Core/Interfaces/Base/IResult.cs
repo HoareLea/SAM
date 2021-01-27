@@ -2,5 +2,6 @@
 {
     public interface IResult : ISAMObject
     {
+        string Reference { get; }
     }
 }

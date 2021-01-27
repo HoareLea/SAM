@@ -51,8 +51,10 @@
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
+    <Compile Include="Classes\SimulationResult\PanelSimulationResult.cs" />
+    <Compile Include="Classes\SimulationResult\ZoneSimulationResult.cs" />
     <Compile Include="Classes\Zone.cs" />
-    <Compile Include="Classes\SpaceSimulationResult.cs" />
+    <Compile Include="Classes\SimulationResult\SpaceSimulationResult.cs" />
     <Compile Include="Classes\System\HeatingSystem.cs" />
     <Compile Include="Classes\System\HeatingSystemType.cs" />
     <Compile Include="Classes\System\VentilationSystem.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\AirSupplyMethod.cs" />
     <Compile Include="Enums\ApertureType.cs" />
+    <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
     <Compile Include="Enums\ZoneType.cs" />
     <Compile Include="Enums\EmitterType.cs" />
     <Compile Include="Enums\HeatFlowDirection.cs" />

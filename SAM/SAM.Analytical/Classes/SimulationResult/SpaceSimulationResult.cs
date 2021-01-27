@@ -4,26 +4,24 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class SpaceSimulationResult : SAMObject, IResult
+    public class SpaceSimulationResult : Result
     {
-        private string reference;
-        
         public SpaceSimulationResult(string name, string reference)
-            : base(name)
+            : base(name, reference)
         {
-            this.reference = reference;
+
         }
 
         public SpaceSimulationResult(Guid guid, string name, string reference)
-            : base(guid, name)
+            : base(guid, name, reference)
         {
-            this.reference = reference;
+
         }
 
         public SpaceSimulationResult(SpaceSimulationResult spaceSimulationResult)
             : base(spaceSimulationResult)
         {
-            reference = spaceSimulationResult?.reference;
+
         }
 
         public SpaceSimulationResult(JObject jObject)
@@ -31,21 +29,10 @@ namespace SAM.Analytical
         {
         }
 
-        public string Reference
-        {
-            get
-            {
-                return reference;
-            }
-        }
-
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
                 return false;
-
-            if (jObject.ContainsKey("Reference"))
-                reference = jObject.Value<string>("Reference");
 
             return true;
         }
@@ -55,9 +42,6 @@ namespace SAM.Analytical
            JObject jObject = base.ToJObject();
             if (jObject == null)
                 return null;
-
-            if (reference != null)
-                jObject.Add("Reference", reference);
 
             return jObject;
         }
