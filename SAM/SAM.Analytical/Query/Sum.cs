@@ -14,13 +14,19 @@ namespace SAM.Analytical
                 return double.NaN;
 
             double result = 0;
-            foreach(Space space in spaces)
+            bool contains = false;
+            foreach (Space space in spaces)
             {
                 if (!space.TryGetValue(name, out double value) || double.IsNaN(value))
                     continue;
 
                 result += value;
+                contains = true;
             }
+
+            if (!contains)
+                return double.NaN;
+
             return result;
         }
 
@@ -34,13 +40,19 @@ namespace SAM.Analytical
                 return double.NaN;
 
             double result = 0;
+            bool contains = false;
             foreach (Space space in spaces)
             {
                 if (!space.TryGetValue(spaceParameter, out double value) || double.IsNaN(value))
                     continue;
 
                 result += value;
+                contains = true;
             }
+
+            if (!contains)
+                return double.NaN;
+
             return result;
         }
     }

@@ -28,6 +28,5 @@ namespace SAM.Analytical
         [ParameterProperties("Outside Supply Airflow", "Outside Supply Airflow [m3/s]"), DoubleParameterValue(0)] OutsideSupplyAirFlow,
         [ParameterProperties("Supply Airflow", "Supply Airflow [m3/s]"), DoubleParameterValue(0)] SupplyAirFlow,
         [ParameterProperties("Exhaust Airflow", "Exhaust Airflow [m3/s]"), DoubleParameterValue(0)] ExhaustAirFlow,
-
     }
 }
