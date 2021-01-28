@@ -99,7 +99,7 @@
     <Compile Include="Enums\AirSupplyMethod.cs" />
     <Compile Include="Enums\ApertureType.cs" />
     <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
-    <Compile Include="Enums\SimulationType.cs" />
+    <Compile Include="Enums\LoadType.cs" />
     <Compile Include="Enums\ZoneType.cs" />
     <Compile Include="Enums\EmitterType.cs" />
     <Compile Include="Enums\HeatFlowDirection.cs" />

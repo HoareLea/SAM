@@ -2,8 +2,8 @@
 
 namespace SAM.Analytical
 {
-    [Description("Simulation Type.")]
-    public enum SimulationType
+    [Description("Load Type.")]
+    public enum LoadType
     {
         [Description("Undefined")] Undefined,
         [Description("Cooling")] Cooling,

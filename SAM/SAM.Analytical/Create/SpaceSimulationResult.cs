@@ -7,11 +7,12 @@
             string reference = null,
             double volume = double.NaN,
             double area = double.NaN,
+            LoadType? loadType = null,
+            double load = double.NaN,
+            double loadIndex = -1,
             SizingMethod? sizingMethod = null,
             double dryBulbTemperature = double.NaN, 
             double resultantTemperature = double.NaN,
-            double coolingLoad = double.NaN,
-            double heatingLoad = double.NaN,
             double solarGain = double.NaN,
             double lightingGain = double.NaN,
             double infiltartionGain = double.NaN,
@@ -40,6 +41,9 @@
             if (sizingMethod != null && sizingMethod.HasValue)
                 result.SetValue(SpaceSimulationResultParameter.SizingMethod, sizingMethod.Text());
 
+            if (loadType != null && loadType.HasValue)
+                result.SetValue(SpaceSimulationResultParameter.LoadType, loadType.Text());
+
             if (!double.IsNaN(dryBulbTemperature))
                 result.SetValue(SpaceSimulationResultParameter.DryBulbTempearture, dryBulbTemperature);
 
@@ -49,11 +53,11 @@
             if (!double.IsNaN(resultantTemperature))
                 result.SetValue(SpaceSimulationResultParameter.ResultantTemperature, resultantTemperature);
 
-            if (!double.IsNaN(coolingLoad))
-                result.SetValue(SpaceSimulationResultParameter.CoolingLoad, coolingLoad);
+            if (!double.IsNaN(load))
+                result.SetValue(SpaceSimulationResultParameter.Load, load);
 
-            if (!double.IsNaN(heatingLoad))
-                result.SetValue(SpaceSimulationResultParameter.HeatingLoad, heatingLoad);
+            if (loadIndex != -1)
+                result.SetValue(SpaceSimulationResultParameter.LoadIndex, loadIndex);
 
             if (!double.IsNaN(solarGain))
                 result.SetValue(SpaceSimulationResultParameter.SolarGain, solarGain);
