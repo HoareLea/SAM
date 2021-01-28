@@ -11,5 +11,7 @@ namespace SAM.Analytical
         [ParameterProperties("Occupancy", "Occupancy [p]"), DoubleParameterValue(0)] Occupancy,
         [ParameterProperties("Max Cooling Sensible Load", "Max Cooling Sensible Load"), DoubleParameterValue(0)] MaxCoolingSensibleLoad,
         [ParameterProperties("Max Cooling Sensible Load Index", "Max Cooling Sensible Load Index"), IntegerParameterValue(0, 8759)] MaxCoolingSensibleLoadIndex,
+
+        [ParameterProperties("Simulation Type", "Simulation Type"), ParameterValue(Core.ParameterType.String)] SimulationType,
     }
 }
