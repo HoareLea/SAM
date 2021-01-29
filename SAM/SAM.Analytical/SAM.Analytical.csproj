@@ -161,6 +161,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\LoadType.cs" />
     <Compile Include="Query\CalculatedExhaustAirflow.cs" />
     <Compile Include="Query\CalculatedSupplyAirflow.cs" />
     <Compile Include="Query\CalculatedOutsideSupplyAirflow.cs" />

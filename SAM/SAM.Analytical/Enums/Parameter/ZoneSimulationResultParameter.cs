@@ -21,6 +21,6 @@ namespace SAM.Analytical
         [ParameterProperties("Opaque External Conduction", "Opaque External Conduction [W]"), DoubleParameterValue()] OpaqueExternalConduction,
         [ParameterProperties("Solar Gain", "Solar Gain [W]"), DoubleParameterValue()] SolarGain,
 
-        [ParameterProperties("Simulation Type", "Simulation Type"), ParameterValue(Core.ParameterType.String)] SimulationType,
+        [ParameterProperties("Load Type", "Load Type"), ParameterValue(Core.ParameterType.String)] LoadType,
     }
 }

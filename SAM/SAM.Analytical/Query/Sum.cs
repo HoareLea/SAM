@@ -55,5 +55,27 @@ namespace SAM.Analytical
 
             return result;
         }
+
+        public static double Sum(this IEnumerable<SpaceSimulationResult> spaceSimulationResults, SpaceSimulationResultParameter spaceSimulationResultParameter)
+        {
+            if (spaceSimulationResults == null)
+                return double.NaN;
+
+            double result = 0;
+            bool contains = false;
+            foreach (SpaceSimulationResult spaceSimulationResult in spaceSimulationResults)
+            {
+                if (!spaceSimulationResult.TryGetValue(spaceSimulationResultParameter, out double value) || double.IsNaN(value))
+                    continue;
+
+                result += value;
+                contains = true;
+            }
+
+            if (!contains)
+                return double.NaN;
+
+            return result;
+        }
     }
 }
