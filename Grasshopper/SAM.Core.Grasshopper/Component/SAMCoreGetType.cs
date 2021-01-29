@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreParameterType : GH_SAMComponent
+    public class SAMCoreGetType : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -30,9 +30,9 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Panel Type
         /// </summary>
-        public SAMCoreParameterType()
-          : base("SAMCore.ParameterType", "SAMCore.ParameterType",
-              "Get Type with Parameter",
+        public SAMCoreGetType()
+          : base("SAMCore.GetType", "SAMCore.GetType",
+              "Get Type form objects to find out all Parameter, \n *to be used with Node: SAMCore.ParameterFromType",
               "SAM", "Core")
         {
         }

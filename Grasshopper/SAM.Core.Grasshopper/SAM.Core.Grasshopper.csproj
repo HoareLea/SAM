@@ -77,8 +77,8 @@
     <Compile Include="Component\SAMCoreCopyMaterials.cs" />
     <Compile Include="Component\SAMCoreFromFile.cs" />
     <Compile Include="Component\SAMCoreRemoveValue.cs" />
-    <Compile Include="Component\SAMCoreParameter.cs" />
-    <Compile Include="Component\SAMCoreParameterType.cs" />
+    <Compile Include="Component\SAMCoreParameterFromType.cs" />
+    <Compile Include="Component\SAMCoreGetType.cs" />
     <Compile Include="Component\SAMCoreSAMLibraryAddObjects.cs" />
     <Compile Include="Component\SAMCoreSetValue.cs" />
     <Compile Include="Component\SAMCoreLoadMaterialLibrary.cs" />
