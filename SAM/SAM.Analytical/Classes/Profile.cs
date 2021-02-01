@@ -213,12 +213,53 @@ namespace SAM.Analytical
             double[] result = new double[8760];
 
             for(int i = min; i <= max; i++)
+            {
+                if (i >= result.Length)
+                    break;
+                
                 result[i] = this[i];
+            }
+                
 
             int index;
 
             index = min;
             for(int i= max + 1; i < 8760; i++)
+            {
+                result[i] = result[index];
+                index++;
+            }
+
+            index = max;
+            for (int i = min - 1; i >= 0; i--)
+            {
+                result[i] = result[index];
+                index--;
+            }
+
+            return result;
+        }
+
+        public double[] GetDailyValues()
+        {
+            int max = Max;
+            int min = Min;
+
+            double[] result = new double[24];
+
+            for (int i = min; i <= max; i++)
+            {
+                if (i >= result.Length)
+                    break;
+
+                result[i] = this[i];
+            }
+                
+
+            int index;
+
+            index = min;
+            for (int i = max + 1; i < 24; i++)
             {
                 result[i] = result[index];
                 index++;
