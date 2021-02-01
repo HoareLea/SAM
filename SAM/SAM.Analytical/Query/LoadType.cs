@@ -23,5 +23,16 @@
 
             return Core.Query.Enum<LoadType>(text);
         }
+
+        public static LoadType LoadType(this AdjacencyClusterSimulationResult adjacencyClusterSimulationResult)
+        {
+            if (adjacencyClusterSimulationResult == null)
+                return Analytical.LoadType.Undefined;
+
+            if (!adjacencyClusterSimulationResult.TryGetValue(AdjacencyClusterSimulationResultParameter.LoadType, out string text) || string.IsNullOrWhiteSpace(text))
+                return Analytical.LoadType.Undefined;
+
+            return Core.Query.Enum<LoadType>(text);
+        }
     }
 }

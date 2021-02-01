@@ -25,6 +25,12 @@ namespace SAM.Core
             reference = result?.reference;
         }
 
+        public Result(Guid guid, Result result)
+            : base(guid, result)
+        {
+            reference = result?.reference;
+        }
+
         public Result(JObject jObject)
             : base(jObject)
         {

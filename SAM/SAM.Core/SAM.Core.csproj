@@ -150,6 +150,7 @@
     <Compile Include="Interfaces\Base\ISAMObject.cs" />
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\RemoveValue.cs" />
+    <Compile Include="Modify\Copy.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Query\ReplaceSpecialCharacters.cs" />
     <Compile Include="Query\Copy.cs" />

@@ -34,7 +34,8 @@ namespace SAM.Analytical
             return typeof(Panel).IsAssignableFrom(type) || 
                 typeof(Space).IsAssignableFrom(type) ||
                 typeof(Zone).IsAssignableFrom(type) ||
-                typeof(MechanicalSystem).IsAssignableFrom(type) || 
+                typeof(MechanicalSystem).IsAssignableFrom(type) ||
+                typeof(AdjacencyClusterSimulationResult).IsAssignableFrom(type) ||
                 typeof(SpaceSimulationResult).IsAssignableFrom(type) ||
                 typeof(PanelSimulationResult).IsAssignableFrom(type) ||
                 typeof(ZoneSimulationResult).IsAssignableFrom(type);

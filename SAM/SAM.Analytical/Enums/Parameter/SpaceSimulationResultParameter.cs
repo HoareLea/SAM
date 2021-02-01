@@ -38,5 +38,9 @@ namespace SAM.Analytical
         [ParameterProperties("Min Dry Bulb Temperature", "Minimal Dry Bulb Temperature"), DoubleParameterValue()] MinDryBulbTemperature,
         [ParameterProperties("Max Dry Bulb Temperature Index", "Maximal Dry Bulb Temperature Index"), DoubleParameterValue(0, 8759)] MaxDryBulbTemperatureIndex,
         [ParameterProperties("Min Dry Bulb Temperature Index", "Minimal Dry Bulb Temperature Index"), DoubleParameterValue(0, 8759)] MinDryBulbTemperatureIndex,
+
+        [ParameterProperties("Unmet Hours", "Unmet Hours"), IntegerParameterValue(0, 8760)] UnmetHours,
+        [ParameterProperties("Unmet Hour First Index", "Unmet Hour First Index"), IntegerParameterValue(0, 8760)] UnmetHourFirstIndex,
+        [ParameterProperties("Occupied Unmet Hours", "Occupied Unmet Hours"), IntegerParameterValue(0, 8760)] OccupiedUnmetHours,
     }
 }
