@@ -126,12 +126,12 @@ namespace SAM.Core
                 names = delimitedFileRows[namesIndex].ToArray();
 
             header = new List<object[]>();
-            int min = Math.Min(headerCount + 1, count);
-            for (int i = 1; i < min; i++)
+            int min = namesIndex + 1;
+            for (int i = min; i < min + headerCount; i++)
                 if (delimitedFileRows[i] != null)
                     header.Add(delimitedFileRows[i].ToArray());
 
-            min = Math.Min(min, namesIndex);
+            min = namesIndex + headerCount + 1;
             values = new List<object[]>();
             for (int i = min; i < count; i++)
                 if (delimitedFileRows[i] != null)
@@ -218,6 +218,26 @@ namespace SAM.Core
                     return i;
 
             return -1;
+        }
+
+        public string GetColumnName(int index)
+        {
+            TryGetColumnName(index, out string result);
+            return result;
+        }
+
+        public bool TryGetColumnName(int index, out string name)
+        {
+            name = null;
+            
+            if (names == null)
+                return false;
+
+            if (index < 0 || index >= names.Length)
+                return false;
+
+            name = names[index];
+            return true;
         }
 
         public List<int> GetColumnIndexes(string columnText, TextComparisonType textComparisonType, bool caseSensitive = true)
