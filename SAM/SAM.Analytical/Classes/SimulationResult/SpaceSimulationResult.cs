@@ -24,6 +24,12 @@ namespace SAM.Analytical
 
         }
 
+        public SpaceSimulationResult(Guid guid, SpaceSimulationResult spaceSimulationResult)
+            : base(guid, spaceSimulationResult)
+        {
+
+        }
+
         public SpaceSimulationResult(JObject jObject)
             : base(jObject)
         {
