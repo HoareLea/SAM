@@ -30,9 +30,9 @@ namespace SAM.Core
             }
         }
 
-        public bool TryGetProperties(out string typeName, out string name)
+        public bool TryGetProperties(out ExpressionVariable expressionVariable, out string name)
         {
-            typeName = null;
+            expressionVariable = null;
             name = null;
 
             if (text == null)
@@ -51,37 +51,31 @@ namespace SAM.Core
                 return true;
             }
 
-            name = texts[0];
+            expressionVariable = new ExpressionVariable(texts[0]);
 
             int length = text.IndexOf(texts[0]) - 1;
             if (length < 1)
-                typeName = string.Empty;
+                name = string.Empty;
             else
-                typeName = text.Substring(0, length);
+                name = text.Substring(0, length);
 
             return true;
         }
 
-        public string Name
+        public string GetName()
         {
-            get
-            {
-                if (!TryGetProperties(out string typeName, out string name))
-                    return null;
+            if (!TryGetProperties(out ExpressionVariable expressionVariable, out string name))
+                return null;
 
-                return name;
-            }
+            return name;
         }
 
-        public string TypeName
+        public ExpressionVariable GetExpressionVariable()
         {
-            get
-            {
-                if (!TryGetProperties(out string typeName, out string name))
-                    return null;
+            if (!TryGetProperties(out ExpressionVariable expressionVariable, out string name))
+                return null;
 
-                return typeName;
-            }
+            return expressionVariable;
         }
 
         public bool FromJObject(JObject jObject)
