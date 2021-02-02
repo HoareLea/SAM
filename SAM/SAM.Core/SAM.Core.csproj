@@ -156,6 +156,7 @@
     <Compile Include="Query\Copy.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
     <Compile Include="Query\CustomAttribute.cs" />
+    <Compile Include="Query\TryCompute.cs" />
     <Compile Include="Query\Weekday.cs" />
     <Compile Include="Query\Weekend.cs" />
     <Compile Include="Query\RangeDictionary.cs" />
