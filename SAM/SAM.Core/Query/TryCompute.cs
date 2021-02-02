@@ -17,10 +17,16 @@ namespace SAM.Core
             {
                 foreach (KeyValuePair<string, object> keyValuePair in variables)
                 {
-                    if (string.IsNullOrWhiteSpace(keyValuePair.Key) || keyValuePair.Value == null)
+                    object variable = keyValuePair.Value;
+
+
+                    if (string.IsNullOrWhiteSpace(keyValuePair.Key) || variable == null)
                         continue;
 
-                    expression_Temp = expression_Temp.Replace(openSymbol + keyValuePair.Key + closeSymbol, keyValuePair.Value.ToString());
+                    if (variable is string)
+                        variable = string.Format("\'{0}\'", variable);
+
+                    expression_Temp = expression_Temp.Replace(openSymbol + keyValuePair.Key + closeSymbol, variable.ToString());
                 }
             }
 

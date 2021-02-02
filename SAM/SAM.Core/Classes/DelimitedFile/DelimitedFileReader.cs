@@ -56,76 +56,76 @@ namespace SAM.Core
             if (DelimitedFileRow.LineText == null)
                 return false;
 
-            int aPosition = 0;
-            int aRowCount = 0;
+            int position = 0;
+            int rowCount = 0;
 
-            while (aPosition < DelimitedFileRow.LineText.Length)
+            while (position < DelimitedFileRow.LineText.Length)
             {
                 string aValue;
 
                 // Special handling for quoted field
-                if (DelimitedFileRow.LineText[aPosition] == '"')
+                if (DelimitedFileRow.LineText[position] == '"')
                 {
                     // Skip initial quote
-                    aPosition++;
+                    position++;
 
                     // Parse quoted value
-                    int aStart = aPosition;
-                    while (aPosition < DelimitedFileRow.LineText.Length)
+                    int start = position;
+                    while (position < DelimitedFileRow.LineText.Length)
                     {
                         // Test for quote character
-                        if (DelimitedFileRow.LineText[aPosition] == '"')
+                        if (DelimitedFileRow.LineText[position] == '"')
                         {
                             // Found one
-                            aPosition++;
+                            position++;
 
                             // If two quotes together, keep one Otherwise, indicates end of value
-                            if (aPosition >= DelimitedFileRow.LineText.Length || DelimitedFileRow.LineText[aPosition] != '"')
+                            if (position >= DelimitedFileRow.LineText.Length || DelimitedFileRow.LineText[position] != '"')
                             {
-                                aPosition--;
+                                position--;
                                 break;
                             }
                         }
-                        aPosition++;
+                        position++;
 
                         //TODO: Add code which read quoted text with break line symbol
-                        while (aPosition == DelimitedFileRow.LineText.Length)
+                        while (position == DelimitedFileRow.LineText.Length)
                         {
-                            string aLineText = ReadLine();
-                            if (aLineText == null)
+                            string lineText = ReadLine();
+                            if (lineText == null)
                                 break;
 
-                            DelimitedFileRow.LineText += "\n" + aLineText;
+                            DelimitedFileRow.LineText += "\n" + lineText;
                         }
                     }
-                    aValue = DelimitedFileRow.LineText.Substring(aStart, aPosition - aStart);
+                    aValue = DelimitedFileRow.LineText.Substring(start, position - start);
                     aValue = aValue.Replace("\"\"", "\"");
                 }
                 else
                 {
                     // Parse unquoted value
-                    int aStart = aPosition;
-                    while (aPosition < DelimitedFileRow.LineText.Length && DelimitedFileRow.LineText[aPosition] != Separator)
-                        aPosition++;
-                    aValue = DelimitedFileRow.LineText.Substring(aStart, aPosition - aStart);
+                    int aStart = position;
+                    while (position < DelimitedFileRow.LineText.Length && DelimitedFileRow.LineText[position] != Separator)
+                        position++;
+                    aValue = DelimitedFileRow.LineText.Substring(aStart, position - aStart);
                 }
 
                 // Add field to list
-                if (aRowCount < DelimitedFileRow.Count)
-                    DelimitedFileRow[aRowCount] = aValue;
+                if (rowCount < DelimitedFileRow.Count)
+                    DelimitedFileRow[rowCount] = aValue;
                 else
                     DelimitedFileRow.Add(aValue);
-                aRowCount++;
+                rowCount++;
 
                 // Eat up to and including next comma
-                while (aPosition < DelimitedFileRow.LineText.Length && DelimitedFileRow.LineText[aPosition] != Separator)
-                    aPosition++;
-                if (aPosition < DelimitedFileRow.LineText.Length)
-                    aPosition++;
+                while (position < DelimitedFileRow.LineText.Length && DelimitedFileRow.LineText[position] != Separator)
+                    position++;
+                if (position < DelimitedFileRow.LineText.Length)
+                    position++;
             }
             // Delete any unused items
-            while (DelimitedFileRow.Count > aRowCount)
-                DelimitedFileRow.RemoveAt(aRowCount);
+            while (DelimitedFileRow.Count > rowCount)
+                DelimitedFileRow.RemoveAt(rowCount);
 
             // Return true if any columns read
             return (DelimitedFileRow.Count > 0);

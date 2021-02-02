@@ -147,6 +147,11 @@ namespace SAM.Core
             return GetNames(GetId(type_1), GetId(type_2));
         }
 
+        public List<string> GetNames(Type type_1, Type type_2, string name)
+        {
+            return GetNames(GetId(type_1), GetId(type_2), name, 2);
+        }
+
         public List<string> GetNames(Type type_1, Type type_2, int index)
         {
             if (type_1 == null || type_2 == null)
