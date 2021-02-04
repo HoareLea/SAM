@@ -76,7 +76,7 @@ namespace SAM.Core
                 return false;
 
             if (jObject.ContainsKey("Source"))
-                reference = jObject.Value<string>("Source");
+                source = jObject.Value<string>("Source");
 
             if (jObject.ContainsKey("Reference"))
                 reference = jObject.Value<string>("Reference");
