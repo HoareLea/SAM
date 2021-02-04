@@ -10,17 +10,20 @@ namespace SAM.Core
     {
         private Dictionary<string, Type> dictionary;
 
-        private List<Tuple<string, string, string, string>> tuples;
+        /// <summary>
+        /// list of tuples where Item1 - Id_1, Item2 - Id_2, Item3 - name_1, Item4 - name_2, Item5 - formula_1, Item6 - formula_2
+        /// </summary>
+        private List<Tuple<string, string, string, string, string, string>> tuples;
 
         public TypeMap(TypeMap typeMap)
             :base(typeMap)
         {
-            tuples = typeMap.tuples.ConvertAll(x => new Tuple<string, string, string, string>(x.Item1, x.Item2, x.Item3, x.Item4));
+            tuples = typeMap?.tuples?.ConvertAll(x => new Tuple<string, string, string, string, string, string>(x.Item1, x.Item2, x.Item3, x.Item4, x.Item5, x.Item6));
         }
         
         public TypeMap()
         {
-            tuples = new List<Tuple<string, string, string, string>>();
+            tuples = new List<Tuple<string, string, string, string, string, string>>();
         }
 
         public TypeMap(JObject jObject)
@@ -29,12 +32,12 @@ namespace SAM.Core
 
         }
 
-        public bool Add(Type type_1, Type type_2, string name_1, string name_2)
+        public bool Add(Type type_1, Type type_2, string name_1, string name_2, string formula_1 = null, string formula_2 = null)
         {
             if (type_1 == null || type_2 == null || string.IsNullOrEmpty(name_1) || string.IsNullOrEmpty(name_2))
                 return false;
 
-            bool result = Add(GetId(type_1), GetId(type_2), name_1, name_2);
+            bool result = Add(GetId(type_1), GetId(type_2), name_1, name_2, formula_1, formula_2);
             if(result)
             {
                 AddType(type_1);
@@ -43,7 +46,7 @@ namespace SAM.Core
             return result;
         }
 
-        public List<Type> Add(Enum @enum, Type type, string name)
+        public List<Type> Add(Enum @enum, Type type, string name, string formula_1 = null, string formula_2 = null)
         {
             if (type == null || string.IsNullOrEmpty(name))
                 return null;
@@ -66,42 +69,42 @@ namespace SAM.Core
 
             List<Type> result = new List<Type>();
             foreach (Type type_Temp in types)
-                if (Add(type_Temp, type, name_Temp, name))
+                if (Add(type_Temp, type, name_Temp, name, formula_1, formula_2))
                     result.Add(type_Temp);
 
             return result;
         }
         
-        public bool Add(string id_1, string id_2, string name_1, string name_2)
+        public bool Add(string id_1, string id_2, string name_1, string name_2, string formula_1 = null, string formula_2 = null)
         {
             if (string.IsNullOrEmpty(id_1) || string.IsNullOrEmpty(id_2) || string.IsNullOrEmpty(name_1) || string.IsNullOrEmpty(name_2))
                 return false;
 
-            List<Tuple<string, string, string, string>> tuples_Temp = tuples.FindAll(x => x.Item1.Equals(id_1));
+            List<Tuple<string, string, string, string, string, string>> tuples_Temp = tuples.FindAll(x => x.Item1.Equals(id_1));
             if (tuples_Temp.Count == 0)
             {
-                tuples.Add(new Tuple<string, string, string, string>(id_1, id_2, name_1, name_2));
+                tuples.Add(new Tuple<string, string, string, string, string, string>(id_1, id_2, name_1, name_2, formula_1, formula_2));
                 return true;
             }
 
             tuples_Temp = tuples_Temp.FindAll(x => x.Item2.Equals(id_2));
             if (tuples_Temp.Count == 0)
             {
-                tuples.Add(new Tuple<string, string, string, string>(id_1, id_2, name_1, name_2));
+                tuples.Add(new Tuple<string, string, string, string, string, string>(id_1, id_2, name_1, name_2, formula_1, formula_2));
                 return true;
             }
 
             tuples_Temp = tuples_Temp.FindAll(x => x.Item3.Equals(name_1));
             if (tuples_Temp.Count == 0)
             {
-                tuples.Add(new Tuple<string, string, string, string>(id_1, id_2, name_1, name_2));
+                tuples.Add(new Tuple<string, string, string, string, string, string>(id_1, id_2, name_1, name_2, formula_1, formula_2));
                 return true;
             }
 
             tuples_Temp = tuples_Temp.FindAll(x => x.Item4.Equals(name_2));
             if (tuples_Temp.Count == 0)
             {
-                tuples.Add(new Tuple<string, string, string, string>(id_1, id_2, name_1, name_2));
+                tuples.Add(new Tuple<string, string, string, string, string, string>(id_1, id_2, name_1, name_2, formula_1, formula_2));
                 return true;
             }
 
@@ -152,6 +155,11 @@ namespace SAM.Core
             return GetNames(GetId(type_1), GetId(type_2), name, 2);
         }
 
+        public List<string> GetFormulas(Type type_1, Type type_2, string name)
+        {
+            return GetFormulas(GetId(type_1), GetId(type_2), name, 2);
+        }
+
         public List<string> GetNames(Type type_1, Type type_2, int index)
         {
             if (type_1 == null || type_2 == null)
@@ -177,7 +185,7 @@ namespace SAM.Core
                 return null;
 
             JArray jArray_Map = new JArray();
-            foreach (Tuple<string, string, string, string> tuple in tuples)
+            foreach (Tuple<string, string, string, string, string, string> tuple in tuples)
             {
                 JArray jArray = new JArray();
                 jArray.Add(tuple.Item1);
@@ -197,7 +205,7 @@ namespace SAM.Core
             if (!base.FromJObject(jObject))
                 return false;
 
-            tuples = new List<Tuple<string, string, string, string>>();
+            tuples = new List<Tuple<string, string, string, string, string, string>>();
 
             JArray jArray_Map = jObject.Value<JArray>("Map");
             if(jArray_Map != null)
@@ -208,7 +216,16 @@ namespace SAM.Core
                     if (jArray.Count < 4)
                         continue;
 
-                    Tuple<string, string, string, string> tuple = new Tuple<string, string, string, string>(jArray[0].Value<string>(), jArray[1].Value<string>(), jArray[2].Value<string>(), jArray[3].Value<string>());
+                    string formula_1 = null;
+                    string formula_2 = null;
+                    if (jArray.Count > 4)
+                    {
+                        formula_1 = jArray[4].Value<string>();
+                        if (jArray.Count > 5)
+                            formula_2 = jArray[5].Value<string>();
+                    }
+
+                    Tuple<string, string, string, string, string, string> tuple = new Tuple<string, string, string, string, string, string>(jArray[0].Value<string>(), jArray[1].Value<string>(), jArray[2].Value<string>(), jArray[3].Value<string>(), formula_1, formula_2);
 
                     if (tuple != null)
                         tuples.Add(tuple);
@@ -221,7 +238,7 @@ namespace SAM.Core
         }
 
 
-        private List<string> GetNames(string id_1, string id_2, string name, int index)
+        private List<int> GetIndexes(string id_1, string id_2, string name, int index)
         {
             if (string.IsNullOrWhiteSpace(id_1) || string.IsNullOrWhiteSpace(id_2))
                 return null;
@@ -229,9 +246,11 @@ namespace SAM.Core
             Type type_1 = GetType(id_1, false);
             Type type_2 = GetType(id_2, false);
 
-            List<string> result = new List<string>();
-            foreach (Tuple<string, string, string, string> tuple in tuples)
+            List<int> result = new List<int>();
+            for (int i = 0; i < tuples.Count; i++)
             {
+                Tuple<string, string, string, string, string, string> tuple = tuples[i];
+
                 bool valid;
 
                 valid = false;
@@ -262,40 +281,45 @@ namespace SAM.Core
                 if (!valid)
                     continue;
 
-                if(name != null)
+                if (name == null)
                 {
-                    string name_Input = null;
-                    string name_Output = null;
-                    if (index == 1)
-                    {
-                        name_Input = tuple.Item4;
-                        name_Output = tuple.Item3;
-                    }
-                    else
-                    {
-                        name_Input = tuple.Item3;
-                        name_Output = tuple.Item4;
-                    }
-                        
-                    if(name_Input.Equals(name))
-                    {
-                        result.Add(name_Output);
-                        return result;
-                    }
-
+                    result.Add(i);
                     continue;
                 }
-                else
-                {
-                    string name_Output = null;
-                    if (index == 1)
-                        name_Output = tuple.Item3;
-                    else
-                        name_Output = tuple.Item4;
 
-                    result.Add(name_Output);
+                string name_Input = index == 1 ? tuple.Item4 : tuple.Item3;
+                if (name_Input.Equals(name))
+                {
+                    result.Add(i);
+                    return result;
                 }
             }
+
+            return result;
+        }
+
+        private List<string> GetNames(string id_1, string id_2, string name, int index)
+        {
+            List<int> indexes = GetIndexes(id_1, id_2, name, index);
+            if (indexes == null)
+                return null;
+
+            List<string> result = new List<string>();
+            foreach(int i in indexes)
+                result.Add(index == 1 ? tuples[i].Item3 : tuples[i].Item4);
+
+            return result;
+        }
+
+        private List<string> GetFormulas(string id_1, string id_2, string name, int index)
+        {
+            List<int> indexes = GetIndexes(id_1, id_2, name, index);
+            if (indexes == null)
+                return null;
+
+            List<string> result = new List<string>();
+            foreach (int i in indexes)
+                result.Add(index == 1 ? tuples[i].Item5 : tuples[i].Item6);
 
             return result;
         }

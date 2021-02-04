@@ -9,7 +9,43 @@ namespace SAM.Core
         public static List<MethodInfo> MethodInfos(string assemblyName, string typeName, string methodName)
         {
             List<MethodInfo> result = new List<MethodInfo>();
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            if (assemblyName != null)
+            {
+                Assembly assembly = null;
+
+                foreach (Assembly assembly_Temp in assemblies)
+                {
+                    if (assembly_Temp?.GetName()?.Name == assemblyName)
+                    {
+                        assembly = assembly_Temp;
+                        break;
+                    }
+                }
+
+                if (assembly == null)
+                {
+                    try
+                    {
+                        assembly = AppDomain.CurrentDomain.Load(new AssemblyName(assemblyName));
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+                    
+
+                if (assembly == null)
+                    return null;
+
+                assemblies = new Assembly[] { assembly };
+            }
+            
+
+            foreach (Assembly assembly in assemblies)
             {
                 if (assembly == null)
                     continue;
