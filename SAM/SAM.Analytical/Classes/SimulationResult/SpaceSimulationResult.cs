@@ -6,14 +6,14 @@ namespace SAM.Analytical
 {
     public class SpaceSimulationResult : Result
     {
-        public SpaceSimulationResult(string name, string reference)
-            : base(name, reference)
+        public SpaceSimulationResult(string name, string source, string reference)
+            : base(name, source, reference)
         {
 
         }
 
-        public SpaceSimulationResult(Guid guid, string name, string reference)
-            : base(guid, name, reference)
+        public SpaceSimulationResult(Guid guid, string name, string source, string reference)
+            : base(guid, name, source, reference)
         {
 
         }

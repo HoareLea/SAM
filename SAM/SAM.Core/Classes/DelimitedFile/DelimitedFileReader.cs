@@ -25,16 +25,16 @@ namespace SAM.Core
             this.separator = separator;
         }
 
-        public DelimitedFileReader(DelimitedFileType DelimitedFileType, IEnumerable<string> lines)
+        public DelimitedFileReader(DelimitedFileType delimitedFileType, IEnumerable<string> lines)
             : base(Query.MemoryStream(lines))
         {
-            this.separator = Query.Separator(DelimitedFileType);
+            this.separator = Query.Separator(delimitedFileType);
         }
 
-        public DelimitedFileReader(DelimitedFileType DelimitedFileType, string Path)
-            : base(new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        public DelimitedFileReader(DelimitedFileType delimitedFileType, string path)
+            : base(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
         {
-            separator = Query.Separator(DelimitedFileType);
+            separator = Query.Separator(delimitedFileType);
         }
 
         public char Separator
@@ -48,39 +48,39 @@ namespace SAM.Core
         /// <summary>
         /// Reads a row of data from a CSV file
         /// </summary>
-        /// <param name="DelimitedFileRow"></param>
+        /// <param name="delimitedFileRow"></param>
         /// <returns></returns>
-        public bool Read(DelimitedFileRow DelimitedFileRow)
+        public bool Read(DelimitedFileRow delimitedFileRow)
         {
-            DelimitedFileRow.LineText = ReadLine();
-            if (DelimitedFileRow.LineText == null)
+            delimitedFileRow.LineText = ReadLine();
+            if (delimitedFileRow.LineText == null)
                 return false;
 
             int position = 0;
             int rowCount = 0;
 
-            while (position < DelimitedFileRow.LineText.Length)
+            while (position < delimitedFileRow.LineText.Length)
             {
-                string aValue;
+                string value;
 
                 // Special handling for quoted field
-                if (DelimitedFileRow.LineText[position] == '"')
+                if (delimitedFileRow.LineText[position] == '"')
                 {
                     // Skip initial quote
                     position++;
 
                     // Parse quoted value
                     int start = position;
-                    while (position < DelimitedFileRow.LineText.Length)
+                    while (position < delimitedFileRow.LineText.Length)
                     {
                         // Test for quote character
-                        if (DelimitedFileRow.LineText[position] == '"')
+                        if (delimitedFileRow.LineText[position] == '"')
                         {
                             // Found one
                             position++;
 
                             // If two quotes together, keep one Otherwise, indicates end of value
-                            if (position >= DelimitedFileRow.LineText.Length || DelimitedFileRow.LineText[position] != '"')
+                            if (position >= delimitedFileRow.LineText.Length || delimitedFileRow.LineText[position] != '"')
                             {
                                 position--;
                                 break;
@@ -89,46 +89,46 @@ namespace SAM.Core
                         position++;
 
                         //TODO: Add code which read quoted text with break line symbol
-                        while (position == DelimitedFileRow.LineText.Length)
+                        while (position == delimitedFileRow.LineText.Length)
                         {
                             string lineText = ReadLine();
                             if (lineText == null)
                                 break;
 
-                            DelimitedFileRow.LineText += "\n" + lineText;
+                            delimitedFileRow.LineText += "\n" + lineText;
                         }
                     }
-                    aValue = DelimitedFileRow.LineText.Substring(start, position - start);
-                    aValue = aValue.Replace("\"\"", "\"");
+                    value = delimitedFileRow.LineText.Substring(start, position - start);
+                    value = value.Replace("\"\"", "\"");
                 }
                 else
                 {
                     // Parse unquoted value
-                    int aStart = position;
-                    while (position < DelimitedFileRow.LineText.Length && DelimitedFileRow.LineText[position] != Separator)
+                    int start = position;
+                    while (position < delimitedFileRow.LineText.Length && delimitedFileRow.LineText[position] != separator)
                         position++;
-                    aValue = DelimitedFileRow.LineText.Substring(aStart, position - aStart);
+                    value = delimitedFileRow.LineText.Substring(start, position - start);
                 }
 
                 // Add field to list
-                if (rowCount < DelimitedFileRow.Count)
-                    DelimitedFileRow[rowCount] = aValue;
+                if (rowCount < delimitedFileRow.Count)
+                    delimitedFileRow[rowCount] = value;
                 else
-                    DelimitedFileRow.Add(aValue);
+                    delimitedFileRow.Add(value);
                 rowCount++;
 
                 // Eat up to and including next comma
-                while (position < DelimitedFileRow.LineText.Length && DelimitedFileRow.LineText[position] != Separator)
+                while (position < delimitedFileRow.LineText.Length && delimitedFileRow.LineText[position] != separator)
                     position++;
-                if (position < DelimitedFileRow.LineText.Length)
+                if (position < delimitedFileRow.LineText.Length)
                     position++;
             }
             // Delete any unused items
-            while (DelimitedFileRow.Count > rowCount)
-                DelimitedFileRow.RemoveAt(rowCount);
+            while (delimitedFileRow.Count > rowCount)
+                delimitedFileRow.RemoveAt(rowCount);
 
             // Return true if any columns read
-            return (DelimitedFileRow.Count > 0);
+            return (delimitedFileRow.Count > 0);
         }
 
         /// <summary>

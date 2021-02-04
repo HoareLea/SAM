@@ -60,10 +60,10 @@ namespace SAM.Analytical
         public Panel(string name, Panel panel, Construction construction)
             : base(name, panel, construction)
         {
-            planarBoundary3D = new PlanarBoundary3D(panel.planarBoundary3D);
-            panelType = panel.panelType;
+            planarBoundary3D = panel == null ? null : new PlanarBoundary3D(panel.planarBoundary3D);
+            panelType = panel == null ? PanelType.Undefined : panel.panelType;
 
-            if (panel.apertures != null)
+            if (panel?.apertures != null)
                 apertures = new List<Aperture>(panel.apertures.ConvertAll(x => new Aperture(x)));
         }
 

@@ -154,6 +154,7 @@
     <Compile Include="Modify\RemoveValue.cs" />
     <Compile Include="Modify\Copy.cs" />
     <Compile Include="Modify\SetValue.cs" />
+    <Compile Include="Query\MethodInfos.cs" />
     <Compile Include="Query\ReplaceSpecialCharacters.cs" />
     <Compile Include="Query\Copy.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
@@ -169,9 +170,10 @@
     <Compile Include="Query\IsHex.cs" />
     <Compile Include="Query\IsNullable.cs" />
     <Compile Include="Query\IsValid.cs" />
+    <Compile Include="Query\MethodInfo.cs" />
     <Compile Include="Query\Write.cs" />
     <Compile Include="Query\ValidTypes.cs" />
-    <Compile Include="Query\ParameterTypesDictionary.cs" />
+    <Compile Include="Query\AssociatedTypesDictionary.cs" />
     <Compile Include="Query\UniqueTypes.cs" />
     <Compile Include="Query\WriteAccess.cs" />
     <Compile Include="Query\ReadAccess.cs" />

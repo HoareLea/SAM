@@ -6,14 +6,14 @@ namespace SAM.Analytical
 {
     public class AdjacencyClusterSimulationResult : Result
     {
-        public AdjacencyClusterSimulationResult(string name, string reference)
-            : base(name, reference)
+        public AdjacencyClusterSimulationResult(string name, string source, string reference)
+            : base(name, source, reference)
         {
 
         }
 
-        public AdjacencyClusterSimulationResult(Guid guid, string name, string reference)
-            : base(guid, name, reference)
+        public AdjacencyClusterSimulationResult(Guid guid, string name, string source, string reference)
+            : base(guid, name, source, reference)
         {
 
         }

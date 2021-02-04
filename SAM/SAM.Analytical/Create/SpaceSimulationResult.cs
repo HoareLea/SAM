@@ -4,6 +4,7 @@
     {
         public static SpaceSimulationResult SpaceSimulationResult(
             string name, 
+            string source = null,
             string reference = null,
             double volume = double.NaN,
             double area = double.NaN,
@@ -30,7 +31,7 @@
             double apertureFlowOut = double.NaN,
             double pollutant = double.NaN)
         {
-            SpaceSimulationResult result = new SpaceSimulationResult(name, reference);
+            SpaceSimulationResult result = new SpaceSimulationResult(name, source, reference);
 
             if (!double.IsNaN(volume))
                 result.SetValue(SpaceSimulationResultParameter.Volume, volume);

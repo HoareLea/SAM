@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 
 namespace SAM.Core
 {
@@ -50,6 +51,55 @@ namespace SAM.Core
             }
 
             return TryConvert(value, out result);
+        }
+    
+        public static bool TryCompute<T>(Expression expression, out T result, Dictionary<string, object> variables)
+        {
+            result = default;
+
+            if (expression == null)
+                return false;
+
+            string expressionText = expression.Text;
+
+            List<ExpressionVariable> expressionVariables = expression.GetExpressionVariables();
+            foreach(ExpressionVariable expressionVariable in expressionVariables)
+            {
+                ExpressionVariable expressionVariable_Temp;
+
+                string name = expressionVariable.GetName();
+                new ExpressionVariable(name).TryGetProperties(out expressionVariable_Temp, out name, '(', ')');
+
+                List<MethodInfo> methodInfos = MethodInfos(name);
+                if (methodInfos == null || methodInfos.Count == 0)
+                    return false;
+
+                List<object> parameters = new List<object>();
+
+                name = expressionVariable_Temp.GetName();
+                if(name != null)
+                {
+                    foreach (string parameterName in name.Split(','))
+                    {
+                        parameters.Add(variables[parameterName.Trim()]);
+                    }
+                }
+
+                string text = string.Empty;
+
+               object value = methodInfos[0].Invoke(null, parameters.ToArray());
+                if (value != null)
+                {
+                    if (value is string)
+                        text = '\'' + (string)value + '\'';
+                    else
+                        text = value.ToString();
+                }
+
+                expressionText = expressionText.Replace('[' + expressionVariable.Text + ']', text);
+            }
+
+            return TryCompute<T>(expressionText, out result, variables);
         }
     }
 }

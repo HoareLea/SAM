@@ -30,13 +30,13 @@ namespace SAM.Core
             }
         }
 
-        public List<ExpressionVariable> GetExpressionVariables()
+        public List<ExpressionVariable> GetExpressionVariables(char openSymbol = '[', char closeSymbol = ']')
         {
             if (text == null)
                 return null;
 
             List<ExpressionVariable> result = new List<ExpressionVariable>();
-            List<string> texts = Query.Texts(text, true, '[', ']');
+            List<string> texts = Query.Texts(text, true, openSymbol, closeSymbol);
             if (texts != null && texts.Count > 0)
                 result = texts.ConvertAll(x => new ExpressionVariable(x));
 

@@ -6,14 +6,14 @@ namespace SAM.Analytical
 {
     public class ZoneSimulationResult : Result
     {
-        public ZoneSimulationResult(string name, string reference)
-            : base(name, reference)
+        public ZoneSimulationResult(string name, string source, string reference)
+            : base(name, source, reference)
         {
 
         }
 
-        public ZoneSimulationResult(Guid guid, string name, string reference)
-            : base(guid, name, reference)
+        public ZoneSimulationResult(Guid guid, string name, string source, string reference)
+            : base(guid, name, source, reference)
         {
 
         }

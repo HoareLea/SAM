@@ -6,14 +6,14 @@ namespace SAM.Analytical
 {
     public class PanelSimulationResult : Result
     {
-        public PanelSimulationResult(string name, string reference)
-            : base(name, reference)
+        public PanelSimulationResult(string name, string source, string reference)
+            : base(name, source, reference)
         {
 
         }
 
-        public PanelSimulationResult(Guid guid, string name, string reference)
-            : base(guid, name, reference)
+        public PanelSimulationResult(Guid guid, string name, string source, string reference)
+            : base(guid, name, source, reference)
         {
 
         }

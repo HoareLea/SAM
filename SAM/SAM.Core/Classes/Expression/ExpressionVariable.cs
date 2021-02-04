@@ -30,7 +30,7 @@ namespace SAM.Core
             }
         }
 
-        public bool TryGetProperties(out ExpressionVariable expressionVariable, out string name)
+        public bool TryGetProperties(out ExpressionVariable expressionVariable, out string name, char openSymbol = '[', char closeSymbol = ']')
         {
             expressionVariable = null;
             name = null;
@@ -38,13 +38,13 @@ namespace SAM.Core
             if (text == null)
                 return false;
 
-            if (text.IndexOf('[') == -1)
+            if (text.IndexOf(openSymbol) == -1)
             {
                 name = text;
                 return true;
             }
 
-            List<string> texts = Query.Texts(Text, '[', ']');
+            List<string> texts = Query.Texts(Text, openSymbol, closeSymbol);
             if(texts == null || texts.Count == 0)
             {
                 name = text;
