@@ -11,7 +11,12 @@ namespace SAM.Analytical
         /// <returns>String</returns>
         public static string ToString(int hourIndex)
         {
-            return ToDateTime(hourIndex).ToString("dd-MM-yyyy@HH:mm");
+            return ToString(ToDateTime(hourIndex));
+        }
+
+        public static string ToString(DateTime dateTime)
+        {
+            return dateTime.ToString("dd-MM-yyyy@HH:mm");
         }
     }
 }

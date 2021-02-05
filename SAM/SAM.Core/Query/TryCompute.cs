@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 
 namespace SAM.Core
@@ -87,7 +88,60 @@ namespace SAM.Core
 
                 string text = string.Empty;
 
-               object value = methodInfos[0].Invoke(null, parameters.ToArray());
+                MethodInfo methodInfo = null;
+                foreach(MethodInfo methodInfo_Temp in methodInfos)
+                {
+                    ParameterInfo[] parameterInfos = methodInfo_Temp.GetParameters();
+                    if((parameterInfos == null || parameterInfos.Length == 0) && (parameters == null || parameters.Count == 0))
+                    {
+                        methodInfo = methodInfo_Temp;
+                        break;
+                    }
+
+                    if (parameterInfos == null || parameterInfos.Length == 0 || parameters == null || parameters.Count == 0)
+                        continue;
+
+                    bool valid = true;
+                    int count = 0;
+                    for(int i=0; i < parameterInfos.Length; i++)
+                    {
+                        count++;
+                        System.Type type = parameterInfos[i].ParameterType;
+                        if (parameters == null && type.IsNullable())
+                            continue;
+
+                        if (count - 1 >= parameters.Count && parameterInfos[i].IsOptional)
+                        {
+                            parameters.Add(System.Type.Missing);
+                            continue;
+                        }
+
+                        System.Type type_Parameter = parameters[count - 1].GetType();
+
+                        if (type.IsAssignableFrom(type_Parameter))
+                            continue;
+
+                        if (parameterInfos[i].IsOptional)
+                        {
+                            count--;
+                            continue;
+                        }
+
+                        valid = false;
+                        break;
+                    }
+
+                    if(valid)
+                    {
+                        methodInfo = methodInfo_Temp;
+                        break;
+                    }
+                }
+
+                if (methodInfo == null)
+                    return false;
+
+               object value = methodInfo.Invoke(null, parameters.ToArray());
                 if (value != null)
                 {
                     if (value is string)
