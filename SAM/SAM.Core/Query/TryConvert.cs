@@ -1,30 +1,30 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace SAM.Core
 {
     public static partial class Query
     {
-        public static bool TryConvert<T>(this object @object, out T result)
+        public static bool TryConvert(this object @object, out object result, Type type)
         {
             result = default;
-                
-            if(@object is T)
+
+            Type type_Object = @object?.GetType();
+            if (type_Object == type || type == null)
             {
-                result = (T)@object;
+                result = @object;
                 return true;
             }
-            
-            if(typeof(T) == typeof(string))
+
+            if (type == typeof(string))
             {
                 if (@object != null)
-                    result = (T)(object)@object.ToString();
-                
+                    result = @object.ToString();
+
                 return true;
             }
-            else if(typeof(T) == typeof(bool))
+            else if (type == typeof(bool))
             {
                 if (@object == null)
                     return false;
@@ -32,131 +32,131 @@ namespace SAM.Core
                 if (@object is string)
                 {
                     bool @bool;
-                    if(bool.TryParse((string)@object, out @bool))
+                    if (bool.TryParse((string)@object, out @bool))
                     {
-                        result = (T)(object)@bool;
+                        result = @bool;
                         return true;
                     }
-                    
+
                     string @string = ((string)@object).Trim().ToUpper();
-                    result = (T)(object)(@string.Equals("1") || @string.Equals("YES") || @string.Equals("TRUE"));
+                    result = (@string.Equals("1") || @string.Equals("YES") || @string.Equals("TRUE"));
                     return true;
-                } 
-                else if(IsNumeric(@object))
+                }
+                else if (IsNumeric(@object))
                 {
-                    result = (T)(object)(System.Convert.ToInt64(@object) == 1);
+                    result = (System.Convert.ToInt64(@object) == 1);
                     return true;
                 }
             }
-            else if(typeof(T) == typeof(int))
+            else if (type == typeof(int))
             {
                 if (@object == null)
                     return false;
-                
+
                 if (@object is string)
                 {
                     int @int;
                     if (int.TryParse((string)@object, out @int))
                     {
-                        result = (T)(object)@int;
+                        result = @int;
                         return true;
                     }
                 }
                 else if (IsNumeric(@object))
                 {
-                    result = (T)(object)(System.Convert.ToInt32(@object));
+                    result = System.Convert.ToInt32(@object);
                     return true;
                 }
-                else if(@object is Enum)
+                else if (@object is Enum)
                 {
-                    result = (T)(object)(int)@object;
+                    result = (int)@object;
                     return true;
                 }
             }
-            else if (typeof(T) == typeof(double))
+            else if (type == typeof(double))
             {
                 if (@object == null)
                     return false;
-                
+
                 if (@object is string)
                 {
                     double @double;
                     if (double.TryParse((string)@object, out @double))
                     {
-                        result = (T)(object)@double;
+                        result = @double;
                         return true;
                     }
                 }
                 else if (IsNumeric(@object))
                 {
-                    result = (T)(object)(System.Convert.ToDouble(@object));
+                    result = System.Convert.ToDouble(@object);
                     return true;
                 }
-                else if(@object is bool)
+                else if (@object is bool)
                 {
                     double @double = 0;
                     if ((bool)@object)
                         @double = 1;
-                    
-                    result = (T)(object)@double;
+
+                    result = @double;
                     return true;
                 }
-                else if(@object is int)
+                else if (@object is int)
                 {
                     int @int = 0;
                     if ((bool)@object)
                         @int = 1;
 
-                    result = (T)(object)@int;
+                    result = @int;
                     return true;
                 }
             }
-            else if (typeof(T) == typeof(uint))
+            else if (type == typeof(uint))
             {
                 if (@object == null)
                     return false;
-                
+
                 if (@object is string)
                 {
                     uint @uint;
                     if (uint.TryParse((string)@object, out @uint))
                     {
-                        result = (T)(object)@uint;
+                        result = @uint;
                         return true;
                     }
                 }
                 else if (IsNumeric(@object))
                 {
-                    result = (T)(object)(System.Convert.ToUInt32(@object));
+                    result = System.Convert.ToUInt32(@object);
                     return true;
                 }
-                else if(@object is SAMColor)
+                else if (@object is SAMColor)
                 {
-                    result = (T)(object)Convert.ToUint(((SAMColor)@object).ToColor());
+                    result = Convert.ToUint(((SAMColor)@object).ToColor());
                     return true;
                 }
             }
-            else if (typeof(T) == typeof(short))
+            else if (type == typeof(short))
             {
                 if (@object == null)
                     return false;
-                
+
                 if (@object is string)
                 {
                     short @short;
                     if (short.TryParse((string)@object, out @short))
                     {
-                        result = (T)(object)@short;
+                        result = @short;
                         return true;
                     }
                 }
                 else if (IsNumeric(@object))
                 {
-                    result = (T)(object)(System.Convert.ToInt16(@object));
+                    result = System.Convert.ToInt16(@object);
                     return true;
                 }
             }
-            else if (typeof(T) == typeof(int))
+            else if (type == typeof(int))
             {
                 if (@object == null)
                     return false;
@@ -166,52 +166,52 @@ namespace SAM.Core
                     int @int;
                     if (int.TryParse((string)@object, out @int))
                     {
-                        result = (T)(object)@int;
+                        result = @int;
                         return true;
                     }
                 }
                 else if (IsNumeric(@object))
                 {
-                    result = (T)(object)(System.Convert.ToInt16(@object));
+                    result = System.Convert.ToInt16(@object);
                     return true;
                 }
             }
-            else if (typeof(T) == typeof(long))
+            else if (type == typeof(long))
             {
                 if (@object == null)
                     return false;
-                
+
                 if (@object is string)
                 {
                     long @long;
                     if (long.TryParse((string)@object, out @long))
                     {
-                        result = (T)(object)@long;
+                        result = @long;
                         return true;
                     }
                 }
                 else if (IsNumeric(@object))
                 {
-                    result = (T)(object)(System.Convert.ToInt32(@object));
+                    result = System.Convert.ToInt32(@object);
                     return true;
                 }
             }
-            else if(typeof(T) == typeof(Guid))
+            else if (type == typeof(Guid))
             {
                 if (@object == null)
                     return false;
-                
-                if(@object is string)
+
+                if (@object is string)
                 {
                     Guid guid;
-                    if(System.Guid.TryParse((string)@object, out guid))
+                    if (System.Guid.TryParse((string)@object, out guid))
                     {
-                        result = (T)(object)guid;
+                        result = guid;
                         return true;
                     }
                 }
             }
-            else if(typeof(T) == typeof(DateTime))
+            else if (type == typeof(DateTime))
             {
                 if (@object == null)
                     return false;
@@ -221,21 +221,21 @@ namespace SAM.Core
                     DateTime dateTime;
                     if (DateTime.TryParse((string)@object, out dateTime))
                     {
-                        result = (T)(object)dateTime;
+                        result = dateTime;
                         return true;
                     }
                 }
-                else if(IsNumeric(@object))
+                else if (IsNumeric(@object))
                 {
-                    if(@object is double)
-                        result = (T)(object)DateTime.FromOADate((double)@object);
+                    if (@object is double)
+                        result = DateTime.FromOADate((double)@object);
                     else
-                        result = (T)(object)new DateTime(System.Convert.ToInt64(@object));
+                        result = new DateTime(System.Convert.ToInt64(@object));
 
                     return true;
                 }
             }
-            else if (typeof(T) == typeof(System.Drawing.Color))
+            else if (type == typeof(System.Drawing.Color))
             {
                 if (@object == null)
                     return false;
@@ -243,65 +243,65 @@ namespace SAM.Core
                 if (@object is string)
                 {
                     string @string = (string)@object;
-                    if(@string.StartsWith("##"))
+                    if (@string.StartsWith("##"))
                     {
-                        result = (T)(object)Convert.ToColor(@string);
+                        result = Convert.ToColor(@string);
                         if (!result.Equals(System.Drawing.Color.Empty))
-                            return true; 
+                            return true;
                     }
 
                     int @int;
-                    if(int.TryParse(@string, out @int))
+                    if (int.TryParse(@string, out @int))
                     {
-                        result = (T)(object)Convert.ToColor(@int);
+                        result = Convert.ToColor(@int);
                         return true;
                     }
 
                     uint @uint;
                     if (uint.TryParse(@string, out @uint))
                     {
-                        result = (T)(object)Convert.ToColor(@uint);
+                        result = Convert.ToColor(@uint);
                         return true;
                     }
 
-                    result = (T)(object)Convert.ToColor(@string);
+                    result = Convert.ToColor(@string);
                     if (!result.Equals(System.Drawing.Color.Empty))
                         return true;
 
                 }
                 else if (@object is SAMColor)
                 {
-                    result = (T)(object)((SAMColor)@object).ToColor();
+                    result = ((SAMColor)@object).ToColor();
                     return true;
                 }
-                else if(@object is int)
+                else if (@object is int)
                 {
-                    result = (T)(object)Convert.ToColor((int)@object);
+                    result = Convert.ToColor((int)@object);
                     return true;
                 }
                 else if (@object is uint)
                 {
-                    result = (T)(object)Convert.ToColor((uint)@object);
+                    result = Convert.ToColor((uint)@object);
                     return true;
                 }
             }
-            else if(typeof(IJSAMObject).IsAssignableFrom(typeof(T)))
+            else if (typeof(IJSAMObject).IsAssignableFrom(type))
             {
-                if(@object is string)
+                if (@object is string)
                 {
                     List<IJSAMObject> sAMObjects = Convert.ToSAM((string)@object);
-                    if(sAMObjects != null && sAMObjects.Count != 0)
+                    if (sAMObjects != null && sAMObjects.Count != 0)
                     {
-                        IJSAMObject jSAMObject = sAMObjects.Find(x => x is T);
-                        if(jSAMObject != null)
+                        IJSAMObject jSAMObject = sAMObjects.Find(x => x != null && type.IsAssignableFrom(x.GetType()));
+                        if (jSAMObject != null)
                         {
-                            result = (T)jSAMObject;
+                            result = jSAMObject;
                             return true;
                         }
                     }
                 }
-                
-                if(typeof(T) == typeof(SAMColor))
+
+                if (type_Object == typeof(SAMColor))
                 {
                     System.Drawing.Color color = System.Drawing.Color.Empty;
                     if (TryConvert(@object, out color))
@@ -311,30 +311,30 @@ namespace SAM.Core
                             result = default;
                             return true;
                         }
-                            
-                        result = (T)(object)new SAMColor(color);
+
+                        result = new SAMColor(color);
                         return true;
                     }
                 }
             }
-            else if(typeof(JObject).IsAssignableFrom(typeof(T)))
+            else if (typeof(JObject).IsAssignableFrom(type))
             {
-                if(@object is string)
+                if (@object is string)
                 {
-                    result = (T)(object)JObject.Parse((string)@object);
+                    result = JObject.Parse((string)@object);
                     return true;
                 }
             }
-            else if(@object is JToken)
+            else if (@object is JToken)
             {
                 double value;
                 if (TryConvert(((JValue)@object).Value, out value))
                 {
-                    result = (T)(object)value;
+                    result = value;
                     return true;
                 }
             }
-            else if(result is Enum)
+            else if (result is Enum)
             {
                 if (@object == null)
                     return false;
@@ -343,27 +343,27 @@ namespace SAM.Core
                 {
                     string @string = (string)@object;
 
-                    Type type = result.GetType();
+                    Type type_Result = result.GetType();
 
-                    Array array = System.Enum.GetValues(type);
-                    if(array != null)
+                    Array array = System.Enum.GetValues(type_Result);
+                    if (array != null)
                     {
-                        foreach(Enum @enum in array)
+                        foreach (Enum @enum in array)
                         {
-                            if(@enum.ToString().Equals(@string))
+                            if (@enum.ToString().Equals(@string))
                             {
-                                result = (T)(object)@enum;
+                                result = @enum;
                                 return true;
                             }
                         }
                     }
 
                     int @int;
-                    if(int.TryParse(@string, out @int))
+                    if (int.TryParse(@string, out @int))
                     {
-                        if(System.Enum.IsDefined(type, @int))
+                        if (System.Enum.IsDefined(type, @int))
                         {
-                            result = (T)(object)@int;
+                            result = @int;
                             return true;
                         }
                     }
@@ -373,7 +373,7 @@ namespace SAM.Core
                     int @int = default;
                     if (System.Enum.IsDefined(result.GetType(), @int))
                     {
-                        result = (T)(object)@int;
+                        result = @int;
                         return true;
                     }
                 }
@@ -382,7 +382,7 @@ namespace SAM.Core
                     int @int = System.Convert.ToInt32(@object);
                     if (System.Enum.IsDefined(result.GetType(), @int))
                     {
-                        result = (T)(object)@int;
+                        result = @int;
                         return true;
                     }
                 }
@@ -390,6 +390,18 @@ namespace SAM.Core
 
             result = default;
             return false;
+        }
+
+        public static bool TryConvert<T>(this object @object, out T result)
+        {
+            result = default;
+
+            object result_Object;
+            if (!TryConvert(@object, out result_Object, typeof(T)))
+                return false;
+
+            result = (T)result_Object;
+            return true;
         }
     }
 }

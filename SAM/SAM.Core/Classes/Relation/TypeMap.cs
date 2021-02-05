@@ -288,11 +288,10 @@ namespace SAM.Core
                 }
 
                 string name_Input = index == 1 ? tuple.Item4 : tuple.Item3;
-                if (name_Input.Equals(name))
-                {
-                    result.Add(i);
-                    return result;
-                }
+                if (!name_Input.Equals(name))
+                    continue;
+
+                result.Add(i);
             }
 
             return result;

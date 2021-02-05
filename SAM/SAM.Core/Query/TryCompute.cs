@@ -121,6 +121,12 @@ namespace SAM.Core
                         if (type.IsAssignableFrom(type_Parameter))
                             continue;
 
+                        if(TryConvert(parameters[count - 1], out object parameter, type))
+                        {
+                            parameters[count - 1] = parameter;
+                            continue;
+                        }
+
                         if (parameterInfos[i].IsOptional)
                         {
                             count--;
