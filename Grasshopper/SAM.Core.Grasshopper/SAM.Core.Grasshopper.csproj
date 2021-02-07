@@ -76,6 +76,7 @@
     <Compile Include="Component\SAMCoreAddMaterials.cs" />
     <Compile Include="Component\SAMCoreCopyMaterials.cs" />
     <Compile Include="Component\SAMCoreFromFile.cs" />
+    <Compile Include="Component\SAMCoreObjects.cs" />
     <Compile Include="Component\SAMCoreRemoveValue.cs" />
     <Compile Include="Component\SAMCoreParameterFromType.cs" />
     <Compile Include="Component\SAMCoreGetType.cs" />
@@ -206,8 +207,8 @@ copy "$(TargetDir)*.dll" "%25SAM_DIR%25"
 copy "%25SAM_DIR%25\$(ProjectName).dll" "%25SAM_DIR%25\$(ProjectName).gha"
 
 
-echo #Order of files is important or just folder > "$(APPDATA)\Grasshopper\Libraries\SAM.ghlink"
-echo %25SAM_DIR%25 >> "$(APPDATA)\Grasshopper\Libraries\SAM.ghlink"
+echo #Order of files is important or just folder &gt; "$(APPDATA)\Grasshopper\Libraries\SAM.ghlink"
+echo %25SAM_DIR%25 &gt;&gt; "$(APPDATA)\Grasshopper\Libraries\SAM.ghlink"
 
 
 xcopy "$(SolutionDir)\files" "$(APPDATA)\SAM\" /Y /I /E/S

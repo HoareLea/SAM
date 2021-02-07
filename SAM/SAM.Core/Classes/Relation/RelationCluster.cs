@@ -438,6 +438,9 @@ namespace SAM.Core
 
         public List<object> GetObjects(Type type)
         {
+            if (dictionary_Objects == null)
+                return null;
+
             if (!IsValid(type))
                 return null;
 
@@ -447,6 +450,19 @@ namespace SAM.Core
 
             List<object> result = new List<object>();
             foreach (KeyValuePair<Guid, object> keyValuePair in dictionary_Objects[typeName])
+                result.Add(keyValuePair.Value);
+
+            return result;
+        }
+
+        public List<object> GetObjects()
+        {
+            if (dictionary_Objects == null)
+                return null;
+            
+            List<object> result = new List<object>();
+            foreach(Dictionary<Guid, object> dictionary in dictionary_Objects.Values)
+            foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
                 result.Add(keyValuePair.Value);
 
             return result;
