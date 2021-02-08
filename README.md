@@ -4,7 +4,7 @@
 
 Currently tested on Rhino 6 (6.32.20340.21001), Rhino 7 and Revit 2020, 2021
 
-To install SAM from .exe just down load run latest version 
+To install SAM from .exe just download and run latest installer 
 https://github.com/HoareLea/SAM_Deploy/releases
 
 
