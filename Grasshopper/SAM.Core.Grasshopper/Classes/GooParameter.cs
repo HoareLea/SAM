@@ -64,6 +64,9 @@ namespace SAM.Core.Grasshopper
             if (Value is Guid)
                 return Value.ToString();
 
+            if (Value is Type)
+                return Core.Query.FullTypeName(((Type)Value));
+
             string value = Value.GetType().FullName;
 
             if (Value is ISAMObject)
