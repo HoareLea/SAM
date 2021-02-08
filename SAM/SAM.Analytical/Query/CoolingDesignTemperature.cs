@@ -2,6 +2,11 @@
 {
     public static partial class Query
     {
+        public static double CoolingDesignTemperature(this Space space, AnalyticalModel analyticalModel)
+        {
+            return CoolingDesignTemperature(space, analyticalModel?.ProfileLibrary);
+        }
+
         public static double CoolingDesignTemperature(this Space space, ProfileLibrary profileLibrary)
         {
             if (space == null || profileLibrary == null)
