@@ -5,6 +5,24 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
+        public static double Height(this SpaceSimulationResult spaceSimulationResult)
+        {
+            if (spaceSimulationResult == null)
+                return double.NaN;
+
+            if (!spaceSimulationResult.TryGetValue(SpaceSimulationResultParameter.Volume, out double volume) || double.IsNaN(volume))
+                return double.NaN;
+
+            if (!spaceSimulationResult.TryGetValue(SpaceSimulationResultParameter.Area, out double area) || double.IsNaN(area))
+                return double.NaN;
+
+            if (area == 0)
+                return 0;
+
+            return volume / area;
+        }
+
+
         public static double Height(this PlanarBoundary3D planarBoundary3D)
         {
             //TODO: Find better way to determine Height
