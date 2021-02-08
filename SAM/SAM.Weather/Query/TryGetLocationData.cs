@@ -31,7 +31,7 @@ namespace SAM.Weather
                 return false;
 
             string[] values = line.Split(',');
-            if (values == null || values.Length < 10)
+            if (values == null || values.Length < 9)
                 return false;
 
             city = values[0];
