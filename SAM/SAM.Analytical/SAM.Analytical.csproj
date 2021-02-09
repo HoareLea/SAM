@@ -234,6 +234,7 @@
     <Compile Include="Query\InternalConstructionLayer.cs" />
     <Compile Include="Query\ExternalConstructionLayer.cs" />
     <Compile Include="Query\DefaultGasMaterial.cs" />
+    <Compile Include="Query\ZoneType.cs" />
     <Compile Include="Query\Zone.cs" />
     <Compile Include="Query\Volume.cs" />
     <Compile Include="Query\OffsetAperturesOnEdge.cs" />
