@@ -99,15 +99,27 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            double airflow = double.NaN;
-
-            //double airflow
-
+            double airflow_LpSpP = double.NaN;
             index = Params.IndexOfInputParam("_airflow_LpSpP");
             if(index != -1)
+                dataAccess.GetData(index, ref airflow_LpSpP);
 
+            double airflow_ACH = double.NaN;
+            index = Params.IndexOfInputParam("_airflow_ACH");
+            if (index != -1)
+                dataAccess.GetData(index, ref airflow_ACH);
 
-            if (double.IsNaN(airflow))
+            double airflow_LpSpM2 = double.NaN;
+            index = Params.IndexOfInputParam("_airflow_LpSpM2");
+            if (index != -1)
+                dataAccess.GetData(index, ref airflow_LpSpM2);
+
+            double airflow_LpS = double.NaN;
+            index = Params.IndexOfInputParam("_airflow_LpS");
+            if (index != -1)
+                dataAccess.GetData(index, ref airflow_LpS);
+
+            if (double.IsNaN(airflow_LpSpP) && double.IsNaN(airflow_ACH) && double.IsNaN(airflow_LpSpM2) && double.IsNaN(airflow_LpS))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -122,10 +134,83 @@ namespace SAM.Analytical.Grasshopper
             if(spaces != null)
                 spaces_Temp = spaces_Temp.FindAll(x => x != null && spaces.Find(y => y != null && y.Guid == x.Guid) != null);
 
+            foreach(Space space in spaces_Temp)
+            {
+                if (space == null)
+                    continue;
+                
+                double airflow = double.NaN;
+                
+                if(!double.IsNaN(airflow_LpSpP))
+                {
+                    double occupancy = space.CalculatedOccupancy();
+                    if(double.IsNaN(occupancy))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Space {0} (Guid: {1}) missing occupancy", space.Name, space.Guid));
+                    }
+                    else
+                    {
+                        if (double.IsNaN(airflow))
+                            airflow = 0;
 
+                        airflow += airflow_LpSpP * occupancy / 1000;
+                    }
+                        
+                }
 
+                if (!double.IsNaN(airflow_ACH))
+                {
+                    double volume = space.CalculatedVolume(adjacencyCluster);
+                    if (double.IsNaN(volume))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Could not get volume for Space {0} (Guid: {1})", space.Name, space.Guid));
+                    }
+                    else
+                    {
+                        if (double.IsNaN(airflow))
+                            airflow = 0;
 
-            
+                        airflow += airflow_ACH * volume / 3600;
+                    }
+                }
+
+                if (!double.IsNaN(airflow_LpSpM2))
+                {
+                    double area = space.CalculatedArea(adjacencyCluster);
+                    if (double.IsNaN(area))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Could not get area for Space {0} (Guid: {1})", space.Name, space.Guid));
+                    }
+                    else
+                    {
+                        if (double.IsNaN(airflow))
+                            airflow = 0;
+
+                        airflow += airflow_LpSpM2 * area / 1000;
+                    }
+                }
+
+                if (!double.IsNaN(airflow_LpS))
+                {
+                    if (double.IsNaN(airflow))
+                        airflow = 0;
+
+                    airflow += airflow_LpS / 1000;
+                }
+
+                if (double.IsNaN(airflow))
+                    continue;
+
+                space.SetValue(SpaceParameter.ExhaustAirFlow, airflow);
+                space.SetValue(SpaceParameter.OutsideSupplyAirFlow, airflow);
+                adjacencyCluster.AddObject(space);
+            }
+
+            if (sAMObject is AnalyticalModel)
+                sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
+            else if (sAMObject is AdjacencyCluster)
+                sAMObject = adjacencyCluster
+
             index = Params.IndexOfOutputParam("Analytical");
             if(index != -1)
                 dataAccess.SetData(index, sAMObject);

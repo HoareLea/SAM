@@ -164,6 +164,8 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\CalculatedArea.cs" />
+    <Compile Include="Query\CalculatedVolume.cs" />
     <Compile Include="Query\DesignHeatingLoad.cs" />
     <Compile Include="Query\SpecificOccupancySensibleGain.cs" />
     <Compile Include="Query\SpecificLoad.cs" />
