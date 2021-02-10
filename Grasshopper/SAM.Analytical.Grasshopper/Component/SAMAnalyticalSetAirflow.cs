@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
                 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_LpSpP", NickName = "_airflow_LpSpP", Description = "Airflow [l/s/p]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_ACH", NickName = "_airflow_ACH", Description = "Airflow [ACH]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
@@ -118,12 +118,6 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfInputParam("_airflow_LpS");
             if (index != -1)
                 dataAccess.GetData(index, ref airflow_LpS);
-
-            if (double.IsNaN(airflow_LpSpP) && double.IsNaN(airflow_ACH) && double.IsNaN(airflow_LpSpM2) && double.IsNaN(airflow_LpS))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
             
             List <Space> spaces = new List<Space>();
             index = Params.IndexOfInputParam("_spaces");
@@ -131,7 +125,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, spaces);
 
             List<Space> spaces_Temp = adjacencyCluster.GetSpaces();
-            if(spaces != null)
+            if(spaces != null && spaces.Count != 0)
                 spaces_Temp = spaces_Temp.FindAll(x => x != null && spaces.Find(y => y != null && y.Guid == x.Guid) != null);
 
             foreach(Space space in spaces_Temp)

@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_object", NickName = "_object", Description = "Object to be added", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "objects_", NickName = "objects_", Description = "Object to be added", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -81,50 +81,49 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            SAMObject sAMObject_Object = null;
-            index = Params.IndexOfInputParam("_object");
-            if(index != -1 || dataAccess.GetData(index, ref sAMObject_Object) || sAMObject_Object == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            List<SAMObject> sAMObjects = new List<SAMObject>();
+            index = Params.IndexOfInputParam("objects_");
+            if (index != -1)
+                dataAccess.GetDataList(index, sAMObjects);
 
-            if (sAMObject is AnalyticalModel)
+            if(sAMObjects != null && sAMObjects.Count != 0)
             {
-                AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
-                if(sAMObject_Object is IMaterial)
+                if (sAMObject is AnalyticalModel)
                 {
-                    analyticalModel.AddMaterial((IMaterial)sAMObject_Object);
+                    AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
+                    sAMObjects.FindAll(x => x is IMaterial).ForEach(x => analyticalModel.AddMaterial((IMaterial)x));
+                    sAMObjects.FindAll(x => x is Profile).ForEach(x => analyticalModel.AddProfile((Profile)x));
+
+                    AdjacencyCluster adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
+                    if(adjacencyCluster != null)
+                    {
+                        List<SAMObject> sAMObjects_AdjacencyCluster = sAMObjects.FindAll(x => adjacencyCluster.IsValid(x));
+                        if(sAMObjects_AdjacencyCluster != null && sAMObjects_AdjacencyCluster.Count > 0)
+                        {
+                            sAMObjects_AdjacencyCluster.ForEach(x => adjacencyCluster.AddObject(x));
+                            analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                        }
+                    }
+
+                    sAMObject = analyticalModel;
                 }
-                else if (sAMObject_Object is Profile)
+                else if (sAMObject is AdjacencyCluster)
                 {
-                    analyticalModel.AddProfile((Profile)sAMObject_Object);
+                    AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
+                    foreach (SAMObject sAMObject_Object in sAMObjects)
+                    {
+                        if (adjacencyCluster.IsValid(sAMObject_Object))
+                            adjacencyCluster.AddObject(sAMObject_Object);
+                    }
+
+                    sAMObject = adjacencyCluster;
                 }
                 else
                 {
-                    AdjacencyCluster adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-                    if (adjacencyCluster.IsValid(sAMObject_Object))
-                        adjacencyCluster.AddObject(sAMObject_Object);
-
-                    analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
                 }
-
-                sAMObject = analyticalModel;
             }
-            else if (sAMObject is AdjacencyCluster)
-            {
-                AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-                if (adjacencyCluster.IsValid(sAMObject_Object))
-                    adjacencyCluster.AddObject(sAMObject_Object);
-
-                sAMObject = adjacencyCluster;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
 
             index = Params.IndexOfOutputParam("Analytical");
             if(index != -1)
