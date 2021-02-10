@@ -97,9 +97,17 @@ namespace SAM.Core.Grasshopper
 
             int columnIndex = -1;
             if (Core.Query.IsNumeric(column))
+            {
                 columnIndex = System.Convert.ToInt32(column);
+            }
             else
-                columnIndex = delimitedFileTable.GetColumnIndex(column.ToString());
+            {
+                if ((column is string) && int.TryParse((string)column, out int columnIndex_Temp))
+                    columnIndex = columnIndex_Temp;
+                else
+                    columnIndex = delimitedFileTable.GetColumnIndex(column.ToString());
+            }
+                
 
             if(columnIndex == -1)
             {

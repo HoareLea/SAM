@@ -96,7 +96,13 @@ namespace SAM.Core.Grasshopper
             if (Core.Query.IsNumeric(column))
                 column = System.Convert.ToInt32(column);
             else
-                column = column.ToString();
+            {
+                if ((column is string) && int.TryParse((string)column, out int columnIndex))
+                    column = columnIndex;
+                else
+                    column = column.ToString();
+            }
+                
 
             int row = -1;
             index = Params.IndexOfInputParam("row_");
