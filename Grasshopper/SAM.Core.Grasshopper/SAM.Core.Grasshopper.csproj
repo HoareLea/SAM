@@ -75,6 +75,7 @@
     <Compile Include="Classes\GooParameter.cs" />
     <Compile Include="Component\SAMCoreAddMaterials.cs" />
     <Compile Include="Component\SAMCoreCopyMaterials.cs" />
+    <Compile Include="Component\SAMCoreDelimitedFileTableMap.cs" />
     <Compile Include="Component\SAMCoreFromFile.cs" />
     <Compile Include="Component\SAMCoreObjects.cs" />
     <Compile Include="Component\SAMCoreRemoveValue.cs" />

@@ -73,6 +73,12 @@ namespace SAM.Core.Grasshopper
 
         public override bool CastTo<Q>(ref Q target)
         {
+            if(typeof(Q).IsAssignableFrom(Value?.GetType()))
+            {
+                target = (Q)(object)Value;
+                return true;
+            }
+            
             return base.CastTo(ref target);
         }
     }

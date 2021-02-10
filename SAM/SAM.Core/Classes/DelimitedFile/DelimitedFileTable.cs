@@ -103,10 +103,10 @@ namespace SAM.Core
                 }
             }
 
-            min = Math.Min(rowsStart, namesIndex);
+            int max = Math.Max(namesIndex, rowsStart);
 
             values = new List<object[]>();
-            for (int i = headerCount + min + 1; i < rowsCount + min; i++)
+            for (int i = max + headerCount + 1; i < rowsCount + rowsStart; i++)
             {
                 object[] values = new object[columnsCount];
                 for (int j = columnsStart; j < columnsCount + columnsStart; j++)

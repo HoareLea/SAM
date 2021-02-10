@@ -155,6 +155,7 @@
     <Compile Include="Modify\RemoveValue.cs" />
     <Compile Include="Modify\Copy.cs" />
     <Compile Include="Modify\SetValue.cs" />
+    <Compile Include="Query\Indexes.cs" />
     <Compile Include="Query\MethodInfos.cs" />
     <Compile Include="Query\ReplaceSpecialCharacters.cs" />
     <Compile Include="Query\Copy.cs" />

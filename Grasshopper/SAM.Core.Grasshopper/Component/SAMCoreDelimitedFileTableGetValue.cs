@@ -46,7 +46,7 @@ namespace SAM.Core.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooDelimitedFileTableParam() { Name = "_delimitedFileTable", NickName = "_delimitedFileTable", Description = "SAM DelimitedFileTable", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_column", NickName = "_column", Description = "Column name or index", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "row_", NickName = "row_", Description = "Row index", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "row_", NickName = "row_", Description = "Row index", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 
 
                 return result.ToArray();
@@ -99,8 +99,8 @@ namespace SAM.Core.Grasshopper
                 column = column.ToString();
 
             int row = -1;
-            index = Params.IndexOfInputParam("_row");
-            if (index != -1 || !dataAccess.GetData(index, ref row))
+            index = Params.IndexOfInputParam("row_");
+            if (index == -1 || !dataAccess.GetData(index, ref row))
                 row = -1;
 
             object[] result = null;
