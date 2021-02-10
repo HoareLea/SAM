@@ -209,7 +209,7 @@ namespace SAM.Analytical.Grasshopper
             if (sAMObject is AnalyticalModel)
                 sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
             else if (sAMObject is AdjacencyCluster)
-                sAMObject = adjacencyCluster
+                sAMObject = adjacencyCluster;
 
             index = Params.IndexOfOutputParam("Analytical");
             if(index != -1)
