@@ -83,13 +83,14 @@
     <Compile Include="Component\SAMAnalyticalGetZonesByName.cs" />
     <Compile Include="Component\SAMAnalyticalGetZonesBySpace.cs" />
     <Compile Include="Component\SAMAnalyticalGetZone_Obsolete.cs" />
-    <Compile Include="Component\SAMAnalyticalAirFlow.cs" />
+    <Compile Include="Component\SAMAnalyticalAirflow.cs" />
     <Compile Include="Component\SAMAnalyticalCopyApertureConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalCopyConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalCreateProfileByValues.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalAddObject.cs" />
+    <Compile Include="Component\SAMAnalyticalSetAirflow.cs" />
     <Compile Include="Component\SAMAnalyticalZoneType.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateZone.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultLibrary.cs" />

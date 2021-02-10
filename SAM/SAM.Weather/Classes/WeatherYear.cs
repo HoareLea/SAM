@@ -92,6 +92,17 @@ namespace SAM.Weather
             }
         }
 
+        public List<WeatherDay> WeatherDays
+        {
+            get
+            {
+                if (weatherDays == null)
+                    return null;
+
+                return weatherDays.ToList();
+            }
+        }
+
         public List<double> GetValues(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

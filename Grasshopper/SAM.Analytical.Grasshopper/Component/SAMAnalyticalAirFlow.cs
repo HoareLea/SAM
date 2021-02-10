@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAirFlow : GH_SAMComponent
+    public class SAMAnalyticalAirflow : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,9 +27,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAirFlow()
-          : base("SAMAnalytical.AirFlow", "SAMAnalytical.AirFlow",
-              "Calculates Exhaust and Supply Air Flow",
+        public SAMAnalyticalAirflow()
+          : base("SAMAnalytical.Airflow", "SAMAnalytical.Airflow",
+              "Calculates Exhaust and Supply Airflow",
               "SAM", "Analytical")
         {
         }
@@ -47,10 +47,10 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddNumberParameter("Supply", "Supply", "Supply Air Flow [m3/s]", GH_ParamAccess.item);
-            outputParamManager.AddNumberParameter("Exhaust", "Exhasut", "Exhaust Air Flow [m3/s]", GH_ParamAccess.item);
-            outputParamManager.AddNumberParameter("Supply_LpS", "Supply_LpS", "Supply Air Flow [l/s]", GH_ParamAccess.item);
-            outputParamManager.AddNumberParameter("Exhaust_LpS", "Exhasut_LpS", "Exhaust Air Flow [l/s]", GH_ParamAccess.item);
+            outputParamManager.AddNumberParameter("Supply", "Supply", "Supply Airflow [m3/s]", GH_ParamAccess.item);
+            outputParamManager.AddNumberParameter("Exhaust", "Exhasut", "Exhaust Airflow [m3/s]", GH_ParamAccess.item);
+            outputParamManager.AddNumberParameter("Supply_LpS", "Supply_LpS", "Supply Airflow [l/s]", GH_ParamAccess.item);
+            outputParamManager.AddNumberParameter("Exhaust_LpS", "Exhasut_LpS", "Exhaust Airflow [l/s]", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
@@ -61,13 +61,13 @@ namespace SAM.Analytical.Grasshopper
 
             }
 
-            double exhaustAirFlow = Analytical.Query.ExhaustAirFlow(space);
-            double supplyAirFlow = Analytical.Query.SupplyAirFlow(space);
+            double exhaustAirflow = Analytical.Query.ExhaustAirFlow(space);
+            double supplyAirflow = Analytical.Query.SupplyAirFlow(space);
 
-            dataAccess.SetData(0, supplyAirFlow);
-            dataAccess.SetData(1, exhaustAirFlow);
-            dataAccess.SetData(2, supplyAirFlow * 1000);
-            dataAccess.SetData(3, exhaustAirFlow * 1000);
+            dataAccess.SetData(0, supplyAirflow);
+            dataAccess.SetData(1, exhaustAirflow);
+            dataAccess.SetData(2, supplyAirflow * 1000);
+            dataAccess.SetData(3, exhaustAirflow * 1000);
         }
     }
 }
