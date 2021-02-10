@@ -1,9 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
-using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {

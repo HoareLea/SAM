@@ -12,7 +12,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("4a0cde0d-b4e8-4af8-9e84-6d128afe4c47");
+        public override Guid ComponentGuid => new Guid("586fbc48-80aa-4a88-b263-cca4b86fc5d0");
 
         /// <summary>
         /// The latest version of this component
@@ -46,9 +46,12 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_LpS", NickName = "_airflow_LpS", Description = "Airflow [l/s]", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_ACH", NickName = "_airflow_ACH", Description = "Airflow [ACH]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_LpSpP", NickName = "_airflow_LpSpP", Description = "Airflow [l/s/p]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_ACH", NickName = "_airflow_ACH", Description = "Airflow [ACH]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_LpSpM2", NickName = "_airflow_LpSpM2", Description = "Airflow [l/s/m2]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_LpS", NickName = "_airflow_LpS", Description = "Airflow [l/s]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                
                 return result.ToArray();
             }
         }
@@ -96,7 +99,21 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Space> spaces = new List<Space>();
+            double airflow = double.NaN;
+
+            //double airflow
+
+            index = Params.IndexOfInputParam("_airflow_LpSpP");
+            if(index != -1)
+
+
+            if (double.IsNaN(airflow))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            
+            List <Space> spaces = new List<Space>();
             index = Params.IndexOfInputParam("_spaces");
             if (index != -1)
                 dataAccess.GetDataList(index, spaces);
