@@ -81,6 +81,7 @@
     <Compile Include="Component\SAMCoreParameterFromType.cs" />
     <Compile Include="Component\SAMCoreGetType.cs" />
     <Compile Include="Component\SAMCoreSAMLibraryAddObjects.cs" />
+    <Compile Include="Component\SAMCoreDelimitedFileTableGetValue.cs" />
     <Compile Include="Component\SAMCoreSetValues.cs" />
     <Compile Include="Component\SAMCoreSetValue.cs" />
     <Compile Include="Component\SAMCoreLoadMaterialLibrary.cs" />

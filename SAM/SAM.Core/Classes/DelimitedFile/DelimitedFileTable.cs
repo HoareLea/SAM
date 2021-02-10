@@ -296,6 +296,36 @@ namespace SAM.Core
             return -1;
         }
 
+        public object[] GetColumnValues(int index)
+        {
+            if (index >= names.Length || index < 0)
+                return null;
+            
+            object[] result = new object[values.Count];
+            for(int i = 0; i < values.Count; i++)
+            {
+                result[i] = values[i][index];
+            }
+
+            return result;
+        }
+
+        public object[] GetColumnValues(string columnName)
+        {
+            if (columnName == null)
+                return null;
+
+            return GetColumnValues(GetColumnIndex(columnName));
+        }
+
+        public object[] GetRowValues(int index)
+        {
+            if (index < 0 || index >= names.Length)
+                return null;
+            
+            return values[index];
+        }
+
         public bool TryGetValue<T>(int row, int column, out T value)
         {
             value = default(T);

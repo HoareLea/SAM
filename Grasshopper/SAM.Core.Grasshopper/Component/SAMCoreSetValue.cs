@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,7 +40,10 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_sAMObject", "_sAMObject", "SAM Object", GH_ParamAccess.item);
+            global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_sAMObject", NickName = "_sAMObject", Description = "SAM Object", Access = GH_ParamAccess.item };
+            genericObject.DataMapping = GH_DataMapping.Graft;
+            inputParamManager.AddParameter(genericObject, "_sAMObject", "_sAMObject", "SAM Object", GH_ParamAccess.item);
+            
             int index = inputParamManager.AddTextParameter("_parameter", "_parameter", "Parameter", GH_ParamAccess.item);
             inputParamManager[index].DataMapping = GH_DataMapping.Graft;
 
