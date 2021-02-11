@@ -38,7 +38,7 @@ namespace SAM.Core
 
                 for (int j = 0; j < columnCount; j++)
                 {
-                    string parameter = parameters.ElementAt(i);
+                    string parameter = parameters.ElementAt(j);
                     if (parameter == null)
                         continue;
 
