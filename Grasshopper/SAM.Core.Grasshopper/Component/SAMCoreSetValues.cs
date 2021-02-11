@@ -129,7 +129,7 @@ namespace SAM.Core.Grasshopper
                         value = (value as dynamic).Value;
                 }
 
-                bool succeded = false;
+                bool succeed = false;
 
                 List<Enum> enums = ActiveManager.GetParameterEnums(sAMObject, name);
                 if (enums != null && enums.Count > 0)
@@ -139,7 +139,7 @@ namespace SAM.Core.Grasshopper
                         foreach (Enum @enum in enums)
                         {
                             if (sAMObject.RemoveValue(@enum))
-                                succeded = true;
+                                succeed = true;
                         }
                     }
                     else
@@ -147,19 +147,19 @@ namespace SAM.Core.Grasshopper
                         foreach (Enum @enum in enums)
                         {
                             if (sAMObject.SetValue(@enum, value))
-                                succeded = true;
+                                succeed = true;
                         }
                     }
                 }
                 else
                 {
                     if (value == null)
-                        succeded = sAMObject.RemoveValue(name);
+                        succeed = sAMObject.RemoveValue(name);
                     else
-                        succeded = Core.Modify.SetValue(sAMObject, name, value as dynamic);
+                        succeed = Core.Modify.SetValue(sAMObject, name, value as dynamic);
                 }
 
-                if (succeded)
+                if (succeed)
                     names_Result.Add(name);
             }
 
