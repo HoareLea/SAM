@@ -91,6 +91,7 @@
     <Compile Include="Component\SAMAnalyticalGetDefaultConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalAddObject.cs" />
     <Compile Include="Component\SAMAnalyticalSetAirflow.cs" />
+    <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalZoneType.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateZone.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultLibrary.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="Component\SAMAnalyticalGetDefaultInternalConditionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalSetConstructionLayersByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalSetOccupancyGains.cs" />
-    <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
+    <Compile Include="Component\SAMAnalyticalSetInternalConditionByInternalConditionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalExtendPanelByPlane.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelByPanels.cs" />
     <Compile Include="Component\SAMAnalyticalRemoveInternalEdges.cs" />

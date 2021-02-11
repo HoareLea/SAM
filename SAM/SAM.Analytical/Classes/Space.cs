@@ -83,7 +83,7 @@ namespace SAM.Analytical
                 if (value == null)
                     internalCondition = null;
                 else
-                    internalCondition = new InternalCondition(value);
+                    internalCondition = new InternalCondition(Guid.NewGuid(), value);
             }
         }
 
