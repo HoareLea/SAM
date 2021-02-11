@@ -102,10 +102,12 @@ namespace SAM.Core.Grasshopper
             }
             else
             {
-                if ((column is string) && int.TryParse((string)column, out int columnIndex_Temp))
-                    columnIndex = columnIndex_Temp;
-                else
-                    columnIndex = delimitedFileTable.GetColumnIndex(column.ToString());
+                columnIndex = delimitedFileTable.GetColumnIndex(column.ToString());
+                if(columnIndex == -1)
+                {
+                    if ((column is string) && int.TryParse((string)column, out int columnIndex_Temp))
+                        columnIndex = columnIndex_Temp;
+                }
             }
                 
 
