@@ -93,22 +93,35 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            object value = objectWrapper.Value;
+            object value = objectWrapper?.Value;
             if(value is IGH_Goo)
                 value = (value as dynamic).Value;
 
             sAMObject = sAMObject.Clone();
 
             bool result = false;
+
             if(enums != null && enums.Count > 0)
             {
-                foreach (Enum @enum in enums)
-                    if (sAMObject.SetValue(@enum, value))
-                        result = true;
+                if(value == null)
+                {
+                    foreach (Enum @enum in enums)
+                        if (sAMObject.RemoveValue(@enum))
+                            result = true;
+                }
+                else
+                {
+                    foreach (Enum @enum in enums)
+                        if (sAMObject.SetValue(@enum, value))
+                            result = true;
+                }
             }
             else
             {
-                result = Core.Modify.SetValue(sAMObject, name, value as dynamic);
+                if (value == null)
+                    result = sAMObject.RemoveValue(name);
+                else
+                    result = Core.Modify.SetValue(sAMObject, name, value as dynamic);
             }
             
             dataAccess.SetData(0, sAMObject);

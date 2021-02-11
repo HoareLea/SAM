@@ -134,14 +134,27 @@ namespace SAM.Core.Grasshopper
                 List<Enum> enums = ActiveManager.GetParameterEnums(sAMObject, name);
                 if (enums != null && enums.Count > 0)
                 {
-                    foreach (Enum @enum in enums)
-                        if (sAMObject.SetValue(@enum, value))
-                            succeded = true;
+                    if(value == null)
+                    {
+                        foreach (Enum @enum in enums)
+                        {
+                            if (sAMObject.RemoveValue(@enum))
+                                succeded = true;
+                        }
+                    }
+                    else
+                    {
+                        foreach (Enum @enum in enums)
+                        {
+                            if (sAMObject.SetValue(@enum, value))
+                                succeded = true;
+                        }
+                    }
                 }
                 else
                 {
                     if (value == null)
-                        succeded = Core.Modify.RemoveValue(sAMObject, name, null, true);
+                        succeded = sAMObject.RemoveValue(name);
                     else
                         succeded = Core.Modify.SetValue(sAMObject, name, value as dynamic);
                 }
