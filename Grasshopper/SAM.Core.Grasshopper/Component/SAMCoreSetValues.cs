@@ -115,15 +115,23 @@ namespace SAM.Core.Grasshopper
                 if (objectWrappers.Count <= i)
                     continue;
 
-                GH_ObjectWrapper objectWrapper = objectWrappers[i];
-                
-                List<Enum> enums = ActiveManager.GetParameterEnums(sAMObject, name);
+                object value = null;
 
-                object value = objectWrapper.Value;
-                if (value is IGH_Goo)
-                    value = (value as dynamic).Value;
+                GH_ObjectWrapper objectWrapper = objectWrappers[i];
+                if (objectWrapper == null)
+                {
+                    value = null;
+                }
+                else
+                {
+                    value = objectWrapper.Value;
+                    if (value is IGH_Goo)
+                        value = (value as dynamic).Value;
+                }
 
                 bool succeded = false;
+
+                List<Enum> enums = ActiveManager.GetParameterEnums(sAMObject, name);
                 if (enums != null && enums.Count > 0)
                 {
                     foreach (Enum @enum in enums)
@@ -132,7 +140,10 @@ namespace SAM.Core.Grasshopper
                 }
                 else
                 {
-                    succeded = Core.Modify.SetValue(sAMObject, name, value as dynamic);
+                    if (value == null)
+                        succeded = Core.Modify.RemoveValue(sAMObject, name, null, true);
+                    else
+                        succeded = Core.Modify.SetValue(sAMObject, name, value as dynamic);
                 }
 
                 if (succeded)
