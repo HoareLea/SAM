@@ -77,7 +77,7 @@ namespace SAM.Analytical.Grasshopper
 
             SAMObject sAMObject = null;
             index = Params.IndexOfInputParam("_analytical");
-            if(index == -1 || dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            if(index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -89,14 +89,14 @@ namespace SAM.Analytical.Grasshopper
             else if (sAMObject is AnalyticalModel)
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
 
-            if(adjacencyCluster != null)
+            if(adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             index = Params.IndexOfInputParam("_analyticalObject");
-            if (index == -1 || dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

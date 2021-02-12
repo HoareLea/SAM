@@ -75,7 +75,7 @@ namespace SAM.Core.Grasshopper
 
             RelationCluster relationCluster = null;
             index = Params.IndexOfInputParam("_relationCluster");
-            if (index == -1 || dataAccess.GetData(index, ref relationCluster) || relationCluster == null)
+            if (index == -1 || !dataAccess.GetData(index, ref relationCluster) || relationCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -83,7 +83,7 @@ namespace SAM.Core.Grasshopper
 
             SAMObject sAMObject = null;
             index = Params.IndexOfInputParam("_object");
-            if (index == -1 || dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
