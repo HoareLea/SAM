@@ -228,6 +228,27 @@ namespace SAM.Core
             return result;
         }
 
+        public bool SetColumnName(int index, string name)
+        {
+            if (names == null)
+                return false;
+
+            if (index < 0 || index >= names.Length)
+                return false;
+
+            names[index] = name;
+            return true;
+        }
+
+        public bool SetColumnName(string columnName_Old, string columnName_New)
+        {
+            int index = GetColumnIndex(columnName_Old);
+            if (index == -1)
+                return false;
+
+            return SetColumnName(index, columnName_New);
+        }
+
         public bool TryGetColumnName(int index, out string name)
         {
             name = null;

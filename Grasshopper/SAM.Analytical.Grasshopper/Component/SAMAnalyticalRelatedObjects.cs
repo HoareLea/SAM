@@ -8,7 +8,7 @@ using SAM.Core.Grasshopper;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMCoreRelatedObjects : GH_SAMComponent
+    public class SAMAnalyticalRelatedObjects : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,19 +18,21 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMCoreRelatedObjects()
-          : base("AdjacencyCluster.RelatedObjects", "AdjacencyCluster.RelatedObjects",
-              "Related Objects in AdjacencyCluster",
+        public SAMAnalyticalRelatedObjects()
+          : base("Analytical.RelatedObjects", "Analytical.RelatedObjects",
+              "Gets Related Objects from AnalyticalModel or AdjacencyCluster",
               "SAM", "Analytical")
         {
         }
@@ -38,18 +40,29 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM AdjacencyCluster", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_object", "_object", "SAM Object", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as Space, Panel etc.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "type_", NickName = "type_", Description = "Type", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddGenericParameter("RelatedObjects", "RelatedObjects", "Related Objects", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Objects", NickName = "Objects", Description = "Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -60,36 +73,62 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            AdjacencyCluster adjacencyCluster = null;
-
-            if (!dataAccess.GetData(0, ref adjacencyCluster))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            int index = -1;
 
             SAMObject sAMObject = null;
-            if (!dataAccess.GetData(1, ref sAMObject))
+            index = Params.IndexOfInputParam("_analytical");
+            if(index == -1 || dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            IEnumerable<object> result = adjacencyCluster.GetRelatedObjects(sAMObject);
+            AdjacencyCluster adjacencyCluster = null;
+            if (sAMObject is AdjacencyCluster)
+                adjacencyCluster = (AdjacencyCluster)sAMObject;
+            else if (sAMObject is AnalyticalModel)
+                adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
 
-            if (result == null)
+            if(adjacencyCluster != null)
             {
-                dataAccess.SetDataList(0, null);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            if (result.Count() == 0)
+            index = Params.IndexOfInputParam("_analyticalObject");
+            if (index == -1 || dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
-                dataAccess.SetDataList(0, result);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetDataList(0, result);
+            Type type = null;
+            index = Params.IndexOfInputParam("type_");
+            if(index != -1)
+            {
+                string fullTypeName = null;
+                if (dataAccess.GetData(index, ref fullTypeName))
+                {
+                    try
+                    {
+                        type = Type.GetType(fullTypeName);
+                    }
+                    catch
+                    {
+                        type = null;
+                    }
+                }
+            }
+
+            List<object> result = null;
+            if (type == null)
+                result = adjacencyCluster.GetRelatedObjects(sAMObject);
+            else
+                result = adjacencyCluster.GetRelatedObjects(sAMObject, type);
+
+            index = Params.IndexOfOutputParam("Objects");
+            if (index != -1)
+                dataAccess.SetDataList(index, result);
         }
     }
 }

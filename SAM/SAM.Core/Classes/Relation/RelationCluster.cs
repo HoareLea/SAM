@@ -569,6 +569,15 @@ namespace SAM.Core
             return GetObjects(guids);
         }
 
+        public List<object> GetRelatedObjects(object @object, Type type)
+        {
+            List<object> objects = GetRelatedObjects(@object);
+            if (objects == null || objects.Count == 0)
+                return objects;
+
+            return objects.FindAll(x => x != null && type.IsAssignableFrom(x.GetType()));
+        }
+
         public List<T> GetRelatedObjects<T>(object @object)
         {
             List<object> objects = GetRelatedObjects(@object);

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreRelatedObjects : GH_SAMComponent
+    public class SAMCoreRelatedObjects : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -16,12 +16,14 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -36,18 +38,29 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooRelationClusterParam(), "_relationCluster", "_relationCluster", "SAM AdjacencyCluster", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_object", "_object", "SAM Object", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooRelationClusterParam() { Name = "_relationCluster", NickName = "_relationCluster", Description = "SAM Core RelationCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_object", NickName = "_object", Description = "Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "type_", NickName = "type_", Description = "Type", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddGenericParameter("RelatedObjects", "RelatedObjects", "Related Objects", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Objects", NickName = "Objects", Description = "Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -58,36 +71,51 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            RelationCluster relationCluster = null;
+            int index = -1;
 
-            if (!dataAccess.GetData(0, ref relationCluster))
+            RelationCluster relationCluster = null;
+            index = Params.IndexOfInputParam("_relationCluster");
+            if (index == -1 || dataAccess.GetData(index, ref relationCluster) || relationCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             SAMObject sAMObject = null;
-            if (!dataAccess.GetData(1, ref sAMObject))
+            index = Params.IndexOfInputParam("_object");
+            if (index == -1 || dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            IEnumerable<object> result = relationCluster.GetRelatedObjects(sAMObject);
-
-            if (result == null)
+            Type type = null;
+            index = Params.IndexOfInputParam("type_");
+            if (index != -1)
             {
-                dataAccess.SetDataList(0, null);
-                return;
+                string fullTypeName = null;
+                if (dataAccess.GetData(index, ref fullTypeName))
+                {
+                    try
+                    {
+                        type = Type.GetType(fullTypeName);
+                    }
+                    catch
+                    {
+                        type = null;
+                    }
+                }
             }
 
-            if (result.Count() == 0)
-            {
-                dataAccess.SetDataList(0, result);
-                return;
-            }
+            List<object> result = null;
+            if (type == null)
+                result = relationCluster.GetRelatedObjects(sAMObject);
+            else
+                result = relationCluster.GetRelatedObjects(sAMObject, type);
 
-            dataAccess.SetDataList(0, result);
+            index = Params.IndexOfOutputParam("Objects");
+            if (index != -1)
+                dataAccess.SetDataList(index, result);
         }
     }
 }
