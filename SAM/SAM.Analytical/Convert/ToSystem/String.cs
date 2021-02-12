@@ -16,7 +16,7 @@ namespace SAM.Analytical
 
         public static string ToString(DateTime dateTime)
         {
-            return dateTime.ToString("dd-MM-yyyy@HH:mm");
+            return dateTime.ToString("dd.MM.yyyy@HH:mm");
         }
     }
 }
