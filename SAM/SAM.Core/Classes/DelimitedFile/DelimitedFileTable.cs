@@ -180,7 +180,7 @@ namespace SAM.Core
                 if (column >= values[row].Length)
                     return null;
 
-                return values[row][column] as string;
+                return values[row][column];
             }
         }
 
@@ -263,6 +263,49 @@ namespace SAM.Core
             return true;
         }
 
+        public bool SetValue(object value, int row = -1, int column = -1)
+        {
+            if (column == -1 && row == -1)
+                return false;
+
+            if(row != -1 && column != -1)
+            {
+                if (row >= values.Count)
+                    return false;
+
+                if (column >= values[row].Length)
+                    return false;
+
+                values[row][column] = value;
+                return true;
+            }
+
+            if (row != -1)
+            {
+                if (row >= values.Count)
+                    return false;
+
+                for (int i = 0; i < values[row].Length; i++)
+                    values[row][i] = value;
+
+                return true;
+            }
+
+            if (column >= values[row].Length)
+                return false;
+
+            bool result = false;
+            foreach(object[] row_Values in values)
+            {
+                if (column >= row_Values.Length)
+                    continue;
+
+                row_Values[column] = value;
+                result = true;
+            }
+            return result;
+        }
+
         public List<int> GetColumnIndexes(string columnText, TextComparisonType textComparisonType, bool caseSensitive = true)
         {
             if (columnText == null)
@@ -337,6 +380,32 @@ namespace SAM.Core
                 return null;
 
             return GetColumnValues(GetColumnIndex(columnName));
+        }
+
+        public object[,] GetColumnValues(IEnumerable<int> indexes)
+        {
+            if (indexes == null)
+                return null;
+
+            object[,] result = new object[values.Count, indexes.Count()];
+
+            int count = 0;
+            foreach(int index in indexes)
+            {
+                object[] values = GetColumnValues(index);
+                if (values == null || values.Length == 0)
+                {
+                    count++;
+                    continue;
+                }
+
+                for(int i = 0; i < values.Length; i++)
+                    result[i, count] = values[i];
+
+                count++;
+            }
+
+            return result;
         }
 
         public object[] GetRowValues(int index)

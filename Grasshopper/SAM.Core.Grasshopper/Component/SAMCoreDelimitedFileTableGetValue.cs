@@ -32,7 +32,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreDelimitedFileTableGetValue()
           : base("DelimitedFileTable.GetValue", "DelimitedFileTable.GetValue",
-              "Set Value of object by Parameter",
+              "Gets Value of object by Parameter",
               "SAM", "Core")
         {
         }
