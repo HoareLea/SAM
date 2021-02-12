@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -62,7 +62,8 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "Day", NickName = "Day", Description = "Day", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "Hour", NickName = "Hour", Description = "Hour", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "DayOfYear", NickName = "DayOfYear", Description = "Day of the year", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
-                
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "Text", NickName = "Text", Description = "DateTime as Text", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
         }
@@ -111,6 +112,10 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("DayOfYear");
             if (index != -1)
                 dataAccess.SetData(index, dateTime.DayOfYear);
+
+            index = Params.IndexOfOutputParam("Text");
+            if (index != -1)
+                dataAccess.SetData(index, Analytical.Convert.ToString(dateTime));
         }
     }
 }
