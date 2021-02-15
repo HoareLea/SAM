@@ -46,7 +46,7 @@ namespace SAM.Core.Grasshopper
             }
         }
 
-        public abstract string LatestComponentVersion { get;  }
+        public abstract string LatestComponentVersion { get; }
 
         public override void AddedToDocument(GH_Document document)
         {

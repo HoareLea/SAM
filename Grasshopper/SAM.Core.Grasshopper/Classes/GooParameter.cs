@@ -105,6 +105,20 @@ namespace SAM.Core.Grasshopper
                 target = (Y)Value;
                 return true;
             }
+            
+            if(typeof(Y).IsEnum && Value is string)
+            {
+                try
+                {
+                    target = (Y)Enum.Parse(typeof(Y), (string)Value);
+                    return true;
+                }
+                catch
+                {
+
+                }
+                
+            }
 
             if(typeof(Y) == typeof(GH_ObjectWrapper))
             {

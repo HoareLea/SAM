@@ -55,6 +55,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GH_SAMEnumComponent.cs" />
     <Compile Include="Classes\GH_SAMNullAttributes.cs" />
     <Compile Include="Classes\GH_SAMParam.cs" />
     <Compile Include="Classes\GH_SAMVariableOutputParameterComponent.cs" />
