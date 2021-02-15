@@ -49,9 +49,9 @@ namespace SAM.Core.Grasshopper
 
         private void Menu_Changed(object sender, EventArgs e)
         {
-            if (sender is ToolStripMenuItem item && item.Tag != null)
+            if (sender is ToolStripMenuItem item && item.Tag is T)
             {
-                this.value.Equals(item.Tag);
+                this.value = (T)item.Tag;
                 ExpireSolution(true);
             }
         }
