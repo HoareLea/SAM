@@ -5,16 +5,16 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static double CalculatedFloorArea(this AdjacencyCluster adjacencyCluster, Space space, double maxTiltDifference = 20, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> GeomericalFloorPanels(this AdjacencyCluster adjacencyCluster, Space space, double maxTiltDifference = 20, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null || space == null)
-                return double.NaN;
+                return null;
 
             Dictionary<Panel, Vector3D> dictionary = adjacencyCluster.NormalDictionary(space, out Shell shell, true, silverSpacing, tolerance);
             if (dictionary == null || dictionary.Count == 0)
-                return double.NaN;
+                return null;
 
-            double result = double.NaN;
+            List<Panel> result = new List<Panel>();
             foreach(KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
             {
                 Vector3D vector3D = keyValuePair.Value;
@@ -35,14 +35,7 @@ namespace SAM.Analytical
                 if (180 - maxTiltDifference < tilt || tilt > 180 + maxTiltDifference)
                     continue;
 
-                double area = panel.GetArea();
-                if (double.IsNaN(area))
-                    continue;
-
-                if (double.IsNaN(result))
-                    result = 0;
-
-                result += area;
+                result.Add(panel);
             }
 
             return result;

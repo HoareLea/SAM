@@ -4,10 +4,11 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCaluclatedFloorArea : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalCaluclateFloorArea : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,9 +30,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCaluclatedFloorArea()
-          : base("SAMAnalytical.CaluclatedFloorArea", "SAMAnalytical.CaluclatedFloorArea",
-              "Get Floor Area from Space",
+        public SAMAnalyticalCaluclateFloorArea()
+          : base("SAMAnalytical.CaluclateFloorArea", "SAMAnalytical.CaluclateFloorArea",
+              "Calculates Floor Area from Space",
               "SAM", "Analytical")
         {
         }
@@ -64,6 +65,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Area", NickName = "Area", Description = "Calculated Area", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "Panels", NickName = "Panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -80,7 +82,7 @@ namespace SAM.Analytical.Grasshopper
 
             SAMObject sAMObject = null;
             index = Params.IndexOfInputParam("_analytical");
-            if(index == -1 || dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            if(index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -100,7 +102,7 @@ namespace SAM.Analytical.Grasshopper
 
             Space space= null;
             index = Params.IndexOfInputParam("_space");
-            if (index == -1 || dataAccess.GetData(index, ref space) || space == null)
+            if (index == -1 || !dataAccess.GetData(index, ref space) || space == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -116,7 +118,15 @@ namespace SAM.Analytical.Grasshopper
 
             }
 
-            double area = Analytical.Query.CalculatedFloorArea(adjacencyCluster, space, maxTiltDifference);
+            List<Panel> panels = Analytical.Query.GeomericalFloorPanels(adjacencyCluster, space, maxTiltDifference);
+            double area = double.NaN;
+
+            if(panels != null && panels.Count > 0)
+                area = panels.ConvertAll(x => x.GetArea()).Sum();
+
+            index = Params.IndexOfOutputParam("Panels");
+            if (index != -1)
+                dataAccess.SetDataList(index, panels?.ConvertAll(x => new GooPanel(x)));
 
             index = Params.IndexOfOutputParam("Area");
             if (index != -1)
