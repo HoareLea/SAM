@@ -177,20 +177,32 @@ namespace SAM.Geometry.Spatial
             if (point3D == null)
                 return null;
 
+            List<int> indexes = ClosestFace3DsIndexes(point3D, tolerance);
+            if (indexes == null || indexes.Count == 0)
+                return null;
+
+            return indexes.ConvertAll(x => new Face3D(boundaries[x].Item2));
+        }
+
+        public List<int> ClosestFace3DsIndexes(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3D == null)
+                return null;
+
             if (boundaries == null || boundaries.Count == 0)
                 return null;
 
             if (boundaries.Count == 1)
-                return new List<Face3D>() { boundaries[0].Item2 };
+                return new List<int>() { 0 };
 
-            List<Face3D> result = new List<Face3D>();
+            List<int> result = new List<int>();
 
             List<double> distances = boundaries.ConvertAll(x => x.Item2.Distance(point3D));
             double min = distances.Min();
             for (int i = 0; i < distances.Count; i++)
             {
                 if (System.Math.Abs(distances[i] - min) <= tolerance)
-                    result.Add(new Face3D(boundaries[i].Item2));
+                    result.Add(i);
             }
 
             return result;
@@ -215,15 +227,51 @@ namespace SAM.Geometry.Spatial
 
         public Vector3D Normal(Point3D point3D, bool external = false, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            List<Face3D> face3Ds = ClosestFace3Ds(point3D, tolerance);
-            if (face3Ds == null || face3Ds.Count == 0)
+            List<int> indexes = ClosestFace3DsIndexes(point3D, tolerance);
+            if (indexes == null || indexes.Count == 0)
                 return null;
 
-            Face3D face3D = face3Ds[0];
+            return Normal(indexes[0], external, silverSpacing, tolerance);
+
+
+            //List<Face3D> face3Ds = ClosestFace3Ds(point3D, tolerance);
+            //if (face3Ds == null || face3Ds.Count == 0)
+            //    return null;
+
+            //Face3D face3D = face3Ds[0];
+
+            //Vector3D vector3D = face3D?.GetPlane()?.Normal;
+            //if (!external || !IsClosed(tolerance))
+            //    return vector3D;
+
+            //vector3D *= silverSpacing;
+
+            //Point3D point3D_Move = point3D.GetMoved(vector3D) as Point3D;
+            //if (Inside(point3D_Move, silverSpacing, tolerance))
+            //    vector3D.Negate();
+
+            //return vector3D.Unit;
+        }
+
+        public Vector3D Normal(int index, bool external = false, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (boundaries == null || boundaries.Count == 0)
+                return null;
+
+            if (index < 0 || index >= boundaries.Count)
+                return null;
+
+            Face3D face3D = boundaries[index].Item2;
+            if (face3D == null)
+                return null;
 
             Vector3D vector3D = face3D?.GetPlane()?.Normal;
             if (!external || !IsClosed(tolerance))
                 return vector3D;
+
+            Point3D point3D = face3D.InternalPoint3D(tolerance);
+            if (point3D == null)
+                return null;
 
             vector3D *= silverSpacing;
 
@@ -234,6 +282,18 @@ namespace SAM.Geometry.Spatial
             return vector3D.Unit;
         }
 
+        public Face3D this[int index]
+        {
+            get
+            {
+                Face3D result = boundaries?[index].Item2;
+                if (result == null)
+                    return result;
+
+                return new Face3D(result);
+            }
+        }
+        
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             if (boundingBox3D == null)

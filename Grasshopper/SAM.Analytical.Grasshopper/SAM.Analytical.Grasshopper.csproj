@@ -78,6 +78,7 @@
     <Compile Include="Component\SAMAnalyticalAddMechanicalSystems.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateOccupancy.cs" />
+    <Compile Include="Component\SAMAnalyticalCalculatedFloorArea.cs" />
     <Compile Include="Component\SAMAnalyticalIndexToDateTime.cs" />
     <Compile Include="Component\SAMAnalyticalFixNames.cs" />
     <Compile Include="Component\SAMAnalyticalGetZonesByName.cs" />
