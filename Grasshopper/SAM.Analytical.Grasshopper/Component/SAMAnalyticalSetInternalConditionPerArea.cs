@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "_internalCondition", NickName = "_internalCondition", Description = "SAM Analytical InternalCondition", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_includeInvalid_", NickName = "_includeInvalid_", Description = "Include invalid values (NaN) or null Parameter", Access = GH_ParamAccess.item };
@@ -54,8 +54,8 @@ namespace SAM.Analytical.Grasshopper
                 @string.SetPersistentData(Core.NumberComparisonType.Less);
                 result.Add(new GH_SAMParam(@string, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_value_", NickName = "number", Description = "Area value", Access = GH_ParamAccess.item };
-                @string.SetPersistentData(2);
+                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_value_", NickName = "_value_", Description = "Area value", Access = GH_ParamAccess.item };
+                number.SetPersistentData(2);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new GooProfileLibraryParam() { Name = "profileLibrary_", NickName = "profileLibrary_", Description = "SAM Analytical ProfileLibrary", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Voluntary));
