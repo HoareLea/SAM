@@ -32,7 +32,7 @@ namespace SAM.Analytical
                 if (double.IsNaN(tilt))
                     continue;
 
-                if (180 - maxTiltDifference < tilt || tilt > 180 + maxTiltDifference)
+                if (180 - maxTiltDifference > tilt || tilt > 180 + maxTiltDifference)
                     continue;
 
                 result.Add(panel);
