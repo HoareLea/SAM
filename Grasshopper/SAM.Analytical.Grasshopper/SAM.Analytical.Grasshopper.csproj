@@ -93,6 +93,7 @@
     <Compile Include="Component\SAMAnalyticalAddObject.cs" />
     <Compile Include="Component\SAMAnalyticalAnalyticalModelMapInternalCondtions.cs" />
     <Compile Include="Component\SAMAnalyticalSetAirflow.cs" />
+    <Compile Include="Component\SAMAnalyticalSetInternalConditionPerArea.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalZoneType.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateZone.cs" />

@@ -4,6 +4,13 @@ namespace SAM.Core
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Compare two numbers using NumberComparisonType (Example: NumberComparisonType.Greater returns true if value_1 greater than value_2)
+        /// </summary>
+        /// <param name="value_1">First value </param>
+        /// <param name="value_2">Second Value</param>
+        /// <param name="numberComparisonType">Number Comparison Type example Equals etc.</param>
+        /// <returns>Comparison Type Result</returns>
         public static bool Compare(this double value_1, double value_2, NumberComparisonType numberComparisonType)
         {
             switch(numberComparisonType)
