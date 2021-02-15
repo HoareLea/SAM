@@ -91,6 +91,7 @@
     <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalAddObject.cs" />
+    <Compile Include="Component\SAMAnalyticalAnalyticalModelMapInternalCondtions.cs" />
     <Compile Include="Component\SAMAnalyticalSetAirflow.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalZoneType.cs" />
