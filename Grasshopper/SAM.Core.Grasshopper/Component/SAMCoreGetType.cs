@@ -84,7 +84,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooParameterParam(), "Type", "Type", "Type", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooObjectParam(), "Type", "Type", "Type", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, new GooParameter(Type.GetType(typeFullName)));
+            dataAccess.SetData(0, new GooObject(Type.GetType(typeFullName)));
         }
     }
 }

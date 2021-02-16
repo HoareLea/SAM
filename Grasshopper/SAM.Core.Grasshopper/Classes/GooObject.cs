@@ -7,9 +7,9 @@ using System;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooParameter : GH_Goo<object>
+    public class GooObject : GH_Goo<object>
     {
-        public GooParameter(object value)
+        public GooObject(object value)
         {
             Value = value;
         }
@@ -40,7 +40,7 @@ namespace SAM.Core.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GooParameter(Value);
+            return new GooObject(Value);
         }
         
         public override string ToString()
@@ -186,7 +186,7 @@ namespace SAM.Core.Grasshopper
         }
     }
 
-    public class GooParameterParam : GH_Param<IGH_Goo>
+    public class GooObjectParam : GH_Param<IGH_Goo>
     {       
         public override Guid ComponentGuid => new Guid("a7a5eb79-1834-43db-9aa3-30ca105c3bbb");
 
@@ -194,14 +194,14 @@ namespace SAM.Core.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
         
-        public GooParameterParam(string name)
+        public GooObjectParam(string name)
              : base(name, name, name, "Params", "SAM", GH_ParamAccess.item)
         {
 
         }
 
-        public GooParameterParam()
-            : base("Parameter", "Parameter", "Parameter", "Params", "SAM", GH_ParamAccess.item)
+        public GooObjectParam()
+            : base("Object", "Object", "Object", "Params", "SAM", GH_ParamAccess.item)
         {
 
         }
@@ -220,15 +220,11 @@ namespace SAM.Core.Grasshopper
 
             string name = null;
             
-            if (!reader.TryGetString(typeof(GooParameter).FullName, ref name))
+            if (!reader.TryGetString(typeof(GooObject).FullName, ref name))
                 return false;
 
             if (string.IsNullOrWhiteSpace(name))
                 return false;
-
-            ////Name = name;
-            ////Description = name;
-            ////NickName = name;
 
             return true;
         }
@@ -241,7 +237,7 @@ namespace SAM.Core.Grasshopper
             if (string.IsNullOrWhiteSpace(Name))
                 return false;
 
-            writer.SetString(typeof(GooParameter).FullName, Name);
+            writer.SetString(typeof(GooObject).FullName, Name);
 
             return true;
         }

@@ -1,7 +1,7 @@
-﻿using GH_IO.Serialization;
-using Grasshopper.Kernel;
-using System;
+﻿using System;
 using System.Windows.Forms;
+using GH_IO.Serialization;
+using Grasshopper.Kernel;
 
 namespace SAM.Core.Grasshopper
 {
@@ -17,18 +17,18 @@ namespace SAM.Core.Grasshopper
 
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetString(typeof(T).Name, value.ToString());
+            writer.SetInt32(typeof(T).Name, value.GetHashCode());
             return base.Write(writer);
         }
 
         public override bool Read(GH_IReader reader)
         {
-            string @string = null;
-            if (reader.TryGetString("ClearOption", ref @string))
+            int @int = -1;
+            if (reader.TryGetInt32("ClearOption", ref @int) && @int != -1)
             {
                 try
                 {
-                    value = (T)Enum.Parse(typeof(T), @string);
+                    value = (T)Enum.ToObject(typeof(T), @int);
                 }
                 catch
                 {
@@ -51,7 +51,7 @@ namespace SAM.Core.Grasshopper
         {
             if (sender is ToolStripMenuItem item && item.Tag is T)
             {
-                this.value = (T)item.Tag;
+                value = (T)item.Tag;
                 ExpireSolution(true);
             }
         }
@@ -68,7 +68,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooParameterParam() { Name = typeof(T).Name, NickName = typeof(T).Name, Description = typeof(T).Name, Access = GH_ParamAccess.item});
+            outputParamManager.AddParameter(new GooObjectParam() { Name = typeof(T).Name, NickName = typeof(T).Name, Description = typeof(T).Name, Access = GH_ParamAccess.item});
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, new GooParameter(value));
+            dataAccess.SetData(0, new GooObject(value));
         }
 
     }

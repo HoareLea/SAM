@@ -73,7 +73,7 @@ namespace SAM.Core.Grasshopper
 
 
 
-        void PopulateOutputParameters(IEnumerable<GooParameterParam> gooParameterParams)
+        void PopulateOutputParameters(IEnumerable<GooObjectParam> gooParameterParams)
         {
             Dictionary<string, IList<IGH_Param>> dictionary = new Dictionary<string, IList<IGH_Param>>();
             foreach (IGH_Param param in Params.Output)
@@ -81,7 +81,7 @@ namespace SAM.Core.Grasshopper
                 if (param.Recipients == null && param.Recipients.Count == 0)
                     continue;
 
-                GooParameterParam gooParameterParam = param as GooParameterParam;
+                GooObjectParam gooParameterParam = param as GooObjectParam;
                 if (gooParameterParam == null)
                     continue;
 
@@ -93,7 +93,7 @@ namespace SAM.Core.Grasshopper
 
             if (gooParameterParams != null)
             {
-                foreach (GooParameterParam gooParameterParam in gooParameterParams)
+                foreach (GooObjectParam gooParameterParam in gooParameterParams)
                 {
                     AddOutputParameter(gooParameterParam);
 
@@ -137,7 +137,7 @@ namespace SAM.Core.Grasshopper
             List<string> names_Temp = names.ToList();
             names_Temp.Sort();
 
-            PopulateOutputParameters(names_Temp.ConvertAll(x => new GooParameterParam(x)));
+            PopulateOutputParameters(names_Temp.ConvertAll(x => new GooObjectParam(x)));
         }
 
         void Menu_PopulateOutputsWithCommonParameters(object sender, EventArgs e)
@@ -153,7 +153,7 @@ namespace SAM.Core.Grasshopper
                 List<string> names = value?.UserFriendlyNames();
                 if (names == null || names.Count == 0)
                 {
-                    PopulateOutputParameters(new List<GooParameterParam>());
+                    PopulateOutputParameters(new List<GooObjectParam>());
                     return;
                 }
 
@@ -176,7 +176,7 @@ namespace SAM.Core.Grasshopper
                     names_Result.Add(name);
             }
 
-            PopulateOutputParameters(names_Result.ToList().ConvertAll(x => new GooParameterParam(x)));
+            PopulateOutputParameters(names_Result.ToList().ConvertAll(x => new GooObjectParam(x)));
         }
 
         void Menu_RemoveUnconnectedParameters(object sender, EventArgs e)
@@ -243,9 +243,9 @@ namespace SAM.Core.Grasshopper
 
             for (int i = 0; i < Params.Output.Count; ++i)
             {
-                GooParameterParam gooParameterParam = Params.Output[i] as GooParameterParam;
+                GooObjectParam gooParameterParam = Params.Output[i] as GooObjectParam;
                 if (gooParameterParam == null)
-                    gooParameterParam = new GooParameterParam(Params.Output[i].Name);
+                    gooParameterParam = new GooObjectParam(Params.Output[i].Name);
 
                 if (gooParameterParam == null || string.IsNullOrWhiteSpace(gooParameterParam.Name))
                     continue;
@@ -262,13 +262,13 @@ namespace SAM.Core.Grasshopper
 
                 if (result is JToken)
                 {
-                    dataAccess.SetData(i, new GooParameter(result.ToString()));
+                    dataAccess.SetData(i, new GooObject(result.ToString()));
                 }
                 else if (result is IEnumerable && !result.GetType().Namespace.StartsWith("SAM.") && !(result is string))
                 {
-                    List<GooParameter> gooParameters = new List<GooParameter>();
+                    List<GooObject> gooParameters = new List<GooObject>();
                     foreach (object @object_Result in (IEnumerable)result)
-                        gooParameters.Add(new GooParameter(@object_Result));
+                        gooParameters.Add(new GooObject(@object_Result));
 
                     dataAccess.SetDataList(i, gooParameters);
                 }
@@ -280,7 +280,7 @@ namespace SAM.Core.Grasshopper
                     }
                     else if (result is Enum)
                     {
-                        dataAccess.SetData(i, new GooParameter(result.ToString()));
+                        dataAccess.SetData(i, new GooObject(result.ToString()));
                     }
                     else if(result is int || result is long)
                     {
@@ -288,7 +288,7 @@ namespace SAM.Core.Grasshopper
                         if (Core.Query.TryConvert(result, out value))
                             dataAccess.SetData(i, new GH_Number(value));
                         else
-                            dataAccess.SetData(i, new GooParameter(result));
+                            dataAccess.SetData(i, new GooObject(result));
                     }
                     else if (Core.Query.IsNumeric(result))
                     {
@@ -296,7 +296,7 @@ namespace SAM.Core.Grasshopper
                         if (Core.Query.TryConvert(result, out value))
                             dataAccess.SetData(i, new GH_Number(value));
                         else
-                            dataAccess.SetData(i, new GooParameter(result));
+                            dataAccess.SetData(i, new GooObject(result));
                     }
                     else if (result is bool)
                     {
@@ -304,7 +304,7 @@ namespace SAM.Core.Grasshopper
                     }
                     else
                     {
-                        dataAccess.SetData(i, new GooParameter(result));
+                        dataAccess.SetData(i, new GooObject(result));
                     }
                 }
 
