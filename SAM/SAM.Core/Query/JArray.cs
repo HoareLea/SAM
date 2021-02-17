@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.IO;
 
 namespace SAM.Core
 {
@@ -10,8 +9,7 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(json))
                 return null;
 
-            JToken jToken = JToken.Parse(json);
-            if (jToken == null)
+            if (!TryGetJToken(json, out JToken jToken) || jToken == null)
                 return null;
 
             if (jToken is JObject)

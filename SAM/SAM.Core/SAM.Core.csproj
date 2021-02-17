@@ -156,6 +156,7 @@
     <Compile Include="Modify\Copy.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Query\Indexes.cs" />
+    <Compile Include="Query\TryGetJToken.cs" />
     <Compile Include="Query\Transpose.cs" />
     <Compile Include="Query\MethodInfos.cs" />
     <Compile Include="Query\ReplaceSpecialCharacters.cs" />
