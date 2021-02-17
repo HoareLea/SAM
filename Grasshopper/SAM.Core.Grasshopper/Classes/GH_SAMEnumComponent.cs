@@ -24,7 +24,7 @@ namespace SAM.Core.Grasshopper
         public override bool Read(GH_IReader reader)
         {
             int @int = -1;
-            if (reader.TryGetInt32("ClearOption", ref @int) && @int != -1)
+            if (reader.TryGetInt32(typeof(T).Name, ref @int) && @int != -1)
             {
                 try
                 {
