@@ -240,7 +240,7 @@ namespace SAM.Core
 
             foreach(object[] value in values)
             {
-                if (value == null || value.Length <= index || value[index] is IComparable)
+                if (value == null || value.Length <= index || !(value[index] is IComparable))
                     values_Invalid.Add(value);
                 else
                     values_Valid.Add(value);

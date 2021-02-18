@@ -100,7 +100,7 @@ namespace SAM.Core.Grasshopper
                 }
             }
 
-            if(columnIndex != -1)
+            if(columnIndex == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could Not Find Column");
                 return;
