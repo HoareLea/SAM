@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalInternalConditionParameter : GH_SAMComponent
+    public class SAMAnalyticalInternalConditionParameter : GH_SAMEnumComponent<InternalConditionParameter>
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,80 +17,21 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        private InternalConditionParameter internalConditionParameter = InternalConditionParameter.AreaPerPerson;
-
         /// <summary>
-        /// Panel Type
+        /// Internal Condition Parameter Component
         /// </summary>
         public SAMAnalyticalInternalConditionParameter()
           : base("SAMAnalytical.InternalConditionParameter", "SAMAnalytical.InternalConditionParameter",
               "Select InternalConditionParameter",
               "SAM", "Analytical")
         {
-        }
-
-        public override bool Write(GH_IWriter writer)
-        {
-            writer.SetInt32("InternalConditionParameter", (int)internalConditionParameter);
-            return base.Write(writer);
-        }
-
-        public override bool Read(GH_IReader reader)
-        {
-            int index = -1;
-            if (reader.TryGetInt32("InternalConditionParameter", ref index))
-                internalConditionParameter = (InternalConditionParameter)index;
-
-            return base.Read(reader);
-        }
-
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            foreach (InternalConditionParameter internalConditionParameter in Enum.GetValues(typeof(InternalConditionParameter)))
-                Menu_AppendItem(menu, Core.Attributes.ParameterProperties.Get(internalConditionParameter).Name, Menu_Changed, true, internalConditionParameter == this.internalConditionParameter).Tag = internalConditionParameter;
-        }
-
-        private void Menu_Changed(object sender, EventArgs e)
-        {
-            if (sender is ToolStripMenuItem item && item.Tag is InternalConditionParameter)
-            {
-                //Do something with panelType
-                this.internalConditionParameter = (InternalConditionParameter)item.Tag;
-                ExpireSolution(true);
-            }
-        }
-
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
-        {
-        }
-
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
-        {
-            outputParamManager.AddTextParameter("InternalConditionParameter", "InternalConditionParameter", "SAM Analytical InternalConditionParameter", GH_ParamAccess.item);
-        }
-
-        /// <summary>
-        /// This is the method that actually does the work.
-        /// </summary>
-        /// <param name="dataAccess">
-        /// The DA object is used to retrieve from inputs and store in outputs.
-        /// </param>
-        protected override void SolveInstance(IGH_DataAccess dataAccess)
-        {
-            dataAccess.SetData(0, internalConditionParameter.ToString());
         }
     }
 }
