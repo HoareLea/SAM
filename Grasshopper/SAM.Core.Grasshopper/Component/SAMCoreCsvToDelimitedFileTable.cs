@@ -77,7 +77,7 @@ namespace SAM.Core.Grasshopper
             }
 
             DelimitedFileTable delimitedFileTable = null;
-            if (Core.Query.ValidFilePath(csvOrPath))
+            if (Core.Query.FileExists(csvOrPath))
             {
                 delimitedFileTable = new Core.DelimitedFileTable(new Core.DelimitedFileReader(Core.DelimitedFileType.Csv, csvOrPath));
             }

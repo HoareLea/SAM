@@ -165,6 +165,7 @@
     <Compile Include="Query\CustomAttribute.cs" />
     <Compile Include="Query\Texts.cs" />
     <Compile Include="Query\TryCompute.cs" />
+    <Compile Include="Query\ValidFileName.cs" />
     <Compile Include="Query\Weekday.cs" />
     <Compile Include="Query\Weekend.cs" />
     <Compile Include="Query\RangeDictionary.cs" />
@@ -220,7 +221,7 @@
     <Compile Include="Query\Tolerance.cs" />
     <Compile Include="Query\Names.cs" />
     <Compile Include="Query\TryGetValue.cs" />
-    <Compile Include="Query\ValidFilePath.cs" />
+    <Compile Include="Query\FileExists.cs" />
     <Compile Include="Query\Clone.cs" />
     <Compile Include="Query\Value.cs" />
   </ItemGroup>

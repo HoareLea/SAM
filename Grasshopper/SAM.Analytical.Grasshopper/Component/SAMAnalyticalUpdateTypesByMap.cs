@@ -118,7 +118,7 @@ namespace SAM.Analytical.Grasshopper
                 apertureConstructionLibrary = ActiveSetting.Setting.GetValue<ApertureConstructionLibrary>(AnalyticalSettingParameter.DefaultApertureConstructionLibrary);
 
             DelimitedFileTable delimitedFileTable = null;
-            if (Core.Query.ValidFilePath(csvOrPath))
+            if (Core.Query.FileExists(csvOrPath))
             {
                 delimitedFileTable = new DelimitedFileTable(new DelimitedFileReader(DelimitedFileType.Csv, csvOrPath));
             }

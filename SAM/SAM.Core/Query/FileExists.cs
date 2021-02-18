@@ -5,7 +5,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static bool ValidFilePath(this string filePath)
+        public static bool FileExists(this string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))
                 return false;
