@@ -60,7 +60,7 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "DelimitedFileTable", NickName = "DelimitedFileTable", Description = "SAM Core DelimitedFileTable", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "DelimitedFileTable", NickName = "DelimitedFileTable", Description = "SAM Core DelimitedFileTable", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }

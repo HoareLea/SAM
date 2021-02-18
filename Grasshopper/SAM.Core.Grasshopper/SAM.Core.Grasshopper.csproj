@@ -78,6 +78,7 @@
     <Compile Include="Component\SAMCoreCopyMaterials.cs" />
     <Compile Include="Component\SAMCoreCreateDelimitedFileTableBySAMObjects.cs" />
     <Compile Include="Component\SAMCoreCsvToDelimitedFileTable.cs" />
+    <Compile Include="Component\SAMCoreDelimitedFileTableSort.cs" />
     <Compile Include="Component\SAMCoreDelimitedFileTableSetValue.cs" />
     <Compile Include="Component\SAMCoreDelimitedFileTableSetColumnNames.cs" />
     <Compile Include="Component\SAMCoreDelimitedFileTableMap.cs" />

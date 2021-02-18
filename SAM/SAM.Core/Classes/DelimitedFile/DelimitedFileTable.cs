@@ -222,6 +222,35 @@ namespace SAM.Core
             return -1;
         }
 
+        public void Sort(string columnName)
+        {
+            Sort(GetColumnIndex(columnName));
+        }
+
+        public void Sort(int index)
+        {
+            if (index == -1)
+                return;
+
+            if (values == null || values.Count == 0)
+                return;
+            
+            List<object[]> values_Valid = new List<object[]>();
+            List<object[]> values_Invalid = new List<object[]>();
+
+            foreach(object[] value in values)
+            {
+                if (value == null || value.Length <= index || value[index] is IComparable)
+                    values_Invalid.Add(value);
+                else
+                    values_Valid.Add(value);
+            }
+
+            values_Valid.Sort((x, y) => ((IComparable)x[index]).CompareTo((IComparable)y[index]));
+            values = values_Valid;
+            values.AddRange(values_Invalid);
+        }
+
         public string GetColumnName(int index)
         {
             TryGetColumnName(index, out string result);
