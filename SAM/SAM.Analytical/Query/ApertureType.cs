@@ -14,6 +14,9 @@ namespace SAM.Analytical
             {
                 string value = (string)@object;
 
+                if (string.IsNullOrWhiteSpace(value))
+                    return Analytical.ApertureType.Undefined;
+
                 if (System.Enum.TryParse(value, out result))
                     return result;
 
@@ -24,12 +27,15 @@ namespace SAM.Analytical
 
                     value_Type = Query.Text(apertureType);
                     if (!string.IsNullOrWhiteSpace(value_Type) && value_Type.ToUpper().Equals(value))
-                        return result;
+                        return apertureType;
 
                     value_Type = apertureType.ToString().ToUpper();
                     if (value_Type.Equals(value))
-                        return result;
+                        return apertureType;
                 }
+
+                if (value.EndsWith("S"))
+                    return ApertureType(value.Substring(0, value.Length - 1));
 
                 return Analytical.ApertureType.Undefined;
             }
