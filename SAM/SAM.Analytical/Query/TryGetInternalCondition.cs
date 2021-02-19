@@ -22,7 +22,7 @@ namespace SAM.Analytical
                 return false;
 
             List<InternalCondition> internalConditions = internalConditionLibrary.GetInternalConditions(names_InternalCondition.First());
-            if (internalConditions == null && internalConditions.Count == 0)
+            if (internalConditions == null || internalConditions.Count == 0)
                 return false;
 
             internalCondition = internalConditions[0];
