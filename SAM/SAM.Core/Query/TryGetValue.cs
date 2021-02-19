@@ -49,7 +49,7 @@ namespace SAM.Core
             return TryGetValue(@object, name, out value, true, true, true);
         }
 
-        public static bool TryGetValue(this object @object, string name, out object value, bool property, bool method, bool propertySets)
+        public static bool TryGetValue(this object @object, string name, out object value, bool property, bool method, bool parameterSets)
         {
             value = null;
 
@@ -62,7 +62,7 @@ namespace SAM.Core
             if (method && TryGetValue_Method(@object, name, out value))
                 return true;
 
-            if (propertySets && TryGetValue_PropertySets(@object, name, out value))
+            if (parameterSets && TryGetValue_ParameterSets(@object, name, out value))
                 return true;
 
             return false;
@@ -88,7 +88,7 @@ namespace SAM.Core
             if (!findAny)
                 return false;
 
-            return TryGetValue_PropertySets(sAMObject, name, out value);
+            return TryGetValue_ParameterSets(sAMObject, name, out value);
         }
 
         public static bool TryGetValue(this object @object, string name, out object value, bool UserFriendlyName)
@@ -206,7 +206,7 @@ namespace SAM.Core
             return false;
         }
 
-        private static bool TryGetValue_PropertySets(this object @object, string name, out object value)
+        private static bool TryGetValue_ParameterSets(this object @object, string name, out object value)
         {
             value = null;
 
