@@ -103,7 +103,7 @@ namespace SAM.Analytical
         /// <param name="panel">SAM Analytical Panel</param>
         /// <param name="face">New face for Panel</param>
         /// <param name="apertures">Additional apertures will be added to panel (panel apertures will be included automatically).</param>
-        /// <param name="trimGeometry">Trim geometry to make sure it fits on panel</param>
+        /// <param name="trimGeometry">Trim apertures geometry to make sure it fits on panel</param>
         /// <param name="minArea">Minimal area of aperture to be added to panel</param>
         /// <param name="maxDistance">Max distance between panel and aperture to be added</param>
         public Panel(Guid guid, Panel panel, Face3D face, IEnumerable<Aperture> apertures = null, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)

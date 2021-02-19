@@ -241,6 +241,17 @@ namespace SAM.Analytical
             return materialLibrary.Add(material.Clone());
         }
 
+        public bool AddProfile(Profile profile)
+        {
+            if (profile == null)
+                return false;
+
+            if (profileLibrary == null)
+                profileLibrary = new ProfileLibrary("Default Profile Libarary");
+
+            return profileLibrary.Add(profile.Clone());
+        }
+
         public List<Space> GetSpaces()
         {
             return adjacencyCluster?.GetSpaces()?.ConvertAll(x => new Space(x));
@@ -259,17 +270,6 @@ namespace SAM.Analytical
         public IEnumerable<InternalCondition> GetInternalConditions()
         {
             return adjacencyCluster?.GetInternalConditions();
-        }
-
-        public bool AddProfile(Profile profile)
-        {
-            if (profile == null)
-                return false;
-
-            if (profileLibrary == null)
-                profileLibrary = new ProfileLibrary("Default Profile Libarary");
-
-            return profileLibrary.Add(profile.Clone());
         }
 
         public void OffsetAperturesOnEdge(double distance, double tolerance = Tolerance.Distance)

@@ -4,7 +4,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static Dictionary<System.Type, List<T>> TypeDictionary<T>(this IEnumerable<T> objects) where T : ISAMObject
+        public static Dictionary<System.Type, List<T>> TypeDictionary<T>(this IEnumerable<T> objects) where T : IJSAMObject
         {
             if (objects == null)
                 return null;
