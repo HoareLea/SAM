@@ -114,11 +114,11 @@ namespace SAM.Geometry.Planar
                 return null;
 
             NetTopologySuite.Geometries.Geometry geometry = polygon.Intersection(lineString);
-            if (geometry == null)
+            if (geometry == null || !geometry.IsValid || geometry.IsEmpty)
                 return null;
 
             if (geometry is LineString)
-                return new List<Segment2D>(((LineString)geometry).ToSAM().GetSegments());
+                return new List<Segment2D>(((LineString)geometry).ToSAM().GetSegments());               
 
             if (geometry is MultiLineString)
             {
