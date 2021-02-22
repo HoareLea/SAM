@@ -116,7 +116,7 @@ namespace SAM.Geometry.Spatial
             return Geometry3Ds?.FindAll(x => x is T).ConvertAll(x => (T)x);
         }
 
-        public List<T> GetGeometry2Ds<T>() where T : SAMGeometry, ISAMGeometry2D
+        public List<T> GetGeometry2Ds<T>() where T : ISAMGeometry2D
         {
             return geometry2Ds?.FindAll(x => x is T).ConvertAll(x => (T)x);
         }

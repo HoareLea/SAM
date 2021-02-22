@@ -71,6 +71,7 @@
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateShells.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByAzimuth.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByAperture.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureType.cs" />

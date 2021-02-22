@@ -169,6 +169,7 @@
     <Compile Include="Query\GeometricalFloorPanels.cs" />
     <Compile Include="Query\CalculatedVolume.cs" />
     <Compile Include="Query\DesignHeatingLoad.cs" />
+    <Compile Include="Query\Shells.cs" />
     <Compile Include="Query\SpecificOccupancySensibleGain.cs" />
     <Compile Include="Query\SpecificLoad.cs" />
     <Compile Include="Query\LoadType.cs" />

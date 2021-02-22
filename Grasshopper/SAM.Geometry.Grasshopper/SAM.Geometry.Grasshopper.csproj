@@ -65,6 +65,7 @@
     <Compile Include="Component\GeometryModifyDifference.cs" />
     <Compile Include="Component\GeometryPolycurveLoop2D.cs" />
     <Compile Include="Component\GeometryCreateSAMPlane.cs" />
+    <Compile Include="Component\GeometryCreateSAMShells.cs" />
     <Compile Include="Component\GeometrySnapByDistance.cs" />
     <Compile Include="Component\CreateSAMTransform3DPlaneToPlane.cs" />
     <Compile Include="Component\CreateSAMTransform3DPlaneToOrigin.cs" />
@@ -169,7 +170,7 @@
     </PackageReference>
     <PackageReference Include="Grasshopper">
       <Version>6.32.20340.21001</Version>
-	  <ExcludeAssets>runtime</ExcludeAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="NetTopologySuite">
       <Version>2.1.0</Version>
