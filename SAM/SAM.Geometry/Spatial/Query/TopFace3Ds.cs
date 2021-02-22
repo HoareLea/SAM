@@ -27,8 +27,8 @@ namespace SAM.Geometry.Spatial
             Dictionary<Face3D, Planar.Face2D> dictionary = new Dictionary<Face3D, Planar.Face2D>();
             foreach(Face3D face3D in face3Ds_Temp)
             {
-                if (plane.Coplanar(face3D))
-                    continue;
+                //if (plane.Coplanar(face3D))
+                //    continue;
                 
                 Face3D face3D_Project = plane.Project(face3D);
                 if (face3D_Project == null)
