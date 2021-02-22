@@ -111,7 +111,7 @@ namespace SAM.Geometry.Spatial
             return (T)result;
         }
 
-        public List<T> GetGeometry3Ds<T>() where T : SAMGeometry, ISAMGeometry3D
+        public List<T> GetGeometry3Ds<T>() where T : ISAMGeometry3D
         {
             return Geometry3Ds?.FindAll(x => x is T).ConvertAll(x => (T)x);
         }
@@ -206,6 +206,18 @@ namespace SAM.Geometry.Spatial
             {
                 point3Ds = point3Ds.FindAll(x => face3D.Inside(x));
                 geometry3Ds.AddRange(point3Ds);
+            }
+
+            List<Segment2D> segment2Ds = planarIntersectionResult.GetGeometry2Ds<Segment2D>();
+            if(segment2Ds != null && segment2Ds.Count > 0)
+            {
+                Face2D face2D = plane.Convert(face3D);
+                foreach(Segment2D segment2D in segment2Ds)
+                {
+                    List<Segment2D> segment2Ds_Intersection = Planar.Query.Intersection(face2D, segment2D, tolerance);
+                    if (segment2Ds_Intersection != null && segment2Ds_Intersection.Count != 0)
+                        geometry3Ds.AddRange(segment2Ds_Intersection.ConvertAll(x => plane.Convert(x)));
+                }
             }
 
             return new PlanarIntersectionResult(plane, geometry3Ds);
@@ -535,7 +547,33 @@ namespace SAM.Geometry.Spatial
             if (point3Ds != null && point3Ds.Count > 0)
                 point3Ds.FindAll(x => face3D_2.Inside(x)).ForEach(x => geometry3Ds.Add(x));
 
-            throw new NotImplementedException();
+            List<Segment3D> segment3Ds = planarIntersectionResult_1.GetGeometry3Ds<Segment3D>();
+            if(segment3Ds != null && segment3Ds.Count > 0)
+            {
+                foreach(Segment3D segment3D_Plane in segment3Ds)
+                {
+                    PlanarIntersectionResult planarIntersectionResult_Plane = Create(face3D_1, segment3D_Plane, tolerance_Distance);
+                    if (planarIntersectionResult_Plane == null || !planarIntersectionResult_Plane.Intersecting)
+                        continue;
+
+                    List<Point3D> point3Ds_Plane = planarIntersectionResult_Plane.GetGeometry3Ds<Point3D>();
+                    if (point3Ds_Plane != null && point3Ds_Plane.Count > 0)
+                        point3Ds_Plane.ForEach(x => geometry3Ds.Add(x));
+
+                    List<Segment3D> segment3Ds_Plane = planarIntersectionResult_Plane.GetGeometry3Ds<Segment3D>();
+                    if (segment3Ds_Plane != null && segment3Ds_Plane.Count > 0)
+                        segment3Ds_Plane.ForEach(x => geometry3Ds.Add(x));
+                }
+            }
+
+
+            List<IClosedPlanar3D> closedPlanar3Ds = planarIntersectionResult_1.GetGeometry3Ds<IClosedPlanar3D>();
+            if(closedPlanar3Ds != null || closedPlanar3Ds.Count > 0)
+            {
+                throw new NotImplementedException();
+            }
+
+            return new PlanarIntersectionResult(plane_1, geometry3Ds);
         }
     }
 }
