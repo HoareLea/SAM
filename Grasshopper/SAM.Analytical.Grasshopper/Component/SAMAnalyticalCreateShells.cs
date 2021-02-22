@@ -85,7 +85,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            index = Params.IndexOfInputParam("_geometries");
+            index = Params.IndexOfInputParam("_panels");
             List<Panel> panels = new List<Panel>();
             if (index == -1 || !dataAccess.GetDataList(index, panels) || panels == null || panels.Count == 0)
             {

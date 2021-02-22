@@ -568,7 +568,7 @@ namespace SAM.Geometry.Spatial
 
 
             List<IClosedPlanar3D> closedPlanar3Ds = planarIntersectionResult_1.GetGeometry3Ds<IClosedPlanar3D>();
-            if(closedPlanar3Ds != null || closedPlanar3Ds.Count > 0)
+            if(closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
             {
                 throw new NotImplementedException();
             }
