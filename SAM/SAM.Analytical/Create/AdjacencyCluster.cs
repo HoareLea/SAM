@@ -218,7 +218,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        private static AdjacencyCluster AdjacencyCluster(this Dictionary<double, List<Face2D>> face2Ds, int index_Ground, double tolerance = Core.Tolerance.Distance)
+        private static AdjacencyCluster AdjacencyCluster(this Dictionary<double, List<Face2D>> face2Ds, int index_Ground, double tolerance = Tolerance.Distance)
         {
             if (face2Ds == null)
                 return null;

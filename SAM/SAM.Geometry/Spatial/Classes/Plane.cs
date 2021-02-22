@@ -390,7 +390,7 @@ namespace SAM.Geometry.Spatial
             return Distance(plane.origin);
         }
 
-        public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        public bool On(Point3D point3D, double tolerance = Tolerance.Distance)
         {
             return System.Math.Abs((normal.X * (point3D.X - origin.X)) + (normal.Y * (point3D.Y - origin.Y)) + (normal.Z * (point3D.Z - origin.Z))) < tolerance;
         }

@@ -316,6 +316,33 @@ namespace SAM.Geometry.Spatial
             return true;
         }
 
+        public List<ICurve3D> GetCurve3Ds(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3D == null)
+                return null;
+
+            List<ICurve3D> result = new List<ICurve3D>();
+            foreach (Tuple<BoundingBox3D, Face3D> tuple in boundaries)
+            {
+                if (!tuple.Item1.InRange(point3D, tolerance))
+                    continue;
+
+                if (!tuple.Item2.GetPlane().On(point3D, tolerance))
+                    continue;
+
+                ISegmentable3D segmentable3D = tuple.Item1.GetExternalEdge() as ISegmentable3D;
+                if (segmentable3D == null)
+                    throw new NotImplementedException();
+
+                foreach(Segment3D segment3D in segmentable3D.GetSegments())
+                {
+                    if (segment3D.On(point3D, tolerance))
+                        result.Add(segment3D);
+                }
+            }
+            return result;
+        }
+
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
