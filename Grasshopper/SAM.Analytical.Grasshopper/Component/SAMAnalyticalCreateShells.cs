@@ -113,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Shell> shells = Analytical.Query.Shells(panels, offset, tolerance);
 
-            index = Params.IndexOfInputParam("Shells");
+            index = Params.IndexOfOutputParam("Shells");
             if (index != -1)
                 dataAccess.SetDataList(index, shells?.ConvertAll(x => new GooSAMGeometry(x)));
         }
