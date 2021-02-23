@@ -359,6 +359,9 @@ namespace SAM.Geometry.Spatial
             if(point3Ds.Count == 1)
                 return new PlanarIntersectionResult(plane, point3Ds[0]);
 
+            if (point3Ds.Count == 2)
+                return new PlanarIntersectionResult(plane, new Segment3D(point3Ds[0], point3Ds[1]));
+
             List<Point2D> point2Ds = point3Ds.ConvertAll(x => plane_ClosedPlanar3D.Convert(x));
             IClosed2D closed2D = plane_ClosedPlanar3D.Convert(closedPlanar3D);
 
