@@ -84,11 +84,8 @@ namespace SAM.Analytical
             if (face3Ds_Top == null || face3Ds_Top.Count == 0)
                 return result;
 
-            int count_1 = 0;
             foreach(Face3D face3D in face3Ds_Top)
             {
-                count_1++;
-
                 Plane plane = face3D?.GetPlane();
                 if (plane == null)
                     continue;
@@ -97,12 +94,9 @@ namespace SAM.Analytical
                 if (tuple == null)
                     continue;
 
-                int count_2 = 0;
                 List<Panel> panels_Face3D = new List<Panel>();
                 foreach(Panel panel in tuple.Item2)
                 {
-                    count_2++;
-
                     PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(face3D, panel.GetFace3D(), tolerance_Distance: tolerance);
                     if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                         continue;
