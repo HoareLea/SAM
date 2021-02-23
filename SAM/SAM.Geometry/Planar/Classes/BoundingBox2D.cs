@@ -184,6 +184,17 @@ namespace SAM.Geometry.Planar
         {
             return Query.On(GetSegments(), point2D, tolerance);
         }
+        
+        /// <summary>
+        /// Point2D On or Inside BoundingBox2D 
+        /// </summary>
+        /// <param name="point2D">Point2D</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>True if point2D On or Inside BoundingBox 2D</returns>
+        public bool InRange(Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        {
+            return Inside(point2D, tolerance) || On(point2D, tolerance);
+        }
 
         public Segment2D GetSegment(Point2D point2D, Vector2D direction)
         {
