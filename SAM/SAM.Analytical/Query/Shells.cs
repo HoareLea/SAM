@@ -85,6 +85,10 @@ namespace SAM.Analytical
                 if (face2Ds == null || face2Ds.Count == 0)
                     continue;
 
+                List<Geometry.Planar.IClosed2D> closed2Ds = Geometry.Planar.Query.Holes(face2Ds);
+                if (closed2Ds != null && closed2Ds.Count > 0)
+                    closed2Ds.ForEach(x => face2Ds.Add(new Geometry.Planar.Face2D(x)));
+
                 if (tuples != null && tuples.Count > 0)
                     dictionary[tuple.Item1] = tuples;
 
