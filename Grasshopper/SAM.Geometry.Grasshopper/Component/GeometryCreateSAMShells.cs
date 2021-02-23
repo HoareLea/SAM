@@ -225,7 +225,7 @@ namespace SAM.Geometry.Grasshopper
                 face3Ds.AddRange(face2Ds.ConvertAll(x => plane.Convert(x)));
             }
 
-            List<Shell> shells = Spatial.Create.Shells(face3Ds, tolerance);
+            List<Shell> shells = Spatial.Create.Shells(face3Ds, Core.Tolerance.MacroDistance, tolerance);
 
 
             index = Params.IndexOfInputParam("Shells");

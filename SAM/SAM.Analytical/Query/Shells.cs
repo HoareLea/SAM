@@ -8,7 +8,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Shell> Shells(this IEnumerable<Panel> panels, double offset = 0.1, double tolerance = Core.Tolerance.Distance)
+        public static List<Shell> Shells(this IEnumerable<Panel> panels, double offset = 0.1, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null)
                 return null;
@@ -40,7 +40,7 @@ namespace SAM.Analytical
             {
                 Plane plane = Plane.WorldXY.GetMoved(new Vector3D(0, 0, tuple.Item1 + offset)) as Plane;
 
-                List<Geometry.Planar.ISegmentable2D> segmentable2Ds = new List<Geometry.Planar.ISegmentable2D>();
+                List<Geometry.Planar.Segment2D> segment2Ds = new List<Geometry.Planar.Segment2D>();
                 foreach (Panel panel in tuple.Item2)
                 {
                     Face3D face3D = panel.GetFace3D();
@@ -57,13 +57,17 @@ namespace SAM.Analytical
                     if (segmentable2Ds_Temp == null || segmentable2Ds_Temp.Count == 0)
                         continue;
 
-                    segmentable2Ds.AddRange(segmentable2Ds_Temp);
+                    foreach (Geometry.Planar.ISegmentable2D segmentable2D in segmentable2Ds_Temp)
+                        segment2Ds.AddRange(segmentable2D.GetSegments());
                 }
 
-                if (segmentable2Ds == null || segmentable2Ds.Count == 0)
+                if (segment2Ds == null || segment2Ds.Count == 0)
                     continue;
 
-                List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segmentable2Ds, tolerance);
+                segment2Ds = segment2Ds.ConvertAll(x => Geometry.Planar.Query.Extend(x, snapTolerance, true, true));
+                segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, snapTolerance);
+
+                List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, snapTolerance);
                 if (polygon2Ds == null || polygon2Ds.Count == 0)
                     continue;
 
@@ -111,7 +115,7 @@ namespace SAM.Analytical
                 face3Ds.Add(face3D.GetMoved(new Vector3D(0, 0, elevation_Max - plane.Origin.Z)) as Face3D);
             }
 
-            return Geometry.Spatial.Create.Shells(face3Ds, tolerance);
+            return Geometry.Spatial.Create.Shells(face3Ds, snapTolerance, tolerance);
         }
     }
 }

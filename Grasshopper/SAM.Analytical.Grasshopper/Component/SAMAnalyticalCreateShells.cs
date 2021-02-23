@@ -111,7 +111,7 @@ namespace SAM.Analytical.Grasshopper
                     tolerance = tolerance_Temp;
             }
 
-            List<Shell> shells = Analytical.Query.Shells(panels, offset, tolerance);
+            List<Shell> shells = Analytical.Query.Shells(panels, offset, Core.Tolerance.MacroDistance, tolerance);
 
             index = Params.IndexOfOutputParam("Shells");
             if (index != -1)

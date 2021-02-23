@@ -66,7 +66,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static List<Shell> Shells(this IEnumerable<Face3D> face3Ds, double tolerance = Core.Tolerance.Distance)
+        public static List<Shell> Shells(this IEnumerable<Face3D> face3Ds, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (face3Ds == null)
                 return null;
@@ -130,6 +130,9 @@ namespace SAM.Geometry.Spatial
 
                 if (segment2Ds == null || segment2Ds.Count < 3)
                     continue;
+
+                segment2Ds = segment2Ds.ConvertAll(x => Planar.Query.Extend(x, snapTolerance, true, true));
+                segment2Ds = Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
                 List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds, tolerance);
                 face2Ds_All = Planar.Create.Face2Ds(polygon2Ds, true);
