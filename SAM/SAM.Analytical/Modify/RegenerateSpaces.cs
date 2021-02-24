@@ -24,7 +24,7 @@ namespace SAM.Analytical
                 if (tuples == null || tuples.Count == 0)
                     continue;
 
-                tuples.RemoveAll(x => x.Item1 == null || x.Item2 == null);
+                tuples.RemoveAll(x => x.Item1 == null || x.Item2 == null || x.Item1.GetArea() < minArea);
                 if (tuples.Count == 0)
                     continue;
 
@@ -47,7 +47,7 @@ namespace SAM.Analytical
 
                 Face3D face3D_ExternalEdge = new Face3D(closedPlanar3D);
 
-                BoundingBox3D boundingBox3D = face3D_ExternalEdge.GetBoundingBox();
+                //BoundingBox3D boundingBox3D = face3D_ExternalEdge.GetBoundingBox();
 
                 Dictionary<Shell, List<Face3D>> dictionary_Shells = new Dictionary<Shell, List<Face3D>>();
                 foreach (KeyValuePair<Shell, List<Tuple<Face3D, Point3D>>> keyValuePair in dictionary_Face3Ds)
