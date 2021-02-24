@@ -153,11 +153,11 @@ namespace SAM.Geometry.Spatial
                 Plane plane_Bottom_Flipped = new Plane(plane_Bottom);
                 plane_Bottom_Flipped.FlipZ();
 
-                List<Face3D> face3Ds_Shell = new List<Face3D>();
-
                 List<Face2D> face2Ds = tuples[i].Item2;
                 foreach (Face2D face2D in face2Ds)
                 {
+                    List<Face3D> face3Ds_Shell = new List<Face3D>();
+
                     List<Segment2D> segment2Ds = new List<Segment2D>();
                     foreach (IClosed2D closed2D in face2D.Edge2Ds)
                     {
@@ -266,10 +266,10 @@ namespace SAM.Geometry.Spatial
 
                         face3Ds_Shell.Add(face3D_Bottom);
                     }
-                }
 
-                Shell shell = new Shell(face3Ds_Shell);
-                result.Add(shell);
+                    Shell shell = new Shell(face3Ds_Shell);
+                    result.Add(shell);
+                }
             }
 
             return result;
