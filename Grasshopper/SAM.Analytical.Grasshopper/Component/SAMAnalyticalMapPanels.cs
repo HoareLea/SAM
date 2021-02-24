@@ -51,6 +51,7 @@ namespace SAM.Analytical.Grasshopper
 
 
                 GooPanelParam gooPanelParam = new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list};
+                gooPanelParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(gooPanelParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number;

@@ -61,6 +61,6 @@ namespace SAM.Analytical
             }
 
             return result;
-        }
+        }    
     }
 }

@@ -9,7 +9,7 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double elevation_Ground = 0, double tolerance = Core.Tolerance.Distance)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double elevation_Ground = 0, double tolerance = Tolerance.Distance)
         {
             if (segmentable2Ds == null || double.IsNaN(elevation_Min) || double.IsNaN(elevation_Max))
                 return null;
@@ -214,6 +214,110 @@ namespace SAM.Analytical
             AdjacencyCluster result = new AdjacencyCluster();
             foreach (AdjacencyCluster adjacencyCluster in adjacencyClusters)
                 result.Join(adjacencyCluster);
+
+            return result;
+        }
+
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, List<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
+        {
+            AdjacencyCluster result = new AdjacencyCluster();
+
+            if (!addMissingSpaces && (spaces == null || spaces.Count() == 0))
+                return result;
+
+            List<Space> spaces_Temp = null;
+            if (spaces != null)
+            {
+                spaces_Temp = new List<Space>(spaces);
+                spaces_Temp.RemoveAll(x => x == null || x.Location == null || !x.IsPlaced());
+            }
+
+            Dictionary<Shell, List<Tuple<Face3D, Point3D>>> dictionary_Face3Ds = new Dictionary<Shell, List<Tuple<Face3D, Point3D>>>();
+            foreach (Shell shell in shells)
+            {
+                List<Tuple<Face3D, Point3D>> tuples = shell?.Face3Ds?.ConvertAll(x => new Tuple<Face3D, Point3D>(x, x.InternalPoint3D(tolerance)));
+                if (tuples == null || tuples.Count == 0)
+                    continue;
+
+                tuples.RemoveAll(x => x.Item1 == null || x.Item2 == null || x.Item1.GetArea() < minArea);
+                if (tuples.Count == 0)
+                    continue;
+
+                dictionary_Face3Ds[shell] = tuples;
+            }
+
+            int count = 1;
+            Dictionary<Shell, Space> dictionary = new Dictionary<Shell, Space>();
+            foreach (Panel panel in panels)
+            {
+                Face3D face3D = panel?.GetFace3D();
+                if (face3D == null)
+                    continue;
+
+                IClosedPlanar3D closedPlanar3D = face3D.GetExternalEdge3D();
+                if (closedPlanar3D == null)
+                    continue;
+
+                Face3D face3D_ExternalEdge = new Face3D(closedPlanar3D);
+
+                Dictionary<Shell, List<Face3D>> dictionary_Shells = new Dictionary<Shell, List<Face3D>>();
+                foreach (KeyValuePair<Shell, List<Tuple<Face3D, Point3D>>> keyValuePair in dictionary_Face3Ds)
+                {
+                    List<Face3D> face3Ds_Shell = new List<Face3D>();
+                    foreach (Tuple<Face3D, Point3D> tuple in keyValuePair.Value)
+                    {
+                        double distance = face3D_ExternalEdge.Distance(tuple.Item2);
+                        if (distance <= maxDistance)
+                            face3Ds_Shell.Add(tuple.Item1);
+                    }
+
+                    if (face3Ds_Shell == null || face3Ds_Shell.Count == 0)
+                        continue;
+
+                    dictionary_Shells[keyValuePair.Key] = face3Ds_Shell;
+                }
+
+                if (dictionary_Shells == null || dictionary_Shells.Count == 0)
+                    continue;
+
+                foreach (KeyValuePair<Shell, List<Face3D>> keyValuePair in dictionary_Shells)
+                {
+                    Shell shell = keyValuePair.Key;
+
+                    if (!dictionary.TryGetValue(shell, out Space space))
+                    {
+                        if (spaces_Temp != null)
+                        {
+                            space = spaces_Temp.Find(x => shell.Inside(x?.Location, silverSpacing, tolerance));
+                            if (space == null)
+                                space = spaces_Temp.Find(x => shell.On(x?.Location, tolerance));
+                        }
+
+                        if (!addMissingSpaces && space == null)
+                            continue;
+
+                        if (space == null)
+                        {
+                            string name = string.Format("Cell {0}", count);
+
+                            if (spaces_Temp != null)
+                            {
+                                while (spaces_Temp.Find(x => x.Name == name) != null)
+                                {
+                                    count++;
+                                    name = string.Format("Cell {0}", count);
+                                }
+                            }
+
+                            space = new Space(name, shell.InternalPoint3D(silverSpacing, tolerance));
+                            result.AddObject(space);
+                            count++;
+                        }
+
+                        dictionary[shell] = space;
+                    }
+                }
+            }
 
             return result;
         }
