@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static void RegenerateSpaces(this AdjacencyCluster adjacencyCluster, double offset = 0.1, double snapTolerance = Core.Tolerance.MacroDistance, double silverSpacing = Core.Tolerance.MacroDistance, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static void RegenerateSpaces(this AdjacencyCluster adjacencyCluster, double offset = 0.1, bool addMissingSpaces = true, double snapTolerance = Core.Tolerance.MacroDistance, double silverSpacing = Core.Tolerance.MacroDistance, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null)
                 return;
@@ -32,6 +32,8 @@ namespace SAM.Analytical
             }
 
             List<Space> spaces = adjacencyCluster.GetSpaces();
+            if (!addMissingSpaces && (spaces == null || spaces.Count == 0))
+                return;
 
             int count = 1;
             Dictionary<Shell, Space> dictionary = new Dictionary<Shell, Space>();
@@ -61,7 +63,9 @@ namespace SAM.Analytical
                         //if (!face3D.InRange(tuple.Item2, snapTolerance))
                         //    continue;
 
-                        if (face3D_ExternalEdge.On(tuple.Item2, snapTolerance))
+                        double distance = face3D_ExternalEdge.Distance(tuple.Item2);
+                        distance = Core.Query.Round(distance, snapTolerance);
+                        if(distance <= snapTolerance)
                             face3Ds_Shell.Add(tuple.Item1);
                     }
 
@@ -86,6 +90,9 @@ namespace SAM.Analytical
                         if (spaces != null)
                             space = spaces.Find(x => shell.Inside(x?.Location, silverSpacing, tolerance));
 
+                        if (!addMissingSpaces && space == null)
+                            continue;
+                        
                         if (space == null)
                         {
                             string name = string.Format("Cell {0}", count);
@@ -106,6 +113,9 @@ namespace SAM.Analytical
 
                         dictionary[shell] = space;
                     }
+
+                    if (space == null)
+                        continue;
 
                     adjacencyCluster.RemoveObject<Panel>(panel.Guid);
 

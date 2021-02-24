@@ -24,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -66,11 +66,19 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber.SetPersistentData(0.1);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
+                global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingSpaces_", NickName = "addMissingSpaces_", Description = "Add Missing Spaces", Access = GH_ParamAccess.item };
+                paramBoolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Voluntary));
+
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "snapTolerance_", NickName = "snapTolerance_", Description = "Snap Tolerance for computation of Spaces", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Core.Tolerance.MacroDistance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "silverSpacing_", NickName = "silverSpacing_", Description = "Silver Spacing for computation of Spaces", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(Core.Tolerance.MacroDistance);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minArea_", NickName = "minArea_", Description = "Minimal Area", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Core.Tolerance.MacroDistance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
@@ -129,10 +137,20 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref snapTolerance);
 
+            index = Params.IndexOfInputParam("addMissingSpaces_");
+            bool addMissingSpaces = true;
+            if (index != -1)
+                dataAccess.GetData(index, ref addMissingSpaces);
+
             index = Params.IndexOfInputParam("silverSpacing_");
             double silverSpacing = Core.Tolerance.MacroDistance;
             if (index != -1)
                 dataAccess.GetData(index, ref silverSpacing);
+
+            index = Params.IndexOfInputParam("minArea_");
+            double minArea = Core.Tolerance.MacroDistance;
+            if (index != -1)
+                dataAccess.GetData(index, ref minArea);
 
             index = Params.IndexOfInputParam("tolerance_");
             double tolerance = Core.Tolerance.Distance;
@@ -147,7 +165,7 @@ namespace SAM.Analytical.Grasshopper
             foreach (Space space in spaces)
                 adjacencyCluster.AddObject(space);
 
-            adjacencyCluster.RegenerateSpaces(offset, snapTolerance, silverSpacing, Core.Tolerance.MacroDistance, tolerance);
+            adjacencyCluster.RegenerateSpaces(offset, addMissingSpaces, snapTolerance, silverSpacing, minArea, tolerance);
 
             index = Params.IndexOfOutputParam("AdjacencyCluster");
             if (index != -1)
