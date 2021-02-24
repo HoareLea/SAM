@@ -88,7 +88,11 @@ namespace SAM.Analytical
                     if (!dictionary.TryGetValue(shell, out Space space))
                     {
                         if (spaces != null)
+                        {
                             space = spaces.Find(x => shell.Inside(x?.Location, silverSpacing, tolerance));
+                            if(space == null)
+                                space = spaces.Find(x => shell.On(x?.Location, tolerance));
+                        }
 
                         if (!addMissingSpaces && space == null)
                             continue;
