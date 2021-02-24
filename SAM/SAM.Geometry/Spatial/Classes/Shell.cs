@@ -462,5 +462,28 @@ namespace SAM.Geometry.Spatial
             boundingBox3D = new BoundingBox3D(boundaries.ConvertAll(x => x.Item1));
             return true;
         }
+
+        public void OrientNormals(bool flipX = false, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            Dictionary<Face3D, Vector3D> dictionary = Query.NormalDictionary(this, true, silverSpacing, tolerance);
+            if (dictionary == null)
+                return;
+
+            boundaries = new List<Tuple<BoundingBox3D, Face3D>>();
+            foreach(KeyValuePair<Face3D, Vector3D> keyValuePair in dictionary)
+            {
+                Face3D face3D = keyValuePair.Key;
+
+                Vector3D normal_External = keyValuePair.Value;
+                if (normal_External != null)
+                {
+                    Vector3D normal_Face3D = face3D.GetPlane()?.Normal;
+                    if(normal_Face3D != null && !normal_External.SameHalf(normal_Face3D))
+                        face3D.FlipNormal(flipX);
+                }
+
+                Add(face3D);
+            }
+        }
     }
 }

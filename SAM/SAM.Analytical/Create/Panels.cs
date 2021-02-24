@@ -1,5 +1,6 @@
 ﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -79,6 +80,38 @@ namespace SAM.Analytical
                     continue;
 
                 result.Add(new Panel(construction, panelType, new Face3D(polygon3D)));
+            }
+
+            return result;
+        }
+    
+        public static List<Panel> Panels(this Shell shell, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (shell == null)
+                return null;
+
+            Shell shell_Temp = new Shell(shell);
+            shell_Temp.OrientNormals(false, silverSpacing, tolerance);
+
+            List<Face3D> face3Ds = shell_Temp.Face3Ds;
+            if (face3Ds == null)
+                return null;
+
+            ConstructionLibrary constructionLibrary =ActiveSetting.Setting.GetValue<ConstructionLibrary>(AnalyticalSettingParameter.DefaultConstructionLibrary);
+
+            List<Panel> result = new List<Panel>();
+            foreach(Face3D face3D in face3Ds)
+            {
+                PanelType panelType = Query.PanelType(face3D.GetPlane().Normal);
+                Construction construction = null;
+                if (panelType != PanelType.Undefined && constructionLibrary != null)
+                {
+                    construction = constructionLibrary.GetConstructions(panelType).FirstOrDefault();
+                    if (construction == null)
+                        construction = constructionLibrary.GetConstructions(panelType.PanelGroup()).FirstOrDefault();
+                }
+
+                result.Add(new Panel(construction, panelType, face3D));
             }
 
             return result;

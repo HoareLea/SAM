@@ -71,6 +71,7 @@
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalAnalyticalModelMapInternalCondtions - Copy.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByPanelsAndSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalMapPanels.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByShells.cs" />
@@ -95,7 +96,7 @@
     <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalAddObject.cs" />
-    <Compile Include="Component\SAMAnalyticalAnalyticalModelMapInternalCondtions.cs" />
+    <Compile Include="Component\SAMAnalyticalAnalyticalCreatePanelsByShell.cs" />
     <Compile Include="Component\SAMAnalyticalMapAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalSetAirflow.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalConditionPerArea.cs" />

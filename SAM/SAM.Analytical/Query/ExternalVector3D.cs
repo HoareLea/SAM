@@ -22,7 +22,7 @@ namespace SAM.Analytical
             if (shell == null)
                 return null;
 
-            return shell.Normal(face3D.InternalPoint3D(), true, silverSpacing, tolerance);          
+            return shell.Normal(face3D.InternalPoint3D(), true, silverSpacing, tolerance);
         }
     }
 }
