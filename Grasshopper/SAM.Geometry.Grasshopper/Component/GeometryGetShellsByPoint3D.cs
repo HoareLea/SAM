@@ -152,7 +152,7 @@ namespace SAM.Geometry.Grasshopper
 
             List<Shell> result = shells.FindAll(x => x.On(point3D, tolerance) || x.Inside(point3D, silverSpacing, tolerance));
 
-            index = Params.IndexOfInputParam("Shells");
+            index = Params.IndexOfOutputParam("Shells");
             if (index != -1)
                 dataAccess.SetDataList(index, result.ConvertAll(x => new GooSAMGeometry(x)));
         }
