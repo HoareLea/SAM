@@ -93,7 +93,7 @@ namespace SAM.Geometry.Grasshopper
         {
             int index = -1;
 
-            index = Params.IndexOfInputParam("_geometries");
+            index = Params.IndexOfInputParam("_shells");
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
             if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null || objectWrappers.Count == 0)
             {
