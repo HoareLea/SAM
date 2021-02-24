@@ -78,7 +78,7 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "Shells", NickName = "Shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Shells", NickName = "Shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -154,7 +154,7 @@ namespace SAM.Geometry.Grasshopper
 
             index = Params.IndexOfOutputParam("Shells");
             if (index != -1)
-                dataAccess.SetDataList(index, result.ConvertAll(x => new GooSAMGeometry(x)));
+                dataAccess.SetDataList(index, result);
         }
     }
 }
