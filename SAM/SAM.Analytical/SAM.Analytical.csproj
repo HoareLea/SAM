@@ -147,6 +147,7 @@
     <Compile Include="Modify\AddMechanicalSystems.cs" />
     <Compile Include="Modify\AddMechanicalSystem.cs" />
     <Compile Include="Modify\MapInternalConditions.cs" />
+    <Compile Include="Modify\MapPanels.cs" />
     <Compile Include="Modify\SetOccupantGains.cs" />
     <Compile Include="Modify\SetInternalCondition.cs" />
     <Compile Include="Modify\Join.cs" />
