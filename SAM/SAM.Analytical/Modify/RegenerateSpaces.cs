@@ -118,47 +118,54 @@ namespace SAM.Analytical
                         continue;
 
                     adjacencyCluster.RemoveObject<Panel>(panel.Guid);
-
                     for (int i = 0; i < keyValuePair.Value.Count; i++)
                     {
-                        Geometry.Planar.Face2D face2D_New = plane.Convert(plane.Project(keyValuePair.Value[i]));
-                        Face3D face3D_New = plane.Convert(face2D_New);
-
-                        Panel panel_New = new Panel(Guid.NewGuid(), panel, face3D_New, null, true, minArea);
+                        Panel panel_New = new Panel(Guid.NewGuid(), panel, keyValuePair.Value[i], null, true, minArea);
                         adjacencyCluster.AddObject(panel_New);
                         adjacencyCluster.AddRelation(space, panel_New);
-
-                        if (face2Ds_Old != null && face2Ds_Old.Count > 0)
-                        {
-                            List<Geometry.Planar.Face2D> face2Ds_Old_Temp = new List<Geometry.Planar.Face2D>();
-                            foreach (Geometry.Planar.Face2D face2D_Old in face2Ds_Old)
-                            {
-                                List<Geometry.Planar.Face2D> face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Old, face2D_New, tolerance);
-                                if (face2Ds_Difference == null || face2Ds_Difference.Count == 0)
-                                    continue;
-
-                                foreach(Geometry.Planar.Face2D face2D_Difference in face2Ds_Difference)
-                                {
-                                    if (face2D_Difference == null || face2D_Difference.GetArea() < minArea)
-                                        continue;
-
-                                    face2Ds_Old_Temp.Add(face2D_Difference);
-                                }
-                            }
-
-                            face2Ds_Old = face2Ds_Old_Temp == null || face2Ds_Old_Temp.Count == 0 ? null : face2Ds_Old_Temp;
-                        }
                     }
 
-                    if (face2Ds_Old != null && face2Ds_Old.Count > 0)
-                    {
-                        foreach(Geometry.Planar.Face2D face2D_Old in face2Ds_Old)
-                        {
-                            Face3D face3D_Old = plane.Convert(face2D_Old);
-                            Panel panel_Old = new Panel(Guid.NewGuid(), panel, face3D_Old, null, true, minArea);
-                            adjacencyCluster.AddObject(panel_Old);
-                        }
-                    }
+
+                    //for (int i = 0; i < keyValuePair.Value.Count; i++)
+                    //{
+                    //    Geometry.Planar.Face2D face2D_New = plane.Convert(plane.Project(keyValuePair.Value[i]));
+                    //    Face3D face3D_New = plane.Convert(face2D_New);
+
+                    //    Panel panel_New = new Panel(Guid.NewGuid(), panel, face3D_New, null, true, minArea);
+                    //    adjacencyCluster.AddObject(panel_New);
+                    //    adjacencyCluster.AddRelation(space, panel_New);
+
+                    //    if (face2Ds_Old != null && face2Ds_Old.Count > 0)
+                    //    {
+                    //        List<Geometry.Planar.Face2D> face2Ds_Old_Temp = new List<Geometry.Planar.Face2D>();
+                    //        foreach (Geometry.Planar.Face2D face2D_Old in face2Ds_Old)
+                    //        {
+                    //            List<Geometry.Planar.Face2D> face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Old, face2D_New, tolerance);
+                    //            if (face2Ds_Difference == null || face2Ds_Difference.Count == 0)
+                    //                continue;
+
+                    //            foreach(Geometry.Planar.Face2D face2D_Difference in face2Ds_Difference)
+                    //            {
+                    //                if (face2D_Difference == null || face2D_Difference.GetArea() < minArea)
+                    //                    continue;
+
+                    //                face2Ds_Old_Temp.Add(face2D_Difference);
+                    //            }
+                    //        }
+
+                    //        face2Ds_Old = face2Ds_Old_Temp == null || face2Ds_Old_Temp.Count == 0 ? null : face2Ds_Old_Temp;
+                    //    }
+                    //}
+
+                    //if (face2Ds_Old != null && face2Ds_Old.Count > 0)
+                    //{
+                    //    foreach(Geometry.Planar.Face2D face2D_Old in face2Ds_Old)
+                    //    {
+                    //        Face3D face3D_Old = plane.Convert(face2D_Old);
+                    //        Panel panel_Old = new Panel(Guid.NewGuid(), panel, face3D_Old, null, true, minArea);
+                    //        adjacencyCluster.AddObject(panel_Old);
+                    //    }
+                    //}
                 }
             }
 
