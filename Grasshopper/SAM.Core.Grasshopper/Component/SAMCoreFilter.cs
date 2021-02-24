@@ -86,7 +86,7 @@ namespace SAM.Core.Grasshopper
             List<object> objects = new List<object>();
             foreach (GH_ObjectWrapper gH_ObjectWrapper in objectWrappers)
             {
-                object @object = gH_ObjectWrapper.Value;
+                object @object = gH_ObjectWrapper?.Value;
 
                 if (@object is IGH_Goo)
                 {

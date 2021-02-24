@@ -125,19 +125,19 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfOutputParam("Walls");
             if (index != -1)
-                dataAccess.SetData(index, panels?.FindAll(x => x.PanelGroup == PanelGroup.Wall));
+                dataAccess.SetDataList(index, panels?.FindAll(x => x.PanelGroup == PanelGroup.Wall));
 
             index = Params.IndexOfOutputParam("Floors");
             if (index != -1)
-                dataAccess.SetData(index, panels?.FindAll(x => x.PanelGroup == PanelGroup.Floor));
+                dataAccess.SetDataList(index, panels?.FindAll(x => x.PanelGroup == PanelGroup.Floor));
 
             index = Params.IndexOfOutputParam("Roofs");
             if (index != -1)
-                dataAccess.SetData(index, panels?.FindAll(x => x.PanelGroup == PanelGroup.Roof));
+                dataAccess.SetDataList(index, panels?.FindAll(x => x.PanelGroup == PanelGroup.Roof));
 
             index = Params.IndexOfOutputParam("Others");
             if (index != -1)
-                dataAccess.SetData(index, panels?.FindAll(x => x.PanelGroup == PanelGroup.Other));
+                dataAccess.SetDataList(index, panels?.FindAll(x => x.PanelGroup == PanelGroup.Other));
 
         }
     }
