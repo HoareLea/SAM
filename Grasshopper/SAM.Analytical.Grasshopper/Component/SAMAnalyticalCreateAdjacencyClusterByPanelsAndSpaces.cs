@@ -147,7 +147,7 @@ namespace SAM.Analytical.Grasshopper
             foreach (Space space in spaces)
                 adjacencyCluster.AddObject(space);
 
-            adjacencyCluster.RegenerateSpaces(offset, snapTolerance, silverSpacing, tolerance);
+            adjacencyCluster.RegenerateSpaces(offset, snapTolerance, silverSpacing, Core.Tolerance.MacroDistance, tolerance);
 
             index = Params.IndexOfOutputParam("AdjacencyCluster");
             if (index != -1)
