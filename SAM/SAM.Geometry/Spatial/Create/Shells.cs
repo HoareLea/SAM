@@ -131,7 +131,7 @@ namespace SAM.Geometry.Spatial
                 if (segment2Ds == null || segment2Ds.Count < 3)
                     continue;
 
-                segment2Ds = segment2Ds.ConvertAll(x => Planar.Query.Extend(x, snapTolerance, true, true));
+                //segment2Ds = segment2Ds.ConvertAll(x => Planar.Query.Extend(x, snapTolerance, true, true));
                 segment2Ds = Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
                 List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds, tolerance);
