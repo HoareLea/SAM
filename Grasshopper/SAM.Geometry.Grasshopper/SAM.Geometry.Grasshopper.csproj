@@ -58,6 +58,7 @@
     <Compile Include="Classes\GooTransform3D.cs" />
     <Compile Include="Classes\GooSAMGeometry.cs" />
     <Compile Include="Component\CreateSAMTransform3DOriginToPlane.cs" />
+    <Compile Include="Component\GeometryGetShellsByPoint3D.cs" />
     <Compile Include="Component\GeometryMeshClose.cs" />
     <Compile Include="Component\GeometryModifyIntersection.cs" />
     <Compile Include="Component\GeometryMeshReduce.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Modify\BakeGeometry.cs" />
     <Compile Include="Modify\Convert.cs" />
     <Compile Include="Modify\Reduce.cs" />
+    <Compile Include="Query\TryGetSAMGeometry.cs" />
     <Compile Include="Query\Close.cs" />
     <Compile Include="Template\TemplateComponent.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
