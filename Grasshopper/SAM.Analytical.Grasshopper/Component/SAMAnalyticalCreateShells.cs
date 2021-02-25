@@ -5,6 +5,7 @@ using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using SAM.Geometry.Grasshopper;
+using Grasshopper.Kernel.Types;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -18,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -47,6 +48,10 @@ namespace SAM.Analytical.Grasshopper
                 GooPanelParam panelParam = new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list };
                 panelParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(panelParam, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_points_", NickName = "_points_", Description = "Points", Access = GH_ParamAccess.list, Optional = true };
+                genericObject.DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(genericObject, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = null;
 
@@ -112,6 +117,48 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Shell> shells = Analytical.Query.Shells(panels, offset, Core.Tolerance.MacroDistance, tolerance);
+
+            index = Params.IndexOfInputParam("_points_");
+            if(index != -1)
+            {
+                List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+                if(dataAccess.GetDataList(index, objectWrappers) && objectWrappers != null && objectWrappers.Count > 0)
+                {
+                    List<Point3D> point3Ds = new List<Point3D>();
+                    foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
+                        if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Point3D> point3Ds_Temp) && point3Ds_Temp != null)
+                            point3Ds.AddRange(point3Ds_Temp);
+
+                    if(point3Ds != null && point3Ds.Count != 0)
+                    {
+                        bool duplicates = false;
+                        List<Shell> shells_Temp = new List<Shell>();
+                        foreach(Point3D point3D in point3Ds)
+                        {
+                            List<Shell> shells_InRange = shells.FindAll(x => x.InRange(point3D));
+                            if (shells_InRange == null || shells_InRange.Count == 0)
+                                continue;
+
+                            foreach(Shell shell in shells_InRange)
+                                if(!shells_Temp.Contains(shell))
+                                {
+                                    shells.Remove(shell);
+                                    shells_Temp.Add(shell);
+                                }
+                                else
+                                {
+                                    duplicates = true;
+                                }
+                        }
+
+                        shells = shells_Temp;
+
+                        if(duplicates)
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "There are multiple points enclosed in one shell");
+                    }
+                }
+            }
+
 
             index = Params.IndexOfOutputParam("Shells");
             if (index != -1)
