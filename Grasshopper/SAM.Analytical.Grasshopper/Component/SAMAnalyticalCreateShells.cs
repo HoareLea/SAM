@@ -135,7 +135,7 @@ namespace SAM.Analytical.Grasshopper
                         List<Shell> shells_Temp = new List<Shell>();
                         foreach(Point3D point3D in point3Ds)
                         {
-                            List<Shell> shells_InRange = shells.FindAll(x => x.InRange(point3D));
+                            List<Shell> shells_InRange = shells.FindAll(x => x.InRange(point3D, tolerance) || x.Inside(point3D, tolerance: tolerance));
                             if (shells_InRange == null || shells_InRange.Count == 0)
                                 continue;
 
