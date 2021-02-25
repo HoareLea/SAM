@@ -43,6 +43,12 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (sAMGeometry is Spatial.Shell)
+            {
+                guid = rhinoDoc.Objects.AddBrep(((Spatial.Shell)sAMGeometry).ToRihno());
+                return true;
+            }
+
             if (sAMGeometry is Spatial.Polygon3D)
             {
                 guid = rhinoDoc.Objects.AddCurve(((Spatial.Polygon3D)sAMGeometry).ToRhino_PolylineCurve());
