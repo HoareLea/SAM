@@ -85,7 +85,7 @@ namespace SAM.Geometry.Spatial
 
             BoundingBox3D boundingBox3D_Temp = new BoundingBox3D(boundingBox3D, tolerance);
 
-            if (!boundingBox3D_Temp.Inside(point3D))
+            if (!boundingBox3D_Temp.InRange(point3D))
                 return false;
 
             Vector3D vector3D = new Vector3D(boundingBox3D_Temp.Min, boundingBox3D_Temp.Max);

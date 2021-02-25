@@ -95,7 +95,7 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.SetData(0, text);
         }
 
-        public override Rhino.Geometry.BoundingBox ClippingBox
+        public override BoundingBox ClippingBox
         {
             get
             {
