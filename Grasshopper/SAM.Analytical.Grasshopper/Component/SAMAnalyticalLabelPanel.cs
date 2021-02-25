@@ -99,7 +99,7 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                Rhino.Geometry.BoundingBox boundingBox = base.ClippingBox;
+                BoundingBox boundingBox = base.ClippingBox;
 
                 List<Text3d> text3ds = GetText3ds();
                 if (text3ds != null && text3ds.Count != 0)
@@ -213,12 +213,36 @@ namespace SAM.Analytical.Grasshopper
                     if (text3d == null)
                         continue;
                     Point3d point = text3d.TextPlane.Origin;
-                    if (point.DistanceTo(cameraLocation) > 16) continue;
+                    if (point.DistanceTo(cameraLocation) > 16) 
+                        continue;
+
                     args.Display.Draw3dText(text3d, System.Drawing.Color.Black);
                 }
             }
 
             base.DrawViewportMeshes(args);
+        }
+
+        public override void DrawViewportWires(IGH_PreviewArgs args)
+        {
+            List<Text3d> text3ds = GetText3ds();
+            if (text3ds != null)
+            {
+                Point3d cameraLocation = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation;
+                foreach (Text3d text3d in text3ds)
+                {
+                    if (text3d == null)
+                        continue;
+
+                    Point3d point = text3d.TextPlane.Origin;
+                    if (point.DistanceTo(cameraLocation) > 16) 
+                        continue;
+
+                    args.Display.Draw3dText(text3d, System.Drawing.Color.Black);
+                }
+            }
+
+            base.DrawViewportWires(args);
         }
 
         #endregion IGH_PreviewObject
