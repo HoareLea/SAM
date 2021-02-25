@@ -314,7 +314,21 @@ namespace SAM.Analytical
                             count++;
                         }
 
+                        if (space == null)
+                            continue;
+
                         dictionary[shell] = space;
+                        result.AddObject(space);
+                    }
+
+                    if (space == null)
+                        continue;
+
+                    foreach (Face3D face3D_New in keyValuePair.Value)
+                    {
+                        Panel panel_New = new Panel(Guid.NewGuid(), panel, face3D_New, null, true, minArea);
+                        result.AddObject(panel_New);
+                        result.AddRelation(space, panel_New);
                     }
                 }
             }
