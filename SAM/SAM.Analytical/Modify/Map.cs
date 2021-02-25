@@ -93,7 +93,7 @@ namespace SAM.Analytical
                     {
                         foreach(KeyValuePair<Space, Shell> keyValuePair in dictionary)
                         {
-                            List<Space> spaces_Source_Shell = spaces_Source.FindAll(x => keyValuePair.Value.InRange(x.Location));
+                            List<Space> spaces_Source_Shell = spaces_Source.FindAll(x => keyValuePair.Value.InRange(x.Location, tolerance) || keyValuePair.Value.Inside(x.Location, tolerance));
                             if (spaces_Source_Shell == null || spaces_Source_Shell.Count == 0)
                                 continue;
 

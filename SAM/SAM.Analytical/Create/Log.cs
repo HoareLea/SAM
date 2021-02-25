@@ -80,8 +80,8 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                List<Space> spaces_InRange = spaces.FindAll(x => x.Location != null && shell.InRange(x.Location));
-                spaces_InRange = spaces_InRange.FindAll(x => shell.InRange(x.Location?.GetMoved(Vector3D.WorldZ * Tolerance.MacroDistance) as Point3D));
+                List<Space> spaces_InRange = spaces.FindAll(x => shell.InRange(x.Location) || shell.Inside(x.Location));
+                spaces_InRange = spaces_InRange.FindAll(x => shell.InRange(x.Location?.GetMoved(Vector3D.WorldZ * Tolerance.MacroDistance) as Point3D) || shell.Inside(x.Location?.GetMoved(Vector3D.WorldZ * Tolerance.MacroDistance) as Point3D));
                 if (spaces_InRange == null || spaces_InRange.Count > 1)
                 {
                     result.Add("There are more than one space enclosed in single shell: {0}", LogRecordType.Warning, string.Join(", ", spaces_InRange.ConvertAll(x => x.Name)));

@@ -152,6 +152,12 @@ namespace SAM.Geometry.Spatial
             return false;
         }
 
+        /// <summary>
+        /// Checks in Point3D is in range (on shell excluding internal edges of Faces3D). It does not check if Point3D is inside shell
+        /// </summary>
+        /// <param name="point3D">SAM Geometry Point3D</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>True if Point3D is in range</returns>
         public bool InRange(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
             if (point3D == null || boundaries == null || boundingBox3D == null)
