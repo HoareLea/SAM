@@ -6,7 +6,40 @@ namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
-        //Create surfaace from planar polyline points
+        public static Rhino.Geometry.Brep ToRihno(this Shell shell, double tolerance = Core.Tolerance.Distance)
+        {
+            if (shell == null)
+                return null;
+
+            List<Face3D> face3Ds = shell.Face3Ds;
+            if (face3Ds == null || face3Ds.Count == 0)
+                return null;
+
+            List<Rhino.Geometry.Brep> breps = new List<Rhino.Geometry.Brep>();
+            foreach(Face3D face3D in face3Ds)
+            {
+                Rhino.Geometry.Brep brep = face3D.ToRhino_Brep(tolerance);
+                if (brep == null)
+                    continue;
+
+                breps.Add(brep);
+            }
+
+            if (breps == null || breps.Count == 0)
+                return null;
+
+            Rhino.Geometry.Brep[] result = Rhino.Geometry.Brep.JoinBreps(breps, tolerance);
+            if (result == null || result.Length == 0)
+                return null;
+
+            return result[0];
+        }
+
+        /// <summary>
+        /// Creates Rhino surface brep from planar polyline points
+        /// </summary>
+        /// <param name="points">Rhino points</param>
+        /// <returns>Rhino Brep</returns>
         public static Rhino.Geometry.Brep ToRihno_Brep(this IEnumerable<Rhino.Geometry.Point3d> points)
         {
             List<Rhino.Geometry.Point3d> pointList = new List<Rhino.Geometry.Point3d>(points);

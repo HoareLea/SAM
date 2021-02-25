@@ -204,6 +204,16 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (source is Brep)
+            {
+                List<Spatial.ISAMGeometry3D> sAMGeometry3Ds = ((Brep)source).ToSAM();
+                if(sAMGeometry3Ds != null && sAMGeometry3Ds.Count != 0)
+                {
+                    Value = sAMGeometry3Ds[0];
+                    return true;
+                }
+            }
+
             return base.CastFrom(source);
         }
 
@@ -334,14 +344,24 @@ namespace SAM.Geometry.Grasshopper
 
             if (Value is Spatial.Point3D)
             {
-                args.Pipeline.DrawPoint((Value as Spatial.Point3D).ToRhino());
+                args.Pipeline.DrawPoint((Value as Spatial.Point3D).ToRhino(), color);
                 return;
             }
 
             if (Value is Planar.Point2D)
             {
-                args.Pipeline.DrawPoint((Value as Planar.Point2D).ToRhino());
+                args.Pipeline.DrawPoint((Value as Planar.Point2D).ToRhino(), color);
                 return;
+            }
+
+            if(Value is Spatial.Face3D)
+            {
+                args.Pipeline.DrawBrepWires((Value as Spatial.Face3D).ToRhino_Brep(), color);
+            }
+
+            if (Value is Spatial.Shell)
+            {
+                args.Pipeline.DrawBrepWires((Value as Spatial.Shell).ToRihno(), color);
             }
         }
 

@@ -47,6 +47,9 @@ namespace SAM.Geometry.Grasshopper
             if (geometry is Plane)
                 return ((Plane)geometry).ToGrasshopper();
 
+            if (geometry is Shell)
+                return ((Shell)geometry).ToGrasshopper();
+
             return (geometry as dynamic).ToGrasshopper();
         }
     }

@@ -39,6 +39,7 @@ namespace SAM.Geometry.Grasshopper
                 foreach (object object_Temp in (IEnumerable)@object)
                     if (object_Temp is ISAMGeometry3D)
                         result.Add((ISAMGeometry3D)object_Temp);
+
                 return result;
             }
 
@@ -88,8 +89,7 @@ namespace SAM.Geometry.Grasshopper
                 //}
             }
 
-            List<ISAMGeometry3D> result = new List<ISAMGeometry3D>();
-
+            List<Face3D> face3Ds = new List<Face3D>();
             foreach (BrepFace brepFace in brepFaces)
             {
                 List<IClosedPlanar3D> closedPlanar3Ds = new List<IClosedPlanar3D>();
@@ -104,16 +104,33 @@ namespace SAM.Geometry.Grasshopper
                     if (geometry3D is IClosedPlanar3D)
                         closedPlanar3Ds.Add((IClosedPlanar3D)geometry3D);
                 }
-                if (closedPlanar3Ds != null && closedPlanar3Ds.Count > 0)
-                    result.Add(Face3D.Create(closedPlanar3Ds));
+
+                if (closedPlanar3Ds == null || closedPlanar3Ds.Count != 0)
+                    continue;
+
+                Face3D face3D = Face3D.Create(closedPlanar3Ds);
+                if (face3D == null)
+                    continue;
+
+                face3Ds.Add(face3D);
             }
+
+            if (face3Ds == null || face3Ds.Count == 0)
+                return null;
+
+            List<ISAMGeometry3D> result = new List<ISAMGeometry3D>();
+
+            if(brep.IsSolid)
+                result.Add(new Shell(face3Ds));
+            else
+                result.AddRange(face3Ds);
 
             return result;
         }
 
         public static List<ISAMGeometry3D> ToSAM(this GH_Surface surface, bool simplify = true)
         {
-            return ToSAM(surface.Value);
+            return ToSAM(surface.Value, simplify);
         }
 
         public static List<ISAMGeometry3D> ToSAM(this Rhino.Geometry.Surface surface, bool simplify = true)

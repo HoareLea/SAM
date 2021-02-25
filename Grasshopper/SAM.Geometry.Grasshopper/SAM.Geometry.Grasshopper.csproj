@@ -83,6 +83,7 @@
     <Compile Include="Component\SAMGeometry2DSAMGeometry.cs" />
     <Compile Include="Component\SAMGeometrySAMGeometry2D.cs" />
     <Compile Include="Component\SAMGeometrySegment2DIntersection.cs" />
+    <Compile Include="Convert\ToGrasshopper\GH_Brep.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Plane.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Vector.cs" />
     <Compile Include="Convert\ToSAM\Shell.cs" />
