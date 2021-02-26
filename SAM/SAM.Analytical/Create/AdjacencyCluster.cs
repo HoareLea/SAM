@@ -304,6 +304,7 @@ namespace SAM.Analytical
                 if (dictionary_Shells == null || dictionary_Shells.Count == 0)
                     continue;
 
+                List<Tuple<Point3D, Panel>> tuples = new List<Tuple<Point3D, Panel>>();
                 foreach (KeyValuePair<Shell, List<Face3D>> keyValuePair in dictionary_Shells)
                 {
                     Shell shell = keyValuePair.Key;
@@ -351,8 +352,30 @@ namespace SAM.Analytical
 
                     foreach (Face3D face3D_New in keyValuePair.Value)
                     {
-                        Panel panel_New = new Panel(Guid.NewGuid(), panel, face3D_New, null, true, minArea);
-                        result.AddObject(panel_New);
+                        if (face3D_New == null)
+                            continue;
+
+                        Panel panel_New = null;
+
+                        int index = tuples.FindIndex(x => face3D_New.Inside(x.Item1));
+                        if (index != -1)
+                            panel_New = tuples[index].Item2;
+
+                        if (panel_New == null)
+                        {
+                            Point3D point3D = face3D_New.InternalPoint3D(tolerance);
+                            if (point3D == null)
+                                continue;
+
+                            panel_New = new Panel(Guid.NewGuid(), panel, face3D_New, null, true, minArea);
+
+                            tuples.Add(new Tuple<Point3D, Panel>(point3D, panel_New));
+                            result.AddObject(panel_New);
+                        }
+
+                        if (panel_New == null)
+                            continue;
+
                         foreach (Space space in spaces_Shell)
                             result.AddRelation(space, panel_New);
                     }
