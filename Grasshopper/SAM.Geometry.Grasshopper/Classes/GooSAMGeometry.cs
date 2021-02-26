@@ -361,7 +361,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (Value is Spatial.Shell)
             {
-                args.Pipeline.DrawBrepWires((Value as Spatial.Shell).ToRihno(), color);
+                args.Pipeline.DrawBrepShaded((Value as Spatial.Shell).ToRihno(), new Rhino.Display.DisplayMaterial(color));
             }
         }
 
