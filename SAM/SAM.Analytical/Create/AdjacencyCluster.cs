@@ -329,6 +329,14 @@ namespace SAM.Analytical
                         Space space = new Space(name, shell.InternalPoint3D(silverSpacing, tolerance));
                         names.Add(name);
                         spaces_Shell.Add(space);
+
+                        if (!dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Temp))
+                        {
+                            spaces_Temp = new List<Space>();
+                            dictionary_Spaces[shell] = spaces_Temp;
+                        }
+
+                        spaces_Temp.Add(space);
                     }
 
                     if (spaces_Shell == null || spaces_Shell.Count == 0)
