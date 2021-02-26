@@ -14,7 +14,7 @@ namespace SAM.Analytical
                 return null;
 
             List<Shell> result = new List<Shell>();
-            if (panels.Count() < 4)
+            if (panels.Count() < 2)
                 return result;
 
             List<Tuple<double, List<Panel>>> tuples_Elevation = new List<Tuple<double, List<Panel>>>();
