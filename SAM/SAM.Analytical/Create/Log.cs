@@ -15,6 +15,13 @@ namespace SAM.Analytical
 
             Log result = new Log();
 
+            List<Space> spaces = adjacencyCluster.GetSpaces();
+            if (spaces == null || spaces.Count == 0)
+            {
+                result.Add("AdjacencyCluster has no spaces.", LogRecordType.Warning);
+                return result;
+            }
+
             List<Panel> panels = adjacencyCluster.GetPanels();
             if (panels == null || panels.Count == 0)
             {
@@ -58,15 +65,43 @@ namespace SAM.Analytical
                         
 
                     }
-                }
-                    
-            }
 
-            List<Space> spaces = adjacencyCluster.GetSpaces();
-            if(spaces == null || spaces.Count == 0)
-            {
-                result.Add("AdjacencyCluster has no spaces.", LogRecordType.Warning);
-                return result;
+                    if (spaces != null && spaces.Count != 0)
+                    {
+                        List<Space> spaces_Panel = adjacencyCluster.GetRelatedObjects<Space>(panel);
+                        if(spaces_Panel != null && spaces_Panel.Count != 0)
+                        {
+                            PanelType panelType = panel.PanelType;
+                            switch (panelType)
+                            {
+                                case PanelType.Air:
+                                case PanelType.Ceiling:
+                                case PanelType.FloorInternal:
+                                case PanelType.FloorRaised:
+                                case PanelType.UndergroundCeiling:
+                                case PanelType.WallInternal:
+                                    if (spaces_Panel.Count < 2)
+                                        result.Add("{0} Panel {1} (Guid: {2}) has no adjacent spaces.", LogRecordType.Warning, panelType.Text(), panel.Name, panel.Guid);
+                                    break;
+
+                                case PanelType.FloorExposed:
+                                case PanelType.Roof:
+                                case PanelType.SlabOnGrade:
+                                case PanelType.UndergroundSlab:
+                                case PanelType.UndergroundWall:
+                                case PanelType.WallExternal:
+                                    if (spaces_Panel.Count > 1)
+                                        result.Add("{0} Panel {1} (Guid: {2}) has more than one adjacent spaces.", LogRecordType.Warning, panelType.Text(), panel.Name, panel.Guid);
+                                    break;
+
+                                case PanelType.Shade:
+                                case PanelType.SolarPanel:
+                                    result.Add("{0} Panel {1} (Guid: {2}) has some adjacent spaces.", LogRecordType.Warning, panelType.Text(), panel.Name, panel.Guid);
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
 
             foreach(Space space in spaces)
