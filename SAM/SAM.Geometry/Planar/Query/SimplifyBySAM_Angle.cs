@@ -18,8 +18,11 @@ namespace SAM.Geometry.Planar
                 if (segment2Ds == null || segment2Ds_Temp.Count != 2)
                     continue;
 
-                if (segment2Ds[0].Direction.SmallestAngle(segment2Ds[1].Direction) >= maxAngle)
+                if (segment2Ds_Temp[0].Direction.SmallestAngle(segment2Ds_Temp[1].Direction) >= maxAngle)
                     continue;
+
+                //if (segment2Ds[0].Direction.SmallestAngle(segment2Ds[1].Direction) >= maxAngle)
+                //    continue;
 
                 List<Point2D> point2Ds_Temp = segment2Ds_Temp.Point2Ds(tolerance).FindAll(x => !x.AlmostEquals(point2D));
                 if (point2Ds_Temp == null || point2Ds_Temp.Count != 2)
