@@ -80,14 +80,12 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                List<Space> spaces_InRange = spaces.FindAll(x => shell.InRange(x.Location) || shell.Inside(x.Location));
-                spaces_InRange = spaces_InRange.FindAll(x => shell.InRange(x.Location?.GetMoved(Vector3D.WorldZ * Tolerance.MacroDistance) as Point3D) || shell.Inside(x.Location?.GetMoved(Vector3D.WorldZ * Tolerance.MacroDistance) as Point3D));
-                if (spaces_InRange == null || spaces_InRange.Count > 1)
+                if(space.Location == null)
                 {
-                    result.Add("There are more than one space enclosed in single shell: {0}", LogRecordType.Warning, string.Join(", ", spaces_InRange.ConvertAll(x => x.Name)));
+                    result.Add("Space {0} (Guid: {1}) has no location.", LogRecordType.Warning, space.Name, space.Guid);
                     continue;
                 }
-                
+
                 List<Panel> panels_Space = adjacencyCluster.GetPanels(space);
                 if(panels_Space == null || panels_Space.Count == 0)
                 {
@@ -107,7 +105,6 @@ namespace SAM.Analytical
                     else
                         result.Add("Space {0} (Guid: {1}) has no floor panels and air panels.", LogRecordType.Message, space.Name, space.Guid);
                 }
-                    
 
                 foreach(Panel panel in panels_Space)
                 {
@@ -119,6 +116,22 @@ namespace SAM.Analytical
                         result.Add("Panel {0} (Guid: {1}) has assigned {2} PanelType and it also encloses {3} space (Guid: {4}).", LogRecordType.Warning, panel.Name, panel.Guid, panel.PanelType, space.Name, space.Guid);
                         return result;
                     }
+                }
+            }
+
+            Dictionary<Shell, List<Space>> dictionary = Query.DuplicatedSpacesDictionary(adjacencyCluster);
+            if(dictionary != null && dictionary.Count > 0)
+            {
+                foreach(List<Space> spaces_Duplicated in dictionary.Values)
+                {
+                    List<string> names = spaces_Duplicated.ConvertAll(x => x?.Name);
+                    for (int i = 0; i < names.Count; i++)
+                        if (string.IsNullOrWhiteSpace(names[i]))
+                            names[i] = "???";
+
+                    List<string> guids = spaces_Duplicated.ConvertAll(x => x.Guid.ToString());
+
+                    result.Add("Spaces {0} (Guids: {1}) are enclosed in single shell.", LogRecordType.Message, string.Join(", ", names), string.Join(", ", guids));
                 }
             }
 
