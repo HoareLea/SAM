@@ -77,7 +77,7 @@ namespace SAM.Geometry.Spatial
 
         public bool Inside(Point3D point3D, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if (point3D == null || boundaries == null || boundingBox3D == null)
+            if (point3D == null || boundaries == null || boundingBox3D == null || boundaries.Count == 0)
                 return false;
 
             if (!IsClosed(tolerance))

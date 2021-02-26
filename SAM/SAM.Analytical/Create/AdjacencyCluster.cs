@@ -222,15 +222,37 @@ namespace SAM.Analytical
         {
             AdjacencyCluster result = new AdjacencyCluster();
 
-            if (!addMissingSpaces && (spaces == null || spaces.Count() == 0))
-                return result;
-
-            List<Space> spaces_Temp = null;
+            Dictionary<Shell, List<Space>> dictionary_Spaces = new Dictionary<Shell, List<Space>>(); ;
+            HashSet<string> names = new HashSet<string>();
             if (spaces != null)
             {
-                spaces_Temp = new List<Space>(spaces);
-                spaces_Temp.RemoveAll(x => x == null || x.Location == null || !x.IsPlaced());
+                foreach (Space space in spaces)
+                {
+                    Point3D point3D = space?.Location;
+                    if (point3D == null)
+                        continue;
+
+                    names.Add(space.Name);
+
+                    List<Shell> spaces_Shell = Query.SpaceShells(shells, point3D, silverSpacing, tolerance);
+                    if (spaces_Shell != null && spaces_Shell.Count > 0)
+                    {
+                        foreach(Shell shell in spaces_Shell)
+                        {
+                            if(!dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Temp))
+                            {
+                                spaces_Temp = new List<Space>();
+                                dictionary_Spaces[shell] = spaces_Temp;
+                            }
+
+                            spaces_Temp.Add(space);
+                        }
+                    }
+                }
             }
+
+            if (!addMissingSpaces && (dictionary_Spaces == null || dictionary_Spaces.Count() == 0))
+                return result;
 
             Dictionary<Shell, List<Tuple<Face3D, Point3D>>> dictionary_Face3Ds = new Dictionary<Shell, List<Tuple<Face3D, Point3D>>>();
             foreach (Shell shell in shells)
@@ -247,7 +269,9 @@ namespace SAM.Analytical
             }
 
             int count = 1;
-            Dictionary<Shell, Space> dictionary = new Dictionary<Shell, Space>();
+
+            List<Space> spaces_AdjacencyCluster = new List<Space>();
+
             foreach (Panel panel in panels)
             {
                 Face3D face3D = panel?.GetFace3D();
@@ -284,51 +308,45 @@ namespace SAM.Analytical
                 {
                     Shell shell = keyValuePair.Key;
 
-                    if (!dictionary.TryGetValue(shell, out Space space))
-                    {
-                        if (spaces_Temp != null)
-                        {
-                            space = spaces_Temp.Find(x => shell.Inside(x?.Location, silverSpacing, tolerance));
-                            if (space == null)
-                                space = spaces_Temp.Find(x => shell.On(x?.Location, tolerance));
-                        }
+                    dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Shell);
 
-                        if (!addMissingSpaces && space == null)
+                    if (spaces_Shell == null || spaces_Shell.Count == 0)
+                    {
+                        if (!addMissingSpaces)
                             continue;
 
-                        if (space == null)
+                        spaces_Shell = new List<Space>();
+
+                        string name = null;
+
+                        do
                         {
-                            string name = string.Format("Cell {0}", count);
-
-                            if (spaces_Temp != null)
-                            {
-                                while (spaces_Temp.Find(x => x.Name == name) != null)
-                                {
-                                    count++;
-                                    name = string.Format("Cell {0}", count);
-                                }
-                            }
-
-                            space = new Space(name, shell.InternalPoint3D(silverSpacing, tolerance));
-                            result.AddObject(space);
+                            name = string.Format("Cell {0}", count);
                             count++;
                         }
+                        while (names.Contains(name));
 
-                        if (space == null)
-                            continue;
-
-                        dictionary[shell] = space;
-                        result.AddObject(space);
+                        Space space = new Space(name, shell.InternalPoint3D(silverSpacing, tolerance));
+                        names.Add(name);
+                        spaces_Shell.Add(space);
                     }
 
-                    if (space == null)
+                    if (spaces_Shell == null || spaces_Shell.Count == 0)
                         continue;
+
+                    foreach(Space space in spaces_Shell)
+                        if(!spaces_AdjacencyCluster.Contains(space))
+                        {
+                            result.AddObject(space);
+                            spaces_AdjacencyCluster.Add(space);
+                        }
 
                     foreach (Face3D face3D_New in keyValuePair.Value)
                     {
                         Panel panel_New = new Panel(Guid.NewGuid(), panel, face3D_New, null, true, minArea);
                         result.AddObject(panel_New);
-                        result.AddRelation(space, panel_New);
+                        foreach (Space space in spaces_Shell)
+                            result.AddRelation(space, panel_New);
                     }
                 }
             }

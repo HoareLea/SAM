@@ -432,6 +432,16 @@ namespace SAM.Geometry.Spatial
             return Query.On(this, point3D, tolerance);
         }
 
+        public bool Include(BoundingBox3D boundingBox3D)
+        {
+            if (boundingBox3D == null)
+                return false;
+
+            max = Query.Max(max, boundingBox3D.Max);
+            min = Query.Min(min, boundingBox3D.Min);
+            return true;
+        }
+
         public static bool operator ==(BoundingBox3D boundingBox3D_1, BoundingBox3D boundingBox3D_2)
         {
             if (ReferenceEquals(boundingBox3D_1, null) && ReferenceEquals(boundingBox3D_2, null))

@@ -276,13 +276,15 @@ namespace SAM.Analytical.Grasshopper
             Modify.BakeGeometry_ByConstruction(doc, VolatileData, false, Core.Tolerance.Distance);
         }
 
-        public override void AppendAdditionalMenuItems(System.Windows.Forms.ToolStripDropDown menu)
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
 
             Menu_AppendItem(menu, "Show All", Menu_ShowAll, VolatileData.AllData(true).Any(), showAll).Tag = showAll;
 
             Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, VolatileData.AllData(true).Any());
+
+            //Menu_AppendSeparator(menu);
 
             base.AppendAdditionalMenuItems(menu);
         }
