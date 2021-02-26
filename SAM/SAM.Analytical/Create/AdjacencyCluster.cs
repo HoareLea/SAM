@@ -326,7 +326,7 @@ namespace SAM.Analytical
                         }
                         while (names.Contains(name));
 
-                        Space space = new Space(name, shell.InternalPoint3D(silverSpacing, tolerance));
+                        Space space = new Space(name, shell.CalculatedInternalPoint3D(silverSpacing, tolerance));
                         names.Add(name);
                         spaces_Shell.Add(space);
 
