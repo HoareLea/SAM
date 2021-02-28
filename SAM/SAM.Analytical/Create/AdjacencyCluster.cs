@@ -357,7 +357,7 @@ namespace SAM.Analytical
 
                         Panel panel_New = null;
 
-                        int index = tuples.FindIndex(x => face3D_New.Inside(x.Item1));
+                        int index = tuples.FindIndex(x => face3D_New.Distance(tuples[0].Item1) < tolerance);
                         if (index != -1)
                             panel_New = tuples[index].Item2;
 

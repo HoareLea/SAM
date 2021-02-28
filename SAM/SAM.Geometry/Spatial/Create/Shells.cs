@@ -99,7 +99,7 @@ namespace SAM.Geometry.Spatial
 
             tuples.Sort((x, y) => x.Item1.CompareTo(y.Item1));
             Dictionary<double, List<Tuple<Point2D, Face2D>>> dictionary_Split = new Dictionary<double, List<Tuple<Point2D, Face2D>>>();
-            for (int i = 1; i < tuples.Count - 1; i++)
+            for (int i = 0; i < tuples.Count - 1; i++)
             {
                 Tuple<double, List<Face2D>> Tuple_Bottom = tuples[i];
                 Tuple<double, List<Face2D>> Tuple_Top = tuples[i + 1];
@@ -145,8 +145,8 @@ namespace SAM.Geometry.Spatial
 
             for (int i = 0; i < tuples.Count - 1; i++)
             {
-                double elevation_Top = tuples[i].Item1;
-                double elevation_Bottom = tuples[i + 1].Item1;
+                double elevation_Bottom = tuples[i].Item1;
+                double elevation_Top = tuples[i + 1].Item1;
 
                 Plane plane_Top = Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Top)) as Plane;
                 Plane plane_Bottom = Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Bottom)) as Plane;
@@ -181,7 +181,8 @@ namespace SAM.Geometry.Spatial
                         Segment3D segment3D_Top = plane_Top.Convert(segment2D);
                         Segment3D segment3D_Bottom = plane_Bottom.Convert(segment2D);
 
-                        Polygon3D polygon3D = Polygon3D(new Point3D[] { segment3D_Bottom[0], segment3D_Bottom[1], segment3D_Top[1], segment3D_Top[0] }, tolerance);
+                        //Polygon3D polygon3D = Polygon3D(new Point3D[] { segment3D_Bottom[0], segment3D_Bottom[1], segment3D_Top[1], segment3D_Top[0] }, tolerance);
+                        Polygon3D polygon3D = Polygon3D(new Point3D[] { segment3D_Top[0], segment3D_Top[1], segment3D_Bottom[1], segment3D_Bottom[0] }, tolerance);
                         //Polygon3D polygon3D = Polygon3D(new Point3D[] { segment3D_Top[0], segment3D_Top[1], segment3D_Bottom[1], segment3D_Bottom[0] }, tolerance);
                         //Polygon3D polygon3D = new Polygon3D(new Point3D[] { segment3D_Top[0], segment3D_Top[1], segment3D_Bottom[1], segment3D_Bottom[0] });
                         if (polygon3D == null)
@@ -189,6 +190,46 @@ namespace SAM.Geometry.Spatial
 
                         Face3D face3D = new Face3D(polygon3D);
                         face3Ds_Shell.Add(face3D);
+                    }
+
+                    //Faces Bottom
+                    List<Face2D> face2Ds_Bottom = new List<Face2D>() { face2D };
+                    if (dictionary_Split.Count > 0)
+                    {
+                        if (dictionary_Split.TryGetValue(elevation_Bottom, out List<Tuple<Point2D, Face2D>> tuples_Split))
+                        {
+                            BoundingBox2D boundingBox2D = face2D.GetBoundingBox();
+                            if (boundingBox2D != null)
+                            {
+                                List<Face2D> face2Ds_Bottom_Temp = new List<Face2D>();
+                                foreach (Tuple<Point2D, Face2D> tuple in tuples_Split)
+                                {
+                                    if (!boundingBox2D.InRange(tuple.Item1, tolerance))
+                                        continue;
+
+                                    if (!face2D.InRange(tuple.Item1))
+                                        continue;
+
+                                    face2Ds_Bottom_Temp.Add(tuple.Item2);
+                                }
+
+                                if (face2Ds_Bottom_Temp != null && face2Ds_Bottom_Temp.Count > 0)
+                                    face2Ds_Bottom = face2Ds_Bottom_Temp;
+                            }
+
+                        }
+                    }
+
+                    foreach (Face2D face2D_Bottom in face2Ds_Bottom)
+                    {
+                        Face3D face3D_Bottom = plane_Top.Convert(face2D_Bottom);
+                        if (face3D_Bottom == null)
+                            continue;
+
+                        Face2D face2D_Bottom_Flipped = plane_Bottom_Flipped.Convert(face3D_Bottom);
+                        face3D_Bottom = plane_Bottom_Flipped.Convert(face2D_Bottom_Flipped);
+
+                        face3Ds_Shell.Add(face3D_Bottom);
                     }
 
 
@@ -226,47 +267,6 @@ namespace SAM.Geometry.Spatial
                         if (face3D_Top == null)
                             continue;
                         face3Ds_Shell.Add(face3D_Top);
-                    }
-
-
-                    //Faces Bottom
-                    List<Face2D> face2Ds_Bottom = new List<Face2D>() { face2D };
-                    if (dictionary_Split.Count > 0)
-                    {
-                        if (dictionary_Split.TryGetValue(elevation_Bottom, out List<Tuple<Point2D, Face2D>> tuples_Split))
-                        {
-                            BoundingBox2D boundingBox2D = face2D.GetBoundingBox();
-                            if (boundingBox2D != null)
-                            {
-                                List<Face2D> face2Ds_Top_Temp = new List<Face2D>();
-                                foreach (Tuple<Point2D, Face2D> tuple in tuples_Split)
-                                {
-                                    if (!boundingBox2D.InRange(tuple.Item1, tolerance))
-                                        continue;
-
-                                    if (!face2D.InRange(tuple.Item1))
-                                        continue;
-
-                                    face2Ds_Top_Temp.Add(tuple.Item2);
-                                }
-
-                                if (face2Ds_Top_Temp != null && face2Ds_Top_Temp.Count > 0)
-                                    face2Ds_Top = face2Ds_Top_Temp;
-                            }
-
-                        }
-                    }
-
-                    foreach (Face2D face2D_Bottom in face2Ds_Bottom)
-                    {
-                        Face3D face3D_Bottom = plane_Top.Convert(face2D_Bottom);
-                        if (face3D_Bottom == null)
-                            continue;
-
-                        Face2D face2D_Bottom_Flipped = plane_Bottom_Flipped.Convert(face3D_Bottom);
-                        face3D_Bottom = plane_Bottom_Flipped.Convert(face2D_Bottom_Flipped);
-
-                        face3Ds_Shell.Add(face3D_Bottom);
                     }
 
                     Shell shell = new Shell(face3Ds_Shell);
