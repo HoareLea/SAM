@@ -17,7 +17,7 @@ To install **SAM** from .exe just download and run [latest installer](https://gi
 SAM is free software licenced under GNU Lesser General Public Licence - [https://www.gnu.org/licenses/lgpl-3.0.html](https://www.gnu.org/licenses/lgpl-3.0.html)  
 Each contributor holds copyright over their respective contributions.
 The project versioning (Git) records all such contribution source information.
-See [LICENSE](https://github.com/BHoM/BHoM/blob/master/LICENSE) and [COPYRIGHT_HEADER](https://github.com/HoareLea/SAM/blob/master/COPYRIGHT_HEADER.txt).
+See [LICENSE](https://github.com/HoareLea/SAM_gbXML/blob/master/LICENSE) and [COPYRIGHT_HEADER](https://github.com/HoareLea/SAM/blob/master/COPYRIGHT_HEADER.txt).
 
 
 
