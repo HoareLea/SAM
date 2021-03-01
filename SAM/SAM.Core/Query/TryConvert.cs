@@ -299,6 +299,14 @@ namespace SAM.Core
                             return true;
                         }
                     }
+                    else if(typeof(SAMColor).IsAssignableFrom(type))
+                    {
+                        if(int.TryParse((string)@object, out int int_color))
+                        {
+                            result = new SAMColor(Convert.ToColor(int_color));
+                            return true;
+                        }
+                    }
                 }
 
                 if (type_Object == typeof(SAMColor))
