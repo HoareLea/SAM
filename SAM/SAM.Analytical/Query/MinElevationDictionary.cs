@@ -42,7 +42,28 @@ namespace SAM.Analytical
 
             if (filterElevations)
             {
-                panels_Levels = panels_Temp.FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Floor);
+                panels_Levels = new List<Panel>();
+                foreach(Panel panel in panels_Temp)
+                {
+                    if(PanelGroup(panel.PanelType) == Analytical.PanelGroup.Floor)
+                    {
+                        panels_Levels.Add(panel);
+                        continue;
+                    }
+
+                    if (panel.PanelType != Analytical.PanelType.Air)
+                        continue;
+
+                    Geometry.Spatial.Vector3D normal = panel.Normal;
+                    if (normal == null)
+                        continue;
+
+                    if(normal.AlmostEqual(Geometry.Spatial.Vector3D.WorldZ) || normal.GetNegated().AlmostEqual(Geometry.Spatial.Vector3D.WorldZ) )
+                    {
+                        panels_Levels.Add(panel);
+                        continue;
+                    }
+                }
 
                 if (panels_Levels.Count == 0)
                     panels_Levels = panels_Temp.FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Wall && x.PanelType != Analytical.PanelType.CurtainWall);

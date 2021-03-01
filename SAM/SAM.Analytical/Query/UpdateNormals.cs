@@ -29,7 +29,7 @@ namespace SAM.Analytical
             foreach(Space space in spaces)
             {
                 Shell shell = null;
-                Dictionary<Panel, Vector3D> dictionary = adjacencyCluster.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
+                Dictionary<Panel, Vector3D> dictionary = result.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
                 if (dictionary == null)
                     continue;
 
