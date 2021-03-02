@@ -42,7 +42,7 @@ namespace SAM.Analytical
                     result.Add(tuple.Item3);
             }
 
-            if (result != null && tuples.Count > 0)
+            if (result != null && result.Count > 0)
                 return result;
 
             foreach (Tuple<bool, bool, Shell> tuple in tuples)
@@ -51,7 +51,7 @@ namespace SAM.Analytical
                     result.Add(tuple.Item3);
             }
 
-            if (result != null && tuples.Count > 0)
+            if (result != null && result.Count > 0)
                 return result;
 
             return tuples.ConvertAll(x => x.Item3);

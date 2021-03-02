@@ -45,7 +45,11 @@ namespace SAM.Analytical
                 panels_Levels = new List<Panel>();
                 foreach(Panel panel in panels_Temp)
                 {
-                    if(PanelGroup(panel.PanelType) == Analytical.PanelGroup.Floor)
+                    PanelGroup panelGroup = PanelGroup(panel.PanelType);
+                    if (panelGroup == Analytical.PanelGroup.Undefined)
+                        continue;
+
+                    if (panelGroup == Analytical.PanelGroup.Floor || panelGroup == Analytical.PanelGroup.Roof)
                     {
                         panels_Levels.Add(panel);
                         continue;
