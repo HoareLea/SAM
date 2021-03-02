@@ -35,15 +35,51 @@ namespace SAM.Analytical
             dictionary.Remove(Analytical.PanelGroup.Floor);
             dictionary.Remove(Analytical.PanelGroup.Roof);
 
-            panels_Temp = MergeOverlapPanels_FloorAndRoof(panels_Temp, offset, ref redundantPanels, setDefaultConstruction, tolerance);
+            panels_Temp = MergeOverlapPanels_Horizontal(panels_Temp, offset, ref redundantPanels, setDefaultConstruction, tolerance);
             if (panels_Temp != null && panels_Temp.Count > 0)
                 result.AddRange(panels_Temp);
 
             panels_Temp = dictionary[Analytical.PanelGroup.Wall];
             dictionary.Remove(Analytical.PanelGroup.Wall);
-            panels_Temp = MergeOverlapPanels_Walls(panels_Temp, offset, ref redundantPanels, setDefaultConstruction, tolerance);
+            panels_Temp = MergeOverlapPanels_Vertical(panels_Temp, offset, ref redundantPanels, setDefaultConstruction, tolerance);
             if (panels_Temp != null && panels_Temp.Count > 0)
                 result.AddRange(panels_Temp);
+
+            panels_Temp = dictionary[Analytical.PanelGroup.Other];
+            dictionary.Remove(Analytical.PanelGroup.Other);
+            if (panels_Temp != null && panels_Temp.Count > 0)
+            {
+                List<Panel> panels_Temp_Horizontal = new List<Panel>();
+                List<Panel> panels_Temp_Vertical = new List<Panel>();
+                foreach (Panel panel in panels_Temp)
+                {
+                    if (panel.PanelType != Analytical.PanelType.Air)
+                        continue;
+                    
+                    if (panel.Normal.Collinear(Vector3D.WorldZ, tolerance))
+                        panels_Temp_Horizontal.Add(panel);
+                    else
+                        panels_Temp_Vertical.Add(panel);
+                }
+
+                if (panels_Temp_Horizontal.Count > 0)
+                {
+                    panels_Temp_Horizontal = MergeOverlapPanels_Horizontal(panels_Temp_Horizontal, offset, ref redundantPanels, setDefaultConstruction, tolerance);
+
+                    if (panels_Temp_Horizontal != null && panels_Temp_Horizontal.Count > 0)
+                        result.AddRange(panels_Temp_Horizontal);
+                }
+
+                if (panels_Temp_Vertical.Count > 0)
+                {
+                    panels_Temp_Vertical = MergeOverlapPanels_Vertical(panels_Temp_Vertical, offset, ref redundantPanels, setDefaultConstruction, tolerance);
+
+                    if (panels_Temp_Vertical != null && panels_Temp_Vertical.Count > 0)
+                        result.AddRange(panels_Temp_Vertical);
+                }
+            }
+
+                
 
             foreach (KeyValuePair<PanelGroup, List<Panel>> keyValuePair in dictionary)
                 if (keyValuePair.Value != null && keyValuePair.Value.Count > 0)
@@ -82,7 +118,7 @@ namespace SAM.Analytical
         }
 
 
-        private static List<Panel> MergeOverlapPanels_FloorAndRoof(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
+        private static List<Panel> MergeOverlapPanels_Horizontal(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
         {
             List<Tuple<double, Panel>> tuples = new List<Tuple<double, Panel>>();
             foreach (Panel panel in panels)
@@ -263,7 +299,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        private static List<Panel> MergeOverlapPanels_Walls(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
+        private static List<Panel> MergeOverlapPanels_Vertical(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool setDefaultConstruction, double tolerance = Core.Tolerance.Distance)
         {
             List<Tuple<Face3D, Panel>> tuples = panels?.ToList().ConvertAll(x => new Tuple<Face3D, Panel>(x.GetFace3D(), x));
             if (tuples == null || tuples.Count == 0)
