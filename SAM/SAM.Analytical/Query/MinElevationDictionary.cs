@@ -49,7 +49,7 @@ namespace SAM.Analytical
                     if (panelGroup == Analytical.PanelGroup.Undefined)
                         continue;
 
-                    if (panelGroup == Analytical.PanelGroup.Floor || panelGroup == Analytical.PanelGroup.Roof)
+                    if (panelGroup == Analytical.PanelGroup.Floor)
                     {
                         panels_Levels.Add(panel);
                         continue;
