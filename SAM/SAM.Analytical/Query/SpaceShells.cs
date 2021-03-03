@@ -23,7 +23,7 @@ namespace SAM.Analytical
                 if (boundingBox3D_Shell == null)
                     continue;
 
-                bool inside_1 = shell.Inside(point3D, silverSpacing, tolerance);
+                bool inside_1 = shell.Inside(point3D, silverSpacing, tolerance) || shell.On(point3D, tolerance);
                 bool inside_2 = shell.Inside(point3D_Moved, silverSpacing, tolerance);
 
                 if (!inside_1 && !inside_2)
