@@ -93,17 +93,57 @@ namespace SAM.Geometry.Spatial
             if (length < silverSpacing)
                 return false;
 
-            Point3D point3D_InternalPoint = boundaries.First().Item2.InternalPoint3D(tolerance);
-            if(point3D_InternalPoint != null)
-                vector3D = new Vector3D(point3D, point3D_InternalPoint).Unit * length;
+            //------NEW CODE START-----
 
             Segment3D segment3D = new Segment3D(point3D, vector3D);
 
             List<Point3D> point3Ds = IntersectionPoint3Ds(segment3D, false, tolerance);
-            if (point3Ds == null || point3Ds.Count == 0)
-                return false;
+            if (point3Ds != null || point3Ds.Count != 0)
+                if (point3Ds.Find(x => OnEdge(x, tolerance)) == null)
+                    return point3Ds.Count % 2 != 0;
 
-            return point3Ds.Count % 2 != 0;
+            foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries)
+            {
+                Point3D point3D_InternalPoint = boundary.Item2.InternalPoint3D(tolerance);
+                if (point3D_InternalPoint == null)
+                    continue;
+
+                Vector3D normal =  boundary.Item2.GetPlane()?.Normal;
+                if (normal == null)
+                    continue;
+
+                Vector3D vector3D_Temp = new Vector3D(point3D, point3D_InternalPoint);
+                if (vector3D_Temp.IsPerpedicular(normal, tolerance))
+                    continue;
+
+                vector3D_Temp = vector3D_Temp * length;
+
+                Segment3D segment3D_Temp = new Segment3D(point3D, vector3D_Temp);
+                List<Point3D> point3Ds_Temp = IntersectionPoint3Ds(segment3D_Temp, false, tolerance);
+                if (point3Ds_Temp == null || point3Ds_Temp.Count == 0)
+                    continue;
+
+                if (point3Ds_Temp.Find(x => OnEdge(x, tolerance)) != null)
+                    continue;
+
+                return point3Ds_Temp.Count % 2 != 0;
+            }
+
+            return false;
+
+            //------NEW CODE END-----
+
+            //Point3D point3D_InternalPoint = boundaries.First().Item2.InternalPoint3D(tolerance);
+            //if(point3D_InternalPoint != null)
+            //    vector3D = new Vector3D(point3D, point3D_InternalPoint).Unit * length;
+
+            //Segment3D segment3D = new Segment3D(point3D, vector3D);
+
+            //List<Point3D> point3Ds = IntersectionPoint3Ds(segment3D, false, tolerance);
+            //if (point3Ds == null || point3Ds.Count == 0)
+            //    return false;
+
+            //return point3Ds.Count % 2 != 0;
         }
 
         public List<Point3D> IntersectionPoint3Ds(Segment3D segment3D, bool includeInternalEdges = true, double tolerance = Core.Tolerance.Distance)
@@ -146,6 +186,26 @@ namespace SAM.Geometry.Spatial
                     continue;
 
                 if (boundary.Item2.On(point3D, tolerance))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool OnEdge(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3D == null || boundaries == null || boundingBox3D == null)
+                return false;
+
+            if (!boundingBox3D.InRange(point3D, tolerance))
+                return false;
+
+            foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries)
+            {
+                if (!boundary.Item1.InRange(point3D, tolerance))
+                    continue;
+
+                if (boundary.Item2.OnEdge(point3D, tolerance))
                     return true;
             }
 

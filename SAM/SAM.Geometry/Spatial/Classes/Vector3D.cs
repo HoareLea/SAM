@@ -91,6 +91,11 @@ namespace SAM.Geometry.Spatial
             return System.Math.Abs(System.Math.Abs(this * vector3D) - (Length * vector3D.Length)) <= tolerance;
         }
 
+        public bool IsPerpedicular(Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
+        {
+            return (vector3D.coordinates[0] * coordinates[0]) + (vector3D.coordinates[1] * coordinates[1]) + (vector3D.coordinates[2] * coordinates[2]) <= tolerance;
+        }
+
         public bool SameHalf(Vector3D vector3D)
         {
             if (vector3D == null)
