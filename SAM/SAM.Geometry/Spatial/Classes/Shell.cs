@@ -98,7 +98,7 @@ namespace SAM.Geometry.Spatial
             Segment3D segment3D = new Segment3D(point3D, vector3D);
 
             List<Point3D> point3Ds = IntersectionPoint3Ds(segment3D, false, tolerance);
-            if (point3Ds != null || point3Ds.Count != 0)
+            if (point3Ds != null && point3Ds.Count != 0)
                 if (point3Ds.Find(x => OnEdge(x, tolerance)) == null)
                     return point3Ds.Count % 2 != 0;
 
@@ -113,9 +113,7 @@ namespace SAM.Geometry.Spatial
                     continue;
 
                 Vector3D vector3D_Temp = new Vector3D(point3D, point3D_InternalPoint);
-                if (vector3D_Temp.IsPerpedicular(normal, tolerance))
-                    continue;
-
+                vector3D_Temp.Normalize();
                 vector3D_Temp = vector3D_Temp * length;
 
                 Segment3D segment3D_Temp = new Segment3D(point3D, vector3D_Temp);
