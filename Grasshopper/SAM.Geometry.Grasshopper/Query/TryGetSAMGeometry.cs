@@ -48,6 +48,7 @@ namespace SAM.Geometry.Grasshopper
                 else if(@object is T)
                 {
                     sAMGeometries = new List<T>() { (T)@object };
+                    return true;
                 }
             }
 
