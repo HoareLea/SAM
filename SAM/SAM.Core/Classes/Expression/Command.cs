@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,89 +7,11 @@ namespace SAM.Core
 {
     public class Command : IJSAMObject
     {
-        public static class Operators
-        {
-            public static class Arithmetic
-            {
-                public const string Addition = "+";
-                public const string Subtraction = "-";
-                public const string Multiplication = "*";
-                public const string Division = "/";
-                public const string Modulus = "%";
-            }
-
-            public static class Relational
-            {
-                public const string Equal = "==";
-                public const string NotEqual = "!=";
-                public const string GreaterThan = ">";
-                public const string LessThan = ">=";
-                public const string LessThanOrEqual = "<=";
-            }
-
-            public static class Bitwise
-            {
-                public const string And = "&";
-                public const string Or = "|";
-                public const string Xor = "^";
-                public const string Not = "~";
-                public const string LeftShift = "<<";
-                public const string RightShift = ">>";
-            }
-
-            public static class Logical
-            {
-                public const string And = "&&";
-                public const string Or = "||";
-                public const string Not = "!";
-            }
-
-            public static class Assignment
-            {
-                public const string Assign = "=";
-                public const string AddAndAssign = "+=";
-                public const string SubstractAndAssign = "-=";
-                public const string MultiplyAndAssign = "*=";
-                public const string DivideAndAssign = "/=";
-                public const string ModulusAndAssign = "%=";
-                public const string LeftShiftAndAssign = "<<=";
-                public const string RightShiftAndAssign = ">>=";
-                public const string BitwiseAndAndAssign = "&=";
-                public const string BitwiseOrAndAssign = "|=";
-                public const string BitwiseXorAndAssign = "^=";
-            }
-
-            public static class IncrementAndDecrement
-            {
-                public const string Increment = "++";
-                public const string Decrement = "--";
-            }
-
-        }
-
-        public static class Syntax
-        {
-            public const char Apostrophe = '\'';
-            public const char OpeningBracket = '(';
-            public const char ClosingBracket = ')';
-        }
-        
-        
         private string text;
-        
-        public Command(string text)
+
+        public Command(string text = null)
         {
             this.text = text;
-        }
-
-        public Command(Command command)
-        {
-            text = command?.text;
-        }
-
-        public Command(JObject jObject)
-        {
-            FromJObject(jObject);
         }
 
         public List<Command> GetCommands()
@@ -96,57 +19,161 @@ namespace SAM.Core
             if (string.IsNullOrEmpty(text))
                 return null;
 
-            int count = text.Length;
+            string text_Trim = text.Trim();
 
-            bool[] apostropheMask = Enumerable.Repeat(false, count).ToArray();
-            bool[] openingBracketMask = Enumerable.Repeat(false, count).ToArray();
-            bool[] closingBracketMask = Enumerable.Repeat(false, count).ToArray();
+            if (string.IsNullOrEmpty(text_Trim))
+                return null;
 
-            for(int i=0; i < count; i++)
+            int count = text_Trim.Length;
+
+            char textOperator = SAM.Core.Query.Operator(CommandOperator.Text)[0];
+            char openingBracketOperator = SAM.Core.Query.Operator(CommandOperator.OpeningBracket)[0];
+            char closingBracketOperator = SAM.Core.Query.Operator(CommandOperator.ClosingBracket)[0];
+
+            bool[] textMask = new bool[count];
+            bool[] openingBracketMask = new bool[count];
+            bool[] closingBracketMask = new bool[count];
+
+            for (int i = 0; i < count; i++)
             {
-                switch(text[i])
-                {
-                    case Syntax.Apostrophe:
-                        apostropheMask[i] = true;
-                        break;
-
-                    case Syntax.OpeningBracket:
-                        openingBracketMask[i] = true;
-                        break;
-
-                    case Syntax.ClosingBracket:
-                        closingBracketMask[i] = true;
-                        break;
-                }
+                char @char = text[i];
+                textMask[i] = @char == textOperator;
+                openingBracketMask[i] = @char == openingBracketOperator;
+                closingBracketMask[i] = @char == closingBracketOperator;
             }
 
             for (int i = 1; i < count; i++)
             {
-                if(apostropheMask[i] && apostropheMask[i -1])
+                if (textMask[i] && textMask[i - 1])
                 {
-                    apostropheMask[i] = false;
-                    apostropheMask[i - 1] = false;
+                    textMask[i] = false;
+                    textMask[i - 1] = false;
                 }
             }
 
-            int index = 0;
-            while(index < count)
+            bool[] expressionMask = new bool[count];
+            bool apostrophe = false;
+            bool braket = false;
+            for (int i = 0; i < count; i++)
             {
-                switch(text[index])
+                if (!apostrophe && textMask[i])
+                    apostrophe = true;
+                else if (apostrophe && textMask[i])
+                    apostrophe = false;
+
+                if (!apostrophe)
                 {
-                    case Syntax.Apostrophe:
-
-                        break;
-
-                    case Syntax.OpeningBracket:
-
-                        break;
+                    if (!braket && openingBracketMask[i])
+                        braket = true;
+                    else if (braket && closingBracketMask[i])
+                        braket = false;
                 }
 
-                index++;
+                expressionMask[i] = !apostrophe && !braket;
             }
 
-            throw new System.NotImplementedException();
+            List<int> indexes = new List<int>();
+            List<string> operators = new List<string>();
+
+            List<Enum> enums = SAM.Core.Query.Enums(typeof(ArithmeticOperator), typeof(RelationalOperator), typeof(LogicalOperator), typeof(IncrementAndDecrementOperator), typeof(AssignmentOperator), typeof(BitwiseOperator));
+            foreach (Enum @enum in enums)
+            {
+                string @operator = SAM.Core.Query.Operator(@enum);
+                List<int> indexes_Temp = text_Trim.IndexesOf(@operator);
+                indexes_Temp?.RemoveAll(x => !expressionMask[x]);
+                if (indexes_Temp != null && indexes_Temp.Count > 0)
+                {
+                    indexes.AddRange(indexes_Temp);
+                    operators.Add(@operator);
+                }
+            }
+
+            indexes.Add(0);
+
+            indexes = indexes.Distinct().ToList();
+
+            indexes.Sort();
+
+            List<Command> result = new List<Command>();
+            while (indexes.Count > 0)
+            {
+                int startIndex = indexes[0];
+                indexes.RemoveAt(0);
+
+                int endIndex = count;
+                if (indexes.Count > 0)
+                    endIndex = indexes[0];
+
+                int length = endIndex - startIndex;
+
+                string text_Temp = text_Trim.Substring(startIndex);
+                List<string> operators_Temp = operators.FindAll(x => text_Temp.StartsWith(x));
+                if (operators_Temp == null || operators_Temp.Count == 0)
+                {
+                    text_Temp = text_Temp.Substring(0, length).Trim();
+                    result.Add(new Command(text_Temp));
+                    continue;
+                }
+
+                string @operator = null;
+                if (operators_Temp.Count == 1)
+                {
+                    @operator = operators_Temp[0];
+                }
+                else
+                {
+                    operators_Temp.Sort((x, y) => y.Length.CompareTo(x.Length));
+                    @operator = operators_Temp[0];
+
+                    int index = startIndex;
+                    while (indexes.Count > 0 && indexes[0] < index + @operator.Length)
+                        indexes.RemoveAt(0);
+
+                    endIndex = count;
+                    if (indexes.Count > 0)
+                        endIndex = indexes[0];
+
+                    length = endIndex - startIndex;
+                }
+
+                if (string.IsNullOrWhiteSpace(@operator))
+                    continue;
+
+                result.Add(new Command(@operator));
+                result.Add(new Command(text_Temp.Substring(@operator.Length, length - @operator.Length).Trim()));
+            }
+
+            return result;
+        }
+
+        public bool IsOperator(out Enum @enum)
+        {
+            @enum = CommandOperator.Undefined;
+
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            List<Enum> enums = SAM.Core.Query.Enums(
+                typeof(LogicalOperator),
+                typeof(ArithmeticOperator),
+                typeof(RelationalOperator),
+                typeof(IncrementAndDecrementOperator),
+                typeof(AssignmentOperator),
+                typeof(BitwiseOperator),
+                typeof(CommandOperator));
+
+            string text_Trim = text.Trim();
+            foreach (Enum enum_Temp in enums)
+            {
+                string @operator = SAM.Core.Query.Operator(enum_Temp);
+                if (text_Trim == @operator)
+                {
+                    @enum = enum_Temp;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public string Text
@@ -155,6 +182,15 @@ namespace SAM.Core
             {
                 return text;
             }
+            set
+            {
+                text = value;
+            }
+        }
+
+        public override string ToString()
+        {
+            return text;
         }
 
         public bool FromJObject(JObject jObject)

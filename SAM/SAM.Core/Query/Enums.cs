@@ -1,6 +1,7 @@
 ﻿using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core
 {
@@ -68,6 +69,24 @@ namespace SAM.Core
 
                     result.Add(@enum);
                 }
+            }
+
+            return result;
+        }
+
+        public static List<Enum> Enums(params Type[] types)
+        {
+            if (types == null)
+                return null;
+
+            List<Enum> result = new List<Enum>();
+            foreach(Type type in types)
+            {
+                if (type == null || !type.IsEnum)
+                    continue;
+
+                foreach (Enum @enum in System.Enum.GetValues(type))
+                    result.Add(@enum);
             }
 
             return result;

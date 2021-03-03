@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Accuracy\Rounding.cs" />
     <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Attributes\Enum\Operator.cs" />
     <Compile Include="Attributes\Enum\AssociatedTypes.cs" />
     <Compile Include="Attributes\Parameter\IntegerParameterValue.cs" />
     <Compile Include="Attributes\Parameter\NullableParameterValue.cs" />
@@ -79,6 +80,13 @@
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Create\ZipArchiveInfo.cs" />
     <Compile Include="Enums\AccessType.cs" />
+    <Compile Include="Enums\Operator\ArithmeticOperator.cs" />
+    <Compile Include="Enums\Operator\BitwiseOperator.cs" />
+    <Compile Include="Enums\Operator\CommandOperator.cs" />
+    <Compile Include="Enums\Operator\AssignmentOperator.cs" />
+    <Compile Include="Enums\Operator\IncrementAndDecrementOperator.cs" />
+    <Compile Include="Enums\Operator\RelationalOperator.cs" />
+    <Compile Include="Enums\Operator\LogicalOperator.cs" />
     <Compile Include="Enums\Week.cs" />
     <Compile Include="Enums\SAMFileType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
@@ -155,6 +163,7 @@
     <Compile Include="Modify\RemoveValue.cs" />
     <Compile Include="Modify\Copy.cs" />
     <Compile Include="Modify\SetValue.cs" />
+    <Compile Include="Query\Operator.cs" />
     <Compile Include="Query\Indexes.cs" />
     <Compile Include="Query\TryGetJToken.cs" />
     <Compile Include="Query\Transpose.cs" />
