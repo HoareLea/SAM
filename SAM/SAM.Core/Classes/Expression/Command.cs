@@ -36,6 +36,7 @@ namespace SAM.Core
             List<string> operators = new List<string>();
 
             List<Enum> enums = Query.Enums(typeof(ArithmeticOperator), typeof(RelationalOperator), typeof(LogicalOperator), typeof(IncrementAndDecrementOperator), typeof(AssignmentOperator), typeof(BitwiseOperator));
+            enums.Add(CommandOperator.Comment);
             foreach (Enum @enum in enums)
             {
                 string @operator = Query.Operator(@enum);
@@ -100,10 +101,21 @@ namespace SAM.Core
                 if (string.IsNullOrWhiteSpace(@operator))
                     continue;
 
-                result.Add(new Command(@operator));
-                text_Temp = text_Temp.Substring(@operator.Length, length - @operator.Length).Trim();
-                if (!string.IsNullOrWhiteSpace(text_Temp))
-                    result.Add(new Command());
+                if(@operator == CommandOperator.Comment.Operator())
+                {
+                    text_Temp = text_Temp.Substring(0, length).Trim();
+                    if (!string.IsNullOrWhiteSpace(text_Temp))
+                        result.Add(new Command(text_Temp));
+                }
+                else
+                {
+                    result.Add(new Command(@operator));
+                    text_Temp = text_Temp.Substring(@operator.Length, length - @operator.Length).Trim();
+                    if (!string.IsNullOrWhiteSpace(text_Temp))
+                        result.Add(new Command(text_Temp));
+                }
+
+
             }
 
             return result;
@@ -166,6 +178,24 @@ namespace SAM.Core
 
                 result[i] = !apostrophe && !braket;
             }
+
+            //string commentOperator = Query.Operator(CommandOperator.Comment);
+            //List<int> indexes = Query.IndexesOf(text_Trim, commentOperator);
+            //if(indexes != null && indexes.Count > 0)
+            //{
+            //    indexes.RemoveAll(x => !result[x]);
+            //    if(indexes.Count != 0)
+            //    {
+            //        if (indexes.Count > 1)
+            //        {
+            //            indexes.Sort();
+            //            indexes.Reverse();
+            //        }
+
+            //        for (int i = indexes[0]; i < count; i++)
+            //            result[i] = false;
+            //    }
+            //}
 
             return result;
         }
@@ -280,6 +310,9 @@ namespace SAM.Core
             if (IsObject(out string result))
                 return false;
 
+            if (IsComment(out string comment))
+                return false;
+
             if (IsValue(out object value))
                 return false;
 
@@ -308,57 +341,32 @@ namespace SAM.Core
 
             return false;
         }
+
+        public bool IsComment(out string comment)
+        {
+            comment = null;
+
+            if (string.IsNullOrEmpty(text))
+                return false;
+
+            string text_Trim = text.Trim();
+
+            if (string.IsNullOrEmpty(text_Trim))
+                return false;
+
+            string objectOperator = Query.Operator(CommandOperator.Comment);
+
+            if (!text_Trim.StartsWith(objectOperator))
+                return false;
+
+            comment = text_Trim.Substring(objectOperator.Length);
+            return true;
+        }
         
         public bool IsEmpty()
         {
             return string.IsNullOrWhiteSpace(text);
         }
-
-        //public string GetComment()
-        //{
-        //    if (string.IsNullOrEmpty(text))
-        //        return null;
-
-        //    string text_Trim = text.Trim();
-
-        //    if (string.IsNullOrEmpty(text_Trim))
-        //        return null;
-
-        //    int index = GetCommentIndex();
-        //    if (index == -1)
-        //        return null;
-
-        //    string @operator = Query.Operator(CommandOperator.Comment);
-
-        //    return text_Trim.Substring(index + @operator.Length);
-        //}
-
-        //public int GetCommentIndex()
-        //{
-        //    if (string.IsNullOrEmpty(text))
-        //        return -1;
-
-        //    string text_Trim = text.Trim();
-
-        //    if (string.IsNullOrEmpty(text_Trim))
-        //        return -1;
-
-        //    string @operator = Query.Operator(CommandOperator.Comment);
-
-        //    List<int> indexes = Query.IndexesOf(text_Trim, @operator);
-        //    if (indexes == null || indexes.Count == 0)
-        //        return -1;
-
-        //    bool[] mask = GetMask();
-
-        //    indexes.RemoveAll(x => !mask[x]);
-        //    if (indexes.Count == 0)
-        //        return -1;
-
-        //    indexes.Sort();
-
-        //    return indexes[0];
-        //}
 
         public string Text
         {
