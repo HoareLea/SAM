@@ -178,25 +178,6 @@ namespace SAM.Core
 
                 result[i] = !apostrophe && !braket;
             }
-
-            //string commentOperator = Query.Operator(CommandOperator.Comment);
-            //List<int> indexes = Query.IndexesOf(text_Trim, commentOperator);
-            //if(indexes != null && indexes.Count > 0)
-            //{
-            //    indexes.RemoveAll(x => !result[x]);
-            //    if(indexes.Count != 0)
-            //    {
-            //        if (indexes.Count > 1)
-            //        {
-            //            indexes.Sort();
-            //            indexes.Reverse();
-            //        }
-
-            //        for (int i = indexes[0]; i < count; i++)
-            //            result[i] = false;
-            //    }
-            //}
-
             return result;
         }
 
@@ -303,6 +284,9 @@ namespace SAM.Core
                 return false;
 
             if (IsValue(out object value))
+                return false;
+
+            if (IsDirective(out string directive))
                 return false;
 
             bool[] mask = GetMask();
