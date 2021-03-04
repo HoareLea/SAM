@@ -207,7 +207,7 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(text))
                 return false;
 
-            List<Enum> enums = SAM.Core.Query.Enums(
+            List<Enum> enums = Query.Enums(
                 typeof(LogicalOperator),
                 typeof(ArithmeticOperator),
                 typeof(RelationalOperator),
@@ -232,23 +232,7 @@ namespace SAM.Core
 
         public bool IsObject(out string name)
         {
-            name = null;
-
-            if (string.IsNullOrEmpty(text))
-                return false;
-
-            string text_Trim = text.Trim();
-
-            if (string.IsNullOrEmpty(text_Trim))
-                return false;
-
-            string objectOperator = Query.Operator(CommandOperator.Object);
-
-            if (!text_Trim.StartsWith(objectOperator))
-                return false;
-
-            name = text_Trim.Substring(objectOperator.Length);
-            return true;
+            return IsCommandOperator(CommandOperator.Object, out name);
         }
 
         public bool IsValue(out object value)
@@ -289,6 +273,11 @@ namespace SAM.Core
             }
 
             return false;
+        }
+
+        public bool IsDirective(out string directive)
+        {
+            return IsCommandOperator(CommandOperator.Directive, out directive);
         }
 
         public bool IsCommand(out string name, out Command command)
@@ -344,23 +333,7 @@ namespace SAM.Core
 
         public bool IsComment(out string comment)
         {
-            comment = null;
-
-            if (string.IsNullOrEmpty(text))
-                return false;
-
-            string text_Trim = text.Trim();
-
-            if (string.IsNullOrEmpty(text_Trim))
-                return false;
-
-            string objectOperator = Query.Operator(CommandOperator.Comment);
-
-            if (!text_Trim.StartsWith(objectOperator))
-                return false;
-
-            comment = text_Trim.Substring(objectOperator.Length);
-            return true;
+            return IsCommandOperator(CommandOperator.Comment, out comment);
         }
         
         public bool IsEmpty()
@@ -405,6 +378,27 @@ namespace SAM.Core
                 jObject.Add("Text", text);
 
             return jObject;
+        }
+
+        private bool IsCommandOperator(CommandOperator commandOperator, out string value)
+        {
+            value = null;
+
+            if (string.IsNullOrEmpty(text))
+                return false;
+
+            string text_Trim = text.Trim();
+
+            if (string.IsNullOrEmpty(text_Trim))
+                return false;
+
+            string objectOperator = Query.Operator(commandOperator);
+
+            if (!text_Trim.StartsWith(objectOperator))
+                return false;
+
+            value = text_Trim.Substring(objectOperator.Length);
+            return true;
         }
 
         public static bool operator ==(Command command, object @object)
