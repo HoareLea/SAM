@@ -9,15 +9,25 @@ namespace SAM.Geometry.Spatial
             if (geometry3Ds == null)
                 return null;
 
-            List<Face3D> faces = new List<Face3D>();
+            List<Face3D> result = new List<Face3D>();
             foreach (ISAMGeometry3D geometry3D in geometry3Ds)
             {
                 if (geometry3D is Segment3D)
                     continue;
 
+                if(geometry3D is Shell)
+                {
+                    List<Face3D> face3Ds = ((Shell)geometry3D).Face3Ds;
+                    if(face3Ds != null && face3Ds.Count > 0)
+                    {
+                        result.AddRange(face3Ds);
+                        continue;
+                    }
+                }
+
                 if (geometry3D is Face3D)
                 {
-                    faces.Add((Face3D)geometry3D);
+                    result.Add((Face3D)geometry3D);
                     continue;
                 }
 
@@ -28,18 +38,18 @@ namespace SAM.Geometry.Spatial
                     if (plane == null)
                         continue;
 
-                    faces.Add(new Face3D(closedPlanar3D));
+                    result.Add(new Face3D(closedPlanar3D));
                     continue;
                 }
 
                 if (geometry3D is ICurvable3D)
                 {
                     List<Point3D> point3Ds = ((ICurvable3D)geometry3D).GetCurves().ConvertAll(x => x.GetStart());
-                    faces.Add(new Face3D(new Polygon3D(point3Ds, tolerance)));
+                    result.Add(new Face3D(new Polygon3D(point3Ds, tolerance)));
                 }
             }
 
-            return faces;
+            return result;
         }
     }
 }
