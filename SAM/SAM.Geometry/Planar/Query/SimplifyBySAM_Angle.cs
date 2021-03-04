@@ -37,8 +37,17 @@ namespace SAM.Geometry.Planar
                 if (!segment2D.Direction.SameHalf(segment2D_Temp.Direction))
                     segment2D.Reverse();
 
-                segment2Ds_Temp.ForEach(x => segment2Ds.Remove(x));
-                segment2Ds.Add(segment2D);
+                List<int> indexes = segment2Ds_Temp.ConvertAll(x => segment2Ds.IndexOf(x));
+                
+                indexes.Sort();
+                indexes.Reverse();
+                indexes.ForEach(x => segment2Ds.RemoveAt(x));
+                
+                indexes.Reverse();
+                segment2Ds.Insert(indexes[0], segment2D);
+
+                //segment2Ds_Temp.ForEach(x => segment2Ds.Remove(x));
+                //segment2Ds.Add(segment2D);
                 result = true;
             }
 

@@ -82,7 +82,10 @@ namespace SAM.Core
                 {
                     foreach (string parameterName in name.Split(','))
                     {
-                        parameters.Add(variables[parameterName.Trim()]);
+                        if (!variables.TryGetValue(parameterName.Trim(), out object parameter))
+                            return false;
+
+                        parameters.Add(parameter);
                     }
                 }
 
