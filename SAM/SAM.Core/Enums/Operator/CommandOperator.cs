@@ -11,5 +11,6 @@ namespace SAM.Core
         [Operator("("), Description("Opening Bracket")] OpeningBracket,
         [Operator(")"), Description("Closing Bracket")] ClosingBracket,
         [Operator("$"), Description("Object")] Object,
+        [Operator("//"), Description("Comment")] Comment,
     }
 }

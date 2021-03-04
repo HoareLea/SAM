@@ -26,6 +26,7 @@ namespace SAM.Core
                 return null;
 
             int count = text_Trim.Length;
+                
 
             bool[] mask = GetMask();
             if (mask == null)
@@ -70,7 +71,8 @@ namespace SAM.Core
                 if (operators_Temp == null || operators_Temp.Count == 0)
                 {
                     text_Temp = text_Temp.Substring(0, length).Trim();
-                    result.Add(new Command(text_Temp));
+                    if (!string.IsNullOrWhiteSpace(text_Temp))
+                        result.Add(new Command(text_Temp));
                     continue;
                 }
 
@@ -99,7 +101,9 @@ namespace SAM.Core
                     continue;
 
                 result.Add(new Command(@operator));
-                result.Add(new Command(text_Temp.Substring(@operator.Length, length - @operator.Length).Trim()));
+                text_Temp = text_Temp.Substring(@operator.Length, length - @operator.Length).Trim();
+                if (!string.IsNullOrWhiteSpace(text_Temp))
+                    result.Add(new Command());
             }
 
             return result;
@@ -304,6 +308,57 @@ namespace SAM.Core
 
             return false;
         }
+        
+        public bool IsEmpty()
+        {
+            return string.IsNullOrWhiteSpace(text);
+        }
+
+        //public string GetComment()
+        //{
+        //    if (string.IsNullOrEmpty(text))
+        //        return null;
+
+        //    string text_Trim = text.Trim();
+
+        //    if (string.IsNullOrEmpty(text_Trim))
+        //        return null;
+
+        //    int index = GetCommentIndex();
+        //    if (index == -1)
+        //        return null;
+
+        //    string @operator = Query.Operator(CommandOperator.Comment);
+
+        //    return text_Trim.Substring(index + @operator.Length);
+        //}
+
+        //public int GetCommentIndex()
+        //{
+        //    if (string.IsNullOrEmpty(text))
+        //        return -1;
+
+        //    string text_Trim = text.Trim();
+
+        //    if (string.IsNullOrEmpty(text_Trim))
+        //        return -1;
+
+        //    string @operator = Query.Operator(CommandOperator.Comment);
+
+        //    List<int> indexes = Query.IndexesOf(text_Trim, @operator);
+        //    if (indexes == null || indexes.Count == 0)
+        //        return -1;
+
+        //    bool[] mask = GetMask();
+
+        //    indexes.RemoveAll(x => !mask[x]);
+        //    if (indexes.Count == 0)
+        //        return -1;
+
+        //    indexes.Sort();
+
+        //    return indexes[0];
+        //}
 
         public string Text
         {
