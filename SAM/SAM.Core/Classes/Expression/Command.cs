@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace SAM.Core
@@ -26,61 +27,19 @@ namespace SAM.Core
 
             int count = text_Trim.Length;
 
-            char textOperator = SAM.Core.Query.Operator(CommandOperator.Text)[0];
-            char openingBracketOperator = SAM.Core.Query.Operator(CommandOperator.OpeningBracket)[0];
-            char closingBracketOperator = SAM.Core.Query.Operator(CommandOperator.ClosingBracket)[0];
-
-            bool[] textMask = new bool[count];
-            bool[] openingBracketMask = new bool[count];
-            bool[] closingBracketMask = new bool[count];
-
-            for (int i = 0; i < count; i++)
-            {
-                char @char = text[i];
-                textMask[i] = @char == textOperator;
-                openingBracketMask[i] = @char == openingBracketOperator;
-                closingBracketMask[i] = @char == closingBracketOperator;
-            }
-
-            for (int i = 1; i < count; i++)
-            {
-                if (textMask[i] && textMask[i - 1])
-                {
-                    textMask[i] = false;
-                    textMask[i - 1] = false;
-                }
-            }
-
-            bool[] expressionMask = new bool[count];
-            bool apostrophe = false;
-            bool braket = false;
-            for (int i = 0; i < count; i++)
-            {
-                if (!apostrophe && textMask[i])
-                    apostrophe = true;
-                else if (apostrophe && textMask[i])
-                    apostrophe = false;
-
-                if (!apostrophe)
-                {
-                    if (!braket && openingBracketMask[i])
-                        braket = true;
-                    else if (braket && closingBracketMask[i])
-                        braket = false;
-                }
-
-                expressionMask[i] = !apostrophe && !braket;
-            }
+            bool[] mask = GetMask();
+            if (mask == null)
+                return null;
 
             List<int> indexes = new List<int>();
             List<string> operators = new List<string>();
 
-            List<Enum> enums = SAM.Core.Query.Enums(typeof(ArithmeticOperator), typeof(RelationalOperator), typeof(LogicalOperator), typeof(IncrementAndDecrementOperator), typeof(AssignmentOperator), typeof(BitwiseOperator));
+            List<Enum> enums = Query.Enums(typeof(ArithmeticOperator), typeof(RelationalOperator), typeof(LogicalOperator), typeof(IncrementAndDecrementOperator), typeof(AssignmentOperator), typeof(BitwiseOperator));
             foreach (Enum @enum in enums)
             {
-                string @operator = SAM.Core.Query.Operator(@enum);
+                string @operator = Query.Operator(@enum);
                 List<int> indexes_Temp = text_Trim.IndexesOf(@operator);
-                indexes_Temp?.RemoveAll(x => !expressionMask[x]);
+                indexes_Temp?.RemoveAll(x => !mask[x]);
                 if (indexes_Temp != null && indexes_Temp.Count > 0)
                 {
                     indexes.AddRange(indexes_Temp);
@@ -146,6 +105,67 @@ namespace SAM.Core
             return result;
         }
 
+        public bool[] GetMask()
+        {
+            if (string.IsNullOrEmpty(text))
+                return null;
+
+            string text_Trim = text.Trim();
+
+            if (string.IsNullOrEmpty(text_Trim))
+                return null;
+
+            int count = text_Trim.Length;
+
+            char textOperator = Query.Operator(CommandOperator.Text)[0];
+            char openingBracketOperator = Query.Operator(CommandOperator.OpeningBracket)[0];
+            char closingBracketOperator = Query.Operator(CommandOperator.ClosingBracket)[0];
+
+            bool[] textMask = new bool[count];
+            bool[] openingBracketMask = new bool[count];
+            bool[] closingBracketMask = new bool[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                char @char = text[i];
+                textMask[i] = @char == textOperator;
+                openingBracketMask[i] = @char == openingBracketOperator;
+                closingBracketMask[i] = @char == closingBracketOperator;
+            }
+
+            for (int i = 1; i < count; i++)
+            {
+                if (textMask[i] && textMask[i - 1])
+                {
+                    textMask[i] = false;
+                    textMask[i - 1] = false;
+                }
+            }
+
+            bool[] result = new bool[count];
+            bool apostrophe = false;
+            bool braket = false;
+            for (int i = 0; i < count; i++)
+            {
+                if (!apostrophe && textMask[i])
+                    apostrophe = true;
+                else if (apostrophe && textMask[i])
+                    apostrophe = false;
+
+                if (!apostrophe)
+                {
+                    if (!braket && openingBracketMask[i])
+                        braket = true;
+                    else if (braket && closingBracketMask[i])
+                        braket = false;
+                }
+
+                result[i] = !apostrophe && !braket;
+            }
+
+            return result;
+        }
+
         public bool IsOperator(out Enum @enum)
         {
             @enum = CommandOperator.Undefined;
@@ -172,6 +192,115 @@ namespace SAM.Core
                     return true;
                 }
             }
+
+            return false;
+        }
+
+        public bool IsObject(out string name)
+        {
+            name = null;
+
+            if (string.IsNullOrEmpty(text))
+                return false;
+
+            string text_Trim = text.Trim();
+
+            if (string.IsNullOrEmpty(text_Trim))
+                return false;
+
+            string objectOperator = Query.Operator(CommandOperator.Object);
+
+            if (!text_Trim.StartsWith(objectOperator))
+                return false;
+
+            name = text_Trim.Substring(objectOperator.Length);
+            return true;
+        }
+
+        public bool IsValue(out object value)
+        {
+            value = null;
+
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            string text_Trim = text.Trim();
+
+            if (text_Trim == "null")
+            {
+                value = null;
+                return true;
+            }
+
+            string @operator = Query.Operator(CommandOperator.Text);
+
+            if(text_Trim.Length >= 2 && text_Trim[0] == @operator[0] && text_Trim[text_Trim.Length - 1] == @operator[0])
+            {
+                value = text_Trim.Substring(1, text_Trim.Length - 2);
+                return true;
+            }
+
+            decimal @decimal;
+
+            if (decimal.TryParse(text_Trim, NumberStyles.Integer, CultureInfo.InvariantCulture, out @decimal))
+            {
+                value = System.Convert.ToInt32(@decimal);
+                return true;
+            }
+
+            if (decimal.TryParse(text_Trim, NumberStyles.Float, CultureInfo.InvariantCulture, out @decimal))
+            {
+                value = System.Convert.ToDouble(@decimal);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IsCommand(out string name, out Command command)
+        {
+            name = null;
+            command = null;
+
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            string text_Trim = text.Trim();
+
+            if (string.IsNullOrWhiteSpace(text_Trim))
+                return false;
+
+            if (IsOperator(out Enum @enum))
+                return false;
+
+            if (IsObject(out string result))
+                return false;
+
+            if (IsValue(out object value))
+                return false;
+
+            bool[] mask = GetMask();
+            if (mask == null || mask.Length == 0)
+                return false;
+
+            int index = -1;
+            for (int i = 0; i < mask.Length; i++)
+                if (!mask[i])
+                {
+                    name = text_Trim.Substring(0, i);
+                    index = i;
+                    break;
+                }
+
+            if (index == -1)
+                return false;
+
+            for (int i = index; i < mask.Length; i++)
+                if (mask[i])
+                {
+                    command = new Command(text_Trim.Substring(index + 1, i - index));
+                    return true;
+                }
 
             return false;
         }
