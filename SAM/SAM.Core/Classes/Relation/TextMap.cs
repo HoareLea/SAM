@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace SAM.Core
 {
@@ -45,8 +46,7 @@ namespace SAM.Core
             if (dictionary == null)
                 dictionary = new Dictionary<string, HashSet<string>>();
 
-            HashSet<string> values_Temp = null;
-            if (!dictionary.TryGetValue(key, out values_Temp))
+            if (!dictionary.TryGetValue(key, out HashSet<string> values_Temp))
             {
                 values_Temp = new HashSet<string>();
                 dictionary[key] = values_Temp;
@@ -296,6 +296,33 @@ namespace SAM.Core
             }
 
             return true;
+        }
+
+        public string Replace(string @string)
+        {
+            if (@string == null)
+                return null;
+
+            string result = @string;
+
+            if (dictionary == null || dictionary.Count == 0)
+                return result;
+
+            foreach(KeyValuePair<string, HashSet<string>> keyValuePair in dictionary)
+            {
+                if (keyValuePair.Key == null)
+                    continue;
+
+                foreach (string pattern in keyValuePair.Value)
+                {
+                    if (pattern == null)
+                        continue;
+
+                    result = Regex.Replace(result, pattern, keyValuePair.Key);
+                }
+            }
+
+            return result;
         }
     }
 }
