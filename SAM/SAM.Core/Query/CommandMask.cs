@@ -39,23 +39,21 @@ namespace SAM.Core
 
             bool[] result = new bool[count];
             bool apostrophe = false;
-            bool braket = false;
+            int braketCount = 0;
             for (int i = 0; i < count; i++)
             {
-                if (!apostrophe && textMask[i])
-                    apostrophe = true;
-                else if (apostrophe && textMask[i])
-                    apostrophe = false;
+                if (textMask[i])
+                    apostrophe = !apostrophe;
 
                 if (!apostrophe)
                 {
-                    if (!braket && openingBracketMask[i])
-                        braket = true;
-                    else if (braket && closingBracketMask[i])
-                        braket = false;
+                    if (openingBracketMask[i])
+                        braketCount++;
+                    else if (closingBracketMask[i])
+                        braketCount--;
                 }
 
-                result[i] = !apostrophe && !braket;
+                result[i] = !apostrophe && braketCount == 0;
             }
 
             if(includeComment)

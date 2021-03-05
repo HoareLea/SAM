@@ -178,7 +178,7 @@ namespace SAM.Core
             for (int i = index_Start; i < mask.Length; i++)
                 if (mask[i])
                 {
-                    index_End = i;
+                    index_End = i - 1;
                     break;
                 }
 
