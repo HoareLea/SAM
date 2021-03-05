@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 
 namespace SAM.Core
 {
@@ -20,165 +19,10 @@ namespace SAM.Core
             if (string.IsNullOrEmpty(text))
                 return null;
 
-            string text_Trim = text.Trim();
-
-            if (string.IsNullOrEmpty(text_Trim))
-                return null;
-
-            int count = text_Trim.Length;
-                
-
-            bool[] mask = GetMask();
-            if (mask == null)
-                return null;
-
-            List<int> indexes = new List<int>();
-            List<string> operators = new List<string>();
-
             List<Enum> enums = Query.Enums(typeof(ArithmeticOperator), typeof(RelationalOperator), typeof(LogicalOperator), typeof(IncrementAndDecrementOperator), typeof(AssignmentOperator), typeof(BitwiseOperator));
             enums.Add(CommandOperator.Comment);
-            foreach (Enum @enum in enums)
-            {
-                string @operator = Query.Operator(@enum);
-                List<int> indexes_Temp = text_Trim.IndexesOf(@operator);
-                indexes_Temp?.RemoveAll(x => !mask[x]);
-                if (indexes_Temp != null && indexes_Temp.Count > 0)
-                {
-                    indexes.AddRange(indexes_Temp);
-                    operators.Add(@operator);
-                }
-            }
 
-            indexes.Add(0);
-
-            indexes = indexes.Distinct().ToList();
-
-            indexes.Sort();
-
-            List<Command> result = new List<Command>();
-            while (indexes.Count > 0)
-            {
-                int startIndex = indexes[0];
-                indexes.RemoveAt(0);
-
-                int endIndex = count;
-                if (indexes.Count > 0)
-                    endIndex = indexes[0];
-
-                int length = endIndex - startIndex;
-
-                string text_Temp = text_Trim.Substring(startIndex);
-                List<string> operators_Temp = operators.FindAll(x => text_Temp.StartsWith(x));
-                if (operators_Temp == null || operators_Temp.Count == 0)
-                {
-                    text_Temp = text_Temp.Substring(0, length).Trim();
-                    if (!string.IsNullOrWhiteSpace(text_Temp))
-                        result.Add(new Command(text_Temp));
-                    continue;
-                }
-
-                string @operator = null;
-                if (operators_Temp.Count == 1)
-                {
-                    @operator = operators_Temp[0];
-                }
-                else
-                {
-                    operators_Temp.Sort((x, y) => y.Length.CompareTo(x.Length));
-                    @operator = operators_Temp[0];
-
-                    int index = startIndex;
-                    while (indexes.Count > 0 && indexes[0] < index + @operator.Length)
-                        indexes.RemoveAt(0);
-
-                    endIndex = count;
-                    if (indexes.Count > 0)
-                        endIndex = indexes[0];
-
-                    length = endIndex - startIndex;
-                }
-
-                if (string.IsNullOrWhiteSpace(@operator))
-                    continue;
-
-                if(@operator == CommandOperator.Comment.Operator())
-                {
-                    text_Temp = text_Temp.Substring(0, length).Trim();
-                    if (!string.IsNullOrWhiteSpace(text_Temp))
-                        result.Add(new Command(text_Temp));
-                }
-                else
-                {
-                    result.Add(new Command(@operator));
-                    text_Temp = text_Temp.Substring(@operator.Length, length - @operator.Length).Trim();
-                    if (!string.IsNullOrWhiteSpace(text_Temp))
-                        result.Add(new Command(text_Temp));
-                }
-
-
-            }
-
-            return result;
-        }
-
-        public bool[] GetMask()
-        {
-            if (string.IsNullOrEmpty(text))
-                return null;
-
-            string text_Trim = text.Trim();
-
-            if (string.IsNullOrEmpty(text_Trim))
-                return null;
-
-            int count = text_Trim.Length;
-
-            char textOperator = Query.Operator(CommandOperator.Text)[0];
-            char openingBracketOperator = Query.Operator(CommandOperator.OpeningBracket)[0];
-            char closingBracketOperator = Query.Operator(CommandOperator.ClosingBracket)[0];
-
-            bool[] textMask = new bool[count];
-            bool[] openingBracketMask = new bool[count];
-            bool[] closingBracketMask = new bool[count];
-
-            for (int i = 0; i < count; i++)
-            {
-                char @char = text[i];
-                textMask[i] = @char == textOperator;
-                openingBracketMask[i] = @char == openingBracketOperator;
-                closingBracketMask[i] = @char == closingBracketOperator;
-            }
-
-            for (int i = 1; i < count; i++)
-            {
-                if (textMask[i] && textMask[i - 1])
-                {
-                    textMask[i] = false;
-                    textMask[i - 1] = false;
-                }
-            }
-
-            bool[] result = new bool[count];
-            bool apostrophe = false;
-            bool braket = false;
-            for (int i = 0; i < count; i++)
-            {
-                if (!apostrophe && textMask[i])
-                    apostrophe = true;
-                else if (apostrophe && textMask[i])
-                    apostrophe = false;
-
-                if (!apostrophe)
-                {
-                    if (!braket && openingBracketMask[i])
-                        braket = true;
-                    else if (braket && closingBracketMask[i])
-                        braket = false;
-                }
-
-                result[i] = !apostrophe && !braket;
-            }
-            return result;
+            return Create.Commands(text, enums);
         }
 
         public bool IsOperator(out Enum @enum)
@@ -200,7 +44,7 @@ namespace SAM.Core
             string text_Trim = text.Trim();
             foreach (Enum enum_Temp in enums)
             {
-                string @operator = SAM.Core.Query.Operator(enum_Temp);
+                string @operator = Query.Operator(enum_Temp);
                 if (text_Trim == @operator)
                 {
                     @enum = enum_Temp;
@@ -211,9 +55,35 @@ namespace SAM.Core
             return false;
         }
 
-        public bool IsObject(out string name)
+        public bool IsOperator()
         {
-            return IsCommandOperator(CommandOperator.Object, out name);
+            return IsOperator(out Enum @enum);
+        }
+
+        public bool IsObject(out string name, out List<Command> members)
+        {
+            members = null;
+            name = null;
+
+            if (!IsCommandOperator(CommandOperator.Object, out string value))
+                return false;
+
+            List<Command> commands = Create.Commands(value, new Enum[] { CommandOperator.MemberSeparator });
+            if (commands == null || commands.Count == 0)
+                return false;
+
+            name = commands[0].Text;
+            commands.RemoveAt(0);
+
+            if (commands.Count != 0)
+                members = commands.FindAll(x => !x.IsOperator(out Enum @enum));
+
+            return true;
+        }
+
+        public bool IsObject()
+        {
+            return IsObject(out string name, out List<Command> members);
         }
 
         public bool IsValue(out object value)
@@ -256,15 +126,26 @@ namespace SAM.Core
             return false;
         }
 
+        public bool IsValue()
+        {
+            return IsValue(out object value);
+        }
+
         public bool IsDirective(out string directive)
         {
             return IsCommandOperator(CommandOperator.Directive, out directive);
         }
 
-        public bool IsCommand(out string name, out Command command)
+        public bool IsDirective()
+        {
+            return IsDirective(out string directive);
+        }
+
+        public bool IsCommand(out string name, out Command command, out List<Command> members)
         {
             name = null;
             command = null;
+            members = null;
 
             if (string.IsNullOrWhiteSpace(text))
                 return false;
@@ -274,50 +155,63 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(text_Trim))
                 return false;
 
-            if (IsOperator(out Enum @enum))
+            if (IsOperator() || IsObject() || IsComment() || IsValue() || IsDirective())
                 return false;
 
-            if (IsObject(out string result))
-                return false;
-
-            if (IsComment(out string comment))
-                return false;
-
-            if (IsValue(out object value))
-                return false;
-
-            if (IsDirective(out string directive))
-                return false;
-
-            bool[] mask = GetMask();
+            bool[] mask = Query.CommandMask(text_Trim);
             if (mask == null || mask.Length == 0)
                 return false;
 
-            int index = -1;
+            int index_Start = -1;
             for (int i = 0; i < mask.Length; i++)
                 if (!mask[i])
                 {
                     name = text_Trim.Substring(0, i);
-                    index = i;
+                    index_Start = i;
                     break;
                 }
 
-            if (index == -1)
+            if (index_Start == -1)
                 return false;
 
-            for (int i = index; i < mask.Length; i++)
+            int index_End = -1;
+            for (int i = index_Start; i < mask.Length; i++)
                 if (mask[i])
                 {
-                    command = new Command(text_Trim.Substring(index + 1, i - index));
-                    return true;
+                    index_End = i;
+                    break;
                 }
 
-            return false;
+            if (index_End == -1)
+                return false;
+
+            command = new Command(text_Trim.Substring(index_Start + 1, index_End - index_Start));
+
+            text_Trim = text_Trim.Substring(index_Start);
+            List<Command> commands = Create.Commands(text_Trim, new Enum[] { CommandOperator.MemberSeparator });
+            if(commands != null && commands.Count != 0)
+            {
+                commands.RemoveAt(0);
+                if (commands.Count != 0)
+                    members = commands.FindAll(x => !x.IsOperator(out Enum @enum_Temp));
+            }
+            
+            return true;
+        }
+
+        public bool IsCommand()
+        {
+            return IsCommand(out string name, out Command command, out List<Command> members);
         }
 
         public bool IsComment(out string comment)
         {
             return IsCommandOperator(CommandOperator.Comment, out comment);
+        }
+
+        public bool IsComment()
+        {
+            return IsComment(out string comment);
         }
         
         public bool IsEmpty()

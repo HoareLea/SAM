@@ -13,5 +13,6 @@ namespace SAM.Core
         [Operator("$"), Description("Object")] Object,
         [Operator("//"), Description("Comment")] Comment,
         [Operator("using"), Description("Directive")] Directive,
+        [Operator("."), Description("Member Separator")] MemberSeparator,
     }
 }

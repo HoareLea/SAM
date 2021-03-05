@@ -78,6 +78,7 @@
     <Compile Include="Convert\ToJsonDocument\JsonDocument.cs" />
     <Compile Include="Convert\ToJsonElement\JsonElement.cs" />
     <Compile Include="Create\DelimitedFileTable.cs" />
+    <Compile Include="Create\Commands.cs" />
     <Compile Include="Create\ZipArchiveInfo.cs" />
     <Compile Include="Enums\AccessType.cs" />
     <Compile Include="Enums\Operator\ArithmeticOperator.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Modify\RemoveValue.cs" />
     <Compile Include="Modify\Copy.cs" />
     <Compile Include="Modify\SetValue.cs" />
+    <Compile Include="Query\CommandMask.cs" />
     <Compile Include="Query\Operator.cs" />
     <Compile Include="Query\Indexes.cs" />
     <Compile Include="Query\TryGetJToken.cs" />
