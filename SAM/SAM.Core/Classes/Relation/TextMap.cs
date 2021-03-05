@@ -313,12 +313,12 @@ namespace SAM.Core
                 if (keyValuePair.Key == null)
                     continue;
 
-                foreach (string pattern in keyValuePair.Value)
+                foreach (string replacement in keyValuePair.Value)
                 {
-                    if (pattern == null)
+                    if (replacement == null)
                         continue;
 
-                    result = Regex.Replace(result, pattern, keyValuePair.Key);
+                    result = Regex.Replace(result, keyValuePair.Key, replacement);
                 }
             }
 

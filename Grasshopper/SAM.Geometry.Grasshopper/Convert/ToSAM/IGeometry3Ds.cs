@@ -71,7 +71,7 @@ namespace SAM.Geometry.Grasshopper
                     mesh.Append(meshes);
                 }
                 Brep brep_Mesh = Brep.CreateFromMesh(mesh, true);
-                brep_Mesh.MergeCoplanarFaces(tolerance);
+                brep_Mesh.MergeCoplanarFaces(tolerance); //Does not work for all cases
 
                 foreach (BrepFace brepFace in brep_Mesh.Faces)
                     brepFaces.Add(brepFace);
