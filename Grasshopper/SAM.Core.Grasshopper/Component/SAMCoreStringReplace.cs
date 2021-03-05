@@ -44,6 +44,11 @@ namespace SAM.Core.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_text", NickName = "_text", Description = "Text", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooTextMapParam() { Name = "_textMap", NickName = "_textMap", Description = "SAM Core TextMap", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Integer param_Integer = new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "maxLength_", NickName = "maxLength_", Description = "Max Text Length", Access = GH_ParamAccess.item, Optional = true };
+                param_Integer.SetPersistentData(int.MaxValue);
+                result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Voluntary));
+
                 return result.ToArray();
             }
         }
@@ -87,10 +92,22 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
+            int maxLength = int.MaxValue;
+            index = Params.IndexOfInputParam("maxLength_");
+            if (index != -1)
+            {
+                int maxLength_Temp = int.MaxValue;
+                if (dataAccess.GetData(index, ref maxLength_Temp))
+                    maxLength = maxLength_Temp;
+            }
+
             index = Params.IndexOfOutputParam("Text");
             if(index != -1)
             {
                 string result = textMap.Replace(text);
+                if (result.Length > maxLength)
+                    result = result.Substring(0, maxLength);
+
                 dataAccess.SetData(index, result);
             }
         }
