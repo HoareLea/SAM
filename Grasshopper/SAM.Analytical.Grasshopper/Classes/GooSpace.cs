@@ -7,6 +7,8 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -112,6 +114,36 @@ namespace SAM.Analytical.Grasshopper
                 (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
                 obj_ids.Add(uuid);
             }
+        }
+
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendItem(menu, "Bake By Internal Condition", Menu_BakeByInternalCondition, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Level", Menu_BakeByLevel, VolatileData.AllData(true).Any());
+
+            //Menu_AppendSeparator(menu);
+
+            base.AppendAdditionalMenuItems(menu);
+        }
+
+        private void Menu_BakeByInternalCondition(object sender, EventArgs e)
+        {
+            BakeGeometry_ByInternalCondition(RhinoDoc.ActiveDoc);
+        }
+
+        public void BakeGeometry_ByInternalCondition(RhinoDoc doc)
+        {
+            //Modify.BakeGeometry_ByInternalCondition(doc, VolatileData, false, Core.Tolerance.Distance);
+        }
+
+        private void Menu_BakeByLevel(object sender, EventArgs e)
+        {
+            BakeGeometry_ByLevel(RhinoDoc.ActiveDoc);
+        }
+
+        public void BakeGeometry_ByLevel(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByLevel(doc, VolatileData, false, Core.Tolerance.Distance);
         }
     }
 }
