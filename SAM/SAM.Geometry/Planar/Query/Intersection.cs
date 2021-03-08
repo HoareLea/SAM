@@ -118,7 +118,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             if (geometry is LineString)
-                return new List<Segment2D>(((LineString)geometry).ToSAM().GetSegments());               
+                return new List<Segment2D>(((LineString)geometry).ToSAM().GetSegments());
 
             if (geometry is MultiLineString)
             {
