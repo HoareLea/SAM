@@ -9,7 +9,8 @@ namespace SAM.Analytical.Grasshopper
     {
         public static void BakeGeometry_ByLevel(this RhinoDoc rhinoDoc, global::Grasshopper.Kernel.Data.IGH_Structure gH_Structure, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
-            if (rhinoDoc == null)
+            Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
+            if (layerTable == null)
                 return;
 
             Dictionary<string, List<Geometry.Spatial.Point3D>> dictionary = new Dictionary<string, List<Geometry.Spatial.Point3D>>();
@@ -42,18 +43,18 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            Layer layer_SAM = Core.Grasshopper.Modify.AddSAMLayer(layerTable);
+            if (layer_SAM == null)
+                return;
+
             foreach (KeyValuePair<string, List<Geometry.Spatial.Point3D>> keyValuePair in dictionary)
-                BakeGeometry_Level(rhinoDoc, keyValuePair.Value, keyValuePair.Key);
+                BakeGeometry_Level(rhinoDoc, keyValuePair.Value, keyValuePair.Key, layer_SAM.Id);
         }
 
-        public static void BakeGeometry_Level(this RhinoDoc rhinoDoc, IEnumerable<Geometry.Spatial.Point3D> point3Ds, string levelName)
+        public static void BakeGeometry_Level(this RhinoDoc rhinoDoc, IEnumerable<Geometry.Spatial.Point3D> point3Ds, string levelName, Guid parentLayerId)
         {
             Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
             if (layerTable == null)
-                return;
-
-            Layer layer_SAM = Core.Grasshopper.Modify.AddSAMLayer(layerTable);
-            if (layer_SAM == null)
                 return;
 
             int index = -1;
@@ -61,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
             index = layerTable.Add();
             Layer layer_Level = layerTable[index];
             layer_Level.Name = levelName;
-            layer_Level.ParentLayerId = layer_SAM.Id;
+            layer_Level.ParentLayerId = parentLayerId;
 
             int currentIndex = layerTable.CurrentLayerIndex;
 
