@@ -13,7 +13,7 @@ namespace SAM.Analytical.Grasshopper
             if (layerTable == null)
                 return;
 
-            Dictionary<string, List<Geometry.Spatial.Point3D>> dictionary = new Dictionary<string, List<Geometry.Spatial.Point3D>>();
+            List<Space> spaces = new List<Space>();
             foreach (var variable in gH_Structure.AllData(true))
             {
                 if (variable is GooSpace)
@@ -26,58 +26,67 @@ namespace SAM.Analytical.Grasshopper
                     if (location == null)
                         continue;
 
-                    string levelName = space.GetValue<string>(SpaceParameter.LevelName);
-                    if (string.IsNullOrWhiteSpace(levelName))
-                        levelName = "Level " + System.Math.Round(location.Z, 2).ToString();
-
-                    if (string.IsNullOrWhiteSpace(levelName))
-                        levelName = "???";
-
-                    if(!dictionary.TryGetValue(levelName, out List<Geometry.Spatial.Point3D> point3Ds))
-                    {
-                        point3Ds = new List<Geometry.Spatial.Point3D>();
-                        dictionary[levelName] = point3Ds;
-                    }
-
-                    point3Ds.Add(location);
+                    spaces.Add(space);
                 }
             }
 
-            Layer layer_SAM = Core.Grasshopper.Modify.AddSAMLayer(layerTable);
-            if (layer_SAM == null)
-                return;
-
-            foreach (KeyValuePair<string, List<Geometry.Spatial.Point3D>> keyValuePair in dictionary)
-                BakeGeometry_Level(rhinoDoc, keyValuePair.Value, keyValuePair.Key, layer_SAM.Id);
+            if (spaces != null && spaces.Count != 0)
+                BakeGeometry_ByLevel(rhinoDoc, spaces);
         }
 
-        public static void BakeGeometry_Level(this RhinoDoc rhinoDoc, IEnumerable<Geometry.Spatial.Point3D> point3Ds, string levelName, Guid parentLayerId)
+        public static void BakeGeometry_ByLevel(this RhinoDoc rhinoDoc, IEnumerable<Space> spaces)
         {
             Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
             if (layerTable == null)
                 return;
 
+            Layer layer_SAM = Core.Grasshopper.Modify.AddSAMLayer(layerTable);
+            if (layer_SAM == null)
+                return;
+
             int index = -1;
 
             index = layerTable.Add();
-            Layer layer_Level = layerTable[index];
-            layer_Level.Name = levelName;
-            layer_Level.ParentLayerId = parentLayerId;
+            Layer layer_Spaces = layerTable[index];
+            layer_Spaces.Name = "Spaces";
+            layer_Spaces.ParentLayerId = layer_SAM.Id;
 
             int currentIndex = layerTable.CurrentLayerIndex;
 
-            layerTable.SetCurrentLayerIndex(layer_Level.Index, true);
-
             ObjectAttributes objectAttributes = rhinoDoc.CreateDefaultAttributes();
 
+            Random random = new Random();
+
             List<Guid> guids = new List<Guid>();
-            foreach (Geometry.Spatial.Point3D point3D in point3Ds)
+            foreach (Space space in spaces)
             {
-                if (point3D == null)
+                Geometry.Spatial.Point3D location = space?.Location;
+                if (location == null)
                     continue;
 
+                string levelName = space.GetValue<string>(SpaceParameter.LevelName);
+                if (string.IsNullOrWhiteSpace(levelName))
+                    levelName = "Level " + System.Math.Round(location.Z, 2).ToString();
+
+                if (string.IsNullOrWhiteSpace(levelName))
+                    levelName = "???";
+
+                System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+
+                Layer layer_Level = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Spaces.Id, levelName, color);
+
+                string layerName = space.Name;
+                if (string.IsNullOrWhiteSpace(layerName))
+                    layerName = "???";
+
+                color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+
+                Layer layer_Space = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Level.Id, layerName, color);
+
+                layerTable.SetCurrentLayerIndex(layer_Space.Index, true);
+
                 Guid guid = default;
-                if(Geometry.Grasshopper.Modify.BakeGeometry(point3D, rhinoDoc, objectAttributes, out guid))
+                if (Geometry.Grasshopper.Modify.BakeGeometry(location, rhinoDoc, objectAttributes, out guid))
                     guids.Add(guid);
             }
 
