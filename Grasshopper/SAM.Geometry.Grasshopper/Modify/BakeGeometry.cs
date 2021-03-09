@@ -62,6 +62,8 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            //How to fill/add properties to object with guid (Name etc.)
+
             return false;
         }
     }
