@@ -227,6 +227,7 @@
     <Compile Include="Classes\GooDegreeOfActivity.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Modify\BakeGeometry_ByConstruction.cs" />
+    <Compile Include="Modify\BakeGeometry_ByInternalCondtion.cs" />
     <Compile Include="Modify\BakeGeometry_ByLevel.cs" />
     <Compile Include="Modify\BakeGeometry_ByPanelType.cs" />
     <Compile Include="Modify\BakeGeometry.cs" />

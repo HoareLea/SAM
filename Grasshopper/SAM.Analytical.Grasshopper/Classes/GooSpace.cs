@@ -133,7 +133,7 @@ namespace SAM.Analytical.Grasshopper
 
         public void BakeGeometry_ByInternalCondition(RhinoDoc doc)
         {
-            //Modify.BakeGeometry_ByInternalCondition(doc, VolatileData, false, Core.Tolerance.Distance);
+            Modify.BakeGeometry_ByInternalCondition(doc, VolatileData, false, Core.Tolerance.Distance);
         }
 
         private void Menu_BakeByLevel(object sender, EventArgs e)
