@@ -89,7 +89,7 @@ namespace SAM.Core.Grasshopper
                 jSAMObject = jSAMObjects?.FirstOrDefault();
             }
 
-            index = Params.IndexOfOutputParam("DelimitedFileTable");
+            index = Params.IndexOfOutputParam("SAMObject");
             if (index != -1)
                 dataAccess.SetData(index, jSAMObject);
         }
