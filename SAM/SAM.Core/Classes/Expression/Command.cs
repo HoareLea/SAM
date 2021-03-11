@@ -1,4 +1,16 @@
-﻿using Newtonsoft.Json.Linq;
+﻿//'SAM' + SAM.Core.Revit.Query.ParameterNamePrefix($Object_1) + '_PeakDate'
+//2 + 50 + SAM.Core.Revit.Query.Number($Object_1) + $Object_2
+//(2 + 50) / $Object_2
+//(2 + 10) < $Object_2
+//2 + 50 + Number(SAM.Core.Revit.Value($Object_1)) + $Object_2
+//50 + Number(SAM.Core.Revit.Value($Object_1 + 2)) + $Object_2
+//'SAM' + SAM.Core.Revit.Query.ParameterNamePrefix($Object_1.ToUpper()) + $Object_1.Length.ToString() + '_PeakDate'
+//$Object == SAM.Core.Revit.Value($Object_1)
+//$Object = SAM.Core.Revit.Value($Object_1)
+//SAM.Core.Revit.Query.Number($Object_1)
+//$Object == 2 + 50 + Number(SAM.Core.Revit.Value('Some Text (value)')) + $Object_2
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
