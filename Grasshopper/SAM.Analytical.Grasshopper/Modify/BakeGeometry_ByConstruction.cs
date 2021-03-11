@@ -58,7 +58,7 @@ namespace SAM.Analytical.Grasshopper
             layer_ApertureConstruction.Name = "ApertureConstruction";
             layer_ApertureConstruction.ParentLayerId = layer_SAM.Id;
 
-            int currentIndex = layerTable.CurrentLayerIndex;
+            //int currentIndex = layerTable.CurrentLayerIndex;
 
             ObjectAttributes objectAttributes = rhinoDoc.CreateDefaultAttributes();
 
@@ -90,7 +90,8 @@ namespace SAM.Analytical.Grasshopper
 
                 Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Construction.Id, layerName, color);
 
-                layerTable.SetCurrentLayerIndex(layer.Index, true);
+                //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                objectAttributes.LayerIndex = layer.Index;
 
                 Guid guid = default;
                 if (Modify.BakeGeometry(panel, rhinoDoc, objectAttributes, out guid, cutApertures, tolerance))
@@ -109,7 +110,8 @@ namespace SAM.Analytical.Grasshopper
 
                     layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureConstruction.Id, aperture.Name, color);
 
-                    layerTable.SetCurrentLayerIndex(layer.Index, true);
+                    //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                    objectAttributes.LayerIndex = layer.Index;
 
                     guid = default;
                     if (Modify.BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
@@ -117,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            layerTable.SetCurrentLayerIndex(currentIndex, true);
+            //layerTable.SetCurrentLayerIndex(currentIndex, true);
         }
     }
 }

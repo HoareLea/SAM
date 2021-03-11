@@ -51,7 +51,7 @@ namespace SAM.Analytical.Grasshopper
             layer_Spaces.Name = "Spaces";
             layer_Spaces.ParentLayerId = layer_SAM.Id;
 
-            int currentIndex = layerTable.CurrentLayerIndex;
+            //int currentIndex = layerTable.CurrentLayerIndex;
 
             ObjectAttributes objectAttributes = rhinoDoc.CreateDefaultAttributes();
 
@@ -80,14 +80,15 @@ namespace SAM.Analytical.Grasshopper
 
                 Layer layer_Space = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Level.Id, layerName, color);
 
-                layerTable.SetCurrentLayerIndex(layer_Space.Index, true);
+                //layerTable.SetCurrentLayerIndex(layer_Space.Index, true);
+                objectAttributes.LayerIndex = layer_Space.Index;
 
                 Guid guid = default;
-                if (Geometry.Grasshopper.Modify.BakeGeometry(location, rhinoDoc, objectAttributes, out guid))
+                if (BakeGeometry(space, rhinoDoc, objectAttributes, out guid))
                     guids.Add(guid);
             }
 
-            layerTable.SetCurrentLayerIndex(currentIndex, true);
+            //layerTable.SetCurrentLayerIndex(currentIndex, true);
         }
     }
 }

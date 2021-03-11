@@ -3,6 +3,7 @@ using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace SAM.Core.Grasshopper
@@ -81,6 +82,8 @@ namespace SAM.Core.Grasshopper
             }
 
             IJSAMObject jSAMObject = null;
+
+            NameValueCollection nwc = geometryBase.GetUserStrings();
 
             string @string = geometryBase.GetUserString("SAM");
             if (string.IsNullOrWhiteSpace(@string))
