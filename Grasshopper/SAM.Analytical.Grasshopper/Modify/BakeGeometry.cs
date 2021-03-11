@@ -14,17 +14,25 @@ namespace SAM.Analytical.Grasshopper
             if (panel == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
-            //string @string = panel.ToJObject()?.ToString();
-            //if (!string.IsNullOrWhiteSpace(@string))
-            //    objectAttributes.SetUserString("SAM", @string);
-
+            Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
             objectAttributes.Name = panel.Name;
+
+            bool result = true;
 
             Brep brep = panel.ToRhino(cutApertures, tolerance);
             if (brep == null)
-                return Geometry.Grasshopper.Modify.BakeGeometry(panel.GetFace3D(), rhinoDoc, objectAttributes, out guid);
+                result = Geometry.Grasshopper.Modify.BakeGeometry(panel.GetFace3D(), rhinoDoc, objectAttributes, out guid);
+            else
+                guid = rhinoDoc.Objects.AddBrep(brep, objectAttributes);
 
-            guid = rhinoDoc.Objects.AddBrep(brep, objectAttributes);
+            if (!result)
+                return false;
+
+            RhinoObject rhinoObject = rhinoDoc.Objects.FindId(guid);
+            if(rhinoObject != null)
+            {
+            }
+
             return true;
         }
 
@@ -35,10 +43,7 @@ namespace SAM.Analytical.Grasshopper
             if (aperture == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
-            //string @string = aperture.ToJObject()?.ToString();
-            //if (!string.IsNullOrWhiteSpace(@string))
-            //    objectAttributes.SetUserString("SAM", @string);
-
+            Core.Grasshopper.Modify.SetUserStrings(objectAttributes, aperture);
             objectAttributes.Name = aperture.Name;
 
             return Geometry.Grasshopper.Modify.BakeGeometry(aperture.GetFace3D(), rhinoDoc, objectAttributes, out guid);
@@ -51,6 +56,7 @@ namespace SAM.Analytical.Grasshopper
             if (space == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
+            Core.Grasshopper.Modify.SetUserStrings(objectAttributes, space);
             objectAttributes.Name = space.Name;
 
             return Geometry.Grasshopper.Modify.BakeGeometry(space.Location, rhinoDoc, objectAttributes, out guid);
