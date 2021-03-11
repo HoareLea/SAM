@@ -14,9 +14,9 @@ namespace SAM.Analytical.Grasshopper
             if (panel == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
-            string @string = panel.ToJObject()?.ToString();
-            if (!string.IsNullOrWhiteSpace(@string))
-                objectAttributes.SetUserString("SAM", @string);
+            //string @string = panel.ToJObject()?.ToString();
+            //if (!string.IsNullOrWhiteSpace(@string))
+            //    objectAttributes.SetUserString("SAM", @string);
 
             objectAttributes.Name = panel.Name;
 
@@ -35,9 +35,9 @@ namespace SAM.Analytical.Grasshopper
             if (aperture == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
-            string @string = aperture.ToJObject()?.ToString();
-            if (!string.IsNullOrWhiteSpace(@string))
-                objectAttributes.SetUserString("SAM", @string);
+            //string @string = aperture.ToJObject()?.ToString();
+            //if (!string.IsNullOrWhiteSpace(@string))
+            //    objectAttributes.SetUserString("SAM", @string);
 
             objectAttributes.Name = aperture.Name;
 
@@ -50,10 +50,6 @@ namespace SAM.Analytical.Grasshopper
 
             if (space == null || rhinoDoc == null || objectAttributes == null)
                 return false;
-
-            string @string = space.ToJObject()?.ToString();
-            if (!string.IsNullOrWhiteSpace(@string))
-                objectAttributes.SetUserString("SAM", @string);
 
             objectAttributes.Name = space.Name;
 

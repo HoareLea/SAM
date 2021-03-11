@@ -16,7 +16,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (sAMGeometry is Planar.Point2D)
             {
-                guid = rhinoDoc.Objects.AddPoint(((Planar.Point2D)sAMGeometry).ToRhino(), objectAttributes);
+                guid = rhinoDoc.Objects.AddPoint(new Point(((Planar.Point2D)sAMGeometry).ToRhino()), objectAttributes, null, false);
                 return true;
             }
 
@@ -27,7 +27,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (sAMGeometry is Spatial.Point3D)
             {
-                guid = rhinoDoc.Objects.AddPoint(((Spatial.Point3D)sAMGeometry).ToRhino(), objectAttributes);
+                guid = rhinoDoc.Objects.AddPoint(new Point(((Spatial.Point3D)sAMGeometry).ToRhino()), objectAttributes, null, false);
                 return true;
             }
 
@@ -61,8 +61,6 @@ namespace SAM.Geometry.Grasshopper
                 guid = rhinoDoc.Objects.Add(geometryBase, objectAttributes);
                 return true;
             }
-
-            //How to fill/add properties to object with guid (Name etc.)
 
             return false;
         }
