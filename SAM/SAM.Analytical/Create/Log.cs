@@ -80,8 +80,10 @@ namespace SAM.Analytical
                                 case PanelType.FloorRaised:
                                 case PanelType.UndergroundCeiling:
                                 case PanelType.WallInternal:
-                                    if (spaces_Panel.Count < 2)
+                                    if (spaces_Panel == null || spaces_Panel.Count == 0)
                                         result.Add("{0} Panel {1} (Guid: {2}) has no adjacent spaces.", LogRecordType.Warning, panelType.Text(), panel.Name, panel.Guid);
+                                    else if (spaces_Panel.Count < 2)
+                                        result.Add("{0} Panel {1} (Guid: {2}) has not enough adjacent spaces.", LogRecordType.Warning, panelType.Text(), panel.Name, panel.Guid);
                                     break;
 
                                 case PanelType.FloorExposed:
