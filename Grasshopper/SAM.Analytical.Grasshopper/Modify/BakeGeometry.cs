@@ -14,11 +14,17 @@ namespace SAM.Analytical.Grasshopper
             if (panel == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
+            string @string = panel.ToJObject()?.ToString();
+            if (!string.IsNullOrWhiteSpace(@string))
+                objectAttributes.SetUserString("SAM", @string);
+
+            objectAttributes.Name = panel.Name;
+
             Brep brep = panel.ToRhino(cutApertures, tolerance);
             if (brep == null)
                 return Geometry.Grasshopper.Modify.BakeGeometry(panel.GetFace3D(), rhinoDoc, objectAttributes, out guid);
 
-            guid = rhinoDoc.Objects.AddBrep(brep);
+            guid = rhinoDoc.Objects.AddBrep(brep, objectAttributes);
             return true;
         }
 
@@ -29,7 +35,29 @@ namespace SAM.Analytical.Grasshopper
             if (aperture == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
+            string @string = aperture.ToJObject()?.ToString();
+            if (!string.IsNullOrWhiteSpace(@string))
+                objectAttributes.SetUserString("SAM", @string);
+
+            objectAttributes.Name = aperture.Name;
+
             return Geometry.Grasshopper.Modify.BakeGeometry(aperture.GetFace3D(), rhinoDoc, objectAttributes, out guid);
+        }
+
+        public static bool BakeGeometry(this Space space, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid)
+        {
+            guid = Guid.Empty;
+
+            if (space == null || rhinoDoc == null || objectAttributes == null)
+                return false;
+
+            string @string = space.ToJObject()?.ToString();
+            if (!string.IsNullOrWhiteSpace(@string))
+                objectAttributes.SetUserString("SAM", @string);
+
+            objectAttributes.Name = space.Name;
+
+            return Geometry.Grasshopper.Modify.BakeGeometry(space.Location, rhinoDoc, objectAttributes, out guid);
         }
     }
 }

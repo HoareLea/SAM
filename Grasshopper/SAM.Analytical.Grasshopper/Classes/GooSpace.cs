@@ -64,13 +64,7 @@ namespace SAM.Analytical.Grasshopper
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            string @string = Value?.ToJObject()?.ToString();
-            if (!string.IsNullOrWhiteSpace(@string))
-                att.SetUserString("SAM", @string);
-
-            att.Name = Value?.Name;
-            
-            return Geometry.Grasshopper.Modify.BakeGeometry(Value?.Location, doc, att, out obj_guid);
+            return Modify.BakeGeometry(Value, doc, att, out obj_guid);
         }
     }
 
