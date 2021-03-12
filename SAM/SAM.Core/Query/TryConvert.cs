@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -21,7 +22,20 @@ namespace SAM.Core
             {
                 if (@object != null)
                 {
-                    if (@object is IJSAMObject)
+                    if(@object is IEnumerable)
+                    {
+                        JArray jArray = new JArray();
+                        foreach(object @object_Temp in (IEnumerable)@object)
+                        {
+                            if (TryConvert(@object_Temp, out string value) && value != null)
+                                jArray.Add(value);
+                            else
+                                jArray.Add(string.Empty);
+                        }
+
+                        result = jArray.ToString();
+                    }
+                    else if (@object is IJSAMObject)
                         result = ((IJSAMObject)@object).ToJObject()?.ToString();
 
                     if (result == default)

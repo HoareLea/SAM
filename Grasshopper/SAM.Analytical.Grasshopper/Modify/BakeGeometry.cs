@@ -31,13 +31,10 @@ namespace SAM.Analytical.Grasshopper
             GeometryBase geometryBase = rhinoDoc.Objects.FindGeometry(guid);
             if (geometryBase != null)
             {
-                geometryBase.SetUserString("SAM", panel.ToJObject().ToString());
+                string @string = panel.ToJObject()?.ToString();
+                if (!string.IsNullOrWhiteSpace(@string))
+                    geometryBase.SetUserString("SAM", @string);
             }
-
-            //RhinoObject rhinoObject = rhinoDoc.Objects.FindId(guid);
-            //if(rhinoObject != null)
-            //{
-            //}
 
             return true;
         }
