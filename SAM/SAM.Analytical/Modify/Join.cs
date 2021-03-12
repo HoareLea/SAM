@@ -479,11 +479,11 @@ namespace SAM.Analytical
                     if (point2Ds.Count == 2 && segment2D.GetLength() >= distance)
                         continue;
 
-                    int i = -1;
+                    //int i = -1;
                     //Iterating through each end point of segment2D
                     foreach (Point2D point2D in segment2D.GetPoints())
                     {
-                        i++;
+                        //i++;
                         point2Ds.SortByDistance(point2D);
 
                         if(point2Ds[1].Distance(point2D) >= distance)
@@ -494,7 +494,7 @@ namespace SAM.Analytical
                         if (tuples_Temp == null || tuples_Temp.Count != 1)
                             continue;
 
-                        Segment2D segment2D_New = new Segment2D(point2Ds[1], point2D);
+                        Segment2D segment2D_New = new Segment2D(point2Ds[1], point2Ds.Last());
 
                         double length_New = segment2D_New.GetLength();
                         if (length_New <= tolerance)
