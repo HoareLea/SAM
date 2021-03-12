@@ -306,148 +306,151 @@ namespace SAM.Analytical
             }
 
             //Looping through all panels data till panels cannot be join anymore. Every change will stop current iteration and start from beginning
+            Join(tuples_All, true, distance, tolerance); //Extend
+            Join(tuples_All, false, distance, tolerance); //Trim
+
             bool updated = false;
-            do
-            {
-                updated = false;
+            //do
+            //{
+            //    updated = false;
 
-                //Filtering panels have been removed (tuple which segment2D is null)
-                List<Tuple<Panel, double, double, Segment2D>> tuples = tuples_All.FindAll(x => x.Item4 != null && x.Item4.GetLength() > tolerance);
+            //    //Filtering panels have been removed (tuple which segment2D is null)
+            //    List<Tuple<Panel, double, double, Segment2D>> tuples = tuples_All.FindAll(x => x.Item4 != null && x.Item4.GetLength() > tolerance);
 
-                foreach (Tuple<Panel, double, double, Segment2D> tuple in tuples)
-                {
-                    Segment2D segment2D = tuple.Item4;
+            //    foreach (Tuple<Panel, double, double, Segment2D> tuple in tuples)
+            //    {
+            //        Segment2D segment2D = tuple.Item4;
 
-                    List<Tuple<Panel, double, double, Segment2D>> tuples_Overlap = null;
+            //        List<Tuple<Panel, double, double, Segment2D>> tuples_Overlap = null;
 
-                    //Removing overlaps for segment2D
-                    tuples_Overlap = tuples.FindAll(x => x.Item4.On(segment2D[0]) && x.Item4.On(segment2D[1]));
-                    if (tuples_Overlap.Count > 1)
-                    {
-                        Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, null);
-                        tuples_All[tuples_All.IndexOf(tuple)] = tuple_New;
-                        updated = true;
-                        break;
-                    }
+            //        //Removing overlaps for segment2D
+            //        tuples_Overlap = tuples.FindAll(x => x.Item4.On(segment2D[0]) && x.Item4.On(segment2D[1]));
+            //        if (tuples_Overlap.Count > 1)
+            //        {
+            //            Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, null);
+            //            tuples_All[tuples_All.IndexOf(tuple)] = tuple_New;
+            //            updated = true;
+            //            break;
+            //        }
 
-                    //Removing overlaps for segment2D
-                    tuples_Overlap = tuples.FindAll(x => segment2D.On(x.Item4[0]) && segment2D.On(x.Item4[1]));
-                    if (tuples_Overlap.Count > 1)
-                    {
-                        foreach (Tuple<Panel, double, double, Segment2D> tuple_Overlap in tuples_Overlap)
-                        {
-                            Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple_Overlap.Item1, tuple_Overlap.Item2, tuple_Overlap.Item3, null);
-                            tuples_All[tuples_All.IndexOf(tuple_Overlap)] = tuple_New;
-                        }
+            //        //Removing overlaps for segment2D
+            //        tuples_Overlap = tuples.FindAll(x => segment2D.On(x.Item4[0]) && segment2D.On(x.Item4[1]));
+            //        if (tuples_Overlap.Count > 1)
+            //        {
+            //            foreach (Tuple<Panel, double, double, Segment2D> tuple_Overlap in tuples_Overlap)
+            //            {
+            //                Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple_Overlap.Item1, tuple_Overlap.Item2, tuple_Overlap.Item3, null);
+            //                tuples_All[tuples_All.IndexOf(tuple_Overlap)] = tuple_New;
+            //            }
 
-                        updated = true;
-                        break; ;
-                    }
+            //            updated = true;
+            //            break; ;
+            //        }
 
-                    //Iterating through each end point of segment2D
-                    foreach (Point2D point2D in segment2D.GetPoints())
-                    {
-                        //Checking if point is connected with other segments (panels). If connected then skip
-                        List<Tuple<Panel, double, double, Segment2D>> tuples_Temp = tuples.FindAll(x => x.Item4.On(point2D, tolerance));
-                        if (tuples_Temp == null || tuples_Temp.Count != 1)
-                            continue;
+            //        //Iterating through each end point of segment2D
+            //        foreach (Point2D point2D in segment2D.GetPoints())
+            //        {
+            //            //Checking if point is connected with other segments (panels). If connected then skip
+            //            List<Tuple<Panel, double, double, Segment2D>> tuples_Temp = tuples.FindAll(x => x.Item4.On(point2D, tolerance));
+            //            if (tuples_Temp == null || tuples_Temp.Count != 1)
+            //                continue;
 
-                        //Looking for all segments which are not further than provided distance
-                        tuples_Temp = tuples.FindAll(x => x.Item4.Distance(point2D) < distance + tolerance);
-                        if (tuples_Temp == null || tuples_Temp.Count < 2)
-                            continue;
+            //            //Looking for all segments which are not further than provided distance
+            //            tuples_Temp = tuples.FindAll(x => x.Item4.Distance(point2D) < distance + tolerance);
+            //            if (tuples_Temp == null || tuples_Temp.Count < 2)
+            //                continue;
 
-                        tuples_Temp.Remove(tuple);
+            //            tuples_Temp.Remove(tuple);
 
-                        //Looking for intersection points
-                        List<Tuple<Segment2D, Point2D>> tuples_Segment2D_Intersection = new List<Tuple<Segment2D, Point2D>>();
-                        foreach (Tuple<Panel, double, double, Segment2D> tuple_Temp in tuples_Temp)
-                        {
-                            Segment2D segment2D_Temp = tuple_Temp.Item4;
+            //            //Looking for intersection points
+            //            List<Tuple<Segment2D, Point2D>> tuples_Segment2D_Intersection = new List<Tuple<Segment2D, Point2D>>();
+            //            foreach (Tuple<Panel, double, double, Segment2D> tuple_Temp in tuples_Temp)
+            //            {
+            //                Segment2D segment2D_Temp = tuple_Temp.Item4;
 
-                            Point2D point2D_Segment2D_Intersection = segment2D.Intersection(segment2D_Temp, false, tolerance);
-                            if (point2D_Segment2D_Intersection != null)
-                            {
-                                if (point2D_Segment2D_Intersection.Distance(point2D) <= distance)
-                                    tuples_Segment2D_Intersection.Add(new Tuple<Segment2D, Point2D>(segment2D_Temp, point2D_Segment2D_Intersection));
-                                continue;
-                            }
+            //                Point2D point2D_Segment2D_Intersection = segment2D.Intersection(segment2D_Temp, false, tolerance);
+            //                if (point2D_Segment2D_Intersection != null)
+            //                {
+            //                    if (point2D_Segment2D_Intersection.Distance(point2D) <= distance)
+            //                        tuples_Segment2D_Intersection.Add(new Tuple<Segment2D, Point2D>(segment2D_Temp, point2D_Segment2D_Intersection));
+            //                    continue;
+            //                }
 
-                            point2D_Segment2D_Intersection = segment2D_Temp.ClosestEnd(point2D);
-                            Vector2D vector2D = new Vector2D(point2D, point2D_Segment2D_Intersection).Unit;
-                            if (!(vector2D.AlmostEqual(segment2D.Direction) || vector2D.AlmostEqual(segment2D.Direction.GetNegated())))
-                                continue;
+            //                point2D_Segment2D_Intersection = segment2D_Temp.ClosestEnd(point2D);
+            //                Vector2D vector2D = new Vector2D(point2D, point2D_Segment2D_Intersection).Unit;
+            //                if (!(vector2D.AlmostEqual(segment2D.Direction) || vector2D.AlmostEqual(segment2D.Direction.GetNegated())))
+            //                    continue;
 
-                            tuples_Segment2D_Intersection.Add(new Tuple<Segment2D, Point2D>(segment2D_Temp, point2D_Segment2D_Intersection));
-                        }
+            //                tuples_Segment2D_Intersection.Add(new Tuple<Segment2D, Point2D>(segment2D_Temp, point2D_Segment2D_Intersection));
+            //            }
 
-                        if (tuples_Segment2D_Intersection.Count == 0)
-                            continue;
+            //            if (tuples_Segment2D_Intersection.Count == 0)
+            //                continue;
 
-                        tuples_Segment2D_Intersection.Sort((x, y) => x.Item2.Distance(point2D).CompareTo(y.Item2.Distance(point2D)));
+            //            tuples_Segment2D_Intersection.Sort((x, y) => x.Item2.Distance(point2D).CompareTo(y.Item2.Distance(point2D)));
 
-                        Tuple<Segment2D, Point2D> tuple_Segment2D_Intersection = tuples_Segment2D_Intersection.First();
+            //            Tuple<Segment2D, Point2D> tuple_Segment2D_Intersection = tuples_Segment2D_Intersection.First();
 
-                        Tuple<Panel, double, double, Segment2D> tuple_Intersection = tuples_Temp.Find(x => x.Item4 == tuple_Segment2D_Intersection.Item1);
-                        if (tuple_Intersection == null)
-                            continue;
+            //            Tuple<Panel, double, double, Segment2D> tuple_Intersection = tuples_Temp.Find(x => x.Item4 == tuple_Segment2D_Intersection.Item1);
+            //            if (tuple_Intersection == null)
+            //                continue;
 
-                        //Adjusting segments to intersection point has been found
-                        Segment2D segment2D_Intersection = tuple_Segment2D_Intersection.Item1;
-                        Point2D point2D_Intersection = tuple_Segment2D_Intersection.Item2;
+            //            //Adjusting segments to intersection point has been found
+            //            Segment2D segment2D_Intersection = tuple_Segment2D_Intersection.Item1;
+            //            Point2D point2D_Intersection = tuple_Segment2D_Intersection.Item2;
 
-                        List<Point2D> point2Ds = null;
-                        Point2D point2D_1 = null;
-                        Point2D point2D_2 = null;
+            //            List<Point2D> point2Ds = null;
+            //            Point2D point2D_1 = null;
+            //            Point2D point2D_2 = null;
 
-                        point2Ds = segment2D.GetPoints();
-                        point2Ds.Add(point2D_Intersection);
+            //            point2Ds = segment2D.GetPoints();
+            //            point2Ds.Add(point2D_Intersection);
 
-                        point2Ds.ExtremePoints(out point2D_1, out point2D_2);
-                        if (point2D_1 != null && point2D_2 != null && !point2D_1.AlmostEquals(point2D_2, tolerance))
-                        {
-                            Segment2D segment2D_New = new Segment2D(point2D_1, point2D_2);
-                            if (!segment2D_New.Direction.SameHalf(segment2D.Direction))
-                                segment2D_New.Reverse();
+            //            point2Ds.ExtremePoints(out point2D_1, out point2D_2);
+            //            if (point2D_1 != null && point2D_2 != null && !point2D_1.AlmostEquals(point2D_2, tolerance))
+            //            {
+            //                Segment2D segment2D_New = new Segment2D(point2D_1, point2D_2);
+            //                if (!segment2D_New.Direction.SameHalf(segment2D.Direction))
+            //                    segment2D_New.Reverse();
 
-                            if (!segment2D_New.AlmostSimilar(segment2D))
-                            {
-                                Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, segment2D_New);
-                                tuples_All[tuples_All.IndexOf(tuple)] = tuple_New;
-                                updated = true;
-                            }
-                        }
+            //                if (!segment2D_New.AlmostSimilar(segment2D))
+            //                {
+            //                    Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, segment2D_New);
+            //                    tuples_All[tuples_All.IndexOf(tuple)] = tuple_New;
+            //                    updated = true;
+            //                }
+            //            }
 
-                        if (!segment2D.On(point2D_Intersection))
-                        {
-                            point2Ds = segment2D_Intersection.GetPoints();
-                            point2Ds.Add(point2D_Intersection);
+            //            if (!segment2D.On(point2D_Intersection))
+            //            {
+            //                point2Ds = segment2D_Intersection.GetPoints();
+            //                point2Ds.Add(point2D_Intersection);
 
-                            point2Ds.ExtremePoints(out point2D_1, out point2D_2);
-                            if (point2D_1 != null && point2D_2 != null && !point2D_1.AlmostEquals(point2D_2, tolerance))
-                            {
-                                Segment2D segment2D_New = new Segment2D(point2D_1, point2D_2);
-                                if (!segment2D_New.Direction.SameHalf(segment2D_Intersection.Direction))
-                                    segment2D_New.Reverse();
+            //                point2Ds.ExtremePoints(out point2D_1, out point2D_2);
+            //                if (point2D_1 != null && point2D_2 != null && !point2D_1.AlmostEquals(point2D_2, tolerance))
+            //                {
+            //                    Segment2D segment2D_New = new Segment2D(point2D_1, point2D_2);
+            //                    if (!segment2D_New.Direction.SameHalf(segment2D_Intersection.Direction))
+            //                        segment2D_New.Reverse();
 
-                                if (!segment2D_New.AlmostSimilar(segment2D_Intersection))
-                                {
-                                    Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple_Intersection.Item1, tuple_Intersection.Item2, tuple_Intersection.Item3, segment2D_New);
-                                    tuples_All[tuples_All.IndexOf(tuple_Intersection)] = tuple_New;
-                                    updated = true;
-                                }
-                            }
-                        }
+            //                    if (!segment2D_New.AlmostSimilar(segment2D_Intersection))
+            //                    {
+            //                        Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple_Intersection.Item1, tuple_Intersection.Item2, tuple_Intersection.Item3, segment2D_New);
+            //                        tuples_All[tuples_All.IndexOf(tuple_Intersection)] = tuple_New;
+            //                        updated = true;
+            //                    }
+            //                }
+            //            }
 
-                        if (updated)
-                            break;
-                    }
+            //            if (updated)
+            //                break;
+            //        }
 
-                    if (updated)
-                        break;
-                }
+            //        if (updated)
+            //            break;
+            //    }
 
-            } while (updated);
+            //} while (updated);
 
             //Removing short, not connected panels
             updated = false;
@@ -563,5 +566,163 @@ namespace SAM.Analytical
 
             return result;
         }
+
+        private static void Join(this List<Tuple<Panel, double, double, Segment2D>> tuples_All, bool extend, double distance, double tolerance = Core.Tolerance.Distance)
+        {
+            bool updated = false;
+            do
+            {
+                updated = false;
+
+                //Filtering panels have been removed (tuple which segment2D is null)
+                List<Tuple<Panel, double, double, Segment2D>> tuples = tuples_All.FindAll(x => x.Item4 != null && x.Item4.GetLength() > tolerance);
+
+                foreach (Tuple<Panel, double, double, Segment2D> tuple in tuples)
+                {
+                    Segment2D segment2D = tuple.Item4;
+
+                    List<Tuple<Panel, double, double, Segment2D>> tuples_Overlap = null;
+
+                    //Removing overlaps for segment2D
+                    tuples_Overlap = tuples.FindAll(x => x.Item4.On(segment2D[0]) && x.Item4.On(segment2D[1]));
+                    if (tuples_Overlap.Count > 1)
+                    {
+                        Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, null);
+                        tuples_All[tuples_All.IndexOf(tuple)] = tuple_New;
+                        updated = true;
+                        break;
+                    }
+
+                    //Removing overlaps for segment2D
+                    tuples_Overlap = tuples.FindAll(x => segment2D.On(x.Item4[0]) && segment2D.On(x.Item4[1]));
+                    if (tuples_Overlap.Count > 1)
+                    {
+                        foreach (Tuple<Panel, double, double, Segment2D> tuple_Overlap in tuples_Overlap)
+                        {
+                            Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple_Overlap.Item1, tuple_Overlap.Item2, tuple_Overlap.Item3, null);
+                            tuples_All[tuples_All.IndexOf(tuple_Overlap)] = tuple_New;
+                        }
+
+                        updated = true;
+                        break; ;
+                    }
+
+                    //Iterating through each end point of segment2D
+                    foreach (Point2D point2D in segment2D.GetPoints())
+                    {
+                        //Checking if point is connected with other segments (panels). If connected then skip
+                        List<Tuple<Panel, double, double, Segment2D>> tuples_Temp = tuples.FindAll(x => x.Item4.On(point2D, tolerance));
+                        if (tuples_Temp == null || tuples_Temp.Count != 1)
+                            continue;
+
+                        //Looking for all segments which are not further than provided distance
+                        tuples_Temp = tuples.FindAll(x => x.Item4.Distance(point2D) < distance + tolerance);
+                        if (tuples_Temp == null || tuples_Temp.Count < 2)
+                            continue;
+
+                        tuples_Temp.Remove(tuple);
+
+                        //Looking for intersection points
+                        List<Tuple<Segment2D, Point2D>> tuples_Segment2D_Intersection = new List<Tuple<Segment2D, Point2D>>();
+                        foreach (Tuple<Panel, double, double, Segment2D> tuple_Temp in tuples_Temp)
+                        {
+                            Segment2D segment2D_Temp = tuple_Temp.Item4;
+
+                            Point2D point2D_Segment2D_Intersection = segment2D.Intersection(segment2D_Temp, false, tolerance);
+                            if (point2D_Segment2D_Intersection != null)
+                            {
+                                if (point2D_Segment2D_Intersection.Distance(point2D) <= distance)
+                                    tuples_Segment2D_Intersection.Add(new Tuple<Segment2D, Point2D>(segment2D_Temp, point2D_Segment2D_Intersection));
+                                continue;
+                            }
+
+                            point2D_Segment2D_Intersection = segment2D_Temp.ClosestEnd(point2D);
+                            Vector2D vector2D = new Vector2D(point2D, point2D_Segment2D_Intersection).Unit;
+                            if (!(vector2D.AlmostEqual(segment2D.Direction) || vector2D.AlmostEqual(segment2D.Direction.GetNegated())))
+                                continue;
+
+                            tuples_Segment2D_Intersection.Add(new Tuple<Segment2D, Point2D>(segment2D_Temp, point2D_Segment2D_Intersection));
+                        }
+
+                        if (tuples_Segment2D_Intersection.Count == 0)
+                            continue;
+
+                        tuples_Segment2D_Intersection.Sort((x, y) => x.Item2.Distance(point2D).CompareTo(y.Item2.Distance(point2D)));
+
+                        Tuple<Segment2D, Point2D> tuple_Segment2D_Intersection = tuples_Segment2D_Intersection.First();
+
+                        Tuple<Panel, double, double, Segment2D> tuple_Intersection = tuples_Temp.Find(x => x.Item4 == tuple_Segment2D_Intersection.Item1);
+                        if (tuple_Intersection == null)
+                            continue;
+
+                        //Adjusting segments to intersection point has been found
+                        Point2D point2D_Intersection = tuple_Segment2D_Intersection.Item2;
+
+                        List<Point2D> point2Ds = null;
+                        Point2D point2D_1 = null;
+                        Point2D point2D_2 = null;
+
+                        point2Ds = segment2D.GetPoints();
+                        point2Ds.Add(point2D_Intersection);
+
+                        point2Ds.ExtremePoints(out point2D_1, out point2D_2);
+                        if (point2D_1 != null && point2D_2 != null && !point2D_1.AlmostEquals(point2D_2, tolerance))
+                        {
+                            Segment2D segment2D_New = new Segment2D(point2D_1, point2D_2);
+                            if (!segment2D_New.Direction.SameHalf(segment2D.Direction))
+                                segment2D_New.Reverse();
+
+                            if (!segment2D_New.AlmostSimilar(segment2D))
+                            {
+                                bool extended = segment2D_New.GetLength() > segment2D.GetLength();
+
+                                if (extend == extended)
+                                {
+                                    Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, segment2D_New);
+                                    tuples_All[tuples_All.IndexOf(tuple)] = tuple_New;
+                                    updated = true;
+                                }
+                            }
+                        }
+
+                        if (!segment2D.On(point2D_Intersection))
+                        {
+                            Segment2D segment2D_Intersection = tuple_Segment2D_Intersection.Item1;
+
+                            point2Ds = segment2D_Intersection.GetPoints();
+                            point2Ds.Add(point2D_Intersection);
+
+                            point2Ds.ExtremePoints(out point2D_1, out point2D_2);
+                            if (point2D_1 != null && point2D_2 != null && !point2D_1.AlmostEquals(point2D_2, tolerance))
+                            {
+                                Segment2D segment2D_New = new Segment2D(point2D_1, point2D_2);
+                                if (!segment2D_New.Direction.SameHalf(segment2D_Intersection.Direction))
+                                    segment2D_New.Reverse();
+
+                                if (!segment2D_New.AlmostSimilar(segment2D_Intersection))
+                                {
+                                    bool extended = segment2D_New.GetLength() > segment2D_Intersection.GetLength();
+
+                                    if (extend == extended)
+                                    {
+                                        Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple_Intersection.Item1, tuple_Intersection.Item2, tuple_Intersection.Item3, segment2D_New);
+                                        tuples_All[tuples_All.IndexOf(tuple_Intersection)] = tuple_New;
+                                        updated = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (updated)
+                            break;
+                    }
+
+                    if (updated)
+                        break;
+                }
+
+            } while (updated);
+        }
+
     }
 }
