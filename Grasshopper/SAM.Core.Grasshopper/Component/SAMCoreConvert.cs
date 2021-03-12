@@ -86,7 +86,7 @@ namespace SAM.Core.Grasshopper
             NameValueCollection nwc = geometryBase.GetUserStrings();
 
             string @string = geometryBase.GetUserString("SAM");
-            if (string.IsNullOrWhiteSpace(@string))
+            if (!string.IsNullOrWhiteSpace(@string))
             {
                 List<IJSAMObject> jSAMObjects = Core.Convert.ToSAM(@string);
                 jSAMObject = jSAMObjects?.FirstOrDefault();

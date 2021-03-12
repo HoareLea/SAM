@@ -20,8 +20,14 @@ namespace SAM.Core
             if (type == typeof(string))
             {
                 if (@object != null)
-                    result = @object.ToString();
+                {
+                    if (@object is IJSAMObject)
+                        result = ((IJSAMObject)@object).ToJObject()?.ToString();
 
+                    if (result == default)
+                        result = @object.ToString();
+                }
+                    
                 return true;
             }
             else if (type == typeof(bool))

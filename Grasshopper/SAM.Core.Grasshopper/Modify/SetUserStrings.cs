@@ -10,17 +10,10 @@ namespace SAM.Core.Grasshopper
             if (objectAttributes == null || sAMObject == null)
                 return false;
 
-            List<ParameterSet> parameterSets = sAMObject.GetParamaterSets();
-            if (parameterSets == null || parameterSets.Count == 0)
-                return true;
-
-            foreach(ParameterSet parameterSet in parameterSets)
+            foreach(string name in Core.Query.Names(sAMObject))
             {
-                foreach(string name in parameterSet.Names)
-                {
-                    if (parameterSet.TryGetValue(name, out string value))
-                        objectAttributes.SetUserString(name, value);
-                }
+                if (sAMObject.TryGetValue(name, out string value, true))
+                    objectAttributes.SetUserString(name, value);
             }
 
             return true;
