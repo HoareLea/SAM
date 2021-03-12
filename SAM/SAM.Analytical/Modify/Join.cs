@@ -491,21 +491,33 @@ namespace SAM.Analytical
                         if (tuples_Temp == null || tuples_Temp.Count != 1)
                             continue;
 
-                        Segment2D segment2D_New = null;
-                        if (i == 0)
-                            segment2D_New = new Segment2D(point2Ds[1], segment2D[1]);
-                        else
-                            segment2D_New = new Segment2D(segment2D[0], point2Ds[1]);
+                        Segment2D segment2D_New = new Segment2D(point2Ds[1], point2D);
 
-                        if(segment2D_New.GetLength() > tolerance)
-                        {
-                            if (!segment2D_New.Direction.SameHalf(segment2D.Direction))
-                                segment2D_New.Reverse();
-                        }
-                        else
-                        {
-                            segment2D_New = null;
-                        }
+                        double length_New = segment2D_New.GetLength();
+                        if (length_New <= tolerance)
+                            continue;
+
+                        if (!segment2D_New.Direction.SameHalf(segment2D.Direction))
+                            segment2D_New.Reverse();
+
+                        if (segment2D_New.AlmostSimilar(segment2D))
+                            continue;
+
+                        //Segment2D segment2D_New = null;
+                        //if (i == 0)
+                        //    segment2D_New = new Segment2D(point2Ds[1], segment2D[1]);
+                        //else
+                        //    segment2D_New = new Segment2D(segment2D[0], point2Ds[1]);
+
+                        //if (segment2D_New.GetLength() > tolerance)
+                        //{
+                        //    if (!segment2D_New.Direction.SameHalf(segment2D.Direction))
+                        //        segment2D_New.Reverse();
+                        //}
+                        //else
+                        //{
+                        //    segment2D_New = null;
+                        //}
 
                         Tuple<Panel, double, double, Segment2D> tuple_New = new Tuple<Panel, double, double, Segment2D>(tuple.Item1, tuple.Item2, tuple.Item3, segment2D_New);
                         tuples_All[tuples_All.IndexOf(tuple)] = tuple_New;
