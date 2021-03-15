@@ -202,7 +202,7 @@ namespace SAM.Geometry.Planar
             if (value == 0)
                 return value;
 
-            return System.Math.PI - value;
+            return System.Math.Min(System.Math.PI - value, value);
         }
 
         public double SignedAngle(Vector2D vector2D)
