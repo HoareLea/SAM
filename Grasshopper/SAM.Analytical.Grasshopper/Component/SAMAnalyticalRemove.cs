@@ -65,57 +65,57 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            //SAMObject sAMObject = null;
-            //if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
-            //{
-            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-            //    return;
-            //}
+            SAMObject sAMObject = null;
+            if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            //List<SAMObject> sAMObjects = new List<SAMObject>();
-            //if (!dataAccess.GetDataList(1, sAMObjects) || sAMObjects == null)
-            //{
-            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-            //    return;
-            //}
+            List<SAMObject> sAMObjects = new List<SAMObject>();
+            if (!dataAccess.GetDataList(1, sAMObjects) || sAMObjects == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            //if (sAMObject is Panel)
-            //{
-            //    Panel result = new Panel((Panel)sAMObject);
-            //    List<Guid> guids = new List<Guid>();
+            if (sAMObject is Panel)
+            {
+                Panel result = new Panel((Panel)sAMObject);
+                List<Guid> guids = new List<Guid>();
 
-            //    List<Aperture> apertures = sAMObjects.FindAll(x => x is Aperture).ConvertAll(x => (Aperture)x);
-            //    if (apertures != null)
-            //    {
-            //        foreach (Aperture aperture in apertures)
-            //            if (result.RemoveAperture(aperture.Guid))
-            //                guids.Add(aperture.Guid);
-            //    }
+                List<Aperture> apertures = sAMObjects.FindAll(x => x is Aperture).ConvertAll(x => (Aperture)x);
+                if (apertures != null)
+                {
+                    foreach (Aperture aperture in apertures)
+                        if (result.RemoveAperture(aperture.Guid))
+                            guids.Add(aperture.Guid);
+                }
 
-            //    dataAccess.SetData(0, result);
-            //    dataAccess.SetDataList(1, guids);
-            //    return;
-            //}
-            //else if (sAMObject is AnalyticalModel)
-            //{
-            //    AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
+                dataAccess.SetData(0, result);
+                dataAccess.SetDataList(1, guids);
+                return;
+            }
+            else if (sAMObject is AnalyticalModel)
+            {
+                AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
 
-            //    List<Guid> guids = analyticalModel.Remove(sAMObjects);
+                List<Guid> guids = analyticalModel.Remove(sAMObjects);
 
-            //    dataAccess.SetData(0, analyticalModel);
-            //    dataAccess.SetDataList(1, guids);
-            //    return;
-            //}
-            //else if (sAMObject is AdjacencyCluster)
-            //{
-            //    AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
+                dataAccess.SetData(0, analyticalModel);
+                dataAccess.SetDataList(1, guids);
+                return;
+            }
+            else if (sAMObject is AdjacencyCluster)
+            {
+                AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
 
-            //    List<Guid> guids = adjacencyCluster.Remove(sAMObjects);
+                List<Guid> guids = adjacencyCluster.Remove(sAMObjects);
 
-            //    dataAccess.SetData(0, adjacencyCluster);
-            //    dataAccess.SetDataList(1, guids);
-            //    return;
-            //}
+                dataAccess.SetData(0, adjacencyCluster);
+                dataAccess.SetDataList(1, guids);
+                return;
+            }
         }
     }
 }
