@@ -12,10 +12,11 @@ using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Rhino.DocObjects;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalLabelPanel : GH_SAMComponent, IGH_PreviewObject
+    public class SAMAnalyticalLabelPanel : GH_SAMComponent, IGH_PreviewObject, IGH_BakeAwareObject
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -159,6 +160,8 @@ namespace SAM.Analytical.Grasshopper
 
                 Point3D point3D = panel.GetInternalPoint3D();
 
+               // point3D = point3D.GetMoved(normal * 0.1) as Point3D; //TEMP SOLUTION FOR TESTING
+
                 Rhino.Geometry.Plane plane = new SAM.Geometry.Spatial.Plane(point3D, normal).ToRhino();
                 Rhino.Geometry.Vector3d normal_Rhino = normal.ToRhino();
                 if (normal.Z >= 0)
@@ -213,8 +216,8 @@ namespace SAM.Analytical.Grasshopper
                     if (text3d == null)
                         continue;
                     Point3d point = text3d.TextPlane.Origin;
-                    if (point.DistanceTo(cameraLocation) > 16) 
-                        continue;
+                    //if (point.DistanceTo(cameraLocation) > 16) 
+                    //    continue;
 
                     args.Display.Draw3dText(text3d, System.Drawing.Color.Black);
                 }
@@ -246,5 +249,24 @@ namespace SAM.Analytical.Grasshopper
         }
 
         #endregion IGH_PreviewObject
+
+        public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
+        {
+            BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
+        }
+
+        public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
+        {
+            List<Text3d> text3ds = GetText3ds();
+            if (text3ds == null || text3ds.Count == 0)
+                return;
+
+            foreach(Text3d text3d in text3ds)
+            {
+                Guid guid = doc.Objects.AddText(text3d, att);
+                if (guid != Guid.Empty)
+                    obj_ids.Add(guid);
+            }
+        }
     }
 }

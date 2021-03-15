@@ -112,8 +112,18 @@ namespace SAM.Analytical
                 {
                     if(validateConstruction)
                     {
-                        if (!panel_Temp.Construction.Name.Equals(panel.Construction?.Name))
+                        Construction construction_Temp = panel_Temp.Construction;
+                        Construction construction = panel.Construction;
+
+                        if (construction_Temp != null && construction != null)
+                        {
+                            if (!construction_Temp.Name.Equals(construction.Name))
+                                continue;
+                        }
+                        else if (!(construction_Temp == null && construction == null))
+                        {
                             continue;
+                        }
                     }
 
                     Plane plane_Temp = panel_Temp?.PlanarBoundary3D?.Plane;
