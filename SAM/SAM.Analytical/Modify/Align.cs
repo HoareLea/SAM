@@ -7,7 +7,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static void Align(this List<Panel> panels, double elevation, double referenceElevation, double maxDistance = 0.2, double tolerance = Core.Tolerance.Distance)
+        public static void Align(this List<Panel> panels, double elevation, double referenceElevation, double maxDistance = 0.2, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (panels == null || double.IsNaN(elevation) || double.IsNaN(referenceElevation))
                 return;
@@ -35,7 +35,7 @@ namespace SAM.Analytical
                         if (segment2Ds != null && segment2Ds.Count != 0)
                         {
                             Geometry.Planar.Query.ExtremePoints(segment2Ds.Point2Ds(), out Point2D point2D_1, out Point2D point2D_2);
-                            if (point2D_1.Distance(point2D_2) > tolerance)
+                            if (point2D_1.Distance(point2D_2) > tolerance_Distance)
                                 panels_Temp.Add(panel);
                         }
                     }
@@ -63,7 +63,7 @@ namespace SAM.Analytical
             if (panels_Temp.Count == 0 || dictionary_Reference.Count == 0)
                 return;
 
-            Align(panels_Temp, dictionary_Reference, maxDistance, tolerance);
+            Align(panels_Temp, dictionary_Reference, maxDistance, tolerance_Angle, tolerance_Distance);
 
             foreach (Panel panel_Temp in panels_Temp)
             {
@@ -75,7 +75,7 @@ namespace SAM.Analytical
             }
         }
 
-        public static void Align(this List<Panel> panels, Dictionary<Segment2D, Panel> dictionary_Reference, double maxDistance = 0.2, double tolerance = Core.Tolerance.Distance)
+        public static void Align(this List<Panel> panels, Dictionary<Segment2D, Panel> dictionary_Reference, double maxDistance = 0.2, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (panels == null || dictionary_Reference == null)
                 return;
@@ -92,7 +92,7 @@ namespace SAM.Analytical
                 double max = panel.MaxElevation();
                 double min = panel.MinElevation();
 
-                Plane plane_Temp = Plane.WorldXY.GetMoved(Vector3D.WorldZ * (max - min)) as Plane;
+                Plane plane_Temp = Plane.WorldXY.GetMoved(Vector3D.WorldZ * ((max + min) / 2)) as Plane;
 
                 PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane_Temp, panel.GetFace3D());
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
@@ -103,7 +103,7 @@ namespace SAM.Analytical
                     continue;
 
                 Geometry.Planar.Query.ExtremePoints(segment2Ds_Intersection.Point2Ds(), out Point2D point2D_1, out Point2D point2D_2);
-                if (point2D_1.Distance(point2D_2) <= tolerance)
+                if (point2D_1.Distance(point2D_2) <= tolerance_Distance)
                     continue;
 
                 Segment2D segment2D = new Segment2D(point2D_1, point2D_2);
@@ -116,7 +116,7 @@ namespace SAM.Analytical
                 foreach (Segment2D segment2D_Temp in segment2Ds_Temp)
                 {
                     double distance = segment2D_Temp.Distance(segment2D, Core.Tolerance.MacroDistance);
-                    if(distance < tolerance)
+                    if(distance < tolerance_Distance)
                     {
                         segment2Ds_Result = null;
                         break;
@@ -198,7 +198,7 @@ namespace SAM.Analytical
 
                 Vector3D vector3D = Plane.WorldXY.Convert(new Vector2D(point2D_1, point2D_2));
 
-                List<Panel> panels_Connected = panel.ConnectedPanels(panels, tolerance);
+                List<Panel> panels_Connected = panel.ConnectedPanels(panels, tolerance_Distance);
 
                 panel = new Panel(panel); 
                 panel.Move(vector3D);
@@ -210,7 +210,7 @@ namespace SAM.Analytical
 
                     foreach (Panel panel_Connected in panels_Connected)
                     {
-                        Panel panel_New = Align(panel_Connected, plane_Panel, tolerance);
+                        Panel panel_New = Align(panel_Connected, plane_Panel, tolerance_Angle, tolerance_Distance);
                         if (panel_New == null)
                             continue;
 
@@ -225,11 +225,11 @@ namespace SAM.Analytical
             }
 
             if (updated)
-                Align(panels, dictionary_Reference, maxDistance, tolerance);
+                Align(panels, dictionary_Reference, maxDistance, tolerance_Angle, tolerance_Distance);
 
         }
 
-        public static Panel Align(this Panel panel, Plane plane, double tolerance = Core.Tolerance.Angle)
+        public static Panel Align(this Panel panel, Plane plane, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (panel == null || plane == null)
                 return null;
@@ -244,7 +244,7 @@ namespace SAM.Analytical
 
             Plane plane_Face3D = face3D.GetPlane();
 
-            PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, plane_Face3D, tolerance);
+            PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, plane_Face3D, tolerance_Angle);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return null;
 
@@ -267,7 +267,7 @@ namespace SAM.Analytical
 
             Geometry.Planar.Query.ExtremePoints(dictionary.Keys, out Point2D point2D_1, out Point2D point2D_2);
 
-            if (point2D_1.Distance(point2D_2) < tolerance)
+            if (point2D_1.Distance(point2D_2) < tolerance_Distance)
                 return null;
 
             ISegmentable2D segmentable2D = face3D.ExternalEdge2D as ISegmentable2D;
@@ -276,10 +276,10 @@ namespace SAM.Analytical
             segment2Ds.Add(dictionary[point2D_1]);
             segment2Ds.Add(dictionary[point2D_2]);
 
-            segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance);
+            segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance_Distance);
 
-            List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance);
-            polygon2Ds = Geometry.Planar.Query.Union(polygon2Ds, tolerance);
+            List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance_Distance);
+            polygon2Ds = Geometry.Planar.Query.Union(polygon2Ds, tolerance_Distance);
 
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;

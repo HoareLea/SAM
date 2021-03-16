@@ -127,7 +127,7 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(tolerance))
                 tolerance = Tolerance.Distance;
 
-            Analytical.Modify.Align(panels, elevation, referenceElevation, maxDistance, tolerance);
+            Analytical.Modify.Align(panels, elevation, referenceElevation, maxDistance, SAM.Core.Tolerance.Angle, tolerance);
 
             dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
         }
