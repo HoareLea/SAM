@@ -229,7 +229,7 @@ namespace SAM.Geometry.Planar
             Point2D point2D_Closest_1 = null;
             Point2D point2D_Closest_2 = null;
 
-            Point2D point2D_Intersection = Intersection(segment2D, out point2D_Closest_1, out point2D_Closest_2);
+            Point2D point2D_Intersection = Intersection(segment2D, out point2D_Closest_1, out point2D_Closest_2, tolerance);
 
             if (point2D_Intersection == null)
             {

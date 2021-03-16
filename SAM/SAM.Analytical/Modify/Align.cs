@@ -65,7 +65,7 @@ namespace SAM.Analytical
 
             Align(panels_Temp, dictionary_Reference, maxDistance, tolerance);
 
-            foreach(Panel panel_Temp in panels_Temp)
+            foreach (Panel panel_Temp in panels_Temp)
             {
                 int index = panels.FindIndex(x => x.Guid == panel_Temp.Guid);
                 if (index == -1)
@@ -83,8 +83,9 @@ namespace SAM.Analytical
             Plane plane = Plane.WorldXY;
 
             bool updated = false;
-            foreach(Panel panel in panels)
+            for (int i = 0; i < panels.Count; i++)
             {
+                Panel panel = panels[i];
                 if (panel == null)
                     continue;
 
@@ -107,12 +108,30 @@ namespace SAM.Analytical
 
                 Segment2D segment2D = new Segment2D(point2D_1, point2D_2);
 
-                List<Segment2D> segment2Ds_Temp = dictionary_Reference.Keys.ToList().FindAll(x => x.Collinear(segment2D) && x.Distance(segment2D) <= maxDistance + Core.Tolerance.MacroDistance);
+                List<Segment2D> segment2Ds_Temp = dictionary_Reference.Keys.ToList().FindAll(x => x.Collinear(segment2D));
                 if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
                     continue;
 
-                if (segment2Ds_Temp.Find(x => x.Distance(segment2D) <= Core.Tolerance.MacroDistance) != null)
+                List<Segment2D> segment2Ds_Result = new List<Segment2D>();
+                foreach (Segment2D segment2D_Temp in segment2Ds_Temp)
+                {
+                    double distance = segment2D_Temp.Distance(segment2D, Core.Tolerance.MacroDistance);
+                    if(distance < tolerance)
+                    {
+                        segment2Ds_Result = null;
+                        break;
+                    }
+
+                    if (distance > maxDistance + Core.Tolerance.MacroDistance)
+                        continue;
+
+                    segment2Ds_Result.Add(segment2D_Temp);
+                }
+
+                if (segment2Ds_Result == null || segment2Ds_Result.Count == 0)
                     continue;
+
+                segment2Ds_Temp = segment2Ds_Result;
 
                 segment2Ds_Temp.Sort((x, y) => segment2D.Distance(x).CompareTo(segment2D.Distance(y)));
 
@@ -180,7 +199,10 @@ namespace SAM.Analytical
                 Vector3D vector3D = Plane.WorldXY.Convert(new Vector2D(point2D_1, point2D_2));
 
                 List<Panel> panels_Connected = panel.ConnectedPanels(panels, tolerance);
+
+                panel = new Panel(panel); 
                 panel.Move(vector3D);
+                panels[i] = panel;
 
                 if (panels_Connected != null)
                 {
@@ -202,7 +224,7 @@ namespace SAM.Analytical
                 break;
             }
 
-            if(updated)
+            if (updated)
                 Align(panels, dictionary_Reference, maxDistance, tolerance);
 
         }
@@ -216,7 +238,7 @@ namespace SAM.Analytical
             if (face3D == null)
                 return null;
 
-            ISegmentable3D segmentable3D = face3D.GetExternalEdge3D()as ISegmentable3D;
+            ISegmentable3D segmentable3D = face3D.GetExternalEdge3D() as ISegmentable3D;
             if (segmentable3D == null)
                 return null;
 
