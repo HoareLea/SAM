@@ -852,7 +852,7 @@ namespace SAM.Analytical
                         if (!internalCondition.TryGetValue(InternalConditionParameter.OccupancySensibleGainPerPerson, out value_2))
                             value_2 = double.NaN;
 
-                        if (double.IsNaN(value_1) || double.IsNaN(value_2) && profile != null && !profile.IsOff())
+                        if (double.IsNaN(value_1) && double.IsNaN(value_2) && profile != null && !profile.IsOff())
                             result.Add("{0} InternalCondition (Guid: {1}) has {2} {3} (Guid: {4}) assigned but Occupancy Latent Gain Per Person or Occupancy Sensible Gain Per Person have not been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileName, profileType.Text(), profile.Guid);
                         else if ((!double.IsNaN(value_1) || !double.IsNaN(value_2)) && profile == null)
                             result.Add("{0} InternalCondition (Guid: {1}) has no {2} assigned but Occupancy Latent Gain Per Person or Occupancy Sensible Gain Per Person has been provided.", LogRecordType.Warning, name, internalCondition.Guid, profileType.Text());
