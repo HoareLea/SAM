@@ -222,6 +222,7 @@ namespace SAM.Analytical
         {
             AdjacencyCluster result = new AdjacencyCluster();
 
+            //Match spaces with shells
             Dictionary<Shell, List<Space>> dictionary_Spaces = new Dictionary<Shell, List<Space>>(); ;
             HashSet<string> names = new HashSet<string>();
             if (spaces != null)
@@ -254,6 +255,7 @@ namespace SAM.Analytical
             if (!addMissingSpaces && (dictionary_Spaces == null || dictionary_Spaces.Count() == 0))
                 return result;
 
+            //Extract data from shell (Face3D Internal Point)
             Dictionary<Shell, List<Tuple<Face3D, Point3D>>> dictionary_Face3Ds = new Dictionary<Shell, List<Tuple<Face3D, Point3D>>>();
             foreach (Shell shell in shells)
             {
@@ -272,6 +274,7 @@ namespace SAM.Analytical
 
             List<Space> spaces_AdjacencyCluster = new List<Space>();
 
+            //Iterating through Panels
             foreach (Panel panel in panels)
             {
                 Face3D face3D = panel?.GetFace3D();
@@ -284,6 +287,7 @@ namespace SAM.Analytical
 
                 Face3D face3D_ExternalEdge = new Face3D(closedPlanar3D);
 
+                //Searching for faces in shells for given Panel
                 Dictionary<Shell, List<Face3D>> dictionary_Shells = new Dictionary<Shell, List<Face3D>>();
                 foreach (KeyValuePair<Shell, List<Tuple<Face3D, Point3D>>> keyValuePair in dictionary_Face3Ds)
                 {
@@ -304,11 +308,15 @@ namespace SAM.Analytical
                 if (dictionary_Shells == null || dictionary_Shells.Count == 0)
                     continue;
 
+                //List contains all new face3Ds. The list is used to create shading
+                List<Face3D> face3Ds_New = new List<Face3D>(); 
+
                 List<Tuple<Point3D, Panel>> tuples = new List<Tuple<Point3D, Panel>>();
                 foreach (KeyValuePair<Shell, List<Face3D>> keyValuePair in dictionary_Shells)
                 {
                     Shell shell = keyValuePair.Key;
 
+                    //Searching for spaces
                     dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Shell);
 
                     if (spaces_Shell == null || spaces_Shell.Count == 0)
@@ -350,6 +358,7 @@ namespace SAM.Analytical
                             spaces_AdjacencyCluster.Add(space);
                         }
 
+                    //Creating new panels based on shell faces
                     foreach (Face3D face3D_New in keyValuePair.Value)
                     {
                         if (face3D_New == null)
@@ -378,6 +387,26 @@ namespace SAM.Analytical
 
                         foreach (Space space in spaces_Shell)
                             result.AddRelation(space, panel_New);
+
+                        face3Ds_New.Add(face3D_New);
+                    }
+                }
+
+                //Creating shades
+                if(face3Ds_New != null && face3Ds_New.Count != 0)
+                {
+                    Plane plane = face3D.GetPlane();
+
+                    List<Face2D> face2Ds = Geometry.Planar.Query.Difference(plane.Convert(face3D), face3Ds_New.ConvertAll(x => plane.Convert(plane.Project(x))), tolerance);
+                    if(face2Ds != null && face2Ds.Count != 0)
+                    {
+                        foreach(Face2D face2D in face2Ds)
+                        {
+                            Face3D face3D_Shade = plane.Convert(face2D);
+
+                            Panel panel_Shade = new Panel(Guid.NewGuid(), panel, face3D_Shade, null, true, minArea);
+                            result.AddObject(panel_Shade);
+                        }
                     }
                 }
             }

@@ -191,5 +191,37 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
+
+        public static List<Face2D> Difference(this Face2D face2D, IEnumerable<Face2D> face2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (face2D == null || face2Ds == null)
+                return null;
+
+            List<Face2D> result = new List<Face2D>() { face2D };
+
+            foreach(Face2D face2D_Temp in face2Ds)
+            {
+                List<Face2D> face2Ds_Temp = new List<Face2D>();
+                foreach (Face2D face2D_Result in result)
+                {
+                    List<Face2D> face2Ds_Difference = Difference(face2D_Result, face2D_Temp, tolerance);
+                    if (face2Ds_Difference != null && face2Ds_Difference.Count != 0)
+                    {
+                        foreach (Face2D face2D_Difference in face2Ds_Difference)
+                        {
+                            if (face2D_Difference != null && face2D_Difference.GetArea() > tolerance)
+                                face2Ds_Temp.Add(face2D_Difference);
+                        }
+                    }
+                }
+
+                result = face2Ds_Temp;
+
+                if (result == null || result.Count == 0)
+                    break;
+            }
+
+            return result;
+        }
     }
 }
