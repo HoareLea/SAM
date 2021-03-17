@@ -306,7 +306,10 @@ namespace SAM.Analytical
                 }
 
                 if (dictionary_Shells == null || dictionary_Shells.Count == 0)
+                {
+                    result.AddObject(new Panel(panel));
                     continue;
+                }
 
                 //List contains all new face3Ds. The list is used to create shading
                 List<Face3D> face3Ds_New = new List<Face3D>(); 
@@ -408,6 +411,10 @@ namespace SAM.Analytical
                             result.AddObject(panel_Shade);
                         }
                     }
+                }
+                else
+                {
+                    result.AddObject(new Panel(panel));
                 }
             }
 
