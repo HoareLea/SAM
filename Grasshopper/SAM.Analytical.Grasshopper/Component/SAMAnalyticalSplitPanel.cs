@@ -112,6 +112,10 @@ namespace SAM.Analytical.Grasshopper
                 {
                     plane = ((GH_Plane)@object).ToSAM();
                 }
+                else if(@object is Rhino.Geometry.Plane)
+                {
+                    plane = ((Rhino.Geometry.Plane)@object).ToSAM();
+                }
                 else if (@object is string)
                 {
                     double value;
