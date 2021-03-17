@@ -106,7 +106,7 @@ namespace SAM.Analytical.Grasshopper
 
             if(panels == null)
             {
-                dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
+                dataAccess.SetData(0, new GooAnalyticalModel(analyticalModel));
                 return;
             }
 
