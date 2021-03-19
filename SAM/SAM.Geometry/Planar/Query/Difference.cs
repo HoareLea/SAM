@@ -158,6 +158,9 @@ namespace SAM.Geometry.Planar
         {
             if (face2D_1 == null || face2D_2 == null)
                 return null;
+
+            if (face2D_1.GetArea() <= tolerance || face2D_2.GetArea() <= tolerance)
+                return null;
             
             Polygon polygon_1 = face2D_1.ToNTS(tolerance);
             Polygon polygon_2 = face2D_2.ToNTS(tolerance);
@@ -194,13 +197,16 @@ namespace SAM.Geometry.Planar
 
         public static List<Face2D> Difference(this Face2D face2D, IEnumerable<Face2D> face2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if (face2D == null || face2Ds == null)
+            if (face2D == null || face2Ds == null || face2D.GetArea() <= tolerance)
                 return null;
 
             List<Face2D> result = new List<Face2D>() { face2D };
 
             foreach(Face2D face2D_Temp in face2Ds)
             {
+                if (face2D_Temp.GetArea() <= tolerance)
+                    continue;
+                
                 List<Face2D> face2Ds_Temp = new List<Face2D>();
                 foreach (Face2D face2D_Result in result)
                 {
