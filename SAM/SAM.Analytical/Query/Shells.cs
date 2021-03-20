@@ -74,10 +74,12 @@ namespace SAM.Analytical
                 if (segment2Ds == null || segment2Ds.Count == 0)
                     continue;
 
+                segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance);
+
                 //segment2Ds = segment2Ds.ConvertAll(x => Geometry.Planar.Query.Extend(x, snapTolerance, true, true));
                 segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
-                List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, snapTolerance);
+                List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance);
                 if (polygon2Ds == null || polygon2Ds.Count == 0)
                     continue;
 
@@ -114,7 +116,11 @@ namespace SAM.Analytical
                 if (segmentable2Ds == null || segmentable2Ds.Count() == 0)
                     continue;
 
-                Geometry.Planar.BoundingBox2D boundingBox2D = Geometry.Planar.Create.BoundingBox2D(segmentable2Ds);
+                List<Geometry.Planar.Segment2D> segment2Ds = new List<Geometry.Planar.Segment2D>();
+                foreach (Geometry.Planar.ISegmentable2D segmentable2D_Temp in segmentable2Ds)
+                    segment2Ds.AddRange(segmentable2D_Temp.GetSegments());
+
+                Geometry.Planar.BoundingBox2D boundingBox2D = Geometry.Planar.Create.BoundingBox2D(segment2Ds);
 
                 List<Panel> panels_Face3D = new List<Panel>();
                 foreach (Tuple<Panel, List<Geometry.Planar.Segment2D>> tuple in tuples)
@@ -124,16 +130,21 @@ namespace SAM.Analytical
                     {
                         Geometry.Planar.Point2D point2D = segment2D.Mid();
 
-                        if (!boundingBox2D.InRange(point2D, tolerance))
-                            continue;
-
-                        foreach(Geometry.Planar.ISegmentable2D segmentable2D in segmentable2Ds)
+                        if (boundingBox2D.InRange(point2D, tolerance))
                         {
-                            if(segmentable2D.On(point2D, tolerance))
+                            foreach (Geometry.Planar.Segment2D segment2D_Temp in segment2Ds)
                             {
-                                include = true;
-                                break;
+                                if (segment2D_Temp.On(point2D, tolerance))
+                                {
+                                    include = true;
+                                    break;
+                                }
                             }
+                        }
+                        else
+                        {
+                            if (segment2Ds.Find(x => segment2D.On(x.Mid(), tolerance)) != null)
+                                include = true;
                         }
 
                         if (include)
@@ -155,7 +166,8 @@ namespace SAM.Analytical
                 face3Ds.Add(face3D.GetMoved(new Vector3D(0, 0, elevation_Max - plane.Origin.Z)) as Face3D);
             }
 
-            return Geometry.Spatial.Create.Shells(face3Ds, snapTolerance, tolerance);
+            //return Geometry.Spatial.Create.Shells_Depreciated(face3Ds, snapTolerance, tolerance);
+            return Geometry.Spatial.Create.Shells(face3Ds, tolerance);
         }
     }
 }

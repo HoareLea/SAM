@@ -182,15 +182,21 @@ namespace SAM.Analytical.Grasshopper
 
             foreach (KeyValuePair<double, List<ISegmentable2D>> keyValuePair in dictionary)
             {
-                //IEnumerable<ISegmentable2D> segmentable2Ds = Geometry.Planar.Query.Split(keyValuePair.Value)?.Cast<ISegmentable2D>();
-                //if (segmentable2Ds == null)
-                //    segmentable2Ds = keyValuePair.Value;
+                IEnumerable<ISegmentable2D> segmentable2Ds = Geometry.Planar.Query.Split(keyValuePair.Value, tolerance)?.Cast<ISegmentable2D>();
+                if (segmentable2Ds == null)
+                    segmentable2Ds = keyValuePair.Value;
 
-                //if (segmentable2Ds == null)
-                //    continue;
+                if (segmentable2Ds == null)
+                    continue;
 
-                //List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segmentable2Ds);
-                List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(keyValuePair.Value);
+                List<Segment2D> segment2Ds = new List<Segment2D>();
+                foreach (ISegmentable2D segmentable2D in segmentable2Ds)
+                    segment2Ds.AddRange(segmentable2D.GetSegments());
+
+                segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true);
+
+                List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds);
+                //List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(keyValuePair.Value);
                 if (polygon2Ds == null)
                     continue;
 
