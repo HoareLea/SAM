@@ -361,7 +361,8 @@ namespace SAM.Geometry.Grasshopper
 
             if (Value is Spatial.Shell)
             {
-                args.Pipeline.DrawBrepShaded((Value as Spatial.Shell).ToRihno(), new Rhino.Display.DisplayMaterial(color));
+                List<Spatial.Face3D> face3Ds = ((Spatial.Shell)Value).Face3Ds;
+                face3Ds?.ForEach(x => args.Pipeline.DrawBrepShaded(x.ToRhino_Brep(), new Rhino.Display.DisplayMaterial(color)));
             }
         }
 
