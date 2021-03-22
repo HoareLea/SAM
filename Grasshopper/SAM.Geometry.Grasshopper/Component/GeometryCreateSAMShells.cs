@@ -194,7 +194,13 @@ namespace SAM.Geometry.Grasshopper
 
             foreach (KeyValuePair<double, List<ISegmentable2D>> keyValuePair in dictionary)
             {
-                List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(keyValuePair.Value);
+                List<Segment2D> segment2Ds = new List<Segment2D>();
+                foreach (ISegmentable2D segmentable2D in keyValuePair.Value)
+                    segment2Ds.AddRange(segmentable2D.GetSegments());
+
+                segment2Ds = Planar.Query.Snap(segment2Ds, true);
+
+                List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds, tolerance);
                 if (polygon2Ds == null)
                     continue;
 
@@ -225,8 +231,8 @@ namespace SAM.Geometry.Grasshopper
                 face3Ds.AddRange(face2Ds.ConvertAll(x => plane.Convert(x)));
             }
 
-            List<Shell> shells = Spatial.Create.Shells(face3Ds, Core.Tolerance.MacroDistance, tolerance);
-
+            //List<Shell> shells = Spatial.Create.Shells_Depreciated(face3Ds, Core.Tolerance.MacroDistance, tolerance);
+            List<Shell> shells = Spatial.Create.Shells(face3Ds, tolerance);
 
             index = Params.IndexOfInputParam("Shells");
             if (index != -1)

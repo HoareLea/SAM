@@ -6,7 +6,7 @@ namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
-        public static Rhino.Geometry.Brep ToRihno(this Shell shell, double tolerance = Core.Tolerance.Distance)
+        public static Rhino.Geometry.Brep ToRihno(this Shell shell, double tolerance = Core.Tolerance.MacroDistance)
         {
             if (shell == null)
                 return null;
