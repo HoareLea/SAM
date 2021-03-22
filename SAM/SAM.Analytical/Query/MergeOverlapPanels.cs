@@ -287,6 +287,10 @@ namespace SAM.Analytical
 
                         Panel panel_New = new Panel(guid, panel_Old, face3D, apertures);
 
+                        //Added 2021.03.22. Requested by Michal
+                        if (!panel_New.Normal.SameHalf(panel_Old.Normal))
+                            panel_New.FlipNormal(true, false);
+
                         //redundantPanels.AddRange(redundantPanels_Temp);
                         result.Add(panel_New);
                         guids.Add(guid);
