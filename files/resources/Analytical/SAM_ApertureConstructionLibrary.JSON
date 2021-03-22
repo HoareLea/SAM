@@ -81,6 +81,49 @@
     },
     {
       "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "7b522444-6c66-4d2d-8a47-41507854218f",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "CurtainWall"
+            }
+          ]
+        }
+      ],
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
+          "Thickness": 0.006
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ar0UP_Air__12mm_3.168W/m2K",
+          "Thickness": 0.12
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9",
+          "Thickness": 0.006
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Frame Notional building_7800kg/m3_0.176W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Door"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
       "Name": "SIM_INT_GLZ",
       "Guid": "5ad2e36d-6a2b-4cf1-af02-1ce62e7d2290",
       "ParameterSets": [
@@ -168,6 +211,49 @@
             {
               "Name": "Dafault Panel Type",
               "Value": "WallExternal"
+            }
+          ]
+        }
+      ],
+      "PaneConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Glazing Inner Pane_6mm_g0.78_Lt0.89",
+          "Thickness": 0.006
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "Ag90UP_Argon__12mm_1.403W/m2K",
+          "Thickness": 0.012
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "_Side Lit Glazing Outer Pane_6mm_g0.41_Lt0.9",
+          "Thickness": 0.006
+        }
+      ],
+      "FrameConstructionLayers": [
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Frame Notional building_7800kg/m3_0.176W/mK",
+          "Thickness": 0.05
+        }
+      ],
+      "ApertureType": "Window"
+    },
+    {
+      "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "4d00dd0-f646-4fbb-90e6-f8d9cd6634eb",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Dafault Panel Type",
+              "Value": "CurtainWall"
             }
           ]
         }
