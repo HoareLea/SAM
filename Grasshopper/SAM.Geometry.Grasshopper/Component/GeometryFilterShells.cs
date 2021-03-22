@@ -170,7 +170,7 @@ namespace SAM.Geometry.Grasshopper
 
             index = Params.IndexOfOutputParam("Shells");
             if (index != -1)
-                dataAccess.SetDataList(index, result);
+                dataAccess.SetDataList(index, result.ConvertAll(x => new GooSAMGeometry(x)));
         }
     }
 }
