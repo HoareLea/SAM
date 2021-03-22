@@ -368,6 +368,7 @@ namespace SAM.Geometry.Spatial
                     face2Ds_All_Temp.Add(face2D_Bottom);
 
                     face2Ds_All_Temp = Planar.Query.Split(face2Ds_All_Temp);
+                    face2Ds_All_Temp?.RemoveAll(x => !face2D_Bottom.Inside(x.InternalPoint2D(), tolerance));
 
                     if (face2Ds_All_Temp == null || face2Ds_All_Temp.Count == 0)
                         continue;
