@@ -288,7 +288,7 @@ namespace SAM.Analytical
                 Face3D face3D_ExternalEdge = new Face3D(closedPlanar3D);
 
                 //Searching for faces in shells for given Panel
-                Dictionary<Shell, List<Face3D>> dictionary_Shells = new Dictionary<Shell, List<Face3D>>();
+                List<Tuple<Face3D, Shell>> tuples_Face3D = new List<Tuple<Face3D, Shell>>();
                 foreach (KeyValuePair<Shell, List<Tuple<Face3D, Point3D>>> keyValuePair in dictionary_Face3Ds)
                 {
                     List<Face3D> face3Ds_Shell = new List<Face3D>();
@@ -296,28 +296,37 @@ namespace SAM.Analytical
                     {
                         double distance = face3D_ExternalEdge.Distance(tuple.Item2);
                         if (distance <= maxDistance)
-                            face3Ds_Shell.Add(tuple.Item1);
+                            tuples_Face3D.Add(new Tuple<Face3D, Shell>(tuple.Item1, keyValuePair.Key));
                     }
-
-                    if (face3Ds_Shell == null || face3Ds_Shell.Count == 0)
-                        continue;
-
-                    dictionary_Shells[keyValuePair.Key] = face3Ds_Shell;
                 }
 
-                if (dictionary_Shells == null || dictionary_Shells.Count == 0)
+                if (tuples_Face3D == null || tuples_Face3D.Count == 0)
                 {
                     result.AddObject(new Panel(panel));
                     continue;
                 }
 
+                //Sorting new Face3Ds (Normal of face3D has to match direction of panel at the first place)
+                Vector3D normal = face3D.GetPlane().Normal;
+                List<Tuple<Face3D, Shell>> tuples_Face3D_Temp = tuples_Face3D.FindAll(x => x.Item1.GetPlane().Normal.SameHalf(normal));
+                tuples_Face3D.RemoveAll(x => tuples_Face3D_Temp.Contains(x));
+                tuples_Face3D_Temp.AddRange(tuples_Face3D);
+                tuples_Face3D = tuples_Face3D_Temp;
+
                 //List contains all new face3Ds. The list is used to create shading
                 List<Face3D> face3Ds_New = new List<Face3D>(); 
 
-                List<Tuple<Point3D, Panel>> tuples = new List<Tuple<Point3D, Panel>>();
-                foreach (KeyValuePair<Shell, List<Face3D>> keyValuePair in dictionary_Shells)
+                //Createing new panels based on Shell -> Face3D
+                List<Tuple<Point3D, Panel>> tuples_Point3D = new List<Tuple<Point3D, Panel>>();
+                foreach (Tuple<Face3D, Shell> tuple in tuples_Face3D)
                 {
-                    Shell shell = keyValuePair.Key;
+                    Shell shell = tuple.Item2;
+                    if (shell == null)
+                        continue;
+
+                    Face3D face3D_New = tuple.Item1;
+                    if (face3D_New == null)
+                        continue;
 
                     //Searching for spaces
                     dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Shell);
@@ -355,46 +364,41 @@ namespace SAM.Analytical
                         continue;
 
                     foreach(Space space in spaces_Shell)
-                        if(!spaces_AdjacencyCluster.Contains(space))
+                    {
+                        if (!spaces_AdjacencyCluster.Contains(space))
                         {
                             result.AddObject(space);
                             spaces_AdjacencyCluster.Add(space);
                         }
-
-                    //Creating new panels based on shell faces
-                    foreach (Face3D face3D_New in keyValuePair.Value)
-                    {
-                        if (face3D_New == null)
-                            continue;
-
-                        Panel panel_New = null;
-
-                        int index = tuples.FindIndex(x => face3D_New.Distance(x.Item1) < tolerance);
-                        if (index != -1)
-                            panel_New = tuples[index].Item2;
-
-                        if (panel_New == null)
-                        {
-                            Point3D point3D = face3D_New.InternalPoint3D(tolerance);
-                            if (point3D == null)
-                                continue;
-
-                            panel_New = new Panel(Guid.NewGuid(), panel, face3D_New, null, true, minArea);
-                            if(!panel_New.Normal.SameHalf(panel.Normal))
-                                panel_New.FlipNormal(true, false);
-
-                            tuples.Add(new Tuple<Point3D, Panel>(point3D, panel_New));
-                            result.AddObject(panel_New);
-                        }
-
-                        if (panel_New == null)
-                            continue;
-
-                        foreach (Space space in spaces_Shell)
-                            result.AddRelation(space, panel_New);
-
-                        face3Ds_New.Add(face3D_New);
                     }
+
+                    Panel panel_New = null;
+
+                    int index = tuples_Point3D.FindIndex(x => face3D_New.Distance(x.Item1) < tolerance);
+                    if (index != -1)
+                        panel_New = tuples_Point3D[index].Item2;
+
+                    if (panel_New == null)
+                    {
+                        Point3D point3D = face3D_New.InternalPoint3D(tolerance);
+                        if (point3D == null)
+                            continue;
+
+                        panel_New = new Panel(Guid.NewGuid(), panel, face3D_New, null, true, minArea);
+                        //if (!panel_New.Normal.SameHalf(panel.Normal))
+                        //    panel_New.FlipNormal(true, false);
+
+                        tuples_Point3D.Add(new Tuple<Point3D, Panel>(point3D, panel_New));
+                        result.AddObject(panel_New);
+                    }
+
+                    if (panel_New == null)
+                        continue;
+
+                    foreach (Space space in spaces_Shell)
+                        result.AddRelation(space, panel_New);
+
+                    face3Ds_New.Add(face3D_New);
                 }
 
                 //Creating shades
