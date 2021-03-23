@@ -169,6 +169,7 @@
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\CutShading.cs" />
+    <Compile Include="Modify\FixAdjacencyCluster.cs" />
     <Compile Include="Query\IntersectingPanels.cs" />
     <Compile Include="Query\DuplicatedSpacesDictionary.cs" />
     <Compile Include="Query\SpaceShells.cs" />
