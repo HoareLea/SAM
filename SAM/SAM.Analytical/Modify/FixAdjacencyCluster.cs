@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -10,72 +11,121 @@ namespace SAM.Analytical
             if (adjacencyCluster == null)
                 return null;
 
-            List<Construction> constructions = adjacencyCluster.GetConstructions();
-            if (constructions == null || constructions.Count == 0)
+            List<Panel> panels = adjacencyCluster.GetPanels();
+            if (panels == null || panels.Count == 0)
                 return null;
 
-            Dictionary<string, Construction> dictionary = new Dictionary<string, Construction>();
-            List<Panel> result = new List<Panel>();
-            foreach(Construction construction in constructions)
+            Dictionary<PanelGroup, Dictionary<string, Tuple<Construction, List<Panel>>>> dictionary = new Dictionary<PanelGroup, Dictionary<string, Tuple<Construction, List<Panel>>>>();
+            foreach(Panel panel in panels)
             {
+                if (panel == null)
+                    continue;
+
+                Construction construction = panel.Construction;
+                if (construction == null)
+                    continue;
+
                 string name = construction.Name;
                 if (string.IsNullOrWhiteSpace(name))
                     continue;
 
-                List<Panel> panels = adjacencyCluster.GetPanels(construction);
-                panels?.RemoveAll(x => x.PanelGroup != PanelGroup.Wall);
-                if (panels == null || panels.Count == 0)
-                    continue;
-
-                List<bool> externals = panels.ConvertAll(x => adjacencyCluster.External(x));
-
-                IEnumerable<bool> externals_Unique = externals.Distinct();
-                if (externals_Unique == null || externals_Unique.Count() <= 1)
-                    continue;
-
-                for (int i = 0; i < panels.Count; i++)
+                PanelGroup panelGroup = panel.PanelGroup;
+                if(!dictionary.TryGetValue(panelGroup, out Dictionary<string, Tuple<Construction, List<Panel>>> dictionary_Temp))
                 {
-                    Panel panel = panels[i];
-                    bool external = externals[i];
+                    dictionary_Temp = new Dictionary<string, Tuple<Construction, List<Panel>>>();
+                    dictionary[panelGroup] = dictionary_Temp;
+                }
 
-                    PanelType panelType = panel.PanelType;
-                    if (external == panelType.External())
+                if(!dictionary_Temp.TryGetValue(name, out Tuple<Construction, List<Panel>> tuple))
+                {
+                    tuple = new Tuple<Construction, List<Panel>>(construction, new List<Panel>());
+                    dictionary_Temp[name] = tuple;
+
+                }
+
+                tuple.Item2.Add(panel);
+            }
+
+            Dictionary<string, Construction> dictionary_Result = new Dictionary<string, Construction>();
+            List<Panel> result = new List<Panel>();
+            foreach (KeyValuePair<PanelGroup, Dictionary<string, Tuple<Construction, List<Panel>>>> keyValuePair_PanelGroup in dictionary)
+            {
+                foreach(KeyValuePair<string, Tuple<Construction, List<Panel>>> keyValuePair_Name in keyValuePair_PanelGroup.Value)
+                {
+                    Construction construction = keyValuePair_Name.Value.Item1;
+
+                    List<Panel> panels_Temp = keyValuePair_Name.Value.Item2;
+                    for(int i =0; i < panels_Temp.Count; i++)
+                    {
+                        panels_Temp[i] = new Panel(panels_Temp[i], construction);
+                        adjacencyCluster.AddObject(panels_Temp[i]);
+                    }
+
+                    panels_Temp?.RemoveAll(x => x.PanelGroup != PanelGroup.Wall);
+                    if (panels_Temp == null || panels_Temp.Count == 0)
                         continue;
 
-                    string name_New = null;
-                    if(external)
+                    //List<bool> externals = panels_Temp.ConvertAll(x => adjacencyCluster.External(x));
+
+                    //IEnumerable<bool> externals_Unique = externals.Distinct();
+                    //if (externals_Unique == null || externals_Unique.Count() <= 1)
+                    //    continue;
+
+                    string name = keyValuePair_Name.Key;
+
+                    for (int i = 0; i < panels_Temp.Count; i++)
                     {
-                        if (name.StartsWith("SIM_INT_GLZ"))
-                            name_New = "SIM_EXT_GLZ" + name.Substring(("SIM_INT_GLZ").Length);
-                        else if (name.StartsWith("SIM_INT_SLD_Core"))
-                            name_New = "SIM_EXT_GRD" + name.Substring(("SIM_INT_SLD_Core").Length);
-                        else if (name.StartsWith("SIM_INT_SLD_Core"))
-                            name_New = "SIM_EXT_SLD" + name.Substring(("SIM_INT_SLD_Core").Length);
+                        Panel panel = panels_Temp[i];
+                        Panel panel_New = null;
 
+                        List <Space> spaces = adjacencyCluster.GetSpaces(panel);
+                        if (spaces == null || spaces.Count == 0)
+                        {
+                            panel_New = new Panel(panel, PanelType.Shade);
+                            adjacencyCluster.AddObject(panel_New);
+                            continue;
+                        }
+
+                        bool external = spaces.Count == 1;
+
+                        PanelType panelType = panel.PanelType;
+                        if (external == panelType.External())
+                            continue;
+
+                        string name_New = null;
+                        if (external)
+                        {
+                            if (name.StartsWith("SIM_INT_GLZ"))
+                                name_New = "SIM_EXT_GLZ" + name.Substring(("SIM_INT_GLZ").Length);
+                            else if (name.StartsWith("SIM_INT_SLD_Core"))
+                                name_New = "SIM_EXT_GRD" + name.Substring(("SIM_INT_SLD_Core").Length);
+                            else if (name.StartsWith("SIM_INT_SLD_Core"))
+                                name_New = "SIM_EXT_SLD" + name.Substring(("SIM_INT_SLD_Core").Length);
+                        }
+                        else
+                        {
+                            if (name.StartsWith("SIM_EXT_GLZ"))
+                                name_New = "SIM_INT_GLZ" + name.Substring(("SIM_EXT_GLZ").Length);
+                            else if (name.StartsWith("SIM_EXT_GRD"))
+                                name_New = "SIM_INT_SLD_Core" + name.Substring(("SIM_EXT_GRD").Length);
+                            else if (name.StartsWith("SIM_EXT_SLD"))
+                                name_New = "SIM_INT_SLD_Core" + name.Substring(("SIM_EXT_SLD").Length);
+                        }
+
+                        if (string.IsNullOrWhiteSpace(name_New))
+                            continue;
+
+                        if (!dictionary_Result.TryGetValue(name_New, out Construction construction_New) || construction_New == null)
+                            construction_New = new Construction(construction, name_New);
+
+                        panel_New = new Panel(panel, construction_New);
+                        if (external)
+                            panel_New = new Panel(panel_New, PanelType.WallExternal);
+                        else
+                            panel_New = new Panel(panel_New, PanelType.WallInternal);
+
+                        result.Add(panel_New);
                     }
-                    else
-                    {
-                        if (name.StartsWith("SIM_EXT_GLZ"))
-                            name_New = "SIM_INT_GLZ" + name.Substring(("SIM_EXT_GLZ").Length);
-                        else if (name.StartsWith("SIM_EXT_GRD"))
-                            name_New = "SIM_INT_SLD_Core" + name.Substring(("SIM_EXT_GRD").Length);
-                        else if (name.StartsWith("SIM_EXT_SLD"))
-                            name_New = "SIM_INT_SLD_Core" + name.Substring(("SIM_EXT_SLD").Length);
-                    }
-
-                    if (string.IsNullOrWhiteSpace(name_New))
-                        continue;
-
-                    if (!dictionary.TryGetValue(name_New, out Construction construction_New) || construction_New == null)
-                        construction_New = new Construction(construction, name_New);
-
-                    Panel panel_New = new Panel(panel, construction_New);
-                    if (external)
-                        panel_New = new Panel(panel_New, PanelType.WallExternal);
-                    else
-                        panel_New = new Panel(panel_New, PanelType.WallInternal);
-
-                    result.Add(panel_New);
                 }
             }
 
