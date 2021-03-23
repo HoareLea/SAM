@@ -380,6 +380,8 @@ namespace SAM.Analytical
                                 continue;
 
                             panel_New = new Panel(Guid.NewGuid(), panel, face3D_New, null, true, minArea);
+                            if(!panel_New.Normal.SameHalf(panel.Normal))
+                                panel_New.FlipNormal(true, false);
 
                             tuples.Add(new Tuple<Point3D, Panel>(point3D, panel_New));
                             result.AddObject(panel_New);

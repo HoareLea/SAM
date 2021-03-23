@@ -15,7 +15,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -68,7 +68,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             panel = new Panel(panel);
-            panel.FlipNormal(true);
+            panel.FlipNormal(true, false);
 
             dataAccess.SetData(0, new GooPanel(panel));
         }
