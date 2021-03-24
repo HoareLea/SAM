@@ -96,7 +96,7 @@ namespace SAM.Analytical
                             if (name.StartsWith("SIM_INT_GLZ"))
                             {
                                 name_New = "SIM_EXT_GLZ" + name.Substring(("SIM_INT_GLZ").Length);
-                                prefix = "SIM_INT_GLZ";
+                                prefix = "SIM_EXT_GLZ";
                             }
                             //else if (name.StartsWith("SIM_INT_SLD_Core"))
                             //{
@@ -106,7 +106,7 @@ namespace SAM.Analytical
                             else if (name.StartsWith("SIM_INT_SLD_Core"))
                             {
                                 name_New = "SIM_EXT_SLD" + name.Substring(("SIM_INT_SLD_Core").Length);
-                                prefix = "SIM_INT_SLD_Core";
+                                prefix = "SIM_EXT_SLD";
                             }
                         }
                         else
@@ -114,17 +114,17 @@ namespace SAM.Analytical
                             if (name.StartsWith("SIM_EXT_GLZ"))
                             {
                                 name_New = "SIM_INT_GLZ" + name.Substring(("SIM_EXT_GLZ").Length);
-                                prefix = "SIM_EXT_GLZ";
+                                prefix = "SIM_INT_GLZ";
                             }
                             else if (name.StartsWith("SIM_EXT_GRD"))
                             {
                                 name_New = "SIM_INT_SLD_Core" + name.Substring(("SIM_EXT_GRD").Length);
-                                prefix = "SIM_EXT_GRD";
+                                prefix = "SIM_INT_SLD_Core";
                             }
                             else if (name.StartsWith("SIM_EXT_SLD"))
                             {
                                 name_New = "SIM_INT_SLD_Core" + name.Substring(("SIM_EXT_SLD").Length);
-                                prefix = "SIM_EXT_SLD";
+                                prefix = "SIM_INT_SLD_Core";
                             }
                                 
                         }
