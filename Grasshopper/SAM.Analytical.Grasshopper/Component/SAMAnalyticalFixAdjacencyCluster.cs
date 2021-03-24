@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalFixAdjacencyCluster()
           : base("SAMAnalytical.FixAdjacencyCluster", "SAMAnalytical.FixAdjacencyCluster",
-              "Fix AdjacencyCluster",
+              "Fix AdjacencyCluster - this component will check each panel and nr of adjacency and will fix PanelType and also duplicate construction and assign correct prefix, so if you have SIM_EXT_SLD WA10 and this after split will become internal wall. Panel tyope will be changed to InternalWall and construction to SIM_INT_SLD WA10",
               "SAM", "Analytical")
         {
         }
@@ -62,6 +62,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "AdjacencyCluster", NickName = "AdjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "Prefixes", NickName = "Prefixes", Description = "Prefixes that referes to revit family ie. SIM_EXT_SLD", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "Panels", NickName = "Panels", Description = "Modified SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -79,9 +81,11 @@ namespace SAM.Analytical.Grasshopper
             }
 
             adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-            adjacencyCluster.FixAdjacencyCluster();
+            List<Panel> panels = adjacencyCluster.FixAdjacencyCluster(out List<string> prefixes);
 
             dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
+            dataAccess.SetDataList(1, prefixes);
+            dataAccess.SetDataList(2, panels.ConvertAll(x => new GooPanel(x)));
         }
     }
 }

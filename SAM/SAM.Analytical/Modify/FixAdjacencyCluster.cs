@@ -6,8 +6,10 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Panel> FixAdjacencyCluster(this AdjacencyCluster adjacencyCluster)
+        public static List<Panel> FixAdjacencyCluster(this AdjacencyCluster adjacencyCluster, out List<string> prefixes)
         {
+            prefixes = null;
+
             if (adjacencyCluster == null)
                 return null;
 
@@ -48,6 +50,7 @@ namespace SAM.Analytical
 
             Dictionary<string, Construction> dictionary_Result = new Dictionary<string, Construction>();
             List<Panel> result = new List<Panel>();
+            prefixes = new List<string>();
             foreach (KeyValuePair<PanelGroup, Dictionary<string, Tuple<Construction, List<Panel>>>> keyValuePair_PanelGroup in dictionary)
             {
                 foreach(KeyValuePair<string, Tuple<Construction, List<Panel>>> keyValuePair_Name in keyValuePair_PanelGroup.Value)
@@ -64,12 +67,6 @@ namespace SAM.Analytical
                     panels_Temp?.RemoveAll(x => x.PanelGroup != PanelGroup.Wall);
                     if (panels_Temp == null || panels_Temp.Count == 0)
                         continue;
-
-                    //List<bool> externals = panels_Temp.ConvertAll(x => adjacencyCluster.External(x));
-
-                    //IEnumerable<bool> externals_Unique = externals.Distinct();
-                    //if (externals_Unique == null || externals_Unique.Count() <= 1)
-                    //    continue;
 
                     string name = keyValuePair_Name.Key;
 
@@ -93,23 +90,43 @@ namespace SAM.Analytical
                             continue;
 
                         string name_New = null;
+                        string prefix = null;
                         if (external)
                         {
                             if (name.StartsWith("SIM_INT_GLZ"))
+                            {
                                 name_New = "SIM_EXT_GLZ" + name.Substring(("SIM_INT_GLZ").Length);
+                                prefix = "SIM_INT_GLZ";
+                            }
+                            //else if (name.StartsWith("SIM_INT_SLD_Core"))
+                            //{
+                            //    name_New = "SIM_EXT_GRD" + name.Substring(("SIM_INT_SLD_Core").Length);
+                            //    prefix = "SIM_INT_SLD_Core";
+                            //}
                             else if (name.StartsWith("SIM_INT_SLD_Core"))
-                                name_New = "SIM_EXT_GRD" + name.Substring(("SIM_INT_SLD_Core").Length);
-                            else if (name.StartsWith("SIM_INT_SLD_Core"))
+                            {
                                 name_New = "SIM_EXT_SLD" + name.Substring(("SIM_INT_SLD_Core").Length);
+                                prefix = "SIM_INT_SLD_Core";
+                            }
                         }
                         else
                         {
                             if (name.StartsWith("SIM_EXT_GLZ"))
+                            {
                                 name_New = "SIM_INT_GLZ" + name.Substring(("SIM_EXT_GLZ").Length);
+                                prefix = "SIM_EXT_GLZ";
+                            }
                             else if (name.StartsWith("SIM_EXT_GRD"))
+                            {
                                 name_New = "SIM_INT_SLD_Core" + name.Substring(("SIM_EXT_GRD").Length);
+                                prefix = "SIM_EXT_GRD";
+                            }
                             else if (name.StartsWith("SIM_EXT_SLD"))
+                            {
                                 name_New = "SIM_INT_SLD_Core" + name.Substring(("SIM_EXT_SLD").Length);
+                                prefix = "SIM_EXT_SLD";
+                            }
+                                
                         }
 
                         if (string.IsNullOrWhiteSpace(name_New))
@@ -125,6 +142,7 @@ namespace SAM.Analytical
                             panel_New = new Panel(panel_New, PanelType.WallInternal);
 
                         result.Add(panel_New);
+                        prefixes.Add(prefix);
                     }
                 }
             }
