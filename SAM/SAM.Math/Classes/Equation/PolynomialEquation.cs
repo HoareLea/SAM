@@ -42,7 +42,7 @@ namespace SAM.Math
                 variables[i] = polynomialEquation.variables[i];
         }
 
-        public double Calculate(double value)
+        public double Evaluate(double value)
         {
             int count = variables.Length;
             
@@ -111,6 +111,17 @@ namespace SAM.Math
             }
 
             return jObject;
+        }
+
+        public int Degree
+        {
+            get
+            {
+                if (variables == null)
+                    return -1;
+
+                return variables.Length;
+            }
         }
     }
 }

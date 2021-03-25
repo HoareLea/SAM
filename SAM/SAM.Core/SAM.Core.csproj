@@ -71,6 +71,7 @@
     <Compile Include="Classes\Base\ZipArchiveInfo.cs" />
     <Compile Include="Classes\Base\Range.cs" />
     <Compile Include="Classes\Library\SystemTypeLibrary.cs" />
+    <Compile Include="Classes\Material\LiquidMaterial.cs" />
     <Compile Include="Classes\Relation\TextMap.cs" />
     <Compile Include="Convert\ToBitmapSource\BitmapSource.cs" />
     <Compile Include="Convert\ToBitmap\Bitmap.cs" />
