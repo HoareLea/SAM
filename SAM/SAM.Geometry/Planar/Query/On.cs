@@ -40,5 +40,15 @@ namespace SAM.Geometry.Planar
 
             return false;
         }
+    
+        public static bool On(this Math.PolynomialEquation polynomialEquation, Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (polynomialEquation == null || point2D == null)
+                return false;
+
+            double y = polynomialEquation.Evaluate(point2D.X);
+
+            return System.Math.Abs(y - point2D.Y) <= tolerance;
+        }
     }
 }
