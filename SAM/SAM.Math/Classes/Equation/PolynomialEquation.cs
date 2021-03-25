@@ -11,57 +11,57 @@ namespace SAM.Math
     /// </summary>
     public class PolynomialEquation : IJSAMObject
     {
-        private double[] variables;
+        private double[] coefficients;
         
         public PolynomialEquation(JObject jObject)
         {
             FromJObject(jObject);
         }
         
-        public PolynomialEquation(IEnumerable<double> variables)
+        public PolynomialEquation(IEnumerable<double> coefficients)
         {
-            if (variables == null)
+            if (coefficients == null)
                 return;
 
-            int count = variables.Count();
+            int count = coefficients.Count();
 
-            this.variables = new double[count];
+            this.coefficients = new double[count];
             for (int i = 0; i < count; i++)
-                this.variables[i] = variables.ElementAt(i);
+                this.coefficients[i] = coefficients.ElementAt(i);
         }
 
         public PolynomialEquation(PolynomialEquation polynomialEquation)
         {
-            if (polynomialEquation == null || polynomialEquation.variables == null)
+            if (polynomialEquation == null || polynomialEquation.coefficients == null)
                 return;
 
-            int count = polynomialEquation.variables.Length;
+            int count = polynomialEquation.coefficients.Length;
 
-            variables = new double[count];
+            coefficients = new double[count];
             for (int i = 0; i < count; i++)
-                variables[i] = polynomialEquation.variables[i];
+                coefficients[i] = polynomialEquation.coefficients[i];
         }
 
         public double Evaluate(double value)
         {
-            int count = variables.Length;
+            int count = coefficients.Length;
             
             double result = 0;
             for (int i = 0; i < count; i++)
-                result += System.Math.Pow(value, count - i) * variables[i];
+                result += System.Math.Pow(value, count - i) * coefficients[i];
 
             return result;
         }
 
-        public List<double> Variables
+        public List<double> Coefficients
         {
             get
             {
-                if (variables == null)
+                if (coefficients == null)
                     return null;
 
                 List<double> result = new List<double>();
-                foreach (double variable in variables)
+                foreach (double variable in coefficients)
                     result.Add(variable);
 
                 return result;
@@ -76,20 +76,20 @@ namespace SAM.Math
             if(jObject.ContainsKey("Variables"))
             {
                 JArray jArray = jObject.Value<JArray>("Variables");
-                variables = new double[jArray.Count];
+                coefficients = new double[jArray.Count];
                 for(int i=0; i < jArray.Count; i++)
                 {
                     object @object = jArray[i];
                     if(@object is double)
                     {
-                        variables[i] = (double)@object;
+                        coefficients[i] = (double)@object;
                         continue;
                     }    
 
                     if (!Core.Query.IsNumeric(@object))
                         return false;
 
-                    variables[i] = System.Convert.ToDouble(@object);
+                    coefficients[i] = System.Convert.ToDouble(@object);
                 }
             }
 
@@ -101,10 +101,10 @@ namespace SAM.Math
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
-            if (variables != null)
+            if (coefficients != null)
             {
                 JArray jArray = new JArray();
-                foreach (double variable in variables)
+                foreach (double variable in coefficients)
                     jArray.Add(variable);
 
                 jObject.Add("Variables", jArray);
@@ -117,10 +117,10 @@ namespace SAM.Math
         {
             get
             {
-                if (variables == null)
+                if (coefficients == null)
                     return -1;
 
-                return variables.Length;
+                return coefficients.Length;
             }
         }
     }
