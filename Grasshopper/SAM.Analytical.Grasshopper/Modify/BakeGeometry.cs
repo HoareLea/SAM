@@ -14,7 +14,7 @@ namespace SAM.Analytical.Grasshopper
             if (panel == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
-            Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
+            //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
             objectAttributes.Name = panel.Name;
 
             bool result = true;
@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
             if (aperture == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
-            Core.Grasshopper.Modify.SetUserStrings(objectAttributes, aperture);
+            //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, aperture);
             objectAttributes.Name = aperture.Name;
 
             return Geometry.Grasshopper.Modify.BakeGeometry(aperture.GetFace3D(), rhinoDoc, objectAttributes, out guid);
@@ -59,7 +59,7 @@ namespace SAM.Analytical.Grasshopper
             if (space == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
-            Core.Grasshopper.Modify.SetUserStrings(objectAttributes, space);
+            //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, space);
             objectAttributes.Name = space.Name;
 
             return Geometry.Grasshopper.Modify.BakeGeometry(space.Location, rhinoDoc, objectAttributes, out guid);
