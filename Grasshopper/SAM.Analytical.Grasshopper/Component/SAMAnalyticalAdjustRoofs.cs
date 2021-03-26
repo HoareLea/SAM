@@ -1,7 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("4a0cde0d-b4e8-4af8-9e84-6d128afe4c47");
+        public override Guid ComponentGuid => new Guid("7bc23a21-2461-4704-987e-b64ae8f96d9f");
 
         /// <summary>
         /// The latest version of this component

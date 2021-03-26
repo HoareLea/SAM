@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SAM.Geometry.Spatial;
 using SAM.Geometry.Planar;
 
@@ -101,10 +100,18 @@ namespace SAM.Analytical
                 Plane plane_Roof = tuple_Roof.Item2.Plane;
 
                 Face3D face3D = plane.Convert(tuple_Roof.Item1);
+
+                face3D = plane_Roof.Project(face3D, plane.Normal);
+                if (face3D == null)
+                    continue;
+
+                Panel panel_Old = tuple_Roof.Item2;
+
+                Panel panel = new Panel(panel_Old.Guid, panel_Old, face3D, maxDistance: tolerance_Snap);
+                result.Add(panel);
             }
 
-            throw new NotImplementedException();
-
+            return result;
         }
     }
 }
