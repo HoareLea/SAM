@@ -137,14 +137,14 @@ namespace SAM.Analytical
                 return null;
 
             List<ISegmentable3D> segmentable3Ds = tuples_Face3D.ConvertAll(x => x.Item1).Intersections<ISegmentable3D>(tolerance_Angle, tolerance_Distance);
-            if(segmentable3Ds != null && segmentable3Ds.Count > 0)
+            if (segmentable3Ds != null && segmentable3Ds.Count > 0)
             {
                 List<Segment3D> segment3Ds = new List<Segment3D>();
                 segmentable3Ds.ForEach(x => segment3Ds.AddRange(x.GetSegments()));
-                if(segment3Ds != null && segment3Ds.Count > 0)
+                if (segment3Ds != null && segment3Ds.Count > 0)
                 {
                     Dictionary<Panel, List<Face2D>> dictionary = new Dictionary<Panel, List<Face2D>>();
-                    
+
                     List<Segment2D> segment2Ds = segment3Ds.ConvertAll(x => plane.Convert(plane.Project(x)));
                     List<Face3D> face3Ds = new List<Face3D>();
                     foreach (Tuple<Face3D, Panel> tuple in tuples_Face3D)
@@ -158,7 +158,7 @@ namespace SAM.Analytical
                             continue;
 
                         List<IClosed2D> closed2Ds = face2D.Edge2Ds;
-                        foreach(IClosed2D closed2D in closed2Ds)
+                        foreach (IClosed2D closed2D in closed2Ds)
                         {
                             ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
                             if (segmentable2D == null)
@@ -177,9 +177,9 @@ namespace SAM.Analytical
                     if (segment2Ds != null && segment2Ds.Count != 0)
                     {
                         List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance_Distance);
-                        if(polygon2Ds != null && polygon2Ds.Count > 0)
+                        if (polygon2Ds != null && polygon2Ds.Count > 0)
                         {
-                            foreach(Polygon2D polygon2D in polygon2Ds)
+                            foreach (Polygon2D polygon2D in polygon2Ds)
                             {
                                 Point2D point2D = polygon2D.GetInternalPoint2D();
 
@@ -195,7 +195,7 @@ namespace SAM.Analytical
                                 if (tuple == null)
                                     continue;
 
-                                if(!dictionary.TryGetValue(tuple.Item2, out List<Face2D> face2Ds))
+                                if (!dictionary.TryGetValue(tuple.Item2, out List<Face2D> face2Ds))
                                 {
                                     face2Ds = new List<Face2D>();
                                     dictionary[tuple.Item2] = face2Ds;
@@ -206,10 +206,26 @@ namespace SAM.Analytical
                         }
                     }
 
-                    foreach(KeyValuePair<Panel, List<Face2D>> keyValuePair in dictionary)
+                    if (dictionary != null && dictionary.Count > 0)
                     {
-                        //Join Face2Ds
-                        
+                        tuples_Face3D = new List<Tuple<Face3D, Panel>>();
+                        foreach (KeyValuePair<Panel, List<Face2D>> keyValuePair in dictionary)
+                        {
+                            Plane plane_Roof = keyValuePair.Key.Plane;
+
+                            //Join Face2Ds
+                            List<Face2D> face2Ds = Geometry.Planar.Query.Union(keyValuePair.Value, tolerance_Distance);
+                            foreach (Face2D face2D in face2Ds)
+                            {
+                                Face3D face3D = plane.Convert(face2D);
+
+                                face3D = plane_Roof.Project(face3D, plane.Normal);
+                                if (face3D == null)
+                                    continue;
+
+                                tuples_Face3D.Add(new Tuple<Face3D, Panel>(face3D, keyValuePair.Key));
+                            }
+                        }
                     }
                 }
             }
@@ -222,6 +238,9 @@ namespace SAM.Analytical
                     guid = Guid.NewGuid();
 
                 Panel panel = new Panel(guid, tuple.Item2, tuple.Item1, maxDistance: tolerance_Snap);
+                if (!panel.Normal.SameHalf(tuple.Item2.Normal))
+                    panel.FlipNormal(false, false);
+
                 result.Add(panel);
             }
 
