@@ -397,21 +397,39 @@ namespace SAM.Geometry.Spatial
 
         public Point3D Closest(Point3D point3D)
         {
-            double factor = point3D.ToVector3D().DotProduct(normal) - K;
-            return new Point3D(point3D.X - (normal.X * factor), point3D.Y - (normal.Y * factor), point3D.Z - (normal.Z * factor));
+            //double factor = point3D.ToVector3D().DotProduct(normal) - K;
+            //return new Point3D(point3D.X - (normal.X * factor), point3D.Y - (normal.Y * factor), point3D.Z - (normal.Z * factor));
+            return Closest(point3D, normal);
+        }
+
+        public Point3D Closest(Point3D point3D, Vector3D vector3D)
+        {
+            double dotProduct = normal.DotProduct(point3D.ToVector3D());
+            Vector3D vector3D_Projection = (dotProduct + D) * vector3D.GetNormalized();
+            return point3D - vector3D_Projection;
         }
 
         public Vector3D Project(Vector3D vector3D)
         {
-            return vector3D - vector3D.DotProduct(normal) * normal;
+            //return vector3D - vector3D.DotProduct(normal) * normal;
+            return Project(vector3D, normal);
+        }
 
-            //double factor = vector3D.DotProduct(normal) - K;
-            //return new Vector3D(vector3D.X - (normal.X * factor), vector3D.Y - (normal.Y * factor), vector3D.Z - (normal.Z * factor));
+        public Vector3D Project(Vector3D vector3D, Vector3D vector3D_Direction)
+        {
+            double dotProduct = normal.DotProduct(vector3D);
+            return (dotProduct + D) * vector3D_Direction.GetNormalized();
         }
 
         public Point3D Project(Point3D point3D)
         {
-            return Closest(point3D);
+            //return Closest(point3D);
+            return Project(point3D, normal);
+        }
+
+        public Point3D Project(Point3D point3D, Vector3D vector3D)
+        {
+            return Closest(point3D, vector3D);
         }
 
         public Point3D Project(Point3D point3D, Vector3D vector3D, double tolerance = Tolerance.Distance)
@@ -425,58 +443,125 @@ namespace SAM.Geometry.Spatial
 
         public Segment3D Project(Segment3D segment3D)
         {
-            return new Segment3D(Closest(segment3D[0]), Closest(segment3D[1]));
+            //return new Segment3D(Closest(segment3D[0]), Closest(segment3D[1]));
+            return Project(segment3D, normal);
+        }
+
+        public Segment3D Project(Segment3D segment3D, Vector3D vector3D)
+        {
+            return new Segment3D(Closest(segment3D[0], vector3D), Closest(segment3D[1], vector3D));
         }
 
         public Triangle3D Project(Triangle3D triangle3D)
         {
+            //List<Point3D> point3Ds = triangle3D.GetPoints();
+            //return new Triangle3D(Closest(point3Ds[0]), Closest(point3Ds[1]), Closest(point3Ds[2]));
+            return Project(triangle3D, normal);
+        }
+
+        public Triangle3D Project(Triangle3D triangle3D, Vector3D vector3D)
+        {
             List<Point3D> point3Ds = triangle3D.GetPoints();
-            return new Triangle3D(Closest(point3Ds[0]), point3Ds[1], point3Ds[2]);
+            return new Triangle3D(Closest(point3Ds[0], vector3D), Closest(point3Ds[1], vector3D), Closest(point3Ds[2], vector3D));
         }
 
         public Polyline3D Project(Polyline3D polyline3D)
         {
-            return new Polyline3D(polyline3D.Points.ConvertAll(x => Closest(x)));
+            //return new Polyline3D(polyline3D.Points.ConvertAll(x => Closest(x)));
+            return Project(polyline3D, normal);
+        }
+
+        public Polyline3D Project(Polyline3D polyline3D, Vector3D vector3D)
+        {
+            return new Polyline3D(polyline3D.Points.ConvertAll(x => Closest(x, vector3D)));
         }
 
         public Polygon3D Project(Polygon3D polygon3D)
+        {
+            //List<Point3D> point3Ds = polygon3D.GetPoints();
+            //if (point3Ds == null)
+            //    return null;
+
+            //List<Planar.Point2D> point2Ds = point3Ds.ConvertAll(x => Convert(x));
+
+            //return new Polygon3D(this, point2Ds);
+
+            return Project(polygon3D, normal);
+        }
+
+        public Polygon3D Project(Polygon3D polygon3D, Vector3D vector3D)
         {
             List<Point3D> point3Ds = polygon3D.GetPoints();
             if (point3Ds == null)
                 return null;
 
-            List<Planar.Point2D> point2Ds = point3Ds.ConvertAll(x => Convert(x));
+            List<Planar.Point2D> point2Ds = point3Ds.ConvertAll(x => Convert(Project(x, vector3D)));
 
             return new Polygon3D(this, point2Ds);
         }
 
         public ICurve3D Project(ICurve3D curve)
         {
-            return Project(curve as dynamic);
+            //return Project(curve as dynamic);
+            return Project(curve, normal);
+        }
+
+        public ICurve3D Project(ICurve3D curve, Vector3D vector3D)
+        {
+            return Project(curve as dynamic, vector3D);
         }
 
         public Face3D Project(Face3D face3D)
         {
-            Planar.IClosed2D externalEdge = Convert(Project(face3D.GetExternalEdge3D()));
+            //Planar.IClosed2D externalEdge = Convert(Project(face3D.GetExternalEdge3D()));
+
+            //List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
+            //if (internalEdges != null && internalEdges.Count > 0)
+            //    internalEdges = internalEdges.ConvertAll(x => Project(x));
+
+            //return Face3D.Create(this, externalEdge, internalEdges?.ConvertAll(x => Convert(x)));
+
+            return Project(face3D, normal);
+        }
+
+        public Face3D Project(Face3D face3D, Vector3D vector3D)
+        {
+            Planar.IClosed2D externalEdge = Convert(Project(face3D.GetExternalEdge3D(), vector3D));
 
             List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
             if (internalEdges != null && internalEdges.Count > 0)
-                internalEdges = internalEdges.ConvertAll(x => Project(x));
+                internalEdges = internalEdges.ConvertAll(x => Project(x, vector3D));
 
             return Face3D.Create(this, externalEdge, internalEdges?.ConvertAll(x => Convert(x)));
         }
 
         public Line3D Project(Line3D line3D)
         {
-            return new Line3D(Project(line3D.Origin), Project(line3D.Direction));
+            //return new Line3D(Project(line3D.Origin), Project(line3D.Direction));
+            return Project(line3D, normal);
+        }
+
+        public Line3D Project(Line3D line3D, Vector3D vector3D)
+        {
+            return new Line3D(Project(line3D.Origin, vector3D), Project(line3D.Direction, vector3D));
         }
 
         public IClosedPlanar3D Project(IClosedPlanar3D closedPlanar3D)
         {
+            //if (closedPlanar3D == null)
+            //    return null;
+
+            //return Project(closedPlanar3D as dynamic);
+
+            return Project(closedPlanar3D, normal);
+        }
+
+        public IClosedPlanar3D Project(IClosedPlanar3D closedPlanar3D, Vector3D vector3D)
+        {
             if (closedPlanar3D == null)
                 return null;
 
-            return Project(closedPlanar3D as dynamic);
+            return Project(closedPlanar3D as dynamic, vector3D);
         }
 
         public void FlipZ(bool flipX = true)
@@ -498,12 +583,12 @@ namespace SAM.Geometry.Spatial
                 axisY = Query.AxisY(normal, axisX);
         }
 
-        public PlanarIntersectionResult Intersection(Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
+        public PlanarIntersectionResult Intersection(Segment3D segment3D, double tolerance = Tolerance.Distance)
         {
             return PlanarIntersectionResult.Create(this, segment3D, tolerance);
         }
 
-        public PlanarIntersectionResult Intersection(IClosedPlanar3D closedPlanar3D, double tolerance = Core.Tolerance.Distance)
+        public PlanarIntersectionResult Intersection(IClosedPlanar3D closedPlanar3D, double tolerance = Tolerance.Distance)
         {
             if (closedPlanar3D is Face3D)
                 return Intersection((Face3D)closedPlanar3D);
@@ -511,12 +596,12 @@ namespace SAM.Geometry.Spatial
             return PlanarIntersectionResult.Create(this, closedPlanar3D, tolerance);
         }
 
-        public PlanarIntersectionResult Intersection(Face3D face3D, double tolerance = Core.Tolerance.Distance)
+        public PlanarIntersectionResult Intersection(Face3D face3D, double tolerance = Tolerance.Distance)
         {
             return PlanarIntersectionResult.Create(this, face3D, tolerance);
         }
 
-        public PlanarIntersectionResult Intersection(Plane plane, double tolerance = Core.Tolerance.Distance)
+        public PlanarIntersectionResult Intersection(Plane plane, double tolerance = Tolerance.Distance)
         {
             return PlanarIntersectionResult.Create(this, plane, tolerance);
         }

@@ -77,10 +77,16 @@ namespace SAM.Geometry.Spatial
 
         public void Normalize()
         {
-            double aLength = Length;
-            coordinates[0] = coordinates[0] / aLength;
-            coordinates[1] = coordinates[1] / aLength;
-            coordinates[2] = coordinates[2] / aLength;
+            double length = Length;
+            coordinates[0] = coordinates[0] / length;
+            coordinates[1] = coordinates[1] / length;
+            coordinates[2] = coordinates[2] / length;
+        }
+
+        public Vector3D GetNormalized()
+        {
+            double length = Length;
+            return new Vector3D(coordinates[0] / length, coordinates[1] / length, coordinates[2] / length);
         }
 
         public bool Collinear(Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
