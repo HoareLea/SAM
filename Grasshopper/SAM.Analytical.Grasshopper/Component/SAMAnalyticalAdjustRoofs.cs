@@ -44,8 +44,13 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooPanelParam { Name = "_roofs", NickName = "_roofs", Description = "SAM Analytical Roof Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_shells", NickName = "_shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                GooPanelParam gooPanelParam = new GooPanelParam() { Name = "_roofs", NickName = "_roofs", Description = "SAM Analytical Roof Panels", Access = GH_ParamAccess.list };
+                gooPanelParam.DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(gooPanelParam, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_shells", NickName = "_shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list };
+                genericObject.DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
