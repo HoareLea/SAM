@@ -12,7 +12,7 @@ namespace SAM.Analytical
         public BoundaryEdge2D(Geometry.Spatial.Plane plane, BoundaryEdge3D boundaryEdge3D)
             : base(System.Guid.NewGuid(), boundaryEdge3D)
         {
-            curve2D = (ICurve2D)plane.Convert(boundaryEdge3D.Curve3D);
+            curve2D = (ICurve2D)Geometry.Spatial.Query.Convert(plane, boundaryEdge3D.Curve3D);
         }
 
         public BoundaryEdge2D(BoundaryEdge2D boundaryEdge2D)
@@ -98,7 +98,7 @@ namespace SAM.Analytical
             if (geometry3D is Geometry.Spatial.IClosedPlanar3D && geometry3D is Geometry.Spatial.ISegmentable3D)
             {
                 Geometry.Spatial.Plane plane = ((Geometry.Spatial.IClosedPlanar3D)geometry3D).GetPlane();
-                return ((Geometry.Spatial.ISegmentable3D)geometry3D).GetSegments().ConvertAll(x => new BoundaryEdge2D(plane.Convert(x)));
+                return ((Geometry.Spatial.ISegmentable3D)geometry3D).GetSegments().ConvertAll(x => new BoundaryEdge2D(Geometry.Spatial.Query.Convert(plane, x)));
             }
 
             return null;

@@ -169,6 +169,8 @@
     <Compile Include="Spatial\Create\Point3D.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Project.cs" />
+    <Compile Include="Spatial\Query\Convert.cs" />
     <Compile Include="Spatial\Query\Section.cs" />
     <Compile Include="Spatial\Query\CalculatedInternalPoint3D.cs" />
     <Compile Include="Spatial\Query\Max.cs" />

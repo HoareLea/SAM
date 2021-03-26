@@ -23,7 +23,7 @@ namespace SAM.Analytical
             if(area_Target < area)
             {
                 Geometry.Spatial.Plane plane = face3D.GetPlane();
-                Face2D face2D_Panel = plane?.Convert(face3D);
+                Face2D face2D_Panel = Geometry.Spatial.Query.Convert(plane, face3D);
                 if (face2D_Panel == null)
                     return null;
 
@@ -87,7 +87,7 @@ namespace SAM.Analytical
                     offset = offset + factor;
                 }
 
-                face3D = plane.Convert(face2D);
+                face3D = Geometry.Spatial.Query.Convert(plane, face2D);
             }
 
             Aperture aperture = panel.AddAperture(apertureConstruction, face3D, false, tolerance_Area, tolerance, tolerance);

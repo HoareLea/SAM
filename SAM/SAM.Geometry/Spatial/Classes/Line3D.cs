@@ -13,10 +13,10 @@ namespace SAM.Geometry.Spatial
             vector = new Vector3D(line3D.vector);
         }
 
-        public Line3D(Point3D origin, Vector3D vector)
+        public Line3D(Point3D origin, Vector3D vector3D)
         {
             this.origin = new Point3D(origin);
-            this.vector = vector.Unit;
+            this.vector = vector3D.Unit;
         }
 
         public Line3D(JObject jObject)

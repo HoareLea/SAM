@@ -100,7 +100,7 @@ namespace SAM.Analytical
             {
                 Plane plane_Roof = tuple_Roof.Item2.Plane;
 
-
+                Face3D face3D = plane.Convert(tuple_Roof.Item1);
             }
 
             throw new NotImplementedException();

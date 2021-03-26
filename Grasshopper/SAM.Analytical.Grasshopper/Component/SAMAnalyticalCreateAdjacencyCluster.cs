@@ -165,7 +165,7 @@ namespace SAM.Analytical.Grasshopper
                 double elevation = Core.Query.Round(boundingBox3D.Min.Z, tolerance);
 
                 Geometry.Spatial.Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, elevation)) as Geometry.Spatial.Plane;
-                ISegmentable2D segmentable2D = plane.Convert(plane.Project(segmentable3D as dynamic));
+                ISegmentable2D segmentable2D = Geometry.Spatial.Query.Convert(plane, Geometry.Spatial.Query.Project(plane, segmentable3D as dynamic));
                 if (segmentable2D == null)
                     continue;
 

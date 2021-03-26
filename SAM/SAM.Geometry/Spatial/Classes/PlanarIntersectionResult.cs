@@ -15,7 +15,7 @@ namespace SAM.Geometry.Spatial
             this.plane = plane;
 
             if (plane != null && sAMGeometry3Ds != null)
-                geometry2Ds = sAMGeometry3Ds.ToList().ConvertAll(x => plane.Convert(x as dynamic) as ISAMGeometry2D);
+                geometry2Ds = sAMGeometry3Ds.ToList().ConvertAll(x => Query.Convert(plane, x as dynamic) as ISAMGeometry2D);
         }
 
         public PlanarIntersectionResult(Plane plane, Point3D point3D)
@@ -129,11 +129,6 @@ namespace SAM.Geometry.Spatial
             return new PlanarIntersectionResult(plane, point3D);
         }
 
-        public static PlanarIntersectionResult Create(Plane plane, Point3D point3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
-        {
-            return Create(plane, new Line3D(point3D, vector3D), tolerance);
-        }
-
         public static PlanarIntersectionResult Create(Face3D face3D, Point3D point3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
         {
             Plane plane = face3D?.GetPlane();
@@ -223,31 +218,32 @@ namespace SAM.Geometry.Spatial
             return new PlanarIntersectionResult(plane, geometry3Ds);
         }
 
-        public static PlanarIntersectionResult Create(Plane plane, Line3D line3D, double tolerance = Core.Tolerance.Distance)
+        public static PlanarIntersectionResult Create(Plane plane, Point3D point3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
         {
-            if (plane == null || line3D == null)
+            if (plane == null || point3D == null || vector3D == null)
                 return null;
-
-            Vector3D direction = line3D.Direction;
 
             Vector3D normal = plane.Normal;
 
-            Point3D origin = line3D.Origin;
-
-            double d = normal.DotProduct(direction);
+            double d = normal.DotProduct(vector3D);
             if (System.Math.Abs(d) < tolerance)
             {
-                if (plane.Distance(origin) < tolerance)
-                    return new PlanarIntersectionResult(plane, plane.Project(line3D));
-                else
-                    return new PlanarIntersectionResult(plane);
+                if (plane.Distance(point3D) < tolerance)
+                    return new PlanarIntersectionResult(plane, plane.Project(new Line3D(point3D, vector3D)));
+
+                return new PlanarIntersectionResult(plane);
             }
 
-            double u = (plane.K - normal.DotProduct(origin.ToVector3D())) / d;
+            double u = (plane.K - normal.DotProduct(point3D.ToVector3D())) / d;
 
-            Point3D point3D_Intersection = new Point3D(origin.X + u * direction.X, origin.Y + u * direction.Y, origin.Z + u * direction.Z);
+            Point3D point3D_Intersection = new Point3D(point3D.X + u * vector3D.X, point3D.Y + u * vector3D.Y, point3D.Z + u * vector3D.Z);
 
             return new PlanarIntersectionResult(plane, point3D_Intersection);
+        }
+        
+        public static PlanarIntersectionResult Create(Plane plane, Line3D line3D, double tolerance = Core.Tolerance.Distance)
+        {
+            return Create(plane, line3D.Origin, line3D.Direction, tolerance);
         }
 
         public static PlanarIntersectionResult Create(Plane plane_1, Plane plane_2, double tolerance = Core.Tolerance.Angle)

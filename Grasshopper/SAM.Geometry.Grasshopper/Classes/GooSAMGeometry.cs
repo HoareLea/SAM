@@ -333,7 +333,7 @@ namespace SAM.Geometry.Grasshopper
             }
             else if (Value is Planar.ICurvable2D)
             {
-                curve3Ds = ((Planar.ICurvable2D)Value).GetCurves().ConvertAll(x => Spatial.Plane.WorldXY.Convert(x));
+                curve3Ds = ((Planar.ICurvable2D)Value).GetCurves().ConvertAll(x => Spatial.Query.Convert(Spatial.Plane.WorldXY, x));
             }
 
             if (curve3Ds != null && curve3Ds.Count > 0)
