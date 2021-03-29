@@ -168,9 +168,13 @@ namespace SAM.Geometry.Planar
             if (polygon_1 == null || polygon_2 == null)
                 return null;
 
+            List<Face2D> result = new List<Face2D>();
+
+            if (polygon_1.EqualsTopologically(polygon_2))
+                return result;
+
             NetTopologySuite.Geometries.Geometry geometry = polygon_1.Difference(polygon_2);
 
-            List<Face2D> result = new List<Face2D>();
             if (geometry is Polygon)
             {
                 Face2D face2D = ((Polygon)geometry).ToSAM(tolerance);
