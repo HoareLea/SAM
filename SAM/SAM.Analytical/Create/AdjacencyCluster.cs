@@ -316,7 +316,7 @@ namespace SAM.Analytical
                 //List contains all new face3Ds. The list is used to create shading
                 List<Face3D> face3Ds_New = new List<Face3D>(); 
 
-                //Createing new panels based on Shell -> Face3D
+                //Creating new panels based on Shell -> Face3D
                 List<Tuple<Point3D, Panel>> tuples_Point3D = new List<Tuple<Point3D, Panel>>();
                 foreach (Tuple<Face3D, Shell> tuple in tuples_Face3D)
                 {
@@ -398,7 +398,9 @@ namespace SAM.Analytical
                     foreach (Space space in spaces_Shell)
                         result.AddRelation(space, panel_New);
 
-                    face3Ds_New.Add(face3D_New);
+                    //Add to the list only if Panel not exists before
+                    if (index == -1) 
+                        face3Ds_New.Add(face3D_New);
                 }
 
                 //Creating shades
