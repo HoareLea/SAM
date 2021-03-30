@@ -160,20 +160,20 @@ namespace SAM.Geometry.Spatial
             return new Polygon3D(point3Ds);
         }
 
-        public static ICurve3D Project(this Plane plane, ICurve3D curve)
+        public static ICurve3D Project(this Plane plane, ICurve3D curve3D)
         {
-            if (plane == null || curve == null)
+            if (plane == null || curve3D == null)
                 return null;
 
-            return Project(plane, curve as dynamic);
+            return Project(plane, curve3D as dynamic);
         }
 
-        public static ICurve3D Project(this Plane plane, ICurve3D curve, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
+        public static ICurve3D Project(this Plane plane, ICurve3D curve3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
         {
-            if (plane == null || curve == null || vector3D == null)
+            if (plane == null || curve3D == null || vector3D == null)
                 return null;
 
-            return Project(plane, curve as dynamic, vector3D, tolerance);
+            return Project(plane, curve3D as dynamic, vector3D, tolerance);
         }
 
         public static Face3D Project(this Plane plane, Face3D face3D)

@@ -133,6 +133,19 @@ namespace SAM.Analytical
             //apertures = panel.apertures.FindAll(x => Query.IsValid(this, x, Core.Tolerance.MacroDistance)).ConvertAll(x => new Aperture(x));
         }
 
+        /// <summary>
+        /// This constructor does not copy apertures acorss
+        /// </summary>
+        /// <param name="guid">New Guid for Panel</param>
+        /// <param name="panel">Old Panel used as base</param>
+        /// <param name="planarBoundary3D">New PlanarBoundary</param>
+        public Panel(Guid guid, Panel panel, PlanarBoundary3D planarBoundary3D)
+            : base(guid, panel)
+        {
+            panelType = panel.panelType;
+            this.planarBoundary3D = planarBoundary3D;
+        }
+
         public Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
             : base(guid, name, parameterSets, construction)
         {
@@ -643,7 +656,7 @@ namespace SAM.Analytical
                 return false;
 
             if (!Query.IsValid(this, aperture))
-                return false;        
+                return false;
 
             if (apertures == null)
                 apertures = new List<Aperture>();
