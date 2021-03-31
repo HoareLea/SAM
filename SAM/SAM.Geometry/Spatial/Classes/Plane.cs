@@ -198,9 +198,9 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public double Distance(Plane plane)
+        public double Distance(Plane plane, double tolerance = Tolerance.Distance)
         {
-            if (!Coplanar(plane))
+            if (!Coplanar(plane, tolerance))
                 return 0;
 
             return Distance(plane.origin);
