@@ -381,6 +381,11 @@ namespace SAM.Geometry.Planar
             return GetMoved(Direction.GetPerpendicular(orientation) * offset);
         }
 
+        public bool IsNaN()
+        {
+            return (origin != null && origin.IsNaN()) || (vector != null && vector.IsNaN());
+        }
+
         public override ISAMGeometry Clone()
         {
             return new Segment2D(origin, vector);
