@@ -63,7 +63,7 @@ namespace SAM.Analytical
             : base(aperture.ApertureConstruction?.Name, aperture, aperture.ApertureConstruction)
         {
             if (planarBoundary3D != null)
-                planarBoundary3D = new PlanarBoundary3D(planarBoundary3D);
+                this.planarBoundary3D = new PlanarBoundary3D(planarBoundary3D);
         }
 
         public override bool FromJObject(JObject jObject)
