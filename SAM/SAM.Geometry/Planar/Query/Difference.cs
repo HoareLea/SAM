@@ -211,6 +211,14 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public static List<Face2D> Difference(this Face2D face2D, Polygon2D polygon2D, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (face2D == null || polygon2D == null)
+                return null;
+
+            return Difference(face2D, new Face2D(polygon2D), tolerance);
+        }
+
         public static List<Face2D> Difference(this Face2D face2D, IEnumerable<Face2D> face2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (face2D == null || face2Ds == null || face2D.GetArea() <= tolerance)

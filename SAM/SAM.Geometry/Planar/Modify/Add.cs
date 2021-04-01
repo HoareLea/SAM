@@ -18,5 +18,14 @@ namespace SAM.Geometry.Planar
 
             return false;
         }
+
+        public static bool Add(this List<Point2D> point2Ds, double x, double y)
+        {
+            if (point2Ds == null)
+                return false;
+
+            point2Ds.Add(new Point2D(x, y));
+            return true;
+        }
     }
 }

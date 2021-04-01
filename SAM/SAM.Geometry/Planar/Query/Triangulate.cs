@@ -1,50 +1,75 @@
 ﻿using System.Collections.Generic;
+using NetTopologySuite.Triangulate;
+using NetTopologySuite.Geometries;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Triangle2D> Triangulate(this Polygon2D polygon2D, double tolerance = Core.Tolerance.Distance)
+        public static List<Triangle2D> Triangulate(this Polygon2D polygon2D, double tolerance = Core.Tolerance.MicroDistance)
         {
-            List<Segment2D> segment2Ds = polygon2D?.GetSegments();
-            if (segment2Ds == null)
+            if (polygon2D == null)
                 return null;
 
-            segment2Ds.RemoveAll(x => x == null);
-            if (segment2Ds.Count < 3)
+            Polygon polygon = polygon2D.ToNTS_Polygon(tolerance);
+
+            DelaunayTriangulationBuilder delaunayTriangulationBuilder = new DelaunayTriangulationBuilder();
+            delaunayTriangulationBuilder.SetSites(polygon);
+
+            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
+
+            GeometryCollection geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
+            if (geometryCollection == null)
                 return null;
 
             List<Triangle2D> result = new List<Triangle2D>();
-            bool updated = true;
-            while (updated && segment2Ds.Count > 0)
+            foreach (NetTopologySuite.Geometries.Geometry geometry in geometryCollection.Geometries)
             {
-                updated = false;
-                for(int i=0; i < segment2Ds.Count - 1; i++)
-                {
-                    Segment2D segment2D_1 = segment2Ds[i];
-                    Segment2D segment2D_2 = segment2Ds[i + 1];
+                Polygon polygon_Temp = geometry as Polygon;
+                if (polygon == null)
+                    continue;
 
-                    Point2D point2D_1 = segment2D_1[0];
-                    Point2D point2D_2 = segment2D_2[1];
+                Coordinate[] coordinates = polygon_Temp.Coordinates;
+                if (coordinates == null || coordinates.Length != 4)
+                    continue;
 
-                    Segment2D segment2D_3 = new Segment2D(point2D_1, point2D_2);
+                result.Add(new Triangle2D(coordinates[0].ToSAM(tolerance), coordinates[1].ToSAM(), coordinates[2].ToSAM(tolerance)));
+            }
 
-                    List<Point2D> point2Ds = Intersections(segment2D_3, segment2Ds, tolerance);
-                    if (point2Ds == null || point2Ds.Count == 0)
-                        continue;
+            return result;
+        }
 
-                    point2Ds.RemoveAll(x => x.AlmostEquals(point2D_1, tolerance) || x.AlmostEquals(point2D_2, tolerance));
+        public static List<Triangle2D> Traingulate(this Face2D face2D, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (face2D == null)
+                return null;
 
-                    if (point2Ds.Count > 0)
-                        continue;
+            Polygon polygon = face2D.ToNTS(tolerance);
 
-                    Triangle2D triangle2D = new Triangle2D(point2D_1, segment2D_2[0], point2D_2);
-                    result.Add(triangle2D);
-                    
-                    segment2Ds.Remove(segment2D_1);
-                    segment2Ds.Remove(segment2D_2);
-                    updated = true;
-                }
+            DelaunayTriangulationBuilder delaunayTriangulationBuilder = new DelaunayTriangulationBuilder();
+            delaunayTriangulationBuilder.SetSites(polygon);
+
+            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
+
+            GeometryCollection geometryCollection =  delaunayTriangulationBuilder.GetTriangles(geometryFactory);
+            if (geometryCollection == null)
+                return null;
+
+            List<Triangle2D> result = new List<Triangle2D>();
+            foreach(NetTopologySuite.Geometries.Geometry geometry in geometryCollection.Geometries)
+            {
+                Polygon polygon_Temp = geometry as Polygon;
+                if (polygon == null)
+                    continue;
+
+                if (!polygon.Contains(polygon_Temp.Centroid))
+                    continue;
+
+                Coordinate[] coordinates = polygon_Temp.Coordinates;
+                if (coordinates == null || coordinates.Length != 4)
+                    continue;
+
+                result.Add(new Triangle2D(coordinates[0].ToSAM(tolerance), coordinates[1].ToSAM(), coordinates[2].ToSAM(tolerance)));
             }
 
             return result;
