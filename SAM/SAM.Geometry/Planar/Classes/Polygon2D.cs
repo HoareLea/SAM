@@ -270,7 +270,7 @@ namespace SAM.Geometry.Planar
             if (polygon3D == null)
                 return null;
 
-            return polygon3D.GetPlane()?.Convert(polygon3D);
+            return Spatial.Query.Convert(polygon3D.GetPlane(), polygon3D);
         }
     }
 }

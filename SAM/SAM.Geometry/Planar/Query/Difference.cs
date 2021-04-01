@@ -159,18 +159,34 @@ namespace SAM.Geometry.Planar
             if (face2D_1 == null || face2D_2 == null)
                 return null;
 
-            if (face2D_1.GetArea() <= tolerance || face2D_2.GetArea() <= tolerance)
+            double area_1 = face2D_1.GetArea();
+            if (area_1 <= tolerance)
                 return null;
-            
+
+            double area_2 = face2D_2.GetArea();
+            if (area_2 <= tolerance)
+                return new List<Face2D>() { new Face2D(face2D_2) };
+
             Polygon polygon_1 = face2D_1.ToNTS(tolerance);
             Polygon polygon_2 = face2D_2.ToNTS(tolerance);
 
             if (polygon_1 == null || polygon_2 == null)
                 return null;
 
-            NetTopologySuite.Geometries.Geometry geometry = polygon_1.Difference(polygon_2);
+            List<Polygon> polygons_Snap = Snap(polygon_1, polygon_2, tolerance);
+            if (polygons_Snap != null && polygons_Snap.Count == 2)
+            {
+                polygon_1 = polygons_Snap[0];
+                polygon_2 = polygons_Snap[1];
+            }
 
             List<Face2D> result = new List<Face2D>();
+
+            if (polygon_1.EqualsTopologically(polygon_2))
+                return result;
+
+            NetTopologySuite.Geometries.Geometry geometry = polygon_1.Difference(polygon_2);
+
             if (geometry is Polygon)
             {
                 Face2D face2D = ((Polygon)geometry).ToSAM(tolerance);
@@ -180,7 +196,7 @@ namespace SAM.Geometry.Planar
             else if (geometry is MultiPolygon)
             {
                 List<Polygon> polygons = Query.Polygons((MultiPolygon)geometry);
-                if(polygons != null && polygons.Count > 0)
+                if (polygons != null && polygons.Count > 0)
                 {
                     polygons.ForEach(x => result.Add(x.ToSAM(tolerance)));
                 }

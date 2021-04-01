@@ -123,8 +123,8 @@ namespace SAM.Geometry.Planar
         public bool AlmostOnSegment(Segment2D segment2D, double tolerance = Core.Tolerance.Distance)
         {
             Segment2D segment2D_temp = new Segment2D(new Point2D(0, 0), new Point2D(segment2D[1].X - segment2D[0].X, segment2D[1].Y - segment2D[0].Y));
-            Point2D aPoint2D = new Point2D(coordinates[0] - segment2D[0].X, coordinates[1] - segment2D[0].Y);
-            return System.Math.Abs(segment2D_temp[1].X * aPoint2D.Y - aPoint2D.X * segment2D_temp[1].Y) < tolerance;
+            Point2D point2D = new Point2D(coordinates[0] - segment2D[0].X, coordinates[1] - segment2D[0].Y);
+            return System.Math.Abs(segment2D_temp[1].X * point2D.Y - point2D.X * segment2D_temp[1].Y) < tolerance;
         }
 
         public bool IsValid()

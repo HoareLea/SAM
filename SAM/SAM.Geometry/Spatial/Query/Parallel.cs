@@ -14,6 +14,11 @@
             return System.Math.Abs(d) >= System.Math.Cos(tolerance);
         }
 
+        public static bool Parallel(this Plane plane_1, Plane plane_2, double tolerance = Core.Tolerance.Angle)
+        {
+            return Parallel(plane_1?.Normal, plane_2?.Normal, tolerance);
+        }
+
         public static bool Parallel(this Segment3D segment3D_1, Segment3D segment3D_2, double tolerance = Core.Tolerance.Angle)
         {
             return Parallel(segment3D_1?.Direction, segment3D_2?.Direction, tolerance);

@@ -79,8 +79,8 @@ namespace SAM.Geometry.Grasshopper
                 ISAMGeometry sAMGeometry = ((GooSAMGeometry)objectWrapper.Value).Value;
                 if (sAMGeometry is Spatial.ISAMGeometry3D)
                     sAMGeometry3Ds.Add((Spatial.ISAMGeometry3D)sAMGeometry);
-                else if (sAMGeometry is Planar.ISAMGeometry2D)
-                    sAMGeometry3Ds.Add(Spatial.Plane.WorldXY.Convert((Planar.ISAMGeometry2D)sAMGeometry));
+                else if (sAMGeometry is ISAMGeometry2D)
+                    sAMGeometry3Ds.Add(Spatial.Query.Convert(Spatial.Plane.WorldXY, (ISAMGeometry2D)sAMGeometry));
             }
             else if (objectWrapper.Value is IGH_GeometricGoo)
             {
@@ -93,9 +93,9 @@ namespace SAM.Geometry.Grasshopper
                 {
                     List<Spatial.ICurve3D> curve3Ds = new List<Spatial.ICurve3D>();
                     if (sAMGeometry3D is Spatial.ICurvable3D)
-                        curve3Ds.AddRange(((Spatial.ICurvable3D)sAMGeometry3D).GetCurves().ConvertAll(x => Spatial.Plane.WorldXY.Project(x)));
+                        curve3Ds.AddRange(((Spatial.ICurvable3D)sAMGeometry3D).GetCurves().ConvertAll(x => Spatial.Query.Project(Spatial.Plane.WorldXY, x)));
                     else if (sAMGeometry3D is Spatial.ICurve3D)
-                        curve3Ds.Add(Spatial.Plane.WorldXY.Project((Spatial.ICurve3D)sAMGeometry3D));
+                        curve3Ds.Add(Spatial.Query.Project(Spatial.Plane.WorldXY, (Spatial.ICurve3D)sAMGeometry3D));
 
                     if (curve3Ds == null || curve3Ds.Count == 0)
                         continue;
@@ -105,7 +105,7 @@ namespace SAM.Geometry.Grasshopper
                         if (curve3D == null)
                             continue;
 
-                        ICurvable2D curvable2D = Spatial.Plane.WorldXY.Convert(curve3D) as ICurvable2D;
+                        ICurvable2D curvable2D = Spatial.Query.Convert(Spatial.Plane.WorldXY, curve3D) as ICurvable2D;
                         if (curvable2D != null)
                             sAMGeometry2Ds.Add(curvable2D);
                     }

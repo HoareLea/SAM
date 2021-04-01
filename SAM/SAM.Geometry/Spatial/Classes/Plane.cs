@@ -2,6 +2,7 @@
 using SAM.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -163,191 +164,6 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public Planar.ISAMGeometry2D Convert(IBoundable3D geometry)
-        {
-            return Convert(geometry as dynamic);
-        }
-
-        public Planar.Polycurve2D Convert(Polycurve3D polycurve3D)
-        {
-            if (polycurve3D == null)
-                return null;
-
-            List<ICurve3D> curve3Ds = polycurve3D.GetCurves();
-
-            if (curve3Ds.TrueForAll(x => x is Segment3D))
-                return new Planar.Polycurve2D(curve3Ds.ConvertAll(x => Convert((Segment3D)x)));
-
-            throw new NotImplementedException();
-        }
-
-        public Polycurve3D Convert(Planar.Polycurve2D polycurve2D)
-        {
-            if (polycurve2D == null)
-                return null;
-
-            List<Planar.ICurve2D> curve2Ds = polycurve2D.GetCurves();
-
-            if (curve2Ds.TrueForAll(x => x is Planar.Segment2D))
-                return new Polycurve3D(curve2Ds.ConvertAll(x => Convert((Planar.Segment2D)x)));
-
-            throw new NotImplementedException();
-        }
-
-        public ISAMGeometry3D Convert(Planar.ISAMGeometry2D geometry)
-        {
-            return Convert(geometry as dynamic);
-        }
-
-        public PolycurveLoop3D Convert(Planar.PolycurveLoop2D polycurveLoop2D)
-        {
-            if (polycurveLoop2D == null)
-                return null;
-
-            List<Planar.ICurve2D> curve2Ds = polycurveLoop2D.GetCurves();
-
-            if (curve2Ds.TrueForAll(x => x is Planar.Segment2D))
-                return new PolycurveLoop3D(curve2Ds.ConvertAll(x => Convert((Planar.Segment2D)x)));
-
-            throw new NotImplementedException();
-        }
-
-        public ICurve3D Convert(Planar.ICurve2D curve2D)
-        {
-            return Convert(curve2D as dynamic);
-        }
-
-        public Point3D Convert(Planar.Point2D point2D)
-        {
-            Vector3D axisX = AxisX;
-
-            Vector3D u = new Vector3D(axisY.X * point2D.Y, axisY.Y * point2D.Y, axisY.Z * point2D.Y);
-            Vector3D v = new Vector3D(axisX.X * point2D.X, axisX.Y * point2D.X, axisX.Z * point2D.X);
-
-            return new Point3D(Origin.X + u.X + v.X, Origin.Y + u.Y + v.Y, Origin.Z + u.Z + v.Z);
-        }
-
-        public Planar.Point2D Convert(Point3D point3D)
-        {
-            Vector3D vector3D = new Vector3D(point3D.X - origin.X, point3D.Y - origin.Y, point3D.Z - origin.Z);
-            return new Planar.Point2D(AxisX.DotProduct(vector3D), axisY.DotProduct(vector3D));
-        }
-
-        public Planar.Vector2D Convert(Vector3D vector3D)
-        {
-            //Vector3D vector3D_Result = new Vector3D(vector3D.X - origin.X, vector3D.Y - origin.Y, vector3D.Z - origin.Z);
-            return new Planar.Vector2D(AxisX.DotProduct(vector3D), axisY.DotProduct(vector3D));
-        }
-
-        public Vector3D Convert(Planar.Vector2D vector2D)
-        {
-            Vector3D axisX = AxisX;
-
-            Vector3D u = new Vector3D(axisY.X * vector2D.Y, axisY.Y * vector2D.Y, axisY.Z * vector2D.Y);
-            Vector3D v = new Vector3D(axisX.X * vector2D.X, axisX.Y * vector2D.X, axisX.Z * vector2D.X);
-
-            return new Vector3D(u.X + v.X, u.Y + v.Y, u.Z + v.Z);
-        }
-
-        public Polygon3D Convert(Planar.Polygon2D polygon2D)
-        {
-            //return new Polygon3D(Convert(polygon2D.Points));
-            return new Polygon3D(this, polygon2D.Points);
-        }
-
-        public Polygon3D Convert(Planar.Rectangle2D rectangle2D)
-        {
-            //return new Polygon3D(Convert(rectangle2D.GetPoints()));
-            return new Polygon3D(this, rectangle2D.GetPoints());
-        }
-
-        public Planar.Polygon2D Convert(Polygon3D polygon3D)
-        {
-            return new Planar.Polygon2D(Convert(polygon3D.GetPoints()));
-        }
-
-        public Planar.Polyline2D Convert(Polyline3D polyline3D)
-        {
-            return new Planar.Polyline2D(Convert(polyline3D.GetPoints()));
-        }
-
-        public Polyline3D Convert(Planar.Polyline2D polyline2D)
-        {
-            return new Polyline3D(Convert(polyline2D.GetPoints()));
-        }
-
-        public Planar.Triangle2D Convert(Triangle3D triangle3D)
-        {
-            List<Point3D> point3Ds = triangle3D.GetPoints();
-            return new Planar.Triangle2D(Convert(point3Ds[0]), Convert(point3Ds[1]), Convert(point3Ds[2]));
-        }
-
-        public Planar.Segment2D Convert(Segment3D segment3D)
-        {
-            return new Planar.Segment2D(Convert(segment3D[0]), Convert(segment3D[1]));
-        }
-
-        public Segment3D Convert(Planar.Segment2D segment2D)
-        {
-            return new Segment3D(Convert(segment2D.Start), Convert(segment2D.End));
-        }
-
-        public Planar.Line2D Convert(Line3D line3D)
-        {
-            return new Planar.Line2D(Convert(line3D.Origin), Convert(line3D.Direction));
-        }
-
-        public Line3D Convert(Planar.Line2D line2D)
-        {
-            return new Line3D(Convert(line2D.Origin), Convert(line2D.Direction));
-        }
-
-        public IClosedPlanar3D Convert(Planar.IClosed2D closed2D)
-        {
-            return Convert(closed2D as dynamic);
-        }
-
-        public Planar.Face2D Convert(Face3D face3D)
-        {
-            IClosedPlanar3D closedPlanar3D_External = face3D.GetExternalEdge3D();
-            Planar.IClosed2D closed2D_external = Convert(closedPlanar3D_External);
-
-            List<Planar.IClosed2D> closed2Ds_internal = new List<Planar.IClosed2D>();
-            List<IClosedPlanar3D> closedPlanar3Ds_Internal = face3D.GetInternalEdge3Ds();
-            if (closedPlanar3Ds_Internal != null && closedPlanar3Ds_Internal.Count > 0)
-                closedPlanar3Ds_Internal.ForEach(x => closed2Ds_internal.Add(Convert(x)));
-
-            return Planar.Face2D.Create(closed2D_external, closed2Ds_internal);
-        }
-
-        public Face3D Convert(Planar.Face2D face2D)
-        {
-            return new Face3D(this, face2D);
-        }
-
-        public Planar.IClosed2D Convert(IClosed3D closed3D)
-        {
-            return Convert(closed3D as dynamic);
-        }
-
-        public List<Planar.Point2D> Convert(IEnumerable<Point3D> point3Ds)
-        {
-            List<Planar.Point2D> point2ds = new List<Planar.Point2D>();
-            foreach (Point3D point3D in point3Ds)
-                point2ds.Add(Convert(point3D));
-
-            return point2ds;
-        }
-
-        public List<Point3D> Convert(IEnumerable<Planar.Point2D> point2Ds)
-        {
-            List<Point3D> point3ds = new List<Point3D>();
-            foreach (Planar.Point2D point2D in point2Ds)
-                point3ds.Add(Convert(point2D));
-
-            return point3ds;
-        }
-
         public double Distance(Point3D point3D)
         {
             return Closest(point3D).Distance(point3D);
@@ -382,9 +198,9 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public double Distance(Plane plane)
+        public double Distance(Plane plane, double tolerance = Tolerance.Distance)
         {
-            if (!Coplanar(plane))
+            if (!Coplanar(plane, tolerance))
                 return 0;
 
             return Distance(plane.origin);
@@ -401,82 +217,13 @@ namespace SAM.Geometry.Spatial
             return new Point3D(point3D.X - (normal.X * factor), point3D.Y - (normal.Y * factor), point3D.Z - (normal.Z * factor));
         }
 
-        public Vector3D Project(Vector3D vector3D)
-        {
-            return vector3D - vector3D.DotProduct(normal) * normal;
-
-            //double factor = vector3D.DotProduct(normal) - K;
-            //return new Vector3D(vector3D.X - (normal.X * factor), vector3D.Y - (normal.Y * factor), vector3D.Z - (normal.Z * factor));
-        }
-
-        public Point3D Project(Point3D point3D)
-        {
-            return Closest(point3D);
-        }
-
-        public Point3D Project(Point3D point3D, Vector3D vector3D, double tolerance = Tolerance.Distance)
+        public Point3D Closest(Point3D point3D, Vector3D vector3D, double tolerance = Tolerance.Distance)
         {
             PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(this, point3D, vector3D, tolerance);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return null;
 
-            return planarIntersectionResult.GetGeometry3D<Point3D>();
-        }
-
-        public Segment3D Project(Segment3D segment3D)
-        {
-            return new Segment3D(Closest(segment3D[0]), Closest(segment3D[1]));
-        }
-
-        public Triangle3D Project(Triangle3D triangle3D)
-        {
-            List<Point3D> point3Ds = triangle3D.GetPoints();
-            return new Triangle3D(Closest(point3Ds[0]), point3Ds[1], point3Ds[2]);
-        }
-
-        public Polyline3D Project(Polyline3D polyline3D)
-        {
-            return new Polyline3D(polyline3D.Points.ConvertAll(x => Closest(x)));
-        }
-
-        public Polygon3D Project(Polygon3D polygon3D)
-        {
-            List<Point3D> point3Ds = polygon3D.GetPoints();
-            if (point3Ds == null)
-                return null;
-
-            List<Planar.Point2D> point2Ds = point3Ds.ConvertAll(x => Convert(x));
-
-            return new Polygon3D(this, point2Ds);
-        }
-
-        public ICurve3D Project(ICurve3D curve)
-        {
-            return Project(curve as dynamic);
-        }
-
-        public Face3D Project(Face3D face3D)
-        {
-            Planar.IClosed2D externalEdge = Convert(Project(face3D.GetExternalEdge3D()));
-
-            List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
-            if (internalEdges != null && internalEdges.Count > 0)
-                internalEdges = internalEdges.ConvertAll(x => Project(x));
-
-            return Face3D.Create(this, externalEdge, internalEdges?.ConvertAll(x => Convert(x)));
-        }
-
-        public Line3D Project(Line3D line3D)
-        {
-            return new Line3D(Project(line3D.Origin), Project(line3D.Direction));
-        }
-
-        public IClosedPlanar3D Project(IClosedPlanar3D closedPlanar3D)
-        {
-            if (closedPlanar3D == null)
-                return null;
-
-            return Project(closedPlanar3D as dynamic);
+            return planarIntersectionResult.GetGeometry3Ds<Point3D>()?.FirstOrDefault();
         }
 
         public void FlipZ(bool flipX = true)

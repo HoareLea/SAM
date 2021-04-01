@@ -154,6 +154,11 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        public bool IsNaN()
+        {
+            return double.IsNaN(coordinates[0]) || double.IsNaN(coordinates[1]);
+        }
+
         public void Round(double tolerance = Core.Tolerance.Distance)
         {
             coordinates[0] = Core.Query.Round(coordinates[0], tolerance);

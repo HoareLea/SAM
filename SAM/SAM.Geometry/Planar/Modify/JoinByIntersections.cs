@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        public static bool JoinByIntersections(this List<Segment2D> segment2Ds, bool close = false, double tolerance = Core.Tolerance.Distance)
+        public static bool JoinByIntersections(this List<Segment2D> segment2Ds, bool close = false, double tolerance = Core.Tolerance.MacroDistance)
         {
             if (segment2Ds == null || segment2Ds.Count < 2)
                 return false;

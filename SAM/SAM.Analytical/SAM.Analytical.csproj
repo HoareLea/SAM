@@ -168,6 +168,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\AdjustRoofs.cs" />
     <Compile Include="Query\CutShading.cs" />
     <Compile Include="Modify\FixAdjacencyCluster.cs" />
     <Compile Include="Query\IntersectingPanels.cs" />

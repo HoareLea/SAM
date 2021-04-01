@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else if (sAMGeometry is Geometry.Planar.ISAMGeometry2D)
                 {
-                    sAMGeometry3Ds = new List<ISAMGeometry3D>() { Plane.WorldXY.Convert(sAMGeometry as dynamic) };
+                    sAMGeometry3Ds = new List<ISAMGeometry3D>() { Geometry.Spatial.Query.Convert(Plane.WorldXY, sAMGeometry as dynamic) };
                     return true;
                 }
             }

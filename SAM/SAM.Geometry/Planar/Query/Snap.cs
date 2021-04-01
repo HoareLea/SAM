@@ -24,6 +24,15 @@ namespace SAM.Geometry.Planar
             return geometries.ToList().ConvertAll(x => (x as LinearRing).ToSAM(tolerance));
         }
 
+        public static List<Polygon> Snap(this Polygon polygon_1, Polygon polygon_2, double snapDistance)
+        {
+            NetTopologySuite.Geometries.Geometry[] geometries = GeometrySnapper.Snap(polygon_1, polygon_2, snapDistance);
+            if (geometries == null)
+                return null;
+
+            return geometries.ToList().ConvertAll(x => (x as Polygon));
+        }
+        
         public static List<Face2D> Snap(this Face2D face2D_1, Face2D face2D_2, double snapDistance, double tolerance = Core.Tolerance.Distance)
         {
             Polygon polygon_1 = Convert.ToNTS(face2D_1 as Face, tolerance);

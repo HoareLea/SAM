@@ -126,10 +126,12 @@ namespace SAM.Analytical
                 return null;
 
             List<Panel> panels_Temp = new List<Panel>();
-            foreach(Panel panel in panels_ToBeExtended)
+            foreach (Panel panel in panels_ToBeExtended)
             {
                 Panel panel_Temp = Extend(panel, panels, tolerance);
-                if (panels_Temp != null)
+                if (panel_Temp == null)
+                    panels_Temp.Add(panel);
+                else
                     panels_Temp.Add(panel_Temp);
             }
 
