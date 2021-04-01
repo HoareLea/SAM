@@ -180,6 +180,7 @@
     <Compile Include="Spatial\Query\NormalDictionary.cs" />
     <Compile Include="Spatial\Query\Perpendicular.cs" />
     <Compile Include="Spatial\Query\Rotate90.cs" />
+    <Compile Include="Spatial\Query\Triangulate.cs" />
     <Compile Include="Spatial\Query\TopFace3Ds.cs" />
     <Compile Include="Spatial\Query\Between.cs" />
     <Compile Include="Spatial\Query\Grid.cs" />

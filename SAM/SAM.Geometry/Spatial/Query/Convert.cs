@@ -189,6 +189,18 @@ namespace SAM.Geometry.Spatial
             return new Planar.Triangle2D(Convert(plane, point3Ds[0]), Convert(plane, point3Ds[1]), Convert(plane, point3Ds[2]));
         }
 
+        public static Triangle3D Convert(this Plane plane, Planar.Triangle2D triangle2D)
+        {
+            if (plane == null || triangle2D == null)
+                return null;
+
+            List<Planar.Point2D> point2Ds = triangle2D.GetPoints();
+            if (point2Ds == null)
+                return null;
+
+            return new Triangle3D(Convert(plane, point2Ds[0]), Convert(plane, point2Ds[1]), Convert(plane, point2Ds[2]));
+        }
+
         public static Planar.Segment2D Convert(this Plane plane, Segment3D segment3D)
         {
             if (plane == null || segment3D == null)

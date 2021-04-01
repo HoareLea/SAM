@@ -39,7 +39,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Triangle2D> Traingulate(this Face2D face2D, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Triangle2D> Triangulate(this Face2D face2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (face2D == null)
                 return null;
@@ -75,7 +75,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Triangle2D> Triangulate(this Polyline2D polyline2D, double tolerance = Core.Tolerance.Distance)
+        public static List<Triangle2D> Triangulate(this Polyline2D polyline2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (polyline2D == null)
                 return null;
