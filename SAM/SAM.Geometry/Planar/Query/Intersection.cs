@@ -83,6 +83,13 @@ namespace SAM.Geometry.Planar
             if (polygon_2 == null)
                 return null;
 
+            List<Polygon> polygons_Snap = Snap(polygon_1, polygon_2, tolerance);
+            if (polygons_Snap != null && polygons_Snap.Count == 2)
+            {
+                polygon_1 = polygons_Snap[0];
+                polygon_2 = polygons_Snap[1];
+            }
+
             NetTopologySuite.Geometries.Geometry geometry = polygon_1.Intersection(polygon_2);
             if (geometry == null)
                 return null;
