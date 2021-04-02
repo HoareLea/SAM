@@ -93,8 +93,6 @@ namespace SAM.Geometry.Spatial
             if (length < silverSpacing)
                 return false;
 
-            //------NEW CODE START-----
-
             Segment3D segment3D = new Segment3D(point3D, vector3D);
 
             List<Point3D> point3Ds = IntersectionPoint3Ds(segment3D, false, tolerance);
@@ -128,20 +126,6 @@ namespace SAM.Geometry.Spatial
             }
 
             return false;
-
-            //------NEW CODE END-----
-
-            //Point3D point3D_InternalPoint = boundaries.First().Item2.InternalPoint3D(tolerance);
-            //if(point3D_InternalPoint != null)
-            //    vector3D = new Vector3D(point3D, point3D_InternalPoint).Unit * length;
-
-            //Segment3D segment3D = new Segment3D(point3D, vector3D);
-
-            //List<Point3D> point3Ds = IntersectionPoint3Ds(segment3D, false, tolerance);
-            //if (point3Ds == null || point3Ds.Count == 0)
-            //    return false;
-
-            //return point3Ds.Count % 2 != 0;
         }
 
         public List<Point3D> IntersectionPoint3Ds(Segment3D segment3D, bool includeInternalEdges = true, double tolerance = Core.Tolerance.Distance)
