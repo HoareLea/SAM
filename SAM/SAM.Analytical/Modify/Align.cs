@@ -195,6 +195,8 @@ namespace SAM.Analytical
 
                 point2D_1 = segment2D.Mid();
                 point2D_2 = segment2D_Reference.Project(point2D_1);
+                if (point2D_1.Distance(point2D_2) <= tolerance_Distance)
+                    continue;
 
                 Vector3D vector3D = Plane.WorldXY.Convert(new Vector2D(point2D_1, point2D_2));
 
