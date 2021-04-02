@@ -54,7 +54,7 @@ namespace SAM.Geometry.Grasshopper
                 result.Add(new GH_SAMParam(gerenricObject, ParamVisibility.Binding));
 
                 gerenricObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_point", NickName = "_point", Description = "SAM Geometry Point3D", Access = GH_ParamAccess.item };
-                gerenricObject.DataMapping = GH_DataMapping.Flatten;
+                gerenricObject.DataMapping = GH_DataMapping.Graft;
                 result.Add(new GH_SAMParam(gerenricObject, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean booleanParam = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "allowOnBoundary_", NickName = "allowOnBoundary_", Description = "Allow On Boundary", Access = GH_ParamAccess.item };
