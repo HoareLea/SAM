@@ -98,5 +98,26 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        /// <summary>
+        /// Cut Face3D by given plane. Returned face3D will be limited to the ones on the same side as given Point3D.
+        /// </summary>
+        /// <param name="face3D">Face3D to be cut</param>
+        /// <param name="plane">Cutting plane</param>
+        /// <param name="point3D">Point3D which determines faces to be left</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Face3Ds </returns>
+        public static List<Face3D> Cut(this Face3D face3D, Plane plane, Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (point3D == null || face3D == null || plane == null)
+                return null;
+
+            Cut(face3D, plane, out List<Face3D> face3Ds_Above, out List<Face3D> face3Ds_Below, tolerance);
+
+            if (plane.Above(point3D, tolerance))
+                return face3Ds_Above;
+
+            return face3Ds_Below;
+        }
     }
 }

@@ -212,13 +212,33 @@ namespace SAM.Analytical
 
                     foreach (Panel panel_Connected in panels_Connected)
                     {
-                        Panel panel_New = Extend(panel_Connected, plane_Panel, tolerance_Angle, tolerance_Distance);
-                        if (panel_New == null)
+                        Face3D face3D = panel_Connected?.GetFace3D();
+                        if (face3D == null)
+                            continue;
+
+                        Face3D face3D_New = null;
+
+                        PlanarIntersectionResult planarIntersectionResult_Temp = PlanarIntersectionResult.Create(plane_Panel, face3D, tolerance_Angle, tolerance_Distance);
+                        if(planarIntersectionResult_Temp == null && planarIntersectionResult_Temp.Intersecting)
+                        {
+                            List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D, plane_Panel, tolerance_Distance);
+                            if(face3Ds != null && face3Ds.Count != 0)
+                            {
+                                face3Ds.Sort((x, y) => y.GetArea().CompareTo(y.GetArea()));
+                                face3D_New = face3Ds[0];
+                            }
+                        }
+                        else
+                        {
+                            face3D_New = Geometry.Spatial.Query.Extend(face3D, plane_Panel, tolerance_Angle, tolerance_Distance);
+                        }
+                        
+                        if (face3D_New == null)
                             continue;
 
                         int index = panels.IndexOf(panel_Connected);
                         if (index != -1)
-                            panels[index] = panel_New;
+                            panels[index] = new Panel(panel_Connected.Guid, panel_Connected, face3D_New);
                     }
                 }
 
