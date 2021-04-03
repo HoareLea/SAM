@@ -129,8 +129,8 @@ namespace SAM.Analytical.Grasshopper
 
                 Panel panel_Temp = new Panel(panels[i]);
 
-                panel_Temp = Analytical.Modify.Align(panel_Temp, plane_Upper, Tolerance.Angle, tolerance);
-                panel_Temp = Analytical.Modify.Align(panel_Temp, plane_Lower, Tolerance.Angle, tolerance);
+                panel_Temp = Analytical.Modify.Extend(panel_Temp, plane_Upper, Tolerance.Angle, tolerance);
+                panel_Temp = Analytical.Modify.Extend(panel_Temp, plane_Lower, Tolerance.Angle, tolerance);
 
                 List<Panel> panels_Temp = Analytical.Query.Cut(panel_Temp, new Geometry.Spatial.Plane[] { plane_Upper, plane_Lower });
                 if (panels_Temp == null || panels_Temp.Count == 0)

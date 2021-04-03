@@ -162,6 +162,7 @@
     <Compile Include="Modify\UpdateConstruction.cs" />
     <Compile Include="Modify\MapZones.cs" />
     <Compile Include="Modify\RegenerateSpaces.cs" />
+    <Compile Include="Modify\Extend.cs" />
     <Compile Include="Modify\UpdateZone.cs" />
     <Compile Include="Modify\UpdateSpace.cs" />
     <Compile Include="Modify\Remove.cs" />
