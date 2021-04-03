@@ -68,5 +68,35 @@ namespace SAM.Geometry.Spatial
 
             return face2Ds.ConvertAll(x => plane_Face3D.Convert(x));
         }
+
+        public static List<Face3D> Cut(this Face3D face3D, Plane plane, out List<Face3D> face3Ds_Above, out List<Face3D> face3Ds_Below, double tolerance = Core.Tolerance.Distance)
+        {
+            face3Ds_Above = null;
+            face3Ds_Below = null;
+
+            List<Face3D> result = Cut(face3D, plane, tolerance);
+            if (result == null)
+                return null;
+
+            face3Ds_Above = new List<Face3D>();
+            face3Ds_Below = new List<Face3D>();
+
+            if (result.Count == 0)
+                return result;
+
+            foreach(Face3D face3D_New in result)
+            {
+                Point3D point3D = face3D_New?.InternalPoint3D();
+                if (point3D == null)
+                    continue;
+
+                if (plane.Above(point3D, tolerance))
+                    face3Ds_Above.Add(face3D_New);
+                else
+                    face3Ds_Below.Add(face3D_New);
+            }
+
+            return result;
+        }
     }
 }
