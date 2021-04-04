@@ -119,5 +119,33 @@ namespace SAM.Geometry.Spatial
 
             return face3Ds_Below;
         }
+
+        public static List<Face3D> Cut(this Face3D face3D, IEnumerable<Face3D> face3Ds, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if (face3D == null || face3Ds == null)
+                return null;
+
+            Plane plane = face3D.GetPlane();
+            if (plane == null)
+                return null;
+
+            List<ISegmentable2D> segmentable2Ds = new List<ISegmentable2D>();
+            foreach(Face3D face3D_Temp in face3Ds)
+            {
+                PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(face3D, face3D_Temp, tolerance_Angle, tolerance_Distance);
+                if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                    continue;
+
+                List<ISegmentable2D> segmentable2Ds_Temp = planarIntersectionResult.GetGeometry2Ds<ISegmentable2D>();
+                if (segmentable2Ds_Temp == null || segmentable2Ds_Temp.Count == 0)
+                    continue;
+
+                segmentable2Ds.AddRange(segmentable2Ds_Temp);
+            }
+
+            List<Face2D> face2Ds = plane.Convert(face3D)?.Cut(segmentable2Ds, tolerance_Distance);
+
+            return face2Ds?.ConvertAll(x => plane.Convert(x));
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace SAM.Geometry.Planar
             {
                 for (int j = 1; j < count - 1; j++)
                 {
-                    result = Planar.Query.Mid(point2Ds[i], point2Ds[j]);
+                    result = Mid(point2Ds[i], point2Ds[j]);
                     if (On(segment2Ds, result, tolerance))
                         continue;
 
@@ -49,9 +49,9 @@ namespace SAM.Geometry.Planar
             if (point2Ds == null || point2Ds.Count() < 3)
                 return null;
 
-            Point2D result = Query.Centroid(point2Ds);
+            Point2D result = Centroid(point2Ds);
 
-            if (result != null && Query.Inside(point2Ds, result))
+            if (result != null && Inside(point2Ds, result))
                 return result;
 
             List<Point2D> point2Ds_List = new List<Point2D>(point2Ds);
@@ -76,7 +76,7 @@ namespace SAM.Geometry.Planar
                             continue;
 
                         result = segment2D.Mid();
-                        if (Query.Inside(point2Ds, result) && !Query.On(segments, result))
+                        if (Inside(point2Ds, result) && !On(segments, result))
                             return result;
                     }
                 }

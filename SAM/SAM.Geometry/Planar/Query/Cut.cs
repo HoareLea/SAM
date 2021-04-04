@@ -67,40 +67,73 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Face2D> Cut(this Face2D face2D, IEnumerable<Segment2D> segment2Ds, double tolerance = Tolerance.Distance)
+        public static List<Face2D> Cut(this Face2D face2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Tolerance.Distance)
         {
-            if (face2D == null || segment2Ds == null || segment2Ds.Count() == 0)
+            if (face2D == null || segmentable2Ds == null)
                 return null;
 
-            List<IClosed2D> closed2Ds = face2D.Edge2Ds;
-            if (closed2Ds == null || closed2Ds.Count == 0)
+            List<IClosed2D> edges = face2D.Edge2Ds;
+            if (edges == null || edges.Count == 0)
                 return null;
 
-            List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
-            foreach (IClosed2D closed2D in closed2Ds)
+            List<ISegmentable2D> segmentable2Ds_All = new List<ISegmentable2D>();
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
-                if (closed2D == null || !(closed2D is ISegmentable2D))
+                if (segmentable2D == null)
                     continue;
 
-                segment2Ds_Temp.AddRange(((ISegmentable2D)closed2D).GetSegments());
+                segmentable2Ds_All.Add(segmentable2D);
             }
 
-            if (segment2Ds_Temp.Count < 2)
+            HashSet<Point2D> point2Ds = new HashSet<Point2D>();
+            foreach (IClosed2D closed2D in edges)
+            {
+                ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
+                if (segmentable2D == null)
+                    continue;
+
+                segmentable2Ds_All.Add(segmentable2D);
+                foreach (Point2D point2D in segmentable2D.GetPoints())
+                    point2Ds.Add(point2D);
+            }
+
+            if (segmentable2Ds_All == null || segmentable2Ds_All.Count == 0)
                 return null;
 
-            List<Segment2D> segment2Ds_Split = new List<Segment2D>(segment2Ds_Temp);
-            segment2Ds_Split.AddRange(segment2Ds);
-            segment2Ds_Split = segment2Ds_Split.Split(tolerance);
+            List<Segment2D> segment2Ds = segmentable2Ds_All.Split(tolerance);
 
-            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds_Split, tolerance);
+            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds, tolerance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
 
-            for(int i=0; i < polygon2Ds.Count; i++)
-                polygon2Ds[i] = Snap(polygon2Ds[i], segment2Ds_Temp, tolerance);
+            List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
 
-            return Create.Face2Ds(polygon2Ds);
+            List<IClosed2D> externalEdges_New = new List<IClosed2D>();
+            List<IClosed2D> internalEdges_New = new List<IClosed2D>();
+            for (int i = 0; i < polygon2Ds.Count; i++)
+            {
+                Polygon2D polygon2D = Snap(polygon2Ds[i], point2Ds, tolerance);
 
+                Point2D point2D = polygon2D.GetInternalPoint2D(tolerance);
+                if (face2D.Inside(point2D, tolerance))
+                    externalEdges_New.Add(polygon2D);
+
+                IClosed2D closed2D = internalEdges?.Find(x => x.Inside(point2D, tolerance));
+                if (closed2D != null)
+                    internalEdges_New.Add(closed2D);
+            }
+
+            List<Face2D> result = new List<Face2D>();
+            foreach (IClosed2D externalEdge_New in externalEdges_New)
+            {
+                Face2D face2D_New = Face2D.Create(externalEdge_New, internalEdges_New);
+                if (face2D_New == null)
+                    continue;
+
+                result.Add(face2D_New);
+            }
+
+            return result;
         }
     }
 }
