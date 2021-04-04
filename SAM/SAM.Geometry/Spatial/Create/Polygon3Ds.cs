@@ -36,12 +36,12 @@ namespace SAM.Geometry.Spatial
                 PlanarIntersectionResult planarIntersectionResult = null;
                 if(checkIntersection)
                 {
-                    planarIntersectionResult = PlanarIntersectionResult.Create(plane, closedPlanar3D);
+                    planarIntersectionResult = PlanarIntersectionResult(plane, closedPlanar3D);
                     if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                         continue;
                 }
 
-                planarIntersectionResult = PlanarIntersectionResult.Create(plane, plane_Temp);
+                planarIntersectionResult = PlanarIntersectionResult(plane, plane_Temp);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 

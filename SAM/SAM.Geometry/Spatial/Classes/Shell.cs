@@ -139,9 +139,9 @@ namespace SAM.Geometry.Spatial
                 PlanarIntersectionResult planarIntersectionResult = null;
 
                 if(includeInternalEdges)
-                    planarIntersectionResult = PlanarIntersectionResult.Create(boundary.Item2, segment3D, tolerance);
+                    planarIntersectionResult = Create.PlanarIntersectionResult(boundary.Item2, segment3D, tolerance);
                 else
-                    planarIntersectionResult = PlanarIntersectionResult.Create(new Face3D(boundary.Item2.GetExternalEdge3D()), segment3D, tolerance);
+                    planarIntersectionResult = Create.PlanarIntersectionResult(new Face3D(boundary.Item2.GetExternalEdge3D()), segment3D, tolerance);
 
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;

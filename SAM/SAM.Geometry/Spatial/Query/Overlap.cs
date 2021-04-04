@@ -30,7 +30,7 @@ namespace SAM.Geometry.Spatial
             if (!plane_1.Overlap(plane_2, tolerance_Distance))
                 return false;
 
-            PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(face3D_1, face3D_2, tolerance_Angle, tolerance_Distance);
+            PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(face3D_1, face3D_2, tolerance_Angle, tolerance_Distance);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return false;
 

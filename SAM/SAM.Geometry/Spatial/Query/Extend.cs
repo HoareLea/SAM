@@ -16,7 +16,7 @@ namespace SAM.Geometry.Spatial
 
             Plane plane_Face3D = face3D.GetPlane();
 
-            PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, plane_Face3D, tolerance_Angle);
+            PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(plane, plane_Face3D, tolerance_Angle);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return null;
 

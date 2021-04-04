@@ -34,7 +34,7 @@ namespace SAM.Geometry.Spatial
             List<IBoundable2D> boundable2Ds = new List<IBoundable2D>();
             foreach(IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
             {
-                PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, closedPlanar3D, tolerance_Angle, tolerance_Distance);
+                PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(plane, closedPlanar3D, tolerance_Angle, tolerance_Distance);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 

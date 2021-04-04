@@ -19,7 +19,7 @@ namespace SAM.Geometry.Spatial
                 if (face3D.GetArea() <= tolerance_Distance)
                     continue;
                 
-                PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, face3D, tolerance_Angle, tolerance_Distance);
+                PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(plane, face3D, tolerance_Angle, tolerance_Distance);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 

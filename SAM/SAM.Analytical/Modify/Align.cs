@@ -28,7 +28,7 @@ namespace SAM.Analytical
 
                 if (System.Math.Abs(min - elevation) < Core.Tolerance.Distance || (min - Core.Tolerance.Distance < elevation && max - Core.Tolerance.Distance > elevation))
                 {
-                    planarIntersectionResult = PlanarIntersectionResult.Create(plane, panel.GetFace3D());
+                    planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, panel.GetFace3D());
                     if (planarIntersectionResult != null)
                     {
                         List<Segment2D> segment2Ds = planarIntersectionResult.GetGeometry2Ds<Segment2D>();
@@ -44,7 +44,7 @@ namespace SAM.Analytical
                 if (System.Math.Abs(min - referenceElevation) < Core.Tolerance.Distance || (min - Core.Tolerance.Distance < referenceElevation && max - Core.Tolerance.Distance > referenceElevation))
                 {
                     if (planarIntersectionResult == null)
-                        planarIntersectionResult = PlanarIntersectionResult.Create(plane, panel.GetFace3D());
+                        planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, panel.GetFace3D());
 
                     if (planarIntersectionResult != null)
                     {
@@ -94,7 +94,7 @@ namespace SAM.Analytical
 
                 Plane plane_Temp = Plane.WorldXY.GetMoved(Vector3D.WorldZ * ((max + min) / 2)) as Plane;
 
-                PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane_Temp, panel.GetFace3D());
+                PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane_Temp, panel.GetFace3D());
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 
@@ -218,7 +218,7 @@ namespace SAM.Analytical
 
                         Face3D face3D_New = null;
 
-                        PlanarIntersectionResult planarIntersectionResult_Temp = PlanarIntersectionResult.Create(plane_Panel, face3D, tolerance_Angle, tolerance_Distance);
+                        PlanarIntersectionResult planarIntersectionResult_Temp = Geometry.Spatial.Create.PlanarIntersectionResult(plane_Panel, face3D, tolerance_Angle, tolerance_Distance);
                         if(planarIntersectionResult_Temp == null && planarIntersectionResult_Temp.Intersecting)
                         {
                             List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D, plane_Panel, tolerance_Distance);

@@ -27,7 +27,7 @@ namespace SAM.Analytical
                 if (plane_Temp == null)
                     continue;
 
-                PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, plane_Temp);
+                PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, plane_Temp);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 
@@ -163,7 +163,7 @@ namespace SAM.Analytical
                     if (face3D == null)
                         continue;
 
-                    PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(face3D, point3D, vector3D, tolerance);
+                    PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(face3D, point3D, vector3D, tolerance);
                     if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                         continue;
 
@@ -194,7 +194,7 @@ namespace SAM.Analytical
 
             Plane plane_Panel = panel.Plane;
 
-            PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, plane_Panel, tolerance);
+            PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, plane_Panel, tolerance);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return null;
 

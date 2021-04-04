@@ -96,7 +96,7 @@ namespace SAM.Geometry.Spatial
                         if (keyValuePair.Key == face3D)
                             continue;
 
-                        PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(face3D, segment3D, tolerance);
+                        PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(face3D, segment3D, tolerance);
                         if (planarIntersectionResult == null)
                             continue;
 

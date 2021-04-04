@@ -15,7 +15,7 @@ namespace SAM.Geometry.Spatial
             List<Point3D> point3Ds = new List<Point3D>();
             foreach (Face3D face3D in face3Ds)
             {
-                PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(face3D, point3D, vector3D, tolerance_Distance);
+                PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(face3D, point3D, vector3D, tolerance_Distance);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 

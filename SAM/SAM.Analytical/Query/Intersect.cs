@@ -13,7 +13,7 @@ namespace SAM.Analytical
             if (face3D == null)
                 return false;
 
-            PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(plane, face3D, tolerance_Angle, tolerance_Distance);
+            PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, face3D, tolerance_Angle, tolerance_Distance);
             if (planarIntersectionResult == null)
                 return false;
 

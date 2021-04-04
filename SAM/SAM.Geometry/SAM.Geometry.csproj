@@ -70,6 +70,7 @@
     <Compile Include="Convert\ToSAM\Point2D.cs" />
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />
     <Compile Include="Create\ISAMGeometries.cs" />
+    <Compile Include="Spatial\Create\PlanarIntersectionResult.cs" />
     <Compile Include="Create\PolynomialEquation.cs" />
     <Compile Include="Create\JArray.cs" />
     <Compile Include="Create\ISAMGeometry.cs" />

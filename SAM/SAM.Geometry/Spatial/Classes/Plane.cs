@@ -219,7 +219,7 @@ namespace SAM.Geometry.Spatial
 
         public Point3D Closest(Point3D point3D, Vector3D vector3D, double tolerance = Tolerance.Distance)
         {
-            PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult.Create(this, point3D, vector3D, tolerance);
+            PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(this, point3D, vector3D, tolerance);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return null;
 
@@ -245,27 +245,27 @@ namespace SAM.Geometry.Spatial
                 axisY = Query.AxisY(normal, axisX);
         }
 
-        public PlanarIntersectionResult Intersection(Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
+        public PlanarIntersectionResult Intersection(Segment3D segment3D, double tolerance = Tolerance.Distance)
         {
-            return PlanarIntersectionResult.Create(this, segment3D, tolerance);
+            return Create.PlanarIntersectionResult(this, segment3D, tolerance);
         }
 
-        public PlanarIntersectionResult Intersection(IClosedPlanar3D closedPlanar3D, double tolerance = Core.Tolerance.Distance)
+        public PlanarIntersectionResult Intersection(IClosedPlanar3D closedPlanar3D, double tolerance = Tolerance.Distance)
         {
             if (closedPlanar3D is Face3D)
                 return Intersection((Face3D)closedPlanar3D);
 
-            return PlanarIntersectionResult.Create(this, closedPlanar3D, tolerance);
+            return Create.PlanarIntersectionResult(this, closedPlanar3D, tolerance);
         }
 
-        public PlanarIntersectionResult Intersection(Face3D face3D, double tolerance = Core.Tolerance.Distance)
+        public PlanarIntersectionResult Intersection(Face3D face3D, double tolerance = Tolerance.Distance)
         {
-            return PlanarIntersectionResult.Create(this, face3D, tolerance);
+            return Create.PlanarIntersectionResult(this, face3D, tolerance);
         }
 
-        public PlanarIntersectionResult Intersection(Plane plane, double tolerance = Core.Tolerance.Distance)
+        public PlanarIntersectionResult Intersection(Plane plane, double tolerance = Tolerance.Distance)
         {
-            return PlanarIntersectionResult.Create(this, plane, tolerance);
+            return Create.PlanarIntersectionResult(this, plane, tolerance);
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
@@ -294,7 +294,7 @@ namespace SAM.Geometry.Spatial
             return new Plane(this);
         }
 
-        public bool Coplanar(Plane plane, double tolerance = Core.Tolerance.Distance)
+        public bool Coplanar(Plane plane, double tolerance = Tolerance.Distance)
         {
             return normal.AlmostEqual(plane.normal, tolerance) || normal.AlmostEqual(-plane.normal, tolerance);
         }
