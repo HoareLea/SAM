@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace SAM.Core
 {
@@ -36,7 +37,23 @@ namespace SAM.Core
                         result = jArray.ToString();
                     }
                     else if (@object is IJSAMObject)
+                    {
                         result = ((IJSAMObject)@object).ToJObject()?.ToString();
+                    }
+                    else if(@object is JsonElement)
+                    {
+                        JsonElement jsonElement = (JsonElement)@object;
+                        switch(jsonElement.ValueKind)
+                        {
+                            case JsonValueKind.String:
+                                result = jsonElement.GetString();
+                                break;
+                            case JsonValueKind.Number:
+                                result = jsonElement.GetDouble().ToString();
+                                break;
+                        }
+                    }
+                        
 
                     if (result == default)
                         result = @object.ToString();
@@ -223,8 +240,16 @@ namespace SAM.Core
 
                 if (@object is string)
                 {
-                    Guid guid;
-                    if (System.Guid.TryParse((string)@object, out guid))
+                    if (System.Guid.TryParse((string)@object, out Guid guid))
+                    {
+                        result = guid;
+                        return true;
+                    }
+                }
+                else if(@object is JsonElement)
+                {
+                    JsonElement jsonElement = (JsonElement)@object;
+                    if(jsonElement.TryGetGuid(out Guid guid))
                     {
                         result = guid;
                         return true;

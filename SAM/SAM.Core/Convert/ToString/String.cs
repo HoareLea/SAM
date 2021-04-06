@@ -73,8 +73,10 @@ namespace SAM.Core
         {
             if (expandoObject == null)
                 return null;
-            
-            return ToString(expandoObject.ToJsonDocument());
+
+            return JsonSerializer.Serialize(expandoObject);
+
+            //return ToString(expandoObject.ToJsonDocument());
         }
     }
 }

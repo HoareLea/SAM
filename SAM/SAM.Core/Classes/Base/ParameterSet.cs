@@ -56,6 +56,11 @@ namespace SAM.Core
             FromExpandoObject(expandoObject);
         }
 
+        public ParameterSet(JsonElement jsonElement)
+        {            
+            FromJsonElement(jsonElement);
+        }
+
         public string Name
         {
             get
@@ -509,6 +514,60 @@ namespace SAM.Core
                             continue;
 
                         dictionary[parameter_Name] = expandoObject_Parameter.Value;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool FromJsonElement(JsonElement jsonElement)
+        {
+            if (jsonElement.ValueKind != JsonValueKind.Object)
+                return false;
+
+            JsonElement jsonElement_Property;
+
+            if (jsonElement.TryGetProperty("Name", out jsonElement_Property))
+                Query.TryConvert(jsonElement_Property, out name);
+
+            if (jsonElement.TryGetProperty("Guid", out jsonElement_Property))
+                Query.TryConvert(jsonElement_Property, out guid);
+
+            if(jsonElement.TryGetProperty("Parameters", out jsonElement_Property) && jsonElement_Property.ValueKind == JsonValueKind.Array)
+            {
+                this.dictionary = new Dictionary<string, object>();
+                foreach (object @object in jsonElement_Property.EnumerateArray())
+                {
+                    if (@object is JsonElement)
+                    {
+                        JsonElement jsonElement_Parameter = (JsonElement)@object;
+
+                        if (!jsonElement_Parameter.TryGetProperty("Name", out JsonElement jsonElement_ParameterName))
+                            continue;
+
+                        if (!Query.TryConvert(jsonElement_ParameterName, out string parameter_Name) || parameter_Name == null)
+                            continue;
+
+                        if (jsonElement_Parameter.TryGetProperty("Value", out JsonElement jsonElement_ParameterValue))
+                        {
+                            switch (jsonElement_ParameterValue.ValueKind)
+                            {
+                                case JsonValueKind.String:
+                                    dictionary[parameter_Name] = jsonElement_ParameterValue.GetString();
+                                    break;
+                                case JsonValueKind.Number:
+                                    dictionary[parameter_Name] = jsonElement_ParameterValue.GetDouble();
+                                    break;
+                                case JsonValueKind.False:
+                                    dictionary[parameter_Name] = false;
+                                    break;
+                                case JsonValueKind.True:
+                                    dictionary[parameter_Name] = true;
+                                    break;
+                                    //TODO: Implement Rest of the cases
+                            }
+                        }
                     }
                 }
             }

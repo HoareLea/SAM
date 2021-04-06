@@ -94,6 +94,11 @@ namespace SAM.Core
             FromJObject(jObject);
         }
 
+        public SAMObject(System.Dynamic.ExpandoObject expandoObject)
+        {
+            FromExpandoObject(expandoObject);
+        }
+
         public SAMObject(Guid guid)
         {
             this.guid = guid;
@@ -379,11 +384,15 @@ namespace SAM.Core
 
             if (dictionary.ContainsKey("ParameterSets"))
             {
-                IEnumerable enumerable = dictionary["ParameterSets"] as IEnumerable;
-                if (enumerable != null)
+                object @object = dictionary["ParameterSets"];
+                if(@object is JsonElement)
+                {
+                    parameterSets = Create.ParameterSets((JsonElement)@object);
+                }
+                else if (@object is IEnumerable)
                 {
                     parameterSets = new List<ParameterSet>();
-                    foreach (System.Dynamic.ExpandoObject expandoObject_Temp in enumerable)
+                    foreach (System.Dynamic.ExpandoObject expandoObject_Temp in (IEnumerable)@object)
                         parameterSets.Add(new ParameterSet(expandoObject_Temp));
                 }
             }

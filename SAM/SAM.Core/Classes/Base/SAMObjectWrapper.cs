@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Reflection;
 
 namespace SAM.Core
 {
@@ -68,12 +67,14 @@ namespace SAM.Core
         {
             string fullTypeName = Query.FullTypeName(jObject);
             if (string.IsNullOrWhiteSpace(fullTypeName))
+            {
                 return null;
+            }
 
-            string typeName = null;
-            string assemblyName = null;
-            if (!Query.TryGetTypeNameAndAssemblyName(fullTypeName, out typeName, out assemblyName))
+            if (!Query.TryGetTypeNameAndAssemblyName(fullTypeName, out string typeName, out string assemblyName))
+            {
                 return null;
+            }
 
             return typeName;
         }
@@ -82,12 +83,14 @@ namespace SAM.Core
         {
             string fullTypeName = Query.FullTypeName(jObject);
             if (string.IsNullOrWhiteSpace(fullTypeName))
+            {
                 return null;
+            }
 
-            string typeName = null;
-            string assemblyName = null;
-            if (!Query.TryGetTypeNameAndAssemblyName(fullTypeName, out typeName, out assemblyName))
+            if (!Query.TryGetTypeNameAndAssemblyName(fullTypeName, out string typeName, out string assemblyName))
+            {
                 return null;
+            }
 
             return assemblyName;
         }
