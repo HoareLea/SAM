@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,7 +40,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            index = inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            index = inputParamManager.AddGenericParameter("_analyticals", "_analyticals", "SAM Analytical Panels or Spaces", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             index = inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
@@ -52,9 +52,9 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooPanelParam(), "UpperPanels", "UpperPanels", "Upper SAM Analytical Panels", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooPanelParam(), "LowerPanels", "LowerPanels", "Lower SAM Analytical Panels", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("Analyticals", "Analyticals", "SAM Analytical Panels or Spaces", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("UpperAnalyticals", "UpperAnalyticals", "Upper SAM Analytical Panels or Spaces", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("LowerAnalyticals", "LowerAnalyticals", "Lower SAM Analytical Panels or Spaces", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -65,8 +65,8 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(0, panels))
+            List<Core.SAMObject> sAMObjects = new List<Core.SAMObject>();
+            if (!dataAccess.GetDataList(0, sAMObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -86,37 +86,60 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> result = new List<Panel>();
-            List<Panel> result_Upper = new List<Panel>();
-            List<Panel> result_Lower = new List<Panel>();
-            foreach (Panel panel in panels)
+            List<Core.SAMObject> result = new List<Core.SAMObject>();
+            List<Core.SAMObject> result_Upper = new List<Core.SAMObject>();
+            List<Core.SAMObject> result_Lower = new List<Core.SAMObject>();
+            foreach (Core.SAMObject sAMObject in sAMObjects)
             {
-                double min = panel.MinElevation();
-                double max = panel.MaxElevation();
-
-                if(min - tolerance <= elevation && max + tolerance >= elevation)
+                
+                if(sAMObject is Panel)
                 {
-                    if (System.Math.Abs(max - min) >  tolerance && System.Math.Abs(max - elevation) < tolerance)
+                    Panel panel = (Panel)sAMObject;
+                    
+                    double min = panel.MinElevation();
+                    double max = panel.MaxElevation();
+
+                    if (min - tolerance <= elevation && max + tolerance >= elevation)
                     {
-                        result_Lower.Add(panel);
-                        continue;
-                    }
-                        
+                        if (System.Math.Abs(max - min) > tolerance && System.Math.Abs(max - elevation) < tolerance)
+                        {
+                            result_Lower.Add(panel);
+                            continue;
+                        }
 
-                    result.Add(panel);
-                }
-                else
-                {
-                    if (min >= elevation)
-                        result_Upper.Add(panel);
+
+                        result.Add(panel);
+                    }
                     else
-                        result_Lower.Add(panel);
+                    {
+                        if (min >= elevation)
+                            result_Upper.Add(panel);
+                        else
+                            result_Lower.Add(panel);
+                    }
                 }
+                else if(sAMObject is Space)
+                {
+                    Geometry.Spatial.Point3D location = ((Space)sAMObject).Location;
+                    if (location == null)
+                        continue;
+
+                    double z = location.Z;
+                    double difference = z - elevation;
+
+                    if (System.Math.Abs(difference) <= tolerance)
+                        result.Add(sAMObject);
+                    else if (difference >= elevation)
+                        result_Upper.Add(sAMObject);
+                    else
+                        result_Lower.Add(sAMObject);
+                }
+
             }
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooPanel(x)));
-            dataAccess.SetDataList(1, result_Upper.ConvertAll(x => new GooPanel(x)));
-            dataAccess.SetDataList(2, result_Lower.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(0, result);
+            dataAccess.SetDataList(1, result_Upper);
+            dataAccess.SetDataList(2, result_Lower);
         }
     }
 }
