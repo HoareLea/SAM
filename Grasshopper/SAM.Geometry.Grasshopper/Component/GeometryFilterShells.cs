@@ -21,7 +21,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -79,7 +79,8 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Shells", NickName = "Shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "In", NickName = "In", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Out", NickName = "Out", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -154,8 +155,8 @@ namespace SAM.Geometry.Grasshopper
                     silverSpacing = silverSpacing_Temp;
             }
 
-            List<Shell> result = new List<Shell>();
-            foreach(Point3D point3D in point3Ds)
+            List<Shell> result_In = new List<Shell>();
+            foreach (Point3D point3D in point3Ds)
             {
                 List<Shell> shells_Temp = shells.FindAll(x => x.On(point3D, tolerance) || x.Inside(point3D, silverSpacing, tolerance));
                 if (shells_Temp == null || shells_Temp.Count == 0)
@@ -163,14 +164,18 @@ namespace SAM.Geometry.Grasshopper
 
                 foreach(Shell shell in shells_Temp)
                 {
-                    result.Add(shell);
+                    result_In.Add(shell);
                     shells.Remove(shell);
                 }
             }
 
-            index = Params.IndexOfOutputParam("Shells");
+            index = Params.IndexOfOutputParam("In");
             if (index != -1)
-                dataAccess.SetDataList(index, result.ConvertAll(x => new GooSAMGeometry(x)));
+                dataAccess.SetDataList(index, result_In.ConvertAll(x => new GooSAMGeometry(x)));
+
+            index = Params.IndexOfOutputParam("Out");
+            if (index != -1)
+                dataAccess.SetDataList(index, shells.ConvertAll(x => new GooSAMGeometry(x)));
         }
     }
 }
