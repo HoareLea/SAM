@@ -497,5 +497,30 @@ namespace SAM.Analytical
 
             return result;
         }
+
+        public void Transform(Geometry.Spatial.Transform3D transform3D)
+        {
+            List<Panel> panels = GetPanels();
+            if(panels != null)
+            {
+                foreach(Panel panel in panels)
+                {
+                    Panel panel_New = new Panel(panel);
+                    panel_New.Transform(transform3D);
+                    AddObject(panel_New);
+                }
+            }
+
+            List<Space> spaces = GetSpaces();
+            if (spaces != null)
+            {
+                foreach (Space space in spaces)
+                {
+                    Space space_New = new Space(space);
+                    space_New.Transform(transform3D);
+                    AddObject(space_New);
+                }
+            }
+        }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using SAM.Geometry.Spatial;
 using System;
 
 namespace SAM.Analytical
 {
     public class Space : SAMObject
     {
-        private Geometry.Spatial.Point3D location;
+        private Point3D location;
         private InternalCondition internalCondition;
 
         public Space(Space space)
@@ -23,7 +24,7 @@ namespace SAM.Analytical
             internalCondition = space.InternalCondition;
         }
 
-        public Space(Guid guid, string name, Geometry.Spatial.Point3D location)
+        public Space(Guid guid, string name, Point3D location)
             : base(guid, name)
         {
             this.location = location;
@@ -34,13 +35,13 @@ namespace SAM.Analytical
         {
         }
 
-        public Space(string name, Geometry.Spatial.Point3D location)
+        public Space(string name, Point3D location)
             : base(name)
         {
             this.location = location;
         }
 
-        public Space(Space space, string name, Geometry.Spatial.Point3D location)
+        public Space(Space space, string name, Point3D location)
             : base(name, space)
         {
             this.location = location;
@@ -52,7 +53,7 @@ namespace SAM.Analytical
         {
         }
 
-        public Geometry.Spatial.Point3D Location
+        public Point3D Location
         {
             get
             {
@@ -92,7 +93,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            location = new Geometry.Spatial.Point3D(jObject.Value<JObject>("Location"));
+            location = new Point3D(jObject.Value<JObject>("Location"));
 
             if(jObject.ContainsKey("InternalCondition"))
                 internalCondition = new InternalCondition(jObject.Value<JObject>("InternalCondition"));
@@ -113,6 +114,12 @@ namespace SAM.Analytical
                 jObject.Add("InternalCondition", internalCondition.ToJObject());
 
             return jObject;
+        }
+
+        public void Transform(Transform3D transform3D)
+        {
+            if (location != null)
+                location = Location.Transform(transform3D);
         }
     }
 }

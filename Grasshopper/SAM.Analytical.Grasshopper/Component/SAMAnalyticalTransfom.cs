@@ -76,17 +76,36 @@ namespace SAM.Analytical.Grasshopper
 
             if(sAMObject is Panel)
             {
-                Panel panel_New = new Panel((Panel)sAMObject);
-                panel_New.Transform(transform3D);
-                dataAccess.SetData(0, new GooPanel(panel_New));
+                Panel panel = new Panel((Panel)sAMObject);
+                panel.Transform(transform3D);
+                sAMObject = panel;
             }
             else if(sAMObject is Aperture)
             {
-                Aperture panel_Aperture = new Aperture((Aperture)sAMObject);
-                panel_Aperture.Transform(transform3D);
-                dataAccess.SetData(0, new GooAperture(panel_Aperture));
+                Aperture aperture = new Aperture((Aperture)sAMObject);
+                aperture.Transform(transform3D);
+                sAMObject = aperture;
             }
-            
+            else if(sAMObject is Space)
+            {
+                Space space = new Space((Space)sAMObject);
+                space.Transform(transform3D);
+                sAMObject = space;
+            }
+            else if(sAMObject is AdjacencyCluster)
+            {
+                AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
+                adjacencyCluster.Transform(transform3D);
+                sAMObject = adjacencyCluster;
+            }
+            else if (sAMObject is AnalyticalModel)
+            {
+                AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
+                analyticalModel.Transform(transform3D);
+                sAMObject = analyticalModel;
+            }
+
+            dataAccess.SetData(0, sAMObject);
         }
     }
 }

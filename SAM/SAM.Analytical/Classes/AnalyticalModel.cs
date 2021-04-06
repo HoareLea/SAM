@@ -347,5 +347,11 @@ namespace SAM.Analytical
 
             return jObject;
         }
+
+        public void Transform(Geometry.Spatial.Transform3D transform3D)
+        {
+            if (adjacencyCluster != null)
+                adjacencyCluster.Transform(transform3D);
+        }
     }
 }
