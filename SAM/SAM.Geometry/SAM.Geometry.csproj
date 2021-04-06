@@ -173,6 +173,7 @@
     <Compile Include="Spatial\Query\Extend.cs" />
     <Compile Include="Spatial\Query\IntersectionDictionary.cs" />
     <Compile Include="Spatial\Query\Intersections.cs" />
+    <Compile Include="Spatial\Query\Offset.cs" />
     <Compile Include="Spatial\Query\Project.cs" />
     <Compile Include="Spatial\Query\Convert.cs" />
     <Compile Include="Spatial\Query\Section.cs" />

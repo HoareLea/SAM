@@ -102,6 +102,7 @@
     <Compile Include="Component\SAMAnalyticalAnalyticalCreatePanelsByShell.cs" />
     <Compile Include="Component\SAMAnalyticalMapAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalAdjustRoofs.cs" />
+    <Compile Include="Component\SAMAnalyticalOffsetPanel.cs" />
     <Compile Include="Component\SAMAnalyticalSetAirflow.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalConditionPerArea.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />

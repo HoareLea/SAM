@@ -2,14 +2,13 @@
 using SAM.Core;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
-using System.IO.Compression;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Face2D> Offset(this Face2D face2D, double offset, bool includeExternalEdge = true, bool includeInternalEdges = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Face2D> Offset(this Face2D face2D, double offset, bool includeExternalEdge = true, bool includeInternalEdges = true, double tolerance = Tolerance.MicroDistance)
         {
             if (face2D == null)
                 return null;
@@ -79,23 +78,6 @@ namespace SAM.Geometry.Planar
 
             return Offset(polyline2D, offset, JoinType.jtMiter, endType, tolerance);
         }
-
-        //public static List<Polygon2D> Offset(this Polyline2D polyline2D, double offset, JoinType joinType, EndType endType, double tolerance = Core.Tolerance.MicroDistance)
-        //{
-        //    if (polyline2D == null)
-        //        return null;
-
-        // List<IntPoint> intPoints = ((ISegmentable2D)polyline2D).ToClipper(tolerance); if
-        // (intPoints == null) return null;
-
-        // ClipperOffset clipperOffset = new ClipperOffset(); clipperOffset.AddPath(intPoints,
-        // joinType, endType); List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
-        // clipperOffset.Execute(ref intPointList, offset / tolerance);
-
-        // if (intPointList == null) return null;
-
-        //    return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
-        //}
 
         public static List<Polygon2D> Offset(this ISegmentable2D segmentable2D, double offset, JoinType joinType, EndType endType, double tolerance = Core.Tolerance.MicroDistance)
         {
