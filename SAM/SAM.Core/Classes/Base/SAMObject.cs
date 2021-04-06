@@ -350,23 +350,23 @@ namespace SAM.Core
 
         public virtual System.Dynamic.ExpandoObject ToExpandoObject()
         {
-            dynamic @dynamic = new System.Dynamic.ExpandoObject();
-
+            IDictionary<string, object> dictionary = new System.Dynamic.ExpandoObject();
+            
             if (name != null)
-                dynamic.Name = name;
+                dictionary["Name"] = name;
 
-            @dynamic.Guid = guid;
+            dictionary["Guid"] = guid;
 
-            if(parameterSets != null)
+            if (parameterSets != null)
             {
                 List<System.Dynamic.ExpandoObject> expandoObjects = new List<System.Dynamic.ExpandoObject>();
                 foreach (ParameterSet parameterSet in parameterSets)
                     expandoObjects.Add(parameterSet?.ToExpandoObject());
 
-                dynamic.ParameterSets = expandoObjects;
+                dictionary["ParameterSets"] = expandoObjects;
             }
-            
-            return dynamic;
+
+            return (System.Dynamic.ExpandoObject)dictionary;
         }
 
         public virtual bool FromExpandoObject(System.Dynamic.ExpandoObject expandoObject)
