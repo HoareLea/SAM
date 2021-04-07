@@ -1,10 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
+using Rhino.Commands;
 using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Grasshopper;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,12 +96,119 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooSpace> values)
         {
-            throw new NotImplementedException();
+            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
+            getObject.SetCommandPrompt("Pick Points to create spaces");
+            getObject.GeometryFilter = ObjectType.Point;
+            getObject.SubObjectSelect = true;
+            getObject.DeselectAllBeforePostSelect = false;
+            getObject.OneByOnePostSelect = false;
+            getObject.GetMultiple(1, 0);
+
+            if (getObject.CommandResult() != Result.Success)
+                return GH_GetterResult.cancel;
+
+            if (getObject.ObjectCount == 0)
+                return GH_GetterResult.cancel;
+
+            values = new List<GooSpace>();
+
+            for (int i = 0; i < getObject.ObjectCount; i++)
+            {
+                ObjRef objRef = getObject.Object(i);
+
+                RhinoObject rhinoObject = objRef.Object();
+                if (rhinoObject == null)
+                    return GH_GetterResult.cancel;
+
+                Point point = rhinoObject.Geometry as Point;
+                if (point == null)
+                    return GH_GetterResult.cancel;
+
+                List<Space> spaces = null;
+
+                if (point.HasUserData)
+                {
+                    string @string = point.GetUserString("SAM");
+                    if (!string.IsNullOrWhiteSpace(@string))
+                    {
+                        spaces = Core.Convert.ToSAM<Space>(@string);
+                    }
+                }
+
+                if (spaces == null || spaces.Count == 0)
+                {
+
+                    Point3D point3D = point.ToSAM();
+                    if (point3D == null)
+                        continue;
+
+                    spaces = new List<Space>() { new Space("Cell", point3D)};
+                }
+
+                if (spaces == null || spaces.Count == 0)
+                    continue;
+
+                values.AddRange(spaces.ConvertAll(x => new GooSpace(x)));
+            }
+
+            return GH_GetterResult.success;
         }
 
         protected override GH_GetterResult Prompt_Singular(ref GooSpace value)
         {
-            throw new NotImplementedException();
+            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
+            getObject.SetCommandPrompt("Pick Point to create space");
+            getObject.GeometryFilter = ObjectType.Point;
+            getObject.SubObjectSelect = true;
+            getObject.DeselectAllBeforePostSelect = false;
+            getObject.OneByOnePostSelect = true;
+            getObject.Get();
+
+            if (getObject.CommandResult() != Result.Success)
+                return GH_GetterResult.cancel;
+
+            if (getObject.ObjectCount == 0)
+                return GH_GetterResult.cancel;
+
+            for (int i = 0; i < getObject.ObjectCount; i++)
+            {
+                ObjRef objRef = getObject.Object(i);
+
+                RhinoObject rhinoObject = objRef.Object();
+                if (rhinoObject == null)
+                    return GH_GetterResult.cancel;
+
+                Point point = rhinoObject.Geometry as Point;
+                if (point == null)
+                    return GH_GetterResult.cancel;
+
+                List<Space> spaces = null;
+
+                if (point.HasUserData)
+                {
+                    string @string = point.GetUserString("SAM");
+                    if (!string.IsNullOrWhiteSpace(@string))
+                    {
+                        spaces = Core.Convert.ToSAM<Space>(@string);
+                    }
+                }
+
+                if (spaces == null || spaces.Count == 0)
+                {
+                    Point3D point3D = point.ToSAM();
+                    if (point3D == null)
+                        continue;
+
+                    spaces = new List<Space>() { new Space("Cell", point3D) };
+                }
+
+                if (spaces == null || spaces.Count == 0)
+                    continue;
+
+                value = new GooSpace(spaces[0]);
+            }
+
+            return GH_GetterResult.success;
         }
 
         public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
