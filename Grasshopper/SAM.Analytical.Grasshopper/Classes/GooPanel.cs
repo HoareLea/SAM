@@ -215,13 +215,46 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooPanel> values)
         {
-            throw new NotImplementedException();
+            values.Clear();
+
+            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
+            getObject.SetCommandPrompt("Pick Surfaces to create panel");
+            getObject.GeometryFilter = ObjectType.Surface;
+            getObject.SubObjectSelect = true;
+            getObject.DeselectAllBeforePostSelect = false;
+            getObject.OneByOnePostSelect = true;
+            getObject.GetMultiple(1, 0);
+
+            if (getObject.CommandResult() != Result.Success)
+                return GH_GetterResult.cancel;
+
+            if(getObject.ObjectCount == 0)
+                return GH_GetterResult.cancel;
+
+            for (int i =0; i < getObject.ObjectCount; i++)
+            {
+                ObjRef objRef = getObject.Object(0);
+
+                RhinoObject rhinoObject = objRef.Object();
+                if (rhinoObject == null)
+                    return GH_GetterResult.cancel;
+
+                Rhino.Geometry.Surface surface = objRef.Surface();
+                if (surface == null)
+                    return GH_GetterResult.cancel;
+
+                List<Panel> panels = Create.Panels(Geometry.Grasshopper.Convert.ToSAM(surface), PanelType.WallExternal, Analytical.Query.DefaultConstruction(PanelType.WallExternal), Core.Tolerance.MacroDistance);
+                if (panels == null || panels.Count == 0)
+                    continue;
+
+                values.AddRange(panels.ConvertAll(x => new GooPanel(x)));
+            }
+
+            return GH_GetterResult.success;
         }
 
         protected override GH_GetterResult Prompt_Singular(ref GooPanel value)
         {
-            //throw new NotImplementedException();
-
             Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
             getObject.SetCommandPrompt("Pick Surface to create panel");
             getObject.GeometryFilter = ObjectType.Surface;
