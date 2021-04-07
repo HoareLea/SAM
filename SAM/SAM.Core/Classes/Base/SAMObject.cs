@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text.Json;
 
 namespace SAM.Core
 {
@@ -92,11 +89,6 @@ namespace SAM.Core
         public SAMObject(JObject jObject)
         {
             FromJObject(jObject);
-        }
-
-        public SAMObject(System.Dynamic.ExpandoObject expandoObject)
-        {
-            FromExpandoObject(expandoObject);
         }
 
         public SAMObject(Guid guid)
@@ -346,58 +338,6 @@ namespace SAM.Core
                 jObject.Add("ParameterSets", Create.JArray(parameterSets));
 
             return jObject;
-        }
-
-        public virtual System.Dynamic.ExpandoObject ToExpandoObject()
-        {
-            IDictionary<string, object> dictionary = new System.Dynamic.ExpandoObject();
-            
-            if (name != null)
-                dictionary["Name"] = name;
-
-            dictionary["Guid"] = guid;
-
-            if (parameterSets != null)
-            {
-                List<System.Dynamic.ExpandoObject> expandoObjects = new List<System.Dynamic.ExpandoObject>();
-                foreach (ParameterSet parameterSet in parameterSets)
-                    expandoObjects.Add(parameterSet?.ToExpandoObject());
-
-                dictionary["ParameterSets"] = expandoObjects;
-            }
-
-            return (System.Dynamic.ExpandoObject)dictionary;
-        }
-
-        public virtual bool FromExpandoObject(System.Dynamic.ExpandoObject expandoObject)
-        {
-            if (expandoObject == null)
-                return false;
-            
-            IDictionary<string, object> dictionary = expandoObject;
-
-            if (dictionary.ContainsKey("Name"))
-                Query.TryConvert(dictionary["Name"], out name);
-
-            if (dictionary.ContainsKey("Guid"))
-                Query.TryConvert(dictionary["Guid"], out guid);
-
-            if (dictionary.ContainsKey("ParameterSets"))
-            {
-                object @object = dictionary["ParameterSets"];
-                if(@object is JsonElement)
-                {
-                    parameterSets = Create.ParameterSets((JsonElement)@object);
-                }
-                else if (@object is IEnumerable)
-                {
-                    parameterSets = new List<ParameterSet>();
-                    foreach (System.Dynamic.ExpandoObject expandoObject_Temp in (IEnumerable)@object)
-                        parameterSets.Add(new ParameterSet(expandoObject_Temp));
-                }
-            }
-
-            return true;
         }
     }
 }

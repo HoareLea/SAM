@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text.Json;
 
 namespace SAM.Core
 {
@@ -49,16 +47,6 @@ namespace SAM.Core
         public ParameterSet(JObject jObject)
         {
             FromJObject(jObject);
-        }
-
-        public ParameterSet(System.Dynamic.ExpandoObject expandoObject)
-        {
-            FromExpandoObject(expandoObject);
-        }
-
-        public ParameterSet(JsonElement jsonElement)
-        {            
-            FromJsonElement(jsonElement);
         }
 
         public string Name
@@ -452,127 +440,6 @@ namespace SAM.Core
                 jObject.Add("Parameters", jArray);
 
             return jObject;
-        }
-
-        public System.Dynamic.ExpandoObject ToExpandoObject()
-        {
-            dynamic result = new System.Dynamic.ExpandoObject();
-            result._type = GetType().FullName;
-
-            if (name != null)
-                result.Name = name;
-
-            result.Guid = guid;
-
-            List<System.Dynamic.ExpandoObject> parameters = new List<System.Dynamic.ExpandoObject>();
-            foreach (KeyValuePair<string, object> keyValuePair in dictionary)
-            {
-                dynamic parameter = new System.Dynamic.ExpandoObject();
-                parameter.Name = keyValuePair.Key;
-                if (keyValuePair.Value != null)
-                {
-                    if (keyValuePair.Value is IJSAMObject)
-                        parameter.Value = ((IJSAMObject)keyValuePair.Value).ToJObject(); //TODO: Replace with ToExpandoObject when implemented
-                    else if (keyValuePair.Value is JArray) //TODO: Replace with ToExpandoObject when implemented
-                        parameter.Value = (JArray)keyValuePair.Value;
-                    else
-                        parameter.Value = keyValuePair.Value as dynamic;
-                }
-                parameters.Add(parameter);
-            }
-
-            result.Parameters = parameters;
-
-            return result;
-        }
-
-        public bool FromExpandoObject(System.Dynamic.ExpandoObject expandoObject)
-        {
-            if (expandoObject == null)
-                return false;
-
-            IDictionary<string, object> dictionary = expandoObject;
-
-            if (dictionary.ContainsKey("Name"))
-                Query.TryConvert(dictionary["Name"], out name);
-
-            if (dictionary.ContainsKey("Guid"))
-                Query.TryConvert(dictionary["Guid"], out guid);
-
-            if (dictionary.ContainsKey("Parameters"))
-            {
-                IEnumerable enumerable = dictionary["Parameters"] as IEnumerable;
-                if(enumerable != null)
-                {
-                    this.dictionary = new Dictionary<string, object>();
-                    foreach(dynamic expandoObject_Parameter in enumerable)
-                    {
-                        string parameter_Name = null;
-                        Query.TryConvert(expandoObject_Parameter.Name, out parameter_Name);
-
-                        if (parameter_Name == null)
-                            continue;
-
-                        dictionary[parameter_Name] = expandoObject_Parameter.Value;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        public bool FromJsonElement(JsonElement jsonElement)
-        {
-            if (jsonElement.ValueKind != JsonValueKind.Object)
-                return false;
-
-            JsonElement jsonElement_Property;
-
-            if (jsonElement.TryGetProperty("Name", out jsonElement_Property))
-                Query.TryConvert(jsonElement_Property, out name);
-
-            if (jsonElement.TryGetProperty("Guid", out jsonElement_Property))
-                Query.TryConvert(jsonElement_Property, out guid);
-
-            if(jsonElement.TryGetProperty("Parameters", out jsonElement_Property) && jsonElement_Property.ValueKind == JsonValueKind.Array)
-            {
-                this.dictionary = new Dictionary<string, object>();
-                foreach (object @object in jsonElement_Property.EnumerateArray())
-                {
-                    if (@object is JsonElement)
-                    {
-                        JsonElement jsonElement_Parameter = (JsonElement)@object;
-
-                        if (!jsonElement_Parameter.TryGetProperty("Name", out JsonElement jsonElement_ParameterName))
-                            continue;
-
-                        if (!Query.TryConvert(jsonElement_ParameterName, out string parameter_Name) || parameter_Name == null)
-                            continue;
-
-                        if (jsonElement_Parameter.TryGetProperty("Value", out JsonElement jsonElement_ParameterValue))
-                        {
-                            switch (jsonElement_ParameterValue.ValueKind)
-                            {
-                                case JsonValueKind.String:
-                                    dictionary[parameter_Name] = jsonElement_ParameterValue.GetString();
-                                    break;
-                                case JsonValueKind.Number:
-                                    dictionary[parameter_Name] = jsonElement_ParameterValue.GetDouble();
-                                    break;
-                                case JsonValueKind.False:
-                                    dictionary[parameter_Name] = false;
-                                    break;
-                                case JsonValueKind.True:
-                                    dictionary[parameter_Name] = true;
-                                    break;
-                                    //TODO: Implement Rest of the cases
-                            }
-                        }
-                    }
-                }
-            }
-
-            return true;
         }
     }
 }

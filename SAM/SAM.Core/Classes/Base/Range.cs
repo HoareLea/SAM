@@ -108,7 +108,10 @@ namespace SAM.Core
 
         public override int GetHashCode()
         {
-            return (min, max).GetHashCode();
+            int hash = 13;
+            hash = (hash * 7) + min.GetHashCode();
+            hash = (hash * 7) + max.GetHashCode();
+            return hash;
         }
 
         public static bool operator ==(Range<T> range, object @object)
