@@ -215,14 +215,14 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooPanel> values)
         {
-            values.Clear();
+            values = new List<GooPanel>();
 
             Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
             getObject.SetCommandPrompt("Pick Surfaces to create panel");
-            getObject.GeometryFilter = ObjectType.Surface;
+            getObject.GeometryFilter = ObjectType.Brep;
             getObject.SubObjectSelect = true;
             getObject.DeselectAllBeforePostSelect = false;
-            getObject.OneByOnePostSelect = true;
+            getObject.OneByOnePostSelect = false;
             getObject.GetMultiple(1, 0);
 
             if (getObject.CommandResult() != Result.Success)
@@ -233,17 +233,37 @@ namespace SAM.Analytical.Grasshopper
 
             for (int i =0; i < getObject.ObjectCount; i++)
             {
-                ObjRef objRef = getObject.Object(0);
+                ObjRef objRef = getObject.Object(i);
 
                 RhinoObject rhinoObject = objRef.Object();
                 if (rhinoObject == null)
                     return GH_GetterResult.cancel;
 
-                Rhino.Geometry.Surface surface = objRef.Surface();
-                if (surface == null)
+                Brep brep = rhinoObject.Geometry as Brep;
+                if (brep == null)
                     return GH_GetterResult.cancel;
 
-                List<Panel> panels = Create.Panels(Geometry.Grasshopper.Convert.ToSAM(surface), PanelType.WallExternal, Analytical.Query.DefaultConstruction(PanelType.WallExternal), Core.Tolerance.MacroDistance);
+                List<Panel> panels = null;
+
+                if (brep.HasUserData)
+                {
+                    string @string = brep.GetUserString("SAM");
+                    if(!string.IsNullOrWhiteSpace(@string))
+                    {
+                        panels = Core.Convert.ToSAM<Panel>(@string);
+                    }
+                }
+                
+                if(panels == null || panels.Count == 0)
+                {
+
+                    List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
+                    if (sAMGeometry3Ds == null)
+                        continue;
+
+                    panels = Create.Panels(sAMGeometry3Ds);
+                }
+
                 if (panels == null || panels.Count == 0)
                     continue;
 
