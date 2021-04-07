@@ -142,7 +142,11 @@ namespace SAM.Analytical.Grasshopper
                     if (point3D == null)
                         continue;
 
-                    spaces = new List<Space>() { new Space("Cell", point3D)};
+                    string name = rhinoObject?.Name;
+                    if (string.IsNullOrWhiteSpace(name))
+                        name = "Cell";
+
+                    spaces = new List<Space>() { new Space(name, point3D)};
                 }
 
                 if (spaces == null || spaces.Count == 0)
@@ -199,7 +203,11 @@ namespace SAM.Analytical.Grasshopper
                     if (point3D == null)
                         continue;
 
-                    spaces = new List<Space>() { new Space("Cell", point3D) };
+                    string name = rhinoObject?.Name;
+                    if (string.IsNullOrWhiteSpace(name))
+                        name = "Cell";
+
+                    spaces = new List<Space>() { new Space(name, point3D) };
                 }
 
                 if (spaces == null || spaces.Count == 0)

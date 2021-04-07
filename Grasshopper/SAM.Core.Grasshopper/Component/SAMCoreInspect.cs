@@ -95,6 +95,9 @@ namespace SAM.Core.Grasshopper
             {
                 foreach (GooObjectParam gooParameterParam in gooParameterParams)
                 {
+                    if (gooParameterParam == null)
+                        continue;
+                    
                     AddOutputParameter(gooParameterParam);
 
                     IList<IGH_Param> @params = null;
