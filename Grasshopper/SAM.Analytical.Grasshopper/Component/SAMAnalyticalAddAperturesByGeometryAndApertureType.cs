@@ -159,9 +159,13 @@ namespace SAM.Analytical.Grasshopper
                 {
                     ApertureConstruction apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, apertureType);
 
-                    Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
-                    if (aperture != null)
-                        apertures.Add(aperture);
+                    //Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
+                    //if (aperture != null)
+                    //    apertures.Add(aperture);
+
+                    List<Aperture> apertures_Temp = panel.AddApertures(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
+                    if (apertures_Temp != null)
+                        apertures.AddRange(apertures_Temp);
                 }
 
                 dataAccess.SetData(0, panel);
@@ -223,11 +227,17 @@ namespace SAM.Analytical.Grasshopper
                         if(panel_Temp == null)
                             panel_Temp = new Panel(panel);
 
-                        Aperture aperture = panel_Temp.AddAperture(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
-                        if (aperture == null)
+                        //Aperture aperture = panel_Temp.AddAperture(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
+                        //if (aperture == null)
+                        //    continue;
+
+                        //tuples_Result.Add(new Tuple<Panel, Aperture>(panel_Temp, aperture));
+
+                        List<Aperture> apertures_Temp = panel_Temp.AddApertures(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
+                        if (apertures_Temp == null)
                             continue;
 
-                        tuples_Result.Add(new Tuple<Panel, Aperture>(panel_Temp, aperture));
+                        apertures_Temp.ForEach(x => tuples_Result.Add(new Tuple<Panel, Aperture>(panel_Temp, x)));
                     }
 
                     if(panel_Temp != null)

@@ -650,6 +650,80 @@ namespace SAM.Analytical
             return aperture;
         }
 
+        public List<Aperture> AddApertures(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
+        {
+            if (apertureConstruction == null || closedPlanar3D == null)
+                return null;
+
+            if (!Query.ApertureHost(this, closedPlanar3D, minArea, maxDistance, tolerance))
+                return null;
+
+            Plane plane = planarBoundary3D?.Plane;
+            if (plane == null)
+                return null;
+
+            Plane plane_Aperture = closedPlanar3D.GetPlane();
+            if (plane_Aperture == null)
+                return null;
+
+            //Flipping if not match with Aperture plane 
+            Vector3D normal = plane.Normal;
+            Vector3D normal_closedPlanar3D = plane_Aperture.Normal;
+            if (!normal.SameHalf(normal_closedPlanar3D))
+                plane.FlipZ(false);
+
+            if (!plane.AxisX.SameHalf(plane_Aperture.AxisX))
+                plane.FlipX(true);
+
+            Face3D face3D_Aperture = null;
+            if (closedPlanar3D is Face3D)
+                face3D_Aperture = (Face3D)closedPlanar3D;
+            else
+                face3D_Aperture = new Face3D(closedPlanar3D);
+
+            if (face3D_Aperture == null)
+                return null;
+
+            Face2D face2D_Aperture = plane.Convert(plane.Project(face3D_Aperture));
+            if (face2D_Aperture == null)
+                return null;
+
+            Face2D face2D = plane.Convert(planarBoundary3D.GetFace3D());
+
+            List<Face2D> face2Ds_Aperture_New = trimGeometry ? face2D.Intersection(face2D_Aperture) : new List<Face2D>() { face2D_Aperture };
+            if (face2Ds_Aperture_New == null || face2Ds_Aperture_New.Count == 0)
+                return null;
+
+            List<Aperture> result = new List<Aperture>();
+            foreach(Face2D face2D_Aperture_New in face2Ds_Aperture_New)
+            {
+                if (face2D_Aperture_New == null)
+                    continue;
+
+                double area = face2D_Aperture_New.GetArea();
+                if (area <= minArea)
+                    continue;
+
+                Face3D face3D_Aperture_New = plane.Convert(face2D_Aperture_New);
+
+                Point3D point3D_Location = plane.Convert(face2D_Aperture_New.GetCentroid());
+                if (Geometry.Spatial.Query.Vertical(plane, tolerance))
+                    point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, face3D_Aperture_New.GetBoundingBox().Min.Z);
+
+                Aperture aperture = new Aperture(apertureConstruction, face3D_Aperture_New, point3D_Location);
+                if (!Query.IsValid(this, aperture))
+                    continue;
+
+                if (apertures == null)
+                    apertures = new List<Aperture>();
+
+                apertures.Add(aperture);
+                result.Add(aperture);
+            }
+
+            return result;
+        }
+
         public bool AddAperture(Aperture aperture)
         {
             if (aperture == null)
