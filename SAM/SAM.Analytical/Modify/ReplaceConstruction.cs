@@ -27,7 +27,7 @@ namespace SAM.Analytical
 
                 if(apertureConstruction != null)
                 {
-                    panel_New.AddAperture(apertureConstruction, panel.GetFace3D(), false);
+                    panel_New.AddApertures(apertureConstruction, panel.GetFace3D(), false);
 
                     if (offset > 0)
                         panel.OffsetAperturesOnEdge(offset);

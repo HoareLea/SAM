@@ -142,7 +142,6 @@
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
-    <Compile Include="Modify\AddAperture.cs" />
     <Compile Include="Modify\Align.cs" />
     <Compile Include="Modify\Map.cs" />
     <Compile Include="Modify\AddVentilationSystem.cs" />

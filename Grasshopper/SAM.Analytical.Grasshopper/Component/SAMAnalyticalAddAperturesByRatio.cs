@@ -91,11 +91,11 @@ namespace SAM.Analytical.Grasshopper
                 if (apertureConstruction_Temp == null)
                     apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
 
-                Aperture aperture = panel.AddAperture(apertureConstruction_Temp, ratio);
+                List<Aperture> apertures = panel.AddApertures(apertureConstruction_Temp, ratio);
 
                 dataAccess.SetData(0, panel);
-                dataAccess.SetDataList(1, new List<GooAperture>() { new GooAperture(aperture) });
-                dataAccess.SetData(2, aperture != null);
+                dataAccess.SetDataList(1, apertures.ConvertAll(x => new GooAperture(x)));
+                dataAccess.SetData(2, apertures != null && apertures.Count != 0);
                 return;
             }
 
@@ -133,11 +133,11 @@ namespace SAM.Analytical.Grasshopper
                     if (apertureConstruction_Temp == null)
                         apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel_New, ApertureType.Window);
 
-                    Aperture aperture = panel_New.AddAperture(apertureConstruction_Temp, ratio);
-                    if (aperture == null)
+                    List<Aperture> apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio);
+                    if (apertures == null)
                         continue;
 
-                    tuples_Result.Add(new Tuple<Panel, Aperture>(panel_New, aperture));
+                    apertures.ForEach(x => tuples_Result.Add(new Tuple<Panel, Aperture>(panel_New, x)));
                     adjacencyCluster.AddObject(panel_New);
                 }
 
