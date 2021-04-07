@@ -77,6 +77,7 @@
     <Compile Include="Convert\ToSystem\DateTime.cs" />
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
+    <Compile Include="Create\Apertures.cs" />
     <Compile Include="Create\Zone.cs" />
     <Compile Include="Create\SpaceSimulationResult.cs" />
     <Compile Include="Create\HeatingSystemType.cs" />

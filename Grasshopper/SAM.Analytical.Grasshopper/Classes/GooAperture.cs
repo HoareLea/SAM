@@ -1,11 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
+using Rhino.Commands;
 using Rhino.Display;
 using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -151,12 +153,120 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooAperture> values)
         {
-            throw new NotImplementedException();
+            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
+            getObject.SetCommandPrompt("Pick Surfaces to create apertures");
+            getObject.GeometryFilter = ObjectType.Brep;
+            getObject.SubObjectSelect = true;
+            getObject.DeselectAllBeforePostSelect = false;
+            getObject.OneByOnePostSelect = false;
+            getObject.GetMultiple(1, 0);
+
+            if (getObject.CommandResult() != Result.Success)
+                return GH_GetterResult.cancel;
+
+            if (getObject.ObjectCount == 0)
+                return GH_GetterResult.cancel;
+
+            values = new List<GooAperture>();
+
+            for (int i = 0; i < getObject.ObjectCount; i++)
+            {
+                ObjRef objRef = getObject.Object(i);
+
+                RhinoObject rhinoObject = objRef.Object();
+                if (rhinoObject == null)
+                    return GH_GetterResult.cancel;
+
+                Brep brep = rhinoObject.Geometry as Brep;
+                if (brep == null)
+                    return GH_GetterResult.cancel;
+
+                List<Aperture> apertures = null;
+
+                if (brep.HasUserData)
+                {
+                    string @string = brep.GetUserString("SAM");
+                    if (!string.IsNullOrWhiteSpace(@string))
+                    {
+                        apertures = Core.Convert.ToSAM<Aperture>(@string);
+                    }
+                }
+
+                if (apertures == null || apertures.Count == 0)
+                {
+
+                    List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
+                    if (sAMGeometry3Ds == null)
+                        continue;
+
+                    apertures = Create.Apertures(sAMGeometry3Ds);
+                }
+
+                if (apertures == null || apertures.Count == 0)
+                    continue;
+
+                values.AddRange(apertures.ConvertAll(x => new GooAperture(x)));
+            }
+
+            return GH_GetterResult.success;
         }
 
         protected override GH_GetterResult Prompt_Singular(ref GooAperture value)
         {
-            throw new NotImplementedException();
+            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
+            getObject.SetCommandPrompt("Pick Surfaces to create apertures");
+            getObject.GeometryFilter = ObjectType.Brep;
+            getObject.SubObjectSelect = true;
+            getObject.DeselectAllBeforePostSelect = false;
+            getObject.OneByOnePostSelect = false;
+            getObject.GetMultiple(1, 0);
+
+            if (getObject.CommandResult() != Result.Success)
+                return GH_GetterResult.cancel;
+
+            if (getObject.ObjectCount == 0)
+                return GH_GetterResult.cancel;
+
+            for (int i = 0; i < getObject.ObjectCount; i++)
+            {
+                ObjRef objRef = getObject.Object(i);
+
+                RhinoObject rhinoObject = objRef.Object();
+                if (rhinoObject == null)
+                    return GH_GetterResult.cancel;
+
+                Brep brep = rhinoObject.Geometry as Brep;
+                if (brep == null)
+                    return GH_GetterResult.cancel;
+
+                List<Aperture> apertures = null;
+
+                if (brep.HasUserData)
+                {
+                    string @string = brep.GetUserString("SAM");
+                    if (!string.IsNullOrWhiteSpace(@string))
+                    {
+                        apertures = Core.Convert.ToSAM<Aperture>(@string);
+                    }
+                }
+
+                if (apertures == null || apertures.Count == 0)
+                {
+
+                    List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
+                    if (sAMGeometry3Ds == null)
+                        continue;
+
+                    apertures = Create.Apertures(sAMGeometry3Ds);
+                }
+
+                if (apertures == null || apertures.Count == 0)
+                    continue;
+
+                value = new GooAperture(apertures[0]);
+            }
+
+            return GH_GetterResult.success;
         }
 
         public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
