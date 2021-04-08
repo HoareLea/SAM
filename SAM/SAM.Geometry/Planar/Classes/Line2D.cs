@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace SAM.Geometry.Planar
 {
@@ -63,6 +64,11 @@ namespace SAM.Geometry.Planar
             jObject.Add("Vector", vector.ToJObject());
 
             return jObject;
+        }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(origin, vector).GetHashCode();
         }
     }
 }

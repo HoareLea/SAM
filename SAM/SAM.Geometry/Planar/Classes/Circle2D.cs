@@ -137,5 +137,10 @@ namespace SAM.Geometry.Planar
         {
             return System.Math.Abs(center.Distance(point2D) - radious) <= tolerance;
         }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(center, radious).GetHashCode();
+        }
     }
 }

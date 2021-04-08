@@ -299,5 +299,10 @@ namespace SAM.Geometry.Planar
         {
             return GetSegments().ConvertAll(x => x.GetLength()).Sum();
         }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(origin, width, height, heightDirection).GetHashCode();
+        }
     }
 }

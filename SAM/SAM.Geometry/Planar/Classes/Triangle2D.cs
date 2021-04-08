@@ -192,5 +192,10 @@ namespace SAM.Geometry.Planar
         {
             return GetSegments().ConvertAll(x => x.GetLength()).Sum();
         }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(points[0], points[1], points[2]).GetHashCode();
+        }
     }
 }

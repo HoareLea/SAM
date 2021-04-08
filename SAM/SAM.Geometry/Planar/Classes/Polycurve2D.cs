@@ -101,5 +101,19 @@ namespace SAM.Geometry.Planar
             curves.ForEach(x => x.Reverse());
             curves.Reverse();
         }
+
+        public override int GetHashCode()
+        {
+            if (curves == null)
+                return base.GetHashCode();
+
+            int hash = 13;
+
+            if (curves != null)
+                foreach (ICurve2D curve2D in curves)
+                    hash = (hash * 7) + curve2D.GetHashCode();
+
+            return hash;
+        }
     }
 }

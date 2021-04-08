@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -262,10 +263,7 @@ namespace SAM.Geometry.Planar
 
         public override int GetHashCode()
         {
-            int hash = 13;
-            hash = (hash * 7) + coordinates[0].GetHashCode();
-            hash = (hash * 7) + coordinates[1].GetHashCode();
-            return hash;
+            return Tuple.Create(coordinates[0], coordinates[1]).GetHashCode();
         }
 
         public static Point2D Invalid

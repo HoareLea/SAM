@@ -335,5 +335,18 @@ namespace SAM.Geometry.Planar
         {
             return this.GetEnumerator();
         }
+
+        public override int GetHashCode()
+        {
+            if (points == null)
+                return base.GetHashCode();
+
+            int hash = 13;
+            if (points != null)
+                foreach (Point2D point2D in points)
+                    hash = (hash * 7) + point2D.GetHashCode();
+
+            return hash;
+        }
     }
 }

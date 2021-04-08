@@ -226,5 +226,18 @@ namespace SAM.Geometry
                         ((IReversible)internalEdge2Ds[i]).Reverse();
             }
         }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            
+            hash = (hash * 7) + externalEdge2D.GetHashCode();
+            
+            if (internalEdge2Ds != null)
+                foreach (IClosed2D internalEdge2D in internalEdge2Ds)
+                    hash = (hash * 7) + internalEdge2D.GetHashCode();
+            
+            return hash;
+        }
     }
 }

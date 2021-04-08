@@ -618,5 +618,10 @@ namespace SAM.Geometry.Planar
             origin.Round(tolerance);
             vector.Round(tolerance);
         }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(origin, vector).GetHashCode();
+        }
     }
 }

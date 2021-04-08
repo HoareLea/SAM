@@ -403,5 +403,10 @@ namespace SAM.Geometry.Planar
 
             return new Segment2D[] { new Segment2D(point2Ds[0], point2Ds[2]), new Segment2D(point2Ds[1], point2Ds[3]) };
         }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(min, max).GetHashCode();
+        }
     }
 }
