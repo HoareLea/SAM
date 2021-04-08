@@ -42,5 +42,16 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
+
+        public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, bool split, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (segmentable2Ds == null)
+                return null;
+
+            if (split)
+                return Polygon2Ds(segmentable2Ds.Split(tolerance), tolerance);
+
+            return Polygon2Ds(segmentable2Ds, tolerance);
+        }
     }
 }

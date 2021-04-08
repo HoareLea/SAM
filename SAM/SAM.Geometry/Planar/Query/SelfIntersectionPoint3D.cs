@@ -1,25 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static Point2D SelfIntersectionPoint2D(this Polygon2D polygon2D, double tolerance = Core.Tolerance.MicroDistance)
+        public static Point2D SelfIntersectionPoint2D(this ISegmentable2D segmentable2D, double tolerance = Core.Tolerance.Distance)
         {
-            if (polygon2D == null)
+            if (segmentable2D == null)
                 return null;
 
-            List<Point2D> result = new List<Point2D>();
-
-            PointGraph2D pointGraph2D = new PointGraph2D(polygon2D.GetSegments(), true, tolerance);
-            for (int i = 0; i < pointGraph2D.Count; i++)
-            {
-                int count = pointGraph2D.ConnectionsCount(i);
-                if (count > 2)
-                    return pointGraph2D[i];
-            }
-
-            return null;
+            return SelfIntersectionPoint2Ds(segmentable2D, 1, tolerance)?.FirstOrDefault();
         }
     }
 }
