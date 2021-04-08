@@ -237,7 +237,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\Comparison\" />
-    <Folder Include="Convert\ToExpandoObject\" />
     <Folder Include="Interfaces\Range\" />
   </ItemGroup>
   <ItemGroup>

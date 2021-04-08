@@ -2,6 +2,9 @@
 
 namespace SAM.Analytical
 {
+    /// <summary>
+    /// Analytical ActivityLevel according to VDI 2078 2015.
+    /// </summary>
     [Description("Analytical ActivityLevel according to VDI 2078 2015.")]
     public enum ActivityLevel
     {
