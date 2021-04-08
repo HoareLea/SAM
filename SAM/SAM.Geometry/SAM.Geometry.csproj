@@ -70,6 +70,8 @@
     <Compile Include="Convert\ToSAM\Point2D.cs" />
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />
     <Compile Include="Create\ISAMGeometries.cs" />
+    <Compile Include="Create\AdjacencyGraph.cs" />
+    <Compile Include="Planar\Query\ShortestPath.cs" />
     <Compile Include="Spatial\Create\PlanarIntersectionResult.cs" />
     <Compile Include="Create\PolynomialEquation.cs" />
     <Compile Include="Create\JArray.cs" />
@@ -336,6 +338,9 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="QuickGraph">
+      <Version>3.6.61119.7</Version>
     </PackageReference>
     <PackageReference Include="System.Memory">
       <Version>4.5.4</Version>
