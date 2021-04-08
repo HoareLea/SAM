@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        public static Alignment Opposite(Alignment alignment)
+        public static Alignment Opposite(this Alignment alignment)
         {
             switch (alignment)
             {
@@ -17,7 +17,7 @@
             }
         }
 
-        public static Orientation Opposite(Orientation orientation)
+        public static Orientation Opposite(this Orientation orientation)
         {
             switch (orientation)
             {
@@ -32,7 +32,7 @@
             }
         }
 
-        public static Corner Opposite(Corner corner, Alignment alignment = Alignment.Undefined)
+        public static Corner Opposite(this Corner corner, Alignment alignment = Alignment.Undefined)
         {
             switch (alignment)
             {
