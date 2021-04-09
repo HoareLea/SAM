@@ -128,7 +128,7 @@ namespace SAM.Geometry.Planar
 
             AdjacencyGraph<Point2D, Edge<Point2D>> adjacencyGraph = Geometry.Create.AdjacencyGraph(segment2Ds);
 
-            AStarShortestPathAlgorithm<Point2D, Edge<Point2D>> aStarShortestPathAlgorithm = new AStarShortestPathAlgorithm<Point2D, Edge<Point2D>>(adjacencyGraph, edge => edge.Source.Distance(edge.Target), point2D => 1);
+            AStarShortestPathAlgorithm<Point2D, Edge<Point2D>> aStarShortestPathAlgorithm = new AStarShortestPathAlgorithm<Point2D, Edge<Point2D>>(adjacencyGraph, edge => edge.Source.Distance(edge.Target), point2D => point2D.Distance(point2D_Start_Temp));
 
             VertexPredecessorRecorderObserver<Point2D, Edge<Point2D>> vertexPredecessorRecorderObserver = new VertexPredecessorRecorderObserver<Point2D, Edge<Point2D>>();
             vertexPredecessorRecorderObserver.Attach(aStarShortestPathAlgorithm);

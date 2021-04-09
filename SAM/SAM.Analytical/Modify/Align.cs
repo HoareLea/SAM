@@ -34,7 +34,7 @@ namespace SAM.Analytical
                         List<Segment2D> segment2Ds = planarIntersectionResult.GetGeometry2Ds<Segment2D>();
                         if (segment2Ds != null && segment2Ds.Count != 0)
                         {
-                            Geometry.Planar.Query.ExtremePoints(segment2Ds.Point2Ds(), out Point2D point2D_1, out Point2D point2D_2);
+                            Geometry.Planar.Query.ExtremePoints(segment2Ds.UniquePoint2Ds(tolerance_Distance), out Point2D point2D_1, out Point2D point2D_2);
                             if (point2D_1.Distance(point2D_2) > tolerance_Distance)
                                 panels_Temp.Add(panel);
                         }
@@ -102,7 +102,7 @@ namespace SAM.Analytical
                 if (segment2Ds_Intersection == null || segment2Ds_Intersection.Count == 0)
                     continue;
 
-                Geometry.Planar.Query.ExtremePoints(segment2Ds_Intersection.Point2Ds(), out Point2D point2D_1, out Point2D point2D_2);
+                Geometry.Planar.Query.ExtremePoints(segment2Ds_Intersection.UniquePoint2Ds(tolerance_Distance), out Point2D point2D_1, out Point2D point2D_2);
                 if (point2D_1.Distance(point2D_2) <= tolerance_Distance)
                     continue;
 

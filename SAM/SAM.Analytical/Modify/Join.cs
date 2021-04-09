@@ -102,7 +102,7 @@ namespace SAM.Analytical
 
                         segment2Ds_ToBeRemoved = new List<Segment2D>();
 
-                        List<Point2D> point2Ds = segment2Ds.Point2Ds(tolerance);
+                        List<Point2D> point2Ds = segment2Ds.UniquePoint2Ds(tolerance);
                         if (point2Ds != null && point2Ds.Count != 0)
                         {
                             foreach (Point2D point2D in point2Ds)
@@ -143,7 +143,7 @@ namespace SAM.Analytical
 
                         segment2Ds_Temp.ForEach(x => segment2Ds.Remove(x));
 
-                        List<Point2D> point2Ds = segment2Ds_Temp.Point2Ds(tolerance);
+                        List<Point2D> point2Ds = segment2Ds_Temp.UniquePoint2Ds(tolerance);
 
                         Point2D point2D_1 = null;
                         Point2D point2D_2 = null;
@@ -472,7 +472,7 @@ namespace SAM.Analytical
                     if (segment2Ds_Split == null || segment2Ds_Split.Count == 0)
                         continue;
 
-                    List<Point2D> point2Ds = segment2Ds_Split.Point2Ds(tolerance);
+                    List<Point2D> point2Ds = segment2Ds_Split.UniquePoint2Ds(tolerance);
                     if (point2Ds.Count < 2)
                         continue;
 

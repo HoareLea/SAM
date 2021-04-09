@@ -11,7 +11,7 @@ namespace SAM.Geometry.Planar
 
             bool result = false;
 
-            List<Point2D> point2Ds = segment2Ds.Point2Ds(tolerance);
+            List<Point2D> point2Ds = segment2Ds.UniquePoint2Ds(tolerance);
             foreach(Point2D point2D in point2Ds)
             {
                 List<Segment2D> segment2Ds_Temp = segment2Ds.FindAll(x => x[0].AlmostEquals(point2D) || x[1].AlmostEquals(point2D));
@@ -24,7 +24,7 @@ namespace SAM.Geometry.Planar
                 //if (segment2Ds[0].Direction.SmallestAngle(segment2Ds[1].Direction) >= maxAngle)
                 //    continue;
 
-                List<Point2D> point2Ds_Temp = segment2Ds_Temp.Point2Ds(tolerance).FindAll(x => !x.AlmostEquals(point2D));
+                List<Point2D> point2Ds_Temp = segment2Ds_Temp.UniquePoint2Ds(tolerance).FindAll(x => !x.AlmostEquals(point2D));
                 if (point2Ds_Temp == null || point2Ds_Temp.Count != 2)
                     continue;
 

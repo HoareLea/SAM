@@ -71,7 +71,9 @@
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />
     <Compile Include="Create\ISAMGeometries.cs" />
     <Compile Include="Create\AdjacencyGraph.cs" />
+    <Compile Include="Planar\Create\Polyline2Ds.cs" />
     <Compile Include="Planar\Query\ShortestPath.cs" />
+    <Compile Include="Planar\Query\UniquePoint2Ds.cs" />
     <Compile Include="Spatial\Create\PlanarIntersectionResult.cs" />
     <Compile Include="Create\PolynomialEquation.cs" />
     <Compile Include="Create\JArray.cs" />
@@ -129,7 +131,6 @@
     <Compile Include="Planar\Query\Average.cs" />
     <Compile Include="Planar\Query\InRange.cs" />
     <Compile Include="Planar\Query\InternalPoint2D.cs" />
-    <Compile Include="Planar\Query\Point2Ds.cs" />
     <Compile Include="Planar\Query\Polygons.cs" />
     <Compile Include="Planar\Query\Inside.cs" />
     <Compile Include="Planar\Query\Area.cs" />

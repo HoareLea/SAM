@@ -37,6 +37,7 @@ namespace SAM.Geometry
                     }
 
                     result.AddEdge(new Edge<Point2D>(point2D_1, point2D_2));
+                    result.AddEdge(new Edge<Point2D>(point2D_2, point2D_1));
                 }
             }
 
