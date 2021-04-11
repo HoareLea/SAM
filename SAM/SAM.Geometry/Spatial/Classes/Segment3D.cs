@@ -136,7 +136,12 @@ namespace SAM.Geometry.Spatial
             return vector.Length;
         }
 
-        public Point3D Closest(Point3D point3D)
+        public Point3D Project(Point3D point3D)
+        {
+            return Closest(point3D, false);
+        }
+
+        public Point3D Closest(Point3D point3D, bool bounded = true)
         {
             Point3D start = GetStart();
             Point3D end = GetEnd();
@@ -154,12 +159,182 @@ namespace SAM.Geometry.Spatial
             if (squareLength != 0)
                 parameter = dot / squareLength;
 
-            if (parameter < 0)
+            if (parameter < 0 && bounded)
                 return start;
-            else if (parameter > 1)
+            else if (parameter > 1 && bounded)
                 return end;
             else
                 return new Point3D(start.X + parameter * c, start.Y + parameter * d, start.Z + parameter * f);
+        }
+
+        public double Distance(Point3D point3D)
+        {
+            if (point3D == null)
+                return double.NaN;
+
+            return point3D.Distance(Closest(point3D));
+        }
+
+        //public double Distance(Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
+        //{
+        //    if (segment3D == null)
+        //        return double.NaN;
+
+        //    Vector3D normal = Direction.CrossProduct(segment3D.Direction);
+        //    double length = normal.Length;
+        //    if(double.IsNaN(length) || normal.Length < tolerance)
+        //    {
+        //        normal = Query.Normal(origin, GetEnd(), segment3D.origin);
+        //        length = normal.Length;
+        //        if (double.IsNaN(length) || normal.Length < tolerance)
+        //        {
+        //            normal = Direction.Rotate90();
+        //        }
+        //    }
+
+        //    Plane plane = new Plane(origin, normal);
+        //    Planar.Segment2D segment2D_1 = plane.Convert(this);
+        //    Planar.Segment2D segment2D_2 = plane.Convert(segment3D);
+        //    return segment2D_1.Distance(segment2D_2);
+        //}
+
+        public double Distance(Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segment3D == null)
+                return double.NaN;
+
+            Point3D point3D_Closest_1 = null;
+            Point3D point3D_Closest_2 = null;
+
+            Point3D point3D_Intersection = Intersection(segment3D, out point3D_Closest_1, out point3D_Closest_2, tolerance);
+
+            if (point3D_Intersection == null)
+            {
+                //Paraller segments
+                Segment3D segment3D_Temp = segment3D;
+                point3D_Closest_1 = Project(segment3D.origin);
+                if (!On(point3D_Closest_1, tolerance))
+                {
+                    point3D_Closest_1 = Project(segment3D.GetEnd());
+                    if (!On(point3D_Closest_1, tolerance))
+                    {
+                        segment3D_Temp = this;
+                        point3D_Closest_1 = segment3D.Project(origin);
+                        if (!segment3D.On(point3D_Closest_1, tolerance))
+                        {
+                            point3D_Closest_1 = segment3D.Project(GetEnd());
+                            if (!segment3D.On(point3D_Closest_1, tolerance))
+                                return (new double[] { segment3D.origin.Distance(origin), segment3D.GetEnd().Distance(GetEnd()), segment3D.origin.Distance(GetEnd()), segment3D.GetEnd().Distance(origin) }).Min();
+                        }
+                    }
+                }
+
+                point3D_Closest_2 = segment3D_Temp.Project(point3D_Closest_1);
+            }
+            else if (point3D_Closest_1 == null || point3D_Closest_2 == null)
+            {
+                return 0;
+            }
+
+            return Math.Query.Min(Distance(segment3D[0]), Distance(segment3D[1]), segment3D.Distance(origin), segment3D.Distance(GetEnd()));
+
+            //return point2D_Closest_1.Distance(point2D_Closest_2);
+        }
+
+        public Point3D Intersection(Segment3D segment3D, out Point3D point3D_Closest1, out Point3D point3D_Closest2, double tolerance = Core.Tolerance.Distance)
+        {
+            point3D_Closest1 = null;
+            point3D_Closest2 = null;
+
+            Vector3D normal = Direction.CrossProduct(segment3D.Direction);
+            double length = normal.Length;
+            if (double.IsNaN(length) || normal.Length < tolerance)
+            {
+                normal = Query.Normal(origin, GetEnd(), segment3D.origin);
+                length = normal.Length;
+                if (double.IsNaN(length) || normal.Length < tolerance)
+                {
+                    normal = Direction.Rotate90();
+                }
+
+                Plane plane = new Plane(origin, normal);
+                Planar.Segment2D segment2D_1 = plane.Convert(this);
+                Planar.Segment2D segment2D_2 = plane.Convert(segment3D);
+
+                Planar.Point2D point2D_Intersection = segment2D_1.Intersection(segment2D_2, out Planar.Point2D point2D_Closest_1, out Planar.Point2D point2D_Closest_2, tolerance);
+                if (point2D_Closest_1 != null)
+                {
+                    point3D_Closest1 = plane.Convert(point2D_Closest_1);
+                }
+
+                if (point2D_Closest_2 != null)
+                {
+                    point3D_Closest2 = plane.Convert(point2D_Closest_2);
+                }
+
+                return plane.Convert(point2D_Intersection);
+            }
+
+            var point0 = origin;
+            var u = Direction;
+            var point1 = segment3D.origin;
+            var v = segment3D.Direction;
+
+            var w0 = point0 - point1;
+            var a = u.DotProduct(u);
+            var b = u.DotProduct(v);
+            var c = v.DotProduct(v);
+            var d = u.DotProduct(w0);
+            var e = v.DotProduct(w0);
+
+            var sc = ((b * e) - (c * d)) / ((a * c) - (b * b));
+            var tc = ((a * e) - (b * d)) / ((a * c) - (b * b));
+
+            point3D_Closest1 = point0.GetMoved(sc * u) as Point3D;
+            point3D_Closest2 = point1.GetMoved(tc * v) as Point3D;
+
+            if(!On(point3D_Closest1, tolerance))
+            {
+                point3D_Closest1 = Closest(point3D_Closest1);
+            }
+
+            if (!segment3D.On(point3D_Closest2, tolerance))
+            {
+                point3D_Closest2 = segment3D.Closest(point3D_Closest2);
+            }
+
+            if (!point3D_Closest1.AlmostEquals(point3D_Closest2, tolerance))
+                return null;
+
+            Point3D result = point3D_Closest1;
+            point3D_Closest1 = null;
+            point3D_Closest2 = null;
+
+            return result;
+        }
+
+        public Point3D Intersection(Segment3D segment3D, bool bounded = true, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segment3D == null)
+                return null;
+
+            Point3D result = Query.Intersection(origin, vector.GetNormalized(), segment3D.origin, segment3D.vector.GetNormalized(), tolerance);
+            if(result == null)
+            {
+                return result;
+            }
+
+            if(!bounded)
+            {
+                return result;
+            }
+
+            if (segment3D.On(result, tolerance) && On(result, tolerance))
+            {
+                return result;
+            }
+
+            return null;
         }
 
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)

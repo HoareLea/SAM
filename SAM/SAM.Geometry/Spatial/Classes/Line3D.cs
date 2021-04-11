@@ -50,6 +50,14 @@ namespace SAM.Geometry.Spatial
             vector.Negate();
         }
 
+        public Point3D Intersection(Line3D line3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (line3D == null)
+                return null;
+
+            return Query.Intersection(origin, vector, line3D.origin, line3D.vector, tolerance);
+        }
+
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new Segment3D((Point3D)origin.GetMoved(vector3D), (Vector3D)vector.Clone());
@@ -84,6 +92,34 @@ namespace SAM.Geometry.Spatial
             jObject.Add("Vector", vector.ToJObject());
 
             return jObject;
+        }
+
+        /// <summary>
+        /// Changes line2D to string formula. Source: https://math.stackexchange.com/questions/404440/what-is-the-equation-for-a-3d-line
+        /// </summary>
+        /// <param name="lineFormulaForm">LineFormulaForm</param>
+        /// <returns>string</returns>
+        public string ToString(LineFormulaForm lineFormulaForm)
+        {
+            if (lineFormulaForm == LineFormulaForm.Undefined)
+                return null;
+
+            Vector3D direction = vector.Unit;
+
+            switch (lineFormulaForm)
+            {
+                case LineFormulaForm.Parameteric:
+
+                    return string.Format("x={0}{1}\ny={2}{3}\nz={4}{5}", origin.X, Core.Convert.ToString(direction.X, "t"), origin.Y, Core.Convert.ToString(direction.Y, "t"), origin.Z, Core.Convert.ToString(direction.Z, "t"));
+
+                case LineFormulaForm.Vector:
+                    return string.Format("(x;y;z)=({0};{1};{2}})+t({3};{4};{5})", origin.X, origin.Y, origin.Z, direction.X, direction.Y, direction.Z);
+
+                case LineFormulaForm.Symmetric:
+                    return string.Format("(x{0})/{1}=(y{2})/{3}=(z{4})/{5}", -origin.X, direction.X, -origin.Y, direction.X, -origin.Z, direction.Z);
+            }
+
+            return null;
         }
     }
 }

@@ -71,6 +71,7 @@
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />
     <Compile Include="Create\ISAMGeometries.cs" />
     <Compile Include="Create\AdjacencyGraph.cs" />
+    <Compile Include="Enums\LineFormulaForm.cs" />
     <Compile Include="Planar\Create\Polyline2Ds.cs" />
     <Compile Include="Planar\Query\ShortestPath.cs" />
     <Compile Include="Planar\Query\UniquePoint2Ds.cs" />
@@ -173,7 +174,9 @@
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
     <Compile Include="Spatial\Query\Extend.cs" />
+    <Compile Include="Spatial\Query\Distance.cs" />
     <Compile Include="Spatial\Query\IntersectionDictionary.cs" />
+    <Compile Include="Spatial\Query\Intersection.cs" />
     <Compile Include="Spatial\Query\Intersections.cs" />
     <Compile Include="Spatial\Query\Offset.cs" />
     <Compile Include="Spatial\Query\Project.cs" />

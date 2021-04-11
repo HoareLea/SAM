@@ -696,7 +696,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, List<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, List<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
         {
             AdjacencyCluster result = new AdjacencyCluster();
 
@@ -713,7 +713,7 @@ namespace SAM.Analytical
 
                     names.Add(space.Name);
 
-                    List<Shell> spaces_Shell = Query.SpaceShells(shells, point3D, silverSpacing, tolerance_Distance);
+                    List<Shell> spaces_Shell = Query.SpaceShells(shells, point3D, silverSpacing, tolerance);
                     if (spaces_Shell != null && spaces_Shell.Count > 0)
                     {
                         foreach (Shell shell in spaces_Shell)
@@ -749,9 +749,8 @@ namespace SAM.Analytical
                     {
                         continue;
                     }
-                        
 
-                    if (!keyValuePair.Key.Inside(point3D, silverSpacing, tolerance_Distance))
+                    if (!keyValuePair.Key.Inside(point3D, silverSpacing, tolerance))
                     {
                         spaces_Shell.Add(space);
                     }
@@ -779,7 +778,7 @@ namespace SAM.Analytical
                 if (plane == null)
                     continue;
 
-                if (face3D.GetArea() < tolerance_Distance)
+                if (face3D.GetArea() < tolerance)
                     continue;
 
                 tuples_Panel.Add(new Tuple<Plane, Face3D, Panel>(plane, face3D, panel));
@@ -817,7 +816,7 @@ namespace SAM.Analytical
                     }
                     while (names.Contains(name));
 
-                    Space space = new Space(name, shell.CalculatedInternalPoint3D(silverSpacing, tolerance_Distance));
+                    Space space = new Space(name, shell.CalculatedInternalPoint3D(silverSpacing, tolerance));
                     names.Add(name);
                     spaces_Shell.Add(space);
 
@@ -851,9 +850,9 @@ namespace SAM.Analytical
                     if (point3D_Internal == null)
                         continue;
 
-                    Panel panel_New = tuples_Panel_New.Find(x => face3D.InRange(x.Item1, tolerance_Distance))?.Item2;
+                    Panel panel_New = tuples_Panel_New.Find(x => face3D.InRange(x.Item1, tolerance))?.Item2;
                     if(panel_New == null)
-                        panel_New = tuples_Panel_New.Find(x => x.Item2.GetFace3D().InRange(point3D_Internal, tolerance_Distance))?.Item2;
+                        panel_New = tuples_Panel_New.Find(x => x.Item2.GetFace3D().InRange(point3D_Internal, tolerance))?.Item2;
 
                     if (panel_New == null)
                     {
@@ -862,10 +861,10 @@ namespace SAM.Analytical
                         {
                             Plane plane_Panel = tuple_Panel.Item1;
 
-                            if (plane_Panel.Normal.SmallestAngle(plane.Normal.GetNegated()) > tolerance_Angle && plane_Panel.Normal.SmallestAngle(plane.Normal) > tolerance_Angle)
+                            if (plane_Panel.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_Panel.Normal.SmallestAngle(plane.Normal) > maxAngle)
                                 continue;
 
-                            double distance = plane_Panel.Distance(plane, tolerance_Distance);
+                            double distance = tuple_Panel.Item2.Distance(face3D, tolerance);
 
                             if (distance > maxDistance)
                                 continue;
@@ -883,8 +882,8 @@ namespace SAM.Analytical
                         Face2D face2D_Shell = plane.Convert(face3D);
                         for (int i = tuples_Face2D.Count - 1; i >= 0; i--)
                         {
-                            List<Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D_Shell, tuples_Face2D[i].Item1, tolerance_Distance);
-                            face2Ds_Intersection?.RemoveAll(x => x == null || x.GetArea() <= tolerance_Distance);
+                            List<Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D_Shell, tuples_Face2D[i].Item1, tolerance);
+                            face2Ds_Intersection?.RemoveAll(x => x == null || x.GetArea() <= tolerance);
 
                             if (face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
                                 tuples_Face2D.RemoveAt(i);
@@ -941,10 +940,10 @@ namespace SAM.Analytical
                 {
                     Plane plane_New = tuple_Panel_New.Item2.Plane;
 
-                    if (!plane_New.Coplanar(plane))
+                    if (plane_New.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_New.Normal.SmallestAngle(plane.Normal) > maxAngle)
                         continue;
 
-                    double distance = plane_New.Distance(plane, tolerance_Distance);
+                    double distance = tuple_Panel_New.Item2.GetFace3D().Distance(face3D, tolerance);
 
                     if (distance > maxDistance)
                         continue;
@@ -956,8 +955,8 @@ namespace SAM.Analytical
                     List<Face2D> face2Ds_Temp = new List<Face2D>();
                     foreach(Face2D face2D_Temp in face2Ds)
                     {
-                        List<Face2D> face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Temp, face2D, tolerance_Distance);
-                        face2Ds_Difference?.RemoveAll(x => x == null || x.GetArea() <= tolerance_Distance);
+                        List<Face2D> face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Temp, face2D, tolerance);
+                        face2Ds_Difference?.RemoveAll(x => x == null || x.GetArea() <= minArea);
                         if (face2Ds_Difference == null || face2Ds_Difference.Count == 0)
                             continue;
 

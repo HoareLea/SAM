@@ -70,5 +70,33 @@ namespace SAM.Geometry.Planar
         {
             return Tuple.Create(origin, vector).GetHashCode();
         }
+
+        /// <summary>
+        /// Changes line2D to string formula. Source: https://math.stackexchange.com/questions/404440/what-is-the-equation-for-a-3d-line
+        /// </summary>
+        /// <param name="lineFormulaForm">LineFormulaForm</param>
+        /// <returns>string</returns>
+        public string ToString(LineFormulaForm lineFormulaForm)
+        {
+            if (lineFormulaForm == LineFormulaForm.Undefined)
+                return null;
+
+            Vector2D direction = vector.Unit;
+
+            switch (lineFormulaForm)
+            {
+                case LineFormulaForm.Parameteric:
+
+                    return string.Format("x={0}{1}\ny={2}{3}", origin.X, Core.Convert.ToString(direction.X, "t"), origin.Y, Core.Convert.ToString(direction.Y, "t"));
+
+                case LineFormulaForm.Vector:
+                    return string.Format("(x;y)=({0};{1}})+t({2};{3})", origin.X, origin.Y, direction.X, direction.Y);
+
+                case LineFormulaForm.Symmetric:
+                    return string.Format("(x{0})/{1}=(y{2})/{3}", -origin.X, direction.X, -origin.Y, direction.X);
+            }
+
+            return null;
+        }
     }
 }

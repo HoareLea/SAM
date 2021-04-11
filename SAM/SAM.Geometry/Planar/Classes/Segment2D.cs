@@ -221,6 +221,11 @@ namespace SAM.Geometry.Planar
             return point2D.Distance(Closest(point2D));
         }
 
+        public double Distance(ISegmentable2D segmentable2D)
+        {
+            return Query.Distance(this, segmentable2D);
+        }
+
         public double Distance(Segment2D segment2D, double tolerance = Core.Tolerance.Distance)
         {
             if (segment2D == null)
@@ -259,15 +264,19 @@ namespace SAM.Geometry.Planar
                 return 0;
             }
 
-            return point2D_Closest_1.Distance(point2D_Closest_2);
+            return Math.Query.Min(Distance(segment2D[0]), Distance(segment2D[1]), segment2D.Distance(origin), segment2D.Distance(End));
+
+            //return point2D_Closest_1.Distance(point2D_Closest_2);
         }
 
         /// <summary>
-        /// Find intersection Point2D by two segments2Ds. Method will aslo return closest point2Ds
-        /// on Segmnet2Ds to extended intersection Point2D
+        /// Find intersection Point2D by two segments2Ds. Method will aslo return closest point2Ds on Segment2Ds to extended intersection Point2D
         /// </summary>
-        /// <returns>Point2D</returns>
         /// <param name="segment2D">Segment2D for intersection.</param>
+        /// <param name="point2D_Closest1">Point2D closest to given Segment2D and being on this Segment2D</param>
+        /// <param name="point2D_Closest2">Point2D closest to this Segment2D and being on given Segment2D</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Intersection Point2D</returns>
         public Point2D Intersection(Segment2D segment2D, out Point2D point2D_Closest1, out Point2D point2D_Closest2, double tolerance = Core.Tolerance.Distance)
         {
             point2D_Closest1 = null;
@@ -299,10 +308,10 @@ namespace SAM.Geometry.Planar
             Point2D point2D_Intersection = new Point2D(Start.X + dx12 * t1, Start.Y + dy12 * t1);
 
             double t1_Temp = Core.Query.Round(t1, tolerance);
-            double aT2_Temp = Core.Query.Round(t2, tolerance);
+            double t2_Temp = Core.Query.Round(t2, tolerance);
 
             // The segments intersect if t1 and t2 are between 0 and 1.
-            if (((t1_Temp >= 0) && (t1_Temp <= 1) && (aT2_Temp >= 0) && (aT2_Temp <= 1)))
+            if (((t1_Temp >= 0) && (t1_Temp <= 1) && (t2_Temp >= 0) && (t2_Temp <= 1)))
                 return point2D_Intersection;
 
             // Find the closest points on the segments.
@@ -431,23 +440,23 @@ namespace SAM.Geometry.Planar
             Point2D start = Start;
             Point2D end = End;
 
-            double A = point2D.X - start.X;
-            double B = point2D.Y - start.Y;
-            double C = end.X - start.X;
-            double D = end.Y - start.Y;
+            double a = point2D.X - start.X;
+            double b = point2D.Y - start.Y;
+            double c = end.X - start.X;
+            double d = end.Y - start.Y;
 
-            double aDot = A * C + B * D;
-            double aLen_sq = C * C + D * D;
-            double aParameter = -1;
-            if (aLen_sq != 0)
-                aParameter = aDot / aLen_sq;
+            double dot = a * c + b * d;
+            double len_sq = c * c + d * d;
+            double parameter = -1;
+            if (len_sq != 0)
+                parameter = dot / len_sq;
 
-            if (aParameter < 0)
+            if (parameter < 0)
                 return start;
-            else if (aParameter > 1)
+            else if (parameter > 1)
                 return end;
             else
-                return new Point2D(start.X + aParameter * C, start.Y + aParameter * D);
+                return new Point2D(start.X + parameter * c, start.Y + parameter * d);
         }
 
         public Point2D ClosestEnd(Point2D point2D)
@@ -534,11 +543,6 @@ namespace SAM.Geometry.Planar
         public BoundingBox2D GetBoundingBox(double offset = 0)
         {
             return new BoundingBox2D(origin, GetEnd(), offset);
-        }
-
-        public double Distance(ISegmentable2D segmentable2D)
-        {
-            return Query.Distance(this, segmentable2D);
         }
 
         public Point2D GetPoint(double parameter, bool inverted = false)

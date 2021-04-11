@@ -48,5 +48,13 @@ namespace SAM.Core
         {
             return color.Name;
         }
+
+        public static string ToString(double value, string prefix)
+        {
+            if (value < 0)
+                return string.Format("-{0}{1}", prefix, System.Math.Abs(value));
+
+            return "+" + prefix + value.ToString();
+        }
     }
 }
