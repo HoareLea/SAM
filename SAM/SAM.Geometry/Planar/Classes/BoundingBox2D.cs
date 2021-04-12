@@ -209,37 +209,35 @@ namespace SAM.Geometry.Planar
                 return false;
             }
 
-            List<Point2D> point2Ds;
+            double max_1;
+            double min_1;
 
-            point2Ds = boundingBox2D.GetPoints();
-            if (point2Ds == null || point2Ds.Count == 0)
+            double max_2;
+            double min_2;
+
+            max_1 = Max.X + tolerance;
+            min_1 = Min.X - tolerance;
+
+            max_2 = boundingBox2D.Max.X;
+            min_2 = boundingBox2D.Min.X;
+
+            if(max_1 < min_2 || min_1 > max_2)
             {
                 return false;
             }
 
-            foreach (Point2D point2D in point2Ds)
-            {
-                if (Inside(point2D, tolerance))
-                {
-                    return true;
-                }
-            }
+            max_1 = Max.Y + tolerance;
+            min_1 = Min.Y - tolerance;
 
-            point2Ds = GetPoints();
-            if (point2Ds == null || point2Ds.Count == 0)
+            max_2 = boundingBox2D.Max.Y;
+            min_2 = boundingBox2D.Min.Y;
+
+            if (max_1 < min_2 || min_1 > max_2)
             {
                 return false;
             }
 
-            foreach (Point2D point2D in point2Ds)
-            {
-                if (boundingBox2D.Inside(point2D, tolerance))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return true;
         }
 
         public Segment2D GetSegment(Point2D point2D, Vector2D direction)

@@ -5,7 +5,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static bool InRange(this BoundingBox3D boundingBox3D, Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        public static bool InRange(this BoundingBox3D boundingBox3D, Point3D point3D, double tolerance = Tolerance.Distance)
         {
             if (boundingBox3D == null || point3D == null)
                 return false;
@@ -15,10 +15,56 @@ namespace SAM.Geometry.Spatial
 
         public static bool InRange(this BoundingBox3D boundingBox3D_1, BoundingBox3D boundingBox3D_2, double tolerance = Tolerance.Distance)
         {
-            if (boundingBox3D_1 == null || boundingBox3D_2 == null)
-                return false;
+            //if (boundingBox3D_1 == null || boundingBox3D_2 == null)
+            //    return false;
 
-            return boundingBox3D_1.Inside(boundingBox3D_2) || boundingBox3D_1.Intersect(boundingBox3D_2) || boundingBox3D_1.On(boundingBox3D_2.Min) || boundingBox3D_1.On(boundingBox3D_2.Max);
+            //return boundingBox3D_1.Inside(boundingBox3D_2) || boundingBox3D_1.Intersect(boundingBox3D_2) || boundingBox3D_1.On(boundingBox3D_2.Min) || boundingBox3D_1.On(boundingBox3D_2.Max);
+
+            if (boundingBox3D_1 == null || boundingBox3D_2 == null)
+            {
+                return false;
+            }
+
+            double max_1;
+            double min_1;
+
+            double max_2;
+            double min_2;
+
+            max_1 = boundingBox3D_1.Max.X + tolerance;
+            min_1 = boundingBox3D_1.Min.X - tolerance;
+
+            max_2 = boundingBox3D_2.Max.X;
+            min_2 = boundingBox3D_2.Min.X;
+
+            if (max_1 < min_2 || min_1 > max_2)
+            {
+                return false;
+            }
+
+            max_1 = boundingBox3D_1.Max.Y + tolerance;
+            min_1 = boundingBox3D_1.Min.Y - tolerance;
+
+            max_2 = boundingBox3D_2.Max.Y;
+            min_2 = boundingBox3D_2.Min.Y;
+
+            if (max_1 < min_2 || min_1 > max_2)
+            {
+                return false;
+            }
+
+            max_1 = boundingBox3D_1.Max.Z + tolerance;
+            min_1 = boundingBox3D_1.Min.Z - tolerance;
+
+            max_2 = boundingBox3D_2.Max.Z;
+            min_2 = boundingBox3D_2.Min.Z;
+
+            if (max_1 < min_2 || min_1 > max_2)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public static bool InRange(this BoundingBox3D boundingBox3D, Segment3D segment3D, double tolerance = Tolerance.Distance)

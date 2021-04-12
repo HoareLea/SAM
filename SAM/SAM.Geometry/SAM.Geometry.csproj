@@ -73,6 +73,7 @@
     <Compile Include="Create\AdjacencyGraph.cs" />
     <Compile Include="Enums\LineFormulaForm.cs" />
     <Compile Include="Planar\Create\Polyline2Ds.cs" />
+    <Compile Include="Planar\Query\LongestPath.cs" />
     <Compile Include="Planar\Query\ShortestPath.cs" />
     <Compile Include="Planar\Query\UniquePoint2Ds.cs" />
     <Compile Include="Spatial\Create\PlanarIntersectionResult.cs" />

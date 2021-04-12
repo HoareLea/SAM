@@ -95,10 +95,11 @@ namespace SAM.Geometry.Spatial
 
             Segment3D segment3D = new Segment3D(point3D, vector3D);
 
-            List<Point3D> point3Ds = IntersectionPoint3Ds(segment3D, false, tolerance);
-            if (point3Ds != null && point3Ds.Count != 0)
-                if (point3Ds.Find(x => OnEdge(x, tolerance)) == null)
-                    return point3Ds.Count % 2 != 0;
+            //List<Point3D> point3Ds = IntersectionPoint3Ds(segment3D, false, tolerance);
+            List<ISAMGeometry3D> geometry3Ds_Intersection = IntersectionGeometry3Ds<ISAMGeometry3D>(segment3D, false, tolerance);
+            if (geometry3Ds_Intersection != null && geometry3Ds_Intersection.Count != 0)
+                if (geometry3Ds_Intersection.Find(x => x is ISegmentable3D || OnEdge(x as Point3D, tolerance)) == null)
+                    return geometry3Ds_Intersection.Count % 2 != 0;
 
             foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries)
             {
@@ -115,14 +116,14 @@ namespace SAM.Geometry.Spatial
                 vector3D_Temp = vector3D_Temp * length;
 
                 Segment3D segment3D_Temp = new Segment3D(point3D, vector3D_Temp);
-                List<Point3D> point3Ds_Temp = IntersectionPoint3Ds(segment3D_Temp, false, tolerance);
-                if (point3Ds_Temp == null || point3Ds_Temp.Count == 0)
+                List<ISAMGeometry3D> geometry3Ds_Intersection_Temp = IntersectionGeometry3Ds<ISAMGeometry3D>(segment3D_Temp, false, tolerance);
+                if (geometry3Ds_Intersection_Temp == null || geometry3Ds_Intersection_Temp.Count == 0)
                     continue;
 
-                if (point3Ds_Temp.Find(x => OnEdge(x, tolerance)) != null)
+                if (geometry3Ds_Intersection_Temp.Find(x => x is ISegmentable3D || OnEdge(x as Point3D, tolerance)) != null)
                     continue;
 
-                return point3Ds_Temp.Count % 2 != 0;
+                return geometry3Ds_Intersection_Temp.Count % 2 != 0;
             }
 
             return false;
@@ -152,6 +153,32 @@ namespace SAM.Geometry.Spatial
             }
 
             return point3Ds.ToList();
+        }
+
+        public List<T> IntersectionGeometry3Ds<T>(Segment3D segment3D, bool includeInternalEdges = true, double tolerance = Core.Tolerance.Distance) where T: ISAMGeometry3D
+        {
+            if (segment3D == null || boundaries == null)
+                return null;
+
+            HashSet<T> sAMGeometry3Ds = new HashSet<T>();
+            foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries)
+            {
+                PlanarIntersectionResult planarIntersectionResult = null;
+
+                if (includeInternalEdges)
+                    planarIntersectionResult = Create.PlanarIntersectionResult(boundary.Item2, segment3D, tolerance);
+                else
+                    planarIntersectionResult = Create.PlanarIntersectionResult(new Face3D(boundary.Item2.GetExternalEdge3D()), segment3D, tolerance);
+
+                if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                    continue;
+
+                List<T> sAMGeometry3Ds_Temp = planarIntersectionResult.GetGeometry3Ds<T>();
+                if (sAMGeometry3Ds_Temp != null && sAMGeometry3Ds_Temp.Count > 0)
+                    sAMGeometry3Ds_Temp.ForEach(x => sAMGeometry3Ds.Add(x));
+            }
+
+            return sAMGeometry3Ds.ToList();
         }
 
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
