@@ -852,9 +852,9 @@ namespace SAM.Analytical
 
                     BoundingBox3D boundingBox3D = face3D.GetBoundingBox(maxDistance + tolerance);
 
-                    Panel panel_New = tuples_Panel_New.Find(x => boundingBox3D.InRange(x.Item1, tolerance) && face3D.InRange(x.Item1, tolerance))?.Item2;
+                    Panel panel_New = tuples_Panel_New.Find(x => boundingBox3D.InRange(x.Item1, tolerance) && face3D.Inside(x.Item1, tolerance))?.Item2;
                     if(panel_New == null)
-                        panel_New = tuples_Panel_New.Find(x => x.Item3.InRange(point3D_Internal, maxDistance + tolerance) && x.Item2.GetFace3D().InRange(point3D_Internal, tolerance))?.Item2;
+                        panel_New = tuples_Panel_New.Find(x => x.Item3.InRange(point3D_Internal, maxDistance + tolerance) && x.Item2.GetFace3D().Inside(point3D_Internal, tolerance))?.Item2;
 
                     if (panel_New == null)
                     {
