@@ -767,7 +767,7 @@ namespace SAM.Analytical
                 }
             }
 
-            List<Tuple<Plane, Face3D, Panel>> tuples_Panel = new List<Tuple<Plane, Face3D, Panel>>();
+            List<Tuple<Plane, Face3D, Panel, BoundingBox3D>> tuples_Panel = new List<Tuple<Plane, Face3D, Panel, BoundingBox3D>>();
             foreach(Panel panel in panels)
             {
                 Face3D face3D = panel?.GetFace3D();
@@ -781,14 +781,14 @@ namespace SAM.Analytical
                 if (face3D.GetArea() < tolerance)
                     continue;
 
-                tuples_Panel.Add(new Tuple<Plane, Face3D, Panel>(plane, face3D, panel));
+                tuples_Panel.Add(new Tuple<Plane, Face3D, Panel, BoundingBox3D>(plane, face3D, panel, face3D.GetBoundingBox(tolerance)));
             }
 
             tuples_Panel.Sort((x, y) => y.Item2.GetArea().CompareTo(x.Item2.GetArea()));
 
             int count = 1;
 
-            List<Tuple<Point3D, Panel>> tuples_Panel_New = new List<Tuple<Point3D, Panel>>();
+            List<Tuple<Point3D, Panel, BoundingBox3D>> tuples_Panel_New = new List<Tuple<Point3D, Panel, BoundingBox3D>>();
 
             //Creating Shell Panels
             foreach (Shell shell in shells)
@@ -850,15 +850,20 @@ namespace SAM.Analytical
                     if (point3D_Internal == null)
                         continue;
 
-                    Panel panel_New = tuples_Panel_New.Find(x => face3D.InRange(x.Item1, tolerance))?.Item2;
+                    BoundingBox3D boundingBox3D = face3D.GetBoundingBox(maxDistance + tolerance);
+
+                    Panel panel_New = tuples_Panel_New.Find(x => boundingBox3D.InRange(x.Item1, tolerance) && face3D.InRange(x.Item1, tolerance))?.Item2;
                     if(panel_New == null)
-                        panel_New = tuples_Panel_New.Find(x => x.Item2.GetFace3D().InRange(point3D_Internal, tolerance))?.Item2;
+                        panel_New = tuples_Panel_New.Find(x => x.Item3.InRange(point3D_Internal, maxDistance + tolerance) && x.Item2.GetFace3D().InRange(point3D_Internal, tolerance))?.Item2;
 
                     if (panel_New == null)
                     {
                         List<Tuple<Face2D, Panel>> tuples_Face2D = new List<Tuple<Face2D, Panel>>();
-                        foreach (Tuple<Plane, Face3D, Panel> tuple_Panel in tuples_Panel)
+                        foreach (Tuple<Plane, Face3D, Panel, BoundingBox3D> tuple_Panel in tuples_Panel)
                         {
+                            if (!boundingBox3D.InRange(tuple_Panel.Item4))
+                                continue;
+
                             Plane plane_Panel = tuple_Panel.Item1;
 
                             if (plane_Panel.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_Panel.Normal.SmallestAngle(plane.Normal) > maxAngle)
@@ -909,7 +914,7 @@ namespace SAM.Analytical
                         panel_New = new Panel(guid, panel, face3D, null, true, minArea);
                         result.AddObject(panel_New);
 
-                        tuples_Panel_New.Add(new Tuple<Point3D, Panel>(point3D_Internal, panel_New));
+                        tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance)));
                     }
 
                     if (panel_New == null)
@@ -919,8 +924,6 @@ namespace SAM.Analytical
                         result.AddRelation(space, panel_New);
                 }
             }
-
-            tuples_Panel = new List<Tuple<Plane, Face3D, Panel>>();
 
 
             //Creating Shade Panels
@@ -934,10 +937,15 @@ namespace SAM.Analytical
                 if (plane == null)
                     continue;
 
+                BoundingBox3D boundingBox3D = face3D.GetBoundingBox(maxDistance + tolerance);
+
                 List<Face2D> face2Ds = new List<Face2D>() { plane.Convert(face3D) };
 
-                foreach(Tuple<Point3D, Panel> tuple_Panel_New in tuples_Panel_New)
+                foreach(Tuple<Point3D, Panel, BoundingBox3D> tuple_Panel_New in tuples_Panel_New)
                 {
+                    if (!boundingBox3D.InRange(tuple_Panel_New.Item3, tolerance))
+                        continue;
+
                     Plane plane_New = tuple_Panel_New.Item2.Plane;
 
                     if (plane_New.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_New.Normal.SmallestAngle(plane.Normal) > maxAngle)
