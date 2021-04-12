@@ -276,6 +276,46 @@ namespace SAM.Geometry.Spatial
 
             return true;
         }
+
+        public bool InRange(BoundingBox3D boundingBox3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (boundingBox3D == null)
+            {
+                return false;
+            }
+
+            List<Point3D> point3Ds;
+
+            point3Ds = boundingBox3D.GetPoints();
+            if (point3Ds == null || point3Ds.Count == 0)
+            {
+                return false;
+            }
+
+            foreach(Point3D point3D in point3Ds)
+            {
+                if (Inside(point3D, true, tolerance))
+                {
+                    return true;
+                }
+            }
+
+            point3Ds = GetPoints();
+            if (point3Ds == null || point3Ds.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (Point3D point3D in point3Ds)
+            {
+                if (boundingBox3D.Inside(point3D, true, tolerance))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         
         public override ISAMGeometry Clone()
         {

@@ -197,7 +197,7 @@ namespace SAM.Geometry.Planar
         }
 
         /// <summary>
-        /// boundingBox2D On or Inside this BoundingBox2D 
+        /// boundingBox2D not outside this BoundingBox2D 
         /// </summary>
         /// <param name="boundingBox2D">Point2D</param>
         /// <param name="tolerance">Tolerance</param>
@@ -205,9 +205,41 @@ namespace SAM.Geometry.Planar
         public bool InRange(BoundingBox2D boundingBox2D, double tolerance = Core.Tolerance.Distance)
         {
             if (boundingBox2D == null)
+            {
                 return false;
+            }
 
-            return InRange(boundingBox2D.Min, tolerance) && InRange(boundingBox2D.Max, tolerance);
+            List<Point2D> point2Ds;
+
+            point2Ds = boundingBox2D.GetPoints();
+            if (point2Ds == null || point2Ds.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (Point2D point2D in point2Ds)
+            {
+                if (Inside(point2D, tolerance))
+                {
+                    return true;
+                }
+            }
+
+            point2Ds = GetPoints();
+            if (point2Ds == null || point2Ds.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (Point2D point2D in point2Ds)
+            {
+                if (boundingBox2D.Inside(point2D, tolerance))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public Segment2D GetSegment(Point2D point2D, Vector2D direction)
