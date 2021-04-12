@@ -246,6 +246,9 @@ namespace SAM.Geometry.Spatial
             point3D_Closest1 = null;
             point3D_Closest2 = null;
 
+            if (segment3D == null)
+                return null;
+
             Vector3D normal = Direction.CrossProduct(segment3D.Direction);
             double length = normal.Length;
             if (double.IsNaN(length) || normal.Length < tolerance)
@@ -275,23 +278,24 @@ namespace SAM.Geometry.Spatial
                 return plane.Convert(point2D_Intersection);
             }
 
-            var point0 = origin;
-            var u = Direction;
-            var point1 = segment3D.origin;
-            var v = segment3D.Direction;
+            Point3D origin_1 = origin;
+            Vector3D direction_1 = Direction;
+            
+            Point3D origin_2 = segment3D.origin;
+            Vector3D direction_2 = segment3D.Direction;
 
-            var w0 = point0 - point1;
-            var a = u.DotProduct(u);
-            var b = u.DotProduct(v);
-            var c = v.DotProduct(v);
-            var d = u.DotProduct(w0);
-            var e = v.DotProduct(w0);
+            Vector3D vector3D = origin_1 - origin_2;
+            double a = direction_1.DotProduct(direction_1);
+            double b = direction_1.DotProduct(direction_2);
+            double c = direction_2.DotProduct(direction_2);
+            double d = direction_1.DotProduct(vector3D);
+            double e = direction_2.DotProduct(vector3D);
 
-            var sc = ((b * e) - (c * d)) / ((a * c) - (b * b));
-            var tc = ((a * e) - (b * d)) / ((a * c) - (b * b));
+            double sc = ((b * e) - (c * d)) / ((a * c) - (b * b));
+            double tc = ((a * e) - (b * d)) / ((a * c) - (b * b));
 
-            point3D_Closest1 = point0.GetMoved(sc * u) as Point3D;
-            point3D_Closest2 = point1.GetMoved(tc * v) as Point3D;
+            point3D_Closest1 = origin_1.GetMoved(sc * direction_1) as Point3D;
+            point3D_Closest2 = origin_2.GetMoved(tc * direction_2) as Point3D;
 
             if(!On(point3D_Closest1, tolerance))
             {
@@ -315,26 +319,11 @@ namespace SAM.Geometry.Spatial
 
         public Point3D Intersection(Segment3D segment3D, bool bounded = true, double tolerance = Core.Tolerance.Distance)
         {
-            if (segment3D == null)
+            Point3D point2D_Intersection = Intersection(segment3D, out Point3D point3D_Closest1, out Point3D point3D_Closest2, tolerance);
+            if (bounded && (point3D_Closest1 != null || point3D_Closest2 != null))
                 return null;
 
-            Point3D result = Query.Intersection(origin, vector.GetNormalized(), segment3D.origin, segment3D.vector.GetNormalized(), tolerance);
-            if(result == null)
-            {
-                return result;
-            }
-
-            if(!bounded)
-            {
-                return result;
-            }
-
-            if (segment3D.On(result, tolerance) && On(result, tolerance))
-            {
-                return result;
-            }
-
-            return null;
+            return point2D_Intersection;
         }
 
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)

@@ -28,6 +28,14 @@ namespace SAM.Geometry.Planar
             heightDirection = Vector2D.WorldY;
         }
 
+        public Rectangle2D(BoundingBox2D boundingBox2D)
+        {
+            origin = boundingBox2D.GetPoint(Corner.BottomLeft);
+            width = boundingBox2D.Width;
+            height = boundingBox2D.Height;
+            heightDirection = Vector2D.WorldY;
+        }
+
         public Rectangle2D(Point2D origin, double width, double height, Vector2D heightDirection)
         {
             this.origin = origin;
