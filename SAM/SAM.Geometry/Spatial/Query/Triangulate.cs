@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -45,18 +46,22 @@ namespace SAM.Geometry.Spatial
             if (face3Ds == null)
                 return null;
 
-            List<Triangle3D> result = new List<Triangle3D>();
-            foreach(Face3D face3D in face3Ds)
+            List<List<Triangle3D>> triangle3Ds = Enumerable.Repeat<List<Triangle3D>>(null, face3Ds.Count).ToList();
+            System.Threading.Tasks.Parallel.For(0, face3Ds.Count, (int i) =>
             {
-                List<Triangle3D> triangle3Ds = face3D?.Triangulate(tolerance);
-                if (triangle3Ds == null || triangle3Ds.Count == 0)
-                    continue;
+                triangle3Ds[i] = face3Ds[i]?.Triangulate(tolerance);
+            });
 
-                result.AddRange(triangle3Ds);
+            List<Triangle3D> result = new List<Triangle3D>();
+            foreach(List<Triangle3D> triangle3Ds_Temp in triangle3Ds)
+            {
+                if(triangle3Ds_Temp != null && triangle3Ds_Temp.Count > 0)
+                {
+                    result.AddRange(triangle3Ds_Temp);
+                }
             }
 
             return result;
-
         }
     }
 }

@@ -3,6 +3,7 @@ using QuickGraph.Algorithms.Observers;
 using QuickGraph.Algorithms.ShortestPath;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
@@ -48,12 +49,11 @@ namespace SAM.Geometry.Planar
                 point2Ds.Add(point2Ds_All.ElementAt(0));
             }
 
-            double distance = double.MinValue;
-            Point2D point2D_Start = null;
-            Point2D point2D_End = null;
-
-            foreach(Point2D point2D in point2Ds)
+            List<System.Tuple<double, Point2D, Point2D>> tuples = Enumerable.Repeat<System.Tuple<double, Point2D, Point2D>>(null, point2Ds.Count).ToList();
+            Parallel.For(0, point2Ds.Count, (int i) =>
             {
+                Point2D point2D = point2Ds[i];
+
                 AStarShortestPathAlgorithm<Point2D, Edge<Point2D>> aStarShortestPathAlgorithm_Temp = new AStarShortestPathAlgorithm<Point2D, Edge<Point2D>>(adjacencyGraph, edge => edge.Source.Distance(edge.Target), point2D_Temp => point2D.Distance(point2D_Temp));
 
                 VertexDistanceRecorderObserver<Point2D, Edge<Point2D>> vertexDistanceRecorderObserver = new VertexDistanceRecorderObserver<Point2D, Edge<Point2D>>(edge => edge.Source.Distance(edge.Target));
@@ -61,19 +61,26 @@ namespace SAM.Geometry.Planar
 
                 aStarShortestPathAlgorithm_Temp.Compute(point2D);
 
+                double distance = double.MinValue;
+
                 List<string> values = new List<string>();
                 foreach (KeyValuePair<Point2D, double> keyValuePair in vertexDistanceRecorderObserver.Distances)
                 {
-                    if(keyValuePair.Value > distance)
+                    if (keyValuePair.Value > distance)
                     {
+                        tuples[i] = new System.Tuple<double, Point2D, Point2D>(keyValuePair.Value, point2D, keyValuePair.Key);
                         distance = keyValuePair.Value;
-                        point2D_Start = point2D;
-                        point2D_End = keyValuePair.Key;
                     }
                 }
-            }
+            });
 
-            if(point2D_Start == null || point2D_End == null)
+            if (tuples.Count > 1)
+                tuples.Sort((x, y) => y.Item1.CompareTo(x.Item1));
+
+            Point2D point2D_Start = tuples[0].Item2;
+            Point2D point2D_End = tuples[0].Item3;
+
+            if (point2D_Start == null || point2D_End == null)
             {
                 return null;
             }
