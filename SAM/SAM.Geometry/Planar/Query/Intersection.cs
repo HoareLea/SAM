@@ -1,6 +1,7 @@
 ﻿using ClipperLib;
 using NetTopologySuite.Geometries;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -91,23 +92,35 @@ namespace SAM.Geometry.Planar
             }
 
             NetTopologySuite.Geometries.Geometry geometry = polygon_1.Intersection(polygon_2);
-            if (geometry == null)
-                return null;
-
-            if (geometry.IsEmpty)
-                return null;
-
-            if (geometry is MultiPolygon)
-                return ((MultiPolygon)geometry).ToSAM();
-
-            if (geometry is Polygon)
+            if (geometry == null || geometry.IsEmpty)
             {
-                Face2D face2D = ((Polygon)geometry).ToSAM();
-                if (face2D != null)
-                    return new List<Face2D>() { face2D };
+                return null;
             }
 
-            return null;
+            List<NetTopologySuite.Geometries.Geometry> geometries = geometry is GeometryCollection ? ((GeometryCollection)geometry).Geometries?.ToList() : new List<NetTopologySuite.Geometries.Geometry>() { geometry };
+            if(geometries == null || geometries.Count == 0)
+            {
+                return null;
+            }
+
+            List<Face2D> result = new List<Face2D>();
+            foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
+            {
+                if (geometry_Temp is MultiPolygon)
+                {
+                    result.AddRange(((MultiPolygon)geometry_Temp).ToSAM());
+                }
+                else if(geometry_Temp is Polygon)
+                {
+                    Face2D face2D = ((Polygon)geometry_Temp).ToSAM();
+                    if (face2D != null)
+                    {
+                        result.Add(face2D);
+                    }
+                }
+            }
+
+            return result;
         }
 
         public static List<Segment2D> Intersection(this Face2D face2D, Segment2D segment2D, double tolerance = Core.Tolerance.MicroDistance)

@@ -13,7 +13,8 @@ namespace SAM.Geometry.Spatial
 
             List<Tuple<Shell, bool>> tuples = shells.ConvertAll(x => new Tuple<Shell, bool>(x, false));
 
-            Parallel.For(0, shells.Count, (int i) => 
+            //Parallel.For(0, shells.Count, (int i) => 
+            for(int i=0; i < shells.Count; i++)
             {
                 Shell shell = tuples[i].Item1;
                 if(shell != null)
@@ -38,7 +39,7 @@ namespace SAM.Geometry.Spatial
                     }
                 }
 
-            });
+            }//);
 
             shells.Clear();
             shells.AddRange(tuples.ConvertAll(x =>x.Item1));
