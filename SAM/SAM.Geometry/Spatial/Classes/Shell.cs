@@ -368,7 +368,7 @@ namespace SAM.Geometry.Spatial
                 return new Face3D(result);
             }
         }
-        
+               
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             if (boundingBox3D == null)
@@ -559,6 +559,111 @@ namespace SAM.Geometry.Spatial
 
                 Add(face3D);
             }
+        }
+
+        public bool SplitFace3Ds(Face3D face3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if (boundaries == null || boundaries.Count == 0)
+                return false;
+
+            BoundingBox3D boundingBox3D = face3D?.GetBoundingBox();
+            if (boundingBox3D == null)
+                return false;
+
+            if (!this.boundingBox3D.InRange(boundingBox3D, tolerance_Distance))
+                return false;
+
+            Plane plane = face3D.GetPlane();
+
+            double area = double.NaN;
+
+            Dictionary<int, List<Face3D>> dictionary = new Dictionary<int, List<Face3D>>();
+            for(int i= boundaries.Count - 1; i >= 0; i--)
+            {
+                if (!boundaries[i].Item1.InRange(boundingBox3D))
+                    continue;
+
+                Face3D face3D_Boundary = boundaries[i].Item2;
+
+                Plane plane_Boundary = face3D_Boundary.GetPlane();
+
+                if (plane_Boundary.Normal.SmallestAngle(plane.Normal.GetNegated()) > tolerance_Angle && plane_Boundary.Normal.SmallestAngle(plane.Normal) > tolerance_Angle)
+                    continue;
+
+                Face2D face2D_Boundary = plane_Boundary.Convert(face3D_Boundary);
+                Face2D face2D = plane_Boundary.Convert(plane_Boundary.Project(face3D));
+
+                List<Face2D> face2Ds = face2D_Boundary.Intersection(face2D, tolerance_Distance);
+                face2Ds?.RemoveAll(x => x == null || x.GetArea() <= tolerance_Distance);
+                if (face2Ds == null || face2Ds.Count == 0)
+                    continue;
+
+                if (double.IsNaN(area))
+                    area = face3D.GetArea();
+
+                if(face2Ds.Count == 1 && System.Math.Abs(face2Ds[0].GetArea() - area) <= tolerance_Distance)
+                {
+                    continue;
+                }
+
+                List<Face2D> face2Ds_Difference = face2D_Boundary.Difference(face2Ds);
+                face2Ds_Difference?.RemoveAll(x => x == null || x.GetArea() <= tolerance_Distance);
+                if (face2Ds_Difference != null && face2Ds_Difference.Count != 0)
+                {
+                    face2Ds.AddRange(face2Ds_Difference);
+                }
+
+                dictionary[i] = face2Ds.ConvertAll(x => plane_Boundary.Convert(x));
+            }
+
+            if(dictionary == null || dictionary.Count == 0)
+            {
+                return false;
+            }
+
+            foreach(KeyValuePair<int, List<Face3D>> keyValuePair in dictionary)
+            {
+                boundaries.RemoveAt(keyValuePair.Key);
+                foreach (Face3D face3D_New in keyValuePair.Value)
+                {
+                    boundaries.Add(new Tuple<BoundingBox3D, Face3D>(face3D_New.GetBoundingBox(), face3D_New));
+                }
+            }
+
+            this.boundingBox3D = new BoundingBox3D(boundaries.ConvertAll(x => x.Item1));
+            return true;
+        }
+
+        public bool SplitFace3Ds(Shell shell, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if (shell == null)
+                return false;
+
+            if (!boundingBox3D.InRange(shell.boundingBox3D, tolerance_Distance))
+                return false;
+
+            List<Tuple<BoundingBox3D, Face3D>> boundaries_Temp = shell.boundaries;
+            if (boundaries_Temp == null || boundaries_Temp.Count == 0)
+                return false;
+
+            if (boundaries == null || boundaries.Count == 0)
+                return false;
+
+            bool result = false;
+            foreach (Tuple<BoundingBox3D, Face3D> boundary_Temp in boundaries_Temp)
+            {
+                if(!boundingBox3D.InRange(boundary_Temp.Item1, tolerance_Distance))
+                {
+                    continue;
+                }
+
+                if (SplitFace3Ds(boundary_Temp.Item2, tolerance_Angle, tolerance_Distance))
+                {
+                    result = true;
+                }
+            }
+
+            return result;
         }
     }
 }

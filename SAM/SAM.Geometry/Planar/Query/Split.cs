@@ -1,4 +1,5 @@
 ﻿using NetTopologySuite.Geometries;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -254,6 +255,92 @@ namespace SAM.Geometry.Planar
             aResult[count] = new Point2D(point2D_2);
 
             return aResult;
+        }
+
+        public static List<Tuple<Face2D, T>> Split<T>(this Face2D face2D, IEnumerable<Tuple<Face2D, T>> tuples, double tolerance = Core.Tolerance.Distance)
+        {
+            if (face2D == null || tuples == null || tuples.Count() == 0)
+            {
+                return null;
+            }
+
+            List<Face2D> face2Ds_Temp = new List<Face2D>() { face2D };
+
+            List<Tuple<Face2D, T>> result = new List<Tuple<Face2D, T>>();
+            foreach (Tuple<Face2D, T> tuple in tuples)
+            {
+                List<Face2D> face2Ds_Intersection = new List<Face2D>();
+                foreach(Face2D face2D_Temp in face2Ds_Temp)
+                {
+                    List<Face2D> face2Ds_Intersection_Temp = face2D_Temp.Intersection(tuple.Item1);
+                    face2Ds_Intersection_Temp?.RemoveAll(x => x == null || x.GetArea() <= tolerance);
+                    if (face2Ds_Intersection_Temp == null || face2Ds_Intersection_Temp.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    face2Ds_Intersection.AddRange(face2Ds_Intersection_Temp);
+                }
+
+                result.AddRange(face2Ds_Intersection.ConvertAll(x => new Tuple<Face2D, T>(x, tuple.Item2)));
+
+                List<Face2D> face2Ds_Difference = new List<Face2D>();
+                foreach (Face2D face2D_Temp in face2Ds_Temp)
+                {
+                    List<Face2D> face2Ds_Difference_Temp = face2D_Temp.Difference(face2Ds_Intersection);
+                    face2Ds_Difference_Temp?.RemoveAll(x => x == null || x.GetArea() <= tolerance);
+                    if (face2Ds_Difference_Temp == null || face2Ds_Difference_Temp.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    face2Ds_Difference.AddRange(face2Ds_Difference_Temp);
+                }
+
+                face2Ds_Temp = face2Ds_Difference;
+                if (face2Ds_Temp == null || face2Ds_Temp.Count == 0)
+                    break;
+            }
+
+            if (face2Ds_Temp != null && face2Ds_Temp.Count != 0)
+            {
+                int index = -1;
+                while(index < face2Ds_Temp.Count)
+                {
+                    index++;
+
+                    for (int i = 0; i < result.Count; i++)
+                    {
+                        List<Face2D> face2Ds_Union = result[i].Item1.Union(face2Ds_Temp[index]);
+                        if (face2Ds_Union == null || face2Ds_Union.Count != 1)
+                        {
+                            continue;
+                        }
+
+                        face2Ds_Temp.RemoveAt(index);
+                        result[i] = new Tuple<Face2D, T>(face2Ds_Union[0], result[i].Item2);
+                        index = -1;
+                        break;
+                    }
+                }
+
+                if (face2Ds_Temp != null && face2Ds_Temp.Count != 0)
+                {
+                    List<Tuple<Face2D, T>> tuples_Temp_Sorted = new List<Tuple<Face2D, T>>(result);
+                    tuples_Temp_Sorted.Sort((x, y) => y.Item1.GetArea().CompareTo(x.Item1.GetArea()));
+
+                    face2Ds_Temp = face2Ds_Temp.Union(tolerance);
+
+                    foreach (Face2D face2D_Temp in face2Ds_Temp)
+                    {
+                        result.Add(new Tuple<Face2D, T>(face2D_Temp, tuples_Temp_Sorted[0].Item2));
+                    }
+                }
+
+            }
+
+            return result;
+
         }
     }
 }
