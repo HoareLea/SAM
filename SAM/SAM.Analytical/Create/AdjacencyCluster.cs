@@ -4,6 +4,7 @@ using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
@@ -218,484 +219,6 @@ namespace SAM.Analytical
             return result;
         }
 
-        //TODO: Remove this if new method works
-        public static AdjacencyCluster AdjacencyCluster_Depreciated(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, List<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
-        {
-            AdjacencyCluster result = new AdjacencyCluster();
-
-            //Match spaces with shells
-            Dictionary<Shell, List<Space>> dictionary_Spaces = new Dictionary<Shell, List<Space>>(); ;
-            HashSet<string> names = new HashSet<string>();
-            if (spaces != null)
-            {
-                foreach (Space space in spaces)
-                {
-                    Point3D point3D = space?.Location;
-                    if (point3D == null)
-                        continue;
-
-                    names.Add(space.Name);
-
-                    List<Shell> spaces_Shell = Query.SpaceShells(shells, point3D, silverSpacing, tolerance);
-                    if (spaces_Shell != null && spaces_Shell.Count > 0)
-                    {
-                        foreach(Shell shell in spaces_Shell)
-                        {
-                            if(!dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Temp))
-                            {
-                                spaces_Temp = new List<Space>();
-                                dictionary_Spaces[shell] = spaces_Temp;
-                            }
-
-                            spaces_Temp.Add(space);
-                        }
-                    }
-                }
-            }
-
-            if (!addMissingSpaces && (dictionary_Spaces == null || dictionary_Spaces.Count() == 0))
-                return result;
-
-            //Extract data from shell (Face3D Internal Point)
-            Dictionary<Shell, List<Tuple<Face3D, Point3D>>> dictionary_Face3Ds = new Dictionary<Shell, List<Tuple<Face3D, Point3D>>>();
-            foreach (Shell shell in shells)
-            {
-                List<Tuple<Face3D, Point3D>> tuples = shell?.Face3Ds?.ConvertAll(x => new Tuple<Face3D, Point3D>(x, x.InternalPoint3D(tolerance)));
-                if (tuples == null || tuples.Count == 0)
-                    continue;
-
-                tuples.RemoveAll(x => x.Item1 == null || x.Item2 == null || x.Item1.GetArea() < minArea);
-                if (tuples.Count == 0)
-                    continue;
-
-                dictionary_Face3Ds[shell] = tuples;
-            }
-
-            int count = 1;
-
-            List<Space> spaces_AdjacencyCluster = new List<Space>();
-
-            //Iterating through Panels
-            foreach (Panel panel in panels)
-            {
-                Face3D face3D = panel?.GetFace3D();
-                if (face3D == null)
-                    continue;
-
-                IClosedPlanar3D closedPlanar3D = face3D.GetExternalEdge3D();
-                if (closedPlanar3D == null)
-                    continue;
-
-                Face3D face3D_ExternalEdge = new Face3D(closedPlanar3D);
-
-                //Searching for faces in shells for given Panel
-                List<Tuple<Face3D, Shell>> tuples_Face3D = new List<Tuple<Face3D, Shell>>();
-                foreach (KeyValuePair<Shell, List<Tuple<Face3D, Point3D>>> keyValuePair in dictionary_Face3Ds)
-                {
-                    List<Face3D> face3Ds_Shell = new List<Face3D>();
-                    foreach (Tuple<Face3D, Point3D> tuple in keyValuePair.Value)
-                    {
-                        double distance = face3D_ExternalEdge.Distance(tuple.Item2);
-                        if (distance <= maxDistance)
-                            tuples_Face3D.Add(new Tuple<Face3D, Shell>(tuple.Item1, keyValuePair.Key));
-                    }
-                }
-
-                if (tuples_Face3D == null || tuples_Face3D.Count == 0)
-                {
-                    result.AddObject(new Panel(panel));
-                    continue;
-                }
-
-                //Sorting new Face3Ds (Normal of face3D has to match direction of panel at the first place)
-                Vector3D normal = face3D.GetPlane().Normal;
-                List<Tuple<Face3D, Shell>> tuples_Face3D_Temp = tuples_Face3D.FindAll(x => x.Item1.GetPlane().Normal.SameHalf(normal));
-                tuples_Face3D.RemoveAll(x => tuples_Face3D_Temp.Contains(x));
-                tuples_Face3D_Temp.AddRange(tuples_Face3D);
-                tuples_Face3D = tuples_Face3D_Temp;
-
-                //List contains all new face3Ds. The list is used to create shading
-                List<Face3D> face3Ds_New = new List<Face3D>(); 
-
-                //Creating new panels based on Shell -> Face3D
-                List<Tuple<Point3D, Panel>> tuples_Point3D = new List<Tuple<Point3D, Panel>>();
-                foreach (Tuple<Face3D, Shell> tuple in tuples_Face3D)
-                {
-                    Shell shell = tuple.Item2;
-                    if (shell == null)
-                        continue;
-
-                    Face3D face3D_New = tuple.Item1;
-                    if (face3D_New == null)
-                        continue;
-
-                    //Searching for spaces
-                    dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Shell);
-
-                    if (spaces_Shell == null || spaces_Shell.Count == 0)
-                    {
-                        if (!addMissingSpaces)
-                            continue;
-
-                        spaces_Shell = new List<Space>();
-
-                        string name = null;
-
-                        do
-                        {
-                            name = string.Format("Cell {0}", count);
-                            count++;
-                        }
-                        while (names.Contains(name));
-
-                        Space space = new Space(name, shell.CalculatedInternalPoint3D(silverSpacing, tolerance));
-                        names.Add(name);
-                        spaces_Shell.Add(space);
-
-                        if (!dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Temp))
-                        {
-                            spaces_Temp = new List<Space>();
-                            dictionary_Spaces[shell] = spaces_Temp;
-                        }
-
-                        spaces_Temp.Add(space);
-                    }
-
-                    if (spaces_Shell == null || spaces_Shell.Count == 0)
-                        continue;
-
-                    foreach(Space space in spaces_Shell)
-                    {
-                        if (!spaces_AdjacencyCluster.Contains(space))
-                        {
-                            result.AddObject(space);
-                            spaces_AdjacencyCluster.Add(space);
-                        }
-                    }
-
-                    Panel panel_New = null;
-
-                    int index = tuples_Point3D.FindIndex(x => face3D_New.Distance(x.Item1) < tolerance);
-                    if (index != -1)
-                        panel_New = tuples_Point3D[index].Item2;
-
-                    if (panel_New == null)
-                    {
-                        Point3D point3D = face3D_New.InternalPoint3D(tolerance);
-                        if (point3D == null)
-                            continue;
-
-                        panel_New = new Panel(Guid.NewGuid(), panel, face3D_New, null, true, minArea);
-                        //if (!panel_New.Normal.SameHalf(panel.Normal))
-                        //    panel_New.FlipNormal(true, false);
-
-                        tuples_Point3D.Add(new Tuple<Point3D, Panel>(point3D, panel_New));
-                        result.AddObject(panel_New);
-                    }
-
-                    if (panel_New == null)
-                        continue;
-
-                    foreach (Space space in spaces_Shell)
-                        result.AddRelation(space, panel_New);
-
-                    //Add to the list only if Panel not exists before
-                    if (index == -1) 
-                        face3Ds_New.Add(face3D_New);
-                }
-
-                //Creating shades
-                if(face3Ds_New != null && face3Ds_New.Count != 0)
-                {
-                    Plane plane = face3D.GetPlane();
-
-                    List<Face2D> face2Ds = Geometry.Planar.Query.Difference(plane.Convert(face3D), face3Ds_New.ConvertAll(x => plane.Convert(plane.Project(x))), tolerance);
-                    if(face2Ds != null && face2Ds.Count != 0)
-                    {
-                        foreach(Face2D face2D in face2Ds)
-                        {
-                            Face3D face3D_Shade = plane.Convert(face2D);
-
-                            Panel panel_Shade = new Panel(Guid.NewGuid(), panel, face3D_Shade, null, true, minArea);
-                            result.AddObject(panel_Shade);
-                        }
-                    }
-                }
-                else
-                {
-                    result.AddObject(new Panel(panel));
-                }
-            }
-
-            return result;
-        }
-
-        public static AdjacencyCluster AdjacencyCluster_Depreciated2(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, List<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
-        {
-            AdjacencyCluster result = new AdjacencyCluster();
-
-            //Match spaces with shells
-            Dictionary<Shell, List<Space>> dictionary_Spaces = new Dictionary<Shell, List<Space>>(); ;
-            HashSet<string> names = new HashSet<string>();
-            if (spaces != null)
-            {
-                foreach (Space space in spaces)
-                {
-                    Point3D point3D = space?.Location;
-                    if (point3D == null)
-                        continue;
-
-                    names.Add(space.Name);
-
-                    List<Shell> spaces_Shell = Query.SpaceShells(shells, point3D, silverSpacing, tolerance);
-                    if (spaces_Shell != null && spaces_Shell.Count > 0)
-                    {
-                        foreach (Shell shell in spaces_Shell)
-                        {
-                            if (!dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Temp))
-                            {
-                                spaces_Temp = new List<Space>();
-                                dictionary_Spaces[shell] = spaces_Temp;
-                            }
-
-                            spaces_Temp.Add(space);
-                        }
-                    }
-                }
-            }
-
-            if (!addMissingSpaces && (dictionary_Spaces == null || dictionary_Spaces.Count() == 0))
-                return result;
-
-            //Extract data from shell (Face3D Internal Point)
-            Dictionary<Shell, List<Tuple<Face3D, Point3D>>> dictionary_Face3Ds = new Dictionary<Shell, List<Tuple<Face3D, Point3D>>>();
-            foreach (Shell shell in shells)
-            {
-                List<Tuple<Face3D, Point3D>> tuples = shell?.Face3Ds?.ConvertAll(x => new Tuple<Face3D, Point3D>(x, x.InternalPoint3D(tolerance)));
-                if (tuples == null || tuples.Count == 0)
-                    continue;
-
-                tuples.RemoveAll(x => x.Item1 == null || x.Item2 == null || x.Item1.GetArea() < minArea);
-                if (tuples.Count == 0)
-                    continue;
-
-                dictionary_Face3Ds[shell] = tuples;
-            }
-
-            int count = 1;
-
-            List<Space> spaces_AdjacencyCluster = new List<Space>();
-
-            List<Panel> panels_Shade = new List<Panel>(panels);
-
-            //List contains all new face3Ds created from Shell Panels. The list is used to create shading
-            List<Tuple<Face3D, Point3D, Panel>> tuples_Shell = new List<Tuple<Face3D, Point3D, Panel>>();
-
-            //Iterating through Panels - Create Shells Panels
-            foreach (Panel panel in panels)
-            {
-                Face3D face3D = panel?.GetFace3D();
-                if (face3D == null)
-                    continue;
-
-                Point3D point3D_Internal = face3D.InternalPoint3D();
-
-                //Searching for faces in shells for given Panel
-                List<Tuple<Face3D, Shell>> tuples_Face3D = new List<Tuple<Face3D, Shell>>();
-                foreach (KeyValuePair<Shell, List<Tuple<Face3D, Point3D>>> keyValuePair in dictionary_Face3Ds)
-                {
-                    //List<Face3D> face3Ds_Shell = new List<Face3D>();
-                    foreach (Tuple<Face3D, Point3D> tuple in keyValuePair.Value)
-                    {
-                        double distance_1 = face3D.Distance(tuple.Item2);
-                        double distance_2 = double.MaxValue;
-                        if (point3D_Internal != null)
-                            distance_2 = tuple.Item1.Distance(point3D_Internal);
-
-                        double distance = System.Math.Min(distance_1, distance_2);
-
-                        if (distance <= maxDistance)
-                            tuples_Face3D.Add(new Tuple<Face3D, Shell>(tuple.Item1, keyValuePair.Key));
-                    }
-                }
-
-                if (tuples_Face3D == null || tuples_Face3D.Count == 0)
-                {
-                    result.AddObject(new Panel(panel));
-                    panels_Shade.Remove(panel);
-                    continue;
-                }
-
-                //Sorting new Face3Ds (Normal of face3D has to match direction of panel at the first place)
-                Vector3D normal = face3D.GetPlane().Normal;
-                List<Tuple<Face3D, Shell>> tuples_Face3D_Temp = tuples_Face3D.FindAll(x => x.Item1.GetPlane().Normal.SameHalf(normal));
-                tuples_Face3D.RemoveAll(x => tuples_Face3D_Temp.Contains(x));
-                tuples_Face3D_Temp.AddRange(tuples_Face3D);
-                tuples_Face3D = tuples_Face3D_Temp;
-
-                //Creating new panels based on Shell -> Face3D
-                foreach (Tuple<Face3D, Shell> tuple in tuples_Face3D)
-                {
-                    Shell shell = tuple.Item2;
-                    if (shell == null)
-                        continue;
-
-                    Face3D face3D_Shell = tuple.Item1;
-                    if (face3D_Shell == null)
-                        continue;
-
-                    //Searching for spaces
-                    dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Shell);
-
-                    if (spaces_Shell == null || spaces_Shell.Count == 0)
-                    {
-                        if (!addMissingSpaces)
-                            continue;
-
-                        spaces_Shell = new List<Space>();
-
-                        string name = null;
-
-                        do
-                        {
-                            name = string.Format("Cell {0}", count);
-                            count++;
-                        }
-                        while (names.Contains(name));
-
-                        Space space = new Space(name, shell.CalculatedInternalPoint3D(silverSpacing, tolerance));
-                        names.Add(name);
-                        spaces_Shell.Add(space);
-
-                        if (!dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Temp))
-                        {
-                            spaces_Temp = new List<Space>();
-                            dictionary_Spaces[shell] = spaces_Temp;
-                        }
-
-                        spaces_Temp.Add(space);
-                    }
-
-                    if (spaces_Shell == null || spaces_Shell.Count == 0)
-                        continue;
-
-                    foreach (Space space in spaces_Shell)
-                    {
-                        if (!spaces_AdjacencyCluster.Contains(space))
-                        {
-                            result.AddObject(space);
-                            spaces_AdjacencyCluster.Add(space);
-                        }
-                    }
-
-                    Panel panel_New = null;
-
-                    foreach(Tuple<Face3D, Point3D, Panel> tuple_Point3D in tuples_Shell)
-                    {
-                        double distance;
-
-                        distance = face3D_Shell.Distance(tuple_Point3D.Item2);
-                        if(distance < tolerance)
-                        {
-                            panel_New = tuple_Point3D.Item3;
-                            break;
-                        }
-
-                        if (point3D_Internal == null)
-                            continue;
-
-                        distance = tuple_Point3D.Item1.Distance(point3D_Internal);
-                        if (distance < tolerance)
-                        {
-                            panel_New = tuple_Point3D.Item3;
-                            break;
-                        }
-                    }
-
-                    if (panel_New == null)
-                    {
-                        Point3D point3D = face3D_Shell.InternalPoint3D(tolerance);
-                        if (point3D == null)
-                            continue;
-
-                        Guid guid = panel.Guid;
-                        if (result.GetObject<Panel>(guid) != null)
-                            guid = Guid.NewGuid();
-
-                        panel_New = new Panel(guid, panel, face3D_Shell, null, true, minArea);
-
-                        tuples_Shell.Add(new Tuple<Face3D, Point3D, Panel>(face3D_Shell, point3D, panel_New));
-                        result.AddObject(panel_New);
-                    }
-
-                    if (panel_New == null)
-                        continue;
-
-                    foreach (Space space in spaces_Shell)
-                        result.AddRelation(space, panel_New);
-                }
-            }
-
-            //Iterating through Panels - Creating shades
-            if (tuples_Shell != null && tuples_Shell.Count != 0)
-            {
-                List<Face3D> face3Ds_Shell = tuples_Shell.ConvertAll(x => x.Item1);
-
-                foreach (Panel panel in panels_Shade)
-                {
-                    Face3D face3D = panel.GetFace3D();
-                    
-                    Plane plane = face3D.GetPlane();
-
-                    List<Face3D> face3Ds_Coplanar = new List<Face3D>();
-                    foreach(Face3D face3D_New in face3Ds_Shell)
-                    {
-                        Plane plane_New = face3D_New.GetPlane();
-
-                        if (!plane.Coplanar(plane_New, tolerance))
-                            continue;
-
-                        double distance = plane.Distance(plane_New, tolerance);
-
-                        if (distance > tolerance)
-                            continue;
-
-                        face3Ds_Coplanar.Add(face3D_New);
-                    }
-
-                    //List<Face3D> face3Ds_Coplanar = face3Ds_New.FindAll(x => plane.Coplanar(face3D, tolerance));
-                    //face3Ds_Coplanar.RemoveAll(x => plane.Distance(x.GetPlane(), tolerance) > tolerance);
-
-                    if (face3Ds_Coplanar == null || face3Ds_Coplanar.Count == 0)
-                        continue;
-
-                    List<Face2D> face2Ds = Geometry.Planar.Query.Difference(plane.Convert(face3D), face3Ds_Coplanar.ConvertAll(x => plane.Convert(plane.Project(x))), tolerance);
-                    if (face2Ds == null && face2Ds.Count == 0)
-                        continue;
-
-                    foreach (Face2D face2D in face2Ds)
-                    {
-                        if (face2D == null)
-                            continue;
-
-                        if (face2D.GetArea() <= minArea)
-                            continue;
-                        
-                        Face3D face3D_Shade = plane.Convert(face2D);
-
-                        Guid guid = panel.Guid;
-                        if (result.GetObject<Panel>(guid) != null)
-                            guid = Guid.NewGuid();
-
-                        Panel panel_Shade = new Panel(guid, panel, face3D_Shade, null, true, minArea);
-                        result.AddObject(panel_Shade);
-                    }
-                }
-            }
-
-            return result;
-        }
-
         public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, List<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
         {
             AdjacencyCluster result = new AdjacencyCluster();
@@ -840,6 +363,12 @@ namespace SAM.Analytical
                     result.AddObject(space);
                 }
 
+                BoundingBox3D boundingBox3D_Shell = shell.GetBoundingBox(maxDistance);
+                if (boundingBox3D_Shell == null)
+                    continue;
+
+                List<Tuple<Plane, Face3D, Panel, BoundingBox3D>> tuples_Panel_Temp = tuples_Panel.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance));
+
                 foreach (Face3D face3D in face3Ds)
                 {
                     Plane plane = face3D.GetPlane();
@@ -850,18 +379,18 @@ namespace SAM.Analytical
                     if (point3D_Internal == null)
                         continue;
 
-                    BoundingBox3D boundingBox3D = face3D.GetBoundingBox(maxDistance + tolerance);
+                    BoundingBox3D boundingBox3D_Face3D = face3D.GetBoundingBox(maxDistance);
 
-                    Panel panel_New = tuples_Panel_New.Find(x => boundingBox3D.InRange(x.Item1, tolerance) && face3D.Inside(x.Item1, tolerance))?.Item2;
+                    Panel panel_New = tuples_Panel_New.Find(x => boundingBox3D_Face3D.InRange(x.Item1, tolerance) && face3D.Inside(x.Item1, tolerance))?.Item2;
                     if(panel_New == null)
                         panel_New = tuples_Panel_New.Find(x => x.Item3.InRange(point3D_Internal, maxDistance + tolerance) && x.Item2.GetFace3D().Inside(point3D_Internal, tolerance))?.Item2;
 
                     if (panel_New == null)
                     {
                         List<Tuple<Face2D, Panel>> tuples_Face2D = new List<Tuple<Face2D, Panel>>();
-                        foreach (Tuple<Plane, Face3D, Panel, BoundingBox3D> tuple_Panel in tuples_Panel)
+                        foreach (Tuple<Plane, Face3D, Panel, BoundingBox3D> tuple_Panel in tuples_Panel_Temp)
                         {
-                            if (!boundingBox3D.InRange(tuple_Panel.Item4))
+                            if (!boundingBox3D_Face3D.InRange(tuple_Panel.Item4))
                                 continue;
 
                             Plane plane_Panel = tuple_Panel.Item1;
@@ -925,23 +454,26 @@ namespace SAM.Analytical
                 }
             }
 
-
             //Creating Shade Panels
-            foreach (Panel panel in panels)
+            List<List<Panel>> tuples = Enumerable.Repeat<List<Panel>>(null, panels.Count).ToList(); 
+
+            Parallel.For(0, panels.Count, (int i) => 
             {
-                Face3D face3D = panel.GetFace3D();
+                Panel panel = panels[i];
+
+                Face3D face3D = panel?.GetFace3D();
                 if (face3D == null)
-                    continue;
+                    return;
 
                 Plane plane = face3D.GetPlane();
                 if (plane == null)
-                    continue;
+                    return;
 
                 BoundingBox3D boundingBox3D = face3D.GetBoundingBox(maxDistance + tolerance);
 
                 List<Face2D> face2Ds = new List<Face2D>() { plane.Convert(face3D) };
 
-                foreach(Tuple<Point3D, Panel, BoundingBox3D> tuple_Panel_New in tuples_Panel_New)
+                foreach (Tuple<Point3D, Panel, BoundingBox3D> tuple_Panel_New in tuples_Panel_New)
                 {
                     if (!boundingBox3D.InRange(tuple_Panel_New.Item3, tolerance))
                         continue;
@@ -961,7 +493,7 @@ namespace SAM.Analytical
                         continue;
 
                     List<Face2D> face2Ds_Temp = new List<Face2D>();
-                    foreach(Face2D face2D_Temp in face2Ds)
+                    foreach (Face2D face2D_Temp in face2Ds)
                     {
                         List<Face2D> face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Temp, face2D, tolerance);
                         face2Ds_Difference?.RemoveAll(x => x == null || x.GetArea() <= minArea);
@@ -978,10 +510,11 @@ namespace SAM.Analytical
                 }
 
                 if (face2Ds == null || face2Ds.Count == 0)
-                    continue;
+                    return;
 
                 Guid guid = panel.Guid;
 
+                tuples[i] = new List<Panel>();
                 foreach (Face2D face2D in face2Ds)
                 {
                     Face3D face3D_New = plane.Convert(face2D);
@@ -992,9 +525,16 @@ namespace SAM.Analytical
                         guid = Guid.NewGuid();
 
                     Panel panel_New = new Panel(guid, panel, face3D_New, null, true, minArea);
-                    result.AddObject(panel_New);
+                    tuples[i].Add(panel_New);
                 }
+            });
 
+            foreach(List<Panel> panels_New in tuples)
+            {
+                if(panels_New != null)
+                {
+                    panels_New.ForEach(x => result.AddObject(x));
+                }
             }
 
             return result;
