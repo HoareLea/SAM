@@ -131,28 +131,7 @@ namespace SAM.Geometry.Spatial
 
         public List<Point3D> IntersectionPoint3Ds(Segment3D segment3D, bool includeInternalEdges = true, double tolerance = Core.Tolerance.Distance)
         {
-            if (segment3D == null || boundaries == null)
-                return null;
-            
-            HashSet<Point3D> point3Ds = new HashSet<Point3D>();
-            foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries)
-            {
-                PlanarIntersectionResult planarIntersectionResult = null;
-
-                if(includeInternalEdges)
-                    planarIntersectionResult = Create.PlanarIntersectionResult(boundary.Item2, segment3D, tolerance);
-                else
-                    planarIntersectionResult = Create.PlanarIntersectionResult(new Face3D(boundary.Item2.GetExternalEdge3D()), segment3D, tolerance);
-
-                if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
-                    continue;
-
-                List<Point3D> point3Ds_Temp = planarIntersectionResult.GetGeometry3Ds<Point3D>();
-                if (point3Ds_Temp != null && point3Ds_Temp.Count > 0)
-                    point3Ds_Temp.ForEach(x => point3Ds.Add(x));
-            }
-
-            return point3Ds.ToList();
+            return IntersectionGeometry3Ds<Point3D>(segment3D, includeInternalEdges, tolerance);
         }
 
         public List<T> IntersectionGeometry3Ds<T>(Segment3D segment3D, bool includeInternalEdges = true, double tolerance = Core.Tolerance.Distance) where T: ISAMGeometry3D
@@ -160,9 +139,16 @@ namespace SAM.Geometry.Spatial
             if (segment3D == null || boundaries == null)
                 return null;
 
+            BoundingBox3D boundingBox3D_Segment3D = segment3D.GetBoundingBox();
+            if (!boundingBox3D.InRange(boundingBox3D_Segment3D))
+                return null;
+
             HashSet<T> sAMGeometry3Ds = new HashSet<T>();
             foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries)
             {
+                if (!boundary.Item1.InRange(boundingBox3D_Segment3D))
+                    continue;
+                
                 PlanarIntersectionResult planarIntersectionResult = null;
 
                 if (includeInternalEdges)
