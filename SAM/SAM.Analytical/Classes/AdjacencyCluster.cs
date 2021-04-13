@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -400,7 +401,7 @@ namespace SAM.Analytical
         /// <param name="silverSpacing">Silver spacing tolerance</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns>List of List of spaces</returns>
-        public List<List<Space>> GetSpaces(IEnumerable<Geometry.Spatial.Point3D> point3Ds, bool spaceLocation = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public List<List<Space>> GetSpaces(IEnumerable<Point3D> point3Ds, bool spaceLocation = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds == null)
                 return null;
@@ -457,7 +458,7 @@ namespace SAM.Analytical
         /// <param name="silverSpacing">Silver spacing tolerance</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns>List of List of spaces</returns>
-        public List<Space> GetSpaces(Geometry.Spatial.Point3D point3D, bool spaceLocation = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public List<Space> GetSpaces(Point3D point3D, bool spaceLocation = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (point3D == null)
                 return null;
@@ -521,6 +522,15 @@ namespace SAM.Analytical
                     AddObject(space_New);
                 }
             }
+        }
+
+        public List<Shell> GetShells()
+        {
+            List<Space> spaces = GetSpaces();
+            if (spaces == null)
+                return null;
+
+            return spaces.ConvertAll(x => Query.Shell(this, x));
         }
     }
 }

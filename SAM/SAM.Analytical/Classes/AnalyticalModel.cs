@@ -267,6 +267,11 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetZones();
         }
 
+        public List<Geometry.Spatial.Shell> GetShells()
+        {
+            return adjacencyCluster?.GetShells();
+        }
+
         public IEnumerable<InternalCondition> GetInternalConditions()
         {
             return adjacencyCluster?.GetInternalConditions();
