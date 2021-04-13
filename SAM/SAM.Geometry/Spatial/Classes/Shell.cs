@@ -575,8 +575,6 @@ namespace SAM.Geometry.Spatial
 
             Plane plane = face3D.GetPlane();
 
-            double area = double.NaN;
-
             Dictionary<int, List<Face3D>> dictionary = new Dictionary<int, List<Face3D>>();
             for(int i= boundaries.Count - 1; i >= 0; i--)
             {
@@ -598,10 +596,7 @@ namespace SAM.Geometry.Spatial
                 if (face2Ds == null || face2Ds.Count == 0)
                     continue;
 
-                if (double.IsNaN(area))
-                    area = face3D.GetArea();
-
-                if(face2Ds.Count == 1 && System.Math.Abs(face2Ds[0].GetArea() - area) <= tolerance_Distance)
+                if (face2Ds.Count == 1 && System.Math.Abs(face2Ds[0].GetArea() - face2D_Boundary.GetArea()) <= tolerance_Distance)
                 {
                     continue;
                 }

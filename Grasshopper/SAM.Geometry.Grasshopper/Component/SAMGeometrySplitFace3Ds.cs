@@ -126,7 +126,7 @@ namespace SAM.Geometry.Grasshopper
                 dataAccess.GetData(index, ref tolerance_Angle);
             }
 
-            double tolerance_Distance = Core.Tolerance.Angle;
+            double tolerance_Distance = Core.Tolerance.Distance;
             index = Params.IndexOfInputParam("distanceTolerance_");
             if (index != -1)
             {
