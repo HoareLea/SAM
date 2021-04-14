@@ -74,6 +74,9 @@ namespace SAM.Geometry.Spatial
             if (plane == null)
                 return null;
 
+            if (!face3D.GetBoundingBox(tolerance).InRange(segment3D.GetBoundingBox(tolerance)))
+                return new PlanarIntersectionResult(plane);
+
             PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult(plane, segment3D, tolerance);
             if (planarIntersectionResult == null)
                 return null;
@@ -394,16 +397,16 @@ namespace SAM.Geometry.Spatial
 
         public static PlanarIntersectionResult PlanarIntersectionResult(Face3D face3D_1, Face3D face3D_2, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if (face3D_1 == null || face3D_2 == null)
-                return null;
-
-            Plane plane_1 = face3D_1.GetPlane();
+            Plane plane_1 = face3D_1?.GetPlane();
             if (plane_1 == null)
                 return null;
 
-            Plane plane_2 = face3D_2.GetPlane();
+            Plane plane_2 = face3D_2?.GetPlane();
             if (plane_2 == null)
                 return null;
+
+            if(!face3D_1.GetBoundingBox(tolerance_Distance).InRange(face3D_2.GetBoundingBox(tolerance_Distance)))
+                return new PlanarIntersectionResult(plane_1);
 
             if (plane_1.Coplanar(plane_2, tolerance_Distance))
             {
