@@ -86,7 +86,7 @@ namespace SAM.Geometry.Spatial
             List<Point3D> point3Ds = planarIntersectionResult.GetGeometry3Ds<Point3D>();
             if (point3Ds != null && point3Ds.Count > 0)
             {
-                point3Ds = point3Ds.FindAll(x => face3D.Inside(x));
+                point3Ds = point3Ds.FindAll(x => face3D.Inside(x, tolerance) || face3D.OnEdge(x, tolerance));
                 geometry3Ds.AddRange(point3Ds);
             }
 

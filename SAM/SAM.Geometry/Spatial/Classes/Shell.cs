@@ -95,7 +95,6 @@ namespace SAM.Geometry.Spatial
 
             Segment3D segment3D = new Segment3D(point3D, vector3D);
 
-            //List<Point3D> point3Ds = IntersectionPoint3Ds(segment3D, false, tolerance);
             List<ISAMGeometry3D> geometry3Ds_Intersection = IntersectionGeometry3Ds<ISAMGeometry3D>(segment3D, false, tolerance);
             if (geometry3Ds_Intersection != null && geometry3Ds_Intersection.Count != 0)
                 if (geometry3Ds_Intersection.Find(x => x is ISegmentable3D || OnEdge(x as Point3D, tolerance)) == null)
@@ -105,10 +104,6 @@ namespace SAM.Geometry.Spatial
             {
                 Point3D point3D_InternalPoint = boundary.Item2.InternalPoint3D(tolerance);
                 if (point3D_InternalPoint == null)
-                    continue;
-
-                Vector3D normal =  boundary.Item2.GetPlane()?.Normal;
-                if (normal == null)
                     continue;
 
                 Vector3D vector3D_Temp = new Vector3D(point3D, point3D_InternalPoint);

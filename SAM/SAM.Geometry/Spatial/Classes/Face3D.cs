@@ -108,9 +108,9 @@ namespace SAM.Geometry.Spatial
             IClosed2D closed2D = plane.Convert(closed3D);
 
             if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
-                return externalEdge2D.Inside(closed2D);
+                return externalEdge2D.Inside(closed2D, tolerance);
 
-            return externalEdge2D.Inside(closed2D) && internalEdge2Ds.TrueForAll(x => !x.Inside(closed2D));
+            return externalEdge2D.Inside(closed2D, tolerance) && internalEdge2Ds.TrueForAll(x => !x.Inside(closed2D, tolerance));
         }
 
         public bool Inside(Point3D point3D, double tolerance = Core.Tolerance.Distance)
@@ -121,9 +121,9 @@ namespace SAM.Geometry.Spatial
             Point2D point2D = plane.Convert(point3D);
 
             if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
-                return externalEdge2D.Inside(point2D);
+                return externalEdge2D.Inside(point2D, tolerance);
 
-            return externalEdge2D.Inside(point2D) && internalEdge2Ds.TrueForAll(x => !x.Inside(point2D));
+            return externalEdge2D.Inside(point2D, tolerance) && internalEdge2Ds.TrueForAll(x => !x.Inside(point2D, tolerance));
         }
 
         public bool OnEdge(Point3D point3D, double tolerance = Core.Tolerance.Distance)
@@ -134,9 +134,9 @@ namespace SAM.Geometry.Spatial
             Point2D point2D = plane.Convert(point3D);
 
             if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
-                return externalEdge2D.On(point2D);
+                return externalEdge2D.On(point2D, tolerance);
 
-            return externalEdge2D.On(point2D) || internalEdge2Ds.Any(x => x.On(point2D, tolerance));
+            return externalEdge2D.On(point2D, tolerance) || internalEdge2Ds.Any(x => x.On(point2D, tolerance));
         }
 
         public bool InRange(Point3D point3D, double tolerance = Core.Tolerance.Distance)

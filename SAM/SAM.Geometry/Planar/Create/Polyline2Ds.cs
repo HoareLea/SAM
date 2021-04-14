@@ -49,11 +49,33 @@ namespace SAM.Geometry.Planar
 
             if (point2D_Start == null)
             {
+                IEnumerable<Edge<Point2D>> edges_Temp;
+
+                List<Point2D> point2Ds_Temp = new List<Point2D>();
+                foreach (Point2D point2D in adjacencyGraph.Vertices)
+                {
+                    if (!adjacencyGraph.TryGetOutEdges(point2D, out edges_Temp) || edges_Temp == null || edges_Temp.Count() != 1)
+                    {
+                        continue;
+                    }
+
+                    point2Ds_Temp.Add(point2D);
+                }
+
+                if (point2Ds_Temp != null || point2Ds_Temp.Count != 0)
+                {
+                    double maxDistance_Vertex = Query.MaxDistance(point2Ds_Temp, out Point2D point2D_1, out Point2D point2D_2);
+                    point2D_Start = point2D_1;
+                }
+            }
+
+            if (point2D_Start == null)
+            {
                 double maxDistance_Vertex = Query.MaxDistance(adjacencyGraph.Vertices, out Point2D point2D_1, out Point2D point2D_2);
                 point2D_Start = point2D_1;
             }
-            
-            if(point2D_Start == null)
+
+            if (point2D_Start == null)
             {
                 point2D_Start = adjacencyGraph.Vertices.First();
             }
