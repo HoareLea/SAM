@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -66,6 +66,10 @@ namespace SAM.Analytical.Grasshopper
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(0.01);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxAngle_", NickName = "maxAngle_", Description = "Max Angle", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0.0872664626);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "silverSpacing_", NickName = "silverSpacing_", Description = "Silver Spacing for computation of Spaces", Access = GH_ParamAccess.item };
@@ -139,6 +143,11 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref maxDistance);
 
+            index = Params.IndexOfInputParam("maxAngle_");
+            double maxAngle = 0.0872664626;
+            if (index != -1)
+                dataAccess.GetData(index, ref maxAngle);
+
             index = Params.IndexOfInputParam("addMissingSpaces_");
             bool addMissingSpaces = true;
             if (index != -1)
@@ -159,7 +168,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref tolerance);
 
-            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(shells, spaces, panels, addMissingSpaces, minArea, maxDistance, silverSpacing, tolerance);
+            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(shells, spaces, panels, addMissingSpaces, minArea, maxDistance, maxAngle, silverSpacing, tolerance);
 
             index = Params.IndexOfOutputParam("AdjacencyCluster");
             if (index != -1)

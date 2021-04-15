@@ -356,13 +356,19 @@ namespace SAM.Geometry.Grasshopper
 
             if(Value is Spatial.Face3D)
             {
-                args.Pipeline.DrawBrepWires((Value as Spatial.Face3D).ToRhino_Brep(), color);
+                Brep brep = (Value as Spatial.Face3D).ToRhino_Brep();
+                if(brep != null)
+                {
+                    args.Pipeline.DrawBrepWires(brep, color);
+                }
+                return;
             }
 
             if (Value is Spatial.Shell)
             {
-                List<Spatial.Face3D> face3Ds = ((Spatial.Shell)Value).Face3Ds;
-                face3Ds?.ForEach(x => args.Pipeline.DrawBrepWires(x.ToRhino_Brep(), color));
+                List<Brep> breps = ((Spatial.Shell)Value).Face3Ds?.ConvertAll(x => x.ToRhino_Brep());
+                breps?.FindAll(x => x != null).ForEach(x => args.Pipeline.DrawBrepWires(x, color));
+                return;
             }
         }
 

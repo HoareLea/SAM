@@ -368,7 +368,9 @@ namespace SAM.Analytical
                     continue;
 
                 List<Tuple<Plane, Face3D, Panel, BoundingBox3D>> tuples_Panel_Temp = tuples_Panel.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance));
-
+                if (tuples_Panel_Temp == null || tuples_Panel_Temp.Count == 0)
+                    continue;
+                
                 foreach (Face3D face3D in face3Ds)
                 {
                     Plane plane = face3D.GetPlane();
@@ -381,9 +383,18 @@ namespace SAM.Analytical
 
                     BoundingBox3D boundingBox3D_Face3D = face3D.GetBoundingBox(maxDistance);
 
-                    Panel panel_New = tuples_Panel_New.Find(x => boundingBox3D_Face3D.InRange(x.Item1, tolerance) && face3D.Inside(x.Item1, tolerance))?.Item2;
-                    if(panel_New == null)
-                        panel_New = tuples_Panel_New.Find(x => x.Item3.InRange(point3D_Internal, maxDistance + tolerance) && x.Item2.GetFace3D().Inside(point3D_Internal, tolerance))?.Item2;
+                    Panel panel_New = null;
+
+                    List<Tuple<Point3D, Panel, Face3D>> tuples_Face3D = tuples_Panel_New.FindAll(x => boundingBox3D_Face3D.InRange(x.Item3, tolerance)).ConvertAll(x => new Tuple<Point3D, Panel, Face3D>(x.Item1, x.Item2, x.Item2.GetFace3D()));
+                    if (tuples_Face3D != null && tuples_Face3D.Count != 0)
+                    {
+                        List<Tuple<Point3D, Panel, Face3D, double>> tuples_Distance = tuples_Face3D.ConvertAll(x => new Tuple<Point3D, Panel, Face3D, double>(x.Item1, x.Item2, x.Item3, System.Math.Min(x.Item3.Distance(point3D_Internal), face3D.Distance(x.Item1))));
+
+                        if (tuples_Distance.Count > 1)
+                            tuples_Distance.Sort((x, y) => x.Item4.CompareTo(y.Item4));
+
+                        panel_New = tuples_Distance[0].Item4 < silverSpacing ? tuples_Distance[0].Item2 : null;
+                    }
 
                     if (panel_New == null)
                     {
@@ -398,7 +409,7 @@ namespace SAM.Analytical
                             if (plane_Panel.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_Panel.Normal.SmallestAngle(plane.Normal) > maxAngle)
                                 continue;
 
-                            double distance = tuple_Panel.Item2.Distance(face3D, tolerance);
+                            double distance = tuple_Panel.Item2.Distance(face3D, tolerance_Distance: tolerance);
 
                             if (distance > maxDistance)
                                 continue;
@@ -457,6 +468,7 @@ namespace SAM.Analytical
             //Creating Shade Panels
             List<List<Panel>> tuples = Enumerable.Repeat<List<Panel>>(null, panels.Count).ToList(); 
 
+            //for(int i =0; i < panels.Count; i++)
             Parallel.For(0, panels.Count, (int i) => 
             {
                 Panel panel = panels[i];
@@ -483,7 +495,7 @@ namespace SAM.Analytical
                     if (plane_New.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_New.Normal.SmallestAngle(plane.Normal) > maxAngle)
                         continue;
 
-                    double distance = tuple_Panel_New.Item2.GetFace3D().Distance(face3D, tolerance);
+                    double distance = tuple_Panel_New.Item2.GetFace3D().Distance(face3D, tolerance_Distance: tolerance);
 
                     if (distance > maxDistance)
                         continue;
@@ -513,6 +525,8 @@ namespace SAM.Analytical
                     return;
 
                 Guid guid = panel.Guid;
+                if (result.GetObject<Panel>(guid) != null)
+                    guid = Guid.NewGuid();
 
                 tuples[i] = new List<Panel>();
                 foreach (Face2D face2D in face2Ds)
@@ -520,12 +534,11 @@ namespace SAM.Analytical
                     Face3D face3D_New = plane.Convert(face2D);
                     if (face3D_New == null)
                         continue;
-
-                    if (result.GetObject<Panel>(guid) != null)
-                        guid = Guid.NewGuid();
-
+                        
                     Panel panel_New = new Panel(guid, panel, face3D_New, null, true, minArea);
                     tuples[i].Add(panel_New);
+
+                    guid = Guid.NewGuid();
                 }
             });
 

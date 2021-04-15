@@ -2,6 +2,7 @@
 using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Math
 {
@@ -45,10 +46,41 @@ namespace SAM.Math
         public double Evaluate(double value)
         {
             int count = coefficients.Length;
-            
+
             double result = 0;
             for (int i = 0; i < count; i++)
                 result += System.Math.Pow(value, count - i) * coefficients[i];
+
+            return result;
+        }
+
+        public List<double> Evaluate(IEnumerable<double> values)
+        {
+            if (values == null)
+                return null;
+
+            List<double> result = null;
+
+
+            int count = coefficients.Length;
+            if(count < 5 || values.Count() < 1000)
+            {
+                result = new List<double>();
+                foreach(double value in values)
+                {
+                    result.Add(Evaluate(value));
+                }
+            }
+            else
+            {
+                count = values.Count();
+
+                result = Enumerable.Repeat(double.NaN, count).ToList();
+                Parallel.For(0, count, (int i) => 
+                {
+                    result[i] = Evaluate(values.ElementAt(i));
+                });
+            }
 
             return result;
         }
