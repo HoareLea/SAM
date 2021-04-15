@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
@@ -61,25 +62,29 @@ namespace SAM.Geometry.Planar
 
             List<List<T>> result = Enumerable.Repeat<List<T>>(null, connectedComponentsAlgorithm.ComponentCount).ToList();
 
-            foreach (KeyValuePair<Point2D, int> keyValuePair in components)
+            Parallel.For(0, connectedComponentsAlgorithm.ComponentCount, (int i) => 
             {
-                List<Tuple<BoundingBox2D, List<Point2D>, T>> tuples_Temp = tuples.FindAll(x => x.Item1.InRange(keyValuePair.Key, tolerance)).FindAll(x => x.Item2.Find(y => y.AlmostEquals(keyValuePair.Key, tolerance)) != null);
-
-                List<T> segmentable2Ds_Temp = result[keyValuePair.Value];
-                if(segmentable2Ds_Temp == null)
+                List<T> segmentable2Ds_Temp = new List<T>();
+                foreach (KeyValuePair<Point2D, int> keyValuePair in components)
                 {
-                    segmentable2Ds_Temp = new List<T>();
-                    result[keyValuePair.Value] = segmentable2Ds_Temp;
-                }
-                
-                foreach(T segmentable2D in tuples_Temp.ConvertAll(x => x.Item3))
-                {
-                    if(!segmentable2Ds_Temp.Contains(segmentable2D))
+                    if(keyValuePair.Value != i)
                     {
-                        segmentable2Ds_Temp.Add(segmentable2D);
+                        continue;
+                    }
+
+                    List<Tuple<BoundingBox2D, List<Point2D>, T>> tuples_Temp = tuples.FindAll(x => x.Item1.InRange(keyValuePair.Key, tolerance)).FindAll(x => x.Item2.Find(y => y.AlmostEquals(keyValuePair.Key, tolerance)) != null);
+
+                    foreach (T segmentable2D in tuples_Temp.ConvertAll(x => x.Item3))
+                    {
+                        if (!segmentable2Ds_Temp.Contains(segmentable2D))
+                        {
+                            segmentable2Ds_Temp.Add(segmentable2D);
+                        }
                     }
                 }
-            }
+
+                result[i] = segmentable2Ds_Temp;
+            });
 
             return result;
         }
