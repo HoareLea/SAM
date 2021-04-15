@@ -64,6 +64,20 @@ namespace SAM.Analytical
                         adjacencyCluster.AddObject(panels_Temp[i]);
                     }
 
+                    List<Panel> panels_Temp_External = panels_Temp?.FindAll(x => x.PanelGroup == PanelGroup.Floor || x.PanelGroup == PanelGroup.Roof);
+                    if (panels_Temp_External != null && panels_Temp_External.Count != 0)
+                    {
+                        foreach(Panel panel in panels_Temp_External)
+                        {
+                            List<Space> spaces = adjacencyCluster.GetSpaces(panel);
+                            if(spaces== null || spaces.Count == 0)
+                            {
+                                adjacencyCluster.AddObject(new Panel(panel, PanelType.Shade));
+                            }
+                        }
+
+                    }
+
                     panels_Temp?.RemoveAll(x => x.PanelGroup != PanelGroup.Wall);
                     if (panels_Temp == null || panels_Temp.Count == 0)
                         continue;
@@ -103,7 +117,7 @@ namespace SAM.Analytical
                             //    name_New = "SIM_EXT_GRD" + name.Substring(("SIM_INT_SLD_Core").Length);
                             //    prefix = "SIM_INT_SLD_Core";
                             //}
-                            else if (name.StartsWith("SIM_INT_SLD_Core"))
+                            else if (name.StartsWith("SIM_INT_SLD_Core") || name.StartsWith("SIM_INT_SLD_Partition"))
                             {
                                 name_New = "SIM_EXT_SLD" + name.Substring(("SIM_INT_SLD_Core").Length);
                                 prefix = "SIM_EXT_SLD";

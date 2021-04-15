@@ -540,6 +540,15 @@ namespace SAM.Analytical
             return result;
         }
 
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, List<Panel> panels, double offset = 0.1, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
+        {     
+            List<Shell> shells = panels.Shells(offset, maxDistance, tolerance);
+            if (shells == null || shells.Count == 0)
+                return null;
+
+            return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, minArea, maxDistance, maxAngle, silverSpacing, tolerance);
+        }
+
         private static AdjacencyCluster AdjacencyCluster(this Dictionary<double, List<Face2D>> face2Ds, int index_Ground, double tolerance = Tolerance.Distance)
         {
             if (face2Ds == null)
