@@ -39,7 +39,7 @@ namespace SAM.Geometry.Planar
 
             if(split)
             {
-                segment2Ds = Query.Split(segment2Ds, tolerance);
+                segment2Ds = Split(segment2Ds, tolerance);
             }
             
 

@@ -72,8 +72,10 @@
     <Compile Include="Create\UndirectedGraph.cs" />
     <Compile Include="Create\ISAMGeometries.cs" />
     <Compile Include="Create\AdjacencyGraph.cs" />
+    <Compile Include="Enums\PointConnectMethod.cs" />
     <Compile Include="Enums\LineFormulaForm.cs" />
     <Compile Include="Planar\Create\Polyline2Ds.cs" />
+    <Compile Include="Planar\Modify\Connect.cs" />
     <Compile Include="Planar\Query\Connected.cs" />
     <Compile Include="Planar\Query\LongestPath.cs" />
     <Compile Include="Planar\Query\ShortestPath.cs" />

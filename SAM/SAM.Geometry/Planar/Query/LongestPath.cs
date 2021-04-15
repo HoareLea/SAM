@@ -13,9 +13,10 @@ namespace SAM.Geometry.Planar
         /// Returns longest path in given segmentable2Ds with exclusion of loops. If loops exists method will find shortest path through the loop
         /// </summary>
         /// <param name="segmentable2Ds">Segmentable2Ds</param>
+        /// <param name="point2D_Start">Point to start from. If null then Method will find points with the longest paths</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns>List of Point2Ds representing the longest path</returns>
-        public static List<Point2D> LongestPath(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
+        public static List<Point2D> LongestPath(this IEnumerable<ISegmentable2D> segmentable2Ds, Point2D point2D_Start = null, double tolerance = Core.Tolerance.Distance)
         {
             List<Segment2D> segment2Ds = segmentable2Ds?.Split(tolerance);
             if (segment2Ds == null)
@@ -23,30 +24,59 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            AdjacencyGraph<Point2D, Edge<Point2D>> adjacencyGraph = Geometry.Create.AdjacencyGraph(segment2Ds);
 
-            IEnumerable<Point2D> point2Ds_All = adjacencyGraph.Vertices;
-            if(point2Ds_All == null || point2Ds_All.Count() == 0)
-            {
-                return null;
-            }
+            AdjacencyGraph<Point2D, Edge<Point2D>> adjacencyGraph = null;
 
             IEnumerable<Edge<Point2D>> edges;
 
             List<Point2D> point2Ds = new List<Point2D>();
-            foreach(Point2D point2D in point2Ds_All)
+            if (point2D_Start != null)
             {
-                if(!adjacencyGraph.TryGetOutEdges(point2D, out edges) || edges == null || edges.Count() != 1)
+                Point2D point2D_Start_Temp = point2D_Start;
+                if (point2D_Start_Temp != null)
                 {
-                    continue;
+                    List<Segment2D> segment2Ds_Connected = segment2Ds.Connect(point2D_Start_Temp, PointConnectMethod.Projection, tolerance);
+                    if (segment2Ds_Connected != null)
+                    {
+                        Point2D point2D = segment2Ds_Connected.Find(x => x[0].AlmostEquals(point2D_Start_Temp, tolerance))?[0];
+                        if (point2D == null)
+                            point2D = segment2Ds_Connected.Find(x => x[1].AlmostEquals(point2D_Start_Temp, tolerance))?[1];
+
+                        if (point2D == null)
+                            return null;
+
+                        point2D_Start_Temp = point2D;
+                    }
                 }
 
-                point2Ds.Add(point2D);
-            }
+                point2Ds.Add(point2D_Start_Temp);
 
-            if(point2Ds.Count == 0)
+                adjacencyGraph = Geometry.Create.AdjacencyGraph(segment2Ds);
+            }
+            else
             {
-                point2Ds.Add(point2Ds_All.ElementAt(0));
+                adjacencyGraph = Geometry.Create.AdjacencyGraph(segment2Ds);
+
+                IEnumerable<Point2D> point2Ds_All = adjacencyGraph.Vertices;
+                if (point2Ds_All == null || point2Ds_All.Count() == 0)
+                {
+                    return null;
+                }
+
+                foreach (Point2D point2D in point2Ds_All)
+                {
+                    if (!adjacencyGraph.TryGetOutEdges(point2D, out edges) || edges == null || edges.Count() != 1)
+                    {
+                        continue;
+                    }
+
+                    point2Ds.Add(point2D);
+                }
+
+                if (point2Ds.Count == 0)
+                {
+                    point2Ds.Add(point2Ds_All.ElementAt(0));
+                }
             }
 
             List<System.Tuple<double, Point2D, Point2D>> tuples = Enumerable.Repeat<System.Tuple<double, Point2D, Point2D>>(null, point2Ds.Count).ToList();
@@ -77,7 +107,9 @@ namespace SAM.Geometry.Planar
             if (tuples.Count > 1)
                 tuples.Sort((x, y) => y.Item1.CompareTo(x.Item1));
 
-            Point2D point2D_Start = tuples[0].Item2;
+            if (point2D_Start == null)
+                point2D_Start = tuples[0].Item2;
+            
             Point2D point2D_End = tuples[0].Item3;
 
             if (point2D_Start == null || point2D_End == null)
