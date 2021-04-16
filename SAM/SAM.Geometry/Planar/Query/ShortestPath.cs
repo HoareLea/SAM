@@ -2,6 +2,7 @@
 using QuickGraph.Algorithms.Observers;
 using QuickGraph.Algorithms.ShortestPath;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -9,9 +10,35 @@ namespace SAM.Geometry.Planar
     {
         public static List<Point2D> ShortestPath(this IEnumerable<ISegmentable2D> segmentable2Ds, Point2D point2D_Start, Point2D point2D_End, double tolerance = Core.Tolerance.Distance)
         {
-            List<Segment2D> segment2Ds = segmentable2Ds?.Split(tolerance);
-            if (segment2Ds == null)
+            if (segmentable2Ds == null)
+            {
                 return null;
+            }
+
+            HashSet<Point2D> point2Ds_Unique = new HashSet<Point2D>();
+            List<Segment2D> segment2Ds = new List<Segment2D>();
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
+            {
+                List<Segment2D> segment2Ds_Temp = segmentable2D?.GetSegments();
+                if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < segment2Ds_Temp.Count; i++)
+                {
+                    segment2Ds_Temp[i].Round(tolerance);
+                    segment2Ds.Add(segment2Ds_Temp[i]);
+                }
+
+                segmentable2D.GetPoints()?.ForEach(x => point2Ds_Unique.Add(x));
+            }
+
+            segment2Ds = segment2Ds?.Split(tolerance);
+            if (segment2Ds == null)
+            {
+                return null;
+            }
 
             Point2D point2D_Start_Temp = point2D_Start;
             if(point2D_Start_Temp != null)
@@ -64,12 +91,37 @@ namespace SAM.Geometry.Planar
             if (!vertexPredecessorRecorderObserver.TryGetPath(point2D_End_Temp, out IEnumerable<Edge<Point2D>> edges))
                 return result;
 
-            foreach(Edge<Point2D> edge in edges)
+            if (edges.Count() == 0)
             {
-                result.Add(edge.Source);
+                return result;
             }
 
-            result.Add(point2D_End_Temp);
+            foreach (Edge<Point2D> edge_Temp in edges)
+            {
+                Point2D point2D = edge_Temp.Source;
+
+                foreach (Point2D point2D_Unique in point2Ds_Unique)
+                {
+                    if (point2D_Unique.AlmostEquals(point2D))
+                    {
+                        point2D = point2D_Unique;
+                        break;
+                    }
+                }
+
+                result.Add(point2D);
+            }
+
+            foreach (Point2D point2D_Unique in point2Ds_Unique)
+            {
+                if (point2D_Unique.AlmostEquals(point2D_End))
+                {
+                    point2D_End = point2D_Unique;
+                    break;
+                }
+            }
+
+            result.Add(point2D_End);
 
             return result;
         }

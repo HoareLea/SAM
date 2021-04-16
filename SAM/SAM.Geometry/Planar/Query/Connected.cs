@@ -33,16 +33,17 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
+                segment2Ds_Temp.ForEach(x => x.Round(tolerance));
+
                 segment2Ds.AddRange(segment2Ds_Temp);
                 
                 tuples.Add(new Tuple<BoundingBox2D, List<Point2D>, T>(segmentable2D.GetBoundingBox(), segmentable2D.GetPoints(), segmentable2D));
             }
 
-            if(split)
+            if (split)
             {
                 segment2Ds = Split(segment2Ds, tolerance);
             }
-            
 
             UndirectedGraph<Point2D, Edge<Point2D>> undirectedGraph = segment2Ds.UndirectedGraph();
             if (undirectedGraph == null)
