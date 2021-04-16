@@ -98,10 +98,18 @@ namespace SAM.Analytical
                         }
 
                         bool external = spaces.Count == 1;
-
                         PanelType panelType = panel.PanelType;
-                        if (external == panelType.External())
-                            continue;
+                        if(panelType == PanelType.Wall)
+                        {
+                            panelType = external ? PanelType.WallExternal : PanelType.WallInternal;
+                            panel = new Panel(panel, panelType);
+                            adjacencyCluster.AddObject(panel);
+                        }
+                        else
+                        {
+                            if (external == panelType.External() && panelType.External() != panelType.Internal())
+                                continue;
+                        }
 
                         string name_New = null;
                         string prefix = null;
