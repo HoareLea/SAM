@@ -28,7 +28,8 @@ namespace SAM.Geometry.Grasshopper
             if (breps == null || breps.Count == 0)
                 return null;
 
-            Rhino.Geometry.Brep[] result = Rhino.Geometry.Brep.JoinBreps(breps, tolerance);
+            //adjsuted to make sure breps are closed in future see if we can close with higher tolerance
+            Rhino.Geometry.Brep[] result = Rhino.Geometry.Brep.JoinBreps(breps, 0.1);
             if (result == null || result.Length == 0)
                 return null;
 
