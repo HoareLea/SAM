@@ -569,6 +569,9 @@ namespace SAM.Geometry.Spatial
                 if (plane_Boundary.Normal.SmallestAngle(plane.Normal.GetNegated()) > tolerance_Angle && plane_Boundary.Normal.SmallestAngle(plane.Normal) > tolerance_Angle)
                     continue;
 
+                if (face3D.Distance(face3D_Boundary) >= tolerance_Distance)
+                    continue;
+
                 Face2D face2D_Boundary = plane_Boundary.Convert(face3D_Boundary);
                 Face2D face2D = plane_Boundary.Convert(plane_Boundary.Project(face3D));
 
