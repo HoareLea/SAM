@@ -67,6 +67,12 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        /// <summary>
+        /// Create Shells by given Top and Bottom Face3Ds
+        /// </summary>
+        /// <param name="face3Ds">Top and Bottom Face3Ds</param>
+        /// <param name="tolerance">tolerance</param>
+        /// <returns>Shells</returns>
         public static List<Shell> Shells(this IEnumerable<Face3D> face3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (face3Ds == null)
