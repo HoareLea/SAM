@@ -34,6 +34,10 @@ namespace SAM.Geometry
 
                     result.AddRange(face2Ds);
                 }
+                else if (geometry is LinearRing)
+                {
+                    result.Add(new Polygon((LinearRing)geometry).ToSAM(tolerance));
+                }
             }
 
             return result;

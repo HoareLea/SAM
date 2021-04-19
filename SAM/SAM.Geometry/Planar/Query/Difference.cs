@@ -186,26 +186,39 @@ namespace SAM.Geometry.Planar
                 return result;
 
             NetTopologySuite.Geometries.Geometry geometry = polygon_1.Difference(polygon_2);
+            if (geometry == null || geometry.IsEmpty)
+            {
+                return null;
+            }
 
-            if (geometry is Polygon)
+            List<NetTopologySuite.Geometries.Geometry> geometries = geometry is GeometryCollection ? ((GeometryCollection)geometry).Geometries?.ToList() : new List<NetTopologySuite.Geometries.Geometry>() { geometry };
+            if (geometries == null || geometries.Count == 0)
             {
-                Face2D face2D = ((Polygon)geometry).ToSAM(tolerance);
-                if (face2D != null)
-                    result.Add(face2D);
+                return null;
             }
-            else if (geometry is MultiPolygon)
+
+            foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
             {
-                List<Polygon> polygons = Query.Polygons((MultiPolygon)geometry);
-                if (polygons != null && polygons.Count > 0)
+                if (geometry_Temp is Polygon)
                 {
-                    polygons.ForEach(x => result.Add(x.ToSAM(tolerance)));
+                    Face2D face2D = ((Polygon)geometry_Temp).ToSAM(tolerance);
+                    if (face2D != null)
+                        result.Add(face2D);
                 }
-            }
-            else if (geometry is LinearRing)
-            {
-                Polygon2D polygon2D = ((LinearRing)geometry).ToSAM(tolerance);
-                if (polygon2D != null)
-                    result.Add(new Face2D(polygon2D));
+                else if (geometry_Temp is MultiPolygon)
+                {
+                    List<Polygon> polygons = Polygons((MultiPolygon)geometry_Temp);
+                    if (polygons != null && polygons.Count > 0)
+                    {
+                        polygons.ForEach(x => result.Add(x.ToSAM(tolerance)));
+                    }
+                }
+                else if (geometry_Temp is LinearRing)
+                {
+                    Polygon2D polygon2D = ((LinearRing)geometry_Temp).ToSAM(tolerance);
+                    if (polygon2D != null)
+                        result.Add(new Face2D(polygon2D));
+                }
             }
 
             return result;
