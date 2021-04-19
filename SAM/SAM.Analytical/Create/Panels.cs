@@ -44,6 +44,48 @@ namespace SAM.Analytical
             return result;
         }
 
+        public static List<Panel> Panels(this IEnumerable<ISegmentable3D> segmentable3Ds, double height, PanelType panelType = PanelType.Undefined, Construction construction = null)
+        {
+            if (segmentable3Ds == null)
+                return null;
+
+            List<Panel> result = new List<Panel>();
+            foreach(ISegmentable3D segmentable3D in segmentable3Ds)
+            {
+                List<Segment3D> segment3Ds = segmentable3D?.GetSegments();
+                if (segment3Ds == null || segment3Ds.Count == 0)
+                {
+                    continue;
+                }
+                
+                foreach(Segment3D segment3D in segment3Ds)
+                {
+                    Polygon3D polygon3D = Geometry.Spatial.Create.Polygon3D(segment3D, height);
+                    if (polygon3D == null)
+                    {
+                        return null;
+                    }
+
+                    PanelType panelType_Temp = panelType;
+                    if (panelType_Temp == PanelType.Undefined)
+                    {
+                        Vector3D normal = polygon3D.GetPlane().Normal;
+                        panelType_Temp = Query.PanelType(normal);
+                    }
+
+                    Construction construction_Temp = construction;
+                    if(construction_Temp == null)
+                    {
+                        construction_Temp = Query.DefaultConstruction(panelType_Temp);
+                    }
+
+                    result.Add(new Panel(construction_Temp, panelType_Temp, new Face3D(polygon3D)));
+                }
+            }
+
+            return result;
+        }
+
         public static List<Panel> Panels(this IEnumerable<Panel> panels, Plane plane, PanelType panelType = PanelType.Undefined, bool checkIntersection = true, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null || plane == null)

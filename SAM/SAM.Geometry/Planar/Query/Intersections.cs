@@ -40,26 +40,31 @@ namespace SAM.Geometry.Planar
             return point2Ds.ToList();
         }
 
-        public static List<Point2D> Intersections(this ISegmentable2D segmentable2D, IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
+        public static List<Point2D> Intersections(this ISegmentable2D segmentable2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if (segmentable2D == null || segment2Ds == null)
+            if (segmentable2D == null || segmentable2Ds == null)
                 return null;
 
             List<Segment2D> segment2Ds_Segmentable2D = segmentable2D.GetSegments();
             if (segment2Ds_Segmentable2D == null)
                 return null;
 
-            HashSet<Point2D> point2Ds = new HashSet<Point2D>();
-            foreach (Segment2D segment2D in segment2Ds)
+            List<Point2D> point2Ds = new List<Point2D>();
+            foreach (ISegmentable2D segmentable2D_Temp in segmentable2Ds)
             {
-                List<Point2D> point2Ds_Temp = Intersections(segmentable2D, segment2D, tolerance);
+                List<Point2D> point2Ds_Temp = Intersections(segmentable2D, segmentable2D_Temp, tolerance);
                 if (point2Ds_Temp == null || point2Ds_Temp.Count == 0)
                     continue;
 
-                point2Ds_Temp.ForEach(x => point2Ds.Add(x));
+                foreach(Point2D point2D_Temp in point2Ds_Temp)
+                {
+                    Point2D point2D = point2Ds.Find(x => x.AlmostEquals(point2D_Temp, tolerance));
+                    if (point2D == null)
+                        point2Ds.Add(point2D_Temp);
+                }
             }
 
-            return point2Ds.ToList();
+            return point2Ds;
         }
 
         public static List<Point2D> Intersections(this Point2D point2D, Vector2D vector2D, ISegmentable2D segmentable2D, bool keepDirection, bool removeCollinear = true, bool sort = true, bool selfIntersection = true, double tolerance = Core.Tolerance.Distance)

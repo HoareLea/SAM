@@ -71,6 +71,7 @@
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalCreatePanelByBottomAndHeight.cs" />
     <Compile Include="Component\SAMAnalyticalFixAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalAlignPanelsByElevation.cs" />
     <Compile Include="Component\SAMAnalyticalAnalyticalModelMapInternalCondtions.cs" />
@@ -212,7 +213,7 @@
     <Compile Include="Component\SAMAnalyticalApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalSetPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalPlanarBoundary3D.cs" />
-    <Compile Include="Component\SAMAnalyticalCreatePanel.cs" />
+    <Compile Include="Component\SAMAnalyticalCreatePanelBy3DGeometry.cs" />
     <Compile Include="Component\SAMAnalyticalGeometry.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalCreateSpace.cs" />

@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreatePanel : GH_SAMComponent
+    public class SAMAnalyticalCreatePanelBy3DGeometry : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -30,9 +30,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreatePanel()
-          : base("SAMAnalytical.CreatePanel", "SAMAnalytical.CreatePanel",
-              "Create SAM Analytical Panel",
+        public SAMAnalyticalCreatePanelBy3DGeometry()
+          : base("SAMAnalytical.CreatePanelBy3DGeometry", "SAMAnalytical.CreatePanelBy3DGeometry",
+              "Create SAM Analytical Panel by 3D Geometry",
               "SAM", "Analytical")
         {
         }
@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            index = inputParamManager.AddGenericParameter("_geometry", "_geometry", "Geometry", GH_ParamAccess.item);
+            index = inputParamManager.AddGenericParameter("_3Dgeometry", "_3Dgeometry", "3D Geometry", GH_ParamAccess.item);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             index = inputParamManager.AddGenericParameter("panelType_", "panelType_", "PanelType", GH_ParamAccess.item);

@@ -23,6 +23,8 @@ namespace SAM.Geometry.Planar
             }
             else
             {
+                segment2Ds = new List<Segment2D>();
+                
                 foreach(ISegmentable2D segmentable2D in segmentable2Ds)
                 {
                     List<Segment2D> segment2Ds_Temp = segmentable2D?.GetSegments();

@@ -134,7 +134,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Segment2D> Segment2Ds(IEnumerable<Point2D> point2Ds, bool close = false)
+        public static List<Segment2D> Segment2Ds(this IEnumerable<Point2D> point2Ds, bool close = false)
         {
             if (point2Ds == null)
                 return null;
@@ -150,6 +150,23 @@ namespace SAM.Geometry.Planar
 
             if (close)
                 result.Add(new Segment2D(point2Ds.Last(), point2Ds.First()));
+
+            return result;
+        }
+
+        public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, int count)
+        {
+            if (count == -1)
+                return null;
+
+            List<Point2D> point2Ds_Start = Point2Ds(boundingBox2D, count);
+            List<Point2D> point2Ds_End = Point2Ds(boundingBox2D, count);
+
+            List<Segment2D> result = new List<Segment2D>();
+            for (int i = 0; i < count; i++)
+            {
+                result.Add(new Segment2D(point2Ds_Start[0], point2Ds_End[0]));
+            }
 
             return result;
         }

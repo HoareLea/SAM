@@ -7,7 +7,7 @@ namespace SAM.Geometry.Grasshopper
 {
     public static partial class Query
     {
-        public static bool TryGetSAMGeometries<T>(this GH_ObjectWrapper objectWrapper, out List<T> sAMGeometries) where T : SAMGeometry
+        public static bool TryGetSAMGeometries<T>(this GH_ObjectWrapper objectWrapper, out List<T> sAMGeometries) where T : ISAMGeometry
         {
             sAMGeometries = null;
 

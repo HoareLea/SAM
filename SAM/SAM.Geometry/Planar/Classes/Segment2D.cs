@@ -14,6 +14,12 @@ namespace SAM.Geometry.Planar
         private Point2D origin;
         private Vector2D vector;
 
+        public Segment2D(double x_1, double y_1, double x_2, double y_2)
+        {
+            origin = new Point2D(x_1, x_2);
+            vector = new Vector2D(x_2 - x_1, y_2 - y_1);
+        }
+
         /// <summary>
         /// Creates Segment2D by start and end Point2D
         /// </summary>
@@ -626,6 +632,37 @@ namespace SAM.Geometry.Planar
         public override int GetHashCode()
         {
             return Tuple.Create(origin, vector).GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Segment2D))
+                return false;
+
+            Segment2D segment2D = (Segment2D)obj;
+            return segment2D.origin.Equals(origin) && segment2D.vector.Equals(vector);
+        }
+
+        public static bool operator ==(Segment2D segment2D_1, Segment2D segment2D_2)
+        {
+            if (ReferenceEquals(segment2D_1, null) && ReferenceEquals(segment2D_2, null))
+                return true;
+
+            if (ReferenceEquals(segment2D_1, null) || ReferenceEquals(segment2D_2, null))
+                return false;
+
+            return segment2D_1.origin.Equals(segment2D_2.origin) && segment2D_1.vector.Equals(segment2D_2.vector);
+        }
+
+        public static bool operator !=(Segment2D segment2D_1, Segment2D segment2D_2)
+        {
+            if (ReferenceEquals(segment2D_1, null) && ReferenceEquals(segment2D_2, null))
+                return false;
+
+            if (ReferenceEquals(segment2D_1, null) || ReferenceEquals(segment2D_2, null))
+                return true;
+
+            return (!segment2D_1.origin.Equals(segment2D_2.origin)) || (!segment2D_1.vector.Equals(segment2D_2.vector));
         }
     }
 }
