@@ -7,12 +7,12 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAlignPanels : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalJoinExternalPanels : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("68f43a0e-abb0-40ec-9032-a2195366ceb1");
+        public override Guid ComponentGuid => new Guid("29242fec-1491-4f2e-9bdd-ec815e001907");
 
         /// <summary>
         /// The latest version of this component
@@ -29,9 +29,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAlignPanels()
-          : base("SAMAnalytical.AlignPanels", "SAMAnalytical.AlignPanels",
-              "Align Panels",
+        public SAMAnalyticalJoinExternalPanels()
+          : base("SAMAnalytical.JoinExternalPanels", "SAMAnalytical.JoinExternalPanels",
+              "Join External Panels",
               "SAM", "Analytical")
         {
         }
@@ -52,9 +52,6 @@ namespace SAM.Analytical.Grasshopper
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevation", NickName = "elevation", Description = "Elevation", Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
-
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_referenceElevation", NickName = "_referenceElevation", Description = "Reference Elevation", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item };
@@ -102,14 +99,6 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_referenceElevation");
-            double referenceElevation = double.NaN;
-            if (index == -1 || !dataAccess.GetData(index, ref referenceElevation) || double.IsNaN(referenceElevation))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
-                return;
-            }
-
             index = Params.IndexOfInputParam("maxDistance_");
             double maxDistance = 0.2;
             if (index != -1)
@@ -126,7 +115,7 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(tolerance))
                 tolerance = Tolerance.Distance;
 
-            Analytical.Modify.Align(panels, elevation, referenceElevation, maxDistance, Tolerance.Angle, tolerance);
+            Analytical.Modify.JoinExternal(panels, elevation, maxDistance, tolerance);
 
             dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
         }

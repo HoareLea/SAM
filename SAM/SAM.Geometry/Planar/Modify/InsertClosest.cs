@@ -5,7 +5,14 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Modify
     {
-        //Inserts new point on one of the edges (closest to given point2D)
+        /// <summary>
+        /// Inserts new point on one of the edges (closest to given point2D)
+        /// </summary>
+        /// <param name="point2Ds">Point2D list will be modified</param>
+        /// <param name="point2D">Point2D will be inserted</param>
+        /// <param name="close">Is Closed</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Inserted Point2D</returns>
         public static Point2D InsertClosest(this List<Point2D> point2Ds, Point2D point2D, bool close = false, double tolerance = Core.Tolerance.Distance)
         {
             List<Segment2D> segment2Ds = Create.Segment2Ds(point2Ds, close);
@@ -34,8 +41,11 @@ namespace SAM.Geometry.Planar
                 return null;
 
             Segment2D segment2D_Temp = segment2Ds[index];
-            if (point2D_Closest.AlmostEquals(segment2D_Temp[0], tolerance) || point2D_Closest.AlmostEquals(segment2D_Temp[1], tolerance))
-                return point2D_Closest;
+            if (point2D_Closest.AlmostEquals(segment2D_Temp[0], tolerance))
+                return segment2D_Temp[0];
+
+            if(point2D_Closest.AlmostEquals(segment2D_Temp[1], tolerance))
+                return segment2D_Temp[1];
 
             segment2Ds[index] = new Segment2D(segment2D_Temp[0], point2D_Closest);
             segment2Ds.Insert(index + 1, new Segment2D(point2D_Closest, segment2D_Temp[1]));
