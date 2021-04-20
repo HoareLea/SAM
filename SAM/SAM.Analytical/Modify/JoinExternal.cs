@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Guid> JoinExternal(this List<Panel> panels, double elevation, double maxDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static List<Guid> JoinExternal(this List<Panel> panels, double elevation, double maxDistance, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (panels == null)
                 return null;
@@ -47,7 +47,7 @@ namespace SAM.Analytical
 
             List<Guid> result = new List<Guid>();
 
-            List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Query.ExternalPolygon2Ds(segmentable2Ds, maxDistance, tolerance_Distance);
+            List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Query.ExternalPolygon2Ds(segmentable2Ds, maxDistance, snapTolerance, tolerance_Distance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return result;
 

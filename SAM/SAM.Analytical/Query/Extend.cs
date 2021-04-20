@@ -187,7 +187,7 @@ namespace SAM.Analytical
             return result;
         }
     
-        public static Panel Extend(this Panel panel, Plane plane, double tolerance = Core.Tolerance.Distance)
+        public static Panel Extend(this Panel panel, Plane plane, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (plane == null)
                 return null;
@@ -253,7 +253,7 @@ namespace SAM.Analytical
 
             segment2Ds.AddRange(segmentable2D.GetSegments());
 
-            List<Polygon2D> polygon2Ds = Geometry.Planar.Query.ExternalPolygon2Ds(segment2Ds, tolerance);
+            List<Polygon2D> polygon2Ds = Geometry.Planar.Query.ExternalPolygon2Ds(segment2Ds, snapTolerance, tolerance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return new Panel(panel);
 

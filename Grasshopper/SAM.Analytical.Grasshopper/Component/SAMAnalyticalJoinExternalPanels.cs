@@ -115,7 +115,7 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(tolerance))
                 tolerance = Tolerance.Distance;
 
-            Analytical.Modify.JoinExternal(panels, elevation, maxDistance, tolerance);
+            Analytical.Modify.JoinExternal(panels, elevation, maxDistance, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
 
             dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
         }

@@ -81,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> result = panels.ConvertAll(x => Analytical.Query.Extend(x, plane, tolerance));
+            List<Panel> result = panels.ConvertAll(x => Analytical.Query.Extend(x, plane, Core.Tolerance.MacroDistance, tolerance));
 
             dataAccess.SetDataList(0, result?.ConvertAll(x => new GooPanel(x)));
         }

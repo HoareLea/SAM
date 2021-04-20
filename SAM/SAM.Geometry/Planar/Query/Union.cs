@@ -41,9 +41,6 @@ namespace SAM.Geometry.Planar
 
         public static List<Polygon2D> Union(this IEnumerable<Polygon2D> polygon2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if (tolerance == 0)
-                return Union(polygon2Ds);
-
             if (polygon2Ds == null)
                 return null;
 

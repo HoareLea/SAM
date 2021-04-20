@@ -7,17 +7,22 @@ namespace SAM.Geometry.Planar
     {
         public static List<Polygon2D> ExternalPolygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if (segmentable2Ds == null)
+            List<Segment2D> segment2Ds = segmentable2Ds?.Segment2Ds();
+            if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
-            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segmentable2Ds, tolerance);
+            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds, tolerance);
             if (polygon2Ds == null)
                 return null;
 
-            return Union(polygon2Ds, tolerance);
+            polygon2Ds = Union(polygon2Ds, tolerance);
+            if (polygon2Ds != null)
+                polygon2Ds.RemoveAll(x => x.GetArea() < tolerance);
+
+            return polygon2Ds;
         }
 
-        public static List<Polygon2D> ExternalPolygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon2D> ExternalPolygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segmentable2Ds == null)
                 return null;
@@ -92,6 +97,8 @@ namespace SAM.Geometry.Planar
 
                 segment2Ds.Add(new Segment2D(tuple_Extension.Item2[0], point2D));
             }
+
+            segment2Ds = segment2Ds.Snap(true, snapTolerance);
 
             return ExternalPolygon2Ds(segment2Ds, tolerance);
         }
