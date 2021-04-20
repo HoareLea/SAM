@@ -81,6 +81,7 @@
     <Compile Include="Planar\Query\FixEdges.cs" />
     <Compile Include="Planar\Query\ShortestPath.cs" />
     <Compile Include="Planar\Query\UniquePoint2Ds.cs" />
+    <Compile Include="Spatial\Create\Face3D.cs" />
     <Compile Include="Spatial\Create\PlanarIntersectionResult.cs" />
     <Compile Include="Create\PolynomialEquation.cs" />
     <Compile Include="Create\JArray.cs" />

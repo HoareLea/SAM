@@ -112,7 +112,7 @@ namespace SAM.Geometry.Planar
                 {
                     Point2D point2D_Temp = segment2D_Temp.Closest(point2D);
                     double distance_Temp = point2D_Temp.Distance(point2D);
-                    if (distance_Temp < distance)
+                    if (distance_Temp <= tolerance && distance_Temp < distance)
                     {
                         point2Ds[j] = point2D_Temp;
                         distance = distance_Temp;

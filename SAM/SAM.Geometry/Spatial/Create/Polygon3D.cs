@@ -37,12 +37,21 @@ namespace SAM.Geometry.Spatial
             return new Polygon3D(plane, point2Ds);
         }
 
-        public static Polygon3D Polygon3D(this Segment3D segment3D, double height)
+        public static Polygon3D Polygon3D(this Segment3D segment3D, double height, double tolerance = Core.Tolerance.Angle)
         {
             if (segment3D == null || double.IsNaN(height))
                 return null;
 
-            Vector3D vector3D = Spatial.Vector3D.WorldZ * height;
+            Vector3D direction = segment3D.Direction;
+            if (direction == null || !direction.IsValid())
+                return null;
+
+            Vector3D direction_Z = Spatial.Vector3D.WorldZ;
+
+            if (direction.SmallestAngle(direction_Z) <= tolerance || direction.GetNegated().SmallestAngle(direction_Z) <= tolerance)
+                return null;
+
+            Vector3D vector3D = direction_Z * height;
 
             return new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], (Point3D)segment3D[1].GetMoved(vector3D), (Point3D)segment3D[0].GetMoved(vector3D) });
         }
