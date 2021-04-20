@@ -135,18 +135,35 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static Polyline2D Cut(this Polygon2D polygon2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Tolerance.Distance)
+        public static Polygon2D Cut(this Polygon2D polygon2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Tolerance.Distance)
         {
             if (polygon2D == null || segmentable2Ds == null)
                 return null;
 
-            Polyline2D result = new Polyline2D(polygon2D);
+            Polygon2D result = new Polygon2D(polygon2D);
 
             List<Point2D> point2Ds =  polygon2D.Intersections(segmentable2Ds, tolerance);
             if (point2Ds == null || point2Ds.Count == 0)
                 return result;
             
             foreach(Point2D point2D in point2Ds)
+                result.InsertClosest(point2D, tolerance);
+
+            return result;
+        }
+    
+        public static Polyline2D Cut(this Polyline2D polyline2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Tolerance.Distance)
+        {
+            if (polyline2D == null || segmentable2Ds == null)
+                return null;
+
+            Polyline2D result = new Polyline2D(polyline2D);
+
+            List<Point2D> point2Ds = polyline2D.Intersections(segmentable2Ds, tolerance);
+            if (point2Ds == null || point2Ds.Count == 0)
+                return result;
+
+            foreach (Point2D point2D in point2Ds)
                 result.InsertClosest(point2D, tolerance);
 
             return result;
