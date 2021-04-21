@@ -6,7 +6,7 @@ namespace SAM.Geometry
 {
     public static partial class Create
     {
-        public static UndirectedGraph<Point2D, Edge<Point2D>> UndirectedGraph(this IEnumerable<ISegmentable2D> segmentable2Ds)
+        public static UndirectedGraph<Point2D, Edge<Point2D>> UndirectedGraph(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segmentable2Ds == null)
                 return null;
@@ -21,7 +21,13 @@ namespace SAM.Geometry
                     {
                         if (segment2D != null)
                         {
-                            edges.Add(new Edge<Point2D>(segment2D[0], segment2D[1]));
+                            Point2D point2D_1 = segment2D[0];
+                            point2D_1.Round(tolerance);
+
+                            Point2D point2D_2 = segment2D[1];
+                            point2D_2.Round(tolerance);
+
+                            edges.Add(new Edge<Point2D>(point2D_1, point2D_2));
                         }
                     }
                 }

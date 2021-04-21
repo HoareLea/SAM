@@ -33,7 +33,7 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                segment2Ds_Temp.ForEach(x => x.Round(tolerance));
+                //segment2Ds_Temp.ForEach(x => x.Round(tolerance));
 
                 segment2Ds.AddRange(segment2Ds_Temp);
                 
@@ -45,7 +45,7 @@ namespace SAM.Geometry.Planar
                 segment2Ds = Split(segment2Ds, tolerance);
             }
 
-            UndirectedGraph<Point2D, Edge<Point2D>> undirectedGraph = segment2Ds.UndirectedGraph();
+            UndirectedGraph<Point2D, Edge<Point2D>> undirectedGraph = segment2Ds.UndirectedGraph(tolerance);
             if (undirectedGraph == null)
             {
                 return null;

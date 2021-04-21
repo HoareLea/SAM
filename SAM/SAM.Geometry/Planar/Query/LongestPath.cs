@@ -35,7 +35,7 @@ namespace SAM.Geometry.Planar
 
                 for(int i =0; i < segment2Ds_Temp.Count; i++)
                 {
-                    segment2Ds_Temp[i].Round(tolerance);
+                    //segment2Ds_Temp[i].Round(tolerance);
                     segment2Ds.Add(segment2Ds_Temp[i]);
                 }
 
@@ -74,11 +74,11 @@ namespace SAM.Geometry.Planar
 
                 point2Ds.Add(point2D_Start_Temp);
 
-                adjacencyGraph = Geometry.Create.AdjacencyGraph(segment2Ds);
+                adjacencyGraph = Geometry.Create.AdjacencyGraph(segment2Ds, tolerance);
             }
             else
             {
-                adjacencyGraph = Geometry.Create.AdjacencyGraph(segment2Ds);
+                adjacencyGraph = Geometry.Create.AdjacencyGraph(segment2Ds, tolerance);
 
                 IEnumerable<Point2D> point2Ds_All = adjacencyGraph.Vertices;
                 if (point2Ds_All == null || point2Ds_All.Count() == 0)

@@ -6,7 +6,7 @@ namespace SAM.Geometry
 {
     public static partial class Create
     {
-        public static AdjacencyGraph<Point2D, Edge<Point2D>> AdjacencyGraph(this IEnumerable<ISegmentable2D> segmentable2Ds)
+        public static AdjacencyGraph<Point2D, Edge<Point2D>> AdjacencyGraph(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (segmentable2Ds == null)
                 return null;
@@ -23,6 +23,7 @@ namespace SAM.Geometry
                 foreach(Segment2D segment2D in segment2Ds)
                 {
                     Point2D point2D_1 = segment2D[0];
+                    point2D_1.Round(tolerance);
                     if(!point2Ds.Contains(point2D_1))
                     {
                         point2Ds.Add(point2D_1);
@@ -30,6 +31,7 @@ namespace SAM.Geometry
                     }
 
                     Point2D point2D_2 = segment2D[1];
+                    point2D_2.Round(tolerance);
                     if (!point2Ds.Contains(point2D_2))
                     {
                         point2Ds.Add(point2D_2);
