@@ -384,7 +384,7 @@ namespace SAM.Geometry.Grasshopper
             if (Value is Spatial.Face3D)
                 brep = ((Spatial.Face3D)Value).ToRhino_Brep();
             else if (Value is Spatial.Shell)
-                brep = ((Spatial.Shell)Value).ToRihno();
+                brep = ((Spatial.Shell)Value).ToRhino();
 
             if (brep != null)
                 args.Pipeline.DrawBrepShaded(brep, displayMaterial);

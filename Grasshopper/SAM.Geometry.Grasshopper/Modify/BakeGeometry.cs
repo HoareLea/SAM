@@ -45,7 +45,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (sAMGeometry is Spatial.Shell)
             {
-                guid = rhinoDoc.Objects.AddBrep(((Spatial.Shell)sAMGeometry).ToRihno(), objectAttributes);
+                guid = rhinoDoc.Objects.AddBrep(((Spatial.Shell)sAMGeometry).ToRhino(), objectAttributes);
                 return true;
             }
 

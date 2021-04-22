@@ -230,6 +230,8 @@
     <Compile Include="Component\SAMAnalyticalCreateOpaqueMaterial.cs" />
     <Compile Include="Component\SAMAnalyticalObjects.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
+    <Compile Include="Convert\ToGrasshopper\GH_Mesh.cs" />
+    <Compile Include="Convert\ToRhino\Mesh.cs" />
     <Compile Include="Convert\ToRhino\Breps.cs" />
     <Compile Include="Classes\GooDegreeOfActivity.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />

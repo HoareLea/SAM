@@ -160,6 +160,20 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool CastTo<Y>(ref Y target)
         {
+            if (Value == null)
+                return false;
+
+            if (typeof(Y).IsAssignableFrom(typeof(GH_Mesh)))
+            {
+                target = (Y)(object)Value.ToGrasshopper_Mesh();
+                return true;
+            }
+            else if (typeof(Y).IsAssignableFrom(typeof(GH_Brep)))
+            {
+                target = (Y)(object)Value.GetFace3D()?.ToGrasshopper_Brep();
+                return true;
+            }
+
             return base.CastTo(ref target);
         }
     }

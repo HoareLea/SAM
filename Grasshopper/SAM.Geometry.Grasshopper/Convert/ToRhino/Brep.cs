@@ -6,7 +6,7 @@ namespace SAM.Geometry.Grasshopper
 {
     public static partial class Convert
     {
-        public static Rhino.Geometry.Brep ToRihno(this Shell shell, double tolerance = Core.Tolerance.MacroDistance)
+        public static Rhino.Geometry.Brep ToRhino(this Shell shell, double tolerance = Core.Tolerance.MacroDistance)
         {
             if (shell == null)
                 return null;
@@ -41,7 +41,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         /// <param name="points">Rhino points</param>
         /// <returns>Rhino Brep</returns>
-        public static Rhino.Geometry.Brep ToRihno_Brep(this IEnumerable<Rhino.Geometry.Point3d> points)
+        public static Rhino.Geometry.Brep ToRhino_Brep(this IEnumerable<Rhino.Geometry.Point3d> points)
         {
             List<Rhino.Geometry.Point3d> pointList = new List<Rhino.Geometry.Point3d>(points);
 
