@@ -33,9 +33,13 @@ namespace SAM.Analytical.Grasshopper
                 return null;
             }
 
-            Mesh mesh = Geometry.Grasshopper.Convert.ToRhino_Mesh(face3D);
+            Mesh result = Geometry.Grasshopper.Convert.ToRhino_Mesh(face3D);
+            if (result == null)
+                return null;
 
-            if(includeApertures)
+            result.VertexColors.CreateMonotoneMesh(Query.Color(panel.PanelType));
+
+            if (includeApertures)
             {
                 List<Aperture> apertures = panel.Apertures;
                 if(apertures != null && apertures.Count != 0)
@@ -45,20 +49,15 @@ namespace SAM.Analytical.Grasshopper
                         Mesh mesh_Aperture = aperture.ToRhino_Mesh();
                         if(mesh_Aperture != null)
                         {
-                            mesh.Append(mesh_Aperture);
+                            result.Append(mesh_Aperture);
                         }
                     }
 
-                    mesh.Normals.ComputeNormals();
+                    result.Normals.ComputeNormals();
                 }
             }
 
-            if (mesh != null)
-            {
-                mesh.VertexColors.CreateMonotoneMesh(Query.Color(panel.PanelType));
-            }
-
-            return mesh;
+            return result;
         }
 
         public static Mesh ToRhino_Mesh(this AdjacencyCluster adjacencyCluster, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
