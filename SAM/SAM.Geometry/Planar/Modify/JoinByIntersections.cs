@@ -73,7 +73,7 @@ namespace SAM.Geometry.Planar
                 }
                 else
                 {
-                    if(!allowSelfIntersection)
+                    if(!segment_Previous.On(point2D_Intersection, tolerance) && !segment.On(point2D_Intersection, tolerance) && !allowSelfIntersection)
                     {
                         Segment2D segment2D;
                         List<Point2D> point2Ds;
@@ -86,7 +86,6 @@ namespace SAM.Geometry.Planar
                             result.Add(new Segment2D(segment[0], segment[1]));
                             continue;
                         }
-                            
 
                         segment2D = new Segment2D(point2D_Intersection, segment[0]);
                         point2Ds = Query.Intersections(segment2D, segment2Ds);
@@ -96,7 +95,6 @@ namespace SAM.Geometry.Planar
                             result.Add(new Segment2D(segment[0], segment[1]));
                             continue;
                         }
-                            
                     }
 
                     result[result.Count - 1] = new Segment2D(segment_Previous[0], point2D_Intersection);
@@ -117,7 +115,7 @@ namespace SAM.Geometry.Planar
                 else
                 {
                     bool join = true;
-                    if (!allowSelfIntersection)
+                    if (!segment_Previous.On(point2D_Intersection, tolerance) && !segment.On(point2D_Intersection, tolerance) && !allowSelfIntersection)
                     {
                         Segment2D segment2D;
                         List<Point2D> point2Ds;

@@ -41,7 +41,7 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            AdjacencyGraph<Point2D, Edge<Point2D>> adjacencyGraph = segment2Ds?.AdjacencyGraph();
+            AdjacencyGraph<Point2D, Edge<Point2D>> adjacencyGraph = segment2Ds?.AdjacencyGraph(tolerance);
             if (adjacencyGraph == null || adjacencyGraph.Vertices == null || adjacencyGraph.Vertices.Count() == 0)
             {
                 return null;
@@ -67,6 +67,23 @@ namespace SAM.Geometry.Planar
                     double maxDistance_Vertex = Query.MaxDistance(point2Ds_Temp, out Point2D point2D_1, out Point2D point2D_2);
                     point2D_Start = point2D_1;
                 }
+            }
+            else
+            {
+                double distance = double.MaxValue;
+                Point2D point2D = null;
+                foreach(Point2D point_Temp in adjacencyGraph.Vertices)
+                {
+                    double distance_Temp = point_Temp.Distance(point2D_Start);
+                    if (distance_Temp < distance)
+                    {
+                        distance = distance_Temp;
+                        point2D = point_Temp;
+                    }
+                }
+
+                if (point2D != null)
+                    point2D_Start = point2D;
             }
 
             if (point2D_Start == null)
@@ -117,7 +134,7 @@ namespace SAM.Geometry.Planar
             foreach (Edge<Point2D> edge in edges)
             {
                 point2Ds.Add(edge.Source);
-                int index = segment2Ds.FindIndex(x => (x[0] == edge.Source && x[1] == edge.Target) || (x[1] == edge.Source && x[0] == edge.Target));
+                int index = segment2Ds.FindIndex(x => (x[0].AlmostEquals(edge.Source, tolerance) && x[1].AlmostEquals(edge.Target, tolerance)) || (x[1].AlmostEquals(edge.Source, tolerance) && x[0].AlmostEquals(edge.Target, tolerance)));
                 if (index != -1)
                 {
                     segment2Ds.RemoveAt(index);
