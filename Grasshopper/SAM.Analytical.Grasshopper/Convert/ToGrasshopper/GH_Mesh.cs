@@ -14,23 +14,25 @@ namespace SAM.Analytical.Grasshopper
                 return null;
             }
 
+            mesh.VertexColors.CreateMonotoneMesh(Query.Color(aperture.ApertureType));
             return new GH_Mesh(mesh);
         }
 
-        public static GH_Mesh ToGrasshopper_Mesh(this Panel panel, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
+        public static GH_Mesh ToGrasshopper_Mesh(this Panel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
         {
-            Mesh mesh = panel?.ToRhino_Mesh(cutApertures, tolerance);
+            Mesh mesh = panel?.ToRhino_Mesh(cutApertures, includeApertures, tolerance);
             if(mesh == null)
             {
                 return null;
             }
 
+            mesh.VertexColors.CreateMonotoneMesh(Query.Color(panel.PanelType));
             return new GH_Mesh(mesh);
         }
 
-        public static GH_Mesh ToGrasshopper_Mesh(this AdjacencyCluster adjacencyCluster, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
+        public static GH_Mesh ToGrasshopper_Mesh(this AdjacencyCluster adjacencyCluster, bool cutApertures = false, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
         {
-            Mesh mesh = adjacencyCluster?.ToRhino_Mesh(cutApertures, tolerance);
+            Mesh mesh = adjacencyCluster?.ToRhino_Mesh(cutApertures, includeApertures, tolerance);
             if (mesh == null)
             {
                 return null;
@@ -39,9 +41,9 @@ namespace SAM.Analytical.Grasshopper
             return new GH_Mesh(mesh);
         }
 
-        public static GH_Mesh ToGrasshopper_Mesh(this AnalyticalModel analyticalModel, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
+        public static GH_Mesh ToGrasshopper_Mesh(this AnalyticalModel analyticalModel, bool cutApertures = false, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
         {
-            Mesh mesh = analyticalModel?.ToRhino_Mesh(cutApertures, tolerance);
+            Mesh mesh = analyticalModel?.ToRhino_Mesh(cutApertures, includeApertures, tolerance);
             if (mesh == null)
             {
                 return null;
