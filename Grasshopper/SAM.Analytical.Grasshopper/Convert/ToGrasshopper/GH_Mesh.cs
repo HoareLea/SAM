@@ -1,6 +1,5 @@
 ﻿using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
-using SAM.Geometry.Grasshopper;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -14,7 +13,6 @@ namespace SAM.Analytical.Grasshopper
                 return null;
             }
 
-            mesh.VertexColors.CreateMonotoneMesh(Query.Color(aperture.ApertureType));
             return new GH_Mesh(mesh);
         }
 
@@ -26,7 +24,6 @@ namespace SAM.Analytical.Grasshopper
                 return null;
             }
 
-            mesh.VertexColors.CreateMonotoneMesh(Query.Color(panel.PanelType));
             return new GH_Mesh(mesh);
         }
 

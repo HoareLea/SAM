@@ -14,10 +14,18 @@ namespace SAM.Analytical.Grasshopper
                 return null;
             }
 
-            return Geometry.Grasshopper.Convert.ToRhino_Mesh(face3D);
+            
+            Mesh mesh = Geometry.Grasshopper.Convert.ToRhino_Mesh(face3D);
+            if(mesh != null)
+            {
+                mesh.VertexColors.CreateMonotoneMesh(Query.Color(aperture.ApertureType));
+            }
+
+            return mesh;
+
         }
 
-        public static Mesh ToRhino_Mesh(this Panel panel, bool cutApertures = false, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Mesh ToRhino_Mesh(this Panel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             Face3D face3D = panel?.GetFace3D(cutApertures, tolerance);
             if (face3D == null)
@@ -45,10 +53,15 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            if (mesh != null)
+            {
+                mesh.VertexColors.CreateMonotoneMesh(Query.Color(panel.PanelType));
+            }
+
             return mesh;
         }
 
-        public static Mesh ToRhino_Mesh(this AdjacencyCluster adjacencyCluster, bool cutApertures = false, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Mesh ToRhino_Mesh(this AdjacencyCluster adjacencyCluster, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             List<Panel> panels = adjacencyCluster.GetPanels();
             if(panels == null || panels.Count == 0)
@@ -83,7 +96,7 @@ namespace SAM.Analytical.Grasshopper
             return mesh;
         }
 
-        public static Mesh ToRhino_Mesh(this AnalyticalModel analyticalModel, bool cutApertures = false, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Mesh ToRhino_Mesh(this AnalyticalModel analyticalModel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
         {
             return analyticalModel?.AdjacencyCluster?.ToRhino_Mesh(cutApertures, includeApertures, tolerance);
         }
