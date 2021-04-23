@@ -9,7 +9,7 @@
         /// <returns></returns>
         public static Rhino.Display.DisplayMaterial DisplayMaterial(this PanelType panelType)
         {
-            System.Drawing.Color color = Color(panelType);
+            System.Drawing.Color color = Analytical.Query.Color(panelType);
 
             if (color == System.Drawing.Color.Empty)
                 return null;
@@ -19,7 +19,7 @@
 
         public static Rhino.Display.DisplayMaterial DisplayMaterial(this ApertureType apertureType)
         {
-            System.Drawing.Color color = Color(apertureType);
+            System.Drawing.Color color = Analytical.Query.Color(apertureType);
 
             if (color == System.Drawing.Color.Empty)
                 return null;

@@ -80,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
                     if (panelType == PanelType.Air)
                     {
                         layerName = "Air";
-                        color = Query.Color(PanelType.Air);
+                        color = Analytical.Query.Color(PanelType.Air);
                     }
                     else
                     {

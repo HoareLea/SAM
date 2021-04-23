@@ -53,8 +53,8 @@ namespace SAM.Analytical.Grasshopper
 
             if(Value.ApertureConstruction != null)
             {
-                color_ExternalEdge = Query.Color(Value.ApertureConstruction.ApertureType, false);
-                color_InternalEdges = Query.Color(Value.ApertureConstruction.ApertureType, true);
+                color_ExternalEdge = Analytical.Query.Color(Value.ApertureConstruction.ApertureType, false);
+                color_InternalEdges = Analytical.Query.Color(Value.ApertureConstruction.ApertureType, true);
             }
 
             if (color_ExternalEdge == System.Drawing.Color.Empty)

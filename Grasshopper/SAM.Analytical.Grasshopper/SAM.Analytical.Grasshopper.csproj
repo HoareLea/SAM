@@ -78,6 +78,7 @@
     <Compile Include="Component\SAMAnalyticalAnalyticalModelMapInternalCondtions.cs" />
     <Compile Include="Component\SAMAnalyticalAlignPanels.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByPanelsAndSpaces.cs" />
+    <Compile Include="Component\SAMAnalyticalDefaultColor.cs" />
     <Compile Include="Component\SAMAnalyticalMapPanels.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByShells.cs" />
     <Compile Include="Component\SAMAnalyticalCreateShells.cs" />
@@ -251,7 +252,6 @@
     <Compile Include="Convert\ToRhino\Brep.cs" />
     <Compile Include="Query\TryConvertToPanelGeometries.cs" />
     <Compile Include="Query\DisplayMaterial.cs" />
-    <Compile Include="Query\Color.cs" />
     <Compile Include="Component\SAMAnalyticalSplitPanel.cs" />
   </ItemGroup>
   <ItemGroup>

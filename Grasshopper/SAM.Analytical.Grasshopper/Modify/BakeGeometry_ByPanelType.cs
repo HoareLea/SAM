@@ -70,7 +70,7 @@ namespace SAM.Analytical.Grasshopper
 
                 PanelType panelType = panel.PanelType;
 
-                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
+                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Analytical.Query.Color(panelType));
 
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
@@ -90,7 +90,7 @@ namespace SAM.Analytical.Grasshopper
 
                     ApertureType apertureType = aperture.ApertureType;
 
-                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Query.Color(apertureType));
+                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Analytical.Query.Color(apertureType));
 
                     //layerTable.SetCurrentLayerIndex(layer.Index, true);
                     objectAttributes.LayerIndex = layer.Index;

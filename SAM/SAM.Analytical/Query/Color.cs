@@ -1,4 +1,4 @@
-﻿namespace SAM.Analytical.Grasshopper
+﻿namespace SAM.Analytical
 {
     public static partial class Query
     {
@@ -8,7 +8,7 @@
             {
                 switch (panelType)
                 {
-                    case PanelType.Wall:
+                    case Analytical.PanelType.Wall:
                         return System.Drawing.Color.Gray;
 
                     default:
@@ -20,37 +20,37 @@
             {
                 switch (panelType)
                 {
-                    case PanelType.Roof:
+                    case Analytical.PanelType.Roof:
                         return System.Drawing.Color.Red;
 
-                    case PanelType.Wall:
+                    case Analytical.PanelType.Wall:
                         return System.Drawing.Color.Red;
 
-                    case PanelType.WallExternal:
+                    case Analytical.PanelType.WallExternal:
                         return System.Drawing.Color.Red;
 
-                    case PanelType.WallInternal:
+                    case Analytical.PanelType.WallInternal:
                         return System.Drawing.Color.Lime;
 
-                    case PanelType.Floor:
+                    case Analytical.PanelType.Floor:
                         return System.Drawing.Color.Red;
 
-                    case PanelType.FloorExposed:
+                    case Analytical.PanelType.FloorExposed:
                         return System.Drawing.Color.Red;
 
-                    case PanelType.FloorInternal:
+                    case Analytical.PanelType.FloorInternal:
                         return System.Drawing.Color.Lime;
 
-                    case PanelType.UndergroundSlab:
+                    case Analytical.PanelType.UndergroundSlab:
                         return System.Drawing.Color.Red;
 
-                    case PanelType.UndergroundWall:
+                    case Analytical.PanelType.UndergroundWall:
                         return System.Drawing.Color.Red;
 
-                    case PanelType.UndergroundCeiling:
+                    case Analytical.PanelType.UndergroundCeiling:
                         return System.Drawing.Color.Red;
 
-                    case PanelType.SlabOnGrade:
+                    case Analytical.PanelType.SlabOnGrade:
                         return System.Drawing.Color.Red;
 
                     default:
@@ -65,80 +65,88 @@
 
             switch (panelType)
             {
-                case PanelType.Ceiling:
+                case Analytical.PanelType.Ceiling:
                     color = System.Drawing.ColorTranslator.FromHtml("#FF8080");
                     break;
 
-                case PanelType.CurtainWall:
+                case Analytical.PanelType.CurtainWall:
                     color = System.Drawing.Color.BlueViolet;
                     break;
 
-                case PanelType.Floor:
+                case Analytical.PanelType.Floor:
                     color = System.Drawing.ColorTranslator.FromHtml("#804000");
                     break;
 
-                case PanelType.FloorExposed:
+                case Analytical.PanelType.FloorExposed:
                     color = System.Drawing.ColorTranslator.FromHtml("#40B4FF");
                     break;
 
-                case PanelType.FloorInternal:
+                case Analytical.PanelType.FloorInternal:
                     color = System.Drawing.ColorTranslator.FromHtml("#80FFFF");
                     break;
 
-                case PanelType.FloorRaised:
+                case Analytical.PanelType.FloorRaised:
                     color = System.Drawing.ColorTranslator.FromHtml("#80FFFF");
                     break;
 
-                case PanelType.Roof:
+                case Analytical.PanelType.Roof:
                     color = System.Drawing.ColorTranslator.FromHtml("#800000");
                     break;
 
-                case PanelType.Shade:
+                case Analytical.PanelType.Shade:
                     color = System.Drawing.ColorTranslator.FromHtml("#FFCE9D");
                     break;
 
-                case PanelType.SlabOnGrade:
+                case Analytical.PanelType.SlabOnGrade:
                     color = System.Drawing.ColorTranslator.FromHtml("#804000");
                     break;
 
-                case PanelType.SolarPanel:
+                case Analytical.PanelType.SolarPanel:
                     color = System.Drawing.ColorTranslator.FromHtml("#FFB400");
                     break;
 
-                case PanelType.Undefined:
+                case Analytical.PanelType.Undefined:
                     color = System.Drawing.ColorTranslator.FromHtml("#FFB400");
                     break;
 
-                case PanelType.UndergroundCeiling:
+                case Analytical.PanelType.UndergroundCeiling:
                     color = System.Drawing.ColorTranslator.FromHtml("#408080");
                     break;
 
-                case PanelType.UndergroundSlab:
+                case Analytical.PanelType.UndergroundSlab:
                     color = System.Drawing.ColorTranslator.FromHtml("#804000");
                     break;
 
-                case PanelType.UndergroundWall:
+                case Analytical.PanelType.UndergroundWall:
                     color = System.Drawing.ColorTranslator.FromHtml("#A55200");
                     break;
 
-                case PanelType.Wall:
+                case Analytical.PanelType.Wall:
                     color = System.Drawing.ColorTranslator.FromHtml("#FFB400");
                     break;
 
-                case PanelType.WallExternal:
+                case Analytical.PanelType.WallExternal:
                     color = System.Drawing.ColorTranslator.FromHtml("#FFB400");
                     break;
 
-                case PanelType.WallInternal:
+                case Analytical.PanelType.WallInternal:
                     color = System.Drawing.ColorTranslator.FromHtml("#008000");
                     break;
 
-                case PanelType.Air:
+                case Analytical.PanelType.Air:
                     color = System.Drawing.ColorTranslator.FromHtml("#FFFF00");
                     break;
             }
 
             return color;
+        }
+
+        public static System.Drawing.Color Color(this Panel panel)
+        {
+            if (panel == null)
+                return System.Drawing.Color.Empty;
+
+            return Color(panel.PanelType);
         }
 
         public static System.Drawing.Color Color(this ApertureType apertureType, bool internalEdges)
@@ -147,10 +155,10 @@
             {
                 switch (apertureType)
                 {
-                    case ApertureType.Door:
+                    case Analytical.ApertureType.Door:
                         return System.Drawing.Color.Violet;
 
-                    case ApertureType.Window:
+                    case Analytical.ApertureType.Window:
                         return System.Drawing.Color.Violet;
 
                     default:
@@ -161,10 +169,10 @@
             {
                 switch (apertureType)
                 {
-                    case ApertureType.Door:
+                    case Analytical.ApertureType.Door:
                         return System.Drawing.Color.Brown;
 
-                    case ApertureType.Window:
+                    case Analytical.ApertureType.Window:
                         return System.Drawing.Color.Blue;
 
                     default:
@@ -179,11 +187,11 @@
 
             switch (apertureType)
             {
-                case ApertureType.Door:
+                case Analytical.ApertureType.Door:
                     color = System.Drawing.Color.Brown;
                     break;
 
-                case ApertureType.Window:
+                case Analytical.ApertureType.Window:
                     color = System.Drawing.Color.Blue;
                     break;
             }

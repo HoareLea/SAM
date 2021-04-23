@@ -51,8 +51,8 @@ namespace SAM.Analytical.Grasshopper
             if (Value == null)
                 return;
 
-            System.Drawing.Color color_ExternalEdge = Query.Color(Value.PanelType, false);
-            System.Drawing.Color color_InternalEdges = Query.Color(Value.PanelType, true);
+            System.Drawing.Color color_ExternalEdge = Analytical.Query.Color(Value.PanelType, false);
+            System.Drawing.Color color_InternalEdges = Analytical.Query.Color(Value.PanelType, true);
 
             if (color_ExternalEdge == System.Drawing.Color.Empty)
                 color_ExternalEdge = args.Color;

@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
             Mesh mesh = Geometry.Grasshopper.Convert.ToRhino_Mesh(face3D);
             if(mesh != null)
             {
-                mesh.VertexColors.CreateMonotoneMesh(Query.Color(aperture.ApertureType));
+                mesh.VertexColors.CreateMonotoneMesh(Analytical.Query.Color(aperture.ApertureType));
             }
 
             return mesh;
@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
             if (result == null)
                 return null;
 
-            result.VertexColors.CreateMonotoneMesh(Query.Color(panel.PanelType));
+            result.VertexColors.CreateMonotoneMesh(Analytical.Query.Color(panel.PanelType));
 
             if (includeApertures)
             {
