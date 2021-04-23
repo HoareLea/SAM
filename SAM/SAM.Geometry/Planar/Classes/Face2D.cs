@@ -47,6 +47,39 @@ namespace SAM.Geometry.Planar
             return externalEdge2D.GetCentroid();
         }
 
+        public static implicit operator Face2D(BoundingBox2D boundingBox2D)
+        {
+            if (boundingBox2D == null)
+                return null;
+
+            return new Face2D(boundingBox2D);
+        }
+
+        public static implicit operator Face2D(Triangle2D triangle2D)
+        {
+            if (triangle2D == null)
+                return null;
+
+            return new Face2D(triangle2D);
+        }
+
+        public static implicit operator Face2D(Rectangle2D rectangle2D)
+        {
+            if (rectangle2D == null)
+                return null;
+
+            return new Face2D(rectangle2D);
+        }
+
+        public static implicit operator Face2D(Polygon2D polygon2D)
+        {
+            if (polygon2D == null)
+                return null;
+
+            return new Face2D(polygon2D);
+        }
+
+
         internal static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, bool orientInternalEdges = true)
         {
             Face2D result = new Face2D(externalEdge);

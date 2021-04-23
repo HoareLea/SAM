@@ -115,5 +115,21 @@ namespace SAM.Geometry.Planar
 
             return hash;
         }
+
+        public static implicit operator Polycurve2D(Polyline2D polyline2D)
+        {
+            if (polyline2D == null)
+                return null;
+
+            return new Polycurve2D(polyline2D.GetSegments());
+        }
+
+        public static implicit operator Polycurve2D(Polygon2D polygon2D)
+        {
+            if (polygon2D == null)
+                return null;
+
+            return new Polycurve2D(polygon2D.GetSegments());
+        }
     }
 }
