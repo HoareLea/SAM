@@ -197,5 +197,18 @@ namespace SAM.Geometry.Planar
         {
             return Tuple.Create(points[0], points[1], points[2]).GetHashCode();
         }
+
+        public static implicit operator Triangle2D(Spatial.Triangle3D triangle3D)
+        {
+            Spatial.Plane plane = triangle3D?.GetPlane();
+            if(plane == null)
+            {
+                return null;
+            }
+
+            List<Spatial.Point3D> point3Ds = triangle3D.GetPoints();
+
+            return new Triangle2D(Spatial.Query.Convert(plane, point3Ds[0]), Spatial.Query.Convert(plane, point3Ds[1]), Spatial.Query.Convert(plane, point3Ds[2]));
+        }
     }
 }

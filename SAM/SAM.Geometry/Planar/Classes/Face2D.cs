@@ -79,6 +79,14 @@ namespace SAM.Geometry.Planar
             return new Face2D(polygon2D);
         }
 
+        public static implicit operator Face2D(Spatial.Face3D face3D)
+        {
+            if (face3D == null)
+                return null;
+
+            return Face2D.Create(face3D.ExternalEdge2D, face3D.InternalEdge2Ds, false);
+        }
+
 
         internal static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, bool orientInternalEdges = true)
         {

@@ -134,20 +134,30 @@ namespace SAM.Analytical.Grasshopper
                 Analytical.Modify.Align(panels, elevation, referenceElevation, maxDistance, Tolerance.Angle, tolerance);
             }
 
+            List<Panel> panels_Lower = null;
+            List<Panel> panels_Upper = null;
+
             DataTree<GooPanel> dataTree_Panel = new DataTree<GooPanel>();
             for(int i=0; i < elevations.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
-                panels?.Panels(elevations[i])?.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path));
+
+                List<Panel> panels_Temp = panels?.FilterByElevation(elevations[i], out panels_Lower, out panels_Upper, tolerance);
+                panels_Temp?.FilterByElevation(elevations[i], out panels_Lower, out panels_Upper, tolerance);
+
+                panels_Upper?.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path)); ;
             }
 
             index = Params.IndexOfOutputParam("panels");
             if (index != -1)
                 dataAccess.SetDataTree(index, dataTree_Panel);
 
+            panels = panels?.FilterByElevation(referenceElevation, out panels_Lower, out panels_Upper, tolerance);
+            panels?.FilterByElevation(referenceElevation, out panels_Lower, out panels_Upper, tolerance);
+
             index = Params.IndexOfOutputParam("referencePanels");
             if (index != -1)
-                dataAccess.SetDataList(index, panels?.Panels(referenceElevation)?.ConvertAll(x => new GooPanel(x)));
+                dataAccess.SetDataList(index, panels_Upper?.ConvertAll(x => new GooPanel(x)));
         }
     }
 }

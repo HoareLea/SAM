@@ -89,53 +89,35 @@ namespace SAM.Analytical.Grasshopper
             List<Core.SAMObject> result = new List<Core.SAMObject>();
             List<Core.SAMObject> result_Upper = new List<Core.SAMObject>();
             List<Core.SAMObject> result_Lower = new List<Core.SAMObject>();
+
+            List<Panel> panels = new List<Panel>();
+            List<Space> spaces = new List<Space>();
             foreach (Core.SAMObject sAMObject in sAMObjects)
             {
-                
                 if(sAMObject is Panel)
                 {
-                    Panel panel = (Panel)sAMObject;
-                    
-                    double min = panel.MinElevation();
-                    double max = panel.MaxElevation();
-
-                    if (min - tolerance <= elevation && max + tolerance >= elevation)
-                    {
-                        if (System.Math.Abs(max - min) > tolerance && System.Math.Abs(max - elevation) < tolerance)
-                        {
-                            result_Lower.Add(panel);
-                            continue;
-                        }
-
-
-                        result.Add(panel);
-                    }
-                    else
-                    {
-                        if (min >= elevation)
-                            result_Upper.Add(panel);
-                        else
-                            result_Lower.Add(panel);
-                    }
+                    panels.Add((Panel)sAMObject);
                 }
                 else if(sAMObject is Space)
                 {
-                    Geometry.Spatial.Point3D location = ((Space)sAMObject).Location;
-                    if (location == null)
-                        continue;
-
-                    double z = location.Z;
-                    double difference = z - elevation;
-
-                    if (System.Math.Abs(difference) <= tolerance)
-                        result.Add(sAMObject);
-                    else if (difference >= elevation)
-                        result_Upper.Add(sAMObject);
-                    else
-                        result_Lower.Add(sAMObject);
+                    spaces.Add((Space)sAMObject);
                 }
-
             }
+            List<Panel> panels_Lower = null;
+            List<Panel> panels_Upper = null;
+
+            List<Panel> panels_Temp = panels?.FilterByElevation(elevation, out panels_Lower, out panels_Upper, tolerance);
+            panels_Temp?.ForEach(x => result.Add(x));
+            panels_Lower?.ForEach(x => result_Lower.Add(x));
+            panels_Upper?.ForEach(x => result_Upper.Add(x));
+
+            List<Space> spaces_Lower = null;
+            List<Space> spaces_Upper = null;
+
+            List<Space> spaces_Temp = spaces?.FilterByElevation(elevation, out spaces_Lower, out spaces_Upper, tolerance);
+            spaces_Temp?.ForEach(x => result.Add(x));
+            spaces_Lower?.ForEach(x => result_Lower.Add(x));
+            spaces_Upper?.ForEach(x => result_Upper.Add(x));
 
             dataAccess.SetDataList(0, result);
             dataAccess.SetDataList(1, result_Upper);
