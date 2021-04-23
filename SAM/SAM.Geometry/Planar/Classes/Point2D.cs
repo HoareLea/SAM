@@ -302,5 +302,13 @@ namespace SAM.Geometry.Planar
         {
             return new Vector2D(point2D_1.coordinates[0] - point2D_2.coordinates[0], point2D_1.coordinates[1] - point2D_2.coordinates[1]);
         }
+
+        public static implicit operator Point2D(Vector2D vector2D)
+        {
+            if (vector2D == null)
+                return null;
+
+            return new Point2D(vector2D.X, vector2D.Y);
+        }
     }
 }

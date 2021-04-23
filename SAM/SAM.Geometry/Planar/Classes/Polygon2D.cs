@@ -270,7 +270,7 @@ namespace SAM.Geometry.Planar
             return new Polygon2D(boundingBox2D.GetPoints());
         }
 
-        public static explicit operator Polygon2D(Polyline2D polyline2D)
+        public static implicit operator Polygon2D(Polyline2D polyline2D)
         {
             if (polyline2D == null)
                 return null;
@@ -278,7 +278,7 @@ namespace SAM.Geometry.Planar
             return new Polygon2D(polyline2D.GetPoints());
         }
 
-        public static explicit operator Polygon2D(Triangle2D triangle2D)
+        public static implicit operator Polygon2D(Triangle2D triangle2D)
         {
             if (triangle2D == null)
                 return null;
@@ -286,7 +286,15 @@ namespace SAM.Geometry.Planar
             return new Polygon2D(triangle2D.GetPoints());
         }
 
-        public static explicit operator Polygon2D(Spatial.Polygon3D polygon3D)
+        public static implicit operator Polygon2D(Rectangle2D rectangle2D)
+        {
+            if (rectangle2D == null)
+                return null;
+
+            return new Polygon2D(rectangle2D.GetPoints());
+        }
+
+        public static implicit operator Polygon2D(Spatial.Polygon3D polygon3D)
         {
             if (polygon3D == null)
                 return null;

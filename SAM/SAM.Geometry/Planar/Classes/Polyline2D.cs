@@ -353,5 +353,13 @@ namespace SAM.Geometry.Planar
 
             return hash;
         }
+
+        public static implicit operator Polyline2D(Polygon2D polygon2D)
+        {
+            if (polygon2D == null)
+                return null;
+
+            return new Polyline2D(polygon2D.GetPoints(), true);
+        }
     }
 }

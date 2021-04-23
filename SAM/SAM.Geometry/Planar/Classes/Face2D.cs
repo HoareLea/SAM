@@ -47,7 +47,7 @@ namespace SAM.Geometry.Planar
             return externalEdge2D.GetCentroid();
         }
 
-        public static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, bool orientInternalEdges = true)
+        internal static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, bool orientInternalEdges = true)
         {
             Face2D result = new Face2D(externalEdge);
             if (internalEdges != null && internalEdges.Count() > 0)
@@ -72,7 +72,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static Face2D Create(IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded, bool orientInternalEdges = true)
+        internal static Face2D Create(IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded, bool orientInternalEdges = true)
         {
             edges_Excluded = null;
 
@@ -136,7 +136,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static Face2D Create(IEnumerable<IClosed2D> edges, bool orientInternalEdges = true)
+        internal static Face2D Create(IEnumerable<IClosed2D> edges, bool orientInternalEdges = true)
         {
             List<Planar.IClosed2D> edges_Excluded = null;
             return Create(edges, out edges_Excluded, orientInternalEdges);

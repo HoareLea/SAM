@@ -312,5 +312,13 @@ namespace SAM.Geometry.Planar
         {
             return Tuple.Create(origin, width, height, heightDirection).GetHashCode();
         }
+
+        public static implicit operator Rectangle2D(BoundingBox2D boundingBox2D)
+        {
+            if (boundingBox2D == null)
+                return null;
+
+            return new Rectangle2D(boundingBox2D);
+        }
     }
 }

@@ -98,5 +98,13 @@ namespace SAM.Geometry.Planar
 
             return null;
         }
+
+        public static implicit operator Line2D(Segment2D segment2D)
+        {
+            if (segment2D == null)
+                return null;
+
+            return new Line2D(segment2D[0], segment2D.Direction);
+        }
     }
 }

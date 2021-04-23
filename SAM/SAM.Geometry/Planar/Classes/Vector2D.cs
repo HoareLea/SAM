@@ -402,5 +402,13 @@ namespace SAM.Geometry.Planar
         {
             return vector2D_1?.coordinates[0] != vector2D_2?.coordinates[0] || vector2D_1?.coordinates[1] != vector2D_2?.coordinates[1];
         }
+
+        public static implicit operator Vector2D(Point2D point2D)
+        {
+            if (point2D == null)
+                return null;
+
+            return new Vector2D(point2D.X, point2D.Y);
+        }
     }
 }

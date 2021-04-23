@@ -228,7 +228,7 @@ namespace SAM.Analytical
             if (internalEdge2DLoops != null && internalEdge2DLoops.Count > 0)
                 internalClosed2Ds = InternalEdge2DLoops.ConvertAll(x => x.GetClosed2D());
 
-            return Face2D.Create(externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
+            return Geometry.Planar.Create.Face2D(externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
         }
 
         public double GetPerimeter()

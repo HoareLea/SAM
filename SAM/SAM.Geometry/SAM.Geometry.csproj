@@ -74,6 +74,7 @@
     <Compile Include="Create\AdjacencyGraph.cs" />
     <Compile Include="Enums\PointConnectMethod.cs" />
     <Compile Include="Enums\LineFormulaForm.cs" />
+    <Compile Include="Planar\Create\Face2D.cs" />
     <Compile Include="Planar\Create\Polyline2Ds.cs" />
     <Compile Include="Planar\Modify\Connect.cs" />
     <Compile Include="Planar\Query\Connected.cs" />
