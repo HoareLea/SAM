@@ -76,8 +76,8 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             GH_ObjectWrapper objectWrapper = null;
-            index = Params.IndexOfInputParam("_panel");
-            if(index == -1 || dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
+            index = Params.IndexOfInputParam("_analytical");
+            if(index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
