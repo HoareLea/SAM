@@ -145,7 +145,7 @@ namespace SAM.Analytical.Grasshopper
                 List<Panel> panels_Temp = panels?.FilterByElevation(elevations[i], out panels_Lower, out panels_Upper, tolerance);
                 panels_Temp?.FilterByElevation(elevations[i], out panels_Lower, out panels_Upper, tolerance);
 
-                panels_Upper?.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path)); ;
+                panels_Temp?.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path)); ;
             }
 
             index = Params.IndexOfOutputParam("panels");
@@ -157,7 +157,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfOutputParam("referencePanels");
             if (index != -1)
-                dataAccess.SetDataList(index, panels_Upper?.ConvertAll(x => new GooPanel(x)));
+                dataAccess.SetDataList(index, panels?.ConvertAll(x => new GooPanel(x)));
         }
     }
 }
