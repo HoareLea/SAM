@@ -85,7 +85,7 @@ namespace SAM.Analytical.Grasshopper
 
             dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
             dataAccess.SetDataList(1, prefixes);
-            dataAccess.SetDataList(2, panels.ConvertAll(x => new GooPanel(x)));
+            dataAccess.SetDataList(2, panels?.ConvertAll(x => new GooPanel(x)));
         }
     }
 }
