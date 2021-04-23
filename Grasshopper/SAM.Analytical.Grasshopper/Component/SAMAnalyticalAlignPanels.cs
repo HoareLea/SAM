@@ -138,14 +138,14 @@ namespace SAM.Analytical.Grasshopper
             for(int i=0; i < elevations.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
-                panels?.Panels(referenceElevation)?.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path));
+                panels?.Panels(elevations[i])?.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path));
             }
 
-            index = Params.IndexOfInputParam("panels");
+            index = Params.IndexOfOutputParam("panels");
             if (index != -1)
                 dataAccess.SetDataTree(index, dataTree_Panel);
 
-            index = Params.IndexOfInputParam("referencePanels");
+            index = Params.IndexOfOutputParam("referencePanels");
             if (index != -1)
                 dataAccess.SetDataList(index, panels?.Panels(referenceElevation)?.ConvertAll(x => new GooPanel(x)));
         }
