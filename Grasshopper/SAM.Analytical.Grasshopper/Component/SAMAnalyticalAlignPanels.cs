@@ -1,4 +1,6 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -17,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -51,7 +53,7 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevation", NickName = "elevation", Description = "Elevation", Access = GH_ParamAccess.item };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevations", NickName = "elevations", Description = "Elevations", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_referenceElevation", NickName = "_referenceElevation", Description = "Reference Elevation", Access = GH_ParamAccess.item };
@@ -77,7 +79,8 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "Panels", NickName = "Panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "referencePanels", NickName = "referencePanels", Description = "Reference SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -94,9 +97,9 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
             
-            index = Params.IndexOfInputParam("_elevation");
-            double elevation = double.NaN;
-            if(index == -1 || !dataAccess.GetData(index, ref elevation) || double.IsNaN(elevation))
+            index = Params.IndexOfInputParam("_elevations");
+            List<double> elevations = new List<double>(); 
+            if(index == -1 || !dataAccess.GetDataList(index, elevations) || elevations == null || elevations.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
@@ -126,9 +129,25 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(tolerance))
                 tolerance = Tolerance.Distance;
 
-            Analytical.Modify.Align(panels, elevation, referenceElevation, maxDistance, Tolerance.Angle, tolerance);
+            foreach (double elevation in elevations)
+            {
+                Analytical.Modify.Align(panels, elevation, referenceElevation, maxDistance, Tolerance.Angle, tolerance);
+            }
 
-            dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
+            DataTree<GooPanel> dataTree_Panel = new DataTree<GooPanel>();
+            for(int i=0; i < elevations.Count; i++)
+            {
+                GH_Path path = new GH_Path(i);
+                panels?.Panels(referenceElevation)?.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path));
+            }
+
+            index = Params.IndexOfInputParam("panels");
+            if (index != -1)
+                dataAccess.SetDataTree(index, dataTree_Panel);
+
+            index = Params.IndexOfInputParam("referencePanels");
+            if (index != -1)
+                dataAccess.SetDataList(index, panels?.Panels(referenceElevation)?.ConvertAll(x => new GooPanel(x)));
         }
     }
 }
