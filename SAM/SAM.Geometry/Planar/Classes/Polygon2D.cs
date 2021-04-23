@@ -262,6 +262,14 @@ namespace SAM.Geometry.Planar
             return hash;
         }
 
+        public static implicit operator Polygon2D(BoundingBox2D boundingBox2D)
+        {
+            if (boundingBox2D == null)
+                return null;
+
+            return new Polygon2D(boundingBox2D.GetPoints());
+        }
+
         public static explicit operator Polygon2D(Polyline2D polyline2D)
         {
             if (polyline2D == null)

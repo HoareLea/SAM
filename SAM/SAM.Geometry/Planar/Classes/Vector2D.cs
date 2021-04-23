@@ -215,7 +215,7 @@ namespace SAM.Geometry.Planar
 
             double angle = Angle(vector2D);
 
-            if (DotProduct(vector2D) < 0)
+            if (this.Determinant(vector2D) < 0)
                 return -angle;
 
             return angle;

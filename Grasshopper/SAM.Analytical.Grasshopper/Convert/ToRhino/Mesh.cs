@@ -25,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
 
         }
 
-        public static Mesh ToRhino_Mesh(this Panel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Mesh ToRhino_Mesh(this Panel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
             Face3D face3D = panel?.GetFace3D(cutApertures, tolerance);
             if (face3D == null)
@@ -60,7 +60,7 @@ namespace SAM.Analytical.Grasshopper
             return result;
         }
 
-        public static Mesh ToRhino_Mesh(this AdjacencyCluster adjacencyCluster, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Mesh ToRhino_Mesh(this AdjacencyCluster adjacencyCluster, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
             List<Panel> panels = adjacencyCluster.GetPanels();
             if(panels == null || panels.Count == 0)
@@ -95,7 +95,7 @@ namespace SAM.Analytical.Grasshopper
             return mesh;
         }
 
-        public static Mesh ToRhino_Mesh(this AnalyticalModel analyticalModel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.MicroDistance)
+        public static Mesh ToRhino_Mesh(this AnalyticalModel analyticalModel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
             return analyticalModel?.AdjacencyCluster?.ToRhino_Mesh(cutApertures, includeApertures, tolerance);
         }

@@ -7,12 +7,25 @@ namespace SAM.Geometry.Planar
     {
         public static Orientation Orientation(this Point2D point2D_1, Point2D point2D_2, Point2D point2D_3)
         {
-            double aDeterminant = Determinant(point2D_1, point2D_2, point2D_3);
+            double determinant = Determinant(point2D_1, point2D_2, point2D_3);
 
-            if (aDeterminant == 0)
+            if (determinant == 0)
                 return Geometry.Orientation.Collinear;
 
-            if (aDeterminant > 0)
+            if (determinant > 0)
+                return Geometry.Orientation.Clockwise;
+            else
+                return Geometry.Orientation.CounterClockwise;
+        }
+
+        public static Orientation Orientation(this Vector2D vector2D_1, Vector2D vector2D_2)
+        {
+            double determinant = Determinant(vector2D_1, vector2D_2);
+
+            if (determinant == 0)
+                return Geometry.Orientation.Collinear;
+
+            if (determinant > 0)
                 return Geometry.Orientation.Clockwise;
             else
                 return Geometry.Orientation.CounterClockwise;

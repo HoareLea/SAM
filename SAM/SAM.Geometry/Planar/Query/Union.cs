@@ -44,33 +44,57 @@ namespace SAM.Geometry.Planar
             if (polygon2Ds == null)
                 return null;
 
-            List<List<IntPoint>> intPointsList = new List<List<IntPoint>>();
-
-            foreach (Polygon2D polygon in polygon2Ds)
+            List<Polygon> polygons = new List<Polygon>();
+            foreach (Polygon2D polygon2D in polygon2Ds)
             {
-                List<IntPoint> intPoints = Convert.ToClipper((ISegmentable2D)polygon, tolerance);
-                if (intPoints != null)
-                    intPointsList.Add(intPoints);
+                Polygon polygon = polygon2D?.ToNTS_Polygon(tolerance);
+                if(polygon == null)
+                {
+                    continue;
+                }
+
+                polygons.Add(polygon);
             }
 
-            Clipper clipper = new Clipper();
-            clipper.AddPaths(intPointsList, PolyType.ptSubject, true);
-
-            intPointsList = new List<List<IntPoint>>();
-
-            clipper.Execute(ClipType.ctUnion, intPointsList, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
-
-            if (intPointsList == null)
+            polygons = polygons.Union();
+            if (polygons == null)
                 return null;
 
             List<Polygon2D> result = new List<Polygon2D>();
-            if (intPointsList.Count == 0)
-                return result;
-
-            foreach (List<IntPoint> intPoints in intPointsList)
-                result.Add(new Polygon2D(intPoints.ToSAM(tolerance)));
+            foreach(Polygon polygon in polygons)
+            {
+                result.AddRange(polygon.ToSAM_Polygon2Ds(tolerance));
+            }
 
             return result;
+
+            //List<List<IntPoint>> intPointsList = new List<List<IntPoint>>();
+
+            //foreach (Polygon2D polygon in polygon2Ds)
+            //{
+            //    List<IntPoint> intPoints = Convert.ToClipper((ISegmentable2D)polygon, tolerance);
+            //    if (intPoints != null)
+            //        intPointsList.Add(intPoints);
+            //}
+
+            //Clipper clipper = new Clipper();
+            //clipper.AddPaths(intPointsList, PolyType.ptSubject, true);
+
+            //intPointsList = new List<List<IntPoint>>();
+
+            //clipper.Execute(ClipType.ctUnion, intPointsList, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
+
+            //if (intPointsList == null)
+            //    return null;
+
+            //List<Polygon2D> result = new List<Polygon2D>();
+            //if (intPointsList.Count == 0)
+            //    return result;
+
+            //foreach (List<IntPoint> intPoints in intPointsList)
+            //    result.Add(new Polygon2D(intPoints.ToSAM(tolerance)));
+
+            //return result;
         }
 
         public static List<Polygon> Union(this IEnumerable<Polygon> polygons)
