@@ -1,27 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> ConnectedPanels(this Panel panel, IEnumerable<Panel> panels, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> ConnectedPanels(this Panel panel, IEnumerable<Panel> panels, bool edgeToEdgeConnectionOnly = false, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (panel == null || panels == null)
                 return null;
 
-            Geometry.Spatial.Face3D face3D = panel.GetFace3D();
+            Face3D face3D = panel.GetFace3D();
             if (face3D == null)
                 return null;
 
-            List<Geometry.Spatial.ISegmentable3D> segmentable3Ds = face3D.GetEdge3Ds()?.ConvertAll(x => x as Geometry.Spatial.ISegmentable3D).FindAll(x => x != null);
-            if (segmentable3Ds == null || segmentable3Ds.Count == 0)
-                return null;
-
-            List<Geometry.Spatial.Point3D> point3Ds = new List<Geometry.Spatial.Point3D>();
-            foreach(Geometry.Spatial.ISegmentable3D segmentable3D in segmentable3Ds)
-                segmentable3D?.GetPoints()?.ForEach(x => Geometry.Spatial.Modify.Add(point3Ds, x, tolerance));
-
-            Geometry.Spatial.BoundingBox3D boundingBox3D = face3D.GetBoundingBox(tolerance);
+            BoundingBox3D boundingBox3D = face3D.GetBoundingBox(tolerance_Distance);
 
             List <Panel> result = new List<Panel>();
             foreach(Panel panel_Temp in panels)
@@ -29,56 +22,57 @@ namespace SAM.Analytical
                 if (panel_Temp.Guid == panel.Guid)
                     continue;
                 
-                Geometry.Spatial.Face3D face3D_Temp = panel_Temp.GetFace3D();
+                Face3D face3D_Temp = panel_Temp.GetFace3D();
                 if (face3D_Temp == null)
                     continue;
 
-                Geometry.Spatial.BoundingBox3D boundingBox3D_Temp = face3D_Temp.GetBoundingBox(tolerance);
-                if (boundingBox3D_Temp == null || !boundingBox3D.InRange(boundingBox3D_Temp, tolerance))
+                BoundingBox3D boundingBox3D_Temp = face3D_Temp.GetBoundingBox(tolerance_Distance);
+                if (boundingBox3D_Temp == null || !boundingBox3D.InRange(boundingBox3D_Temp, tolerance_Distance))
                     continue;
 
-                List<Geometry.Spatial.ISegmentable3D> segmentable3Ds_Temp = face3D_Temp.GetEdge3Ds()?.ConvertAll(x => x as Geometry.Spatial.ISegmentable3D).FindAll(x => x != null);
-                if (segmentable3Ds == null || segmentable3Ds.Count == 0)
-                    return null;
+                PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(face3D, face3D_Temp, tolerance_Angle, tolerance_Distance);
+                if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                    continue;
 
-                List<Geometry.Spatial.Point3D> point3Ds_Temp = new List<Geometry.Spatial.Point3D>();
-                foreach (Geometry.Spatial.ISegmentable3D segmentable3D_Temp in segmentable3Ds_Temp)
-                    segmentable3D_Temp?.GetPoints()?.ForEach(x => Geometry.Spatial.Modify.Add(point3Ds_Temp, x, tolerance));
+                List<ISegmentable3D> segmentable3Ds = planarIntersectionResult.GetGeometry3Ds<ISegmentable3D>();
+                if (segmentable3Ds == null || segmentable3Ds.Count == 0)
+                    continue;
 
                 bool connected = false;
-
-                foreach(Geometry.Spatial.Point3D point3D in point3Ds)
+                foreach(ISegmentable3D segmentable3D in segmentable3Ds)
                 {
-                    if (!boundingBox3D_Temp.Inside(point3D))
+                    List<Segment3D> segment3Ds = segmentable3D?.GetSegments();
+                    if(segment3Ds == null || segment3Ds.Count == 0)
+                    {
                         continue;
+                    }
 
-                    if (!face3D_Temp.InRange(point3D, tolerance))
-                        continue;
+                    foreach(Segment3D segment3D in segment3Ds)
+                    {
+                        Point3D point3D = segment3D.Mid();
 
-                    connected = true;
-                    break;
+                        bool onEdge_1 = face3D.OnEdge(point3D, tolerance_Distance);
+                        bool onEdge_2 = face3D_Temp.OnEdge(point3D, tolerance_Distance);
+
+                        if (edgeToEdgeConnectionOnly)
+                        {
+                            connected = onEdge_1 && onEdge_2;
+                        }
+                        else
+                        {
+                            connected = onEdge_1 || onEdge_2;
+                        }
+
+                        if (connected)
+                            break;
+                    }
+
+                    if(connected)
+                    {
+                        result.Add(panel_Temp);
+                        break;
+                    }
                 }
-
-                if(connected)
-                {
-                    result.Add(panel_Temp);
-                    continue;
-                }
-
-                foreach (Geometry.Spatial.Point3D point3D in point3Ds_Temp)
-                {
-                    if (!boundingBox3D.Inside(point3D))
-                        continue;
-
-                    if (!face3D.InRange(point3D, tolerance))
-                        continue;
-
-                    connected = true;
-                    break;
-                }
-
-                if (connected)
-                    result.Add(panel_Temp);
             }
 
             return result;

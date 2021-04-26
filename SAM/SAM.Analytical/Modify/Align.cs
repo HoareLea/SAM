@@ -192,7 +192,7 @@ namespace SAM.Analytical
 
                 Vector3D vector3D = Plane.WorldXY.Convert(new Vector2D(point2D_1, point2D_2));
 
-                List<Panel> panels_Connected = panel.ConnectedPanels(panels, tolerance_Distance);
+                 List<Panel> panels_Connected = panel.ConnectedPanels(panels, true, tolerance_Angle, tolerance_Distance);
 
                 panel = new Panel(panel); 
                 panel.Move(vector3D);
@@ -217,38 +217,11 @@ namespace SAM.Analytical
                             List<ISegmentable3D> segmentable3Ds = planarIntersectionResult_Temp.GetGeometry3Ds<ISegmentable3D>();
                             if(segmentable3Ds != null && segmentable3Ds.Count > 0)
                             {
-                                bool cut = true;
-                                foreach(ISegmentable3D segmentable3D in segmentable3Ds)
+                                List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D_Connected, plane_Panel, tolerance_Distance);
+                                if (face3Ds != null && face3Ds.Count != 0)
                                 {
-                                    List<Segment3D> segment3Ds = segmentable3D?.GetSegments();
-                                    if(segment3Ds == null || segment3Ds.Count == 0)
-                                    {
-                                        continue;
-                                    }
-                                    
-                                    foreach(Segment3D segment3D_Temp in segment3Ds)
-                                    {
-                                        if(face3D_Panel.OnEdge(segment3D_Temp.Mid(), tolerance_Distance))
-                                        {
-                                            cut = false;
-                                            break;
-                                        }
-                                    }
-
-                                    if(!cut)
-                                    {
-                                        break;
-                                    }
-                                }
-
-                                if(cut)
-                                {
-                                    List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D_Connected, plane_Panel, tolerance_Distance);
-                                    if (face3Ds != null && face3Ds.Count != 0)
-                                    {
-                                        face3Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
-                                        face3D_Connected_New = face3Ds[0];
-                                    }
+                                    face3Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+                                    face3D_Connected_New = face3Ds[0];
                                 }
                             }
                         }

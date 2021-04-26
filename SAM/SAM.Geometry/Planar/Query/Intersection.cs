@@ -76,6 +76,11 @@ namespace SAM.Geometry.Planar
 
         public static List<Face2D> Intersection(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
+            return Intersection<Face2D>(face2D_1, face2D_2, tolerance);
+        }
+
+        public static List<T> Intersection<T>(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance) where T: ISAMGeometry2D
+        {
             Polygon polygon_1 = face2D_1?.ToNTS(tolerance);
             if (polygon_1 == null)
                 return null;
@@ -98,19 +103,19 @@ namespace SAM.Geometry.Planar
             }
 
             List<NetTopologySuite.Geometries.Geometry> geometries = geometry is GeometryCollection ? ((GeometryCollection)geometry).Geometries?.ToList() : new List<NetTopologySuite.Geometries.Geometry>() { geometry };
-            if(geometries == null || geometries.Count == 0)
+            if (geometries == null || geometries.Count == 0)
             {
                 return null;
             }
 
-            List<Face2D> result = new List<Face2D>();
-            foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
+            List<ISAMGeometry2D> result = new List<ISAMGeometry2D>();
+            foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
             {
                 if (geometry_Temp is MultiPolygon)
                 {
                     result.AddRange(((MultiPolygon)geometry_Temp).ToSAM());
                 }
-                else if(geometry_Temp is Polygon)
+                else if (geometry_Temp is Polygon)
                 {
                     Face2D face2D = ((Polygon)geometry_Temp).ToSAM();
                     if (face2D != null)
@@ -118,9 +123,18 @@ namespace SAM.Geometry.Planar
                         result.Add(face2D);
                     }
                 }
+                else if(geometry_Temp is LineString)
+                {
+                    result.Add(((LineString)geometry_Temp).ToSAM(tolerance));
+                }
+                else if(geometry_Temp is LinearRing)
+                {
+                    result.Add(((LinearRing)geometry_Temp).ToSAM(tolerance));
+                }
+
             }
 
-            return result;
+            return result.FindAll(x => x is T).ConvertAll(x => (T)x);
         }
 
         public static List<Segment2D> Intersection(this Face2D face2D, Segment2D segment2D, double tolerance = Core.Tolerance.MicroDistance)
