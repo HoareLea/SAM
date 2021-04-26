@@ -10,68 +10,60 @@ namespace SAM.Analytical
         public static void Align(this List<Panel> panels, double elevation, double referenceElevation, double maxDistance = 0.2, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (panels == null || double.IsNaN(elevation) || double.IsNaN(referenceElevation))
-                return;
-
-            List<Panel> panels_Temp = new List<Panel>();
-            Dictionary<Segment2D, Panel> dictionary_Reference = new Dictionary<Segment2D, Panel>();
-            foreach (Panel panel in panels)
             {
-                if (panel == null)
+                return;
+            }
+
+            List<Panel> panels_Temp = panels.FilterByElevation(elevation, out List<Panel> panels_Lower, out List<Panel> panels_Upper, tolerance_Distance);
+            if(panels_Temp == null || panels_Temp.Count == 0)
+            {
+                return;
+            }
+            
+            List<Panel> panels_Reference = panels.FilterByElevation(referenceElevation, out panels_Lower, out panels_Upper);
+            if(panels_Reference == null || panels_Reference.Count == 0)
+            {
+                return;
+            }
+
+            Plane plane = new Plane(new Point3D(0, 0, referenceElevation), Vector3D.WorldZ);
+
+            Dictionary<Segment2D, Panel> dictionary_Reference = new Dictionary<Segment2D, Panel>();
+            foreach (Panel panel_Reference in panels_Reference)
+            {
+                PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, panel_Reference.GetFace3D());
+                if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                {
                     continue;
+                }
 
-                double max = panel.MaxElevation();
-                double min = panel.MinElevation();
-
-                Plane plane = new Plane(new Point3D(0, 0, (max + min) / 2), Vector3D.WorldZ);
-
-                PlanarIntersectionResult planarIntersectionResult = null;
-
-                if (System.Math.Abs(min - elevation) < Core.Tolerance.Distance || (min - Core.Tolerance.Distance < elevation && max - Core.Tolerance.Distance > elevation))
+                List<Segment2D> segment2Ds = planarIntersectionResult.GetGeometry2Ds<Segment2D>();
+                if (segment2Ds != null && segment2Ds.Count != 0)
                 {
-                    planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, panel.GetFace3D());
-                    if (planarIntersectionResult != null)
+                    foreach (Segment2D segment2D in segment2Ds)
                     {
-                        List<Segment2D> segment2Ds = planarIntersectionResult.GetGeometry2Ds<Segment2D>();
-                        if (segment2Ds != null && segment2Ds.Count != 0)
-                        {
-                            Geometry.Planar.Query.ExtremePoints(segment2Ds.UniquePoint2Ds(tolerance_Distance), out Point2D point2D_1, out Point2D point2D_2);
-                            if (point2D_1.Distance(point2D_2) > tolerance_Distance)
-                                panels_Temp.Add(panel);
-                        }
+                        dictionary_Reference[segment2D] = panel_Reference;
                     }
                 }
 
-                if (System.Math.Abs(min - referenceElevation) < Core.Tolerance.Distance || (min - Core.Tolerance.Distance < referenceElevation && max - Core.Tolerance.Distance > referenceElevation))
-                {
-                    if (planarIntersectionResult == null)
-                        planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, panel.GetFace3D());
-
-                    if (planarIntersectionResult != null)
-                    {
-                        List<Segment2D> segment2Ds = planarIntersectionResult.GetGeometry2Ds<Segment2D>();
-                        if (segment2Ds != null && segment2Ds.Count != 0)
-                        {
-                            foreach (Segment2D segment2D in segment2Ds)
-                            {
-                                dictionary_Reference[segment2D] = panel;
-                            }
-                        }
-                    }
-                }
             }
 
             if (panels_Temp.Count == 0 || dictionary_Reference.Count == 0)
                 return;
 
+            List<int> indexes = panels_Temp.ConvertAll(x => panels.IndexOf(x));
+
             Align(panels_Temp, dictionary_Reference, maxDistance, tolerance_Angle, tolerance_Distance);
 
-            foreach (Panel panel_Temp in panels_Temp)
+            for(int i=0; i < indexes.Count; i++)
             {
-                int index = panels.FindIndex(x => x.Guid == panel_Temp.Guid);
-                if (index == -1)
+                int index = indexes[i];
+                if(index == -1)
+                {
                     continue;
+                }
 
-                panels[index] = panel_Temp;
+                panels[index] = panels_Temp[i];
             }
         }
 
