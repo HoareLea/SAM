@@ -200,37 +200,69 @@ namespace SAM.Analytical
 
                 if (panels_Connected != null)
                 {
-                    Plane plane_Panel = panel.Plane;
+                    Face3D face3D_Panel = panel.GetFace3D();
+                    Plane plane_Panel = face3D_Panel.GetPlane();
 
                     foreach (Panel panel_Connected in panels_Connected)
                     {
-                        Face3D face3D = panel_Connected?.GetFace3D();
-                        if (face3D == null)
+                        Face3D face3D_Connected = panel_Connected?.GetFace3D();
+                        if (face3D_Connected == null)
                             continue;
 
-                        Face3D face3D_New = null;
+                        Face3D face3D_Connected_New = null;
 
-                        PlanarIntersectionResult planarIntersectionResult_Temp = Geometry.Spatial.Create.PlanarIntersectionResult(plane_Panel, face3D, tolerance_Angle, tolerance_Distance);
+                        PlanarIntersectionResult planarIntersectionResult_Temp = Geometry.Spatial.Create.PlanarIntersectionResult(plane_Panel, face3D_Connected, tolerance_Angle, tolerance_Distance);
                         if(planarIntersectionResult_Temp != null && planarIntersectionResult_Temp.Intersecting)
                         {
-                            List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D, plane_Panel, tolerance_Distance);
-                            if(face3Ds != null && face3Ds.Count != 0)
+                            List<ISegmentable3D> segmentable3Ds = planarIntersectionResult_Temp.GetGeometry3Ds<ISegmentable3D>();
+                            if(segmentable3Ds != null && segmentable3Ds.Count > 0)
                             {
-                                face3Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
-                                face3D_New = face3Ds[0];
+                                bool cut = true;
+                                foreach(ISegmentable3D segmentable3D in segmentable3Ds)
+                                {
+                                    List<Segment3D> segment3Ds = segmentable3D?.GetSegments();
+                                    if(segment3Ds == null || segment3Ds.Count == 0)
+                                    {
+                                        continue;
+                                    }
+                                    
+                                    foreach(Segment3D segment3D_Temp in segment3Ds)
+                                    {
+                                        if(face3D_Panel.OnEdge(segment3D_Temp.Mid(), tolerance_Distance))
+                                        {
+                                            cut = false;
+                                            break;
+                                        }
+                                    }
+
+                                    if(!cut)
+                                    {
+                                        break;
+                                    }
+                                }
+
+                                if(cut)
+                                {
+                                    List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D_Connected, plane_Panel, tolerance_Distance);
+                                    if (face3Ds != null && face3Ds.Count != 0)
+                                    {
+                                        face3Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+                                        face3D_Connected_New = face3Ds[0];
+                                    }
+                                }
                             }
                         }
                         else
                         {
-                            face3D_New = Geometry.Spatial.Query.Extend(face3D, plane_Panel, tolerance_Angle, tolerance_Distance);
+                            face3D_Connected_New = Geometry.Spatial.Query.Extend(face3D_Connected, plane_Panel, tolerance_Angle, tolerance_Distance);
                         }
                         
-                        if (face3D_New == null)
+                        if (face3D_Connected_New == null)
                             continue;
 
                         int index = panels.IndexOf(panel_Connected);
                         if (index != -1)
-                            panels[index] = new Panel(panel_Connected.Guid, panel_Connected, face3D_New);
+                            panels[index] = new Panel(panel_Connected.Guid, panel_Connected, face3D_Connected_New);
                     }
                 }
 
