@@ -155,16 +155,16 @@ namespace SAM.Analytical
                     panelTypes.Add(panel.PanelType);
                     switch (panelTypes.First())
                     {
-                        case Analytical.PanelType.CurtainWall:
-                            panelTypes.Add(Analytical.PanelType.WallExternal);
+                        case PanelType.CurtainWall:
+                            panelTypes.Add(PanelType.WallExternal);
                             break;
 
-                        case Analytical.PanelType.UndergroundWall:
-                            panelTypes.Add(Analytical.PanelType.WallExternal);
+                        case PanelType.UndergroundWall:
+                            panelTypes.Add(PanelType.WallExternal);
                             break;
 
-                        case Analytical.PanelType.Undefined:
-                            panelTypes.Add(Analytical.PanelType.WallInternal);
+                        case PanelType.Undefined:
+                            panelTypes.Add(PanelType.WallInternal);
                             break;
                     }
 

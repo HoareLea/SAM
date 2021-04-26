@@ -33,6 +33,10 @@ namespace SAM.Analytical
                 if (face3D_Temp == null)
                     continue;
 
+                Geometry.Spatial.BoundingBox3D boundingBox3D_Temp = face3D_Temp.GetBoundingBox(tolerance);
+                if (boundingBox3D_Temp == null || !boundingBox3D.InRange(boundingBox3D_Temp, tolerance))
+                    continue;
+
                 List<Geometry.Spatial.ISegmentable3D> segmentable3Ds_Temp = face3D_Temp.GetEdge3Ds()?.ConvertAll(x => x as Geometry.Spatial.ISegmentable3D).FindAll(x => x != null);
                 if (segmentable3Ds == null || segmentable3Ds.Count == 0)
                     return null;
@@ -40,8 +44,6 @@ namespace SAM.Analytical
                 List<Geometry.Spatial.Point3D> point3Ds_Temp = new List<Geometry.Spatial.Point3D>();
                 foreach (Geometry.Spatial.ISegmentable3D segmentable3D_Temp in segmentable3Ds_Temp)
                     segmentable3D_Temp?.GetPoints()?.ForEach(x => Geometry.Spatial.Modify.Add(point3Ds_Temp, x, tolerance));
-
-                Geometry.Spatial.BoundingBox3D boundingBox3D_Temp = face3D_Temp.GetBoundingBox(tolerance);
 
                 bool connected = false;
 
