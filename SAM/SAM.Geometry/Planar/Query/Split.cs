@@ -243,20 +243,108 @@ namespace SAM.Geometry.Planar
                 return new Point2D[] { point2D_1, point2D_2 };
 
             Vector2D vector2D = new Vector2D(point2D_1, point2D_2);
-            double aLength_Split = vector2D.Length / count;
-            vector2D = vector2D.Unit * aLength_Split;
+            double length_Split = vector2D.Length / count;
+            vector2D = vector2D.Unit * length_Split;
 
-            Point2D[] aResult = new Point2D[count + 1];
+            Point2D[] result = new Point2D[count + 1];
 
-            aResult[0] = new Point2D(point2D_1);
+            result[0] = new Point2D(point2D_1);
             for (int i = 0; i < count; i++)
-                aResult[i + 1] = aResult[i].GetMoved(vector2D);
+                result[i + 1] = result[i].GetMoved(vector2D);
 
-            aResult[count] = new Point2D(point2D_2);
+            result[count] = new Point2D(point2D_2);
 
-            return aResult;
+            return result;
         }
 
+        /// <summary>
+        /// Split one polygon2D into the count number of polygon2Ds. Split based on smallest Rectangle2D described on given polygon2D and spliting longest edge.
+        /// </summary>
+        /// <param name="polygon2D">Polygon2D to be splitted</param>
+        /// <param name="count">Number of output Polygon2Ds</param>
+        /// <param name="alignment">Split Alignment</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Polygon2Ds</returns>
+        public static List<Polygon2D> Split(this Polygon2D polygon2D, int count, Alignment alignment, double tolerance = Core.Tolerance.Distance)
+        {
+            Rectangle2D rectangle2D = Create.Rectangle2D(polygon2D?.Points);
+            if (rectangle2D == null)
+                return null;
+
+            Vector2D direction = Direction(alignment);
+            if(direction == null)
+                return null;
+
+            double angle_Height =rectangle2D.HeightDirection.Angle(direction);
+            double angle_Width = rectangle2D.WidthDirection.Angle(direction);
+
+            Segment2D segment2D = null;
+            Vector2D vector2D = null;
+
+            if (angle_Height < angle_Width)
+            {
+                vector2D = rectangle2D.WidthDirection;
+                Vector2D vector_Width = rectangle2D.WidthDirection * (rectangle2D.Width / 2);
+                Point2D point2D_Start = rectangle2D.Origin.GetMoved(vector_Width);
+                Point2D point2D_End = point2D_Start.GetMoved(rectangle2D.HeightDirection * rectangle2D.Height);
+
+                segment2D = new Segment2D(point2D_Start, point2D_End);
+            }
+            else
+            {
+                vector2D = rectangle2D.HeightDirection;
+                Vector2D vector_Height = rectangle2D.HeightDirection * (rectangle2D.Height / 2);
+                Point2D point2D_Start = rectangle2D.Origin.GetMoved(vector_Height);
+                Point2D point2D_End = point2D_Start.GetMoved(rectangle2D.WidthDirection * rectangle2D.Width);
+
+                segment2D = new Segment2D(point2D_Start, point2D_End);
+            }
+
+            vector2D = vector2D * (rectangle2D.GetDiagonals()[0].GetLength() / 2);
+            Vector2D vector2D_Negate = vector2D.GetNegated();
+
+            IEnumerable<Point2D> point2Ds = Split(segment2D.Start, segment2D.End, count);
+
+            if (point2Ds == null)
+                return null;
+
+            int aCount = point2Ds.Count();
+
+            if (aCount <= 2)
+                return new List<Polygon2D>() { new Polygon2D(polygon2D) };
+
+            List<Polygon2D> result = new List<Polygon2D>();
+
+            List<Segment2D> segment2Ds = new List<Segment2D>();
+            for (int i = 1; i < aCount - 1; i++)
+            {
+                Point2D point2D = point2Ds.ElementAt(i);
+                segment2Ds.Add(new Segment2D(point2D.GetMoved(vector2D), point2D.GetMoved(vector2D_Negate)));
+            }
+
+            segment2Ds.AddRange(polygon2D.GetSegments());
+
+            if (segment2Ds == null || segment2Ds.Count < 4)
+                return new List<Polygon2D>() { new Polygon2D(polygon2D) };
+
+            segment2Ds = Split(segment2Ds, tolerance);
+            if (segment2Ds == null || segment2Ds.Count == 0)
+                return null;
+
+            List<Segment2D> segment2Ds_Inside = new List<Segment2D>();
+            foreach (Segment2D segment2D_Temp in segment2Ds_Inside)
+            {
+                Point2D point2D = segment2D_Temp.Mid();
+
+                if (!polygon2D.Inside(point2D, tolerance) && !polygon2D.On(point2D, tolerance))
+                    continue;
+
+                segment2Ds_Inside.Add(segment2D_Temp);
+            }
+
+            return Create.Polygon2Ds(segment2Ds_Inside, tolerance);
+        }
+        
         public static List<Tuple<Face2D, T>> Split<T>(this Face2D face2D, IEnumerable<Tuple<Face2D, T>> tuples, double tolerance = Core.Tolerance.Distance)
         {
             if (face2D == null || tuples == null || tuples.Count() == 0)

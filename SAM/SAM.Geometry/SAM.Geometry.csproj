@@ -78,6 +78,7 @@
     <Compile Include="Planar\Create\Polyline2Ds.cs" />
     <Compile Include="Planar\Modify\Connect.cs" />
     <Compile Include="Planar\Query\Connected.cs" />
+    <Compile Include="Planar\Query\Direction.cs" />
     <Compile Include="Planar\Query\LongestPath.cs" />
     <Compile Include="Planar\Query\FixEdges.cs" />
     <Compile Include="Planar\Query\Straight.cs" />
