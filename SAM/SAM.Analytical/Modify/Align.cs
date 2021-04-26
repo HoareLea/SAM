@@ -211,12 +211,12 @@ namespace SAM.Analytical
                         Face3D face3D_New = null;
 
                         PlanarIntersectionResult planarIntersectionResult_Temp = Geometry.Spatial.Create.PlanarIntersectionResult(plane_Panel, face3D, tolerance_Angle, tolerance_Distance);
-                        if(planarIntersectionResult_Temp == null && planarIntersectionResult_Temp.Intersecting)
+                        if(planarIntersectionResult_Temp != null && planarIntersectionResult_Temp.Intersecting)
                         {
                             List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D, plane_Panel, tolerance_Distance);
                             if(face3Ds != null && face3Ds.Count != 0)
                             {
-                                face3Ds.Sort((x, y) => y.GetArea().CompareTo(y.GetArea()));
+                                face3Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
                                 face3D_New = face3Ds[0];
                             }
                         }

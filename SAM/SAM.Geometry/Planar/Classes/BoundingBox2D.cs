@@ -419,6 +419,16 @@ namespace SAM.Geometry.Planar
             return true;
         }
 
+        public bool Include(Point2D point2D)
+        {
+            if (point2D == null)
+                return false;
+
+            max = Query.Max(max, point2D);
+            min = Query.Min(min, point2D);
+            return true;
+        }
+
         public double GetLength()
         {
             return GetSegments().ConvertAll(x => x.GetLength()).Sum();
