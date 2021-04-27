@@ -72,7 +72,6 @@
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Component\SAMAnalyticalSection.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterBySections.cs" />
     <Compile Include="Component\SAMAnalyticalJoinExternalPanels.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelByBottomAndHeight.cs" />
     <Compile Include="Component\SAMAnalyticalFixAdjacencyCluster.cs" />
@@ -182,7 +181,6 @@
     <Compile Include="Component\SAMAnalyticalUpdateHeatTransferCoefficients.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByName.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster_Obsolete.cs" />
     <Compile Include="Component\SAMAnalyticalGetAdjacentSpaceNames.cs" />
     <Compile Include="Component\SAMAnalyticalApertureConstructions.cs" />
     <Compile Include="Component\SAMAnalyticalPanelLocation.cs" />

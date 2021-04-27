@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateLevels : GH_SAMComponent
+    public class SAMAnalyticalCreateLevels : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,22 +37,29 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
-
-            index = inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
-
-            index = inputParamManager.AddNumberParameter("_tolerance_", "_tolerance_", "Tolerance", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooLevelParam(), "Levels", "Levels", "SAM Architectural Levels", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooLevelParam() { Name = "levels", NickName = "levels", Description = "SAM Architectural Levels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooLevelParam() { Name = "topLevel", NickName = "topLevel", Description = "SAM Architectural Level", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -63,23 +70,54 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_panels");
             List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(0, panels))
+            if (!dataAccess.GetDataList(index, panels) || panels == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_tolerance_");
             double tolerance = Core.Tolerance.MacroDistance;
-            if (!dataAccess.GetData(1, ref tolerance))
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetData(index, ref tolerance);
             }
 
-            List<Architectural.Level> levels = Create.Levels(panels, false, tolerance);
-            if (levels != null)
-                dataAccess.SetDataList(0, levels.ConvertAll(x => new GooLevel(x)));
+            index = Params.IndexOfOutputParam("levels");
+            if(index != -1)
+            {
+                List<Architectural.Level> levels = Create.Levels(panels, false, tolerance);
+                dataAccess.SetDataList(index, levels?.ConvertAll(x => new GooLevel(x)));
+            }
+
+            index = Params.IndexOfOutputParam("topLevel");
+            if(index != -1)
+            {
+                double elevation = double.MinValue;
+                foreach(Panel panel in panels)
+                {
+                    double elevation_Panel = panel.MaxElevation();
+                    if (double.IsNaN(elevation_Panel))
+                    {
+                        continue;
+                    }
+
+                    if(elevation_Panel > elevation)
+                    {
+                        elevation = elevation_Panel;
+                    }
+                }
+
+                if(elevation != double.MinValue)
+                {
+                    dataAccess.SetData(index, SAM.Architectural.Create.Level(elevation));
+                }
+            }
+
         }
     }
 }
