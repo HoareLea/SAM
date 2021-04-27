@@ -177,6 +177,7 @@
     <Compile Include="Query\IntersectingPanels.cs" />
     <Compile Include="Query\DuplicatedSpacesDictionary.cs" />
     <Compile Include="Query\Offset.cs" />
+    <Compile Include="Query\SectionDictionary.cs" />
     <Compile Include="Query\SpaceShells.cs" />
     <Compile Include="Query\CalculatedArea.cs" />
     <Compile Include="Query\GeometricalFloorPanels.cs" />

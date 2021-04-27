@@ -275,8 +275,8 @@ namespace SAM.Geometry.Planar
             if(direction == null)
                 return null;
 
-            double angle_Height =rectangle2D.HeightDirection.Angle(direction);
-            double angle_Width = rectangle2D.WidthDirection.Angle(direction);
+            double angle_Height = System.Math.Min(rectangle2D.HeightDirection.Angle(direction), rectangle2D.HeightDirection.Angle(direction.GetNegated()));
+            double angle_Width = System.Math.Min(rectangle2D.WidthDirection.Angle(direction), rectangle2D.WidthDirection.Angle(direction.GetNegated()));
 
             Segment2D segment2D = null;
             Vector2D vector2D = null;
@@ -332,7 +332,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Segment2D> segment2Ds_Inside = new List<Segment2D>();
-            foreach (Segment2D segment2D_Temp in segment2Ds_Inside)
+            foreach (Segment2D segment2D_Temp in segment2Ds)
             {
                 Point2D point2D = segment2D_Temp.Mid();
 
