@@ -38,40 +38,71 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static Segment2D Intersection(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static T Intersection<T>(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.MicroDistance) where T: ISAMGeometry2D
         {
-            if (segment2D_1 == null || segment2D_2 == null)
-                return null;
-
-            if (!Collinear(segment2D_1, segment2D_2))
-                return null;
-
-            bool on_1 = segment2D_1.On(segment2D_2[0], tolerance);
-            bool on_2 = segment2D_1.On(segment2D_2[1], tolerance);
-            bool on_3 = segment2D_2.On(segment2D_1[0], tolerance);
-            bool on_4 = segment2D_2.On(segment2D_1[1], tolerance);
-
-            if (!on_1 && !on_2 && !on_3 && !on_4)
-                return null;
-
-            List<Point2D> point2Ds = new List<Point2D>() { segment2D_1[0], segment2D_1[1], segment2D_2[0], segment2D_2[1] };
-
-            Point2D point2D_1;
-            Point2D point2D_2;
-            ExtremePoints(point2Ds, out point2D_1, out point2D_2);
-            if (point2D_1 == null || point2D_2 == null)
-                return null;
-
-            Modify.SortByDistance(point2Ds, point2D_1);
-
-            for (int i = 0; i < point2Ds.Count - 1; i++)
+            if(segment2D_1 == null || segment2D_2 == null)
             {
-                Point2D point2D_Mid = point2Ds[i].Mid(point2Ds[i + 1]);
-                if (segment2D_1.On(point2D_Mid) && segment2D_2.On(point2D_Mid) && point2Ds[i].Distance(point2Ds[i + 1]) > tolerance)
-                    return new Segment2D(point2Ds[i], point2Ds[i + 1]);
+                return default;
             }
 
-            return null;
+            LineString lineString_1 = segment2D_1.ToNTS(tolerance);
+            LineString lineString_2 = segment2D_2.ToNTS(tolerance);
+            
+            NetTopologySuite.Geometries.Geometry geometry = lineString_1?.Intersection(lineString_2);
+            if (geometry == null || geometry.IsEmpty)
+            {
+                return default;
+            }
+
+
+            if (geometry is LineString)
+            {
+                Polyline2D polyline2D = ((LineString)geometry).ToSAM(tolerance);
+                if (polyline2D.Points.Count == 2 && typeof(T).IsAssignableFrom(typeof(Segment2D)))
+                    return (T)(object)(new Segment2D(polyline2D[0], polyline2D[1]));
+            }
+            else if(geometry is Point)
+            {
+                Point2D point2D = ((Point)geometry).ToSAM(tolerance);
+                if (typeof(T) == typeof(Point2D))
+                    return (T)(object)point2D;
+            }
+
+            return default;
+
+
+            //if (segment2D_1 == null || segment2D_2 == null)
+            //    return null;
+
+            //if (!Collinear(segment2D_1, segment2D_2))
+            //    return null;
+
+            //bool on_1 = segment2D_1.On(segment2D_2[0], tolerance);
+            //bool on_2 = segment2D_1.On(segment2D_2[1], tolerance);
+            //bool on_3 = segment2D_2.On(segment2D_1[0], tolerance);
+            //bool on_4 = segment2D_2.On(segment2D_1[1], tolerance);
+
+            //if (!on_1 && !on_2 && !on_3 && !on_4)
+            //    return null;
+
+            //List<Point2D> point2Ds = new List<Point2D>() { segment2D_1[0], segment2D_1[1], segment2D_2[0], segment2D_2[1] };
+
+            //Point2D point2D_1;
+            //Point2D point2D_2;
+            //ExtremePoints(point2Ds, out point2D_1, out point2D_2);
+            //if (point2D_1 == null || point2D_2 == null)
+            //    return null;
+
+            //Modify.SortByDistance(point2Ds, point2D_1);
+
+            //for (int i = 0; i < point2Ds.Count - 1; i++)
+            //{
+            //    Point2D point2D_Mid = point2Ds[i].Mid(point2Ds[i + 1]);
+            //    if (segment2D_1.On(point2D_Mid) && segment2D_2.On(point2D_Mid) && point2Ds[i].Distance(point2Ds[i + 1]) > tolerance)
+            //        return new Segment2D(point2Ds[i], point2Ds[i + 1]);
+            //}
+
+            //return null;
         }
 
         public static List<Face2D> Intersection(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)

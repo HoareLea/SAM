@@ -114,7 +114,7 @@ namespace SAM.Analytical.Grasshopper
 
                 if(elevation != double.MinValue)
                 {
-                    dataAccess.SetData(index, SAM.Architectural.Create.Level(elevation));
+                    dataAccess.SetData(index, Architectural.Create.Level(elevation));
                 }
             }
 
