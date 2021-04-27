@@ -57,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevations", NickName = "_elevations", Description = "Section Elevations", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Optional = true, Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Tolerance.Distance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
@@ -118,7 +118,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            index = Params.IndexOfInputParam("elevations");
+            index = Params.IndexOfInputParam("_elevations");
             List<double> elevations = new List<double>();
             if (index == -1 || !dataAccess.GetDataList(index, elevations) || elevations == null)
             {
@@ -126,7 +126,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("tolerance");
+            index = Params.IndexOfInputParam("tolerance_");
             double tolerance = Tolerance.Distance;
             if(index != -1)
             {
@@ -167,13 +167,13 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            index = Params.IndexOfInputParam("panels");
+            index = Params.IndexOfOutputParam("panels");
             if (index != -1)
             {
                 dataAccess.SetDataList(index, dictionary.Keys);
             }
 
-            index = Params.IndexOfInputParam("elevations");
+            index = Params.IndexOfOutputParam("elevations");
             if (index != -1)
             {
                 DataTree<double> dataTree_Elevation = new DataTree<double>();
@@ -192,7 +192,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetDataTree(index, dataTree_Elevation);
             }
 
-            index = Params.IndexOfInputParam("geometries");
+            index = Params.IndexOfOutputParam("geometries");
             if (index != -1)
             {
                 DataTree<Geometry.Spatial.ISAMGeometry3D> dataTree_Geometries = new DataTree<Geometry.Spatial.ISAMGeometry3D>();
