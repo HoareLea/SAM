@@ -25,7 +25,18 @@ namespace SAM.Geometry.Spatial
 
         public Point3D(Point3D point3D)
         {
-            coordinates = new double[3] { point3D[0], point3D[1], point3D[2] };
+            if (point3D == null)
+            {
+                coordinates[0] = double.NaN;
+                coordinates[1] = double.NaN;
+                coordinates[2] = double.NaN;
+            }
+            else
+            {
+                coordinates[0] = point3D.coordinates[0];
+                coordinates[1] = point3D.coordinates[1];
+                coordinates[2] = point3D.coordinates[2];
+            }
         }
 
         public double this[int index]

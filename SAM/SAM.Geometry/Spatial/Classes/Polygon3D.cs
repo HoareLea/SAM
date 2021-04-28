@@ -143,10 +143,11 @@ namespace SAM.Geometry.Spatial
 
         public void Reverse()
         {
-            points.Reverse();
+            List<Point3D> point3Ds = GetPoints();
+            point3Ds.Reverse();
 
-            //List<Point3D> point3Ds = GetPoints();
-            //point3Ds.Reverse();
+            plane = new Plane(Query.Average(point3Ds), plane.Normal);
+            points = point3Ds.ConvertAll(x => plane.Convert(x));
 
             //this.plane = Create.Plane(point3Ds);
             //this.points = point3Ds.ConvertAll(x => this.plane.Convert(x));
