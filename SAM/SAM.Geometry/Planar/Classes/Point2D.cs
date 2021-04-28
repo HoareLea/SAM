@@ -29,13 +29,30 @@ namespace SAM.Geometry.Planar
 
         public Point2D(double[] coordinates)
         {
-            coordinates[0] = this.coordinates[0];
-            coordinates[1] = this.coordinates[1];
+            if(coordinates == null || coordinates.Length < 2)
+            {
+                coordinates[0] = double.NaN;
+                coordinates[1] = double.NaN;
+            }
+            else
+            {
+                coordinates[0] = this.coordinates[0];
+                coordinates[1] = this.coordinates[1];
+            }
         }
 
         public Point2D(Point2D point2D)
         {
-            coordinates = new double[2] { point2D[0], point2D[1] };
+            if(point2D == null)
+            {
+                coordinates[0] = double.NaN;
+                coordinates[1] = double.NaN;
+            }
+            else
+            {
+                coordinates[0] = point2D.coordinates[0];
+                coordinates[1] = point2D.coordinates[1];
+            }
         }
 
         public double this[int index]
