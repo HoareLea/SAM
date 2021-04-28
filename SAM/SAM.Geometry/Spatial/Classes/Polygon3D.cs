@@ -143,11 +143,13 @@ namespace SAM.Geometry.Spatial
 
         public void Reverse()
         {
-            List<Point3D> point3Ds = GetPoints();
-            point3Ds.Reverse();
+            points.Reverse();
 
-            this.plane = Create.Plane(point3Ds);
-            this.points = point3Ds.ConvertAll(x => this.plane.Convert(x));
+            //List<Point3D> point3Ds = GetPoints();
+            //point3Ds.Reverse();
+
+            //this.plane = Create.Plane(point3Ds);
+            //this.points = point3Ds.ConvertAll(x => this.plane.Convert(x));
         }
 
         public override bool FromJObject(JObject jObject)

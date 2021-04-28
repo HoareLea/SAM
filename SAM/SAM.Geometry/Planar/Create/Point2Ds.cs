@@ -45,5 +45,27 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
+
+        public static List<Point2D> Point2Ds(params double[] values)
+        {
+            if(values == null)
+            {
+                return null;
+            }
+
+            int length = values.Length;
+            if(length == 0 || length % 2 != 0)
+            {
+                return null;
+            }
+
+            List<Point2D> result = new List<Point2D>();
+            for (int i=0; i < length; i = i + 2)
+            {
+                result.Add(new Point2D(values[i], values[i + 1]));
+            }
+
+            return result;
+        }
     }
 }

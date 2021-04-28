@@ -16,5 +16,21 @@ namespace SAM.Geometry.Spatial
 
             return new Face3D(polygon3D);
         }
+
+        public static Face3D Face3D(this IClosedPlanar3D closedPlanar3D)
+        {
+            if (closedPlanar3D == null)
+                return null;
+
+            return new Face3D(closedPlanar3D);
+        }
+
+        public static Face3D Face3D(this Plane plane, Planar.IClosed2D closed2D)
+        {
+            if (closed2D == null || plane == null)
+                return null;
+
+            return new Face3D(plane, closed2D);
+        }
     }
 }

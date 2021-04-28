@@ -40,7 +40,7 @@ namespace SAM.Geometry.Planar
                 if (point2D_Intersection == null)
                     continue;
 
-                if (!selfIntersection && point2D_Intersection.Distance(point2D) < tolerance)
+                if (!selfIntersection && Core.Query.Round(point2D_Intersection.Distance(point2D), tolerance) <= tolerance)
                     continue;
 
                 if (point2D_closest_1 == null || point2D_closest_2 == null)
@@ -49,7 +49,7 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                if (point2D_closest_2 != null && segment2D_Temp.Distance(point2D_Intersection) < tolerance)
+                if (point2D_closest_2 != null && Core.Query.Round(segment2D_Temp.Distance(point2D_Intersection), tolerance) <= tolerance)
                 {
                     if (keepDirection)
                         if (!vector2D.Unit.AlmostEqual(new Vector2D(point2D_closest_1, point2D_closest_2).Unit, tolerance))
