@@ -192,7 +192,7 @@ namespace SAM.Analytical
 
                 Vector3D vector3D = Plane.WorldXY.Convert(new Vector2D(point2D_1, point2D_2));
 
-                 List<Panel> panels_Connected = panel.ConnectedPanels(panels, true, tolerance_Angle, tolerance_Distance);
+                 Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected = panel.IntersectingPanels(panels, tolerance_Angle, tolerance_Distance);
 
                 panel = new Panel(panel); 
                 panel.Move(vector3D);
@@ -203,8 +203,45 @@ namespace SAM.Analytical
                     Face3D face3D_Panel = panel.GetFace3D();
                     Plane plane_Panel = face3D_Panel.GetPlane();
 
-                    foreach (Panel panel_Connected in panels_Connected)
+                    Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected_New = panel.IntersectingPanels(panels, tolerance_Angle, tolerance_Distance);
+
+                    foreach (Panel panel_Connected in panels_Connected.Keys)
                     {
+                        if (panels_Connected_New.ContainsKey(panel_Connected))
+                        {
+                            Point3D point3D = null;
+
+                            List<ISAMGeometry3D> geometry3Ds = panels_Connected[panel_Connected];
+                            foreach(ISAMGeometry3D sAMGeometry3D in geometry3Ds)
+                            {
+                                if(sAMGeometry3D is Segment3D)
+                                {
+                                    point3D = ((Segment3D)sAMGeometry3D).Mid();
+                                }
+                                else if(sAMGeometry3D is Point3D)
+                                {
+                                    point3D = (Point3D)sAMGeometry3D;
+                                }
+
+                                if(point3D != null)
+                                {
+                                    break;
+                                }
+                            }
+
+                            if(point3D != null)
+                            {
+                                List<Panel> panels_Connected_Temp = Query.Panels(point3D, panels, true, tolerance_Distance);
+                                if (panels_Connected_Temp != null && panels_Connected_Temp.Count != 1)
+                                    continue;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+
+                        }
+                        
                         Face3D face3D_Connected = panel_Connected?.GetFace3D();
                         if (face3D_Connected == null)
                             continue;

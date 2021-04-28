@@ -5,7 +5,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> ConnectedPanels(this Panel panel, IEnumerable<Panel> panels, bool edgeToEdgeConnectionOnly = false, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static Dictionary<Panel, List<ISAMGeometry3D>> IntersectingPanels(this Panel panel, IEnumerable<Panel> panels, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (panel == null || panels == null)
                 return null;
@@ -16,7 +16,7 @@ namespace SAM.Analytical
 
             BoundingBox3D boundingBox3D = face3D.GetBoundingBox(tolerance_Distance);
 
-            List <Panel> result = new List<Panel>();
+            Dictionary<Panel, List<ISAMGeometry3D>> result = new Dictionary<Panel, List<ISAMGeometry3D>>();
             foreach(Panel panel_Temp in panels)
             {
                 if (panel_Temp.Guid == panel.Guid)
@@ -34,45 +34,47 @@ namespace SAM.Analytical
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 
-                List<ISegmentable3D> segmentable3Ds = planarIntersectionResult.GetGeometry3Ds<ISegmentable3D>();
-                if (segmentable3Ds == null || segmentable3Ds.Count == 0)
+                List<ISAMGeometry3D> geometry3Ds = planarIntersectionResult.GetGeometry3Ds<ISAMGeometry3D>();
+                if (geometry3Ds == null || geometry3Ds.Count == 0)
                     continue;
 
-                bool connected = false;
-                foreach(ISegmentable3D segmentable3D in segmentable3Ds)
-                {
-                    List<Segment3D> segment3Ds = segmentable3D?.GetSegments();
-                    if(segment3Ds == null || segment3Ds.Count == 0)
-                    {
-                        continue;
-                    }
+                result[panel_Temp] = geometry3Ds;
 
-                    foreach(Segment3D segment3D in segment3Ds)
-                    {
-                        Point3D point3D = segment3D.Mid();
+                //bool connected = false;
+                //foreach(ISegmentable3D segmentable3D in segmentable3Ds)
+                //{
+                //    List<Segment3D> segment3Ds = segmentable3D?.GetSegments();
+                //    if(segment3Ds == null || segment3Ds.Count == 0)
+                //    {
+                //        continue;
+                //    }
 
-                        bool onEdge_1 = face3D.OnEdge(point3D, tolerance_Distance);
-                        bool onEdge_2 = face3D_Temp.OnEdge(point3D, tolerance_Distance);
+                //    foreach(Segment3D segment3D in segment3Ds)
+                //    {
+                //        Point3D point3D = segment3D.Mid();
 
-                        if (edgeToEdgeConnectionOnly)
-                        {
-                            connected = onEdge_1 && onEdge_2;
-                        }
-                        else
-                        {
-                            connected = onEdge_1 || onEdge_2;
-                        }
+                //        bool onEdge_1 = face3D.OnEdge(point3D, tolerance_Distance);
+                //        bool onEdge_2 = face3D_Temp.OnEdge(point3D, tolerance_Distance);
 
-                        if (connected)
-                            break;
-                    }
+                //        if (edgeToEdgeConnectionOnly)
+                //        {
+                //            connected = onEdge_1 && onEdge_2;
+                //        }
+                //        else
+                //        {
+                //            connected = onEdge_1 || onEdge_2;
+                //        }
 
-                    if(connected)
-                    {
-                        result.Add(panel_Temp);
-                        break;
-                    }
-                }
+                //        if (connected)
+                //            break;
+                //    }
+
+                //    if(connected)
+                //    {
+                //        result.Add(panel_Temp);
+                //        break;
+                //    }
+                //}
             }
 
             return result;

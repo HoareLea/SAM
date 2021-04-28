@@ -24,5 +24,42 @@ namespace SAM.Analytical
 
             return result;
         }
+
+        public static List<Panel> Panels(this Point3D point3D, IEnumerable<Panel> panels, bool onEdgeOnly = false, double tolerance = Core.Tolerance.Distance)
+        {
+            if(point3D == null || panels == null)
+            {
+                return null;
+            }
+
+            List<Panel> result = new List<Panel>();
+            foreach (Panel panel in panels)
+            {
+                Face3D face3D = panel?.GetFace3D();
+                if(face3D == null)
+                {
+                    continue;
+                }
+
+                bool add = false;
+
+                if(onEdgeOnly)
+                {
+                    add = face3D.OnEdge(point3D, tolerance);
+                }
+                else
+                {
+                    add = face3D.On(point3D, tolerance) || face3D.OnEdge(point3D, tolerance);
+                }
+
+                if(add)
+                {
+                    result.Add(panel);
+                }
+            }
+
+            return result;
+
+        }
     }
 }
