@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -60,7 +60,7 @@ namespace SAM.Analytical.Grasshopper
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Tolerance.Distance);
-                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -74,7 +74,11 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "Panels", NickName = "Panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "externalPanels_Old", NickName = "externalPanels_Old", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "externalPanels_New", NickName = "externalPanels_New", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "externalPolygon2Ds", NickName = "externalPolygon2Ds", Description = "SAM Geometry Pnlanar External Polygon2Ds", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "extendedPanels", NickName = "extendedPanels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -115,9 +119,27 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(tolerance))
                 tolerance = Tolerance.Distance;
 
-            Analytical.Modify.JoinExternal(panels, elevation, maxDistance, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
+            List<Guid> guids = Analytical.Modify.JoinExternal(panels, elevation, maxDistance, out List<Panel> externalPanels_Old, out List<Panel> externalPanels_New, out List<Geometry.Planar.Polygon2D> externalPolygon2Ds, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
 
-            dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
+            index = Params.IndexOfOutputParam("panels");
+            if (index != -1)
+                dataAccess.SetDataList(index, panels?.ConvertAll(x => new GooPanel(x)));
+
+            index = Params.IndexOfOutputParam("externalPanels_Old");
+            if (index != -1)
+                dataAccess.SetDataList(index, externalPanels_Old?.ConvertAll(x => new GooPanel(x)));
+
+            index = Params.IndexOfOutputParam("externalPanels_New");
+            if (index != -1)
+                dataAccess.SetDataList(index, externalPanels_New?.ConvertAll(x => new GooPanel(x)));
+
+            index = Params.IndexOfOutputParam("externalPolygon2Ds");
+            if (index != -1)
+                dataAccess.SetDataList(index, externalPolygon2Ds);
+
+            index = Params.IndexOfOutputParam("extendedPanels");
+            if (index != -1)
+                dataAccess.SetDataList(index, guids?.ConvertAll(x => new GooPanel(panels.Find(y => y.Guid == x))));
         }
     }
 }
