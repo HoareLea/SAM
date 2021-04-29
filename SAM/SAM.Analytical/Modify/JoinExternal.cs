@@ -16,28 +16,28 @@ namespace SAM.Analytical
 
             List<Geometry.Planar.ISegmentable2D> segmentable2Ds = new List<Geometry.Planar.ISegmentable2D>();
             List<Tuple<Panel, BoundingBox3D, List<Geometry.Planar.ISegmentable2D>>> tuples = new List<Tuple<Panel, BoundingBox3D, List<Geometry.Planar.ISegmentable2D>>>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 Face3D face3D = panel.GetFace3D(false, tolerance_Distance);
-                if(face3D == null)
+                if (face3D == null)
                 {
                     continue;
                 }
 
                 BoundingBox3D boundingBox3D = face3D.GetBoundingBox(tolerance_Distance);
-                if(boundingBox3D.Max.Z < elevation || boundingBox3D.Min.Z > elevation)
+                if (boundingBox3D.Max.Z < elevation || boundingBox3D.Min.Z > elevation)
                 {
                     continue;
                 }
 
                 PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, face3D, tolerance_Angle, tolerance_Distance);
-                if(planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 {
                     continue;
                 }
 
                 List<Geometry.Planar.ISegmentable2D> segmentable2Ds_Temp = planarIntersectionResult.GetGeometry2Ds<Geometry.Planar.ISegmentable2D>();
-                if(segmentable2Ds_Temp == null || segmentable2Ds_Temp.Count == 0)
+                if (segmentable2Ds_Temp == null || segmentable2Ds_Temp.Count == 0)
                 {
                     continue;
                 }
@@ -56,7 +56,7 @@ namespace SAM.Analytical
             foreach (Geometry.Planar.Polygon2D polygon2D in polygon2Ds)
             {
                 List<Geometry.Planar.Segment2D> segment2Ds_Temp = polygon2D?.GetSegments();
-                if(segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
+                if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
                 {
                     continue;
                 }
@@ -81,10 +81,10 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    foreach(Geometry.Planar.Segment2D segment2D in segment2Ds_Temp)
+                    foreach (Geometry.Planar.Segment2D segment2D in segment2Ds_Temp)
                     {
                         Geometry.Planar.Polygon2D polygon2D = polygon2Ds.Find(x => x.On(segment2D.Mid(), tolerance_Distance));
-                        if(polygon2D != null)
+                        if (polygon2D != null)
                         {
                             segment2Ds.Add(segment2D);
                         }
@@ -94,14 +94,14 @@ namespace SAM.Analytical
 
             segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance_Distance);
 
-            foreach(Tuple<Panel, BoundingBox3D, List<Geometry.Planar.ISegmentable2D>> tuple in tuples)
+            foreach (Tuple<Panel, BoundingBox3D, List<Geometry.Planar.ISegmentable2D>> tuple in tuples)
             {
                 if (tuple.Item3 == null)
                 {
                     continue;
                 }
 
-                foreach(Geometry.Planar.ISegmentable2D segmentable2D in tuple.Item3)
+                foreach (Geometry.Planar.ISegmentable2D segmentable2D in tuple.Item3)
                 {
                     if (segment2Ds == null || segment2Ds.Count == 0)
                     {
@@ -109,14 +109,14 @@ namespace SAM.Analytical
                     }
 
                     List<Geometry.Planar.Segment2D> segment2Ds_Temp = segmentable2D.GetSegments();
-                    if(segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
+                    if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
                     {
                         continue;
                     }
 
-                    foreach(Geometry.Planar.Segment2D segment2D in segment2Ds_Temp)
+                    foreach (Geometry.Planar.Segment2D segment2D in segment2Ds_Temp)
                     {
-                        if(segment2D == null || segment2Ds == null || segment2Ds.Count == 0)
+                        if (segment2D == null || segment2Ds == null || segment2Ds.Count == 0)
                         {
                             break;
                         }
@@ -128,7 +128,7 @@ namespace SAM.Analytical
                 }
             }
 
-            foreach(Geometry.Planar.Segment2D segment2D in segment2Ds)
+            foreach (Geometry.Planar.Segment2D segment2D in segment2Ds)
             {
                 Geometry.Planar.Point2D point2D_1 = segment2D[0];
                 Geometry.Planar.Point2D point2D_2 = segment2D[1];
@@ -136,7 +136,7 @@ namespace SAM.Analytical
                 Tuple<Panel, BoundingBox3D, Geometry.Planar.Segment2D> tuple_Temp = null;
                 foreach (Tuple<Panel, BoundingBox3D, List<Geometry.Planar.ISegmentable2D>> tuple in tuples)
                 {
-                    foreach(Geometry.Planar.ISegmentable2D segmentable2D in tuple.Item3)
+                    foreach (Geometry.Planar.ISegmentable2D segmentable2D in tuple.Item3)
                     {
                         List<Geometry.Planar.Segment2D> segment2Ds_Temp = segmentable2D.GetSegments();
                         Geometry.Planar.Point2D point2D_Temp = null;
@@ -147,7 +147,7 @@ namespace SAM.Analytical
 
                         if (point2D_1.AlmostEquals(point2D_Temp, snapTolerance) || point2D_2.AlmostEquals(point2D_Temp, snapTolerance))
                         {
-                            if(segment2D.Direction.SmallestAngle(segment2D_Temp.Direction) < tolerance_Angle || segment2D.Direction.GetNegated().SmallestAngle(segment2D_Temp.Direction) < tolerance_Angle)
+                            if (segment2D.Direction.SmallestAngle(segment2D_Temp.Direction) < tolerance_Angle || segment2D.Direction.GetNegated().SmallestAngle(segment2D_Temp.Direction) < tolerance_Angle)
                             {
                                 tuple_Temp = new Tuple<Panel, BoundingBox3D, Geometry.Planar.Segment2D>(tuple.Item1, tuple.Item2, segment2D_Temp);
                                 break;
@@ -167,13 +167,13 @@ namespace SAM.Analytical
                         }
                     }
 
-                    if(tuple_Temp != null)
+                    if (tuple_Temp != null)
                     {
                         break;
                     }
                 }
 
-                if(tuple_Temp == null)
+                if (tuple_Temp == null)
                 {
                     continue;
                 }
@@ -190,8 +190,8 @@ namespace SAM.Analytical
 
                 Panel panel_New = new Panel(panel_Old.Guid, panel_Old, face3D);
 
-                int index= tuples.FindIndex(x => x.Item1 == panel_Old);
-                if(index != -1)
+                int index = tuples.FindIndex(x => x.Item1 == panel_Old);
+                if (index != -1)
                 {
                     tuples[index] = new Tuple<Panel, BoundingBox3D, List<Geometry.Planar.ISegmentable2D>>(panel_New, face3D.GetBoundingBox(tolerance_Distance), new List<Geometry.Planar.ISegmentable2D>() { segment2D_New });
                     result.Add(panel_New.Guid);
