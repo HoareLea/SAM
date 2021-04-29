@@ -98,9 +98,11 @@ namespace SAM.Geometry.Planar
                 segment2Ds.Add(new Segment2D(tuple_Extension.Item2[0], point2D));
             }
 
+            segment2Ds = segment2Ds.Split(tolerance);
+
             segment2Ds = segment2Ds.Snap(true, snapTolerance);
 
-            return ExternalPolygon2Ds(segment2Ds, tolerance);
+            return ExternalPolygon2Ds(segment2Ds, snapTolerance);
         }
     }
 }
