@@ -73,7 +73,7 @@
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Component\SAMAnalyticalExternalPanels.cs" />
     <Compile Include="Component\SAMAnalyticalSection.cs" />
-    <Compile Include="Component\SAMAnalyticalJoinExternalPanels.cs" />
+    <Compile Include="Component\SAMAnalyticalExtendExternalPanels.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelByBottomAndHeight.cs" />
     <Compile Include="Component\SAMAnalyticalFixAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalAlignPanelsByElevation.cs" />

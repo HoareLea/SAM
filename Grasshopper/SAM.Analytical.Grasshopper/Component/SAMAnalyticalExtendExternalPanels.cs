@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalJoinExternalPanels : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalExtendExternalPanels : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,8 +29,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalJoinExternalPanels()
-          : base("SAMAnalytical.JoinExternalPanels", "SAMAnalytical.JoinExternalPanels",
+        public SAMAnalyticalExtendExternalPanels()
+          : base("SAMAnalytical.ExtendExternalPanels", "SAMAnalytical.ExtendExternalPanels",
               "Join External Panels",
               "SAM", "Analytical")
         {
