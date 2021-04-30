@@ -7,19 +7,19 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Guid> JoinExternal(this List<Panel> panels, double elevation, double maxDistance, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static void JoinExternal(this List<Panel> panels, double elevation, double maxDistance, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            return JoinExternal(panels, elevation, maxDistance, out List<Panel> externalPanels_Old, out List<Panel> externalPanels_New, out List<Geometry.Planar.Polygon2D> externalPolygon2Ds, snapTolerance, tolerance_Angle, tolerance_Distance);
+            JoinExternal(panels, elevation, maxDistance, out List<Panel> externalPanels, out List<Panel> externalPanels_Extended, out List<Polygon3D> externalPolygon3Ds, snapTolerance, tolerance_Angle, tolerance_Distance);
         }
 
-        public static List<Guid> JoinExternal(this List<Panel> panels, double elevation, double maxDistance, out List<Panel> externalPanels_Old, out List<Panel> externalPanels_New, out List<Geometry.Planar.Polygon2D> externalPolygon2Ds, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static void JoinExternal(this List<Panel> panels, double elevation, double maxDistance, out List<Panel> externalPanels, out List<Panel> externalPanels_Extended, out List<Polygon3D> externalPolygon3Ds, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            externalPanels_Old = null;
-            externalPanels_New = null;
-            externalPolygon2Ds = null;
+            externalPanels = null;
+            externalPanels_Extended = null;
+            externalPolygon3Ds = null;
 
             if (panels == null)
-                return null;
+                return;
 
             Plane plane = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
 
@@ -34,9 +34,11 @@ namespace SAM.Analytical
                 }
             }
             
-            externalPolygon2Ds = Geometry.Planar.Query.ExternalPolygon2Ds(segmentable2Ds, maxDistance, snapTolerance, tolerance_Distance);
+            List<Geometry.Planar.Polygon2D> externalPolygon2Ds = Geometry.Planar.Query.ExternalPolygon2Ds(segmentable2Ds, maxDistance, snapTolerance, tolerance_Distance);
             if (externalPolygon2Ds == null || externalPolygon2Ds.Count == 0)
-                return new List<Guid>();
+                return;
+
+            externalPolygon3Ds = externalPolygon2Ds.ConvertAll(x => plane.Convert(x));
 
             List<Geometry.Planar.Segment2D> segment2Ds_Polygon3Ds = new List<Geometry.Planar.Segment2D>();
             foreach (Geometry.Planar.Polygon2D polygon2D in externalPolygon2Ds)
@@ -52,7 +54,7 @@ namespace SAM.Analytical
 
             List<Geometry.Planar.Segment2D> segment2Ds = new List<Geometry.Planar.Segment2D>(segment2Ds_Polygon3Ds);
 
-            externalPanels_Old = new List<Panel>();
+            externalPanels = new List<Panel>();
             foreach (KeyValuePair<Panel, List<Geometry.Planar.ISegmentable2D>> keyValuePair in dictionary)
             {
                 List<Geometry.Planar.ISegmentable2D> segmentable2Ds_Temp = keyValuePair.Value;
@@ -72,10 +74,25 @@ namespace SAM.Analytical
 
                     foreach (Geometry.Planar.Segment2D segment2D in segment2Ds_Temp)
                     {
-                        Geometry.Planar.Polygon2D polygon2D = externalPolygon2Ds.Find(x => x.On(segment2D.Mid(), tolerance_Distance));
+                        Geometry.Planar.BoundingBox2D boundingBox2D_Segment2D = segment2D.GetBoundingBox();
+                        List<Geometry.Planar.Polygon2D> polygon2Ds = externalPolygon2Ds.FindAll(x => x.GetBoundingBox().InRange(boundingBox2D_Segment2D, tolerance_Distance));
+
+                        Geometry.Planar.Polygon2D polygon2D = polygon2Ds.Find(x => x.On(segment2D[0], snapTolerance) || x.On(segment2D[0], snapTolerance) || x.On(segment2D.Mid(), snapTolerance));
                         if (polygon2D != null)
                         {
                             segment2Ds.Add(segment2D);
+                        }
+                        else
+                        {
+                            foreach(Geometry.Planar.Polygon2D polygon2D_Temp in polygon2Ds)
+                            {
+                                Geometry.Planar.Point2D point2D = polygon2D_Temp.Points.Find(x => boundingBox2D_Segment2D.InRange(x, snapTolerance) && segment2D.On(x, snapTolerance));
+                                if(point2D != null)
+                                {
+                                    segment2Ds.Add(segment2D);
+                                    break;
+                                }
+                            }
                         }
 
                         if(!external)
@@ -97,11 +114,11 @@ namespace SAM.Analytical
 
                 if(external)
                 {
-                    externalPanels_Old.Add(keyValuePair.Key);
+                    externalPanels.Add(keyValuePair.Key);
                 }
             }
 
-            externalPanels_New = new List<Panel>(externalPanels_Old);
+            externalPanels_Extended = new List<Panel>(externalPanels);
 
             segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance_Distance);
 
@@ -135,11 +152,11 @@ namespace SAM.Analytical
                         Geometry.Planar.Point2D point2D_Mid = segment2D.Mid();
 
                         segment2Ds.RemoveAll(x => x.On(point2D_Mid, snapTolerance));
+                        segment2Ds.RemoveAll(x => segment2D.On(x.Mid(), snapTolerance));
                     }
                 }
             }
 
-            HashSet<Guid> result = new HashSet<Guid>();
             foreach (Geometry.Planar.Segment2D segment2D in segment2Ds)
             {
                 Geometry.Planar.Point2D point2D_1 = segment2D[0];
@@ -210,19 +227,16 @@ namespace SAM.Analytical
                     if (dictionary.ContainsKey(panel_Old))
                     {
                         dictionary[panel_Old] = new List<Geometry.Planar.ISegmentable2D>() { segment2D_New };
-                        result.Add(panel_New.Guid);
                         panels[index] = panel_New;
 
-                        index = externalPanels_New.IndexOf(panel_Old);
+                        index = externalPanels_Extended.IndexOf(panel_Old);
                         if(index != -1)
                         {
-                            externalPanels_New[index] = panel_New;
+                            externalPanels_Extended[index] = panel_New;
                         }
                     }
                 }
             }
-
-            return result.ToList();
         }
     }
 }
