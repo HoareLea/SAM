@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static Face2D FixEdges(this Face2D face2D, double tolerance = Core.Tolerance.Distance)
+        public static List<Face2D> FixEdges(this Face2D face2D, double tolerance = Core.Tolerance.Distance)
         {
             ISegmentable2D segmentable2D = face2D?.ExternalEdge2D as ISegmentable2D;
             if (segmentable2D == null)
@@ -19,15 +18,11 @@ namespace SAM.Geometry.Planar
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
 
-            if (polygon2Ds.Count > 1)
-                polygon2Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
-
-            IClosed2D externalEdge = polygon2Ds[0];
-
             List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
-            if(internalEdges != null && internalEdges.Count != 0)
+            if (internalEdges != null && internalEdges.Count != 0)
             {
-                for(int i=0; i < internalEdges.Count; i++)
+                List<IClosed2D> internalEdges_New = new List<IClosed2D>();
+                for (int i = 0; i < internalEdges.Count; i++)
                 {
                     segmentable2D = face2D?.ExternalEdge2D as ISegmentable2D;
                     if (segmentable2D == null)
@@ -41,14 +36,21 @@ namespace SAM.Geometry.Planar
                     if (polygon2Ds == null || polygon2Ds.Count == 0)
                         continue;
 
-                    if (polygon2Ds.Count > 1)
-                        polygon2Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
-
-                    internalEdges[i] = polygon2Ds[0];
+                    polygon2Ds.ForEach(x => internalEdges_New.Add(x));
                 }
+
+                internalEdges = internalEdges_New;
             }
 
-            return Face2D.Create(externalEdge, internalEdges, true);
+            List<Face2D> result = new List<Face2D>();
+            foreach(Polygon2D externalEdge in polygon2Ds)
+            {
+                Face2D face2D_New = Face2D.Create(externalEdge, internalEdges, true);
+                if (face2D_New != null)
+                    result.Add(face2D_New);
+            }
+
+            return result;
         }
     }
 }

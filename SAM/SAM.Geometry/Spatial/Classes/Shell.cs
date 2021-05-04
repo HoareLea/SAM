@@ -591,11 +591,15 @@ namespace SAM.Geometry.Spatial
                 {
                     foreach(Face2D face2D_Difference in face2Ds_Difference)
                     {
-                        Face2D face2D_Difference_Temp = face2D_Difference.FixEdges(tolerance_Distance);
-                        if (face2D_Difference_Temp == null)
-                            face2D_Difference_Temp = face2D_Difference;
-
-                        face2Ds.Add(face2D_Difference_Temp);
+                        List<Face2D> face2Ds_Difference_Temp = face2D_Difference.FixEdges(tolerance_Distance);
+                        if (face2Ds_Difference_Temp == null && face2Ds_Difference_Temp.Count == 0)
+                        {
+                            face2Ds.Add(face2D_Difference);
+                        }
+                        else
+                        {
+                            face2Ds.AddRange(face2Ds_Difference_Temp);
+                        }
                     }
                 }
 
