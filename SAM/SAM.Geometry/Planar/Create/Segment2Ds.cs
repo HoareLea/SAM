@@ -214,6 +214,36 @@ namespace SAM.Geometry.Planar
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
+            for (int i = 0; i < tuples_Extensions.Count - 1; i++)
+            {
+                for (int j = i + 1; j < tuples_Extensions.Count; j++)
+                {
+                    if(tuples_Extensions[i].Item1.InRange(tuples_Extensions[j].Item1, tolerance))
+                    {
+                        Segment2D segment2D_1 = tuples_Extensions[i].Item2;
+                        Segment2D segment2D_2 = tuples_Extensions[j].Item2;
+
+                        if(!segment2D_1.Direction.SameHalf(segment2D_2.Direction))
+                        {
+                            if (segment2D_1.Collinear(segment2D_2, tolerance) && (segment2D_1.On(segment2D_2[0], tolerance) || segment2D_1.On(segment2D_2[1], tolerance)))
+                            {
+                                List<Point2D> point2Ds = new List<Point2D>() { segment2D_1[0], segment2D_1[1], segment2D_2[0], segment2D_2[1] };
+                                point2Ds.RemoveAll(x => !segment2D_1.On(x, tolerance) || !segment2D_2.On(x, tolerance));
+                                if(point2Ds.Count >= 2)
+                                {
+                                    Query.ExtremePoints(point2Ds, out Point2D point2D_1, out Point2D point2D_2);
+                                    if (point2D_1 != null && point2D_2 != null && point2D_1.Distance(point2D_2) >= tolerance)
+                                    {
+                                        segment2Ds.Add(new Segment2D(point2D_1, point2D_2));
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+
             foreach (Tuple<BoundingBox2D, Segment2D> tuple_Extension in tuples_Extensions)
             {
                 double distance = double.MaxValue;

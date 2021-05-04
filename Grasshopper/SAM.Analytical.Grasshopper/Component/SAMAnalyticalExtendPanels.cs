@@ -7,17 +7,17 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalExtendExternalPanels : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalExtendPanels : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("29242fec-1491-4f2e-9bdd-ec815e001907");
+        public override Guid ComponentGuid => new Guid("97e5ae37-fedf-4f2b-9650-b551da66de6d");
 
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.0";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,9 +29,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalExtendExternalPanels()
-          : base("SAMAnalytical.ExtendExternalPanels", "SAMAnalytical.ExtendExternalPanels",
-              "Extend External Panels",
+        public SAMAnalyticalExtendPanels()
+          : base("SAMAnalytical.ExtendPanels", "SAMAnalytical.ExtendPanels",
+              "Extend Panels",
               "SAM", "Analytical")
         {
         }
@@ -75,9 +75,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "externalPanels", NickName = "externalPanels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "externalPanels_Extended", NickName = "externalPanels_Extended", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "externalPolygon3Ds", NickName = "externalPolygon3Ds", Description = "SAM Geometry Pnlanar External Polygon3Ds", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "extendedPanels", NickName = "extendedPanels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "segment3Ds", NickName = "segment3Ds", Description = "SAM Geometry Segment3Ds", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -118,23 +117,19 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(tolerance))
                 tolerance = Tolerance.Distance;
 
-            Analytical.Modify.ExtendExternal(panels, elevation, maxDistance, out List<Panel> externalPanels_Old, out List<Panel> externalPanels_New, out List<Geometry.Spatial.Polygon3D> externalPolygon3Ds, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
+            Analytical.Modify.Extend(panels, elevation, maxDistance, out List<Panel> panels_Extended, out List<Geometry.Spatial.Segment3D> segment3Ds, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
 
             index = Params.IndexOfOutputParam("panels");
             if (index != -1)
                 dataAccess.SetDataList(index, panels?.ConvertAll(x => new GooPanel(x)));
 
-            index = Params.IndexOfOutputParam("externalPanels");
+            index = Params.IndexOfOutputParam("extendedPanels");
             if (index != -1)
-                dataAccess.SetDataList(index, externalPanels_Old?.ConvertAll(x => new GooPanel(x)));
+                dataAccess.SetDataList(index, panels_Extended?.ConvertAll(x => new GooPanel(x)));
 
-            index = Params.IndexOfOutputParam("externalPanels_Extended");
+            index = Params.IndexOfOutputParam("segment3Ds");
             if (index != -1)
-                dataAccess.SetDataList(index, externalPanels_New?.ConvertAll(x => new GooPanel(x)));
-
-            index = Params.IndexOfOutputParam("externalPolygon3Ds");
-            if (index != -1)
-                dataAccess.SetDataList(index, externalPolygon3Ds);
+                dataAccess.SetDataList(index, segment3Ds);
 
         }
     }
