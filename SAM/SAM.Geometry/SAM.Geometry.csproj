@@ -77,6 +77,7 @@
     <Compile Include="Planar\Create\Face2D.cs" />
     <Compile Include="Planar\Create\Polyline2Ds.cs" />
     <Compile Include="Planar\Modify\Connect.cs" />
+    <Compile Include="Planar\Query\TrimUnconnected.cs" />
     <Compile Include="Planar\Query\Truncate.cs" />
     <Compile Include="Planar\Query\Connected.cs" />
     <Compile Include="Planar\Query\Direction.cs" />
@@ -162,7 +163,6 @@
     <Compile Include="Planar\Query\SimplifyBySAM_Length.cs" />
     <Compile Include="Planar\Query\SimplifyBySAM_Angle.cs" />
     <Compile Include="Planar\Modify\OrientByEnds.cs" />
-    <Compile Include="Planar\Modify\Join.cs" />
     <Compile Include="Planar\Query\Cut.cs" />
     <Compile Include="Planar\Query\Triangulate.cs" />
     <Compile Include="Planar\Query\Trim.cs" />

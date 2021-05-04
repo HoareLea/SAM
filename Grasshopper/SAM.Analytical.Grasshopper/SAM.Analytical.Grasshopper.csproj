@@ -72,6 +72,7 @@
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Component\SAMAnalyticalExtendExternalPanels.cs" />
+    <Compile Include="Component\SAMAnalyticalTrimPanels.cs" />
     <Compile Include="Component\SAMAnalyticalExternalPanels.cs" />
     <Compile Include="Component\SAMAnalyticalSection.cs" />
     <Compile Include="Component\SAMAnalyticalExtendPanels.cs" />
