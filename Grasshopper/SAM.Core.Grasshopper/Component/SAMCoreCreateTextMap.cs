@@ -90,7 +90,7 @@ namespace SAM.Core.Grasshopper
             index = Params.IndexOfOutputParam("TextMap");
             if(index != -1)
             {
-                TextMap result = new TextMap("Text Map");
+                TextMap result = Core.Create.TextMap("Text Map");
                 for(int i = 0; i < keys.Count; i++)
                 {
                     if (values.Count <= i)

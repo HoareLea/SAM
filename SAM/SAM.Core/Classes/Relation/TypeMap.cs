@@ -15,18 +15,18 @@ namespace SAM.Core
         /// </summary>
         private List<Tuple<string, string, string, string, string, string>> tuples;
 
-        public TypeMap(TypeMap typeMap)
+        internal TypeMap(TypeMap typeMap)
             :base(typeMap)
         {
             tuples = typeMap?.tuples?.ConvertAll(x => new Tuple<string, string, string, string, string, string>(x.Item1, x.Item2, x.Item3, x.Item4, x.Item5, x.Item6));
         }
         
-        public TypeMap()
+        internal TypeMap()
         {
             tuples = new List<Tuple<string, string, string, string, string, string>>();
         }
 
-        public TypeMap(JObject jObject)
+        internal TypeMap(JObject jObject)
             : base(jObject)
         {
 

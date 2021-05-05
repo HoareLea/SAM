@@ -78,6 +78,8 @@
     <Compile Include="Convert\ToFile\File.cs" />
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Create\Commands.cs" />
+    <Compile Include="Create\TypeMap.cs" />
+    <Compile Include="Create\TextMap.cs" />
     <Compile Include="Create\ZipArchiveInfo.cs" />
     <Compile Include="Enums\AccessType.cs" />
     <Compile Include="Enums\Operator\ArithmeticOperator.cs" />

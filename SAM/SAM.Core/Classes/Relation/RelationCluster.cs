@@ -10,8 +10,6 @@ namespace SAM.Core
         private Dictionary<string, Dictionary<Guid, object>> dictionary_Objects;
         private Dictionary<string, Dictionary<Guid, HashSet<Guid>>> dictionary_Relations;
 
-        //private List<GuidCollection> groups;
-
         public RelationCluster()
         {
             dictionary_Objects = new Dictionary<string, Dictionary<Guid, object>>();
@@ -201,7 +199,6 @@ namespace SAM.Core
 
             return true;
         }
-
 
         public bool Join(RelationCluster relationCluster)
         {

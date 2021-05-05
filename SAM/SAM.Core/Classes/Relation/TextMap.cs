@@ -9,13 +9,13 @@ namespace SAM.Core
     {
         private Dictionary<string, HashSet<string>> dictionary;
 
-        public TextMap(string name)
+        internal TextMap(string name)
             : base(name)
         {
 
         }
 
-        public TextMap(TextMap textMap)
+        internal TextMap(TextMap textMap)
             : base(textMap)
         {
             if(textMap.dictionary != null)
@@ -32,7 +32,7 @@ namespace SAM.Core
             }
         }
 
-        public TextMap(JObject jObject)
+        internal TextMap(JObject jObject)
             : base(jObject)
         {
 

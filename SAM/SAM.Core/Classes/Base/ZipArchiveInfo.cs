@@ -11,17 +11,17 @@ namespace SAM.Core
 
         HashSet<Guid> guids;
         
-        public ZipArchiveInfo()
+        internal ZipArchiveInfo()
         {
 
         }
 
-        public ZipArchiveInfo(JObject jObject)
+        internal ZipArchiveInfo(JObject jObject)
         {
             FromJObject(jObject);
         }
 
-        public ZipArchiveInfo(ZipArchiveInfo zipArchiveInfo)
+        internal ZipArchiveInfo(ZipArchiveInfo zipArchiveInfo)
         {
             guids = new HashSet<Guid>();
             foreach (Guid guid in zipArchiveInfo.guids)
