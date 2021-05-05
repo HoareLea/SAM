@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -65,11 +66,20 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<Core.SAMObject> sAMObjects = new List<Core.SAMObject>();
-            if (!dataAccess.GetDataList(0, sAMObjects))
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+            if (!dataAccess.GetDataList(0, objectWrappers))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
+            }
+
+            List<Core.SAMObject> sAMObjects = new List<Core.SAMObject>();
+            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            {
+                if(objectWrapper?.Value is Core.SAMObject)
+                {
+                    sAMObjects.Add((Core.SAMObject)objectWrapper.Value);
+                }
             }
 
             double elevation = double.NaN;
