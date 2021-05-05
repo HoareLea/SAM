@@ -70,12 +70,12 @@ namespace SAM.Geometry.Planar
             return new Segment2D(point2D_Start, point2D_End);
         }
 
-        public static Segment2D Extend(this Segment2D segment2D, double distance, bool extend_Start = true, bool extend_End = true)
+        public static Segment2D Extend(this Segment2D segment2D, double distance, bool extendStart = true, bool extendEnd = true)
         {
             if (segment2D == null)
                 return null;
 
-            if (!extend_Start && !extend_End)
+            if (!extendStart && !extendEnd)
                 return new Segment2D(segment2D);
 
             if (distance == 0)
@@ -84,31 +84,31 @@ namespace SAM.Geometry.Planar
             Vector2D vector2D = segment2D.Direction * distance;
 
             Point2D point2D_End = segment2D.End;
-            if (extend_End)
+            if (extendEnd)
                 point2D_End.Move(vector2D);
 
             vector2D.Negate();
 
             Point2D point2D_Start = segment2D.Start;
-            if (extend_Start)
+            if (extendStart)
                 point2D_Start.Move(vector2D);
 
             return new Segment2D(point2D_Start, point2D_End);
         }
 
-        public static Polyline2D Extend(this Polyline2D polyline2D, ISegmentable2D segmentable2D, bool extend_Start = true, bool extend_End = true)
+        public static Polyline2D Extend(this Polyline2D polyline2D, ISegmentable2D segmentable2D, bool extendStart = true, bool extendEnd = true)
         {
             if (polyline2D == null || segmentable2D == null)
                 return null;
 
-            if (polyline2D.IsClosed() || (!extend_End && !extend_Start))
+            if (polyline2D.IsClosed() || (!extendEnd && !extendStart))
                 return new Polyline2D(polyline2D);
 
             List<Segment2D> segment2Ds = polyline2D.GetSegments();
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
-            if (extend_Start)
+            if (extendStart)
             {
                 Segment2D segment2D = segment2Ds[0];
 
@@ -121,7 +121,7 @@ namespace SAM.Geometry.Planar
                     segment2Ds[0] = new Segment2D(point2D.GetMoved(vector2Ds[0]), segment2D.End);
             }
 
-            if (extend_End)
+            if (extendEnd)
             {
                 Segment2D segment2D = segment2Ds[segment2Ds.Count - 1];
 

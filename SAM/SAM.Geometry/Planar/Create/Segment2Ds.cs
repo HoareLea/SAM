@@ -27,9 +27,9 @@ namespace SAM.Geometry.Planar
             return Segment2Ds(boundingBox2D, offset_Horizontal, offset_Vertical, corner, includeEdge);
         }
 
-        public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, double? offset_Horizontal, double? offset_Vertical, Point2D point2D, bool includeEdge = true)
+        public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, double? horizontalOffset, double? verticalOffset, Point2D point2D, bool includeEdge = true)
         {
-            return Segment2Ds(boundingBox2D, offset_Horizontal, offset_Vertical, boundingBox2D.GetCorner(point2D), true);
+            return Segment2Ds(boundingBox2D, horizontalOffset, verticalOffset, boundingBox2D.GetCorner(point2D), true);
         }
 
         public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, Alignment alignment, double offset, Point2D point2D, bool includeEdge = true)
@@ -37,14 +37,14 @@ namespace SAM.Geometry.Planar
             return Segment2Ds(boundingBox2D, alignment, offset, boundingBox2D.GetCorner(point2D), true);
         }
 
-        public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, double? offset_Horizontal, double? offset_Vertical, Corner corner = Corner.TopLeft, bool includeEdge = true)
+        public static List<Segment2D> Segment2Ds(this BoundingBox2D boundingBox2D, double? horizontalOffset, double? verticalOffset, Corner corner = Corner.TopLeft, bool includeEdge = true)
         {
             if (boundingBox2D == null || corner == Corner.Undefined)
                 return null;
 
             List<Segment2D> result = null;
 
-            if (offset_Horizontal != null && offset_Horizontal.HasValue && offset_Horizontal.Value != 0)
+            if (horizontalOffset != null && horizontalOffset.HasValue && horizontalOffset.Value != 0)
             {
                 result = new List<Segment2D>();
 
@@ -68,7 +68,7 @@ namespace SAM.Geometry.Planar
                         break;
                 }
 
-                double offset = offset_Horizontal.Value;
+                double offset = horizontalOffset.Value;
                 int count = System.Convert.ToInt32(boundingBox2D.Height / offset);
                 if (!includeEdge)
                     count--;
@@ -87,7 +87,7 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            if (offset_Vertical != null && offset_Vertical.HasValue && offset_Vertical.Value != 0)
+            if (verticalOffset != null && verticalOffset.HasValue && verticalOffset.Value != 0)
             {
                 if (result == null)
                     result = new List<Segment2D>();
@@ -112,7 +112,7 @@ namespace SAM.Geometry.Planar
                         break;
                 }
 
-                double offset = offset_Vertical.Value;
+                double offset = verticalOffset.Value;
                 int count = System.Convert.ToInt32(boundingBox2D.Width / offset);
 
                 if (!includeEdge)

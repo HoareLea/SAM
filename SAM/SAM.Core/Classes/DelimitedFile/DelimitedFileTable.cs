@@ -54,9 +54,9 @@ namespace SAM.Core
             Read(delimitedFileReader, namesIndex, headerCount);
         }
 
-        public DelimitedFileTable(List<DelimitedFileRow> DelimitedFileRowList, int namesIndex = 0, int headerCount = 0)
+        public DelimitedFileTable(List<DelimitedFileRow> delimitedFileRows, int namesIndex = 0, int headerCount = 0)
         {
-            Read(DelimitedFileRowList, namesIndex, headerCount);
+            Read(delimitedFileRows, namesIndex, headerCount);
         }
 
         public DelimitedFileTable(object[,] data, int namesIndex = 0, int headerCount = 0)

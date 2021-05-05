@@ -13,9 +13,9 @@ namespace SAM.Core
         {
         }
 
-        public DelimitedFileRow(IEnumerable<string> Values)
+        public DelimitedFileRow(IEnumerable<string> values)
         {
-            AddRange(Values);
+            AddRange(values);
         }
     }
 }

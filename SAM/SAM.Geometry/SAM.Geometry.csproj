@@ -154,7 +154,6 @@
     <Compile Include="Planar\Query\ThinnessRatio.cs" />
     <Compile Include="Planar\Query\Perimeter.cs" />
     <Compile Include="Planar\Query\Snap.cs" />
-    <Compile Include="Planar\Query\ExtendOrTrim.cs" />
     <Compile Include="Planar\Query\Extend.cs" />
     <Compile Include="Planar\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Planar\Query\SimplifyByNTS_TopologyPreservingSimplifier.cs" />

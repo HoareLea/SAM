@@ -20,10 +20,10 @@ namespace SAM.Core
             pSeparator = Separator;
         }
 
-        public DelimitedFileWriter(DelimitedFileType DelimitedFileType, string Path)
+        public DelimitedFileWriter(DelimitedFileType delimitedFileType, string Path)
             : base(Path)
         {
-            pSeparator = Query.Separator(DelimitedFileType);
+            pSeparator = Query.Separator(delimitedFileType);
         }
 
         public char Separator
@@ -37,15 +37,15 @@ namespace SAM.Core
         /// <summary>
         /// Writes a single row to a CSV file.
         /// </summary>
-        /// <param name="DelimitedFileRow">The row to be written</param>
-        public void Write(DelimitedFileRow DelimitedFileRow)
+        /// <param name="delimitedFileRow">The row to be written</param>
+        public void Write(DelimitedFileRow delimitedFileRow)
         {
-            if (DelimitedFileRow == null)
+            if (delimitedFileRow == null)
                 return;
 
             StringBuilder aBuilder = new StringBuilder();
             bool aFirstColumn = true;
-            foreach (string aValue in DelimitedFileRow)
+            foreach (string aValue in delimitedFileRow)
             {
                 // Add separator if this isn't the first value
                 if (!aFirstColumn)
@@ -58,26 +58,26 @@ namespace SAM.Core
                     aBuilder.Append(aValue);
                 aFirstColumn = false;
             }
-            DelimitedFileRow.LineText = aBuilder.ToString();
-            WriteLine(DelimitedFileRow.LineText);
+            delimitedFileRow.LineText = aBuilder.ToString();
+            WriteLine(delimitedFileRow.LineText);
         }
 
         /// <summary>
         /// Writes a rows to a CSV file.
         /// </summary>
-        /// <param name="DelimitedFileRows">The rows to be written</param>
-        public void Write(IEnumerable<DelimitedFileRow> DelimitedFileRows)
+        /// <param name="delimitedFileRows">The rows to be written</param>
+        public void Write(IEnumerable<DelimitedFileRow> delimitedFileRows)
         {
-            foreach (DelimitedFileRow aDelimitedFileRow in DelimitedFileRows)
+            foreach (DelimitedFileRow aDelimitedFileRow in delimitedFileRows)
                 Write(aDelimitedFileRow);
         }
 
-        public void Write(DelimitedFileTable DelimitedFileTable)
+        public void Write(DelimitedFileTable delimitedFileTable)
         {
-            if (DelimitedFileTable == null)
+            if (delimitedFileTable == null)
                 return;
 
-            DelimitedFileTable.Write(this);
+            delimitedFileTable.Write(this);
         }
     }
 }
