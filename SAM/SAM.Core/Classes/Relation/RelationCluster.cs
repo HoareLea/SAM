@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Core
 {
@@ -735,12 +736,20 @@ namespace SAM.Core
                     if (jArray == null)
                         continue;
 
-                    Dictionary<Guid, object> dictionary = new Dictionary<Guid, object>();
-                    foreach (JObject jObject_Temp in jArray)
+                    List<Tuple<Guid, object>> tuples = Enumerable.Repeat(new Tuple<Guid, object>(Guid.Empty, null), jArray.Count).ToList();
+                    Parallel.For(0, jArray.Count, (int i) => 
                     {
+                        JObject jObject_Temp = jArray[i] as JObject;
+                        if (jObject_Temp == null)
+                        {
+                            return;
+                        }
+
                         Guid guid = jObject_Temp.Guid("Key");
                         if (guid == Guid.Empty)
-                            continue;
+                        {
+                            return;
+                        }
 
                         object @object = null;
                         JToken jToken = jObject_Temp.GetValue("Value");
@@ -762,15 +771,30 @@ namespace SAM.Core
                                 @object = jToken.Value<double>();
                                 break;
                             case JTokenType.Date:
-                                @object = jToken.Value<System.DateTime>();
+                                @object = jToken.Value<DateTime>();
                                 break;
                         }
 
-                        if (@object == null)
-                            continue;
+                        if(@object == null)
+                        {
+                            return;
+                        }
 
-                        dictionary[guid] = @object;
+                        tuples[i] = new Tuple<Guid, object>(guid, @object);
+
+                    });
+
+                    Dictionary<Guid, object> dictionary = new Dictionary<Guid, object>();
+                    foreach(Tuple<Guid, object> tuple in tuples)
+                    {
+                        if(tuple.Item1 == Guid.Empty && tuple.Item2 == null)
+                        {
+                            continue;
+                        }
+
+                        dictionary[tuple.Item1] = tuple.Item2;
                     }
+
                     dictionary_Objects[typeName] = dictionary;
                 }
             }
