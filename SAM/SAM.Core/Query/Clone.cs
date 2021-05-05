@@ -51,7 +51,9 @@ namespace SAM.Core
             ConstructorInfo constructorInfo_Type = null;
             ConstructorInfo constructorInfo_Type_AssignableFrom = null;
 
-            foreach (ConstructorInfo constructorInfo in type.GetConstructors())
+            List<ConstructorInfo> constructorInfos = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).ToList();
+
+            foreach (ConstructorInfo constructorInfo in constructorInfos)
             {
                 ParameterInfo[] parameterInfos = constructorInfo.GetParameters();
                 if(parameterInfos == null || parameterInfos.Length == 0)

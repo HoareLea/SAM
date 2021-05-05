@@ -69,12 +69,14 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            GH_ObjectWrapper objectWrapper = null;
+            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null || !(objectWrapper.Value is SAMObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+
+            SAMObject sAMObject = objectWrapper.Value as SAMObject;
 
             string name = null;
             if (!dataAccess.GetData(1, ref name) || string.IsNullOrWhiteSpace(name))
@@ -85,7 +87,7 @@ namespace SAM.Core.Grasshopper
 
             List<Enum> enums = ActiveManager.GetParameterEnums(sAMObject, name);
 
-            GH_ObjectWrapper objectWrapper = null;
+            objectWrapper = null;
             if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper == null)
             {
                 dataAccess.SetData(0, null);
