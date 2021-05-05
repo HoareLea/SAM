@@ -75,7 +75,7 @@ namespace SAM.Analytical.Grasshopper
 
             Geometry.Spatial.Vector3D vector3D = vector3d.ToSAM();
 
-            Panel result = new Panel(panel);
+            Panel result = Create.Panel(panel);
             result.Move(vector3D);
 
             dataAccess.SetData(0, result);

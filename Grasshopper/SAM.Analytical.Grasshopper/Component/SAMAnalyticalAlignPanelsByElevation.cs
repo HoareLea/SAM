@@ -127,7 +127,7 @@ namespace SAM.Analytical.Grasshopper
                 if(panels[i] == null)
                     continue;
 
-                Panel panel_Temp = new Panel(panels[i]);
+                Panel panel_Temp = Create.Panel(panels[i]);
 
                 panel_Temp = Analytical.Modify.Extend(panel_Temp, plane_Upper, Tolerance.Angle, tolerance);
                 panel_Temp = Analytical.Modify.Extend(panel_Temp, plane_Lower, Tolerance.Angle, tolerance);

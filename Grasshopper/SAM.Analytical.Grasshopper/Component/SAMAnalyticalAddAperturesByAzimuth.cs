@@ -109,7 +109,7 @@ namespace SAM.Analytical.Grasshopper
                 //if (((Panel)sAMObject).PanelType != PanelType.WallExternal)
                 //    return;
                 
-                Panel panel = new Panel((Panel)sAMObject);
+                Panel panel = Create.Panel((Panel)sAMObject);
 
                 double azimuth = panel.Azimuth();
                 if (double.IsNaN(azimuth))
@@ -166,7 +166,7 @@ namespace SAM.Analytical.Grasshopper
                     if (!Core.Grasshopper.Query.TryGetValue(dictionary, azimuth, out ratio))
                         continue;
 
-                    Panel panel_New = new Panel(panel);
+                    Panel panel_New = Create.Panel(panel);
 
                     ApertureConstruction apertureConstruction_Temp = apertureConstruction;
                     if (apertureConstruction_Temp == null)

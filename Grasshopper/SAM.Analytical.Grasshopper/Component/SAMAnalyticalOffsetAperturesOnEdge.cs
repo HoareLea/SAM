@@ -68,7 +68,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            panel = new Panel(panel);
+            panel = Create.Panel(panel);
 
             double distance = 0.1;
             dataAccess.GetData(1, ref distance);

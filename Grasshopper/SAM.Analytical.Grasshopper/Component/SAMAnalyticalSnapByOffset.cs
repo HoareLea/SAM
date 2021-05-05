@@ -75,7 +75,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Geometry.Spatial.Point3D> point3DList = Geometry.Spatial.Point3D.Generate(new Geometry.Spatial.BoundingBox3D(panels.ConvertAll(x => x.GetBoundingBox(offset))), offset);
 
-            panels = panels.ConvertAll(x => new Panel(x));
+            panels = panels.ConvertAll(x => Create.Panel(x));
             panels.ForEach(x => x.Snap(point3DList, offset));
 
             dataAccess.SetDataList(0, panels.ConvertAll(x => new GooPanel(x)));

@@ -81,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
 
             if (sAMObject is Panel)
             {
-                Panel result = new Panel((Panel)sAMObject);
+                Panel result = Create.Panel((Panel)sAMObject);
                 List<Guid> guids = new List<Guid>();
 
                 List<Aperture> apertures = sAMObjects.FindAll(x => x is Aperture).ConvertAll(x => (Aperture)x);

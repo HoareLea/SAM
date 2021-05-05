@@ -88,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
             List<Geometry.Spatial.Point3D> point3Ds = geometries?.Cast<Geometry.Spatial.Point3D>()?.ToList();
             Geometry.Spatial.Modify.RemoveAlmostSimilar(point3Ds);
 
-            Panel result = new Panel(panel);
+            Panel result = Create.Panel(panel);
             result.Snap(point3Ds, maxDistance);
 
             dataAccess.SetData(0, new GooPanel(result));

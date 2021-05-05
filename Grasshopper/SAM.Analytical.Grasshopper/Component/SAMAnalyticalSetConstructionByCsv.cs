@@ -173,7 +173,7 @@ namespace SAM.Analytical.Grasshopper
                     if (construction_New == null)
                         construction_New = new Construction(construction, name_destination);
 
-                    result.Add(new Panel(panel, construction_New));
+                    result.Add(Create.Panel(panel, construction_New));
                 }
             }
 

@@ -108,7 +108,7 @@ namespace SAM.Analytical.Grasshopper
                     double area = panel.GetArea();
                     if (area > minArea)
                     {
-                        panels_In.Add(new Panel(panel));
+                        panels_In.Add(Create.Panel(panel));
                         continue;
                     }
 
@@ -116,12 +116,12 @@ namespace SAM.Analytical.Grasshopper
                     double thinnessRatio = panel.GetThinnessRatio();
                     if (thinnessRatio > minThinnessRatio)
                     {
-                        panels_In.Add(new Panel(panel));
+                        panels_In.Add(Create.Panel(panel));
                         continue;
                     }
 
                     adjacencyCluster.RemoveObject<Panel>(panel.Guid);
-                    panels_Out.Add(new Panel(panel));
+                    panels_Out.Add(Create.Panel(panel));
                 }
             }
 

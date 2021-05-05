@@ -152,7 +152,7 @@ namespace SAM.Analytical.Grasshopper
                 if (panel == null)
                     continue;
 
-                List<Panel> panels_Cut = Analytical.Query.Cut(new Panel(panel), plane);
+                List<Panel> panels_Cut = Analytical.Query.Cut(Create.Panel(panel), plane);
                 if (panels_Cut == null)
                     panels_Cut = new List<Panel>();
 

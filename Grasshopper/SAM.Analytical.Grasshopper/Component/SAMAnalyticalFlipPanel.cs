@@ -67,7 +67,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            panel = new Panel(panel);
+            panel = Create.Panel(panel);
             panel.FlipNormal(true, false);
 
             dataAccess.SetData(0, new GooPanel(panel));

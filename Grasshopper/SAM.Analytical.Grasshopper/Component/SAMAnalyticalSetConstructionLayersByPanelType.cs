@@ -145,13 +145,13 @@ namespace SAM.Analytical.Grasshopper
 
                     construction_New = new Construction(construction_Old, construction_New.ConstructionLayers);
 
-                    panel = new Panel(panel, construction_New);
+                    panel = Create.Panel(panel, construction_New);
                     updated = true;
                 }
                     
                 if(panel.HasApertures)
                 {
-                    panel = new Panel(panel);
+                    panel = Create.Panel(panel);
                     foreach (Aperture aperture in panel.Apertures)
                     {
                         Aperture aperture_Old = panel.GetAperture(aperture.Guid);

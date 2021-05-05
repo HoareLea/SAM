@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+﻿using SAM.Core;
+using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -26,6 +29,75 @@ namespace SAM.Analytical
                 return null;
 
             return new Panel(panel.Guid, panel, new Face3D(polygon3D));
+        }
+
+        public static Panel Panel(Construction construction, PanelType panelType, Face3D face3D)
+        {
+            if(face3D == null || panelType == PanelType.Undefined)
+            {
+                return null;
+            }
+
+            return new Panel(construction, panelType, face3D);
+        }
+
+        public static Panel Panel(Guid guid, Panel panel, Face3D face3D, IEnumerable<Aperture> apertures = null, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)
+        {
+            if(panel == null || face3D == null || guid == Guid.Empty)
+            {
+                return null;
+            }
+
+            return new Panel(guid, panel, face3D, apertures, trimGeometry, minArea, maxDistance);
+        }
+
+        public static Panel Panel(Panel panel)
+        {
+            if(panel == null)
+            {
+                return null;
+            }
+
+            return new Panel(panel);
+        }
+
+        public static Panel Panel(Panel panel, PanelType panelType)
+        {
+            if(panel == null)
+            {
+                return null;
+            }
+
+            return new Panel(panel, panelType);
+        }
+
+        public static Panel Panel(Panel panel, Construction construction)
+        {
+            if(panel == null)
+            {
+                return null;
+            }
+            
+            return new Panel(panel, construction);
+        }
+
+        public static Panel Panel(Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
+        {
+            if(planarBoundary3D == null)
+            {
+                return null;
+            }
+
+            return new Panel(construction, panelType, planarBoundary3D);
+        }
+
+        public static Panel Panel(Guid guid, Panel panel, PlanarBoundary3D planarBoundary3D)
+        {
+            if(guid == Guid.Empty || panel == null || planarBoundary3D == null)
+            {
+                return null;
+            }
+            return new Panel(guid, panel, planarBoundary3D);
         }
     }
 }

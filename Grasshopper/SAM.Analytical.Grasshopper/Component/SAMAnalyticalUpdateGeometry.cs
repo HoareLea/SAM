@@ -131,7 +131,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            panels[0] = new Panel(panel.Guid, panel, panels[0].GetFace3D(), null, true, minArea);
+            panels[0] = Create.Panel(panel.Guid, panel, panels[0].GetFace3D(), null, true, minArea);
             if (!copyApertures)
                 panels[0].RemoveApertures();
 
@@ -139,7 +139,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 for (int i = 1; i < panels.Count; i++)
                 {
-                    panels[i] = new Panel(panels[i].Guid, panel, panels[i].GetFace3D(), null, true, minArea);
+                    panels[i] = Create.Panel(panels[i].Guid, panel, panels[i].GetFace3D(), null, true, minArea);
                     if (!copyApertures)
                         panels[i].RemoveApertures();
                 }

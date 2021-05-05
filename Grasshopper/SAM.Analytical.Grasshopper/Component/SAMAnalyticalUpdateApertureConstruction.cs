@@ -94,7 +94,7 @@ namespace SAM.Analytical.Grasshopper
                         if(panel.HasAperture(aperture.Guid))
                         {
                             if (!updated)
-                                panel = new Panel(panel);
+                                panel = Create.Panel(panel);
 
                             panel.RemoveAperture(aperture.Guid);
                             panel.AddAperture(new Aperture(aperture, apertureConstruction));

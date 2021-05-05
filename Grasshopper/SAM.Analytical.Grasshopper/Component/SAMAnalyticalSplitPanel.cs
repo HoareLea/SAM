@@ -130,7 +130,7 @@ namespace SAM.Analytical.Grasshopper
             List<Panel> result = Analytical.Query.Cut(panel, planes);
 
             if (result == null || result.Count == 0)
-                result = new List<Panel>() { new Panel(panel) };
+                result = new List<Panel>() { Create.Panel(panel) };
 
             List<Panel> result_Upper = new List<Panel>();
             List<Panel> result_Lower = new List<Panel>();

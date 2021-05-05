@@ -79,7 +79,7 @@ namespace SAM.Analytical.Grasshopper
 
             if (sAMObject is Panel)
             {              
-                Panel panel = new Panel((Panel)sAMObject);
+                Panel panel = Create.Panel((Panel)sAMObject);
 
                 List<Aperture> apertures_Result = new List<Aperture>();
                 foreach (Aperture aperture in apertures)
@@ -117,7 +117,7 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach (Panel panel in panels)
                 {
-                    Panel panel_New = new Panel(panel);
+                    Panel panel_New = Create.Panel(panel);
 
                     bool updated = false;
                     foreach(Aperture aperture in apertures)

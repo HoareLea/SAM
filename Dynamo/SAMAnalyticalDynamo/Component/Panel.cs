@@ -32,7 +32,7 @@ namespace SAMAnalyticalDynamo
         {
             Plane plane = Create.Plane(point3Ds, SAM.Core.Tolerance.Distance);
 
-            return new SAM.Analytical.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face3D(new SAM.Geometry.Spatial.Polygon3D(point3Ds.ToList().ConvertAll(x => plane.Project(x)))));
+            return SAM.Analytical.Create.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face3D(new SAM.Geometry.Spatial.Polygon3D(point3Ds.ToList().ConvertAll(x => plane.Project(x)))));
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace SAMAnalyticalDynamo
             if (closedPlanar3D == null)
                 return null;
 
-            return new SAM.Analytical.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face3D(closedPlanar3D));
+            return SAM.Analytical.Create.Panel(construction, SAM.Analytical.Query.PanelType(panelType), new Face3D(closedPlanar3D));
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace SAMAnalyticalDynamo
             if (closedPlanar3D == null)
                 return null;
 
-            return new SAM.Analytical.Panel(new SAM.Analytical.Construction(constructionName), SAM.Analytical.PanelType.Undefined, new Face3D(closedPlanar3D));
+            return SAM.Analytical.Create.Panel(new SAM.Analytical.Construction(constructionName), SAM.Analytical.PanelType.Undefined, new Face3D(closedPlanar3D));
         }
 
         public static SAM.Analytical.Panel SnapByPoints(SAM.Analytical.Panel panel, IEnumerable<object> points, double maxDistance = 0.2)
@@ -101,7 +101,7 @@ namespace SAMAnalyticalDynamo
                 }
             }
 
-            SAM.Analytical.Panel panel_New = new SAM.Analytical.Panel(panel);
+            SAM.Analytical.Panel panel_New = SAM.Analytical.Create.Panel(panel);
             panel_New.Snap(point3Ds, maxDistance);
 
             return panel_New;
@@ -117,7 +117,7 @@ namespace SAMAnalyticalDynamo
             if (construction == null || panel == null)
                 return null;
 
-            return new SAM.Analytical.Panel(panel, construction);
+            return SAM.Analytical.Create.Panel(panel, construction);
         }
 
         public static SAM.Analytical.Panel SetPanelType(SAM.Analytical.Panel panel, object panelType)
@@ -125,7 +125,7 @@ namespace SAMAnalyticalDynamo
             if (panel == null)
                 return null;
 
-            return new SAM.Analytical.Panel(panel, SAM.Analytical.Query.PanelType(panelType));
+            return SAM.Analytical.Create.Panel(panel, SAM.Analytical.Query.PanelType(panelType));
         }
 
         public static object PanelType(SAM.Analytical.Panel panel)

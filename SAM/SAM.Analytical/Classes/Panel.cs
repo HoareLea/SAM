@@ -32,7 +32,7 @@ namespace SAM.Analytical
         /// Creates new instance of panel based on another panel
         /// </summary>
         /// <param name="panel">SAM Analytical Panel</param>
-        public Panel(Panel panel)
+        internal Panel(Panel panel)
             : base(panel)
         {
             planarBoundary3D = new PlanarBoundary3D(panel.planarBoundary3D);
@@ -47,7 +47,7 @@ namespace SAM.Analytical
         /// </summary>
         /// <param name="panel">SAM Analytical Panel</param>
         /// <param name="construction">SAM Analytical Construction</param>
-        public Panel(Panel panel, Construction construction)
+        internal Panel(Panel panel, Construction construction)
             : base(construction == null ? null : construction.Name, panel, construction)
         {
             planarBoundary3D = new PlanarBoundary3D(panel.planarBoundary3D);
@@ -57,7 +57,7 @@ namespace SAM.Analytical
                 apertures = new List<Aperture>(panel.apertures.ConvertAll(x => new Aperture(x)));
         }
 
-        public Panel(string name, Panel panel, Construction construction)
+        internal Panel(string name, Panel panel, Construction construction)
             : base(name, panel, construction)
         {
             planarBoundary3D = panel == null ? null : new PlanarBoundary3D(panel.planarBoundary3D);
@@ -72,7 +72,7 @@ namespace SAM.Analytical
         /// </summary>
         /// <param name="panel">SAM Analytical Panel</param>
         /// <param name="panelType">SAM Analytical PanelType</param>
-        public Panel(Panel panel, PanelType panelType)
+        internal Panel(Panel panel, PanelType panelType)
             : base(panel)
         {
             planarBoundary3D = new PlanarBoundary3D(panel.planarBoundary3D);
@@ -82,14 +82,14 @@ namespace SAM.Analytical
                 apertures = new List<Aperture>(panel.apertures.ConvertAll(x => new Aperture(x)));
         }
 
-        public Panel(Construction construction, PanelType panelType, Face3D face)
+        internal Panel(Construction construction, PanelType panelType, Face3D face)
             : base(construction == null ? null : construction.Name, construction)
         {
             this.panelType = panelType;
             planarBoundary3D = new PlanarBoundary3D(face);
         }
 
-        public Panel(Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
+        internal Panel(Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
             : base(construction == null ? null : construction.Name, construction)
         {
             this.panelType = panelType;
@@ -106,7 +106,7 @@ namespace SAM.Analytical
         /// <param name="trimGeometry">Trim apertures geometry to make sure it fits on panel</param>
         /// <param name="minArea">Minimal area of aperture to be added to panel</param>
         /// <param name="maxDistance">Max distance between panel and aperture to be added</param>
-        public Panel(Guid guid, Panel panel, Face3D face, IEnumerable<Aperture> apertures = null, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)
+        internal Panel(Guid guid, Panel panel, Face3D face, IEnumerable<Aperture> apertures = null, bool trimGeometry = true, double minArea = Tolerance.MacroDistance, double maxDistance = Tolerance.MacroDistance)
             : base(guid, panel)
         {
             panelType = panel.panelType;
@@ -138,21 +138,21 @@ namespace SAM.Analytical
         /// <param name="guid">New Guid for Panel</param>
         /// <param name="panel">Old Panel used as base</param>
         /// <param name="planarBoundary3D">New PlanarBoundary</param>
-        public Panel(Guid guid, Panel panel, PlanarBoundary3D planarBoundary3D)
+        internal Panel(Guid guid, Panel panel, PlanarBoundary3D planarBoundary3D)
             : base(guid, panel)
         {
             panelType = panel.panelType;
             this.planarBoundary3D = planarBoundary3D;
         }
 
-        public Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
+        internal Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
             : base(guid, name, parameterSets, construction)
         {
             this.panelType = panelType;
             this.planarBoundary3D = new PlanarBoundary3D(planarBoundary3D);
         }
 
-        public Panel(JObject jObject)
+        internal Panel(JObject jObject)
              : base(jObject)
         {
         }

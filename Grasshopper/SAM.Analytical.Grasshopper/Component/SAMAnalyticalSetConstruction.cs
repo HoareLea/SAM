@@ -151,7 +151,7 @@ namespace SAM.Analytical.Grasshopper
                 if (panel_AdjacencyCluster == null)
                     continue;
 
-                panel_AdjacencyCluster = new Panel(panel_AdjacencyCluster, construction);
+                panel_AdjacencyCluster = Create.Panel(panel_AdjacencyCluster, construction);
                 if (panel_AdjacencyCluster == null)
                     continue;
 

@@ -152,7 +152,7 @@ namespace SAM.Analytical.Grasshopper
                                     if (aperture_New == aperture)
                                         continue;
 
-                                    panel_New = new Panel(panel_New);
+                                    panel_New = Create.Panel(panel_New);
 
                                     panel_New.RemoveAperture(aperture.Guid);
                                     panel.AddAperture(aperture_New);

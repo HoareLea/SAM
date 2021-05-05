@@ -151,7 +151,7 @@ namespace SAM.Analytical.Grasshopper
 
             if (sAMObject is Panel)
             {
-                Panel panel = new Panel((Panel)sAMObject);
+                Panel panel = Create.Panel((Panel)sAMObject);
 
                 List<Aperture> apertures = new List<Aperture>();
 
@@ -225,7 +225,7 @@ namespace SAM.Analytical.Grasshopper
                             continue;
 
                         if(panel_Temp == null)
-                            panel_Temp = new Panel(panel);
+                            panel_Temp = Create.Panel(panel);
 
                         //Aperture aperture = panel_Temp.AddAperture(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
                         //if (aperture == null)

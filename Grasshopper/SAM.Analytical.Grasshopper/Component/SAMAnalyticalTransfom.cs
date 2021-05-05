@@ -76,7 +76,7 @@ namespace SAM.Analytical.Grasshopper
 
             if(sAMObject is Panel)
             {
-                Panel panel = new Panel((Panel)sAMObject);
+                Panel panel = Create.Panel((Panel)sAMObject);
                 panel.Transform(transform3D);
                 sAMObject = panel;
             }

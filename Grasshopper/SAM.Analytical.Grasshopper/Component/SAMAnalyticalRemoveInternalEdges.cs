@@ -60,8 +60,8 @@ namespace SAM.Analytical.Grasshopper
 
             if(sAMObject is Panel)
             {
-                Panel panel = new Panel((Panel)sAMObject);
-                panel = new Panel(panel.Guid, panel, new Face3D(panel.GetFace3D().GetExternalEdge3D()), null, false);
+                Panel panel = Create.Panel((Panel)sAMObject);
+                panel = Create.Panel(panel.Guid, panel, new Face3D(panel.GetFace3D().GetExternalEdge3D()), null, false);
 
                 dataAccess.SetData(0, panel);
                 return;
@@ -87,7 +87,7 @@ namespace SAM.Analytical.Grasshopper
                     if (internalEdge3Ds == null || internalEdge3Ds.Count == 0)
                         continue;
 
-                    panels_Updated.Add(new Panel(panel.Guid, panel, new Face3D(face3D.GetExternalEdge3D()), null, false));
+                    panels_Updated.Add(Create.Panel(panel.Guid, panel, new Face3D(face3D.GetExternalEdge3D()), null, false));
                 }
 
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);

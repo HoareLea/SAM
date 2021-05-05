@@ -85,7 +85,7 @@ namespace SAM.Analytical.Grasshopper
 
             if (sAMObject is Panel)
             {                
-                Panel panel = new Panel((Panel)sAMObject);
+                Panel panel = Create.Panel((Panel)sAMObject);
 
                 ApertureConstruction apertureConstruction_Temp = apertureConstruction;
                 if (apertureConstruction_Temp == null)
@@ -127,7 +127,7 @@ namespace SAM.Analytical.Grasshopper
                     if (panel.PanelType != PanelType.WallExternal)
                         continue;
 
-                    Panel panel_New = new Panel(panel);
+                    Panel panel_New = Create.Panel(panel);
 
                     ApertureConstruction apertureConstruction_Temp = apertureConstruction;
                     if (apertureConstruction_Temp == null)

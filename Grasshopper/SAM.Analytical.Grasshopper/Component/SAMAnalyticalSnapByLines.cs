@@ -93,7 +93,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Panel result = new Panel(panel);
+            Panel result = Create.Panel(panel);
             result.Snap(planes, maxDistance);
 
             dataAccess.SetData(0, new GooPanel(result));
