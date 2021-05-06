@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Core
 {
@@ -10,10 +12,19 @@ namespace SAM.Core
             if (jArray == null)
                 return null;
 
-            List<T> result = new List<T>();
+            List<T> result = Enumerable.Repeat<T>(default, jArray.Count).ToList();
 
-            foreach (JObject jObject in jArray)
-                result.Add(IJSAMObject<T>(jObject));
+            Parallel.For(0, jArray.Count, (int i) =>
+            {
+                JObject jObject = jArray[i] as JObject;
+                if(jObject == null)
+                {
+                    return;
+                }
+
+                result[i] = IJSAMObject<T>(jObject);
+
+            });
 
             return result;
         }

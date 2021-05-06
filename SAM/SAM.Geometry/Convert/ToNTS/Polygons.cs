@@ -31,7 +31,6 @@ namespace SAM.Geometry
             if (geometries.Count() == 0)
                 return result;
 
-            Polygonizer polygonizer = new Polygonizer(false);
             GeometryNoder geometryNoder = new GeometryNoder(new PrecisionModel(1 / tolerance));
 
             List<LineString> lineStrings = geometryNoder.Node(geometries).ToList();
@@ -46,6 +45,7 @@ namespace SAM.Geometry
             if (lineStrings == null || lineStrings.Count == 0)
                 return result;
 
+            Polygonizer polygonizer = new Polygonizer(false);
             polygonizer.Add(lineStrings.ToArray());
 
             IEnumerable<NetTopologySuite.Geometries.Geometry> geometries_Result = polygonizer.GetPolygons();
