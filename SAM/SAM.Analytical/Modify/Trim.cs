@@ -43,7 +43,7 @@ namespace SAM.Analytical
                 {
                     foreach(Geometry.Planar.Segment2D segment2D in segmentable2D.GetSegments())
                     {
-                        List<Geometry.Planar.Segment2D> segment2Ds_Temp = segment2Ds.FindAll(x => segment2D.On(x.Mid(), tolerance));
+                        List<Geometry.Planar.Segment2D> segment2Ds_Temp = segment2Ds.FindAll(x => segment2D.On(x.Mid(), snapTolerance));
                         if(segment2Ds_Temp.Count == 0)
                         {
                             panels_Trimmed.Add(panels[index]);
