@@ -54,15 +54,15 @@ namespace SAM.Geometry.Planar
             return Polygon2Ds(segmentable2Ds, tolerance);
         }
 
-        public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, double tolerance = Core.Tolerance.MicroDistance)
         {
-            List<Segment2D> segment2Ds = Segment2Ds(segmentable2Ds, maxDistance, snapTolerance, tolerance);
+            List<Segment2D> segment2Ds = Segment2Ds(segmentable2Ds, maxDistance, tolerance);
             if(segment2Ds == null || segment2Ds.Count == 0)
             {
                 return null;
             }
 
-            return Polygon2Ds(segment2Ds, snapTolerance);
+            return Polygon2Ds(segment2Ds, tolerance);
         }
     }
 }

@@ -172,7 +172,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Segment2D> Segment2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> Segment2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segmentable2Ds == null)
                 return null;
@@ -280,7 +280,7 @@ namespace SAM.Geometry.Planar
 
             segment2Ds = segment2Ds.Split(tolerance);
 
-            segment2Ds = segment2Ds.Snap(true, snapTolerance);
+            //segment2Ds = segment2Ds.Snap(true, snapTolerance);
 
             return segment2Ds;
         }

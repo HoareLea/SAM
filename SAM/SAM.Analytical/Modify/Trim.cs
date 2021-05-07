@@ -28,7 +28,7 @@ namespace SAM.Analytical
 
             List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Query.Split(segmentable2Ds, tolerance);
 
-            segment2Ds = Geometry.Planar.Query.TrimUnconnected(segment2Ds, minLength, snapTolerance, tolerance);
+            segment2Ds = Geometry.Planar.Query.TrimUnconnected(segment2Ds, minLength, tolerance);
 
             segment3Ds = segment2Ds.ConvertAll(x => plane.Convert(x));
 
@@ -65,12 +65,6 @@ namespace SAM.Analytical
                                 Panel panel_Old = keyValuePair.Key;
 
                                 BoundingBox3D boundingBox3D = panel_Old.GetBoundingBox();
-
-                                Geometry.Planar.Point2D point2D_1_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_1, snapTolerance);
-                                point2D_1 = point2D_1_Snap == null ? point2D_1 : point2D_1_Snap;
-
-                                Geometry.Planar.Point2D point2D_2_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_2, snapTolerance);
-                                point2D_2 = point2D_2_Snap == null ? point2D_2 : point2D_2_Snap;
 
                                 Geometry.Planar.Segment2D segment2D_New = new Geometry.Planar.Segment2D(point2D_1, point2D_2);
 

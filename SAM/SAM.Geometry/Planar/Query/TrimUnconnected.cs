@@ -4,7 +4,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Segment2D> TrimUnconnected(this IEnumerable<Segment2D> segment2Ds, double minLength, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<Segment2D> TrimUnconnected(this IEnumerable<Segment2D> segment2Ds, double minLength, double tolerance = Core.Tolerance.Distance)
         {
             if(segment2Ds == null)
             {
@@ -12,7 +12,7 @@ namespace SAM.Geometry.Planar
             }
 
             List<Segment2D> result = segment2Ds.Split(tolerance);
-            result = result.Snap(true, snapTolerance);
+            //result = result.Snap(true, snapTolerance);
 
             List<Point2D> point2Ds_Unique = segment2Ds.UniquePoint2Ds(tolerance);
             if (point2Ds_Unique == null || point2Ds_Unique.Count <= 2)

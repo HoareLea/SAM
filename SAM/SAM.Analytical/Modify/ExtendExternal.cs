@@ -1,7 +1,6 @@
 ﻿using System;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -34,7 +33,7 @@ namespace SAM.Analytical
                 }
             }
             
-            List<Geometry.Planar.Polygon2D> externalPolygon2Ds = Geometry.Planar.Query.ExternalPolygon2Ds(segmentable2Ds, maxDistance, snapTolerance, tolerance_Distance);
+            List<Geometry.Planar.Polygon2D> externalPolygon2Ds = Geometry.Planar.Query.ExternalPolygon2Ds(segmentable2Ds, maxDistance, tolerance_Distance);
             if (externalPolygon2Ds == null || externalPolygon2Ds.Count == 0)
                 return;
 
@@ -198,6 +197,16 @@ namespace SAM.Analytical
 
                     if (tuple_Temp != null)
                     {
+                        //TODO: Make sure to split separate parts of section
+                        List<Geometry.Planar.Point2D> point2Ds = new List<Geometry.Planar.Point2D>();
+                        foreach (Geometry.Planar.ISegmentable2D segmentable2D in keyValuePair.Value)
+                        {
+                            point2Ds.AddRange(segmentable2D.GetPoints());
+                        }
+
+                        Geometry.Planar.Query.ExtremePoints(point2Ds, out Geometry.Planar.Point2D point2D_1_Temp, out Geometry.Planar.Point2D point2D_2_Temp);
+                        tuple_Temp = new Tuple<Panel, Geometry.Planar.Segment2D>(tuple_Temp.Item1, new Geometry.Planar.Segment2D(point2D_1_Temp, point2D_2_Temp));
+
                         break;
                     }
                 }
@@ -213,11 +222,11 @@ namespace SAM.Analytical
 
                 Geometry.Planar.Query.ExtremePoints(new Geometry.Planar.Point2D[] { point2D_1, point2D_2, tuple_Temp.Item2[0], tuple_Temp.Item2[1] }, out point2D_1, out point2D_2);
 
-                Geometry.Planar.Point2D point2D_1_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_1, snapTolerance);
-                point2D_1 = point2D_1_Snap == null ? point2D_1 : point2D_1_Snap;
+                //Geometry.Planar.Point2D point2D_1_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_1, snapTolerance);
+                //point2D_1 = point2D_1_Snap == null ? point2D_1 : point2D_1_Snap;
 
-                Geometry.Planar.Point2D point2D_2_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_2, snapTolerance);
-                point2D_2 = point2D_2_Snap == null ? point2D_2 : point2D_2_Snap;
+                //Geometry.Planar.Point2D point2D_2_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_2, snapTolerance);
+                //point2D_2 = point2D_2_Snap == null ? point2D_2 : point2D_2_Snap;
 
                 Geometry.Planar.Segment2D segment2D_New = new Geometry.Planar.Segment2D(point2D_1, point2D_2);
 
