@@ -122,6 +122,16 @@ namespace SAM.Analytical
 
                     if (tuple_Temp != null)
                     {
+                        //TODO: Make sure to split separate parts of section
+                        List<Geometry.Planar.Point2D> point2Ds = new List<Geometry.Planar.Point2D>();
+                        foreach (Geometry.Planar.ISegmentable2D segmentable2D in keyValuePair.Value)
+                        {
+                            point2Ds.AddRange(segmentable2D.GetPoints());
+                        }
+
+                        Geometry.Planar.Query.ExtremePoints(point2Ds, out Geometry.Planar.Point2D point2D_1_Temp, out Geometry.Planar.Point2D point2D_2_Temp);
+                        tuple_Temp = new Tuple<Panel, Geometry.Planar.Segment2D>(tuple_Temp.Item1, new Geometry.Planar.Segment2D(point2D_1_Temp, point2D_2_Temp));
+
                         break;
                     }
                 }
