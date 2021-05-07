@@ -7,6 +7,29 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
+        public static Point2D Snap(this IEnumerable<ISegmentable2D> segmentable2Ds, Point2D point2D, double snapDistance = double.MaxValue)
+        {
+            if(segmentable2Ds == null || point2D == null)
+            {
+                return null;
+            }
+
+            double distance = double.MaxValue;
+            Point2D point2D_Closets = null;
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
+            {
+                Point2D point2D_Closets_Temp = segmentable2D.Closest(point2D);
+                double distance_Temp = point2D.Distance(point2D_Closets_Temp);
+                if(distance_Temp < snapDistance && distance > distance_Temp)
+                {
+                    point2D_Closets = point2D_Closets_Temp;
+                }
+
+            }
+
+            return point2D_Closets;
+        }
+        
         public static List<Polygon2D> Snap(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double snapDistance, double tolerance = Core.Tolerance.Distance)
         {
             LinearRing linearRing_1 = (polygon2D_1 as IClosed2D)?.ToNTS(tolerance);

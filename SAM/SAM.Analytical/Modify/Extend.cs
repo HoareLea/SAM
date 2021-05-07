@@ -147,10 +147,11 @@ namespace SAM.Analytical
 
                 Geometry.Planar.Query.ExtremePoints(new Geometry.Planar.Point2D[] { point2D_1, point2D_2, tuple_Temp.Item2[0], tuple_Temp.Item2[1] }, out point2D_1, out point2D_2);
 
-                Plane plane_Bottom = Plane.WorldXY.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;
-
+                point2D_1 = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_1);
+                point2D_2 = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_2);
                 Geometry.Planar.Segment2D segment2D_New = new Geometry.Planar.Segment2D(point2D_1, point2D_2);
 
+                Plane plane_Bottom = Plane.WorldXY.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;
                 Face3D face3D = Geometry.Spatial.Create.Face3D(plane_Bottom.Convert(segment2D_New), boundingBox3D.Max.Z - boundingBox3D.Min.Z);
 
                 Panel panel_New = new Panel(panel_Old.Guid, panel_Old, face3D);
@@ -175,7 +176,6 @@ namespace SAM.Analytical
                     }
                 }
             }
-
         }
     }
 }
