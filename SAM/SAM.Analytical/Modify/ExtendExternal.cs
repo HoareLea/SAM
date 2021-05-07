@@ -210,12 +210,18 @@ namespace SAM.Analytical
                 Panel panel_Old = tuple_Temp.Item1;
 
                 BoundingBox3D boundingBox3D = panel_Old.GetBoundingBox();
-                
+
                 Geometry.Planar.Query.ExtremePoints(new Geometry.Planar.Point2D[] { point2D_1, point2D_2, tuple_Temp.Item2[0], tuple_Temp.Item2[1] }, out point2D_1, out point2D_2);
 
-                Plane plane_Bottom = Plane.WorldXY.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;
+                Geometry.Planar.Point2D point2D_1_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_1, snapTolerance);
+                point2D_1 = point2D_1_Snap == null ? point2D_1 : point2D_1_Snap;
+
+                Geometry.Planar.Point2D point2D_2_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_2, snapTolerance);
+                point2D_2 = point2D_2_Snap == null ? point2D_2 : point2D_2_Snap;
 
                 Geometry.Planar.Segment2D segment2D_New = new Geometry.Planar.Segment2D(point2D_1, point2D_2);
+
+                Plane plane_Bottom = Plane.WorldXY.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;
 
                 Face3D face3D = Geometry.Spatial.Create.Face3D(plane_Bottom.Convert(segment2D_New), boundingBox3D.Max.Z - boundingBox3D.Min.Z);
 

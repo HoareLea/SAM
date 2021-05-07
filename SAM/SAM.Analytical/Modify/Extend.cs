@@ -147,8 +147,12 @@ namespace SAM.Analytical
 
                 Geometry.Planar.Query.ExtremePoints(new Geometry.Planar.Point2D[] { point2D_1, point2D_2, tuple_Temp.Item2[0], tuple_Temp.Item2[1] }, out point2D_1, out point2D_2);
 
-                point2D_1 = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_1);
-                point2D_2 = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_2);
+                Geometry.Planar.Point2D point2D_1_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_1, snapTolerance);
+                point2D_1 = point2D_1_Snap == null ? point2D_1 : point2D_1_Snap;
+
+                Geometry.Planar.Point2D point2D_2_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_2, snapTolerance);
+                point2D_2 = point2D_2_Snap == null ? point2D_2 : point2D_2_Snap;
+
                 Geometry.Planar.Segment2D segment2D_New = new Geometry.Planar.Segment2D(point2D_1, point2D_2);
 
                 Plane plane_Bottom = Plane.WorldXY.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;

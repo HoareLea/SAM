@@ -66,10 +66,15 @@ namespace SAM.Analytical
 
                                 BoundingBox3D boundingBox3D = panel_Old.GetBoundingBox();
 
-                                Plane plane_Bottom = Plane.WorldXY.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;
+                                Geometry.Planar.Point2D point2D_1_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_1, snapTolerance);
+                                point2D_1 = point2D_1_Snap == null ? point2D_1 : point2D_1_Snap;
+
+                                Geometry.Planar.Point2D point2D_2_Snap = Geometry.Planar.Query.Snap(segmentable2Ds, point2D_2, snapTolerance);
+                                point2D_2 = point2D_2_Snap == null ? point2D_2 : point2D_2_Snap;
 
                                 Geometry.Planar.Segment2D segment2D_New = new Geometry.Planar.Segment2D(point2D_1, point2D_2);
 
+                                Plane plane_Bottom = Plane.WorldXY.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;
                                 Face3D face3D = Geometry.Spatial.Create.Face3D(plane_Bottom.Convert(segment2D_New), boundingBox3D.Max.Z - boundingBox3D.Min.Z);
 
                                 Panel panel_New = new Panel(panel_Old.Guid, panel_Old, face3D);
