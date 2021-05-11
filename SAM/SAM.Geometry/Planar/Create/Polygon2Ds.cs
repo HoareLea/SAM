@@ -62,6 +62,8 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
+            segment2Ds = segment2Ds.Snap(true, tolerance);
+
             return Polygon2Ds(segment2Ds, tolerance);
         }
     }

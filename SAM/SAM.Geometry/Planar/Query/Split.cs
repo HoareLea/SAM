@@ -18,16 +18,32 @@ namespace SAM.Geometry.Planar
             if (segment2Ds == null)
                 return null;
 
-            int count = segment2Ds.Count();
+            List<Tuple<BoundingBox2D, Segment2D>> tuples = new List<Tuple<BoundingBox2D, Segment2D>>();
+            foreach (Segment2D segment2D in segment2Ds)
+            {
+                if(segment2D == null || segment2D.GetLength() < tolerance)
+                {
+                    continue;
+                }
+
+                tuples.Add(new Tuple<BoundingBox2D, Segment2D>(segment2D.GetBoundingBox(), segment2D));
+            }
+
+            int count = tuples.Count();
 
             Dictionary<int, List<Point2D>> dictionary = new Dictionary<int, List<Point2D>>();
-
             for (int i = 0; i < count - 1; i++)
             {
-                Segment2D segment2D_1 = segment2Ds.ElementAt(i);
+                BoundingBox2D boundingBox2D_1 = tuples[i].Item1;
+                Segment2D segment2D_1 = tuples[i].Item2;
+                
                 for (int j = i + 1; j < count; j++)
                 {
-                    Segment2D segment2D_2 = segment2Ds.ElementAt(j);
+                    BoundingBox2D boundingBox2D_2 = tuples[j].Item1;
+                    if (!boundingBox2D_1.InRange(boundingBox2D_2))
+                        continue;
+
+                    Segment2D segment2D_2 = tuples[j].Item2;
 
                     if (segment2D_1.AlmostSimilar(segment2D_2, tolerance))
                         continue;
@@ -92,10 +108,9 @@ namespace SAM.Geometry.Planar
             }
 
             List<Segment2D> result = new List<Segment2D>();
-
             for (int i = 0; i < count; i++)
             {
-                Segment2D segment2D_Temp = segment2Ds.ElementAt(i);
+                Segment2D segment2D_Temp = tuples[i].Item2;
                 if (result.Find(x => x.AlmostSimilar(segment2D_Temp, tolerance)) != null)
                     continue;
 

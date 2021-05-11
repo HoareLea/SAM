@@ -37,7 +37,7 @@ namespace SAM.Analytical
 
             segment2Ds = segment2Ds.Split(tolerance_Distance);
 
-            List<Polygon2D> polygon2Ds = segment2Ds.ExternalPolygon2Ds(snapTolerance);
+            List<Polygon2D> polygon2Ds = segment2Ds.ExternalPolygon2Ds(snapTolerance, tolerance_Distance);
             if(polygon2Ds == null || polygon2Ds.Count == 0)
             {
                 return null;

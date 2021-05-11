@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
@@ -244,8 +245,12 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            foreach (Tuple<BoundingBox2D, Segment2D> tuple_Extension in tuples_Extensions)
+            List<Segment2D> segment2Ds_Extension = Enumerable.Repeat<Segment2D>(null, tuples_Extensions.Count).ToList();
+
+            Parallel.For(0, segment2Ds_Extension.Count, (int i) =>
             {
+                Tuple<BoundingBox2D, Segment2D> tuple_Extension = tuples_Extensions[i];
+
                 double distance = double.MaxValue;
                 Point2D point2D = null;
 
@@ -272,10 +277,18 @@ namespace SAM.Geometry.Planar
 
                 if (point2D == null || point2D.AlmostEquals(tuple_Extension.Item2[0], tolerance))
                 {
-                    continue;
+                    return;
                 }
 
-                segment2Ds.Add(new Segment2D(tuple_Extension.Item2[0], point2D));
+                segment2Ds_Extension[i] = new Segment2D(tuple_Extension.Item2[0], point2D);
+            });
+
+            foreach(Segment2D segment2D_Extension in segment2Ds_Extension)
+            {
+                if(segment2D_Extension != null)
+                {
+                    segment2Ds.Add(segment2D_Extension);
+                }
             }
 
             segment2Ds = segment2Ds.Split(tolerance);
