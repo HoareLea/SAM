@@ -336,6 +336,13 @@ namespace SAM.Geometry.Planar
             return point2D_Intersection;
         }
 
+        /// <summary>
+        /// Intersection of two segments
+        /// </summary>
+        /// <param name="segment2D">segment2D</param>
+        /// <param name="bounded">Second parameter determines if segments are bounded. If sets to false intersection point may not lay on given segments</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Intersection Point2D</returns>
         public Point2D Intersection(Segment2D segment2D, bool bounded = true, double tolerance = Core.Tolerance.Distance)
         {
             Point2D point2D_Closest1 = null;
