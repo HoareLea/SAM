@@ -9,12 +9,12 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometrySplitShells : GH_SAMVariableOutputParameterComponent
+    public class GeometryShellsUnion : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("388697d3-6ee6-4509-9569-1f94327b457a");
+        public override Guid ComponentGuid => new Guid("69353698-4a57-4eb4-995a-de7c6f94b60e");
 
         /// <summary>
         /// The latest version of this component
@@ -29,9 +29,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public GeometrySplitShells()
-          : base("Geometry.SplitShells", "Geometry.SplitShells",
-              "Split Shells",
+        public GeometryShellsUnion()
+          : base("Geometry.ShellsUnion", "Geometry.ShellsUnion",
+              "Shells Union",
               "SAM", "Geometry")
         {
         }
@@ -114,9 +114,7 @@ namespace SAM.Geometry.Grasshopper
                     tolerance = tolerance_Temp;
             }
 
-            shells = shells.ConvertAll(x => new Shell(x));
-
-            shells.Split(Core.Tolerance.Angle, tolerance);
+            shells = shells.Union(Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
 
             index = Params.IndexOfOutputParam("Shells");
             if (index != -1)
