@@ -14,6 +14,7 @@ namespace SAM.Geometry.Spatial
             List<Shell> shells_Result = Enumerable.Repeat<Shell>(null, shells.Count).ToList();
 
             Parallel.For(0, shells.Count, (int i) =>
+            //for(int i=0; i < shells.Count; i++)
             {
                 Shell shell = shells[i];
                 if(shell == null)

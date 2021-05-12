@@ -60,7 +60,7 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                segmentable2Ds.AddRange(segmentable2Ds);
+                segmentable2Ds.AddRange(segmentable2Ds_Temp);
             }
 
             if(segmentable2Ds == null || segmentable2Ds.Count == 0)
