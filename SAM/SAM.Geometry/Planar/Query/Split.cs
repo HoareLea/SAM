@@ -216,6 +216,101 @@ namespace SAM.Geometry.Planar
             return polygons.ConvertAll(x => x.ToSAM(tolerance));
         }
 
+        public static List<Face2D> Split(this Face2D face2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if(face2D == null || segmentable2Ds == null)
+            {
+                return null;
+            }
+
+            BoundingBox2D boundingBox2D = face2D.GetBoundingBox();
+            if(boundingBox2D == null)
+            {
+                return null;
+            }
+
+            List<ISegmentable2D> segmentable2Ds_All = new List<ISegmentable2D>();
+            foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+            {
+                BoundingBox2D boundingBox2D_Segmentable2D = segmentable2D?.GetBoundingBox();
+                if(boundingBox2D_Segmentable2D == null)
+                {
+                    continue;
+                }
+
+                if(!boundingBox2D.InRange(boundingBox2D_Segmentable2D, tolerance))
+                {
+                    continue;
+                }
+
+                segmentable2Ds_All.Add(segmentable2D);
+            }
+
+            if(segmentable2Ds_All == null || segmentable2Ds_All.Count == 0)
+            {
+                return null;
+            }
+
+            IClosed2D externalEdge = face2D.ExternalEdge2D;
+
+            ISegmentable2D segmentable2D_ExternalEdge = externalEdge as ISegmentable2D;
+            if(segmentable2D_ExternalEdge == null)
+            {
+                return null;
+            }
+
+            segmentable2Ds_All.Add(segmentable2D_ExternalEdge);
+
+            List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
+            if(internalEdges != null && internalEdges.Count != 0)
+            {
+                foreach(IClosed2D internalEdge in internalEdges)
+                {
+                    ISegmentable2D segmentable2D_InternalEdge = internalEdge as ISegmentable2D;
+                    if(segmentable2D_InternalEdge == null)
+                    {
+                        continue;
+                    }
+
+                    segmentable2Ds_All.Add(segmentable2D_InternalEdge);
+                }
+            }
+
+            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segmentable2Ds_All, tolerance);
+            if(polygon2Ds == null || polygon2Ds.Count == 0)
+            {
+                return null;
+            }
+
+            List<Tuple<Polygon2D, Point2D>> tuples = polygon2Ds.ConvertAll(x => new Tuple<Polygon2D, Point2D>(x, x.InternalPoint2D()));
+
+            tuples = tuples.FindAll(x => externalEdge.Inside(x.Item2, tolerance));
+
+            List<Tuple<Polygon2D, Point2D>> tuples_Internal = null;
+            if (internalEdges != null && internalEdges.Count != 0)
+            {
+                tuples_Internal = tuples.FindAll(x => internalEdges.Find(y => y.Inside(x.Item2, tolerance)) != null);
+            }
+
+            tuples_Internal?.ForEach(x => tuples.Remove(x));
+
+            if(tuples.Count == 0)
+            {
+                return null;
+            }
+
+            List<Face2D> result = new List<Face2D>();
+            foreach(Tuple<Polygon2D, Point2D> tuple in tuples)
+            {
+                Face2D face2D_Split = Create.Face2D(tuple.Item1, tuples_Internal?.ConvertAll(x => x.Item1));
+                if(face2D_Split != null)
+                {
+                    result.Add(face2D_Split);
+                }
+            }
+            return result;
+        }
+
         public static List<Polyline2D> Split(this Polyline2D polyline2D, Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if (polyline2D == null || point2D == null)

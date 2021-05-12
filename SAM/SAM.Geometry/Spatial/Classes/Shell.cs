@@ -651,5 +651,52 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+    
+        public bool Split(Shell shell, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if(shell == null || !boundingBox3D.InRange(shell.boundingBox3D, tolerance_Distance))
+            {
+                return false;
+            }
+
+            List<Tuple<Face3D, List<Face3D>>> tuples = new List<Tuple<Face3D, List<Face3D>>>();
+            foreach(Tuple<BoundingBox3D, Face3D> boundary in boundaries)
+            {
+                if(!shell.boundingBox3D.InRange(boundary.Item1, tolerance_Distance))
+                {
+                    continue;
+                }
+
+                List<Face3D> face3Ds = boundary.Item2.Split(shell, tolerance_Angle, tolerance_Distance);
+                if (face3Ds == null || face3Ds.Count == 0)
+                {
+                    continue;
+                }
+
+                tuples.Add(new Tuple<Face3D, List<Face3D>>(boundary.Item2, face3Ds));
+            }
+
+            if(tuples == null || tuples.Count == 0)
+            {
+                return false;
+            }
+
+            foreach(Tuple<Face3D, List<Face3D>> tuple in tuples)
+            {
+                int index = boundaries.FindIndex(x => x.Item2 == tuple.Item1);
+                if(index == -1)
+                {
+                    continue;
+                }
+
+                boundaries.RemoveAt(index);
+                foreach(Face3D face3D in tuple.Item2)
+                {
+                    boundaries.Insert(index, new Tuple<BoundingBox3D, Face3D>(face3D.GetBoundingBox(), face3D));
+                }
+            }
+
+            return true;
+        }
     }
 }
