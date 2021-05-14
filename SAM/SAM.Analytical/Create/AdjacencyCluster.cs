@@ -570,6 +570,22 @@ namespace SAM.Analytical
             }
             
             Dictionary<double, List<Panel>> elevationDictionary =  panels.ElevationDictionary(out double maxElevation, tolerance_Distance);
+            if(elevations != null)
+            {
+                foreach (double elevation in elevations)
+                {
+                    List<double> elevations_Main_Temp = elevationDictionary.Keys.ToList();
+
+                    int index = elevations_Main_Temp.FindIndex(x => System.Math.Abs(x - elevation) < tolerance_Distance);
+                    if(index > 0 && index < elevations_Main_Temp.Count - 1)
+                    {
+                        double elevation_Temp = elevations_Main_Temp[index];
+                        List<Panel> panels_Temp = elevationDictionary[elevation_Temp];
+                        elevationDictionary[elevations_Main_Temp[index - 1]].AddRange(panels_Temp);
+                        elevationDictionary.Remove(elevation_Temp);
+                    }
+                }
+            }
 
             List<double> elevations_Main = new List<double>(elevationDictionary.Keys);
             elevations_Main.Add(maxElevation);
