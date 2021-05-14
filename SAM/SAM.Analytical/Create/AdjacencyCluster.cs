@@ -219,7 +219,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, List<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, IEnumerable<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
         {
             AdjacencyCluster result = new AdjacencyCluster();
 
@@ -466,12 +466,12 @@ namespace SAM.Analytical
             }
 
             //Creating Shade Panels
-            List<List<Panel>> tuples = Enumerable.Repeat<List<Panel>>(null, panels.Count).ToList(); 
+            List<List<Panel>> tuples = Enumerable.Repeat<List<Panel>>(null, panels.Count()).ToList(); 
 
             //for(int i =0; i < panels.Count; i++)
-            Parallel.For(0, panels.Count, (int i) => 
+            Parallel.For(0, panels.Count(), (int i) => 
             {
-                Panel panel = panels[i];
+                Panel panel = panels.ElementAt(i);
 
                 Face3D face3D = panel?.GetFace3D();
                 if (face3D == null)
@@ -553,13 +553,60 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, List<Panel> panels, double offset = 0.1, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, double offset = 0.1, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
         {     
             List<Shell> shells = panels.Shells(offset, maxDistance, tolerance);
             if (shells == null || shells.Count == 0)
                 return null;
 
             return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, minArea, maxDistance, maxAngle, silverSpacing, tolerance);
+        }
+
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, IEnumerable<double> elevations, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double snapTolerance = Tolerance.MacroDistance, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
+        {
+            if(panels == null)
+            {
+                return null;
+            }
+            
+            Dictionary<double, List<Panel>> elevationDictionary =  panels.ElevationDictionary(out double maxElevation, tolerance_Distance);
+
+            List<double> elevations_Main = new List<double>(elevationDictionary.Keys);
+            elevations_Main.Add(maxElevation);
+
+            List<Shell> shells = new List<Shell>();
+            for(int i=0; i < elevations_Main.Count - 1; i++)
+            {
+                double elevation_Bottom = elevations_Main[i];
+                double elevation_Top = elevations_Main[i + 1];
+
+                List<double> elevatons_Temp = new List<double>() { elevation_Top, elevation_Bottom};
+                if(elevations != null)
+                {
+                    foreach(double elevation in elevations)
+                    {
+                        if(elevation > elevation_Bottom && elevation < elevation_Top && !elevatons_Temp.Contains(elevation))
+                        {
+                            elevatons_Temp.Add(elevation);
+                        }
+                    }
+                }
+
+                List<Shell> shells_Elevation = elevationDictionary[elevation_Bottom].Shells(elevatons_Temp, snapTolerance, tolerance_Distance);
+                if(shells_Elevation == null)
+                {
+                    continue;
+                }
+
+                shells.AddRange(shells_Elevation);
+            }
+
+            if (shells == null || shells.Count == 0)
+                return null;
+
+            shells.Split(tolerance_Angle, tolerance_Distance);
+
+            return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance);
         }
 
         private static AdjacencyCluster AdjacencyCluster(this Dictionary<double, List<Face2D>> face2Ds, int index_Ground, double tolerance = Tolerance.Distance)
