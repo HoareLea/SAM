@@ -25,36 +25,44 @@ namespace SAM.Geometry.Spatial
             shell_1_Temp.Split(shell_2);
             shell_2_Temp.Split(shell_1);
 
-            List<Tuple<BoundingBox3D, Face3D>> boundiries_1 = shell_1_Temp.Boundaries;
-            List<Tuple<BoundingBox3D, Face3D>> boundiries_2 = shell_2_Temp.Boundaries;
+            shell_1_Temp.OrientNormals(silverSpacing: silverSpacing, tolerance: tolerance_Distance);
+            shell_2_Temp.OrientNormals(silverSpacing: silverSpacing, tolerance: tolerance_Distance);
+
+            List<Tuple<BoundingBox3D, Face3D>> boundaries_1 = shell_1_Temp.Boundaries;
+            List<Tuple<BoundingBox3D, Face3D>> boundaries_2 = shell_2_Temp.Boundaries;
 
             bool union = false;
-            for (int i = boundiries_1.Count - 1; i >= 0; i--)
+            for (int i = boundaries_1.Count - 1; i >= 0; i--)
             {
-                Face3D face3D = boundiries_1[i].Item2;
+                Face3D face3D = boundaries_1[i].Item2;
                 Point3D point3D = face3D.InternalPoint3D(tolerance_Distance);
 
-                List<Tuple<BoundingBox3D, Face3D>> boundaries_On = boundiries_2.FindAll(x => x.Item1.InRange(point3D, tolerance_Distance) && x.Item2.On(point3D, tolerance_Distance));
+                List<Tuple<BoundingBox3D, Face3D>> boundaries_On = boundaries_2.FindAll(x => x.Item1.InRange(point3D, tolerance_Distance) && x.Item2.On(point3D, tolerance_Distance));
                 if (boundaries_On != null && boundaries_On.Count != 0)
                 {
-                    boundaries_On.ForEach(x => boundiries_2.Remove(x));
+                    boundaries_On.ForEach(x => boundaries_2.Remove(x));
+                    if(boundaries_On.Find(x => x.Item2.GetPlane().Normal.SameHalf(face3D.GetPlane().Normal)) == null)
+                    {
+                        boundaries_1.Remove(boundaries_1[i]);
+                    }
+
                     union = true;
                 }
                 else if (shell_2.Inside(point3D, silverSpacing, tolerance_Distance))
                 {
-                    boundiries_1.RemoveAt(i);
+                    boundaries_1.RemoveAt(i);
                     union = true;
                 }
             }
 
-            for (int i = boundiries_2.Count - 1; i >= 0; i--)
+            for (int i = boundaries_2.Count - 1; i >= 0; i--)
             {
-                Face3D face3D = boundiries_2[i].Item2;
+                Face3D face3D = boundaries_2[i].Item2;
                 Point3D point3D = face3D.InternalPoint3D(tolerance_Distance);
 
                 if (shell_1.Inside(point3D, silverSpacing, tolerance_Distance))
                 {
-                    boundiries_2.RemoveAt(i);
+                    boundaries_2.RemoveAt(i);
                     union = true;
                 }
             }
@@ -64,8 +72,8 @@ namespace SAM.Geometry.Spatial
                 return new List<Shell>() { shell_1_Temp, shell_2_Temp };
             }
 
-            List<Face3D> face3Ds = boundiries_1.ConvertAll(x => x.Item2);
-            face3Ds.AddRange(boundiries_2.ConvertAll(x => x.Item2));
+            List<Face3D> face3Ds = boundaries_1.ConvertAll(x => x.Item2);
+            face3Ds.AddRange(boundaries_2.ConvertAll(x => x.Item2));
 
             return new List<Shell>() { new Shell(face3Ds) };
 

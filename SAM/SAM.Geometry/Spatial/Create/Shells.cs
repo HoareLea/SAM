@@ -158,19 +158,21 @@ namespace SAM.Geometry.Spatial
                     if (face2Ds_Top == null || face2Ds_Top.Count == 0)
                         continue;
 
-                    List<Face2D> face2Ds_All_Temp = new List<Face2D>(face2Ds_Top.ConvertAll(x => x.Item2));
-                    face2Ds_All_Temp.Add(face2D_Bottom);
+                    List<Face2D> face2Ds_Top_Temp = new List<Face2D>(face2Ds_Top.ConvertAll(x => x.Item2));
+                    face2Ds_Top_Temp.Add(face2D_Bottom);
 
-                    face2Ds_All_Temp = Planar.Query.Split(face2Ds_All_Temp);
-                    face2Ds_All_Temp?.RemoveAll(x => !face2D_Bottom.Inside(x.InternalPoint2D(), tolerance));
+                    face2Ds_Top_Temp = Planar.Query.Split(face2Ds_Top_Temp);
+                    face2Ds_Top_Temp?.RemoveAll(x => !face2D_Bottom.Inside(x.InternalPoint2D(), tolerance));
 
-                    if (face2Ds_All_Temp == null || face2Ds_All_Temp.Count == 0)
+                    if (face2Ds_Top_Temp == null || face2Ds_Top_Temp.Count == 0)
                         continue;
 
+                    List<Face2D> face2Ds_Bottom_Temp = face2Ds_Top_Temp.Union();
+
                     List<Face3D> face3Ds_Shell = new List<Face3D>();
-                    foreach(Face2D face2D_Temp in face2Ds_All_Temp)
+                    foreach(Face2D face2D_Bottom_Temp in face2Ds_Bottom_Temp)
                     {
-                        Point2D point2D = face2D_Temp.GetInternalPoint2D();
+                        Point2D point2D = face2D_Bottom_Temp.GetInternalPoint2D();
                         if (point2D == null)
                             continue;
 
@@ -186,8 +188,9 @@ namespace SAM.Geometry.Spatial
                         Plane plane_Bottom_Flipped = new Plane(plane_Bottom);
                         plane_Bottom_Flipped.FlipZ();
 
+                        //Add Side Face3Ds
                         List<Segment2D> segment2Ds = new List<Segment2D>();
-                        foreach (IClosed2D closed2D in face2D_Temp.Edge2Ds)
+                        foreach (IClosed2D closed2D in face2D_Bottom_Temp.Edge2Ds)
                         {
                             ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
                             if (segmentable2D == null)
@@ -215,7 +218,18 @@ namespace SAM.Geometry.Spatial
                             face3Ds_Shell.Add(face3D);
                         }
 
-                        Face3D face3D_Bottom = plane_Top.Convert(face2D_Temp);
+                        //Add Top Face3Ds
+                        foreach (Face2D face2D_Top_Temp in face2Ds_Top_Temp)
+                        {
+                            Face3D face3D_Top = plane_Top.Convert(face2D_Bottom_Temp);
+                            if (face3D_Top == null)
+                                continue;
+
+                            face3Ds_Shell.Add(face3D_Top);
+                        }
+
+                        //Add Bottom Face3D
+                        Face3D face3D_Bottom = plane_Top.Convert(face2D_Bottom_Temp);
                         if (face3D_Bottom == null)
                             continue;
 
@@ -223,13 +237,8 @@ namespace SAM.Geometry.Spatial
                         face3D_Bottom = plane_Bottom_Flipped.Convert(face2D_Bottom_Flipped);
 
                         face3Ds_Shell.Add(face3D_Bottom);
-
-                        Face3D face3D_Top = plane_Top.Convert(face2D_Temp);
-                        if (face3D_Top == null)
-                            continue;
-
-                        face3Ds_Shell.Add(face3D_Top);
                     }
+
                     result.Add(new Shell(face3Ds_Shell));
                 }
             }
