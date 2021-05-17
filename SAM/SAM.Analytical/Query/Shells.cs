@@ -178,7 +178,7 @@ namespace SAM.Analytical
 
             List<Tuple<double, List<Face3D>>> tuples_Face3D = new List<Tuple<double, List<Face3D>>>();
 
-            for(int i=0; i < count - 1; i++)
+            for(int i=0; i < count; i++)
             {
                 double elevation = elevations_Temp[i];
                 
@@ -195,62 +195,64 @@ namespace SAM.Analytical
                     }
                 }
 
-                if (segment2Ds == null || segment2Ds.Count == 0)
-                    continue;
+                List<Geometry.Planar.Face2D> face2Ds = null;
 
-                segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance_Distance);
+                if (segment2Ds != null && segment2Ds.Count != 0)
+                {
+                    segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance_Distance);
+                    segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
-                //segment2Ds = segment2Ds.ConvertAll(x => Geometry.Planar.Query.Extend(x, snapTolerance, true, true));
-                segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, snapTolerance);
-
-                List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance_Distance);
-                if (polygon2Ds == null || polygon2Ds.Count == 0)
-                    continue;
-
-                List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
-                if (face2Ds == null || face2Ds.Count == 0)
-                    continue;
-
-                List<Geometry.Planar.IClosed2D> closed2Ds = Geometry.Planar.Query.Holes(face2Ds);
-                if (closed2Ds != null && closed2Ds.Count > 0)
-                    closed2Ds.ForEach(x => face2Ds.Add(new Geometry.Planar.Face2D(x)));
+                    List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance_Distance);
+                    if(polygon2Ds != null && polygon2Ds.Count != 0)
+                    {
+                        face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
+                        if(face2Ds != null && face2Ds.Count != 0)
+                        {
+                            List<Geometry.Planar.IClosed2D> closed2Ds = Geometry.Planar.Query.Holes(face2Ds);
+                            closed2Ds?.ForEach(x => face2Ds.Add(new Geometry.Planar.Face2D(x)));
+                        }
+                    }
+                }
                 
                 tuples_Face3D.Add(new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x))));
-
-                if(i == count - 2)
-                {
-                    elevation = elevations_Temp[i + 1];
-                    plane = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
-                    tuples_Face3D.Add(new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x))));
-                }
             }
 
-            tuples_Face3D.Add(new Tuple<double, List<Face3D>>(elevations_Temp.Last(), tuples_Face3D.Last().Item2));
-
             List<Tuple<double, List<Shell>>> tuples_Shell = new List<Tuple<double, List<Shell>>>(); 
-            for (int i = 0; i < count - 2; i++)
+            for (int i = 0; i < count - 1; i++)
             {
                 Tuple<double, List<Face3D>>  tuple_Bottom = tuples_Face3D[i];
                 Tuple<double, List<Face3D>> tuple_Top = tuples_Face3D[i + 1];
 
-                List<Face3D> face3Ds = new List<Face3D>();
-                face3Ds.AddRange(tuple_Bottom.Item2);
-                face3Ds.AddRange(tuple_Top.Item2);
+                List<Face3D> face3Ds = null;
+                if (tuple_Bottom != null && tuple_Top != null && tuple_Bottom.Item2 != null && tuple_Top.Item2 != null)
+                {
+                    face3Ds = new List<Face3D>();
+                    face3Ds.AddRange(tuple_Bottom.Item2);
+                    face3Ds.AddRange(tuple_Top.Item2);
+                }
 
                 tuples_Shell.Add(new Tuple<double, List<Shell>>(tuple_Bottom.Item1, Geometry.Spatial.Create.Shells(face3Ds, tolerance_Distance)));
             }
 
-            for (int i = 0; i < count - 2; i++)
+            for (int i = 0; i < count - 1; i++)
             {
                 Tuple<double, List<Shell>> tuple = tuples_Shell[i];
+                if(tuple == null || tuple.Item2 == null || tuple.Item2.Count == 0)
+                {
+                    continue;
+                }
 
                 for(int j = 0; j < tuple.Item2.Count; j++)
                 {
                     Shell shell = tuple.Item2[j];
 
-                    for (int k = i + 1; k < count - 2; k++)
+                    for (int k = i + 1; k < count - 1; k++)
                     {
-                        Tuple<double, List<Shell>> tuple_Temp = tuples_Shell[i];
+                        Tuple<double, List<Shell>> tuple_Temp = tuples_Shell[k];
+                        if (tuple_Temp == null || tuple_Temp.Item2 == null || tuple_Temp.Item2.Count == 0)
+                        {
+                            continue;
+                        }
 
                         List<Shell> shells_Union = new List<Shell>();
                         List<Shell> shells_Temp = new List<Shell>();
@@ -284,9 +286,11 @@ namespace SAM.Analytical
             }
 
             List<Shell> result = new List<Shell>();
-            for (int i = 0; i < count - 2; i++)
+            for (int i = 0; i < count - 1; i++)
             {
-                result.AddRange(tuples_Shell[i].Item2);
+                List<Shell> shells = tuples_Shell[i]?.Item2;
+                if (shells != null && shells.Count != 0)
+                    result.AddRange(shells);
             }
 
             return result;

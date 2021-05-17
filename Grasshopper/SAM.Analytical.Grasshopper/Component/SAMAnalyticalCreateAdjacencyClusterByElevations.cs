@@ -138,10 +138,8 @@ namespace SAM.Analytical.Grasshopper
 
             List<double> elevations = new List<double>();
             index = Params.IndexOfInputParam("elevations_");
-            if(index != -1)
-            {
+            if (index != -1)
                 dataAccess.GetDataList(index, elevations);
-            }
 
             index = Params.IndexOfInputParam("_spaces_");
             List<Space> spaces = new List<Space>();
