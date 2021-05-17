@@ -25,9 +25,6 @@ namespace SAM.Geometry.Spatial
             shell_1_Temp.Split(shell_2);
             shell_2_Temp.Split(shell_1);
 
-            shell_1_Temp.OrientNormals(silverSpacing: silverSpacing, tolerance: tolerance_Distance);
-            shell_2_Temp.OrientNormals(silverSpacing: silverSpacing, tolerance: tolerance_Distance);
-
             List<Tuple<BoundingBox3D, Face3D>> boundaries_1 = shell_1_Temp.Boundaries;
             List<Tuple<BoundingBox3D, Face3D>> boundaries_2 = shell_2_Temp.Boundaries;
 
@@ -36,14 +33,25 @@ namespace SAM.Geometry.Spatial
             {
                 Face3D face3D = boundaries_1[i].Item2;
                 Point3D point3D = face3D.InternalPoint3D(tolerance_Distance);
+                Vector3D normal = null;
 
                 List<Tuple<BoundingBox3D, Face3D>> boundaries_On = boundaries_2.FindAll(x => x.Item1.InRange(point3D, tolerance_Distance) && x.Item2.On(point3D, tolerance_Distance));
                 if (boundaries_On != null && boundaries_On.Count != 0)
                 {
                     boundaries_On.ForEach(x => boundaries_2.Remove(x));
-                    if(boundaries_On.Find(x => x.Item2.GetPlane().Normal.SameHalf(face3D.GetPlane().Normal)) == null)
+                    if(normal == null)
                     {
-                        boundaries_1.Remove(boundaries_1[i]);
+                        normal = shell_1_Temp.Normal(i, true, silverSpacing, tolerance_Distance);
+                    }
+
+                    for (int j = boundaries_On.Count - 1; j >= 0; j--)
+                    {
+                        Vector3D normal_Temp = shell_2_Temp.Normal(boundaries_On[j].Item2.InternalPoint3D(tolerance_Distance), true, silverSpacing, tolerance_Distance);
+                        if(!normal.SameHalf(normal_Temp))
+                        {
+                            boundaries_1.Remove(boundaries_1[i]);
+                            break;
+                        }
                     }
 
                     union = true;
