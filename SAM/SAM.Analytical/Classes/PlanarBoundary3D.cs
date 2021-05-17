@@ -259,7 +259,7 @@ namespace SAM.Analytical
             }
         }
 
-        public void Snap(IEnumerable<Plane> planes, double maxDistance)
+        public void Snap(IEnumerable<Plane> planes, double maxDistance, double tolerance = Tolerance.Distance)
         {
             BoundaryEdge3DLoop boundaryEdge3DLoop = GetExternalEdge3DLoop();
             BoundingBox3D boundingBox3D = boundaryEdge3DLoop.GetBoundingBox(maxDistance);
@@ -268,7 +268,7 @@ namespace SAM.Analytical
             double distance_Min = double.MaxValue;
             foreach(Plane plane_Temp in planes)
             {
-                double distance_Temp = plane.Distance(plane_Temp);
+                double distance_Temp = plane.Distance(plane_Temp, tolerance);
 
                 if (distance_Temp > maxDistance)
                     continue;
@@ -276,7 +276,7 @@ namespace SAM.Analytical
                 if (plane_Temp.Distance(boundingBox3D) > maxDistance)
                     continue;
 
-                if (!plane_Temp.Coplanar(plane))
+                if (!plane_Temp.Coplanar(plane, tolerance))
                     continue;
 
                 //This is true only when planes are coplanar

@@ -6,7 +6,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static List<Shell> Union(this Shell shell_1, Shell shell_2, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static List<Shell> Difference(this Shell shell_1, Shell shell_2, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (shell_1 == null || shell_2 == null)
             {
@@ -85,61 +85,6 @@ namespace SAM.Geometry.Spatial
 
             return new List<Shell>() { new Shell(face3Ds) };
 
-        }
-
-        public static List<Shell> Union(this IEnumerable<Shell> shells, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
-        {
-            if (shells == null)
-            {
-                return null;
-            }
-
-            List<Shell> shells_Temp = new List<Shell>(shells);
-            if (shells_Temp.Count == 0)
-            {
-                return new List<Shell>();
-            }
-
-            List<Shell> result = new List<Shell>();
-
-            if (shells_Temp.Count == 1)
-            {
-                result.Add(new Shell(shells_Temp[0]));
-                return result;
-            }
-
-            while (shells_Temp.Count > 0)
-            {
-                Shell shell = shells_Temp[0];
-                shells_Temp.RemoveAt(0);
-
-                List<Shell> shells_Union = null;
-                foreach (Shell shell_Result in result)
-                {
-                    shells_Union = shell_Result.Union(shell);
-                    if (shells_Union != null && shells_Union.Count == 1)
-                    {
-                        result.Remove(shell_Result);
-                        break;
-                    }
-                }
-
-                if (shells_Union != null && shells_Union.Count == 1)
-                {
-                    result.Add(shells_Union[0]);
-                }
-                else
-                {
-                    result.Add(new Shell(shell));
-                }
-            }
-
-            if(result.Count != shells.Count())
-            {
-                result = Union(result, silverSpacing, tolerance_Angle, tolerance_Distance);
-            }
-
-            return result;
         }
     }
 }
