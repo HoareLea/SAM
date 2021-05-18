@@ -29,6 +29,18 @@ namespace SAM.Geometry.Planar
 
             return point2D_Closets;
         }
+
+        public static Point2D Snap(this ISegmentable2D segmentable2D, Point2D point2D, double snapDistance = double.MaxValue)
+        {
+            if (segmentable2D == null || point2D == null)
+            {
+                return null;
+            }
+
+            Point2D result = segmentable2D.Closest(point2D);
+
+            return point2D.Distance(result) < snapDistance ? result : new Point2D(point2D);
+        }
         
         public static List<Polygon2D> Snap(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double snapDistance, double tolerance = Core.Tolerance.Distance)
         {
