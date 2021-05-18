@@ -84,8 +84,10 @@ namespace SAM.Geometry.Spatial
             {
                 BoundingBox3D boundingBox3D = face3D?.GetBoundingBox();
                 if (boundingBox3D == null)
+                {
                     continue;
-
+                }
+                   
                 double elevation_Min = boundingBox3D.Min.Z;
                 Tuple<double, List<Tuple<Face2D, BoundingBox2D>>> tuple = tuples.Find(x => System.Math.Abs(x.Item1 - elevation_Min) < tolerance);
                 if (tuple == null)
@@ -96,13 +98,17 @@ namespace SAM.Geometry.Spatial
 
                 Plane plane = Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Min)) as Plane;
                 Face2D face2D = plane.Convert(plane.Project(face3D));
+                if (face2D == null)
+                {
+                    continue;
+                }                   
 
                 tuple.Item2.Add(new Tuple<Face2D, BoundingBox2D>(face2D, face2D.GetBoundingBox()));
                 face2Ds_All.Add(face2D);
             }
 
             face2Ds_All = Planar.Query.Split(face2Ds_All);
-            List<Point2D> point2Ds = face2Ds_All.ConvertAll(x => x.GetInternalPoint2D());
+            List<Point2D> point2Ds = face2Ds_All.ConvertAll(x => x?.GetInternalPoint2D());
 
             List<Shell> result = new List<Shell>();
 
