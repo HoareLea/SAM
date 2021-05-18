@@ -177,7 +177,6 @@ namespace SAM.Analytical
             elevations_Temp.Sort();
 
             List<Tuple<double, List<Face3D>>> tuples_Face3D = new List<Tuple<double, List<Face3D>>>();
-
             for(int i=0; i < count; i++)
             {
                 double elevation = elevations_Temp[i];
@@ -213,7 +212,7 @@ namespace SAM.Analytical
                         }
                     }
                 }
-                
+
                 tuples_Face3D.Add(new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x))));
             }
 

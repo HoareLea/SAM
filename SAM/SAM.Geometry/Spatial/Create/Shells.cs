@@ -221,7 +221,7 @@ namespace SAM.Geometry.Spatial
                         //Add Top Face3Ds
                         foreach (Face2D face2D_Top_Temp in face2Ds_Top_Temp)
                         {
-                            Face3D face3D_Top = plane_Top.Convert(face2D_Bottom_Temp);
+                            Face3D face3D_Top = plane_Top.Convert(face2D_Top_Temp);
                             if (face3D_Top == null)
                                 continue;
 
