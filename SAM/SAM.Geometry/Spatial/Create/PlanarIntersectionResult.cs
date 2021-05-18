@@ -250,6 +250,9 @@ namespace SAM.Geometry.Spatial
 
             List<Point2D> point2Ds = point3Ds.ConvertAll(x => plane_ClosedPlanar3D.Convert(x));
             IClosed2D closed2D = plane_ClosedPlanar3D.Convert(closedPlanar3D);
+            ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
+
+            point2Ds = point2Ds.Snap(segmentable2D.GetPoints(), tolerance_Distance);
 
             List<Segment2D> segment2Ds_Result = new List<Segment2D>();
             List<Point2D> point2Ds_Result = new List<Point2D>();
