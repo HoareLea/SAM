@@ -162,26 +162,41 @@ namespace SAM.Analytical
             return Geometry.Spatial.Create.Shells(face3Ds, tolerance);
         }
 
-        public static List<Shell> Shells(this IEnumerable<Panel> panels, IEnumerable<double> elevations, double snapTolerance = Core.Tolerance.MacroDistance, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static List<Shell> Shells(this IEnumerable<Panel> panels, IEnumerable<double> elevations, IEnumerable<double> offsets, IEnumerable<double> auxiliaryElevations, double snapTolerance = Core.Tolerance.MacroDistance, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (panels == null || elevations == null)
                 return null;
 
-            int count = elevations.Count();
-            if(count < 2)
+            if(elevations.Count() < 2)
             {
                 return null;
             }
 
-            List<double> elevations_Temp = new List<double>(elevations);
-            elevations_Temp.Sort();
+            HashSet<double> elevations_Unique = new HashSet<double>(elevations);
+            if(auxiliaryElevations != null && auxiliaryElevations.Count() > 0)
+            {
+                foreach(double auxiliaryElevation in auxiliaryElevations)
+                {
+                    elevations_Unique.Add(auxiliaryElevation);
+                }
+            }
+
+            List<double> elevations_All = new List<double>(elevations_Unique);
+            elevations_All.Sort();
+
+            int count = elevations_All.Count;
 
             List<Tuple<double, List<Face3D>>> tuples_Face3D = new List<Tuple<double, List<Face3D>>>();
             for(int i=0; i < count; i++)
             {
-                double elevation = elevations_Temp[i];
-                
-                Plane plane = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
+                double elevation = elevations_All[i];
+
+                double offset = 0;
+                int index = elevations.ToList().IndexOf(elevation);
+                if (index != -1 && offsets != null && offsets.Count() > index)
+                    offset = offsets.ElementAt(index);
+
+                Plane plane = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation + offset)) as Plane;
 
                 Dictionary<Panel, List<Geometry.Planar.ISegmentable2D>> dictionary = panels.SectionDictionary<Geometry.Planar.ISegmentable2D>(plane, tolerance_Distance);
 
@@ -213,6 +228,8 @@ namespace SAM.Analytical
                     }
                 }
 
+                plane = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
+
                 tuples_Face3D.Add(new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x))));
             }
 
@@ -235,6 +252,12 @@ namespace SAM.Analytical
 
             for (int i = 0; i < count - 1; i++)
             {
+                double elevation_Bottom = tuples_Shell[i].Item1;
+                if(!elevations.Contains(elevation_Bottom))
+                {
+                    continue;
+                }
+
                 Tuple<double, List<Shell>> tuple = tuples_Shell[i];
                 if(tuple == null || tuple.Item2 == null || tuple.Item2.Count == 0)
                 {
@@ -247,6 +270,12 @@ namespace SAM.Analytical
 
                     for (int k = i + 1; k < count - 1; k++)
                     {
+                        double elevation_Top = tuples_Shell[k].Item1;
+                        if (elevations.Contains(elevation_Top))
+                        {
+                            break;
+                        }
+
                         Tuple<double, List<Shell>> tuple_Temp = tuples_Shell[k];
                         if (tuple_Temp == null || tuple_Temp.Item2 == null || tuple_Temp.Item2.Count == 0)
                         {

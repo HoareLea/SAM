@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -58,8 +58,10 @@ namespace SAM.Analytical.Grasshopper
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "elevations_", NickName = "elevations_", Description = "Elevations", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offset_", NickName = "offset_", Description = "Offset", Access = GH_ParamAccess.item };
-                number.SetPersistentData(0.1);
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offsets_", NickName = "offsets_", Description = "Offsets", Access = GH_ParamAccess.list, Optional = true };
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "auxiliaryElevations_", NickName = "auxiliaryElevations_", Description = "AuxiliaryElevations", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
@@ -101,20 +103,25 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("offset_");
-            double offset = Core.Tolerance.Distance;
-            if (index != -1)
-            {
-                double offset_Temp = double.NaN;
-                if (!dataAccess.GetData(index, ref offset_Temp) && !double.IsNaN(offset_Temp))
-                    offset = offset_Temp;
-            }
-
             List<double> elevations = new List<double>();
             index = Params.IndexOfInputParam("elevations_");
             if (index != -1)
             {
                 dataAccess.GetDataList(index, elevations);
+            }
+
+            List<double> offstes = new List<double>();
+            index = Params.IndexOfInputParam("offsets_");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, offstes);
+            }
+
+            List<double> auxiliaryElevations = new List<double>();
+            index = Params.IndexOfInputParam("auxiliaryElevations_");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, auxiliaryElevations);
             }
 
             index = Params.IndexOfInputParam("tolerance_");
@@ -126,7 +133,7 @@ namespace SAM.Analytical.Grasshopper
                     tolerance = tolerance_Temp;
             }
 
-            List<Shell> shells = Analytical.Query.Shells(panels, elevations, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
+            List<Shell> shells = Analytical.Query.Shells(panels, elevations, offstes, auxiliaryElevations, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
 
             index = Params.IndexOfInputParam("_points_");
             if(index != -1)
