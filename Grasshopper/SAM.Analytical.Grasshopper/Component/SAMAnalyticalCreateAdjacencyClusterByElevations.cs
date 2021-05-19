@@ -46,10 +46,6 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_shells", NickName = "_shells", Description = "SAM Analytical Shells", Access = GH_ParamAccess.list };
-                genericObject.DataMapping = GH_DataMapping.Flatten;
-                result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
-
                 GooPanelParam panelParam = new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list };
                 panelParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(panelParam, ParamVisibility.Binding));
@@ -120,19 +116,6 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
-
-            index = Params.IndexOfInputParam("_shells");
-            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            List<Shell> shells = new List<Shell>();
-            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
-                if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Shell> shells_Temp) && shells_Temp != null)
-                    shells.AddRange(shells_Temp);
 
             index = Params.IndexOfInputParam("_panels");
             List<Panel> panels = new List<Panel>();
