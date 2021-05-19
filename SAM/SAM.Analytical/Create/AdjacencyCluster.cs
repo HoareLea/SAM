@@ -373,9 +373,14 @@ namespace SAM.Analytical
                 
                 foreach (Face3D face3D in face3Ds)
                 {
-                    Plane plane = face3D.GetPlane();
+                    Plane plane = face3D?.GetPlane();
                     if (plane == null)
                         continue;
+
+                    if(face3D.ThinnessRatio() < tolerance)
+                    {
+                        continue;
+                    }
 
                     Point3D point3D_Internal = face3D.InternalPoint3D();
                     if (point3D_Internal == null)

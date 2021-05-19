@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
@@ -186,9 +186,10 @@ namespace SAM.Analytical
 
             int count = elevations_All.Count;
 
-            List<Tuple<double, List<Face3D>>> tuples_Face3D_Bottom = new List<Tuple<double, List<Face3D>>>();
-            List<Tuple<double, List<Face3D>>> tuples_Face3D_Top = new List<Tuple<double, List<Face3D>>>();
-            for (int i=0; i < count; i++)
+            List<Tuple<double, List<Face3D>>> tuples_Face3D_Bottom = Enumerable.Repeat<Tuple<double, List<Face3D>>>(null, count).ToList();
+            List<Tuple<double, List<Face3D>>> tuples_Face3D_Top = Enumerable.Repeat<Tuple<double, List<Face3D>>>(null, count).ToList();
+            Parallel.For(0, count, (int i) =>
+            //for (int i=0; i < count; i++)
             {
                 double elevation = elevations_All[i];
 
@@ -235,7 +236,12 @@ namespace SAM.Analytical
 
                 plane = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
 
-                tuples_Face3D_Bottom.Add(new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x))));
+                tuples_Face3D_Bottom[i] = new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x)));
+
+                if(i == 0)
+                {
+                    return;
+                }
 
                 //Top
                 dictionary = panels.SectionDictionary<Geometry.Planar.ISegmentable2D>(plane, tolerance_Distance);
@@ -268,13 +274,14 @@ namespace SAM.Analytical
                     }
                 }
 
-                tuples_Face3D_Top.Add(new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x))));
-            }
+                tuples_Face3D_Top[i] = new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x)));
+            });
 
-            List<Tuple<double, List<Shell>>> tuples_Shell = new List<Tuple<double, List<Shell>>>(); 
-            for (int i = 0; i < count - 1; i++)
+            List<Tuple<double, List<Shell>>> tuples_Shell = Enumerable.Repeat<Tuple<double, List<Shell>>>(null, count - 1).ToList();
+            Parallel.For(0, count - 1, (int i) =>
+            //for (int i = 0; i < count - 1; i++)
             {
-                Tuple<double, List<Face3D>>  tuple_Bottom = tuples_Face3D_Bottom[i];
+                Tuple<double, List<Face3D>> tuple_Bottom = tuples_Face3D_Bottom[i];
                 Tuple<double, List<Face3D>> tuple_Top = tuples_Face3D_Top[i + 1];
 
                 List<Face3D> face3Ds = null;
@@ -285,8 +292,8 @@ namespace SAM.Analytical
                     face3Ds.AddRange(tuple_Top.Item2);
                 }
 
-                tuples_Shell.Add(new Tuple<double, List<Shell>>(tuple_Bottom.Item1, Geometry.Spatial.Create.Shells(face3Ds, tolerance_Distance)));
-            }
+                tuples_Shell[i] = new Tuple<double, List<Shell>>(tuple_Bottom.Item1, Geometry.Spatial.Create.Shells(face3Ds, tolerance_Distance));
+            });
 
             for (int i = 0; i < count - 1; i++)
             {
