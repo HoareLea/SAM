@@ -165,7 +165,10 @@ namespace SAM.Analytical
                 {
                     if (dictionary.ContainsKey(panel_Old))
                     {
-                        dictionary[panel_Old] = new List<Geometry.Planar.ISegmentable2D>() { segment2D_New };
+                        dictionary.Remove(panel_Old);
+                        dictionary[panel_New] = new List<Geometry.Planar.ISegmentable2D>() { segment2D_New };
+
+                        //dictionary[panel_Old] = new List<Geometry.Planar.ISegmentable2D>() { segment2D_New };
                         panels[index] = panel_New;
 
                         index = panels_Extended.IndexOf(panel_Old);

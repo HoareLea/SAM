@@ -117,6 +117,8 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(tolerance))
                 tolerance = Tolerance.Distance;
 
+            panels = panels?.ConvertAll(x => Create.Panel(x));
+
             Analytical.Modify.Extend(panels, elevation, maxDistance, out List<Panel> panels_Extended, out List<Geometry.Spatial.Segment3D> segment3Ds, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
 
             index = Params.IndexOfOutputParam("panels");
