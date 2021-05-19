@@ -186,11 +186,13 @@ namespace SAM.Analytical
 
             int count = elevations_All.Count;
 
-            List<Tuple<double, List<Face3D>>> tuples_Face3D = new List<Tuple<double, List<Face3D>>>();
-            for(int i=0; i < count; i++)
+            List<Tuple<double, List<Face3D>>> tuples_Face3D_Bottom = new List<Tuple<double, List<Face3D>>>();
+            List<Tuple<double, List<Face3D>>> tuples_Face3D_Top = new List<Tuple<double, List<Face3D>>>();
+            for (int i=0; i < count; i++)
             {
                 double elevation = elevations_All[i];
 
+                //Bottom
                 double offset = 0;
                 int index = elevations.ToList().IndexOf(elevation);
                 if (index != -1 && offsets != null && offsets.Count() > index)
@@ -230,14 +232,47 @@ namespace SAM.Analytical
 
                 plane = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
 
-                tuples_Face3D.Add(new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x))));
+                tuples_Face3D_Bottom.Add(new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x))));
+
+                //Top
+                dictionary = panels.SectionDictionary<Geometry.Planar.ISegmentable2D>(plane, tolerance_Distance);
+
+                segment2Ds = new List<Geometry.Planar.Segment2D>();
+                foreach (KeyValuePair<Panel, List<Geometry.Planar.ISegmentable2D>> keyValuePair in dictionary)
+                {
+                    foreach (Geometry.Planar.ISegmentable2D segmentable2D in keyValuePair.Value)
+                    {
+                        segment2Ds.AddRange(segmentable2D.GetSegments());
+                    }
+                }
+
+                face2Ds = null;
+
+                if (segment2Ds != null && segment2Ds.Count != 0)
+                {
+                    segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance_Distance);
+                    segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, snapTolerance);
+
+                    List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance_Distance);
+                    if (polygon2Ds != null && polygon2Ds.Count != 0)
+                    {
+                        face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
+                        if (face2Ds != null && face2Ds.Count != 0)
+                        {
+                            List<Geometry.Planar.IClosed2D> closed2Ds = Geometry.Planar.Query.Holes(face2Ds);
+                            closed2Ds?.ForEach(x => face2Ds.Add(new Geometry.Planar.Face2D(x)));
+                        }
+                    }
+                }
+
+                tuples_Face3D_Top.Add(new Tuple<double, List<Face3D>>(elevation, face2Ds?.ConvertAll(x => plane.Convert(x))));
             }
 
             List<Tuple<double, List<Shell>>> tuples_Shell = new List<Tuple<double, List<Shell>>>(); 
             for (int i = 0; i < count - 1; i++)
             {
-                Tuple<double, List<Face3D>>  tuple_Bottom = tuples_Face3D[i];
-                Tuple<double, List<Face3D>> tuple_Top = tuples_Face3D[i + 1];
+                Tuple<double, List<Face3D>>  tuple_Bottom = tuples_Face3D_Bottom[i];
+                Tuple<double, List<Face3D>> tuple_Top = tuples_Face3D_Top[i + 1];
 
                 List<Face3D> face3Ds = null;
                 if (tuple_Bottom != null && tuple_Top != null && tuple_Bottom.Item2 != null && tuple_Top.Item2 != null)
