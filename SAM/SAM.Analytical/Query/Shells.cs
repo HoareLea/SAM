@@ -200,7 +200,10 @@ namespace SAM.Analytical
 
                 Plane plane = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation + offset)) as Plane;
 
-                Dictionary<Panel, List<Geometry.Planar.ISegmentable2D>> dictionary = panels.SectionDictionary<Geometry.Planar.ISegmentable2D>(plane, tolerance_Distance);
+                List<Panel> panels_Bottom = new List<Panel>(panels);
+                panels_Bottom.RemoveAll(x => x == null || x.Below(plane, tolerance_Distance));
+
+                Dictionary<Panel, List<Geometry.Planar.ISegmentable2D>> dictionary = panels_Bottom.SectionDictionary<Geometry.Planar.ISegmentable2D>(plane, tolerance_Distance);
 
                 List<Geometry.Planar.Segment2D> segment2Ds = new List<Geometry.Planar.Segment2D>();
                 foreach(KeyValuePair<Panel, List<Geometry.Planar.ISegmentable2D>> keyValuePair in dictionary)
