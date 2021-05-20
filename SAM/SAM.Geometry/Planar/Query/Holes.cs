@@ -27,18 +27,18 @@ namespace SAM.Geometry.Planar
             List<IClosed2D> result = new List<IClosed2D>();
             foreach (Face2D face2D in face2Ds_Union)
             {
-                List<IClosed2D> closed2Ds = face2D.InternalEdge2Ds;
-                if (closed2Ds == null || closed2Ds.Count == 0)
+                List<IClosed2D> internalEdge2Ds = face2D.InternalEdge2Ds;
+                if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
                     continue;
 
-                foreach(IClosed2D closed2D in closed2Ds)
+                foreach(IClosed2D closed2D in internalEdge2Ds)
                 {
                     BoundingBox2D boundingBox2D = closed2D?.GetBoundingBox(tolerance);
                     if (boundingBox2D == null)
                         continue;
 
                     Tuple<BoundingBox2D, Face2D> tuple = tuples.Find(x => boundingBox2D.InRange(x.Item1, tolerance));
-                    if (tuple != null)
+                    if (tuple == null)
                         continue;
 
                     result.Add(closed2D);
