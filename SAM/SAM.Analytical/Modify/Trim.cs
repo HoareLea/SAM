@@ -28,7 +28,7 @@ namespace SAM.Analytical
 
             List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Query.Split(segmentable2Ds, tolerance);
 
-            segment2Ds = Geometry.Planar.Query.TrimUnconnected(segment2Ds, minLength, tolerance);
+            segment2Ds = Geometry.Planar.Query.TrimUnconnected(segment2Ds, minLength, snapTolerance);
 
             segment3Ds = segment2Ds.ConvertAll(x => plane.Convert(x));
 
