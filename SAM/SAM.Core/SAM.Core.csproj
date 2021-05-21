@@ -76,6 +76,7 @@
     <Compile Include="Convert\ToBitmapSource\BitmapSource.cs" />
     <Compile Include="Convert\ToBitmap\Bitmap.cs" />
     <Compile Include="Convert\ToFile\File.cs" />
+    <Compile Include="Convert\ToHexadecimal\Hexadecimal.cs" />
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Create\Commands.cs" />
     <Compile Include="Create\TypeMap.cs" />
@@ -164,9 +165,11 @@
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\RemoveValue.cs" />
     <Compile Include="Modify\Copy.cs" />
+    <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Query\CamelCase.cs" />
     <Compile Include="Query\CommandMask.cs" />
+    <Compile Include="Query\IsValidEmail.cs" />
     <Compile Include="Query\IsValidHash.cs" />
     <Compile Include="Query\ComputeHash.cs" />
     <Compile Include="Query\Operator.cs" />
