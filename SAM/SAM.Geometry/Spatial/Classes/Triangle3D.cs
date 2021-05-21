@@ -18,7 +18,7 @@ namespace SAM.Geometry.Spatial
 
         public Triangle3D(Triangle3D triangle3D)
         {
-            points = Point3D.Clone(triangle3D.points).ToArray();
+            points = Query.Clone(triangle3D.points).ToArray();
         }
 
         public Triangle3D(JObject jObject)
@@ -72,15 +72,6 @@ namespace SAM.Geometry.Spatial
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             return new BoundingBox3D(points, offset);
-        }
-
-        public static List<Polygon3D> ToPolygons(IEnumerable<Triangle3D> triangle3Ds)
-        {
-            List<Polygon3D> result = new List<Polygon3D>();
-            foreach (Triangle3D triangle3D in triangle3Ds)
-                result.Add(triangle3D.ToPolygon());
-
-            return result;
         }
 
         public IClosed3D GetExternalEdge()

@@ -65,5 +65,29 @@ namespace SAM.Geometry.Spatial
 
             return null;
         }
+
+        public static Point3D Closest(this IEnumerable<Point3D> point3Ds, Point3D point3D)
+        {
+            if (point3Ds == null || point3Ds.Count() == 0 || point3D == null)
+                return null;
+
+            Point3D result = null;
+            double distance = double.MaxValue;
+            foreach (Point3D point3D_Temp in point3Ds)
+            {
+                double distance_Temp = point3D_Temp.Distance(point3D);
+
+                if (distance > distance_Temp)
+                {
+                    distance = distance_Temp;
+                    result = point3D_Temp;
+                }
+
+                if (distance == 0)
+                    return result;
+            }
+
+            return result;
+        }
     }
 }

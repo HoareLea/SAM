@@ -171,7 +171,7 @@ namespace SAM.Geometry.Spatial
 
         public double Distance(Segment3D segment3D)
         {
-            PlanarIntersectionResult planarIntersectionResult = Intersection(segment3D);
+            PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(this, segment3D);
             if (planarIntersectionResult == null)
                 return double.NaN;
 
@@ -245,28 +245,7 @@ namespace SAM.Geometry.Spatial
                 axisY = Query.AxisY(normal, axisX);
         }
 
-        public PlanarIntersectionResult Intersection(Segment3D segment3D, double tolerance = Tolerance.Distance)
-        {
-            return Create.PlanarIntersectionResult(this, segment3D, tolerance);
-        }
 
-        public PlanarIntersectionResult Intersection(IClosedPlanar3D closedPlanar3D, double tolerance = Tolerance.Distance)
-        {
-            if (closedPlanar3D is Face3D)
-                return Intersection((Face3D)closedPlanar3D);
-
-            return Create.PlanarIntersectionResult(this, closedPlanar3D, tolerance);
-        }
-
-        public PlanarIntersectionResult Intersection(Face3D face3D, double tolerance = Tolerance.Distance)
-        {
-            return Create.PlanarIntersectionResult(this, face3D, tolerance);
-        }
-
-        public PlanarIntersectionResult Intersection(Plane plane, double tolerance = Tolerance.Distance)
-        {
-            return Create.PlanarIntersectionResult(this, plane, tolerance);
-        }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {

@@ -5,6 +5,16 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
+        public static Point3D Snap(this IEnumerable<Point3D> point3Ds, Point3D point3D, double maxDistance = double.NaN)
+        {
+            Point3D result = point3Ds.Closest(point3D);
+
+            if (point3D.Distance(result) > maxDistance)
+                result = new Point3D(point3D);
+
+            return result;
+        }
+
         public static List<Face3D> Snap(this Face3D face3D_1, Face3D face3D_2, double snapDistance, double tolerance = Core.Tolerance.Distance)
         {
             Plane plane_1 = face3D_1?.GetPlane();
@@ -180,5 +190,14 @@ namespace SAM.Geometry.Spatial
 
             return Face3D.Create(plane, polygon2D_ExternalEdge2D, polygon2Ds_InternalEdge2Ds);
         }
+
+        public static Segment3D Snap(this IEnumerable<Point3D> point3Ds, Segment3D segment3D, double maxDistance = double.NaN)
+        {
+            Point3D point3D_1 = Snap(point3Ds, segment3D[0], maxDistance);
+            Point3D point3D_2 = Snap(point3Ds, segment3D[1], maxDistance);
+
+            return new Segment3D(point3D_1, point3D_2);
+        }
+
     }
 }

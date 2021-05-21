@@ -73,13 +73,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Geometry.Spatial.Point3D> point3DList = Geometry.Spatial.Point3D.Generate(new Geometry.Spatial.BoundingBox3D(panels.ConvertAll(x => x.GetBoundingBox(offset))), offset);
+            List<Geometry.Spatial.Point3D> point3Ds = Geometry.Spatial.Create.Point3Ds(new Geometry.Spatial.BoundingBox3D(panels.ConvertAll(x => x.GetBoundingBox(offset))), offset);
 
             panels = panels.ConvertAll(x => Create.Panel(x));
-            panels.ForEach(x => x.Snap(point3DList, offset));
+            panels.ForEach(x => x.Snap(point3Ds, offset));
 
             dataAccess.SetDataList(0, panels.ConvertAll(x => new GooPanel(x)));
-            dataAccess.SetDataList(1, point3DList.ConvertAll(x => new Geometry.Grasshopper.GooSAMGeometry(x)));
+            dataAccess.SetDataList(1, point3Ds.ConvertAll(x => new Geometry.Grasshopper.GooSAMGeometry(x)));
         }
     }
 }

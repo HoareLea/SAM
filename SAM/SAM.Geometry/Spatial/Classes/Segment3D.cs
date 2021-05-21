@@ -175,29 +175,6 @@ namespace SAM.Geometry.Spatial
             return point3D.Distance(Closest(point3D));
         }
 
-        //public double Distance(Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
-        //{
-        //    if (segment3D == null)
-        //        return double.NaN;
-
-        //    Vector3D normal = Direction.CrossProduct(segment3D.Direction);
-        //    double length = normal.Length;
-        //    if(double.IsNaN(length) || normal.Length < tolerance)
-        //    {
-        //        normal = Query.Normal(origin, GetEnd(), segment3D.origin);
-        //        length = normal.Length;
-        //        if (double.IsNaN(length) || normal.Length < tolerance)
-        //        {
-        //            normal = Direction.Rotate90();
-        //        }
-        //    }
-
-        //    Plane plane = new Plane(origin, normal);
-        //    Planar.Segment2D segment2D_1 = plane.Convert(this);
-        //    Planar.Segment2D segment2D_2 = plane.Convert(segment3D);
-        //    return segment2D_1.Distance(segment2D_2);
-        //}
-
         public double Distance(Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
         {
             if (segment3D == null)
@@ -342,29 +319,6 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             return new Segment3D(line3D.Origin, line3D.Direction);
-        }
-
-        public static List<Point3D> GetPoints(IEnumerable<Segment3D> segment3Ds, bool close = false)
-        {
-            if (segment3Ds == null)
-                return null;
-
-            List<Point3D> result = new List<Point3D>() { segment3Ds.First().GetStart() };
-            foreach (Segment3D segment3D in segment3Ds)
-                result.Add(segment3D.GetEnd());
-
-            if (close && result.First().Distance(result.Last()) != 0)
-                result.Add(result.First());
-
-            return result;
-        }
-
-        public static Segment3D Snap(IEnumerable<Point3D> point3Ds, Segment3D segment3D, double maxDistance = double.NaN)
-        {
-            Point3D point3D_1 = Point3D.Snap(point3Ds, segment3D[0], maxDistance);
-            Point3D point3D_2 = Point3D.Snap(point3Ds, segment3D[1], maxDistance);
-
-            return new Segment3D(point3D_1, point3D_2);
         }
 
         public static bool operator ==(Segment3D segment3D_1, Segment3D segment3D_2)

@@ -38,7 +38,7 @@ namespace SAM.Geometry.Spatial
             IEnumerable<Segment3D> segment3Ds = curve3Ds.FindAll(x => x is Segment3D).Cast<Segment3D>();
             if (segment3Ds.Count() == curve3Ds.Count)
             {
-                List<Point3D> point3Ds = Segment3D.GetPoints(segment3Ds, false);
+                List<Point3D> point3Ds = Create.Point3Ds(segment3Ds, false);
                 Plane plane = Create.Plane(point3Ds, tolerance);
                 if (plane != null)
                     return new Face3D(new Polygon3D(point3Ds));

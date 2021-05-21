@@ -10,7 +10,7 @@ namespace SAM.Geometry.Spatial
 
         public Polyline3D(IEnumerable<Point3D> point3Ds, bool close = false)
         {
-            this.points = Point3D.Clone(point3Ds);
+            this.points = Query.Clone(point3Ds);
             if (close && !IsClosed())
                 points.Add(points.First());
         }
@@ -24,7 +24,7 @@ namespace SAM.Geometry.Spatial
 
         public Polyline3D(Polyline3D polyline3D)
         {
-            this.points = Point3D.Clone(polyline3D.points);
+            this.points = Query.Clone(polyline3D.points);
         }
 
         public Polyline3D(JObject jObject)
@@ -42,7 +42,7 @@ namespace SAM.Geometry.Spatial
 
         public List<Segment3D> GetSegments()
         {
-            return Point3D.GetSegments(points, false);
+            return Create.Segment3Ds(points, false);
         }
 
         public List<ICurve3D> GetCurves()

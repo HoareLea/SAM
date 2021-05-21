@@ -92,5 +92,14 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static List<Polygon3D> Polygon3Ds(this IEnumerable<Triangle3D> triangle3Ds)
+        {
+            List<Polygon3D> result = new List<Polygon3D>();
+            foreach (Triangle3D triangle3D in triangle3Ds)
+                result.Add(triangle3D.ToPolygon());
+
+            return result;
+        }
     }
 }

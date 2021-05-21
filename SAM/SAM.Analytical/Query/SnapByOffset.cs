@@ -8,7 +8,7 @@ namespace SAM.Analytical
     {
         public static IEnumerable<Panel> SnapByOffset(this IEnumerable<Panel> panels, double offset = 0.2, double maxDixtance = double.NaN)
         {
-            List<Point3D> point3DList = Point3D.Generate(new BoundingBox3D(panels.ToList().ConvertAll(x => x.GetBoundingBox(offset))), offset);
+            List<Point3D> point3DList = Geometry.Spatial.Create.Point3Ds(new BoundingBox3D(panels.ToList().ConvertAll(x => x.GetBoundingBox(offset))), offset);
 
             return SnapByPoints(panels, point3DList, maxDixtance);
         }

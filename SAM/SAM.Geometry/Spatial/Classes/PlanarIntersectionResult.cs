@@ -10,7 +10,7 @@ namespace SAM.Geometry.Spatial
         private List<ISAMGeometry2D> geometry2Ds;
         private Plane plane;
 
-        public PlanarIntersectionResult(Plane plane, IEnumerable<ISAMGeometry3D> sAMGeometry3Ds)
+        internal PlanarIntersectionResult(Plane plane, IEnumerable<ISAMGeometry3D> sAMGeometry3Ds)
         {
             this.plane = plane;
 
@@ -18,7 +18,7 @@ namespace SAM.Geometry.Spatial
                 geometry2Ds = sAMGeometry3Ds.ToList().ConvertAll(x => Query.Convert(plane, x as dynamic) as ISAMGeometry2D);
         }
 
-        public PlanarIntersectionResult(Plane plane, Point3D point3D)
+        internal PlanarIntersectionResult(Plane plane, Point3D point3D)
         {
             this.plane = plane;
 
@@ -29,7 +29,7 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public PlanarIntersectionResult(Plane plane, Line3D line3D)
+        internal PlanarIntersectionResult(Plane plane, Line3D line3D)
         {
             this.plane = plane;
 
@@ -40,7 +40,7 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public PlanarIntersectionResult(Plane plane, Segment3D segment3D)
+        internal PlanarIntersectionResult(Plane plane, Segment3D segment3D)
         {
             this.plane = plane;
 
@@ -51,7 +51,7 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public PlanarIntersectionResult(Plane plane, Face3D face3D)
+        internal PlanarIntersectionResult(Plane plane, Face3D face3D)
         {
             this.plane = plane;
 
@@ -62,7 +62,7 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public PlanarIntersectionResult(Plane plane)
+        internal PlanarIntersectionResult(Plane plane)
         {
             this.plane = plane;
         }

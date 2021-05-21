@@ -113,9 +113,9 @@ namespace SAM.Geometry.Grasshopper
             }
 
             List<ISAMGeometry3D> result = new List<ISAMGeometry3D>();
-            foreach (Spatial.ISAMGeometry3D geometry3D in geometry3Ds)
+            foreach (ISAMGeometry3D geometry3D in geometry3Ds)
             {
-                PlanarIntersectionResult planarIntersectionResult = plane.Intersection(geometry3D as dynamic);
+                PlanarIntersectionResult planarIntersectionResult = Spatial.Create.PlanarIntersectionResult(plane, geometry3D as dynamic);
                 if (planarIntersectionResult == null)
                     continue;
 

@@ -41,14 +41,14 @@ namespace SAM.Geometry.Spatial
 
         public BoundingBox3D(Point3D point3D_1, Point3D point3D_2)
         {
-            max = Point3D.Max(point3D_1, point3D_2);
-            min = Point3D.Min(point3D_1, point3D_2);
+            max = Query.Max(point3D_1, point3D_2);
+            min = Query.Min(point3D_1, point3D_2);
         }
 
         public BoundingBox3D(Point3D point3D_1, Point3D point3D_2, double offset)
         {
-            max = Point3D.Max(point3D_1, point3D_2);
-            min = Point3D.Min(point3D_1, point3D_2);
+            max = Query.Max(point3D_1, point3D_2);
+            min = Query.Min(point3D_1, point3D_2);
 
             max = new Point3D(max.X + offset, max.Y + offset, max.Z + offset);
             min = new Point3D(min.X - offset, min.Y - offset, min.Z - offset);
@@ -107,12 +107,12 @@ namespace SAM.Geometry.Spatial
                 if (min == null)
                     min = new Point3D(boundingBox3D.Min);
                 else
-                    min = Point3D.Min(boundingBox3D.Min, min);
+                    min = Query.Min(boundingBox3D.Min, min);
 
                 if (max == null)
                     max = new Point3D(boundingBox3D.Max);
                 else
-                    max = Point3D.Max(boundingBox3D.Max, max);
+                    max = Query.Max(boundingBox3D.Max, max);
             }
         }
 
@@ -179,8 +179,8 @@ namespace SAM.Geometry.Spatial
                 }
                 else
                 {
-                    max = Point3D.Max(max, value);
-                    min = Point3D.Min(max, value);
+                    max = Query.Max(max, value);
+                    min = Query.Min(max, value);
                 }
             }
         }
@@ -200,8 +200,8 @@ namespace SAM.Geometry.Spatial
                 }
                 else
                 {
-                    max = Point3D.Max(min, value);
-                    min = Point3D.Min(min, value);
+                    max = Query.Max(min, value);
+                    min = Query.Min(min, value);
                 }
             }
         }
@@ -359,57 +359,12 @@ namespace SAM.Geometry.Spatial
 
         public Point3D GetCenter()
         {
-            return Point3D.GetCenter(min, max);
+            return Query.Mid(min, max);
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
             return new BoundingBox3D((Point3D)min.GetMoved(vector3D), (Point3D)max.GetMoved(vector3D));
-        }
-
-        public static List<BoundingBox3D> GetExternal(IEnumerable<BoundingBox3D> boundingBox3Ds)
-        {
-            if (boundingBox3Ds == null)
-                return null;
-
-            int aCount = boundingBox3Ds.Count();
-            if (aCount == 0)
-                return new List<BoundingBox3D>();
-
-            if (aCount == 1)
-                return new List<BoundingBox3D>() { boundingBox3Ds.First() };
-
-            HashSet<int> indexes = new HashSet<int>();
-
-            for (int i = 0; i < aCount - 1; i++)
-            {
-                if (indexes.Contains(i))
-                    continue;
-
-                BoundingBox3D boundingBox3D_1 = boundingBox3Ds.ElementAt(i);
-
-                for (int j = 1; j < aCount; j++)
-                {
-                    if (i == j || indexes.Contains(j))
-                        continue;
-
-                    BoundingBox3D boundingBox3D_2 = boundingBox3Ds.ElementAt(j);
-
-                    if (boundingBox3D_1.Inside(boundingBox3D_2))
-                        indexes.Add(j);
-                }
-            }
-
-            List<BoundingBox3D> result = new List<BoundingBox3D>();
-            for (int i = 0; i < aCount; i++)
-            {
-                if (indexes.Contains(i))
-                    continue;
-
-                result.Add(boundingBox3Ds.ElementAt(i));
-            }
-
-            return result;
         }
 
         public override bool FromJObject(JObject jObject)

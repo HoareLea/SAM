@@ -140,11 +140,11 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (geometry3Ds[i] is Spatial.Point3D)
                 {
-                    geometry3Ds[i] = Spatial.Point3D.Snap(point3Ds, (Spatial.Point3D)geometry3Ds[i], maxDistance);
+                    geometry3Ds[i] = Spatial.Query.Snap(point3Ds, (Spatial.Point3D)geometry3Ds[i], maxDistance);
                 }
                 else if (geometry3Ds[i] is Spatial.Segment3D)
                 {
-                    geometry3Ds[i] = Spatial.Segment3D.Snap(point3Ds, (Spatial.Segment3D)geometry3Ds[i], maxDistance);
+                    geometry3Ds[i] = Spatial.Query.Snap(point3Ds, (Spatial.Segment3D)geometry3Ds[i], maxDistance);
                 }
                 else if (geometry3Ds[i] is Spatial.Polygon3D)
                 {

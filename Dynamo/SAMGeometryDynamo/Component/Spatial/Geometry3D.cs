@@ -68,16 +68,16 @@ namespace SAMGeometryDynamo
             ISAMGeometry3D geometry3D_Snapped = null;
 
             if (geometry3D is SAM.Geometry.Spatial.Point3D)
-                geometry3D_Snapped = SAM.Geometry.Spatial.Point3D.Snap(point3Ds, (SAM.Geometry.Spatial.Point3D)geometry3D, maxDistance);
+                geometry3D_Snapped = Query.Snap(point3Ds, (SAM.Geometry.Spatial.Point3D)geometry3D, maxDistance);
 
             if (geometry3D is Segment3D)
-                geometry3D_Snapped = Segment3D.Snap(point3Ds, (Segment3D)geometry3D, maxDistance);
+                geometry3D_Snapped = Query.Snap(point3Ds, (Segment3D)geometry3D, maxDistance);
 
             if (geometry3D is Face3D)
                 geometry3D = ((Face3D)geometry3D).GetExternalEdge3D() as SAM.Geometry.Spatial.Polygon3D;
 
             if (geometry3D is SAM.Geometry.Spatial.Polygon3D)
-                geometry3D_Snapped = SAM.Geometry.Spatial.Query.Snap((SAM.Geometry.Spatial.Polygon3D)geometry3D, point3Ds, maxDistance);
+                geometry3D_Snapped = Query.Snap((SAM.Geometry.Spatial.Polygon3D)geometry3D, point3Ds, maxDistance);
 
             if (geometry3D_Snapped == null)
                 return null;
