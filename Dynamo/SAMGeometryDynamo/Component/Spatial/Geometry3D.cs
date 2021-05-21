@@ -77,7 +77,7 @@ namespace SAMGeometryDynamo
                 geometry3D = ((Face3D)geometry3D).GetExternalEdge3D() as SAM.Geometry.Spatial.Polygon3D;
 
             if (geometry3D is SAM.Geometry.Spatial.Polygon3D)
-                geometry3D_Snapped = SAM.Geometry.Spatial.Polygon3D.Snap(point3Ds, (SAM.Geometry.Spatial.Polygon3D)geometry3D, maxDistance);
+                geometry3D_Snapped = SAM.Geometry.Spatial.Query.Snap((SAM.Geometry.Spatial.Polygon3D)geometry3D, point3Ds, maxDistance);
 
             if (geometry3D_Snapped == null)
                 return null;

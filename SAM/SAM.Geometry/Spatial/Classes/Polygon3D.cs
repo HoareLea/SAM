@@ -95,16 +95,6 @@ namespace SAM.Geometry.Spatial
             return new Face3D(this);
         }
 
-        public static Polygon3D Snap(IEnumerable<Point3D> point3Ds, Polygon3D polygon3D, double maxDistance = double.NaN)
-        {
-            List<Point3D> point3Ds_Temp = new List<Point3D>();
-
-            foreach (Point3D point3D in polygon3D.GetPoints())
-                point3Ds_Temp.Add(new Point3D(Point3D.Snap(point3Ds, point3D, maxDistance)));
-
-            return new Polygon3D(point3Ds_Temp);
-        }
-
         public IClosed3D GetExternalEdge()
         {
             return new Polygon3D(this);

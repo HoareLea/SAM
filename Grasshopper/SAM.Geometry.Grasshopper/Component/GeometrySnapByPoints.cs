@@ -148,7 +148,7 @@ namespace SAM.Geometry.Grasshopper
                 }
                 else if (geometry3Ds[i] is Spatial.Polygon3D)
                 {
-                    geometry3Ds[i] = Spatial.Polygon3D.Snap(point3Ds, (Spatial.Polygon3D)geometry3Ds[i], maxDistance);
+                    geometry3Ds[i] = Spatial.Query.Snap((Spatial.Polygon3D)geometry3Ds[i], point3Ds, maxDistance);
                 }
             }
 

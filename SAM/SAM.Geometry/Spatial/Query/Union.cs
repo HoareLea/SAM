@@ -80,10 +80,16 @@ namespace SAM.Geometry.Spatial
                 return new List<Shell>() { shell_1_Temp, shell_2_Temp };
             }
 
-            List<Face3D> face3Ds = boundaries_1.ConvertAll(x => x.Item2);
-            face3Ds.AddRange(boundaries_2.ConvertAll(x => x.Item2));
+            List<Face3D> face3Ds_New = boundaries_1.ConvertAll(x => x.Item2);
+            face3Ds_New.AddRange(boundaries_2.ConvertAll(x => x.Item2));
 
-            return new List<Shell>() { new Shell(face3Ds) };
+            //Snap Face3Ds to origin
+            List<Face3D> face3Ds = shell_1.Face3Ds;
+            face3Ds.AddRange(shell_2.Face3Ds);
+
+            face3Ds_New = face3Ds_New.ConvertAll(x => x.Snap(face3Ds, tolerance_Distance, tolerance_Distance));
+
+            return new List<Shell>() { new Shell(face3Ds_New) };
 
         }
 

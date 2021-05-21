@@ -100,6 +100,9 @@ namespace SAM.Core.Grasshopper
                 else
                     @object = gH_ObjectWrapper.Value;
 
+                if (@object is IGH_Goo)
+                    @object = (@object as dynamic).Value;
+
                 if (@object is IJSAMObject)
                     jSAMObjects.Add((IJSAMObject)@object);
             }
