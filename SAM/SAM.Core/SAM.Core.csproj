@@ -165,7 +165,10 @@
     <Compile Include="Modify\RemoveValue.cs" />
     <Compile Include="Modify\Copy.cs" />
     <Compile Include="Modify\SetValue.cs" />
+    <Compile Include="Query\CamelCase.cs" />
     <Compile Include="Query\CommandMask.cs" />
+    <Compile Include="Query\IsValidHash.cs" />
+    <Compile Include="Query\ComputeHash.cs" />
     <Compile Include="Query\Operator.cs" />
     <Compile Include="Query\Indexes.cs" />
     <Compile Include="Query\NextDouble.cs" />

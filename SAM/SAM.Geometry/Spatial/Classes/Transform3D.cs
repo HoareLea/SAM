@@ -86,7 +86,10 @@ namespace SAM.Geometry.Spatial
             return new Transform3D(Matrix4D.GetIdentity());
         }
 
-        /// <summary>Zero Transform3D diagonal = (0,0,0,1)</summary>
+        /// <summary>
+        /// Zero Transform3D Diagonal = (0,0,0,1)
+        /// </summary>
+        /// <returns>Transform3D</returns>
         public static Transform3D GetZero()
         {
             Matrix4D matrix4D = new Matrix4D();
