@@ -73,6 +73,7 @@ namespace SAM.Analytical
                             break;
 
                         case PanelType.Floor:
+                        case PanelType.FloorExposed:
                             PanelType panelType_Normal = Query.PanelType(panel.Normal);
                             if (panelType_Normal == PanelType.Floor)
                             {
