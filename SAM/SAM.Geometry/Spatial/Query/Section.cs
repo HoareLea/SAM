@@ -75,5 +75,16 @@ namespace SAM.Geometry.Spatial
 
             return Section(shell, plane, tolerance_Angle, tolerance_Distance, tolerance_Snap);
         }
+    
+        public static List<Face3D> Section(this Extrusion extrusion, Plane plane, double tolerance_Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        {
+            Shell shell = extrusion?.Shell();
+            if(shell == null)
+            {
+                return null;
+            }
+
+            return Section(shell, plane, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+        }
     }
 }

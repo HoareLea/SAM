@@ -178,6 +178,7 @@
     <Compile Include="Query\CutShading.cs" />
     <Compile Include="Modify\FixAdjacencyCluster.cs" />
     <Compile Include="Query\ExternalPanels.cs" />
+    <Compile Include="Query\Extrusion.cs" />
     <Compile Include="Query\FilterByElevation.cs" />
     <Compile Include="Query\IntersectingPanels.cs" />
     <Compile Include="Query\DuplicatedSpacesDictionary.cs" />

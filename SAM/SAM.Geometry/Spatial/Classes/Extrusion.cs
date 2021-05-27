@@ -49,6 +49,19 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        public Face3D Face3D
+        {
+            get
+            {
+                if (face3D == null)
+                {
+                    return null;
+                }
+
+                return new Face3D(face3D);
+            }
+        }
+
         public override ISAMGeometry Clone()
         {
             return new Extrusion(this);

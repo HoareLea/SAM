@@ -132,13 +132,13 @@ namespace SAM.Geometry.Spatial
             return new Polygon3D(plane, polygon2D.Points);
         }
 
-        public static Polygon3D Convert(this Plane plane, Planar.Rectangle2D rectangle2D)
+        public static Rectangle3D Convert(this Plane plane, Planar.Rectangle2D rectangle2D)
         {
             if (plane == null || rectangle2D == null)
                 return null;
 
-            //return new Polygon3D(Convert(rectangle2D.GetPoints()));
-            return new Polygon3D(plane, rectangle2D.GetPoints());
+            return new Rectangle3D(plane, rectangle2D);
+            //return new Polygon3D(plane, rectangle2D.GetPoints());
         }
 
         public static Planar.Polygon2D Convert(this Plane plane, Polygon3D polygon3D)

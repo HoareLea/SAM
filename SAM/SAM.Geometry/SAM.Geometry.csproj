@@ -176,6 +176,7 @@
     <Compile Include="Spatial\Classes\Rectangle3D.cs" />
     <Compile Include="Spatial\Classes\Shell.cs" />
     <Compile Include="Spatial\Classes\Transform3D.cs" />
+    <Compile Include="Spatial\Create\Rectangle3D.cs" />
     <Compile Include="Spatial\Create\Shell.cs" />
     <Compile Include="Spatial\Create\Shells.cs" />
     <Compile Include="Spatial\Create\Polygon3Ds.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Spatial\Query\External.cs" />
     <Compile Include="Spatial\Query\Clone.cs" />
     <Compile Include="Spatial\Query\Difference.cs" />
+    <Compile Include="Spatial\Query\Shell.cs" />
     <Compile Include="Spatial\Query\SimplifyByDistance.cs" />
     <Compile Include="Spatial\Query\SimplifyByAngle.cs" />
     <Compile Include="Spatial\Query\Union.cs" />

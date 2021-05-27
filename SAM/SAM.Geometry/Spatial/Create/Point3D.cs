@@ -1,8 +1,4 @@
-﻿using NetTopologySuite.Geometries.Utilities;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-
-namespace SAM.Geometry.Spatial
+﻿namespace SAM.Geometry.Spatial
 {
     public static partial class Create
     {
@@ -15,6 +11,11 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             return new Point3D(matrix[0, 0], matrix[1, 0], matrix[2, 0]);
+        }
+
+        public static Point3D Point3D(double x, double y, double z)
+        {
+            return new Point3D(x, y, z);
         }
     }
 }
