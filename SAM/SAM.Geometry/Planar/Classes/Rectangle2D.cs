@@ -118,7 +118,7 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                return heightDirection.GetPerpendicular(Orientation.Clockwise);
+                return heightDirection?.GetPerpendicular(Orientation.Clockwise);
             }
         }
 

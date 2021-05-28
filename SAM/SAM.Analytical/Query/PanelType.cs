@@ -46,11 +46,11 @@ namespace SAM.Analytical
             {
                 string value = (string)@object;
 
-                if (System.Enum.TryParse(value, out result))
+                if (Enum.TryParse(value, out result))
                     return result;
 
                 value = value.Replace(" ", string.Empty).ToUpper();
-                foreach (PanelType panelType in System.Enum.GetValues(typeof(PanelType)))
+                foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
                 {
                     string value_Type = panelType.ToString().ToUpper();
                     if (value_Type.Equals(value))
@@ -91,10 +91,10 @@ namespace SAM.Analytical
                 return Analytical.PanelType.Undefined;
 
             PanelType result = Analytical.PanelType.Undefined;
-            if (System.Enum.TryParse(text, out result))
+            if (Enum.TryParse(text, out result))
                 return result;
 
-            foreach (PanelType panelType in System.Enum.GetValues(typeof(PanelType)))
+            foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
             {
                 string value = null;
 

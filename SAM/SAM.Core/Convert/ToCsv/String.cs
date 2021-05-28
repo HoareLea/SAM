@@ -12,6 +12,8 @@ namespace SAM.Core
 
             List<string> values = new List<string>();
 
+            string separator = Query.Separator(DelimitedFileType.Csv).ToString();
+
             foreach (string propertyName in propertyNames)
             {
                 if (string.IsNullOrWhiteSpace(propertyName))
@@ -33,17 +35,32 @@ namespace SAM.Core
                     continue;
                 }
 
+                string value_Temp = string.Empty;
+
                 if (value is ISAMObject)
-                    values.Add(ToString(((ISAMObject)value)));
+                {
+                    value_Temp = ToString((ISAMObject)value);
+                }
                 else
-                    values.Add(value.ToString());
+                {
+                    value_Temp = value.ToString();
+                }
+
+                value_Temp.Replace("\"", "\"\"");
+
+                if(value_Temp.Contains(separator))
+                {
+                    value_Temp = string.Format("\"{0}\"", value_Temp);
+                }
+
+                values.Add(value_Temp);
             }
 
             string result = string.Empty;
             if (includeHeader)
-                result = string.Join(Query.Separator(DelimitedFileType.Csv).ToString(), propertyNames) + "\n";
+                result = string.Join(separator, propertyNames) + "\n";
 
-            result += string.Join(Query.Separator(DelimitedFileType.Csv).ToString(), values);
+            result += string.Join(separator, values);
 
             return result;
         }
@@ -53,9 +70,11 @@ namespace SAM.Core
             if (jSAMObjects == null || propertyNames == null || propertyNames.Count() == 0)
                 return null;
 
+            string separator = Query.Separator(DelimitedFileType.Csv).ToString();
+
             List<string> lines = new List<string>();
             if (includeHeader)
-                lines.Add(string.Join(Query.Separator(DelimitedFileType.Csv).ToString(), propertyNames));
+                lines.Add(string.Join(separator, propertyNames));
 
             foreach (IJSAMObject jSAMObject in jSAMObjects)
             {

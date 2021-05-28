@@ -268,6 +268,22 @@ namespace SAM.Geometry.Spatial
             return new Face3D(plane, face2D);
         }
 
+        public static Planar.Rectangle2D Convert(this Plane plane, Rectangle3D rectangle3D)
+        {
+            if (plane == null)
+            {
+                return null;
+            }
+
+            Vector3D vector3D_Width = rectangle3D.WidthDirection * rectangle3D.Width;
+            Vector3D vector3D_Height = rectangle3D.HeightDirection * rectangle3D.Height;
+
+            Planar.Vector2D vector2D_Height = plane.Convert(vector3D_Height);
+
+            return new Planar.Rectangle2D(plane.Convert(rectangle3D.Origin), plane.Convert(vector3D_Width).Length, vector2D_Height.Length, vector2D_Height.Unit);
+
+        }
+
         public static Planar.IClosed2D Convert(this Plane plane, IClosed3D closed3D)
         {
             if (plane == null || closed3D == null)

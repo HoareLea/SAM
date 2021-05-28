@@ -84,6 +84,22 @@ namespace SAM.Geometry.Spatial
             return rectangle2D.GetSegments().ConvertAll(x => plane.Convert(x));
         }
 
+        public Vector3D WidthDirection
+        {
+            get
+            {
+                return plane?.Convert(rectangle2D?.HeightDirection?.GetPerpendicular(Orientation.Clockwise));
+            }
+        }
+
+        public Vector3D HeightDirection
+        {
+            get
+            {
+                return plane?.Convert(rectangle2D?.HeightDirection);
+            }
+        }
+
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
             return rectangle2D.On(plane.Convert(point3D), tolerance);
