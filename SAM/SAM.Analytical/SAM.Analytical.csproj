@@ -170,6 +170,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\LevelsDictionary.cs" />
     <Compile Include="Query\Below.cs" />
     <Compile Include="Query\AdjustRoofs.cs" />
     <Compile Include="Query\Above.cs" />
