@@ -1,11 +1,10 @@
 ﻿using SAM.Geometry.Spatial;
-using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static Extrusion Extrusion(this Panel panel, double tolerance = Core.Tolerance.Distance)
+        public static Extrusion Extrusion(this Panel panel)
         {
             if (panel == null)
             {
@@ -43,41 +42,20 @@ namespace SAM.Analytical
                 return null;
             }
 
-            bool rectangular = Geometry.Planar.Query.Rectangular(externalEdge2D, out Geometry.Planar.Rectangle2D rectangle2D, tolerance);
-            if (rectangular)
-            {
-                List<Geometry.Planar.IClosed2D> internalEdge2Ds = face3D.InternalEdge2Ds;
-                if (internalEdge2Ds != null && internalEdge2Ds.Count != 0)
-                    rectangular = false;
-            }
-
-            Vector3D vector3D_Extrusion = null;
+            Vector3D vector3D_Extrusion = plane.Normal * thickness;
+            
             Face3D face3D_Extrusion = null;
-
-            if (!rectangular)
+            switch (panel.PanelGroup)
             {
-                vector3D_Extrusion = plane.Normal * thickness;
-                face3D_Extrusion = face3D.GetMoved(vector3D_Extrusion.GetNegated() * (thickness / 2)) as Face3D;
-            }
-            else
-            {
-                Vector3D xAxis = plane.Convert(rectangle2D.WidthDirection);
-                Vector3D yAxis = plane.Normal;
-                Vector3D zAxis = plane.Convert(rectangle2D.HeightDirection);
-
-                double width = rectangle2D.Width;
-                double height = rectangle2D.Height;
-
-                vector3D_Extrusion = zAxis * height;
-
-                Point3D origin = plane.Convert(rectangle2D.Origin);
-                origin = origin.GetMoved(yAxis * (thickness / 2)) as Point3D;
-                Plane plane_Rectangle3D = Geometry.Spatial.Create.Plane(origin, xAxis, yAxis);
-
-                Geometry.Planar.Point2D point2D_Origin = plane_Rectangle3D.Convert(origin);
-
-                Geometry.Planar.Rectangle2D rectangle2D_Extrusion = new Geometry.Planar.Rectangle2D(point2D_Origin, width, thickness, plane_Rectangle3D.Convert(yAxis));
-                face3D_Extrusion = new Face3D(new Rectangle3D(plane_Rectangle3D, rectangle2D_Extrusion));
+                case Analytical.PanelGroup.Floor:
+                    face3D_Extrusion = face3D;
+                    break;
+                case Analytical.PanelGroup.Roof:
+                    face3D_Extrusion = face3D;
+                    break;
+                default:
+                    face3D_Extrusion = face3D.GetMoved(plane.Normal.GetNegated() * (thickness / 2)) as Face3D;
+                    break;
             }
 
             if (face3D_Extrusion == null || vector3D_Extrusion == null)
