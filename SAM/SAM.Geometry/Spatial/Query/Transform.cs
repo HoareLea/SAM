@@ -82,6 +82,34 @@ namespace SAM.Geometry.Spatial
             return Transform(face3D, transform3D?.Matrix4D);
         }
 
+        public static Extrusion Transform(this Extrusion extrusion, Transform3D transform3D)
+        {
+            return Transform(extrusion, transform3D?.Matrix4D);
+        }
+
+        public static Extrusion Transform(this Extrusion extrusion, Matrix4D matrix4D)
+        {
+            if (matrix4D == null)
+            {
+                return null;
+            }
+
+            Face3D face3D = extrusion?.Face3D;
+            if(face3D == null)
+            {
+                return null;
+            }
+
+            Vector3D vector3D = extrusion.Vector;
+            if(vector3D == null)
+            {
+                return null;
+            }
+
+
+            return new Extrusion(Transform(face3D, matrix4D), Transform(vector3D, matrix4D));
+        }
+
         public static Polygon3D Transform(this Polygon3D polygon3D, Matrix4D matrix4D)
         {
             if (matrix4D == null)
