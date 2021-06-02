@@ -87,6 +87,11 @@ namespace SAM.Geometry.Spatial
             return Transform(extrusion, transform3D?.Matrix4D);
         }
 
+        public static Shell Transform(this Shell shell, Transform3D transform3D)
+        {
+            return Transform(shell, transform3D?.Matrix4D);
+        }
+
         public static Extrusion Transform(this Extrusion extrusion, Matrix4D matrix4D)
         {
             if (matrix4D == null)
@@ -186,6 +191,20 @@ namespace SAM.Geometry.Spatial
             Plane plane = externalEdge.GetPlane();
 
             return Face3D.Create(plane, plane.Convert(externalEdge), internalEdges?.ConvertAll(x => plane.Convert(plane.Project(x))));
+        }
+
+        public static Shell Transform(this Shell shell, Matrix4D matrix4D)
+        {
+            if (matrix4D == null)
+                return null;
+
+            List<Face3D> face3Ds = shell?.Face3Ds;
+            if (face3Ds == null)
+                return null;
+
+            face3Ds = face3Ds.ConvertAll(x => x.Transform(matrix4D));
+
+            return new Shell(face3Ds);
         }
     }
 }
