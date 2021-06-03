@@ -177,6 +177,7 @@
     <Compile Include="Spatial\Classes\Shell.cs" />
     <Compile Include="Spatial\Classes\Transform3D.cs" />
     <Compile Include="Spatial\Create\Rectangle3D.cs" />
+    <Compile Include="Spatial\Create\Segment3D.cs" />
     <Compile Include="Spatial\Create\Shell.cs" />
     <Compile Include="Spatial\Create\Shells.cs" />
     <Compile Include="Spatial\Create\Polygon3Ds.cs" />
