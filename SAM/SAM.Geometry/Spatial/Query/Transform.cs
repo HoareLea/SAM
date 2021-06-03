@@ -92,6 +92,11 @@ namespace SAM.Geometry.Spatial
             return Transform(shell, transform3D?.Matrix4D);
         }
 
+        public static Rectangle3D Transform(this Rectangle3D rectangle3D, Transform3D transform3D)
+        {
+            return Transform(rectangle3D, transform3D?.Matrix4D);
+        }
+
         public static Extrusion Transform(this Extrusion extrusion, Matrix4D matrix4D)
         {
             if (matrix4D == null)
@@ -149,6 +154,26 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             return new Triangle3D(point3Ds[0], point3Ds[1], point3Ds[2]);
+        }
+
+        public static Rectangle3D Transform(this Rectangle3D rectangle3D, Matrix4D matrix4D)
+        {
+            if (matrix4D == null || rectangle3D == null)
+                return null;
+
+            Plane plane = rectangle3D.GetPlane();
+            
+            plane = plane.Transform(matrix4D);
+
+            Vector3D vector3D_Width = rectangle3D.WidthDirection * rectangle3D.Width;
+            Vector3D vector3D_Height  = rectangle3D.HeightDirection * rectangle3D.Height;
+
+            Planar.Vector2D vector2D_Width = plane.Convert(vector3D_Width.Transform(matrix4D));
+            Planar.Vector2D vector2D_Height = plane.Convert(vector3D_Height.Transform(matrix4D));
+
+            Planar.Point2D origin = plane.Convert(rectangle3D.Origin.Transform(matrix4D));
+
+            return new Rectangle3D(plane, new Planar.Rectangle2D(origin, vector2D_Width.Length, vector2D_Height.Length, vector2D_Height.Unit));
         }
 
         public static Plane Transform(this Plane plane, Matrix4D matrix4D)

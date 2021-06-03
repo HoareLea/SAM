@@ -236,6 +236,16 @@ namespace SAM.Geometry.Spatial
             return new Transform3D(matrix4D);
         }
 
+        public static Transform3D GetOriginTranslation(Point3D point3D)
+        {
+            Transform3D result = GetIdentity();
+            result.matrix4D[0, 3] = point3D[0];
+            result.matrix4D[1, 3] = point3D[1];
+            result.matrix4D[2, 3] = point3D[2];
+
+            return result;
+        }
+
         public static Transform3D GetPlaneToPlane(Plane plane_From, Plane plane_To)
         {
             Transform3D transform3D_From = GetPlaneToOrigin(plane_From);
