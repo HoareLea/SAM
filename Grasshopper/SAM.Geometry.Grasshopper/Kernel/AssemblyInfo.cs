@@ -7,8 +7,6 @@ namespace SAM.Geometry.Grasshopper
 {
     public class AssemblyInfo : GH_AssemblyInfo
     {
-        private static MeshingParameters meshingParameters;
-
         public override string Name
         {
             get
@@ -68,29 +66,6 @@ namespace SAM.Geometry.Grasshopper
                 //Return a string representing your preferred contact details.
                 return "Michal Dengusiak -> michaldengusiak@hoarelea.com and Jakub Ziolkowski -> jakubziolkowski@hoarelea.com";
             }
-        }
-
-        public static MeshingParameters GetMeshingParameters()
-        {
-            if (meshingParameters == null)
-            {
-                meshingParameters = new MeshingParameters
-                {
-                    SimplePlanes = false,
-                    RefineGrid = true,
-                    GridMinCount = 16,
-                    GridMaxCount = 400,
-                    GridAspectRatio = 20,
-                    MaximumEdgeLength = 0,
-                    RefineAngle = 20,
-                    MinimumEdgeLength = 0,
-                    //SimplePlanes = true,
-                    //MinimumEdgeLength = 0.6,
-                    //Tolerance = 0.2
-                };
-            }
-
-            return meshingParameters;
         }
     }
 }

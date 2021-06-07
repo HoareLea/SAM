@@ -67,7 +67,7 @@ namespace SAM.Geometry.Grasshopper
                 Mesh mesh = new Mesh();
                 foreach (Brep brep_Temp in breps)
                 {
-                    Mesh[] meshes = Mesh.CreateFromBrep(brep_Temp, AssemblyInfo.GetMeshingParameters());
+                    Mesh[] meshes = Mesh.CreateFromBrep(brep_Temp, ActiveSetting.GetMeshingParameters());
                     mesh.Append(meshes);
                 }
                 Brep brep_Mesh = Brep.CreateFromMesh(mesh, true);

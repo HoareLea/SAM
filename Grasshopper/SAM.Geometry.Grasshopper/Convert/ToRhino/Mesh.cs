@@ -12,7 +12,7 @@ namespace SAM.Geometry.Grasshopper
                 return null;
             }
 
-            Mesh[] meshes = Mesh.CreateFromBrep(brep, AssemblyInfo.GetMeshingParameters());
+            Mesh[] meshes = Mesh.CreateFromBrep(brep, ActiveSetting.GetMeshingParameters());
             if(meshes == null || meshes.Length == 0)
             {
                 return null;

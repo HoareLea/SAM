@@ -96,6 +96,7 @@
     <Compile Include="Convert\ToSAM\Transform3D.cs" />
     <Compile Include="Enum\MeshType.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
+    <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Modify\BakeGeometry.cs" />
     <Compile Include="Modify\Convert.cs" />
     <Compile Include="Modify\Reduce.cs" />
