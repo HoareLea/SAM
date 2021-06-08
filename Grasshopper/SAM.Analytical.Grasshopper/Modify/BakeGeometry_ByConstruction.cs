@@ -103,12 +103,21 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach (Aperture aperture in apertures)
                 {
-                    if (aperture == null || string.IsNullOrWhiteSpace(aperture.Name))
+                    if(aperture == null)
+                    {
+                        continue;
+                    }
+
+                    string apertureConstructionName = aperture.ApertureConstruction?.Name;
+                    if (string.IsNullOrWhiteSpace(apertureConstructionName))
+                        apertureConstructionName = aperture.Name;
+                    
+                    if (string.IsNullOrWhiteSpace(apertureConstructionName))
                         continue;
 
                     color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
 
-                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureConstruction.Id, aperture.Name, color);
+                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureConstruction.Id, apertureConstructionName, color);
 
                     //layerTable.SetCurrentLayerIndex(layer.Index, true);
                     objectAttributes.LayerIndex = layer.Index;

@@ -32,7 +32,7 @@ namespace SAM.Analytical
         }
 
         public Aperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D)
-            : base(System.Guid.NewGuid(), apertureConstruction)
+            : base(System.Guid.NewGuid(), apertureConstruction?.Name, apertureConstruction)
         {
             if (closedPlanar3D != null)
                 planarBoundary3D = new PlanarBoundary3D(closedPlanar3D);
