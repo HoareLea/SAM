@@ -12,12 +12,12 @@ using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreInspect : GH_Component, IGH_VariableParameterComponent, IGH_SAMComponent
+    public class SAMCoreFilterByType : GH_Component, IGH_VariableParameterComponent, IGH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("fe77c7c9-e24b-44d3-9e0b-d40a061cecbe");
+        public override Guid ComponentGuid => new Guid("5a03ff4c-e38d-4fa9-b95c-1bb50ca853be");
 
         /// <summary>
         /// The latest version of this component
@@ -29,7 +29,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Inspect;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public override bool Obsolete
         {
@@ -42,9 +42,9 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMCoreInspect()
-          : base("Inspect", "Inspect",
-              "Inspect Object",
+        public SAMCoreFilterByType()
+          : base("SAMCore.FilterByType", "SAMCore.FilterByType",
+              "Filter By Type",
               "SAM", "Core")
         {
             SetValue("SAM_SAMVersion", Core.Query.CurrentVersion());
@@ -59,9 +59,8 @@ namespace SAM.Core.Grasshopper
             bool hasOutputParameters = Params.Output.Count > 0;
 
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Get common parameters", Menu_PopulateOutputsWithCommonParameters, hasInputData, false);
-            Menu_AppendItem(menu, "Get all parameters", Menu_PopulateOutputsWithAllParameters, hasInputData, false);
-            Menu_AppendItem(menu, "Remove unconnected parameters", Menu_RemoveUnconnectedParameters, hasOutputParameters, false);
+            Menu_AppendItem(menu, "Get types", Menu_PopulateOutputParameters, hasInputData, false);
+            Menu_AppendItem(menu, "Remove unconnected types", Menu_RemoveUnconnectedParameters, hasOutputParameters, false);
 
             base.AppendAdditionalMenuItems(menu);
             Menu_AppendSeparator(menu);
@@ -70,9 +69,7 @@ namespace SAM.Core.Grasshopper
             Modify.AppendNewComponentAdditionalMenuItem(this, menu);
         }
 
-
-
-        void PopulateOutputParameters(IEnumerable<GooObjectParam> gooParameterParams)
+        private void PopulateOutputParameters(IEnumerable<GooObjectParam> gooParameterParams)
         {
             Dictionary<string, IList<IGH_Param>> dictionary = new Dictionary<string, IList<IGH_Param>>();
             foreach (IGH_Param param in Params.Output)
@@ -87,7 +84,7 @@ namespace SAM.Core.Grasshopper
                 dictionary.Add(gooParameterParam.Name, new List<IGH_Param>(gooParameterParam.Recipients));
             }
 
-            while(Params.Output != null && Params.Output.Count() > 0)
+            while (Params.Output != null && Params.Output.Count() > 0)
                 Params.UnregisterOutputParameter(Params.Output[0]);
 
             if (gooParameterParams != null)
@@ -96,7 +93,7 @@ namespace SAM.Core.Grasshopper
                 {
                     if (gooParameterParam == null)
                         continue;
-                    
+
                     AddOutputParameter(gooParameterParam);
 
                     IList<IGH_Param> @params = null;
@@ -113,28 +110,36 @@ namespace SAM.Core.Grasshopper
             ExpireSolution(true);
         }
 
-        void AddOutputParameter(IGH_Param param)
+        private void AddOutputParameter(IGH_Param param)
         {
             if (param.Attributes is null)
                 param.Attributes = new GH_LinkedParamAttributes(param, Attributes);
 
-            param.Access = GH_ParamAccess.item;
+            param.Access = GH_ParamAccess.list;
             Params.RegisterOutputParam(param);
         }
 
-        void Menu_PopulateOutputsWithAllParameters(object sender, EventArgs e)
+        private void Menu_PopulateOutputParameters(object sender, EventArgs e)
         {
             HashSet<string> names = new HashSet<string>();
             foreach (object @object in Params.Input[0].VolatileData.AllData(true).OfType<object>())
             {
                 object value = @object;
                 if (@object is IGH_Goo)
+                {
                     value = (@object as dynamic).Value;
+                }
 
-                value?.UserFriendlyNames()?.ForEach(x => names.Add(x));
+                string name = value?.GetType()?.Name;
+                if(string.IsNullOrWhiteSpace(name))
+                {
+                    continue;
+                }
+
+                names.Add(name);
             }
 
-            RecordUndoEvent("Get Common Parameters");
+            RecordUndoEvent("Get Output Parameters");
 
             List<string> names_Temp = names.ToList();
             names_Temp.Sort();
@@ -142,46 +147,7 @@ namespace SAM.Core.Grasshopper
             PopulateOutputParameters(names_Temp.ConvertAll(x => new GooObjectParam(x)));
         }
 
-        void Menu_PopulateOutputsWithCommonParameters(object sender, EventArgs e)
-        {
-            HashSet<string> names_Unique = new HashSet<string>();
-            List<HashSet<string>> names_Objects = new List<HashSet<string>>();
-            foreach (object @object in Params.Input[0].VolatileData.AllData(true).OfType<object>())
-            {
-                object value = @object;
-                if (@object is IGH_Goo)
-                    value = (@object as dynamic).Value;
-
-                List<string> names = value?.UserFriendlyNames();
-                if (names == null || names.Count == 0)
-                {
-                    PopulateOutputParameters(new List<GooObjectParam>());
-                    return;
-                }
-
-                HashSet<string> names_Unique_Temp = new HashSet<string>();
-                names.ForEach(x => names_Unique_Temp.Add(x));
-
-                names.ForEach(x => names_Unique.Add(x));
-                names_Objects.Add(names_Unique_Temp);
-            }
-
-            RecordUndoEvent("Get Common Parameters");
-
-            List<string> names_Temp = names_Unique.ToList();
-            names_Temp.Sort();
-
-            HashSet<string> names_Result = new HashSet<string>();
-            foreach (string name in names_Temp)
-            {
-                if (names_Objects.TrueForAll(x => x.Contains(name)))
-                    names_Result.Add(name);
-            }
-
-            PopulateOutputParameters(names_Result.ToList().ConvertAll(x => new GooObjectParam(x)));
-        }
-
-        void Menu_RemoveUnconnectedParameters(object sender, EventArgs e)
+        private void Menu_RemoveUnconnectedParameters(object sender, EventArgs e)
         {
             RecordUndoEvent("Remove Unconnected Outputs");
 
@@ -202,7 +168,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_object", "_object", "Object", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_objects", "_objects", "Objects", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -221,106 +187,81 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            object @object = null;
-            if (!dataAccess.GetData(0, ref @object))
+            List<object> objects = new List<object>();
+            if (!dataAccess.GetDataList(0, objects) || objects == null)
+            {
                 return;
-
-            if (@object is IGH_Goo)
-                @object = (@object as dynamic).Value;
-
-            if (@object is Rhino.Geometry.GeometryBase)
-            {
-                if (((Rhino.Geometry.GeometryBase)@object).Disposed)
-                    return;
-
-                @object = ((Rhino.Geometry.GeometryBase)@object).Duplicate();
             }
 
-            if (@object is IJSAMObject)
-            {
-                IJSAMObject jSAMObject = Core.Query.Clone((IJSAMObject)@object);
-                if (jSAMObject != null)
-                    @object = jSAMObject;
-            }
-
+            List<Tuple<int, string, List<GooObject>>> tuples = new List<Tuple<int, string, List<GooObject>>>();
             for (int i = 0; i < Params.Output.Count; ++i)
             {
                 GooObjectParam gooParameterParam = Params.Output[i] as GooObjectParam;
-                if (gooParameterParam == null)
-                    gooParameterParam = new GooObjectParam(Params.Output[i].Name);
-
                 if (gooParameterParam == null || string.IsNullOrWhiteSpace(gooParameterParam.Name))
+                {
                     continue;
+                }
+
+                tuples.Add(new Tuple<int, string, List<GooObject>>(i, gooParameterParam.Name, new List<GooObject>()));
+            }
+
+            for (int i = 0; i < objects.Count; i++)
+            {
+                object @object = objects[i];
+
+                if (@object is IGH_Goo)
+                {
+                    @object = (@object as dynamic).Value;
+                }
 
                 if (@object is Rhino.Geometry.GeometryBase)
                 {
                     if (((Rhino.Geometry.GeometryBase)@object).Disposed)
-                        break;
+                    {
+                        return;
+                    }
+
+                    @object = ((Rhino.Geometry.GeometryBase)@object).Duplicate();
                 }
 
-                object result = null;
-
-                @object.TryGetValue(gooParameterParam.Name, out result, true);
-
-                if (result is JToken)
+                if (@object is IJSAMObject)
                 {
-                    dataAccess.SetData(i, new GooObject(result.ToString()));
-                }
-                else if (result is IEnumerable && !result.GetType().Namespace.StartsWith("SAM.") && !(result is string))
-                {
-                    List<GooObject> gooParameters = new List<GooObject>();
-                    foreach (object @object_Result in (IEnumerable)result)
-                        gooParameters.Add(new GooObject(@object_Result));
-
-                    dataAccess.SetDataList(i, gooParameters);
-                }
-                else
-                {
-                    if (result is string)
-                    {
-                        dataAccess.SetData(i, new GH_String((string)result));
-                    }
-                    else if (result is Enum)
-                    {
-                        dataAccess.SetData(i, new GooObject(result.ToString()));
-                    }
-                    else if(result is int || result is long)
-                    {
-                        int value;
-                        if (Core.Query.TryConvert(result, out value))
-                            dataAccess.SetData(i, new GH_Number(value));
-                        else
-                            dataAccess.SetData(i, new GooObject(result));
-                    }
-                    else if (Core.Query.IsNumeric(result))
-                    {
-                        double value;
-                        if (Core.Query.TryConvert(result, out value))
-                            dataAccess.SetData(i, new GH_Number(value));
-                        else
-                            dataAccess.SetData(i, new GooObject(result));
-                    }
-                    else if (result is bool)
-                    {
-                        dataAccess.SetData(i, new GH_Boolean((bool)result));
-                    }
-                    else
-                    {
-                        dataAccess.SetData(i, new GooObject(result));
-                    }
+                    IJSAMObject jSAMObject = Core.Query.Clone((IJSAMObject)@object);
+                    if (jSAMObject != null)
+                        @object = jSAMObject;
                 }
 
+                string name = @object?.GetType()?.Name;
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    continue;
+                }
+
+                List<GooObject> gooObjects = tuples.Find(x => name.Equals(x.Item2))?.Item3;
+                if (gooObjects == null)
+                {
+                    continue;
+                }
+
+                gooObjects.Add(new GooObject(@object));
+
+            }
+
+            for (int i = 0; i < Params.Output.Count; ++i)
+            {
+                List<GooObject> gooObjects = tuples.Find(x => x.Item1 == i)?.Item3;
+                dataAccess.SetDataList(i, gooObjects);
             }
         }
 
         bool IGH_VariableParameterComponent.CanInsertParameter(GH_ParameterSide side, int index) => false;
-        
+
         bool IGH_VariableParameterComponent.CanRemoveParameter(GH_ParameterSide side, int index) => side == GH_ParameterSide.Output;
-        
+
         IGH_Param IGH_VariableParameterComponent.CreateParameter(GH_ParameterSide side, int index) => null;
-        
+
         bool IGH_VariableParameterComponent.DestroyParameter(GH_ParameterSide side, int index) => true;
-        
+
         void IGH_VariableParameterComponent.VariableParameterMaintenance() { }
 
 

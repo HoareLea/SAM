@@ -85,6 +85,7 @@
     <Compile Include="Component\SAMCoreDelimitedFileTableMap.cs" />
     <Compile Include="Component\SAMCoreFromFile.cs" />
     <Compile Include="Component\SAMCoreCreateTextMap.cs" />
+    <Compile Include="Component\SAMCoreFilterByType.cs" />
     <Compile Include="Component\SAMCoreStringReplace.cs" />
     <Compile Include="Component\SAMCoreObjects.cs" />
     <Compile Include="Component\SAMCoreRemoveValue.cs" />
