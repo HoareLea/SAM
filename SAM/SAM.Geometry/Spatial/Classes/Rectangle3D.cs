@@ -132,7 +132,25 @@ namespace SAM.Geometry.Spatial
 
         public Plane GetPlane()
         {
+            if(plane == null)
+            {
+                return null;
+            }
+            
             return new Plane(plane);
+        }
+
+        public Rectangle2D Rectangle2D
+        {
+            get
+            {
+                if(rectangle2D == null)
+                {
+                    return null;
+                }
+
+                return new Rectangle2D(rectangle2D);
+            }
         }
 
         public void Reverse()

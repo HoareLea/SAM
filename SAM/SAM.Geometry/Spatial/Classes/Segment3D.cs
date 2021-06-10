@@ -66,7 +66,7 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                return vector.Unit;
+                return vector?.Unit;
             }
         }
 
