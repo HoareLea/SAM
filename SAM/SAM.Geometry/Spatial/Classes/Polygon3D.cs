@@ -50,6 +50,11 @@ namespace SAM.Geometry.Spatial
 
         public Plane GetPlane()
         {
+            if(plane == null)
+            {
+                return null;
+            }
+            
             return new Plane(plane);
         }
 
