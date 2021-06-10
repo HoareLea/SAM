@@ -97,5 +97,77 @@ namespace SAM.Geometry.Spatial
 
             return true;
         }
+
+        public static bool IsValid(this BoundingBox3D boundingBox3D)
+        {
+            if(boundingBox3D == null)
+            {
+                return false;
+            }
+
+            if(!IsValid(boundingBox3D.Min))
+            {
+                return false;
+            }
+
+            if(!IsValid(boundingBox3D.Max))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsValid(this Circle3D circle3D)
+        {
+            if(circle3D == null)
+            {
+                return false;
+            }
+
+            if(!IsValid(circle3D.GetPlane()))
+            {
+                return false;
+            }
+
+            if(double.IsNaN(circle3D.Radious))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsValid(this Face3D face3D)
+        {
+            if(face3D == null)
+            {
+                return false;
+            }
+            
+            if(!IsValid(face3D.GetPlane()))
+            {
+                return false;
+            }
+
+            if(!Planar.Query.IsValid(face3D.ExternalEdge2D))
+            {
+                return false;
+            }
+
+            List<Planar.IClosed2D> closed2Ds = face3D.InternalEdge2Ds;
+            if(closed2Ds != null && closed2Ds.Count != 0)
+            {
+                foreach(Planar.IClosed2D closed2D in closed2Ds)
+                {
+                    if (!Planar.Query.IsValid(closed2D))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
     }
 }
