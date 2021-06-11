@@ -163,6 +163,8 @@ namespace SAM.Analytical
                         else
                             panel_New = new Panel(panel_New, PanelType.WallInternal);
 
+                        panel_New.SetValue(PanelParameter.Color, Query.Color(panel_New.PanelType));
+                        
                         result.Add(panel_New);
                         prefixes.Add(prefix);
                     }
