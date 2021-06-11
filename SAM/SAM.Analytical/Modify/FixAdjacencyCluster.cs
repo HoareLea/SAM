@@ -160,7 +160,9 @@ namespace SAM.Analytical
                             continue;
 
                         if (!dictionary_Result.TryGetValue(name_New, out Construction construction_New) || construction_New == null)
+                        {
                             construction_New = new Construction(construction, name_New);
+                        }  
 
                         panel_New = new Panel(panel, construction_New);
                         if (external)
@@ -168,8 +170,13 @@ namespace SAM.Analytical
                         else
                             panel_New = new Panel(panel_New, PanelType.WallInternal);
 
-                        panel_New.SetValue(PanelParameter.Color, Query.Color(panel_New.PanelType));
-                        
+                        System.Drawing.Color color = Query.Color(panel_New.PanelType);
+                        if(color != System.Drawing.Color.Empty)
+                        {
+                            panel_New.SetValue(PanelParameter.Color, color);
+                            construction_New.SetValue(ConstructionParameter.Color, color);
+                        }
+
                         result.Add(panel_New);
                         prefixes.Add(prefix);
                     }

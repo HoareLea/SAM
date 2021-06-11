@@ -345,6 +345,12 @@ namespace SAM.Core
                         return true;
                     }
                 }
+                
+                if(type_Object == typeof(System.Drawing.Color))
+                {
+                    result = new SAMColor((System.Drawing.Color)@object);
+                    return true;
+                }
             }
             else if (typeof(JObject).IsAssignableFrom(type))
             {
