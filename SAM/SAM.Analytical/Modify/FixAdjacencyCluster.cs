@@ -125,9 +125,14 @@ namespace SAM.Analytical
                             //    name_New = "SIM_EXT_GRD" + name.Substring(("SIM_INT_SLD_Core").Length);
                             //    prefix = "SIM_INT_SLD_Core";
                             //}
-                            else if (name.StartsWith("SIM_INT_SLD_Core") || name.StartsWith("SIM_INT_SLD_Partition"))
+                            else if (name.StartsWith("SIM_INT_SLD_Core"))
                             {
                                 name_New = "SIM_EXT_SLD" + name.Substring(("SIM_INT_SLD_Core").Length);
+                                prefix = "SIM_EXT_SLD";
+                            }
+                            else if (name.StartsWith("SIM_INT_SLD_Partition"))
+                            {
+                                name_New = "SIM_EXT_SLD" + name.Substring(("SIM_INT_SLD_Partition").Length);
                                 prefix = "SIM_EXT_SLD";
                             }
                         }
