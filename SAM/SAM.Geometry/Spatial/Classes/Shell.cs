@@ -552,7 +552,7 @@ namespace SAM.Geometry.Spatial
 
         public bool SplitFace3Ds(Face3D face3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if (boundaries == null || boundaries.Count == 0)
+            if (boundaries == null || boundaries.Count == 0 || !Query.IsValid(face3D))
                 return false;
 
             BoundingBox3D boundingBox3D = face3D?.GetBoundingBox();
@@ -606,6 +606,8 @@ namespace SAM.Geometry.Spatial
                         }
                     }
                 }
+
+                face2Ds.RemoveAll(x => x == null || !x.IsValid());
 
                 dictionary[i] = face2Ds.ConvertAll(x => plane_Boundary.Convert(x));
             }
