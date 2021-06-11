@@ -105,7 +105,7 @@ namespace SAM.Analytical
                 }
             }
 
-            //Createing new 3D geometry of Roofs (Face3Ds) including missing parts of roofs
+            //Creating new 3D geometry of Roofs (Face3Ds) including missing parts of roofs
             List<Tuple<Face3D, Panel>> tuples_Face3D = new List<Tuple<Face3D, Panel>>();
             foreach(Tuple<Face2D, Panel> tuple_Roof in tuples_Roof)
             {

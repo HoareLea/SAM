@@ -195,13 +195,13 @@ namespace SAM.Geometry.Spatial
             if (plane == null || face3D == null || vector3D == null)
                 return null;
 
-            Planar.IClosed2D externalEdge = Query.Convert(plane, Project(plane, face3D.GetExternalEdge3D(), vector3D, tolerance));
+            Planar.IClosed2D externalEdge = Convert(plane, Project(plane, face3D.GetExternalEdge3D(), vector3D, tolerance));
 
             List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
             if (internalEdges != null && internalEdges.Count > 0)
-                internalEdges = internalEdges.ConvertAll(x => Project(plane, x));
+                internalEdges = internalEdges.ConvertAll(x => Project(plane, x, vector3D, tolerance));
 
-            return Face3D.Create(plane, externalEdge, internalEdges?.ConvertAll(x => Query.Convert(plane, x)));
+            return Face3D.Create(plane, externalEdge, internalEdges?.ConvertAll(x => Convert(plane, x)));
         }
 
         public static Line3D Project(this Plane plane, Line3D line3D)
