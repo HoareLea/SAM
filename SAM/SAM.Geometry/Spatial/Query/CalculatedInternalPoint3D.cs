@@ -23,6 +23,11 @@ namespace SAM.Geometry.Spatial
             List<Tuple<Point3D, double>> tuples = new List<Tuple<Point3D, double>>();
             foreach(KeyValuePair<Face3D, Vector3D> keyValuePair in dictionary)
             {
+                if(keyValuePair.Key == null || keyValuePair.Value == null)
+                {
+                    continue;
+                }
+
                 Vector3D vector3D = keyValuePair.Value.GetNegated() * distance;
                 
                 Point3D point3D = keyValuePair.Key.InternalPoint3D();
