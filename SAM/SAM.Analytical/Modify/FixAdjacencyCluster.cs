@@ -6,19 +6,22 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Panel> FixAdjacencyCluster(this AdjacencyCluster adjacencyCluster, out List<string> prefixes)
+        public static void FixAdjacencyCluster(this AdjacencyCluster adjacencyCluster, out List<string> prefixes_Panel, out List<Panel> panels, out List<string> prefixes_Aperture, out List<Aperture> apertures)
         {
-            prefixes = null;
+            prefixes_Panel = null;
+            panels = null;
+            prefixes_Aperture = null;
+            apertures = null;
 
             if (adjacencyCluster == null)
-                return null;
+                return;
 
-            List<Panel> panels = adjacencyCluster.GetPanels();
-            if (panels == null || panels.Count == 0)
-                return null;
+            List<Panel> panels_AdjacencyCluster = adjacencyCluster.GetPanels();
+            if (panels_AdjacencyCluster == null || panels_AdjacencyCluster.Count == 0)
+                return;
 
             Dictionary<PanelGroup, Dictionary<string, Tuple<Construction, List<Panel>>>> dictionary = new Dictionary<PanelGroup, Dictionary<string, Tuple<Construction, List<Panel>>>>();
-            foreach(Panel panel in panels)
+            foreach(Panel panel in panels_AdjacencyCluster)
             {
                 if (panel == null)
                     continue;
@@ -48,9 +51,15 @@ namespace SAM.Analytical
                 tuple.Item2.Add(panel);
             }
 
-            Dictionary<string, Construction> dictionary_Result = new Dictionary<string, Construction>();
-            List<Panel> result = new List<Panel>();
-            prefixes = new List<string>();
+            Dictionary<string, Construction> dictionary_Construction = new Dictionary<string, Construction>();
+            Dictionary<string, ApertureConstruction> dictionary_ApertureConstruction = new Dictionary<string, ApertureConstruction>();
+
+            panels = new List<Panel>();
+            prefixes_Panel = new List<string>();
+            
+            apertures = new List<Aperture>();
+            prefixes_Aperture = new List<string>();
+
             foreach (KeyValuePair<PanelGroup, Dictionary<string, Tuple<Construction, List<Panel>>>> keyValuePair_PanelGroup in dictionary)
             {
                 foreach(KeyValuePair<string, Tuple<Construction, List<Panel>>> keyValuePair_Name in keyValuePair_PanelGroup.Value)
@@ -82,7 +91,7 @@ namespace SAM.Analytical
                     if (panels_Temp == null || panels_Temp.Count == 0)
                         continue;
 
-                    string name = keyValuePair_Name.Key;
+                    string nameAperture = keyValuePair_Name.Key;
 
                     for (int i = 0; i < panels_Temp.Count; i++)
                     {
@@ -115,9 +124,9 @@ namespace SAM.Analytical
                         string prefix = null;
                         if (external)
                         {
-                            if (name.StartsWith("SIM_INT_GLZ"))
+                            if (nameAperture.StartsWith("SIM_INT_GLZ"))
                             {
-                                name_New = "SIM_EXT_GLZ" + name.Substring(("SIM_INT_GLZ").Length);
+                                name_New = "SIM_EXT_GLZ" + nameAperture.Substring(("SIM_INT_GLZ").Length);
                                 prefix = "SIM_EXT_GLZ";
                             }
                             //else if (name.StartsWith("SIM_INT_SLD_Core"))
@@ -125,32 +134,32 @@ namespace SAM.Analytical
                             //    name_New = "SIM_EXT_GRD" + name.Substring(("SIM_INT_SLD_Core").Length);
                             //    prefix = "SIM_INT_SLD_Core";
                             //}
-                            else if (name.StartsWith("SIM_INT_SLD_Core"))
+                            else if (nameAperture.StartsWith("SIM_INT_SLD_Core"))
                             {
-                                name_New = "SIM_EXT_SLD" + name.Substring(("SIM_INT_SLD_Core").Length);
+                                name_New = "SIM_EXT_SLD" + nameAperture.Substring(("SIM_INT_SLD_Core").Length);
                                 prefix = "SIM_EXT_SLD";
                             }
-                            else if (name.StartsWith("SIM_INT_SLD_Partition"))
+                            else if (nameAperture.StartsWith("SIM_INT_SLD_Partition"))
                             {
-                                name_New = "SIM_EXT_SLD" + name.Substring(("SIM_INT_SLD_Partition").Length);
+                                name_New = "SIM_EXT_SLD" + nameAperture.Substring(("SIM_INT_SLD_Partition").Length);
                                 prefix = "SIM_EXT_SLD";
                             }
                         }
                         else
                         {
-                            if (name.StartsWith("SIM_EXT_GLZ"))
+                            if (nameAperture.StartsWith("SIM_EXT_GLZ"))
                             {
-                                name_New = "SIM_INT_GLZ" + name.Substring(("SIM_EXT_GLZ").Length);
+                                name_New = "SIM_INT_GLZ" + nameAperture.Substring(("SIM_EXT_GLZ").Length);
                                 prefix = "SIM_INT_GLZ";
                             }
-                            else if (name.StartsWith("SIM_EXT_GRD"))
+                            else if (nameAperture.StartsWith("SIM_EXT_GRD"))
                             {
-                                name_New = "SIM_INT_SLD_Core" + name.Substring(("SIM_EXT_GRD").Length);
+                                name_New = "SIM_INT_SLD_Core" + nameAperture.Substring(("SIM_EXT_GRD").Length);
                                 prefix = "SIM_INT_SLD_Core";
                             }
-                            else if (name.StartsWith("SIM_EXT_SLD"))
+                            else if (nameAperture.StartsWith("SIM_EXT_SLD"))
                             {
-                                name_New = "SIM_INT_SLD_Core" + name.Substring(("SIM_EXT_SLD").Length);
+                                name_New = "SIM_INT_SLD_Core" + nameAperture.Substring(("SIM_EXT_SLD").Length);
                                 prefix = "SIM_INT_SLD_Core";
                             }
                                 
@@ -159,7 +168,7 @@ namespace SAM.Analytical
                         if (string.IsNullOrWhiteSpace(name_New))
                             continue;
 
-                        if (!dictionary_Result.TryGetValue(name_New, out Construction construction_New) || construction_New == null)
+                        if (!dictionary_Construction.TryGetValue(name_New, out Construction construction_New) || construction_New == null)
                         {
                             construction_New = new Construction(construction, name_New);
                         }  
@@ -177,16 +186,75 @@ namespace SAM.Analytical
                             construction_New.SetValue(ConstructionParameter.Color, color);
                         }
 
-                        result.Add(panel_New);
-                        prefixes.Add(prefix);
+                        List<Aperture> apertures_Panel = panel_New.Apertures;
+                        if(apertures_Panel != null && apertures_Panel.Count != 0)
+                        {
+                            foreach(Aperture aperture in apertures_Panel)
+                            {
+                                ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
+                                if(apertureConstruction != null)
+                                {
+                                    nameAperture = apertureConstruction.Name;
+                                    string prefix_Aperture = null;
+                                    name_New = null;
+                                    if (external)
+                                    {
+                                        if (nameAperture.StartsWith("SIM_INT_GLZ"))
+                                        {
+                                            name_New = "SIM_EXT_GLZ" + nameAperture.Substring(("SIM_INT_GLZ").Length);
+                                            prefix_Aperture = "SIM_EXT_GLZ";
+                                        }
+                                        else if (nameAperture.StartsWith("SIM_INT_SLD"))
+                                        {
+                                            name_New = "SIM_EXT_SLD" + nameAperture.Substring(("SIM_INT_SLD").Length);
+                                            prefix_Aperture = "SIM_EXT_SLD";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (nameAperture.StartsWith("SIM_EXT_GLZ"))
+                                        {
+                                            name_New = "SIM_INT_GLZ" + nameAperture.Substring(("SIM_EXT_GLZ").Length);
+                                            prefix_Aperture = "SIM_INT_GLZ";
+                                        }
+                                        else if (nameAperture.StartsWith("SIM_EXT_SLD"))
+                                        {
+                                            name_New = "SIM_INT_SLD" + nameAperture.Substring(("SIM_EXT_SLD").Length);
+                                            prefix_Aperture = "SIM_INT_SLD";
+                                        }
+                                    }
+
+                                    if (string.IsNullOrWhiteSpace(name_New))
+                                        continue;
+
+                                    if (!dictionary_ApertureConstruction.TryGetValue(name_New, out ApertureConstruction apertureConstruction_New) || apertureConstruction_New == null)
+                                    {
+                                        apertureConstruction_New = new ApertureConstruction(apertureConstruction, name_New);
+                                    }
+
+                                    color = Query.Color(apertureConstruction_New.ApertureType);
+                                    if (color != System.Drawing.Color.Empty)
+                                    {
+                                        apertureConstruction_New.SetValue(ApertureConstructionParameter.Color, color);
+                                    }
+
+                                    Aperture aperture_New = new Aperture(aperture, apertureConstruction_New);
+
+                                    panel_New.RemoveAperture(aperture.Guid);
+                                    panel_New.AddAperture(aperture_New);
+                                }
+
+                            }
+                        }
+
+                        panels.Add(panel_New);
+                        prefixes_Panel.Add(prefix);
                     }
                 }
             }
 
-            if (result != null)
-                result.ForEach(x => adjacencyCluster.AddObject(x));
-
-            return result;
+            if (panels != null)
+                panels.ForEach(x => adjacencyCluster.AddObject(x));
         }
     }
 }
