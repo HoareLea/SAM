@@ -15,6 +15,9 @@ namespace SAM.Analytical
             if (@object is Geometry.Spatial.Vector3D)
                 return PanelType((Geometry.Spatial.Vector3D)@object);
 
+            if (@object is Panel)
+                return ((Panel)@object).PanelType;
+
             PanelType result;
 
             if (@object is Construction)

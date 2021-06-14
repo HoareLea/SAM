@@ -7,7 +7,7 @@ using Grasshopper.Kernel.Types;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalDefaultColor : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalDefaultColorByPanelType : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,8 +29,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalDefaultColor()
-          : base("SAMAnalytical.DefaultColor", "SAMAnalytical.DefaultColor",
+        public SAMAnalyticalDefaultColorByPanelType()
+          : base("SAMAnalytical.DefaultColorByPanelType", "SAMAnalytical.DefaultColorByPanelType",
               "Gets Default Color for given Panel (PanelType) or Aperture (ApertureType)",
               "SAM", "Analytical")
         {
@@ -83,34 +83,45 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            object @object = objectWrapper.Value;
+            if (@object is IGH_Goo)
+            {
+                @object = (@object as dynamic).Value;
+            }
+
             System.Drawing.Color color = System.Drawing.Color.Transparent;
 
-            if (objectWrapper.Value is Panel)
+            if (@object is Panel)
             {
-                Panel panel = objectWrapper.Value as Panel;
+                Panel panel = @object as Panel;
                 color = Analytical.Query.Color(panel);
             }
-            else if (objectWrapper.Value is Aperture)
+            else if (@object is Aperture)
             {
-                Aperture aperture = objectWrapper.Value as Aperture;
+                Aperture aperture = @object as Aperture;
                 ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
                 if(apertureConstruction != null)
                 {
                     color = Analytical.Query.Color(apertureConstruction.ApertureType);
                 }
             }
-            else if(objectWrapper.Value is string)
+            else if(@object is string)
             {
-                PanelType panelType = Analytical.Query.PanelType((string)objectWrapper.Value);
+                PanelType panelType = Analytical.Query.PanelType((string)@object);
                 if (panelType != PanelType.Undefined)
                 {
                     color = Analytical.Query.Color(panelType);
                 }
                 else
                 {
-                    ApertureType apertureType = Analytical.Query.ApertureType((string)objectWrapper.Value);
+                    ApertureType apertureType = Analytical.Query.ApertureType((string)@object);
                     color = Analytical.Query.Color(apertureType);
                 }
+            }
+            else
+            {
+                PanelType panelType = Analytical.Query.PanelType(@object);
+                color = Analytical.Query.Color(panelType);
             }
 
             index = Params.IndexOfOutputParam("color");
