@@ -91,7 +91,7 @@ namespace SAM.Analytical
                     if (panels_Temp == null || panels_Temp.Count == 0)
                         continue;
 
-                    string nameAperture = keyValuePair_Name.Key;
+                    string name_Panel = keyValuePair_Name.Key;
 
                     for (int i = 0; i < panels_Temp.Count; i++)
                     {
@@ -124,9 +124,9 @@ namespace SAM.Analytical
                         string prefix = null;
                         if (external)
                         {
-                            if (nameAperture.StartsWith("SIM_INT_GLZ"))
+                            if (name_Panel.StartsWith("SIM_INT_GLZ"))
                             {
-                                name_New = "SIM_EXT_GLZ" + nameAperture.Substring(("SIM_INT_GLZ").Length);
+                                name_New = "SIM_EXT_GLZ" + name_Panel.Substring(("SIM_INT_GLZ").Length);
                                 prefix = "SIM_EXT_GLZ";
                             }
                             //else if (name.StartsWith("SIM_INT_SLD_Core"))
@@ -134,32 +134,32 @@ namespace SAM.Analytical
                             //    name_New = "SIM_EXT_GRD" + name.Substring(("SIM_INT_SLD_Core").Length);
                             //    prefix = "SIM_INT_SLD_Core";
                             //}
-                            else if (nameAperture.StartsWith("SIM_INT_SLD_Core"))
+                            else if (name_Panel.StartsWith("SIM_INT_SLD_Core"))
                             {
-                                name_New = "SIM_EXT_SLD" + nameAperture.Substring(("SIM_INT_SLD_Core").Length);
+                                name_New = "SIM_EXT_SLD" + name_Panel.Substring(("SIM_INT_SLD_Core").Length);
                                 prefix = "SIM_EXT_SLD";
                             }
-                            else if (nameAperture.StartsWith("SIM_INT_SLD_Partition"))
+                            else if (name_Panel.StartsWith("SIM_INT_SLD_Partition"))
                             {
-                                name_New = "SIM_EXT_SLD" + nameAperture.Substring(("SIM_INT_SLD_Partition").Length);
+                                name_New = "SIM_EXT_SLD" + name_Panel.Substring(("SIM_INT_SLD_Partition").Length);
                                 prefix = "SIM_EXT_SLD";
                             }
                         }
                         else
                         {
-                            if (nameAperture.StartsWith("SIM_EXT_GLZ"))
+                            if (name_Panel.StartsWith("SIM_EXT_GLZ"))
                             {
-                                name_New = "SIM_INT_GLZ" + nameAperture.Substring(("SIM_EXT_GLZ").Length);
+                                name_New = "SIM_INT_GLZ" + name_Panel.Substring(("SIM_EXT_GLZ").Length);
                                 prefix = "SIM_INT_GLZ";
                             }
-                            else if (nameAperture.StartsWith("SIM_EXT_GRD"))
+                            else if (name_Panel.StartsWith("SIM_EXT_GRD"))
                             {
-                                name_New = "SIM_INT_SLD_Core" + nameAperture.Substring(("SIM_EXT_GRD").Length);
+                                name_New = "SIM_INT_SLD_Core" + name_Panel.Substring(("SIM_EXT_GRD").Length);
                                 prefix = "SIM_INT_SLD_Core";
                             }
-                            else if (nameAperture.StartsWith("SIM_EXT_SLD"))
+                            else if (name_Panel.StartsWith("SIM_EXT_SLD"))
                             {
-                                name_New = "SIM_INT_SLD_Core" + nameAperture.Substring(("SIM_EXT_SLD").Length);
+                                name_New = "SIM_INT_SLD_Core" + name_Panel.Substring(("SIM_EXT_SLD").Length);
                                 prefix = "SIM_INT_SLD_Core";
                             }
                                 
@@ -194,32 +194,32 @@ namespace SAM.Analytical
                                 ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
                                 if(apertureConstruction != null)
                                 {
-                                    nameAperture = apertureConstruction.Name;
+                                    string name_Aperture = apertureConstruction.Name;
                                     string prefix_Aperture = null;
                                     name_New = null;
                                     if (external)
                                     {
-                                        if (nameAperture.StartsWith("SIM_INT_GLZ"))
+                                        if (name_Aperture.StartsWith("SIM_INT_GLZ"))
                                         {
-                                            name_New = "SIM_EXT_GLZ" + nameAperture.Substring(("SIM_INT_GLZ").Length);
+                                            name_New = "SIM_EXT_GLZ" + name_Aperture.Substring(("SIM_INT_GLZ").Length);
                                             prefix_Aperture = "SIM_EXT_GLZ";
                                         }
-                                        else if (nameAperture.StartsWith("SIM_INT_SLD"))
+                                        else if (name_Aperture.StartsWith("SIM_INT_SLD"))
                                         {
-                                            name_New = "SIM_EXT_SLD" + nameAperture.Substring(("SIM_INT_SLD").Length);
+                                            name_New = "SIM_EXT_SLD" + name_Aperture.Substring(("SIM_INT_SLD").Length);
                                             prefix_Aperture = "SIM_EXT_SLD";
                                         }
                                     }
                                     else
                                     {
-                                        if (nameAperture.StartsWith("SIM_EXT_GLZ"))
+                                        if (name_Aperture.StartsWith("SIM_EXT_GLZ"))
                                         {
-                                            name_New = "SIM_INT_GLZ" + nameAperture.Substring(("SIM_EXT_GLZ").Length);
+                                            name_New = "SIM_INT_GLZ" + name_Aperture.Substring(("SIM_EXT_GLZ").Length);
                                             prefix_Aperture = "SIM_INT_GLZ";
                                         }
-                                        else if (nameAperture.StartsWith("SIM_EXT_SLD"))
+                                        else if (name_Aperture.StartsWith("SIM_EXT_SLD"))
                                         {
-                                            name_New = "SIM_INT_SLD" + nameAperture.Substring(("SIM_EXT_SLD").Length);
+                                            name_New = "SIM_INT_SLD" + name_Aperture.Substring(("SIM_EXT_SLD").Length);
                                             prefix_Aperture = "SIM_INT_SLD";
                                         }
                                     }
