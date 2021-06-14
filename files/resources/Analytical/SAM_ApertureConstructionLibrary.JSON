@@ -319,7 +319,7 @@
     },
     {
       "_type": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
-      "Name": "SIM_EXT_GLZ_SKY DF01",
+      "Name": "SIM_EXT_GLZ_SKY",
       "Guid": "6f6dc032-6fa5-43fa-bfef-de5937e95599",
       "ParameterSets": [
         {
