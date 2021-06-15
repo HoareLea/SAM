@@ -410,8 +410,8 @@ namespace SAM.Analytical
             if (spaces == null)
                 return null;
 
-            List<Tuple<Space, Geometry.Spatial.Shell>> tuples = new List<Tuple<Space, Geometry.Spatial.Shell>>();
-            spaces.ForEach(x => tuples.Add(new Tuple<Space, Geometry.Spatial.Shell>(x, this.Shell(x))));
+            List<Tuple<Space, Shell>> tuples = new List<Tuple<Space, Shell>>();
+            spaces.ForEach(x => tuples.Add(new Tuple<Space, Shell>(x, this.Shell(x))));
             tuples.RemoveAll(x => x.Item2 == null);
 
 
@@ -427,12 +427,12 @@ namespace SAM.Analytical
 
             Parallel.For(0, count, (int i) =>
             {
-                Geometry.Spatial.Point3D point3D = point3Ds.ElementAt(i);
-                List<Tuple<Space, Geometry.Spatial.Shell>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(point3D, tolerance) || x.Item2.Inside(point3D, silverSpacing, tolerance));
+                Point3D point3D = point3Ds.ElementAt(i);
+                List<Tuple<Space, Shell>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(point3D, tolerance) || x.Item2.Inside(point3D, silverSpacing, tolerance));
                 
                 //Handling cases where Space Location is on the floor
                 if (spaceLocation && tuples_Temp.Count > 1)
-                    tuples_Temp = tuples.FindAll(x => x.Item2.InRange(point3D.GetMoved(Geometry.Spatial.Vector3D.WorldZ * silverSpacing) as Geometry.Spatial.Point3D, tolerance));
+                    tuples_Temp = tuples.FindAll(x => x.Item2.InRange(point3D.GetMoved(Vector3D.WorldZ * silverSpacing) as Point3D, tolerance));
 
                 result[i] = tuples_Temp?.ConvertAll(x => x.Item1);
             });
@@ -463,7 +463,7 @@ namespace SAM.Analytical
             if (point3D == null)
                 return null;
 
-            return GetSpaces(new Geometry.Spatial.Point3D[] { point3D }, spaceLocation, silverSpacing, tolerance)?.FirstOrDefault();
+            return GetSpaces(new Point3D[] { point3D }, spaceLocation, silverSpacing, tolerance)?.FirstOrDefault();
         }
 
         public AdjacencyCluster Filter(IEnumerable<Space> spaces)
@@ -499,7 +499,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public void Transform(Geometry.Spatial.Transform3D transform3D)
+        public void Transform(Transform3D transform3D)
         {
             List<Panel> panels = GetPanels();
             if(panels != null)

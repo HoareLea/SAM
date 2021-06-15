@@ -20,7 +20,7 @@ namespace SAM.Analytical
             if (validatePanelGroup)
                 return MergeCoplanarPanels(panels, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
 
-            return MergeCoplanarPanels(panels.ToList(), offset, ref redundantPanels, validateConstruction, minArea, tolerance);
+            return MergeCoplanarPanels(panels, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
         }
 
         public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool validateConstruction = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
@@ -29,7 +29,7 @@ namespace SAM.Analytical
                 return null;
 
             Dictionary<PanelGroup, List<Panel>> dictionary = new Dictionary<PanelGroup, List<Panel>>();
-            foreach (PanelGroup panelGroup in System.Enum.GetValues(typeof(PanelGroup)))
+            foreach (PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
                 dictionary[panelGroup] = new List<Panel>();
 
             foreach (Panel panel in panels)
@@ -42,7 +42,7 @@ namespace SAM.Analytical
 
             List<Panel> result = new List<Panel>();
 
-            foreach (PanelGroup panelGroup in System.Enum.GetValues(typeof(PanelGroup)))
+            foreach (PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
             {
                 List<Panel> panels_Temp = MergeCoplanarPanels(dictionary[panelGroup], offset, ref redundantPanels, validateConstruction, minArea, tolerance);
                 if (panels_Temp != null && panels_Temp.Count > 0)
@@ -63,14 +63,19 @@ namespace SAM.Analytical
             if (validatePanelGroup)
                 mergedPanels = MergeCoplanarPanels(panels, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
             else
-                mergedPanels = MergeCoplanarPanels(panels.ToList(), offset, ref redundantPanels, validateConstruction, minArea, tolerance);
+                mergedPanels = MergeCoplanarPanels(panels, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
 
             AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
             if (redundantPanels != null && redundantPanels.Count != 0)
+            {
                 result.Remove(redundantPanels);
+            }
+                
 
             if (mergedPanels != null && mergedPanels.Count != 0)
+            {
                 mergedPanels.ForEach(x => result.AddObject(x));
+            }
 
             return result;
         }
@@ -130,7 +135,7 @@ namespace SAM.Analytical
                     if (plane == null)
                         continue;
 
-                    if (!plane.Coplanar(plane_Temp))
+                    if (!plane.Coplanar(plane_Temp, tolerance))
                         continue;
 
                     double distance = plane.Distance(plane_Temp);

@@ -44,6 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\MaterialLayer.cs" />
+    <Compile Include="Classes\WallType.cs" />
+    <Compile Include="Classes\Wall.cs" />
+    <Compile Include="Classes\BuildingElementType.cs" />
+    <Compile Include="Classes\BuildingElement.cs" />
     <Compile Include="Classes\Level.cs" />
     <Compile Include="Create\Level.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

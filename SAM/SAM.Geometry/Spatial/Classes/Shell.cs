@@ -366,20 +366,6 @@ namespace SAM.Geometry.Spatial
                 return new BoundingBox3D(boundingBox3D, offset);
         }
 
-        public override bool FromJObject(JObject jObject)
-        {
-            if (jObject == null)
-                return false;
-
-            if (jObject.ContainsKey("Face3Ds"))
-            {
-                List<Face3D> face3Ds = Geometry.Create.ISAMGeometries<Face3D>(jObject.Value<JArray>("Face3Ds"));
-                if (face3Ds != null)
-                    face3Ds.ForEach(x => Add(x));
-            }
-            return true;
-        }
-
         public List<ICurve3D> GetCurve3Ds(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
             if (point3D == null)
@@ -398,13 +384,27 @@ namespace SAM.Geometry.Spatial
                 if (segmentable3D == null)
                     throw new NotImplementedException();
 
-                foreach(Segment3D segment3D in segmentable3D.GetSegments())
+                foreach (Segment3D segment3D in segmentable3D.GetSegments())
                 {
                     if (segment3D.On(point3D, tolerance))
                         result.Add(segment3D);
                 }
             }
             return result;
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (jObject == null)
+                return false;
+
+            if (jObject.ContainsKey("Face3Ds"))
+            {
+                List<Face3D> face3Ds = Geometry.Create.ISAMGeometries<Face3D>(jObject.Value<JArray>("Face3Ds"));
+                if (face3Ds != null)
+                    face3Ds.ForEach(x => Add(x));
+            }
+            return true;
         }
 
         public override JObject ToJObject()

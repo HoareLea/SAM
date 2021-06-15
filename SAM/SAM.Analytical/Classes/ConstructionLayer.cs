@@ -1,70 +1,44 @@
 ﻿using Newtonsoft.Json.Linq;
-using SAM.Core;
+using SAM.Architectural;
 
 namespace SAM.Analytical
 {
-    public class ConstructionLayer : IJSAMObject
+    public class ConstructionLayer : MaterialLayer
     {
-        private double thickness;
-        private string name;
-
         public ConstructionLayer(string name, double thickness)
+            : base(name, thickness)
         {
-            this.thickness = thickness;
-            this.name = name;
         }
 
         public ConstructionLayer(ConstructionLayer constructionLayer)
+            : base(constructionLayer)
         {
-            thickness = constructionLayer.thickness;
-            name = constructionLayer.name;
+
         }
 
         public ConstructionLayer(JObject jObject)
+            : base(jObject)
         {
-            FromJObject(jObject);
-        }
 
-        public double Thickness
-        {
-            get
-            {
-                return thickness;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
         }
 
         public bool FromJObject(JObject jObject)
         {
-            if (jObject == null)
+            if (!base.FromJObject(jObject))
+            {
                 return false;
-
-            if (jObject.ContainsKey("Thickness"))
-                thickness = jObject.Value<double>("Thickness");
-
-            if (jObject.ContainsKey("Name"))
-                name = jObject.Value<string>("Name");
+            }
 
             return true;
         }
 
         public JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", Core.Query.FullTypeName(this));
-
-            if (name != null)
-                jObject.Add("Name", name);
-
-            if (!double.IsNaN(thickness))
-                jObject.Add("Thickness", thickness);
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+            {
+                return jObject;
+            }
 
             return jObject;
         }
