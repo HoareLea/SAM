@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalFilterByPanelAreaAndThinnessRatio()
           : base("SAMAnalytical.FilterByPanelAreaAndThinnessRatio", "SAMAnalytical.FilterByPanelAreaAndThinnessRatio",
-              "Filters Analytcial Model/AdjacencyCluster by Panel Area And ThinnessRatio",
+              "Filters Analytcial Model/AdjacencyCluster by Panel Area And ThinnessRatio. To filter only by Areau use ThinnessRatio = 1",
               "SAM", "Analytical")
         {
         }
