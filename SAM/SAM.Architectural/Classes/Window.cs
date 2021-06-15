@@ -1,20 +1,25 @@
 ﻿using Newtonsoft.Json.Linq;
 
-using SAM.Core;
-using System.Collections.Generic;
+using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public abstract class BuildingElementType : SAMType
+    public class Window : Opening
     {
-        public BuildingElementType(BuildingElementType buildingElementType)
-            : base(buildingElementType)
+        public Window(Window window)
+            : base(window)
         {
 
         }
 
-        public BuildingElementType(JObject jObject)
+        public Window(JObject jObject)
             : base(jObject)
+        {
+
+        }
+
+        public Window(WindowType windowType, Face3D face3D)
+            : base(windowType, face3D)
         {
 
         }
@@ -22,7 +27,9 @@ namespace SAM.Architectural
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
+            {
                 return false;
+            }
 
             return true;
         }
@@ -32,7 +39,9 @@ namespace SAM.Architectural
             JObject jObject = base.ToJObject();
 
             if (jObject == null)
+            {
                 return jObject;
+            }
 
             return jObject;
         }

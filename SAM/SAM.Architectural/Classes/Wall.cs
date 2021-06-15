@@ -4,7 +4,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public class Wall : BuildingElement
+    public class Wall : HostBuildingElement
     {
         public Wall(Wall wall)
             : base(wall)
