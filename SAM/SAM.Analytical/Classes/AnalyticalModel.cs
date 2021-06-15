@@ -252,6 +252,19 @@ namespace SAM.Analytical
             return profileLibrary.Add(profile.Clone());
         }
 
+        public bool AddPanel(Panel panel)
+        {
+            if (panel == null)
+            {
+                return false;
+            }
+
+            if (adjacencyCluster == null)
+                adjacencyCluster = new AdjacencyCluster();
+
+            return adjacencyCluster.AddObject(panel);
+        }
+
         public List<Space> GetSpaces()
         {
             return adjacencyCluster?.GetSpaces()?.ConvertAll(x => new Space(x));
