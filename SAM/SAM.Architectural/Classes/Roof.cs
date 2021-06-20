@@ -1,19 +1,25 @@
 ﻿using Newtonsoft.Json.Linq;
 
-using SAM.Core;
+using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public abstract class BuildingElementType : SAMType, IArchitecturalObject
+    public class Roof : HostBuildingElement
     {
-        public BuildingElementType(BuildingElementType buildingElementType)
-            : base(buildingElementType)
+        public Roof(Roof roof)
+            : base(roof)
         {
 
         }
 
-        public BuildingElementType(JObject jObject)
+        public Roof(JObject jObject)
             : base(jObject)
+        {
+
+        }
+
+        public Roof(RoofType roofType, Face3D face3D)
+            : base(roofType, face3D)
         {
 
         }
@@ -21,7 +27,9 @@ namespace SAM.Architectural
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
+            {
                 return false;
+            }
 
             return true;
         }
@@ -31,7 +39,9 @@ namespace SAM.Architectural
             JObject jObject = base.ToJObject();
 
             if (jObject == null)
+            {
                 return jObject;
+            }
 
             return jObject;
         }

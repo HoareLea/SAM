@@ -6,6 +6,12 @@ namespace SAM.Core
 {
     public class SAMModel : SAMObject
     {
+        public SAMModel()
+            : base()
+        {
+
+        }
+        
         public SAMModel(Guid guid, string name)
             : base(guid, name)
         {

@@ -1,18 +1,16 @@
 ﻿using Newtonsoft.Json.Linq;
 
-using SAM.Core;
-
 namespace SAM.Architectural
 {
-    public abstract class BuildingElementType : SAMType, IArchitecturalObject
+    public abstract class FloorType : HostBuildingElementType
     {
-        public BuildingElementType(BuildingElementType buildingElementType)
-            : base(buildingElementType)
+        public FloorType(FloorType floorType)
+            : base(floorType)
         {
 
         }
 
-        public BuildingElementType(JObject jObject)
+        public FloorType(JObject jObject)
             : base(jObject)
         {
 

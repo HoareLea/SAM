@@ -457,11 +457,11 @@ namespace SAM.Core
         {
             if (dictionary_Objects == null)
                 return null;
-            
+
             List<object> result = new List<object>();
-            foreach(Dictionary<Guid, object> dictionary in dictionary_Objects.Values)
-            foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
-                result.Add(keyValuePair.Value);
+            foreach (Dictionary<Guid, object> dictionary in dictionary_Objects.Values)
+                foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
+                    result.Add(keyValuePair.Value);
 
             return result;
         }

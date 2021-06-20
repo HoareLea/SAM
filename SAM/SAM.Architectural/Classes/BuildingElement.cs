@@ -5,7 +5,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public abstract class BuildingElement : SAMInstance
+    public abstract class BuildingElement : SAMInstance, IArchitecturalObject, ISAMGeometry3DObject
     {
         private Face3D face3D;
         
@@ -36,6 +36,16 @@ namespace SAM.Architectural
 
                 return new Face3D(face3D);
             }
+        }
+
+        public void Transform(Transform3D transform3D)
+        {
+            face3D = face3D?.Transform(transform3D);
+        }
+
+        public void Move(Vector3D vector3D)
+        {
+            face3D = face3D?.GetMoved(vector3D) as Face3D;
         }
 
         public override bool FromJObject(JObject jObject)

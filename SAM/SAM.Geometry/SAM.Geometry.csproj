@@ -74,9 +74,11 @@
     <Compile Include="Create\AdjacencyGraph.cs" />
     <Compile Include="Enums\PointConnectMethod.cs" />
     <Compile Include="Enums\LineFormulaForm.cs" />
+    <Compile Include="Interfaces\ISAMGeometryObject.cs" />
     <Compile Include="Planar\Classes\Ellipse2D.cs" />
     <Compile Include="Planar\Create\Face2D.cs" />
     <Compile Include="Planar\Create\Polyline2Ds.cs" />
+    <Compile Include="Planar\Interfaces\ISAMGeometry2DObject.cs" />
     <Compile Include="Planar\Modify\Connect.cs" />
     <Compile Include="Planar\Query\TrimUnconnected.cs" />
     <Compile Include="Planar\Query\Truncate.cs" />
@@ -185,6 +187,7 @@
     <Compile Include="Spatial\Create\Segment3Ds.cs" />
     <Compile Include="Spatial\Create\Vector3D.cs" />
     <Compile Include="Spatial\Create\Point3D.cs" />
+    <Compile Include="Spatial\Interfaces\ISAMGeometry3DObject.cs" />
     <Compile Include="Spatial\Modify\Split.cs" />
     <Compile Include="Spatial\Modify\SplitFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />

@@ -44,11 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ArchitecturalModel.cs" />
+    <Compile Include="Classes\Room.cs" />
+    <Compile Include="Classes\Roof.cs" />
     <Compile Include="Classes\OpeningType.cs" />
     <Compile Include="Classes\HostBuildingElementType.cs" />
     <Compile Include="Classes\HostBuildingElement.cs" />
     <Compile Include="Classes\MaterialLayer.cs" />
     <Compile Include="Classes\Opening.cs" />
+    <Compile Include="Classes\DoorType.cs" />
+    <Compile Include="Classes\Door.cs" />
+    <Compile Include="Classes\FloorType.cs" />
+    <Compile Include="Classes\RoofType.cs" />
+    <Compile Include="Classes\Floor.cs" />
     <Compile Include="Classes\WindowType.cs" />
     <Compile Include="Classes\Window.cs" />
     <Compile Include="Classes\WallType.cs" />
@@ -57,6 +65,7 @@
     <Compile Include="Classes\BuildingElement.cs" />
     <Compile Include="Classes\Level.cs" />
     <Compile Include="Create\Level.cs" />
+    <Compile Include="Interfaces\IArchitecturalObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +76,10 @@
     <ProjectReference Include="..\SAM.Geometry\SAM.Geometry.csproj">
       <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>
       <Name>SAM.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Math\SAM.Math.csproj">
+      <Project>{255e428d-6969-4542-9846-67b7de87501b}</Project>
+      <Name>SAM.Math</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
