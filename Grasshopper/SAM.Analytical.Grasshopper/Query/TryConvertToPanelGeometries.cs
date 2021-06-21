@@ -14,7 +14,7 @@ namespace SAM.Analytical.Grasshopper
             
             if (@object is IGH_GeometricGoo)
             {
-                sAMGeometry3Ds = ((IGH_GeometricGoo)@object).ToSAM(simplify).Cast<ISAMGeometry3D>().ToList();
+                sAMGeometry3Ds = ((IGH_GeometricGoo)@object).ToSAM(simplify);
                 return true;
             }
 
