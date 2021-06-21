@@ -60,7 +60,7 @@ namespace SAM.Geometry
         {
             get
             {
-                return externalEdge2D.Clone() as IClosed2D;
+                return externalEdge2D?.Clone() as IClosed2D;
             }
         }
 
