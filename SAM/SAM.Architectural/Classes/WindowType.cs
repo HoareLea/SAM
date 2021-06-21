@@ -2,7 +2,7 @@
 
 namespace SAM.Architectural
 {
-    public abstract class WindowType : OpeningType
+    public class WindowType : OpeningType
     {
         public WindowType(WindowType windowType)
             : base(windowType)
@@ -12,6 +12,12 @@ namespace SAM.Architectural
 
         public WindowType(JObject jObject)
             : base(jObject)
+        {
+
+        }
+
+        public WindowType(string name)
+            : base(name)
         {
 
         }

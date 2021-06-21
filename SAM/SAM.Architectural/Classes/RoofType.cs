@@ -2,7 +2,7 @@
 
 namespace SAM.Architectural
 {
-    public abstract class RoofType : HostBuildingElementType
+    public class RoofType : HostBuildingElementType
     {
         public RoofType(RoofType roofType)
             : base(roofType)
@@ -12,6 +12,12 @@ namespace SAM.Architectural
 
         public RoofType(JObject jObject)
             : base(jObject)
+        {
+
+        }
+
+        public RoofType(string name)
+            : base(name)
         {
 
         }

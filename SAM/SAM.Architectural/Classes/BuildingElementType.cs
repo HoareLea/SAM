@@ -18,6 +18,12 @@ namespace SAM.Architectural
 
         }
 
+        public BuildingElementType(string name)
+            : base(name)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

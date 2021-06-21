@@ -38,6 +38,21 @@ namespace SAM.Architectural
             }
         }
 
+        public bool AddOpening(Opening opening)
+        {
+            if (opening == null)
+                return false;
+
+            if (!Query.IsValid(this, opening))
+                return false;
+
+            if (openings == null)
+                openings = new List<Opening>();
+
+            openings.Add(opening);
+            return true;
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

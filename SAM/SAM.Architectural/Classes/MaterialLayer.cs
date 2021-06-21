@@ -59,7 +59,7 @@ namespace SAM.Architectural
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
-            jObject.Add("_type", Query.FullTypeName(this));
+            jObject.Add("_type", Core.Query.FullTypeName(this));
 
             if (name != null)
                 jObject.Add("Name", name);

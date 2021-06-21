@@ -20,6 +20,12 @@ namespace SAM.Architectural
 
         }
 
+        public HostBuildingElementType(string name)
+            : base(name)
+        {
+
+        }
+
         public List<MaterialLayer> MaterialLayers
         {
             get

@@ -21,6 +21,12 @@ namespace SAM.Architectural
 
         }
 
+        public OpeningType(string name)
+            : base(name)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

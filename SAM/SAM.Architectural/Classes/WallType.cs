@@ -2,7 +2,7 @@
 
 namespace SAM.Architectural
 {
-    public abstract class WallType : HostBuildingElementType
+    public class WallType : HostBuildingElementType
     {
         public WallType(WallType wallType)
             : base(wallType)
@@ -12,6 +12,12 @@ namespace SAM.Architectural
 
         public WallType(JObject jObject)
             : base(jObject)
+        {
+
+        }
+
+        public WallType(string name)
+            : base(name)
         {
 
         }

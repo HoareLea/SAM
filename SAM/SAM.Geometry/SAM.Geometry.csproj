@@ -69,6 +69,7 @@
     <Compile Include="Convert\ToSAM\Polygon2D.cs" />
     <Compile Include="Convert\ToSAM\Point2D.cs" />
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />
+    <Compile Include="Spatial\Create\IClosedPlanar3D.cs" />
     <Compile Include="Create\UndirectedGraph.cs" />
     <Compile Include="Create\ISAMGeometries.cs" />
     <Compile Include="Create\AdjacencyGraph.cs" />

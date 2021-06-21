@@ -2,7 +2,7 @@
 
 namespace SAM.Architectural
 {
-    public abstract class FloorType : HostBuildingElementType
+    public class FloorType : HostBuildingElementType
     {
         public FloorType(FloorType floorType)
             : base(floorType)
@@ -12,6 +12,12 @@ namespace SAM.Architectural
 
         public FloorType(JObject jObject)
             : base(jObject)
+        {
+
+        }
+
+        public FloorType(string name)
+            : base(name)
         {
 
         }

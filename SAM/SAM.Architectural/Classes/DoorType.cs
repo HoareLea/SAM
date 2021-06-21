@@ -2,7 +2,7 @@
 
 namespace SAM.Architectural
 {
-    public abstract class DoorType : OpeningType
+    public class DoorType : OpeningType
     {
         public DoorType(DoorType doorType)
             : base(doorType)
@@ -12,6 +12,12 @@ namespace SAM.Architectural
 
         public DoorType(JObject jObject)
             : base(jObject)
+        {
+
+        }
+
+        public DoorType(string name)
+            : base(name)
         {
 
         }
