@@ -1,13 +1,15 @@
-﻿using SAM.Geometry.Planar;
+﻿using SAM.Core;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Architectural
 {
     public static partial class Create
     {
-        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Angle = Core.Tolerance.Angle)
+        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             if (segmentable2Ds == null || double.IsNaN(elevation_Min) || double.IsNaN(elevation_Max))
                 return null;
@@ -106,6 +108,118 @@ namespace SAM.Architectural
             }
 
             return architecturalModel;
+        }
+
+        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Face3D> face3Ds, double elevation_Ground = 0, double tolerance = Tolerance.Distance)
+        {
+            if (face3Ds == null)
+                return null;
+
+            Plane plane_Default = Plane.WorldXY;
+            plane_Default.Move(new Vector3D(0, 0, elevation_Ground));
+
+            Dictionary<Face2D, Face3D> dictionary_Project = new Dictionary<Face2D, Face3D>();
+            foreach (Face3D face3D in face3Ds)
+            {
+                Face3D face3D_Project = plane_Default.Project(face3D);
+                if (face3D_Project == null)
+                    continue;
+
+                Face2D face2D = plane_Default.Convert(face3D_Project);
+                if (face2D == null)
+                    continue;
+
+                dictionary_Project[face2D] = face3D;
+            }
+
+            if (dictionary_Project.Count == 0)
+                return null;
+
+            List<Face2D> face2Ds = Geometry.Planar.Query.Union(dictionary_Project.Keys);
+            if (face2Ds == null)
+                return null;
+
+            Dictionary<Face2D, List<Face3D>> dictionary_Common = new Dictionary<Face2D, List<Face3D>>();
+            foreach (KeyValuePair<Face2D, Face3D> keyValuePair_Project in dictionary_Project)
+            {
+                Face2D face2D = null;
+                foreach (Face2D face2D_Temp in face2Ds)
+                {
+                    if (face2D_Temp.InRange(keyValuePair_Project.Key.GetInternalPoint2D(), tolerance))
+                    {
+                        face2D = face2D_Temp;
+                        break;
+                    }
+                }
+
+                if (face2D == null)
+                    continue;
+
+                if (!dictionary_Common.ContainsKey(face2D))
+                    dictionary_Common[face2D] = new List<Face3D>();
+
+                dictionary_Common[face2D].Add(keyValuePair_Project.Value);
+            }
+
+            List<Dictionary<Room, List<HostBuildingElement>>> dictionaries_Room = new List<Dictionary<Room, List<HostBuildingElement>>>();
+            foreach (List<Face3D> face3Ds_Common in dictionary_Common.Values)
+            {
+                Dictionary<double, List<Face2D>> dictionary = new Dictionary<double, List<Face2D>>();
+                foreach (Face3D face3D in face3Ds_Common)
+                {
+                    BoundingBox3D boundingBox3D = face3D?.GetBoundingBox();
+                    if (boundingBox3D == null)
+                        continue;
+
+                    double elevation = Core.Query.Round(boundingBox3D.Min.Z, tolerance);
+                    plane_Default.Move(new Vector3D(0, 0, elevation));
+
+                    Face2D face2D = plane_Default.Convert(plane_Default.Project(face3D));
+                    if (face2D == null)
+                        continue;
+
+                    List<Face2D> face2Ds_Elevation = null;
+                    if (!dictionary.TryGetValue(elevation, out face2Ds_Elevation))
+                    {
+                        face2Ds_Elevation = new List<Face2D>();
+                        dictionary[elevation] = face2Ds_Elevation;
+                    }
+
+                    face2Ds_Elevation.Add(face2D);
+                }
+
+                List<double> elevations = dictionary.Keys.ToList();
+                if (!elevations.Contains(elevation_Ground))
+                {
+                    elevations.Sort();
+                    for (int i = 1; i < elevations.Count; i++)
+                    {
+                        if (elevation_Ground > elevations[i])
+                            continue;
+
+                        dictionary[elevation_Ground] = dictionary[elevations[i - 1]];
+                        break;
+                    }
+
+                    if (!dictionary.ContainsKey(elevation_Ground))
+                        dictionary[elevation_Ground] = dictionary[elevations.Last()];
+                }
+
+                Dictionary<Room, List<HostBuildingElement>> dictionary_Room = Query.RoomDictionary(dictionary, dictionary.Keys.ToList().IndexOf(elevation_Ground), tolerance);
+                if (dictionary_Room != null)
+                    dictionaries_Room.Add(dictionary_Room);
+            }
+
+            ArchitecturalModel result = new ArchitecturalModel();
+            foreach (Dictionary<Room, List<HostBuildingElement>> dictionary_Room in dictionaries_Room)
+            {
+                foreach (KeyValuePair<Room, List<HostBuildingElement>> keyValuePair in dictionary_Room)
+                {
+                    result.Add(keyValuePair.Key, keyValuePair.Value);
+                }
+            }
+
+            return result;
         }
     }
 }
