@@ -161,7 +161,7 @@ namespace SAM.Analytical
         /// Gets Geometrical Representation of Panel (None Analytical Data)
         /// </summary>
         /// <returns name="face3D">SAM Geometry Face3D</returns>
-        public Face3D GetFace3D(bool cutApertures = false, double tolerance = Tolerance.Distance)
+        public Face3D GetFace3D(bool cutOpenings = false, double tolerance = Tolerance.Distance)
         {
             Face2D face2D = planarBoundary3D?.GetFace2D();
             if (face2D == null)
@@ -169,7 +169,7 @@ namespace SAM.Analytical
 
             Plane plane = planarBoundary3D.Plane;
 
-            if(cutApertures && apertures != null && apertures.Count != 0)
+            if(cutOpenings && apertures != null && apertures.Count != 0)
             {
                 foreach(Aperture aperture in apertures)
                 {

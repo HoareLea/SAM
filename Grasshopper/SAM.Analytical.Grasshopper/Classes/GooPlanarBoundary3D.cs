@@ -51,19 +51,19 @@ namespace SAM.Analytical.Grasshopper
             if (planarBoundary3D == null)
                 return;
 
-            Dictionary<BoundaryEdge3DLoop, System.Drawing.Color> aDictionary = new Dictionary<BoundaryEdge3DLoop, System.Drawing.Color>();
+            Dictionary<BoundaryEdge3DLoop, System.Drawing.Color> dictionary = new Dictionary<BoundaryEdge3DLoop, System.Drawing.Color>();
 
             //Assign Color for Edges
-            aDictionary[planarBoundary3D.GetExternalEdge3DLoop()] = color_ExternalEdge;
+            dictionary[planarBoundary3D.GetExternalEdge3DLoop()] = color_ExternalEdge;
 
             IEnumerable<BoundaryEdge3DLoop> edge3DLoops = planarBoundary3D.GetInternalEdge3DLoops();
             if (edge3DLoops != null)
             {
                 foreach (BoundaryEdge3DLoop edge3DLoop in edge3DLoops)
-                    aDictionary[edge3DLoop] = color_InternalEdges;
+                    dictionary[edge3DLoop] = color_InternalEdges;
             }
 
-            foreach (KeyValuePair<BoundaryEdge3DLoop, System.Drawing.Color> keyValuePair in aDictionary)
+            foreach (KeyValuePair<BoundaryEdge3DLoop, System.Drawing.Color> keyValuePair in dictionary)
             {
                 List<BoundaryEdge3D> edge3Ds = keyValuePair.Key.BoundaryEdge3Ds;
                 if (edge3Ds == null || edge3Ds.Count == 0)

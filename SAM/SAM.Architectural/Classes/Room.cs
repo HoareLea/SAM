@@ -26,6 +26,14 @@ namespace SAM.Architectural
             this.location = location;
         }
 
+        public Point3D Location
+        {
+            get
+            {
+                return location;
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

@@ -53,15 +53,26 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GooArchitecturalModel.cs" />
     <Compile Include="Classes\GooLevel.cs" />
+    <Compile Include="Classes\GooHostBuildingElement.cs" />
     <Compile Include="Component\SAMArchitecturalCreateLevel.cs" />
+    <Compile Include="Convert\ToGrasshopper\GH_Mesh.cs" />
+    <Compile Include="Convert\ToRhino\Brep.cs" />
+    <Compile Include="Convert\ToRhino\Mesh.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
+    <Compile Include="Modify\DrawViewportMeshes.cs" />
+    <Compile Include="Modify\DrawViewportWires.cs" />
+    <Compile Include="Modify\BakeGeometry.cs" />
+    <Compile Include="Modify\BakeGeometry_ByCategory.cs" />
+    <Compile Include="Modify\BakeGeometry_ByType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Query\DisplayMaterial.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -80,8 +91,6 @@
     <None Include="Resources\SAM_Architectural.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Convert\ToGrasshopper\" />
-    <Folder Include="Convert\ToRhino\" />
     <Folder Include="Convert\ToSAM\" />
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +118,7 @@
   <ItemGroup>
     <PackageReference Include="Grasshopper">
       <Version>6.32.20340.21001</Version>
-	  <ExcludeAssets>runtime</ExcludeAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

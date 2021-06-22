@@ -434,15 +434,8 @@ namespace SAM.Core
             return result;
         }
 
-        public List<object> GetObjects(Type type)
+        public List<object> GetObjects(string typeName)
         {
-            if (dictionary_Objects == null)
-                return null;
-
-            if (!IsValid(type))
-                return null;
-
-            string typeName = type.FullName;
             if (!dictionary_Objects.ContainsKey(typeName))
                 return null;
 
@@ -451,6 +444,42 @@ namespace SAM.Core
                 result.Add(keyValuePair.Value);
 
             return result;
+        }
+
+        public List<T> GetObjects<T>(string typeName)
+        {
+            if (!dictionary_Objects.ContainsKey(typeName))
+            {
+                return null;
+            }
+
+            List<object> objects = GetObjects(typeName);
+            if(objects == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach (object @object in objects)
+            {
+                if(@object is T)
+                {
+                    result.Add((T)@object);
+                }
+            }
+
+            return result;
+        }
+
+        public List<object> GetObjects(Type type)
+        {
+            if (dictionary_Objects == null)
+                return null;
+
+            if (!IsValid(type))
+                return null;
+
+            return GetObjects(type.FullName);
         }
 
         public List<object> GetObjects()
@@ -622,6 +651,28 @@ namespace SAM.Core
             }
 
             return -1;
+        }
+
+        public List<string> GetTypeNames(Type type)
+        {
+            if (dictionary_Objects == null || type == null)
+            {
+                return null;
+            }
+
+            List<string> result = new List<string>();
+            foreach(string typeName in dictionary_Objects.Keys)
+            {
+                Type type_Temp = Type.GetType(typeName, false, false);
+                if(type_Temp == null || !type.IsAssignableFrom(type_Temp))
+                {
+                    continue;
+                }
+
+                result.Add(typeName);
+            }
+
+            return result;
         }
 
         public bool Contains(Type type)

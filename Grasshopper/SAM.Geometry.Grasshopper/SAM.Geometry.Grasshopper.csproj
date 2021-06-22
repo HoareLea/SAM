@@ -98,6 +98,8 @@
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Modify\BakeGeometry.cs" />
+    <Compile Include="Modify\DrawViewportMeshes.cs" />
+    <Compile Include="Modify\DrawViewportWires.cs" />
     <Compile Include="Modify\Convert.cs" />
     <Compile Include="Modify\Reduce.cs" />
     <Compile Include="Query\TryGetSAMGeometry.cs" />

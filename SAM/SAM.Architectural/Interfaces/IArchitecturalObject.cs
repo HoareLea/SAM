@@ -2,7 +2,7 @@
 
 namespace SAM.Architectural
 {
-    interface IArchitecturalObject : IJSAMObject
+    public interface IArchitecturalObject : IJSAMObject
     {
     }
 }

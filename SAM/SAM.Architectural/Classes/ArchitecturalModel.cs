@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using System.Collections.Generic;
 
 namespace SAM.Architectural
 {
@@ -14,6 +15,94 @@ namespace SAM.Architectural
             : base()
         {
 
+        }
+
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+            set
+            {
+                description = value;
+            }
+        }
+
+        public List<T> GetObjects<T>()
+        {
+            List<string> typeNames = relationCluster?.GetTypeNames(typeof(T));
+            if(typeNames == null || typeNames.Count == 0)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach(string typeName in typeNames)
+            {
+                List<T> objects = relationCluster.GetObjects<T>(typeName);
+                if (objects != null && objects.Count != 0)
+                {
+                    result.AddRange(objects);
+                }
+            }
+
+            return result;
+        }
+
+        public List<Room> GetRooms(HostBuildingElement hostBuildingElement)
+        {
+            return relationCluster?.GetRelatedObjects<Room>(hostBuildingElement);
+        }
+
+        public bool Add(HostBuildingElement hostBuildingElement)
+        {
+            if(hostBuildingElement == null)
+            {
+                return false;
+            }
+
+            if (relationCluster == null)
+                relationCluster = new RelationCluster();
+
+            return relationCluster.AddObject(hostBuildingElement);
+        }
+
+        public bool Add(Room room, List<HostBuildingElement> hostBuildingElements = null)
+        {
+            if (room == null)
+            {
+                return false;
+            }
+
+            if (relationCluster == null)
+                relationCluster = new RelationCluster();
+
+            bool result = relationCluster.AddObject(room);
+            if(hostBuildingElements != null && hostBuildingElements.Count != 0)
+            {
+                foreach(HostBuildingElement hostBuildingElement in hostBuildingElements)
+                {
+                    if(relationCluster.AddObject(hostBuildingElement))
+                    {
+                        relationCluster.AddRelation(room, hostBuildingElement);
+                    }
+
+                }
+            }
+
+            return result;
+        }
+
+        public Geometry.Spatial.BoundingBox3D GetBoundingBox3D()
+        {
+            List<BuildingElement> buildingElements = GetObjects<BuildingElement>();
+            if(buildingElements == null || buildingElements.Count == 0)
+            {
+                return null;
+            }
+
+            return new Geometry.Spatial.BoundingBox3D(buildingElements.ConvertAll(x => x.Face3D?.GetBoundingBox()).FindAll(x => x != null));
         }
 
         public override bool FromJObject(JObject jObject)

@@ -316,78 +316,17 @@ namespace SAM.Geometry.Grasshopper
 
         public virtual void DrawViewportWires(GH_PreviewWireArgs args, System.Drawing.Color color)
         {
-            //TODO: Display Spatial.Surface as Rhino.Geometry.Surface
-
-            List<Spatial.ICurve3D> curve3Ds = null;
-            if (Value is Spatial.Face3D)
-            {
-                curve3Ds = new List<Spatial.ICurve3D>();
-
-                foreach (Spatial.IClosedPlanar3D closedPlanar3D in ((Spatial.Face3D)Value).GetEdge3Ds())
-                    if (closedPlanar3D is Spatial.ICurvable3D)
-                        curve3Ds.AddRange(((Spatial.ICurvable3D)closedPlanar3D).GetCurves());
-            }
-            else if (Value is Spatial.ICurvable3D)
-            {
-                curve3Ds = ((Spatial.ICurvable3D)Value).GetCurves();
-            }
-            else if (Value is Planar.ICurvable2D)
-            {
-                curve3Ds = ((Planar.ICurvable2D)Value).GetCurves().ConvertAll(x => Spatial.Query.Convert(Spatial.Plane.WorldXY, x));
-            }
-
-            if (curve3Ds != null && curve3Ds.Count > 0)
-            {
-                curve3Ds.ForEach(x => args.Pipeline.DrawCurve(x.ToRhino(), color));
-                //return;
-            }
-
-            if (Value is Spatial.Point3D)
-            {
-                args.Pipeline.DrawPoint((Value as Spatial.Point3D).ToRhino(), color);
-                return;
-            }
-
-            if (Value is Planar.Point2D)
-            {
-                args.Pipeline.DrawPoint((Value as Planar.Point2D).ToRhino(), color);
-                return;
-            }
-
-            if(Value is Spatial.Face3D)
-            {
-                Brep brep = (Value as Spatial.Face3D).ToRhino_Brep();
-                if(brep != null)
-                {
-                    args.Pipeline.DrawBrepWires(brep, color);
-                }
-                return;
-            }
-
-            if (Value is Spatial.Shell)
-            {
-                List<Brep> breps = ((Spatial.Shell)Value).Face3Ds?.ConvertAll(x => x.ToRhino_Brep());
-                breps?.FindAll(x => x != null).ForEach(x => args.Pipeline.DrawBrepWires(x, color));
-                return;
-            }
+            Modify.DrawViewportWires(Value, args, color);
         }
 
         public virtual void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            DrawViewportMeshes(args, args.Material);
+            Modify.DrawViewportMeshes(Value, args, args.Material);
         }
 
         public virtual void DrawViewportMeshes(GH_PreviewMeshArgs args, Rhino.Display.DisplayMaterial displayMaterial)
         {
-            Brep brep = null;
-
-            if (Value is Spatial.Face3D)
-                brep = ((Spatial.Face3D)Value).ToRhino_Brep();
-            else if (Value is Spatial.Shell)
-                brep = ((Spatial.Shell)Value).ToRhino();
-
-            if (brep != null)
-                args.Pipeline.DrawBrepShaded(brep, displayMaterial);
+            Modify.DrawViewportMeshes(Value, args, displayMaterial);
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
