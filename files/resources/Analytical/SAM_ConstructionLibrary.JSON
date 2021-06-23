@@ -105,7 +105,7 @@
     },
     {
       "_type": "SAM.Analytical.Construction,SAM.Analytical",
-      "Name": "SIM_EXT_GRD_FLR FLR01",
+      "Name": "SIM_EXT_GRD_FLR",
       "Guid": "6b5cbfab-bc87-4d2c-98e0-d940c75295fa",
       "ParameterSets": [
         {
@@ -205,7 +205,7 @@
     },
     {
       "_type": "SAM.Analytical.Construction,SAM.Analytical",
-      "Name": "SIM_INT_SLD_FLR FLR02",
+      "Name": "SIM_INT_SLD_FLR",
       "Guid": "d5521200-8376-49b2-a9ed-ad914f380022",
       "ParameterSets": [
         {
@@ -605,7 +605,7 @@
     },
     {
       "_type": "SAM.Analytical.Construction,SAM.Analytical",
-      "Name": "SIM_EXT_GRD_Roof DGRD01",
+      "Name": "SIM_EXT_GRD_Roof",
       "Guid": "595f988a-89cc-47fb-b3d1-b8df1f76002d",
       "ParameterSets": [
         {

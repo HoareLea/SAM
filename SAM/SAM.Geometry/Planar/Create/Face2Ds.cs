@@ -31,7 +31,7 @@ namespace SAM.Geometry.Planar
             if (face2Ds.Count == 1)
                 return face2Ds;
 
-            face2Ds.Sort((x, y) => y.ExternalEdge2D.GetArea().CompareTo(x.ExternalEdge2D.GetArea()));
+            face2Ds.Sort((x, y) => x.ExternalEdge2D.GetArea().CompareTo(y.ExternalEdge2D.GetArea()));
             List<Face2D> result = new List<Face2D>();
             while(face2Ds.Count > 0)
             {
