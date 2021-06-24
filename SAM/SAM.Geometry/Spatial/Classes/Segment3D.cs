@@ -106,6 +106,16 @@ namespace SAM.Geometry.Spatial
             return new Segment3D((Point3D)origin.GetMoved(vector3D), (Vector3D)vector.Clone());
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
         public Point3D GetCenter()
         {
             return (Point3D)origin.GetMoved(vector / 2);

@@ -255,6 +255,16 @@ namespace SAM.Geometry.Spatial
             return plane;
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
         public Plane GetPlane()
         {
             return new Plane(this);

@@ -111,6 +111,16 @@ namespace SAM.Geometry.Spatial
             return new Polyline3D(points.ConvertAll(x => (Point3D)x.GetMoved(vector3D)));
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
         public List<Point3D> GetPoints()
         {
             return points.ConvertAll(x => (Point3D)x.Clone());

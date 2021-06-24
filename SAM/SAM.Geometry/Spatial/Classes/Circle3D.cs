@@ -136,6 +136,16 @@ namespace SAM.Geometry.Spatial
             plane.FlipZ(true);
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
         public static bool operator ==(Circle3D circle3D_1, Circle3D circle3D_2)
         {
             if (ReferenceEquals(circle3D_1, null) && ReferenceEquals(circle3D_2, null))

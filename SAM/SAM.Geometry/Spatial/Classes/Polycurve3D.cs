@@ -74,6 +74,11 @@ namespace SAM.Geometry.Spatial
             return new Polycurve3D(curves.ConvertAll(x => (ICurve3D)x.GetMoved(vector3D)));
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (jObject == null)

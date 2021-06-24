@@ -20,6 +20,19 @@ namespace SAM.Geometry.Spatial
             return Create.Point3D(matrix);
         }
 
+        public static BoundingBox3D Transform(this BoundingBox3D boundingBox3D, Transform3D transform3D)
+        {
+            return Transform(boundingBox3D, transform3D?.Matrix4D);
+        }
+
+        public static BoundingBox3D Transform(this BoundingBox3D boundingBox3D, Matrix4D matrix4D)
+        {
+            if (boundingBox3D == null || matrix4D == null)
+                return null;
+
+            return new BoundingBox3D(boundingBox3D.Min.Transform(matrix4D), boundingBox3D.Max.Transform(matrix4D));
+        }
+
         public static List<Point3D> Transform(this IEnumerable<Point3D> point3Ds, Transform3D transform3D)
         {
             return Transform(point3Ds, transform3D?.Matrix4D);
@@ -95,6 +108,48 @@ namespace SAM.Geometry.Spatial
         public static Rectangle3D Transform(this Rectangle3D rectangle3D, Transform3D transform3D)
         {
             return Transform(rectangle3D, transform3D?.Matrix4D);
+        }
+
+        public static Circle3D Transform(this Circle3D circle3D, Transform3D transform3D)
+        {
+            return Transform(circle3D, transform3D?.Matrix4D);
+        }
+
+        public static Circle3D Transform(this Circle3D circle3D, Matrix4D matrix4D)
+        {
+            if (matrix4D == null)
+            {
+                return null;
+            }
+
+            Plane plane = circle3D.GetPlane();
+            if (plane == null)
+            {
+                return null;
+            }
+
+            return new Circle3D(plane.Transform(matrix4D), circle3D.Radious);
+        }
+
+        public static Sphere Transform(this Sphere sphere, Transform3D transform3D)
+        {
+            return Transform(sphere, transform3D?.Matrix4D);
+        }
+
+        public static Sphere Transform(this Sphere sphere, Matrix4D matrix4D)
+        {
+            if (matrix4D == null)
+            {
+                return null;
+            }
+
+            Point3D point3D = sphere.Origin;
+            if (point3D == null)
+            {
+                return null;
+            }
+
+            return new Sphere(point3D.Transform(matrix4D), sphere.Radious);
         }
 
         public static Extrusion Transform(this Extrusion extrusion, Matrix4D matrix4D)

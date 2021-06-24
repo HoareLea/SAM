@@ -431,6 +431,16 @@ namespace SAM.Geometry.Spatial
             return new Shell(face3Ds);
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
         public override ISAMGeometry Clone()
         {
             return new Shell(this);

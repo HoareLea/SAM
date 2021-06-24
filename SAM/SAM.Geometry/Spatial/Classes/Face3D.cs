@@ -89,6 +89,16 @@ namespace SAM.Geometry.Spatial
             return new Face3D((Plane)plane.GetMoved(vector3D), (IClosed2D)externalEdge2D.Clone());
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
         public bool RemoveInternalEdge(int index)
         {
             if (index < 0 || internalEdge2Ds == null || internalEdge2Ds.Count == 0)

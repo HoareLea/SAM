@@ -85,5 +85,10 @@ namespace SAM.Geometry.Spatial
             jObject.Add("Boundary", externalEdge3D.ToJObject());
             return jObject;
         }
+
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

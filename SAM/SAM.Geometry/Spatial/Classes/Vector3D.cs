@@ -300,6 +300,16 @@ namespace SAM.Geometry.Spatial
             return new Vector3D(coordinates[0] + vector3D.coordinates[0], coordinates[1] + vector3D.coordinates[1], coordinates[2] + vector3D.coordinates[2]);
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             coordinates[0] = jObject.Value<double>("X");

@@ -402,6 +402,16 @@ namespace SAM.Geometry.Spatial
             return true;
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if(transform3D == null)
+            {
+                return null;
+            }    
+
+            return Query.Transform(this, transform3D);
+        }
+
         public static bool operator ==(BoundingBox3D boundingBox3D_1, BoundingBox3D boundingBox3D_2)
         {
             if (ReferenceEquals(boundingBox3D_1, null) && ReferenceEquals(boundingBox3D_2, null))

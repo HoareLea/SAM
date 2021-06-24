@@ -63,6 +63,11 @@ namespace SAM.Geometry.Spatial
             return new Segment3D((Point3D)origin.GetMoved(vector3D), (Vector3D)vector.Clone());
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Point3D Project(Point3D point3D)
         {
             double t = (point3D - origin).DotProduct(vector);

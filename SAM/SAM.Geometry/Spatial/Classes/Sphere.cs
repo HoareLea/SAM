@@ -85,6 +85,16 @@ namespace SAM.Geometry.Spatial
             return new Sphere((Point3D)origin.GetMoved(vector3D), radious);
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             origin = new Point3D(jObject.Value<JObject>("Origin"));

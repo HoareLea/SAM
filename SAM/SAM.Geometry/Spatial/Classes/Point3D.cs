@@ -239,7 +239,17 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
+
         public static bool operator ==(Point3D point3D_1, Point3D point3D_2)
         {
             if (ReferenceEquals(point3D_1, null) && ReferenceEquals(point3D_2, null))

@@ -117,6 +117,16 @@ namespace SAM.Geometry.Spatial
             return Query.On(this, point3D, tolerance);
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
         public static bool operator ==(Triangle3D triangle3D_1, Triangle3D triangle3D_2)
         {
             if (ReferenceEquals(triangle3D_1, null) && ReferenceEquals(triangle3D_2, null))

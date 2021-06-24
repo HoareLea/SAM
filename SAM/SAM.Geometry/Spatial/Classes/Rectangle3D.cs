@@ -74,6 +74,16 @@ namespace SAM.Geometry.Spatial
             return new Rectangle3D((Plane)plane.GetMoved(vector3D), rectangle2D);
         }
 
+        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
+        {
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return Query.Transform(this, transform3D);
+        }
+
         public List<Point3D> GetPoints()
         {
             return rectangle2D.GetPoints().ConvertAll(x => plane.Convert(x));
