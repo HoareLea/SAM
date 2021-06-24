@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -74,6 +75,43 @@ namespace SAM.Geometry.Spatial
 
             List<Planar.Face2D> face2Ds = Planar.Query.Split(face2D, segmentable2Ds, tolerance_Distance);
             return face2Ds?.ConvertAll(x => plane.Convert(x));
+        }
+    
+        public static List<Face3D> Split(this Face3D face3D, IEnumerable<Shell> shells, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if(face3D == null)
+            {
+                return null;
+            }
+
+            List<Face3D> result = new List<Face3D>() { new Face3D(face3D)};
+
+            if(shells == null || shells.Count() == 0)
+            {
+                return result;
+            }
+
+            foreach(Shell shell in shells)
+            {
+                List<Face3D> face3Ds_Shell = new List<Face3D>();
+
+                foreach (Face3D face3D_Temp in result)
+                {
+                    List<Face3D> face3Ds_Temp = Split(face3D_Temp, shell, tolerance_Angle, tolerance_Distance);
+                    if(face3Ds_Temp != null && face3Ds_Temp.Count != 0)
+                    {
+                        face3Ds_Shell.AddRange(face3Ds_Temp);
+                    }
+                    else
+                    {
+                        face3Ds_Shell.Add(face3D_Temp);
+                    }
+                }
+
+                result = face3Ds_Shell;
+            }
+
+            return result;
         }
     }
 }

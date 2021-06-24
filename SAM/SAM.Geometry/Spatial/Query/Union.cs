@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Spatial
 {
@@ -143,6 +144,73 @@ namespace SAM.Geometry.Spatial
             if(result.Count != shells.Count())
             {
                 result = Union(result, silverSpacing, tolerance_Angle, tolerance_Distance);
+            }
+
+            return result;
+        }
+    
+        public static List<Face3D> Union(this IEnumerable<Face3D> face3Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if(face3Ds == null)
+            {
+                return null;
+            }
+
+            List<Face3D> result = new List<Face3D>();
+            if(face3Ds.Count() == 0)
+            {
+                return result;
+            }
+
+            List<Face3D> face3Ds_Temp = new List<Face3D>(face3Ds);
+            face3Ds_Temp.RemoveAll(x => x == null || !x.IsValid());
+
+            while(face3Ds_Temp.Count > 0)
+            {
+                Face3D face3D_Temp = face3Ds_Temp[0];
+
+                Plane plane = face3D_Temp.GetPlane();
+                if(plane == null)
+                {
+                    face3Ds_Temp.RemoveAt(0);
+                    continue;
+                }
+
+                List<Face3D> face3Ds_Coplanar = face3Ds_Temp.FindAll(x => plane.Coplanar(x.GetPlane(), tolerance));
+                face3Ds_Coplanar.ForEach(x => face3Ds_Temp.Remove(x));
+
+                switch(face3Ds_Coplanar.Count)
+                {
+                    case 0:
+                        return null;
+
+                    case 1:
+                        result.Add(face3Ds_Coplanar[0]);
+                        break;
+
+                    default:
+
+                        List<Face2D> face2Ds = face3Ds_Coplanar.ConvertAll(x => plane.Convert(x)).Union(tolerance);
+                        if(face2Ds == null || face2Ds.Count == 0)
+                        {
+                            result.AddRange(face3Ds_Coplanar);
+                        }
+                        else
+                        {
+                            foreach(Face2D face2D in face2Ds)
+                            {
+                                if(face2D == null || !face2D.IsValid())
+                                {
+                                    continue;
+                                }
+
+                                result.Add(plane.Convert(face2D));
+                            }
+                        }
+
+                        break;
+                }
+
             }
 
             return result;

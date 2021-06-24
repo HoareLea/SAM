@@ -196,6 +196,7 @@
     <Compile Include="Spatial\Query\External.cs" />
     <Compile Include="Spatial\Query\Clone.cs" />
     <Compile Include="Spatial\Query\Difference.cs" />
+    <Compile Include="Spatial\Query\InternalFace3Ds.cs" />
     <Compile Include="Spatial\Query\Shell.cs" />
     <Compile Include="Spatial\Query\SimplifyByDistance.cs" />
     <Compile Include="Spatial\Query\SimplifyByAngle.cs" />
