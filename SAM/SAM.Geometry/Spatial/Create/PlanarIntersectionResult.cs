@@ -417,8 +417,8 @@ namespace SAM.Geometry.Spatial
                 if (plane_1.Distance(plane_2) > tolerance_Distance)
                     return new PlanarIntersectionResult(plane_1);
 
-                face3D_2 = plane_1.Project(face3D_2);
-                return new PlanarIntersectionResult(plane_1, Planar.Query.Intersection<ISAMGeometry2D>(plane_1.Convert(face3D_1), plane_1.Convert(face3D_2))?.ConvertAll(x => plane_1.Convert(x)));
+                Face3D face3D_Temp = plane_1.Project(face3D_2);
+                return new PlanarIntersectionResult(plane_1, Planar.Query.Intersection<ISAMGeometry2D>(plane_1.Convert(face3D_1), plane_1.Convert(face3D_Temp))?.ConvertAll(x => plane_1.Convert(x)));
             }
 
             PlanarIntersectionResult planarIntersectionResult_1 = PlanarIntersectionResult(plane_1, face3D_2, tolerance_Angle, tolerance_Distance);
@@ -463,6 +463,36 @@ namespace SAM.Geometry.Spatial
 
 
             return new PlanarIntersectionResult(plane_1, geometry3Ds);
+        }
+    
+        public static PlanarIntersectionResult PlanarIntersectionResult(IClosedPlanar3D closedPlanar3D_1, IClosedPlanar3D closedPlanar3D_2, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if(closedPlanar3D_1 == null || closedPlanar3D_2 == null)
+            {
+                return null;
+            }
+            
+            Face3D face3D_1 = null;
+            if(closedPlanar3D_1 is Face3D)
+            {
+                face3D_1 = (Face3D)closedPlanar3D_1;
+            }
+            else
+            {
+                face3D_1 = new Face3D(closedPlanar3D_1);
+            }
+
+            Face3D face3D_2 = null;
+            if (closedPlanar3D_2 is Face3D)
+            {
+                face3D_2 = (Face3D)closedPlanar3D_2;
+            }
+            else
+            {
+                face3D_2 = new Face3D(closedPlanar3D_2);
+            }
+
+            return PlanarIntersectionResult(face3D_1, face3D_2, tolerance_Angle, tolerance_Distance);
         }
     }
 }

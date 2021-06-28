@@ -194,5 +194,35 @@ namespace SAM.Geometry.Planar
 
             return null;
         }
+
+        public static List<T> Intersection<T>(this IClosed2D closed2D_1, IClosed2D closed2D_2, double tolerance = Core.Tolerance.MicroDistance) where T : ISAMGeometry2D
+        {
+            if(closed2D_1 == null || closed2D_2 == null)
+            {
+                return null;
+            }
+
+            Face2D face2D_1 = null;
+            if(closed2D_1 is Face2D)
+            {
+                face2D_1 = (Face2D)closed2D_1;
+            }
+            else
+            {
+                face2D_1 = new Face2D(closed2D_1);
+            }
+
+            Face2D face2D_2 = null;
+            if (closed2D_2 is Face2D)
+            {
+                face2D_2 = (Face2D)closed2D_2;
+            }
+            else
+            {
+                face2D_2 = new Face2D(closed2D_2);
+            }
+
+            return Intersection<T>(face2D_1, face2D_2, tolerance);
+        }
     }
 }
