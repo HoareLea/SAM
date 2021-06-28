@@ -276,7 +276,7 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segmentable2Ds_All, tolerance);
+            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segmentable2Ds_All.Split(tolerance), tolerance);
             if(polygon2Ds == null || polygon2Ds.Count == 0)
             {
                 return null;
