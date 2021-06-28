@@ -4,7 +4,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public class Room : Core.SAMObject, ISAMGeometry3DObject
+    public class Room : Core.SAMObject, ISAMGeometry3DObject, IArchitecturalObject
     {
         private Point3D location;
 
@@ -31,6 +31,13 @@ namespace SAM.Architectural
             get
             {
                 return location;
+            }
+            set
+            {
+                if(value != null)
+                {
+                    location = value;
+                }
             }
         }
 
