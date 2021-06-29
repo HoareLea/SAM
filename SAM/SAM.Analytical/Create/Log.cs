@@ -556,7 +556,7 @@ namespace SAM.Analytical
                 if (panelType != PanelType.Air)
                     result.Add(string.Format("{0} Panel (Guid: {1}) has no construction assigned.", name, panel.Guid), LogRecordType.Error);
             }
-            else
+            else if(panelType != PanelType.Shade)
             {
                 PanelGroup panelGroup_Construction = construction.PanelType().PanelGroup();
                 if(panelGroup_Construction != PanelGroup.Undefined)
@@ -725,6 +725,11 @@ namespace SAM.Analytical
                 name = "???";
             }
 
+            if(!space.TryGetValue(SpaceParameter.Area, out double area) || double.IsNaN(area))
+            {
+                result.Add(string.Format("Space (Guid: {1}) has no area assigned.", name, space.Guid), LogRecordType.Error);
+            }
+
             InternalCondition internalCondition = space.InternalCondition;
             if(internalCondition == null)
                 result.Add(string.Format("{0} Space (Guid: {1}) has no InternalCondition assigned.", name, space.Guid), LogRecordType.Warning);
@@ -880,7 +885,7 @@ namespace SAM.Analytical
         }
 
 
-        private static Log Log(this IEnumerable<ConstructionLayer> constructionLayers, MaterialLibrary materialLibrary, string name, System.Guid guid)
+        private static Log Log(this IEnumerable<ConstructionLayer> constructionLayers, MaterialLibrary materialLibrary, string name, Guid guid)
         {
             if (constructionLayers == null)
                 return null;
