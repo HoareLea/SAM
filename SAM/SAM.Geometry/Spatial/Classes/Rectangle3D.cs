@@ -170,7 +170,7 @@ namespace SAM.Geometry.Spatial
 
         public override ISAMGeometry Clone()
         {
-            return new Rectangle3D(plane, rectangle2D);
+            return new Rectangle3D(plane, (Rectangle2D)rectangle2D?.Clone());
         }
     }
 }

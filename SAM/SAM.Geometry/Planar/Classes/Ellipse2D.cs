@@ -108,7 +108,7 @@ namespace SAM.Geometry.Planar
 
         public Ellipse2D GetMoved(Vector2D vector2D)
         {
-            return new Ellipse2D((Point2D)center.GetMoved(vector2D), width, height, heightDirection);
+            return new Ellipse2D(center.GetMoved(vector2D), width, height, heightDirection);
         }
 
         public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)

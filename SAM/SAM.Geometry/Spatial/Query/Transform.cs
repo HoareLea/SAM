@@ -152,6 +152,21 @@ namespace SAM.Geometry.Spatial
             return new Sphere(point3D.Transform(matrix4D), sphere.Radious);
         }
 
+        public static Ellipse3D Transform(this Ellipse3D ellipse3D, Transform3D transform3D)
+        {
+            return Transform(ellipse3D, transform3D?.Matrix4D);
+        }
+
+        public static Ellipse3D Transform(this Ellipse3D ellipse3D, Matrix4D matrix4D)
+        {
+            if (matrix4D == null)
+            {
+                return null;
+            }
+
+            return new Ellipse3D(ellipse3D.GetPlane().Transform(matrix4D), ellipse3D.Ellipse2D);
+        }
+
         public static Extrusion Transform(this Extrusion extrusion, Matrix4D matrix4D)
         {
             if (matrix4D == null)
