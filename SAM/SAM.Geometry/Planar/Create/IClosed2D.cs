@@ -27,5 +27,46 @@ namespace SAM.Geometry.Planar
 
             return new Polygon2D(point2Ds);
         }
+
+        public static IClosed2D IClosed2D(this Polycurve2D polycurve2D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(polycurve2D == null)
+            {
+                return null;
+            }
+
+            throw new System.NotImplementedException();
+
+            if(polycurve2D.GetCurves().TrueForAll(x => x is Segment2D))
+            {
+                
+            }
+
+        }
+
+        public static IClosed2D IClosed2D(this IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(closed2D == null)
+            {
+                return null;
+            }
+
+            if(closed2D is Polygon2D)
+            {
+                return IClosed2D((Polygon2D)closed2D, tolerance);
+            }
+
+            if(closed2D is Face2D)
+            {
+                return new Face2D((Face2D)closed2D);
+            }
+
+            if(closed2D is Polycurve2D)
+            {
+                return IClosed2D((Polycurve2D)closed2D, tolerance);
+            }
+
+            throw new System.NotImplementedException();
+        }
     }
 }
