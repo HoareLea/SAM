@@ -42,52 +42,34 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static Point3D Closest(this IClosedPlanar3D closedPlanar3D, Point3D point3D)
+        public static T Closest<T>(this IEnumerable<T> segmentable3Ds, Point3D point3D, out double distance) where T: ISegmentable3D
         {
-            if (closedPlanar3D == null || point3D == null)
-                return null;
+            distance = double.NaN;
+            T result = default;
 
-            Plane plane = closedPlanar3D.GetPlane();
-
-            Planar.Point2D point2D_Converted = plane.Convert(plane.Project(point3D));
-
-            Planar.IClosed2D externalEdge = null;
-            if (closedPlanar3D is Face3D)
-                externalEdge = plane.Convert(((Face3D)closedPlanar3D).GetExternalEdge3D());
-            else
-                externalEdge = plane.Convert(closedPlanar3D);
-
-            if (externalEdge.Inside(point2D_Converted))
-                return plane.Convert(point2D_Converted);
-
-            if (externalEdge is Planar.ISegmentable2D)
-                return plane.Convert(Planar.Query.Closest((Planar.ISegmentable2D)externalEdge, point2D_Converted));
-
-            return null;
-        }
-
-        public static Point3D Closest(this IEnumerable<Point3D> point3Ds, Point3D point3D)
-        {
-            if (point3Ds == null || point3Ds.Count() == 0 || point3D == null)
-                return null;
-
-            Point3D result = null;
-            double distance = double.MaxValue;
-            foreach (Point3D point3D_Temp in point3Ds)
+            if (segmentable3Ds == null || point3D == null)
             {
-                double distance_Temp = point3D_Temp.Distance(point3D);
+                return result;
+            }
 
-                if (distance > distance_Temp)
+            double distance_min = double.MaxValue;
+            foreach(T segmentable3D in segmentable3Ds)
+            {
+                double distance_Temp = segmentable3D.Distance(point3D);
+                if(distance_Temp < distance_min)
                 {
                     distance = distance_Temp;
-                    result = point3D_Temp;
+                    distance_min = distance_Temp;
+                    result = segmentable3D;
                 }
-
-                if (distance == 0)
-                    return result;
             }
 
             return result;
+        }
+
+        public static T Closest<T>(this IEnumerable<T> segmentable3Ds, Point3D point3D) where T: ISegmentable3D
+        {
+            return Closest<T>(segmentable3Ds, point3D, out double distance);
         }
     }
 }

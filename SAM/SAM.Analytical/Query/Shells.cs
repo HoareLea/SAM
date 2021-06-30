@@ -45,7 +45,7 @@ namespace SAM.Analytical
 
                     face3D = new Face3D(face3D.GetExternalEdge3D());
 
-                    PlanarIntersectionResult planarIntersectionResult = plane.Intersection(face3D);
+                    PlanarIntersectionResult planarIntersectionResult = plane.PlanarIntersectionResult(face3D);
                     if (planarIntersectionResult == null)
                         continue;
 

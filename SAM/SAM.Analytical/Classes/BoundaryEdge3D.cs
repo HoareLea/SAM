@@ -54,8 +54,8 @@ namespace SAM.Analytical
             if (curve3D is Segment3D)
             {
                 Segment3D segment3D = (Segment3D)curve3D;
-                Point3D point3D_1 = Geometry.Spatial.Query.Closest(point3Ds, segment3D[0]);
-                Point3D point3D_2 = Geometry.Spatial.Query.Closest(point3Ds, segment3D[1]);
+                Point3D point3D_1 = Geometry.Spatial.Query.ClosestPoint3D(point3Ds, segment3D[0]);
+                Point3D point3D_2 = Geometry.Spatial.Query.ClosestPoint3D(point3Ds, segment3D[1]);
 
                 if (!double.IsNaN(maxDistance))
                 {

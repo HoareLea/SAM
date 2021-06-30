@@ -273,7 +273,7 @@ namespace SAM.Geometry.Spatial
             List<Point3D> result = new List<Point3D>();
             foreach (Face3D face3D in face3Ds)
             {
-                Point3D point3D_Closest = face3D.Closest(point3D);
+                Point3D point3D_Closest = face3D.ClosestPoint3D(point3D);
                 if (point3D_Closest != null)
                     result.Add(point3D_Closest);
             }

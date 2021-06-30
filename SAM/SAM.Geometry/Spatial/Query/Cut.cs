@@ -42,7 +42,7 @@ namespace SAM.Geometry.Spatial
 
         public static List<Face3D> Cut(this Face3D face3D, Plane plane, double tolerance = Core.Tolerance.Distance)
         {
-            PlanarIntersectionResult planarIntersectionResult = plane?.Intersection(face3D, tolerance);
+            PlanarIntersectionResult planarIntersectionResult = plane?.PlanarIntersectionResult(face3D, tolerance);
             if (planarIntersectionResult == null)
                 return null;
 

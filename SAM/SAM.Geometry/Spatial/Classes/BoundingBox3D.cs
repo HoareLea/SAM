@@ -142,7 +142,7 @@ namespace SAM.Geometry.Spatial
 
             foreach (Plane plane in GetPlanes())
             {
-                PlanarIntersectionResult planarIntersectionResult = plane.Intersection(segment3D, tolerance);
+                PlanarIntersectionResult planarIntersectionResult = plane.PlanarIntersectionResult(segment3D, tolerance);
                 if (planarIntersectionResult != null && planarIntersectionResult.Intersecting)
                 {
                     ISAMGeometry3D geometry3D = planarIntersectionResult.Geometry3D;

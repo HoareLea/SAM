@@ -7,7 +7,7 @@ namespace SAM.Geometry.Spatial
     {
         public static Point3D Snap(this IEnumerable<Point3D> point3Ds, Point3D point3D, double maxDistance = double.NaN)
         {
-            Point3D result = point3Ds.Closest(point3D);
+            Point3D result = point3Ds.ClosestPoint3D(point3D);
 
             if (point3D.Distance(result) > maxDistance)
                 result = new Point3D(point3D);
@@ -37,7 +37,7 @@ namespace SAM.Geometry.Spatial
                 return face2Ds?.ConvertAll(x => plane_1.Convert(x));
             }
 
-            PlanarIntersectionResult planarIntersectionResult = plane_1.Intersection(plane_2);
+            PlanarIntersectionResult planarIntersectionResult = plane_1.PlanarIntersectionResult(plane_2, tolerance); //tolerance input updated
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return null;
 

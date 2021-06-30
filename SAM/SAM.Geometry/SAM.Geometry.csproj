@@ -196,6 +196,9 @@
     <Compile Include="Spatial\Modify\SplitFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\ClosestEnd.cs" />
+    <Compile Include="Spatial\Query\ClosestPoint3D.cs" />
+    <Compile Include="Spatial\Query\PlanarIntersectionResult.cs" />
     <Compile Include="Spatial\Query\Reduce.cs" />
     <Compile Include="Spatial\Query\External.cs" />
     <Compile Include="Spatial\Query\Clone.cs" />

@@ -13,7 +13,7 @@ namespace SAM.Geometry.Spatial
         /// <param name="vector3D_2">Direction Vector3D of second line</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns></returns>
-        public static Point3D Intersection(this Point3D point3D_1, Vector3D vector3D_1, Point3D point3D_2, Vector3D vector3D_2, double tolerance = Core.Tolerance.Distance)
+        public static Point3D Intersection(this Point3D point3D_1, Vector3D vector3D_1, Point3D point3D_2, Vector3D vector3D_2, double tolerance = Tolerance.Distance)
         {
             //x = x1 + a1*t = x2 + b1*s
             //y = y1 + a2*t = y2 + b2*s
@@ -45,29 +45,6 @@ namespace SAM.Geometry.Spatial
             double z = point3D_1.Z + vector3D_1.Z * t;
 
             return new Point3D(x, y, z);
-        }
-
-        public static PlanarIntersectionResult Intersection(this Plane plane, Segment3D segment3D, double tolerance = Tolerance.Distance)
-        {
-            return Create.PlanarIntersectionResult(plane, segment3D, tolerance);
-        }
-
-        public static PlanarIntersectionResult Intersection(this Plane plane, IClosedPlanar3D closedPlanar3D, double tolerance = Tolerance.Distance)
-        {
-            if (closedPlanar3D is Face3D)
-                return Intersection(plane, (Face3D)closedPlanar3D, tolerance);
-
-            return Create.PlanarIntersectionResult(plane, closedPlanar3D, tolerance);
-        }
-
-        public static PlanarIntersectionResult Intersection(this Plane plane, Face3D face3D, double tolerance = Tolerance.Distance)
-        {
-            return Create.PlanarIntersectionResult(plane, face3D, tolerance);
-        }
-
-        public static PlanarIntersectionResult Intersection(this Plane plane_1, Plane plane_2, double tolerance = Tolerance.Distance)
-        {
-            return Create.PlanarIntersectionResult(plane_1, plane_2, tolerance);
         }
     }
 }

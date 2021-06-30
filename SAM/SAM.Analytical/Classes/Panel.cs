@@ -324,7 +324,7 @@ namespace SAM.Analytical
             if (face3D == null)
                 return null;
 
-            PlanarIntersectionResult planarIntersectionResult = plane.Intersection(face3D);
+            PlanarIntersectionResult planarIntersectionResult = plane.PlanarIntersectionResult(face3D);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return null;
 
@@ -350,7 +350,7 @@ namespace SAM.Analytical
             if (face3D == null)
                 return null;
 
-            PlanarIntersectionResult planarIntersectionResult = plane.Intersection(face3D);
+            PlanarIntersectionResult planarIntersectionResult = plane.PlanarIntersectionResult(face3D);
             if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 return null;
 
