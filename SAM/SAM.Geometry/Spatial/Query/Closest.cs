@@ -42,10 +42,11 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static T Closest<T>(this IEnumerable<T> segmentable3Ds, Point3D point3D, out double distance) where T: ISegmentable3D
+        public static T Closest<T>(this IEnumerable<T> segmentable3Ds, Point3D point3D, out double distance, out Point3D point3D_Closest) where T: ISegmentable3D
         {
             distance = double.NaN;
             T result = default;
+            point3D_Closest = null;
 
             if (segmentable3Ds == null || point3D == null)
             {
@@ -55,7 +56,7 @@ namespace SAM.Geometry.Spatial
             double distance_min = double.MaxValue;
             foreach(T segmentable3D in segmentable3Ds)
             {
-                double distance_Temp = segmentable3D.Distance(point3D);
+                Point3D point3D_Closest_Temp = segmentable3D.ClosestPoint3D(point3D, out double distance_Temp);
                 if(distance_Temp < distance_min)
                 {
                     distance = distance_Temp;
@@ -69,7 +70,31 @@ namespace SAM.Geometry.Spatial
 
         public static T Closest<T>(this IEnumerable<T> segmentable3Ds, Point3D point3D) where T: ISegmentable3D
         {
-            return Closest<T>(segmentable3Ds, point3D, out double distance);
+            return Closest<T>(segmentable3Ds, point3D, out double distance, out Point3D point3D_Closest);
+        }
+
+        public static Point3D Closest(this IEnumerable<Point3D> point3Ds, Point3D point3D)
+        {
+            if (point3Ds == null || point3Ds.Count() == 0 || point3D == null)
+                return null;
+
+            Point3D result = null;
+            double distance = double.MaxValue;
+            foreach (Point3D point3D_Temp in point3Ds)
+            {
+                double distance_Temp = point3D_Temp.Distance(point3D);
+
+                if (distance > distance_Temp)
+                {
+                    distance = distance_Temp;
+                    result = point3D_Temp;
+                }
+
+                if (distance == 0)
+                    return result;
+            }
+
+            return result;
         }
     }
 }

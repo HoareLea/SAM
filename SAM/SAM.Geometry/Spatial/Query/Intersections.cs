@@ -72,5 +72,27 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+    
+        public static List<Point3D> Intersections(this ISegmentable3D segmentable3D, IEnumerable<ISegmentable3D> segmentable3Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if(segmentable3D == null || segmentable3Ds == null)
+            {
+                return null;
+            }
+
+            List<Point3D> result = new List<Point3D>();
+            foreach(ISegmentable3D segmentable3D_Temp in segmentable3Ds)
+            {
+                List<Point3D> point3Ds_Temp = segmentable3D.Intersections(segmentable3D_Temp);
+                if(point3Ds_Temp == null || point3Ds_Temp.Count == 0)
+                {
+                    continue;
+                }
+
+                result.AddRange(point3Ds_Temp);
+            }
+
+            return result;
+        }
     }
 }

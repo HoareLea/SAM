@@ -7,7 +7,7 @@ namespace SAM.Geometry.Spatial
     {
         public static Point3D Snap(this IEnumerable<Point3D> point3Ds, Point3D point3D, double maxDistance = double.NaN)
         {
-            Point3D result = point3Ds.ClosestPoint3D(point3D);
+            Point3D result = point3Ds.Closest(point3D);
 
             if (point3D.Distance(result) > maxDistance)
                 result = new Point3D(point3D);

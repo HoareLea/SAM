@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -29,28 +28,51 @@ namespace SAM.Geometry.Spatial
             return null;
         }
 
-        public static Point3D ClosestPoint3D(this IEnumerable<Point3D> point3Ds, Point3D point3D)
+        public static Point3D ClosestPoint3D(this ISegmentable3D segmentable3D, Point3D point3D, out double distance)
         {
-            if (point3Ds == null || point3Ds.Count() == 0 || point3D == null)
-                return null;
+            distance = double.NaN;
 
-            Point3D result = null;
-            double distance = double.MaxValue;
-            foreach (Point3D point3D_Temp in point3Ds)
+            if(segmentable3D == null || point3D == null)
             {
-                double distance_Temp = point3D_Temp.Distance(point3D);
+                return null;
+            }
 
-                if (distance > distance_Temp)
+            List<Segment3D> segment3Ds = segmentable3D.GetSegments();
+            if(segment3Ds == null || segment3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            double distance_Min = double.MaxValue;
+            Point3D result = null;
+            foreach(Segment3D segment3D in segment3Ds)
+            {
+                if(segment3D == null)
                 {
-                    distance = distance_Temp;
-                    result = point3D_Temp;
+                    continue;
                 }
 
-                if (distance == 0)
-                    return result;
+                Point3D point3D_Temp = segment3D.Closest(point3D, true);
+                if(point3D_Temp == null)
+                {
+                    continue;
+                }
+
+                double distance_Temp = point3D_Temp.Distance(point3D);
+                if (distance_Temp < distance_Min)
+                {
+                    distance_Min = distance_Temp;
+                    distance = distance_Min;
+                    result = point3D_Temp;
+                }
             }
 
             return result;
+        }
+
+        public static Point3D ClosestPoint3D(this ISegmentable3D segmentable3D, Point3D point3D)
+        {
+            return ClosestPoint3D(segmentable3D, point3D, out double distance);
         }
     }
 }
