@@ -158,8 +158,10 @@
     <Compile Include="Modify\ReplaceTransparentPanels.cs" />
     <Compile Include="Modify\SetConstructionsDefaultPanelType.cs" />
     <Compile Include="Modify\ReplaceConstruction.cs" />
+    <Compile Include="Modify\UpdateApertureConstructionsByApertureType.cs" />
     <Compile Include="Modify\UpdateApertures.cs" />
     <Compile Include="Modify\UpdateApertureConstructionsByName.cs" />
+    <Compile Include="Modify\UpdateConstructionsByPanelType.cs" />
     <Compile Include="Modify\UpdateConstructionsByName.cs" />
     <Compile Include="Modify\UpdateConstruction.cs" />
     <Compile Include="Modify\MapZones.cs" />

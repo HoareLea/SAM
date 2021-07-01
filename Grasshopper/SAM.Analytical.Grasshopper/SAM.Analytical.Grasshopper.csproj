@@ -116,6 +116,7 @@
     <Compile Include="Component\SAMAnalyticalSetAirflow.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalConditionPerArea.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateApertureConstructionsByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalZoneType.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateZone.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultLibrary.cs" />
@@ -185,7 +186,7 @@
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByMap.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateTypesByName.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateHeatTransferCoefficients.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByName.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalGetAdjacentSpaceNames.cs" />
     <Compile Include="Component\SAMAnalyticalApertureConstructions.cs" />
