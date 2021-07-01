@@ -219,7 +219,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, IEnumerable<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, IEnumerable<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             AdjacencyCluster result = new AdjacencyCluster();
 
@@ -236,7 +236,7 @@ namespace SAM.Analytical
 
                     names.Add(space.Name);
 
-                    List<Shell> spaces_Shell = Query.SpaceShells(shells, point3D, silverSpacing, tolerance);
+                    List<Shell> spaces_Shell = Query.SpaceShells(shells, point3D, silverSpacing, tolerance_Distance);
                     if (spaces_Shell != null && spaces_Shell.Count > 0)
                     {
                         foreach (Shell shell in spaces_Shell)
@@ -273,7 +273,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    if (!keyValuePair.Key.Inside(point3D, silverSpacing, tolerance))
+                    if (!keyValuePair.Key.Inside(point3D, silverSpacing, tolerance_Distance))
                     {
                         spaces_Shell.Add(space);
                     }
@@ -301,10 +301,10 @@ namespace SAM.Analytical
                 if (plane == null)
                     continue;
 
-                if (face3D.GetArea() < tolerance)
+                if (face3D.GetArea() < tolerance_Distance)
                     continue;
 
-                tuples_Panel.Add(new Tuple<Plane, Face3D, Panel, BoundingBox3D>(plane, face3D, panel, face3D.GetBoundingBox(tolerance)));
+                tuples_Panel.Add(new Tuple<Plane, Face3D, Panel, BoundingBox3D>(plane, face3D, panel, face3D.GetBoundingBox(tolerance_Distance)));
             }
 
             tuples_Panel.Sort((x, y) => y.Item2.GetArea().CompareTo(x.Item2.GetArea()));
@@ -312,6 +312,10 @@ namespace SAM.Analytical
             int count = 1;
 
             List<Tuple<Point3D, Panel, BoundingBox3D>> tuples_Panel_New = new List<Tuple<Point3D, Panel, BoundingBox3D>>();
+
+            List<Shell> shells_Temp = new List<Shell>(shells);
+            shells_Temp = shells_Temp.ConvertAll(x => x.Merge(tolerance_Distance));
+            shells_Temp.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
 
             //Creating Shell Panels
             foreach (Shell shell in shells)
@@ -339,7 +343,7 @@ namespace SAM.Analytical
                     }
                     while (names.Contains(name));
 
-                    Space space = new Space(name, shell.CalculatedInternalPoint3D(silverSpacing, tolerance));
+                    Space space = new Space(name, shell.CalculatedInternalPoint3D(silverSpacing, tolerance_Distance));
                     names.Add(name);
                     spaces_Shell.Add(space);
 
@@ -367,7 +371,7 @@ namespace SAM.Analytical
                 if (boundingBox3D_Shell == null)
                     continue;
 
-                List<Tuple<Plane, Face3D, Panel, BoundingBox3D>> tuples_Panel_Temp = tuples_Panel.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance));
+                List<Tuple<Plane, Face3D, Panel, BoundingBox3D>> tuples_Panel_Temp = tuples_Panel.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
                 if (tuples_Panel_Temp == null || tuples_Panel_Temp.Count == 0)
                     continue;
                 
@@ -377,12 +381,12 @@ namespace SAM.Analytical
                     if (plane == null)
                         continue;
 
-                    if(face3D.ThinnessRatio() < tolerance)
+                    if(face3D.ThinnessRatio() < tolerance_Distance)
                     {
                         continue;
                     }
 
-                    Point3D point3D_Internal = face3D.InternalPoint3D();
+                    Point3D point3D_Internal = face3D.InternalPoint3D(tolerance_Distance);
                     if (point3D_Internal == null)
                         continue;
 
@@ -390,7 +394,7 @@ namespace SAM.Analytical
 
                     Panel panel_New = null;
 
-                    List<Tuple<Point3D, Panel, Face3D>> tuples_Face3D = tuples_Panel_New.FindAll(x => boundingBox3D_Face3D.InRange(x.Item3, tolerance)).ConvertAll(x => new Tuple<Point3D, Panel, Face3D>(x.Item1, x.Item2, x.Item2.GetFace3D()));
+                    List<Tuple<Point3D, Panel, Face3D>> tuples_Face3D = tuples_Panel_New.FindAll(x => boundingBox3D_Face3D.InRange(x.Item3, tolerance_Distance)).ConvertAll(x => new Tuple<Point3D, Panel, Face3D>(x.Item1, x.Item2, x.Item2.GetFace3D()));
                     if (tuples_Face3D != null && tuples_Face3D.Count != 0)
                     {
                         List<Tuple<Point3D, Panel, Face3D, double>> tuples_Distance = tuples_Face3D.ConvertAll(x => new Tuple<Point3D, Panel, Face3D, double>(x.Item1, x.Item2, x.Item3, System.Math.Min(x.Item3.Distance(point3D_Internal), face3D.Distance(x.Item1))));
@@ -414,7 +418,7 @@ namespace SAM.Analytical
                             if (plane_Panel.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_Panel.Normal.SmallestAngle(plane.Normal) > maxAngle)
                                 continue;
 
-                            double distance = tuple_Panel.Item2.Distance(face3D, tolerance_Distance: tolerance);
+                            double distance = tuple_Panel.Item2.Distance(face3D, tolerance_Distance: tolerance_Distance);
 
                             if (distance > maxDistance)
                                 continue;
@@ -432,8 +436,8 @@ namespace SAM.Analytical
                         Face2D face2D_Shell = plane.Convert(face3D);
                         for (int i = tuples_Face2D.Count - 1; i >= 0; i--)
                         {
-                            List<Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D_Shell, tuples_Face2D[i].Item1, tolerance);
-                            face2Ds_Intersection?.RemoveAll(x => x == null || x.GetArea() <= tolerance);
+                            List<Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D_Shell, tuples_Face2D[i].Item1, tolerance_Distance);
+                            face2Ds_Intersection?.RemoveAll(x => x == null || x.GetArea() <= tolerance_Distance);
 
                             if (face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
                                 tuples_Face2D.RemoveAt(i);
@@ -459,7 +463,7 @@ namespace SAM.Analytical
                         panel_New = new Panel(guid, panel, face3D, null, true, minArea);
                         result.AddObject(panel_New);
 
-                        tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance)));
+                        tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance_Distance)));
                     }
 
                     if (panel_New == null)
@@ -486,13 +490,13 @@ namespace SAM.Analytical
                 if (plane == null)
                     return;
 
-                BoundingBox3D boundingBox3D = face3D.GetBoundingBox(maxDistance + tolerance);
+                BoundingBox3D boundingBox3D = face3D.GetBoundingBox(maxDistance + tolerance_Distance);
 
                 List<Face2D> face2Ds = new List<Face2D>() { plane.Convert(face3D) };
 
                 foreach (Tuple<Point3D, Panel, BoundingBox3D> tuple_Panel_New in tuples_Panel_New)
                 {
-                    if (!boundingBox3D.InRange(tuple_Panel_New.Item3, tolerance))
+                    if (!boundingBox3D.InRange(tuple_Panel_New.Item3, tolerance_Distance))
                         continue;
 
                     Plane plane_New = tuple_Panel_New.Item2.Plane;
@@ -500,7 +504,7 @@ namespace SAM.Analytical
                     if (plane_New.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_New.Normal.SmallestAngle(plane.Normal) > maxAngle)
                         continue;
 
-                    double distance = tuple_Panel_New.Item2.GetFace3D().Distance(face3D, tolerance_Distance: tolerance);
+                    double distance = tuple_Panel_New.Item2.GetFace3D().Distance(face3D, tolerance_Angle, tolerance_Distance);
 
                     if (distance > maxDistance)
                         continue;
@@ -512,7 +516,7 @@ namespace SAM.Analytical
                     List<Face2D> face2Ds_Temp = new List<Face2D>();
                     foreach (Face2D face2D_Temp in face2Ds)
                     {
-                        List<Face2D> face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Temp, face2D, tolerance);
+                        List<Face2D> face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Temp, face2D, tolerance_Distance);
                         face2Ds_Difference?.RemoveAll(x => x == null || x.GetArea() <= minArea);
                         if (face2Ds_Difference == null || face2Ds_Difference.Count == 0)
                             continue;
@@ -558,13 +562,13 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, double offset = 0.1, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, double offset = 0.1, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {     
-            List<Shell> shells = panels.Shells(offset, maxDistance, tolerance);
+            List<Shell> shells = panels.Shells(offset, maxDistance, tolerance_Distance);
             if (shells == null || shells.Count == 0)
                 return null;
 
-            return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, minArea, maxDistance, maxAngle, silverSpacing, tolerance);
+            return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance, tolerance_Angle);
         }
 
         public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, IEnumerable<double> elevations, IEnumerable<double> offsets = null, IEnumerable<double> auxiliaryElevations = null, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double snapTolerance = Tolerance.MacroDistance, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
