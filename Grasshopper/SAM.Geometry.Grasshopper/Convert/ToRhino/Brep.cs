@@ -67,9 +67,32 @@ namespace SAM.Geometry.Grasshopper
             if (face3D == null)
                 return null;
 
-            List<IClosedPlanar3D> edges = face3D.GetEdge3Ds();
-            if (edges == null || edges.Count == 0)
+            IClosedPlanar3D externalEdge3D = face3D.GetExternalEdge3D();
+            if(externalEdge3D == null || !externalEdge3D.IsValid())
+            {
                 return null;
+            }
+
+            List<IClosedPlanar3D> edges = new List<IClosedPlanar3D>() { externalEdge3D };
+
+            List<IClosedPlanar3D> internalEdge3Ds = face3D.GetInternalEdge3Ds();
+            if (internalEdge3Ds != null && internalEdge3Ds.Count != 0)
+            {
+                internalEdge3Ds.RemoveAll(x => x == null || !x.IsValid());
+                
+                Orientation orientation_Main = externalEdge3D.Orinetation();
+                if (orientation_Main != Orientation.Undefined && orientation_Main != Orientation.Collinear)
+                {
+                    for (int i = 0; i < internalEdge3Ds.Count; i++)
+                    {
+                        Orientation orientation = internalEdge3Ds[i].Orinetation();
+                        if (orientation != Orientation.Undefined && orientation != Orientation.Collinear)
+                        {
+                            internalEdge3Ds[i].Reverse();
+                        }
+                    }
+                }
+            }
 
             return ToRhino_Brep(edges, tolerance);
         }

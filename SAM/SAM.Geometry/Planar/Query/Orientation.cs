@@ -65,5 +65,16 @@ namespace SAM.Geometry.Planar
 
             return Geometry.Orientation.Undefined;
         }
+
+        public static Orientation Orientation(this IClosed2D closed2D)
+        {
+            ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
+            if(segmentable2D == null)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            return Orientation(segmentable2D.GetPoints(), !(segmentable2D is Triangle2D || segmentable2D is Rectangle2D));
+        }
     }
 }
