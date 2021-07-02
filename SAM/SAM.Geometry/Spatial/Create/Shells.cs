@@ -245,7 +245,20 @@ namespace SAM.Geometry.Spatial
                         face3Ds_Shell.Add(face3D_Bottom);
                     }
 
-                    result.Add(new Shell(face3Ds_Shell));
+                    if(face3Ds_Shell != null && face3Ds_Shell.Count > 0)
+                    {
+                        Shell shell = new Shell(face3Ds_Shell);
+                        Shell shell_Merge = shell.Merge(tolerance);
+                        if (shell_Merge != null)
+                        {
+                            shell = shell_Merge;
+                        }
+
+                        if (shell != null)
+                        {
+                            result.Add(shell);
+                        }
+                    }
                 }
             }
 

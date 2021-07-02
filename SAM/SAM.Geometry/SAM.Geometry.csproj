@@ -69,6 +69,7 @@
     <Compile Include="Convert\ToSAM\Polygon2D.cs" />
     <Compile Include="Convert\ToSAM\Point2D.cs" />
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />
+    <Compile Include="Enums\EdgeOrientationMethod.cs" />
     <Compile Include="Enums\Padding.cs" />
     <Compile Include="Planar\Query\Reduce.cs" />
     <Compile Include="Spatial\Classes\Ellipse3D.cs" />
