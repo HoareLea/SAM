@@ -88,7 +88,7 @@ namespace SAM.Geometry.Planar
         }
 
 
-        internal static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, bool orientInternalEdges = true)
+        internal static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, bool orientInternalEdges = true, double tolerance = Core.Tolerance.Distance)
         {
             Face2D result = new Face2D(externalEdge);
             if (internalEdges != null && internalEdges.Count() > 0)
@@ -96,7 +96,7 @@ namespace SAM.Geometry.Planar
                 result.internalEdge2Ds = new List<IClosed2D>();
                 foreach (IClosed2D closed2D in internalEdges)
                 {
-                    if (externalEdge.Inside(closed2D))
+                    if (externalEdge.Inside(closed2D, tolerance))
                     {
                         IClosed2D closed2D_Temp = (IClosed2D)closed2D.Clone();
                         if (orientInternalEdges)
@@ -113,7 +113,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        internal static Face2D Create(IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded, bool orientInternalEdges = true)
+        internal static Face2D Create(IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded, bool orientInternalEdges = true, double tolerance = Core.Tolerance.Distance)
         {
             edges_Excluded = null;
 
@@ -133,7 +133,7 @@ namespace SAM.Geometry.Planar
             edges_Excluded = new List<IClosed2D>();
             foreach (IClosed2D edge_Temp in edges_Temp)
             {
-                if (!edge_Max.Inside(edge_Temp))
+                if (!edge_Max.Inside(edge_Temp, tolerance))
                 {
                     edges_Excluded.Add(edge_Temp);
                     continue;
@@ -144,12 +144,15 @@ namespace SAM.Geometry.Planar
 
                 if (edge_Temp is Polygon2D && edge_Max is Polygon2D)
                 {
-                    IClosed2D edge = result.InternalEdge2Ds.Find(x => ((Polygon2D)x).Similar((Polygon2D)edge_Temp));
+                    if (((Polygon2D)edge_Max).Similar((Polygon2D)edge_Temp, tolerance))
+                        continue;
+
+                    IClosed2D edge = result.InternalEdge2Ds.Find(x => ((Polygon2D)x).Similar((Polygon2D)edge_Temp, tolerance));
                     if (edge != null)
                         continue;
                 }
 
-                IClosed2D internalEdge = result.InternalEdge2Ds.Find(x => x.InRange(edge_Temp as ISegmentable2D));
+                IClosed2D internalEdge = result.InternalEdge2Ds.Find(x => x.InRange(edge_Temp as ISegmentable2D, tolerance));
                 if(internalEdge != null)
                 {
                     if (!edges_Excluded.Contains(internalEdge))
@@ -177,10 +180,10 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        internal static Face2D Create(IEnumerable<IClosed2D> edges, bool orientInternalEdges = true)
+        internal static Face2D Create(IEnumerable<IClosed2D> edges, bool orientInternalEdges = true, double tolerance = Core.Tolerance.Distance)
         {
-            List<Planar.IClosed2D> edges_Excluded = null;
-            return Create(edges, out edges_Excluded, orientInternalEdges);
+            List<IClosed2D> edges_Excluded = null;
+            return Create(edges, out edges_Excluded, orientInternalEdges, tolerance);
         }
     }
 }

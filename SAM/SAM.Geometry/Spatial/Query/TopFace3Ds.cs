@@ -52,11 +52,11 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            List<Planar.Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segmentable2Ds, tolerance);
-            if (polygon2Ds == null || polygon2Ds.Count == 0)
+            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(segmentable2Ds, tolerance);
+            if (face2Ds == null || face2Ds.Count == 0)
                 return result;
 
-            List<Planar.Point2D> point2Ds = polygon2Ds.ConvertAll(x => x.GetInternalPoint2D());
+            List<Planar.Point2D> point2Ds = face2Ds.ConvertAll(x => x.GetInternalPoint2D());
 
             Vector3D vector3D = new Vector3D(0, 0, boundingBox3D.Height);
 

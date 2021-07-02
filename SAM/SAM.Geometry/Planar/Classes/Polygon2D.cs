@@ -121,7 +121,7 @@ namespace SAM.Geometry.Planar
         public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if (closed2D is ISegmentable2D)
-                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance));
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance) || On(x, tolerance));
 
             throw new NotImplementedException();
         }

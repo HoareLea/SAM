@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NetTopologySuite.Geometries;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -41,6 +42,41 @@ namespace SAM.Geometry.Planar
                 List<Face2D> faces2D_Inside = face2Ds.FindAll(x => face2D.Inside(x.InternalPoint2D()));
                 if (faces2D_Inside.Count != 0)
                     continue;
+
+                result.Add(face2D);
+            }
+
+            return result;
+        }
+
+        public static List<Face2D> Face2Ds<T>(this IEnumerable<T> segmentable2Ds, double tolerance = Core.Tolerance.MicroDistance) where T: ISegmentable2D
+        {
+            if (segmentable2Ds == null)
+                return null;
+
+            List<Segment2D> segment2Ds = new List<Segment2D>();
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
+            {
+                if (segmentable2D == null)
+                    continue;
+
+                List<Segment2D> segment2Ds_Temp = segmentable2D.GetSegments();
+                if (segment2Ds_Temp != null && segment2Ds_Temp.Count > 0)
+                    segment2Ds.AddRange(segment2Ds_Temp);
+            }
+
+            List<Polygon> polygons = segment2Ds.ToNTS_Polygons(tolerance);
+            if (polygons == null)
+                return null;
+
+            List<Face2D> result = new List<Face2D>();
+            foreach (Polygon polygon in polygons)
+            {
+                Face2D face2D = polygon?.ToSAM(tolerance);
+                if (face2D == null || !face2D.IsValid())
+                {
+                    continue;
+                }
 
                 result.Add(face2D);
             }

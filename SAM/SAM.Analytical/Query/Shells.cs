@@ -71,11 +71,12 @@ namespace SAM.Analytical
                 //segment2Ds = segment2Ds.ConvertAll(x => Geometry.Planar.Query.Extend(x, snapTolerance, true, true));
                 segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
-                List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance);
-                if (polygon2Ds == null || polygon2Ds.Count == 0)
-                    continue;
+                //List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance);
+                //if (polygon2Ds == null || polygon2Ds.Count == 0)
+                //    continue;
 
-                List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
+                //List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
+                List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds, tolerance);
                 if (face2Ds == null || face2Ds.Count == 0)
                     continue;
 
