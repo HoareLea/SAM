@@ -333,35 +333,35 @@ namespace SAM.Geometry.Spatial
             return Create(plane, externalEdge_2D, internalEdges_2D);
         }
 
-        public static Face3D Create(Plane plane, IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, bool orientInternalEdges = true)
+        public static Face3D Create(Plane plane, IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
         {
             if (plane == null || externalEdge == null)
                 return null;
 
-            Face2D face2D = Planar.Face2D.Create(externalEdge, internalEdges, orientInternalEdges);
+            Face2D face2D = Planar.Face2D.Create(externalEdge, internalEdges, edgeOrientationMethod);
             if (face2D == null)
                 return null;
 
             return new Face3D(plane, face2D);
         }
 
-        public static Face3D Create(Plane plane, IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded, bool orientInternalEdges = true)
+        public static Face3D Create(Plane plane, IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
         {
             edges_Excluded = null;
 
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            Face2D face2D = Planar.Face2D.Create(edges, out edges_Excluded, orientInternalEdges);
+            Face2D face2D = Planar.Face2D.Create(edges, out edges_Excluded, edgeOrientationMethod);
             return new Face3D(plane, face2D);
         }
 
-        public static Face3D Create(Plane plane, IEnumerable<IClosed2D> edges, bool orientInternalEdges = true)
+        public static Face3D Create(Plane plane, IEnumerable<IClosed2D> edges, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
         {
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            return new Face3D(plane, Planar.Face2D.Create(edges, orientInternalEdges));
+            return new Face3D(plane, Planar.Face2D.Create(edges, edgeOrientationMethod));
         }
     }
 }

@@ -207,7 +207,7 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            return Face2D.Create(externalEdge, internalEdges, false);
+            return Face2D.Create(externalEdge, internalEdges, EdgeOrientationMethod.Undefined);
         }
 
         public static List<Point2D> Snap(this IEnumerable<Point2D> point2Ds_ToBeSnapped, IEnumerable<Point2D> point2Ds_Snap, double tolerance = Core.Tolerance.Distance)

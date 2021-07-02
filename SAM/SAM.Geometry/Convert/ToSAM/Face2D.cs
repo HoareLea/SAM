@@ -44,7 +44,7 @@ namespace SAM.Geometry
                 }
             }
 
-            return Face2D.Create(polygon2D, polygon2Ds, true);
+            return Face2D.Create(polygon2D, polygon2Ds, EdgeOrientationMethod.Opposite);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace SAM.Geometry
                 }
             }
 
-            return Face2D.Create(polygon2D, polygon2Ds, true);
+            return Face2D.Create(polygon2D, polygon2Ds, EdgeOrientationMethod.Opposite);
         }
     }
 }

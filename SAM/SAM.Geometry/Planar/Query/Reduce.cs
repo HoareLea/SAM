@@ -48,7 +48,7 @@ namespace SAM.Geometry.Planar
                 internalEdge2Ds = internalEdge2Ds.ConvertAll(x => Reduce(x, minDistance));
             }
 
-            return Create.Face2D(externalEdge2D, internalEdge2Ds, false);
+            return Create.Face2D(externalEdge2D, internalEdge2Ds, EdgeOrientationMethod.Undefined);
         }
 
         public static IClosed2D Reduce(IClosed2D closed2D, double minDistance)

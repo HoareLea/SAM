@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Create
     {
-        public static List<Face2D> Face2Ds(this IEnumerable<IClosed2D> edges, bool orientInternalEdges = true)
+        public static List<Face2D> Face2Ds(this IEnumerable<IClosed2D> edges, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
         {
             if (edges == null)
                 return null;
@@ -19,7 +19,7 @@ namespace SAM.Geometry.Planar
             while (edges_Current.Count > 0)
             {
                 List<IClosed2D> edges_Excluded = null;
-                Face2D face2D = Create.Face2D(edges_Current, out edges_Excluded, orientInternalEdges);
+                Face2D face2D = Create.Face2D(edges_Current, out edges_Excluded, edgeOrientationMethod);
                 if (face2D == null)
                     break;
 

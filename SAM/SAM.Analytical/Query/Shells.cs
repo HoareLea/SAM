@@ -226,7 +226,7 @@ namespace SAM.Analytical
                     List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance_Distance);
                     if(polygon2Ds != null && polygon2Ds.Count != 0)
                     {
-                        face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
+                        face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, Geometry.EdgeOrientationMethod.Opposite);
                         if(face2Ds != null && face2Ds.Count != 0)
                         {
                             List<Geometry.Planar.IClosed2D> closed2Ds = Geometry.Planar.Query.Holes(face2Ds);
@@ -266,7 +266,7 @@ namespace SAM.Analytical
                     List<Geometry.Planar.Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds, tolerance_Distance);
                     if (polygon2Ds != null && polygon2Ds.Count != 0)
                     {
-                        face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
+                        face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, Geometry.EdgeOrientationMethod.Opposite);
                         if (face2Ds != null && face2Ds.Count != 0)
                         {
                             List<Geometry.Planar.IClosed2D> closed2Ds = Geometry.Planar.Query.Holes(face2Ds);

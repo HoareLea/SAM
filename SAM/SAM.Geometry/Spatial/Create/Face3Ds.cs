@@ -5,12 +5,12 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Create
     {
-        public static List<Face3D> Face3Ds(this IEnumerable<Planar.IClosed2D> edges, Plane plane, bool orientInternalEdges = true)
+        public static List<Face3D> Face3Ds(this IEnumerable<Planar.IClosed2D> edges, Plane plane, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
         {
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(edges, orientInternalEdges);
+            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(edges, edgeOrientationMethod);
             if (face2Ds == null)
                 return null;
 
@@ -21,7 +21,7 @@ namespace SAM.Geometry.Spatial
             return face2Ds.ConvertAll(x => new Face3D(plane, x));
         }
 
-        public static List<Face3D> Face3Ds(this IEnumerable<Polygon3D> polygon3Ds, bool orientInternalEdges = true, double tolerance = Core.Tolerance.Distance)
+        public static List<Face3D> Face3Ds(this IEnumerable<Polygon3D> polygon3Ds, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon3Ds == null)
                 return null;
@@ -50,7 +50,7 @@ namespace SAM.Geometry.Spatial
                 polygon3Ds_Temp.RemoveAll(x => polygon3Ds_Plane.Contains(x));
 
                 IEnumerable<Planar.IClosed2D> closed2Ds = polygon3Ds_Plane.ConvertAll(x => plane.Convert(plane.Project(x)));
-                List<Face3D> face3Ds = Face3Ds(closed2Ds, plane, orientInternalEdges);
+                List<Face3D> face3Ds = Face3Ds(closed2Ds, plane, edgeOrientationMethod);
                 if (face3Ds != null && face3Ds.Count > 0)
                     result.AddRange(face3Ds);
             }

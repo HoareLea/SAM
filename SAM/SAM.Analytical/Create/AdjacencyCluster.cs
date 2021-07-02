@@ -631,7 +631,7 @@ namespace SAM.Analytical
                 if (polygon2Ds == null || polygon2Ds.Count == 0)
                     continue;
 
-                List<Face2D> face2Ds_New = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
+                List<Face2D> face2Ds_New = Geometry.Planar.Create.Face2Ds(polygon2Ds, Geometry.EdgeOrientationMethod.Opposite);
 
                 List<Face2D> face2Ds_All = new List<Face2D>();
                 face2Ds_All.AddRange(face2Ds_Top);

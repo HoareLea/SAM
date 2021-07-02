@@ -52,7 +52,7 @@ namespace SAM.Geometry.Spatial
 
             List<Planar.Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds, tolerance_Distance);
 
-            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(polygon2Ds, true);
+            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(polygon2Ds, EdgeOrientationMethod.Opposite);
             if (face2Ds == null)
                 return null;
 

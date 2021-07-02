@@ -204,7 +204,7 @@ namespace SAM.Geometry.Grasshopper
                 if (polygon2Ds == null)
                     continue;
 
-                List<Face2D> face2Ds = Planar.Create.Face2Ds(polygon2Ds, true);
+                List<Face2D> face2Ds = Planar.Create.Face2Ds(polygon2Ds, EdgeOrientationMethod.Opposite);
                 if (face2Ds == null)
                     continue;
 
@@ -231,7 +231,6 @@ namespace SAM.Geometry.Grasshopper
                 face3Ds.AddRange(face2Ds.ConvertAll(x => plane.Convert(x)));
             }
 
-            //List<Shell> shells = Spatial.Create.Shells_Depreciated(face3Ds, Core.Tolerance.MacroDistance, tolerance);
             List<Shell> shells = Spatial.Create.Shells(face3Ds, tolerance);
 
             index = Params.IndexOfInputParam("Shells");

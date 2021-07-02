@@ -200,7 +200,7 @@ namespace SAM.Analytical.Grasshopper
                 if (polygon2Ds == null)
                     continue;
 
-                List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
+                List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, EdgeOrientationMethod.Opposite);
                 if (face2Ds == null)
                     continue;
 

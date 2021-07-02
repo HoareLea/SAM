@@ -45,7 +45,7 @@ namespace SAM.Geometry.Planar
             List<Face2D> result = new List<Face2D>();
             foreach(Polygon2D externalEdge in polygon2Ds)
             {
-                Face2D face2D_New = Face2D.Create(externalEdge, internalEdges, true);
+                Face2D face2D_New = Face2D.Create(externalEdge, internalEdges, EdgeOrientationMethod.Opposite);
                 if (face2D_New != null)
                     result.Add(face2D_New);
             }
