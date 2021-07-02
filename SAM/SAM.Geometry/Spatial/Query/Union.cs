@@ -177,6 +177,7 @@ namespace SAM.Geometry.Spatial
                 }
 
                 List<Face3D> face3Ds_Coplanar = face3Ds_Temp.FindAll(x => plane.Coplanar(x.GetPlane(), tolerance));
+                face3Ds_Coplanar = face3Ds_Coplanar.FindAll(x => plane.Distance(x.InternalPoint3D(tolerance)) < tolerance);
                 face3Ds_Coplanar.ForEach(x => face3Ds_Temp.Remove(x));
 
                 switch(face3Ds_Coplanar.Count)
