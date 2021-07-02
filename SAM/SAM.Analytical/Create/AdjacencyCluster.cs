@@ -318,7 +318,7 @@ namespace SAM.Analytical
             shells_Temp.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
 
             //Creating Shell Panels
-            foreach (Shell shell in shells)
+            foreach (Shell shell in shells_Temp)
             {
                 List<Face3D> face3Ds = shell.Face3Ds;
                 if (face3Ds == null || face3Ds.Count == 0)
