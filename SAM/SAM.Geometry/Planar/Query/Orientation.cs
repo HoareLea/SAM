@@ -68,6 +68,16 @@ namespace SAM.Geometry.Planar
 
         public static Orientation Orientation(this IClosed2D closed2D)
         {
+            if(closed2D == null)
+            {
+                return Geometry.Orientation.Undefined;
+            }
+
+            if(closed2D is Face2D)
+            {
+                return Orientation(((Face2D)closed2D).ExternalEdge2D);
+            }
+            
             ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
             if(segmentable2D == null)
             {
