@@ -185,6 +185,7 @@
     <Compile Include="Query\FilterByElevation.cs" />
     <Compile Include="Query\IntersectingPanels.cs" />
     <Compile Include="Query\DuplicatedSpacesDictionary.cs" />
+    <Compile Include="Query\MergeCoplanarApertures.cs" />
     <Compile Include="Query\Offset.cs" />
     <Compile Include="Query\SectionDictionary.cs" />
     <Compile Include="Query\SpaceShells.cs" />
