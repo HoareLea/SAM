@@ -45,21 +45,19 @@ namespace SAM.Geometry.Spatial
 
                 if (tuples_Temp.Count == 1)
                 {
-                    if (tuples_Temp[0].Item2.On(point3D, tolerance))
+                    if (Core.Query.Round(tuples_Temp[0].Item2.Distance(point3D), tolerance) <= tolerance)
                         result.Add(tuples_Temp[0].Item2);
 
                     continue;
                 }
 
-                tuples_Temp = tuples_Temp.FindAll(x => x.Item2.On(point3D, tolerance));
+                tuples_Temp = tuples_Temp.FindAll(x => Core.Query.Round(x.Item2.Distance(point3D), tolerance) > tolerance);
                 if (tuples_Temp == null || tuples_Temp.Count == 0)
                     continue;
 
                 if (tuples_Temp.Count == 1)
                 {
-                    if (tuples_Temp[0].Item2.On(point3D, tolerance))
-                        result.Add(tuples_Temp[0].Item2);
-
+                    result.Add(tuples_Temp[0].Item2);
                     continue;
                 }
             }

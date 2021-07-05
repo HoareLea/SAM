@@ -559,6 +559,19 @@ namespace SAM.Analytical
                 }
             }
 
+            List<Space> spaces_Check = result.GetSpaces();
+            if(spaces_Check != null && spaces_Check.Count != 0)
+            {
+                foreach(Space space_Check in spaces_Check)
+                {
+                    Shell shell = result.Shell(space_Check);
+                    if(shell == null || !shell.IsClosed(tolerance_Distance))
+                    {
+                        result.RemoveObject<Space>(space_Check.Guid);
+                    }
+                }
+            }
+
             return result;
         }
 

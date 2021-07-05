@@ -84,7 +84,7 @@ namespace SAM.Geometry.Planar
             if (face3D == null)
                 return null;
 
-            return Face2D.Create(face3D.ExternalEdge2D, face3D.InternalEdge2Ds, EdgeOrientationMethod.Undefined);
+            return Create(face3D.ExternalEdge2D, face3D.InternalEdge2Ds, EdgeOrientationMethod.Undefined);
         }
 
 

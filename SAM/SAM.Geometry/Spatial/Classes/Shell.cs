@@ -72,7 +72,21 @@ namespace SAM.Geometry.Spatial
 
         public bool IsClosed(double tolerance = Core.Tolerance.Distance)
         {
-            return boundaries != null && boundaries.Count != 0;
+            //return boundaries != null && boundaries.Count != 0;
+
+            if (boundaries == null || boundaries.Count < 3)
+                return false;
+
+            if (boundaries.FindAll(x => x != null && x.Item2 != null && x.Item2.IsValid()).Count < 3)
+                return false;
+
+            List<Segment3D> segment3Ds = Query.NakedSegment3Ds(this, tolerance);
+            if(segment3Ds == null || segment3Ds.Count == 0)
+            {
+                return true;
+            }
+
+            return segment3Ds.TrueForAll(x => x.GetLength() <= tolerance);
         }
 
         public bool Inside(Point3D point3D, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
