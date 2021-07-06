@@ -187,12 +187,16 @@ namespace SAM.Analytical
 
                     foreach (Face2D face2D_Intersection in face2Ds_Intersection)
                     {
-                        if (face2D_Intersection.GetArea() < tolerance)
+                        if (face2Ds_Intersection == null || face2D_Intersection.GetArea() < minArea)
                         {
                             continue;
                         }
 
                         Face3D face3D = plane.Convert(face2D_Intersection);
+                        if(!face3D.IsValid())
+                        {
+                            continue;
+                        }
 
                         Aperture aperture = new Aperture(apertureConstruction, face3D);
                         result.Add(aperture);

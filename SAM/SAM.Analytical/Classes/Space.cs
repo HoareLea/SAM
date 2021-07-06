@@ -93,7 +93,8 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            location = new Point3D(jObject.Value<JObject>("Location"));
+            if (jObject.ContainsKey("Location"))
+                location = new Point3D(jObject.Value<JObject>("Location"));
 
             if(jObject.ContainsKey("InternalCondition"))
                 internalCondition = new InternalCondition(jObject.Value<JObject>("InternalCondition"));
