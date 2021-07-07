@@ -226,6 +226,11 @@ namespace SAM.Analytical
         {
             get
             {
+                if(planarBoundary3D == null)
+                {
+                    return null;
+                }
+                
                 return new PlanarBoundary3D(planarBoundary3D);
             }
         }
