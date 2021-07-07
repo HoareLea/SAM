@@ -1,6 +1,4 @@
-﻿using Grasshopper.Documentation;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Parameters;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;

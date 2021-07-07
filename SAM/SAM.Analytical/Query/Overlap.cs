@@ -1,5 +1,4 @@
-﻿using SAM.Geometry;
-using SAM.Geometry.Spatial;
+﻿using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {

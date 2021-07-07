@@ -2,7 +2,6 @@
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using System;
-using System.Collections;
 
 namespace SAM.Geometry.Grasshopper
 {

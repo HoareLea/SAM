@@ -1,9 +1,6 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Rhino.Render.Fields;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
-using SAM.Geometry.Grasshopper;
 using System;
 using System.Collections.Generic;
 using System.Linq;

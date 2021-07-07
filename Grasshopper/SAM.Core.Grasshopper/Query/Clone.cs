@@ -1,6 +1,5 @@
 ﻿using Grasshopper;
 using Grasshopper.Kernel;
-using System;
 
 namespace SAM.Core.Grasshopper
 {

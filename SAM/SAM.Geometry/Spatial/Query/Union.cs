@@ -32,7 +32,12 @@ namespace SAM.Geometry.Spatial
             bool union = false;
             for (int i = boundaries_1.Count - 1; i >= 0; i--)
             {
-                Face3D face3D = boundaries_1[i].Item2;
+                Face3D face3D = boundaries_1[i]?.Item2;
+                if(face3D == null)
+                {
+                    continue;
+                }
+
                 Point3D point3D = face3D.InternalPoint3D(tolerance_Distance);
                 Vector3D normal = null;
 

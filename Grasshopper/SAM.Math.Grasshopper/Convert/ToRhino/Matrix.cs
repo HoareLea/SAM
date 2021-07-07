@@ -1,7 +1,4 @@
-﻿using Grasshopper.Kernel.Types;
-using System.Drawing.Drawing2D;
-
-namespace SAM.Math.Grasshopper
+﻿namespace SAM.Math.Grasshopper
 {
     public static partial class Convert
     {

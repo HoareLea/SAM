@@ -1,8 +1,5 @@
-﻿using NetTopologySuite.Mathematics;
-using NetTopologySuite.Operation.Distance3D;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {

@@ -1,6 +1,5 @@
 ﻿using GH_IO.Serialization;
 using Grasshopper.Kernel;
-using Newtonsoft.Json.Serialization;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;

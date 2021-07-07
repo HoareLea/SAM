@@ -2,10 +2,8 @@
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
-using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 

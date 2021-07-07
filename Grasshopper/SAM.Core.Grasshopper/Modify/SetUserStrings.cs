@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Rhino.DocObjects;
+﻿using Rhino.DocObjects;
 
 namespace SAM.Core.Grasshopper
 {

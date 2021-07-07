@@ -1,6 +1,5 @@
 ﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Architectural
 {

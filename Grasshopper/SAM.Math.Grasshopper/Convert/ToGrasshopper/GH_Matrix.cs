@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel.Types;
-using System.Drawing.Drawing2D;
 
 namespace SAM.Math.Grasshopper
 {

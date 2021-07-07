@@ -4,7 +4,6 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
 
 namespace SAM.Analytical.Grasshopper
 {

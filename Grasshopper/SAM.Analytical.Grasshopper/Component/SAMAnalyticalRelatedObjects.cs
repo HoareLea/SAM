@@ -2,7 +2,6 @@
 using SAM.Analytical.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using SAM.Core;
 using SAM.Core.Grasshopper;
 

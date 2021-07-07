@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-
-namespace SAM.Core
+﻿namespace SAM.Core
 {
     public static partial class Query
     {

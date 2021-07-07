@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SAM.Math
+﻿namespace SAM.Math
 {
     public static partial class Convert
     {

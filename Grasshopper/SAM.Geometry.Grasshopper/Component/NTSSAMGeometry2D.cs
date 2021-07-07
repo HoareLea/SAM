@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Planar;
