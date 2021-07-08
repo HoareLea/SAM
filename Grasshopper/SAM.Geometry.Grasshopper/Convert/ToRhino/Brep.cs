@@ -92,6 +92,8 @@ namespace SAM.Geometry.Grasshopper
                         }
                     }
                 }
+
+                edges.AddRange(internalEdge3Ds);
             }
 
             return ToRhino_Brep(edges, tolerance);
