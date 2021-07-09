@@ -194,17 +194,6 @@ namespace SAM.Geometry.Spatial
                 this.internalEdge2Ds = internalEdges.ConvertAll(x => plane.Convert(x));
         }
 
-        public IClosedPlanar3D Project(IClosed3D closed3D)
-        {
-            if (closed3D is ISegmentable3D)
-            {
-                List<Point3D> point3Ds = ((ISegmentable3D)closed3D).GetPoints().ConvertAll(x => plane.Project(x));
-                return new Polygon3D(point3Ds);
-            }
-
-            return null;
-        }
-
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

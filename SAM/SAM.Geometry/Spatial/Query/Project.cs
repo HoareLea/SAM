@@ -25,6 +25,29 @@ namespace SAM.Geometry.Spatial
             return plane.Closest(point3D);
         }
 
+        public static Point3D Project(this Face3D face3D, Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(point3D == null || face3D == null)
+            {
+                return null;
+            }
+
+
+            Plane plane = face3D.GetPlane();
+            if(plane == null)
+            {
+                return null;
+            }
+
+            Point3D point3D_Project = plane.Project(point3D);
+            if(point3D_Project == null)
+            {
+                return null;
+            }
+
+            return face3D.InRange(point3D, tolerance) ? point3D_Project: null;
+        }
+
         public static Point3D Project(this Plane plane, Point3D point3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
         {
             if (plane == null || point3D == null || vector3D == null)

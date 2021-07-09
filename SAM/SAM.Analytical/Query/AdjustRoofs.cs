@@ -54,7 +54,7 @@ namespace SAM.Analytical
 
                 Plane plane_Temp = plane.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z + offset)) as Plane;
                 
-                List<Face3D> face3Ds = shell?.Section(plane_Temp, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+                List<Face3D> face3Ds = shell?.Section(plane_Temp, true, tolerance_Angle, tolerance_Distance, tolerance_Snap);
                 if (face3Ds == null)
                     continue;
                 
