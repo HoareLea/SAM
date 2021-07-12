@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -49,10 +50,10 @@ namespace SAM.Analytical.Grasshopper
                 panelParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(panelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevation", NickName = "elevation", Description = "Elevation", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevation", NickName = "elevation", Description = "Elevation", Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+                global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(1.0);
@@ -93,13 +94,30 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
-            
+
             index = Params.IndexOfInputParam("_elevation");
-            double elevation = double.NaN;
-            if(index == -1 || !dataAccess.GetData(index, ref elevation) || double.IsNaN(elevation))
+            GH_ObjectWrapper objectWrapper_Elevation = null;
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper_Elevation) || objectWrapper_Elevation == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
+            }
+
+            double elevation = double.NaN;
+
+            object @object = objectWrapper_Elevation.Value;
+            if (@object is IGH_Goo)
+            {
+                @object = (@object as dynamic).Value;
+            }
+
+            if (@object is double)
+            {
+                elevation = (double)@object;
+            }
+            else if (@object is Architectural.Level)
+            {
+                elevation = ((Architectural.Level)@object).Elevation;
             }
 
             index = Params.IndexOfInputParam("maxDistance_");

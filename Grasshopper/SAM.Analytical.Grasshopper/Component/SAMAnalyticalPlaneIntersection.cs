@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
@@ -42,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object ie.Panel, Face3d", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
         }
 
@@ -78,11 +79,28 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            double elevation = 0;
-            if (!dataAccess.GetData(1, ref elevation))
+            GH_ObjectWrapper objectWrapper_Elevation = null;
+            if (!dataAccess.GetData(1, ref objectWrapper_Elevation))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
+            }
+
+            double elevation = double.NaN;
+
+            object @object = objectWrapper_Elevation.Value;
+            if (@object is IGH_Goo)
+            {
+                @object = (@object as dynamic).Value;
+            }
+
+            if (@object is double)
+            {
+                elevation = (double)@object;
+            }
+            else if (@object is Architectural.Level)
+            {
+                elevation = ((Architectural.Level)@object).Elevation;
             }
 
             Panel panel = (Panel)sAMObject;
