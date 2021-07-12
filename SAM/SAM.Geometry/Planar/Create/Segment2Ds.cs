@@ -173,14 +173,13 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Segment2D> Segment2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> Segment2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, bool unconnectedOnly = false, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (segmentable2Ds == null)
                 return null;
 
             List<Segment2D> segment2Ds = new List<Segment2D>();
 
-            List<Tuple<BoundingBox2D, Segment2D>> tuples_Extensions = new List<Tuple<BoundingBox2D, Segment2D>>();
             List<Tuple<BoundingBox2D, Segment2D>> tuples_All = new List<Tuple<BoundingBox2D, Segment2D>>();
             foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
@@ -190,30 +189,45 @@ namespace SAM.Geometry.Planar
 
                 foreach (Segment2D segment2D in segment2Ds_Temp)
                 {
-                    Vector2D vector2D = segment2D.Direction * maxDistance;
-
                     BoundingBox2D boundingBox = segment2D.GetBoundingBox(tolerance);
                     tuples_All.Add(new Tuple<BoundingBox2D, Segment2D>(boundingBox, segment2D));
 
                     segment2Ds.Add(segment2D);
-
-                    Segment2D segment2D_Temp = null;
-                    BoundingBox2D boundingBox_Temp = null;
-
-                    segment2D_Temp = new Segment2D(segment2D[1], segment2D[1].GetMoved(vector2D));
-                    boundingBox_Temp = segment2D_Temp.GetBoundingBox(tolerance);
-                    tuples_Extensions.Add(new Tuple<BoundingBox2D, Segment2D>(boundingBox_Temp, segment2D_Temp));
-                    tuples_All.Add(new Tuple<BoundingBox2D, Segment2D>(boundingBox_Temp, segment2D_Temp));
-
-                    segment2D_Temp = new Segment2D(segment2D[0], segment2D[0].GetMoved(vector2D.GetNegated()));
-                    boundingBox_Temp = segment2D_Temp.GetBoundingBox(tolerance);
-                    tuples_Extensions.Add(new Tuple<BoundingBox2D, Segment2D>(boundingBox_Temp, segment2D_Temp));
-                    tuples_All.Add(new Tuple<BoundingBox2D, Segment2D>(boundingBox_Temp, segment2D_Temp));
                 }
             }
 
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
+
+            List<Tuple<BoundingBox2D, Segment2D>> tuples_Extensions = new List<Tuple<BoundingBox2D, Segment2D>>();
+
+            foreach (Segment2D segment2D in segment2Ds)
+            {
+                Segment2D segment2D_Temp = null;
+                BoundingBox2D boundingBox_Temp = null;
+
+                Vector2D vector2D = segment2D.Direction * maxDistance;
+
+                Point2D point2D_Start = segment2D.GetStart();
+                List<Segment2D> segment2Ds_Start = segment2Ds.FindAll(x => point2D_Start.AlmostEquals(x.GetStart(), tolerance) || point2D_Start.AlmostEquals(x.GetEnd(), tolerance));
+                if(segment2Ds_Start.Count == 1 || !unconnectedOnly)
+                {
+                    segment2D_Temp = new Segment2D(point2D_Start, point2D_Start.GetMoved(vector2D.GetNegated()));
+                    boundingBox_Temp = segment2D_Temp.GetBoundingBox(tolerance);
+                    tuples_Extensions.Add(new Tuple<BoundingBox2D, Segment2D>(boundingBox_Temp, segment2D_Temp));
+                    tuples_All.Add(new Tuple<BoundingBox2D, Segment2D>(boundingBox_Temp, segment2D_Temp));
+                }
+
+                Point2D point2D_End = segment2D.GetEnd();
+                List<Segment2D> segment2Ds_End = segment2Ds.FindAll(x => point2D_End.AlmostEquals(x.GetStart(), tolerance) || point2D_End.AlmostEquals(x.GetEnd(), tolerance));
+                if (segment2Ds_End.Count == 1 || !unconnectedOnly)
+                {
+                    segment2D_Temp = new Segment2D(point2D_End, point2D_End.GetMoved(vector2D));
+                    boundingBox_Temp = segment2D_Temp.GetBoundingBox(tolerance);
+                    tuples_Extensions.Add(new Tuple<BoundingBox2D, Segment2D>(boundingBox_Temp, segment2D_Temp));
+                    tuples_All.Add(new Tuple<BoundingBox2D, Segment2D>(boundingBox_Temp, segment2D_Temp));
+                }
+            }
 
             for (int i = 0; i < tuples_Extensions.Count - 1; i++)
             {

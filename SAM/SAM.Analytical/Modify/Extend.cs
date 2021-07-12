@@ -39,7 +39,7 @@ namespace SAM.Analytical
                 }
             }
 
-            List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Create.Segment2Ds(segmentable2Ds, maxDistance, tolerance_Distance);
+            List<Geometry.Planar.Segment2D> segment2Ds = Geometry.Planar.Create.Segment2Ds(segmentable2Ds, maxDistance, true, tolerance_Distance);
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return;
 

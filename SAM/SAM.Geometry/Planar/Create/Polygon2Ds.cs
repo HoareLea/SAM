@@ -134,9 +134,9 @@ namespace SAM.Geometry.Planar
             return Polygon2Ds(segmentable2Ds, tolerance);
         }
 
-        public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, bool unconnectedOnly = false, double tolerance = Core.Tolerance.MicroDistance)
         {
-            List<Segment2D> segment2Ds = Segment2Ds(segmentable2Ds, maxDistance, tolerance);
+            List<Segment2D> segment2Ds = Segment2Ds(segmentable2Ds, maxDistance, unconnectedOnly, tolerance);
             if(segment2Ds == null || segment2Ds.Count == 0)
             {
                 return null;
