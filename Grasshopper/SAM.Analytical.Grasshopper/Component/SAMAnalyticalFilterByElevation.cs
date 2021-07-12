@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddGenericParameter("_analyticals", "_analyticals", "SAM Analytical Panels or Spaces", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
-            index = inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
+            index = inputParamManager.AddGenericParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
             index = inputParamManager.AddNumberParameter("_tolerance", "_tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
         }
 
@@ -82,12 +82,31 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            double elevation = double.NaN;
-            if (!dataAccess.GetData(1, ref elevation))
+            GH_ObjectWrapper objectWrapper_Elevation = null;
+            if (!dataAccess.GetData(1, ref objectWrapper_Elevation))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+
+            double elevation = double.NaN;
+
+            object @object = objectWrapper_Elevation.Value;
+            if (@object is IGH_Goo)
+            {
+                @object = (@object as dynamic).Value;
+            }
+
+
+            if (@object is double)
+            {
+                elevation = (double)@object;
+            }
+            else if(@object is Architectural.Level)
+            {
+                elevation = ((Architectural.Level)@object).Elevation;
+            }
+
 
             double tolerance = double.NaN;
             if (!dataAccess.GetData(2, ref tolerance))
