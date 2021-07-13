@@ -122,6 +122,10 @@ namespace SAM.Analytical.Grasshopper
                 if (double.TryParse((string)@object, out value))
                     plane = Geometry.Spatial.Create.Plane(value);
             }
+            else if(@object is Architectural.Level)
+            {
+                plane = Geometry.Spatial.Create.Plane(((Architectural.Level)@object).Elevation);
+            }
 
             if (plane == null)
             {

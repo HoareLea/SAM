@@ -109,6 +109,11 @@ namespace SAM.Analytical.Grasshopper
             {
                 elevation = (double)@object;
             }
+            else if (@object is string)
+            {
+                if (double.TryParse((string)@object, out double elevation_Temp))
+                    elevation = elevation_Temp;
+            }
             else if (@object is Architectural.Level)
             {
                 elevation = ((Architectural.Level)@object).Elevation;
