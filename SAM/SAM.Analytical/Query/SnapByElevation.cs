@@ -91,11 +91,11 @@ namespace SAM.Analytical
                         Segment2D segment2D = null;
                         if(tuple.Item3)
                         {
-                            segment2D = new Segment2D(point2D, segment2D[1]);
+                            segment2D = new Segment2D(point2D, tuple.Item2[1]);
                         }
                         else
                         {
-                            segment2D = new Segment2D(segment2D[0], point2D);
+                            segment2D = new Segment2D(tuple.Item2[0], point2D);
                         }
 
                         tuples_Segment2D_Weight.Add(new Tuple<Segment2D, double> (segment2D, segment2D.GetLength() * segment2D.Direction.SmallestAngle(tuple.Item2.Direction)));

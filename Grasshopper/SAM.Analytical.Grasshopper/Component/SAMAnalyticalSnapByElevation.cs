@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -39,7 +40,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("_elevation", "_elevation", "elevation", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_elevation", "_elevation", "elevation", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("_minTolerance_", "_minTolerance_", "Minimal Tolerance", GH_ParamAccess.item, Core.Tolerance.MicroDistance);
             inputParamManager.AddNumberParameter("_maxTolerance", "_maxTolerance", "Maximal Tolerance", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
         }
@@ -67,11 +68,34 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            double elevation = double.NaN;
-            if (!dataAccess.GetData(1, ref elevation) || double.IsNaN(elevation))
+            int index = Params.IndexOfInputParam("_elevation");
+            GH_ObjectWrapper objectWrapper_Elevation = null;
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper_Elevation) || objectWrapper_Elevation == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
+            }
+
+            double elevation = double.NaN;
+
+            object @object = objectWrapper_Elevation.Value;
+            if (@object is IGH_Goo)
+            {
+                @object = (@object as dynamic).Value;
+            }
+
+            if (@object is double)
+            {
+                elevation = (double)@object;
+            }
+            else if (@object is string)
+            {
+                if (double.TryParse((string)@object, out double elevation_Temp))
+                    elevation = elevation_Temp;
+            }
+            else if (@object is Architectural.Level)
+            {
+                elevation = ((Architectural.Level)@object).Elevation;
             }
 
             double minTolerance = double.NaN;
