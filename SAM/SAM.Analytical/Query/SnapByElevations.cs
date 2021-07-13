@@ -8,35 +8,60 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> SnapByElevation(this IEnumerable<Panel> panels, double elevation, double maxTolerance = Core.Tolerance.MacroDistance, double minTolerance = Core.Tolerance.MicroDistance)
+        public static List<Panel> SnapByElevations(this IEnumerable<Panel> panels, IEnumerable<double> elevations, double maxTolerance = Core.Tolerance.MacroDistance, double minTolerance = Core.Tolerance.MicroDistance)
         {
             if(panels == null)
             {
                 return null;
             }
 
-            List<Panel> panels_Temp = SnapByElevation_Ends(panels, elevation, maxTolerance, minTolerance);
-            if(panels_Temp == null)
+            List<Panel> result = new List<Panel>(panels);
+            foreach (double elevation in elevations)
             {
-                return null;
+                double[] elevations_Temp = new double[] { elevation };
+
+                result = SnapByElevations_Ends(result, elevations_Temp, maxTolerance, minTolerance);
+                if (result == null)
+                {
+                    return null;
+                }
+
+                result = SnapByElevations_Intersections(result, elevations_Temp, maxTolerance, minTolerance);
             }
 
-            return SnapByElevation_Intersections(panels_Temp, elevation, maxTolerance, minTolerance);
+            result = SnapByElevations_Ends(result, elevations, maxTolerance, minTolerance);
+            result = SnapByElevations_Intersections(result, elevations, maxTolerance, minTolerance);
+
+            return result;
         }
 
-        private static List<Panel> SnapByElevation_Ends(this IEnumerable<Panel> panels, double elevation, double maxTolerance = Core.Tolerance.MacroDistance, double minTolerance = Core.Tolerance.MicroDistance)
+        private static List<Panel> SnapByElevations_Ends(this IEnumerable<Panel> panels, IEnumerable<double> elevations, double maxTolerance = Core.Tolerance.MacroDistance, double minTolerance = Core.Tolerance.MicroDistance)
         {
-            if (panels == null || double.IsNaN(elevation))
+            if (panels == null || elevations == null)
             {
                 return null;
             }
 
-            Plane plane = Plane.WorldXY.GetMoved(Vector3D.WorldZ * elevation) as Plane;
-
-            Dictionary<Panel, List<ISegmentable2D>> dictionary = panels.SectionDictionary<ISegmentable2D>(plane, maxTolerance);
-            if (dictionary == null)
+            Dictionary<Panel, List<ISegmentable2D>> dictionary = new Dictionary<Panel, List<ISegmentable2D>>();
+            foreach(double elevation in elevations)
             {
-                return null;
+                Plane plane = Plane.WorldXY.GetMoved(Vector3D.WorldZ * elevation) as Plane;
+
+                Dictionary<Panel, List<ISegmentable2D>> dictionary_Temp = panels.SectionDictionary<ISegmentable2D>(plane, maxTolerance);
+                if (dictionary_Temp == null)
+                {
+                    continue;
+                }
+
+                foreach (KeyValuePair<Panel, List<ISegmentable2D>> keyValuePair in dictionary_Temp)
+                {
+                    if(dictionary.ContainsKey(keyValuePair.Key))
+                    {
+                        continue;
+                    }
+
+                    dictionary[keyValuePair.Key] = keyValuePair.Value;
+                }
             }
 
             List<Tuple<Panel, List<Segment2D>>> tuples = new List<Tuple<Panel, List<Segment2D>>>();
@@ -131,8 +156,22 @@ namespace SAM.Analytical
             }
 
             List<Panel> result = new List<Panel>();
+            foreach (Panel panel in panels)
+            {
+                if (!dictionary.ContainsKey(panel))
+                {
+                    result.Add(panel);
+                }
+            }
+
             foreach (Tuple<Panel, List<Segment2D>> tuple in tuples)
             {
+                if(tuple.Item2 == null || tuple.Item2.Count == 0)
+                {
+                    result.Add(tuple.Item1);
+                    continue;
+                }
+                
                 List<Tuple<Point2D, Segment2D, bool>> tuples_Point2D_Snap_Panel = new List<Tuple<Point2D, Segment2D, bool>>();
                 foreach (Segment2D segment2D in tuple.Item2)
                 {
@@ -169,6 +208,8 @@ namespace SAM.Analytical
                     BoundingBox3D boundingBox3D = tuple.Item1.GetBoundingBox();
                     Vector3D vector3D = Vector3D.WorldZ * boundingBox3D.Height;
 
+                    Plane plane = Plane.WorldXY.GetMoved(Vector3D.WorldZ * boundingBox3D.Min.Z) as Plane;
+
                     Segment3D segment3D = plane.Convert(segment2D);
 
                     Panel panel = Create.Panel(guid, tuple.Item1, new PlanarBoundary3D(new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], segment3D[1].GetMoved(vector3D) as Point3D, segment3D[0].GetMoved(vector3D) as Point3D })));
@@ -180,19 +221,33 @@ namespace SAM.Analytical
             return result;
         }
 
-        private static List<Panel> SnapByElevation_Intersections(this IEnumerable<Panel> panels, double elevation, double maxTolerance = Core.Tolerance.MacroDistance, double minTolerance = Core.Tolerance.MicroDistance)
+        private static List<Panel> SnapByElevations_Intersections(this IEnumerable<Panel> panels, IEnumerable<double> elevations, double maxTolerance = Core.Tolerance.MacroDistance, double minTolerance = Core.Tolerance.MicroDistance)
         {
-            if (panels == null || double.IsNaN(elevation))
+            if (panels == null || elevations == null)
             {
                 return null;
             }
 
-            Plane plane = Plane.WorldXY.GetMoved(Vector3D.WorldZ * elevation) as Plane;
-
-            Dictionary<Panel, List<ISegmentable2D>> dictionary = panels.SectionDictionary<ISegmentable2D>(plane, maxTolerance);
-            if (dictionary == null)
+            Dictionary<Panel, List<ISegmentable2D>> dictionary = new Dictionary<Panel, List<ISegmentable2D>>();
+            foreach (double elevation in elevations)
             {
-                return null;
+                Plane plane = Plane.WorldXY.GetMoved(Vector3D.WorldZ * elevation) as Plane;
+
+                Dictionary<Panel, List<ISegmentable2D>> dictionary_Temp = panels.SectionDictionary<ISegmentable2D>(plane, maxTolerance);
+                if (dictionary_Temp == null)
+                {
+                    continue;
+                }
+
+                foreach (KeyValuePair<Panel, List<ISegmentable2D>> keyValuePair in dictionary_Temp)
+                {
+                    if (dictionary.ContainsKey(keyValuePair.Key))
+                    {
+                        continue;
+                    }
+
+                    dictionary[keyValuePair.Key] = keyValuePair.Value;
+                }
             }
 
             List<Tuple<Panel, List<Segment2D>>> tuples = new List<Tuple<Panel, List<Segment2D>>>();
@@ -249,8 +304,22 @@ namespace SAM.Analytical
             }
 
             List<Panel> result = new List<Panel>();
+            foreach(Panel panel in panels)
+            {
+                if(!dictionary.ContainsKey(panel))
+                {
+                    result.Add(panel);
+                }
+            }
+
             foreach (Tuple<Panel, List<Segment2D>> tuple in tuples)
             {
+                if (tuple.Item2 == null || tuple.Item2.Count == 0)
+                {
+                    result.Add(tuple.Item1);
+                    continue;
+                }
+
                 List<Tuple<Point2D, Segment2D, bool>> tuples_Point2D_Snap_Panel = new List<Tuple<Point2D, Segment2D, bool>>();
                 foreach (Segment2D segment2D in tuple.Item2)
                 {
@@ -286,6 +355,8 @@ namespace SAM.Analytical
 
                     BoundingBox3D boundingBox3D = tuple.Item1.GetBoundingBox();
                     Vector3D vector3D = Vector3D.WorldZ * boundingBox3D.Height;
+
+                    Plane plane = Plane.WorldXY.GetMoved(Vector3D.WorldZ * boundingBox3D.Min.Z) as Plane;
 
                     Segment3D segment3D = plane.Convert(segment2D);
 

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSnapByElevation : GH_SAMComponent
+    public class SAMAnalyticalSnapByElevations : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,8 +27,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalSnapByElevation()
-          : base("SAMAnalytical.SnapByElevation", "SAMAnalytical.SnapByElevation",
+        public SAMAnalyticalSnapByElevations()
+          : base("SAMAnalytical.SnapByElevations", "SAMAnalytical.SnapByElevations",
               "Snap By Elevation",
               "SAM", "Analytical")
         {
@@ -40,9 +40,9 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
-            inputParamManager.AddGenericParameter("_elevation", "_elevation", "elevation", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_elevations", "_elevations", "elevations", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_minTolerance_", "_minTolerance_", "Minimal Tolerance", GH_ParamAccess.item, Core.Tolerance.MicroDistance);
-            inputParamManager.AddNumberParameter("_maxTolerance", "_maxTolerance", "Maximal Tolerance", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
+            inputParamManager.AddNumberParameter("_maxTolerance_", "_maxTolerance_", "Maximal Tolerance", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
         }
 
         /// <summary>
@@ -68,34 +68,46 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            int index = Params.IndexOfInputParam("_elevation");
-            GH_ObjectWrapper objectWrapper_Elevation = null;
-            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper_Elevation) || objectWrapper_Elevation == null)
+            int index = Params.IndexOfInputParam("_elevations");
+            List<GH_ObjectWrapper> objectWrappers_Elevation = new List<GH_ObjectWrapper>();
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers_Elevation) || objectWrappers_Elevation == null || objectWrappers_Elevation.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
-            double elevation = double.NaN;
+            List<double> elevations = new List<double>();
 
-            object @object = objectWrapper_Elevation.Value;
-            if (@object is IGH_Goo)
+            foreach(GH_ObjectWrapper objectWrapper_Elevation in objectWrappers_Elevation)
             {
-                @object = (@object as dynamic).Value;
-            }
+                double elevation = double.NaN;
 
-            if (@object is double)
-            {
-                elevation = (double)@object;
-            }
-            else if (@object is string)
-            {
-                if (double.TryParse((string)@object, out double elevation_Temp))
-                    elevation = elevation_Temp;
-            }
-            else if (@object is Architectural.Level)
-            {
-                elevation = ((Architectural.Level)@object).Elevation;
+                object @object = objectWrapper_Elevation?.Value;
+                if (@object is IGH_Goo)
+                {
+                    @object = (@object as dynamic).Value;
+                }
+
+                if (@object is double)
+                {
+                    elevation = (double)@object;
+                }
+                else if (@object is string)
+                {
+                    if (double.TryParse((string)@object, out double elevation_Temp))
+                        elevation = elevation_Temp;
+                }
+                else if (@object is Architectural.Level)
+                {
+                    elevation = ((Architectural.Level)@object).Elevation;
+                }
+
+                if(double.IsNaN(elevation))
+                {
+                    continue;
+                }
+
+                elevations.Add(elevation);
             }
 
             double minTolerance = double.NaN;
@@ -112,7 +124,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> result = Analytical.Query.SnapByElevation(panels, elevation, maxTolerance, minTolerance);
+            List<Panel> result = Analytical.Query.SnapByElevations(panels, elevations, maxTolerance, minTolerance);
             dataAccess.SetDataList(0, result.ConvertAll(x => new GooPanel(x)));
         }
     }

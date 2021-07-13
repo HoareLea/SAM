@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSnapPanelsByElevations : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalSnapByPlanes : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,8 +30,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalSnapPanelsByElevations()
-          : base("SAMAnalytical.SnapPanelsByElevations", "SAMAnalytical.SnapPanelsByElevations",
+        public SAMAnalyticalSnapByPlanes()
+          : base("SAMAnalytical.SnapPanelsByPlanes", "SAMAnalytical.SnapPanelsByPlanes",
               "Snap Panels By Elevations",
               "SAM", "Analytical")
         {
@@ -49,10 +50,10 @@ namespace SAM.Analytical.Grasshopper
                 panelParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(panelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevations", NickName = "elevations", Description = "Elevations", Access = GH_ParamAccess.list };
+                result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevations", NickName = "elevations", Description = "Elevations", Access = GH_ParamAccess.list };
-                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+                global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(1);
@@ -90,13 +91,47 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
-            
+
             index = Params.IndexOfInputParam("_elevations");
-            List<double> elevations = new List<double>(); 
-            if(index == -1 || !dataAccess.GetDataList(index, elevations) || elevations == null || elevations.Count == 0)
+            List<GH_ObjectWrapper> objectWrappers_Elevation = new List<GH_ObjectWrapper>();
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers_Elevation) || objectWrappers_Elevation == null || objectWrappers_Elevation.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
+            }
+
+            List<double> elevations = new List<double>();
+
+            foreach (GH_ObjectWrapper objectWrapper_Elevation in objectWrappers_Elevation)
+            {
+                double elevation = double.NaN;
+
+                object @object = objectWrapper_Elevation?.Value;
+                if (@object is IGH_Goo)
+                {
+                    @object = (@object as dynamic).Value;
+                }
+
+                if (@object is double)
+                {
+                    elevation = (double)@object;
+                }
+                else if (@object is string)
+                {
+                    if (double.TryParse((string)@object, out double elevation_Temp))
+                        elevation = elevation_Temp;
+                }
+                else if (@object is Architectural.Level)
+                {
+                    elevation = ((Architectural.Level)@object).Elevation;
+                }
+
+                if (double.IsNaN(elevation))
+                {
+                    continue;
+                }
+
+                elevations.Add(elevation);
             }
 
             index = Params.IndexOfInputParam("maxDistance_");
