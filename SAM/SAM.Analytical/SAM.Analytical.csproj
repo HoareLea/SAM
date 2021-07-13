@@ -188,6 +188,7 @@
     <Compile Include="Query\MergeOverlapApertures.cs" />
     <Compile Include="Query\Offset.cs" />
     <Compile Include="Query\SectionDictionary.cs" />
+    <Compile Include="Query\SnapByElevation.cs" />
     <Compile Include="Query\SpaceShells.cs" />
     <Compile Include="Query\CalculatedArea.cs" />
     <Compile Include="Query\GeometricalFloorPanels.cs" />
