@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,7 +39,11 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            int index = -1;
+
+            index = inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+
             inputParamManager.AddGenericParameter("_elevations", "_elevations", "elevations", GH_ParamAccess.list);
             inputParamManager.AddNumberParameter("_minTolerance_", "_minTolerance_", "Minimal Tolerance", GH_ParamAccess.item, Core.Tolerance.MicroDistance);
             inputParamManager.AddNumberParameter("_maxTolerance_", "_maxTolerance_", "Maximal Tolerance", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
