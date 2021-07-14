@@ -107,6 +107,72 @@ namespace SAM.Geometry.Planar
             return new Triangle2D(point2DsList[0][0], point2DsList[0][1], point2DsList[0][2]);
         }
 
+        public static BoundingBox2D Offset(BoundingBox2D boundingBox2D, double offset, double tolerance = Tolerance.MicroDistance)
+        {
+            if (boundingBox2D == null)
+            {
+                return null;
+            }
+
+            List<List<Point2D>> point2DsList = Offset(boundingBox2D.GetPoints(), offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
+            if (point2DsList == null)
+            {
+                return null;
+            }
+
+            point2DsList.RemoveAll(x => x == null || x.Count < 3);
+            if (point2DsList.Count == 0)
+            {
+                return null;
+            }
+
+            if (point2DsList.Count > 1)
+            {
+                point2DsList.Sort((x, y) => Area(y).CompareTo(Area(x)));
+
+            }
+
+            return new BoundingBox2D(point2DsList[0]);
+        }
+
+        public static Circle2D Offset(Circle2D circle2D, double offset)
+        {
+            return new Circle2D(circle2D.Center, System.Math.Abs(circle2D.Radious + offset));
+        }
+
+        public static Ellipse2D Offset(Ellipse2D ellipse2D, double offset)
+        {
+            return new Ellipse2D(ellipse2D.Center, System.Math.Abs(ellipse2D.Width + offset), System.Math.Abs(ellipse2D.Height + offset), ellipse2D.HeightDirection);
+        }
+
+        public static Rectangle2D Offset(Rectangle2D rectangle2D, double offset, double tolerance = Tolerance.MicroDistance)
+        {
+            if (rectangle2D == null)
+            {
+                return null;
+            }
+
+            List<List<Point2D>> point2DsList = Offset(rectangle2D.GetPoints(), offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
+            if (point2DsList == null)
+            {
+                return null;
+            }
+
+            point2DsList.RemoveAll(x => x == null || x.Count < 3);
+            if (point2DsList.Count == 0)
+            {
+                return null;
+            }
+
+            if (point2DsList.Count > 1)
+            {
+                point2DsList.Sort((x, y) => Area(y).CompareTo(Area(x)));
+
+            }
+
+            return Create.Rectangle2D(point2DsList[0]);
+        }
+
         //public static List<Polygon2D> Offset(this ISegmentable2D segmentable2D, double offset, JoinType joinType, EndType endType, double tolerance = Tolerance.MicroDistance)
         //{
         //    if (segmentable2D == null)
