@@ -40,7 +40,7 @@ namespace SAM.Analytical
                 else
                 {
                     panelType = panel.PanelType;
-                    construction = Query.DefaultConstruction(panelType);
+                    construction = DefaultConstruction(panelType);
                 }
             }
             else
@@ -90,7 +90,7 @@ namespace SAM.Analytical
                                 panel = panels_Temp.First();
 
                             panelType = Analytical.PanelType.FloorInternal;
-                            construction = Query.DefaultConstruction(panelType);
+                            construction = DefaultConstruction(panelType);
                         }
                         else
                         {
@@ -108,7 +108,7 @@ namespace SAM.Analytical
                             panel = panels_Temp.First();
 
                         panelType = Analytical.PanelType.FloorInternal;
-                        construction = Query.DefaultConstruction(panelType);
+                        construction = DefaultConstruction(panelType);
                     }
                     return true;
                 }
@@ -125,7 +125,7 @@ namespace SAM.Analytical
                         panel = panels_Temp.First();
 
                     panelType = Analytical.PanelType.FloorInternal;
-                    construction = Query.DefaultConstruction(panelType);
+                    construction = DefaultConstruction(panelType);
                     return true;
                 }
 

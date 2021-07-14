@@ -13,7 +13,7 @@ namespace SAM.Core
                 return null;
             }
 
-            string fullTypeName = Query.FullTypeName(jObject);
+            string fullTypeName = FullTypeName(jObject);
             if (string.IsNullOrWhiteSpace(fullTypeName))
             {
                 return new JSAMObjectWrapper(jObject);

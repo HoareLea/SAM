@@ -327,7 +327,7 @@ namespace SAM.Geometry.Spatial
             if (plane == null || externalEdge == null)
                 return null;
 
-            Face2D face2D = Planar.Face2D.Create(externalEdge, internalEdges, edgeOrientationMethod);
+            Face2D face2D = Face2D.Create(externalEdge, internalEdges, edgeOrientationMethod);
             if (face2D == null)
                 return null;
 
@@ -341,7 +341,7 @@ namespace SAM.Geometry.Spatial
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            Face2D face2D = Planar.Face2D.Create(edges, out edges_Excluded, edgeOrientationMethod);
+            Face2D face2D = Face2D.Create(edges, out edges_Excluded, edgeOrientationMethod);
             return new Face3D(plane, face2D);
         }
 
@@ -350,7 +350,7 @@ namespace SAM.Geometry.Spatial
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            return new Face3D(plane, Planar.Face2D.Create(edges, edgeOrientationMethod));
+            return new Face3D(plane, Face2D.Create(edges, edgeOrientationMethod));
         }
     }
 }

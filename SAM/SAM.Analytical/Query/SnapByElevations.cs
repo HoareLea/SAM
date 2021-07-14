@@ -212,7 +212,11 @@ namespace SAM.Analytical
 
                     Segment3D segment3D = plane.Convert(segment2D);
 
-                    Panel panel = Create.Panel(guid, tuple.Item1, new PlanarBoundary3D(new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], segment3D[1].GetMoved(vector3D) as Point3D, segment3D[0].GetMoved(vector3D) as Point3D })));
+                    Face3D face3D = new Face3D(new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], segment3D[1].GetMoved(vector3D) as Point3D, segment3D[0].GetMoved(vector3D) as Point3D }));
+
+                    Panel panel = Create.Panel(guid, tuple.Item1, face3D, null, true, minTolerance, maxTolerance);
+                    //Panel panel = Create.Panel(guid, tuple.Item1, new PlanarBoundary3D()));
+
                     result.Add(panel);
                 }
 
@@ -360,7 +364,11 @@ namespace SAM.Analytical
 
                     Segment3D segment3D = plane.Convert(segment2D);
 
-                    Panel panel = Create.Panel(guid, tuple.Item1, new PlanarBoundary3D(new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], segment3D[1].GetMoved(vector3D) as Point3D, segment3D[0].GetMoved(vector3D) as Point3D })));
+                    Face3D face3D = new Face3D(new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], segment3D[1].GetMoved(vector3D) as Point3D, segment3D[0].GetMoved(vector3D) as Point3D }));
+
+                    Panel panel = Create.Panel(guid, tuple.Item1, face3D, null, true, minTolerance, maxTolerance);
+
+                    //Panel panel = Create.Panel(guid, tuple.Item1, new PlanarBoundary3D(new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], segment3D[1].GetMoved(vector3D) as Point3D, segment3D[0].GetMoved(vector3D) as Point3D })));
                     result.Add(panel);
                 }
 

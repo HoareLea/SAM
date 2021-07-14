@@ -48,10 +48,10 @@ namespace SAM.Core
 
         private static List<IJSAMObject> ToSAM_FromJsonFile(string path)
         {
-            if (string.IsNullOrEmpty(path) || !System.IO.File.Exists(path))
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
                 return null;
 
-            string json = System.IO.File.ReadAllText(path);
+            string json = File.ReadAllText(path);
             if (string.IsNullOrWhiteSpace(json))
                 return null;
 

@@ -359,7 +359,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                DefaultGasType defaultGasType = Query.DefaultGasType(gasMaterial);
+                DefaultGasType defaultGasType = DefaultGasType(gasMaterial);
                 if (defaultGasType == Analytical.DefaultGasType.Undefined)
                 {
                     constructionLayers_Out.Add(new ConstructionLayer(constructionLayer));

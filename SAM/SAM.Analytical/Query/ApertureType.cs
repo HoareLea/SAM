@@ -23,7 +23,7 @@
                 {
                     string value_Type = null;
 
-                    value_Type = Query.Text(apertureType);
+                    value_Type = Text(apertureType);
                     if (!string.IsNullOrWhiteSpace(value_Type) && value_Type.ToUpper().Equals(value))
                         return apertureType;
 

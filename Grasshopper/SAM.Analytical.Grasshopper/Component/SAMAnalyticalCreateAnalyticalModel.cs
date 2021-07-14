@@ -42,7 +42,7 @@ namespace SAM.Analytical.Grasshopper
             int index = -1;
 
             inputParamManager.AddTextParameter("_name_", "_name_", "Analytical Model Name", GH_ParamAccess.item, "000000_SAM_AnalyticalModel");
-            inputParamManager.AddTextParameter("_description_", "_description_", "SAM Description", GH_ParamAccess.item, string.Format("Delivered by SAM https://github.com/HoareLea/SAM [{0}]", System.DateTime.Now.ToString("yyyy/MM/dd")));
+            inputParamManager.AddTextParameter("_description_", "_description_", "SAM Description", GH_ParamAccess.item, string.Format("Delivered by SAM https://github.com/HoareLea/SAM [{0}]", DateTime.Now.ToString("yyyy/MM/dd")));
             inputParamManager.AddParameter(new GooLocationParam(), "_location", "_location", "SAM Location", GH_ParamAccess.item);
 
             index = inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Adjacency Cluster", GH_ParamAccess.item);

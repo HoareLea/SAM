@@ -119,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
             List<Face3D> face3Ds = new List<Face3D>();
             List<ISegmentable3D> segmentable3Ds = new List<ISegmentable3D>();
 
-            Geometry.Spatial.Plane plane_Default = Geometry.Spatial.Plane.WorldXY;
+            Geometry.Spatial.Plane plane_Default = Plane.WorldXY;
             foreach(ISAMGeometry sAMGeometry in sAMGeometries)
             {
                 if (sAMGeometry is Face3D)

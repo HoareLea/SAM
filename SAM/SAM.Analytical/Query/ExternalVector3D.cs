@@ -18,7 +18,7 @@ namespace SAM.Analytical
             if (face3D == null)
                 return null;
 
-            Shell shell = Query.Shell(adjacencyCluster, space);
+            Shell shell = Shell(adjacencyCluster, space);
             if (shell == null)
                 return null;
 

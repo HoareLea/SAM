@@ -59,7 +59,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
-                paramNumber.SetPersistentData(Core.Tolerance.Distance);
+                paramNumber.SetPersistentData(Tolerance.Distance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
                 
                 

@@ -4,7 +4,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static double Distance(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2, double tolerance = SAM.Core.Tolerance.Distance)
+        public static double Distance(this ISegmentable2D segmentable2D_1, ISegmentable2D segmentable2D_2, double tolerance = Core.Tolerance.Distance)
         {
             if (segmentable2D_1 == null || segmentable2D_2 == null)
                 return double.NaN;

@@ -26,7 +26,7 @@ namespace SAM.Geometry.Grasshopper
             if (geometricGoo is GH_Mesh)
                 return ((GH_Mesh)geometricGoo).ToSAM();
 
-            object @object = SAM.Geometry.Grasshopper.Convert.ToSAM(geometricGoo as dynamic);
+            object @object = Convert.ToSAM(geometricGoo as dynamic);
             if (@object == null)
                 return null;
 

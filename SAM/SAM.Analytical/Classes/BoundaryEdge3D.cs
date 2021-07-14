@@ -17,7 +17,7 @@ namespace SAM.Analytical
         }
 
         public BoundaryEdge3D(Plane plane, BoundaryEdge2D boundaryEdge2D)
-            : base(System.Guid.NewGuid(), boundaryEdge2D)
+            : base(Guid.NewGuid(), boundaryEdge2D)
         {
             curve3D = (ICurve3D)plane.Convert(boundaryEdge2D.Curve2D);
         }
@@ -78,7 +78,7 @@ namespace SAM.Analytical
             if (!(curve3D is ISegmentable3D))
                 throw new NotImplementedException();
 
-            curve3D = SAM.Geometry.Spatial.Query.Transform(curve3D as dynamic, transform3D);
+            curve3D = Geometry.Spatial.Query.Transform(curve3D as dynamic, transform3D);
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)

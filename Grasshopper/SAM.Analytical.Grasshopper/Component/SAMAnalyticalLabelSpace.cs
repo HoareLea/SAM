@@ -136,7 +136,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            Vector3D normal = SAM.Geometry.Spatial.Plane.WorldXY.Normal;
+            Vector3D normal = Geometry.Spatial.Plane.WorldXY.Normal;
 
             List<Text3d> result = new List<Text3d>();
 

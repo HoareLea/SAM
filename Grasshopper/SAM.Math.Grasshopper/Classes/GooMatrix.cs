@@ -71,7 +71,7 @@ namespace SAM.Math.Grasshopper
             if (string.IsNullOrWhiteSpace(value))
                 return false;
 
-            Value = Math.Create.Matrix(JObject.Parse(value));
+            Value = Create.Matrix(JObject.Parse(value));
             return true;
         }
 

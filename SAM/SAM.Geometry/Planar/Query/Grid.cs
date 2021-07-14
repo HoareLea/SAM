@@ -130,7 +130,7 @@ namespace SAM.Geometry.Planar
                 BoundingBox2D boundingBox2D_KeepFull = new BoundingBox2D(segment2Ds_KeepFull.ConvertAll(segment2D_KeepFull => segment2D_KeepFull.GetBoundingBox()));
                 if(boundingBox2D_KeepFull != null)
                 {
-                    result = Query.Extend(result, boundingBox2D_KeepFull);
+                    result = Extend(result, boundingBox2D_KeepFull);
                     foreach(Segment2D segment2D_KeepFull in boundingBox2D_KeepFull.GetSegments())
                     {
                         if (result.Find(segment2D_Temp => segment2D_Temp.AlmostSimilar(segment2D_KeepFull)) == null)

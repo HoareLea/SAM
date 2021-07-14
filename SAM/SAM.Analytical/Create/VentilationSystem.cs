@@ -5,7 +5,7 @@
         public static VentilationSystem VentilationSystem(VentilationSystemType ventilationSystemType, int index = -1, string supplyUnitName = null, string exhaustUnitName = null)
         {
 
-            VentilationSystem result = Create.MechanicalSystem(ventilationSystemType, index) as VentilationSystem;
+            VentilationSystem result = MechanicalSystem(ventilationSystemType, index) as VentilationSystem;
             if (result == null)
                 return null;
 

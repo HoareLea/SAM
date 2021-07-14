@@ -6,20 +6,20 @@
         private double max = double.NaN;
 
         public DoubleParameterValue()
-            : base(Core.ParameterType.Double)
+            : base(ParameterType.Double)
         {
 
         }
 
         public DoubleParameterValue(double min, double max)
-            : base(Core.ParameterType.Double)
+            : base(ParameterType.Double)
         {
             this.min = min;
             this.max = max;
         }
 
         public DoubleParameterValue(double min)
-            : base(Core.ParameterType.Double)
+            : base(ParameterType.Double)
         {
             this.min = min;
         }

@@ -91,7 +91,7 @@ namespace SAM.Analytical.Grasshopper
 
             double value = double.NaN;
             if (double.TryParse(text, out value))
-                text = value.Round(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+                text = value.Round(RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
 
             dataAccess.SetData(0, text);
         }
@@ -153,7 +153,7 @@ namespace SAM.Analytical.Grasshopper
 
                 double value = double.NaN;
                 if (double.TryParse(text, out value))
-                    text =   value.Round(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+                    text =   value.Round(RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
 
                 Vector3D normal = panel.PlanarBoundary3D?.GetFace3D()?.GetPlane()?.Normal;
                 normal.Round(Tolerance.Distance);
@@ -188,8 +188,8 @@ namespace SAM.Analytical.Grasshopper
                     height_Temp = max / (length * 2);
                 }
 
-                Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = Rhino.DocObjects.TextHorizontalAlignment.Center;
-                Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = Rhino.DocObjects.TextVerticalAlignment.MiddleOfBottom;
+                Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = TextHorizontalAlignment.Center;
+                Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = TextVerticalAlignment.MiddleOfBottom;
                 Text3d text3d = new Text3d("\n"+ text, plane, height_Temp);  // TODO: add enter in front of Panel Data
                 text3d.HorizontalAlignment = textHorizontalAlignment;
                 text3d.VerticalAlignment = textVerticalAlignment;

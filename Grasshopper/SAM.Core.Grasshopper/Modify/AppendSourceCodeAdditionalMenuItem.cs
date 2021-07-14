@@ -15,7 +15,7 @@ namespace SAM.Core.Grasshopper
             if (gH_Component == null)
                 return null;
 
-            ToolStripMenuItem toolStripMenuItem = GH_Component.Menu_AppendItem(menu, "Go to source code...", OnSourceCodeClick, Properties.Resources.SAM_Small);
+            ToolStripMenuItem toolStripMenuItem = GH_DocumentObject.Menu_AppendItem(menu, "Go to source code...", OnSourceCodeClick, Properties.Resources.SAM_Small);
             if (toolStripMenuItem != null)
                 toolStripMenuItem.Tag = gH_Component.InstanceGuid;
 

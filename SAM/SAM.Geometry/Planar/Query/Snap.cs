@@ -311,7 +311,7 @@ namespace SAM.Geometry.Planar
                     }
 
                     if (point2D_New == null)
-                        point2D_New = Query.Average(point2Ds);
+                        point2D_New = Average(point2Ds);
 
 
                     foreach (KeyValuePair<int, List<int>> keyValuePair in dictionary)

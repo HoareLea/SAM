@@ -93,7 +93,7 @@ namespace SAM.Core
 
         public Color ToColor()
         {
-            return System.Drawing.Color.FromArgb(alpha, red, green, blue);
+            return Color.FromArgb(alpha, red, green, blue);
         }
 
         public bool FromJObject(JObject jObject)

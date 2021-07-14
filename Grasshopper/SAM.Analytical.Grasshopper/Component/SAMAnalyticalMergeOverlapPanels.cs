@@ -45,9 +45,9 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
-            inputParamManager.AddNumberParameter("_offset_", "_offset_", "Offset", GH_ParamAccess.item, Core.Tolerance.Distance);
+            inputParamManager.AddNumberParameter("_offset_", "_offset_", "Offset", GH_ParamAccess.item, Tolerance.Distance);
             inputParamManager.AddBooleanParameter("_defaultConstruction_", "_defaultConstruction_", "Set default Construtcion for Panels", GH_ParamAccess.item, false);
-            inputParamManager.AddNumberParameter("_tolerance_", "_tolerance_", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
+            inputParamManager.AddNumberParameter("_tolerance_", "_tolerance_", "Tolerance", GH_ParamAccess.item, Tolerance.Distance);
             inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
         }
 
@@ -77,14 +77,14 @@ namespace SAM.Analytical.Grasshopper
             if (!run)
                 return;
 
-            double offset = Core.Tolerance.Distance;
+            double offset = Tolerance.Distance;
             if (!dataAccess.GetData(1, ref offset))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            double tolerance = Core.Tolerance.Distance;
+            double tolerance = Tolerance.Distance;
             if (!dataAccess.GetData(3, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

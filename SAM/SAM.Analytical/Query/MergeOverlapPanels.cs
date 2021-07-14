@@ -16,7 +16,7 @@ namespace SAM.Analytical
                 return null;
 
             Dictionary<PanelGroup, List<Panel>> dictionary = new Dictionary<PanelGroup, List<Panel>>();
-            foreach (PanelGroup panelGroup in System.Enum.GetValues(typeof(PanelGroup)))
+            foreach (PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
                 dictionary[panelGroup] = new List<Panel>();
 
             foreach (Panel panel in panels)
@@ -227,7 +227,7 @@ namespace SAM.Analytical
 
                         if (panel_Old == null)
                         {
-                            List<Tuple<Polygon, Panel>> tuples_Polygon_Floor = tuples_Polygon_Contains.FindAll(x => Query.PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
+                            List<Tuple<Polygon, Panel>> tuples_Polygon_Floor = tuples_Polygon_Contains.FindAll(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Floor);
                             if (tuples_Polygon_Floor != null && tuples_Polygon_Floor.Count != 0)
                             {
                                 panel_Old = tuples_Polygon_Floor.Find(x => x.PanelType() == Analytical.PanelType.FloorInternal)?.Item2;
@@ -236,7 +236,7 @@ namespace SAM.Analytical
                             }
                             else
                             {
-                                List<Tuple<Polygon, Panel>> tuples_Polygon_Roof = tuples_Polygon_Contains.FindAll(x => Query.PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Roof);
+                                List<Tuple<Polygon, Panel>> tuples_Polygon_Roof = tuples_Polygon_Contains.FindAll(x => PanelGroup(x.Item2.PanelType) == Analytical.PanelGroup.Roof);
                                 if (tuples_Polygon_Roof != null && tuples_Polygon_Roof.Count > 1)
                                     panel_Old = tuples_Polygon_Contains.Find(x => x.PanelType() == Analytical.PanelType.FloorInternal)?.Item2;
                             }

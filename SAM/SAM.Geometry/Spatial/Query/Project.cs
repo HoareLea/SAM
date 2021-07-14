@@ -110,7 +110,7 @@ namespace SAM.Geometry.Spatial
                 point3Ds[i] = point3D;
             }
 
-            if (Planar.Query.Area(point3Ds.ConvertAll(x => Query.Convert(plane, x))) <= tolerance)
+            if (Planar.Query.Area(point3Ds.ConvertAll(x => Convert(plane, x))) <= tolerance)
                 return null;
 
             return new Triangle3D(point3Ds[0], point3Ds[1], point3Ds[2]);
@@ -177,7 +177,7 @@ namespace SAM.Geometry.Spatial
                 point3Ds[i] = point3D;
             }
 
-            if (Planar.Query.Area(point3Ds.ConvertAll(x => Query.Convert(plane, x))) <= tolerance)
+            if (Planar.Query.Area(point3Ds.ConvertAll(x => Convert(plane, x))) <= tolerance)
                 return null;
 
             return new Polygon3D(point3Ds);
@@ -204,13 +204,13 @@ namespace SAM.Geometry.Spatial
             if (plane == null || face3D == null)
                 return null;
 
-            Planar.IClosed2D externalEdge = Query.Convert(plane, Project(plane, face3D.GetExternalEdge3D()));
+            Planar.IClosed2D externalEdge = Convert(plane, Project(plane, face3D.GetExternalEdge3D()));
 
             List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
             if (internalEdges != null && internalEdges.Count > 0)
                 internalEdges = internalEdges.ConvertAll(x => Project(plane, x));
 
-            return Face3D.Create(plane, externalEdge, internalEdges?.ConvertAll(x => Query.Convert(plane, x)));
+            return Face3D.Create(plane, externalEdge, internalEdges?.ConvertAll(x => Convert(plane, x)));
         }
 
         public static Face3D Project(this Plane plane, Face3D face3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)

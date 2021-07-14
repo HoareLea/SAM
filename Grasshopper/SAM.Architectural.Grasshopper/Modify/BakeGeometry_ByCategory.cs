@@ -74,7 +74,7 @@ namespace SAM.Architectural.Grasshopper
                 objectAttributes.LayerIndex = layer.Index;
 
                 Guid guid = default;
-                if (Modify.BakeGeometry(hostBuildingElement, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
+                if (BakeGeometry(hostBuildingElement, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
                     guids.Add(guid);
 
                 List<Opening> openings = hostBuildingElement.Openings;
@@ -92,7 +92,7 @@ namespace SAM.Architectural.Grasshopper
                     objectAttributes.LayerIndex = layer.Index;
 
                     guid = default;
-                    if (Modify.BakeGeometry(opening, rhinoDoc, objectAttributes, out guid))
+                    if (BakeGeometry(opening, rhinoDoc, objectAttributes, out guid))
                         guids.Add(guid);
                 }
             }

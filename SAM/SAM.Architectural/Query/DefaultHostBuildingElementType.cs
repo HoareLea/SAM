@@ -8,7 +8,7 @@ namespace SAM.Architectural
         {
             if (normal == null)
                 return null;
-            HostBuildingElementCategory hostBuildingElementCategory = Query.HostBuildingElementCategory(normal, tolerance);
+            HostBuildingElementCategory hostBuildingElementCategory = HostBuildingElementCategory(normal, tolerance);
             switch (hostBuildingElementCategory)
             {
                 case Architectural.HostBuildingElementCategory.Floor:

@@ -19,7 +19,7 @@ namespace SAM.Geometry.Planar
             while (edges_Current.Count > 0)
             {
                 List<IClosed2D> edges_Excluded = null;
-                Face2D face2D = Create.Face2D(edges_Current, out edges_Excluded, edgeOrientationMethod);
+                Face2D face2D = Face2D(edges_Current, out edges_Excluded, edgeOrientationMethod);
                 if (face2D == null)
                     break;
 

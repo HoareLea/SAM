@@ -194,7 +194,7 @@ namespace SAM.Analytical
 
         public Point3D GetInternalPoint3D(double tolerance = Tolerance.Distance)
         {
-            return SAM.Geometry.Spatial.Query.InternalPoint3D(GetFace3D(), tolerance);
+            return Geometry.Spatial.Query.InternalPoint3D(GetFace3D(), tolerance);
         }
 
         public double GetArea()
