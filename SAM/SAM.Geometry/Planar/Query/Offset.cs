@@ -79,6 +79,34 @@ namespace SAM.Geometry.Planar
             return Offset(polyline2D.Points, offset, JoinType.jtMiter, endType, tolerance).ConvertAll(x => new Polygon2D(x));
         }
 
+        public static Triangle2D Offset(Triangle2D triangle2D, double offset, double tolerance = Tolerance.MicroDistance)
+        {
+            if (triangle2D == null)
+            {
+                return null;
+            }
+
+            List<List<Point2D>> point2DsList =  Offset(triangle2D.GetPoints(), offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
+            if(point2DsList == null)
+            {
+                return null;
+            }
+
+            point2DsList.RemoveAll(x => x == null || x.Count < 3);
+            if(point2DsList.Count == 0)
+            {
+                return null;
+            }
+
+            if (point2DsList.Count > 1)
+            {
+                point2DsList.Sort((x, y) => Area(y).CompareTo(Area(x)));
+                
+            }
+
+            return new Triangle2D(point2DsList[0][0], point2DsList[0][1], point2DsList[0][2]);
+        }
+
         //public static List<Polygon2D> Offset(this ISegmentable2D segmentable2D, double offset, JoinType joinType, EndType endType, double tolerance = Tolerance.MicroDistance)
         //{
         //    if (segmentable2D == null)
@@ -124,6 +152,7 @@ namespace SAM.Geometry.Planar
             return Offset(polygon2D?.Points, offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance)?.ConvertAll(x => new Polygon2D(x));
         }
 
+        
         public static List<Polyline2D> Offset(this Polyline2D polyline2D, double offset, Orientation orientation, double tolerance = Tolerance.Distance)
         {
             return Offset(polyline2D, new double[] { offset }, orientation, tolerance);
