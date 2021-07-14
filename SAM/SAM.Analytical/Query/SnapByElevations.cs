@@ -8,7 +8,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> SnapByElevations(this IEnumerable<Panel> panels, IEnumerable<double> elevations, double maxTolerance = Core.Tolerance.MacroDistance, double minTolerance = Core.Tolerance.MicroDistance)
+        public static List<Panel> SnapByElevations(this IEnumerable<Panel> panels, IEnumerable<double> elevations, int maxIterations = 1, double maxTolerance = Core.Tolerance.MacroDistance, double minTolerance = Core.Tolerance.MicroDistance)
         {
             if(panels == null)
             {
@@ -34,20 +34,64 @@ namespace SAM.Analytical
                 }
             }
 
-            foreach (double elevation in elevations)
+            if(panels_Rectangular.Count != 0)
             {
-                double[] elevations_Temp = new double[] { elevation };
+                int count = -1;
+                for (int i = 0; i < maxIterations; i++)
+                {
+                    List<Point3D> point3Ds = null;
 
-                panels_Rectangular = SnapByElevations_Ends(panels_Rectangular, elevations_Temp, maxTolerance, minTolerance);
-                panels_Rectangular = SnapByElevations_Intersections(panels_Rectangular, elevations_Temp, maxTolerance, minTolerance);
-            }
+                    if (count == -1 && maxIterations > 1)
+                    {
+                        point3Ds = SpacingPoint3Ds(panels_Rectangular, maxTolerance, minTolerance);
+                        if (point3Ds == null || point3Ds.Count == 0)
+                        {
+                            break;
+                        }
 
-            panels_Rectangular = SnapByElevations_Ends(panels_Rectangular, elevations, maxTolerance, minTolerance);
-            panels_Rectangular = SnapByElevations_Intersections(panels_Rectangular, elevations, maxTolerance, minTolerance);
+                        count = point3Ds.Count;
+                    }
 
-            if(panels_Rectangular != null)
-            {
-                result.AddRange(panels_Rectangular);
+                    List<Panel> panels_Rectangular_Temp = panels_Rectangular.ConvertAll(x => new Panel(x));
+
+                    foreach (double elevation in elevations)
+                    {
+                        double[] elevations_Temp = new double[] { elevation };
+
+                        panels_Rectangular = SnapByElevations_Ends(panels_Rectangular, elevations_Temp, maxTolerance, minTolerance);
+                        panels_Rectangular = SnapByElevations_Intersections(panels_Rectangular, elevations_Temp, maxTolerance, minTolerance);
+                    }
+
+                    panels_Rectangular = SnapByElevations_Ends(panels_Rectangular, elevations, maxTolerance, minTolerance);
+                    panels_Rectangular = SnapByElevations_Intersections(panels_Rectangular, elevations, maxTolerance, minTolerance);
+
+                    if(count != -1)
+                    {
+                        point3Ds = SpacingPoint3Ds(panels_Rectangular, maxTolerance, minTolerance);
+                        if (point3Ds == null || point3Ds.Count == 0)
+                        {
+                            break;
+                        }
+
+                        int count_Temp = point3Ds.Count;
+                        if(count_Temp > count)
+                        {
+                            panels_Rectangular = panels_Rectangular_Temp;
+                            break;
+                        }
+                        else if(count_Temp == count)
+                        {
+                            break;
+                        }
+
+                        count = count_Temp;
+                    }
+                }
+
+                if (panels_Rectangular != null && panels_Rectangular.Count != 0)
+                {
+                    result.AddRange(panels_Rectangular);
+                }
             }
 
             return result;
@@ -83,7 +127,7 @@ namespace SAM.Analytical
             }
 
             List<Tuple<Panel, List<Segment2D>>> tuples = new List<Tuple<Panel, List<Segment2D>>>();
-            List<Tuple<Point2D, Segment2D, bool>> tuples_Point2D = new List<Tuple<Point2D, Segment2D, bool>>();
+            List<Tuple<Point2D, Segment2D, bool, BoundingBox2D>> tuples_Point2D = new List<Tuple<Point2D, Segment2D, bool, BoundingBox2D>>();
             foreach (KeyValuePair<Panel, List<ISegmentable2D>> keyValuePair in dictionary)
             {
                 if (keyValuePair.Key == null || keyValuePair.Value == null || keyValuePair.Value.Count == 0)
@@ -105,8 +149,10 @@ namespace SAM.Analytical
 
                 foreach (Segment2D segment2D in segment2Ds)
                 {
-                    tuples_Point2D.Add(new Tuple<Point2D, Segment2D, bool>(segment2D[0], segment2D, true));
-                    tuples_Point2D.Add(new Tuple<Point2D, Segment2D, bool>(segment2D[1], segment2D, false));
+                    BoundingBox2D boundingBox2D = segment2D.GetBoundingBox();
+
+                    tuples_Point2D.Add(new Tuple<Point2D, Segment2D, bool, BoundingBox2D>(segment2D[0], segment2D, true, boundingBox2D));
+                    tuples_Point2D.Add(new Tuple<Point2D, Segment2D, bool, BoundingBox2D>(segment2D[1], segment2D, false, boundingBox2D));
                 }
 
                 tuples.Add(new Tuple<Panel, List<Segment2D>>(keyValuePair.Key, segment2Ds));
@@ -115,7 +161,8 @@ namespace SAM.Analytical
             List<Tuple<Point2D, Segment2D, bool>> tuples_Point2D_Snap = new List<Tuple<Point2D, Segment2D, bool>>();
             while (tuples_Point2D.Count > 0)
             {
-                List<Tuple<Point2D, Segment2D, bool>> tuples_Point2D_Temp = tuples_Point2D.FindAll(x => x.Item1.Distance(tuples_Point2D[0].Item1) <= maxTolerance);
+                List<Tuple<Point2D, Segment2D, bool, BoundingBox2D>> tuples_Point2D_Temp = tuples_Point2D.FindAll(x => x.Item4.InRange(tuples_Point2D[0].Item1, maxTolerance));
+                tuples_Point2D_Temp = tuples_Point2D_Temp.FindAll(x => x.Item1.Distance(tuples_Point2D[0].Item1) <= maxTolerance);
                 tuples_Point2D_Temp.ForEach(x => tuples_Point2D.Remove(x));
                 if (tuples_Point2D_Temp.Count < 2)
                 {
@@ -145,7 +192,7 @@ namespace SAM.Analytical
                 {
                     List<Tuple<Segment2D, double>> tuples_Segment2D_Weight = new List<Tuple<Segment2D, double>>();
 
-                    foreach (Tuple<Point2D, Segment2D, bool> tuple in tuples_Point2D_Temp)
+                    foreach (Tuple<Point2D, Segment2D, bool, BoundingBox2D> tuple in tuples_Point2D_Temp)
                     {
                         Segment2D segment2D = null;
                         if (tuple.Item3)
@@ -167,7 +214,7 @@ namespace SAM.Analytical
 
                 Point2D point2D_Snap = tuples_Weight[0].Item1;
 
-                foreach (Tuple<Point2D, Segment2D, bool> tuple in tuples_Point2D_Temp)
+                foreach (Tuple<Point2D, Segment2D, bool, BoundingBox2D> tuple in tuples_Point2D_Temp)
                 {
                     tuples_Point2D_Snap.Add(new Tuple<Point2D, Segment2D, bool>(point2D_Snap, tuple.Item2, tuple.Item3));
                 }
@@ -274,7 +321,7 @@ namespace SAM.Analytical
 
             List<Tuple<Panel, List<Segment2D>>> tuples = new List<Tuple<Panel, List<Segment2D>>>();
             List<Tuple<Point2D, Segment2D, bool>> tuples_Point2D = new List<Tuple<Point2D, Segment2D, bool>>();
-            List<Segment2D> segment2Ds_All = new List<Segment2D>();
+            List<Tuple<Segment2D, BoundingBox2D>> tuples_Segment2D = new List<Tuple<Segment2D, BoundingBox2D>>();
             foreach (KeyValuePair<Panel, List<ISegmentable2D>> keyValuePair in dictionary)
             {
                 if (keyValuePair.Key == null || keyValuePair.Value == null || keyValuePair.Value.Count == 0)
@@ -300,14 +347,28 @@ namespace SAM.Analytical
                     tuples_Point2D.Add(new Tuple<Point2D, Segment2D, bool>(segment2D[1], segment2D, false));
                 }
 
-                segment2Ds_All.AddRange(segment2Ds);
+                segment2Ds.ForEach(x => tuples_Segment2D.Add(new Tuple<Segment2D, BoundingBox2D>(x, x.GetBoundingBox())));
                 tuples.Add(new Tuple<Panel, List<Segment2D>>(keyValuePair.Key, segment2Ds));
             }
 
             List<Tuple<Point2D, Segment2D, bool>> tuples_Point2D_Snap = new List<Tuple<Point2D, Segment2D, bool>>();
             foreach(Tuple<Point2D, Segment2D, bool> tuple in tuples_Point2D)
             {
-                List<Segment2D> segment2Ds_Temp = segment2Ds_All.FindAll(x => x.Distance(tuple.Item1) <= maxTolerance && x.Distance(tuple.Item1) >= minTolerance);
+                List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
+                foreach(Tuple<Segment2D, BoundingBox2D> tuple_Segment2D in tuples_Segment2D)
+                {
+                    if(!tuple_Segment2D.Item2.InRange(tuple.Item1, maxTolerance))
+                    {
+                        continue;
+                    }
+
+                    double distance = tuple_Segment2D.Item1.Distance(tuple.Item1);
+                    if(distance <= maxTolerance && distance>= minTolerance)
+                    {
+                        segment2Ds_Temp.Add(tuple_Segment2D.Item1);
+                    }
+                }
+
                 segment2Ds_Temp.Remove(tuple.Item2);
                 if(segment2Ds_Temp.Count < 1)
                 {

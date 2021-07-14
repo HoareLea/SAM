@@ -189,6 +189,7 @@
     <Compile Include="Query\Offset.cs" />
     <Compile Include="Query\Rectangular.cs" />
     <Compile Include="Query\SectionDictionary.cs" />
+    <Compile Include="Query\SpacingPoint3Ds.cs" />
     <Compile Include="Query\SnapByElevations.cs" />
     <Compile Include="Query\SpaceShells.cs" />
     <Compile Include="Query\CalculatedArea.cs" />

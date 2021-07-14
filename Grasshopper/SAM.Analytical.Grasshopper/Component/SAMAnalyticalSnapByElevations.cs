@@ -128,7 +128,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> result = Analytical.Query.SnapByElevations(panels, elevations, maxTolerance, minTolerance);
+            List<Panel> result = Analytical.Query.SnapByElevations(panels, elevations, 5, maxTolerance, minTolerance);
             dataAccess.SetDataList(0, result.ConvertAll(x => new GooPanel(x)));
         }
     }
