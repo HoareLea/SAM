@@ -15,22 +15,40 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<Panel> result = new List<Panel>(panels);
+            List<Panel> panels_Rectangular = new List<Panel>();
+            List<Panel> result = new List<Panel>();
+            foreach (Panel panel in panels)
+            {
+                if(panel == null)
+                {
+                    continue;
+                }
+
+                if(panel.Rectangular(maxTolerance))
+                {
+                    panels_Rectangular.Add(panel);
+                }
+                else
+                {
+                    result.Add(new Panel(panel));
+                }
+            }
+
             foreach (double elevation in elevations)
             {
                 double[] elevations_Temp = new double[] { elevation };
 
-                result = SnapByElevations_Ends(result, elevations_Temp, maxTolerance, minTolerance);
-                if (result == null)
-                {
-                    return null;
-                }
-
-                result = SnapByElevations_Intersections(result, elevations_Temp, maxTolerance, minTolerance);
+                panels_Rectangular = SnapByElevations_Ends(panels_Rectangular, elevations_Temp, maxTolerance, minTolerance);
+                panels_Rectangular = SnapByElevations_Intersections(panels_Rectangular, elevations_Temp, maxTolerance, minTolerance);
             }
 
-            result = SnapByElevations_Ends(result, elevations, maxTolerance, minTolerance);
-            result = SnapByElevations_Intersections(result, elevations, maxTolerance, minTolerance);
+            panels_Rectangular = SnapByElevations_Ends(panels_Rectangular, elevations, maxTolerance, minTolerance);
+            panels_Rectangular = SnapByElevations_Intersections(panels_Rectangular, elevations, maxTolerance, minTolerance);
+
+            if(panels_Rectangular != null)
+            {
+                result.AddRange(panels_Rectangular);
+            }
 
             return result;
         }
