@@ -55,5 +55,38 @@ namespace SAM.Geometry.Spatial
 
             return new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], (Point3D)segment3D[1].GetMoved(vector3D), (Point3D)segment3D[0].GetMoved(vector3D) });
         }
+
+        public static Polygon3D Polygon3D(this Segment3D segment3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(segment3D == null || !segment3D.IsValid() || vector3D == null || !vector3D.IsValid())
+            {
+                return null;
+            }
+
+            double length = vector3D.Length;
+            if(double.IsNaN(length) || length < tolerance)
+            {
+                return null;
+            }
+
+            if(segment3D.Direction.AlmostSimilar(vector3D.Unit, tolerance))
+            {
+                return null;
+            }
+
+            Point3D point3D_1 = segment3D[0];
+            Point3D point3D_2 = segment3D[1];
+            Point3D point3D_3 = segment3D[1].GetMoved(vector3D) as Point3D;
+
+            Plane plane = Plane(point3D_1, point3D_2, point3D_3);
+            if(plane == null || !plane.IsValid())
+            {
+                return null;
+            }
+
+            Point3D point3D_4 = segment3D[0].GetMoved(vector3D) as Point3D;
+
+            return new Polygon3D(plane, new Point2D[] { plane.Convert(point3D_1), plane.Convert(point3D_2), plane.Convert(point3D_3), plane.Convert(point3D_4) });
+        }
     }
 }

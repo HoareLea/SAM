@@ -78,12 +78,12 @@ namespace SAM.Core.Grasshopper
             DelimitedFileTable delimitedFileTable = null;
             if (Core.Query.FileExists(csvOrPath))
             {
-                delimitedFileTable = new Core.DelimitedFileTable(new Core.DelimitedFileReader(DelimitedFileType.Csv, csvOrPath));
+                delimitedFileTable = new DelimitedFileTable(new DelimitedFileReader(DelimitedFileType.Csv, csvOrPath));
             }
             else
             {
                 string[] lines = csvOrPath.Split('\n');
-                delimitedFileTable = new DelimitedFileTable(new Core.DelimitedFileReader(DelimitedFileType.Csv, lines));
+                delimitedFileTable = new DelimitedFileTable(new DelimitedFileReader(DelimitedFileType.Csv, lines));
             }
 
             index = Params.IndexOfOutputParam("DelimitedFileTable");

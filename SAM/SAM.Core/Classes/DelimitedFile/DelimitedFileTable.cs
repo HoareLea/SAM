@@ -467,7 +467,7 @@ namespace SAM.Core
             if (!TryGetValue(row, column, out object_value))
                 return false;
 
-            return Query.TryConvert<T>(@object_value, out value);
+            return Query.TryConvert(@object_value, out value);
         }
 
         public string ToString(int row, int column)

@@ -161,7 +161,7 @@ namespace SAM.Core
                 expressionText = expressionText.Replace('[' + expressionVariable.Text + ']', text);
             }
 
-            return TryCompute<T>(expressionText, out result, variables);
+            return TryCompute(expressionText, out result, variables);
         }
     }
 }

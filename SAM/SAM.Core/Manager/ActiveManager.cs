@@ -80,12 +80,12 @@ namespace SAM.Core
 
         public static bool TryGetValue<T>(Assembly assembly, string name, out T value)
         {
-            return manager.TryGetValue<T>(assembly, name, out value);
+            return manager.TryGetValue(assembly, name, out value);
         }
 
         public static bool TryGetValue<T>(string name, out T value)
         {
-            return manager.TryGetValue<T>(name, out value);
+            return manager.TryGetValue(name, out value);
         }
 
         public static T GetValue<T>(Assembly assembly, string name)

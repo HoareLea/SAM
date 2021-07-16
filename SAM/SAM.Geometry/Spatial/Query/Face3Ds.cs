@@ -51,5 +51,10 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static List<Face3D> Face3Ds(this Extrusion extrusion, double tolerance = Core.Tolerance.Distance)
+        {
+            return Create.Shell(extrusion, tolerance)?.Face3Ds;
+        }
     }
 }

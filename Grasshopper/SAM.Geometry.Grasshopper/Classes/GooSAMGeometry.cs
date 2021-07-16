@@ -306,7 +306,7 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            return base.CastTo<Y>(ref target);
+            return base.CastTo(ref target);
         }
 
         public virtual void DrawViewportWires(GH_PreviewWireArgs args)

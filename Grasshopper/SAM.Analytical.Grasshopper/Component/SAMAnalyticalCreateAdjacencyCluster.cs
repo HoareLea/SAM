@@ -119,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
             List<Face3D> face3Ds = new List<Face3D>();
             List<ISegmentable3D> segmentable3Ds = new List<ISegmentable3D>();
 
-            Geometry.Spatial.Plane plane_Default = Plane.WorldXY;
+            Plane plane_Default = Plane.WorldXY;
             foreach(ISAMGeometry sAMGeometry in sAMGeometries)
             {
                 if (sAMGeometry is Face3D)
@@ -163,7 +163,7 @@ namespace SAM.Analytical.Grasshopper
 
                 double elevation = Core.Query.Round(boundingBox3D.Min.Z, tolerance);
 
-                Geometry.Spatial.Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, elevation)) as Geometry.Spatial.Plane;
+                Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
                 ISegmentable2D segmentable2D = Geometry.Spatial.Query.Convert(plane, Geometry.Spatial.Query.Project(plane, segmentable3D as dynamic));
                 if (segmentable2D == null)
                     continue;
@@ -222,7 +222,7 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                Geometry.Spatial.Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, keyValuePair.Key)) as Geometry.Spatial.Plane;
+                Plane plane = plane_Default.GetMoved(new Vector3D(0, 0, keyValuePair.Key)) as Plane;
                 face3Ds.AddRange(face2Ds.ConvertAll(x => plane.Convert(x)));
             }
 

@@ -182,7 +182,7 @@ namespace SAM.Core.Grasshopper
 
             }
 
-            return base.CastTo<Y>(ref target);
+            return base.CastTo(ref target);
         }
     }
 

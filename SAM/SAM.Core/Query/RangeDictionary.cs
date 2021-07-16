@@ -29,7 +29,7 @@ namespace SAM.Core
 
                 if (value.Equals(value_Temp))
                 {
-                    range = new Core.Range<int>(range.Min, range.Max + 1);
+                    range = new Range<int>(range.Min, range.Max + 1);
                     continue;
                 }
                 else

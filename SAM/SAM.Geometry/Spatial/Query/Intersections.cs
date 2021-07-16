@@ -94,5 +94,54 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static List<Point3D> Intersections(this Point3D point3D, Vector3D vector3D, IEnumerable<Face3D> face3Ds, bool sort = true, double tolerance = Core.Tolerance.Distance)
+        {
+            if(point3D == null || vector3D == null || face3Ds == null)
+            {
+                return null;
+            }
+
+            return IntersectionDictionary(point3D, vector3D, face3Ds, sort, tolerance)?.Values?.ToList();
+        }
+
+        public static List<Point3D> Intersections(this Shell shell, ISegmentable3D segmentable3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(shell == null || segmentable3D == null)
+            {
+                return null;
+            }
+
+            List<Face3D> face3Ds = shell.Face3Ds;
+            if(face3Ds == null)
+            {
+                return null;
+            }
+
+            List<Point3D> result = new List<Point3D>();
+            if(!shell.GetBoundingBox().InRange(segmentable3D.GetBoundingBox(), tolerance))
+            {
+                return result;
+            }
+
+            foreach(Face3D face3D in face3Ds)
+            {
+                PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(face3D, segmentable3D, tolerance);
+                if(planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                {
+                    continue;
+                }
+
+                List<Point3D> point3Ds_Face3D = planarIntersectionResult.GetGeometry3Ds<Point3D>();
+                if(point3Ds_Face3D == null || point3Ds_Face3D.Count == 0)
+                {
+                    continue;
+                }
+
+                result.AddRange(point3Ds_Face3D);
+            }
+
+            return result;
+        }
     }
 }

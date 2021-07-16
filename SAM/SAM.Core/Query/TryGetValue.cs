@@ -143,8 +143,8 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(name) || @object == null)
                 return false;
 
-            System.Reflection.PropertyInfo[] propertyInfos = @object.GetType().GetProperties();
-            foreach (System.Reflection.PropertyInfo propertyInfo in propertyInfos)
+            PropertyInfo[] propertyInfos = @object.GetType().GetProperties();
+            foreach (PropertyInfo propertyInfo in propertyInfos)
             {
                 if (propertyInfo.Name.Equals(name) && propertyInfo.GetMethod != null)
                 {
@@ -168,7 +168,7 @@ namespace SAM.Core
 
             object[] parameters = new object[] { };
 
-            System.Reflection.ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+            ParameterInfo[] parameterInfos = methodInfo.GetParameters();
             if (parameterInfos != null && parameterInfos.Length > 0)
             {
                 if (!parameterInfos.ToList().TrueForAll(x => x.IsOptional))
@@ -190,8 +190,8 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(name) || @object == null)
                 return false;
 
-            System.Reflection.MethodInfo[] methodInfos = @object.GetType().GetMethods();
-            foreach (System.Reflection.MethodInfo methodInfo in methodInfos)
+            MethodInfo[] methodInfos = @object.GetType().GetMethods();
+            foreach (MethodInfo methodInfo in methodInfos)
             {
                 if (methodInfo.ReturnType == typeof(void))
                     continue;

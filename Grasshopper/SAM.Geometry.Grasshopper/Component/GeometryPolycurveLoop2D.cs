@@ -89,7 +89,7 @@ namespace SAM.Geometry.Grasshopper
             index = Params.IndexOfInputParam("_run_");
             if (index != -1)
             {
-                if (!dataAccess.GetData<bool>(index, ref run))
+                if (!dataAccess.GetData(index, ref run))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                     dataAccess.SetData(3, false);

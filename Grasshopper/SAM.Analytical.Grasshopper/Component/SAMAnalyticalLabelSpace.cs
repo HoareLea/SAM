@@ -93,11 +93,11 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.SetData(0, text);
         }
 
-        public override Rhino.Geometry.BoundingBox ClippingBox
+        public override BoundingBox ClippingBox
         {
             get
             {
-                Rhino.Geometry.BoundingBox boundingBox = base.ClippingBox;
+                BoundingBox boundingBox = base.ClippingBox;
 
                 List<Text3d> text3ds = GetText3ds();
                 if (text3ds != null && text3ds.Count != 0)
@@ -156,8 +156,8 @@ namespace SAM.Analytical.Grasshopper
 
                 Point3D point3D = space.Location;
 
-                Rhino.Geometry.Plane plane = new SAM.Geometry.Spatial.Plane(point3D, normal).ToRhino();
-                Rhino.Geometry.Vector3d normal_Rhino = normal.ToRhino();
+                Rhino.Geometry.Plane plane = new Geometry.Spatial.Plane(point3D, normal).ToRhino();
+                Vector3d normal_Rhino = normal.ToRhino();
 
                 double height_Temp = height;
                 if (double.IsNaN(height_Temp))

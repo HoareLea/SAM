@@ -68,7 +68,7 @@ namespace SAM.Core.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool run = false;
-            if (!dataAccess.GetData<bool>(2, ref run))
+            if (!dataAccess.GetData(2, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(1, false);
@@ -78,7 +78,7 @@ namespace SAM.Core.Grasshopper
                 return;
 
             string path = null;
-            dataAccess.GetData<string>(1, ref path);
+            dataAccess.GetData(1, ref path);
 
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 

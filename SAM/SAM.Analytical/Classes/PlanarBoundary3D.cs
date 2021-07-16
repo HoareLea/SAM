@@ -24,11 +24,11 @@ namespace SAM.Analytical
                 plane = face3D.GetPlane();
                 externalEdge2DLoop = new BoundaryEdge2DLoop(face3D.ExternalEdge2D);
 
-                List<Geometry.Planar.IClosed2D> internalEdges = face3D.InternalEdge2Ds;
+                List<IClosed2D> internalEdges = face3D.InternalEdge2Ds;
                 if (internalEdges != null)
                 {
                     internalEdge2DLoops = new List<BoundaryEdge2DLoop>();
-                    foreach (Geometry.Planar.IClosed2D internalEdge in internalEdges)
+                    foreach (IClosed2D internalEdge in internalEdges)
                         internalEdge2DLoops.Add(new BoundaryEdge2DLoop(internalEdge));
                 }
             }

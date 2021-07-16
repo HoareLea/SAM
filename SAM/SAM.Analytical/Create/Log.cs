@@ -923,7 +923,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        private static Log Log(this IEnumerable<ConstructionLayer> constructionLayers, string name, System.Guid guid)
+        private static Log Log(this IEnumerable<ConstructionLayer> constructionLayers, string name, Guid guid)
         {
             string name_Temp = name;
             if (string.IsNullOrEmpty(name))

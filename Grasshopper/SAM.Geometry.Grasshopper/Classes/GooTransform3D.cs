@@ -29,7 +29,7 @@ namespace SAM.Geometry.Grasshopper
         {
             get
             {
-                return typeof(Spatial.Transform3D).Name;
+                return typeof(Transform3D).Name;
             }
         }
 
@@ -72,7 +72,7 @@ namespace SAM.Geometry.Grasshopper
             if (jObject == null)
                 return false;
 
-            Value = new Spatial.Transform3D(jObject);
+            Value = new Transform3D(jObject);
             return true;
         }
 
@@ -83,9 +83,9 @@ namespace SAM.Geometry.Grasshopper
 
         public override bool CastFrom(object source)
         {
-            if (source is Spatial.Transform3D)
+            if (source is Transform3D)
             {
-                Value = (Spatial.Transform3D)source;
+                Value = (Transform3D)source;
                 return true;
             }
 
@@ -99,9 +99,9 @@ namespace SAM.Geometry.Grasshopper
                 {
                 }
 
-                if (source is Spatial.Transform3D)
+                if (source is Transform3D)
                 {
-                    Value = (Spatial.Transform3D)source;
+                    Value = (Transform3D)source;
                     return true;
                 }
             }
@@ -169,7 +169,7 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            return base.CastTo<Y>(ref target);
+            return base.CastTo(ref target);
         }
     }
 

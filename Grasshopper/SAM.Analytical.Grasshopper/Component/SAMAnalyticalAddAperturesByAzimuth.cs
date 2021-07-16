@@ -116,7 +116,7 @@ namespace SAM.Analytical.Grasshopper
                     return;
 
                 double ratio;
-                if (!Core.Grasshopper.Query.TryGetValue<double>(dictionary, azimuth, out ratio))
+                if (!Core.Grasshopper.Query.TryGetValue(dictionary, azimuth, out ratio))
                     return;
 
                 ApertureConstruction apertureConstruction_Temp = apertureConstruction;

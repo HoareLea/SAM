@@ -79,5 +79,59 @@ namespace SAM.Geometry.Spatial
 
             return new Shell(face3Ds_Shell);
         }
+
+        public static Shell Shell(this Face3D face3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(face3D == null || !face3D.IsValid() || vector3D == null || !vector3D.IsValid())
+            {
+                return null;
+            }
+
+            Plane plane = face3D.GetPlane();
+            if(plane.Normal.Perpendicular(vector3D, tolerance))
+            {
+                return null;
+            }
+
+            List<ISegmentable3D> segmentable3Ds = face3D.GetEdge3Ds()?.ConvertAll(x => x as ISegmentable3D);
+            if (segmentable3Ds == null || segmentable3Ds.Count == 0)
+            {
+                throw new NotImplementedException();
+            }
+
+            List<Face3D> face3Ds = new List<Face3D>();
+            foreach (ISegmentable3D segmentable3D in segmentable3Ds)
+            {
+                List<Segment3D> segment3Ds = segmentable3D?.GetSegments();
+                if (segment3Ds == null || segment3Ds.Count == 0)
+                {
+                    return null;
+                }
+
+                foreach (Segment3D segment3D in segment3Ds)
+                {
+                    Polygon3D polygon3D = Polygon3D(segment3D, vector3D, tolerance);
+                    if (polygon3D != null)
+                    {
+                        face3Ds.Add(new Face3D(polygon3D));
+                    }
+                }
+            }
+
+            face3Ds.Add(face3D);
+            face3Ds.Add(face3D.GetMoved(vector3D) as Face3D);
+
+            return new Shell(face3Ds);
+        }
+
+        public static Shell Shell(this Extrusion extrusion, double tolerance = Core.Tolerance.Distance)
+        {
+            if(extrusion == null)
+            {
+                return null;
+            }
+
+            return Shell(extrusion.Face3D, extrusion.Vector, tolerance);
+        }
     }
 }

@@ -76,7 +76,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             bool simplify = false;
-            if (!dataAccess.GetData<bool>(3, ref simplify))
+            if (!dataAccess.GetData(3, ref simplify))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

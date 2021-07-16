@@ -113,7 +113,7 @@ namespace SAM.Analytical
             if (panel == null || apertureConstruction == null)
                 return null;
 
-            Geometry.Spatial.Face3D face3D = panel.GetFace3D(false, tolerance);
+            Face3D face3D = panel.GetFace3D(false, tolerance);
             if (face3D == null)
                 return null;
 
@@ -124,7 +124,7 @@ namespace SAM.Analytical
 
             if (area_Target < area)
             {
-                Geometry.Spatial.Plane plane = face3D.GetPlane();
+                Plane plane = face3D.GetPlane();
                 Face2D face2D_Panel = Geometry.Spatial.Query.Convert(plane, face3D);
                 if (face2D_Panel == null)
                     return null;

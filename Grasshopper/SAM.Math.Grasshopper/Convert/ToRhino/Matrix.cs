@@ -2,7 +2,7 @@
 {
     public static partial class Convert
     {
-        public static Rhino.Geometry.Matrix ToRhino(this Math.Matrix matrix)
+        public static Rhino.Geometry.Matrix ToRhino(this Matrix matrix)
         {
             if (matrix == null)
                 return null;

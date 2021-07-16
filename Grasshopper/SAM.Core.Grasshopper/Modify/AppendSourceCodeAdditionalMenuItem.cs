@@ -25,10 +25,10 @@ namespace SAM.Core.Grasshopper
         private static void OnSourceCodeClick(object sender = null, object e = null)
         {
             ToolStripMenuItem toolStripMenuItem = sender as ToolStripMenuItem;
-            if (toolStripMenuItem == null || !(toolStripMenuItem.Tag is System.Guid))
+            if (toolStripMenuItem == null || !(toolStripMenuItem.Tag is Guid))
                 return;
 
-            GH_SAMComponent gH_SAMComponent = Instances.ActiveCanvas.Document.FindComponent((System.Guid)toolStripMenuItem.Tag) as GH_SAMComponent;
+            GH_SAMComponent gH_SAMComponent = Instances.ActiveCanvas.Document.FindComponent((Guid)toolStripMenuItem.Tag) as GH_SAMComponent;
             if (gH_SAMComponent == null)
                 return;
 

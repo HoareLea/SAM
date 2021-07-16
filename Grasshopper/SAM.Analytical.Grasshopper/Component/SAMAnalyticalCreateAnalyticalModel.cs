@@ -88,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Core.Location location = null;
+            Location location = null;
             if (!dataAccess.GetData(2, ref location) || location == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

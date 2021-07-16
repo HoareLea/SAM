@@ -70,7 +70,7 @@ namespace SAM.Geometry.Spatial
 
         public static T Closest<T>(this IEnumerable<T> segmentable3Ds, Point3D point3D) where T: ISegmentable3D
         {
-            return Closest<T>(segmentable3Ds, point3D, out double distance, out Point3D point3D_Closest);
+            return Closest(segmentable3Ds, point3D, out double distance, out Point3D point3D_Closest);
         }
 
         public static Point3D Closest(this IEnumerable<Point3D> point3Ds, Point3D point3D)

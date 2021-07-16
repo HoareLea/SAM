@@ -30,7 +30,7 @@ namespace SAM.Analytical
             boundaryEdge2Ds = boundaryEdge3DLoop.BoundaryEdge3Ds.ConvertAll(x => new BoundaryEdge2D(plane, x));
         }
 
-        public BoundaryEdge2DLoop(Geometry.Planar.IClosed2D closed2D)
+        public BoundaryEdge2DLoop(IClosed2D closed2D)
             : base()
         {
             boundaryEdge2Ds = BoundaryEdge2D.FromGeometry(closed2D).ToList();
@@ -75,7 +75,7 @@ namespace SAM.Analytical
             }
         }
 
-        public Geometry.Planar.IClosed2D GetClosed2D()
+        public IClosed2D GetClosed2D()
         {
             return ToGeometry(this);
         }
@@ -93,7 +93,7 @@ namespace SAM.Analytical
             double perimeter = 0;
             foreach(BoundaryEdge2D boundaryEdge2D in boundaryEdge2Ds)
             {
-                SAM.Geometry.Planar.ICurve2D curve2D = boundaryEdge2D.Curve2D;
+                ICurve2D curve2D = boundaryEdge2D.Curve2D;
                 if (curve2D == null)
                     continue;
 
@@ -103,7 +103,7 @@ namespace SAM.Analytical
             return perimeter;
         }
 
-        public bool Move(Geometry.Planar.Vector2D vector2D)
+        public bool Move(Vector2D vector2D)
         {
             if (boundaryEdge2Ds == null || vector2D == null)
                 return false;
@@ -139,15 +139,15 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public static Geometry.Planar.IClosed2D ToGeometry(BoundaryEdge2DLoop boundaryEdge2DLoop)
+        public static IClosed2D ToGeometry(BoundaryEdge2DLoop boundaryEdge2DLoop)
         {
-            List<Geometry.Planar.Point2D> point2Ds = new List<Geometry.Planar.Point2D>();
+            List<Point2D> point2Ds = new List<Point2D>();
             foreach (BoundaryEdge2D edge2D in boundaryEdge2DLoop.boundaryEdge2Ds)
             {
-                Geometry.Planar.Segment2D segment2D = edge2D.Curve2D as Geometry.Planar.Segment2D;
+                Segment2D segment2D = edge2D.Curve2D as Segment2D;
                 point2Ds.Add(segment2D.GetStart());
             }
-            return new Geometry.Planar.Polygon2D(point2Ds);
+            return new Polygon2D(point2Ds);
         }
     }
 }

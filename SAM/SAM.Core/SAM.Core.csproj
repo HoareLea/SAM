@@ -172,6 +172,8 @@
     <Compile Include="Query\IsValidEmail.cs" />
     <Compile Include="Query\IsValidHash.cs" />
     <Compile Include="Query\ComputeHash.cs" />
+    <Compile Include="Query\Previous.cs" />
+    <Compile Include="Query\Next.cs" />
     <Compile Include="Query\Operator.cs" />
     <Compile Include="Query\Indexes.cs" />
     <Compile Include="Query\NextDouble.cs" />

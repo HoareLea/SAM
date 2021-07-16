@@ -107,6 +107,49 @@ namespace SAM.Geometry.Spatial
             return new PlanarIntersectionResult(plane, geometry3Ds);
         }
 
+        public static PlanarIntersectionResult PlanarIntersectionResult(Face3D face3D, ISegmentable3D segmentable3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (face3D == null || segmentable3D == null)
+            {
+                return null;
+            }
+
+            Plane plane = face3D.GetPlane();
+            if(plane == null)
+            {
+                return null;
+            }
+
+            List<Segment3D> segment3Ds = segmentable3D.GetSegments();
+            if(segment3Ds == null)
+            {
+                return null;
+            }
+
+            if (!face3D.GetBoundingBox(tolerance).InRange(segmentable3D.GetBoundingBox(tolerance)))
+            {
+                return new PlanarIntersectionResult(plane);
+            }
+
+            List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
+            foreach (Segment3D segment3D in segment3Ds)
+            {
+                PlanarIntersectionResult planarIntersectionResult_Segment3D = PlanarIntersectionResult(face3D, segment3D);
+                if(planarIntersectionResult_Segment3D == null || !planarIntersectionResult_Segment3D.Intersecting)
+                {
+                    continue;
+                }
+
+                List<ISAMGeometry3D> geometry3Ds_Segment3D = planarIntersectionResult_Segment3D.Geometry3Ds;
+                if(geometry3Ds_Segment3D != null && geometry3Ds_Segment3D.Count != 0)
+                {
+                    geometry3Ds.AddRange(geometry3Ds_Segment3D);
+                }
+            }
+
+            return new PlanarIntersectionResult(plane, geometry3Ds);
+        }
+
         public static PlanarIntersectionResult PlanarIntersectionResult(Plane plane, Point3D point3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
         {
             if (plane == null || point3D == null || vector3D == null)

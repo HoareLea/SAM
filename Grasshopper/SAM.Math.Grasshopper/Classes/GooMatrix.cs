@@ -27,7 +27,7 @@ namespace SAM.Math.Grasshopper
             get
             {
                 if (Value == null)
-                    return typeof(Math.Matrix).Name;
+                    return typeof(Matrix).Name;
                 else
                     return Value.GetType().Name;
             }
@@ -38,7 +38,7 @@ namespace SAM.Math.Grasshopper
             get
             {
                 if (Value == null)
-                    return typeof(Math.Matrix).Name;
+                    return typeof(Matrix).Name;
                 else
                     return Value.GetType().Name;
             }
@@ -58,14 +58,14 @@ namespace SAM.Math.Grasshopper
             if (jObject == null)
                 return false;
 
-            writer.SetString(typeof(Math.Matrix).FullName, jObject.ToString());
+            writer.SetString(typeof(Matrix).FullName, jObject.ToString());
             return true;
         }
 
         public override bool Read(GH_IReader reader)
         {
             string value = null;
-            if (!reader.TryGetString(typeof(Math.Matrix).FullName, ref value))
+            if (!reader.TryGetString(typeof(Matrix).FullName, ref value))
                 return false;
 
             if (string.IsNullOrWhiteSpace(value))
@@ -78,7 +78,7 @@ namespace SAM.Math.Grasshopper
         public override string ToString()
         {
             if (Value == null)
-                return typeof(Math.Matrix).Name;
+                return typeof(Matrix).Name;
             
             return Value?.GetType().Name;
         }
@@ -148,7 +148,7 @@ namespace SAM.Math.Grasshopper
                 return true;
             }
 
-            return base.CastTo<Y>(ref target);
+            return base.CastTo(ref target);
         }
     }
 

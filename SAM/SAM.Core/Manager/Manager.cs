@@ -55,7 +55,7 @@ namespace SAM.Core
         public T GetValue<T>(Assembly assembly, string name)
         {
             T value = default;
-            TryGetValue<T>(assembly, name, out value);
+            TryGetValue(assembly, name, out value);
             return value;
         }
 
@@ -91,7 +91,7 @@ namespace SAM.Core
 
         public bool TryGetValue<T>(string name, out T value)
         {
-            return TryGetValue<T>(GetType().Assembly, name, out value);
+            return TryGetValue(GetType().Assembly, name, out value);
         }
 
         public bool SetValue(Assembly assembly, string name, string value)

@@ -43,7 +43,7 @@ namespace SAM.Analytical
             return new BoundingBox3D(boundaryEdge3Ds.ConvertAll(x => x.GetBoundingBox(offset)));
         }
 
-        public void Snap(IEnumerable<Geometry.Spatial.Point3D> point3Ds, double maxDistance = double.NaN)
+        public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
         {
             foreach (BoundaryEdge3D boundaryEdge3D in boundaryEdge3Ds)
                 boundaryEdge3D.Snap(point3Ds, maxDistance);

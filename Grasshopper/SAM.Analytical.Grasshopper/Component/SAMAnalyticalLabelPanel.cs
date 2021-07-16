@@ -162,8 +162,8 @@ namespace SAM.Analytical.Grasshopper
 
                // point3D = point3D.GetMoved(normal * 0.1) as Point3D; //TEMP SOLUTION FOR TESTING
 
-                Rhino.Geometry.Plane plane = new SAM.Geometry.Spatial.Plane(point3D, normal).ToRhino();
-                Rhino.Geometry.Vector3d normal_Rhino = normal.ToRhino();
+                Rhino.Geometry.Plane plane = new Geometry.Spatial.Plane(point3D, normal).ToRhino();
+                Vector3d normal_Rhino = normal.ToRhino();
                 if (normal.Z >= 0)
                 {
                     if (normal.Z != 1)
@@ -188,8 +188,8 @@ namespace SAM.Analytical.Grasshopper
                     height_Temp = max / (length * 2);
                 }
 
-                Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = TextHorizontalAlignment.Center;
-                Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = TextVerticalAlignment.MiddleOfBottom;
+                TextHorizontalAlignment textHorizontalAlignment = TextHorizontalAlignment.Center;
+                TextVerticalAlignment textVerticalAlignment = TextVerticalAlignment.MiddleOfBottom;
                 Text3d text3d = new Text3d("\n"+ text, plane, height_Temp);  // TODO: add enter in front of Panel Data
                 text3d.HorizontalAlignment = textHorizontalAlignment;
                 text3d.VerticalAlignment = textVerticalAlignment;

@@ -60,7 +60,7 @@ namespace SAM.Analytical
                 if (location == null)
                     return null;
 
-                return new Geometry.Spatial.Point3D(location);
+                return new Point3D(location);
             }
         }
 

@@ -70,9 +70,9 @@ namespace SAM.Geometry.Grasshopper
             if (value is IGH_Goo)
                 value = (value as dynamic).Value;
 
-            Spatial.Plane plane = null;
-            if (value is Spatial.Plane)
-                plane = (Spatial.Plane)value;
+            Plane plane = null;
+            if (value is Plane)
+                plane = (Plane)value;
             else if (value is GH_Plane)
                 plane = ((GH_Plane)value).ToSAM();
             else if (value is Rhino.Geometry.Plane)

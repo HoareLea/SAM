@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
                 if (Value == null)
                     return BoundingBox.Empty;
 
-                Geometry.Spatial.Point3D location = Value.Location;
+                Point3D location = Value.Location;
                 if (location == null || !location.IsValid())
                     return BoundingBox.Empty;
 
@@ -49,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            Geometry.Spatial.Point3D point3D = Value?.Location;
+            Point3D point3D = Value?.Location;
             if (point3D == null)
                 return;
 
@@ -58,7 +58,7 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            Geometry.Spatial.Point3D point3D = Value?.Location;
+            Point3D point3D = Value?.Location;
             if (point3D == null)
                 return;
 

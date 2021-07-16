@@ -10,7 +10,7 @@ namespace SAM.Core
         private byte green;
         private byte blue;
 
-        public SAMColor(System.Drawing.Color color)
+        public SAMColor(Color color)
         {
             alpha = color.A;
             red = color.R;
