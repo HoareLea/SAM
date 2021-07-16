@@ -167,6 +167,7 @@
     <Compile Include="Modify\Copy.cs" />
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
+    <Compile Include="Modify\District.cs" />
     <Compile Include="Query\CamelCase.cs" />
     <Compile Include="Query\CommandMask.cs" />
     <Compile Include="Query\IsValidEmail.cs" />

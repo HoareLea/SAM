@@ -6,7 +6,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static Dictionary<Face3D, Point3D> IntersectionDictionary(this Point3D point3D, Vector3D vector3D, IEnumerable<Face3D> face3Ds, bool sort = true, double tolerance = Core.Tolerance.Distance)
+        public static Dictionary<Face3D, Point3D> IntersectionDictionary(this Point3D point3D, Vector3D vector3D, IEnumerable<Face3D> face3Ds, bool keepDirection, bool sort = true, double tolerance = Core.Tolerance.Distance)
         {
             if (face3Ds == null || point3D == null || vector3D == null)
                 return null;
@@ -27,10 +27,17 @@ namespace SAM.Geometry.Spatial
                 tuples.Add(new Tuple<Point3D, Face3D>(point3D_Intersection, face3D));
             }
 
-            if(sort)
+            if (keepDirection)
+            {
+                point3Ds.RemoveAll(x => !(new Vector3D(point3D, x)).SameHalf(vector3D));
+            }
+
+            if (sort)
             {
                 Modify.SortByDistance(point3Ds, point3D);
             }
+
+
 
             Dictionary<Face3D, Point3D> result = new Dictionary<Face3D, Point3D>();
             foreach(Point3D point3D_Temp in point3Ds)

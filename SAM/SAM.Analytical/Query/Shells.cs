@@ -395,6 +395,7 @@ namespace SAM.Analytical
             List<double> elevations_Temp = new List<double>(elevations);
             elevations_Temp.Add(boundinBox3D.Max.Z);
             elevations_Temp.Add(boundinBox3D.Min.Z);
+            Core.Modify.District(elevations_Temp, tolerance_Distance);
 
             List<List<Tuple<Shell, BoundingBox2D, Face2D, Plane>>> tuples_Elevation = Enumerable.Repeat<List<Tuple<Shell, BoundingBox2D, Face2D, Plane>>>(null, elevations.Count()).ToList();
 
@@ -492,26 +493,26 @@ namespace SAM.Analytical
             
             foreach(Panel panel in panels)
             {
-                Face3D face3D = panel.GetFace3D();
-                if(face3D == null)
+                Face3D face3D_Panel = panel.GetFace3D();
+                if(face3D_Panel == null)
                 {
                     continue;
                 }
 
-                face3D = plane.Project(face3D);
-                if(face3D == null || !face3D.IsValid() || face3D.GetArea() <  tolerance_Distance)
+                Face3D face3D_Project = plane.Project(face3D_Panel);
+                if(face3D_Project == null || !face3D_Project.IsValid() || face3D_Project.GetArea() <  tolerance_Distance)
                 {
                     continue;
                 }
 
-                Face2D face2D = plane.Convert(face3D);
+                Face2D face2D = plane.Convert(face3D_Project);
                 if(face2D == null || !face2D.IsValid() || face2D.GetArea() < tolerance_Distance)
                 {
                     continue;
                 }
 
                 face2Ds.Add(face2D);
-                face3Ds.Add(face3D);
+                face3Ds.Add(face3D_Panel);
             }
 
             face2Ds = Geometry.Planar.Query.Split(face2Ds, tolerance_Distance);
@@ -547,7 +548,9 @@ namespace SAM.Analytical
                 List<Face2D> face2Ds_Temp = tuples_Intersection.ConvertAll(x => x.Item1);
                 face2Ds_Temp.Add(tuple.Item3);
                 face2Ds_Temp = Geometry.Planar.Query.Split(face2Ds_Temp, tolerance_Distance);
-                face2Ds_Temp = face2Ds_Temp.FindAll(x => tuple.Item3.Inside(x.InternalPoint2D(tolerance_Distance)));
+                face2Ds_Temp.RemoveAll(x => x == null || !x.IsValid());
+                face2Ds_Temp.RemoveAll(x => x.ThinnessRatio() < 0.1);
+                face2Ds_Temp.RemoveAll(x => !tuple.Item3.Inside(x.InternalPoint2D(tolerance_Distance)));
                 if (face2Ds_Temp == null || face2Ds_Temp.Count == 0)
                 {
                     tuples.Remove(tuple);
@@ -556,28 +559,37 @@ namespace SAM.Analytical
 
                 List<Point3D> point3Ds = face2Ds_Temp.ConvertAll(x => tuple.Item4.Convert(x)?.InternalPoint3D(tolerance_Distance));
 
-                Point3D point2D_Up = null;
+                Point3D point3D_Up = null;
+                Point3D point3D_Down = null;
+
+                Vector3D up = Vector3D.WorldZ;
 
                 List<Shell> shells = new List<Shell>();
                 foreach (Point3D point3D in point3Ds)
                 {
-                    point2D_Up = point3D.Intersections(Vector3D.WorldZ, face3Ds, true, tolerance_Distance)?.FirstOrDefault();
-                    if(point2D_Up == null)
+                    List<Point3D> point3Ds_Intersection = point3D.Intersections(up, face3Ds, false, true, tolerance_Distance);
+                    if(point3Ds == null || point3Ds.Count == 0)
                     {
                         continue;
                     }
 
-                    point2D_Up.Move(new Vector3D(0, 0, -snapTolerance));
-
-                    Point3D point2D_Down = point3D.Intersections(Vector3D.WorldZ.GetNegated(), face3Ds, true, tolerance_Distance)?.FirstOrDefault();
-                    if(point2D_Down == null)
+                    Point3D point3D_Up_Temp = point3Ds_Intersection.FindAll(x => up.SameHalf(new Vector3D(point3D, x))).FirstOrDefault();
+                    if(point3D_Up_Temp == null)
                     {
                         continue;
                     }
 
-                    point2D_Down.Move(new Vector3D(0, 0, snapTolerance));
+                    point3D_Up_Temp.Move(new Vector3D(0, 0, -snapTolerance));
 
-                    Segment3D segment3D = new Segment3D(point2D_Down, point2D_Up);
+                    Point3D point3D_Down_Temp = point3Ds_Intersection.FindAll(x => up.SameHalf(new Vector3D(x, point3D))).FirstOrDefault();
+                    if (point3D_Down_Temp == null)
+                    {
+                        continue;
+                    }
+
+                    point3D_Down_Temp.Move(new Vector3D(0, 0, snapTolerance));
+
+                    Segment3D segment3D = new Segment3D(point3D_Down_Temp, point3D_Up_Temp);
                     
                     foreach(Tuple<Shell, BoundingBox2D, Face2D, Plane> tuple_Temp in tuples)
                     {
@@ -588,17 +600,20 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        List<Point3D> point3Ds_Intersection = shell_Temp?.Intersections(segment3D, tolerance_Distance);
-                        if(point3Ds_Intersection == null || point3Ds_Intersection.Count == 0)
+                        List<Point3D> point3Ds_Intersection_Segment3D = shell_Temp?.Intersections(segment3D, tolerance_Distance);
+                        if(point3Ds_Intersection_Segment3D == null || point3Ds_Intersection_Segment3D.Count == 0)
                         {
                             continue;
                         }
 
                         shells.Add(shell_Temp);
                     }
+
+                    point3D_Up = point3D_Up_Temp;
+                    point3D_Down = point3D_Down_Temp;
                 }
 
-                if(point2D_Up == null || !point2D_Up.IsValid())
+                if(point3D_Up == null || !point3D_Up.IsValid() || point3D_Down == null || !point3D_Down.IsValid())
                 {
                     tuples.Remove(tuple);
                     continue;

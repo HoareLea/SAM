@@ -206,7 +206,7 @@ namespace SAM.Analytical
                                 Point2D point2D = polygon2D.GetInternalPoint2D();
 
                                 //2.Shot ray in up direction and check which Face3Ds intesect with ray.
-                                Dictionary<Face3D, Point3D> dictionary_Intersection = Geometry.Spatial.Query.IntersectionDictionary(plane.Convert(point2D), plane.Normal, face3Ds, true, tolerance_Distance);
+                                Dictionary<Face3D, Point3D> dictionary_Intersection = Geometry.Spatial.Query.IntersectionDictionary(plane.Convert(point2D), plane.Normal, face3Ds, false, true, tolerance_Distance);
                                 if (dictionary_Intersection == null || dictionary_Intersection.Count == 0)
                                     continue;
 

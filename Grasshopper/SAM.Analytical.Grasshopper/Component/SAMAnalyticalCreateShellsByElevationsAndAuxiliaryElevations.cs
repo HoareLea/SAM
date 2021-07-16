@@ -6,21 +6,20 @@ using System;
 using System.Collections.Generic;
 using SAM.Geometry.Grasshopper;
 using Grasshopper.Kernel.Types;
-using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateShellsByElevations : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalCreateShellsByElevationsAndAuxiliaryElevations : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("bf6c81c7-9169-4fa6-8da4-1ecfdb792ce6");
+        public override Guid ComponentGuid => new Guid("e26f2513-a0ab-42bd-a57a-c28b9c95bb41");
 
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -30,8 +29,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreateShellsByElevations()
-          : base("SAMAnalytical.CreateShellsByElevations", "SAMAnalytical.CreateShellsByElevations",
+        public SAMAnalyticalCreateShellsByElevationsAndAuxiliaryElevations()
+          : base("SAMAnalytical.CreateShellsByElevationsAndAuxiliaryElevations", "SAMAnalytical.CreateShellsByElevationsAndAuxiliaryElevations",
               "Create Shells ",
               "SAM", "Analytical")
         {
@@ -59,7 +58,10 @@ namespace SAM.Analytical.Grasshopper
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "elevations_", NickName = "elevations_", Description = "Elevations", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offset_", NickName = "offset_", Description = "Offset", Access = GH_ParamAccess.item, Optional = true };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offsets_", NickName = "offsets_", Description = "Offsets", Access = GH_ParamAccess.list, Optional = true };
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "auxiliaryElevations_", NickName = "auxiliaryElevations_", Description = "AuxiliaryElevations", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
@@ -108,11 +110,18 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, elevations);
             }
 
-            double offset = 0.1;
-            index = Params.IndexOfInputParam("offset_");
+            List<double> offsets = new List<double>();
+            index = Params.IndexOfInputParam("offsets_");
             if (index != -1)
             {
-                dataAccess.GetData(index, ref offset);
+                dataAccess.GetDataList(index, offsets);
+            }
+
+            List<double> auxiliaryElevations = new List<double>();
+            index = Params.IndexOfInputParam("auxiliaryElevations_");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, auxiliaryElevations);
             }
 
             index = Params.IndexOfInputParam("tolerance_");
@@ -124,15 +133,7 @@ namespace SAM.Analytical.Grasshopper
                     tolerance = tolerance_Temp;
             }
 
-            if(elevations == null || elevations.Count == 0)
-            {
-                List<Panel> panels_Horizontal = panels.FindAll(x => Analytical.Query.Horizontal(x, tolerance));
-                
-                Dictionary<double, List<Panel>> elevationDictionary = panels_Horizontal.ElevationDictionary(tolerance);
-                elevations = elevationDictionary.Keys.ToList();
-            }
-
-            List<Shell> shells = Analytical.Query.Shells(panels, elevations, offset, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
+            List<Shell> shells = Analytical.Query.Shells(panels, elevations, offsets, auxiliaryElevations, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
 
             index = Params.IndexOfInputParam("_points_");
             if(index != -1)

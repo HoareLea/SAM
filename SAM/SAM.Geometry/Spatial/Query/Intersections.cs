@@ -95,14 +95,14 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static List<Point3D> Intersections(this Point3D point3D, Vector3D vector3D, IEnumerable<Face3D> face3Ds, bool sort = true, double tolerance = Core.Tolerance.Distance)
+        public static List<Point3D> Intersections(this Point3D point3D, Vector3D vector3D, IEnumerable<Face3D> face3Ds, bool keepDirection, bool sort = true, double tolerance = Core.Tolerance.Distance)
         {
             if(point3D == null || vector3D == null || face3Ds == null)
             {
                 return null;
             }
 
-            return IntersectionDictionary(point3D, vector3D, face3Ds, sort, tolerance)?.Values?.ToList();
+            return IntersectionDictionary(point3D, vector3D, face3Ds, keepDirection, sort, tolerance)?.Values?.ToList();
         }
 
         public static List<Point3D> Intersections(this Shell shell, ISegmentable3D segmentable3D, double tolerance = Core.Tolerance.Distance)

@@ -71,11 +71,12 @@
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateShellsByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalMergeOverlapApertures.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByPlanes.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByElevations.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateShellsByElevations.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateShellsByElevationsAndAuxiliaryElevations.cs" />
     <Compile Include="Component\SAMAnalyticalExtendExternalPanels.cs" />
     <Compile Include="Component\SAMAnalyticalTrimPanels.cs" />
     <Compile Include="Component\SAMAnalyticalExternalPanels.cs" />
