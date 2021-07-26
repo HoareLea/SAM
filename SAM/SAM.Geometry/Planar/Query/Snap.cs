@@ -328,5 +328,114 @@ namespace SAM.Geometry.Planar
             result.RemoveAll(x => x.GetLength() <= tolerance);
             return result;
         }
+
+        public static Face2D Snap(this Face2D face2D, IEnumerable<Face2D> face2Ds, double snapDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if(face2D == null || face2Ds == null)
+            {
+                return null;
+            }
+
+            BoundingBox2D boundingBox2D = face2D.GetBoundingBox();
+            if (boundingBox2D == null)
+            {
+                return null;
+            }
+
+            ISegmentable2D externalEdge2D = face2D.ExternalEdge2D as ISegmentable2D;
+            List<ISegmentable2D> internalEdge2Ds = face2D.InternalEdge2Ds?.ConvertAll(x => x as ISegmentable2D);
+
+            List<Point2D> point2Ds_ExternalEdge2D = externalEdge2D.GetPoints();
+            List<List<Point2D>> point2Ds_InternalEdge2Ds = internalEdge2Ds?.ConvertAll(x => x.GetPoints());
+
+            bool snapped = false;
+            foreach(Face2D face2D_Temp in face2Ds)
+            {
+                BoundingBox2D boundingBox2D_Temp = face2D_Temp?.GetBoundingBox();
+                if (boundingBox2D_Temp == null || !boundingBox2D.InRange(boundingBox2D_Temp, snapDistance))
+                {
+                    continue;
+                }
+
+                List<ISegmentable2D> segmentable2Ds = face2D_Temp.Edge2Ds?.ConvertAll(x => x as ISegmentable2D);
+                if (segmentable2Ds == null)
+                {
+                    continue;
+                }
+
+                foreach (ISegmentable2D segmentable2D in segmentable2Ds)
+                {
+                    List<Segment2D> segment2Ds = segmentable2D?.GetSegments();
+                    if (segment2Ds == null || segment2Ds.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (Segment2D segment2D in segment2Ds)
+                    {
+                        BoundingBox2D boundingBox2D_Segment2D = segment2D.GetBoundingBox();
+                        if (boundingBox2D_Segment2D == null)
+                        {
+                            continue;
+                        }
+
+                        for (int i = 0; i < point2Ds_ExternalEdge2D.Count; i++)
+                        {
+                            Point2D point2D = point2Ds_ExternalEdge2D[i];
+                            if (!boundingBox2D_Segment2D.InRange(point2D, snapDistance))
+                            {
+                                continue;
+                            }
+
+                            Point2D point3D_Closest = segment2D.Closest(point2D, true);
+                            double distance = point3D_Closest.Distance(point2D);
+                            if (distance > snapDistance)
+                            {
+                                continue;
+                            }
+
+                            point2Ds_ExternalEdge2D[i] = point3D_Closest;
+                            snapped = true;
+                            //break;
+                        }
+
+                        if (point2Ds_InternalEdge2Ds != null)
+                        {
+                            foreach (List<Point2D> point2Ds in point2Ds_InternalEdge2Ds)
+                            {
+                                for (int i = 0; i < point2Ds.Count; i++)
+                                {
+                                    Point2D point3D = point2Ds[i];
+                                    if (!boundingBox2D_Segment2D.InRange(point3D, snapDistance))
+                                    {
+                                        continue;
+                                    }
+
+                                    Point2D point2D_Closest = segment2D.Closest(point3D, true);
+                                    double distance = point2D_Closest.Distance(point3D);
+                                    if (distance > snapDistance)
+                                    {
+                                        continue;
+                                    }
+
+                                    point2Ds[i] = point2D_Closest;
+                                    snapped = true;
+                                    //break;
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            if (!snapped)
+                return new Face2D(face2D);
+
+            Polygon2D polygon2D_ExternalEdge2D = new Polygon2D(point2Ds_ExternalEdge2D);
+            List<Polygon2D> polygon2Ds_InternalEdge2Ds = point2Ds_InternalEdge2Ds?.ConvertAll(x => new Polygon2D(x));
+
+            return Face2D.Create(polygon2D_ExternalEdge2D, polygon2Ds_InternalEdge2Ds);
+        }
     }
 }

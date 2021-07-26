@@ -132,7 +132,7 @@ namespace SAM.Analytical.Grasshopper
                 elevations = elevationDictionary.Keys.ToList();
             }
 
-            List<Shell> shells = Analytical.Query.Shells(panels, elevations, offset, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
+            List<Shell> shells = Analytical.Query.Shells(panels, elevations, offset, 0.1, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
 
             index = Params.IndexOfInputParam("_points_");
             if(index != -1)

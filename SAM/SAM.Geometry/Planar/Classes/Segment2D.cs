@@ -448,7 +448,7 @@ namespace SAM.Geometry.Planar
             return jObject;
         }
 
-        public Point2D Closest(Point2D point2D)
+        public Point2D Closest(Point2D point2D, bool bounded = true)
         {
             Point2D start = Start;
             Point2D end = End;
@@ -464,9 +464,9 @@ namespace SAM.Geometry.Planar
             if (len_sq != 0)
                 parameter = dot / len_sq;
 
-            if (parameter < 0)
+            if (parameter < 0 && bounded)
                 return start;
-            else if (parameter > 1)
+            else if (parameter > 1 && bounded)
                 return end;
             else
                 return new Point2D(start.X + parameter * c, start.Y + parameter * d);

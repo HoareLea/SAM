@@ -142,10 +142,11 @@ namespace SAM.Geometry.Spatial
         /// <summary> The cross product takes two vectors and produces a third vector that is
         /// orthogonal to both. For example, if you have two vectors lying on the World xy-plane,
         /// then their cross product is a vector perpendicular to the xy-plane going either in the
-        /// positive or negative World z-axis direction. Sample: a​<a1, a2, a3> and ​b​<b1, b2, b3>
-        /// then a​ ​×​ ​b ​=​ ​<​a2​ ​*​ ​b3 – a3​ ​*​ ​b2​,​ ​a3​ ​*​ ​b1 - a1​ ​*​ ​b3, a1​ ​*​
-        /// ​b2 - a2​ ​*​ ​b1​ ​> </summary> <returns> Cross Product Vector3D </returns> <param
-        /// name="vector3D">A Vector3D</param>
+        /// positive or negative World z-axis direction. Sample: a​(a1, a2, a3) and ​b​(b1, b2, b3)
+        /// then a​ ​×​ ​b ​=​ ​(a2​ ​*​ ​b3 – a3​ ​*​ ​b2​,​ ​a3​ ​*​ ​b1 - a1​ ​*​ ​b3, a1​ ​*​ ​b2 - a2​ ​*​ ​b1​ ​)
+        /// <returns> Cross Product Vector3D </returns> 
+        /// <param name="vector3D">A Vector3D</param>
+        /// </summary>
         public Vector3D CrossProduct(Vector3D vector3D)
         {
             return new Vector3D((coordinates[1] * vector3D.coordinates[2]) - (coordinates[2] * vector3D.coordinates[1]), (coordinates[2] * vector3D.coordinates[0]) - (coordinates[0] * vector3D.coordinates[2]), (coordinates[0] * vector3D.coordinates[1]) - (coordinates[1] * vector3D.coordinates[0]));
