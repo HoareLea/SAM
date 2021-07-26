@@ -16,5 +16,16 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static Dictionary<Face3D, Vector3D> NormalDictionary(this Extrusion extrusion, bool external = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            Shell shell = Create.Shell(extrusion);
+            if(shell == null)
+            {
+                return null;
+            }
+
+            return NormalDictionary(shell, external, silverSpacing, tolerance);
+        }
     }
 }

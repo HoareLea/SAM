@@ -32,7 +32,6 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-
         public static List<Face3D> Inside(this Shell shell, IEnumerable<Face3D> face3Ds, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (shell == null || face3Ds == null)

@@ -63,5 +63,16 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static List<Triangle3D> Triangulate(this Extrusion extrusion, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            Shell shell = Create.Shell(extrusion, tolerance);
+            if(shell == null)
+            {
+                return null;
+            }
+
+            return Triangulate(shell, tolerance);
+        }
     }
 }

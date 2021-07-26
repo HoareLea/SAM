@@ -7,8 +7,14 @@ namespace SAM.Geometry.Spatial
     {
         public static void ExtremePoints(this IEnumerable<Point3D> point3Ds, out Point3D point3D_1, out Point3D point3D_2)
         {
+            ExtremePoints(point3Ds, out point3D_1, out point3D_2, out double distance);
+        }
+
+        public static void ExtremePoints(this IEnumerable<Point3D> point3Ds, out Point3D point3D_1, out Point3D point3D_2, out double distance)
+        {
             point3D_1 = null;
             point3D_2 = null;
+            distance = double.NaN;
 
             if (point3Ds == null)
                 return;
@@ -26,14 +32,19 @@ namespace SAM.Geometry.Spatial
                 {
                     Point3D point3D_2_Temp = point3Ds.ElementAt(j);
 
-                    double distance = point3D_1_Temp.Distance(point3D_2_Temp);
-                    if (distance_Max < distance)
+                    double distance_Temp = point3D_1_Temp.Distance(point3D_2_Temp);
+                    if (distance_Max < distance_Temp)
                     {
                         point3D_1 = point3D_1_Temp;
                         point3D_2 = point3D_2_Temp;
-                        distance_Max = distance;
+                        distance_Max = distance_Temp;
                     }
                 }
+            }
+
+            if(distance_Max != double.MinValue)
+            {
+                distance = distance_Max;
             }
         }
     }
