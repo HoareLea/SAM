@@ -493,7 +493,7 @@ namespace SAM.Analytical
             
             foreach(Panel panel in panels)
             {
-                Face3D face3D_Panel = panel.GetFace3D();
+                Face3D face3D_Panel = panel?.GetFace3D();
                 if(face3D_Panel == null)
                 {
                     continue;
@@ -515,7 +515,15 @@ namespace SAM.Analytical
                 face3Ds.Add(face3D_Panel);
             }
 
-            face2Ds = Geometry.Planar.Query.Split(face2Ds, tolerance_Distance);
+            //Version 1
+            //face2Ds = Geometry.Planar.Query.Split(face2Ds, tolerance_Distance);
+
+            //Version 2
+            List<ISegmentable2D> segmentable2Ds_Edges = face2Ds.Edges().FindAll(x => x is ISegmentable2D).ConvertAll(x => x as ISegmentable2D);
+            List<Segment2D> segment2Ds_Edges = Geometry.Planar.Query.Split(segmentable2Ds_Edges, tolerance_Distance);
+            segment2Ds_Edges = Geometry.Planar.Query.Snap(segment2Ds_Edges, true, snapTolerance);
+            face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds_Edges, tolerance_Distance);
+
             face2Ds.RemoveAll(x => x == null || x.GetArea() <= minArea);
             List<Tuple<Face2D, BoundingBox2D>> tuples_All = face2Ds.ConvertAll(x => new Tuple<Face2D, BoundingBox2D>(x, x.GetBoundingBox()));
 

@@ -197,6 +197,12 @@ namespace SAM.Geometry.Planar
             return result;
         }
         
+        /// <summary>
+        /// Method splits face2Ds by intersection. Does not fully work if any of face2Ds are similar or overlaping
+        /// </summary>
+        /// <param name="face2Ds">Face2Ds</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Face2Ds</returns>
         public static List<Face2D> Split(this IEnumerable<Face2D> face2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (face2Ds == null)
@@ -205,7 +211,10 @@ namespace SAM.Geometry.Planar
             if (face2Ds.Count() <= 1)
                 return new List<Face2D>(face2Ds);
 
-            MultiPolygon multiPolygon = face2Ds.ToNTS(tolerance);
+            List<Face2D> face2Ds_Temp = new List<Face2D>(face2Ds);
+            face2Ds_Temp.RemoveSimilar(tolerance);
+
+            MultiPolygon multiPolygon = face2Ds_Temp.ToNTS(tolerance);
             if (multiPolygon == null || multiPolygon.IsEmpty)
                 return null;
 
