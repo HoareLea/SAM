@@ -219,7 +219,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, IEnumerable<Panel> panels, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, IEnumerable<Panel> panels, bool addMissingSpaces = false, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             AdjacencyCluster result = new AdjacencyCluster();
 
@@ -301,7 +301,7 @@ namespace SAM.Analytical
                 if (plane == null)
                     continue;
 
-                if (face3D.GetArea() < tolerance_Distance)
+                if (face3D.GetArea() < minArea || face3D.ThinnessRatio() < thinnessRatio) // Changed from tolerance_Distance to minArea
                     continue;
 
                 tuples_Panel.Add(new Tuple<Plane, Face3D, Panel, BoundingBox3D>(plane, face3D, panel, face3D.GetBoundingBox(tolerance_Distance)));
@@ -381,7 +381,7 @@ namespace SAM.Analytical
                     if (plane == null)
                         continue;
 
-                    if(face3D.ThinnessRatio() < tolerance_Distance)
+                    if(face3D.ThinnessRatio() < thinnessRatio)
                     {
                         continue;
                     }
@@ -483,7 +483,7 @@ namespace SAM.Analytical
                 Panel panel = panels.ElementAt(i);
 
                 Face3D face3D = panel?.GetFace3D();
-                if (face3D == null)
+                if (face3D == null || face3D.GetArea() < minArea || face3D.ThinnessRatio() < thinnessRatio)
                     return;
 
                 Plane plane = face3D.GetPlane();
@@ -510,12 +510,15 @@ namespace SAM.Analytical
                         continue;
 
                     Face2D face2D = plane.Convert(plane.Project(tuple_Panel_New.Item2.GetFace3D()));
-                    if (face2D == null)
+                    if (face2D == null || !face2D.IsValid() || face2D.GetArea() <= minArea || face2D.ThinnessRatio() < thinnessRatio)
                         continue;
 
                     List<Face2D> face2Ds_Temp = new List<Face2D>();
                     foreach (Face2D face2D_Temp in face2Ds)
                     {
+                        if (face2D_Temp == null || !face2D_Temp.IsValid() || face2D_Temp.GetArea() < minArea || face2D_Temp.ThinnessRatio() < thinnessRatio)
+                            continue;
+
                         List<Face2D> face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Temp, face2D, tolerance_Distance);
                         face2Ds_Difference?.RemoveAll(x => x == null || x.GetArea() <= minArea);
                         if (face2Ds_Difference == null || face2Ds_Difference.Count == 0)
@@ -575,16 +578,16 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, double offset = 0.1, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, double offset = 0.1, bool addMissingSpaces = false, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {     
             List<Shell> shells = panels.Shells(offset, maxDistance, tolerance_Distance);
             if (shells == null || shells.Count == 0)
                 return null;
 
-            return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance, tolerance_Angle);
+            return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, thinnessRatio, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance, tolerance_Angle);
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, IEnumerable<double> elevations, IEnumerable<double> offsets = null, IEnumerable<double> auxiliaryElevations = null, bool addMissingSpaces = false, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double snapTolerance = Tolerance.MacroDistance, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, IEnumerable<double> elevations, IEnumerable<double> offsets = null, IEnumerable<double> auxiliaryElevations = null, bool addMissingSpaces = false, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double snapTolerance = Tolerance.MacroDistance, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
         {
             if (panels == null)
             {
@@ -594,7 +597,7 @@ namespace SAM.Analytical
             List<Shell> shells = Query.Shells(panels, elevations, offsets, auxiliaryElevations, snapTolerance, silverSpacing, tolerance_Angle, tolerance_Distance);
             shells?.Split(tolerance_Angle, tolerance_Distance);
 
-            return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance);
+            return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, thinnessRatio, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance);
         }
 
         private static AdjacencyCluster AdjacencyCluster(this Dictionary<double, List<Face2D>> face2Ds, int index_Ground, double tolerance = Tolerance.Distance)

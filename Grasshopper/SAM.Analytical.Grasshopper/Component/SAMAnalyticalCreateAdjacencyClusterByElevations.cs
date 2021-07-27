@@ -177,7 +177,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref tolerance);
 
-            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(spaces, panels, elevations, offsets, auxiliaryElevations, addMissingSpaces, minArea, maxDistance, maxAngle, Core.Tolerance.MacroDistance, silverSpacing, Core.Tolerance.Angle, tolerance);
+            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(spaces, panels, elevations, offsets, auxiliaryElevations, addMissingSpaces, 0.01, minArea, maxDistance, maxAngle, Core.Tolerance.MacroDistance, silverSpacing, Core.Tolerance.Angle, tolerance);
 
             index = Params.IndexOfOutputParam("AdjacencyCluster");
             if (index != -1)
