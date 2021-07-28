@@ -64,6 +64,10 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Point2D> point2Ds_ConvexHull = Query.ConvexHull(point2Ds);
+            if(point2Ds_ConvexHull == null || point2Ds_ConvexHull.Count < 2)
+            {
+                return null;
+            }
 
             double area = double.MaxValue;
             Rectangle2D rectangle = null;
@@ -79,6 +83,11 @@ namespace SAM.Geometry.Planar
                 {
                     angleHashSet.Add(angle);
                     Rectangle2D rectangle_Temp = Rectangle2D(point2Ds_ConvexHull, direction);
+                    if(rectangle_Temp == null || !rectangle_Temp.IsValid())
+                    {
+                        continue;
+                    }
+
                     double aArea_Temp = rectangle_Temp.GetArea();
                     if (aArea_Temp < area)
                     {

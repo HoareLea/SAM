@@ -35,6 +35,11 @@
             if (closed2D is ISegmentable2D)
             {
                 rectangle2D = Create.Rectangle2D(((ISegmentable2D)closed2D).GetPoints());
+                if(rectangle2D == null || !rectangle2D.IsValid())
+                {
+                    rectangle2D = null;
+                    return false;
+                }
 
                 bool result = System.Math.Abs(closed2D.GetArea() - rectangle2D.GetArea()) < tolerance;
                 if (!result)
