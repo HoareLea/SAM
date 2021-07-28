@@ -58,10 +58,11 @@ namespace SAM.Analytical
                                 result[point3D] = panels_Temp;
                             }
 
-                            Panel panel = tuple_Temp.Item1;
+                            if (!panels_Temp.Contains(tuple_Temp.Item1))
+                                panels_Temp.Add(tuple_Temp.Item1);
 
-                            if (!panels_Temp.Contains(panel))
-                                panels_Temp.Add(panel);
+                            if (!panels_Temp.Contains(tuple.Item1))
+                                panels_Temp.Add(tuple.Item1);
                         }
                     }
                 }
