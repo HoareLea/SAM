@@ -1,5 +1,8 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
@@ -9,7 +12,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalPanelSpacing : GH_SAMComponent
+    public class SAMAnalyticalPanelSpacing : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -36,22 +39,44 @@ namespace SAM.Analytical.Grasshopper
         {
         }
 
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_SAMPanels", "SAM Analytical Panels", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("max", "max", "Maximal distance to be checked", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
-            inputParamManager.AddNumberParameter("min", "min", "Minimal distance to be checked", GH_ParamAccess.item, Core.Tolerance.Distance);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number number;
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_max_", NickName = "_max_", Description = "Maximal distance to be checked", Access = GH_ParamAccess.item, Optional = true };
+                number.SetPersistentData(Tolerance.MacroDistance);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_min_", NickName = "_min_", Description = "Minimal distance to be checked", Access = GH_ParamAccess.item, Optional = true };
+                number.SetPersistentData(Tolerance.Distance);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddPointParameter("Points", "Points", "Points", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "points", NickName = "points", Description = "Points", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -62,30 +87,53 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_panels");
             List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(0, panels))
+            if (index == -1 || !dataAccess.GetDataList(index, panels))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            double max = Core.Tolerance.MacroDistance;
-            if (!dataAccess.GetData(1, ref max))
+            index = Params.IndexOfInputParam("_max_");
+            double max = Tolerance.MacroDistance;
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetData(index, ref max);
             }
 
-            double min = Core.Tolerance.Distance;
-            if (!dataAccess.GetData(2, ref min))
+            index = Params.IndexOfInputParam("_min_");
+            double min = Tolerance.Distance;
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetData(index, ref min);
             }
 
-            List<Point3D> point3Ds = Analytical.Query.SpacingPoint3Ds(panels, max, min);
+            Dictionary<Point3D, List<Panel>> dictionary = Analytical.Query.SpacingDictionary(panels, max, min);
 
-            dataAccess.SetDataList(0, point3Ds.ToList().ConvertAll(x => x.ToRhino()));
+            index = Params.IndexOfOutputParam("points");
+            if(index != -1)
+            {
+                dataAccess.SetDataList(index, dictionary?.Keys.ToList().ConvertAll(x => x.ToRhino()));
+            }
+
+            index = Params.IndexOfOutputParam("panels");
+            if(index != -1)
+            {
+                DataTree<GooPanel> dataTree_Panel = new DataTree<GooPanel>();
+
+                int count = 0;
+                foreach (KeyValuePair<Point3D, List<Panel>> keyValuePair in dictionary)
+                {
+                    GH_Path path = new GH_Path(count);
+                    keyValuePair.Value?.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path));
+                    count++;
+                }
+
+                dataAccess.SetDataTree(index, dataTree_Panel);
+            }
         }
     }
 }

@@ -39,17 +39,17 @@ namespace SAM.Analytical
                 int count = -1;
                 for (int i = 0; i < maxIterations; i++)
                 {
-                    List<Point3D> point3Ds = null;
+                    Dictionary<Point3D, List<Panel>> dictionary = null;
 
                     if (count == -1 && maxIterations > 1)
                     {
-                        point3Ds = SpacingPoint3Ds(panels_Rectangular, maxTolerance, minTolerance);
-                        if (point3Ds == null || point3Ds.Count == 0)
+                        dictionary = SpacingDictionary(panels_Rectangular, maxTolerance, minTolerance);
+                        if (dictionary == null || dictionary.Count == 0)
                         {
                             break;
                         }
 
-                        count = point3Ds.Count;
+                        count = dictionary.Count;
                     }
 
                     List<Panel> panels_Rectangular_Temp = panels_Rectangular.ConvertAll(x => new Panel(x));
@@ -67,13 +67,13 @@ namespace SAM.Analytical
 
                     if(count != -1)
                     {
-                        point3Ds = SpacingPoint3Ds(panels_Rectangular, maxTolerance, minTolerance);
-                        if (point3Ds == null || point3Ds.Count == 0)
+                        dictionary = SpacingDictionary(panels_Rectangular, maxTolerance, minTolerance);
+                        if (dictionary == null || dictionary.Count == 0)
                         {
                             break;
                         }
 
-                        int count_Temp = point3Ds.Count;
+                        int count_Temp = dictionary.Count;
                         if(count_Temp > count)
                         {
                             panels_Rectangular = panels_Rectangular_Temp;
