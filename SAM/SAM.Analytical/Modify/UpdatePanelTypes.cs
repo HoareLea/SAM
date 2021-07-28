@@ -35,6 +35,8 @@ namespace SAM.Analytical
                 {
                     double elevation = double.NaN;
 
+                    PanelType panelType_Normal = PanelType.Undefined;
+
                     switch (panelType)
                     {
                         case PanelType.Shade:
@@ -69,12 +71,20 @@ namespace SAM.Analytical
                         
                         case PanelType.FloorInternal:
                         case PanelType.UndergroundCeiling:
-                            panelType = PanelType.FloorExposed;
+                            panelType_Normal = Query.PanelType(panel.Normal);
+                            if (panelType_Normal == PanelType.Floor)
+                            {
+                                panelType = PanelType.FloorExposed;
+                            }
+                            else if (panelType_Normal == PanelType.Roof)
+                            {
+                                panelType = PanelType.Roof;
+                            }
                             break;
 
                         case PanelType.Floor:
                         case PanelType.FloorExposed:
-                            PanelType panelType_Normal = Query.PanelType(panel.Normal);
+                            panelType_Normal = Query.PanelType(panel.Normal);
                             if (panelType_Normal == PanelType.Floor)
                             {
                                 elevation = Query.MaxElevation(panel);
