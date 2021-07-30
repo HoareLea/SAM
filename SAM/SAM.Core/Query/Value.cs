@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -7,19 +8,25 @@ namespace SAM.Core
         public static T Value<T>(this Dictionary<string, object> dictionary, string key)
         {
             if (dictionary == null || key == null)
+            {
                 return default;
+            }
 
-            object value;
-            if (!dictionary.TryGetValue(key, out value))
+            if (!dictionary.TryGetValue(key, out object value) || value == null)
+            {
                 return default;
+            }
 
-            if (value == null)
-                return default;
+            Type type = value.GetType();
+            if (type != typeof(T))
+            {
+                if(!typeof(T).IsAssignableFrom(type))
+                {
+                    return default;
+                }
+            }
 
-            if (value.GetType() != typeof(T))
-                return default;
-
-            return (T)(object)(value);
+            return (T)value;
         }
     }
 }

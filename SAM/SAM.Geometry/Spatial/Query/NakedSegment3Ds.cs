@@ -15,7 +15,7 @@ namespace SAM.Geometry.Spatial
             List<Point3D> point3Ds = new List<Point3D>();
             foreach (Face3D face3D in face3Ds)
             {
-                ISegmentable3D segmentable3D = face3D.GetExternalEdge3D() as ISegmentable3D;
+                ISegmentable3D segmentable3D = face3D?.GetExternalEdge3D() as ISegmentable3D;
                 if (segmentable3D == null)
                     continue;
 
@@ -30,6 +30,16 @@ namespace SAM.Geometry.Spatial
 
                     tuples.Add(new Tuple<BoundingBox3D, Segment3D>(segment3D.GetBoundingBox(tolerance), segment3D));
                     Modify.Add(point3Ds, segment3D.Mid(), tolerance);
+                }
+
+                //New Code Added (2021.07.30) -> Include Holes Edges
+                List<ISegmentable3D> segmentable3Ds_Internal = face3D.GetInternalEdge3Ds()?.FindAll(x => x is ISegmentable3D).ConvertAll(x => (ISegmentable3D)x);
+                if(segmentable3Ds_Internal != null)
+                {
+                    foreach(ISegmentable3D segmentable3D_Internal in segmentable3Ds_Internal)
+                    {
+                        segmentable3D_Internal?.GetSegments()?.ForEach(x => tuples.Add(new Tuple<BoundingBox3D, Segment3D>(x.GetBoundingBox(tolerance), x)));
+                    }
                 }
             }
 
