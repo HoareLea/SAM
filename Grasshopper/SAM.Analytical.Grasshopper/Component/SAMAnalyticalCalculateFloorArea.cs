@@ -129,6 +129,7 @@ namespace SAM.Analytical.Grasshopper
 
                 Dictionary<Space, double> dictionary_Area = new Dictionary<Space, double>();
                 Dictionary<Space, List<Panel>> dictionary_Panel = new Dictionary<Space, List<Panel>>();
+                List<Space> spaces_Temp = new List<Space>();
                 foreach(Space space in spaces)
                 {
                     if(space == null)
@@ -142,40 +143,35 @@ namespace SAM.Analytical.Grasshopper
                         return;
                     }
 
+                    spaces_Temp.Add(space_Temp);
                     dictionary_Area[space_Temp] = double.NaN;
                     dictionary_Panel[space_Temp] = new List<Panel>();
                 }
 
-                Parallel.For(0, dictionary_Area.Count, (int i) => {
+                Parallel.For(0, spaces_Temp.Count, (int i) => {
 
-                    Space space = dictionary_Area.Keys.ElementAt(i);
-                    if(space == null)
+                    Space space_Temp = spaces_Temp[i];
+                    if(space_Temp == null)
                     {
                         return;
                     }
 
-                    List<Panel> panels = Analytical.Query.GeomericalFloorPanels(adjacencyCluster, space, maxTiltDifference);
+                    List<Panel> panels = Analytical.Query.GeomericalFloorPanels(adjacencyCluster, space_Temp, maxTiltDifference);
                     if (panels == null || panels.Count == 0)
                     {
                         return;
                     }
 
-                    dictionary_Panel[space] = panels;
-                    dictionary_Area[space] = panels.ConvertAll(x => x.GetArea()).Sum();
+                    dictionary_Panel[space_Temp] = panels;
+                    dictionary_Area[space_Temp] = panels.ConvertAll(x => x.GetArea()).Sum();
                 });
-
-                spaces = null;
 
                 DataTree<GooPanel> dataTree_Panel = new DataTree<GooPanel>();
                 if (dictionary_Panel != null && dictionary_Panel.Count > 0)
                 {
-                    spaces = new List<Space>();
-
                     int count = 0;
                     foreach(KeyValuePair<Space, List<Panel>> keyValuePair in dictionary_Panel)
                     {
-                        spaces.Add(keyValuePair.Key);
-
                         GH_Path path = new GH_Path(count);
                         keyValuePair.Value.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path));
                         count++;
@@ -200,10 +196,10 @@ namespace SAM.Analytical.Grasshopper
                         space.SetValue(SpaceParameter.Area, keyValuePair.Value);
                         adjacencyCluster.AddObject(space);
 
-                        int index_Space = spaces.IndexOf(keyValuePair.Key);
+                        int index_Space = spaces_Temp.IndexOf(keyValuePair.Key);
                         if(index_Space != -1)
                         {
-                            spaces[index_Space] = space;
+                            spaces_Temp[index_Space] = space;
                         }
                     }
 
@@ -217,7 +213,7 @@ namespace SAM.Analytical.Grasshopper
 
                 index = Params.IndexOfOutputParam("Spaces");
                 if (index != -1)
-                    dataAccess.SetDataList(index, spaces?.ConvertAll(x => new GooSpace(x)));
+                    dataAccess.SetDataList(index, spaces_Temp?.ConvertAll(x => new GooSpace(x)));
 
 
             }
