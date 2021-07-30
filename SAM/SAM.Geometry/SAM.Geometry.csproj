@@ -71,6 +71,7 @@
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />
     <Compile Include="Enums\EdgeOrientationMethod.cs" />
     <Compile Include="Enums\Padding.cs" />
+    <Compile Include="Planar\Classes\ConvexHullComparer.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
     <Compile Include="Planar\Query\Edges.cs" />
     <Compile Include="Planar\Query\Reduce.cs" />
