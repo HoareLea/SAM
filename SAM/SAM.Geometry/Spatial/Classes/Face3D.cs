@@ -86,7 +86,16 @@ namespace SAM.Geometry.Spatial
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
-            return new Face3D((Plane)plane.GetMoved(vector3D), (IClosed2D)externalEdge2D.Clone());
+            if(vector3D == null || plane == null || externalEdge2D == null)
+            {
+                return null;
+            }
+            
+            Face3D face3D = new Face3D((Plane)plane.GetMoved(vector3D), (IClosed2D)externalEdge2D.Clone());
+            face3D.internalEdge2Ds = internalEdge2Ds?.ConvertAll(x => (IClosed2D)x.Clone());
+            return face3D;
+
+            //return new Face3D((Plane)plane.GetMoved(vector3D), (IClosed2D)externalEdge2D.Clone());
         }
 
         public ISAMGeometry3D GetTransformed(Transform3D transform3D)
