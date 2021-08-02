@@ -568,7 +568,7 @@ namespace SAM.Analytical
                 foreach(Space space_Check in spaces_Check)
                 {
                     Shell shell = result.Shell(space_Check);
-                    if(shell == null || !shell.IsClosed(tolerance_Distance))
+                    if(shell == null || !shell.IsClosed(silverSpacing))
                     {
                         result.RemoveObject<Space>(space_Check.Guid);
                     }

@@ -49,6 +49,23 @@ namespace SAM.Geometry.Spatial
 
             foreach (Point3D point3D in point3Ds)
             {
+                //List<Tuple<BoundingBox3D, Segment3D>> tuples_Temp = new List<Tuple<BoundingBox3D, Segment3D>>();
+                //foreach (Tuple<BoundingBox3D, Segment3D> tuple_Temp in tuples)
+                //{
+                //    double distance = Core.Query.Round(tuple_Temp.Item2.Distance(point3D), tolerance);
+                //    if (distance > tolerance)
+                //    {
+                //        continue;
+                //    }
+
+                //    tuples_Temp.Add(tuple_Temp);
+                //}
+
+                //if(tuples_Temp.Count == 1)
+                //{
+                //    result.Add(tuples_Temp[0].Item2);
+                //}
+
                 List<Tuple<BoundingBox3D, Segment3D>> tuples_Temp = tuples.FindAll(x => x.Item1.Inside(point3D, true, tolerance));
                 if (tuples_Temp == null || tuples_Temp.Count == 0)
                     continue;
