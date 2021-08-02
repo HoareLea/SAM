@@ -212,6 +212,7 @@
     <Compile Include="Spatial\Query\InternalFace3Ds.cs" />
     <Compile Include="Spatial\Query\SimplifyByDistance.cs" />
     <Compile Include="Spatial\Query\SimplifyByAngle.cs" />
+    <Compile Include="Spatial\Query\SpacingDictionary.cs" />
     <Compile Include="Spatial\Query\Union.cs" />
     <Compile Include="Spatial\Query\Split.cs" />
     <Compile Include="Spatial\Query\Extend.cs" />

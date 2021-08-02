@@ -279,6 +279,11 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        public Point3D GetInternalPoint3D(double tolerance = Core.Tolerance.Distance)
+        {
+            return Query.InternalPoint3D(this, tolerance);
+        }
+
 
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges, bool orientInternalEdges = true)
         {
