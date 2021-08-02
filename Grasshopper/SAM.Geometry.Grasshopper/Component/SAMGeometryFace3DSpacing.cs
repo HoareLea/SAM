@@ -101,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
             List<Face3D> face3Ds = new List<Face3D>();
             foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                if(Geometry.Grasshopper.Query.TryGetSAMGeometries<Face3D>(objectWrapper, out List<Face3D> face3Ds_Temp))
+                if(Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds_Temp))
                 {
                     face3Ds.AddRange(face3Ds_Temp);
                 }
