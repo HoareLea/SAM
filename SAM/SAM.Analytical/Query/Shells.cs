@@ -371,7 +371,7 @@ namespace SAM.Analytical
             return result;
         }
     
-        public static List<Shell> Shells(this IEnumerable<Panel> panels, IEnumerable<double> elevations, double offset = 0.1, double thinnessRatio = 0.1, double minArea = Core.Tolerance.MacroDistance, double snapTolerance = Core.Tolerance.MacroDistance, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static List<Shell> Shells(this IEnumerable<Panel> panels, IEnumerable<double> elevations, double offset = 0.1, double thinnessRatio = 0.01, double minArea = Core.Tolerance.MacroDistance, double snapTolerance = Core.Tolerance.MacroDistance, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if(panels == null || elevations == null)
             {
@@ -567,7 +567,7 @@ namespace SAM.Analytical
                 }
 
                 face2Ds_Temp.RemoveAll(x => x == null || !x.IsValid());
-                face2Ds_Temp.RemoveAll(x => x.ThinnessRatio() < 0.1 || x.GetArea() < minArea);
+                face2Ds_Temp.RemoveAll(x => x.ThinnessRatio() < thinnessRatio || x.GetArea() < minArea);
                 face2Ds_Temp.RemoveAll(x => !tuple.Item3.Inside(x.InternalPoint2D(tolerance_Distance)));
                 if (face2Ds_Temp == null || face2Ds_Temp.Count == 0)
                 {

@@ -16,7 +16,8 @@ namespace SAM.Analytical
             }
 
             List<Panel> panels_Rectangular = new List<Panel>();
-            List<Panel> result = new List<Panel>();
+            List<Panel> panels_Horizontal = new List<Panel>();
+            List<Panel> panels_Other = new List<Panel>();
             foreach (Panel panel in panels)
             {
                 if(panel == null)
@@ -24,17 +25,25 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                if(panel.Rectangular(maxTolerance))
+                if(panel.Horizontal(maxTolerance))
+                {
+                    panels_Horizontal.Add(panel);
+                }
+                else if(panel.Rectangular(maxTolerance))
                 {
                     panels_Rectangular.Add(panel);
                 }
                 else
                 {
-                    result.Add(new Panel(panel));
+                    panels_Other.Add(new Panel(panel));
                 }
             }
 
-            if(panels_Rectangular.Count != 0)
+            List<Panel> result = new List<Panel>();
+            Dictionary<BoundingBox3D, List<ISegmentable3D>> dictionary_Segmentable3D = new Dictionary<BoundingBox3D, List<ISegmentable3D>>();
+
+            //Rectangular
+            if (panels_Rectangular.Count != 0)
             {
                 int count = -1;
                 for (int i = 0; i < maxIterations; i++)
@@ -91,6 +100,117 @@ namespace SAM.Analytical
                 if (panels_Rectangular != null && panels_Rectangular.Count != 0)
                 {
                     result.AddRange(panels_Rectangular);
+                    foreach(Panel panel_Rectangular in panels_Rectangular)
+                    {
+                        BoundingBox3D boundingBox3D = panel_Rectangular?.GetBoundingBox();
+                        if(boundingBox3D == null)
+                        {
+                            continue;
+                        }
+
+                        Face3D face3D = panel_Rectangular.GetFace3D();
+                        if(face3D == null)
+                        {
+                            continue;
+                        }
+
+                        dictionary_Segmentable3D[boundingBox3D] = new List<ISegmentable3D>();
+
+                        List<IClosedPlanar3D> edge3Ds = face3D.GetEdge3Ds();
+                        foreach(IClosedPlanar3D edge3D in edge3Ds)
+                        {
+                            ISegmentable3D segmentable3D = edge3D as ISegmentable3D;
+                            if(segmentable3D == null)
+                            {
+                                continue;
+                            }
+
+                            dictionary_Segmentable3D[boundingBox3D].Add(segmentable3D);
+                        }
+                    }
+
+                }
+            }
+
+            //Horizontal
+            if(panels_Horizontal.Count != 0)
+            {
+                foreach(Panel panel in panels_Horizontal)
+                {
+                    List<ISegmentable3D> segmentable3Ds = new List<ISegmentable3D>();
+                    BoundingBox3D boundingBox3D = panel.GetBoundingBox();
+                    foreach(KeyValuePair<BoundingBox3D, List<ISegmentable3D>> keyValuePair in dictionary_Segmentable3D)
+                    {
+                        if(!boundingBox3D.InRange(keyValuePair.Key, maxTolerance))
+                        {
+                            continue;
+                        }
+
+                        segmentable3Ds.AddRange(keyValuePair.Value);
+                    }
+
+                    if(segmentable3Ds == null || segmentable3Ds.Count == 0)
+                    {
+                        result.Add(new Panel(panel));
+                        continue;
+                    }
+
+                    Panel panel_Temp = panel.SnapByEnds(segmentable3Ds, maxTolerance, minTolerance);
+                    if(panel_Temp == null)
+                    {
+                        panel_Temp = panel;
+                    }
+
+                    panel_Temp = panel_Temp.SnapByIntersections(segmentable3Ds, maxTolerance, minTolerance);
+                    if (panel_Temp == null)
+                    {
+                        result.Add(new Panel(panel));
+                    }
+                    else
+                    {
+                        result.Add(panel_Temp);
+                    }
+                }
+            }
+
+            //Other
+            if (panels_Other.Count != 0)
+            {
+                foreach (Panel panel in panels_Other)
+                {
+                    List<ISegmentable3D> segmentable3Ds = new List<ISegmentable3D>();
+                    BoundingBox3D boundingBox3D = panel.GetBoundingBox();
+                    foreach (KeyValuePair<BoundingBox3D, List<ISegmentable3D>> keyValuePair in dictionary_Segmentable3D)
+                    {
+                        if (!boundingBox3D.InRange(keyValuePair.Key, maxTolerance))
+                        {
+                            continue;
+                        }
+
+                        segmentable3Ds.AddRange(keyValuePair.Value);
+                    }
+
+                    if (segmentable3Ds == null || segmentable3Ds.Count == 0)
+                    {
+                        result.Add(new Panel(panel));
+                        continue;
+                    }
+
+                    Panel panel_Temp = panel.SnapByEnds(segmentable3Ds, maxTolerance, minTolerance);
+                    if (panel_Temp == null)
+                    {
+                        panel_Temp = panel;
+                    }
+
+                    panel_Temp = panel_Temp.SnapByIntersections(segmentable3Ds, maxTolerance, minTolerance);
+                    if (panel_Temp == null)
+                    {
+                        result.Add(new Panel(panel));
+                    }
+                    else
+                    {
+                        result.Add(panel_Temp);
+                    }
                 }
             }
 

@@ -188,8 +188,11 @@
     <Compile Include="Query\DuplicatedSpacesDictionary.cs" />
     <Compile Include="Query\MergeOverlapApertures.cs" />
     <Compile Include="Query\Offset.cs" />
+    <Compile Include="Query\Point3Ds.cs" />
     <Compile Include="Query\Rectangular.cs" />
     <Compile Include="Query\SectionDictionary.cs" />
+    <Compile Include="Query\SnapByIntersections.cs" />
+    <Compile Include="Query\SnapByEnds.cs" />
     <Compile Include="Query\SpacingDictionary.cs" />
     <Compile Include="Query\SnapByElevations.cs" />
     <Compile Include="Query\SpaceShells.cs" />
