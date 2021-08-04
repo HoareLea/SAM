@@ -384,6 +384,11 @@ namespace SAM.Analytical
                         }
                     }
 
+                    if(!segment2D.IsValid() || segment2D.GetLength() < minTolerance)
+                    {
+                        continue;
+                    }
+
                     Guid guid = tuple.Item1.Guid;
                     if (result.Find(x => x.Guid == guid) != null)
                     {
@@ -398,11 +403,13 @@ namespace SAM.Analytical
                     Segment3D segment3D = plane.Convert(segment2D);
 
                     Face3D face3D = new Face3D(new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], segment3D[1].GetMoved(vector3D) as Point3D, segment3D[0].GetMoved(vector3D) as Point3D }));
+                    if(face3D.IsValid())
+                    {
+                        Panel panel = Create.Panel(guid, tuple.Item1, face3D, null, true, minTolerance, maxTolerance);
+                        //Panel panel = Create.Panel(guid, tuple.Item1, new PlanarBoundary3D()));
 
-                    Panel panel = Create.Panel(guid, tuple.Item1, face3D, null, true, minTolerance, maxTolerance);
-                    //Panel panel = Create.Panel(guid, tuple.Item1, new PlanarBoundary3D()));
-
-                    result.Add(panel);
+                        result.Add(panel);
+                    }
                 }
 
             }
