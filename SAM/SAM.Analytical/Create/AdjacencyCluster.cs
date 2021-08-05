@@ -309,20 +309,40 @@ namespace SAM.Analytical
 
             tuples_Panel.Sort((x, y) => y.Item2.GetArea().CompareTo(x.Item2.GetArea()));
 
+            BoundingBox3D boundingBox3D_All = new BoundingBox3D(tuples_Panel.ConvertAll(x => x.Item4));
+
             int count = 1;
 
             List<Tuple<Point3D, Panel, BoundingBox3D>> tuples_Panel_New = new List<Tuple<Point3D, Panel, BoundingBox3D>>();
 
-            List<Shell> shells_Temp = new List<Shell>(shells);
-            shells_Temp = shells_Temp.ConvertAll(x => x.Merge(tolerance_Distance));
+            List<Shell> shells_Temp = new List<Shell>();
+            foreach(Shell shell in shells)
+            {
+                BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
+                if (boundingBox3D == null)
+                {
+                    continue;
+                }
+
+                if (!boundingBox3D_All.InRange(boundingBox3D))
+                {
+                    continue;
+                }
+
+                shells_Temp.Add(shell.Merge(tolerance_Distance));
+            }
+
+            //shells_Temp = shells_Temp.ConvertAll(x => x.Merge(tolerance_Distance));
             shells_Temp.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
 
             //Creating Shell Panels
             foreach (Shell shell in shells_Temp)
             {
-                List<Face3D> face3Ds = shell.Face3Ds;
+                List<Face3D> face3Ds = shell?.Face3Ds;
                 if (face3Ds == null || face3Ds.Count == 0)
+                {
                     continue;
+                }
 
                 //Searching for spaces
                 dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Shell);
@@ -568,9 +588,25 @@ namespace SAM.Analytical
                 foreach(Space space_Check in spaces_Check)
                 {
                     Shell shell = result.Shell(space_Check);
-                    if(shell == null || !shell.IsClosed(silverSpacing))
+
+                    BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
+                    if (boundingBox3D == null || !boundingBox3D.IsValid() || boundingBox3D.GetVolume() < minArea)
                     {
                         result.RemoveObject<Space>(space_Check.Guid);
+                        continue;
+                    }
+
+                    List<Face3D> face3Ds = shell.Face3Ds;
+                    if (face3Ds.Count <= 2)
+                    {
+                        result.RemoveObject<Space>(space_Check.Guid);
+                        continue;
+                    }
+
+                    if (!shell.IsClosed(silverSpacing))
+                    {
+                        result.RemoveObject<Space>(space_Check.Guid);
+                        continue;
                     }
                 }
             }
