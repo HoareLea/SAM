@@ -24,7 +24,7 @@ namespace SAM.Geometry.Planar
                 List<IClosed2D> internalEdges_New = new List<IClosed2D>();
                 for (int i = 0; i < internalEdges.Count; i++)
                 {
-                    segmentable2D = face2D?.ExternalEdge2D as ISegmentable2D;
+                    segmentable2D = internalEdges[i] as ISegmentable2D;
                     if (segmentable2D == null)
                         continue;
 

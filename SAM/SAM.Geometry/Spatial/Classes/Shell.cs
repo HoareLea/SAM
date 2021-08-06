@@ -632,6 +632,7 @@ namespace SAM.Geometry.Spatial
                 }
 
                 face2Ds.RemoveAll(x => x == null || !x.IsValid());
+                face2Ds.RemoveAll(x => !face2D_Boundary.Inside(x.InternalPoint2D(tolerance_Distance), tolerance_Distance));
 
                 dictionary[i] = face2Ds.ConvertAll(x => plane_Boundary.Convert(x));
             }
