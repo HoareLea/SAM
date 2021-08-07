@@ -15,39 +15,6 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static List<Face3D> Snap(this Face3D face3D_1, Face3D face3D_2, double snapDistance, double tolerance = Core.Tolerance.Distance)
-        {
-            Plane plane_1 = face3D_1?.GetPlane();
-            if (plane_1 == null)
-                return null;
-
-            Plane plane_2 = face3D_2?.GetPlane();
-            if (plane_2 == null)
-                return null;
-
-            if (plane_1.Coplanar(plane_2, tolerance))
-            {
-                Planar.Face2D face2D_1 = plane_1.Convert(face3D_1);
-                Planar.Face2D face2D_2 = plane_1.Convert(plane_1.Project(face3D_2));
-
-                List<Planar.Face2D> face2Ds = Planar.Query.Snap(face2D_1, face2D_2, snapDistance, tolerance);
-                if (face2Ds == null)
-                    return null;
-
-                return face2Ds?.ConvertAll(x => plane_1.Convert(x));
-            }
-
-            PlanarIntersectionResult planarIntersectionResult = plane_1.PlanarIntersectionResult(plane_2, tolerance); //tolerance input updated
-            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
-                return null;
-
-            List<Segment3D> segment3Ds = planarIntersectionResult.GetGeometry3Ds<Segment3D>();
-            if (segment3Ds == null || segment3Ds.Count == 0)
-                return null;
-
-            throw new NotImplementedException();
-        }
-
         public static Polygon3D Snap(this Polygon3D polygon3D, IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds == null)
@@ -76,7 +43,12 @@ namespace SAM.Geometry.Spatial
 
             return new Polygon3D(point3Ds_Result);
         }
-    
+
+        public static Face3D Snap(this Face3D face3D_Snapped, Face3D face3D_Snapping, double snapDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            return Snap(face3D_Snapped, new Face3D[] { face3D_Snapping }, snapDistance, tolerance);
+        }
+        
         public static Face3D Snap(this Face3D face3D, IEnumerable<Face3D> face3Ds, double snapDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (face3D == null || face3Ds == null)

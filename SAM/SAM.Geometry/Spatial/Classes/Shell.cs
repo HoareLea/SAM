@@ -644,9 +644,18 @@ namespace SAM.Geometry.Spatial
 
             foreach(KeyValuePair<int, List<Face3D>> keyValuePair in dictionary)
             {
+                //Tuple<BoundingBox3D, Face3D> tuple = boundaries[keyValuePair.Key];
                 boundaries.RemoveAt(keyValuePair.Key);
+
                 foreach (Face3D face3D_New in keyValuePair.Value)
                 {
+                    //Face3D face3D_New_Temp = face3D_New.Snap(tuple.Item2, Core.Tolerance.MacroDistance, tolerance_Distance);
+                    //if (face3D_New_Temp == null)
+                    //{
+                    //    face3D_New_Temp = face3D_New;
+                    //}
+
+                    //boundaries.Add(new Tuple<BoundingBox3D, Face3D>(face3D_New_Temp.GetBoundingBox(), face3D_New_Temp));
                     boundaries.Add(new Tuple<BoundingBox3D, Face3D>(face3D_New.GetBoundingBox(), face3D_New));
                 }
             }

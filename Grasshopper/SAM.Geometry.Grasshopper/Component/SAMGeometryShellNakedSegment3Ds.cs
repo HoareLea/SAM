@@ -9,12 +9,12 @@ using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometryShellContains : GH_SAMVariableOutputParameterComponent
+    public class SAMGeometryShellNakedSegment3Ds : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("981a3a3a-60ec-49af-89e1-42497b6164f9");
+        public override Guid ComponentGuid => new Guid("642f9b92-e41a-420c-bf9e-60a208874e16");
 
         /// <summary>
         /// The latest version of this component
@@ -29,9 +29,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMGeometryShellContains()
-          : base("SAMGeometry.ShellContains", "SAMGeometry.ShellContains",
-              "Checks if Shell Contains given Point3D",
+        public SAMGeometryShellNakedSegment3Ds()
+          : base("SAMGeometry.NakedSegment3Ds", "SAMGeometry.NakedSegment3Ds",
+              "Gets Naked Segment3Ds from Shell",
               "SAM", "Geometry")
         {
         }
@@ -51,21 +51,10 @@ namespace SAM.Geometry.Grasshopper
                 gerenricObject.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(gerenricObject, ParamVisibility.Binding));
 
-                gerenricObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_point", NickName = "_point", Description = "SAM Geometry Point3D", Access = GH_ParamAccess.item };
-                gerenricObject.DataMapping = GH_DataMapping.Graft;
-                result.Add(new GH_SAMParam(gerenricObject, ParamVisibility.Binding));
-
-                global::Grasshopper.Kernel.Parameters.Param_Boolean booleanParam = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "allowOnBoundary_", NickName = "allowOnBoundary_", Description = "Allow On Boundary", Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(booleanParam, ParamVisibility.Binding));
-
                 global::Grasshopper.Kernel.Parameters.Param_Number number;
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "silverSpacing_", NickName = "silverSpacing_", Description = "Silver Spacing", Access = GH_ParamAccess.item };
-                number.SetPersistentData(Core.Tolerance.MacroDistance);
-                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
-
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
-                number.SetPersistentData(Core.Tolerance.Distance);
+                number.SetPersistentData(Core.Tolerance.MacroDistance);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
                 return result.ToArray();
@@ -80,7 +69,7 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Contains", NickName = "Contains", Description = "Contains", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "segment3Ds", NickName = "segment3Ds", Description = "SAM Geometry Spatial Segment3Ds", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -114,26 +103,8 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            objectWrapper = null;
-            index = Params.IndexOfInputParam("_point");
-            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            Point3D point3D = null;
-            if (Query.TryGetSAMGeometries(objectWrapper, out List<Point3D> point3Ds_Temp) && point3Ds_Temp != null && point3Ds_Temp.Count > 0)
-                point3D = point3Ds_Temp.FirstOrDefault();
-
-            if (point3D == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             index = Params.IndexOfInputParam("tolerance_");
-            double tolerance = Core.Tolerance.Distance;
+            double tolerance = Core.Tolerance.MacroDistance;
             if (index != -1)
             {
                 double tolerance_Temp = double.NaN;
@@ -141,35 +112,9 @@ namespace SAM.Geometry.Grasshopper
                     tolerance = tolerance_Temp;
             }
 
-            index = Params.IndexOfInputParam("silverSpacing_");
-            double silverSpacing = Core.Tolerance.MacroDistance;
+            index = Params.IndexOfOutputParam("segment3Ds");
             if (index != -1)
-            {
-                double silverSpacing_Temp = double.NaN;
-                if (dataAccess.GetData(index, ref silverSpacing_Temp) && !double.IsNaN(silverSpacing_Temp))
-                    silverSpacing = silverSpacing_Temp;
-            }
-
-            index = Params.IndexOfInputParam("silverSpacing_");
-            bool allowOnBoundary = true;
-            if (index != -1)
-            {
-                bool allowOnBoundary_Temp = true;
-                if (dataAccess.GetData(index, ref allowOnBoundary_Temp))
-                    allowOnBoundary = allowOnBoundary_Temp;
-            }
-
-            bool contains = false;
-            if(shell.Inside(point3D, silverSpacing, tolerance))
-            {
-                contains = true;
-                if (!allowOnBoundary && shell.On(point3D, tolerance))
-                    contains = false;
-            }
-
-            index = Params.IndexOfOutputParam("Contains");
-            if (index != -1)
-                dataAccess.SetData(index, contains);
+                dataAccess.SetDataList(index, shell.NakedSegment3Ds(tolerance));
         }
     }
 }
