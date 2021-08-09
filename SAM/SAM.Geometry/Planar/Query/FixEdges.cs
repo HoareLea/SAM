@@ -63,16 +63,11 @@ namespace SAM.Geometry.Planar
                         continue;
                     }
 
-                    double area = polygon2D_ExternalEdge.GetArea();
+                    polygon2Ds_ExternalEdge_Temp.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
 
-                    for (int i = polygon2Ds_ExternalEdge_Temp.Count - 1; i >= 0; i--)
+                    for (int i = polygon2Ds_ExternalEdge_Temp.Count - 1; i > 0; i--)
                     {
                         Polygon2D polygon2D_ExternalEdge_Temp = polygon2Ds_ExternalEdge_Temp[i];
-
-                        if(System.Math.Abs(polygon2D_ExternalEdge_Temp.GetArea() - area) <= tolerance)
-                        {
-                            continue;
-                        }
 
                         Polygon2D polygon2D = polygon2Ds_InternalEdge_Temp.Find(x => polygon2Ds_ExternalEdge_Temp[i].Inside(x.InternalPoint2D(tolerance)));
                         if(polygon2D != null)
