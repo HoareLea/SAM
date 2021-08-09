@@ -256,7 +256,7 @@ namespace SAM.Analytical
             if (!addMissingSpaces && (dictionary_Spaces == null || dictionary_Spaces.Count() == 0))
                 return result;
 
-            foreach(KeyValuePair<Shell, List<Space>> keyValuePair in dictionary_Spaces)
+            foreach (KeyValuePair<Shell, List<Space>> keyValuePair in dictionary_Spaces)
             {
                 if (keyValuePair.Value == null)
                     continue;
@@ -265,7 +265,7 @@ namespace SAM.Analytical
                     continue;
 
                 List<Space> spaces_Shell = new List<Space>();
-                foreach(Space space in keyValuePair.Value)
+                foreach (Space space in keyValuePair.Value)
                 {
                     Point3D point3D = space.Location.GetMoved(new Vector3D(0, 0, silverSpacing)) as Point3D;
                     if (point3D == null)
@@ -279,7 +279,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(spaces_Shell.Count != 0)
+                if (spaces_Shell.Count != 0)
                 {
                     if (spaces_Shell.Count == keyValuePair.Value.Count)
                     {
@@ -291,7 +291,7 @@ namespace SAM.Analytical
             }
 
             List<Tuple<Plane, Face3D, Panel, BoundingBox3D>> tuples_Panel = new List<Tuple<Plane, Face3D, Panel, BoundingBox3D>>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 Face3D face3D = panel?.GetFace3D();
                 if (face3D == null)
@@ -315,24 +315,39 @@ namespace SAM.Analytical
 
             List<Tuple<Point3D, Panel, BoundingBox3D>> tuples_Panel_New = new List<Tuple<Point3D, Panel, BoundingBox3D>>();
 
-            List<Shell> shells_Temp = new List<Shell>();
-            foreach(Shell shell in shells)
+            List<Shell> shells_Temp = Enumerable.Repeat<Shell>(null, shells.Count()).ToList();
+            Parallel.For(0, shells.Count(), (int i) =>
             {
+                Shell shell = shells.ElementAt(i);
+
                 BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
                 if (boundingBox3D == null)
                 {
-                    continue;
+                    return;
                 }
 
                 if (!boundingBox3D_All.InRange(boundingBox3D))
                 {
-                    continue;
+                    return;
                 }
 
-                shells_Temp.Add(shell.Merge(tolerance_Distance));
-            }
+                Shell shell_Merge = shell.Merge(tolerance_Distance);
+                if(shell_Merge == null)
+                {
+                    shell_Merge = new Shell(shell);
+                }
 
-            //shells_Temp = shells_Temp.ConvertAll(x => x.Merge(tolerance_Distance));
+                Shell shell_FixEdges = shell_Merge.FixEdges(tolerance_Distance);
+                if(shell_FixEdges == null)
+                {
+                    shell_FixEdges = new Shell(shell_Merge);
+                }
+
+                shells_Temp[i] = shell_FixEdges;
+            });
+
+            shells_Temp.RemoveAll(x => x == null);
+
             shells_Temp.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
 
             //Creating Shell Panels
@@ -394,14 +409,14 @@ namespace SAM.Analytical
                 List<Tuple<Plane, Face3D, Panel, BoundingBox3D>> tuples_Panel_Temp = tuples_Panel.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
                 if (tuples_Panel_Temp == null || tuples_Panel_Temp.Count == 0)
                     continue;
-                
+
                 foreach (Face3D face3D in face3Ds)
                 {
                     Plane plane = face3D?.GetPlane();
                     if (plane == null)
                         continue;
 
-                    if(face3D.ThinnessRatio() < thinnessRatio)
+                    if (face3D.ThinnessRatio() < thinnessRatio)
                     {
                         continue;
                     }
@@ -489,16 +504,16 @@ namespace SAM.Analytical
                     if (panel_New == null)
                         continue;
 
-                    foreach(Space space in spaces_Shell)
+                    foreach (Space space in spaces_Shell)
                         result.AddRelation(space, panel_New);
                 }
             }
 
             //Creating Shade Panels
-            List<List<Panel>> tuples = Enumerable.Repeat<List<Panel>>(null, panels.Count()).ToList(); 
+            List<List<Panel>> tuples = Enumerable.Repeat<List<Panel>>(null, panels.Count()).ToList();
 
             //for(int i =0; i < panels.Count; i++)
-            Parallel.For(0, panels.Count(), (int i) => 
+            Parallel.For(0, panels.Count(), (int i) =>
             {
                 Panel panel = panels.ElementAt(i);
 
@@ -566,7 +581,7 @@ namespace SAM.Analytical
                     Face3D face3D_New = plane.Convert(face2D);
                     if (face3D_New == null)
                         continue;
-                        
+
                     Panel panel_New = new Panel(guid, panel, face3D_New, null, true, minArea);
                     tuples[i].Add(panel_New);
 
@@ -574,18 +589,18 @@ namespace SAM.Analytical
                 }
             });
 
-            foreach(List<Panel> panels_New in tuples)
+            foreach (List<Panel> panels_New in tuples)
             {
-                if(panels_New != null)
+                if (panels_New != null)
                 {
                     panels_New.ForEach(x => result.AddObject(x));
                 }
             }
 
             List<Space> spaces_Check = result.GetSpaces();
-            if(spaces_Check != null && spaces_Check.Count != 0)
+            if (spaces_Check != null && spaces_Check.Count != 0)
             {
-                foreach(Space space_Check in spaces_Check)
+                foreach (Space space_Check in spaces_Check)
                 {
                     Shell shell = result.Shell(space_Check);
 

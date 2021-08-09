@@ -112,31 +112,61 @@ namespace SAM.Geometry.Planar
 
         public static List<T> Intersection<T>(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance) where T: ISAMGeometry2D
         {
-            Polygon polygon_1 = face2D_1?.ToNTS(tolerance);
-            if (polygon_1 == null)
-                return null;
-
-            Polygon polygon_2 = face2D_2?.ToNTS(tolerance);
-            if (polygon_2 == null)
-                return null;
-
-            List<Polygon> polygons_Snap = Snap(polygon_1, polygon_2, tolerance);
-            if (polygons_Snap != null && polygons_Snap.Count == 2)
-            {
-                polygon_1 = polygons_Snap[0];
-                polygon_2 = polygons_Snap[1];
-            }
-
-            NetTopologySuite.Geometries.Geometry geometry = polygon_1.Intersection(polygon_2);
-            if (geometry == null || geometry.IsEmpty)
+            if(face2D_1 == null || face2D_2 == null)
             {
                 return null;
             }
 
-            List<NetTopologySuite.Geometries.Geometry> geometries = geometry is GeometryCollection ? ((GeometryCollection)geometry).Geometries?.ToList() : new List<NetTopologySuite.Geometries.Geometry>() { geometry };
-            if (geometries == null || geometries.Count == 0)
+            List<Face2D> face2Ds_1 = face2D_1.FixEdges(tolerance);
+            if(face2Ds_1 == null || face2Ds_1.Count == 0)
             {
-                return null;
+                face2Ds_1 = new List<Face2D>() { face2D_1};
+            }
+
+            List<Face2D> face2Ds_2 = face2D_2.FixEdges(tolerance);
+            if (face2Ds_2 == null || face2Ds_2.Count == 0)
+            {
+                face2Ds_2 = new List<Face2D>() { face2D_1 };
+            }
+
+            List<NetTopologySuite.Geometries.Geometry> geometries = new List<NetTopologySuite.Geometries.Geometry>();
+            foreach (Face2D face2D_1_Temp in face2Ds_1)
+            {
+                foreach (Face2D face2D_2_Temp in face2Ds_2)
+                {
+                    Polygon polygon_1 = face2D_1_Temp?.ToNTS(tolerance);
+                    if (polygon_1 == null)
+                    {
+                        continue;
+                    }
+
+                    Polygon polygon_2 = face2D_2_Temp?.ToNTS(tolerance);
+                    if (polygon_2 == null)
+                    {
+                        continue;
+                    }
+
+                    List<Polygon> polygons_Snap = Snap(polygon_1, polygon_2, tolerance);
+                    if (polygons_Snap != null && polygons_Snap.Count == 2)
+                    {
+                        polygon_1 = polygons_Snap[0];
+                        polygon_2 = polygons_Snap[1];
+                    }
+
+                    NetTopologySuite.Geometries.Geometry geometry = polygon_1.Intersection(polygon_2);
+                    if (geometry == null || geometry.IsEmpty)
+                    {
+                        continue;
+                    }
+
+                    List<NetTopologySuite.Geometries.Geometry> geometries_Temp = geometry is GeometryCollection ? ((GeometryCollection)geometry).Geometries?.ToList() : new List<NetTopologySuite.Geometries.Geometry>() { geometry };
+                    if (geometries_Temp == null || geometries_Temp.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    geometries.AddRange(geometries_Temp);
+                }
             }
 
             List<ISAMGeometry2D> result = new List<ISAMGeometry2D>();

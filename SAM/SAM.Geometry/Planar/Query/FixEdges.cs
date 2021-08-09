@@ -14,7 +14,6 @@ namespace SAM.Geometry.Planar
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
-
             //Fix for the case when externalEdge selfintersect
             List<Polygon2D> polygon2Ds_ExternalEdge = Create.Polygon2Ds(segment2Ds, tolerance);
             if (polygon2Ds_ExternalEdge == null || polygon2Ds_ExternalEdge.Count == 0)

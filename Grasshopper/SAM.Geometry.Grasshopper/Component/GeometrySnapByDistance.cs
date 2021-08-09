@@ -123,7 +123,10 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            dataAccess.SetDataList(0, Spatial.Query.Snap(face3D_1, face3D_2, snapDistance));
+            face3D_1 = Spatial.Query.Snap(face3D_1, face3D_2, snapDistance);
+            face3D_2 = Spatial.Query.Snap(face3D_2, face3D_1, snapDistance);
+
+            dataAccess.SetDataList(0, new Face3D[] { face3D_1, face3D_2 });
             dataAccess.SetData(1, true);
         }
     }

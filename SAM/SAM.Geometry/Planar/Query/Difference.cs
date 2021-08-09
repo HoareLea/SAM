@@ -167,13 +167,42 @@ namespace SAM.Geometry.Planar
             if (area_2 <= tolerance)
                 return new List<Face2D>() { new Face2D(face2D_2) };
 
-            Polygon polygon_1 = face2D_1.ToNTS(tolerance);
-            Polygon polygon_2 = face2D_2.ToNTS(tolerance);
+            List<Face2D> face2Ds_1 = face2D_1.FixEdges(tolerance);
+            if(face2Ds_1 == null || face2Ds_1.Count == 0)
+            {
+                face2Ds_1 = new List<Face2D>() { face2D_1};
+            }
+
+            List<Face2D> face2Ds_2 = face2D_2.FixEdges(tolerance);
+            if (face2Ds_2 == null || face2Ds_2.Count == 0)
+            {
+                face2Ds_2 = new List<Face2D>() { face2D_2 };
+            }
+
+            List<Face2D> result = null;
+
+            if (face2Ds_1.Count != 1  || face2Ds_2.Count != 1 )
+            {
+                result = new List<Face2D>();
+                foreach (Face2D face2D in face2Ds_1)
+                {
+                    List<Face2D> face2Ds_Difference = face2D.Difference(face2Ds_2, tolerance);
+                    if(face2Ds_Difference != null && face2Ds_Difference.Count != 0)
+                    {
+                        result.AddRange(face2Ds_Difference);
+                    }
+                }
+
+                return result;
+            }
+
+            Polygon polygon_1 = face2Ds_1[0].ToNTS(tolerance);
+            Polygon polygon_2 = face2Ds_2[0].ToNTS(tolerance);
 
             if (polygon_1 == null || polygon_2 == null)
-                return null;
+                return result;
 
-            List<Face2D> result = new List<Face2D>();
+            result = new List<Face2D>();
 
             //test to check  NaN when createing shells from adj cluster
             //Find better way to determine EqualsTopologically for polygons which gives exception
@@ -257,8 +286,18 @@ namespace SAM.Geometry.Planar
             if (face2D == null || face2Ds == null || face2D.GetArea() <= tolerance)
                 return null;
 
-            List<Face2D> result = new List<Face2D>() { face2D };
+            int count = face2Ds.Count();
+            if (count == 1)
+            {
+                return Difference(face2D, face2Ds.ElementAt(0), tolerance);
+            }
 
+            List<Face2D> result = new List<Face2D>() { face2D };
+            if (count == 0)
+            {
+                return result;
+            }
+            
             foreach(Face2D face2D_Temp in face2Ds)
             {
                 if (face2D_Temp.GetArea() <= tolerance)
