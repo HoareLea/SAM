@@ -418,7 +418,11 @@ namespace SAM.Analytical
 
                     if (face3D.ThinnessRatio() < thinnessRatio)
                     {
-                        continue;
+                        double area = face3D.GetArea();
+                        if (area < minArea)
+                        {
+                            continue;
+                        }
                     }
 
                     Point3D point3D_Internal = face3D.InternalPoint3D(tolerance_Distance);
@@ -432,12 +436,18 @@ namespace SAM.Analytical
                     List<Tuple<Point3D, Panel, Face3D>> tuples_Face3D = tuples_Panel_New.FindAll(x => boundingBox3D_Face3D.InRange(x.Item3, tolerance_Distance)).ConvertAll(x => new Tuple<Point3D, Panel, Face3D>(x.Item1, x.Item2, x.Item2.GetFace3D()));
                     if (tuples_Face3D != null && tuples_Face3D.Count != 0)
                     {
-                        List<Tuple<Point3D, Panel, Face3D, double>> tuples_Distance = tuples_Face3D.ConvertAll(x => new Tuple<Point3D, Panel, Face3D, double>(x.Item1, x.Item2, x.Item3, System.Math.Min(x.Item3.Distance(point3D_Internal), face3D.Distance(x.Item1))));
+                        double area = face3D.GetArea();
+                        tuples_Face3D.RemoveAll(x => !area.AlmostEqual(x.Item3.GetArea(), minArea));
+                        if (tuples_Face3D != null && tuples_Face3D.Count != 0)
+                        {
+                            List<Tuple<Point3D, Panel, Face3D, double>> tuples_Distance = tuples_Face3D.ConvertAll(x => new Tuple<Point3D, Panel, Face3D, double>(x.Item1, x.Item2, x.Item3, System.Math.Min(x.Item3.Distance(point3D_Internal), face3D.Distance(x.Item1))));
 
-                        if (tuples_Distance.Count > 1)
-                            tuples_Distance.Sort((x, y) => x.Item4.CompareTo(y.Item4));
+                            if (tuples_Distance.Count > 1)
+                                tuples_Distance.Sort((x, y) => x.Item4.CompareTo(y.Item4));
 
-                        panel_New = tuples_Distance[0].Item4 < silverSpacing ? tuples_Distance[0].Item2 : null;
+                            panel_New = tuples_Distance[0].Item4 < silverSpacing ? tuples_Distance[0].Item2 : null;
+
+                        }
                     }
 
                     if (panel_New == null)
