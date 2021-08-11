@@ -157,5 +157,33 @@ namespace SAM.Geometry.Planar
 
             return new Polyline2D(point2Ds, polyline2D.IsClosed());
         }
+
+        public static Face2D SimplifyBySAM_Angle(this Face2D face2D, double maxAngle = Core.Tolerance.Angle, double tolerance = Core.Tolerance.Distance)
+        {
+            if (face2D == null)
+            {
+                return null;
+            }
+
+            IClosed2D externalEdge = face2D.ExternalEdge2D;
+            if(externalEdge is Polygon2D)
+            {
+                externalEdge = SimplifyBySAM_Angle((Polygon2D)externalEdge);
+            }
+
+            List<IClosed2D> internalEdge2Ds = face2D.InternalEdge2Ds;
+            if (internalEdge2Ds != null && internalEdge2Ds.Count!= 0)
+            {
+                for(int i=0; i < internalEdge2Ds.Count; i++)
+                {
+                    if(internalEdge2Ds[i] is Polygon2D)
+                    {
+                        internalEdge2Ds[i] = SimplifyBySAM_Angle((Polygon2D)internalEdge2Ds[i]);
+                    }
+                }
+            }
+
+            return Face2D.Create(externalEdge, internalEdge2Ds, EdgeOrientationMethod.Undefined, tolerance);
+        }
     }
 }

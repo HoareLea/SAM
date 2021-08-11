@@ -617,13 +617,15 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
+                face2Ds = face2Ds.ConvertAll(x => Planar.Query.SimplifyBySAM_Angle(x, tolerance_Angle));
+
                 List<Face2D> face2Ds_Difference = face2D_Boundary.Difference(face2Ds);
                 face2Ds_Difference?.RemoveAll(x => x == null || x.GetArea() <= tolerance_Distance);
                 if (face2Ds_Difference != null && face2Ds_Difference.Count != 0)
                 {
                     foreach(Face2D face2D_Difference in face2Ds_Difference)
                     {
-                        List<Face2D> face2Ds_Difference_Temp = face2D_Difference.FixEdges(tolerance_Distance);
+                        List<Face2D> face2Ds_Difference_Temp = face2D_Difference.SimplifyBySAM_Angle(tolerance_Angle).FixEdges(tolerance_Distance);
                         if (face2Ds_Difference_Temp != null && face2Ds_Difference_Temp.Count != 0)
                         {
                             face2Ds.AddRange(face2Ds_Difference_Temp);
@@ -634,7 +636,7 @@ namespace SAM.Geometry.Spatial
                 face2Ds.RemoveAll(x => x == null || !x.IsValid());
                 face2Ds.RemoveAll(x => !face2D_Boundary.Inside(x.InternalPoint2D(tolerance_Distance), tolerance_Distance));
 
-                dictionary[i] = face2Ds.ConvertAll(x => plane_Boundary.Convert(x));
+                dictionary[i] = face2Ds.ConvertAll(x => Planar.Query.SimplifyBySAM_Angle(x, tolerance_Angle)).ConvertAll(x => plane_Boundary.Convert(x));
             }
 
             if(dictionary == null || dictionary.Count == 0)
