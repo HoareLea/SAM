@@ -452,7 +452,7 @@ namespace SAM.Analytical
 
                     if (panel_New == null)
                     {
-                        List<Tuple<Face2D, Panel>> tuples_Face2D = new List<Tuple<Face2D, Panel>>();
+                        List<Tuple<Face2D, Panel>> tuples_Face2D_All = new List<Tuple<Face2D, Panel>>();
                         foreach (Tuple<Plane, Face3D, Panel, BoundingBox3D> tuple_Panel in tuples_Panel_Temp)
                         {
                             if (!boundingBox3D_Face3D.InRange(tuple_Panel.Item4))
@@ -472,47 +472,83 @@ namespace SAM.Analytical
                             if (face2D == null)
                                 continue;
 
-                            tuples_Face2D.Add(new Tuple<Face2D, Panel>(face2D, tuple_Panel.Item3));
+                            tuples_Face2D_All.Add(new Tuple<Face2D, Panel>(face2D, tuple_Panel.Item3));
                         }
 
-                        if (tuples_Face2D == null && tuples_Face2D.Count == 0)
-                            continue;
-
-                        Face2D face2D_Shell = plane.Convert(face3D);
-                        for (int i = tuples_Face2D.Count - 1; i >= 0; i--)
+                        if (tuples_Face2D_All != null && tuples_Face2D_All.Count != 0)
                         {
-                            List<Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D_Shell, tuples_Face2D[i].Item1, tolerance_Distance);
-                            face2Ds_Intersection?.RemoveAll(x => x == null || x.GetArea() <= tolerance_Distance);
+                            List<Tuple<Face2D, Panel>> tuples_Face2D = new List<Tuple<Face2D, Panel>>(tuples_Face2D_All);
 
-                            if (face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
-                                tuples_Face2D.RemoveAt(i);
+                            //Find By Face2D Intersection
+                            Face2D face2D_Shell = plane.Convert(face3D);
+                            for (int i = tuples_Face2D.Count - 1; i >= 0; i--)
+                            {
+                                List<Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D_Shell, tuples_Face2D[i].Item1, tolerance_Distance);
+                                face2Ds_Intersection?.RemoveAll(x => x == null || x.GetArea() <= tolerance_Distance);
+
+                                if (face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
+                                    tuples_Face2D.RemoveAt(i);
+                            }
+
+                            if (tuples_Face2D != null && tuples_Face2D.Count != 0)
+                            {
+                                //Sorting by face3D Normal
+                                Vector3D normal = plane.Normal;
+                                List<Tuple<Face2D, Panel>> tuples_Face2D_Temp = tuples_Face2D.FindAll(x => x.Item2.Normal.SameHalf(normal));
+                                tuples_Face2D.RemoveAll(x => tuples_Face2D_Temp.Contains(x));
+                                tuples_Face2D_Temp.AddRange(tuples_Face2D);
+                                tuples_Face2D = tuples_Face2D_Temp;
+
+                                Panel panel = tuples_Face2D.FirstOrDefault()?.Item2;
+                                if (panel != null)
+                                {
+                                    Guid guid = panel.Guid;
+                                    if (result.GetObject<Panel>(guid) != null)
+                                        guid = Guid.NewGuid();
+
+                                    panel_New = new Panel(guid, panel, face3D, null, true, minArea);
+                                    result.AddObject(panel_New);
+
+                                    tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance_Distance)));
+                                }
+                            }
+                            else
+                            {
+                                //Find The Closest Panel
+                                
+                                Point3D point3D = face3D.GetInternalPoint3D(tolerance_Distance);
+                                List<Tuple<Face2D, Panel, double>> tuples_Face2D_Distance = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, Panel, double>(x.Item1, x.Item2, x.Item2.Distance(point3D)));
+                                tuples_Face2D_Distance.RemoveAll(x => x.Item3 > maxDistance);
+                                tuples_Face2D_Distance.Sort((x, y) => x.Item3.CompareTo(y.Item3));
+
+                                //Sorting by face3D Normal
+                                Vector3D normal = plane.Normal;
+                                List<Tuple<Face2D, Panel, double>> tuples_Face2D_Distance_Temp = tuples_Face2D_Distance.FindAll(x => x.Item2.Normal.SameHalf(normal));
+                                tuples_Face2D_Distance.RemoveAll(x => tuples_Face2D_Distance_Temp.Contains(x));
+                                tuples_Face2D_Distance_Temp.AddRange(tuples_Face2D_Distance);
+                                tuples_Face2D_Distance = tuples_Face2D_Distance_Temp;
+
+                                Panel panel = tuples_Face2D_Distance.FirstOrDefault()?.Item2;
+                                if (panel != null)
+                                {
+                                    Guid guid = panel.Guid;
+                                    if (result.GetObject<Panel>(guid) != null)
+                                        guid = Guid.NewGuid();
+
+                                    panel_New = new Panel(guid, panel, face3D, null, true, minArea);
+                                    result.AddObject(panel_New);
+
+                                    tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance_Distance)));
+                                }
+
+                            }
                         }
-
-                        if (tuples_Face2D == null && tuples_Face2D.Count == 0)
-                            continue;
-
-                        Vector3D normal = plane.Normal;
-                        List<Tuple<Face2D, Panel>> tuples_Face2D_Temp = tuples_Face2D.FindAll(x => x.Item2.Normal.SameHalf(normal));
-                        tuples_Face2D.RemoveAll(x => tuples_Face2D_Temp.Contains(x));
-                        tuples_Face2D_Temp.AddRange(tuples_Face2D);
-                        tuples_Face2D = tuples_Face2D_Temp;
-
-                        Panel panel = tuples_Face2D.FirstOrDefault()?.Item2;
-                        if (panel == null)
-                            continue;
-
-                        Guid guid = panel.Guid;
-                        if (result.GetObject<Panel>(guid) != null)
-                            guid = Guid.NewGuid();
-
-                        panel_New = new Panel(guid, panel, face3D, null, true, minArea);
-                        result.AddObject(panel_New);
-
-                        tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance_Distance)));
                     }
 
                     if (panel_New == null)
+                    {
                         continue;
+                    }
 
                     foreach (Space space in spaces_Shell)
                         result.AddRelation(space, panel_New);
