@@ -290,7 +290,7 @@ namespace SAM.Analytical
                 }
             }
 
-            List<Tuple<Plane, Face3D, Panel, BoundingBox3D>> tuples_Panel = new List<Tuple<Plane, Face3D, Panel, BoundingBox3D>>();
+            List<Tuple<Plane, Face3D, Panel, BoundingBox3D, double>> tuples_Panel = new List<Tuple<Plane, Face3D, Panel, BoundingBox3D, double>>();
             foreach (Panel panel in panels)
             {
                 Face3D face3D = panel?.GetFace3D();
@@ -301,13 +301,15 @@ namespace SAM.Analytical
                 if (plane == null)
                     continue;
 
-                if (face3D.GetArea() < minArea || face3D.ThinnessRatio() < thinnessRatio) // Changed from tolerance_Distance to minArea
+                double area = face3D.GetArea();
+
+                if (area < minArea || face3D.ThinnessRatio() < thinnessRatio) // Changed from tolerance_Distance to minArea
                     continue;
 
-                tuples_Panel.Add(new Tuple<Plane, Face3D, Panel, BoundingBox3D>(plane, face3D, panel, face3D.GetBoundingBox(tolerance_Distance)));
+                tuples_Panel.Add(new Tuple<Plane, Face3D, Panel, BoundingBox3D, double>(plane, face3D, panel, face3D.GetBoundingBox(tolerance_Distance), area));
             }
 
-            tuples_Panel.Sort((x, y) => y.Item2.GetArea().CompareTo(x.Item2.GetArea()));
+            tuples_Panel.Sort((x, y) => y.Item5.CompareTo(x.Item5));
 
             BoundingBox3D boundingBox3D_All = new BoundingBox3D(tuples_Panel.ConvertAll(x => x.Item4));
 
@@ -337,13 +339,15 @@ namespace SAM.Analytical
                     shell_Merge = new Shell(shell);
                 }
 
-                Shell shell_FixEdges = shell_Merge.FixEdges(tolerance_Distance);
-                if(shell_FixEdges == null)
-                {
-                    shell_FixEdges = new Shell(shell_Merge);
-                }
+                shells_Temp[i] = shell_Merge;
 
-                shells_Temp[i] = shell_FixEdges;
+                //Shell shell_FixEdges = shell_Merge.FixEdges(tolerance_Distance);
+                //if(shell_FixEdges == null)
+                //{
+                //    shell_FixEdges = new Shell(shell_Merge);
+                //}
+
+                //shells_Temp[i] = shell_FixEdges;
             });
 
             shells_Temp.RemoveAll(x => x == null);
@@ -406,7 +410,7 @@ namespace SAM.Analytical
                 if (boundingBox3D_Shell == null)
                     continue;
 
-                List<Tuple<Plane, Face3D, Panel, BoundingBox3D>> tuples_Panel_Temp = tuples_Panel.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
+                List<Tuple<Plane, Face3D, Panel, BoundingBox3D, double>> tuples_Panel_Temp = tuples_Panel.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
                 if (tuples_Panel_Temp == null || tuples_Panel_Temp.Count == 0)
                     continue;
 
@@ -453,7 +457,7 @@ namespace SAM.Analytical
                     if (panel_New == null)
                     {
                         List<Tuple<Face2D, Panel>> tuples_Face2D_All = new List<Tuple<Face2D, Panel>>();
-                        foreach (Tuple<Plane, Face3D, Panel, BoundingBox3D> tuple_Panel in tuples_Panel_Temp)
+                        foreach (Tuple<Plane, Face3D, Panel, BoundingBox3D, double> tuple_Panel in tuples_Panel_Temp)
                         {
                             if (!boundingBox3D_Face3D.InRange(tuple_Panel.Item4))
                                 continue;
@@ -484,12 +488,14 @@ namespace SAM.Analytical
                             for (int i = tuples_Face2D.Count - 1; i >= 0; i--)
                             {
                                 List<Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D_Shell, tuples_Face2D[i].Item1, tolerance_Distance);
-                                face2Ds_Intersection?.RemoveAll(x => x == null || x.GetArea() <= tolerance_Distance);
+                                face2Ds_Intersection?.RemoveAll(x => x == null || x.GetArea() <= minArea);
 
                                 if (face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
                                     tuples_Face2D.RemoveAt(i);
                             }
 
+                            Panel panel_New_Temp = null;
+                            
                             if (tuples_Face2D != null && tuples_Face2D.Count != 0)
                             {
                                 //Sorting by face3D Normal
@@ -499,18 +505,7 @@ namespace SAM.Analytical
                                 tuples_Face2D_Temp.AddRange(tuples_Face2D);
                                 tuples_Face2D = tuples_Face2D_Temp;
 
-                                Panel panel = tuples_Face2D.FirstOrDefault()?.Item2;
-                                if (panel != null)
-                                {
-                                    Guid guid = panel.Guid;
-                                    if (result.GetObject<Panel>(guid) != null)
-                                        guid = Guid.NewGuid();
-
-                                    panel_New = new Panel(guid, panel, face3D, null, true, minArea);
-                                    result.AddObject(panel_New);
-
-                                    tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance_Distance)));
-                                }
+                                panel_New_Temp = tuples_Face2D.FirstOrDefault()?.Item2;
                             }
                             else
                             {
@@ -528,19 +523,19 @@ namespace SAM.Analytical
                                 tuples_Face2D_Distance_Temp.AddRange(tuples_Face2D_Distance);
                                 tuples_Face2D_Distance = tuples_Face2D_Distance_Temp;
 
-                                Panel panel = tuples_Face2D_Distance.FirstOrDefault()?.Item2;
-                                if (panel != null)
-                                {
-                                    Guid guid = panel.Guid;
-                                    if (result.GetObject<Panel>(guid) != null)
-                                        guid = Guid.NewGuid();
+                                panel_New_Temp = tuples_Face2D_Distance.FirstOrDefault()?.Item2;
+                            }
 
-                                    panel_New = new Panel(guid, panel, face3D, null, true, minArea);
-                                    result.AddObject(panel_New);
+                            if (panel_New_Temp != null)
+                            {
+                                Guid guid = panel_New_Temp.Guid;
+                                if (result.GetObject<Panel>(guid) != null)
+                                    guid = Guid.NewGuid();
 
-                                    tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance_Distance)));
-                                }
+                                panel_New = new Panel(guid, panel_New_Temp, face3D, null, true, minArea);
+                                result.AddObject(panel_New);
 
+                                tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance_Distance)));
                             }
                         }
                     }
@@ -649,29 +644,45 @@ namespace SAM.Analytical
             List<Space> spaces_Check = result.GetSpaces();
             if (spaces_Check != null && spaces_Check.Count != 0)
             {
-                foreach (Space space_Check in spaces_Check)
+                int spaceCount = spaces_Check.Count;
+
+                List<Guid> guids = Enumerable.Repeat(Guid.Empty, spaceCount).ToList();
+                Parallel.For(0, spaceCount, (int i) =>
                 {
-                    Shell shell = result.Shell(space_Check);
+                    Space space = spaces_Check[i];
+                    
+                    Shell shell = result.Shell(space);
 
                     BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
                     if (boundingBox3D == null || !boundingBox3D.IsValid() || boundingBox3D.GetVolume() < minArea)
                     {
-                        result.RemoveObject<Space>(space_Check.Guid);
-                        continue;
+                        guids[i] = space.Guid;
+                        return;
                     }
 
                     List<Face3D> face3Ds = shell.Face3Ds;
                     if (face3Ds.Count <= 2)
                     {
-                        result.RemoveObject<Space>(space_Check.Guid);
-                        continue;
+                        guids[i] = space.Guid;
+                        return;
                     }
 
                     if (!shell.IsClosed(silverSpacing))
                     {
-                        result.RemoveObject<Space>(space_Check.Guid);
+                        guids[i] = space.Guid;
+                        return;
+                    }
+
+                });
+
+                foreach (Guid guid in guids)
+                {
+                    if(guid == Guid.Empty)
+                    {
                         continue;
                     }
+
+                    result.RemoveObject<Space>(guid);
                 }
             }
 
