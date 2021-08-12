@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -60,6 +60,10 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingSpaces_", NickName = "addMissingSpaces_", Description = "Add Missing Spaces", Access = GH_ParamAccess.item };
                 paramBoolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Voluntary));
+
+                paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingPanels_", NickName = "addMissingPanels_", Description = "Add Missing Panels", Access = GH_ParamAccess.item };
+                paramBoolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "snapTolerance_", NickName = "snapTolerance_", Description = "Snap Tolerance for computation of Spaces", Access = GH_ParamAccess.item };
@@ -134,6 +138,11 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref addMissingSpaces);
 
+            index = Params.IndexOfInputParam("addMissingPanels_");
+            bool addMissingPanels = false;
+            if (index != -1)
+                dataAccess.GetData(index, ref addMissingPanels);
+
             index = Params.IndexOfInputParam("silverSpacing_");
             double silverSpacing = Core.Tolerance.MacroDistance;
             if (index != -1)
@@ -149,7 +158,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref tolerance);
 
-            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(spaces, panels, offset, addMissingSpaces, 0.01, minArea, snapTolerance, Core.Tolerance.Angle, silverSpacing, tolerance, Core.Tolerance.Angle);
+            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(spaces, panels, offset, addMissingSpaces, addMissingPanels, 0.01, minArea, snapTolerance, Core.Tolerance.Angle, silverSpacing, tolerance, Core.Tolerance.Angle);
 
             index = Params.IndexOfOutputParam("AdjacencyCluster");
             if (index != -1)
