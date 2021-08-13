@@ -24,7 +24,7 @@ namespace SAM.Geometry.Spatial
 
                 BoundingBox3D boundingBox3D = shell.GetBoundingBox();
 
-                List<Shell> shells_InRange = shells.FindAll(x => x != shell && boundingBox3D.InRange(x.GetBoundingBox()));
+                List<Shell> shells_InRange = shells.FindAll(x => x != shell && boundingBox3D.InRange(x.GetBoundingBox(), tolerance_Distance));
                 if(shells_InRange == null || shells_InRange.Count == 0)
                 {
                     shells_Result[i] = shell;

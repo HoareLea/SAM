@@ -55,7 +55,7 @@ namespace SAM.Analytical.Grasshopper
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "elevations_", NickName = "elevations_", Description = "Elevations", Access = GH_ParamAccess.list };
-                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offsets_", NickName = "offsets_", Description = "Offsets", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
@@ -129,8 +129,11 @@ namespace SAM.Analytical.Grasshopper
 
             List<double> elevations = new List<double>();
             index = Params.IndexOfInputParam("elevations_");
-            if (index != -1)
-                dataAccess.GetDataList(index, elevations);
+            if (index == -1 || !dataAccess.GetDataList(index, elevations))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
             List<double> offsets = new List<double>();
             index = Params.IndexOfInputParam("offsets_");
