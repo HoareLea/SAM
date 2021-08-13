@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAlignPanelsByElevation : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalAlignPanelsByLowerAndUpperElevation : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,8 +29,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAlignPanelsByElevation()
-          : base("SAMAnalytical.AlignPanelsByElevation", "SAMAnalytical.AlignPanelsByElevation",
+        public SAMAnalyticalAlignPanelsByLowerAndUpperElevation()
+          : base("SAMAnalytical.AlignPanelsByLowerAndUpperElevation", "SAMAnalytical.AlignPanelsByLowerAndUpperElevation",
               "Align Panels By Upper and Lower Elevation",
               "SAM", "Analytical")
         {
@@ -127,14 +127,24 @@ namespace SAM.Analytical.Grasshopper
                 if(panels[i] == null)
                     continue;
 
-                Panel panel_Temp = Create.Panel(panels[i]);
+                List<Panel> panels_Temp = null;
 
-                panel_Temp = Analytical.Modify.Extend(panel_Temp, plane_Upper, Tolerance.Angle, tolerance);
-                panel_Temp = Analytical.Modify.Extend(panel_Temp, plane_Lower, Tolerance.Angle, tolerance);
+                if (!panels[i].Horizontal(tolerance))
+                {
+                    Panel panel_Temp = Create.Panel(panels[i]);
 
-                List<Panel> panels_Temp = Analytical.Query.Cut(panel_Temp, new Geometry.Spatial.Plane[] { plane_Upper, plane_Lower });
-                if (panels_Temp == null || panels_Temp.Count == 0)
-                    continue;
+                    panel_Temp = Analytical.Modify.Extend(panel_Temp, plane_Upper, Tolerance.Angle, tolerance);
+                    panel_Temp = Analytical.Modify.Extend(panel_Temp, plane_Lower, Tolerance.Angle, tolerance);
+
+                    panels_Temp = Analytical.Query.Cut(panel_Temp, new Geometry.Spatial.Plane[] { plane_Upper, plane_Lower });
+                    if (panels_Temp == null || panels_Temp.Count == 0)
+                        continue;
+                }
+
+                if(panels_Temp == null || panels_Temp.Count == 0)
+                {
+                    panels_Temp = new List<Panel>() { Create.Panel(panels[i]) };
+                }
 
                 foreach(Panel panel_Result in panels_Temp)
                 {
