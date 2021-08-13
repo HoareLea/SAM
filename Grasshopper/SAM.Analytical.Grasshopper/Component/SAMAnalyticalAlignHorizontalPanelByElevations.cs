@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -58,6 +58,10 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Max Distance", Optional = true, Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(2);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "projectOnElevation_", NickName = "projectOnElevation_", Description = "Project non horizontal Panel on Elevation", Optional = true, Access = GH_ParamAccess.item };
+                paramBoolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Optional = true, Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Tolerance.Distance);
@@ -139,6 +143,11 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(maxDistance))
                 maxDistance = 2;
 
+            index = Params.IndexOfInputParam("projectOnElevation_");
+            bool projectOnElevation = true;
+            if (index != -1)
+                dataAccess.GetData(index, ref projectOnElevation);
+
             index = Params.IndexOfInputParam("tolerance_");
             double tolerance = Tolerance.Distance;
             if (index != -1)
@@ -149,14 +158,28 @@ namespace SAM.Analytical.Grasshopper
 
             panel = Create.Panel(panel);
 
-            if(panel.Horizontal(tolerance))
+            bool horizontal = panel.Horizontal(tolerance);
+
+            if(horizontal || (!horizontal && projectOnElevation))
             {
                 double panelElevation = panel.MinElevation();
                 elevations.Sort((x, y) => System.Math.Abs(x - panelElevation).CompareTo(System.Math.Abs(y - panelElevation)));
                 if (System.Math.Abs(elevations[0] - panelElevation) <= maxDistance)
                 {
-                    Geometry.Spatial.Vector3D vector3D = new Geometry.Spatial.Vector3D(0, 0, elevations[0] - panelElevation);
-                    panel.Move(vector3D);
+                    if(!horizontal)
+                    {
+                        Geometry.Spatial.Face3D face3D = panel.GetFace3D();
+
+                        Geometry.Spatial.Plane plane = (Geometry.Spatial.Plane)Geometry.Spatial.Plane.WorldXY.GetMoved(new Geometry.Spatial.Vector3D(0, 0, elevations[0]));
+                        face3D = Geometry.Spatial.Query.Project(plane, face3D);
+
+                        panel = Create.Panel(panel.Guid, panel, face3D, null, false, Tolerance.MicroDistance, System.Math.Abs(elevations[0] - panelElevation) + tolerance);
+                    }
+                    else
+                    {
+                        Geometry.Spatial.Vector3D vector3D = new Geometry.Spatial.Vector3D(0, 0, elevations[0] - panelElevation);
+                        panel.Move(vector3D);
+                    }
                 }
             }
 
