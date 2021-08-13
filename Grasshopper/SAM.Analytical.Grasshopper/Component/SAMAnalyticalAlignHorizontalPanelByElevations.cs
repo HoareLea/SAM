@@ -153,7 +153,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 double panelElevation = panel.MinElevation();
                 elevations.Sort((x, y) => System.Math.Abs(x - panelElevation).CompareTo(System.Math.Abs(y - panelElevation)));
-                if (elevations[0] < maxDistance)
+                if (System.Math.Abs(elevations[0] - panelElevation) <= maxDistance)
                 {
                     Geometry.Spatial.Vector3D vector3D = new Geometry.Spatial.Vector3D(0, 0, elevations[0] - panelElevation);
                     panel.Move(vector3D);
