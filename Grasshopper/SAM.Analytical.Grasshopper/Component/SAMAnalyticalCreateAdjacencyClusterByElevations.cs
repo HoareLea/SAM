@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateAdjacencyClusterByElevations()
           : base("SAMAnalytical.CreateAdjacencyClusterByElevations", "SAMAnalytical.CreateAdjacencyClusterByElevations",
-              "Create AdjacencyCluster from Shells, Panels And Spaces",
+              "Create AdjacencyCluster from Shells, Panels And Spaces. If we have two boxes and want to have one Space eneter for elevation ie.0,4 and auxiliaryElevations_ ie.2 ",
               "SAM", "Analytical")
         {
         }
@@ -54,13 +54,13 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "elevations_", NickName = "elevations_", Description = "Elevations", Access = GH_ParamAccess.list };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevations", NickName = "_elevations", Description = "Elevations for floors and roofs ie.0, 4", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offsets_", NickName = "offsets_", Description = "Offsets", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "auxiliaryElevations_", NickName = "auxiliaryElevations_", Description = "AuxiliaryElevations", Access = GH_ParamAccess.list, Optional = true };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "auxiliaryElevations_", NickName = "auxiliaryElevations_", Description = "AuxiliaryElevations for levels that should be ignored ie. 2", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingSpaces_", NickName = "addMissingSpaces_", Description = "Add Missing Spaces", Access = GH_ParamAccess.item };
