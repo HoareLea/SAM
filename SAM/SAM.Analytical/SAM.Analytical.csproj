@@ -75,6 +75,7 @@
     <Compile Include="Classes\DegreeOfActivity.cs" />
     <Compile Include="Convert\ToSystem\String.cs" />
     <Compile Include="Convert\ToSystem\DateTime.cs" />
+    <Compile Include="Create\Aperture.cs" />
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />

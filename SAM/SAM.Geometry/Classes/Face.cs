@@ -79,9 +79,26 @@ namespace SAM.Geometry
         {
             get
             {
-                List<IClosed2D> result = new List<IClosed2D>() { externalEdge2D };
-                if (internalEdge2Ds != null && internalEdge2Ds.Count > 0)
-                    result.AddRange(internalEdge2Ds);
+                List<IClosed2D> result = null;
+
+                if (externalEdge2D != null)
+                {
+                    result = new List<IClosed2D>() { (IClosed2D)externalEdge2D.Clone() };
+                }
+
+                if (internalEdge2Ds != null)
+                {
+                    if(result == null)
+                    {
+                        result = new List<IClosed2D>();
+                    }
+
+                    foreach(IClosed2D internalEdge2D in internalEdge2Ds)
+                    {
+                        result.Add((IClosed2D)internalEdge2D.Clone());
+                    }
+                }
+                
                 return result;
             }
         }
