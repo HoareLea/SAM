@@ -5,7 +5,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static List<Segment3D> NakedSegment3Ds(this Shell shell, double tolerance = Core.Tolerance.Distance)
+        public static List<Segment3D> NakedSegment3Ds(this Shell shell, int maxCount = int.MaxValue, double tolerance = Core.Tolerance.Distance)
         {
             List<Face3D> face3Ds = shell?.Face3Ds;
             if (face3Ds == null)
@@ -25,7 +25,7 @@ namespace SAM.Geometry.Spatial
 
                 foreach (Segment3D segment3D in segment3Ds)
                 {
-                    if (segment3D == null)
+                    if (segment3D == null || segment3D.GetLength() < tolerance)
                         continue;
 
                     tuples.Add(new Tuple<BoundingBox3D, Segment3D>(segment3D.GetBoundingBox(tolerance), segment3D));
@@ -38,7 +38,7 @@ namespace SAM.Geometry.Spatial
                 {
                     foreach(ISegmentable3D segmentable3D_Internal in segmentable3Ds_Internal)
                     {
-                        segmentable3D_Internal?.GetSegments()?.ForEach(x => tuples.Add(new Tuple<BoundingBox3D, Segment3D>(x.GetBoundingBox(tolerance), x)));
+                        segmentable3D_Internal?.GetSegments()?.FindAll(x => x.GetLength() > tolerance).ForEach(x => tuples.Add(new Tuple<BoundingBox3D, Segment3D>(x.GetBoundingBox(tolerance), x)));
                     }
                 }
             }
@@ -75,6 +75,9 @@ namespace SAM.Geometry.Spatial
                     if (Core.Query.Round(tuples_Temp[0].Item2.Distance(point3D), tolerance) <= tolerance)
                         result.Add(tuples_Temp[0].Item2);
 
+                    if (result.Count >= maxCount)
+                        return result;
+
                     continue;
                 }
 
@@ -87,6 +90,10 @@ namespace SAM.Geometry.Spatial
                 if (tuples_Temp.Count == 1)
                 {
                     result.Add(tuples_Temp[0].Item2);
+
+                    if (result.Count >= maxCount)
+                        return result;
+
                     continue;
                 }
             }

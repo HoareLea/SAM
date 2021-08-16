@@ -412,7 +412,7 @@ namespace SAM.Analytical
 
             List<Tuple<Space, Shell>> tuples = new List<Tuple<Space, Shell>>();
             spaces.ForEach(x => tuples.Add(new Tuple<Space, Shell>(x, this.Shell(x))));
-            tuples.RemoveAll(x => x.Item2 == null);
+            tuples.RemoveAll(x => x.Item2 == null || !x.Item2.IsClosed(silverSpacing));
 
 
             int count = point3Ds.Count();

@@ -48,7 +48,7 @@ namespace SAM.Geometry.Spatial
             double d = normal.DotProduct(direction);
             if (System.Math.Abs(d) < tolerance)
             {
-                if (plane.Distance(segment3D[0]) < tolerance)
+                if (System.Math.Min(plane.Distance(segment3D[0]), plane.Distance(segment3D[1])) <= tolerance)
                     return new PlanarIntersectionResult(plane, plane.Project(segment3D));
                 else
                     return new PlanarIntersectionResult(plane);
@@ -134,7 +134,7 @@ namespace SAM.Geometry.Spatial
             List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
             foreach (Segment3D segment3D in segment3Ds)
             {
-                PlanarIntersectionResult planarIntersectionResult_Segment3D = PlanarIntersectionResult(face3D, segment3D);
+                PlanarIntersectionResult planarIntersectionResult_Segment3D = PlanarIntersectionResult(face3D, segment3D, tolerance);
                 if(planarIntersectionResult_Segment3D == null || !planarIntersectionResult_Segment3D.Intersecting)
                 {
                     continue;
@@ -258,12 +258,23 @@ namespace SAM.Geometry.Spatial
 
             List<Segment3D> segment3Ds_Segmentable3D = segmentable3D.GetSegments();
 
-            List<PlanarIntersectionResult> planarIntersectionResults_All = segment3Ds_Segmentable3D?.ConvertAll(x => PlanarIntersectionResult(plane, x)).FindAll(x => x.Intersecting);
-            if (planarIntersectionResults_All == null || planarIntersectionResults_All.Count == 0)
+            List<Tuple<Segment3D, PlanarIntersectionResult>> tuples = new List<Tuple<Segment3D, PlanarIntersectionResult>>();
+            foreach(Segment3D segment3D_Temp in segment3Ds_Segmentable3D)
+            {
+                PlanarIntersectionResult planarIntersectionResult_Temp = PlanarIntersectionResult(plane, segment3D_Temp, tolerance_Distance);
+                if(planarIntersectionResult_Temp == null || !planarIntersectionResult_Temp.Intersecting)
+                {
+                    continue;
+                }
+
+                tuples.Add(new Tuple<Segment3D, PlanarIntersectionResult>(segment3D_Temp, planarIntersectionResult_Temp));
+            }
+
+            if (tuples == null || tuples.Count == 0)
                 return new PlanarIntersectionResult(plane);
 
             List<Point3D> point3Ds = new List<Point3D>();
-            foreach (PlanarIntersectionResult planarIntersectionResult_Temp in planarIntersectionResults_All)
+            foreach (PlanarIntersectionResult planarIntersectionResult_Temp in tuples.ConvertAll(x => x.Item2))
             {
                 Point3D point3D = planarIntersectionResult_Temp.GetGeometry3D<Point3D>();
                 if (point3D != null)
@@ -291,6 +302,8 @@ namespace SAM.Geometry.Spatial
                 return new PlanarIntersectionResult(plane, new Segment3D(point3Ds[0], point3Ds[1]));
 
             List<Point2D> point2Ds = point3Ds.ConvertAll(x => plane_ClosedPlanar3D.Convert(x));
+            Planar.Query.ExtremePoints(point2Ds, out Point2D point2D_1, out Point2D point2D_2);
+            point2Ds.SortByDistance(point2D_1);
             
             IClosed2D closed2D = plane_ClosedPlanar3D.Convert(closedPlanar3D);
             ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
@@ -311,12 +324,12 @@ namespace SAM.Geometry.Spatial
 
                 if (segment2Ds_Result.Count == 0)
                 {
-                    point2Ds.Add(point2Ds[i]);
+                    point2Ds_Result.Add(point2Ds[i]);
                 }
 
                 if (i == point2Ds.Count - 2)
                 {
-                    point2Ds.Add(point2Ds[i]);
+                    point2Ds_Result.Add(point2Ds[i]);
                 }
 
                 if (segment2Ds_Result.Count == 0)
@@ -324,7 +337,7 @@ namespace SAM.Geometry.Spatial
 
                 Segment2D segment2D = segment2Ds_Result.Last();
                 if (!segment2D[1].AlmostEquals(point2Ds[i], tolerance_Distance))
-                    point2Ds.Add(point2Ds[i]);
+                    point2Ds_Result.Add(point2Ds[i]);
             }
 
             List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();

@@ -80,7 +80,7 @@ namespace SAM.Geometry.Spatial
             if (boundaries.FindAll(x => x != null && x.Item2 != null && x.Item2.IsValid()).Count < 3)
                 return false;
 
-            List<Segment3D> segment3Ds = Query.NakedSegment3Ds(this, tolerance);
+            List<Segment3D> segment3Ds = Query.NakedSegment3Ds(this, 1, tolerance);
             if(segment3Ds == null || segment3Ds.Count == 0)
             {
                 return true;
@@ -94,8 +94,8 @@ namespace SAM.Geometry.Spatial
             if (point3D == null || boundaries == null || boundingBox3D == null || boundaries.Count == 0)
                 return false;
 
-            if (!IsClosed(tolerance))
-                return false;
+            //if (!IsClosed(tolerance))
+            //    return false;
 
             BoundingBox3D boundingBox3D_Temp = new BoundingBox3D(boundingBox3D, tolerance);
 

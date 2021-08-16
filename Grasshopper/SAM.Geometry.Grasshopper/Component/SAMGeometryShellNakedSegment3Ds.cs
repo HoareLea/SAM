@@ -114,7 +114,7 @@ namespace SAM.Geometry.Grasshopper
 
             index = Params.IndexOfOutputParam("segment3Ds");
             if (index != -1)
-                dataAccess.SetDataList(index, shell.NakedSegment3Ds(tolerance));
+                dataAccess.SetDataList(index, shell.NakedSegment3Ds(int.MaxValue, tolerance));
         }
     }
 }

@@ -17,8 +17,7 @@ namespace SAM.Geometry.Spatial
             Shell shell_1_Temp = new Shell(shell_1);
             Shell shell_2_Temp = new Shell(shell_2);
 
-
-            if (!shell_1.GetBoundingBox().InRange(shell_2.GetBoundingBox(), tolerance_Distance))
+            if (!shell_1.GetBoundingBox().InRange(shell_2.GetBoundingBox(), tolerance_Distance) || !shell_1.IsClosed(silverSpacing) || !shell_2.IsClosed(silverSpacing))
             {
                 return new List<Shell>() { shell_1_Temp, shell_2_Temp };
             }
