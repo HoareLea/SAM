@@ -114,16 +114,40 @@ namespace SAM.Analytical.Grasshopper
             if (adjacencyCluster != null)
             {
                 Dictionary<Panel, List<Space>> dictionary = new Dictionary<Panel, List<Space>>();
+                panels = panels.FindAll(x => adjacencyCluster.Internal(x));
                 foreach (Panel panel in panels)
                 {
                     List<Space> spaces = adjacencyCluster.GetSpaces(panel);
-                    if (spaces == null || spaces.Count < 2)
+                    if (spaces == null || spaces.Count  < 2)
                     {
                         continue;
                     }
 
-                    adjacencyCluster.RemoveObject<Space>(spaces[0].Guid);
-                    adjacencyCluster.RemoveObject<Panel>(panel.Guid);
+                    Space space = spaces[0];
+
+                    List<Panel> panels_Space = adjacencyCluster.GetPanels(space);
+                    adjacencyCluster.RemoveObject<Space>(space.Guid);
+                    foreach(Panel panel_Space in panels_Space)
+                    {
+                        List<Space> spaces_Panel_Space = adjacencyCluster.GetSpaces(panel_Space);
+                        for(int i = 1; i < spaces.Count; i++)
+                        {
+                            if (spaces_Panel_Space?.Find(x => x.Guid == spaces[i].Guid) == null || spaces_Panel_Space.Count == 0)
+                            {
+                                adjacencyCluster.AddRelation(panel_Space, spaces[i]);
+                            }
+                            else
+                            {
+                                adjacencyCluster.RemoveRelation(panel_Space, spaces[i]);
+                            }
+                        }
+
+                    }
+
+                    if (panel.PanelType == PanelType.Air)
+                    {
+                        adjacencyCluster.RemoveObject<Panel>(panel.Guid);
+                    }
 
                     dictionary[Create.Panel(panel)] = spaces.ConvertAll(x => new Space(x));
                 }
