@@ -336,7 +336,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             Vector3D vector3D = face3D?.GetPlane()?.Normal;
-            if (!external || !IsClosed(tolerance))
+            if (!external)
                 return vector3D;
 
             Point3D point3D = face3D.InternalPoint3D(tolerance);
@@ -465,7 +465,7 @@ namespace SAM.Geometry.Spatial
             if (boundaries == null || boundaries.Count == 0 || boundingBox3D == null)
                 return null;
 
-            if (!IsClosed(tolerance))
+            if (!IsClosed(silverSpacing))
                 return null;
 
             Point3D result = boundingBox3D.GetCenter();

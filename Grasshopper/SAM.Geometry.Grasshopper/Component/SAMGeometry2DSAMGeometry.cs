@@ -17,13 +17,13 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMGeometry2DSAMGeometry()
-          : base("SAMGeometry2D.SAMGeometry", "SAMGeometry2D.SAMGeometry3D",
+          : base("SAMGeometry2D.SAMGeometry", "SAMGeometry2D.SAMGeometry",
               "Convert SAM geometry 2D to SAM geometry 3D",
               "SAM", "Geometry")
         {
