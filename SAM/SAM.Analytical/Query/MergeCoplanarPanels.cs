@@ -138,7 +138,7 @@ namespace SAM.Analytical
                     if (!plane.Coplanar(plane_Temp, tolerance))
                         continue;
 
-                    double distance = plane.Distance(plane_Temp);
+                    double distance = plane.Distance(plane_Temp, tolerance);
                     if (distance > offset)
                         continue;
 
