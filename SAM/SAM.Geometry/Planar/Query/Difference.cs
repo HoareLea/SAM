@@ -156,118 +156,19 @@ namespace SAM.Geometry.Planar
 
         public static List<Face2D> Difference(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if (face2D_1 == null || face2D_2 == null)
-                return null;
-
-            double area_1 = face2D_1.GetArea();
-            if (area_1 <= tolerance)
-                return null;
-
-            double area_2 = face2D_2.GetArea();
-            if (area_2 <= tolerance)
-                return new List<Face2D>() { new Face2D(face2D_2) };
-
-            List<Face2D> face2Ds_1 = face2D_1.FixEdges(tolerance);
-            if(face2Ds_1 == null || face2Ds_1.Count == 0)
-            {
-                face2Ds_1 = new List<Face2D>() { face2D_1};
-            }
-
-            List<Face2D> face2Ds_2 = face2D_2.FixEdges(tolerance);
-            if (face2Ds_2 == null || face2Ds_2.Count == 0)
-            {
-                face2Ds_2 = new List<Face2D>() { face2D_2 };
-            }
-
             List<Face2D> result = null;
-
-            if (face2Ds_1.Count != 1  || face2Ds_2.Count != 1 )
-            {
-                result = new List<Face2D>();
-                foreach (Face2D face2D in face2Ds_1)
-                {
-                    List<Face2D> face2Ds_Difference = face2D.Difference(face2Ds_2, tolerance);
-                    if(face2Ds_Difference != null && face2Ds_Difference.Count != 0)
-                    {
-                        result.AddRange(face2Ds_Difference);
-                    }
-                }
-
-                return result;
-            }
-
-            Polygon polygon_1 = face2Ds_1[0].ToNTS(tolerance);
-            Polygon polygon_2 = face2Ds_2[0].ToNTS(tolerance);
-
-            if (polygon_1 == null || polygon_2 == null)
-                return result;
-
-            result = new List<Face2D>();
-
-            //test to check  NaN when createing shells from adj cluster
-            //Find better way to determine EqualsTopologically for polygons which gives exception
             try
             {
-                if (polygon_1.EqualsTopologically(polygon_2))
-                    return result;
+                result = Difference_NTS(face2D_1, face2D_2, tolerance);
             }
             catch(System.Exception exception)
             {
 
             }
 
-            List<Polygon> polygons_Snap = Snap(polygon_1, polygon_2, tolerance);
-            if (polygons_Snap != null && polygons_Snap.Count == 2)
+            if(result == null)
             {
-                polygon_1 = polygons_Snap[0];
-                polygon_2 = polygons_Snap[1];
-            }
-
-            //Find better way to determine EqualsTopologically for polygons which gives exception
-            try
-            {
-                if (polygon_1.EqualsTopologically(polygon_2))
-                    return result;
-            }
-            catch(System.Exception exception)
-            {
-
-            }
-
-            NetTopologySuite.Geometries.Geometry geometry = polygon_1.Difference(polygon_2);
-            if (geometry == null || geometry.IsEmpty)
-            {
-                return null;
-            }
-
-            List<NetTopologySuite.Geometries.Geometry> geometries = geometry is GeometryCollection ? ((GeometryCollection)geometry).Geometries?.ToList() : new List<NetTopologySuite.Geometries.Geometry>() { geometry };
-            if (geometries == null || geometries.Count == 0)
-            {
-                return null;
-            }
-
-            foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
-            {
-                if (geometry_Temp is Polygon)
-                {
-                    Face2D face2D = ((Polygon)geometry_Temp).ToSAM(tolerance);
-                    if (face2D != null)
-                        result.Add(face2D);
-                }
-                else if (geometry_Temp is MultiPolygon)
-                {
-                    List<Polygon> polygons = Polygons((MultiPolygon)geometry_Temp);
-                    if (polygons != null && polygons.Count > 0)
-                    {
-                        polygons.ForEach(x => result.Add(x.ToSAM(tolerance)));
-                    }
-                }
-                else if (geometry_Temp is LinearRing)
-                {
-                    Polygon2D polygon2D = ((LinearRing)geometry_Temp).ToSAM(tolerance);
-                    if (polygon2D != null)
-                        result.Add(new Face2D(polygon2D));
-                }
+                result = Difference_SAM(face2D_1, face2D_2, tolerance);
             }
 
             return result;
@@ -324,6 +225,205 @@ namespace SAM.Geometry.Planar
             }
 
             return result;
+        }
+
+        private static List<Face2D> Difference_NTS(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if (face2D_1 == null || face2D_2 == null)
+                return null;
+
+            double area_1 = face2D_1.GetArea();
+            if (area_1 <= tolerance)
+                return null;
+
+            double area_2 = face2D_2.GetArea();
+            if (area_2 <= tolerance)
+                return new List<Face2D>() { new Face2D(face2D_2) };
+
+            List<Face2D> face2Ds_1 = face2D_1.FixEdges(tolerance);
+            if (face2Ds_1 == null || face2Ds_1.Count == 0)
+            {
+                face2Ds_1 = new List<Face2D>() { face2D_1 };
+            }
+
+            List<Face2D> face2Ds_2 = face2D_2.FixEdges(tolerance);
+            if (face2Ds_2 == null || face2Ds_2.Count == 0)
+            {
+                face2Ds_2 = new List<Face2D>() { face2D_2 };
+            }
+
+            List<Face2D> result = null;
+
+            if (face2Ds_1.Count != 1 || face2Ds_2.Count != 1)
+            {
+                result = new List<Face2D>();
+                foreach (Face2D face2D in face2Ds_1)
+                {
+                    List<Face2D> face2Ds_Difference = face2D.Difference(face2Ds_2, tolerance);
+                    if (face2Ds_Difference != null && face2Ds_Difference.Count != 0)
+                    {
+                        result.AddRange(face2Ds_Difference);
+                    }
+                }
+
+                return result;
+            }
+
+            Polygon polygon_1 = face2Ds_1[0].ToNTS(tolerance);
+            Polygon polygon_2 = face2Ds_2[0].ToNTS(tolerance);
+
+            if (polygon_1 == null || polygon_2 == null)
+                return result;
+
+            result = new List<Face2D>();
+
+            //test to check  NaN when createing shells from adj cluster
+            //Find better way to determine EqualsTopologically for polygons which gives exception
+            try
+            {
+                if (polygon_1.EqualsTopologically(polygon_2))
+                    return result;
+            }
+            catch (System.Exception exception)
+            {
+
+            }
+
+            List<Polygon> polygons_Snap = Snap(polygon_1, polygon_2, tolerance);
+            if (polygons_Snap != null && polygons_Snap.Count == 2)
+            {
+                polygon_1 = polygons_Snap[0];
+                polygon_2 = polygons_Snap[1];
+            }
+
+            //Find better way to determine EqualsTopologically for polygons which gives exception
+            try
+            {
+                if (polygon_1.EqualsTopologically(polygon_2))
+                    return result;
+            }
+            catch (System.Exception exception)
+            {
+
+            }
+
+            NetTopologySuite.Geometries.Geometry geometry = polygon_1.Difference(polygon_2);
+            if (geometry == null || geometry.IsEmpty)
+            {
+                return null;
+            }
+
+            List<NetTopologySuite.Geometries.Geometry> geometries = geometry is GeometryCollection ? ((GeometryCollection)geometry).Geometries?.ToList() : new List<NetTopologySuite.Geometries.Geometry>() { geometry };
+            if (geometries == null || geometries.Count == 0)
+            {
+                return null;
+            }
+
+            foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
+            {
+                if (geometry_Temp is Polygon)
+                {
+                    Face2D face2D = ((Polygon)geometry_Temp).ToSAM(tolerance);
+                    if (face2D != null)
+                        result.Add(face2D);
+                }
+                else if (geometry_Temp is MultiPolygon)
+                {
+                    List<Polygon> polygons = Polygons((MultiPolygon)geometry_Temp);
+                    if (polygons != null && polygons.Count > 0)
+                    {
+                        polygons.ForEach(x => result.Add(x.ToSAM(tolerance)));
+                    }
+                }
+                else if (geometry_Temp is LinearRing)
+                {
+                    Polygon2D polygon2D = ((LinearRing)geometry_Temp).ToSAM(tolerance);
+                    if (polygon2D != null)
+                        result.Add(new Face2D(polygon2D));
+                }
+            }
+
+            return result;
+        }
+
+        private static List<Face2D> Difference_SAM(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if(face2D_1 == null || face2D_2 == null)
+            {
+                return null;
+            }
+
+            List<ISegmentable2D> segmentable2Ds = new List<ISegmentable2D>();
+
+            List<IClosed2D> edge2Ds_Temp = null;
+
+            edge2Ds_Temp = face2D_1.Edge2Ds;
+            if(edge2Ds_Temp == null)
+            {
+                return null;
+            }
+
+            if(!edge2Ds_Temp.TrueForAll(x => x is ISegmentable2D))
+            {
+                throw new System.NotImplementedException();
+            }
+
+            segmentable2Ds.AddRange(edge2Ds_Temp.ConvertAll(x => (ISegmentable2D)x));
+
+            edge2Ds_Temp = face2D_2.Edge2Ds;
+            if (edge2Ds_Temp == null)
+            {
+                return null;
+            }
+
+            if (!edge2Ds_Temp.TrueForAll(x => x is ISegmentable2D))
+            {
+                throw new System.NotImplementedException();
+            }
+
+            segmentable2Ds.AddRange(edge2Ds_Temp.ConvertAll(x => (ISegmentable2D)x));
+            if(segmentable2Ds == null || segmentable2Ds.Count == 0)
+            {
+                return null;
+            }
+
+            List<Segment2D> segment2Ds = Split(segmentable2Ds, tolerance);
+            segment2Ds = Snap(segment2Ds, true, tolerance);
+
+            List<Polygon2D> polygon2Ds_All = segment2Ds.Polygon2Ds(tolerance);
+            if(polygon2Ds_All == null || polygon2Ds_All.Count == 0)
+            {
+                return null;
+            }
+
+            List<Polygon2D> polygon2Ds = new List<Polygon2D>();
+            foreach(Polygon2D polygon2D in polygon2Ds_All)
+            {
+                Point2D point2D = polygon2D?.GetInternalPoint2D(tolerance);
+                if(point2D == null)
+                {
+                    continue;
+                }
+
+                if (polygon2D.GetArea() < tolerance)
+                {
+                    continue;
+                }
+
+                if(face2D_2.Inside(point2D, tolerance))
+                {
+                    continue;
+                }
+
+                polygon2Ds.Add(polygon2D);
+            }
+
+            if(polygon2Ds == null || polygon2Ds.Count == 0)
+            {
+                return new List<Face2D>();
+            }
+
+            return Create.Face2Ds(polygon2Ds);
         }
     }
 }
