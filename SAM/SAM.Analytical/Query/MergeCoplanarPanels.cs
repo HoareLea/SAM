@@ -20,7 +20,7 @@ namespace SAM.Analytical
             if (validatePanelGroup)
                 return MergeCoplanarPanels(panels, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
 
-            return MergeCoplanarPanels(panels, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
+            return MergeCoplanarPanels(panels?.ToList(), offset, ref redundantPanels, validateConstruction, minArea, tolerance);
         }
 
         public static List<Panel> MergeCoplanarPanels(this IEnumerable<Panel> panels, double offset, ref List<Panel> redundantPanels, bool validateConstruction = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)

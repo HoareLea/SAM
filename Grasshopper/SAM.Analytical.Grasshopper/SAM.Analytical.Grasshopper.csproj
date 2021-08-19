@@ -74,6 +74,7 @@
     <Compile Include="Component\SAMAnalyticalAlignHorizontalPanelByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalCreateShellsByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalJoinSpacesByPanels.cs" />
+    <Compile Include="Component\SAMAnalyticalMergeCoplanarApertures.cs" />
     <Compile Include="Component\SAMAnalyticalMergeOverlapApertures.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByPlanes.cs" />
