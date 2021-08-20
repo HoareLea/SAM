@@ -15,5 +15,21 @@ namespace SAM.Analytical
 
             return new Geometry.Spatial.Shell(panels.ConvertAll(x => x.GetFace3D()));
         }
+
+        public static Geometry.Spatial.Shell Shell(this AdjacencyCluster adjacencyCluster, System.Guid spaceGuid)
+        {
+            if (adjacencyCluster == null || spaceGuid == System.Guid.Empty)
+            {
+                return null;
+            }
+
+            Space space = adjacencyCluster.GetObject<Space>(spaceGuid);
+            if(space == null)
+            {
+                return null;
+            }
+
+            return Shell(adjacencyCluster, space);
+        }
     }
 }

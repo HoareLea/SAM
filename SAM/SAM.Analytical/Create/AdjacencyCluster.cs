@@ -319,17 +319,27 @@ namespace SAM.Analytical
 
             List<Shell> shells_Temp = Enumerable.Repeat<Shell>(null, shells.Count()).ToList();
             Parallel.For(0, shells.Count(), (int i) =>
+            //for(int i =0; i < shells.Count(); i++)
             {
                 Shell shell = shells.ElementAt(i);
 
                 BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
                 if (boundingBox3D == null)
                 {
+                    //continue;
                     return;
                 }
 
                 if (!boundingBox3D_All.InRange(boundingBox3D))
                 {
+                    //continue;
+                    return;
+                }
+
+                shell = shell.RemoveInvalidFace3Ds(silverSpacing);
+                if (shell == null)
+                {
+                    //continue;
                     return;
                 }
 
@@ -362,6 +372,11 @@ namespace SAM.Analytical
                 {
                     continue;
                 }
+
+                //if (shell == null || !shell.IsClosed(silverSpacing))
+                //{
+                //    List<Segment3D> segment3Ds = shell?.NakedSegment3Ds(int.MaxValue, silverSpacing);
+                //}
 
                 //Searching for spaces
                 dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Shell);
@@ -529,7 +544,7 @@ namespace SAM.Analytical
                             if (panel_New_Temp != null)
                             {
                                 Guid guid = panel_New_Temp.Guid;
-                                if (result.GetObject<Panel>(guid) != null)
+                                while (result.GetObject<Panel>(guid) != null)
                                     guid = Guid.NewGuid();
 
                                 panel_New = new Panel(guid, panel_New_Temp, face3D, null, true, minArea);
@@ -546,10 +561,20 @@ namespace SAM.Analytical
                             continue;
 
                         panel_New = Panel(Query.DefaultConstruction(PanelType.Air), PanelType.Air, face3D);
+                        result.AddObject(panel_New);
                     }
 
                     foreach (Space space in spaces_Shell)
                         result.AddRelation(space, panel_New);
+                }
+
+                foreach (Space space in spaces_Shell)
+                {
+                    Shell shell_Temp = result.Shell(space);
+                    if (shell_Temp == null || !shell_Temp.IsClosed(silverSpacing))
+                    {
+                        List<Segment3D> segment3Ds = shell_Temp?.NakedSegment3Ds(int.MaxValue, silverSpacing);
+                    }
                 }
             }
 
@@ -648,6 +673,7 @@ namespace SAM.Analytical
 
                 List<Guid> guids = Enumerable.Repeat(Guid.Empty, spaceCount).ToList();
                 Parallel.For(0, spaceCount, (int i) =>
+                //for (int i = 0; i < spaceCount; i++)
                 {
                     Space space = spaces_Check[i];
                     
@@ -658,6 +684,7 @@ namespace SAM.Analytical
                     {
                         guids[i] = space.Guid;
                         return;
+                        //continue;
                     }
 
                     List<Face3D> face3Ds = shell.Face3Ds;
@@ -665,12 +692,14 @@ namespace SAM.Analytical
                     {
                         guids[i] = space.Guid;
                         return;
+                        //continue;
                     }
 
                     if (!shell.IsClosed(silverSpacing))
                     {
                         guids[i] = space.Guid;
                         return;
+                        //continue;
                     }
 
                 });
