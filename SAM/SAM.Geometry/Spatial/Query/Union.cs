@@ -124,6 +124,22 @@ namespace SAM.Geometry.Spatial
                 Shell shell = shells_Temp[0];
                 shells_Temp.RemoveAt(0);
 
+                //Shell shell_Union = new Shell(shell);
+                //foreach (Shell shell_Result in result)
+                //{
+                //    List<Shell> shells_Union = shell_Result.Union(shell_Union);
+                //    if (shells_Union != null && shells_Union.Count == 1)
+                //    {
+                //        result.Remove(shell_Result);
+                //        break;
+                //    }
+                //}
+
+                //if (shell_Union != null)
+                //{
+                //    result.Add(shell_Union);
+                //}
+
                 List<Shell> shells_Union = null;
                 foreach (Shell shell_Result in result)
                 {

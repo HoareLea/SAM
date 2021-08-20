@@ -295,29 +295,51 @@ namespace SAM.Geometry.Planar
 
             tuples = tuples.FindAll(x => externalEdge.Inside(x.Item2, tolerance));
 
-            List<Tuple<Polygon2D, Point2D>> tuples_Internal = null;
-            if (internalEdges != null && internalEdges.Count != 0)
-            {
-                tuples_Internal = tuples.FindAll(x => internalEdges.Find(y => y.Inside(x.Item2, tolerance)) != null);
-            }
-
-            tuples_Internal?.ForEach(x => tuples.Remove(x));
-
-            if(tuples.Count == 0)
-            {
-                return null;
-            }
-
             List<Face2D> result = new List<Face2D>();
-            foreach(Tuple<Polygon2D, Point2D> tuple in tuples)
+            tuples.Sort((x, y) => y.Item1.GetArea().CompareTo(x.Item1.GetArea()));
+            while(tuples.Count > 0)
             {
-                Face2D face2D_Split = Create.Face2D(tuple.Item1, tuples_Internal?.ConvertAll(x => x.Item1));
-                if(face2D_Split != null)
+                Polygon2D polygon2D_External = tuples[0].Item1;
+                tuples.RemoveAt(0);
+
+                List<Polygon2D> polygon2Ds_Internal = tuples.FindAll(x => polygon2D_External.Inside(x.Item2, tolerance)).ConvertAll(x => x.Item1);
+                if(polygon2Ds_Internal.Count != 0)
+                {
+                    tuples.RemoveAll(x => polygon2Ds_Internal.Contains(x.Item1));
+                }
+
+                Face2D face2D_Split = Create.Face2D(polygon2D_External, polygon2Ds_Internal);
+                if (face2D_Split != null)
                 {
                     result.Add(face2D_Split);
                 }
             }
+
             return result;
+
+            //List<Tuple<Polygon2D, Point2D>> tuples_Internal = null;
+            //if (internalEdges != null && internalEdges.Count != 0)
+            //{
+            //    tuples_Internal = tuples.FindAll(x => internalEdges.Find(y => y.Inside(x.Item2, tolerance)) != null);
+            //}
+
+            //tuples_Internal?.ForEach(x => tuples.Remove(x));
+
+            //if(tuples.Count == 0)
+            //{
+            //    return null;
+            //}
+
+            //List<Face2D> result = new List<Face2D>();
+            //foreach(Tuple<Polygon2D, Point2D> tuple in tuples)
+            //{
+            //    Face2D face2D_Split = Create.Face2D(tuple.Item1, tuples_Internal?.ConvertAll(x => x.Item1));
+            //    if(face2D_Split != null)
+            //    {
+            //        result.Add(face2D_Split);
+            //    }
+            //}
+            //return result;
         }
 
         public static List<Polyline2D> Split(this Polyline2D polyline2D, Point2D point2D, double tolerance = Core.Tolerance.Distance)
