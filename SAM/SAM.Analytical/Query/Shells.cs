@@ -528,19 +528,19 @@ namespace SAM.Analytical
             List<Tuple<Face2D, BoundingBox2D>> tuples_All = face2Ds.ConvertAll(x => new Tuple<Face2D, BoundingBox2D>(x, x.GetBoundingBox()));
 
             List<Shell> result = new List<Shell>();
-            while(tuples.Count > 0)
+            while (tuples.Count > 0)
             {
                 Tuple<Shell, BoundingBox2D, Face2D, Plane> tuple = tuples[0];
 
                 Shell shell = tuple.Item1;
-                if(shell == null)
+                if (shell == null)
                 {
                     tuples.Remove(tuple);
                     continue;
                 }
 
                 List<Tuple<Face2D, BoundingBox2D>> tuples_Intersection = tuples_All.FindAll(x => tuple.Item2.InRange(x.Item2, tolerance_Distance));
-                if(tuples_Intersection == null || tuples_Intersection.Count == 0)
+                if (tuples_Intersection == null || tuples_Intersection.Count == 0)
                 {
                     tuples.Remove(tuple);
                     continue;
@@ -555,7 +555,7 @@ namespace SAM.Analytical
 
                 List<Face2D> face2Ds_Temp = tuples_Intersection.ConvertAll(x => x.Item1);
                 Face2D face2D_Snap = tuple.Item3.Snap(face2Ds_Temp, snapTolerance, tolerance_Distance);
-                if(face2D_Snap == null)
+                if (face2D_Snap == null)
                 {
                     face2D_Snap = tuple.Item3;
                 }
@@ -586,13 +586,13 @@ namespace SAM.Analytical
                 foreach (Point3D point3D in point3Ds)
                 {
                     List<Point3D> point3Ds_Intersection = point3D.Intersections(up, face3Ds, false, true, tolerance_Distance);
-                    if(point3Ds == null || point3Ds.Count == 0)
+                    if (point3Ds == null || point3Ds.Count == 0)
                     {
                         continue;
                     }
 
                     Point3D point3D_Up_Temp = point3Ds_Intersection.FindAll(x => up.SameHalf(new Vector3D(point3D, x))).FirstOrDefault();
-                    if(point3D_Up_Temp == null)
+                    if (point3D_Up_Temp == null)
                     {
                         continue;
                     }
@@ -608,8 +608,8 @@ namespace SAM.Analytical
                     point3D_Down_Temp.Move(new Vector3D(0, 0, snapTolerance));
 
                     Segment3D segment3D = new Segment3D(point3D_Down_Temp, point3D_Up_Temp);
-                    
-                    foreach(Tuple<Shell, BoundingBox2D, Face2D, Plane> tuple_Temp in tuples)
+
+                    foreach (Tuple<Shell, BoundingBox2D, Face2D, Plane> tuple_Temp in tuples)
                     {
                         Shell shell_Temp = tuple_Temp.Item1;
 
@@ -619,7 +619,7 @@ namespace SAM.Analytical
                         }
 
                         List<Point3D> point3Ds_Intersection_Segment3D = shell_Temp?.Intersections(segment3D, tolerance_Distance);
-                        if(point3Ds_Intersection_Segment3D == null || point3Ds_Intersection_Segment3D.Count == 0)
+                        if (point3Ds_Intersection_Segment3D == null || point3Ds_Intersection_Segment3D.Count == 0)
                         {
                             continue;
                         }
@@ -631,7 +631,7 @@ namespace SAM.Analytical
                     point3D_Down = point3D_Down_Temp;
                 }
 
-                if(point3D_Up == null || !point3D_Up.IsValid() || point3D_Down == null || !point3D_Down.IsValid())
+                if (point3D_Up == null || !point3D_Up.IsValid() || point3D_Down == null || !point3D_Down.IsValid())
                 {
                     tuples.Remove(tuple);
                     continue;
@@ -642,7 +642,7 @@ namespace SAM.Analytical
                     shells.Add(shell);
                 }
 
-                if(shells.Count < 2)
+                if (shells.Count < 2)
                 {
                     tuples.Remove(tuple);
                     result.Add(shell);
@@ -650,7 +650,7 @@ namespace SAM.Analytical
                 }
 
                 List<Shell> shells_Union = shells.Union(silverSpacing, tolerance_Angle, tolerance_Distance);
-                if(shells_Union == null || shells_Union.Count == 0)
+                if (shells_Union == null || shells_Union.Count == 0)
                 {
                     tuples.Remove(tuple);
                     result.Add(shell);
@@ -658,7 +658,7 @@ namespace SAM.Analytical
                 }
 
                 Shell shell_Union = shells_Union.Find(x => x.Inside(point3D_Internal, silverSpacing, tolerance_Distance));
-                if(shell_Union == null)
+                if (shell_Union == null)
                 {
                     tuples.Remove(tuple);
                     result.Add(shell);
@@ -666,6 +666,7 @@ namespace SAM.Analytical
                 }
 
                 result.Add(shell_Union);
+
                 foreach (Shell shell_Temp in shells)
                 {
                     Point3D point3D_Internal_Temp = shell_Temp.InternalPoint3D(silverSpacing, tolerance_Distance);
