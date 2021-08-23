@@ -563,14 +563,14 @@ namespace SAM.Analytical
                         result.AddRelation(space, panel_New);
                 }
 
-                //foreach (Space space in spaces_Shell)
-                //{
-                //    Shell shell_Temp = result.Shell(space);
-                //    if (shell_Temp == null || !shell_Temp.IsClosed(silverSpacing))
-                //    {
-                //        List<Segment3D> segment3Ds = shell_Temp?.NakedSegment3Ds(int.MaxValue, silverSpacing);
-                //    }
-                //}
+                foreach (Space space in spaces_Shell)
+                {
+                    Shell shell_Temp = result.Shell(space);
+                    if (shell_Temp == null || !shell_Temp.IsClosed(silverSpacing))
+                    {
+                        List<Segment3D> segment3Ds = shell_Temp?.NakedSegment3Ds(int.MaxValue, silverSpacing);
+                    }
+                }
             }
 
             //Creating Shade Panels

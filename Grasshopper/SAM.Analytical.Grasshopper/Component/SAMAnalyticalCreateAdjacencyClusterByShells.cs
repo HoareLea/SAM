@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -158,7 +158,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref addMissingSpaces);
 
             index = Params.IndexOfInputParam("addMissingPanels_");
-            bool addMissingPanels = false;
+            bool addMissingPanels = true;
             if (index != -1)
                 dataAccess.GetData(index, ref addMissingPanels);
 
