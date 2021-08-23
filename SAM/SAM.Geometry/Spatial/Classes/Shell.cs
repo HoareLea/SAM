@@ -748,5 +748,25 @@ namespace SAM.Geometry.Spatial
 
             return true;
         }
+
+        public List<IClosedPlanar3D> GetEdge3Ds()
+        {
+            if(boundaries == null)
+            {
+                return null;
+            }
+
+            List<IClosedPlanar3D> result = new List<IClosedPlanar3D>();
+            foreach(Tuple<BoundingBox3D, Face3D> boundary in boundaries)
+            {
+                List<IClosedPlanar3D> edge3Ds = boundary?.Item2?.GetEdge3Ds();
+                if(edge3Ds != null)
+                {
+                    result.AddRange(edge3Ds);
+                }
+            }
+
+            return result;
+        }
     }
 }
