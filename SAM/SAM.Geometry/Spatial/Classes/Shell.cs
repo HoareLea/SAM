@@ -109,7 +109,8 @@ namespace SAM.Geometry.Spatial
 
             Segment3D segment3D = new Segment3D(point3D, vector3D);
 
-            List<ISAMGeometry3D> geometry3Ds_Intersection = IntersectionGeometry3Ds<ISAMGeometry3D>(segment3D, false, tolerance);
+            //List<ISAMGeometry3D> geometry3Ds_Intersection = IntersectionGeometry3Ds<ISAMGeometry3D>(segment3D, false, tolerance); // Shells cannot have openings
+            List<ISAMGeometry3D> geometry3Ds_Intersection = IntersectionGeometry3Ds<ISAMGeometry3D>(segment3D, true, tolerance);
             if (geometry3Ds_Intersection != null && geometry3Ds_Intersection.Count != 0)
                 if (geometry3Ds_Intersection.Find(x => x is ISegmentable3D || OnEdge(x as Point3D, silverSpacing)) == null)
                     return geometry3Ds_Intersection.Count % 2 != 0;
@@ -125,7 +126,8 @@ namespace SAM.Geometry.Spatial
                 vector3D_Temp = vector3D_Temp * length;
 
                 Segment3D segment3D_Temp = new Segment3D(point3D, vector3D_Temp);
-                List<ISAMGeometry3D> geometry3Ds_Intersection_Temp = IntersectionGeometry3Ds<ISAMGeometry3D>(segment3D_Temp, false, tolerance);
+                //List<ISAMGeometry3D> geometry3Ds_Intersection_Temp = IntersectionGeometry3Ds<ISAMGeometry3D>(segment3D_Temp, false, tolerance); // Shells cannot have openings
+                List<ISAMGeometry3D> geometry3Ds_Intersection_Temp = IntersectionGeometry3Ds<ISAMGeometry3D>(segment3D_Temp, true, tolerance);
                 if (geometry3Ds_Intersection_Temp == null || geometry3Ds_Intersection_Temp.Count == 0)
                     continue;
 

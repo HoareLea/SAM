@@ -311,7 +311,11 @@ namespace SAM.Geometry.Planar
                 Face2D face2D_Split = Create.Face2D(polygon2D_External, polygon2Ds_Internal);
                 if (face2D_Split != null)
                 {
-                    result.Add(face2D_Split);
+                    Point2D point2D_Internal = face2D_Split?.GetInternalPoint2D(tolerance);
+                    if (face2D.Inside(point2D_Internal, tolerance))
+                    {
+                        result.Add(face2D_Split);
+                    }
                 }
             }
 

@@ -627,6 +627,22 @@ namespace SAM.Analytical
                         shells.Add(shell_Temp);
                     }
 
+                    foreach(Shell shell_Temp in result)
+                    {
+                        if (shell_Temp == null || shells.Contains(shell_Temp))
+                        {
+                            continue;
+                        }
+
+                        List<Point3D> point3Ds_Intersection_Segment3D = shell_Temp?.Intersections(segment3D, tolerance_Distance);
+                        if (point3Ds_Intersection_Segment3D == null || point3Ds_Intersection_Segment3D.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        shells.Add(shell_Temp);
+                    }
+
                     point3D_Up = point3D_Up_Temp;
                     point3D_Down = point3D_Down_Temp;
                 }
@@ -665,8 +681,6 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                result.Add(shell_Union);
-
                 foreach (Shell shell_Temp in shells)
                 {
                     Point3D point3D_Internal_Temp = shell_Temp.InternalPoint3D(silverSpacing, tolerance_Distance);
@@ -677,8 +691,18 @@ namespace SAM.Analytical
                         {
                             tuples.RemoveAt(index);
                         }
+                        else
+                        {
+                            index = result.FindIndex(x => x == shell_Temp);
+                            if (index != -1)
+                            {
+                                result.RemoveAt(index);
+                            }
+                        }
                     }
                 }
+
+                result.Add(shell_Union);
             }
 
             return result;
