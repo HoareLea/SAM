@@ -47,6 +47,12 @@ namespace SAM.Geometry.Planar
             return externalEdge2D.GetCentroid();
         }
 
+        public void Move(Vector2D vector2D)
+        {
+            externalEdge2D = externalEdge2D?.Move(vector2D);
+            internalEdge2Ds = internalEdge2Ds?.ConvertAll(x => x.Move(vector2D));
+        }
+
         public static implicit operator Face2D(BoundingBox2D boundingBox2D)
         {
             if (boundingBox2D == null)

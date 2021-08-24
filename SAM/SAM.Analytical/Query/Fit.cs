@@ -55,7 +55,7 @@ namespace SAM.Analytical
             Geometry.Planar.Vector2D vector2D_Y = null;
             foreach (Geometry.Planar.Point2D point2D in boundingBox2D.GetPoints())
             {
-                if(((Geometry.Planar.IClosed2D)segmentable2D).Inside(point2D, tolerance))
+                if(face2D.Inside(point2D, tolerance))
                 {
                     continue;
                 }
