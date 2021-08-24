@@ -2,5 +2,6 @@
 {
     public interface ISAMGeometry2D : ISAMGeometry
     {
+
     }
 }

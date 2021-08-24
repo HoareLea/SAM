@@ -173,6 +173,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\Fit.cs" />
     <Compile Include="Query\MaxRectangle3D.cs" />
     <Compile Include="Query\Horizontal.cs" />
     <Compile Include="Query\LevelsDictionary.cs" />
