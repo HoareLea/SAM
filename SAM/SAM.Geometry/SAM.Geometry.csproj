@@ -200,6 +200,7 @@
     <Compile Include="Spatial\Modify\SplitFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\MaxRectangle3D.cs" />
     <Compile Include="Spatial\Query\RemoveInvalidFace3Ds.cs" />
     <Compile Include="Spatial\Query\FixEdges.cs" />
     <Compile Include="Spatial\Query\Orientation.cs" />
