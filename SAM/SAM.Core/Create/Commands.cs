@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,6 +6,29 @@ namespace SAM.Core
 {
     public static partial class Create
     {
+        public static List<Command> Commands(this string text)
+        {
+            if(string.IsNullOrWhiteSpace(text))
+            {
+                return null;
+            }
+
+            string[] lines = text.Split('\n');
+
+            List<Command> result = new List<Command>();
+            foreach(string line in lines)
+            {
+                if(string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+
+                result.Add(new Command(line));
+            }
+
+            return result;
+        }
+
         public static List<Command> Commands(this string text, IEnumerable<Enum> enums)
         {
             if (string.IsNullOrEmpty(text))
