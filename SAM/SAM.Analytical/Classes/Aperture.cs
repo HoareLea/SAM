@@ -2,6 +2,7 @@
 
 using SAM.Core;
 using SAM.Geometry.Spatial;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -24,6 +25,12 @@ namespace SAM.Analytical
             : base(aperture, aperture?.SAMType)
         {
             planarBoundary3D = new PlanarBoundary3D(aperture.planarBoundary3D);
+        }
+
+        public Aperture(Guid guid, Aperture aperture, IClosedPlanar3D closedPlanar3D)
+            : base(guid, aperture)
+        {
+            planarBoundary3D = new PlanarBoundary3D(closedPlanar3D);
         }
 
         public Aperture(JObject jObject)

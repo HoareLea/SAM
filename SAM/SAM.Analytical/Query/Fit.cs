@@ -101,13 +101,13 @@ namespace SAM.Analytical
             face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Aperture, face2D, tolerance);
             if (face2Ds_Difference == null || face2Ds_Difference.Count == 0)
             {
-                return new Aperture(aperture.ApertureConstruction, plane.Convert(face2D_Aperture));
+                return Create.Aperture(aperture, plane.Convert(face2D_Aperture));
             }
 
             double area_Difference_New = face2Ds_Difference.ConvertAll(x => x.GetArea()).Sum();
             if (area_Difference_New <= tolerance)
             {
-                return new Aperture(aperture.ApertureConstruction, plane.Convert(face2D_Aperture));
+                return Create.Aperture(aperture, plane.Convert(face2D_Aperture));
             }
 
             return null;
