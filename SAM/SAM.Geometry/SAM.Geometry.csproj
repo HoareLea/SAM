@@ -73,6 +73,7 @@
     <Compile Include="Enums\Padding.cs" />
     <Compile Include="Planar\Classes\ConvexHullComparer.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
+    <Compile Include="Planar\Query\Fill.cs" />
     <Compile Include="Planar\Query\Edges.cs" />
     <Compile Include="Planar\Query\Reduce.cs" />
     <Compile Include="Spatial\Classes\Ellipse3D.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Spatial\Modify\SplitFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Fill.cs" />
     <Compile Include="Spatial\Query\MaxRectangle3D.cs" />
     <Compile Include="Spatial\Query\RemoveInvalidFace3Ds.cs" />
     <Compile Include="Spatial\Query\FixEdges.cs" />
