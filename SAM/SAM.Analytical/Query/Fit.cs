@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static Aperture Fit(this Aperture aperture, Face3D face3D, double areaFactor = 0.5, double offset = 0, double tolerance = Core.Tolerance.Distance)
+        public static Aperture Fit(this Aperture aperture, Face3D face3D, double areaFactor = 0.5, double tolerance = Core.Tolerance.Distance)
         {
             if (aperture == null || face3D == null)
             {
@@ -28,7 +28,7 @@ namespace SAM.Analytical
             Geometry.Planar.Face2D face2D = plane.Convert(face3D);
             Geometry.Planar.Face2D face2D_Aperture = plane.Convert(face3D_Aperture);
 
-            Geometry.Planar.ISegmentable2D segmentable2D = face2D_Aperture.ExternalEdge2D as Geometry.Planar.ISegmentable2D;
+            Geometry.Planar.ISegmentable2D segmentable2D = face2D.ExternalEdge2D as Geometry.Planar.ISegmentable2D;
             if(segmentable2D == null)
             {
                 throw new System.NotImplementedException();
@@ -51,26 +51,38 @@ namespace SAM.Analytical
             Geometry.Planar.BoundingBox2D boundingBox2D = face2D_Aperture.GetBoundingBox();
 
             Geometry.Planar.Vector2D vector2D = null;
+            List<Geometry.Planar.Vector2D> vector2Ds = null;
             Geometry.Planar.Vector2D vector2D_X = null;
             Geometry.Planar.Vector2D vector2D_Y = null;
             foreach (Geometry.Planar.Point2D point2D in boundingBox2D.GetPoints())
             {
-                if(face2D.Inside(point2D, tolerance))
+                if(face2D.Inside(point2D, tolerance) || face2D.On(point2D, tolerance))
                 {
                     continue;
                 }
 
-                vector2D = Geometry.Planar.Query.TraceFirst(point2D, Geometry.Planar.Vector2D.WorldX, segmentable2D);
+                vector2Ds = new List<Geometry.Planar.Vector2D>();
+                vector2Ds.Add(Geometry.Planar.Query.TraceFirst(point2D, Geometry.Planar.Vector2D.WorldX, segmentable2D));
+                vector2Ds.Add(Geometry.Planar.Query.TraceFirst(point2D, Geometry.Planar.Vector2D.WorldX.GetNegated(), segmentable2D));
+                vector2Ds.RemoveAll(x => x == null);
+                vector2Ds.Sort((x, y) => x.Length.CompareTo(y.Length));
+                vector2D = vector2Ds.FirstOrDefault();
                 if (vector2D != null && vector2D.Length > tolerance && (vector2D_X == null || vector2D.Length > vector2D_X.Length))
                 {
                     vector2D_X = vector2D;
                 }
 
-                vector2D = Geometry.Planar.Query.TraceFirst(point2D, Geometry.Planar.Vector2D.WorldY, segmentable2D);
+                vector2Ds = new List<Geometry.Planar.Vector2D>();
+                vector2Ds.Add(Geometry.Planar.Query.TraceFirst(point2D, Geometry.Planar.Vector2D.WorldY, segmentable2D));
+                vector2Ds.Add(Geometry.Planar.Query.TraceFirst(point2D, Geometry.Planar.Vector2D.WorldY.GetNegated(), segmentable2D));
+                vector2Ds.RemoveAll(x => x == null);
+                vector2Ds.Sort((x, y) => x.Length.CompareTo(y.Length));
+                vector2D = vector2Ds.FirstOrDefault();
                 if (vector2D != null && vector2D.Length > tolerance && (vector2D_Y == null || vector2D.Length > vector2D_Y.Length))
                 {
                     vector2D_Y = vector2D;
                 }
+
             }
 
             if(vector2D_X == null && vector2D_Y == null)
@@ -78,7 +90,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            vector2D = new Geometry.Planar.Vector2D(vector2D_X.X, vector2D_Y.Y);
+            vector2D = new Geometry.Planar.Vector2D(vector2D_X == null ? 0 : vector2D_X.X, vector2D_Y == null ? 0 : vector2D_Y.Y);
             if(vector2D.Length <= tolerance)
             {
                 return null;
