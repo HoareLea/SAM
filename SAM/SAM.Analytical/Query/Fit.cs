@@ -1,6 +1,8 @@
 ﻿using SAM.Geometry.Spatial;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
@@ -112,6 +114,80 @@ namespace SAM.Analytical
 
             return null;
 
+        }
+    
+        public static Aperture Fit(this Aperture aperture, IEnumerable<Panel> panels, double areaFactor = 0.5, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if(aperture == null || panels == null)
+            {
+                return null;
+            }
+
+            BoundingBox3D boundingBox3D = aperture.GetBoundingBox();
+
+            List<Aperture> apertures = new List<Aperture>();
+            foreach (Panel panel in panels)
+            {
+                if (!boundingBox3D.InRange(panel?.GetBoundingBox(), maxDistance))
+                {
+                    continue;
+                }
+
+                Face3D face3D = panel?.GetFace3D();
+                if (face3D == null)
+                {
+                    continue;
+                }
+
+                Aperture aperture_Temp = aperture.Fit(face3D, areaFactor, tolerance);
+                if (aperture_Temp == null)
+                {
+                    continue;
+                }
+
+                apertures.Add(aperture_Temp);
+            }
+
+            if(apertures == null || apertures.Count == 0)
+            {
+                return null;
+            }
+
+            if(apertures.Count == 1)
+            {
+                return apertures[0];
+            }
+
+            Point3D point3D = aperture.GetFace3D().InternalPoint3D(tolerance);
+            List<Tuple<double, Aperture>> tuples = apertures.ConvertAll(x => new Tuple<double, Aperture>(x.GetFace3D().InternalPoint3D(tolerance).Distance(point3D), x));
+            tuples.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+
+            return tuples.FirstOrDefault()?.Item2;
+        }
+    
+        public static List<Aperture> Fit(this IEnumerable<Aperture> apertures, IEnumerable<Panel> panels, double areaFactor = 0.5, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if(apertures == null || panels == null)
+            {
+                return null;
+            }
+
+            int count = apertures.Count();
+
+            List<Aperture> result = Enumerable.Repeat<Aperture>(null, count).ToList();
+
+            Parallel.For(0, count, (int i) =>
+            {
+                Aperture aperture = apertures.ElementAt(i);
+
+                Aperture aperture_Temp = aperture?.Fit(panels, areaFactor, maxDistance, tolerance);
+
+                aperture = aperture_Temp == null ? aperture : aperture_Temp;
+
+                result[i] = aperture;
+            });
+
+            return result;
         }
     }
 }
