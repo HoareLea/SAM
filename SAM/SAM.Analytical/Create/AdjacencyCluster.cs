@@ -504,7 +504,8 @@ namespace SAM.Analytical
                                     tuples_Face2D.RemoveAt(i);
                             }
 
-                            Panel panel_New_Temp = null;
+                            //Panel panel_New_Temp = null;
+                            List<Panel> panels_New_Temp = null;
                             
                             if (tuples_Face2D != null && tuples_Face2D.Count != 0)
                             {
@@ -515,7 +516,8 @@ namespace SAM.Analytical
                                 tuples_Face2D_Temp.AddRange(tuples_Face2D);
                                 tuples_Face2D = tuples_Face2D_Temp;
 
-                                panel_New_Temp = tuples_Face2D.FirstOrDefault()?.Item2;
+                                panels_New_Temp = tuples_Face2D_Temp?.ConvertAll(x => x.Item2);
+                                //panel_New_Temp = tuples_Face2D.FirstOrDefault()?.Item2;
                             }
                             else
                             {
@@ -533,16 +535,33 @@ namespace SAM.Analytical
                                 tuples_Face2D_Distance_Temp.AddRange(tuples_Face2D_Distance);
                                 tuples_Face2D_Distance = tuples_Face2D_Distance_Temp;
 
-                                panel_New_Temp = tuples_Face2D_Distance.FirstOrDefault()?.Item2;
+                                panels_New_Temp = tuples_Face2D_Distance?.ConvertAll(x => x.Item2);
+                                //panel_New_Temp = tuples_Face2D_Distance.FirstOrDefault()?.Item2;
                             }
 
-                            if (panel_New_Temp != null)
+                            if (panels_New_Temp != null && panels_New_Temp.Count != 0)
                             {
+                                Panel panel_New_Temp = panels_New_Temp[0];
+                                List<Aperture> apertures = null;
+                                for(int i = 1; i < panels_New_Temp.Count;i++)
+                                {
+                                    List<Aperture> apertures_Temp = panels_New_Temp[i]?.Apertures;
+                                    if(apertures_Temp != null)
+                                    {
+                                        if(apertures == null)
+                                        {
+                                            apertures = new List<Aperture>();
+                                        }
+
+                                        apertures.AddRange(apertures_Temp);
+                                    }
+                                }
+                                
                                 Guid guid = panel_New_Temp.Guid;
                                 while (result.GetObject<Panel>(guid) != null)
                                     guid = Guid.NewGuid();
 
-                                panel_New = new Panel(guid, panel_New_Temp, face3D, null, true, minArea);
+                                panel_New = new Panel(guid, panel_New_Temp, face3D, apertures, true, minArea);
                                 result.AddObject(panel_New);
 
                                 tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance_Distance)));
