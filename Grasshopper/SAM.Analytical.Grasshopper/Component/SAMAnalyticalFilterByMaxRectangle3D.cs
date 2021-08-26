@@ -43,8 +43,8 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
-            index = inputParamManager.AddNumberParameter("_panelMinDimension", "_panelMinDimension", "Minimal dimesion for Panel Rectangle3D", GH_ParamAccess.item, double.MaxValue);
-            index = inputParamManager.AddNumberParameter("_apertureMinDimension", "_apertureMinDimension", "Minimal dimesion for Aperture Rectangle3D", GH_ParamAccess.item, double.MaxValue);
+            index = inputParamManager.AddNumberParameter("_panelMinDimension", "_panelMinDimension", "Minimal dimesion for Panel Rectangle3D", GH_ParamAccess.item, 0);
+            index = inputParamManager.AddNumberParameter("_apertureMinDimension", "_apertureMinDimension", "Minimal dimesion for Aperture Rectangle3D", GH_ParamAccess.item, 0);
         }
 
         /// <summary>
@@ -71,14 +71,14 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            double panelMinDimension = double.NaN;
+            double panelMinDimension = 0;
             if (!dataAccess.GetData(1, ref panelMinDimension))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            double apertureMinDimension = double.NaN;
+            double apertureMinDimension = 0;
             if (!dataAccess.GetData(2, ref apertureMinDimension))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -95,10 +95,11 @@ namespace SAM.Analytical.Grasshopper
                 if(rectangle3D == null || rectangle3D.Width < panelMinDimension || rectangle3D.Height < panelMinDimension)
                 {
                     objects_Out.Add(panel);
-                    continue;
                 }
-
-                panels_In.Add(panel);
+                else
+                {
+                    panels_In.Add(panel);
+                }
 
                 List<Aperture> apertures = panel.Apertures;
                 if(apertures == null || apertures.Count == 0)
