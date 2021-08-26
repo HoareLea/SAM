@@ -53,13 +53,13 @@ namespace SAM.Geometry.Planar
                     }
 
                     Point2D point2D = face2D_Split.InternalPoint2D(tolerance);
-                    tuples_Temp = tuples_Temp.FindAll(x => x.Item2.InRange(point2D, tolerance) && x.Item1.Inside(point2D, tolerance));
-                    if (tuples_Temp == null || tuples_Temp.Count < 2)
+                    List<Tuple<Face2D, BoundingBox2D>> tuples_Temp_Inside = tuples_Temp.FindAll(x => x.Item2.InRange(point2D, tolerance) && x.Item1.Inside(point2D, tolerance));
+                    if (tuples_Temp_Inside == null || tuples_Temp_Inside.Count < 2)
                     {
                         continue;
                     }
 
-                    tuples_Split.Add(new Tuple<Face2D, List<Face2D>>(face2D_Split, tuples_Temp.ConvertAll(x => x.Item1)));
+                    tuples_Split.Add(new Tuple<Face2D, List<Face2D>>(face2D_Split, tuples_Temp_Inside.ConvertAll(x => x.Item1)));
                 }
 
                 if (tuples_Split.Count == 0)
@@ -99,7 +99,7 @@ namespace SAM.Geometry.Planar
 
                 }
 
-                tuples_InvertedThinnessRatio.Sort((x, y) => x.Item1.CompareTo(y.Item2));
+                tuples_InvertedThinnessRatio.Sort((x, y) => x.Item1.CompareTo(y.Item1));
 
                 Tuple<double, List<Face2D>, List<Face2D>> tuple_InvertedThinnessRatio = tuples_InvertedThinnessRatio[0];
 
