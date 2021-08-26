@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> Fill(this Face3D face3D, IEnumerable<Panel> panels, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> Fill(this Face3D face3D, IEnumerable<Panel> panels, double offset = 0.1, double tolerance = Core.Tolerance.Distance)
         {
             if(face3D == null || panels == null)
             {
@@ -37,7 +37,7 @@ namespace SAM.Analytical
                 return result;
             }
 
-            List<Face3D> face3Ds = Geometry.Spatial.Query.Fill(face3D, tuples_Panel.ConvertAll(x => x.Item2), tolerance);
+            List<Face3D> face3Ds = Geometry.Spatial.Query.Fill(face3D, tuples_Panel.ConvertAll(x => x.Item2), offset, tolerance);
             if(face3Ds == null || face3Ds.Count == 0)
             {
                 return result;

@@ -5,7 +5,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static List<Face3D> Fill(this Face3D face3D, IEnumerable<Face3D> face3Ds, double tolerance = SAM.Core.Tolerance.Distance)
+        public static List<Face3D> Fill(this Face3D face3D, IEnumerable<Face3D> face3Ds, double offset = 0.1, double tolerance = SAM.Core.Tolerance.Distance)
         {
             if(face3D == null || face3Ds == null)
             {
@@ -44,7 +44,7 @@ namespace SAM.Geometry.Spatial
 
             }
 
-            return Planar.Query.Fill(face2D, face2Ds, tolerance)?.ConvertAll(x => plane.Convert(x));
+            return Planar.Query.Fill(face2D, face2Ds, offset, tolerance)?.ConvertAll(x => plane.Convert(x));
         }
     }
 }
