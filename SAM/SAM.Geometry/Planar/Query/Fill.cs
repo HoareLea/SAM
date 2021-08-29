@@ -52,6 +52,32 @@ namespace SAM.Geometry.Planar
                 }
             }
 
+            //Making sure Face2Ds do not reduce size
+            face2Ds_Temp = new List<Face2D>(face2Ds_Offset);
+            Modify.MergeOverlaps(face2Ds_Temp, tolerance);
+            foreach(Face2D face2D_Temp in face2Ds_Temp)
+            {
+                Point2D point2D = face2D_Temp.InternalPoint2D(tolerance);
+                int index = face2Ds_Offset.FindIndex(x => x.GetBoundingBox().Inside(point2D, tolerance) && x.Inside(point2D, tolerance));
+                if(index == -1)
+                {
+                    continue;
+                }
+
+                List<Face2D> face2Ds_Union = face2D_Temp.Union(face2Ds_Offset[index], tolerance);
+                if(face2Ds_Union == null || face2Ds_Union.Count == 0)
+                {
+                    continue;
+                }
+
+                if(face2Ds_Union.Count > 1)
+                {
+                    face2Ds_Union.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+                }
+
+                face2Ds_Offset[index] = face2Ds_Union[0];
+            }
+
             return Fill(face2D, face2Ds_Offset, offset, tolerance);
         }
     }
