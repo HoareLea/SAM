@@ -328,7 +328,15 @@ namespace SAM.Geometry.Planar
             result.RemoveAll(x => x.GetLength() <= tolerance);
             return result;
         }
-
+        
+        /// <summary>
+        /// Snaps face2D to given face2Ds
+        /// </summary>
+        /// <param name="face2D"> Face2D to be snapped</param>
+        /// <param name="face2Ds">Snapping face2Ds</param>
+        /// <param name="snapDistance">Snapping distance</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Snapped Face2D</returns>
         public static Face2D Snap(this Face2D face2D, IEnumerable<Face2D> face2Ds, double snapDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if(face2D == null || face2Ds == null)

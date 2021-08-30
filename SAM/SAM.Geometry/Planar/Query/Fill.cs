@@ -33,6 +33,7 @@ namespace SAM.Geometry.Planar
             }
 
             Modify.MergeOverlaps(face2Ds_Temp, tolerance);
+            face2Ds_Temp.ForEach(x => Snap(x, new Face2D[] { face2D }, tolerance, tolerance));
 
             double area = face2D.GetArea();
             double area_Temp = face2Ds_Temp.ConvertAll(x => x.GetArea()).Sum();
