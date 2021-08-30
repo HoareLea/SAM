@@ -701,6 +701,104 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public bool FillFace3Ds(IEnumerable<Face3D> face3Ds, double offset = 0.1, double maxDistance = 0.1, double maxAngle = 0.0872664626, double tolerance = Core.Tolerance.Distance)
+        {
+            if (boundaries == null || boundaries.Count == 0 || face3Ds == null)
+            {
+                return false;
+            }
+
+            List<Tuple<BoundingBox3D, Face3D>> tuples = new List<Tuple<BoundingBox3D, Face3D>>();
+            foreach (Face3D face3D in face3Ds)
+            {
+                BoundingBox3D boundingBox3D = face3D?.GetBoundingBox();
+                if (boundingBox3D == null)
+                {
+                    continue;
+                }
+
+                if (!this.boundingBox3D.InRange(boundingBox3D, maxDistance))
+                {
+                    continue;
+                }
+
+                tuples.Add(new Tuple<BoundingBox3D, Face3D>(boundingBox3D, face3D));
+            }
+
+            if(tuples == null || tuples.Count == 0)
+            {
+                return false;
+            }
+
+            bool result = false;
+            for (int i = boundaries.Count - 1; i >= 0; i--)
+            {
+                BoundingBox3D boundingBox3D = boundaries[i].Item1;
+
+                Plane plane = boundaries[i].Item2?.GetPlane();
+                Vector3D vector3D = plane?.Normal;
+                if(vector3D == null || !vector3D.IsValid())
+                {
+                    continue;
+                }
+
+                List<Face3D> face3Ds_Fill = new List<Face3D>();
+                foreach(Tuple<BoundingBox3D, Face3D> tuple in tuples)
+                {
+                    if(!tuple.Item1.InRange(boundingBox3D, maxDistance))
+                    {
+                        continue;
+                    }
+
+                    Vector3D vector3D_Tuple = tuple.Item2?.GetPlane()?.Normal;
+                    if (vector3D_Tuple == null || !vector3D_Tuple.IsValid())
+                    {
+                        continue;
+                    }
+
+                    if (vector3D.SmallestAngle(vector3D_Tuple.GetNegated()) > maxAngle && vector3D.SmallestAngle(vector3D_Tuple) > maxAngle)
+                    {
+                        continue;
+                    }
+
+                    Face3D face3D_Project = plane.Project(tuple.Item2);
+                    if(face3D_Project == null || !face3D_Project.IsValid())
+                    {
+                        continue;
+                    }
+
+                    if(face3D_Project.GetArea() < tolerance)
+                    {
+                        continue;
+                    }
+
+                    face3Ds_Fill.Add(face3D_Project);
+                }
+
+                if(face3Ds_Fill == null || face3Ds_Fill.Count < 2)
+                {
+                    continue;
+                }
+
+                face3Ds_Fill = Query.Fill(boundaries[i].Item2, face3Ds_Fill, offset, tolerance);
+                if (face3Ds_Fill == null || face3Ds_Fill.Count < 2)
+                {
+                    continue;
+                }
+
+                boundaries.RemoveAt(i);
+                foreach(Face3D face3D_Fill in face3Ds_Fill)
+                {
+                    if(Add(face3D_Fill))
+                    {
+                        result = true;
+                    }
+                }
+            }
+
+            return result;
+        }
     
         public bool Split(Shell shell, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {

@@ -361,7 +361,7 @@ namespace SAM.Analytical
             });
 
             shells_Temp.RemoveAll(x => x == null);
-
+            shells_Temp.FillFace3Ds(tuples_Panel.ConvertAll(x => x.Item2), 0.1, maxDistance, maxAngle, tolerance_Distance);
             shells_Temp.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
 
             //Creating Shell Panels
@@ -582,14 +582,14 @@ namespace SAM.Analytical
                         result.AddRelation(space, panel_New);
                 }
 
-                foreach (Space space in spaces_Shell)
-                {
-                    Shell shell_Temp = result.Shell(space);
-                    if (shell_Temp == null || !shell_Temp.IsClosed(silverSpacing))
-                    {
-                        List<Segment3D> segment3Ds = shell_Temp?.NakedSegment3Ds(int.MaxValue, silverSpacing);
-                    }
-                }
+                //foreach (Space space in spaces_Shell)
+                //{
+                //    Shell shell_Temp = result.Shell(space);
+                //    if (shell_Temp == null || !shell_Temp.IsClosed(silverSpacing))
+                //    {
+                //        List<Segment3D> segment3Ds = shell_Temp?.NakedSegment3Ds(int.MaxValue, silverSpacing);
+                //    }
+                //}
             }
 
             //Creating Shade Panels
