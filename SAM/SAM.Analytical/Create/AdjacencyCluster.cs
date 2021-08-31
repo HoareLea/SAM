@@ -365,16 +365,16 @@ namespace SAM.Analytical
             shells_Temp.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
 
             //Creating Shell Panels
-            foreach (Shell shell in shells_Temp)
+            foreach (Shell shell_Temp in shells_Temp)
             {
-                List<Face3D> face3Ds = shell?.Face3Ds;
+                List<Face3D> face3Ds = shell_Temp?.Face3Ds;
                 if (face3Ds == null || face3Ds.Count == 0)
                 {
                     continue;
                 }
 
                 //Searching for spaces
-                dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Shell);
+                dictionary_Spaces.TryGetValue(shell_Temp, out List<Space> spaces_Shell);
 
                 if (spaces_Shell == null || spaces_Shell.Count == 0)
                 {
@@ -392,14 +392,14 @@ namespace SAM.Analytical
                     }
                     while (names.Contains(name));
 
-                    Space space = new Space(name, shell.CalculatedInternalPoint3D(silverSpacing, tolerance_Distance));
+                    Space space = new Space(name, shell_Temp.CalculatedInternalPoint3D(silverSpacing, tolerance_Distance));
                     names.Add(name);
                     spaces_Shell.Add(space);
 
-                    if (!dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Temp))
+                    if (!dictionary_Spaces.TryGetValue(shell_Temp, out List<Space> spaces_Temp))
                     {
                         spaces_Temp = new List<Space>();
-                        dictionary_Spaces[shell] = spaces_Temp;
+                        dictionary_Spaces[shell_Temp] = spaces_Temp;
                     }
 
                     spaces_Temp.Add(space);
@@ -416,7 +416,7 @@ namespace SAM.Analytical
                     result.AddObject(space);
                 }
 
-                BoundingBox3D boundingBox3D_Shell = shell.GetBoundingBox(maxDistance);
+                BoundingBox3D boundingBox3D_Shell = shell_Temp.GetBoundingBox(maxDistance);
                 if (boundingBox3D_Shell == null)
                     continue;
 
@@ -728,6 +728,8 @@ namespace SAM.Analytical
                     result.RemoveObject<Space>(guid);
                 }
             }
+
+            result = result.UpdateNormals(false, silverSpacing, tolerance_Distance);
 
             return result;
         }
