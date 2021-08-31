@@ -191,6 +191,7 @@
     <Compile Include="Query\IntersectingPanels.cs" />
     <Compile Include="Query\DuplicatedSpacesDictionary.cs" />
     <Compile Include="Query\MergeCoplanarApertures.cs" />
+    <Compile Include="Query\MergeCoplanarPanelsBySpace.cs" />
     <Compile Include="Query\MergeOverlapApertures.cs" />
     <Compile Include="Query\Offset.cs" />
     <Compile Include="Query\Point3Ds.cs" />

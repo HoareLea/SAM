@@ -61,9 +61,13 @@ namespace SAM.Analytical
             List<Panel> mergedPanels = null;
 
             if (validatePanelGroup)
-                mergedPanels = MergeCoplanarPanels(panels, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
+            {
+                mergedPanels = MergeCoplanarPanels((IEnumerable<Panel>)panels, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
+            }
             else
+            {
                 mergedPanels = MergeCoplanarPanels(panels, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
+            }
 
             AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
             if (redundantPanels != null && redundantPanels.Count != 0)
