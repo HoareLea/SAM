@@ -173,25 +173,25 @@ namespace SAM.Geometry.Planar
             return Create.Rectangle2D(point2DsList[0]);
         }
 
-        //public static List<Polygon2D> Offset(this ISegmentable2D segmentable2D, double offset, JoinType joinType, EndType endType, double tolerance = Tolerance.MicroDistance)
-        //{
-        //    if (segmentable2D == null)
-        //        return null;
+        public static List<Polygon2D> Offset(this ISegmentable2D segmentable2D, double offset, JoinType joinType, EndType endType, double tolerance = Tolerance.MicroDistance)
+        {
+            if (segmentable2D == null)
+                return null;
 
-        //    List<IntPoint> intPoints = segmentable2D.ToClipper(tolerance);
-        //    if (intPoints == null)
-        //        return null;
+            List<IntPoint> intPoints = segmentable2D.ToClipper(tolerance);
+            if (intPoints == null)
+                return null;
 
-        //    ClipperOffset clipperOffset = new ClipperOffset();
-        //    clipperOffset.AddPath(intPoints, joinType, endType);
-        //    List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
-        //    clipperOffset.Execute(ref intPointList, offset / tolerance);
+            ClipperOffset clipperOffset = new ClipperOffset();
+            clipperOffset.AddPath(intPoints, joinType, endType);
+            List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
+            clipperOffset.Execute(ref intPointList, offset / tolerance);
 
-        //    if (intPointList == null)
-        //        return null;
+            if (intPointList == null)
+                return null;
 
-        //    return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
-        //}
+            return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
+        }
 
         public static List<List<Point2D>> Offset(this IEnumerable<Point2D> point2Ds, double offset, JoinType joinType, EndType endType, double tolerance = Tolerance.MicroDistance)
         {
