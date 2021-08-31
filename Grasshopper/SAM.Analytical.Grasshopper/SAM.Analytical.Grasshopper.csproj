@@ -78,6 +78,7 @@
     <Compile Include="Component\SAMAnalyticalMergeCoplanarApertures.cs" />
     <Compile Include="Component\SAMAnalyticalMergeCoplanarPanelsBySpace.cs" />
     <Compile Include="Component\SAMAnalyticalMergeOverlapApertures.cs" />
+    <Compile Include="Component\SAMAnalyticalRemoveOverlapApertures.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByPlanes.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByElevations.cs" />
