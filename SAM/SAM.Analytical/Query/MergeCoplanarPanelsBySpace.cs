@@ -66,24 +66,30 @@ namespace SAM.Analytical
                     }
                     
                     List<Panel> mergedPanels = null;
+                    List<Panel> redundantPanels_Temp = new List<Panel>();
 
                     if (validatePanelGroup)
                     {
-                        mergedPanels = MergeCoplanarPanels((IEnumerable<Panel>)tuple.Item2, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
+                        mergedPanels = MergeCoplanarPanels((IEnumerable<Panel>)tuple.Item2, offset, ref redundantPanels_Temp, validateConstruction, minArea, tolerance);
                     }
                     else
                     {
-                        mergedPanels = MergeCoplanarPanels(tuple.Item2, offset, ref redundantPanels, validateConstruction, minArea, tolerance);
-                    }
-
-                    if (redundantPanels != null && redundantPanels.Count != 0)
-                    {
-                        result.Remove(redundantPanels);
+                        mergedPanels = MergeCoplanarPanels(tuple.Item2, offset, ref redundantPanels_Temp, validateConstruction, minArea, tolerance);
                     }
 
                     if (mergedPanels != null && mergedPanels.Count != 0)
                     {
                         mergedPanels.ForEach(x => result.AddObject(x));
+                    }
+
+                    if (redundantPanels_Temp != null && redundantPanels_Temp.Count != 0)
+                    {
+                        result.Remove(redundantPanels_Temp);
+                        if(redundantPanels == null)
+                        {
+                            redundantPanels = new List<Panel>();
+                        }
+                        redundantPanels.AddRange(redundantPanels_Temp);
                     }
                 }
             }

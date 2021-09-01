@@ -197,7 +197,7 @@ namespace SAM.Analytical
 
                     Panel panel_Old = tuples_Panel.First().Item2;
                     tuples_Panel.RemoveAt(0);
-                    redundantPanels.AddRange(tuples_Panel.ConvertAll(x => x.Item2));
+                    redundantPanels?.AddRange(tuples_Panel.ConvertAll(x => x.Item2));
 
                     if (panel_Old == null)
                         continue;
@@ -218,7 +218,6 @@ namespace SAM.Analytical
                     List<Aperture> apertures = new List<Aperture>();
                     if (redundantPanels != null && redundantPanels.Count != 0)
                     {
-
                         foreach (Panel panel_redundant in redundantPanels)
                         {
                             if (panel_redundant == null)
