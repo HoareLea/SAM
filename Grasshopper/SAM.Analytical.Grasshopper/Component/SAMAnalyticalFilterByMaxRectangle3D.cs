@@ -89,8 +89,13 @@ namespace SAM.Analytical.Grasshopper
             List<object> objects_Out = new List<object>();
             
             for(int i=0; i < panels.Count; i++)
-            {
+            {              
                 Panel panel = Create.Panel(panels[i]);
+                if (panel == null)
+                {
+                    continue;
+                }
+
                 Geometry.Spatial.Rectangle3D rectangle3D = panel?.MaxRectangle3D();
                 if(rectangle3D == null || rectangle3D.Width < panelMinDimension || rectangle3D.Height < panelMinDimension)
                 {

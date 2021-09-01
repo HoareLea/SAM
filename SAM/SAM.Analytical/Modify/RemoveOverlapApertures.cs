@@ -40,29 +40,29 @@ namespace SAM.Analytical
                 return false;
             }
 
-            for(int i=0; i < tuples.Count; i++)
+            for(int i=0; i < tuples.Count - 1; i++)
             {
                 Tuple<BoundingBox2D, Face2D, Aperture> tuple_1 = tuples[i];
 
-                for (int j = 1; j < tuples.Count - 1; j++)
+                for (int j = i + 1; j < tuples.Count; j++)
                 {
                     Tuple<BoundingBox2D, Face2D, Aperture> tuple_2 = tuples[j];
 
-                    if(!tuple_1.Item1.InRange(tuple_2.Item1, tolerance))
+                    if (!tuple_1.Item1.InRange(tuple_2.Item1, tolerance))
                     {
                         continue;
                     }
 
                     List<Face2D> face2Ds = tuple_1.Item2.Intersection(tuple_2.Item2, tolerance);
                     face2Ds?.RemoveAll(x => x == null || x.GetArea() < tolerance);
-                    if(face2Ds == null || face2Ds.Count == 0)
+                    if (face2Ds == null || face2Ds.Count == 0)
                     {
                         continue;
                     }
 
                     removedApertures = new List<Aperture>();
 
-                    if(tuple_1.Item2.GetArea() > tuple_2.Item2.GetArea())
+                    if (tuple_1.Item2.GetArea() > tuple_2.Item2.GetArea())
                     {
                         removedApertures.Add(tuple_2.Item3);
                     }
@@ -71,13 +71,13 @@ namespace SAM.Analytical
                         removedApertures.Add(tuple_1.Item3);
                     }
 
-                    foreach(Aperture aperture in removedApertures)
+                    foreach (Aperture aperture in removedApertures)
                     {
                         panel.RemoveAperture(aperture.Guid);
                     }
-                    
+
                     RemoveOverlapApertures(panel, out List<Aperture> removedApertures_Temp, tolerance);
-                    if(removedApertures_Temp != null && removedApertures_Temp.Count > 0)
+                    if (removedApertures_Temp != null && removedApertures_Temp.Count > 0)
                     {
                         removedApertures.AddRange(removedApertures_Temp);
                     }
