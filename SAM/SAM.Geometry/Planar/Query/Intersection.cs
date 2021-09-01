@@ -126,7 +126,7 @@ namespace SAM.Geometry.Planar
             List<Face2D> face2Ds_2 = face2D_2.FixEdges(tolerance);
             if (face2Ds_2 == null || face2Ds_2.Count == 0)
             {
-                face2Ds_2 = new List<Face2D>() { face2D_1 };
+                face2Ds_2 = new List<Face2D>() { face2D_2 };
             }
 
             List<NetTopologySuite.Geometries.Geometry> geometries = new List<NetTopologySuite.Geometries.Geometry>();

@@ -10,7 +10,7 @@ namespace SAM.Geometry.Planar
             if (segmentable2D == null)
                 return null;
 
-            List<Segment2D> segment2Ds = segmentable2D.GetSegments()?.Split(tolerance);
+            List<Segment2D> segment2Ds = segmentable2D.GetSegments()?.Split(tolerance)?.Snap(true, tolerance);
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
@@ -69,10 +69,21 @@ namespace SAM.Geometry.Planar
                     {
                         Polygon2D polygon2D_ExternalEdge_Temp = polygon2Ds_ExternalEdge_Temp[i];
 
-                        Polygon2D polygon2D = polygon2Ds_InternalEdge_Temp.Find(x => polygon2Ds_ExternalEdge_Temp[i].Inside(x.InternalPoint2D(tolerance)));
+                        //Polygon2D polygon2D = polygon2Ds_InternalEdge_Temp.Find(x => polygon2Ds_ExternalEdge_Temp[i].Inside(x.InternalPoint2D(tolerance)));
+                        Polygon2D polygon2D = null;
+                        foreach (Polygon2D polygon2D_InternalEdge_Temp in polygon2Ds_InternalEdge_Temp)
+                        {
+                            Point2D point2D = polygon2D_InternalEdge_Temp.InternalPoint2D(tolerance);
+                            if (polygon2D_ExternalEdge_Temp.Inside(point2D, tolerance) || polygon2D_ExternalEdge_Temp.On(point2D, tolerance))
+                            {
+                                polygon2D = polygon2D_InternalEdge_Temp;
+                                break;
+                            }
+                        }
+
                         if(polygon2D != null)
                         {
-                                polygon2Ds_ExternalEdge_Temp.RemoveAt(i);
+                            polygon2Ds_ExternalEdge_Temp.RemoveAt(i);
                         }
                     }
                 }

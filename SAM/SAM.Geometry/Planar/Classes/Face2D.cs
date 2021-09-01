@@ -96,22 +96,31 @@ namespace SAM.Geometry.Planar
 
         internal static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance = Core.Tolerance.Distance)
         {
-            if(externalEdge == null)
+            return Create(externalEdge, internalEdges, out List<IClosed2D> internalEdges_Excluded, edgeOrientationMethod, tolerance);
+        }
+
+        internal static Face2D Create(IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, out List<IClosed2D> internalEdges_Excluded, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance = Core.Tolerance.Distance)
+        {
+            internalEdges_Excluded = null;
+
+            if (externalEdge == null)
             {
                 return null;
             }
-            
+
             Orientation orientation = Orientation.Undefined;
 
             Face2D result = new Face2D(externalEdge);
             if (internalEdges != null && internalEdges.Count() > 0)
             {
+                internalEdges_Excluded = new List<IClosed2D>(internalEdges);
+
                 double area_ExternalEdge = externalEdge.GetArea();
-                
+
                 result.internalEdge2Ds = new List<IClosed2D>();
                 foreach (IClosed2D internalEdge in internalEdges)
                 {
-                    if(internalEdge == null || !externalEdge.Inside(internalEdge, tolerance))
+                    if (internalEdge == null || !externalEdge.Inside(internalEdge, tolerance))
                     {
                         continue;
                     }
@@ -137,11 +146,13 @@ namespace SAM.Geometry.Planar
                     }
 
                     result.internalEdge2Ds.Add(closed2D_Temp);
+                    internalEdges_Excluded.Remove(internalEdge);
                 }
             }
 
             return result;
         }
+
 
         internal static Face2D Create(IEnumerable<IClosed2D> edges, out List<IClosed2D> edges_Excluded, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance = Core.Tolerance.Distance)
         {
