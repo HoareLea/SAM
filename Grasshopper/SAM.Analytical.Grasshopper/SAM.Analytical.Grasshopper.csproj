@@ -74,6 +74,7 @@
     <Compile Include="Component\SAMAnalyticalAlignHorizontalPanelByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalCreateShellsByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByMaxRectangle3D.cs" />
+    <Compile Include="Component\SAMAnalyticalFillFloorsAndRoofs.cs" />
     <Compile Include="Component\SAMAnalyticalJoinSpacesByPanels.cs" />
     <Compile Include="Component\SAMAnalyticalMergeCoplanarApertures.cs" />
     <Compile Include="Component\SAMAnalyticalMergeCoplanarPanelsBySpace.cs" />

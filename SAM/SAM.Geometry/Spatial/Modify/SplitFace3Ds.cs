@@ -24,12 +24,14 @@ namespace SAM.Geometry.Spatial
                     bool updated = false;
                     for (int j = 0; j < shells.Count; j++)
                     {
-                        if (i != j)
+                        if (i == j)
                         {
-                            if (shell_New.SplitFace3Ds(shells[j], tolerance_Angle, tolerance_Distance))
-                            {
-                                updated = true;
-                            }
+                            continue;
+                        }
+
+                        if (shell_New.SplitFace3Ds(shells[j], tolerance_Angle, tolerance_Distance))
+                        {
+                            updated = true;
                         }
                     }
 
