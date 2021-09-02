@@ -64,8 +64,9 @@ namespace SAM.Analytical
                     }
                 }
 
-                if (segment2Ds != null && segment2Ds.Count != 0)
+                if (segment2Ds == null || segment2Ds.Count == 0)
                 {
+                    result.AddRange(tuple_Elevation.Item2);
                     continue;
                 }
 
@@ -75,13 +76,16 @@ namespace SAM.Analytical
                 List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds, tolerance);
                 if (face2Ds == null || face2Ds.Count == 0)
                 {
+                    result.AddRange(tuple_Elevation.Item2);
                     continue;
                 }
 
                 List<IClosed2D> closed2Ds = Geometry.Planar.Query.Holes(face2Ds);
                 if (closed2Ds != null && closed2Ds.Count > 0)
+                {
                     closed2Ds.ForEach(x => face2Ds.Add(new Face2D(x)));
-
+                }
+                    
                 List<Tuple<BoundingBox2D, Face2D, Plane, Panel>> tuples = new List<Tuple<BoundingBox2D, Face2D, Plane, Panel>>();
                 foreach (Panel panel in tuple_Elevation.Item2)
                 {
@@ -143,8 +147,10 @@ namespace SAM.Analytical
                                 face2Ds_Union.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
                             }
 
+                            int index = tuples.IndexOf(tuples_Temp[i]);
                             tuples_Temp[i] = new Tuple<BoundingBox2D, Face2D, Plane, Panel>(tuples_Temp[i].Item1, face2Ds_Union[0], tuples_Temp[i].Item3, tuples_Temp[i].Item4);
-                            indexes.Add(i);
+                            tuples[index] = tuples_Temp[i];
+                            indexes.Add(index);
                         }
                     }
                 }
@@ -157,7 +163,9 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    Face3D face3D = tuples[i].Item3.Convert(tuples[i].Item2);
+                    Face3D face3D = plane.Convert(tuples[i].Item2);
+                    face3D = tuples[i].Item3.Project(face3D);
+
                     Panel panel = tuples[i].Item4;
                     panel = Create.Panel(panel.Guid, panel, face3D, null, true, tolerance, tolerance);
                     result.Add(panel);
