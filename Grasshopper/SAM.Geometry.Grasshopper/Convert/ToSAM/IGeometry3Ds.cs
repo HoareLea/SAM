@@ -103,8 +103,14 @@ namespace SAM.Geometry.Grasshopper
                     ISAMGeometry3D geometry3D = brepLoop.To3dCurve().ToSAM(simplify);
                     if (geometry3D is Polycurve3D)
                     {
-                        Polycurve3D polycurve3D = (Polycurve3D)geometry3D;
-                        geometry3D = new Polygon3D(polycurve3D.Explode().ConvertAll(x => x.GetStart()));
+                        List<Point3D> point3Ds = ((Polycurve3D)geometry3D).Explode().ConvertAll(x => x.GetStart());
+
+                        PlaneFitResult planeFitResult = Rhino.Geometry.Plane.FitPlaneToPoints(point3Ds.ConvertAll(x => x.ToRhino()), out Rhino.Geometry.Plane plane_Rhino);
+                        if(planeFitResult != PlaneFitResult.Failure && plane_Rhino != null)
+                        {
+                            Spatial.Plane plane = plane_Rhino.ToSAM();
+                            geometry3D = new Polygon3D(plane, point3Ds.ConvertAll(x => plane.Convert(plane.Project(x))));
+                        }
                     }
                     if (geometry3D is IClosedPlanar3D)
                         closedPlanar3Ds.Add((IClosedPlanar3D)geometry3D);
