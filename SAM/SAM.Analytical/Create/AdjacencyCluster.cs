@@ -365,6 +365,8 @@ namespace SAM.Analytical
             shells_Temp.FillFace3Ds(panels_Merged.ConvertAll(x => x.GetFace3D()), 0.1, maxDistance, maxAngle, tolerance_Distance);
             shells_Temp.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
 
+            shells_Temp = shells_Temp.Snap(shells, silverSpacing, tolerance_Distance);
+
             //Creating Shell Panels
             foreach (Shell shell_Temp in shells_Temp)
             {
@@ -665,6 +667,12 @@ namespace SAM.Analytical
                     Face3D face3D_New = plane.Convert(face2D);
                     if (face3D_New == null)
                         continue;
+
+                    Face3D face3D_New_Snap = face3D_New.Snap(shells, silverSpacing, tolerance_Distance);
+                    if(face3D_New_Snap != null)
+                    {
+                        face3D_New = face3D_New_Snap;
+                    }    
 
                     Panel panel_New = new Panel(guid, panel, face3D_New, null, true, minArea);
                     tuples[i].Add(panel_New);
