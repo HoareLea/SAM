@@ -72,6 +72,7 @@
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Component\SAMAnalyticalAlignHorizontalPanelByElevations.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByBreps.cs" />
     <Compile Include="Component\SAMAnalyticalCreateShellsByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByMaxRectangle3D.cs" />
     <Compile Include="Component\SAMAnalyticalFillFloorsAndRoofs.cs" />
@@ -119,7 +120,7 @@
     <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalAddObject.cs" />
-    <Compile Include="Component\SAMAnalyticalAnalyticalCreatePanelsByShell.cs" />
+    <Compile Include="Component\SAMAnalyticalCreatePanelsByShell.cs" />
     <Compile Include="Component\SAMAnalyticalMapAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalAdjustRoofs.cs" />
     <Compile Include="Component\SAMAnalyticalOffsetPanel.cs" />

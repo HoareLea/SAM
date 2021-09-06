@@ -87,5 +87,40 @@ namespace SAM.Analytical
 
             return Cut(panel, planes, tolerance);
         }
+
+        public static AdjacencyCluster Cut(this AdjacencyCluster adjacencyCluster, double elevation, double tolerance = Tolerance.Distance)
+        {
+            if(adjacencyCluster == null)
+            {
+                return null;
+            }
+
+            AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
+
+            List<Panel> panels = adjacencyCluster.GetPanels();
+            if(panels == null || panels.Count == 0)
+            {
+                return result;
+            }
+
+            foreach(Panel panel in panels)
+            {
+                List<Panel> panels_Cut = panel.Cut(elevation, tolerance);
+                if(panels_Cut != null && panels_Cut.Count > 1)
+                {
+                    List<object> relatedObjects = result.GetRelatedObjects(panel);
+                    if(result.RemoveObject<Panel>(panel.Guid))
+                    {
+                        foreach(Panel panel_Cut in panels_Cut)
+                        {
+                            result.AddObject(panel_Cut);
+                            relatedObjects?.ForEach(x => result.AddRelation(panel_Cut, x));
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }

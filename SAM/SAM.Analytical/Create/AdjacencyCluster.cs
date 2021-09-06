@@ -224,7 +224,7 @@ namespace SAM.Analytical
             AdjacencyCluster result = new AdjacencyCluster();
 
             //Match spaces with shells
-            Dictionary<Shell, List<Space>> dictionary_Spaces = new Dictionary<Shell, List<Space>>(); ;
+            Dictionary<Shell, List<Space>> dictionary_Spaces = new Dictionary<Shell, List<Space>>();
             HashSet<string> names = new HashSet<string>();
             if (spaces != null)
             {
@@ -739,6 +739,34 @@ namespace SAM.Analytical
             }
 
             result = result.UpdateNormals(false, silverSpacing, tolerance_Distance);
+
+            return result;
+        }
+
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, double elevationGround = 0, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        {
+            if(shells == null)
+            {
+                return null;
+            }
+
+            List<Panel> panels = new List<Panel>();
+            foreach(Shell shell in shells)
+            {
+                List<Panel> panels_Shell = Panels(shell, silverSpacing, tolerance_Distance);
+                if (panels_Shell != null && panels_Shell.Count != 0)
+                {
+                    panels.AddRange(panels_Shell);
+                }
+            }
+
+            AdjacencyCluster result = AdjacencyCluster(shells, null, panels, true, true, thinnessRatio, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance, tolerance_Angle);
+            if(result != null)
+            {
+                result = result.Cut(elevationGround, tolerance_Distance);
+                result.UpdatePanelTypes(elevationGround);
+                result.SetDefaultConstructionByPanelType();
+            }
 
             return result;
         }

@@ -10,7 +10,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAnalyticalCreatePanelsByShell : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalCreatePanelsByShell : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAnalyticalCreatePanelsByShell()
+        public SAMAnalyticalCreatePanelsByShell()
           : base("SAMAnalytical.CreatePanelsByShell", "SAMAnalytical.CreatePanelsByShell",
               "Creates Panels By Shell",
               "SAM", "Analytical")
