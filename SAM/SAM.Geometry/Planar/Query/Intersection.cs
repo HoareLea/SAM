@@ -200,29 +200,67 @@ namespace SAM.Geometry.Planar
 
         public static List<Segment2D> Intersection(this Face2D face2D, Segment2D segment2D, double tolerance = Core.Tolerance.MicroDistance)
         {
-            Polygon polygon = face2D?.ToNTS(tolerance);
-            if (polygon == null)
+            if(face2D == null || segment2D == null)
+            {
                 return null;
+            }
+
+            if(!segment2D.IsValid() || segment2D.GetLength() < tolerance)
+            {
+                return null;
+            }
 
             LineString lineString = segment2D?.ToNTS(tolerance);
             if (lineString == null)
                 return null;
 
-            NetTopologySuite.Geometries.Geometry geometry = polygon.Intersection(lineString);
-            if (geometry == null || !geometry.IsValid || geometry.IsEmpty)
-                return null;
-
-            if (geometry is LineString)
-                return new List<Segment2D>(((LineString)geometry).ToSAM().GetSegments());
-
-            if (geometry is MultiLineString)
+            List<Face2D> face2Ds = face2D.FixEdges(tolerance);
+            if (face2Ds == null || face2Ds.Count == 0)
             {
-                List<Segment2D> result = new List<Segment2D>();
-                ((MultiLineString)geometry).ToSAM().ForEach(x => result.AddRange(x));
-                return result;
+                face2Ds = new List<Face2D>() { face2D };
             }
 
-            return null;
+            List<Segment2D> result = new List<Segment2D>();
+            foreach(Face2D face2D_Temp in face2Ds)
+            {
+                Polygon polygon = face2D_Temp?.ToNTS(tolerance);
+                if (polygon == null)
+                {
+                    continue;
+                }
+
+                NetTopologySuite.Geometries.Geometry geometry = polygon.Intersection(lineString);
+                if (geometry == null || !geometry.IsValid || geometry.IsEmpty)
+                {
+                    continue;
+                }
+
+                if(geometry is LineString)
+                {
+                    List<Segment2D> segment2Ds_Temp = ((LineString)geometry).ToSAM()?.GetSegments();
+                    if(segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
+                    {
+                        result.AddRange(segment2Ds_Temp);
+                    }
+                }
+                else if(geometry is MultiLineString)
+                {
+                    List<Polyline2D> polyline2Ds = ((MultiLineString)geometry).ToSAM();
+                    if(polyline2Ds != null && polyline2Ds.Count != 0)
+                    {
+                        foreach(Polyline2D polyline2D in polyline2Ds)
+                        {
+                            List<Segment2D> segment2Ds_Temp = polyline2D?.GetSegments();
+                            if (segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
+                            {
+                                result.AddRange(segment2Ds_Temp);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
 
         public static List<T> Intersection<T>(this IClosed2D closed2D_1, IClosed2D closed2D_2, double tolerance = Core.Tolerance.MicroDistance) where T : ISAMGeometry2D
