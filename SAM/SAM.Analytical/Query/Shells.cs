@@ -364,8 +364,16 @@ namespace SAM.Analytical
             for (int i = 0; i < count - 1; i++)
             {
                 List<Shell> shells = tuples_Shell[i]?.Item2;
-                if (shells != null && shells.Count != 0)
-                    result.AddRange(shells);
+                if (shells == null || shells.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach(Shell shell in shells)
+                {
+                    shell.OrientNormals(false, silverSpacing, tolerance_Distance);
+                    result.Add(shell);
+                }
             }
 
             return result;
