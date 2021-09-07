@@ -367,6 +367,24 @@ namespace SAM.Analytical
                 }
             }
 
+            List<double> elevations = new List<double>();
+            foreach(Shell shell_Temp in shells_Temp)
+            {
+                double elevation = Core.Query.Round(shell_Temp.GetBoundingBox().Min.Z, silverSpacing);
+                int index = elevations.FindIndex(x => elevation.AlmostEqual(x, silverSpacing));
+                if(index == -1)
+                {
+                    elevations.Add(elevation);
+                }
+            }
+
+            elevations.Sort();
+            List<Architectural.Level> levels = new List<Architectural.Level>();
+            for(int i =0; i < elevations.Count; i++)
+            {
+                levels.Add(new Architectural.Level("Level " + i.ToString(), elevations[i]));
+            }
+
             //Creating Shell Panels
             foreach (Shell shell_Temp in shells_Temp)
             {
@@ -411,7 +429,22 @@ namespace SAM.Analytical
                 if (spaces_Shell == null || spaces_Shell.Count == 0)
                     continue;
 
+                double elevation = shell_Temp.GetBoundingBox().Min.Z;
+
+                List<Tuple<double, Architectural.Level>> tuples_Level = levels.ConvertAll(x => new Tuple<double, Architectural.Level>(System.Math.Abs(x.Elevation - elevation), x));
+                tuples_Level.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+                Architectural.Level level = tuples_Level.FirstOrDefault()?.Item2;
+
+
                 double volume = shell_Temp.Volume(silverSpacing, tolerance_Distance);
+
+                double area_Shell = double.NaN;
+                List<Face3D> face3Ds_Section = shell_Temp.Section(silverSpacing, true, tolerance_Angle, tolerance_Distance, silverSpacing);
+                if (face3Ds_Section != null && face3Ds_Section.Count > 0)
+                {
+                    area_Shell = face3Ds_Section.ConvertAll(x => x.GetArea()).FindAll(x => !double.IsNaN(x)).Sum();
+                }
+
                 foreach (Space space in spaces_Shell)
                 {
                     if (result.GetObject<Space>(space.Guid) != null)
@@ -421,6 +454,16 @@ namespace SAM.Analytical
                     if(!double.IsNaN(volume))
                     {
                         space_Temp.SetValue(SpaceParameter.Volume, volume);
+                    }
+
+                    if (!double.IsNaN(area_Shell))
+                    {
+                        space_Temp.SetValue(SpaceParameter.Area, area_Shell);
+                    }
+
+                    if(level != null)
+                    {
+                        space_Temp.SetValue(SpaceParameter.LevelName, level.Name);
                     }
 
                     result.AddObject(space_Temp);
