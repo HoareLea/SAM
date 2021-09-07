@@ -57,7 +57,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            return result;
+            return System.Math.Abs(result);
 
         }
 
