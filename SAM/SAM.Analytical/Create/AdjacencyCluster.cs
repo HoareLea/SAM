@@ -416,7 +416,9 @@ namespace SAM.Analytical
                     if (result.GetObject<Space>(space.Guid) != null)
                         continue;
 
-                    result.AddObject(space);
+                    Space space_Temp = new Space(space);
+
+                    result.AddObject(space_Temp);
                 }
 
                 BoundingBox3D boundingBox3D_Shell = shell_Temp.GetBoundingBox(maxDistance);

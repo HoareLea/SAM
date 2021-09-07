@@ -78,6 +78,8 @@
     <Compile Include="Planar\Query\Edges.cs" />
     <Compile Include="Planar\Query\Reduce.cs" />
     <Compile Include="Spatial\Classes\Ellipse3D.cs" />
+    <Compile Include="Spatial\Classes\Mesh3D.cs" />
+    <Compile Include="Spatial\Create\Mesh3D.cs" />
     <Compile Include="Spatial\Create\IClosedPlanar3D.cs" />
     <Compile Include="Create\UndirectedGraph.cs" />
     <Compile Include="Create\ISAMGeometries.cs" />
@@ -203,6 +205,8 @@
     <Compile Include="Spatial\Modify\SplitFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Volume.cs" />
+    <Compile Include="Spatial\Query\SignedVolume.cs" />
     <Compile Include="Spatial\Query\Fill.cs" />
     <Compile Include="Spatial\Query\MaxRectangle3D.cs" />
     <Compile Include="Spatial\Query\RemoveInvalidFace3Ds.cs" />
