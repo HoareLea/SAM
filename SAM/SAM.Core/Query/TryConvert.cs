@@ -422,6 +422,39 @@ namespace SAM.Core
                     }
                 }
             }
+            else if(type.IsEnum)
+            {
+                if(@object == null)
+                {
+                    return false;
+                }
+
+                if(@object is string)
+                {
+                    string @string = ((string)@object).Replace(" ", string.Empty).ToUpper();
+                    if(string.IsNullOrEmpty(@string))
+                    {
+                        return false;
+                    }
+
+                    foreach (Enum @enum in System.Enum.GetValues(type))
+                    {
+                        string name = @enum.ToString().ToUpper();
+                        if (@string.Equals(name))
+                        {
+                            result = @enum;
+                            return true;
+                        }
+
+                        string description = Description(@enum)?.Replace(" ", string.Empty)?.ToUpper();
+                        if(@string.Equals(description))
+                        {
+                            result = @enum;
+                            return true;
+                        }
+                    }
+                }
+            }
 
             result = default;
             return false;
