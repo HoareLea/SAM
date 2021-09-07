@@ -373,7 +373,7 @@ namespace SAM.Geometry.Spatial
                 return boundaries?.ConvertAll(x => new Tuple<BoundingBox3D, Face3D>(new BoundingBox3D( x.Item1), new Face3D(x.Item2)));
             }
         }
-               
+
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             if (boundingBox3D == null)
