@@ -60,5 +60,27 @@ namespace SAM.Geometry.Spatial
             return result;
 
         }
+
+        public static double Volume(this Extrusion extrusion)
+        {
+            if(extrusion == null)
+            {
+                return double.NaN;
+            }
+
+            Face3D face3D = extrusion.Face3D;
+            if(face3D == null)
+            {
+                return double.NaN;
+            }
+
+            Vector3D vector3D = extrusion.Vector;
+            if(vector3D == null)
+            {
+                return double.NaN;
+            }
+
+            return face3D.GetArea() * vector3D.Length;
+        }
     }
 }
