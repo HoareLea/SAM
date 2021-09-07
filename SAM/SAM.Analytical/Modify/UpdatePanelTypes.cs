@@ -104,8 +104,28 @@ namespace SAM.Analytical
 
                         case PanelType.Roof:
                             elevation = Query.MaxElevation(panel);
-                            if (elevation < elevation_Ground)
-                                panelType = PanelType.UndergroundCeiling;
+                            panelType_Normal = Query.PanelType(panel.Normal);
+                            if(panelType_Normal == PanelType.Floor)
+                            {
+                                if (elevation < elevation_Ground)
+                                {
+                                    panelType = PanelType.UndergroundSlab;
+                                }
+                                else if(System.Math.Abs(elevation - elevation_Ground) < Tolerance.MacroDistance)
+                                {
+                                    panelType = PanelType.SlabOnGrade;
+                                }
+                                else
+                                {
+                                    panelType = PanelType.FloorExposed;
+                                }
+                            }
+                            else
+                            {
+                                if (elevation < elevation_Ground)
+                                    panelType = PanelType.UndergroundCeiling;
+                            }
+
                             break;
                     }                 
 
