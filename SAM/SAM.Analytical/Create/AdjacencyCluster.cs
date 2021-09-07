@@ -223,73 +223,6 @@ namespace SAM.Analytical
         {
             AdjacencyCluster result = new AdjacencyCluster();
 
-            //Match spaces with shells
-            Dictionary<Shell, List<Space>> dictionary_Spaces = new Dictionary<Shell, List<Space>>();
-            HashSet<string> names = new HashSet<string>();
-            if (spaces != null)
-            {
-                foreach (Space space in spaces)
-                {
-                    Point3D point3D = space?.Location;
-                    if (point3D == null)
-                        continue;
-
-                    names.Add(space.Name);
-
-                    List<Shell> spaces_Shell = Query.SpaceShells(shells, point3D, silverSpacing, tolerance_Distance);
-                    if (spaces_Shell != null && spaces_Shell.Count > 0)
-                    {
-                        foreach (Shell shell in spaces_Shell)
-                        {
-                            if (!dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Temp))
-                            {
-                                spaces_Temp = new List<Space>();
-                                dictionary_Spaces[shell] = spaces_Temp;
-                            }
-
-                            spaces_Temp.Add(space);
-                        }
-                    }
-                }
-            }
-
-            if (!addMissingSpaces && (dictionary_Spaces == null || dictionary_Spaces.Count() == 0))
-                return result;
-
-            foreach (KeyValuePair<Shell, List<Space>> keyValuePair in dictionary_Spaces)
-            {
-                if (keyValuePair.Value == null)
-                    continue;
-
-                if (keyValuePair.Value.Count < 2)
-                    continue;
-
-                List<Space> spaces_Shell = new List<Space>();
-                foreach (Space space in keyValuePair.Value)
-                {
-                    Point3D point3D = space.Location.GetMoved(new Vector3D(0, 0, silverSpacing)) as Point3D;
-                    if (point3D == null)
-                    {
-                        continue;
-                    }
-
-                    if (!keyValuePair.Key.Inside(point3D, silverSpacing, tolerance_Distance))
-                    {
-                        spaces_Shell.Add(space);
-                    }
-                }
-
-                if (spaces_Shell.Count != 0)
-                {
-                    if (spaces_Shell.Count == keyValuePair.Value.Count)
-                    {
-                        spaces_Shell.RemoveAt(0);
-                    }
-
-                    keyValuePair.Value.RemoveAll(x => spaces_Shell.Contains(x));
-                }
-            }
-
             List<Tuple<Plane, Face3D, Panel, BoundingBox3D, double>> tuples_Panel = new List<Tuple<Plane, Face3D, Panel, BoundingBox3D, double>>();
             foreach (Panel panel in panels)
             {
@@ -366,6 +299,73 @@ namespace SAM.Analytical
             shells_Temp.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
 
             shells_Temp = shells_Temp.Snap(shells, silverSpacing, tolerance_Distance);
+
+            //Match spaces with shells
+            Dictionary<Shell, List<Space>> dictionary_Spaces = new Dictionary<Shell, List<Space>>();
+            HashSet<string> names = new HashSet<string>();
+            if (spaces != null)
+            {
+                foreach (Space space in spaces)
+                {
+                    Point3D point3D = space?.Location;
+                    if (point3D == null)
+                        continue;
+
+                    names.Add(space.Name);
+
+                    List<Shell> spaces_Shell = Query.SpaceShells(shells_Temp, point3D, silverSpacing, tolerance_Distance);
+                    if (spaces_Shell != null && spaces_Shell.Count > 0)
+                    {
+                        foreach (Shell shell in spaces_Shell)
+                        {
+                            if (!dictionary_Spaces.TryGetValue(shell, out List<Space> spaces_Temp))
+                            {
+                                spaces_Temp = new List<Space>();
+                                dictionary_Spaces[shell] = spaces_Temp;
+                            }
+
+                            spaces_Temp.Add(space);
+                        }
+                    }
+                }
+            }
+
+            if (!addMissingSpaces && (dictionary_Spaces == null || dictionary_Spaces.Count() == 0))
+                return result;
+
+            foreach (KeyValuePair<Shell, List<Space>> keyValuePair in dictionary_Spaces)
+            {
+                if (keyValuePair.Value == null)
+                    continue;
+
+                if (keyValuePair.Value.Count < 2)
+                    continue;
+
+                List<Space> spaces_Shell = new List<Space>();
+                foreach (Space space in keyValuePair.Value)
+                {
+                    Point3D point3D = space.Location.GetMoved(new Vector3D(0, 0, silverSpacing)) as Point3D;
+                    if (point3D == null)
+                    {
+                        continue;
+                    }
+
+                    if (!keyValuePair.Key.Inside(point3D, silverSpacing, tolerance_Distance))
+                    {
+                        spaces_Shell.Add(space);
+                    }
+                }
+
+                if (spaces_Shell.Count != 0)
+                {
+                    if (spaces_Shell.Count == keyValuePair.Value.Count)
+                    {
+                        spaces_Shell.RemoveAt(0);
+                    }
+
+                    keyValuePair.Value.RemoveAll(x => spaces_Shell.Contains(x));
+                }
+            }
 
             //Creating Shell Panels
             foreach (Shell shell_Temp in shells_Temp)

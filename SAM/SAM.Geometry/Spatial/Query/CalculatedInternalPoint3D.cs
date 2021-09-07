@@ -7,7 +7,7 @@ namespace SAM.Geometry.Spatial
     {
         public static Point3D CalculatedInternalPoint3D(this Shell shell, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if (shell == null || !shell.IsClosed(tolerance))
+            if (shell == null || !shell.IsClosed(silverSpacing))
                 return null;
 
             BoundingBox3D boundingBox3D = shell.GetBoundingBox();

@@ -128,7 +128,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<double> elevations = new List<double>();
-            index = Params.IndexOfInputParam("elevations_");
+            index = Params.IndexOfInputParam("_elevations");
             if (index == -1 || !dataAccess.GetDataList(index, elevations))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
