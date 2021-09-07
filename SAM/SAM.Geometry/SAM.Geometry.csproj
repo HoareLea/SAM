@@ -205,6 +205,7 @@
     <Compile Include="Spatial\Modify\SplitFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Area.cs" />
     <Compile Include="Spatial\Query\Volume.cs" />
     <Compile Include="Spatial\Query\SignedVolume.cs" />
     <Compile Include="Spatial\Query\Fill.cs" />

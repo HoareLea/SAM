@@ -436,14 +436,8 @@ namespace SAM.Analytical
                 Architectural.Level level = tuples_Level.FirstOrDefault()?.Item2;
 
 
-                double volume = shell_Temp.Volume(silverSpacing, tolerance_Distance);
-
-                double area_Shell = double.NaN;
-                List<Face3D> face3Ds_Section = shell_Temp.Section(silverSpacing, true, tolerance_Angle, tolerance_Distance, silverSpacing);
-                if (face3Ds_Section != null && face3Ds_Section.Count > 0)
-                {
-                    area_Shell = face3Ds_Section.ConvertAll(x => x.GetArea()).FindAll(x => !double.IsNaN(x)).Sum();
-                }
+                double volume_Shell = shell_Temp.Volume(silverSpacing, tolerance_Distance);
+                double area_Shell = shell_Temp.Area(silverSpacing, tolerance_Angle, tolerance_Distance, silverSpacing);
 
                 foreach (Space space in spaces_Shell)
                 {
@@ -451,9 +445,9 @@ namespace SAM.Analytical
                         continue;
 
                     Space space_Temp = new Space(space);
-                    if(!double.IsNaN(volume))
+                    if(!double.IsNaN(volume_Shell))
                     {
-                        space_Temp.SetValue(SpaceParameter.Volume, volume);
+                        space_Temp.SetValue(SpaceParameter.Volume, volume_Shell);
                     }
 
                     if (!double.IsNaN(area_Shell))
