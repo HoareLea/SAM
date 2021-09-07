@@ -411,12 +411,17 @@ namespace SAM.Analytical
                 if (spaces_Shell == null || spaces_Shell.Count == 0)
                     continue;
 
+                double volume = shell_Temp.Volume(silverSpacing, tolerance_Distance);
                 foreach (Space space in spaces_Shell)
                 {
                     if (result.GetObject<Space>(space.Guid) != null)
                         continue;
 
                     Space space_Temp = new Space(space);
+                    if(!double.IsNaN(volume))
+                    {
+                        space_Temp.SetValue(SpaceParameter.Volume, volume);
+                    }
 
                     result.AddObject(space_Temp);
                 }
