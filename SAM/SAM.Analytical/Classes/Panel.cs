@@ -294,7 +294,7 @@ namespace SAM.Analytical
 
         public double DistanceToEdges(Point3D point3D)
         {
-            return GetFace3D().DistanceToEdge2Ds(point3D);
+            return GetFace3D().DistanceToEdges(point3D);
         }
 
         public PlanarBoundary3D PlanarBoundary3D

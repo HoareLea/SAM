@@ -46,7 +46,7 @@ namespace SAM.Geometry.Spatial
                             }
                         }
 
-                        double distance = face3D.DistanceToEdge2Ds(point3D);
+                        double distance = face3D.DistanceToEdges(point3D);
                         if (distance < maxTolerance && distance > minTolerance)
                         {
                             if (!result.TryGetValue(point3D, out List<Face3D> face3Ds_Temp))

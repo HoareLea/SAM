@@ -223,7 +223,7 @@ namespace SAM.Geometry.Spatial
             return jObject;
         }
 
-        public double Distance(Point3D point3D)
+        public double Distance(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
             if (point3D == null)
                 return double.NaN;
@@ -235,12 +235,12 @@ namespace SAM.Geometry.Spatial
                 return double.NaN;
 
             double a = point3D_Project.Distance(point3D);
-            double b = Distance(point2D);
+            double b = Distance(point2D, tolerance);
 
             return System.Math.Sqrt((a * a) + (b * b));
         }
 
-        public double DistanceToEdge2Ds(Point3D point3D)
+        public double DistanceToEdges(Point3D point3D)
         {
             if (point3D == null)
                 return double.NaN;

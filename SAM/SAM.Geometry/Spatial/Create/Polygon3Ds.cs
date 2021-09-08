@@ -97,7 +97,7 @@ namespace SAM.Geometry.Spatial
         {
             List<Polygon3D> result = new List<Polygon3D>();
             foreach (Triangle3D triangle3D in triangle3Ds)
-                result.Add(triangle3D.ToPolygon());
+                result.Add(Polygon3D(triangle3D));
 
             return result;
         }

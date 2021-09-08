@@ -309,8 +309,53 @@ namespace SAM.Geometry.Spatial
 
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
+            if(points == null || indexes == null)
+            {
+                return false;
+            }
+            
+            if(!GetBoundingBox().InRange(point3D, tolerance))
+            {
+                return false;
+            }
+
+            for(int i=0; i < indexes.Count; i++)
+            {
+                Triangle3D triangle3D = GetTriangle(i);
+                if(triangle3D == null)
+                {
+                    continue;
+                }
+
+                if(!triangle3D.GetBoundingBox().InRange(point3D, tolerance))
+                {
+                    continue;
+                }
+
+                double distance = new Face3D(triangle3D).Distance(point3D, tolerance);
+                if(distance < tolerance)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool OnEdge(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (points == null)
+            {
+                return false;
+            }
+
+            if (!GetBoundingBox().InRange(point3D, tolerance))
+            {
+                return false;
+            }
+
             List<Segment3D> segment3Ds = GetSegments(false);
-            if(segment3Ds == null || segment3Ds.Count == 0)
+            if (segment3Ds == null || segment3Ds.Count == 0)
             {
                 return false;
             }

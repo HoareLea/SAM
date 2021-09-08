@@ -51,7 +51,7 @@ namespace SAM.Geometry.Spatial
                 double distance_Min = double.MaxValue;
                 foreach(Face3D face3D in dictionary.Keys)
                 {
-                    double distance_Min_Temp = face3D.Distance(point3D_Mid);
+                    double distance_Min_Temp = face3D.Distance(point3D_Mid, tolerance);
                     if (distance_Min_Temp < distance_Min)
                         distance_Min = distance_Min_Temp;
                 }
@@ -66,7 +66,7 @@ namespace SAM.Geometry.Spatial
                 double distance_Min = double.MaxValue;
                 foreach (Face3D face3D in dictionary.Keys)
                 {
-                    double distance_Min_Temp = face3D.Distance(point3D_Internal);
+                    double distance_Min_Temp = face3D.Distance(point3D_Internal, tolerance);
                     if (distance_Min_Temp < distance_Min)
                         distance_Min = distance_Min_Temp;
                 }

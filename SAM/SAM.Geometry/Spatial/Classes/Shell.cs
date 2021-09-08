@@ -269,7 +269,7 @@ namespace SAM.Geometry.Spatial
 
             List<int> result = new List<int>();
 
-            List<double> distances = boundaries.ConvertAll(x => x.Item2.Distance(point3D));
+            List<double> distances = boundaries.ConvertAll(x => x.Item2.Distance(point3D, tolerance));
             double min = distances.Min();
             for (int i = 0; i < distances.Count; i++)
             {

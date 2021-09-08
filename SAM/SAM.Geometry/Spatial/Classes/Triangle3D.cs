@@ -49,6 +49,35 @@ namespace SAM.Geometry.Spatial
             return Create.Plane(points, Core.Tolerance.Distance);
         }
 
+        public double Distance(Point3D point3D)
+        {
+            if (point3D == null || points == null)
+                return double.NaN;
+
+            Plane plane = new Plane(points[0], points[1], points[2]);
+            if (plane == null || !plane.IsValid())
+            {
+                return double.NaN;
+            }
+
+            Point3D point3D_Project = plane.Project(point3D);
+
+            Planar.Point2D point2D = plane.Convert(point3D_Project);
+            if (point2D == null)
+                return double.NaN;
+
+            List<Planar.Segment2D> segment2Ds = plane.Convert(this)?.GetSegments();
+            if (segment2Ds == null || segment2Ds.Count == 0)
+            {
+                return double.NaN;
+            }
+
+            double a = point3D_Project.Distance(point3D);
+            double b = segment2Ds.ConvertAll(x => x.Distance(point2D)).Min();
+
+            return System.Math.Sqrt((a * a) + (b * b));
+        }
+
         public override ISAMGeometry Clone()
         {
             throw new NotImplementedException();
@@ -62,11 +91,6 @@ namespace SAM.Geometry.Spatial
         public List<ICurve3D> GetCurves()
         {
             return new List<ICurve3D>() { new Segment3D(points[0], points[1]), new Segment3D(points[1], points[2]), new Segment3D(points[2], points[0]) };
-        }
-
-        public Polygon3D ToPolygon()
-        {
-            return new Polygon3D(points);
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
