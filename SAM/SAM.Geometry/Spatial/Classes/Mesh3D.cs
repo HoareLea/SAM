@@ -23,8 +23,8 @@ namespace SAM.Geometry.Spatial
 
         public Mesh3D(IEnumerable<Point3D> points, IEnumerable<Tuple<int, int, int>> indexes)
         {
-            points = points?.ToList().ConvertAll(x => new Point3D(x));
-            indexes = indexes?.ToList().ConvertAll(x => new Tuple<int, int, int>(x.Item1, x.Item2, x.Item3));
+            this.points = points?.ToList().ConvertAll(x => new Point3D(x));
+            this.indexes = indexes?.ToList().ConvertAll(x => new Tuple<int, int, int>(x.Item1, x.Item2, x.Item3));
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
@@ -190,7 +190,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            return new Triangle3D(points[index_3], points[index_2], points[index_3]);
+            return new Triangle3D(points[index_1], points[index_2], points[index_3]);
         }
 
         public List<Triangle3D> GetTriangles()

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
@@ -15,6 +14,11 @@ namespace SAM.Geometry.Spatial
 
             if (count < 3)
                 return null;
+
+            if(count == 3)
+            {
+                return Normal(point3Ds.ElementAt(0), point3Ds.ElementAt(1), point3Ds.ElementAt(2));
+            }
 
             Point3D origin = point3Ds.Average();
             Vector3D normal = new Vector3D();

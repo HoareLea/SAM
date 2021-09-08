@@ -73,7 +73,7 @@ namespace SAM.Geometry.Spatial
                 }
 
                 int index_1 = -1;
-                point3Ds.FindIndex(x => x.AlmostEquals(point3Ds_Triangle[0], tolerance));
+                index_1 = point3Ds.FindIndex(x => x.AlmostEquals(point3Ds_Triangle[0], tolerance));
                 if(index_1 == -1)
                 {
                     index_1 = point3Ds.Count;
@@ -81,7 +81,7 @@ namespace SAM.Geometry.Spatial
                 }
 
                 int index_2 = -1;
-                point3Ds.FindIndex(x => x.AlmostEquals(point3Ds_Triangle[1], tolerance));
+                index_2 = point3Ds.FindIndex(x => x.AlmostEquals(point3Ds_Triangle[1], tolerance));
                 if (index_2 == -1)
                 {
                     index_2 = point3Ds.Count;
@@ -89,7 +89,7 @@ namespace SAM.Geometry.Spatial
                 }
 
                 int index_3 = -1;
-                point3Ds.FindIndex(x => x.AlmostEquals(point3Ds_Triangle[2], tolerance));
+                index_3 = point3Ds.FindIndex(x => x.AlmostEquals(point3Ds_Triangle[2], tolerance));
                 if (index_3 == -1)
                 {
                     index_3 = point3Ds.Count;

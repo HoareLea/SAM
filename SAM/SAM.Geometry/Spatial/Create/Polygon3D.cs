@@ -88,5 +88,22 @@ namespace SAM.Geometry.Spatial
 
             return new Polygon3D(plane, new Point2D[] { plane.Convert(point3D_1), plane.Convert(point3D_2), plane.Convert(point3D_3), plane.Convert(point3D_4) });
         }
+
+        public static Polygon3D Polygon3D(this Triangle3D triangle3D)
+        {
+            List<Point3D> point3Ds = triangle3D?.GetPoints();
+            if(point3Ds == null || point3Ds.Count < 3)
+            {
+                return null;
+            }
+
+            Plane plane = new Plane(point3Ds[0], point3Ds[1], point3Ds[2]);
+            if(plane == null || !plane.IsValid())
+            {
+                return null;
+            }
+
+            return new Polygon3D(plane, point3Ds.ConvertAll(x => plane.Convert(x)));
+        }
     }
 }
