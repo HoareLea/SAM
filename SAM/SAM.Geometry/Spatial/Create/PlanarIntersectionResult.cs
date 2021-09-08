@@ -549,5 +549,40 @@ namespace SAM.Geometry.Spatial
 
             return PlanarIntersectionResult(face3D_1, face3D_2, tolerance_Angle, tolerance_Distance);
         }
+
+        public static PlanarIntersectionResult PlanarIntersectionResult(Plane plane, Mesh3D mesh3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if(plane == null || mesh3D == null)
+            {
+                return null;
+            }
+
+            BoundingBox3D boundingBox3D = mesh3D.GetBoundingBox();
+            if(!plane.Intersect(boundingBox3D, tolerance_Distance))
+            {
+                return new PlanarIntersectionResult(plane);
+            }
+
+            List<ISAMGeometry3D> sAMGeometry3Ds = new List<ISAMGeometry3D>();
+            List<Triangle3D> triangle3Ds = mesh3D.GetTriangles();
+            if(triangle3Ds != null && triangle3Ds.Count != 0)
+            {
+                foreach(Triangle3D triangle3D in triangle3Ds)
+                {
+                    if(triangle3D == null)
+                    {
+                        continue;
+                    }
+
+                    PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult(plane, new Face3D(triangle3D), tolerance_Angle, tolerance_Distance);
+                    if(planarIntersectionResult != null && planarIntersectionResult.Intersecting)
+                    {
+                        sAMGeometry3Ds.AddRange(planarIntersectionResult.GetGeometry3Ds<ISAMGeometry3D>());
+                    }
+                }
+            }
+
+            return new PlanarIntersectionResult(plane, sAMGeometry3Ds);
+        }
     }
 }

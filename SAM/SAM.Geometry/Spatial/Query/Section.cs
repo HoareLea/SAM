@@ -11,6 +11,11 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
+            if(!plane.Intersect(shell.GetBoundingBox(), tolerance_Snap))
+            {
+                return null;
+            }
+
             List<Face3D> face3Ds = shell.Face3Ds;
             if (face3Ds == null)
             {
@@ -93,6 +98,16 @@ namespace SAM.Geometry.Spatial
     
         public static List<Face3D> Section(this Extrusion extrusion, Plane plane, bool includeInternalEdges = true, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
+            if(extrusion == null || plane == null)
+            {
+                return null;
+            }
+
+            if (!plane.Intersect(extrusion.GetBoundingBox(), tolerance_Snap))
+            {
+                return null;
+            }
+
             Shell shell = extrusion?.Shell();
             if(shell == null)
             {
