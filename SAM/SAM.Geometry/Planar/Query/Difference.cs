@@ -227,6 +227,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        
         private static List<Face2D> Difference_NTS(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (face2D_1 == null || face2D_2 == null)

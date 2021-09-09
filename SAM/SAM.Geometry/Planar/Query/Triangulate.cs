@@ -14,16 +14,16 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            if(point2Ds.Count() < 3)
+            if (point2Ds.Count() < 3)
             {
                 return new List<Triangle2D>();
             }
 
             List<Coordinate> coordinates = new List<Coordinate>();
-            foreach(Point2D point2D in point2Ds)
+            foreach (Point2D point2D in point2Ds)
             {
                 Coordinate coordinate = point2D.ToNTS(tolerance);
-                if(coordinate == null)
+                if (coordinate == null)
                 {
                     continue;
                 }
@@ -106,12 +106,12 @@ namespace SAM.Geometry.Planar
 
             GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
 
-            GeometryCollection geometryCollection =  delaunayTriangulationBuilder.GetTriangles(geometryFactory);
+            GeometryCollection geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
             if (geometryCollection == null)
                 return null;
 
             List<Triangle2D> result = new List<Triangle2D>();
-            foreach(NetTopologySuite.Geometries.Geometry geometry in geometryCollection.Geometries)
+            foreach (NetTopologySuite.Geometries.Geometry geometry in geometryCollection.Geometries)
             {
                 Polygon polygon_Temp = geometry as Polygon;
                 if (polygon == null)
@@ -169,7 +169,7 @@ namespace SAM.Geometry.Planar
         {
             if (triangle2D == null)
                 return null;
-            
+
             return new List<Triangle2D>() { new Triangle2D(triangle2D) };
         }
 
@@ -238,10 +238,10 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-    
+
         public static List<Triangle2D> Triangulate(this Face2D face2D, IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if(face2D == null)
+            if (face2D == null)
             {
                 return null;
             }
@@ -253,22 +253,22 @@ namespace SAM.Geometry.Planar
             }
 
             IClosed2D externalEdge = face2D.ExternalEdge2D;
-            if(externalEdge == null)
+            if (externalEdge == null)
             {
                 return null;
             }
 
             ISegmentable2D segmentable2D = externalEdge as ISegmentable2D;
-            if(segmentable2D == null)
+            if (segmentable2D == null)
             {
                 throw new System.NotImplementedException();
             }
 
-            List <Point2D> point2Ds_Triangulate = new List<Point2D>();
+            List<Point2D> point2Ds_Triangulate = new List<Point2D>();
             List<Point2D> point2Ds_Temp = null;
 
             point2Ds_Temp = segmentable2D.GetPoints();
-            if(point2Ds_Temp == null)
+            if (point2Ds_Temp == null)
             {
                 return null;
             }
@@ -276,11 +276,11 @@ namespace SAM.Geometry.Planar
             point2Ds_Triangulate.AddRange(point2Ds_Temp);
 
             List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
-            if(internalEdges != null && internalEdges.Count != 0)
+            if (internalEdges != null && internalEdges.Count != 0)
             {
-                foreach(IClosed2D internalEdge in internalEdges)
+                foreach (IClosed2D internalEdge in internalEdges)
                 {
-                    if(internalEdge == null)
+                    if (internalEdge == null)
                     {
                         continue;
                     }
@@ -301,7 +301,7 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            if(point2Ds != null && point2Ds.Count() != 0)
+            if (point2Ds != null && point2Ds.Count() != 0)
             {
                 foreach (Point2D point2D in point2Ds)
                 {
@@ -329,6 +329,37 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
+                if (internalEdges != null)
+                {
+                    Face2D face2D_Triangle = new Face2D(triangle2D);
+                    List<Face2D> face2Ds_InternalEdges = internalEdges.ConvertAll(x => new Face2D(x));
+
+                    List<Face2D> face2Ds_Difference = face2D_Triangle.Difference(face2Ds_InternalEdges, tolerance);
+                    if (face2Ds_Difference != null)
+                    {
+                        foreach(Face2D face2D_Difference in face2Ds_Difference)
+                        {
+                            List<Triangle2D> triangle2Ds = face2D_Difference?.Triangulate(tolerance);
+                            if(triangle2Ds != null && triangle2Ds.Count != 0)
+                            {
+                                result.AddRange(triangle2Ds);
+                            }
+                        }
+                    }
+                    result.RemoveAt(i);
+                    continue;
+                }
+            }
+
+            for (int i = result.Count - 1; i >= 0; i--)
+            {
+                Triangle2D triangle2D = result[i];
+                if (triangle2D == null)
+                {
+                    result.RemoveAt(i);
+                    continue;
+                }
+
                 Point2D point2D = triangle2D.GetCentroid();
                 if (!boundingBox2D.InRange(point2D, tolerance))
                 {
@@ -344,8 +375,6 @@ namespace SAM.Geometry.Planar
             }
 
             return result;
-
-
         }
     }
 }
