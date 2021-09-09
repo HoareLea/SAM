@@ -72,6 +72,7 @@
     <Compile Include="Enums\EdgeOrientationMethod.cs" />
     <Compile Include="Enums\Padding.cs" />
     <Compile Include="Planar\Classes\ConvexHullComparer.cs" />
+    <Compile Include="Planar\Classes\Mesh2D.cs" />
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
     <Compile Include="Planar\Query\Fill.cs" />

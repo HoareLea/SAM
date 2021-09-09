@@ -3,45 +3,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SAM.Geometry.Spatial
+namespace SAM.Geometry.Planar
 {
-    public class Mesh3D : SAMGeometry, ISAMGeometry3D, IBoundable3D
+    public class Mesh2D : SAMGeometry, ISAMGeometry2D, IBoundable2D
     {
-        private List<Point3D> points;
+        private List<Point2D> points;
         private List<Tuple<int, int, int>> indexes;
         
-        public Mesh3D(JObject jObject)
+        public Mesh2D(JObject jObject)
         {
             FromJObject(jObject);
         }
 
-        public Mesh3D(Mesh3D mesh3D)
+        public Mesh2D(Mesh2D mesh2D)
         {
-            points = mesh3D?.points?.ConvertAll(x => new Point3D(x));
-            indexes = mesh3D?.indexes?.ConvertAll(x => new Tuple<int, int, int>(x.Item1, x.Item2, x.Item3));
+            points = mesh2D?.points?.ConvertAll(x => new Point2D(x));
+            indexes = mesh2D?.indexes?.ConvertAll(x => new Tuple<int, int, int>(x.Item1, x.Item2, x.Item3));
         }
 
-        public Mesh3D(IEnumerable<Point3D> points, IEnumerable<Tuple<int, int, int>> indexes)
+        public Mesh2D(IEnumerable<Point2D> points, IEnumerable<Tuple<int, int, int>> indexes)
         {
-            this.points = points?.ToList().ConvertAll(x => new Point3D(x));
+            this.points = points?.ToList().ConvertAll(x => new Point2D(x));
             this.indexes = indexes?.ToList().ConvertAll(x => new Tuple<int, int, int>(x.Item1, x.Item2, x.Item3));
         }
 
-        public ISAMGeometry3D GetMoved(Vector3D vector3D)
+        public ISAMGeometry2D GetMoved(Vector2D vector2D)
         {
-            return new Mesh3D(points?.ConvertAll(x => x.GetMoved(vector3D) as Point3D), indexes);
+            return new Mesh2D(points?.ConvertAll(x => x.GetMoved(vector2D) as Point2D), indexes);
         }
 
-        public int IndexOf(Point3D point3D)
+        public int IndexOf(Point2D point2D)
         {
-            if (point3D == null || points == null)
+            if (point2D == null || points == null)
             {
                 return -1;
             }
 
             for (int i = 0; i < points.Count; i++)
             {
-                if (point3D.Equals(points[i]))
+                if (point2D.Equals(points[i]))
                 {
                     return i;
                 }
@@ -50,33 +50,28 @@ namespace SAM.Geometry.Spatial
             return -1;
         }
 
-        public int IndexOf(Point3D point3D, double tolerance)
+        public int IndexOf(Point2D point2D, double tolerance)
         {
-            if (point3D == null || points == null)
+            if (point2D == null || points == null)
             {
                 return -1;
             }
 
             for (int i = 0; i < points.Count; i++)
             {
-                if (point3D.AlmostEquals(points[i], tolerance))
+                if (point2D.AlmostEquals(points[i], tolerance))
                 {
                     return i;
                 }
             }
 
             return -1;
-        }
-
-        public ISAMGeometry3D GetTransformed(Transform3D transform3D)
-        {
-            return new Mesh3D(points?.ConvertAll(x => x.GetTransformed(transform3D) as Point3D), indexes);
         }
 
         public override bool FromJObject(JObject jObject)
         {
             if (jObject.ContainsKey("Points"))
-                points = Create.Point3Ds(jObject.Value<JArray>("Points"));
+                points = Create.Point2Ds(jObject.Value<JArray>("Points"));
 
             if (jObject.ContainsKey("Indexes"))
             {
@@ -130,7 +125,7 @@ namespace SAM.Geometry.Spatial
 
         public override ISAMGeometry Clone()
         {
-            return new Mesh3D(points, indexes);
+            return new Mesh2D(points, indexes);
         }
 
         public int TrianglesCount
@@ -160,7 +155,7 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public Triangle3D GetTriangle(int index)
+        public Triangle2D GetTriangle(int index)
         {
             if(points == null || indexes == null)
             {
@@ -190,10 +185,10 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            return new Triangle3D(points[index_1], points[index_2], points[index_3]);
+            return new Triangle2D(points[index_1], points[index_2], points[index_3]);
         }
 
-        public List<Triangle3D> GetTriangles()
+        public List<Triangle2D> GetTriangles()
         {
             if(points == null || indexes == null)
             {
@@ -206,7 +201,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            List<Triangle3D> result = new List<Triangle3D>();
+            List<Triangle2D> result = new List<Triangle2D>();
             if(count == 0)
             {
                 return result;
@@ -220,34 +215,34 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public List<Segment3D> GetSegments()
+        public List<Segment2D> GetSegments()
         {
             return GetSegments(false);
         }
 
-        public List<Segment3D> GetSegments(bool includeSimiliar)
+        public List<Segment2D> GetSegments(bool includeSimiliar)
         {
             if(points == null || indexes == null)
             {
                 return null;
             }
 
-            List<Segment3D> result = new List<Segment3D>();
+            List<Segment2D> result = new List<Segment2D>();
 
             if (includeSimiliar)
             {
-                List<Triangle3D> triangle3Ds = GetTriangles();
-                if(triangle3Ds == null)
+                List<Triangle2D> triangle2Ds = GetTriangles();
+                if(triangle2Ds == null)
                 {
                     return null;
                 }
 
-                foreach(Triangle3D triangle3D in triangle3Ds)
+                foreach(Triangle2D triangle2D in triangle2Ds)
                 {
-                    List<Segment3D> segment3Ds_Triangle3D = triangle3D?.GetSegments();
-                    if(segment3Ds_Triangle3D != null && segment3Ds_Triangle3D.Count != 0)
+                    List<Segment2D> segment3Ds_Triangle2D = triangle2D?.GetSegments();
+                    if(segment3Ds_Triangle2D != null && segment3Ds_Triangle2D.Count != 0)
                     {
-                        result.AddRange(segment3Ds_Triangle3D);
+                        result.AddRange(segment3Ds_Triangle2D);
                     }
                 }
 
@@ -295,44 +290,44 @@ namespace SAM.Geometry.Spatial
                         continue;
                     }
 
-                    result.Add(new Segment3D(points[tuple.Item1], points[tuple.Item2]));
+                    result.Add(new Segment2D(points[tuple.Item1], points[tuple.Item2]));
                 }
             }
 
             return result;
         }
 
-        public List<Point3D> GetPoints()
+        public List<Point2D> GetPoints()
         {
-            return points?.ConvertAll(x => new Point3D(x));
+            return points?.ConvertAll(x => new Point2D(x));
         }
 
-        public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if(points == null || indexes == null)
             {
                 return false;
             }
             
-            if(!GetBoundingBox().InRange(point3D, tolerance))
+            if(!GetBoundingBox().InRange(point2D, tolerance))
             {
                 return false;
             }
 
             for(int i=0; i < indexes.Count; i++)
             {
-                Triangle3D triangle3D = GetTriangle(i);
-                if(triangle3D == null)
+                Triangle2D triangle2D = GetTriangle(i);
+                if(triangle2D == null)
                 {
                     continue;
                 }
 
-                if(!triangle3D.GetBoundingBox().InRange(point3D, tolerance))
+                if(!triangle2D.GetBoundingBox().InRange(point2D, tolerance))
                 {
                     continue;
                 }
 
-                double distance = new Face3D(triangle3D).Distance(point3D, tolerance);
+                double distance = new Face2D(triangle2D).Distance(point2D, tolerance);
                 if(distance < tolerance)
                 {
                     return true;
@@ -342,40 +337,40 @@ namespace SAM.Geometry.Spatial
             return false;
         }
 
-        public bool OnEdge(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        public bool OnEdge(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if (points == null)
             {
                 return false;
             }
 
-            if (!GetBoundingBox().InRange(point3D, tolerance))
+            if (!GetBoundingBox().InRange(point2D, tolerance))
             {
                 return false;
             }
 
-            List<Segment3D> segment3Ds = GetSegments(false);
-            if (segment3Ds == null || segment3Ds.Count == 0)
+            List<Segment2D> segment2Ds = GetSegments(false);
+            if (segment2Ds == null || segment2Ds.Count == 0)
             {
                 return false;
             }
 
-            return segment3Ds.Find(x => x.On(point3D, tolerance)) != null;
+            return segment2Ds.Find(x => x.On(point2D, tolerance)) != null;
         }
 
-        public List<ICurve3D> GetCurves()
+        public List<ICurve2D> GetCurves()
         {
-            return GetSegments()?.ConvertAll(x => x as ICurve3D);
+            return GetSegments()?.ConvertAll(x => x as ICurve2D);
         }
 
-        public BoundingBox3D GetBoundingBox(double offset = 0)
+        public BoundingBox2D GetBoundingBox(double offset = 0)
         {
             if (points == null)
             {
                 return null;
             }
 
-            return new BoundingBox3D(points, offset);
+            return new BoundingBox2D(points, offset);
         }
     }
 }
