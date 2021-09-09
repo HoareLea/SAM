@@ -68,7 +68,16 @@ namespace SAM.Analytical
                                 panelType = PanelType.WallExternal;
 
                             break;
-                        
+
+                        case PanelType.UndergroundWall:
+
+                            elevation = Query.MaxElevation(panel);
+
+                            if (elevation >= elevation_Ground)
+                                panelType = PanelType.WallExternal;
+
+                            break;
+
                         case PanelType.FloorInternal:
                         case PanelType.UndergroundCeiling:
                             panelType_Normal = Query.PanelType(panel.Normal);
