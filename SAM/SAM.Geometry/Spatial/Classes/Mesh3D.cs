@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
-    public class Mesh3D : SAMGeometry, ISAMGeometry3D, IBoundable3D
+    public class Mesh3D : SAMGeometry, IMesh, ISAMGeometry3D, IBoundable3D
     {
         private List<Point3D> points;
         private List<Tuple<int, int, int>> indexes;

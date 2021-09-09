@@ -1,4 +1,4 @@
-﻿namespace SAM.Geometry.Interfaces
+﻿namespace SAM.Geometry
 {
     public interface IReversible
     {

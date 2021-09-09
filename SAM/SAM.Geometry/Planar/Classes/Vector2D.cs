@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-
-using SAM.Geometry.Interfaces;
 using System;
 
 namespace SAM.Geometry.Planar

@@ -71,6 +71,7 @@
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />
     <Compile Include="Enums\EdgeOrientationMethod.cs" />
     <Compile Include="Enums\Padding.cs" />
+    <Compile Include="Interfaces\IMesh.cs" />
     <Compile Include="Planar\Classes\ConvexHullComparer.cs" />
     <Compile Include="Planar\Classes\Mesh2D.cs" />
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />

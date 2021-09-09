@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public class Mesh2D : SAMGeometry, ISAMGeometry2D, IBoundable2D
+    public class Mesh2D : SAMGeometry, IMesh, ISAMGeometry2D, IBoundable2D
     {
         private List<Point2D> points;
         private List<Tuple<int, int, int>> indexes;
