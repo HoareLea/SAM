@@ -9,10 +9,19 @@ namespace SAM.Geometry.Planar
         public static Point2D InternalPoint2D(this IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if (closed2D == null)
+            {
                 return null;
+            }
 
             if (closed2D is Face)
+            {
                 return ((Face)closed2D).GetInternalPoint2D(tolerance);
+            }
+
+            if(closed2D is Triangle2D)
+            {
+                return ((Triangle2D)closed2D).GetCentroid();
+            }
 
             if (!(closed2D is ISegmentable2D))
                 throw new NotImplementedException();

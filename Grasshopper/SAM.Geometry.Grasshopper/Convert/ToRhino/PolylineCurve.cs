@@ -25,15 +25,37 @@ namespace SAM.Geometry.Grasshopper
 
         public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this Polygon3D polygon3D)
         {
-            List<Rhino.Geometry.Point3d> points = polygon3D.GetPoints().ConvertAll(x => x.ToRhino());
+            List<Rhino.Geometry.Point3d> points = polygon3D?.GetPoints()?.ConvertAll(x => x.ToRhino());
+            if (points == null || points.Count < 2)
+            {
+                return null;
+            }
+
             points.Add(polygon3D.GetPoints().First().ToRhino());
+
+            return new Rhino.Geometry.PolylineCurve(points);
+        }
+
+        public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this Triangle3D triangle3D)
+        {
+            List<Rhino.Geometry.Point3d> points = triangle3D?.GetPoints()?.ConvertAll(x => x.ToRhino());
+            if (points == null || points.Count < 2)
+            {
+                return null;
+            }
+
+            points.Add(triangle3D.GetPoints().First().ToRhino());
 
             return new Rhino.Geometry.PolylineCurve(points);
         }
 
         public static Rhino.Geometry.PolylineCurve ToRhino_PolylineCurve(this Polyline3D polyline3D, bool close)
         {
-            List<Rhino.Geometry.Point3d> points = polyline3D.Points.ConvertAll(x => x.ToRhino());
+            List<Rhino.Geometry.Point3d> points = polyline3D?.Points?.ConvertAll(x => x.ToRhino());
+            if (points == null || points.Count < 2)
+            {
+                return null;
+            }
 
             if (close)
                 points.Add(polyline3D.Points.First().ToRhino());

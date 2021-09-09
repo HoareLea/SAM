@@ -55,7 +55,7 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                result.Add(new Triangle2D(coordinates[0].ToSAM(tolerance), coordinates[1].ToSAM(), coordinates[2].ToSAM(tolerance)));
+                result.Add(new Triangle2D(coordinates_Temp[0].ToSAM(tolerance), coordinates_Temp[1].ToSAM(), coordinates_Temp[2].ToSAM(tolerance)));
             }
 
             return result;
@@ -171,6 +171,181 @@ namespace SAM.Geometry.Planar
                 return null;
             
             return new List<Triangle2D>() { new Triangle2D(triangle2D) };
+        }
+
+        public static List<Triangle2D> Triangulate<T>(this T geometry2D, IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.MicroDistance) where T : ISegmentable2D, IClosed2D
+        {
+            if (geometry2D == null)
+            {
+                return null;
+            }
+
+            BoundingBox2D boundingBox2D = geometry2D.GetBoundingBox();
+            if (boundingBox2D == null)
+            {
+                return null;
+            }
+
+            List<Point2D> point2Ds_Triangulate = new List<Point2D>();
+            if (point2Ds != null)
+            {
+                foreach (Point2D point2D in point2Ds)
+                {
+                    if (!boundingBox2D.InRange(point2D, tolerance))
+                    {
+                        continue;
+                    }
+
+                    if (!geometry2D.InRange(point2D, tolerance))
+                    {
+                        continue;
+                    }
+
+                    point2Ds_Triangulate.Add(point2D);
+                }
+            }
+
+
+            List<Point2D> point2Ds_Geometry2D = geometry2D.GetPoints();
+            if (point2Ds_Geometry2D != null)
+            {
+                point2Ds_Triangulate.AddRange(point2Ds_Geometry2D);
+            }
+
+            List<Triangle2D> result = Triangulate(point2Ds_Triangulate, tolerance);
+            for (int i = result.Count - 1; i >= 0; i--)
+            {
+                Triangle2D triangle2D = result[i];
+                if (triangle2D == null)
+                {
+                    result.RemoveAt(i);
+                    continue;
+                }
+
+                Point2D point2D = triangle2D.GetCentroid();
+                if (!boundingBox2D.InRange(point2D, tolerance))
+                {
+                    result.RemoveAt(i);
+                    continue;
+                }
+
+                if (!geometry2D.InRange(point2D, tolerance))
+                {
+                    result.RemoveAt(i);
+                    continue;
+                }
+            }
+
+            return result;
+        }
+    
+        public static List<Triangle2D> Triangulate(this Face2D face2D, IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if(face2D == null)
+            {
+                return null;
+            }
+
+            BoundingBox2D boundingBox2D = face2D.GetBoundingBox();
+            if (boundingBox2D == null)
+            {
+                return null;
+            }
+
+            IClosed2D externalEdge = face2D.ExternalEdge2D;
+            if(externalEdge == null)
+            {
+                return null;
+            }
+
+            ISegmentable2D segmentable2D = externalEdge as ISegmentable2D;
+            if(segmentable2D == null)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            List <Point2D> point2Ds_Triangulate = new List<Point2D>();
+            List<Point2D> point2Ds_Temp = null;
+
+            point2Ds_Temp = segmentable2D.GetPoints();
+            if(point2Ds_Temp == null)
+            {
+                return null;
+            }
+
+            point2Ds_Triangulate.AddRange(point2Ds_Temp);
+
+            List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
+            if(internalEdges != null && internalEdges.Count != 0)
+            {
+                foreach(IClosed2D internalEdge in internalEdges)
+                {
+                    if(internalEdge == null)
+                    {
+                        continue;
+                    }
+
+                    segmentable2D = internalEdge as ISegmentable2D;
+                    if (segmentable2D == null)
+                    {
+                        throw new System.NotImplementedException();
+                    }
+
+                    point2Ds_Temp = segmentable2D.GetPoints();
+                    if (point2Ds_Temp == null)
+                    {
+                        continue;
+                    }
+
+                    point2Ds_Triangulate.AddRange(point2Ds_Temp);
+                }
+            }
+
+            if(point2Ds != null && point2Ds.Count() != 0)
+            {
+                foreach (Point2D point2D in point2Ds)
+                {
+                    if (!boundingBox2D.InRange(point2D, tolerance))
+                    {
+                        continue;
+                    }
+
+                    if (!face2D.InRange(point2D, tolerance))
+                    {
+                        continue;
+                    }
+
+                    point2Ds_Triangulate.Add(point2D);
+                }
+            }
+
+            List<Triangle2D> result = Triangulate(point2Ds_Triangulate, tolerance);
+            for (int i = result.Count - 1; i >= 0; i--)
+            {
+                Triangle2D triangle2D = result[i];
+                if (triangle2D == null)
+                {
+                    result.RemoveAt(i);
+                    continue;
+                }
+
+                Point2D point2D = triangle2D.GetCentroid();
+                if (!boundingBox2D.InRange(point2D, tolerance))
+                {
+                    result.RemoveAt(i);
+                    continue;
+                }
+
+                if (!face2D.Inside(point2D, tolerance))
+                {
+                    result.RemoveAt(i);
+                    continue;
+                }
+            }
+
+            return result;
+
+
         }
     }
 }

@@ -55,6 +55,12 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (sAMGeometry is Spatial.Triangle3D)
+            {
+                guid = rhinoDoc.Objects.AddCurve(((Spatial.Triangle3D)sAMGeometry).ToRhino_PolylineCurve(), objectAttributes);
+                return true;
+            }
+
             GeometryBase geometryBase = (sAMGeometry as dynamic).ToRhino() as GeometryBase;
             if (geometryBase != null)
             {
