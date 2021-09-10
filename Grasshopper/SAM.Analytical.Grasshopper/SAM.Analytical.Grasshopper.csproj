@@ -71,6 +71,7 @@
     <Compile Include="Classes\GooSpace.cs" />
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalAdjustPanels.cs" />
     <Compile Include="Component\SAMAnalyticalAlignHorizontalPanelByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByBreps.cs" />
     <Compile Include="Component\SAMAnalyticalCreateShellsByElevations.cs" />

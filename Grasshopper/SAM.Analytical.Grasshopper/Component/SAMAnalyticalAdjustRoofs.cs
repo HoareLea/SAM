@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalAdjustRoofs()
           : base("SAMAnalytical.AdjustRoofs", "SAMAnalytical.AdjustRoofs",
               "Adjusts Roofs",
-              "SAM", "Core")
+              "SAM", "Analytical")
         {
         }
 

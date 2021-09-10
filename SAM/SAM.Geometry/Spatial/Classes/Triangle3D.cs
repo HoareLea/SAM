@@ -115,6 +115,11 @@ namespace SAM.Geometry.Spatial
             return Planar.Query.Area(points.ToList().ConvertAll(x => plane.Convert(x)));
         }
 
+        public Point3D GetCentroid()
+        {
+            return Query.Centroid(points);
+        }
+
         public void Reverse()
         {
             points.Reverse();
