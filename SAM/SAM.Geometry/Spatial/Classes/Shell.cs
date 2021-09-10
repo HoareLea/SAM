@@ -481,7 +481,7 @@ namespace SAM.Geometry.Spatial
             foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries_Temp)
             {
                 Point3D point3D_Internal = boundary.Item2.InternalPoint3D();
-                if (result == null)
+                if (point3D_Internal == null)
                     continue;
 
                 Vector3D normal = null;
