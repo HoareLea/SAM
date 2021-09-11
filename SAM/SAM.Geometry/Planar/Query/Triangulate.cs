@@ -2,6 +2,7 @@
 using NetTopologySuite.Triangulate;
 using NetTopologySuite.Geometries;
 using System.Linq;
+using System;
 
 namespace SAM.Geometry.Planar
 {
@@ -275,9 +276,13 @@ namespace SAM.Geometry.Planar
 
             point2Ds_Triangulate.AddRange(point2Ds_Temp);
 
+            List<Tuple<BoundingBox2D, IClosed2D, Face2D>> tuples_InternalEdge = null;
+
             List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
             if (internalEdges != null && internalEdges.Count != 0)
             {
+                tuples_InternalEdge = new List<Tuple<BoundingBox2D, IClosed2D, Face2D>>();
+
                 foreach (IClosed2D internalEdge in internalEdges)
                 {
                     if (internalEdge == null)
@@ -288,7 +293,7 @@ namespace SAM.Geometry.Planar
                     segmentable2D = internalEdge as ISegmentable2D;
                     if (segmentable2D == null)
                     {
-                        throw new System.NotImplementedException();
+                        throw new NotImplementedException();
                     }
 
                     point2Ds_Temp = segmentable2D.GetPoints();
@@ -298,6 +303,8 @@ namespace SAM.Geometry.Planar
                     }
 
                     point2Ds_Triangulate.AddRange(point2Ds_Temp);
+
+                    tuples_InternalEdge.Add(new Tuple<BoundingBox2D, IClosed2D, Face2D>(internalEdge.GetBoundingBox(), internalEdge, new Face2D(internalEdge)));
                 }
             }
 
@@ -329,25 +336,29 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                if (internalEdges != null)
+                if (tuples_InternalEdge != null)
                 {
+                    BoundingBox2D boundingBox2D_Triangle2D = triangle2D.GetBoundingBox();
                     Face2D face2D_Triangle = new Face2D(triangle2D);
-                    List<Face2D> face2Ds_InternalEdges = internalEdges.ConvertAll(x => new Face2D(x));
 
-                    List<Face2D> face2Ds_Difference = face2D_Triangle.Difference(face2Ds_InternalEdges, tolerance);
-                    if (face2Ds_Difference != null)
+                    List<Face2D> face2Ds_InternalEdge = tuples_InternalEdge.FindAll(x => x.Item1.InRange(boundingBox2D_Triangle2D, tolerance)).ConvertAll(x => x.Item3);
+                    if (face2Ds_InternalEdge != null && face2Ds_InternalEdge.Count != 0)
                     {
-                        foreach(Face2D face2D_Difference in face2Ds_Difference)
+                        List<Face2D> face2Ds_Difference = face2D_Triangle.Difference(face2Ds_InternalEdge, tolerance);
+                        if (face2Ds_Difference != null)
                         {
-                            List<Triangle2D> triangle2Ds = face2D_Difference?.Triangulate(tolerance);
-                            if(triangle2Ds != null && triangle2Ds.Count != 0)
+                            foreach (Face2D face2D_Difference in face2Ds_Difference)
                             {
-                                result.AddRange(triangle2Ds);
+                                List<Triangle2D> triangle2Ds = face2D_Difference?.Triangulate(tolerance);
+                                if (triangle2Ds != null && triangle2Ds.Count != 0)
+                                {
+                                    result.AddRange(triangle2Ds);
+                                }
                             }
                         }
+                        result.RemoveAt(i);
+                        continue;
                     }
-                    result.RemoveAt(i);
-                    continue;
                 }
             }
 
