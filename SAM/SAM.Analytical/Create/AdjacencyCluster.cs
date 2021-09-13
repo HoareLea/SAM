@@ -538,7 +538,7 @@ namespace SAM.Analytical
 
                         if (tuples_Face2D_All != null && tuples_Face2D_All.Count != 0)
                         {
-                            List<Tuple<Face2D, Panel>> tuples_Face2D = new List<Tuple<Face2D, Panel>>(tuples_Face2D_All);
+                            List<Tuple<Face2D, Panel, double>> tuples_Face2D = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, Panel, double>(x.Item1, x.Item2, 0));
 
                             //Find By Face2D Intersection
                             Face2D face2D_Shell = plane.Convert(face3D);
@@ -548,7 +548,13 @@ namespace SAM.Analytical
                                 face2Ds_Intersection?.RemoveAll(x => x == null || x.GetArea() <= minArea);
 
                                 if (face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
+                                {
                                     tuples_Face2D.RemoveAt(i);
+                                }
+                                else
+                                {
+                                    tuples_Face2D[i] = new Tuple<Face2D, Panel, double>(tuples_Face2D[i].Item1, tuples_Face2D[i].Item2, face2Ds_Intersection.ConvertAll(x => x.GetArea()).Sum());
+                                }
                             }
 
                             //Panel panel_New_Temp = null;
@@ -556,9 +562,11 @@ namespace SAM.Analytical
                             
                             if (tuples_Face2D != null && tuples_Face2D.Count != 0)
                             {
+                                tuples_Face2D.Sort((x, y) => y.Item3.CompareTo(x.Item3));
+
                                 //Sorting by face3D Normal
                                 Vector3D normal = plane.Normal;
-                                List<Tuple<Face2D, Panel>> tuples_Face2D_Temp = tuples_Face2D.FindAll(x => x.Item2.Normal.SameHalf(normal));
+                                List<Tuple<Face2D, Panel, double>> tuples_Face2D_Temp = tuples_Face2D.FindAll(x => x.Item2.Normal.SameHalf(normal));
                                 tuples_Face2D.RemoveAll(x => tuples_Face2D_Temp.Contains(x));
                                 tuples_Face2D_Temp.AddRange(tuples_Face2D);
                                 tuples_Face2D = tuples_Face2D_Temp;
