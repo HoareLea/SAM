@@ -516,7 +516,7 @@ namespace SAM.Analytical
                         List<Tuple<Face2D, Panel>> tuples_Face2D_All = new List<Tuple<Face2D, Panel>>();
                         foreach (Tuple<Plane, Face3D, Panel, BoundingBox3D, double> tuple_Panel in tuples_Panel_Temp)
                         {
-                            if (!boundingBox3D_Face3D.InRange(tuple_Panel.Item4))
+                            if (!boundingBox3D_Face3D.InRange(tuple_Panel.Item4, maxDistance))
                                 continue;
 
                             Plane plane_Panel = tuple_Panel.Item1;

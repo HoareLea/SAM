@@ -132,10 +132,20 @@ namespace SAM.Geometry.Planar
             List<NetTopologySuite.Geometries.Geometry> geometries = new List<NetTopologySuite.Geometries.Geometry>();
             foreach (Face2D face2D_1_Temp in face2Ds_1)
             {
+                if(face2D_1_Temp == null || face2D_1_Temp.GetArea() < tolerance)
+                {
+                    continue;
+                }
+
+                Polygon polygon_1 = face2D_1_Temp?.ToNTS(tolerance);
+                if (polygon_1 == null)
+                {
+                    continue;
+                }
+
                 foreach (Face2D face2D_2_Temp in face2Ds_2)
                 {
-                    Polygon polygon_1 = face2D_1_Temp?.ToNTS(tolerance);
-                    if (polygon_1 == null)
+                    if (face2D_2_Temp == null || face2D_2_Temp.GetArea() < tolerance)
                     {
                         continue;
                     }

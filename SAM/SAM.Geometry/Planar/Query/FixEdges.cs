@@ -90,6 +90,11 @@ namespace SAM.Geometry.Planar
 
                 foreach(Polygon2D polygon2D_ExternalEdge_Temp in polygon2Ds_ExternalEdge_Temp)
                 {
+                    if(polygon2D_ExternalEdge_Temp == null || polygon2D_ExternalEdge_Temp.GetArea() < 0)
+                    {
+                        continue;
+                    }
+                    
                     Face2D face2D_New = Face2D.Create(polygon2D_ExternalEdge_Temp, polygon2Ds_InternalEdge_Temp, EdgeOrientationMethod.Opposite, tolerance);
                     if (face2D_New != null)
                         result.Add(face2D_New);
