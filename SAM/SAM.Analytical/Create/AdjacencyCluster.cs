@@ -741,6 +741,8 @@ namespace SAM.Analytical
                 }
             }
 
+            result.RemoveInvalidAirPanels();
+
             List<Space> spaces_Check = result.GetSpaces();
             if (spaces_Check != null && spaces_Check.Count != 0)
             {
