@@ -73,6 +73,7 @@
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Component\SAMAnalyticalAdjustPanels.cs" />
     <Compile Include="Component\SAMAnalyticalAlignHorizontalPanelByElevations.cs" />
+    <Compile Include="Component\SAMAnalyticalFilterByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByBreps.cs" />
     <Compile Include="Component\SAMAnalyticalCreateShellsByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByMaxRectangle3D.cs" />
