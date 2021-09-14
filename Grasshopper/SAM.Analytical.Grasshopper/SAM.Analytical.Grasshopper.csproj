@@ -83,6 +83,7 @@
     <Compile Include="Component\SAMAnalyticalMergeOverlapApertures.cs" />
     <Compile Include="Component\SAMAnalyticalRemoveOverlapApertures.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByElevations.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByPanels.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByPlanes.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalCreateShellsByElevationsAndAuxiliaryElevations.cs" />
