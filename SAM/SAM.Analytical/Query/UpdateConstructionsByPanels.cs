@@ -44,15 +44,23 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                Panel panel_New = PanelByFace3D(panels, face3D, areaFactor, maxDistance, out double intersectionArea, tolerance_Angle, tolerance_Distance);
-                if(panel_New == null)
-                {
-                    continue;
-                }
-
                 Panel panel_Updated = null;
 
                 List<Space> spaces = result.GetSpaces(panel);
+
+                Panel panel_New = PanelByFace3D(panels, face3D, areaFactor, maxDistance, out double intersectionArea, tolerance_Angle, tolerance_Distance);
+                if(panel_New == null)
+                {
+                    if(panel.PanelGroup == Analytical.PanelGroup.Floor && spaces != null && spaces.Count > 1)
+                    {
+                        panel_Updated = new Panel(panel, null);
+                        panel_Updated = new Panel(panel_Updated, Analytical.PanelType.Air);
+                        result.AddObject(panel_Updated);
+                    }
+                    
+                    continue;
+                }
+
                 if (spaces == null || spaces.Count < 2)
                 {
                     panel_Updated = new Panel(panel, panel_New.Construction);
@@ -63,6 +71,7 @@ namespace SAM.Analytical
                     if(intersectionArea/area < areaFactor)
                     {
                         panel_Updated = new Panel(panel, null);
+                        panel_Updated = new Panel(panel_Updated, Analytical.PanelType.Air);
                     }
                     else
                     {
