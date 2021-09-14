@@ -175,6 +175,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\PanelByFace3D.cs" />
     <Compile Include="Query\Closest.cs" />
     <Compile Include="Query\AdjustPanels.cs" />
     <Compile Include="Query\FillFloorsAndRoofs.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Query\Intersect.cs" />
     <Compile Include="Query\ProfileGroup.cs" />
     <Compile Include="Query\Profiles.cs" />
+    <Compile Include="Query\UpdateConstructionsByPanels.cs" />
     <Compile Include="Query\UpdateHeatTransferCoefficients.cs" />
     <Compile Include="Query\HasMaterial.cs" />
     <Compile Include="Query\Constructions.cs" />

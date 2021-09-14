@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -46,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Objcect such as Panel, AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Objcect such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
                 GooPanelParam panelParam = new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list };
@@ -79,7 +78,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -106,7 +105,14 @@ namespace SAM.Analytical.Grasshopper
 
             double areaFactor = 0.7;
             index = Params.IndexOfInputParam("areaFactor_");
-
+            if(index != -1)
+            {
+                double areaFactor_Temp = 0.7;
+                if(dataAccess.GetData(index, ref areaFactor_Temp))
+                {
+                    areaFactor = areaFactor_Temp;
+                }
+            }
 
             index = Params.IndexOfInputParam("maxDistance_");
             double maxDistance = 1;
@@ -124,11 +130,14 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(tolerance))
                 tolerance = Tolerance.Distance;
 
-            List<Panel> result = null;// Analytical.Query.SnapByPlanes(panels, elevations, maxDistance, tolerance);
+            if(sAMObject is AdjacencyCluster || sAMObject is AnalyticalModel)
+            {
+                sAMObject = Analytical.Query.UpdateConstructionsByPanels(sAMObject as dynamic, panels, areaFactor, maxDistance, Tolerance.Angle, tolerance);
+            }
             
-            index = Params.IndexOfOutputParam("panels");
+            index = Params.IndexOfOutputParam("analytical");
             if (index != -1)
-                dataAccess.SetDataList(index, result);
+                dataAccess.SetData(index, sAMObject);
         }
     }
 }
