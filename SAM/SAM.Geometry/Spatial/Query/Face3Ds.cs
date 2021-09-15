@@ -56,5 +56,38 @@ namespace SAM.Geometry.Spatial
         {
             return Create.Shell(extrusion, tolerance)?.Face3Ds;
         }
+
+        public static List<Face3D> Face3Ds(this PlanarIntersectionResult planarIntersectionResult, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if(planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+            {
+                return null;
+            }
+
+            Plane plane = planarIntersectionResult.Plane;
+            if(plane == null)
+            {
+                return null;
+            }
+
+            List<Face3D> result = new List<Face3D>();
+
+            List<Planar.ISegmentable2D> segmentable2Ds = planarIntersectionResult.GetGeometry2Ds<Planar.ISegmentable2D>();
+            if(segmentable2Ds == null || segmentable2Ds.Count < 3)
+            {
+                return result;
+            }
+
+            List<Planar.Segment2D> segment2Ds = Planar.Query.Split(segmentable2Ds, tolerance);
+            segment2Ds = Planar.Query.Snap(segment2Ds, true, snapTolerance);
+
+            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(segmentable2Ds, tolerance);
+            if(face2Ds == null || face2Ds.Count == 0)
+            {
+                return result;
+            }
+
+            return face2Ds.ConvertAll(x => plane.Convert(x));
+        }
     }
 }

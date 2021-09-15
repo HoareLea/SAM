@@ -119,5 +119,18 @@ namespace SAM.Geometry.Spatial
         {
             return geometry2Ds?.FindAll(x => x is T).ConvertAll(x => (T)x);
         }
+
+        public Plane Plane
+        {
+            get
+            {
+                if(plane == null)
+                {
+                    return null;
+                }
+
+                return new Plane(plane);
+            }
+        }
     }
 }
