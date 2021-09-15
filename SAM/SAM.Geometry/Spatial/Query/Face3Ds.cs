@@ -87,7 +87,8 @@ namespace SAM.Geometry.Spatial
                 return result;
             }
 
-            return face2Ds.ConvertAll(x => plane.Convert(x));
+            result.AddRange(face2Ds.ConvertAll(x => plane.Convert(x)));
+            return result;
         }
     }
 }
