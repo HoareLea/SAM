@@ -252,27 +252,23 @@ namespace SAM.Analytical
 
             List<Shell> shells_Temp = Enumerable.Repeat<Shell>(null, shells.Count()).ToList();
             Parallel.For(0, shells.Count(), (int i) =>
-            //for(int i =0; i < shells.Count(); i++)
             {
                 Shell shell = shells.ElementAt(i);
 
                 BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
                 if (boundingBox3D == null)
                 {
-                    //continue;
                     return;
                 }
 
                 if (!boundingBox3D_All.InRange(boundingBox3D))
                 {
-                    //continue;
                     return;
                 }
 
                 shell = shell.RemoveInvalidFace3Ds(silverSpacing);
                 if (shell == null)
                 {
-                    //continue;
                     return;
                 }
 
@@ -283,14 +279,6 @@ namespace SAM.Analytical
                 }
 
                 shells_Temp[i] = shell_Merge;
-
-                //Shell shell_FixEdges = shell_Merge.FixEdges(tolerance_Distance);
-                //if(shell_FixEdges == null)
-                //{
-                //    shell_FixEdges = new Shell(shell_Merge);
-                //}
-
-                //shells_Temp[i] = shell_FixEdges;
             });
 
             shells_Temp.RemoveAll(x => x == null);
