@@ -116,6 +116,10 @@ namespace SAM.Analytical.Grasshopper
                 {
                     plane = ((Rhino.Geometry.Plane)@object).ToSAM();
                 }
+                else if (@object is Architectural.Level)
+                {
+                    plane = Geometry.Spatial.Create.Plane(((Architectural.Level)@object).Elevation);
+                }
                 else if (@object is string)
                 {
                     double value;
