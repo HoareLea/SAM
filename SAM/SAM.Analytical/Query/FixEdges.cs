@@ -1,5 +1,7 @@
 ﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
@@ -7,7 +9,7 @@ namespace SAM.Analytical
     {
         public static AdjacencyCluster FixEdges(this AdjacencyCluster adjacencyCluster, double tolerance = Core.Tolerance.Distance)
         {
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 return null;
             }
@@ -15,38 +17,40 @@ namespace SAM.Analytical
             AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
 
             List<Panel> panels = result.GetPanels();
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 return result;
             }
 
-            foreach(Panel panel in panels)
+            List<List<Panel>> panelsList = Enumerable.Repeat<List<Panel>>(null, panels.Count).ToList();
+
+            Parallel.For(0, panels.Count, (int i) =>
             {
-                if(panel == null)
+                panelsList[i] = panels[i].FixEdges(tolerance);
+            });
+
+            for(int i=0; i < panels.Count; i++)
+            {
+                List<Panel> panels_Temp = panelsList[i];
+                if(panels_Temp == null || panels_Temp.Count == 0)
                 {
                     continue;
                 }
 
-                List<Panel> panels_FixEdges = panel.FixEdges(tolerance);
-                if(panels_FixEdges == null || panels_FixEdges.Count == 0)
+                if (panels_Temp.Count == 1)
                 {
+                    result.AddObject(panels_Temp[0]);
                     continue;
                 }
 
-                if(panels_FixEdges.Count == 1)
-                {
-                    result.AddObject(panels_FixEdges[0]);
-                    continue;
-                }
+                List<object> relatedObjects = result.GetRelatedObjects<object>(panels[i]);
 
-                List<object> relatedObjects = result.GetRelatedObjects<object>(panel);
-
-                foreach(Panel panel_FixEdge in panels_FixEdges)
+                foreach (Panel panel_FixEdge in panels_Temp)
                 {
                     result.AddObject(panel_FixEdge);
-                    if(relatedObjects != null)
+                    if (relatedObjects != null)
                     {
-                        foreach(object relatedObject in relatedObjects)
+                        foreach (object relatedObject in relatedObjects)
                         {
                             result.AddRelation(panel_FixEdge, relatedObject);
                         }

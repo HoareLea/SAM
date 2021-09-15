@@ -793,6 +793,7 @@ namespace SAM.Analytical
             }
 
             result = result.UpdateNormals(false, silverSpacing, tolerance_Distance);
+            result = result.FixEdges(tolerance_Distance);
 
             return result;
         }
