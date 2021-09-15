@@ -162,12 +162,27 @@ namespace SAM.Geometry.Spatial
             List<Planar.Face2D> face2Ds_Intersection = new List<Planar.Face2D>();
             foreach(Planar.Face2D face2D_Temp in face2Ds_Intersection)
             {
-                //TODO: IMPLEMENT HERE
+                if(face2D_Temp == null)
+                {
+                    continue;
+                }
+
+                List<Planar.Face2D> face2Ds_Intersection_Temp = Planar.Query.Intersection(face2D, face2D_Temp, tolerance_Distance);
+                if(face2Ds_Intersection_Temp == null || face2Ds_Intersection_Temp.Count == 0)
+                {
+                    continue;
+                }
+
+                face2Ds_Intersection.AddRange(face2Ds_Intersection_Temp);
             }
 
-            //Planar.Query.Intersection()
+            if(face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
+            {
+                return result;
+            }
 
-            throw new KeyNotFoundException();
+            List<Planar.Face2D> face2Ds_Union = Planar.Query.Union(face2Ds_Intersection, tolerance_Distance);
+            result = face2Ds_Union?.ConvertAll(x => plane.Convert(x));
 
             return result;
         }
