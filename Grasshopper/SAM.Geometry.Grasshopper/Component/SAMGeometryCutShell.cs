@@ -173,7 +173,7 @@ namespace SAM.Geometry.Grasshopper
                 shells_Result.AddRange(shells_Result_Temp);
             }
 
-            index = Params.IndexOfOutputParam("Shells");
+            index = Params.IndexOfOutputParam("shells");
             if (index != -1)
                 dataAccess.SetDataList(index, shells_Result);
         }
