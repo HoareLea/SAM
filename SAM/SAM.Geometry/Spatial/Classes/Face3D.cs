@@ -284,6 +284,11 @@ namespace SAM.Geometry.Spatial
             return Query.InternalPoint3D(this, tolerance);
         }
 
+        public Point3D GetCentroid()
+        {
+            return plane?.Convert(externalEdge2D.GetCentroid());
+        }
+
 
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges, bool orientInternalEdges = true)
         {

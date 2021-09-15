@@ -172,5 +172,10 @@ namespace SAM.Geometry.Spatial
         {
             return new Rectangle3D(plane, (Rectangle2D)rectangle2D?.Clone());
         }
+
+        public Point3D GetCentroid()
+        {
+            return plane?.Convert(Planar.Query.Centroid(rectangle2D?.GetPoints()));
+        }
     }
 }

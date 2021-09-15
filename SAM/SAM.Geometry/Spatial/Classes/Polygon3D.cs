@@ -180,5 +180,10 @@ namespace SAM.Geometry.Spatial
         {
             return Query.On(this, point3D, tolerance);
         }
+
+        public Point3D GetCentroid()
+        {
+            return plane?.Convert(Planar.Query.Centroid(points));
+        }
     }
 }

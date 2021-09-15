@@ -89,6 +89,11 @@ namespace SAM.Geometry.Spatial
             return new Ellipse3D(plane, (Ellipse2D)ellipse2D?.Clone());
         }
 
+        public Point3D GetCentroid()
+        {
+            return plane?.Convert(ellipse2D?.Center);
+        }
+
         public Ellipse2D Ellipse2D
         {
             get
