@@ -56,6 +56,14 @@ namespace SAM.Analytical
             paneConstructionLayers = apertureConstruction.PaneConstructionLayers;
         }
 
+        public ApertureConstruction(ApertureConstruction apertureConstruction, ApertureType apertureType)
+            : base(apertureConstruction)
+        {
+            this.apertureType = apertureType;
+            frameConstructionLayers = apertureConstruction.FrameConstructionLayers;
+            paneConstructionLayers = apertureConstruction.PaneConstructionLayers;
+        }
+
         public ApertureConstruction(ApertureConstruction apertureConstruction, IEnumerable<ConstructionLayer> paneConstructionLayers, IEnumerable<ConstructionLayer> frameConstructionLayers = null)
             : base(apertureConstruction)
         {

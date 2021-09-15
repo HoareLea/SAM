@@ -116,5 +116,60 @@ namespace SAM.Geometry.Spatial
 
             return Section(shell, plane, includeInternalEdges,tolerance_Angle, tolerance_Distance, tolerance_Snap);
         }
+
+        public static List<Face3D> Section(this Shell shell, Face3D face3D, bool includeInternalEdges = true, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        {
+            if(shell == null || face3D == null)
+            {
+                return null;
+            }
+
+            Plane plane = face3D.GetPlane();
+            if(plane == null)
+            {
+                return null;
+            }
+
+            BoundingBox3D boundingBox3D = shell.GetBoundingBox();
+            if(boundingBox3D == null)
+            {
+                return null;
+            }
+
+            BoundingBox3D boundingBox3D_Face3D = face3D.GetBoundingBox();
+            if(boundingBox3D_Face3D == null)
+            {
+                return null;
+            }
+
+            List<Face3D> result = new List<Face3D>();
+
+            if(!boundingBox3D.InRange(boundingBox3D_Face3D, tolerance_Snap))
+            {
+                return result;
+            }
+
+            List<Face3D> face3Ds = Section(shell, plane, includeInternalEdges, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return result;
+            }
+
+
+            Planar.Face2D face2D = plane.Convert(face3D);
+            List<Planar.Face2D> face2Ds = face3Ds.ConvertAll(x => plane.Convert(x));
+
+            List<Planar.Face2D> face2Ds_Intersection = new List<Planar.Face2D>();
+            foreach(Planar.Face2D face2D_Temp in face2Ds_Intersection)
+            {
+                //TODO: IMPLEMENT HERE
+            }
+
+            //Planar.Query.Intersection()
+
+            throw new KeyNotFoundException();
+
+            return result;
+        }
     }
 }

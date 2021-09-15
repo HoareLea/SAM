@@ -27,13 +27,15 @@ namespace SAM.Analytical
 
             foreach (Panel panel in panels)
             {
-                Construction construction_Panel = panel.Construction;
-                MaterialType materialType = MaterialType(construction_Panel?.ConstructionLayers, materialLibrary);
-                if (materialType == Core.MaterialType.Undefined && panel.PanelType == Analytical.PanelType.CurtainWall)
-                    materialType = Core.MaterialType.Transparent;
-
-                if (materialType != Core.MaterialType.Transparent)
+                if(panel == null)
+                {
                     continue;
+                }
+
+                if(!panel.Transparent(materialLibrary))
+                {
+                    continue;
+                }
 
                 result.Add(panel);
             }
