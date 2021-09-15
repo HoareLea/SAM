@@ -55,6 +55,13 @@ namespace SAM.Analytical
                     {
                         panel_Updated = new Panel(panel, null);
                         panel_Updated = new Panel(panel_Updated, Analytical.PanelType.Air);
+                        if(panel_Updated.Normal.SameHalf(Vector3D.WorldZ))
+                        {
+                            panel_Updated.FlipNormal(true, false);
+                        }
+
+                        panel_Updated.RemoveApertures();
+
                         result.AddObject(panel_Updated);
                     }
                     
@@ -72,6 +79,12 @@ namespace SAM.Analytical
                     {
                         panel_Updated = new Panel(panel, null);
                         panel_Updated = new Panel(panel_Updated, Analytical.PanelType.Air);
+                        if (panel_Updated.Normal.SameHalf(Vector3D.WorldZ))
+                        {
+                            panel_Updated.FlipNormal(true, false);
+                        }
+
+                        panel_Updated.RemoveApertures();
                     }
                     else
                     {
