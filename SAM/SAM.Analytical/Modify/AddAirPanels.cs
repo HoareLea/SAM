@@ -58,6 +58,8 @@ namespace SAM.Analytical
                 int index = 1;
                 foreach(Shell shell_Cut in shells_Cut)
                 {
+                    shell_Cut.SplitFace3Ds(panels_Existing?.ConvertAll(x => x.GetFace3D()), tolerance_Snap, tolerance_Angle, tolerance_Angle, tolerance_Distance);
+                    
                     List<Face3D> face3Ds_Shell_Cut = shell_Cut.Face3Ds;
                     if(face3Ds_Shell_Cut == null || face3Ds_Shell_Cut.Count == 0)
                     {
