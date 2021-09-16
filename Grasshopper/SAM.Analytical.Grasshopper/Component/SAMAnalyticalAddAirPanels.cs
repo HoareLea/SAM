@@ -63,7 +63,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -132,10 +132,19 @@ namespace SAM.Analytical.Grasshopper
             AdjacencyCluster adjacencyCluster = sAMObject is AnalyticalModel ? ((AnalyticalModel)sAMObject).AdjacencyCluster : sAMObject as AdjacencyCluster;
             if(adjacencyCluster != null)
             {
+                if(sAMObject is AdjacencyCluster)
+                {
+                    adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+                }
+
                 adjacencyCluster.AddAirPanels(plane, Tolerance.Angle, Tolerance.Distance, Tolerance.MacroDistance);
                 if (sAMObject is AnalyticalModel)
                 {
                     sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
+                }
+                else
+                {
+                    sAMObject = adjacencyCluster;
                 }
             }
 

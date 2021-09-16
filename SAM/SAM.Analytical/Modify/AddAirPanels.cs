@@ -79,7 +79,15 @@ namespace SAM.Analytical
                     name = string.Format("{0}_{1}", name, index);
                     index++;
 
-                    Space space_Cut = new Space(space, name, point3D);
+                    System.Guid guid = space.Guid;
+                    while(adjacencyCluster.GetObject(guid) != null)
+                    {
+                        guid = System.Guid.NewGuid();
+                    }
+
+                    Space space_Cut = new Space(guid, space);
+                    space_Cut = new Space(space_Cut, name, point3D);
+                    
                     adjacencyCluster.AddObject(space_Cut);
                     foreach(object relatedObject in relatedObjects)
                     {
@@ -93,16 +101,21 @@ namespace SAM.Analytical
 
                     foreach(Face3D face3D_Shell_Cut in face3Ds_Shell_Cut)
                     {
-                        Panel panel_Face3D = panels_Space.PanelsByFace3D(face3D_Shell_Cut, 0, tolerance_Snap, tolerance_Distance).FirstOrDefault();
+                        Panel panel_Face3D = panels_Space.PanelsByFace3D(face3D_Shell_Cut, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
                         if(panel_Face3D == null)
                         {
-                            panel_Face3D = panels_Air.PanelsByFace3D(face3D_Shell_Cut, 0, tolerance_Snap, tolerance_Distance).FirstOrDefault();
+                            panel_Face3D = panels_Air.PanelsByFace3D(face3D_Shell_Cut, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
                             if(panel_Face3D == null)
                             {
                                 continue;
                             }
 
-                            result.Add(panel_Face3D);
+                            
+                            if(result.Find(x => panel_Face3D.Guid == x.Guid) == null)
+                            {
+                                result.Add(panel_Face3D);
+                                adjacencyCluster.AddObject(panel_Face3D);
+                            }
                         }
 
                         adjacencyCluster.AddRelation(space_Cut, panel_Face3D);

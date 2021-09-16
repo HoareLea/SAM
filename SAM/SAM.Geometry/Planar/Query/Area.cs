@@ -26,9 +26,13 @@ namespace SAM.Geometry.Planar
             }
 
             if (!point2Ds_Temp[count - 1].Equals(point2Ds_Temp[0]))
+            {
                 point2Ds_Temp.Add(point2Ds_Temp[0]);
+                count++;
+            }
+                
 
-            return System.Math.Abs(point2Ds.Take(count - 1).Select((p, i) => (point2Ds_Temp[i + 1].X - p.X) * (point2Ds_Temp[i + 1].Y + p.Y)).Sum() / 2);
+            return System.Math.Abs(point2Ds_Temp.Take(count - 1).Select((p, i) => (point2Ds_Temp[i + 1].X - p.X) * (point2Ds_Temp[i + 1].Y + p.Y)).Sum() / 2);
         }
     }
 }
