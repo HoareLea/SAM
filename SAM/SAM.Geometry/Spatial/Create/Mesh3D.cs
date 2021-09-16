@@ -61,7 +61,7 @@ namespace SAM.Geometry.Spatial
 
             foreach (Triangle3D triangle3D in triangle3Ds)
             {
-                if(triangle3D == null || triangle3D.GetArea() < tolerance)
+                if(triangle3D == null || !triangle3D.IsValid() ||triangle3D.GetArea() < tolerance)
                 {
                     continue;
                 }
