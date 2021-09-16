@@ -45,7 +45,7 @@
                 construction_New = ReplaceNameSpecialCharacters(construction_Old, language);
 
             string name = Core.Query.ReplaceSpecialCharacters(panel.Name, language);
-            if (construction_New?.Name == construction_Old.Name && name == panel.Name)
+            if (construction_New?.Name == construction_Old?.Name && name == panel.Name)
                 return panel;
 
 
