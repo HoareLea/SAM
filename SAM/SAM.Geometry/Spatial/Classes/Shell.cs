@@ -16,7 +16,15 @@ namespace SAM.Geometry.Spatial
             if (face3Ds != null)
             {
                 foreach (Face3D face3D in face3Ds)
+                {
+                    if(face3D == null)
+                    {
+                        continue;
+                    }
+                    
                     Add(face3D);
+                }
+                    
             }
         }
 
@@ -42,7 +50,7 @@ namespace SAM.Geometry.Spatial
             if (face3D == null)
                 return false;
 
-            BoundingBox3D boundingBox3D = face3D.GetBoundingBox();
+            BoundingBox3D boundingBox3D = face3D?.GetBoundingBox();
             if (boundingBox3D == null)
                 return false;
 
