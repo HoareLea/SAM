@@ -1,5 +1,6 @@
 ﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -48,7 +49,7 @@ namespace SAM.Analytical
 
                 List<Space> spaces = result.GetSpaces(panel);
 
-                Panel panel_New = PanelByFace3D(panels, face3D, areaFactor, maxDistance, out double intersectionArea, tolerance_Angle, tolerance_Distance);
+                Panel panel_New = PanelsByFace3D(panels, face3D, areaFactor, maxDistance, out List<double> intersectionAreas, tolerance_Angle, tolerance_Distance)?.FirstOrDefault();
                 if(panel_New == null)
                 {
                     if(panel.PanelGroup == Analytical.PanelGroup.Floor && spaces != null && spaces.Count > 1)
@@ -75,7 +76,7 @@ namespace SAM.Analytical
                 else
                 {
                     double area = face3D.GetArea();
-                    if(intersectionArea/area < areaFactor)
+                    if(intersectionAreas[0]/area < areaFactor)
                     {
                         panel_Updated = new Panel(panel, null);
                         panel_Updated = new Panel(panel_Updated, Analytical.PanelType.Air);

@@ -1,4 +1,6 @@
 ﻿using SAM.Geometry.Spatial;
+using SAM.Geometry.Planar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -157,6 +159,115 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+
+        public static List<Panel> Panels(this AdjacencyCluster adjacencyCluster, Plane plane, PanelType panelType = PanelType.Air, Construction construction = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        {
+            if(adjacencyCluster == null || plane == null)
+            {
+                return null;
+            }
+
+            List<Panel> panels = adjacencyCluster.GetPanels();
+            if(panels == null || panels.Count == 0)
+            {
+                return null;
+            }
+
+            Dictionary<Panel, List<ISegmentable2D>> dictionary = panels.SectionDictionary<ISegmentable2D>(plane, tolerance_Distance);
+            if(dictionary == null || dictionary.Count == 0)
+            {
+                return null;
+            }
+
+            List<Segment2D> segment2Ds = new List<Segment2D>();
+            foreach(List<ISegmentable2D> segmentable2Ds in dictionary.Values)
+            {
+                List<Segment2D> segment2Ds_Temp = Geometry.Planar.Query.Segment2Ds(segmentable2Ds);
+                if (segment2Ds_Temp != null)
+                {
+                    segment2Ds.AddRange(segment2Ds_Temp);
+                }
+            }
+            
+            segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance_Distance);
+            segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, tolerance_Snap);
+
+            List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds);
+            if(face2Ds == null || face2Ds.Count == 0)
+            {
+                return null;
+            }
+
+            List<Face3D> face3Ds = new List<Face3D>();
+            foreach(Face2D face2D in face2Ds)
+            {
+                Face3D face3D = plane.Convert(face2D);
+                if(face3D == null)
+                {
+                    continue;
+                }
+
+                List<Face2D> face2Ds_Difference = new List<Face2D>() { face2D };
+
+                List<Panel> panels_Face3D = Query.PanelsByFace3D(panels, face3D, tolerance_Distance, tolerance_Snap, tolerance_Angle, tolerance_Distance);
+                if(panels_Face3D != null && panels_Face3D.Count != 0)
+                {
+                    foreach(Panel panel_Face3D in panels_Face3D)
+                    {
+                        if(face2Ds_Difference == null || face2Ds_Difference.Count == 0)
+                        {
+                            break;
+                        }
+                        
+                        Face2D face2D_Panel = plane.Convert(plane.Project(panel_Face3D.GetFace3D()));
+                        if(face2D_Panel == null)
+                        {
+                            continue;
+                        }
+
+                        int count = face2Ds_Difference.Count;
+                        for (int i = count; i >= 0; i--)
+                        {
+                            Face2D face2D_Difference = face2Ds_Difference[i];
+                            List<Face2D> face2Ds_Difference_Temp = face2D_Difference.Difference(face2D_Panel, tolerance_Distance);
+                            if(face2Ds_Difference_Temp == null || face2Ds_Difference_Temp.Count == 0)
+                            {
+                                continue;
+                            }
+
+                            face2Ds_Difference.RemoveAt(i);
+                            face2Ds_Difference.AddRange(face2Ds_Difference_Temp);
+                        }
+                    }
+                }
+
+                if (face2Ds_Difference == null || face2Ds_Difference.Count == 0)
+                {
+                    continue;
+                }
+
+                for(int i = 0; i < face2Ds_Difference.Count; i++)
+                {
+                    face2Ds_Difference[i] = face2Ds_Difference[i].Snap(face2Ds, tolerance_Snap, tolerance_Distance);
+                    face3Ds.Add(plane.Convert(face2Ds_Difference[i]));
+                }
+            }
+
+            List<Panel> result = new List<Panel>();
+
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return result;
+            }
+
+            return face3Ds.ConvertAll(x => Panel(construction, panelType, x));
+
+        }
+
+        public static List<Panel> Panels(this AnalyticalModel analyticalModel, Plane plane, PanelType panelType = PanelType.Air, Construction construction = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        {
+            return Panels(analyticalModel?.AdjacencyCluster, plane, panelType, construction, tolerance_Angle, tolerance_Distance, tolerance_Snap);
         }
     }
 }

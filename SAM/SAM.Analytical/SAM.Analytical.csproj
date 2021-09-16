@@ -177,7 +177,7 @@
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\FixEdges.cs" />
     <Compile Include="Query\Transparent.cs" />
-    <Compile Include="Query\PanelByFace3D.cs" />
+    <Compile Include="Query\PanelsByFace3D.cs" />
     <Compile Include="Query\Closest.cs" />
     <Compile Include="Query\AdjustPanels.cs" />
     <Compile Include="Query\FillFloorsAndRoofs.cs" />

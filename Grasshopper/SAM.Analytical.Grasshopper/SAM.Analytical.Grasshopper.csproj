@@ -119,7 +119,7 @@
     <Compile Include="Component\SAMAnalyticalAirflow.cs" />
     <Compile Include="Component\SAMAnalyticalCopyApertureConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalCopyConstructionLayers.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateProfileByValues.cs" />
+    <Compile Include="Component\SAMAnalyticalCreatePanelsByPlane.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalAddObject.cs" />

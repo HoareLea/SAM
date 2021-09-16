@@ -7,14 +7,14 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static Panel PanelByFace3D(this IEnumerable<Panel> panels, Face3D face3D, double areaFactor, double maxDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static List<Panel> PanelsByFace3D(this IEnumerable<Panel> panels, Face3D face3D, double areaFactor, double maxDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            return PanelByFace3D(panels, face3D, areaFactor, maxDistance, out double intersectionArea, tolerance_Angle, tolerance_Distance);
+            return PanelsByFace3D(panels, face3D, areaFactor, maxDistance, out List<double> intersectionAreas, tolerance_Angle, tolerance_Distance);
         }
 
-        public static Panel PanelByFace3D(this IEnumerable<Panel> panels, Face3D face3D, double areaFactor, double maxDistance, out double intersectionArea, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static List<Panel> PanelsByFace3D(this IEnumerable<Panel> panels, Face3D face3D, double areaFactor, double maxDistance, out List<double> intersectionAreas, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            intersectionArea = 0;
+            intersectionAreas = null;
             
             if (panels == null || face3D == null)
             {
@@ -110,9 +110,8 @@ namespace SAM.Analytical
                 tuples.Sort((x, y) => y.Item2.CompareTo(x.Item2));
             }
 
-            intersectionArea = tuples[0].Item2;
-
-            return tuples[0].Item1;
+            intersectionAreas = tuples.ConvertAll(x => x.Item2);
+            return tuples.ConvertAll(x => x.Item1);
         }
     }
 }
