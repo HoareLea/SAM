@@ -139,7 +139,7 @@ namespace SAM.Geometry.Spatial
                         continue;
                     }
 
-                    Face3D face3D_Project = plane.Project(tuple.Item2);
+                    Face3D face3D_Project = plane.Project(face3D);
                     if (face3D_Project == null && !face3D_Project.IsValid())
                     {
                         continue;

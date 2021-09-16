@@ -1,11 +1,39 @@
 ﻿using SAM.Geometry.Spatial;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
     public static partial class Modify
     {
+        public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, IEnumerable<Plane> planes, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        {
+            if(adjacencyCluster == null || planes == null)
+            {
+                return null;
+            }
+
+            List<Panel> result = new List<Panel>();
+            foreach (Plane plane in planes)
+            { 
+                if(plane == null)
+                {
+                    continue;
+                }
+
+                List<Panel> panels = AddAirPanels(adjacencyCluster, plane, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+                if(panels != null && panels.Count > 0)
+                {
+                    result.AddRange(panels);
+                }
+
+            }
+
+            return result;
+        }
+
         public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, Plane plane, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             if (adjacencyCluster == null || plane == null)
@@ -22,58 +50,71 @@ namespace SAM.Analytical
             }
 
             List<Panel> panels_Air = adjacencyCluster.Panels(plane, out List<Panel> panels_Existing, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance, tolerance_Snap: tolerance_Snap);
-            if(panels_Air == null || panels_Air.Count == 0)
+            if (panels_Air == null || panels_Air.Count == 0)
             {
                 return result;
             }
 
             adjacencyCluster.Cut(plane, tolerance_Distance);
 
-            foreach(Space space in spaces)
+            List<Tuple<Space, List<Shell>>> tuples = new List<Tuple<Space, List<Shell>>>();
+            foreach (Space space in spaces)
             {
                 Shell shell = adjacencyCluster.Shell(space);
 
-                List<Shell> shells_Cut = shell.Cut(plane, tolerance_Angle, tolerance_Distance, tolerance_Snap);
-                if(shells_Cut == null || shells_Cut.Count <= 1)
+                List<Shell> shells_Cut = shell?.Cut(plane, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+                if (shells_Cut == null || shells_Cut.Count <= 1)
                 {
                     continue;
                 }
 
-                List<object> relatedObjects = adjacencyCluster.GetRelatedObjects(space);
-                if(relatedObjects == null || relatedObjects.Count == 0)
+                tuples.Add(new Tuple<Space, List<Shell>>(space, shells_Cut));
+            }
+
+            if (tuples == null || tuples.Count == 0)
+            {
+                return result;
+            }
+
+            List<Face3D> face3Ds_Existing = panels_Existing?.ConvertAll(x => x.GetFace3D());
+
+            List <Tuple<Space, List<Tuple<Space, List<Panel>>>>> tuples_New = Enumerable.Repeat<Tuple<Space, List<Tuple<Space, List<Panel>>>>>(null, tuples.Count).ToList();
+
+            Parallel.For(0, tuples.Count, (int i) =>
+            {
+                Space space = tuples[i].Item1;
+
+                List<Panel> panels_Space = adjacencyCluster.GetPanels(space);
+                if (panels_Space == null || panels_Space.Count == 0)
                 {
-                    continue;
+                    return;
                 }
 
-                List<Panel> panels_Space = relatedObjects.FindAll(x => x is Panel).ConvertAll(x => (Panel)x);
-                if(panels_Space == null || panels_Space.Count == 0)
-                {
-                    continue;
-                }
+                List<Shell> shells = tuples[i].Item2;
+                shells.Sort((x, y) => x.GetBoundingBox().Min.Z.CompareTo(y.GetBoundingBox().Min.Z));
 
-                shells_Cut.Sort((x, y) => x.GetBoundingBox().Min.Z.CompareTo(y.GetBoundingBox().Min.Z));
+                tuples_New[i] = new Tuple<Space, List<Tuple<Space, List<Panel>>>>(space, new List<Tuple<Space, List<Panel>>>());
 
-                adjacencyCluster.RemoveObject<Space>(space.Guid);
 
                 int index = 1;
-                foreach(Shell shell_Cut in shells_Cut)
+                foreach (Shell shell in shells)
                 {
-                    shell_Cut.SplitFace3Ds(panels_Existing?.ConvertAll(x => x.GetFace3D()), tolerance_Snap, tolerance_Angle, tolerance_Angle, tolerance_Distance);
-                    
-                    List<Face3D> face3Ds_Shell_Cut = shell_Cut.Face3Ds;
-                    if(face3Ds_Shell_Cut == null || face3Ds_Shell_Cut.Count == 0)
+                    shell.SplitFace3Ds(face3Ds_Existing, tolerance_Snap, tolerance_Angle, tolerance_Angle, tolerance_Distance);
+
+                    List<Face3D> face3Ds_Shell = shell.Face3Ds;
+                    if (face3Ds_Shell == null || face3Ds_Shell.Count == 0)
                     {
                         continue;
                     }
 
-                    Point3D point3D = shell_Cut.CalculatedInternalPoint3D(tolerance_Snap, tolerance_Distance);
-                    if(point3D == null)
+                    Point3D point3D = shell.CalculatedInternalPoint3D(tolerance_Snap, tolerance_Distance);
+                    if (point3D == null)
                     {
                         continue;
                     }
 
                     string name = space.Name;
-                    if(name == null)
+                    if (name == null)
                     {
                         name = string.Empty;
                     }
@@ -81,58 +122,75 @@ namespace SAM.Analytical
                     name = string.Format("{0}_{1}", name, index);
                     index++;
 
-                    System.Guid guid = space.Guid;
-                    while(adjacencyCluster.GetObject(guid) != null)
-                    {
-                        guid = System.Guid.NewGuid();
-                    }
+                    Space space_New = new Space(Guid.NewGuid(), space);
+                    space_New = new Space(space_New, name, point3D);
 
-                    Space space_Cut = new Space(guid, space);
-                    space_Cut = new Space(space_Cut, name, point3D);
-                    
-                    adjacencyCluster.AddObject(space_Cut);
-                    foreach(object relatedObject in relatedObjects)
+                    List<Panel> panels = new List<Panel>();
+                    foreach (Face3D face3D_Shell in face3Ds_Shell)
                     {
-                        if(relatedObject is Panel)
+                        Panel panel_Face3D = panels_Space.PanelsByFace3D(face3D_Shell, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
+                        if (panel_Face3D == null)
+                        {
+                            panel_Face3D = panels_Air.PanelsByFace3D(face3D_Shell, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
+                            if (panel_Face3D == null)
+                            {
+                                panel_Face3D = panels_Existing.PanelsByFace3D(face3D_Shell, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
+                            }
+                        }
+
+                        if (panel_Face3D == null)
                         {
                             continue;
                         }
-                        
-                        adjacencyCluster.AddRelation(space_Cut, relatedObject);
+
+                        panels.Add(panel_Face3D);
                     }
 
-                    foreach(Face3D face3D_Shell_Cut in face3Ds_Shell_Cut)
+                    tuples_New[i].Item2.Add(new Tuple<Space, List<Panel>>(space_New, panels));
+                }
+
+            });
+
+            foreach(Tuple<Space, List<Tuple<Space, List<Panel>>>> tuple in tuples_New)
+            {
+                if(tuple == null)
+                {
+                    continue;
+                }
+
+                Space space_Old = tuple.Item1;
+
+                List<object> relatedObjects = adjacencyCluster.GetRelatedObjects(space_Old)?.FindAll(x => !(x is Panel));
+                adjacencyCluster.RemoveObject<Space>(space_Old.Guid);
+
+                foreach(Tuple<Space, List<Panel>> tuple_Space_New in tuple.Item2)
+                {
+                    Space space_New = tuple_Space_New.Item1;
+
+                    adjacencyCluster.AddObject(space_New);
+
+                    if(relatedObjects != null)
                     {
-                        Panel panel_Face3D = panels_Space.PanelsByFace3D(face3D_Shell_Cut, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
-                        if(panel_Face3D == null)
+                        foreach (object relatedObject in relatedObjects)
                         {
-                            bool existing = false;
-                            panel_Face3D = panels_Air.PanelsByFace3D(face3D_Shell_Cut, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
-                            if(panel_Face3D == null)
+                            if (relatedObject is Panel)
                             {
-                                panel_Face3D = panels_Existing.PanelsByFace3D(face3D_Shell_Cut, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
-                                existing = true;
-
-                                if(panel_Face3D == null)
-                                {
-                                    continue;
-                                }
+                                continue;
                             }
 
-                            adjacencyCluster.AddObject(panel_Face3D);
-
-                            if (!existing && result.Find(x => panel_Face3D.Guid == x.Guid) == null)
-                            {
-                                result.Add(panel_Face3D);
-                            }
+                            adjacencyCluster.AddRelation(space_New, relatedObject);
                         }
+                    }
 
-                        adjacencyCluster.AddRelation(space_Cut, panel_Face3D);
+                    foreach(Panel panel in tuple_Space_New.Item2)
+                    {
+                        adjacencyCluster.AddObject(panel);
+                        adjacencyCluster.AddRelation(space_New, panel);
                     }
                 }
             }
 
-            return result;
+            return panels_Air.FindAll(x => adjacencyCluster.Contains(x));
         }
     }
 }

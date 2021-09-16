@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -49,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_plane", NickName = "_plane", Description = "SAM Geometry Plane", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_planes", NickName = "_planes", Description = "SAM Geometry Planes", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -87,46 +87,52 @@ namespace SAM.Analytical.Grasshopper
             }
 
 
-            index = Params.IndexOfInputParam("_plane");
-            GH_ObjectWrapper objectWrapper = null;
-            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
+            index = Params.IndexOfInputParam("_planes");
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null || objectWrappers.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            Plane plane = null;
+            List<Plane> planes = new List<Plane>();
 
-            object @object = objectWrapper.Value;
-            if (@object is IGH_Goo)
+            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                @object = (@object as dynamic).Value;
-            }
+                Plane plane = null;
 
-            if (@object is double)
-            {
-                plane = Geometry.Spatial.Create.Plane((double)@object);
-            }
-            else if (@object is string)
-            {
-                if (double.TryParse((string)@object, out double elevation_Temp))
+                object @object = objectWrapper.Value;
+                if (@object is IGH_Goo)
                 {
-                    plane = Geometry.Spatial.Create.Plane(elevation_Temp);
+                    @object = (@object as dynamic).Value;
                 }
-            }
-            else if (@object is Rhino.Geometry.Plane)
-            {
-                plane = Geometry.Grasshopper.Convert.ToSAM(((Rhino.Geometry.Plane)@object));
-            }
-            else if (@object is Plane)
-            {
-                plane = (Plane)@object;
-            }
 
-            if (plane == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                if (@object is double)
+                {
+                    plane = Geometry.Spatial.Create.Plane((double)@object);
+                }
+                else if (@object is string)
+                {
+                    if (double.TryParse((string)@object, out double elevation_Temp))
+                    {
+                        plane = Geometry.Spatial.Create.Plane(elevation_Temp);
+                    }
+                }
+                else if (@object is Rhino.Geometry.Plane)
+                {
+                    plane = Geometry.Grasshopper.Convert.ToSAM(((Rhino.Geometry.Plane)@object));
+                }
+                else if (@object is Plane)
+                {
+                    plane = (Plane)@object;
+                }
+
+                if(plane == null)
+                {
+                    continue;
+                }
+
+                planes.Add(plane);
             }
 
             AdjacencyCluster adjacencyCluster = sAMObject is AnalyticalModel ? ((AnalyticalModel)sAMObject).AdjacencyCluster : sAMObject as AdjacencyCluster;
@@ -137,7 +143,7 @@ namespace SAM.Analytical.Grasshopper
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
                 }
 
-                adjacencyCluster.AddAirPanels(plane, Tolerance.Angle, Tolerance.Distance, Tolerance.MacroDistance);
+                adjacencyCluster.AddAirPanels(planes, Tolerance.Angle, Tolerance.Distance, Tolerance.MacroDistance);
                 if (sAMObject is AnalyticalModel)
                 {
                     sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
