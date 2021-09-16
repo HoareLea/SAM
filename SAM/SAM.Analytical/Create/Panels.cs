@@ -163,7 +163,14 @@ namespace SAM.Analytical
 
         public static List<Panel> Panels(this AdjacencyCluster adjacencyCluster, Plane plane, PanelType panelType = PanelType.Air, Construction construction = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
-            if(adjacencyCluster == null || plane == null)
+            return Panels(adjacencyCluster, plane, out List<Panel> existingPanels, panelType, construction, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+        }
+
+        public static List<Panel> Panels(this AdjacencyCluster adjacencyCluster, Plane plane, out List<Panel> existingPanels, PanelType panelType = PanelType.Air, Construction construction = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        {
+            existingPanels = null;
+
+            if (adjacencyCluster == null || plane == null)
             {
                 return null;
             }
@@ -199,6 +206,8 @@ namespace SAM.Analytical
                 return null;
             }
 
+            existingPanels = new List<Panel>();
+
             List<Face3D> face3Ds = new List<Face3D>();
             foreach(Face2D face2D in face2Ds)
             {
@@ -213,6 +222,8 @@ namespace SAM.Analytical
                 List<Panel> panels_Face3D = Query.PanelsByFace3D(panels, face3D, tolerance_Distance, tolerance_Snap, tolerance_Angle, tolerance_Distance);
                 if(panels_Face3D != null && panels_Face3D.Count != 0)
                 {
+                    existingPanels.AddRange(panels_Face3D);
+                    
                     foreach(Panel panel_Face3D in panels_Face3D)
                     {
                         if(face2Ds_Difference == null || face2Ds_Difference.Count == 0)

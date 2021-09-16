@@ -21,7 +21,7 @@ namespace SAM.Analytical
                 return result;
             }
 
-            List<Panel> panels_Air = adjacencyCluster.Panels(plane, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance, tolerance_Snap: tolerance_Snap);
+            List<Panel> panels_Air = adjacencyCluster.Panels(plane, out List<Panel> panels_Existing, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance, tolerance_Snap: tolerance_Snap);
             if(panels_Air == null || panels_Air.Count == 0)
             {
                 return result;
@@ -104,17 +104,24 @@ namespace SAM.Analytical
                         Panel panel_Face3D = panels_Space.PanelsByFace3D(face3D_Shell_Cut, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
                         if(panel_Face3D == null)
                         {
+                            bool existing = false;
                             panel_Face3D = panels_Air.PanelsByFace3D(face3D_Shell_Cut, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
                             if(panel_Face3D == null)
                             {
-                                continue;
+                                panel_Face3D = panels_Existing.PanelsByFace3D(face3D_Shell_Cut, 0, tolerance_Snap, tolerance_Distance)?.FirstOrDefault();
+                                existing = true;
+
+                                if(panel_Face3D == null)
+                                {
+                                    continue;
+                                }
                             }
 
-                            
-                            if(result.Find(x => panel_Face3D.Guid == x.Guid) == null)
+                            adjacencyCluster.AddObject(panel_Face3D);
+
+                            if (!existing && result.Find(x => panel_Face3D.Guid == x.Guid) == null)
                             {
                                 result.Add(panel_Face3D);
-                                adjacencyCluster.AddObject(panel_Face3D);
                             }
                         }
 
