@@ -227,11 +227,11 @@ namespace SAM.Analytical
                         }
 
                         int count = face2Ds_Difference.Count;
-                        for (int i = count; i >= 0; i--)
+                        for (int i = count - 1; i >= 0; i--)
                         {
                             Face2D face2D_Difference = face2Ds_Difference[i];
                             List<Face2D> face2Ds_Difference_Temp = face2D_Difference.Difference(face2D_Panel, tolerance_Distance);
-                            if(face2Ds_Difference_Temp == null || face2Ds_Difference_Temp.Count == 0)
+                            if (face2Ds_Difference_Temp == null || face2Ds_Difference_Temp.Count == 0)
                             {
                                 continue;
                             }
