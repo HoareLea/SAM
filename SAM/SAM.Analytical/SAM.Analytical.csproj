@@ -175,6 +175,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\Intersection.cs" />
     <Compile Include="Query\FixEdges.cs" />
     <Compile Include="Query\Transparent.cs" />
     <Compile Include="Query\PanelsByFace3D.cs" />
