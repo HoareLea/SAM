@@ -1,6 +1,4 @@
-﻿using Grasshopper;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Data;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -21,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,6 +48,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_planes", NickName = "_planes", Description = "SAM Geometry Planes", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -135,6 +134,19 @@ namespace SAM.Analytical.Grasshopper
                 planes.Add(plane);
             }
 
+
+            List<Space> spaces = null;
+            index = Params.IndexOfInputParam("spaces_");
+            if(index != -1)
+            {
+                List<Space> spaces_Temp = new List<Space>();
+
+                if (dataAccess.GetDataList(index, spaces_Temp) && spaces_Temp != null && spaces_Temp.Count != 0)
+                {
+                    spaces = spaces_Temp;
+                }
+            }
+
             AdjacencyCluster adjacencyCluster = sAMObject is AnalyticalModel ? ((AnalyticalModel)sAMObject).AdjacencyCluster : sAMObject as AdjacencyCluster;
             if(adjacencyCluster != null)
             {
@@ -143,7 +155,7 @@ namespace SAM.Analytical.Grasshopper
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
                 }
 
-                adjacencyCluster.AddAirPanels(planes, Tolerance.Angle, Tolerance.Distance, Tolerance.MacroDistance);
+                adjacencyCluster.AddAirPanels(planes, spaces, Tolerance.Angle, Tolerance.Distance, Tolerance.MacroDistance);
                 if (sAMObject is AnalyticalModel)
                 {
                     sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);

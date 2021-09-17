@@ -8,7 +8,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, IEnumerable<Plane> planes, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, IEnumerable<Plane> planes, IEnumerable<Space> spaces = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             if(adjacencyCluster == null || planes == null)
             {
@@ -23,7 +23,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                List<Panel> panels = AddAirPanels(adjacencyCluster, plane, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+                List<Panel> panels = AddAirPanels(adjacencyCluster, plane, spaces, tolerance_Angle, tolerance_Distance, tolerance_Snap);
                 if(panels != null && panels.Count > 0)
                 {
                     result.AddRange(panels);
@@ -34,7 +34,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, Plane plane, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, Plane plane, IEnumerable<Space> spaces = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             if (adjacencyCluster == null || plane == null)
             {
@@ -43,10 +43,30 @@ namespace SAM.Analytical
 
             List<Panel> result = new List<Panel>();
 
-            List<Space> spaces = adjacencyCluster.GetSpaces();
-            if (spaces == null || spaces.Count == 0)
+            List<Space> spaces_Temp = adjacencyCluster.GetSpaces();
+            if (spaces_Temp == null || spaces_Temp.Count == 0)
             {
                 return result;
+            }
+
+            if(spaces != null)
+            {
+                foreach(Space space in spaces)
+                {
+                    if(space == null)
+                    {
+                        continue;
+                    }
+
+                    Guid guid = space.Guid;
+                    Space space_Temp = spaces_Temp.Find(x => x.Guid == guid);
+                    if(space_Temp == null)
+                    {
+                        continue;
+                    }
+
+                    spaces_Temp.Remove(space_Temp);
+                }
             }
 
             List<Panel> panels_Air = adjacencyCluster.Panels(plane, out List<Panel> panels_Existing, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance, tolerance_Snap: tolerance_Snap);
@@ -58,7 +78,7 @@ namespace SAM.Analytical
             adjacencyCluster.Cut(plane, tolerance_Distance);
 
             List<Tuple<Space, List<Shell>>> tuples = new List<Tuple<Space, List<Shell>>>();
-            foreach (Space space in spaces)
+            foreach (Space space in spaces_Temp)
             {
                 Shell shell = adjacencyCluster.Shell(space);
 
