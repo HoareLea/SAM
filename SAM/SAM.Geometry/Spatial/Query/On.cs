@@ -61,5 +61,21 @@ namespace SAM.Geometry.Spatial
 
             return true;
         }
+
+        public static bool On(this Plane plane, IPlanar3D planar3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(plane == null || planar3D == null)
+            {
+                return false;
+            }
+
+            Plane plane_Planar3D = planar3D.GetPlane();
+            if(plane_Planar3D == null)
+            {
+                return false;
+            }
+
+            return Coplanar(plane, plane_Planar3D, tolerance) && plane.On(plane_Planar3D.Origin, tolerance);
+        }
     }
 }

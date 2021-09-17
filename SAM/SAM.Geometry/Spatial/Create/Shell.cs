@@ -7,7 +7,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Create
     {
-        public static Shell Shell(this IEnumerable<Face3D> face3Ds, double tolerance = Core.Tolerance.Distance)
+        public static Shell Shell(this IEnumerable<Face3D> face3Ds, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (face3Ds == null || face3Ds.Count() == 0)
                 return null;
@@ -73,11 +73,58 @@ namespace SAM.Geometry.Spatial
                         if (face3D != null)
                             face3Ds_Shell.Add(face3D);
                     }
-                        
                 }
             }
 
-            return new Shell(face3Ds_Shell);
+            int count = face3Ds_Shell.Count;
+            if(count < 3)
+            {
+                return null;
+            }
+
+            Shell result = new Shell(face3Ds_Shell);
+            for(int i = face3Ds_Shell.Count - 1; i >= 0; i--)
+            {
+                Face3D face3D_Shell = face3Ds_Shell[i];
+
+                Point3D point3D = face3D_Shell?.InternalPoint3D(tolerance);
+                if(point3D == null)
+                {
+                    face3Ds_Shell.RemoveAt(i);
+                    continue;
+                }
+
+                Vector3D vector3D = face3D_Shell?.GetPlane()?.Normal;
+                if (vector3D == null)
+                {
+                    face3Ds_Shell.RemoveAt(i);
+                    continue;
+                }
+
+                vector3D = vector3D * silverSpacing;
+
+                bool inside_1 = result.Inside((Point3D)point3D.GetMoved(vector3D), silverSpacing, tolerance);
+                bool inside_2 = result.Inside((Point3D)point3D.GetMoved(vector3D.GetNegated()), silverSpacing, tolerance);
+
+                if(inside_1 == inside_2)
+                {
+                    face3Ds_Shell.RemoveAt(i);
+                    continue;
+                }
+            }
+
+            if(face3Ds_Shell.Count == count)
+            {
+                return result;
+            }
+
+            if(face3Ds_Shell.Count < 3)
+            {
+                return null;
+            }
+
+            result = new Shell(face3Ds_Shell);
+            return result; 
         }
 
         public static Shell Shell(this Face3D face3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)

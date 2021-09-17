@@ -8,7 +8,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, IEnumerable<Plane> planes, IEnumerable<Space> spaces = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, IEnumerable<Plane> planes, IEnumerable<Space> spaces = null, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             if(adjacencyCluster == null || planes == null)
             {
@@ -23,7 +23,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                List<Panel> panels = AddAirPanels(adjacencyCluster, plane, spaces, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+                List<Panel> panels = AddAirPanels(adjacencyCluster, plane, spaces, silverSpacing, tolerance_Angle, tolerance_Distance, tolerance_Snap);
                 if(panels != null && panels.Count > 0)
                 {
                     result.AddRange(panels);
@@ -34,7 +34,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, Plane plane, IEnumerable<Space> spaces = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, Plane plane, IEnumerable<Space> spaces = null, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             if (adjacencyCluster == null || plane == null)
             {
@@ -99,12 +99,12 @@ namespace SAM.Analytical
 
             adjacencyCluster.Cut(plane, tolerance_Distance);
 
-            List<Tuple<Space, List<Shell>>> tuples = new List<Tuple<Space, List<Shell>>>();
+            List<Tuple<Space, Shell, List<Shell>>> tuples = new List<Tuple<Space, Shell, List<Shell>>>();
             foreach (Space space in spaces_Temp)
             {
                 Shell shell = adjacencyCluster.Shell(space);
 
-                List<Shell> shells_Cut = shell?.Cut(plane, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+                List<Shell> shells_Cut = shell?.Cut(plane, silverSpacing, tolerance_Angle, tolerance_Distance, tolerance_Snap);
                 if (shells_Cut == null || shells_Cut.Count <= 1)
                 {
                     continue;
@@ -116,7 +116,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                tuples.Add(new Tuple<Space, List<Shell>>(space, shells_Cut));
+                tuples.Add(new Tuple<Space, Shell, List<Shell>>(space, shell, shells_Cut));
             }
 
             if (tuples == null || tuples.Count == 0)
@@ -138,16 +138,16 @@ namespace SAM.Analytical
                     return;
                 }
 
-                List<Shell> shells = tuples[i].Item2;
+                List<Shell> shells = tuples[i].Item3;
                 shells.Sort((x, y) => x.GetBoundingBox().Min.Z.CompareTo(y.GetBoundingBox().Min.Z));
 
                 tuples_New[i] = new Tuple<Space, List<Tuple<Space, List<Panel>>>>(space, new List<Tuple<Space, List<Panel>>>());
-
 
                 int index = 1;
                 foreach (Shell shell in shells)
                 {
                     shell.SplitFace3Ds(face3Ds_Existing, tolerance_Snap, tolerance_Angle, tolerance_Angle, tolerance_Distance);
+                    shell.Snap(tuples[i].Item2, tolerance_Snap, tolerance_Distance);
 
                     List<Face3D> face3Ds_Shell = shell.Face3Ds;
                     if (face3Ds_Shell == null || face3Ds_Shell.Count == 0)

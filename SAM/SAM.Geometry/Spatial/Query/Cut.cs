@@ -148,7 +148,7 @@ namespace SAM.Geometry.Spatial
             return face2Ds?.ConvertAll(x => plane.Convert(x));
         }
 
-        public static List<Shell> Cut(this Shell shell, Plane plane, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<Shell> Cut(this Shell shell, Plane plane, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             if(shell == null || plane == null)
             {
@@ -192,13 +192,55 @@ namespace SAM.Geometry.Spatial
             foreach (Face3D face3D_Cut in face3Ds_Cut)
             {
                 Point3D point3D = face3D_Cut?.GetExternalEdge3D()?.GetCentroid();
-                if(point3D == null)
+                if (point3D == null)
                 {
                     continue;
                 }
 
-                List<Face3D> face3Ds_Temp = plane.Above(point3D) ? face3Ds_Above : face3Ds_Below;
-                face3Ds_Temp.Add(face3D_Cut);
+                if (plane.On(face3D_Cut, tolerance_Distance))
+                {
+                    Face2D face2D_Cut = plane.Convert(plane.Project(face3D_Cut));
+
+                    BoundingBox2D boundingBox2D_Cut = face2D_Cut.GetBoundingBox();
+
+                    for (int i = face3Ds_Section.Count - 1; i >= 0; i--)
+                    {
+                        Face2D face2D_Section = plane.Convert(face3Ds_Section[i]);
+                        if (face2D_Section.GetBoundingBox().InRange(boundingBox2D_Cut, tolerance_Distance))
+                        {
+                            List<Face2D> face2Ds_Difference = face2D_Section.Difference(face2D_Cut, tolerance_Distance);
+                            if (face2Ds_Difference != null && face2Ds_Difference.Count != 0)
+                            {
+                                face3Ds_Section.RemoveAt(i);
+                                face3Ds_Section.AddRange(face2Ds_Difference.ConvertAll(x => plane.Convert(x)));
+                            }
+                            else
+                            {
+                                if (face2D_Section.Similar(face2D_Cut, tolerance_Distance))
+                                {
+                                    face3Ds_Section.RemoveAt(i);
+                                }
+                            }
+                        }
+
+                    }
+
+                    Vector3D vector3D = plane.Normal * silverSpacing;
+
+                    if(shell.Inside((Point3D)point3D.GetMoved(vector3D), silverSpacing, tolerance_Distance))
+                    {
+                        face3Ds_Above.Add(face3D_Cut);
+                    }
+                    else
+                    {
+                        face3Ds_Below.Add(face3D_Cut);
+                    }
+                }
+                else
+                {
+                    List<Face3D> face3Ds_Temp = plane.Above(point3D) ? face3Ds_Above : face3Ds_Below;
+                    face3Ds_Temp.Add(face3D_Cut);
+                }
             }
 
             List<Shell> result = new List<Shell>();
@@ -224,10 +266,11 @@ namespace SAM.Geometry.Spatial
                     {
                         face3Ds_Shell.Add(face3D_Section);
 
-                        Shell shell_Cut = Create.Shell(face3Ds_Shell, tolerance_Distance);
+                        Shell shell_Cut = Create.Shell(face3Ds_Shell, silverSpacing, tolerance_Distance);
                         if (shell_Cut != null)
                         {
                             face3Ds_Temp.RemoveAll(x => face3Ds_Shell.Contains(x));
+                            shell_Cut.Snap(shell, tolerance_Snap, tolerance_Distance);
                             result.Add(shell_Cut);
                         }
                     }

@@ -155,7 +155,7 @@ namespace SAM.Analytical.Grasshopper
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
                 }
 
-                adjacencyCluster.AddAirPanels(planes, spaces, Tolerance.Angle, Tolerance.Distance, Tolerance.MacroDistance);
+                adjacencyCluster.AddAirPanels(planes, spaces, Tolerance.MacroDistance, Tolerance.Angle, Tolerance.Distance, Tolerance.MacroDistance);
                 if (sAMObject is AnalyticalModel)
                 {
                     sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);

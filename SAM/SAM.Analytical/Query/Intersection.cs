@@ -90,7 +90,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                Shell shell = Geometry.Spatial.Create.Shell(face3Ds_Shell, tolerance_Distance);
+                Shell shell = Geometry.Spatial.Create.Shell(face3Ds_Shell, silverSpacing, tolerance_Distance);
                 if(shell == null)
                 {
                     continue;
