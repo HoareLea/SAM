@@ -51,6 +51,28 @@ namespace SAM.Analytical
 
             if(spaces != null)
             {
+                for(int i = spaces_Temp.Count - 1; i >= 0; i--)
+                {
+                    Guid guid = spaces_Temp[i].Guid;
+
+                    bool exists = false;
+                    foreach(Space space in spaces)
+                    {
+                        if(space.Guid == guid)
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if(exists)
+                    {
+                        continue;
+                    }
+
+                    spaces_Temp.RemoveAt(i);
+                }
+                
                 foreach(Space space in spaces)
                 {
                     if(space == null)
@@ -84,6 +106,12 @@ namespace SAM.Analytical
 
                 List<Shell> shells_Cut = shell?.Cut(plane, tolerance_Angle, tolerance_Distance, tolerance_Snap);
                 if (shells_Cut == null || shells_Cut.Count <= 1)
+                {
+                    continue;
+                }
+
+                shells_Cut.RemoveAll(x => x == null || x.GetBoundingBox() == null);
+                if(shells_Cut.Count <= 1)
                 {
                     continue;
                 }
