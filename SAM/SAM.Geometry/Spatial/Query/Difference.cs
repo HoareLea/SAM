@@ -15,7 +15,6 @@ namespace SAM.Geometry.Spatial
             Shell shell_1_Temp = new Shell(shell_1);
             Shell shell_2_Temp = new Shell(shell_2);
 
-
             if (!shell_1.GetBoundingBox().InRange(shell_2.GetBoundingBox(), tolerance_Distance) || !shell_1.IsClosed(silverSpacing) || !shell_2.IsClosed(silverSpacing))
             {
                 return new List<Shell>() { shell_1_Temp };
@@ -66,7 +65,7 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Face3D> face3Ds = new List<Face3D>();
-            if(boundaries_1 != null && boundaries_1.Count != 0)
+            if (boundaries_1 != null && boundaries_1.Count != 0)
             {
                 face3Ds.AddRange(boundaries_1.ConvertAll(x => x.Item2));
             }
@@ -80,6 +79,8 @@ namespace SAM.Geometry.Spatial
             {
                 return null;
             }
+
+            face3Ds = face3Ds.ConvertAll(x => x.Snap(shell_1.Face3Ds, tolerance_Distance, tolerance_Distance));
 
             List<Shell> result = new List<Shell>();
             while(face3Ds.Count >= 3)
