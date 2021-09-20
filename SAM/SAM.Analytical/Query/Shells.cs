@@ -713,28 +713,28 @@ namespace SAM.Analytical
                 result.Add(shell_Union);
             }
 
-            List<Tuple<BoundingBox3D, Face3D>> tuples_Face3D = face3Ds.ConvertAll(x => new Tuple<BoundingBox3D, Face3D>(x.GetBoundingBox(), x));
-            for (int i = result.Count - 1; i >= 0; i--)
-            {
-                Shell shell = result[i];
+            //List<Tuple<BoundingBox3D, Face3D>> tuples_Face3D = face3Ds.ConvertAll(x => new Tuple<BoundingBox3D, Face3D>(x.GetBoundingBox(), x));
+            //for (int i = result.Count - 1; i >= 0; i--)
+            //{
+            //    Shell shell = result[i];
 
-                BoundingBox3D boundingBox3D = shell.GetBoundingBox();
-                if(boundingBox3D == null)
-                {
-                    result.RemoveAt(i);
-                    continue;
-                }
+            //    BoundingBox3D boundingBox3D = shell.GetBoundingBox();
+            //    if(boundingBox3D == null)
+            //    {
+            //        result.RemoveAt(i);
+            //        continue;
+            //    }
 
-                Plane plane_Shell = Geometry.Spatial.Create.Plane(boundinBox3D.Min.Z + offset);
+            //    Plane plane_Shell = Geometry.Spatial.Create.Plane(boundinBox3D.Min.Z + offset);
 
-                List<Tuple<BoundingBox3D, Face3D>> tuples_Face3D_Temp = tuples_Face3D.FindAll(x => boundingBox3D.InRange(x.Item1, snapTolerance));
-                if(tuples_Face3D_Temp == null || tuples_Face3D_Temp.Count == 0)
-                {
-                    result.RemoveAt(i);
-                    continue;
-                }
+            //    List<Tuple<BoundingBox3D, Face3D>> tuples_Face3D_Temp = tuples_Face3D.FindAll(x => boundingBox3D.InRange(x.Item1, snapTolerance));
+            //    if(tuples_Face3D_Temp == null || tuples_Face3D_Temp.Count == 0)
+            //    {
+            //        result.RemoveAt(i);
+            //        continue;
+            //    }
 
-            }
+            //}
 
             return result;
         }
