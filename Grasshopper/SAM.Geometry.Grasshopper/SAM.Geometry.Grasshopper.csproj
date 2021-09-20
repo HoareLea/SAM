@@ -63,7 +63,7 @@
     <Compile Include="Component\SAMGeometryShellsUnion.cs" />
     <Compile Include="Component\SAMGeometryCutShell.cs" />
     <Compile Include="Component\GeometryTriangulate.cs" />
-    <Compile Include="Component\GeometrySplitShells.cs" />
+    <Compile Include="Component\SAMGeometryShellsSplitFace3Ds.cs" />
     <Compile Include="Component\SAMGeometryFace3DSpacing.cs" />
     <Compile Include="Component\SAMGeometryFill.cs" />
     <Compile Include="Component\SAMGeometryMargeOverlaps.cs" />

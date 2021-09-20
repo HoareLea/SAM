@@ -831,7 +831,7 @@ namespace SAM.Analytical
             }
 
             List<Shell> shells = Query.Shells(panels, elevations, offsets, auxiliaryElevations, snapTolerance, silverSpacing, tolerance_Angle, tolerance_Distance);
-            shells?.Split(tolerance_Angle, tolerance_Distance);
+            shells?.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
 
             return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, addMissingPanels, thinnessRatio, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance);
         }

@@ -808,7 +808,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
     
-        public bool Split(Shell shell, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public bool SplitFace3Ds(Shell shell, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if(shell == null || !boundingBox3D.InRange(shell.boundingBox3D, tolerance_Distance))
             {

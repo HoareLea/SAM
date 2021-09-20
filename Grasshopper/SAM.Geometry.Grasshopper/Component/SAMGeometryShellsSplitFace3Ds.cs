@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometrySplitShells : GH_SAMVariableOutputParameterComponent
+    public class GeometryShellsSplitFace3Ds : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,9 +29,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public GeometrySplitShells()
-          : base("Geometry.SplitShells", "Geometry.SplitShells",
-              "Split Shells",
+        public GeometryShellsSplitFace3Ds()
+          : base("Geometry.ShellsSplitFace3Ds", "Geometry.ShellsSplitFace3Ds",
+              "Split Face3Ds of Shells",
               "SAM", "Geometry")
         {
         }
@@ -69,7 +69,7 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Shells", NickName = "Shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "shells", NickName = "shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -116,9 +116,9 @@ namespace SAM.Geometry.Grasshopper
 
             shells = shells.ConvertAll(x => new Shell(x));
 
-            shells.Split(Core.Tolerance.Angle, tolerance);
+            shells.SplitFace3Ds(Core.Tolerance.Angle, tolerance);
 
-            index = Params.IndexOfOutputParam("Shells");
+            index = Params.IndexOfOutputParam("shells");
             if (index != -1)
                 dataAccess.SetDataList(index, shells);
         }
