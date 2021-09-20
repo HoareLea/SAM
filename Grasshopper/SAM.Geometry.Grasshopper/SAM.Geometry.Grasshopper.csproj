@@ -68,7 +68,7 @@
     <Compile Include="Component\SAMGeometryFill.cs" />
     <Compile Include="Component\SAMGeometryMargeOverlaps.cs" />
     <Compile Include="Component\SAMGeometryShellNakedSegment3Ds.cs" />
-    <Compile Include="Component\SAMGeometrySplitFace3Ds.cs" />
+    <Compile Include="Component\SAMGeometrySplitCoplanarFace3Ds.cs" />
     <Compile Include="Component\SAMGeometryShellContains.cs" />
     <Compile Include="Component\GeometryFilterShells.cs" />
     <Compile Include="Component\GeometryGetShellsByPoint3D.cs" />

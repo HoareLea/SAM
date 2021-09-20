@@ -584,7 +584,7 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public bool SplitFace3Ds(Face3D face3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public bool SplitCoplanarFace3Ds(Face3D face3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (boundaries == null || boundaries.Count == 0 || !Query.IsValid(face3D))
                 return false;
@@ -678,7 +678,7 @@ namespace SAM.Geometry.Spatial
             return true;
         }
 
-        public bool SplitFace3Ds(Shell shell, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public bool SplitCoplanarFace3Ds(Shell shell, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (shell == null)
                 return false;
@@ -701,7 +701,7 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                if (SplitFace3Ds(boundary_Temp.Item2, tolerance_Angle, tolerance_Distance))
+                if (SplitCoplanarFace3Ds(boundary_Temp.Item2, tolerance_Angle, tolerance_Distance))
                 {
                     result = true;
                 }

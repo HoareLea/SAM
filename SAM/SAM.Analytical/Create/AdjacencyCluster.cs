@@ -284,7 +284,7 @@ namespace SAM.Analytical
             shells_Temp.RemoveAll(x => x == null);
             List<Panel> panels_Merged = Query.MergeCoplanarPanels(tuples_Panel.ConvertAll(x => x.Item3), maxDistance, true, true, minArea, tolerance_Distance);
             shells_Temp.FillFace3Ds(panels_Merged.ConvertAll(x => x.GetFace3D()), 0.1, maxDistance, maxAngle, tolerance_Distance);
-            shells_Temp.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
+            shells_Temp.SplitCoplanarFace3Ds(tolerance_Angle, tolerance_Distance);
 
             shells_Temp = shells_Temp.Snap(shells, silverSpacing, tolerance_Distance);
 

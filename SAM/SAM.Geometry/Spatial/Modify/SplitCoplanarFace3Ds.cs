@@ -6,7 +6,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Modify
     {
-        public static bool SplitFace3Ds(this List<Shell> shells, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static bool SplitCoplanarFace3Ds(this List<Shell> shells, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (shells == null || shells.Count < 2)
                 return false;
@@ -29,7 +29,7 @@ namespace SAM.Geometry.Spatial
                             continue;
                         }
 
-                        if (shell_New.SplitFace3Ds(shells[j], tolerance_Angle, tolerance_Distance))
+                        if (shell_New.SplitCoplanarFace3Ds(shells[j], tolerance_Angle, tolerance_Distance))
                         {
                             updated = true;
                         }
@@ -49,7 +49,7 @@ namespace SAM.Geometry.Spatial
             return tuples.Find(x => x.Item2) != null;
         }
 
-        public static bool SplitFace3Ds(this List<Shell> shells, IEnumerable<Face3D> face3Ds, double maxDistance = 0.1, double maxAngle = 0.0872664626, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static bool SplitCoplanarFace3Ds(this List<Shell> shells, IEnumerable<Face3D> face3Ds, double maxDistance = 0.1, double maxAngle = 0.0872664626, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (shells == null || shells.Count < 2)
                 return false;
@@ -64,7 +64,7 @@ namespace SAM.Geometry.Spatial
                 {
                     Shell shell_New = new Shell(tuples[i].Item1);
 
-                    bool updated = SplitFace3Ds(shell_New, face3Ds, maxDistance, maxAngle, tolerance_Angle, tolerance_Distance);
+                    bool updated = SplitCoplanarFace3Ds(shell_New, face3Ds, maxDistance, maxAngle, tolerance_Angle, tolerance_Distance);
                     if (updated)
                     {
                         tuples[i] = new Tuple<Shell, bool>(shell_New, true);
@@ -79,7 +79,7 @@ namespace SAM.Geometry.Spatial
             return tuples.Find(x => x.Item2) != null;
         }
 
-        public static bool SplitFace3Ds(this Shell shell, IEnumerable<Face3D> face3Ds, double maxDistance = 0.1, double maxAngle = 0.0872664626, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static bool SplitCoplanarFace3Ds(this Shell shell, IEnumerable<Face3D> face3Ds, double maxDistance = 0.1, double maxAngle = 0.0872664626, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (shell == null || face3Ds == null)
             {
@@ -170,7 +170,7 @@ namespace SAM.Geometry.Spatial
             bool split = false;
             foreach (Face3D face3D_Split in face3Ds_Split)
             {
-                if (shell.SplitFace3Ds(face3D_Split, tolerance_Angle, tolerance_Distance))
+                if (shell.SplitCoplanarFace3Ds(face3D_Split, tolerance_Angle, tolerance_Distance))
                 {
                     split = true;
                 }

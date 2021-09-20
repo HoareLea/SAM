@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometrySplitFace3Ds : GH_SAMVariableOutputParameterComponent
+    public class SAMGeometrySplitCoplanarFace3Ds : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +18,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -28,9 +28,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMGeometrySplitFace3Ds()
-          : base("SAMGeometry.SplitFace3Ds", "SAMGeometry.SplitFace3Ds",
-              "Split Shells Face3Ds",
+        public SAMGeometrySplitCoplanarFace3Ds()
+          : base("SAMGeometry.SplitCoplanarFace3Ds", "SAMGeometry.SplitCoplanarFace3Ds",
+              "Split Shells Coplanar Face3Ds",
               "SAM", "Geometry")
         {
         }
@@ -71,8 +71,8 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "Shells", NickName = "Shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Updated", NickName = "Updated", Description = "Updated", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "shells", NickName = "shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "updated", NickName = "updated", Description = "Updated", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -87,7 +87,7 @@ namespace SAM.Geometry.Grasshopper
         {
             int index = -1;
 
-            int index_Updated = Params.IndexOfOutputParam("Updated");
+            int index_Updated = Params.IndexOfOutputParam("updated");
             if (index_Updated != -1)
                 dataAccess.SetData(index_Updated, false);
 
@@ -135,9 +135,9 @@ namespace SAM.Geometry.Grasshopper
 
             shells = shells.ConvertAll(x => new Shell(x));
 
-            bool result = shells.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
+            bool result = shells.SplitCoplanarFace3Ds(tolerance_Angle, tolerance_Distance);
 
-            index = Params.IndexOfOutputParam("Shells");
+            index = Params.IndexOfOutputParam("shells");
             if (index != -1)
                 dataAccess.SetDataList(index, shells?.ConvertAll(x => new GooSAMGeometry(x)));
 

@@ -146,7 +146,7 @@ namespace SAM.Analytical
                 int index = 1;
                 foreach (Shell shell in shells)
                 {
-                    shell.SplitFace3Ds(face3Ds_Existing, tolerance_Snap, tolerance_Angle, tolerance_Angle, tolerance_Distance);
+                    shell.SplitCoplanarFace3Ds(face3Ds_Existing, tolerance_Snap, tolerance_Angle, tolerance_Angle, tolerance_Distance);
                     shell.Snap(tuples[i].Item2, tolerance_Snap, tolerance_Distance);
 
                     List<Face3D> face3Ds_Shell = shell.Face3Ds;

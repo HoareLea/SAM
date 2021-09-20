@@ -204,7 +204,7 @@
     <Compile Include="Spatial\Interfaces\ISAMGeometry3DObject.cs" />
     <Compile Include="Spatial\Modify\Split.cs" />
     <Compile Include="Spatial\Modify\FillFace3Ds.cs" />
-    <Compile Include="Spatial\Modify\SplitFace3Ds.cs" />
+    <Compile Include="Spatial\Modify\SplitCoplanarFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
     <Compile Include="Spatial\Query\ConnectedFace3Ds.cs" />
