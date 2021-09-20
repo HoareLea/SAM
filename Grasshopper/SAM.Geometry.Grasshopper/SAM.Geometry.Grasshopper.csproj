@@ -60,6 +60,7 @@
     <Compile Include="Component\CreateSAMTransform3DOriginToPlane.cs" />
     <Compile Include="Component\SAMGeometryShellIntersection.cs" />
     <Compile Include="Component\SAMGeometryShellDifference.cs" />
+    <Compile Include="Component\SAMGeometryShellsSplit.cs" />
     <Compile Include="Component\SAMGeometryShellsUnion.cs" />
     <Compile Include="Component\SAMGeometryCutShell.cs" />
     <Compile Include="Component\GeometryTriangulate.cs" />

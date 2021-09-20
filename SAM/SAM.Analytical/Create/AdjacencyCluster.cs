@@ -793,6 +793,8 @@ namespace SAM.Analytical
                 return null;
             }
 
+            shells = shells.Split(silverSpacing, tolerance_Angle, tolerance_Distance);
+
             List<Panel> panels = new List<Panel>();
             foreach(Shell shell in shells)
             {

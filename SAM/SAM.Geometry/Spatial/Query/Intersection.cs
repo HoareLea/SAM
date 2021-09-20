@@ -74,6 +74,7 @@ namespace SAM.Geometry.Spatial
             List<Tuple<BoundingBox3D, Face3D>> boundaries_1 = shell_1_Temp.Boundaries;
             List<Tuple<BoundingBox3D, Face3D>> boundaries_2 = shell_2_Temp.Boundaries;
 
+            bool inside = false;
             for (int i = boundaries_1.Count - 1; i >= 0; i--)
             {
                 if(!boundingBox3D_2.InRange(boundaries_1[i].Item1, tolerance_Distance))
@@ -91,15 +92,18 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                if(shell_2.Inside(point3D, silverSpacing, tolerance_Distance))
-                {
-                    continue;
-                }
-
                 List<Tuple<BoundingBox3D, Face3D>> boundaries_On = boundaries_2.FindAll(x => x.Item1.InRange(point3D, tolerance_Distance) && x.Item2.On(point3D, tolerance_Distance));
                 if(boundaries_On == null || boundaries_On.Count == 0)
                 {
-                    boundaries_1.RemoveAt(i);
+                    if(shell_2.Inside(point3D, silverSpacing, tolerance_Distance))
+                    {
+                        inside = true;
+                    }
+                    else
+                    {
+                        boundaries_1.RemoveAt(i);
+                    }
+
                     continue;
                 }
 
@@ -123,19 +127,49 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                if (shell_1.Inside(point3D, silverSpacing, tolerance_Distance))
-                {
-                    continue;
-                }
-
                 List<Tuple<BoundingBox3D, Face3D>> boundaries_On = boundaries_1.FindAll(x => x.Item1.InRange(point3D, tolerance_Distance) && x.Item2.On(point3D, tolerance_Distance));
                 if (boundaries_On == null || boundaries_On.Count == 0)
                 {
-                    boundaries_2.RemoveAt(i);
+                    if (shell_1.Inside(point3D, silverSpacing, tolerance_Distance))
+                    {
+                        inside = true;
+                    }
+                    else
+                    {
+                        boundaries_2.RemoveAt(i);
+                    }
                     continue;
                 }
 
                 boundaries_On.ForEach(x => boundaries_1.Remove(x));
+            }
+
+            if(!inside)
+            {
+                boundaries_1 = shell_1_Temp.Boundaries;
+                boundaries_2 = shell_2_Temp.Boundaries;
+
+                foreach(Tuple<BoundingBox3D, Face3D> boundary in boundaries_1)
+                {
+                    Point3D point3D = boundary.Item2.InternalPoint3D(tolerance_Distance);
+                    List<Tuple<BoundingBox3D, Face3D>> boundaries_2_Temp = boundaries_2.FindAll(x => x.Item1.InRange(point3D, tolerance_Distance) && x.Item2.On(point3D, tolerance_Distance));
+                    if(boundaries_2_Temp == null || boundaries_2_Temp.Count == 0)
+                    {
+                        return new List<Shell>();
+                    }
+                }
+
+                foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries_2)
+                {
+                    Point3D point3D = boundary.Item2.InternalPoint3D(tolerance_Distance);
+                    List<Tuple<BoundingBox3D, Face3D>> boundaries_1_Temp = boundaries_1.FindAll(x => x.Item1.InRange(point3D, tolerance_Distance) && x.Item2.On(point3D, tolerance_Distance));
+                    if (boundaries_1_Temp == null || boundaries_1_Temp.Count == 0)
+                    {
+                        return new List<Shell>();
+                    }
+                }
+
+                return new List<Shell>() { new Shell(shell_1) };
             }
 
             List<Face3D> face3Ds = new List<Face3D>();

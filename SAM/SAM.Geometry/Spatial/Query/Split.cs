@@ -119,5 +119,98 @@ namespace SAM.Geometry.Spatial
         {
             return face3D_ToBeSplit?.Split(new Face3D[] { face3D }, tolerance_Angle, tolerance_Distance);
         }
+
+        public static List<Shell> Split(this IEnumerable<Shell> shells, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if (shells == null)
+            {
+                return null;
+            }
+
+            List<Shell> result = new List<Shell>();
+
+            int count = shells.Count();
+
+            if (count < 2)
+            {
+                foreach (Shell shell in shells)
+                {
+                    result.Add(new Shell(shell));
+                }
+
+                return result;
+            }
+
+            foreach(Shell shell in shells)
+            {
+                if(shell != null)
+                {
+                    result.Add(shell);
+                }
+            }
+
+            for (int i = 0; i < count - 1; i++)
+            {
+                BoundingBox3D boundingBox3D_1 = result[i].GetBoundingBox();
+                if(boundingBox3D_1 == null)
+                {
+                    continue;
+                }
+
+                for (int j = i + 1; j < count; j++)
+                {
+                    BoundingBox3D boundingBox3D_2 = result[j].GetBoundingBox();
+                    if (boundingBox3D_2 == null)
+                    {
+                        continue;
+                    }
+
+                    if(!boundingBox3D_1.InRange(boundingBox3D_2, tolerance_Distance))
+                    {
+                        continue;
+                    }
+
+                    List<Shell> shells_Intersection = result[i].Intersection(result[j], silverSpacing, tolerance_Angle, tolerance_Distance);
+                    if(shells_Intersection == null || shells_Intersection.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    shells_Intersection.RemoveAll(x => x.Volume(silverSpacing, tolerance_Distance) < silverSpacing);
+                    if(shells_Intersection.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    List<Shell> shells_Difference = new List<Shell>() { result[i], result[j] };
+                    foreach(Shell shell_Intersection in shells_Intersection)
+                    {
+                        List<Shell> shells_Difference_Temp = new List<Shell>();
+                        foreach (Shell shell_Difference in shells_Difference)
+                        {
+                            List<Shell> shells_Difference_Temp_Temp = shell_Difference.Difference(shell_Intersection, silverSpacing, tolerance_Angle, tolerance_Distance);
+                            if(shells_Difference == null || shells_Difference.Count == 0)
+                            {
+                                continue;
+                            }
+
+                            shells_Difference_Temp.AddRange(shells_Difference_Temp_Temp);
+                        }
+
+                        shells_Difference = shells_Difference_Temp;
+                    }
+
+                    result.RemoveAt(j);
+                    result.RemoveAt(i);
+
+                    result.AddRange(shells_Intersection);
+                    result.AddRange(shells_Difference);
+
+                    return Split(result, silverSpacing, tolerance_Angle, tolerance_Distance);
+                }
+            }
+
+            return result;
+        }
     }
 }
