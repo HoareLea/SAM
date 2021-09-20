@@ -6,15 +6,16 @@ using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryShellsUnion : GH_SAMVariableOutputParameterComponent
+    public class SAMGeometryShellDifference : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("69353698-4a57-4eb4-995a-de7c6f94b60e");
+        public override Guid ComponentGuid => new Guid("94103e96-feb1-419b-a98a-cd9b92d6149a");
 
         /// <summary>
         /// The latest version of this component
@@ -29,9 +30,9 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public GeometryShellsUnion()
-          : base("Geometry.ShellsUnion", "Geometry.ShellsUnion",
-              "Shells Union",
+        public SAMGeometryShellDifference()
+          : base("SAMGeometry.ShellDifference", "SAMGeometry.ShellDifference",
+              "Shell Difference",
               "SAM", "Geometry")
         {
         }
@@ -47,8 +48,10 @@ namespace SAM.Geometry.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_GenericObject gerenricObject;
 
-                gerenricObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_shells", NickName = "_shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list };
-                gerenricObject.DataMapping = GH_DataMapping.Flatten;
+                gerenricObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_shell_1", NickName = "_shell_1", Description = "SAM Geometry Shell", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(gerenricObject, ParamVisibility.Binding));
+
+                gerenricObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_shell_2", NickName = "_shell_2", Description = "SAM Geometry Shell", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(gerenricObject, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number;
@@ -69,7 +72,7 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Shells", NickName = "Shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "shells", NickName = "shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -84,22 +87,28 @@ namespace SAM.Geometry.Grasshopper
         {
             int index = -1;
 
-            index = Params.IndexOfInputParam("_shells");
-            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null || objectWrappers.Count == 0)
+            index = Params.IndexOfInputParam("_shell_1");
+            GH_ObjectWrapper objectWrapper = null;
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            List<Shell> shells = new List<Shell>();
-            foreach (GH_ObjectWrapper objectWrapper_Temp in objectWrappers)
+            if (!Query.TryGetSAMGeometries(objectWrapper, out List<Shell> shells_1) || shells_1 == null || shells_1.Count == 0)
             {
-                if (Query.TryGetSAMGeometries(objectWrapper_Temp, out List<Shell> shells_Temp) && shells_Temp != null && shells_Temp.Count > 0)
-                    shells.AddRange(shells_Temp);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
             }
 
-            if (shells.Count == 0)
+            index = Params.IndexOfInputParam("_shell_2");
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            if (!Query.TryGetSAMGeometries(objectWrapper, out List<Shell> shells_2) || shells_2 == null || shells_2.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -114,9 +123,9 @@ namespace SAM.Geometry.Grasshopper
                     tolerance = tolerance_Temp;
             }
 
-            shells = shells.Union(Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
+            List<Shell> shells = shells_1.FirstOrDefault()?.Difference(shells_2.FirstOrDefault(), Core.Tolerance.Angle, tolerance);
 
-            index = Params.IndexOfOutputParam("Shells");
+            index = Params.IndexOfOutputParam("shells");
             if (index != -1)
                 dataAccess.SetDataList(index, shells);
         }

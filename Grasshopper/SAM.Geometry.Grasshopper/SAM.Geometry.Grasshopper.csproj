@@ -58,7 +58,8 @@
     <Compile Include="Classes\GooTransform3D.cs" />
     <Compile Include="Classes\GooSAMGeometry.cs" />
     <Compile Include="Component\CreateSAMTransform3DOriginToPlane.cs" />
-    <Compile Include="Component\GeometryShellsUnion.cs" />
+    <Compile Include="Component\SAMGeometryShellDifference.cs" />
+    <Compile Include="Component\SAMGeometryShellsUnion.cs" />
     <Compile Include="Component\SAMGeometryCutShell.cs" />
     <Compile Include="Component\GeometryTriangulate.cs" />
     <Compile Include="Component\GeometrySplitShells.cs" />
