@@ -251,5 +251,73 @@ namespace SAM.Geometry.Spatial
             return Project(plane, closedPlanar3D as dynamic, vector3D, tolerance);
         }
 
+        public static Face3D Project(this Plane plane, Shell shell, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(plane == null || shell == null || vector3D == null)
+            {
+                return null;
+            }
+
+            List<Face3D> face3Ds = shell.Face3Ds;
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            face3Ds = face3Ds.ConvertAll(x => plane.Project(x, vector3D, tolerance));
+            face3Ds.RemoveAll(x => x == null || !x.IsValid() || x.GetArea() < tolerance);
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            face3Ds = face3Ds.Union(tolerance);
+            if (face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            if (face3Ds.Count > 1)
+            {
+                face3Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+            }
+
+            return face3Ds[0];
+        }
+
+        public static Face3D Project(this Plane plane, Shell shell, double tolerance = Core.Tolerance.Distance)
+        {
+            if (plane == null || shell == null)
+            {
+                return null;
+            }
+
+            List<Face3D> face3Ds = shell.Face3Ds;
+            if (face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            face3Ds = face3Ds.ConvertAll(x => plane.Project(x));
+            face3Ds.RemoveAll(x => x == null || !x.IsValid() || x.GetArea() < tolerance);
+            if (face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            face3Ds = face3Ds.Union(tolerance);
+            if (face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            if (face3Ds.Count > 1)
+            {
+                face3Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+            }
+
+            return face3Ds[0];
+        }
+
     }
 }
