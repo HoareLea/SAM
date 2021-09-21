@@ -4,7 +4,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static List<Polygon3D> SelfIntersectionPolygon3Ds(this Polygon3D polygon3D, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon3D> SelfIntersectionPolygon3Ds(this Polygon3D polygon3D, double maxLength, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (polygon3D == null)
                 return null;
@@ -15,7 +15,7 @@ namespace SAM.Geometry.Spatial
 
             Planar.Polygon2D polygon2D = plane.Convert(polygon3D);
 
-            List<Planar.Polygon2D> polygon2Ds = Planar.Query.SelfIntersectionPolygon2Ds(polygon2D, tolerance);
+            List<Planar.Polygon2D> polygon2Ds = Planar.Query.SelfIntersectionPolygon2Ds(polygon2D, maxLength, tolerance);
             if (polygon2Ds == null)
                 return null;
 
