@@ -146,6 +146,7 @@
     <Compile Include="Modify\AddAirPanels.cs" />
     <Compile Include="Modify\Cut.cs" />
     <Compile Include="Modify\Align.cs" />
+    <Compile Include="Modify\Merge.cs" />
     <Compile Include="Modify\RemoveInvalidAirPanels.cs" />
     <Compile Include="Modify\RemoveOverlapApertures.cs" />
     <Compile Include="Modify\Trim.cs" />

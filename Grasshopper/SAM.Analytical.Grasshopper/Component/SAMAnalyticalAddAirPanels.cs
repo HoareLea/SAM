@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -63,6 +63,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "airPanels", NickName = "airPanels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -147,6 +148,8 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            List<Panel> panels = null;
+
             AdjacencyCluster adjacencyCluster = sAMObject is AnalyticalModel ? ((AnalyticalModel)sAMObject).AdjacencyCluster : sAMObject as AdjacencyCluster;
             if(adjacencyCluster != null)
             {
@@ -155,7 +158,7 @@ namespace SAM.Analytical.Grasshopper
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
                 }
 
-                adjacencyCluster.AddAirPanels(planes, spaces, Tolerance.MacroDistance, Tolerance.Angle, Tolerance.Distance, Tolerance.MacroDistance);
+                panels = adjacencyCluster.AddAirPanels(planes, spaces, Tolerance.MacroDistance, Tolerance.Angle, Tolerance.Distance, Tolerance.MacroDistance);
                 if (sAMObject is AnalyticalModel)
                 {
                     sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
@@ -169,6 +172,10 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("analytical");
             if (index != -1)
                 dataAccess.SetData(index, sAMObject);
+
+            index = Params.IndexOfOutputParam("airPanels");
+            if (index != -1)
+                dataAccess.SetDataList(index, panels);
         }
     }
 }

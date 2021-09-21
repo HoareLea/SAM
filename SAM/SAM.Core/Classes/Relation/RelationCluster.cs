@@ -359,6 +359,28 @@ namespace SAM.Core
             return Guid.Empty;
         }
 
+        public HashSet<Guid> Guids
+        {
+            get
+            {
+                if(dictionary_Objects == null)
+                {
+                    return null;
+                }
+
+                HashSet<Guid> result = new HashSet<Guid>();
+                foreach(KeyValuePair< string, Dictionary<Guid, object>> keyValuePair_1 in dictionary_Objects)
+                {
+                    foreach(KeyValuePair<Guid, object> keyValuePair_2 in keyValuePair_1.Value)
+                    {
+                        result.Add(keyValuePair_2.Key);
+                    }
+                }
+
+                return result;
+            }
+        }
+
         public List<object> GetObjects(IEnumerable<Guid> guids)
         {
             if (guids == null)
@@ -569,6 +591,150 @@ namespace SAM.Core
                 return null;
 
             return GetRelatedObjects(@object);
+        }
+
+        public List<object> GetRelatedObjects(LogicalOperator logicalOperator, params Guid[] guids)
+        {
+            if(guids == null)
+            {
+                return null;
+            }
+
+            if(guids.Length == 0)
+            {
+                return new List<object>();
+            }
+
+            Dictionary<Guid, object> dictionary = new Dictionary<Guid, object>();
+            List<object> relatedObjects = null;
+
+            switch (logicalOperator)
+            {
+                case LogicalOperator.Not:
+
+                    HashSet<Guid> guids_All = Guids;
+                    if (guids_All == null)
+                    {
+                        return null;
+                    }
+
+                    foreach (Guid guid in guids_All)
+                    {
+                        if (guids.Contains(guid))
+                        {
+                            continue;
+                        }
+
+                        relatedObjects = GetRelatedObjects(guid);
+                        if (relatedObjects == null || relatedObjects.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        foreach (object relatedObject in relatedObjects)
+                        {
+                            Guid guid_RelatedObject = GetGuid(relatedObject);
+                            if (dictionary.ContainsKey(guid_RelatedObject))
+                            {
+                                continue;
+                            }
+
+                            dictionary[guid_RelatedObject] = relatedObject;
+                        }
+                    }
+
+                    break;
+
+                case LogicalOperator.And:
+
+                    relatedObjects = GetRelatedObjects(guids[0]);
+                    if (relatedObjects == null || relatedObjects.Count == 0)
+                    {
+                        return new List<object>();
+                    }
+
+                    foreach (object relatedObject in relatedObjects)
+                    {
+                        Guid guid_RelatedObject = GetGuid(relatedObject);
+                        if (dictionary.ContainsKey(guid_RelatedObject))
+                        {
+                            continue;
+                        }
+
+                        dictionary[guid_RelatedObject] = relatedObject;
+                    }
+
+                    for (int i = 1; i < guids.Length; i++)
+                    {
+                        relatedObjects = GetRelatedObjects(guids[i]);
+                        if (relatedObjects == null || relatedObjects.Count == 0)
+                        {
+                            return new List<object>();
+                        }
+
+                        HashSet<Guid> guids_RelatedObject = new HashSet<Guid>();
+                        foreach (object relatedObject in relatedObjects)
+                        {
+                            guids_RelatedObject.Add(GetGuid(relatedObject));
+                        }
+
+                        List<Guid> guids_Temp = new List<Guid>(dictionary.Keys);
+                        foreach(Guid guid in guids_Temp)
+                        {
+                            if(!guids_RelatedObject.Contains(guid))
+                            {
+                                dictionary.Remove(guid);
+                            }
+                        }
+
+                        if(dictionary.Count == 0)
+                        {
+                            return new List<object>();
+                        }
+                    }
+
+                    break;
+
+                case LogicalOperator.Or:
+
+                    foreach (Guid guid in guids)
+                    {
+                        relatedObjects = GetRelatedObjects(guid);
+                        if (relatedObjects == null || relatedObjects.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        foreach (object relatedObject in relatedObjects)
+                        {
+                            Guid guid_RelatedObject = GetGuid(relatedObject);
+                            if (dictionary.ContainsKey(guid_RelatedObject))
+                            {
+                                continue;
+                            }
+
+                            dictionary[guid_RelatedObject] = relatedObject;
+                        }
+                    }
+
+                    break;
+            }
+
+            return dictionary.Values?.ToList();
+        }
+
+        public List<T> GetRelatedObjects<T>(LogicalOperator logicalOperator, params Guid[] guids)
+        {
+            List<object> objects = GetRelatedObjects(logicalOperator, guids);
+            if (objects == null)
+                return null;
+
+            List<T> result = new List<T>();
+            foreach (object object_Temp in objects)
+                if (object_Temp is T)
+                    result.Add((T)object_Temp);
+
+            return result;
         }
 
         public List<object> GetRelatedObjects(object @object)

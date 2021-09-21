@@ -186,6 +186,16 @@ namespace SAM.Analytical
             return GetObjects<Panel>();
         }
 
+        public List<Panel> GetPanels(Core.LogicalOperator logicalOperator, params Space[] spaces)
+        {
+            if(spaces == null)
+            {
+                return null;
+            }
+
+            return GetRelatedObjects<Panel>(logicalOperator, spaces.ToList().ConvertAll(x => x.Guid).ToArray());
+        }
+
         public IEnumerable<InternalCondition> GetInternalConditions()
         {
             List<Space> spaces = GetSpaces();
