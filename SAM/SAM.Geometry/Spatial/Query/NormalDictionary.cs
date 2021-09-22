@@ -9,10 +9,27 @@ namespace SAM.Geometry.Spatial
             List<Face3D> face3Ds = shell?.Face3Ds;
             if (face3Ds == null)
                 return null;
-            
+
             Dictionary<Face3D, Vector3D> result = new Dictionary<Face3D, Vector3D>();
-            for (int i = 0; i < face3Ds.Count; i++)
-                result[face3Ds[i]] = shell.Normal(face3Ds[i].InternalPoint3D(), external, silverSpacing, tolerance);
+            if (external && face3Ds.Count > 30)
+            {
+                foreach(Face3D face3D in face3Ds)
+                {
+                    result[face3D] = null;
+                }
+
+                System.Threading.Tasks.Parallel.For(0, face3Ds.Count, (int i) => 
+                {
+                    result[face3Ds[i]] = shell.Normal(i, external, silverSpacing, tolerance);
+                });
+            }
+            else
+            {
+                for (int i = 0; i < face3Ds.Count; i++)
+                {
+                    result[face3Ds[i]] = shell.Normal(i, external, silverSpacing, tolerance);
+                }
+            }
 
             return result;
         }
