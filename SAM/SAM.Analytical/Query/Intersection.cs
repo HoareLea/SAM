@@ -5,7 +5,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Shell> Intersection(this Shell shell_1, Shell shell_2, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = SAM.Core.Tolerance.Distance)
+        public static List<Shell> Intersection(this Shell shell_1, Shell shell_2, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             BoundingBox3D boundingBox3D_1 = shell_1?.GetBoundingBox();
             if(boundingBox3D_1 == null)
@@ -25,10 +25,10 @@ namespace SAM.Analytical
             }
 
             Shell shell_1_Temp = new Shell(shell_1);
-            shell_1_Temp.SplitFace3Ds(shell_2, tolerance_Angle, tolerance_Distance);
+            shell_1_Temp.SplitFace3Ds(shell_2, silverSpacing, tolerance_Angle, tolerance_Distance);
 
             Shell shell_2_Temp = new Shell(shell_2);
-            shell_2_Temp.SplitFace3Ds(shell_1, tolerance_Angle, tolerance_Distance);
+            shell_2_Temp.SplitFace3Ds(shell_1, silverSpacing, tolerance_Angle, tolerance_Distance);
 
             List<Face3D> face3Ds = new List<Face3D>();
 

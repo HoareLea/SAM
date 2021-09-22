@@ -6,7 +6,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Modify
     {
-        public static void SplitFace3Ds(this List<Shell> shells, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static void SplitFace3Ds(this List<Shell> shells, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (shells == null || shells.Count == 0)
                 return;
@@ -38,7 +38,7 @@ namespace SAM.Geometry.Spatial
                 bool split = false;
                 foreach (Shell shell_InRange in shells_InRange)
                 {
-                    if (shell.SplitFace3Ds(shell_InRange, tolerance_Angle, tolerance_Distance))
+                    if (shell.SplitFace3Ds(shell_InRange, tolerance_Snap, tolerance_Angle, tolerance_Distance))
                         split = true;
                 }
 

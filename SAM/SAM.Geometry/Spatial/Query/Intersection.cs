@@ -67,8 +67,8 @@ namespace SAM.Geometry.Spatial
                 return new List<Shell>();
             }
 
-            System.Threading.Tasks.Task task_1 = System.Threading.Tasks.Task.Factory.StartNew(() => shell_1_Temp.SplitFace3Ds(shell_2, tolerance_Angle, tolerance_Distance));
-            System.Threading.Tasks.Task task_2 = System.Threading.Tasks.Task.Factory.StartNew(() => shell_2_Temp.SplitFace3Ds(shell_1, tolerance_Angle, tolerance_Distance));
+            System.Threading.Tasks.Task task_1 = System.Threading.Tasks.Task.Factory.StartNew(() => shell_1_Temp.SplitFace3Ds(shell_2, silverSpacing, tolerance_Angle, tolerance_Distance));
+            System.Threading.Tasks.Task task_2 = System.Threading.Tasks.Task.Factory.StartNew(() => shell_2_Temp.SplitFace3Ds(shell_1, silverSpacing, tolerance_Angle, tolerance_Distance));
             System.Threading.Tasks.Task.WaitAll(task_1, task_2);
 
             List<Tuple<BoundingBox3D, Face3D>> boundaries_1 = shell_1_Temp.Boundaries;

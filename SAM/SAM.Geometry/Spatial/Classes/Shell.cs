@@ -808,7 +808,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
     
-        public bool SplitFace3Ds(Shell shell, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public bool SplitFace3Ds(Shell shell, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if(shell == null || !boundingBox3D.InRange(shell.boundingBox3D, tolerance_Distance))
             {
@@ -823,7 +823,7 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                List<Face3D> face3Ds = boundary.Item2.Split(shell, tolerance_Angle, tolerance_Distance);
+                List<Face3D> face3Ds = boundary.Item2.Split(shell, tolerance_Snap, tolerance_Angle, tolerance_Distance);
                 if (face3Ds == null || face3Ds.Count == 0)
                 {
                     continue;

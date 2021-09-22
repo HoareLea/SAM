@@ -225,7 +225,7 @@ namespace SAM.Geometry.Planar
             return polygons.ConvertAll(x => x.ToSAM(tolerance));
         }
 
-        public static List<Face2D> Split(this Face2D face2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
+        public static List<Face2D> Split(this Face2D face2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if(face2D == null || segmentable2Ds == null)
             {
@@ -285,7 +285,10 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segmentable2Ds_All.Split(tolerance), tolerance);
+            List<Segment2D> segment2Ds = segmentable2Ds_All.Split(tolerance);
+            segment2Ds = segment2Ds.Snap(true, tolerance_Snap);
+
+            List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds, tolerance);
             if(polygon2Ds == null || polygon2Ds.Count == 0)
             {
                 return null;
