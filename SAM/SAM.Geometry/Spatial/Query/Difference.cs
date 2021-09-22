@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
@@ -20,9 +21,9 @@ namespace SAM.Geometry.Spatial
                 return new List<Shell>() { shell_1_Temp };
             }
 
-            System.Threading.Tasks.Task task_1 = System.Threading.Tasks.Task.Factory.StartNew(() => shell_1_Temp.SplitFace3Ds(shell_2, silverSpacing, tolerance_Angle, tolerance_Distance));
-            System.Threading.Tasks.Task task_2 = System.Threading.Tasks.Task.Factory.StartNew(() => shell_2_Temp.SplitFace3Ds(shell_1, silverSpacing, tolerance_Angle, tolerance_Distance));
-            System.Threading.Tasks.Task.WaitAll(task_1, task_2);
+            Task task_1 = Task.Factory.StartNew(() => shell_1_Temp.SplitFace3Ds(shell_2, silverSpacing, tolerance_Angle, tolerance_Distance));
+            Task task_2 = Task.Factory.StartNew(() => shell_2_Temp.SplitFace3Ds(shell_1, silverSpacing, tolerance_Angle, tolerance_Distance));
+            Task.WaitAll(task_1, task_2);
 
             List<Tuple<BoundingBox3D, Face3D>> boundaries_1 = shell_1_Temp.Boundaries;
             List<Tuple<BoundingBox3D, Face3D>> boundaries_2 = shell_2_Temp.Boundaries;
@@ -80,7 +81,11 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            face3Ds = face3Ds.ConvertAll(x => x.Snap(shell_1.Face3Ds, tolerance_Distance, tolerance_Distance));
+            List<Face3D> face3Ds_Shell_1 = shell_1.Face3Ds;
+            System.Threading.Tasks.Parallel.For(0, face3Ds.Count, (int i) => 
+            {
+                face3Ds[i] = face3Ds[i].Snap(face3Ds_Shell_1, tolerance_Distance, tolerance_Distance);
+            });
 
             List<Shell> result = new List<Shell>();
             while(face3Ds.Count >= 3)
