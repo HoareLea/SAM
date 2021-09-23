@@ -64,6 +64,8 @@ namespace SAM.Geometry.Grasshopper
 
             if (breps != null && breps.Count > 0)
             {
+                brepFaces = new List<BrepFace>();
+                
                 Mesh mesh = new Mesh();
                 foreach (Brep brep_Temp in breps)
                 {
@@ -78,8 +80,6 @@ namespace SAM.Geometry.Grasshopper
                     foreach (BrepFace brepFace in brep_Mesh.Faces)
                         brepFaces.Add(brepFace);
                 }
-
-
 
                 //foreach (Brep brep_Temp in breps)
                 //{
