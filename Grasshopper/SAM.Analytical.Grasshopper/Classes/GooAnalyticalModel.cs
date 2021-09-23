@@ -119,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
                     Brep brep = Brep.MergeBreps(shells.ConvertAll(x => x.ToRhino()), Core.Tolerance.MacroDistance);
                     if (brep != null)
                     {
-                        target = (Y)(object)brep;
+                        target = (Y)(object)new GH_Brep(brep);
                         return true;
                     }
                 }
