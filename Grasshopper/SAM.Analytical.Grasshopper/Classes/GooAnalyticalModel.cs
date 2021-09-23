@@ -5,6 +5,7 @@ using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Grasshopper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,10 +104,25 @@ namespace SAM.Analytical.Grasshopper
                 target = (Y)(object)Value;
                 return true;
             }
-            else if (typeof(Y).IsAssignableFrom(typeof(GH_Mesh)))
+            
+            if (typeof(Y).IsAssignableFrom(typeof(GH_Mesh)))
             {
                 target = (Y)(object)Value.ToGrasshopper_Mesh();
                 return true;
+            }
+
+            if (typeof(Y).IsAssignableFrom(typeof(GH_Brep)))
+            {
+                List<Geometry.Spatial.Shell> shells = Value.GetShells();
+                if (shells != null)
+                {
+                    Brep brep = Brep.MergeBreps(shells.ConvertAll(x => x.ToRhino()), Core.Tolerance.MacroDistance);
+                    if (brep != null)
+                    {
+                        target = (Y)(object)brep;
+                        return true;
+                    }
+                }
             }
 
             return base.CastTo(ref target);
