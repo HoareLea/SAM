@@ -238,7 +238,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Point3D)
                 {
-                    target = (Y)(object)(((Spatial.Point3D)(object)Value).ToRhino());
+                    target = (Y)(object)(((Spatial.Point3D)Value).ToRhino());
                     return true;
                 }
             }
@@ -247,7 +247,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Point3D)
                 {
-                    target = (Y)(object)(((Spatial.Point3D)(object)Value).ToGrasshopper());
+                    target = (Y)(object)(((Spatial.Point3D)Value).ToGrasshopper());
                     return true;
                 }
             }
@@ -256,7 +256,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Plane)
                 {
-                    target = (Y)(object)(((Spatial.Plane)(object)Value).ToGrasshopper());
+                    target = (Y)(object)(((Spatial.Plane)Value).ToGrasshopper());
                     return true;
                 }
             }
@@ -265,7 +265,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Plane)
                 {
-                    target = (Y)(object)(((Spatial.Plane)(object)Value).ToRhino());
+                    target = (Y)(object)(((Spatial.Plane)Value).ToRhino());
                     return true;
                 }
             }
@@ -274,13 +274,13 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Vector3D)
                 {
-                    target = (Y)(object)(((Spatial.Vector3D)(object)Value).ToRhino());
+                    target = (Y)(object)(((Spatial.Vector3D)Value).ToRhino());
                     return true;
                 }
 
                 if (Value is Planar.Vector2D)
                 {
-                    target = (Y)(object)(((Planar.Vector2D)(object)Value).ToRhino());
+                    target = (Y)(object)(((Planar.Vector2D)Value).ToRhino());
                     return true;
                 }
             }
@@ -289,13 +289,31 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Vector3D)
                 {
-                    target = (Y)(object)(((Spatial.Vector3D)(object)Value).ToGrasshopper());
+                    target = (Y)(object)(((Spatial.Vector3D)Value).ToGrasshopper());
                     return true;
                 }
 
                 if (Value is Planar.Vector2D)
                 {
-                    target = (Y)(object)(((Planar.Vector2D)(object)Value).ToGrasshopper());
+                    target = (Y)(object)(((Planar.Vector2D)Value).ToGrasshopper());
+                    return true;
+                }
+            }
+
+            if (typeof(Y).IsAssignableFrom(typeof(Brep)))
+            {
+                if (Value is Spatial.Shell)
+                {
+                    target = (Y)(object)(((Spatial.Shell)Value).ToRhino());
+                    return true;
+                }
+            }
+
+            if (typeof(Y).IsAssignableFrom(typeof(GH_Brep)))
+            {
+                if (Value is Spatial.Shell)
+                {
+                    target = (Y)(object)new GH_Brep(((Spatial.Shell)Value).ToRhino());
                     return true;
                 }
             }
