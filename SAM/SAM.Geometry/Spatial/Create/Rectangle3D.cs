@@ -42,5 +42,37 @@ namespace SAM.Geometry.Spatial
             return plane.Convert(rectangle2D);
 
         }
+
+        public static Rectangle3D Rectangle3D(Segment3D segment3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segment3D == null || vector3D == null)
+            {
+                return null;
+            }
+
+            double length_Segment3D = segment3D.GetLength();
+            if(length_Segment3D < tolerance)
+            {
+                return null;
+            }
+
+            double length_Vector3D = vector3D.Length;
+            if(length_Vector3D < tolerance)
+            {
+                return null;
+            }
+
+            Plane plane = Plane(segment3D[0], segment3D[1], (Point3D)segment3D[1].GetMoved(vector3D));
+            if(plane == null && !plane.IsValid())
+            {
+                return null;
+            }
+
+            Planar.Point2D origin = plane.Convert(segment3D[0]);
+
+            Planar.Rectangle2D rectangle2D = new Planar.Rectangle2D(origin, length_Segment3D, vector3D.Length);
+
+            return new Rectangle3D(plane, rectangle2D);
+        }
     }
 }

@@ -95,7 +95,7 @@ namespace SAM.Geometry.Spatial
             return permieter;
         }
 
-        public Face3D ToFace()
+        public Face3D ToFace3D()
         {
             return new Face3D(this);
         }
@@ -184,6 +184,29 @@ namespace SAM.Geometry.Spatial
         public Point3D GetCentroid()
         {
             return plane?.Convert(Planar.Query.Centroid(points));
+        }
+
+        public static implicit operator Polygon3D(Rectangle3D rectangle3D)
+        {
+
+            Plane plane = rectangle3D?.GetPlane();
+            if(plane == null)
+            {
+                return null;
+            }
+
+            return new Polygon3D(plane, rectangle3D.GetPoints().ConvertAll(x => plane.Convert(x)));
+        }
+
+        public static implicit operator Polygon3D(Triangle3D triangle3D)
+        {
+            Plane plane = triangle3D?.GetPlane();
+            if (plane == null)
+            {
+                return null;
+            }
+
+            return new Polygon3D(plane, triangle3D.GetPoints().ConvertAll(x => plane.Convert(x)));
         }
     }
 }

@@ -278,19 +278,19 @@ namespace SAM.Analytical.Grasshopper
                 return true;
             }
 
-            if (typeof(Y).IsAssignableFrom(typeof(GH_Brep)))
-            {
-                List<Geometry.Spatial.Shell> shells = Value.GetShells();
-                if(shells != null)
-                {
-                    Brep brep = Brep.MergeBreps(shells.ConvertAll(x => x.ToRhino()), Core.Tolerance.MacroDistance);
-                    if(brep != null)
-                    {
-                        target = (Y)(object)new GH_Brep(brep);
-                        return true;
-                    }
-                }
-            }
+            //if (typeof(Y).IsAssignableFrom(typeof(GH_Brep)))
+            //{
+            //    List<Geometry.Spatial.Shell> shells = Value.GetShells();
+            //    if(shells != null)
+            //    {
+            //        Brep brep = Brep.MergeBreps(shells.ConvertAll(x => x.ToRhino()), Core.Tolerance.MacroDistance);
+            //        if(brep != null)
+            //        {
+            //            target = (Y)(object)new GH_Brep(brep);
+            //            return true;
+            //        }
+            //    }
+            //}
 
             return base.CastTo(ref target);
         }

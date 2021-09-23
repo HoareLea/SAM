@@ -289,6 +289,46 @@ namespace SAM.Geometry.Spatial
             return plane?.Convert(externalEdge2D.GetCentroid());
         }
 
+        public static implicit operator Face3D(Polygon3D polygon3D)
+        {
+            if (polygon3D == null)
+                return null;
+
+            return new Face3D(polygon3D);
+        }
+
+        public static implicit operator Face3D(Circle3D circle3D)
+        {
+            if (circle3D == null)
+                return null;
+
+            return new Face3D(circle3D);
+        }
+
+        public static implicit operator Face3D(Ellipse3D ellipse3D)
+        {
+            if (ellipse3D == null)
+                return null;
+
+            return new Face3D(ellipse3D);
+        }
+
+        public static implicit operator Face3D(Rectangle3D rectangle3D)
+        {
+            if (rectangle3D == null)
+                return null;
+
+            return new Face3D(rectangle3D);
+        }
+
+        public static implicit operator Face3D(Triangle3D triangle3D)
+        {
+            if (triangle3D == null)
+                return null;
+
+            return new Face3D(triangle3D);
+        }
+
 
         public static Face3D Create(IEnumerable<IClosedPlanar3D> edges, bool orientInternalEdges = true)
         {
