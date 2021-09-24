@@ -14,7 +14,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -36,9 +36,12 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item, 25);
-            inputParamManager.AddNumberParameter("_latitude", "_latitude", "Latitude", GH_ParamAccess.item, 51.48);
-            inputParamManager.AddNumberParameter("_longitude", "_longitude", "Longitude", GH_ParamAccess.item, -0.45);
+            Location location = Core.Query.DefaultLocation();
+            
+            inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item, location.Name);
+            inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item, location.Elevation);
+            inputParamManager.AddNumberParameter("_latitude", "_latitude", "Latitude", GH_ParamAccess.item, location.Latitude);
+            inputParamManager.AddNumberParameter("_longitude", "_longitude", "Longitude", GH_ParamAccess.item, location.Longitude);
         }
 
         /// <summary>
@@ -58,28 +61,35 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            string name = string.Empty;
+            if (!dataAccess.GetData(0, ref name))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             double elevation = double.NaN;
-            if (!dataAccess.GetData(0, ref elevation))
+            if (!dataAccess.GetData(1, ref elevation))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             double latitude = double.NaN;
-            if (!dataAccess.GetData(1, ref latitude))
+            if (!dataAccess.GetData(2, ref latitude))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             double longitude = double.NaN;
-            if (!dataAccess.GetData(2, ref longitude))
+            if (!dataAccess.GetData(3, ref longitude))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, new GooLocation(new Location(null, longitude, latitude, elevation)));
+            dataAccess.SetData(0, new GooLocation(new Location(name, longitude, latitude, elevation)));
         }
     }
 }

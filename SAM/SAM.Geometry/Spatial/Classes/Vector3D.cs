@@ -386,6 +386,16 @@ namespace SAM.Geometry.Spatial
             coordinates[2] = Core.Query.Round(coordinates[2], tolerance);
         }
 
+        public static implicit operator Point3D(Vector3D vector3D)
+        {
+            if (vector3D == null)
+            {
+                return null;
+            }
+
+            return new Vector3D(vector3D[0], vector3D[1], vector3D[2]);
+        }
+
         public static Vector3D WorldX
         { 
             get

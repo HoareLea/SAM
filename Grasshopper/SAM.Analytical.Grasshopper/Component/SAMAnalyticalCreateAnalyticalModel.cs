@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -43,7 +43,8 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddTextParameter("_name_", "_name_", "Analytical Model Name", GH_ParamAccess.item, "000000_SAM_AnalyticalModel");
             inputParamManager.AddTextParameter("_description_", "_description_", "SAM Description", GH_ParamAccess.item, string.Format("Delivered by SAM https://github.com/HoareLea/SAM [{0}]", DateTime.Now.ToString("yyyy/MM/dd")));
-            inputParamManager.AddParameter(new GooLocationParam(), "_location", "_location", "SAM Location", GH_ParamAccess.item);
+            index = inputParamManager.AddParameter(new GooLocationParam(), "_location_", "_location_", "SAM Location", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Adjacency Cluster", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
@@ -91,8 +92,7 @@ namespace SAM.Analytical.Grasshopper
             Location location = null;
             if (!dataAccess.GetData(2, ref location) || location == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                location = Core.Query.DefaultLocation();
             }
 
             AdjacencyCluster adjacencyCluster = null;

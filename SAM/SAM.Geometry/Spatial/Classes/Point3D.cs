@@ -247,6 +247,15 @@ namespace SAM.Geometry.Spatial
             return Query.Transform(this, transform3D);
         }
 
+        public static implicit operator Vector3D(Point3D point3D)
+        {
+            if (point3D == null)
+            {
+                return null;
+            }
+
+            return new Vector3D(point3D[0], point3D[1], point3D[2]);
+        }
 
         public static bool operator ==(Point3D point3D_1, Point3D point3D_2)
         {
