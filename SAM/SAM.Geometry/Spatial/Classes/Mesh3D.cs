@@ -160,6 +160,102 @@ namespace SAM.Geometry.Spatial
             }
         }
 
+        public HashSet<int> ConnectedIndexes(int index)
+        {
+            if(indexes == null || indexes.Count == 0)
+            {
+                return null;
+            }
+
+            if(index < 0 || index >= points.Count)
+            {
+                return null;
+            }
+
+            HashSet<int> result = new HashSet<int>();
+            foreach(Tuple<int, int, int> tuple in indexes)
+            {
+                if(index == tuple.Item1)
+                {
+                    result.Add(tuple.Item2);
+                    result.Add(tuple.Item3);
+                }
+                else if(index == tuple.Item2)
+                {
+                    result.Add(tuple.Item1);
+                    result.Add(tuple.Item3);
+                }
+                else if (index == tuple.Item3)
+                {
+                    result.Add(tuple.Item1);
+                    result.Add(tuple.Item2);
+                }
+            }
+
+            return result;
+        }
+
+        public HashSet<int> ConnectedIndexes(Point3D point3D)
+        {
+            int index = IndexOf(point3D);
+            if(index == -1)
+            {
+                return null;
+            }
+
+            return ConnectedIndexes(index);
+        }
+
+        public HashSet<int> ConnectedIndexes(Point3D point3D, double tolerance)
+        {
+            int index = IndexOf(point3D, tolerance);
+            if (index == -1)
+            {
+                return null;
+            }
+
+            return ConnectedIndexes(index);
+        }
+
+        public HashSet<Point3D> ConnectedPoint3Ds(int index)
+        {
+            HashSet<int> indexes = ConnectedIndexes(index);
+            if(indexes == null)
+            {
+                return null;
+            }
+
+            HashSet<Point3D> result = new HashSet<Point3D>();
+            foreach(int index_Connected in indexes)
+            {
+                result.Add(points[index_Connected]);
+            }
+
+            return result;
+        }
+
+        public HashSet<Point3D> ConnectedPoint3Ds(Point3D point3D)
+        {
+            int index = IndexOf(point3D);
+            if (index == -1)
+            {
+                return null;
+            }
+
+            return ConnectedPoint3Ds(index);
+        }
+
+        public HashSet<Point3D> ConnectedPoint3Ds(Point3D point3D, double tolerance)
+        {
+            int index = IndexOf(point3D, tolerance);
+            if (index == -1)
+            {
+                return null;
+            }
+
+            return ConnectedPoint3Ds(index);
+        }
+
         public Triangle3D GetTriangle(int index)
         {
             if(points == null || indexes == null)
