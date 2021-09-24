@@ -67,6 +67,17 @@ namespace SAM.Geometry.Grasshopper
                 breps?.FindAll(x => x != null).ForEach(x => previewWireArgs.Pipeline.DrawBrepWires(x, color));
                 return;
             }
+
+            if (sAMGeomery is Spatial.Mesh3D)
+            {
+                Mesh mesh = ((Spatial.Mesh3D)sAMGeomery).ToRhino();
+                if(mesh != null)
+                {
+                    previewWireArgs.Pipeline.DrawMeshWires(mesh, color);
+                }
+
+                return;
+            }
         }
 
         public static void DrawViewportWires(this Spatial.Face3D face3D, GH_PreviewWireArgs previewWireArgs, System.Drawing.Color color_ExternalEdges, System.Drawing.Color color_InternalEdges)

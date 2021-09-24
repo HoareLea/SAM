@@ -13,6 +13,8 @@ namespace SAM.Geometry.Grasshopper
                 brep = ((Spatial.Face3D)sAMGeometry).ToRhino_Brep();
             else if (sAMGeometry is Spatial.Shell)
                 brep = ((Spatial.Shell)sAMGeometry).ToRhino();
+            else if (sAMGeometry is Spatial.Mesh3D)
+                brep = Brep.CreateFromMesh(((Spatial.Mesh3D)sAMGeometry).ToRhino(), true);
 
             if (brep != null)
                 previewMeshArgs.Pipeline.DrawBrepShaded(brep, displayMaterial == null ? previewMeshArgs.Material : displayMaterial);

@@ -61,6 +61,12 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (sAMGeometry is Spatial.Mesh3D)
+            {
+                guid = rhinoDoc.Objects.AddMesh(((Spatial.Mesh3D)sAMGeometry).ToRhino(), objectAttributes);
+                return true;
+            }
+
             GeometryBase geometryBase = (sAMGeometry as dynamic).ToRhino() as GeometryBase;
             if (geometryBase != null)
             {

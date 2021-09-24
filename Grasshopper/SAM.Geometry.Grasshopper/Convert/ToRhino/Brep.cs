@@ -99,6 +99,30 @@ namespace SAM.Geometry.Grasshopper
             return ToRhino_Brep(edges, tolerance);
         }
 
+        public static Rhino.Geometry.Brep ToRhino_Brep(this Triangle3D triangle3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(triangle3D == null || !triangle3D.IsValid() || triangle3D.GetArea() < tolerance)
+            {
+                return null;
+            }
+
+            List<Rhino.Geometry.PolylineCurve> polylineCurves = new List<Rhino.Geometry.PolylineCurve>();
+            polylineCurves.Add(triangle3D.GetSegments().ToRhino_PolylineCurve());
+
+            if (polylineCurves.Count == 0)
+            {
+                return null;
+            }
+
+            Rhino.Geometry.Brep[] breps = Rhino.Geometry.Brep.CreatePlanarBreps(polylineCurves, tolerance);
+            if(breps == null || breps.Length == 0)
+            {
+                return null;
+            }
+
+            return breps[0];
+        }
+
         public static Rhino.Geometry.Brep ToRhino_Brep(this IEnumerable<IClosed3D> closed3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (closed3Ds == null || closed3Ds.Count() == 0)

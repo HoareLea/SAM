@@ -1,6 +1,5 @@
 ﻿using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
-using Rhino.Geometry.Collections;
 using SAM.Geometry.Spatial;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +23,7 @@ namespace SAM.Geometry.Grasshopper
                 return ((GH_Brep)geometricGoo).ToSAM(simplify);
 
             if (geometricGoo is GH_Mesh)
-                return ((GH_Mesh)geometricGoo).ToSAM();
+                return new List<ISAMGeometry3D>() { ((GH_Mesh)geometricGoo).ToSAM() };
 
             object @object = Convert.ToSAM(geometricGoo as dynamic);
             if (@object == null)
@@ -149,31 +148,6 @@ namespace SAM.Geometry.Grasshopper
             List<ISAMGeometry3D> result = new List<ISAMGeometry3D>();
             foreach (BrepLoop brepLoop in surface.ToBrep().Loops)
                 result.Add(brepLoop.ToSAM(simplify));
-
-            return result;
-        }
-
-        public static List<ISAMGeometry3D> ToSAM(this GH_Mesh mesh)
-        {
-            if (mesh == null || mesh.Value == null)
-                return null;
-
-            MeshVertexList meshVertexList = mesh.Value.Vertices;
-            if (meshVertexList == null)
-                return null;
-
-            IEnumerable<MeshFace> meshFaces = mesh.Value.Faces;
-            if (meshFaces == null)
-                return null;
-
-            List<ISAMGeometry3D> result = new List<ISAMGeometry3D>();
-            foreach(MeshFace meshFace in meshFaces)
-            {
-                if (meshFace.IsQuad)
-                    result.Add(new Polygon3D(new Point3D[] { meshVertexList[meshFace.A].ToSAM(), meshVertexList[meshFace.B].ToSAM(), meshVertexList[meshFace.C].ToSAM(), meshVertexList[meshFace.D].ToSAM() }));
-                else if (meshFace.IsTriangle)
-                    result.Add(new Triangle3D(meshVertexList[meshFace.A].ToSAM(), meshVertexList[meshFace.B].ToSAM(), meshVertexList[meshFace.C].ToSAM()));
-            }
 
             return result;
         }

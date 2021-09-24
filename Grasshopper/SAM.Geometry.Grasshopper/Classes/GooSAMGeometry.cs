@@ -204,6 +204,16 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if(source is Mesh)
+            {
+                Value = Convert.ToSAM((Mesh)source);
+            }
+
+            if (source is GH_Mesh)
+            {
+                Value = Convert.ToSAM((GH_Mesh)source);
+            }
+
             if (source is Brep)
             {
                 List<Spatial.ISAMGeometry3D> sAMGeometry3Ds = ((Brep)source).ToSAM();
@@ -314,6 +324,25 @@ namespace SAM.Geometry.Grasshopper
                 if (Value is Spatial.Shell)
                 {
                     target = (Y)(object)new GH_Brep(((Spatial.Shell)Value).ToRhino());
+                    return true;
+                }
+            }
+
+            if (typeof(Y).IsAssignableFrom(typeof(GH_Mesh)))
+            {
+                if (Value is Spatial.Shell)
+                {
+                    Mesh mesh = ((Spatial.Shell)Value).ToRhino_Mesh();
+                    if(mesh != null)
+                    {
+                        target = (Y)(object)new GH_Mesh(mesh);
+                        return true;
+                    }
+                }
+
+                if(Value is Spatial.Mesh3D)
+                {
+                    target = (Y)(object)new GH_Mesh(((Spatial.Mesh3D)Value).ToRhino());
                     return true;
                 }
             }
