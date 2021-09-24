@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                global::Grasshopper.Kernel.Parameters.Param_Brep genericObject = new global::Grasshopper.Kernel.Parameters.Param_Brep() { Name = "_breps", NickName = "_breps", Description = "Rhino Breps", Access = GH_ParamAccess.list };
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_breps", NickName = "_breps", Description = "Rhino Breps", Access = GH_ParamAccess.list };
                 genericObject.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
@@ -103,14 +103,60 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
-
             index = Params.IndexOfInputParam("_breps");
-            List<Rhino.Geometry.Brep> breps = new List<Rhino.Geometry.Brep>();
-            if (index == -1 || !dataAccess.GetDataList(index, breps) || breps == null)
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+
+            List<Rhino.Geometry.Brep> breps = new List<Rhino.Geometry.Brep>();
+            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            {
+                object @object = objectWrapper?.Value;
+                if(@object == null)
+                {
+                    continue;
+                }
+
+                if(@object is IGH_Goo)
+                {
+                    @object = (@object as dynamic).Value;
+                }
+
+                if (@object is Mesh3D)
+                {
+                    @object = Geometry.Grasshopper.Convert.ToRhino((Mesh3D)@object);
+                }
+
+                if (@object is Rhino.Geometry.Brep)
+                {
+                    breps.Add((Rhino.Geometry.Brep)@object);
+                    continue;
+                }
+               
+                if(@object is Rhino.Geometry.Mesh)
+                {
+                    Rhino.Geometry.Mesh mesh = (Rhino.Geometry.Mesh)@object;
+                    if(mesh.IsClosed)
+                    {
+                        Rhino.Geometry.Brep brep = Rhino.Geometry.Brep.CreateFromMesh(mesh, true);
+                        if(brep != null)
+                        {
+                            breps.Add(brep);
+                            continue;
+                        }
+                    }
+                }
+
+                if (@object is Shell)
+                {
+                    breps.Add(Geometry.Grasshopper.Convert.ToRhino((Shell)@object));
+                    continue;
+                }
+            }
+
 
             List<Shell> shells = new List<Shell>();
             foreach (Rhino.Geometry.Brep brep in breps)
