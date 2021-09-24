@@ -710,6 +710,30 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        public bool SplitCoplanarFace3Ds(IEnumerable<Face3D> face3Ds, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if(face3Ds == null)
+            {
+                return false;
+            }
+
+            if(boundingBox3D == null)
+            {
+                return false;
+            }
+
+            bool result = true;
+            foreach(Face3D face3D in face3Ds)
+            {
+                if(SplitCoplanarFace3Ds(face3D, tolerance_Angle, tolerance_Distance))
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
         public bool FillFace3Ds(IEnumerable<Face3D> face3Ds, double offset = 0.1, double maxDistance = 0.1, double maxAngle = 0.0872664626, double tolerance = Core.Tolerance.Distance)
         {
             if (boundaries == null || boundaries.Count == 0 || face3Ds == null)
