@@ -11,9 +11,9 @@ namespace SAM.Geometry
                 return default;
 
             if (tolerance == 0)
-                return new IntPoint(point2D.X, point2D.Y);
+                return new IntPoint(System.Convert.ToInt64(point2D.X), System.Convert.ToInt64(point2D.Y));
 
-            return new IntPoint(point2D.X / tolerance, point2D.Y / tolerance);
+            return new IntPoint(System.Convert.ToInt64(point2D.X / tolerance), System.Convert.ToInt64(point2D.Y / tolerance));
         }
 
         public static IntPoint ToClipper(this Coordinate cooridnate, double tolerance = Core.Tolerance.MicroDistance)
@@ -22,9 +22,9 @@ namespace SAM.Geometry
                 return default;
 
             if (tolerance == 0)
-                return new IntPoint(cooridnate.X, cooridnate.Y);
+                return new IntPoint(System.Convert.ToInt64(cooridnate.X), System.Convert.ToInt64(cooridnate.Y));
 
-            return new IntPoint(cooridnate.X / tolerance, cooridnate.Y / tolerance);
+            return new IntPoint(System.Convert.ToInt64(cooridnate.X / tolerance), System.Convert.ToInt64(cooridnate.Y / tolerance));
         }
     }
 }
