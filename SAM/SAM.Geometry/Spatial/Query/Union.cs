@@ -197,8 +197,28 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                List<Face3D> face3Ds_Coplanar = face3Ds_Temp.FindAll(x => plane.Coplanar(x.GetPlane(), tolerance));
-                face3Ds_Coplanar = face3Ds_Coplanar.FindAll(x => plane.Distance(x.InternalPoint3D(tolerance)) < tolerance);
+                List<Face3D> face3Ds_Coplanar = new List<Face3D>();
+                foreach(Face3D face3D_Temp_Temp in face3Ds_Temp)
+                {
+                    if(!plane.Coplanar(face3D_Temp_Temp?.GetPlane(), tolerance))
+                    {
+                        continue;
+                    }
+
+                    Point3D point3D = face3D_Temp_Temp.InternalPoint3D(tolerance);
+                    if(point3D == null || !point3D.IsValid())
+                    {
+                        continue;
+                    }
+
+                    if(plane.Distance(point3D) > tolerance)
+                    {
+                        continue;
+                    }
+
+                    face3Ds_Coplanar.Add(face3D_Temp_Temp);
+                }
+
                 face3Ds_Coplanar.ForEach(x => face3Ds_Temp.Remove(x));
 
                 switch(face3Ds_Coplanar.Count)

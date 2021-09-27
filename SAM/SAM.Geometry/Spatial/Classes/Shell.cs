@@ -30,7 +30,7 @@ namespace SAM.Geometry.Spatial
 
         public Shell(Shell shell)
         {
-            if (shell != null)
+            if (shell?.boundaries != null)
             {
                 boundaries = new List<Tuple<BoundingBox3D, Face3D>>();
                 foreach (Tuple<BoundingBox3D, Face3D> boundary in shell.boundaries)

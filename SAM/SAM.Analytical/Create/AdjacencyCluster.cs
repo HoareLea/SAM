@@ -252,23 +252,27 @@ namespace SAM.Analytical
 
             List<Shell> shells_Temp = Enumerable.Repeat<Shell>(null, shells.Count()).ToList();
             Parallel.For(0, shells.Count(), (int i) =>
+            //for(int i=0; i < shells.Count(); i++)
             {
                 Shell shell = shells.ElementAt(i);
 
                 BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
                 if (boundingBox3D == null)
                 {
+                    //continue;
                     return;
                 }
 
                 if (!boundingBox3D_All.InRange(boundingBox3D))
                 {
+                    //continue;
                     return;
                 }
 
                 shell = shell.RemoveInvalidFace3Ds(silverSpacing);
                 if (shell == null)
                 {
+                    //continue;
                     return;
                 }
 
@@ -358,7 +362,13 @@ namespace SAM.Analytical
             List<double> elevations = new List<double>();
             foreach(Shell shell_Temp in shells_Temp)
             {
-                double elevation = Core.Query.Round(shell_Temp.GetBoundingBox().Min.Z, silverSpacing);
+                BoundingBox3D boundingBox3D = shell_Temp?.GetBoundingBox();
+                if(boundingBox3D == null)
+                {
+                    continue;
+                }
+
+                double elevation = Core.Query.Round(boundingBox3D.Min.Z, silverSpacing);
                 int index = elevations.FindIndex(x => elevation.AlmostEqual(x, silverSpacing));
                 if(index == -1)
                 {
