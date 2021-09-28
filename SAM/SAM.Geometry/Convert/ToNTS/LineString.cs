@@ -12,6 +12,11 @@ namespace SAM.Geometry
             if (point2Ds == null || point2Ds.Count == 0)
                 return null;
 
+            if(segmentable2D is IClosed2D)
+            {
+                return ToNTS((IClosed2D)segmentable2D, tolerance);
+            }
+
             return new LineString(point2Ds.ToNTS(tolerance).ToArray());
         }
     }

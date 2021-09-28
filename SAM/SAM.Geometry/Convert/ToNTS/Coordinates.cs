@@ -1,4 +1,4 @@
-﻿using ClipperLib;
+﻿//using ClipperLib;
 using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
 using System.Collections.Generic;
@@ -16,12 +16,12 @@ namespace SAM.Geometry
             return point2Ds.ToList().ConvertAll(x => x.ToNTS(tolerance));
         }
 
-        public static List<Coordinate> ToNTS(this IEnumerable<IntPoint> intPoints, double tolerance = Core.Tolerance.MicroDistance)
-        {
-            if (intPoints == null)
-                return null;
+        //public static List<Coordinate> ToNTS(this IEnumerable<IntPoint> intPoints, double tolerance = Core.Tolerance.MicroDistance)
+        //{
+        //    if (intPoints == null)
+        //        return null;
 
-            return intPoints.ToList().ConvertAll(x => x.ToNTS(tolerance));
-        }
+        //    return intPoints.ToList().ConvertAll(x => x.ToNTS(tolerance));
+        //}
     }
 }
