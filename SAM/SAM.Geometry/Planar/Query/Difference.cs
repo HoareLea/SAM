@@ -2,6 +2,7 @@
 using NetTopologySuite.Geometries;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Geometry.Planar
 {
@@ -218,6 +219,66 @@ namespace SAM.Geometry.Planar
                     }
 
                     result.Add(new Polygon2D(segmentable2D.GetPoints()));
+                }
+            }
+
+            return result;
+        }
+
+        public static List<Polygon2D> Difference(this IEnumerable<Polygon2D> polygon2Ds_1, IEnumerable<Polygon2D> polygon2Ds_2, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if(polygon2Ds_1 == null || polygon2Ds_2 == null)
+            {
+                return null;
+            }
+
+            if(polygon2Ds_2.Count() == 0)
+            {
+                return polygon2Ds_1.ToList().ConvertAll(x => new Polygon2D(x));
+            }
+
+            int count = polygon2Ds_1.Count();
+
+            if (count == 0)
+            {
+                return new List<Polygon2D>();
+            }
+
+            if(count == 1)
+            {
+                return Difference(polygon2Ds_1.ElementAt(0), polygon2Ds_2, tolerance);
+            }
+
+            List<Polygon2D> result = new List<Polygon2D>();
+
+            if (count < 10 && polygon2Ds_2.Count() < 10)
+            {
+                foreach(Polygon2D polygon2D in polygon2Ds_1)
+                {
+                    List<Polygon2D> polygon2Ds = polygon2D?.Difference(polygon2Ds_2, tolerance);
+                    if(polygon2Ds != null)
+                    {
+                        result.AddRange(polygon2Ds);
+                    }
+                }
+            }
+            else
+            {
+                List<List<Polygon2D>> polygon2DsList = Enumerable.Repeat<List<Polygon2D>>(null, count).ToList();
+
+                Parallel.For(0, count, (int i) => 
+                {
+                    polygon2DsList[i] = polygon2Ds_1.ElementAt(0)?.Difference(polygon2Ds_2, tolerance);
+                });
+
+                foreach(List<Polygon2D> polygon2Ds in polygon2DsList)
+                {
+                    if(polygon2Ds == null || polygon2Ds.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    result.AddRange(polygon2Ds);
                 }
             }
 

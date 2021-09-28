@@ -137,11 +137,15 @@ namespace SAM.Geometry.Grasshopper
 
                     Plane plane = polygon3D.GetPlane();
                     Planar.Polygon2D polygon2D = plane.Convert(polygon3D);
-                    List<Planar.Polygon2D> polygon2Ds = Planar.Query.SimplifyByClipper(polygon2D, tolerance);
+                    List<Planar.Polygon2D> polygon2Ds = Planar.Query.FixEdges(polygon2D, tolerance);
                     if (polygon2Ds == null)
+                    {
                         polylineCurves.Add(polygon3D.GetCurves().ToRhino_PolylineCurve());
+                    }
                     else
+                    {
                         polygon2Ds.ConvertAll(x => plane.Convert(x)).ForEach(x => polylineCurves.Add(x.GetSegments().ToRhino_PolylineCurve()));
+                    }
                 }
                 else if (closed3D is ICurvable3D)
                 {
