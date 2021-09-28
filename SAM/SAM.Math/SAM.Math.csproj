@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Constant.cs" />
     <Compile Include="Classes\Interpolation\LinearInterpolation.cs" />
     <Compile Include="Classes\Matrix\Matrix.cs" />
     <Compile Include="Classes\Matrix\Matrix2D.cs" />

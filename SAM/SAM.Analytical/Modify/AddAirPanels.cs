@@ -129,6 +129,7 @@ namespace SAM.Analytical
             List <Tuple<Space, List<Tuple<Space, List<Panel>>>>> tuples_New = Enumerable.Repeat<Tuple<Space, List<Tuple<Space, List<Panel>>>>>(null, tuples.Count).ToList();
 
             Parallel.For(0, tuples.Count, (int i) =>
+            //for(int i=0; i < tuples.Count; i++)
             {
                 Space space = tuples[i].Item1;
 
@@ -136,6 +137,7 @@ namespace SAM.Analytical
                 if (panels_Space == null || panels_Space.Count == 0)
                 {
                     return;
+                    //continue;
                 }
 
                 List<Shell> shells = tuples[i].Item3;
