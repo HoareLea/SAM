@@ -734,7 +734,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public bool FillFace3Ds(IEnumerable<Face3D> face3Ds, double offset = 0.1, double maxDistance = 0.1, double maxAngle = 0.0872664626, double tolerance = Core.Tolerance.Distance)
+        public bool FillFace3Ds(IEnumerable<Face3D> face3Ds, double offset = 0.1, double maxDistance = 0.1, double maxAngle = 0.0872664626, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (boundaries == null || boundaries.Count == 0 || face3Ds == null)
             {
@@ -800,7 +800,7 @@ namespace SAM.Geometry.Spatial
                         continue;
                     }
 
-                    if(face3D_Project.GetArea() < tolerance)
+                    if(face3D_Project.GetArea() < tolerance_Distance)
                     {
                         continue;
                     }
@@ -813,7 +813,7 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                face3Ds_Fill = Query.Fill(boundaries[i].Item2, face3Ds_Fill, offset, tolerance);
+                face3Ds_Fill = Query.Fill(boundaries[i].Item2, face3Ds_Fill, offset, tolerance_Area, tolerance_Distance);
                 if (face3Ds_Fill == null || face3Ds_Fill.Count < 2)
                 {
                     continue;

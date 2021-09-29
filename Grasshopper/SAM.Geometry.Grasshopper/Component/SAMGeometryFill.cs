@@ -112,7 +112,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            List<Face3D> result = face3D.Fill(face3Ds, 0.1, Core.Tolerance.Distance);
+            List<Face3D> result = face3D.Fill(face3Ds, 0.1, Core.Tolerance.MacroDistance, Core.Tolerance.Distance);
 
             dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMGeometry(x)));
             dataAccess.SetData(1, true);

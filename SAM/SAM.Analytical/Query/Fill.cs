@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> Fill(this Face3D face3D, IEnumerable<Panel> panels, double offset = 0.1, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> Fill(this Face3D face3D, IEnumerable<Panel> panels, double offset = 0.1, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if(face3D == null || panels == null)
             {
@@ -22,7 +22,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                Point3D point3D = face3D_Panel.InternalPoint3D(tolerance);
+                Point3D point3D = face3D_Panel.InternalPoint3D(tolerance_Distance);
                 if(point3D == null)
                 {
                     continue;
@@ -37,7 +37,7 @@ namespace SAM.Analytical
                 return result;
             }
 
-            List<Face3D> face3Ds = Geometry.Spatial.Query.Fill(face3D, tuples_Panel.ConvertAll(x => x.Item2), offset, tolerance);
+            List<Face3D> face3Ds = Geometry.Spatial.Query.Fill(face3D, tuples_Panel.ConvertAll(x => x.Item2), offset, tolerance_Area, tolerance_Distance);
             if(face3Ds == null || face3Ds.Count == 0)
             {
                 return result;
@@ -66,7 +66,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    if(!boundingBox3D.InRange(point3D, tolerance) || !face3D_Temp.Inside(point3D, tolerance))
+                    if(!boundingBox3D.InRange(point3D, tolerance_Distance) || !face3D_Temp.Inside(point3D, tolerance_Distance))
                     {
                         continue;
                     }
