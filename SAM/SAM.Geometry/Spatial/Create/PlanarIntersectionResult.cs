@@ -484,7 +484,6 @@ namespace SAM.Geometry.Spatial
             if (planarIntersectionResult_2 == null || !planarIntersectionResult_2.Intersecting)
                 return new PlanarIntersectionResult(plane_1);
 
-            //TODO: Check and process intersection results
             List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
 
             List<Point3D> point3Ds;

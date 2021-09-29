@@ -40,7 +40,7 @@ namespace SAM.Geometry.Planar
                 for (int j = i + 1; j < count; j++)
                 {
                     BoundingBox2D boundingBox2D_2 = tuples[j].Item1;
-                    if (!boundingBox2D_1.InRange(boundingBox2D_2))
+                    if (!boundingBox2D_1.InRange(boundingBox2D_2, tolerance))
                         continue;
 
                     Segment2D segment2D_2 = tuples[j].Item2;

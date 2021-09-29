@@ -6,18 +6,18 @@ namespace SAM.Geometry.Planar
     {
         public static List<Face2D> FixEdges(this Face2D face2D, double tolerance = Core.Tolerance.Distance)
         {
-            ISegmentable2D segmentable2D = face2D?.ExternalEdge2D as ISegmentable2D;
-            if (segmentable2D == null)
+            List<Point2D> point2Ds = (face2D?.ExternalEdge2D as ISegmentable2D)?.GetPoints();
+            if(point2Ds != null || point2Ds.Count < 3)
+            {
                 return null;
-
-            List<Segment2D> segment2Ds = segmentable2D.GetSegments()?.Split(tolerance)?.Snap(true, tolerance * 10); //TODO: Update with proper tolerance
-            if (segment2Ds == null || segment2Ds.Count == 0)
-                return null;
+            }
 
             //Fix for the case when externalEdge selfintersect
-            List<Polygon2D> polygon2Ds_ExternalEdge = Create.Polygon2Ds(segment2Ds, tolerance);
+            List<Polygon2D> polygon2Ds_ExternalEdge = new Polygon2D(point2Ds)?.FixEdges(tolerance);
             if (polygon2Ds_ExternalEdge == null || polygon2Ds_ExternalEdge.Count == 0)
+            {
                 return null;
+            }
 
             List<Polygon2D> polygon2Ds_InternalEdge = null;
 
@@ -27,15 +27,13 @@ namespace SAM.Geometry.Planar
                 polygon2Ds_InternalEdge = new List<Polygon2D>();
                 for (int i = 0; i < internalEdges.Count; i++)
                 {
-                    segmentable2D = internalEdges[i] as ISegmentable2D;
-                    if (segmentable2D == null)
+                    point2Ds = (internalEdges[i] as ISegmentable2D)?.GetPoints();
+                    if (point2Ds != null || point2Ds.Count < 3)
+                    {
                         continue;
+                    }
 
-                    segment2Ds = segmentable2D.GetSegments()?.Split(tolerance);
-                    if (segment2Ds == null || segment2Ds.Count == 0)
-                        continue;
-
-                    List<Polygon2D> polygon2Ds_InternalEdge_Temp = Create.Polygon2Ds(segment2Ds, tolerance);
+                    List<Polygon2D> polygon2Ds_InternalEdge_Temp = new Polygon2D(point2Ds)?.FixEdges(tolerance);
                     if (polygon2Ds_InternalEdge_Temp == null || polygon2Ds_InternalEdge_Temp.Count == 0)
                         continue;
 
@@ -117,7 +115,28 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            segment2Ds = Split(segment2Ds, tolerance);
+            List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
+            for(int i= segment2Ds.Count - 1; i >= 0; i--)
+            {
+                Segment2D segment2D = segment2Ds[i];
+
+                segment2Ds.RemoveAt(i);
+
+                if(segment2D.GetLength() < tolerance)
+                {
+                    continue;
+                }
+
+                if(segment2Ds.Find(x => segment2D.AlmostSimilar(x, tolerance)) != null)
+                {
+                    continue;
+                }
+
+                segment2Ds_Temp.Add(segment2D);
+            }
+
+            segment2Ds = Split(segment2Ds_Temp, tolerance);
+
             segment2Ds = Snap(segment2Ds, true, tolerance);
             if (segment2Ds == null || segment2Ds.Count < 3)
             {
