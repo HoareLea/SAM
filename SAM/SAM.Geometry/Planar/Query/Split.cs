@@ -19,6 +19,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Tuple<BoundingBox2D, Segment2D>> tuples = new List<Tuple<BoundingBox2D, Segment2D>>();
+            List<Point2D> point2Ds = new List<Point2D>();
             foreach (Segment2D segment2D in segment2Ds)
             {
                 if(segment2D == null || segment2D.GetLength() < tolerance)
@@ -27,6 +28,8 @@ namespace SAM.Geometry.Planar
                 }
 
                 tuples.Add(new Tuple<BoundingBox2D, Segment2D>(segment2D.GetBoundingBox(), segment2D));
+                Modify.Add(point2Ds, segment2D[0], tolerance);
+                Modify.Add(point2Ds, segment2D[1], tolerance);
             }
 
             int count = tuples.Count();
@@ -80,28 +83,35 @@ namespace SAM.Geometry.Planar
 
                     foreach(Point2D point2D_Intersection in point2Ds_Intersection)
                     {
-                        List<Point2D> points;
+                        Point2D point2D_Intersection_Temp = point2Ds.Find(x => point2D_Intersection.AlmostEquals(x, tolerance));
+                        if(point2D_Intersection_Temp == null)
+                        {
+                            point2D_Intersection_Temp = point2D_Intersection;
+                            Modify.Add(point2Ds, point2D_Intersection_Temp, tolerance);
+                        }
+                        
+                        List<Point2D> point2Ds_Intersection_Temp;
 
                         if (point2D_Intersection.Distance(segment2D_1.Start) > tolerance && point2D_Intersection.Distance(segment2D_1.End) > tolerance)
                         {
-                            if (!dictionary.TryGetValue(i, out points))
+                            if (!dictionary.TryGetValue(i, out point2Ds_Intersection_Temp))
                             {
-                                points = new List<Point2D>();
-                                dictionary[i] = points;
+                                point2Ds_Intersection_Temp = new List<Point2D>();
+                                dictionary[i] = point2Ds_Intersection_Temp;
                             }
 
-                            Modify.Add(points, point2D_Intersection, tolerance);
+                            Modify.Add(point2Ds_Intersection_Temp, point2D_Intersection, tolerance);
                         }
 
                         if (point2D_Intersection.Distance(segment2D_2.Start) > tolerance && point2D_Intersection.Distance(segment2D_2.End) > tolerance)
                         {
-                            if (!dictionary.TryGetValue(j, out points))
+                            if (!dictionary.TryGetValue(j, out point2Ds_Intersection_Temp))
                             {
-                                points = new List<Point2D>();
-                                dictionary[j] = points;
+                                point2Ds_Intersection_Temp = new List<Point2D>();
+                                dictionary[j] = point2Ds_Intersection_Temp;
                             }
 
-                            Modify.Add(points, point2D_Intersection, tolerance);
+                            Modify.Add(point2Ds_Intersection_Temp, point2D_Intersection, tolerance);
                         }
                     }
                 }
