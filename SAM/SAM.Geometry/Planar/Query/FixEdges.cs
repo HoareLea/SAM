@@ -10,7 +10,7 @@ namespace SAM.Geometry.Planar
             if (segmentable2D == null)
                 return null;
 
-            List<Segment2D> segment2Ds = segmentable2D.GetSegments()?.Split(tolerance)?.Snap(true, tolerance);
+            List<Segment2D> segment2Ds = segmentable2D.GetSegments()?.Split(tolerance)?.Snap(true, tolerance * 10); //TODO: Update with proper tolerance
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
