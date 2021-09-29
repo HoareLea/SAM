@@ -7,7 +7,7 @@ namespace SAM.Geometry.Planar
         public static List<Face2D> FixEdges(this Face2D face2D, double tolerance = Core.Tolerance.Distance)
         {
             List<Point2D> point2Ds = (face2D?.ExternalEdge2D as ISegmentable2D)?.GetPoints();
-            if(point2Ds != null || point2Ds.Count < 3)
+            if(point2Ds == null || point2Ds.Count < 3)
             {
                 return null;
             }
@@ -28,7 +28,7 @@ namespace SAM.Geometry.Planar
                 for (int i = 0; i < internalEdges.Count; i++)
                 {
                     point2Ds = (internalEdges[i] as ISegmentable2D)?.GetPoints();
-                    if (point2Ds != null || point2Ds.Count < 3)
+                    if (point2Ds == null || point2Ds.Count < 3)
                     {
                         continue;
                     }
@@ -109,7 +109,38 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            List<Segment2D> segment2Ds = polygon2D.GetSegments();
+            List<Point2D> point2Ds = polygon2D.GetPoints();
+            if(point2Ds == null || point2Ds.Count < 3)
+            {
+                return null;
+            }
+
+            for (int i = point2Ds.Count - 1; i > 0; i--)
+            {
+                if(!point2Ds[i].AlmostEquals(point2Ds[i - 1], tolerance))
+                {
+                    continue;
+                }
+
+                point2Ds.RemoveAt(i);
+            }
+
+            if(point2Ds.Count < 3)
+            {
+                return null;
+            }
+
+            if(point2Ds[0].AlmostEquals(point2Ds[point2Ds.Count - 1], tolerance))
+            {
+                point2Ds.RemoveAt(point2Ds.Count - 1);
+            }
+
+            if (point2Ds.Count < 3)
+            {
+                return null;
+            }
+
+            List<Segment2D> segment2Ds = point2Ds.Segment2Ds(true);
             if(segment2Ds == null || segment2Ds.Count < 3)
             {
                 return null;

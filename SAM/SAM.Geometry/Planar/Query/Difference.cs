@@ -527,7 +527,7 @@ namespace SAM.Geometry.Planar
                 return new List<Face2D>();
             }
 
-            return Create.Face2Ds(polygon2Ds);
+            return Create.Face2Ds(polygon2Ds, tolerance);
         }
     }
 }
