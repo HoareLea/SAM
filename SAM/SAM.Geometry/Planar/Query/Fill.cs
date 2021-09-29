@@ -38,7 +38,7 @@ namespace SAM.Geometry.Planar
             double area = face2D.GetArea();
             double area_Temp = face2Ds_Temp.ConvertAll(x => x.GetArea()).Sum();
 
-            if (System.Math.Abs(area - area_Temp) < tolerance)
+            if (System.Math.Abs(area - area_Temp) <= tolerance * 10) //TODO: Change 10 to proper tolerance factor
             {
                 return face2Ds_Temp;
             }
@@ -78,6 +78,16 @@ namespace SAM.Geometry.Planar
 
                 face2Ds_Offset[index] = face2Ds_Union[0];
             }
+
+            //if(face2Ds_Offset.Count == face2Ds.Count())
+            //{
+            //    double area_Old = face2Ds.ToList().ConvertAll(x => x.GetArea()).Sum();
+            //    double area_New = face2Ds_Offset.ConvertAll(x => x.GetArea()).Sum();
+            //    if (System.Math.Abs(area_Old - area_New) <= tolerance)
+            //    {
+            //        return face2Ds_Temp;
+            //    }
+            //}
 
             return Fill(face2D, face2Ds_Offset, offset, tolerance);
         }
