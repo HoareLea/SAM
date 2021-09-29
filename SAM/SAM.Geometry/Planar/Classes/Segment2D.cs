@@ -626,7 +626,7 @@ namespace SAM.Geometry.Planar
             if (distance + tolerance > length)
                 return 1;
 
-            return length / distance;
+            return distance / length;
         }
 
         public void Round(double tolerance = Core.Tolerance.Distance)
