@@ -1,4 +1,4 @@
-﻿using ClipperLib;
+﻿//using ClipperLib;
 using NetTopologySuite.Geometries;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,34 +9,34 @@ namespace SAM.Geometry.Planar
     {
         //Intersection of the sets A and B, denoted A ∩ B, is the set of all objects that are members of both A and B. The intersection of {1, 2, 3} and {2, 3, 4} is the set {2, 3}
 
-        public static List<Polygon2D> Intersection(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
-        {
-            if (polygon2D_1 == null || polygon2D_2 == null)
-                return null;
+        //public static List<Polygon2D> Intersection(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        //{
+        //    if (polygon2D_1 == null || polygon2D_2 == null)
+        //        return null;
 
-            List<IntPoint> intPoints_1 = Convert.ToClipper((ISegmentable2D)polygon2D_1, tolerance);
-            List<IntPoint> intPoints_2 = Convert.ToClipper((ISegmentable2D)polygon2D_2, tolerance);
+        //    List<IntPoint> intPoints_1 = Convert.ToClipper((ISegmentable2D)polygon2D_1, tolerance);
+        //    List<IntPoint> intPoints_2 = Convert.ToClipper((ISegmentable2D)polygon2D_2, tolerance);
 
-            Clipper clipper = new Clipper();
-            clipper.AddPath(intPoints_1, PolyType.ptSubject, true);
-            clipper.AddPath(intPoints_2, PolyType.ptClip, true);
+        //    Clipper clipper = new Clipper();
+        //    clipper.AddPath(intPoints_1, PolyType.ptSubject, true);
+        //    clipper.AddPath(intPoints_2, PolyType.ptClip, true);
 
-            List<List<IntPoint>> intPointsList = new List<List<IntPoint>>();
+        //    List<List<IntPoint>> intPointsList = new List<List<IntPoint>>();
 
-            clipper.Execute(ClipType.ctIntersection, intPointsList, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
+        //    clipper.Execute(ClipType.ctIntersection, intPointsList, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
 
-            if (intPointsList == null)
-                return null;
+        //    if (intPointsList == null)
+        //        return null;
 
-            List<Polygon2D> result = new List<Polygon2D>();
-            if (intPointsList.Count == 0)
-                return result;
+        //    List<Polygon2D> result = new List<Polygon2D>();
+        //    if (intPointsList.Count == 0)
+        //        return result;
 
-            foreach (List<IntPoint> intPoints in intPointsList)
-                result.Add(new Polygon2D(intPoints.ToSAM(tolerance)));
+        //    foreach (List<IntPoint> intPoints in intPointsList)
+        //        result.Add(new Polygon2D(intPoints.ToSAM(tolerance)));
 
-            return result;
-        }
+        //    return result;
+        //}
 
         public static T Intersection<T>(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.MicroDistance) where T: ISAMGeometry2D
         {
@@ -108,6 +108,43 @@ namespace SAM.Geometry.Planar
         public static List<Face2D> Intersection(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             return Intersection<Face2D>(face2D_1, face2D_2, tolerance);
+        }
+
+        public static List<Polygon2D> Intersection(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if(polygon2D_1 == null || polygon2D_2 == null)
+            {
+                return null;
+            }
+
+            List<Face2D> face2Ds = Intersection(new Face2D(polygon2D_1), new Face2D(polygon2D_2), tolerance);
+            if(face2Ds == null)
+            {
+                return null;
+            }
+
+            List<Polygon2D> result = new List<Polygon2D>();
+            foreach(Face2D face2D in face2Ds)
+            {
+                List<IClosed2D> edge2Ds = face2D.Edge2Ds;
+                if(edge2Ds == null || edge2Ds.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach(IClosed2D edge2D in edge2Ds)
+                {
+                    ISegmentable2D segmentable2D = edge2D as ISegmentable2D;
+                    if(segmentable2D == null)
+                    {
+                        continue;
+                    }
+
+                    result.Add(new Polygon2D(segmentable2D.GetPoints()));
+                }
+            }
+
+            return result;
         }
 
         public static List<T> Intersection<T>(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance) where T: ISAMGeometry2D

@@ -106,8 +106,7 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            List<Planar.Polygon2D> polygon2Ds_result = new List<Planar.Polygon2D>();
-            polygon2Ds_result = Planar.Query.Intersection(polygon2Ds_1[0], polygon2Ds_2[0], tolerance);
+            List<Planar.Polygon2D> polygon2Ds_result = Planar.Query.Intersection(polygon2Ds_1[0], polygon2Ds_2[0], tolerance);
 
             dataAccess.SetDataList(0, polygon2Ds_result.ConvertAll(x => new GooSAMGeometry(x)));
 

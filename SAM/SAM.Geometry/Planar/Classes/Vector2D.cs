@@ -201,7 +201,9 @@ namespace SAM.Geometry.Planar
         {
             double value = System.Math.Abs(Angle(vector2D));
             if (value == 0)
+            {
                 return value;
+            }
 
             return System.Math.Min(System.Math.PI - value, value);
         }

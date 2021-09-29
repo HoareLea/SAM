@@ -261,7 +261,7 @@ namespace SAM.Geometry.Spatial
         //Source: https://wiki.unity3d.com/index.php/3d_Math_functions
         public double Angle(Plane plane)
         {
-            return (System.Math.PI / 2) - Angle(plane.Normal);
+            return Math.Constant.HalfPI - Angle(plane.Normal);
         }
 
         public Point3D Project(Point3D point3D)
@@ -286,9 +286,11 @@ namespace SAM.Geometry.Spatial
         {
             double value = System.Math.Abs(Angle(vector3D));
             if (value == 0)
+            {
                 return value;
+            }
 
-            return System.Math.PI - value;
+            return System.Math.Min(System.Math.PI - value, value);
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)

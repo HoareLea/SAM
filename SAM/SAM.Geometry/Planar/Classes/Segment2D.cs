@@ -15,7 +15,7 @@ namespace SAM.Geometry.Planar
 
         public Segment2D(double x_1, double y_1, double x_2, double y_2)
         {
-            origin = new Point2D(x_1, x_2);
+            origin = new Point2D(x_1, y_1);
             vector = new Vector2D(x_2 - x_1, y_2 - y_1);
         }
 

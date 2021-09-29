@@ -10,7 +10,7 @@ namespace SAM.Geometry.Planar
             if (segmentable2D == null)
                 return null;
 
-            List<Segment2D> segment2Ds = segmentable2D.GetSegments()?.Split(tolerance)?.Snap(true, tolerance);
+            List<Segment2D> segment2Ds = segmentable2D.GetSegments()?.Split(tolerance)?.Snap(true, tolerance * 10); //TODO: Update with proper tolerance
             if (segment2Ds == null || segment2Ds.Count == 0)
                 return null;
 
@@ -102,6 +102,29 @@ namespace SAM.Geometry.Planar
             }
 
             return result;
+        }
+
+        public static List<Polygon2D> FixEdges(this Polygon2D polygon2D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(polygon2D == null)
+            {
+                return null;
+            }
+
+            List<Segment2D> segment2Ds = polygon2D.GetSegments();
+            if(segment2Ds == null || segment2Ds.Count < 3)
+            {
+                return null;
+            }
+
+            segment2Ds = Split(segment2Ds, tolerance);
+            segment2Ds = Snap(segment2Ds, true, tolerance);
+            if (segment2Ds == null || segment2Ds.Count < 3)
+            {
+                return null;
+            }
+
+            return Create.Polygon2Ds(segment2Ds, tolerance);
         }
     }
 }

@@ -1,8 +1,12 @@
-﻿using ClipperLib;
+﻿//using ClipperLib;
 using SAM.Core;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
+using NetTopologySuite.Operation.Buffer;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.Noding.Snapround;
+using NetTopologySuite.Operation.Polygonize;
 
 namespace SAM.Geometry.Planar
 {
@@ -64,7 +68,9 @@ namespace SAM.Geometry.Planar
             if (polygon2D == null)
                 return null;
 
-            return Offset(polygon2D.Points, offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance)?.ConvertAll(x => new Polygon2D(x));
+            //return Offset(polygon2D.Points, offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance)?.ConvertAll(x => new Polygon2D(x));
+
+            return Offset(polygon2D, offset, JoinStyle.Mitre, EndCapStyle.Square, tolerance);
         }
 
         public static List<Polygon2D> Offset(this Polyline2D polyline2D, double offset, double tolerance = Tolerance.MicroDistance)
@@ -72,11 +78,13 @@ namespace SAM.Geometry.Planar
             if (polyline2D == null)
                 return null;
 
-            EndType endType = EndType.etOpenSquare;
-            if (polyline2D.IsClosed())
-                endType = EndType.etClosedPolygon;
+            //EndType endType = EndType.etOpenSquare;
+            //if (polyline2D.IsClosed())
+            //    endType = EndType.etClosedPolygon;
 
-            return Offset(polyline2D.Points, offset, JoinType.jtMiter, endType, tolerance).ConvertAll(x => new Polygon2D(x));
+            //return Offset(polyline2D.Points, offset, JoinType.jtMiter, endType, tolerance).ConvertAll(x => new Polygon2D(x));
+
+            return Offset(polyline2D, offset, JoinStyle.Mitre, EndCapStyle.Square, tolerance);
         }
 
         public static Triangle2D Offset(Triangle2D triangle2D, double offset, double tolerance = Tolerance.MicroDistance)
@@ -86,25 +94,39 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            List<List<Point2D>> point2DsList =  Offset(triangle2D.GetPoints(), offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
-            if(point2DsList == null)
+            List<Polygon2D> polygon2Ds = Offset(triangle2D, offset, JoinStyle.Mitre, EndCapStyle.Square, tolerance);
+            if(polygon2Ds == null || polygon2Ds.Count == 0)
             {
                 return null;
             }
 
-            point2DsList.RemoveAll(x => x == null || x.Count < 3);
-            if(point2DsList.Count == 0)
+            List<Point2D> point2Ds = polygon2Ds[0].GetPoints();
+            if(point2Ds == null || point2Ds.Count  < 3)
             {
                 return null;
             }
 
-            if (point2DsList.Count > 1)
-            {
-                point2DsList.Sort((x, y) => Area(y).CompareTo(Area(x)));
+            return new Triangle2D(point2Ds[0], point2Ds[1], point2Ds[2]);
+
+            //List<List<Point2D>> point2DsList =  Offset(triangle2D.GetPoints(), offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
+            //if(point2DsList == null)
+            //{
+            //    return null;
+            //}
+
+            //point2DsList.RemoveAll(x => x == null || x.Count < 3);
+            //if(point2DsList.Count == 0)
+            //{
+            //    return null;
+            //}
+
+            //if (point2DsList.Count > 1)
+            //{
+            //    point2DsList.Sort((x, y) => Area(y).CompareTo(Area(x)));
                 
-            }
+            //}
 
-            return new Triangle2D(point2DsList[0][0], point2DsList[0][1], point2DsList[0][2]);
+            //return new Triangle2D(point2DsList[0][0], point2DsList[0][1], point2DsList[0][2]);
         }
 
         public static BoundingBox2D Offset(BoundingBox2D boundingBox2D, double offset, double tolerance = Tolerance.MicroDistance)
@@ -114,25 +136,81 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            List<List<Point2D>> point2DsList = Offset(boundingBox2D.GetPoints(), offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
-            if (point2DsList == null)
+            List<Polygon2D> polygon2Ds = Offset(boundingBox2D, offset, JoinStyle.Mitre, EndCapStyle.Square, tolerance);
+            if (polygon2Ds == null || polygon2Ds.Count == 0)
             {
                 return null;
             }
 
-            point2DsList.RemoveAll(x => x == null || x.Count < 3);
-            if (point2DsList.Count == 0)
+            List<Point2D> point2Ds = polygon2Ds[0].GetPoints();
+            if (point2Ds == null || point2Ds.Count < 4)
             {
                 return null;
             }
 
-            if (point2DsList.Count > 1)
-            {
-                point2DsList.Sort((x, y) => Area(y).CompareTo(Area(x)));
+            return new BoundingBox2D(point2Ds);
 
+            //List<List<Point2D>> point2DsList = Offset(boundingBox2D.GetPoints(), offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
+            //if (point2DsList == null)
+            //{
+            //    return null;
+            //}
+
+            //point2DsList.RemoveAll(x => x == null || x.Count < 3);
+            //if (point2DsList.Count == 0)
+            //{
+            //    return null;
+            //}
+
+            //if (point2DsList.Count > 1)
+            //{
+            //    point2DsList.Sort((x, y) => Area(y).CompareTo(Area(x)));
+
+            //}
+
+            //return new BoundingBox2D(point2DsList[0]);
+        }
+
+        public static Rectangle2D Offset(Rectangle2D rectangle2D, double offset, double tolerance = Tolerance.MicroDistance)
+        {
+            if (rectangle2D == null)
+            {
+                return null;
             }
 
-            return new BoundingBox2D(point2DsList[0]);
+            List<Polygon2D> polygon2Ds = Offset(rectangle2D, offset, JoinStyle.Mitre, EndCapStyle.Square, tolerance);
+            if (polygon2Ds == null || polygon2Ds.Count == 0)
+            {
+                return null;
+            }
+
+            List<Point2D> point2Ds = polygon2Ds[0].GetPoints();
+            if (point2Ds == null || point2Ds.Count < 4)
+            {
+                return null;
+            }
+
+            return Create.Rectangle2D(point2Ds);
+
+            //List<List<Point2D>> point2DsList = Offset(rectangle2D.GetPoints(), offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
+            //if (point2DsList == null)
+            //{
+            //    return null;
+            //}
+
+            //point2DsList.RemoveAll(x => x == null || x.Count < 3);
+            //if (point2DsList.Count == 0)
+            //{
+            //    return null;
+            //}
+
+            //if (point2DsList.Count > 1)
+            //{
+            //    point2DsList.Sort((x, y) => Area(y).CompareTo(Area(x)));
+
+            //}
+
+            //return Create.Rectangle2D(point2DsList[0]);
         }
 
         public static Circle2D Offset(Circle2D circle2D, double offset)
@@ -145,80 +223,155 @@ namespace SAM.Geometry.Planar
             return new Ellipse2D(ellipse2D.Center, System.Math.Abs(ellipse2D.Width + offset), System.Math.Abs(ellipse2D.Height + offset), ellipse2D.HeightDirection);
         }
 
-        public static Rectangle2D Offset(Rectangle2D rectangle2D, double offset, double tolerance = Tolerance.MicroDistance)
-        {
-            if (rectangle2D == null)
-            {
-                return null;
-            }
-
-            List<List<Point2D>> point2DsList = Offset(rectangle2D.GetPoints(), offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance);
-            if (point2DsList == null)
-            {
-                return null;
-            }
-
-            point2DsList.RemoveAll(x => x == null || x.Count < 3);
-            if (point2DsList.Count == 0)
-            {
-                return null;
-            }
-
-            if (point2DsList.Count > 1)
-            {
-                point2DsList.Sort((x, y) => Area(y).CompareTo(Area(x)));
-
-            }
-
-            return Create.Rectangle2D(point2DsList[0]);
-        }
-
-        public static List<Polygon2D> Offset(this ISegmentable2D segmentable2D, double offset, JoinType joinType, EndType endType, double tolerance = Tolerance.MicroDistance)
-        {
-            if (segmentable2D == null)
-                return null;
-
-            List<IntPoint> intPoints = segmentable2D.ToClipper(tolerance);
-            if (intPoints == null)
-                return null;
-
-            ClipperOffset clipperOffset = new ClipperOffset();
-            clipperOffset.AddPath(intPoints, joinType, endType);
-            List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
-            clipperOffset.Execute(ref intPointList, offset / tolerance);
-
-            if (intPointList == null)
-                return null;
-
-            return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
-        }
-
-        public static List<List<Point2D>> Offset(this IEnumerable<Point2D> point2Ds, double offset, JoinType joinType, EndType endType, double tolerance = Tolerance.MicroDistance)
-        {
-            List<IntPoint> intPoints = point2Ds?.ToClipper(tolerance);
-            if (intPoints == null)
-                return null;
-
-            ClipperOffset clipperOffset = new ClipperOffset();
-            clipperOffset.AddPath(intPoints, joinType, endType);
-            List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
-            clipperOffset.Execute(ref intPointList, offset / tolerance);
-
-            if (intPointList == null)
-                return null;
-
-            return intPointList.ConvertAll(x => x.ToSAM(tolerance));
-        }
-
         public static List<Polygon2D> Offset(this Polygon2D polygon2D, double offset, bool inside, double tolerance = Tolerance.Distance)
         {
             if (inside && offset > 0)
                 offset = -offset;
 
-            return Offset(polygon2D?.Points, offset, JoinType.jtMiter, EndType.etClosedPolygon, tolerance)?.ConvertAll(x => new Polygon2D(x));
+            return Offset(polygon2D, offset, tolerance);
         }
 
-        
+        //public static List<Polygon2D> Offset(this ISegmentable2D segmentable2D, double offset, JoinType joinType, EndType endType, double tolerance = Tolerance.MicroDistance)
+        //{
+        //    if (segmentable2D == null)
+        //        return null;
+
+        //    List<IntPoint> intPoints = segmentable2D.ToClipper(tolerance);
+        //    if (intPoints == null)
+        //        return null;
+
+        //    ClipperOffset clipperOffset = new ClipperOffset();
+        //    clipperOffset.AddPath(intPoints, joinType, endType);
+        //    List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
+        //    clipperOffset.Execute(ref intPointList, offset / tolerance);
+
+        //    if (intPointList == null)
+        //        return null;
+
+        //    return intPointList.ConvertAll(x => new Polygon2D(x.ToSAM(tolerance)));
+        //}
+
+        //public static List<List<Point2D>> Offset(this IEnumerable<Point2D> point2Ds, double offset, JoinType joinType, EndType endType, double tolerance = Tolerance.MicroDistance)
+        //{
+        //    List<IntPoint> intPoints = point2Ds?.ToClipper(tolerance);
+        //    if (intPoints == null)
+        //        return null;
+
+        //    ClipperOffset clipperOffset = new ClipperOffset();
+        //    clipperOffset.AddPath(intPoints, joinType, endType);
+        //    List<List<IntPoint>> intPointList = new List<List<IntPoint>>();
+        //    clipperOffset.Execute(ref intPointList, offset / tolerance);
+
+        //    if (intPointList == null)
+        //        return null;
+
+        //    return intPointList.ConvertAll(x => x.ToSAM(tolerance));
+        //}
+
+        public static List<Polygon2D> Offset(this ISegmentable2D segmentable2D, double offset, JoinStyle joinStyle, EndCapStyle endCapStyle, double tolerance = Tolerance.MicroDistance)
+        {
+            LineString lineString = segmentable2D.ToNTS(tolerance);
+            if(lineString == null)
+            {
+                return null;
+            }
+
+            GeometryFactory geometryFactory = lineString.Factory;
+
+            PrecisionModel precisionModel = new PrecisionModel(1 / tolerance);
+
+            BufferParameters bufferParameters = new BufferParameters()
+            {
+                EndCapStyle = endCapStyle,
+                JoinStyle = joinStyle
+            };
+
+            NetTopologySuite.Geometries.Geometry geometry = lineString;
+            if(lineString is LinearRing)
+            {
+                geometry = new Polygon((LinearRing)lineString);
+            }
+
+            OffsetCurveSetBuilder offsetCurveSetBuilder = new OffsetCurveSetBuilder(geometry, offset, new OffsetCurveBuilder(precisionModel, bufferParameters));
+
+            IEnumerable<NetTopologySuite.Noding.ISegmentString> segmentStrings = offsetCurveSetBuilder.GetCurves();
+
+            List<LineString> lineStrings = new List<LineString>();
+            foreach (NetTopologySuite.Noding.ISegmentString segmentString in segmentStrings)
+            {
+                NetTopologySuite.Noding.NodedSegmentString nodedSegmentString = segmentString as NetTopologySuite.Noding.NodedSegmentString;
+
+                if (nodedSegmentString == null)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < nodedSegmentString.Count - 1; i++)
+                {
+                    lineStrings.Add(nodedSegmentString[i].ToGeometry(geometryFactory));
+                }
+            }
+
+            lineStrings = new GeometryNoder(precisionModel).Node(lineStrings).ToList();
+            if(lineString.IsClosed)
+            {
+                double offste_Abs = System.Math.Abs(offset);
+
+                for (int i = lineStrings.Count - 1; i >= 0; i--)
+                {
+                    double distance = lineStrings[i].Distance(lineString);
+                    if (distance < offste_Abs - tolerance)
+                    {
+                        lineStrings.RemoveAt(i);
+                    }
+                }
+            }
+
+            Polygonizer polygonizer = new Polygonizer(true);
+            polygonizer.Add(lineStrings.ToArray());
+
+            IEnumerable<NetTopologySuite.Geometries.Geometry> geometries = polygonizer.GetPolygons();
+            if(geometries == null)
+            {
+                return null;
+            }
+
+            List<Polygon2D> result = new List<Polygon2D>();
+            foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
+            {
+                ISAMGeometry2D sAMGeometry2D = geometry_Temp?.ToSAM(tolerance);
+                if(sAMGeometry2D == null)
+                {
+                    continue;
+                }
+
+                if(sAMGeometry2D is Polygon2D)
+                {
+                    result.Add((Polygon2D)sAMGeometry2D);
+                    continue;
+                }
+
+                if(sAMGeometry2D is Face2D)
+                {
+                    List<IClosed2D> edge2Ds = ((Face2D)sAMGeometry2D).Edge2Ds;
+                    if(edge2Ds != null)
+                    {
+                        foreach(IClosed2D edge2D in edge2Ds)
+                        { 
+                            if(edge2D is ISegmentable2D)
+                            {
+                                result.Add(new Polygon2D(((ISegmentable2D)edge2D).GetPoints()));
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+
+        }
+
+
         public static List<Polyline2D> Offset(this Polyline2D polyline2D, double offset, Orientation orientation, double tolerance = Tolerance.Distance)
         {
             return Offset(polyline2D, new double[] { offset }, orientation, tolerance);
