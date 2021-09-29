@@ -75,6 +75,10 @@ namespace SAM.Analytical
             }
 
             List<Face3D> face3Ds = face3D.FixEdges(tolerance);
+            if(face3Ds == null)
+            {
+                return null;
+            }
 
             List<Panel> result = new List<Panel>();
             foreach(Face3D face3D_Temp in face3Ds)
