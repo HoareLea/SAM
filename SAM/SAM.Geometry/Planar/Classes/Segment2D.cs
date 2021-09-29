@@ -600,10 +600,19 @@ namespace SAM.Geometry.Planar
             return new Segment2D(Start, point2D);
         }
 
+        /// <summary>
+        /// Returns parameter value (normalized value between 0 and 1)
+        /// </summary>
+        /// <param name="point2D">Point to be checked</param>
+        /// <param name="inverted">inverted segment. If value set to false then parameter value counted from End of the Segment2D</param>
+        /// <param name="tolerance"></param>
+        /// <returns>Value between 0 and 1 which determine position of the point on Segment2D</returns>
         public double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null)
+            {
                 return double.NaN;
+            }
 
             if (inverted)
             {
@@ -614,17 +623,27 @@ namespace SAM.Geometry.Planar
 
             Point2D point2D_Closest = Closest(point2D);
             if (point2D_Closest == null)
+            {
                 return double.NaN;
+            }
 
             double length = vector.Length;
+            if(double.IsNaN(length) || length < tolerance)
+            {
+                return double.NaN;
+            }
 
             double distance = new Vector2D(origin, point2D_Closest).Length;
 
             if (distance < tolerance)
+            {
                 return 0;
+            }
 
             if (distance + tolerance > length)
+            {
                 return 1;
+            }
 
             return distance / length;
         }
