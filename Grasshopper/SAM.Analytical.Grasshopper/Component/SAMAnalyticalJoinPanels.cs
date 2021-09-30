@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
                 panelParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(panelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevation", NickName = "elevation", Description = "Elevation", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevations", NickName = "elevations", Description = "Elevations", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
@@ -99,34 +99,46 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_elevation");
-            GH_ObjectWrapper objectWrapper_Elevation = null;
-            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper_Elevation) || objectWrapper_Elevation == null)
+            index = Params.IndexOfInputParam("_elevations");
+            List<GH_ObjectWrapper> objectWrappers_Elevation = new List<GH_ObjectWrapper>() ;
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers_Elevation) || objectWrappers_Elevation == null || objectWrappers_Elevation.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
-            double elevation = double.NaN;
+            List<double> elevations = new List<double>();
 
-            object @object = objectWrapper_Elevation.Value;
-            if (@object is IGH_Goo)
+            foreach(GH_ObjectWrapper objectWrapper_Elevation in objectWrappers_Elevation)
             {
-                @object = (@object as dynamic).Value;
-            }
+                object @object = objectWrapper_Elevation.Value;
+                if (@object is IGH_Goo)
+                {
+                    @object = (@object as dynamic).Value;
+                }
 
-            if (@object is double)
-            {
-                elevation = (double)@object;
-            }
-            else if (@object is string)
-            {
-                if (double.TryParse((string)@object, out double elevation_Temp))
-                    elevation = elevation_Temp;
-            }
-            else if (@object is Architectural.Level)
-            {
-                elevation = ((Architectural.Level)@object).Elevation;
+                double elevation = double.NaN;
+
+                if (@object is double)
+                {
+                    elevation = (double)@object;
+                }
+                else if (@object is string)
+                {
+                    if (double.TryParse((string)@object, out double elevation_Temp))
+                        elevation = elevation_Temp;
+                }
+                else if (@object is Architectural.Level)
+                {
+                    elevation = ((Architectural.Level)@object).Elevation;
+                }
+
+                if(double.IsNaN(elevation))
+                {
+                    continue;
+                }
+
+                elevations.Add(elevation);
             }
 
             index = Params.IndexOfInputParam("distance_");
@@ -145,7 +157,50 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(tolerance))
                 tolerance = Tolerance.Distance;
 
-            Analytical.Modify.Join(panels, elevation, distance, out List<Panel> panels_Extended, out List<Panel> panels_Trimmed, out List<Geometry.Spatial.Segment3D> segment3Ds, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
+            List<Panel> panels_Extended = new List<Panel>();
+            List<Panel> panels_Trimmed = new List<Panel>();
+            List<Geometry.Spatial.Segment3D> segment3Ds = new List<Geometry.Spatial.Segment3D>();
+            foreach (double elevation in elevations)
+            {
+                Analytical.Modify.Join(panels, elevation, distance, out List<Panel> panels_Extended_Temp, out List<Panel> panels_Trimmed_Temp, out List<Geometry.Spatial.Segment3D> segment3Ds_Temp, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
+
+                if(panels_Extended_Temp != null)
+                {
+                    foreach(Panel panel_Extended in panels_Extended_Temp)
+                    {
+                        int i = panels_Extended.FindIndex(x => x.Guid == panel_Extended.Guid);
+                        if(i == -1)
+                        {
+                            panels_Extended.Add(panel_Extended);
+                        }
+                        else
+                        {
+                            panels_Extended[i] = panel_Extended;
+                        }
+                    }
+                }
+
+                if (panels_Trimmed_Temp != null)
+                {
+                    foreach (Panel panel_Trimmed in panels_Trimmed_Temp)
+                    {
+                        int i = panels_Trimmed.FindIndex(x => x.Guid == panel_Trimmed.Guid);
+                        if (i == -1)
+                        {
+                            panels_Trimmed.Add(panel_Trimmed);
+                        }
+                        else
+                        {
+                            panels_Trimmed[i] = panel_Trimmed;
+                        }
+                    }
+                }
+
+                if(segment3Ds_Temp != null)
+                {
+                    segment3Ds.AddRange(segment3Ds_Temp);
+                }
+            }
 
             index = Params.IndexOfOutputParam("panels");
             if (index != -1)

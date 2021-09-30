@@ -7,7 +7,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Create
     {
-        public static List<Shell> Shells(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double tolerance = Core.Tolerance.Distance)
+        public static List<Shell> Shells(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (segmentable2Ds == null || double.IsNaN(elevation_Min) || double.IsNaN(elevation_Max))
                 return null;
@@ -18,7 +18,7 @@ namespace SAM.Geometry.Spatial
             Plane plane_Min_Flipped = new Plane(plane_Min);
             plane_Min_Flipped.FlipZ();
 
-            List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segmentable2Ds, tolerance);
+            List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segmentable2Ds, tolerance_Distance);
             if (polygon2Ds == null)
                 return null;
 
@@ -37,8 +37,7 @@ namespace SAM.Geometry.Spatial
                 if (segment2Ds == null || segment2Ds.Count < 3)
                     continue;
 
-                segment2Ds = Planar.Query.Snap(segment2Ds, true);
-
+                segment2Ds = Planar.Query.Snap(segment2Ds, true, tolerance_Snap);
 
                 List<Face3D> face3Ds = new List<Face3D>();
                 foreach (Segment2D segment2D in segment2Ds)
@@ -101,7 +100,7 @@ namespace SAM.Geometry.Spatial
                 if (face2D == null)
                 {
                     continue;
-                }                   
+                }
 
                 tuple.Item2.Add(new Tuple<Face2D, BoundingBox2D>(face2D, face2D.GetBoundingBox()));
                 face2Ds_All.Add(face2D);
