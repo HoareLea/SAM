@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -56,6 +56,10 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "distance_", NickName = "distance_", Description = "Distance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(0.2);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offset_", NickName = "offset_", Description = "Offset", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(Tolerance.MacroDistance);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Tolerance.Distance);
@@ -157,12 +161,20 @@ namespace SAM.Analytical.Grasshopper
             if (double.IsNaN(tolerance))
                 tolerance = Tolerance.Distance;
 
+            index = Params.IndexOfInputParam("offset_");
+            double offset = Tolerance.MacroDistance;
+            if (index != -1)
+                dataAccess.GetData(index, ref offset);
+
+            if (double.IsNaN(offset))
+                offset = Tolerance.MacroDistance;
+
             List<Panel> panels_Extended = new List<Panel>();
             List<Panel> panels_Trimmed = new List<Panel>();
             List<Geometry.Spatial.Segment3D> segment3Ds = new List<Geometry.Spatial.Segment3D>();
             foreach (double elevation in elevations)
             {
-                Analytical.Modify.Join(panels, elevation, distance, out List<Panel> panels_Extended_Temp, out List<Panel> panels_Trimmed_Temp, out List<Geometry.Spatial.Segment3D> segment3Ds_Temp, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
+                Analytical.Modify.Join(panels, elevation + offset, distance, out List<Panel> panels_Extended_Temp, out List<Panel> panels_Trimmed_Temp, out List<Geometry.Spatial.Segment3D> segment3Ds_Temp, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
 
                 if(panels_Extended_Temp != null)
                 {
