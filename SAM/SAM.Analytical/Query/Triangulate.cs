@@ -5,7 +5,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Panel> Trianulate(this Panel panel, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> Triangulate(this Panel panel, double tolerance = Core.Tolerance.Distance)
         {
             if (panel == null)
                 return null;
@@ -34,7 +34,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<Aperture> Trianulate(this Aperture aperture, double tolerance = Core.Tolerance.Distance)
+        public static List<Aperture> Triangulate(this Aperture aperture, double tolerance = Core.Tolerance.Distance)
         {
             if (aperture == null)
                 return null;
@@ -72,7 +72,7 @@ namespace SAM.Analytical
         /// <param name="internalEdgesOnly">Triangule only the panels which have Internal Edges</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns>AdjacencyCluster</returns>
-        public static AdjacencyCluster Trianulate(this AdjacencyCluster adjacencyCluster, bool includePanels = true, bool includeApertures = false, bool internalEdgesOnly = true, double tolerance = Core.Tolerance.Distance)
+        public static AdjacencyCluster Triangulate(this AdjacencyCluster adjacencyCluster, bool includePanels = true, bool includeApertures = false, bool internalEdgesOnly = true, double tolerance = Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null)
                 return null;
@@ -111,7 +111,7 @@ namespace SAM.Analytical
                             }
                         }
 
-                        panels_Temp = panel.Trianulate(tolerance);
+                        panels_Temp = panel.Triangulate(tolerance);
                     }
                     else
                     {
@@ -138,7 +138,7 @@ namespace SAM.Analytical
                             panel_Temp.RemoveApertures();
                             foreach(Aperture aperture in apertures)
                             {
-                                aperture.Trianulate(tolerance)?.ForEach(x => panel_Temp.AddAperture(x));
+                                aperture.Triangulate(tolerance)?.ForEach(x => panel_Temp.AddAperture(x));
                             }
                         }
                         
