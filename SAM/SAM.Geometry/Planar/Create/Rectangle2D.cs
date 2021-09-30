@@ -99,5 +99,32 @@ namespace SAM.Geometry.Planar
 
             return rectangle;
         }
+
+        public static Rectangle2D Rectangle2D(this IEnumerable<ISegmentable2D> segmentable2Ds)
+        {
+            if(segmentable2Ds == null)
+            {
+                return null;
+            }
+
+            List<Point2D> point2Ds = new List<Point2D>();
+            foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+            {
+                if(segmentable2D == null)
+                {
+                    continue;
+                }
+
+                List<Point2D> point2Ds_Temp = segmentable2D.GetPoints();
+                if(point2Ds_Temp == null)
+                {
+                    continue;
+                }
+
+                point2Ds.AddRange(point2Ds_Temp);
+            }
+
+            return Rectangle2D(point2Ds);
+        }
     }
 }
