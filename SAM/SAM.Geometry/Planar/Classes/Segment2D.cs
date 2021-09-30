@@ -557,11 +557,19 @@ namespace SAM.Geometry.Planar
             return new BoundingBox2D(origin, GetEnd(), offset);
         }
 
+        /// <summary>
+        /// Gets point for given parameter value
+        /// </summary>
+        /// <param name="parameter">parameter value (not normalized value so can be less than 0 and greater than 1) value which is less than 0 determine direction opposite to Segment 2D direction</param>
+        /// <param name="inverted">Inverted segment. If value set to false then parameter value counted from End of the Segment2D</param>
+        /// <returns>Point2D on Segment2D</returns>
         public Point2D GetPoint(double parameter, bool inverted = false)
         {
-            if (parameter < 0 || parameter > 1)
+            if(double.IsNaN(parameter))
+            {
                 return null;
-
+            }
+            
             if (inverted)
             {
                 Segment2D segment2D = new Segment2D(this);
@@ -569,29 +577,23 @@ namespace SAM.Geometry.Planar
                 return segment2D.GetPoint(parameter, false);
             }
 
-            if (parameter == 0)
-                return Start;
-
-            if (parameter == 1)
-                return End;
-
             return origin.GetMoved(vector * parameter);
         }
 
+        /// <summary>
+        /// Trim given Segments by parameter value (not normalized value so can be less than 0 and greater than 1) value which is less than 0 determine direction opposite to Segment 2D direction
+        /// </summary>
+        /// <param name="parameter">Parameter value</param>
+        /// <param name="inverted">Inverted segment. If value set to false then parameter value counted from End of the Segment2D</param>
+        /// <returns>Trimmed Segment2D</returns>
         public ISegmentable2D Trim(double parameter, bool inverted = false)
         {
-            if (parameter <= 0 || parameter > 1)
-                return null;
-
             if (inverted)
             {
                 Segment2D segment2D = new Segment2D(this);
                 segment2D.Reverse();
                 return segment2D.Trim(parameter, false);
             }
-
-            if (parameter == 1)
-                return new Segment2D(this);
 
             Point2D point2D = GetPoint(parameter, false);
             if (point2D == null)
@@ -601,12 +603,12 @@ namespace SAM.Geometry.Planar
         }
 
         /// <summary>
-        /// Returns parameter value (normalized value between 0 and 1)
+        /// Returns parameter value (not normalized value so can be less than 0 and greater than 1). Parameter value which is less than 0 determine direction opposite to Segment 2D direction
         /// </summary>
         /// <param name="point2D">Point to be checked</param>
-        /// <param name="inverted">inverted segment. If value set to false then parameter value counted from End of the Segment2D</param>
-        /// <param name="tolerance"></param>
-        /// <returns>Value between 0 and 1 which determine position of the point on Segment2D</returns>
+        /// <param name="inverted">Inverted segment. If value set to false then parameter value counted from End of the Segment2D</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Value which determine position of the point on Segment2D</returns>
         public double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
         {
             if (point2D == null)
@@ -621,7 +623,7 @@ namespace SAM.Geometry.Planar
                 return segment2D.GetParameter(point2D, false, tolerance);
             }
 
-            Point2D point2D_Closest = Closest(point2D);
+            Point2D point2D_Closest = Closest(point2D, false);
             if (point2D_Closest == null)
             {
                 return double.NaN;
@@ -633,19 +635,19 @@ namespace SAM.Geometry.Planar
                 return double.NaN;
             }
 
-            double distance = new Vector2D(origin, point2D_Closest).Length;
-
-            if (distance < tolerance)
+            Vector2D vector2D = new Vector2D(origin, point2D_Closest);
+            if(vector2D.Length < tolerance)
             {
                 return 0;
             }
 
-            if (distance + tolerance > length)
+            double result =  vector2D.Length / length;
+            if(!vector2D.SameHalf(vector))
             {
-                return 1;
+                result = -result;
             }
 
-            return distance / length;
+            return result;
         }
 
         public void Round(double tolerance = Core.Tolerance.Distance)

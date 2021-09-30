@@ -29,7 +29,7 @@ namespace SAM.Geometry.Planar
 
         public ISAMGeometry2D GetMoved(Vector2D vector2D)
         {
-            return new Mesh2D(points?.ConvertAll(x => x.GetMoved(vector2D) as Point2D), indexes);
+            return new Mesh2D(points?.ConvertAll(x => x.GetMoved(vector2D)), indexes);
         }
 
         public int IndexOf(Point2D point2D)
