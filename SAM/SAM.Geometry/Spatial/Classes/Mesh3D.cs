@@ -289,6 +289,53 @@ namespace SAM.Geometry.Spatial
             return new Triangle3D(points[index_1], points[index_2], points[index_3]);
         }
 
+        public List<int> GetTriangleIndexes(int index_1, int index_2, int maxCount = int.MaxValue)
+        {
+            if(points == null || points.Count < 3 || indexes == null || indexes.Count == 0)
+            {
+                return null;
+            }
+
+            if (index_1 == index_2)
+            {
+                return null;
+            }
+
+            if (index_1 < 0 || index_1 >= points.Count || index_2 < 0 || index_2 >= points.Count)
+            {
+                return null;
+            }
+
+            List<int> result = new List<int>();
+            for(int i=0; i < indexes.Count; i++)
+            {
+                Tuple<int, int, int> tuple = indexes[i];
+                if(tuple == null)
+                {
+                    continue;
+                }
+
+                if(tuple.Item1 != index_1 && tuple.Item2 != index_1 && tuple.Item3 != index_1)
+                {
+                    continue;
+                }
+
+                if (tuple.Item1 != index_2 && tuple.Item2 != index_2 && tuple.Item3 != index_2)
+                {
+                    continue;
+                }
+
+                result.Add(i);
+
+                if(result.Count >= maxCount)
+                {
+                    break;
+                }
+            }
+
+            return result;
+        }
+
         public List<Triangle3D> GetTriangles()
         {
             if(points == null || indexes == null)
