@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,6 +41,8 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
             inputParamManager.AddParameter(new GooApertureParam(), "_apertures", "_apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
+            inputParamManager.AddNumberParameter("_maxDistance_", "_maxDistance_", "Max Distance", GH_ParamAccess.item, 0.1);
+
         }
 
         /// <summary>
@@ -75,6 +77,12 @@ namespace SAM.Analytical.Grasshopper
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
+            }
+
+            double maxDistance = 0.1;
+            if (!dataAccess.GetData(2, ref maxDistance) || double.IsNaN(maxDistance))
+            {
+                maxDistance = 0.1;
             }
 
             if (sAMObject is Panel)
@@ -122,10 +130,14 @@ namespace SAM.Analytical.Grasshopper
                     bool updated = false;
                     foreach(Aperture aperture in apertures)
                     {
-                        if(panel_New.AddAperture(aperture))
+                        List<Aperture> apertures_New = Analytical.Modify.AddApertures(panel_New, aperture.ApertureConstruction, aperture.GetFace3D(), false, Tolerance.MacroDistance, maxDistance);
+                        if(apertures_New != null && apertures_New.Count > 0)
                         {
                             updated = true;
-                            tuples_Result.Add(new Tuple<Panel, Aperture>(panel_New, aperture));
+                            foreach(Aperture aperture_New in apertures_New)
+                            {
+                                tuples_Result.Add(new Tuple<Panel, Aperture>(panel_New, aperture_New));
+                            }
                         }
                     }
 
