@@ -180,6 +180,11 @@ namespace SAM.Analytical
 
                     Face2D face2D = plane.Convert(face3D);
 
+                    if(face2D == null || !face2D.IsValid() || face2D.GetArea() < tolerance)
+                    {
+                        continue;
+                    }
+
                     tuples_Polygon.Add(new Tuple<Polygon, Panel>(face2D.ToNTS(tolerance), panel));
                 }
 
