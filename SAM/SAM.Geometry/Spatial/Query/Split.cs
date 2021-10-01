@@ -139,6 +139,21 @@ namespace SAM.Geometry.Spatial
             Planar.Face2D face2D = plane.Convert(face3D);
 
             List<Planar.Face2D> face2Ds = Planar.Query.Split(face2D, segmentable2Ds, tolerance_Snap, tolerance_Distance);
+            if(face2Ds != null && face2Ds.Count > 0)
+            {
+                List<Planar.Face2D> face2Ds_Difference = Planar.Query.Difference(face2D, face2Ds, tolerance_Distance);
+                if(face2Ds_Difference != null)
+                {
+                    foreach(Planar.Face2D face2D_Difference in face2Ds_Difference)
+                    {
+                        if(face2D_Difference != null && Planar.Query.IsValid(face2D_Difference) && face2D_Difference.GetArea() > tolerance_Snap)
+                        {
+                            face2Ds.Add(face2D_Difference);
+                        }
+                    }
+                }
+            }
+            
             return face2Ds?.ConvertAll(x => plane.Convert(x));
         }
 
