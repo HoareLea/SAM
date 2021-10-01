@@ -127,9 +127,19 @@ namespace SAM.Geometry.Planar
             {
                 Face2D face2D_New = Face2D.Create(externalEdge_New, internalEdges_New);
                 if (face2D_New == null)
+                {
                     continue;
+                }
 
-                result.Add(face2D_New);
+                List<Face2D> face2Ds_Fixed = face2D_New.FixEdges(tolerance);
+                if(face2Ds_Fixed == null || face2Ds_Fixed.Count == 0)
+                {
+                    result.Add(face2D_New);
+                }
+                else
+                {
+                    result.AddRange(face2Ds_Fixed);
+                }
             }
 
             return result;

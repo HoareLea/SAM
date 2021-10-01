@@ -1059,29 +1059,42 @@ namespace SAM.Core
         public bool RemoveObject(Type type, Guid guid)
         {
             if (guid == Guid.Empty || type == null)
+            {
                 return false;
+            }
 
             if (!IsValid(type))
+            {
                 return false;
+            }
 
             string typeName = type.FullName;
 
-            Dictionary<Guid, object> dictionary = null;
-            if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
+            if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, object> dictionary_Object))
+            {
                 return false;
+            }
 
-            object @object = null;
-            if (!dictionary.TryGetValue(guid, out @object))
+            if (!dictionary_Object.TryGetValue(guid, out object @object))
+            {
                 return false;
+            }
 
             List<object> relatedObjects = GetRelatedObjects(@object);
             if (relatedObjects != null && relatedObjects.Count != 0)
             {
                 foreach (object relatedObject in relatedObjects)
+                {
                     RemoveRelation(@object, relatedObject);
+                }
             }
 
-            return dictionary.Remove(guid);
+            if(dictionary_Relations.TryGetValue(typeName, out Dictionary<Guid, HashSet<Guid>> dictionary_Relation))
+            {
+                dictionary_Relation.Remove(guid);
+            }
+
+            return dictionary_Object.Remove(guid);
         }
 
         public bool RemoveObject<T>(Guid guid)
