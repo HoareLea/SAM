@@ -138,41 +138,49 @@ namespace SAM.Analytical.Grasshopper
                     if (adjacencyCluster != null)
                     {
                         adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-                        foreach(Panel panel in adjacencyCluster.GetPanels())
+                        List<Panel> panels = adjacencyCluster.GetPanels();
+                        if(panels != null)
                         {
-                            Panel panel_New = Analytical.Query.ReplaceNameSpecialCharacters(panel, name);
-
-                            if(panel_New != null && panel_New.HasApertures)
+                            foreach (Panel panel in panels)
                             {
-                                foreach(Aperture aperture in panel_New.Apertures)
+                                Panel panel_New = Analytical.Query.ReplaceNameSpecialCharacters(panel, name);
+
+                                if (panel_New != null && panel_New.HasApertures)
                                 {
-                                    Aperture aperture_New = Analytical.Query.ReplaceNameSpecialCharacters(aperture, name);
-                                    if (aperture_New == aperture)
-                                        continue;
+                                    foreach (Aperture aperture in panel_New.Apertures)
+                                    {
+                                        Aperture aperture_New = Analytical.Query.ReplaceNameSpecialCharacters(aperture, name);
+                                        if (aperture_New == aperture)
+                                            continue;
 
-                                    panel_New = Create.Panel(panel_New);
+                                        panel_New = Create.Panel(panel_New);
 
-                                    panel_New.RemoveAperture(aperture.Guid);
-                                    panel.AddAperture(aperture_New);
+                                        panel_New.RemoveAperture(aperture.Guid);
+                                        panel.AddAperture(aperture_New);
+                                    }
                                 }
-                            }
 
-                            if (panel_New != panel)
-                                adjacencyCluster.AddObject(panel_New);
+                                if (panel_New != panel)
+                                    adjacencyCluster.AddObject(panel_New);
+                            }
                         }
 
-                        foreach(Space space in adjacencyCluster.GetSpaces())
+                        List<Space> spaces = adjacencyCluster.GetSpaces();
+                        if (spaces != null)
                         {
-                            InternalCondition internalCondition = Analytical.Query.ReplaceNameSpecialCharacters(space.InternalCondition, name);
-                            Space space_New = null;
-                            if (internalCondition.Name != space.InternalCondition.Name)
-                                space_New = new Space(space) { InternalCondition = internalCondition };
-                            else
-                                space_New = space;
+                            foreach (Space space in spaces)
+                            {
+                                InternalCondition internalCondition = Analytical.Query.ReplaceNameSpecialCharacters(space.InternalCondition, name);
+                                Space space_New = null;
+                                if (internalCondition.Name != space.InternalCondition.Name)
+                                    space_New = new Space(space) { InternalCondition = internalCondition };
+                                else
+                                    space_New = space;
 
-                            space_New = Analytical.Query.ReplaceNameSpecialCharacters(space_New, name);
-                            if (space_New != space)
-                                adjacencyCluster.AddObject(space_New);
+                                space_New = Analytical.Query.ReplaceNameSpecialCharacters(space_New, name);
+                                if (space_New != space)
+                                    adjacencyCluster.AddObject(space_New);
+                            }
                         }
                     }
 
