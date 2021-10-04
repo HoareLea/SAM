@@ -25,6 +25,25 @@ namespace SAM.Geometry.Spatial
                     }
                 }
 
+                if(geometry3D is Mesh3D)
+                {
+                    List<Triangle3D> triangle3Ds = ((Mesh3D)geometry3D).GetTriangles();
+                    if(triangle3Ds != null && triangle3Ds.Count != 0)
+                    {
+                        foreach(Triangle3D triangle3D in triangle3Ds)
+                        {
+                            if(triangle3D == null || !triangle3D.IsValid() || triangle3D.GetArea() < tolerance)
+                            {
+                                continue;
+                            }
+
+                            result.Add(new Face3D(triangle3D));
+                        }
+
+                        continue;
+                    }
+                }
+
                 if (geometry3D is Face3D)
                 {
                     result.Add((Face3D)geometry3D);

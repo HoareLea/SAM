@@ -110,9 +110,20 @@ namespace SAM.Geometry.Spatial
 
         public double GetArea()
         {
-            Plane plane = GetPlane();
+            if(points == null)
+            {
+                return double.NaN;
+            }
 
-            return Planar.Query.Area(points.ToList().ConvertAll(x => plane.Convert(x)));
+            double a = points[0].Distance(points[1]);
+            double b = points[1].Distance(points[2]);
+            double c = points[2].Distance(points[0]);
+
+            double s = (a + b + c) / 2;
+            return System.Math.Sqrt(s * (s - a) * (s - b) * (s - c));
+
+            //Plane plane = GetPlane();
+            //return Planar.Query.Area(points.ToList().ConvertAll(x => plane.Convert(x)));
         }
 
         public Point3D GetCentroid()
