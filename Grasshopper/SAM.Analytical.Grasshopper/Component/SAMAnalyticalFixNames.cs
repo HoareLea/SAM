@@ -190,6 +190,26 @@ namespace SAM.Analytical.Grasshopper
                         sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
                         
                 }
+                else if(sAMObject is Panel)
+                {
+                    sAMObject = Analytical.Query.ReplaceNameSpecialCharacters((Panel)sAMObject, name);
+                }
+                else if(sAMObject is Space)
+                {
+                    sAMObject = Analytical.Query.ReplaceNameSpecialCharacters((Space)sAMObject, name);
+                }
+                else if (sAMObject is Aperture)
+                {
+                    sAMObject = Analytical.Query.ReplaceNameSpecialCharacters((Aperture)sAMObject, name);
+                }
+                else if (sAMObject is ApertureConstruction)
+                {
+                    sAMObject = Analytical.Query.ReplaceNameSpecialCharacters((ApertureConstruction)sAMObject, name);
+                }
+                else if (sAMObject is Construction)
+                {
+                    sAMObject = Analytical.Query.ReplaceNameSpecialCharacters((Construction)sAMObject, name);
+                }
             }
 
             index = Params.IndexOfOutputParam("Analytical");
