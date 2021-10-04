@@ -62,7 +62,7 @@ namespace SAM.Analytical
                             
                             elevation = Query.MaxElevation(panel);
 
-                            if (elevation <= elevation_Ground)
+                            if (System.Math.Abs(elevation - elevation_Ground) < Tolerance.MacroDistance)
                                 panelType = PanelType.UndergroundWall;
                             else
                                 panelType = PanelType.WallExternal;
