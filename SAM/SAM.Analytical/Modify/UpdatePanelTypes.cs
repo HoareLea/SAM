@@ -131,7 +131,7 @@ namespace SAM.Analytical
                             }
                             else
                             {
-                                if (elevation < elevation_Ground)
+                                if (System.Math.Abs(elevation - elevation_Ground) < Tolerance.MacroDistance)
                                     panelType = PanelType.UndergroundCeiling;
                             }
 
