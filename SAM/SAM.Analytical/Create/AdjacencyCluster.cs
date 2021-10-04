@@ -818,7 +818,7 @@ namespace SAM.Analytical
             AdjacencyCluster result = AdjacencyCluster(shells, null, panels, true, true, thinnessRatio, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance, tolerance_Angle);
             if(result != null)
             {
-                result.Cut(elevationGround, tolerance_Distance);
+                result.Cut(elevationGround, null, tolerance_Distance);
                 result.UpdatePanelTypes(elevationGround);
                 result.SetDefaultConstructionByPanelType();
             }

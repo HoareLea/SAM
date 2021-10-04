@@ -160,12 +160,12 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<Panel> Panels(this AdjacencyCluster adjacencyCluster, Plane plane, PanelType panelType = PanelType.Air, Construction construction = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<Panel> Panels(this AdjacencyCluster adjacencyCluster, Plane plane, IEnumerable<Space> spaces = null, PanelType panelType = PanelType.Air, Construction construction = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
-            return Panels(adjacencyCluster, plane, out List<Panel> existingPanels, panelType, construction, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+            return Panels(adjacencyCluster, plane, out List<Panel> existingPanels, spaces, panelType, construction, tolerance_Angle, tolerance_Distance, tolerance_Snap);
         }
 
-        public static List<Panel> Panels(this AdjacencyCluster adjacencyCluster, Plane plane, out List<Panel> existingPanels, PanelType panelType = PanelType.Air, Construction construction = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<Panel> Panels(this AdjacencyCluster adjacencyCluster, Plane plane, out List<Panel> existingPanels, IEnumerable<Space> spaces = null, PanelType panelType = PanelType.Air, Construction construction = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             existingPanels = null;
 
@@ -174,7 +174,32 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<Panel> panels = adjacencyCluster.GetPanels();
+            List<Panel> panels = null;
+            if(spaces == null || spaces.Count() == 0)
+            {
+                panels = adjacencyCluster.GetPanels();
+            }
+            else
+            {
+                panels = new List<Panel>();
+                foreach (Space space in spaces)
+                {
+                    List<Panel> panels_Space = adjacencyCluster.GetPanels(space);
+                    if (panels_Space == null || panels_Space.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (Panel panel_Space in panels_Space)
+                    {
+                        if (panels.Find(x => x.Guid == panel_Space.Guid) == null)
+                        {
+                            panels.Add(panel_Space);
+                        }
+                    }
+                }
+            }
+
             if(panels == null || panels.Count == 0)
             {
                 return null;
@@ -275,9 +300,9 @@ namespace SAM.Analytical
 
         }
 
-        public static List<Panel> Panels(this AnalyticalModel analyticalModel, Plane plane, PanelType panelType = PanelType.Air, Construction construction = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<Panel> Panels(this AnalyticalModel analyticalModel, Plane plane, IEnumerable<Space> spaces = null, PanelType panelType = PanelType.Air, Construction construction = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
-            return Panels(analyticalModel?.AdjacencyCluster, plane, panelType, construction, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+            return Panels(analyticalModel?.AdjacencyCluster, plane, spaces, panelType, construction, tolerance_Angle, tolerance_Distance, tolerance_Snap);
         }
     }
 }

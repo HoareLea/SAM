@@ -72,32 +72,15 @@ namespace SAM.Analytical
 
                     spaces_Temp.RemoveAt(i);
                 }
-                
-                foreach(Space space in spaces)
-                {
-                    if(space == null)
-                    {
-                        continue;
-                    }
-
-                    Guid guid = space.Guid;
-                    Space space_Temp = spaces_Temp.Find(x => x.Guid == guid);
-                    if(space_Temp == null)
-                    {
-                        continue;
-                    }
-
-                    spaces_Temp.Remove(space_Temp);
-                }
             }
 
-            List<Panel> panels_Air = adjacencyCluster.Panels(plane, out List<Panel> panels_Existing, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance, tolerance_Snap: tolerance_Snap);
+            List<Panel> panels_Air = adjacencyCluster.Panels(plane, out List<Panel> panels_Existing, spaces_Temp, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance, tolerance_Snap: tolerance_Snap);
             if (panels_Air == null || panels_Air.Count == 0)
             {
                 return result;
             }
 
-            adjacencyCluster.Cut(plane, tolerance_Distance);
+            adjacencyCluster.Cut(plane, spaces_Temp, tolerance_Distance);
 
             List<Tuple<Space, Shell, List<Shell>>> tuples = new List<Tuple<Space, Shell, List<Shell>>>();
             foreach (Space space in spaces_Temp)
