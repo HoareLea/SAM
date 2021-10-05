@@ -106,11 +106,14 @@ namespace SAM.Analytical.Grasshopper
                 adjacencyCluster = ((AdjacencyCluster)sAMObject);
 
             List<Zone> zones = adjacencyCluster?.GetObjects<Zone>();
-            if (name != null)
-                zones.RemoveAll(x => x.Name != name);
+            if(zones != null)
+            {
+                if (name != null)
+                    zones.RemoveAll(x => x.Name != name);
 
-            if (zoneCategory != null)
-                zones.RemoveAll(x => x.GetValue<string>(ZoneParameter.ZoneCategory) != zoneCategory);
+                if (zoneCategory != null)
+                    zones.RemoveAll(x => x.GetValue<string>(ZoneParameter.ZoneCategory) != zoneCategory);
+            }
 
             index = Params.IndexOfOutputParam("Zones");
             if (index != -1)
