@@ -68,6 +68,7 @@
     <Compile Include="Classes\BuildingElement.cs" />
     <Compile Include="Classes\Level.cs" />
     <Compile Include="Create\ArchitecturalModel.cs" />
+    <Compile Include="Create\PlanarTerrain.cs" />
     <Compile Include="Create\Walls.cs" />
     <Compile Include="Create\Opening.cs" />
     <Compile Include="Create\HostBuildingElement.cs" />

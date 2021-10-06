@@ -23,7 +23,7 @@ namespace SAM.Architectural
         public PlanarTerrain(Plane plane)
             : base()
         {
-            plane = new Plane(plane);
+            this.plane = new Plane(plane);
         }
 
         public override bool FromJObject(JObject jObject)

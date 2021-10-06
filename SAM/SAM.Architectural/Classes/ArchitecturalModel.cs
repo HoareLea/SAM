@@ -10,13 +10,16 @@ namespace SAM.Architectural
         private string description;
         private Location location;
         private Address address;
-        private RelationCluster relationCluster;
         private Terrain terrain;
+        private RelationCluster relationCluster;
 
-        public ArchitecturalModel()
+        public ArchitecturalModel(string description, Location location, Address address, Terrain terrain)
             : base()
         {
-
+            this.description = description;
+            this.location = location?.Clone();
+            this.address = address?.Clone();
+            this.terrain = terrain?.Clone();
         }
 
         public string Description

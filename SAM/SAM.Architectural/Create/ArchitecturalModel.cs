@@ -14,12 +14,12 @@ namespace SAM.Architectural
             if (segmentable2Ds == null || double.IsNaN(elevation_Min) || double.IsNaN(elevation_Max))
                 return null;
 
-            ArchitecturalModel architecturalModel = new ArchitecturalModel();
-
             Level level = Level(elevation_Min);
 
             Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Min)) as Plane;
             Plane plane_Max = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
+
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, new PlanarTerrain(plane_Min));
 
             Plane plane_Min_Flipped = new Plane(plane_Min);
             plane_Min_Flipped.FlipZ();
@@ -103,11 +103,11 @@ namespace SAM.Architectural
 
                 foreach(KeyValuePair<Room, List<HostBuildingElement>> keyValuePair in dictionary)
                 {
-                    architecturalModel.Add(keyValuePair.Key, keyValuePair.Value);
+                    result.Add(keyValuePair.Key, keyValuePair.Value);
                 }
             }
 
-            return architecturalModel;
+            return result;
         }
 
         public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Face3D> face3Ds, double elevation_Ground = 0, double tolerance = Tolerance.Distance)
@@ -210,7 +210,7 @@ namespace SAM.Architectural
                     dictionaries_Room.Add(dictionary_Room);
             }
 
-            ArchitecturalModel result = new ArchitecturalModel();
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(elevation_Ground));
             foreach (Dictionary<Room, List<HostBuildingElement>> dictionary_Room in dictionaries_Room)
             {
                 foreach (KeyValuePair<Room, List<HostBuildingElement>> keyValuePair in dictionary_Room)
