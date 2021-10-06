@@ -4,6 +4,7 @@ using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Architectural
 {
@@ -220,6 +221,85 @@ namespace SAM.Architectural
             }
 
             return result;
+        }
+
+        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Shell> shells, IEnumerable<HostBuildingElement> hostBuildingElements, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        {
+            if(shells == null && hostBuildingElements == null)
+            {
+                return null;
+            }
+
+            List<Tuple<Room, HostBuildingElement>> tuples = new List<Tuple<Room, HostBuildingElement>>();
+
+            List<Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double>> tuples_HostBuildingElement = new List<Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double>>();
+            foreach (HostBuildingElement hostBuildingElement in hostBuildingElements)
+            {
+                Face3D face3D = hostBuildingElement?.Face3D;
+                if (face3D == null)
+                    continue;
+
+                Plane plane = face3D.GetPlane();
+                if (plane == null)
+                    continue;
+
+                double area = face3D.GetArea();
+
+                if (area < minArea || face3D.ThinnessRatio() < thinnessRatio) // Changed from tolerance_Distance to minArea
+                    continue;
+
+                tuples_HostBuildingElement.Add(new Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double>(plane, face3D, hostBuildingElement, face3D.GetBoundingBox(tolerance_Distance), area));
+            }
+
+            tuples_HostBuildingElement.Sort((x, y) => y.Item5.CompareTo(x.Item5));
+
+            BoundingBox3D boundingBox3D_All = new BoundingBox3D(tuples_HostBuildingElement.ConvertAll(x => x.Item4));
+
+            int count = 1;
+
+            List<Tuple<Point3D, HostBuildingElement, BoundingBox3D>> tuples_HostBuildingElement_New = new List<Tuple<Point3D, HostBuildingElement, BoundingBox3D>>();
+
+            List<Shell> shells_Temp = Enumerable.Repeat<Shell>(null, shells.Count()).ToList();
+            Parallel.For(0, shells.Count(), (int i) =>
+            //for(int i=0; i < shells.Count(); i++)
+            {
+                Shell shell = shells.ElementAt(i);
+
+                BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
+                if (boundingBox3D == null)
+                {
+                    //continue;
+                    return;
+                }
+
+                if (!boundingBox3D_All.InRange(boundingBox3D))
+                {
+                    //continue;
+                    return;
+                }
+
+                shell = shell.RemoveInvalidFace3Ds(silverSpacing);
+                if (shell == null)
+                {
+                    //continue;
+                    return;
+                }
+
+                Shell shell_Merge = shell.Merge(tolerance_Distance);
+                if (shell_Merge == null)
+                {
+                    shell_Merge = new Shell(shell);
+                }
+
+                shells_Temp[i] = shell_Merge;
+            });
+
+            shells_Temp.RemoveAll(x => x == null);
+            List<HostBuildingElement> HostBuildingElement_Merged = Query.MergeCoplanar(tuples_HostBuildingElement.ConvertAll(x => x.Item3), maxDistance, true, minArea, tolerance_Distance);
+            shells_Temp.FillFace3Ds(HostBuildingElement_Merged.ConvertAll(x => x.Face3D), 0.1, maxDistance, maxAngle, silverSpacing, tolerance_Distance);
+            shells_Temp.SplitCoplanarFace3Ds(tolerance_Angle, tolerance_Distance);
+
+            throw new NotImplementedException();
         }
     }
 }

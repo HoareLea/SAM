@@ -79,6 +79,7 @@
     <Compile Include="Interfaces\ITerrain.cs" />
     <Compile Include="Interfaces\IArchitecturalObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\MergeCoplanar.cs" />
     <Compile Include="Query\RoomDictionary.cs" />
     <Compile Include="Query\Face3D.cs" />
     <Compile Include="Query\Color.cs" />

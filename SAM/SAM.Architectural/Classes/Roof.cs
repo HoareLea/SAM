@@ -24,6 +24,12 @@ namespace SAM.Architectural
 
         }
 
+        public Roof(System.Guid guid, RoofType roofType, Face3D face3D)
+            : base(guid, roofType, face3D)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

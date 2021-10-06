@@ -24,6 +24,12 @@ namespace SAM.Architectural
 
         }
 
+        public Floor(System.Guid guid,FloorType floorType, Face3D face3D)
+            : base(guid, floorType, face3D)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

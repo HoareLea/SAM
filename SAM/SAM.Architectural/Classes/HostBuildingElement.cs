@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 
 using SAM.Geometry.Spatial;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Architectural
@@ -23,6 +24,12 @@ namespace SAM.Architectural
 
         public HostBuildingElement(HostBuildingElementType hostBuildingElementType, Face3D face3D)
             : base(hostBuildingElementType, face3D)
+        {
+
+        }
+
+        public HostBuildingElement(Guid guid, HostBuildingElementType hostBuildingElementType, Face3D face3D)
+            : base(guid, hostBuildingElementType, face3D)
         {
 
         }

@@ -33,5 +33,35 @@ namespace SAM.Architectural
 
             return null;
         }
+
+        public static HostBuildingElement HostBuildingElement(System.Guid guid, Face3D face3D, HostBuildingElementType hostBuildingElementType = null, double tolerance = Core.Tolerance.Angle)
+        {
+            if (face3D == null || !face3D.IsValid())
+            {
+                return null;
+            }
+
+            if (hostBuildingElementType == null)
+            {
+                hostBuildingElementType = Query.DefaultHostBuildingElementType(face3D, tolerance);
+            }
+
+            if (hostBuildingElementType is WallType)
+            {
+                return new Wall(guid, (WallType)hostBuildingElementType, face3D);
+            }
+
+            if (hostBuildingElementType is RoofType)
+            {
+                return new Roof(guid, (RoofType)hostBuildingElementType, face3D);
+            }
+
+            if (hostBuildingElementType is FloorType)
+            {
+                return new Floor(guid, (FloorType)hostBuildingElementType, face3D);
+            }
+
+            return null;
+        }
     }
 }
