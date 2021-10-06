@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Architectural
@@ -10,6 +11,7 @@ namespace SAM.Architectural
         private Location location;
         private Address address;
         private RelationCluster relationCluster;
+        private Terrain terrain;
 
         public ArchitecturalModel()
             : base()
@@ -55,6 +57,62 @@ namespace SAM.Architectural
             return relationCluster?.GetRelatedObjects<Room>(hostBuildingElement);
         }
 
+        public bool Internal(HostBuildingElement hostBuildingElement)
+        {
+            List<Room> rooms = GetRooms(hostBuildingElement);
+            return rooms != null || rooms.Count > 2;
+        }
+        
+        public bool External(HostBuildingElement hostBuildingElement)
+        {
+            List<Room> rooms = GetRooms(hostBuildingElement);
+            return rooms != null && rooms.Count == 1;
+        }
+
+        public bool Shade(HostBuildingElement hostBuildingElement)
+        {
+            List<Room> rooms = GetRooms(hostBuildingElement);
+            return rooms == null || rooms.Count == 0;
+        }
+
+        public List<Room> GetRooms()
+        {
+            return relationCluster?.GetObjects<Room>();
+        }
+
+        public List<Shell> GetShells()
+        {
+            List<Room> rooms = GetRooms();
+            if(rooms == null)
+            {
+                return null;
+            }
+
+            List<Shell> result = new List<Shell>();
+            foreach(Room room in rooms)
+            {
+                Shell shell = GetShell(room);
+                if(shell != null)
+                {
+                    result.Add(shell);
+                }
+            }
+
+            return result;
+        }
+
+        public Shell GetShell(Room room)
+        {
+            if (relationCluster == null || room == null)
+                return null;
+
+            List<HostBuildingElement> hostBuildingElements = relationCluster.GetRelatedObjects<HostBuildingElement>(room);
+            if (hostBuildingElements == null || hostBuildingElements.Count == 0)
+                return null;
+
+            return new Shell(hostBuildingElements.ConvertAll(x => x.Face3D));
+        }
+
         public bool Add(HostBuildingElement hostBuildingElement)
         {
             if(hostBuildingElement == null)
@@ -94,7 +152,7 @@ namespace SAM.Architectural
             return result;
         }
 
-        public Geometry.Spatial.BoundingBox3D GetBoundingBox3D()
+        public BoundingBox3D GetBoundingBox3D()
         {
             List<BuildingElement> buildingElements = GetObjects<BuildingElement>();
             if(buildingElements == null || buildingElements.Count == 0)
@@ -122,6 +180,9 @@ namespace SAM.Architectural
             if (jObject.ContainsKey("RelationCluster"))
                 relationCluster = new RelationCluster(jObject.Value<JObject>("RelationCluster"));
 
+            if (jObject.ContainsKey("Terrain"))
+                terrain = Core.Create.IJSAMObject<Terrain>(jObject.Value<JObject>("Terrain"));
+
             return true;
         }
 
@@ -142,6 +203,9 @@ namespace SAM.Architectural
 
             if (relationCluster != null)
                 jObject.Add("RelationCluster", relationCluster.ToJObject());
+
+            if (terrain != null)
+                jObject.Add("Terrain", terrain.ToJObject());
 
             return jObject;
         }
