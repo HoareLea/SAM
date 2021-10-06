@@ -165,6 +165,7 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Modify\TryInvokeMethod.cs" />
     <Compile Include="Query\DefaultLocation.cs" />
     <Compile Include="Query\CamelCase.cs" />
     <Compile Include="Query\CommandMask.cs" />
