@@ -156,15 +156,17 @@ namespace SAM.Analytical.Grasshopper
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
                 internalConditions = adjacencyCluster.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
-                List<Space> spaces = adjacencyCluster.GetSpaces();
-                for (int i = 0; i < internalConditions.Count; i++)
+                if (internalConditions != null)
                 {
-                    InternalCondition internalCondition = internalConditions[i];
-                    if (internalCondition == spaces[i].InternalCondition)
-                        spaces_Unassigned.Add(spaces[i]);
+                    List<Space> spaces = adjacencyCluster.GetSpaces();
+                    for (int i = 0; i < internalConditions.Count; i++)
+                    {
+                        InternalCondition internalCondition = internalConditions[i];
+                        if (internalCondition == spaces[i].InternalCondition)
+                            spaces_Unassigned.Add(spaces[i]);
+                    }
+                    sAMObject = adjacencyCluster;
                 }
-
-                sAMObject = adjacencyCluster;
             }
             else if (sAMObject is AnalyticalModel)
             {
@@ -175,12 +177,15 @@ namespace SAM.Analytical.Grasshopper
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
                     internalConditions = adjacencyCluster.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
-                    List<Space> spaces = adjacencyCluster.GetSpaces();
-                    for (int i = 0; i < internalConditions.Count; i++)
-                        if (internalConditions[i] == spaces[i].InternalCondition)
-                            spaces_Unassigned.Add(spaces[i]);
+                    if (internalConditions != null)
+                    {
+                        List<Space> spaces = adjacencyCluster.GetSpaces();
+                        for (int i = 0; i < internalConditions.Count; i++)
+                            if (internalConditions[i] == spaces[i].InternalCondition)
+                                spaces_Unassigned.Add(spaces[i]);
 
-                    sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                        sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                    }
                 }
             }
 
