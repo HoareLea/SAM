@@ -165,9 +165,10 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
-    <Compile Include="Modify\TryInvokeDeclaredMethod.cs" />
-    <Compile Include="Modify\TryInvokeRuntimeMethod.cs" />
-    <Compile Include="Modify\TryInvokeMethod.cs" />
+    <Compile Include="Query\TryInvokeDeclaredMethod.cs" />
+    <Compile Include="Query\TryInvokeRuntimeMethod.cs" />
+    <Compile Include="Query\TryInvokeMethod.cs" />
+    <Compile Include="Query\TryGetFieldValue.cs" />
     <Compile Include="Query\DefaultLocation.cs" />
     <Compile Include="Query\CamelCase.cs" />
     <Compile Include="Query\CommandMask.cs" />

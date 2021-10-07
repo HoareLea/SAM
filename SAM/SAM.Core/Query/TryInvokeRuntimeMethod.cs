@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace SAM.Core
 {
-    public static partial class Modify
+    public static partial class Query
     {
-        public static bool TryInvokeMethod(this object @object, string methodName, out object result, params object[] parameters)
+        public static bool TryInvokeRuntimeMethod(object @object, string methodName, out object result, params object[] parameters)
         {
+
             result = null;
 
             if(@object == null || string.IsNullOrWhiteSpace(methodName))
@@ -14,7 +16,22 @@ namespace SAM.Core
                 return false;
             }
 
-            foreach (MethodInfo methodInfo in @object.GetType().GetMethods())
+            IEnumerable<MethodInfo> methodInfos = null;
+            try
+            {
+                methodInfos = @object.GetType().GetRuntimeMethods();
+            }
+            catch
+            {
+                return false;
+            }
+
+            if(methodInfos == null)
+            {
+                return false;
+            }
+
+            foreach (MethodInfo methodInfo in methodInfos)
             {
                 if (methodInfo?.Name != methodName)
                 {

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace SAM.Core
 {
-    public static partial class Modify
+    public static partial class Query
     {
         public static bool TryInvokeDeclaredMethod(dynamic @object, string methodName, out object result, params object[] parameters)
         {
