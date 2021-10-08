@@ -36,5 +36,16 @@ namespace SAM.Geometry.Spatial
 
             return face3Ds.ConvertAll(x => x.GetArea()).FindAll(x => !double.IsNaN(x)).Sum();
         }
+
+        public static double Area(this IFace3DObject face3DObject)
+        {
+            Face3D face3D = face3DObject?.Face3D;
+            if(face3D == null)
+            {
+                return double.NaN;
+            }
+
+            return face3D.GetArea();
+        }
     }
 }
