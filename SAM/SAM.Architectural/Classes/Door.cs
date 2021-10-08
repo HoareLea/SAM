@@ -4,10 +4,10 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public class Door : Opening
+    public class Door : BuildingElement, IOpening
     {
-        public Door(Window window)
-            : base(window)
+        public Door(Door door)
+            : base(door)
         {
 
         }

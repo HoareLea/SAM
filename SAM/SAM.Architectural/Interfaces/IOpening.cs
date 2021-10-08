@@ -3,7 +3,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public interface IPartition : IArchitecturalObject, ISAMObject, IFace3DObject
+    public interface IOpening : IArchitecturalObject, ISAMObject, IFace3DObject
     {
 
     }

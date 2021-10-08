@@ -87,18 +87,18 @@ namespace SAM.Architectural.Grasshopper
                 if (BakeGeometry(hostPartition, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
                     guids.Add(guid);
 
-                List<Opening> openings = hostPartition.Openings;
+                List<IOpening> openings = hostPartition.Openings;
                 if (openings == null || openings.Count == 0)
                     continue;
 
-                foreach (Opening opening in openings)
+                foreach (IOpening opening in openings)
                 {
                     if(opening == null)
                     {
                         continue;
                     }
 
-                    string apertureConstructionName = (opening.SAMType as OpeningType)?.Name;
+                    string apertureConstructionName = ((opening as dynamic).SAMType as OpeningType)?.Name;
                     if (string.IsNullOrWhiteSpace(apertureConstructionName))
                         apertureConstructionName = opening.Name;
                     

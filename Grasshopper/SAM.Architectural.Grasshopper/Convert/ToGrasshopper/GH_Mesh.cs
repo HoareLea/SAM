@@ -5,7 +5,7 @@ namespace SAM.Architectural.Grasshopper
 {
     public static partial class Convert
     {
-        public static GH_Mesh ToGrasshopper_Mesh(this Opening opening)
+        public static GH_Mesh ToGrasshopper_Mesh(this IOpening opening)
         {
             Mesh mesh = opening?.ToRhino_Mesh();
             if (mesh == null)

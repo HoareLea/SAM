@@ -40,7 +40,7 @@ namespace SAM.Architectural.Grasshopper
             return true;
         }
 
-        public static bool BakeGeometry(this Opening opening, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid)
+        public static bool BakeGeometry(this IOpening opening, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid)
         {
             guid = Guid.Empty;
 

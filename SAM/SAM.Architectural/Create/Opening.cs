@@ -4,7 +4,7 @@ namespace SAM.Architectural
 {
     public static partial class Create
     {
-        public static Opening Opening(this OpeningType openingType, Face3D face3D)
+        public static IOpening Opening(this OpeningType openingType, Face3D face3D)
         {
             if(openingType == null || face3D == null || !face3D.IsValid())
             {

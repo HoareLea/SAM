@@ -6,7 +6,7 @@ namespace SAM.Architectural.Grasshopper
 {
     public static partial class Convert
     {
-        public static Mesh ToRhino_Mesh(this Opening opening)
+        public static Mesh ToRhino_Mesh(this IOpening opening)
         {
             Face3D face3D = opening?.Face3D;
             if(face3D == null)
@@ -41,10 +41,10 @@ namespace SAM.Architectural.Grasshopper
 
             if (includeOpenings)
             {
-                List<Opening> openings = hostPartition.Openings;
+                List<IOpening> openings = hostPartition.Openings;
                 if(openings != null && openings.Count != 0)
                 {
-                    foreach(Opening opening in openings)
+                    foreach(IOpening opening in openings)
                     {
                         Mesh mesh_Aperture = opening.ToRhino_Mesh();
                         if(mesh_Aperture != null)

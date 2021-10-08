@@ -15,7 +15,7 @@ namespace SAM.Architectural
                 return result;
             }
 
-            List<Opening> openings = hostPartition.Openings;
+            List<IOpening> openings = hostPartition.Openings;
             if(openings == null || openings.Count == 0)
             {
                 return result;
@@ -27,7 +27,7 @@ namespace SAM.Architectural
             if (face2D == null)
                 return null;
 
-            foreach(Opening opening in openings)
+            foreach(IOpening opening in openings)
             {
                 Face3D face3D_Aperture = opening?.Face3D;
                 if (face3D_Aperture == null)

@@ -4,7 +4,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public class Window : Opening
+    public class Window : BuildingElement, IOpening
     {
         public Window(Window window)
             : base(window)

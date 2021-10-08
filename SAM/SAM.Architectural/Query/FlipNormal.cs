@@ -27,7 +27,7 @@ namespace SAM.Architectural
                 throw new System.NotImplementedException();
             }
 
-            List<Opening> openings = hostPartition.Openings;
+            List<IOpening> openings = hostPartition.Openings;
 
             hostPartition = Create.HostPartition(partition.Guid, face3D, hostPartition.SAMType as HostPartitionType);
             if(openings != null)
@@ -46,7 +46,7 @@ namespace SAM.Architectural
             return hostPartition;
         }
 
-        public static Opening FlipNormal(this Opening opening, bool flipX = true)
+        public static IOpening FlipNormal(this IOpening opening, bool flipX = true)
         {
             Face3D face3D = opening?.Face3D;
             if (face3D == null)
@@ -56,7 +56,7 @@ namespace SAM.Architectural
 
             face3D.FlipNormal(flipX);
 
-            return Create.Opening(opening.SAMType as OpeningType, face3D);
+            return Create.Opening((opening as dynamic).SAMType as OpeningType, face3D);
         }
     }
 }

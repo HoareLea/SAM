@@ -55,7 +55,6 @@
     <Compile Include="Classes\HostPartitionType.cs" />
     <Compile Include="Classes\HostPartition.cs" />
     <Compile Include="Classes\MaterialLayer.cs" />
-    <Compile Include="Classes\Opening.cs" />
     <Compile Include="Classes\DoorType.cs" />
     <Compile Include="Classes\Door.cs" />
     <Compile Include="Classes\FloorType.cs" />
@@ -77,6 +76,7 @@
     <Compile Include="Create\HostPartitions.cs" />
     <Compile Include="Enums\HostPartitionCategory.cs" />
     <Compile Include="Enums\Parameter\RoomParameter.cs" />
+    <Compile Include="Interfaces\IOpening.cs" />
     <Compile Include="Interfaces\IPartition.cs" />
     <Compile Include="Interfaces\ITerrain.cs" />
     <Compile Include="Interfaces\IArchitecturalObject.cs" />

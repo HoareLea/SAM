@@ -8,7 +8,7 @@ namespace SAM.Architectural
 {
     public abstract class HostPartition : BuildingElement, IPartition
     {
-        private List<Opening> openings;
+        private List<IOpening> openings;
         
         public HostPartition(HostPartition hostPartition)
             : base(hostPartition)
@@ -34,7 +34,7 @@ namespace SAM.Architectural
 
         }
 
-        public List<Opening> Openings
+        public List<IOpening> Openings
         {
             get
             {
@@ -45,7 +45,7 @@ namespace SAM.Architectural
             }
         }
 
-        public bool AddOpening(Opening opening)
+        public bool AddOpening(IOpening opening)
         {
             if (opening == null)
                 return false;
@@ -54,7 +54,7 @@ namespace SAM.Architectural
                 return false;
 
             if (openings == null)
-                openings = new List<Opening>();
+                openings = new List<IOpening>();
 
             openings.Add(opening);
             return true;

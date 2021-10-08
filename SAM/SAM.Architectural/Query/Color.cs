@@ -49,7 +49,7 @@
             return Color(partition);
         }
 
-        public static System.Drawing.Color Color(this Opening opening)
+        public static System.Drawing.Color Color(this IOpening opening)
         {
             System.Drawing.Color result = System.Drawing.Color.Empty;
             if(opening == null)
@@ -70,7 +70,7 @@
             return result;
         }
 
-        public static System.Drawing.Color Color(this Opening opening, bool internalEdges)
+        public static System.Drawing.Color Color(this IOpening opening, bool internalEdges)
         {
             System.Drawing.Color result = System.Drawing.Color.Empty;
             if (opening == null)

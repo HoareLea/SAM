@@ -148,7 +148,7 @@ namespace SAM.Architectural
 
 
                     //Adding Openings from redundant Panels
-                    List<Opening> openings = new List<Opening>();
+                    List<IOpening> openings = new List<IOpening>();
                     if (redundantPartitions != null && redundantPartitions.Count != 0)
                     {
                         foreach (IPartition partition_redundant in redundantPartitions)
@@ -157,7 +157,7 @@ namespace SAM.Architectural
                             if (hostPartition == null)
                                 continue;
 
-                            List<Opening> openings_Temp = hostPartition.Openings;
+                            List<IOpening> openings_Temp = hostPartition.Openings;
                             if (openings_Temp == null || openings_Temp.Count == 0)
                                 continue;
 

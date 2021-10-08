@@ -17,7 +17,7 @@
             return new Rhino.Display.DisplayMaterial(color);
         }
 
-        public static Rhino.Display.DisplayMaterial DisplayMaterial(this Opening opening)
+        public static Rhino.Display.DisplayMaterial DisplayMaterial(this IOpening opening)
         {
             System.Drawing.Color color = Architectural.Query.Color(opening);
 

@@ -525,13 +525,13 @@ namespace SAM.Architectural
                                             continue;
                                         }
 
-                                        List<Opening> openings = hostPartition.Openings;
+                                        List<IOpening> openings = hostPartition.Openings;
                                         if (openings == null)
                                         {
                                             continue;
                                         }
 
-                                        foreach(Opening opening in openings)
+                                        foreach(IOpening opening in openings)
                                         {
                                             ((HostPartition)partition_New).AddOpening(opening);
                                         }

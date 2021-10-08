@@ -65,10 +65,10 @@ namespace SAM.Architectural.Grasshopper
 
             Geometry.Grasshopper.Modify.DrawViewportWires(face3D, args, color_ExternalEdge, color_InternalEdges);
 
-            List<Opening> openings = Value.Openings;
+            List<IOpening> openings = Value.Openings;
             if (openings != null)
             {
-                foreach (Opening opening in openings)
+                foreach (IOpening opening in openings)
                 {
                     Face3D face3D_Opening = opening?.Face3D;
                     if(face3D_Opening == null)
@@ -114,10 +114,10 @@ namespace SAM.Architectural.Grasshopper
 
             args.Pipeline.DrawBrepShaded(brep, displayMaterial);
 
-            List<Opening> openings = Value.Openings;
+            List<IOpening> openings = Value.Openings;
             if (openings != null)
             {
-                foreach (Opening opening in openings)
+                foreach (IOpening opening in openings)
                 {
                     List<IClosedPlanar3D> edge3Ds = opening?.Face3D?.GetEdge3Ds();
                     if(edge3Ds != null && edge3Ds.Count != 0)
