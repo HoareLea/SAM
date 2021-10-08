@@ -354,9 +354,22 @@ namespace SAM.Architectural
                 List<Tuple<double, Level>> tuples_Level = levels.ConvertAll(x => new Tuple<double, Level>(System.Math.Abs(x.Elevation - elevation), x));
                 tuples_Level.Sort((x, y) => x.Item1.CompareTo(y.Item1));
                 Level level = tuples_Level.FirstOrDefault()?.Item2;
+                if (level != null)
+                {
+                    room.SetValue(RoomParameter.LevelName, level.Name);
+                }
 
                 double volume_Shell = shell_Temp.Volume(silverSpacing, tolerance_Distance);
+                if (!double.IsNaN(volume_Shell))
+                {
+                    room.SetValue(RoomParameter.Volume, volume_Shell);
+                }
+
                 double area_Shell = shell_Temp.Area(silverSpacing, tolerance_Angle, tolerance_Distance, silverSpacing);
+                if (!double.IsNaN(area_Shell))
+                {
+                    room.SetValue(RoomParameter.Area, area_Shell);
+                }
 
                 Tuple<Room, List<IPartition>> tuple = new Tuple<Room, List<IPartition>>(room, new List<IPartition>());
                 tuples.Add(tuple);

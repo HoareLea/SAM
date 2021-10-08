@@ -1,26 +1,24 @@
-﻿using SAM.Geometry.Spatial;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SAM.Analytical
+namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static Dictionary<Panel, List<T>> SectionDictionary<T>(this IEnumerable<Panel> panels, Plane plane, double tolerance = Core.Tolerance.Distance) where T: Geometry.ISAMGeometry
+        public static Dictionary<N, List<T>> SectionDictionary<N, T>(this IEnumerable<N> face3DObjects, Plane plane, double tolerance = Core.Tolerance.Distance) where T: ISAMGeometry where N: IFace3DObject
         {
-            if (plane == null || panels == null)
+            if (plane == null || face3DObjects == null)
                 return null;
 
-            List<Tuple<Panel, List<T>>> tuples = new List<Tuple<Panel, List<T>>>();
-            foreach(Panel panel in panels)
+            List<Tuple<N, List<T>>> tuples = new List<Tuple<N, List<T>>>();
+            foreach(N face3DObject in face3DObjects)
             {
-                if(panel == null)
+                if(face3DObject == null)
                 {
                     continue;
                 }
 
-                tuples.Add(new Tuple<Panel, List<T>>(panel, new List<T>()));
+                tuples.Add(new Tuple<N, List<T>>(face3DObject, new List<T>()));
             }
 
             if(tuples.Count == 0)
@@ -28,17 +26,17 @@ namespace SAM.Analytical
                 return null;
             }
 
-            Parallel.For(0, tuples.Count, (int i) => 
+            System.Threading.Tasks.Parallel.For(0, tuples.Count, (int i) => 
             {
-                Panel panel = tuples[i].Item1;
+                N n = tuples[i].Item1;
                 
-                Face3D face3D = panel?.GetFace3D();
+                Face3D face3D = n?.Face3D;
                 if (face3D == null)
                 {
                     return;
                 }
 
-                PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, face3D, tolerance);
+                PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(plane, face3D, tolerance);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 {
                     return;
@@ -64,9 +62,9 @@ namespace SAM.Analytical
 
                     tuples[i].Item2.AddRange(sAMGeometries);
                 }
-                else if (typeof(Geometry.Planar.ISAMGeometry2D).IsAssignableFrom(typeof(T)))
+                else if (typeof(Planar.ISAMGeometry2D).IsAssignableFrom(typeof(T)))
                 {
-                    List<Geometry.Planar.ISAMGeometry2D> sAMGeometry2Ds = planarIntersectionResult.Geometry2Ds;
+                    List<Planar.ISAMGeometry2D> sAMGeometry2Ds = planarIntersectionResult.Geometry2Ds;
                     if (sAMGeometry2Ds == null || sAMGeometry2Ds.Count == 0)
                     {
                         return;
@@ -86,8 +84,8 @@ namespace SAM.Analytical
                 }
             });
 
-            Dictionary<Panel, List<T>> result = new Dictionary<Panel, List<T>>();
-            foreach(Tuple<Panel, List<T>> tuple in tuples)
+            Dictionary<N, List<T>> result = new Dictionary<N, List<T>>();
+            foreach(Tuple<N, List<T>> tuple in tuples)
             {
                 if(tuple.Item2 == null || tuple.Item2.Count == 0)
                 {

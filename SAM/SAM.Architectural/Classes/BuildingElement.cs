@@ -5,7 +5,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public abstract class BuildingElement : SAMInstance, IArchitecturalObject, ISAMGeometry3DObject
+    public abstract class BuildingElement : SAMInstance, IArchitecturalObject, IFace3DObject
     {
         private Face3D face3D;
         
