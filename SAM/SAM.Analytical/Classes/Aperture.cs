@@ -10,7 +10,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Analytical Aperture object which stores information about Winodws and Doors
     /// </summary>
-    public class Aperture : SAMInstance
+    public class Aperture : SAMInstance<ApertureConstruction>
     {
         /// <summary>
         /// Planar Boundary 3D of Aperture
@@ -22,7 +22,7 @@ namespace SAM.Analytical
         /// </summary>
         /// <param name="aperture">Other Aperture</param>
         public Aperture(Aperture aperture)
-            : base(aperture, aperture?.SAMType)
+            : base(aperture, aperture?.Type)
         {
             planarBoundary3D = new PlanarBoundary3D(aperture.planarBoundary3D);
         }
@@ -208,7 +208,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return SAMType as ApertureConstruction;
+                return Type;
             }
         }
 

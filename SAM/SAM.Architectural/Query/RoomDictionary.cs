@@ -9,7 +9,7 @@ namespace SAM.Architectural
 {
     public static partial class Query
     {
-        public static Dictionary<Room, List<HostPartition>> RoomDictionary(this Dictionary<double, List<Face2D>> face2Ds, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static Dictionary<Room, List<IHostPartition>> RoomDictionary(this Dictionary<double, List<Face2D>> face2Ds, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             if (face2Ds == null)
                 return null;
@@ -91,9 +91,9 @@ namespace SAM.Architectural
 
             Plane plane = Plane.WorldXY;
 
-            Dictionary<Room, List<HostPartition>> result = new Dictionary<Room, List<HostPartition>>();
+            Dictionary<Room, List<IHostPartition>> result = new Dictionary<Room, List<IHostPartition>>();
 
-            List<Tuple<Point3D, HostPartition, Room>> tuples_Point3D = new List<Tuple<Point3D, HostPartition, Room>>();
+            List<Tuple<Point3D, IHostPartition, Room>> tuples_Point3D = new List<Tuple<Point3D, IHostPartition, Room>>();
             for (int i = 1; i < tuples.Count; i++)
             {
                 Tuple<double, List<Face2D>> tuple_Top = tuples[i - 1];
@@ -141,7 +141,7 @@ namespace SAM.Architectural
 
                     segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true);
 
-                    HostPartition hostBuilidngElement;
+                    IHostPartition hostBuilidngElement;
 
                     foreach (Segment2D segment2D in segment2Ds)
                     {
@@ -155,7 +155,7 @@ namespace SAM.Architectural
                         hostBuilidngElement = Create.HostPartition(new Face3D(polygon3D), null, tolerance_Angle);
                         if (hostBuilidngElement != null)
                         {
-                            tuples_Point3D.Add(new Tuple<Point3D, HostPartition, Room>(Geometry.Spatial.Query.Mid(plane_Bottom.Convert(segment2D)), hostBuilidngElement, room));
+                            tuples_Point3D.Add(new Tuple<Point3D, IHostPartition, Room>(Geometry.Spatial.Query.Mid(plane_Bottom.Convert(segment2D)), hostBuilidngElement, room));
                         }
                     }
 
@@ -169,7 +169,7 @@ namespace SAM.Architectural
                         hostBuilidngElement = Create.HostPartition(face3D_Top, null, tolerance_Angle);
                         if (hostBuilidngElement != null)
                         {
-                            tuples_Point3D.Add(new Tuple<Point3D, HostPartition, Room>(face3D_Top.InternalPoint3D(), hostBuilidngElement, room));
+                            tuples_Point3D.Add(new Tuple<Point3D, IHostPartition, Room>(face3D_Top.InternalPoint3D(), hostBuilidngElement, room));
                         }
                     }
 
@@ -188,7 +188,7 @@ namespace SAM.Architectural
                             hostBuilidngElement = Create.HostPartition(face3D_Bottom, null, tolerance_Angle);
                             if (hostBuilidngElement != null)
                             {
-                                tuples_Point3D.Add(new Tuple<Point3D, HostPartition, Room>(face3D_Bottom.InternalPoint3D(), hostBuilidngElement, room));
+                                tuples_Point3D.Add(new Tuple<Point3D, IHostPartition, Room>(face3D_Bottom.InternalPoint3D(), hostBuilidngElement, room));
                             }
                         }
                     }
@@ -202,21 +202,21 @@ namespace SAM.Architectural
 
                     room.SetValue(RoomParameter.Area, area);
                     room.SetValue(RoomParameter.Volume, volume);
-                    result[room] = new List<HostPartition>();
+                    result[room] = new List<IHostPartition>();
                 }
             }
 
             while (tuples_Point3D.Count > 0)
             {
-                Tuple<Point3D, HostPartition, Room> tuple = tuples_Point3D[0];
+                Tuple<Point3D, IHostPartition, Room> tuple = tuples_Point3D[0];
                 Point3D point3D = tuple.Item1;
 
-                List<Tuple<Point3D, HostPartition, Room>> tuples_Temp = tuples_Point3D.FindAll(x => point3D.AlmostEquals(x.Item1));
+                List<Tuple<Point3D, IHostPartition, Room>> tuples_Temp = tuples_Point3D.FindAll(x => point3D.AlmostEquals(x.Item1));
                 tuples_Point3D.RemoveAll(x => tuples_Temp.Contains(x));
 
-                HostPartition hostPartition = tuple.Item2;
+                IHostPartition hostPartition = tuple.Item2;
 
-                foreach (Tuple<Point3D, HostPartition, Room> tuple_Temp in tuples_Temp)
+                foreach (Tuple<Point3D, IHostPartition, Room> tuple_Temp in tuples_Temp)
                 {
                     result[tuple_Temp.Item3].Add(hostPartition);
                 }

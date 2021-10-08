@@ -61,19 +61,19 @@ namespace SAM.Architectural
             return relationCluster?.GetRelatedObjects<Room>(partition);
         }
 
-        public bool Internal(HostPartition hostPartition)
+        public bool Internal(IHostPartition hostPartition)
         {
             List<Room> rooms = GetRooms(hostPartition);
             return rooms != null || rooms.Count > 2;
         }
         
-        public bool External(HostPartition hostPartition)
+        public bool External(IHostPartition hostPartition)
         {
             List<Room> rooms = GetRooms(hostPartition);
             return rooms != null && rooms.Count == 1;
         }
 
-        public bool Shade(HostPartition hostPartition)
+        public bool Shade(IHostPartition hostPartition)
         {
             List<Room> rooms = GetRooms(hostPartition);
             return rooms == null || rooms.Count == 0;
@@ -176,7 +176,7 @@ namespace SAM.Architectural
             bool result = relationCluster.AddObject(room);
             if(partitions != null && partitions.Count() != 0)
             {
-                foreach(HostPartition partition in partitions)
+                foreach(IHostPartition partition in partitions)
                 {
                     if(relationCluster.AddObject(partition))
                     {
@@ -191,13 +191,13 @@ namespace SAM.Architectural
 
         public BoundingBox3D GetBoundingBox3D()
         {
-            List<BuildingElement> buildingElements = GetObjects<BuildingElement>();
-            if(buildingElements == null || buildingElements.Count == 0)
+            List<IBoundable3DObject> boundable3DObjects = GetObjects<IBoundable3DObject>();
+            if(boundable3DObjects == null || boundable3DObjects.Count == 0)
             {
                 return null;
             }
 
-            return new Geometry.Spatial.BoundingBox3D(buildingElements.ConvertAll(x => x.Face3D?.GetBoundingBox()).FindAll(x => x != null));
+            return new BoundingBox3D(boundable3DObjects.ConvertAll(x => x.GetBoundingBox()).FindAll(x => x != null));
         }
 
         public override bool FromJObject(JObject jObject)

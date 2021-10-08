@@ -25,23 +25,32 @@ namespace SAM.Architectural.Grasshopper
 
         }
 
-        public static Mesh ToRhino_Mesh(this HostPartition hostPartition, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
+        public static Mesh ToRhino_Mesh(this IPartition partition, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
         {
-            Face3D face3D = hostPartition?.Face3D(cutOpenings, tolerance);
-            if (face3D == null)
+            if(partition == null)
             {
                 return null;
+            }
+
+            Face3D face3D = null;
+            if (partition is IHostPartition)
+            {
+                face3D = ((IHostPartition)partition).Face3D(cutOpenings, tolerance);
+            }
+            else
+            {
+                face3D = partition.Face3D;
             }
 
             Mesh result = Geometry.Grasshopper.Convert.ToRhino_Mesh(face3D);
             if (result == null)
                 return null;
 
-            result.VertexColors.CreateMonotoneMesh(Architectural.Query.Color(hostPartition));
+            result.VertexColors.CreateMonotoneMesh(Architectural.Query.Color(partition));
 
-            if (includeOpenings)
+            if (includeOpenings && partition is IHostPartition)
             {
-                List<IOpening> openings = hostPartition.Openings;
+                List<IOpening> openings = ((IHostPartition)partition).Openings;
                 if(openings != null && openings.Count != 0)
                 {
                     foreach(IOpening opening in openings)
@@ -62,14 +71,14 @@ namespace SAM.Architectural.Grasshopper
 
         public static Mesh ToRhino_Mesh(this ArchitecturalModel architecturalModel, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
         {
-            List<HostPartition> hostPartitions = architecturalModel.GetObjects<HostPartition>();
+            List<IHostPartition> hostPartitions = architecturalModel.GetObjects<IHostPartition>();
             if (hostPartitions == null || hostPartitions.Count == 0)
             {
                 return null;
             }
 
             List<Mesh> meshes = new List<Mesh>();
-            foreach (HostPartition hostPartition in hostPartitions)
+            foreach (IHostPartition hostPartition in hostPartitions)
             {
                 Mesh mesh_Temp = hostPartition?.ToRhino_Mesh(cutOpenings, includeOpenings, tolerance);
                 if (mesh_Temp == null)

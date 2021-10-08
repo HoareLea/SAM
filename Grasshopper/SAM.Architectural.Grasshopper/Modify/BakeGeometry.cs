@@ -8,21 +8,21 @@ namespace SAM.Architectural.Grasshopper
 {
     public static partial class Modify
     {
-        public static bool BakeGeometry(this HostPartition hostPartition, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
+        public static bool BakeGeometry(this IPartition partition, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
         {
             guid = Guid.Empty;
 
-            if (hostPartition == null || rhinoDoc == null || objectAttributes == null)
+            if (partition == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
             //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
-            objectAttributes.Name = hostPartition.Name;
+            objectAttributes.Name = partition.Name;
 
             bool result = true;
 
-            Brep brep = hostPartition.ToRhino(cutOpenings, tolerance);
+            Brep brep = partition.ToRhino(cutOpenings, tolerance);
             if (brep == null)
-                result = Geometry.Grasshopper.Modify.BakeGeometry(hostPartition.Face3D, rhinoDoc, objectAttributes, out guid);
+                result = Geometry.Grasshopper.Modify.BakeGeometry(partition.Face3D, rhinoDoc, objectAttributes, out guid);
             else
                 guid = rhinoDoc.Objects.AddBrep(brep, objectAttributes);
 
@@ -32,7 +32,7 @@ namespace SAM.Architectural.Grasshopper
             GeometryBase geometryBase = rhinoDoc.Objects.FindGeometry(guid);
             if (geometryBase != null)
             {
-                string @string = hostPartition.ToJObject()?.ToString();
+                string @string = partition.ToJObject()?.ToString();
                 if (!string.IsNullOrWhiteSpace(@string))
                     geometryBase.SetUserString("SAM", @string);
             }
@@ -95,14 +95,14 @@ namespace SAM.Architectural.Grasshopper
             if (architecturalModel == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
-            List<HostPartition> hostPartitions = architecturalModel.GetObjects<HostPartition>();
-            if (hostPartitions == null || hostPartitions.Count == 0)
+            List<IPartition> partitions = architecturalModel.GetObjects<IPartition>();
+            if (partitions == null || partitions.Count == 0)
                 return false;
 
             List<Brep> breps = new List<Brep>();
-            foreach (HostPartition hostPartition in hostPartitions)
+            foreach (IPartition partition in partitions)
             {
-                Brep brep = hostPartition.ToRhino();
+                Brep brep = partition.ToRhino();
                 if (brep == null)
                     continue;
 

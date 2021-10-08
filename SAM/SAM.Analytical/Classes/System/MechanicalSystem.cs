@@ -3,7 +3,7 @@ using SAM.Core;
 
 namespace SAM.Analytical
 {
-    public abstract class MechanicalSystem : SAMInstance, ISystem
+    public abstract class MechanicalSystem : SAMInstance<MechanicalSystemType>, ISystem
     {
         public MechanicalSystem(string name, MechanicalSystemType mechanicalSystemType)
             : base(name, mechanicalSystemType)

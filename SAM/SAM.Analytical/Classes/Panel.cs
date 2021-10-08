@@ -11,7 +11,7 @@ namespace SAM.Analytical
     /// <summary>
     /// SAM Analytical Panel stores information about shape and properties of building boundary such as Wall, Floor, Roof, Slab etc.
     /// </summary>
-    public class Panel : SAMInstance
+    public class Panel : SAMInstance<Construction>
     {
         /// <summary>
         /// Type of the Panel such as Wall, Ceiling etc.
@@ -259,7 +259,7 @@ namespace SAM.Analytical
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
-        {           
+        {
             return GetFace3D()?.GetBoundingBox(offset);
         }
 
@@ -267,7 +267,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return SAMType as Construction;
+                return Type;
             }
         }
 
@@ -627,7 +627,7 @@ namespace SAM.Analytical
 
             List<Aperture> result = new List<Aperture>();
             foreach (Aperture aperture in apertures)
-                if (aperture != null && aperture.SAMTypeGuid == apertureConstruction.Guid)
+                if (aperture != null && aperture.TypeGuid == apertureConstruction.Guid)
                     result.Add(aperture.Clone());
 
             return result;

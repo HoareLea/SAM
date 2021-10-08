@@ -407,17 +407,17 @@ namespace SAM.Analytical.Grasshopper
 
                 names_VentilationSystemType.Add(internalCondition?.GetSystemTypeName<VentilationSystemType>());
                 VentilationSystem ventilationSystem = adjacencyCluster?.GetRelatedObjects<VentilationSystem>(space)?.FirstOrDefault();
-                VentilationSystemType ventilationSystemType = ventilationSystem?.SAMType as VentilationSystemType;
+                VentilationSystemType ventilationSystemType = ventilationSystem?.Type as VentilationSystemType;
                 guids_VentilationSystemType.Add(ventilationSystemType == null ? Guid.Empty : ventilationSystemType.Guid);
 
                 names_HeatingSystemType.Add(internalCondition?.GetSystemTypeName<HeatingSystemType>());
                 HeatingSystem heatingSystem = adjacencyCluster?.GetRelatedObjects<HeatingSystem>(space)?.FirstOrDefault();
-                HeatingSystemType heatingSystemType = heatingSystem?.SAMType as HeatingSystemType;
+                HeatingSystemType heatingSystemType = heatingSystem?.Type as HeatingSystemType;
                 guids_HeatingSystemType.Add(heatingSystemType == null ? Guid.Empty : heatingSystemType.Guid);
 
                 names_CoolingSystemType.Add(internalCondition?.GetSystemTypeName<CoolingSystemType>());
                 CoolingSystem coolingSystem = adjacencyCluster?.GetRelatedObjects<CoolingSystem>(space)?.FirstOrDefault();
-                CoolingSystemType coolingSystemType = coolingSystem?.SAMType as CoolingSystemType;
+                CoolingSystemType coolingSystemType = coolingSystem?.Type as CoolingSystemType;
                 guids_CoolingSystemType.Add(coolingSystemType == null ? Guid.Empty : coolingSystemType.Guid);
 
                 if (ventilationSystem == null || !ventilationSystem.TryGetValue(VentilationSystemParameter.SupplyUnitName, out @string))

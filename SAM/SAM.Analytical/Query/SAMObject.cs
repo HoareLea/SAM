@@ -91,7 +91,7 @@ namespace SAM.Analytical
                 return adjacencyCluster.GetApertures()?.Find(x => x != null && x.Guid.Equals(guid));
 
             if (typeof(ApertureConstruction).IsAssignableFrom(type))
-                return adjacencyCluster.GetApertures()?.Find(x => x != null && x.SAMTypeGuid.Equals(guid))?.ApertureConstruction;
+                return adjacencyCluster.GetApertures()?.Find(x => x != null && x.TypeGuid.Equals(guid))?.ApertureConstruction;
 
             if (typeof(Panel).IsAssignableFrom(type))
                 return adjacencyCluster.GetObject<Panel>(guid);

@@ -12,31 +12,31 @@ namespace SAM.Architectural.Grasshopper
             if (rhinoDoc == null)
                 return;
 
-            List<HostPartition> hostPartitions = new List<HostPartition>();
+            List<IPartition> partitions = new List<IPartition>();
             foreach (var variable in gH_Structure.AllData(true))
             {
-                if (variable is GoohostPartition)
+                if (variable is GooPartition)
                 {
-                    hostPartitions.Add(((GoohostPartition)variable).Value);
+                    partitions.Add(((GooPartition)variable).Value);
                 }
                 else if (variable is GooArchitecturalModel)
                 {
                     ArchitecturalModel architecturalModel = ((GooArchitecturalModel)variable).Value;
                     if (architecturalModel != null)
                     {
-                        List<HostPartition> hostPartitions_Temp = architecturalModel.GetObjects<HostPartition>();
-                        if (hostPartitions_Temp != null && hostPartitions_Temp.Count > 0)
+                        List<IPartition> partitions_Temp = architecturalModel.GetObjects<IPartition>();
+                        if (partitions_Temp != null && partitions_Temp.Count > 0)
                         {
-                            hostPartitions.AddRange(hostPartitions_Temp);
+                            partitions.AddRange(partitions_Temp);
                         }
                     }
                 }
             }
 
-            BakeGeometry_ByCategory(rhinoDoc, hostPartitions, cutOpening, tolerance);
+            BakeGeometry_ByCategory(rhinoDoc, partitions, cutOpening, tolerance);
         }
 
-        public static void BakeGeometry_ByCategory(this RhinoDoc rhinoDoc, IEnumerable<HostPartition> hostPartitions, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
+        public static void BakeGeometry_ByCategory(this RhinoDoc rhinoDoc, IEnumerable<IPartition> partitions, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
         {
             Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
             if (layerTable == null)
@@ -63,37 +63,40 @@ namespace SAM.Architectural.Grasshopper
             ObjectAttributes objectAttributes = rhinoDoc.CreateDefaultAttributes();
 
             List<Guid> guids = new List<Guid>();
-            foreach (HostPartition hostPartition in hostPartitions)
+            foreach (IPartition partition in partitions)
             {
-                if (hostPartition == null)
+                if (partition == null)
                     continue;
 
-                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Host.Id, hostPartition.GetType().ToString(), Architectural.Query.Color(hostPartition));
+                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Host.Id, partition.GetType().ToString(), Architectural.Query.Color(partition));
 
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
                 Guid guid = default;
-                if (BakeGeometry(hostPartition, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
+                if (BakeGeometry(partition, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
                     guids.Add(guid);
 
-                List<IOpening> openings = hostPartition.Openings;
-                if (openings == null || openings.Count == 0)
-                    continue;
-
-                foreach (IOpening opening in openings)
+                if(partition is IHostPartition)
                 {
-                    if (opening == null)
+                    List<IOpening> openings = ((IHostPartition)partition).Openings;
+                    if (openings == null || openings.Count == 0)
                         continue;
 
-                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Opening.Id, opening.GetType().ToString(), Architectural.Query.Color(opening));
+                    foreach (IOpening opening in openings)
+                    {
+                        if (opening == null)
+                            continue;
 
-                    //layerTable.SetCurrentLayerIndex(layer.Index, true);
-                    objectAttributes.LayerIndex = layer.Index;
+                        layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Opening.Id, opening.GetType().ToString(), Architectural.Query.Color(opening));
 
-                    guid = default;
-                    if (BakeGeometry(opening, rhinoDoc, objectAttributes, out guid))
-                        guids.Add(guid);
+                        //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                        objectAttributes.LayerIndex = layer.Index;
+
+                        guid = default;
+                        if (BakeGeometry(opening, rhinoDoc, objectAttributes, out guid))
+                            guids.Add(guid);
+                    }
                 }
             }
 

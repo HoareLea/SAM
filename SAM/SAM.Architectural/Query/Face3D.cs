@@ -6,7 +6,7 @@ namespace SAM.Architectural
 {
     public static partial class Query
     {
-        public static Face3D Face3D(this HostPartition hostPartition, bool cutOpenings, double tolerance = Core.Tolerance.Distance)
+        public static Face3D Face3D(this IHostPartition hostPartition, bool cutOpenings, double tolerance = Core.Tolerance.Distance)
         {
             Face3D result = hostPartition?.Face3D;
 

@@ -55,7 +55,7 @@
   <ItemGroup>
     <Compile Include="Classes\GooArchitecturalModel.cs" />
     <Compile Include="Classes\GooLevel.cs" />
-    <Compile Include="Classes\GooHostBuildingElement.cs" />
+    <Compile Include="Classes\GooPartition.cs" />
     <Compile Include="Component\SAMArchitecturalCreateLevel.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Mesh.cs" />
     <Compile Include="Convert\ToRhino\Brep.cs" />

@@ -128,7 +128,7 @@ namespace SAM.Analytical
                 List<Guid> guids = new List<Guid>();
                 foreach(Aperture aperture in apertures)
                 {
-                    Guid guid = aperture.SAMTypeGuid;
+                    Guid guid = aperture.TypeGuid;
                     int index = guids.IndexOf(guid);
                     if(index == -1)
                     {

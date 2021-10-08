@@ -88,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
             List<AnalyticalModel> analyticalModels = sAMObjects.ConvertAll(x => x as AnalyticalModel);
             analyticalModels.RemoveAll(x => x == null);
 
-            panels = panels?.FindAll(x => x.SAMTypeGuid.Equals(construction.Guid));
+            panels = panels?.FindAll(x => x.TypeGuid.Equals(construction.Guid));
 
             if(analyticalModels != null)
             {

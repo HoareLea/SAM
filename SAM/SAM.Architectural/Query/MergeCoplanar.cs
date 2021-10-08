@@ -41,7 +41,7 @@ namespace SAM.Architectural
                 if (plane == null)
                     continue;
 
-                HostPartitionType hostPartitionType = (partition as HostPartition)?.SAMType as HostPartitionType;
+                HostPartitionType hostPartitionType = (partition as HostPartition<HostPartitionType>)?.Type;
 
                 List<IPartition> partitions_Offset = new List<IPartition>();
                 foreach (IPartition partition_Temp in partitions_Temp)
@@ -53,7 +53,7 @@ namespace SAM.Architectural
 
                     if(validateHostPartitionType && hostPartitionType != null)
                     {
-                        HostPartitionType hostPartitionType_Temp = (partition_Temp as HostPartition)?.SAMType as HostPartitionType;
+                        HostPartitionType hostPartitionType_Temp = (partition_Temp as HostPartition<HostPartitionType>)?.Type;
                         if (hostPartitionType_Temp != null && hostPartitionType != null)
                         {
                             if (!hostPartitionType_Temp.Name.Equals(hostPartitionType.Name))
@@ -153,7 +153,7 @@ namespace SAM.Architectural
                     {
                         foreach (IPartition partition_redundant in redundantPartitions)
                         {
-                            HostPartition hostPartition = partition_redundant as HostPartition;
+                            HostPartition<HostPartitionType> hostPartition = partition_redundant as HostPartition<HostPartitionType>;
                             if (hostPartition == null)
                                 continue;
 
@@ -172,7 +172,7 @@ namespace SAM.Architectural
                     }
                     else
                     {
-                        HostPartitionType hostPartitionType_Old = (partition_Old as HostPartition)?.SAMType as HostPartitionType;
+                        HostPartitionType hostPartitionType_Old = (partition_Old as HostPartition<HostPartitionType>)?.Type;
                         partition_New = Create.HostPartition(guid, face3D, hostPartitionType_Old, tolerance);
                     }
 

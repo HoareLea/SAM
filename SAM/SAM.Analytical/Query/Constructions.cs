@@ -14,7 +14,7 @@ namespace SAM.Analytical
 
             foreach (Panel panel in panels)
             {
-                if (dictionary.ContainsKey(panel.SAMTypeGuid))
+                if (dictionary.ContainsKey(panel.TypeGuid))
                     continue;
 
                 Construction construction = panel.Construction;

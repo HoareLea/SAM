@@ -12,31 +12,31 @@ namespace SAM.Architectural.Grasshopper
             if (rhinoDoc == null)
                 return;
 
-            List<HostPartition> hostPartitions = new List<HostPartition>();
+            List<IPartition> partitions = new List<IPartition>();
             foreach (var variable in gH_Structure.AllData(true))
             {
-                if (variable is GoohostPartition)
+                if (variable is GooPartition)
                 {
-                    hostPartitions.Add(((GoohostPartition)variable).Value);
+                    partitions.Add(((GooPartition)variable).Value);
                 }
                 else if(variable is GooArchitecturalModel)
                 {
                     ArchitecturalModel architecturalModel = ((GooArchitecturalModel)variable).Value;
                     if(architecturalModel != null)
                     {
-                        List<HostPartition> hostPartitions_Temp = architecturalModel.GetObjects<HostPartition>();
+                        List<IPartition> hostPartitions_Temp = architecturalModel.GetObjects<IPartition>();
                         if(hostPartitions_Temp != null && hostPartitions_Temp.Count > 0)
                         {
-                            hostPartitions.AddRange(hostPartitions_Temp);
+                            partitions.AddRange(hostPartitions_Temp);
                         }
                     }
                 }
             }
 
-            BakeGeometry_ByType(rhinoDoc, hostPartitions, cutOpenings, tolerance);
+            BakeGeometry_ByType(rhinoDoc, partitions, cutOpenings, tolerance);
         }
 
-        public static void BakeGeometry_ByType(this RhinoDoc rhinoDoc, IEnumerable<HostPartition> hostPartitions, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
+        public static void BakeGeometry_ByType(this RhinoDoc rhinoDoc, IEnumerable<IPartition> partitions, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
         {
             Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
             if (layerTable == null)
@@ -65,7 +65,7 @@ namespace SAM.Architectural.Grasshopper
             Random random = new Random();
 
             List<Guid> guids = new List<Guid>();
-            foreach (HostPartition hostPartition in hostPartitions)
+            foreach (IHostPartition hostPartition in partitions)
             {
                 if (hostPartition == null)
                     continue;

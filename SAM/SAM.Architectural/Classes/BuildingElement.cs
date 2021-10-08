@@ -5,11 +5,11 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public abstract class BuildingElement : SAMInstance, IArchitecturalObject, IFace3DObject
+    public abstract class BuildingElement<T> : SAMInstance<T>, IArchitecturalObject, IFace3DObject where T: BuildingElementType
     {
         private Face3D face3D;
         
-        public BuildingElement(BuildingElement buildingElement)
+        public BuildingElement(BuildingElement<T> buildingElement)
             : base(buildingElement)
         {
 
@@ -21,13 +21,13 @@ namespace SAM.Architectural
 
         }
 
-        public BuildingElement(BuildingElementType buildingElementType, Face3D face3D)
+        public BuildingElement(T buildingElementType, Face3D face3D)
             : base(buildingElementType?.Name, buildingElementType)
         {
             this.face3D = face3D;
         }
 
-        public BuildingElement(System.Guid guid, BuildingElementType buildingElementType, Face3D face3D)
+        public BuildingElement(System.Guid guid, T buildingElementType, Face3D face3D)
             : base(guid, buildingElementType?.Name, buildingElementType)
         {
             this.face3D = face3D;
@@ -91,6 +91,11 @@ namespace SAM.Architectural
             }
 
             return jObject;
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return face3D?.GetBoundingBox(offset);
         }
 
         public Vector3D Normal

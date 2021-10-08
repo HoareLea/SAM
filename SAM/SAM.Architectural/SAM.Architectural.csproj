@@ -77,6 +77,7 @@
     <Compile Include="Enums\HostPartitionCategory.cs" />
     <Compile Include="Enums\Parameter\RoomParameter.cs" />
     <Compile Include="Interfaces\IOpening.cs" />
+    <Compile Include="Interfaces\IHostPartition.cs" />
     <Compile Include="Interfaces\IPartition.cs" />
     <Compile Include="Interfaces\ITerrain.cs" />
     <Compile Include="Interfaces\IArchitecturalObject.cs" />

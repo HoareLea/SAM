@@ -19,7 +19,7 @@ namespace SAM.Analytical
 
             List<Panel> result = new List<Panel>();
             foreach (Panel panel in panels)
-                if (panel.SAMTypeGuid.Equals(guid))
+                if (panel.TypeGuid.Equals(guid))
                     result.Add(panel);
 
             return result;

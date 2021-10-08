@@ -6,11 +6,11 @@ using System.Collections.Generic;
 
 namespace SAM.Architectural
 {
-    public abstract class HostPartition : BuildingElement, IPartition
+    public abstract class HostPartition<T> : BuildingElement<T>, IHostPartition where T: HostPartitionType
     {
         private List<IOpening> openings;
         
-        public HostPartition(HostPartition hostPartition)
+        public HostPartition(HostPartition<T> hostPartition)
             : base(hostPartition)
         {
 
@@ -22,13 +22,13 @@ namespace SAM.Architectural
 
         }
 
-        public HostPartition(HostPartitionType hostPartitionType, Face3D face3D)
+        public HostPartition(T hostPartitionType, Face3D face3D)
             : base(hostPartitionType, face3D)
         {
 
         }
 
-        public HostPartition(Guid guid, HostPartitionType hostPartitionType, Face3D face3D)
+        public HostPartition(Guid guid, T hostPartitionType, Face3D face3D)
             : base(guid, hostPartitionType, face3D)
         {
 

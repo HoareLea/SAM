@@ -233,7 +233,7 @@ namespace SAM.Analytical
                 if (panel == null)
                     continue;
 
-                if (panel.SAMTypeGuid != construction.Guid)
+                if (panel.TypeGuid != construction.Guid)
                     continue;
 
                 result.Add(panel);
@@ -261,7 +261,7 @@ namespace SAM.Analytical
                 if (apertures == null || apertures.Count == 0)
                     continue;
 
-                if (apertures.Find(x => x.SAMTypeGuid == apertureConstruction.Guid) == null)
+                if (apertures.Find(x => x.TypeGuid == apertureConstruction.Guid) == null)
                     continue;
 
                 result.Add(panel);
@@ -346,7 +346,7 @@ namespace SAM.Analytical
                 if (panel == null)
                     continue;
 
-                Guid guid = panel.SAMTypeGuid;
+                Guid guid = panel.TypeGuid;
                 if (guid == Guid.Empty)
                     continue;
 
@@ -384,7 +384,7 @@ namespace SAM.Analytical
                     if (aperture == null)
                         continue;
 
-                    Guid guid = aperture.SAMTypeGuid;
+                    Guid guid = aperture.TypeGuid;
                     if (guid == Guid.Empty)
                         continue;
 

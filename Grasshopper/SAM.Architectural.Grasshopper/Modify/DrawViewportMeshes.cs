@@ -10,7 +10,7 @@ namespace SAM.Architectural.Grasshopper
     {
         public static void DrawViewportMeshes(this ArchitecturalModel architecturalModel, GH_PreviewMeshArgs previewMeshArgs, Rhino.Display.DisplayMaterial displayMaterial = null)
         {
-            List<HostPartition> hostPartitions = architecturalModel?.GetObjects<HostPartition>();
+            List<IHostPartition> hostPartitions = architecturalModel?.GetObjects<IHostPartition>();
             if (hostPartitions == null)
                 return;
 
@@ -27,7 +27,7 @@ namespace SAM.Architectural.Grasshopper
 
             Parallel.For(0, hostPartitions.Count, (int i) =>
             {
-                HostPartition hostPartition = hostPartitions[i];
+                IHostPartition hostPartition = hostPartitions[i];
 
                 Geometry.Spatial.Face3D face3D = hostPartition?.Face3D;
                 if(face3D == null)

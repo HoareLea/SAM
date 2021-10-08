@@ -21,7 +21,7 @@ namespace SAM.Architectural
                 return new AirPartition(partition.Guid, face3D);
             }
 
-            HostPartition hostPartition = partition as HostPartition;
+            IHostPartition hostPartition = partition as IHostPartition;
             if(hostPartition == null)
             {
                 throw new System.NotImplementedException();
@@ -29,7 +29,7 @@ namespace SAM.Architectural
 
             List<IOpening> openings = hostPartition.Openings;
 
-            hostPartition = Create.HostPartition(partition.Guid, face3D, hostPartition.SAMType as HostPartitionType);
+            hostPartition = Create.HostPartition(partition.Guid, face3D, (hostPartition as HostPartition<HostPartitionType>)?.Type);
             if(openings != null)
             {
                 for(int i=0; i < openings.Count; i++)
