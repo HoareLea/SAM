@@ -513,7 +513,7 @@ namespace SAM.Architectural
                                 }
                                 else
                                 {
-                                    HostPartitionType hostPartitionType = (partition_New_Temp as HostPartition<HostPartitionType>)?.Type;
+                                    HostPartitionType hostPartitionType = (partition_New_Temp as IHostPartition)?.Type();
 
                                     partition_New = HostPartition(guid, face3D, hostPartitionType, tolerance_Distance);
 

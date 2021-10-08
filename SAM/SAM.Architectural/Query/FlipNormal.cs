@@ -29,7 +29,7 @@ namespace SAM.Architectural
 
             List<IOpening> openings = hostPartition.Openings;
 
-            hostPartition = Create.HostPartition(partition.Guid, face3D, (hostPartition as HostPartition<HostPartitionType>)?.Type);
+            hostPartition = Create.HostPartition(partition.Guid, face3D, hostPartition.Type());
             if(openings != null)
             {
                 for(int i=0; i < openings.Count; i++)
