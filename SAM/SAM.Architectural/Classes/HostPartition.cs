@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Architectural
 {
-    public abstract class HostPartition : Partition
+    public abstract class HostPartition : BuildingElement, IPartition
     {
         private List<Opening> openings;
         

@@ -5,7 +5,7 @@ using System;
 
 namespace SAM.Architectural
 {
-    public class AirPartition : Partition
+    public class AirPartition : BuildingElement, IPartition
     {
         
         public AirPartition(AirPartition airPartition)

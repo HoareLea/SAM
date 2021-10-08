@@ -2,7 +2,7 @@
 
 namespace SAM.Architectural
 {
-    [Description("hostPartition Category")]
+    [Description("HostPartition Category")]
     public enum HostPartitionCategory
     {
         [Description("Undefined")] Undefined,

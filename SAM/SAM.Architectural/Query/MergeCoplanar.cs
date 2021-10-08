@@ -10,56 +10,56 @@ namespace SAM.Architectural
 {
     public static partial class Query
     {
-        public static List<Partition> MergeCoplanar(this IEnumerable<Partition> partitions, double offset, bool validateConstruction = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<IPartition> MergeCoplanar(this IEnumerable<IPartition> partitions, double offset, bool validateConstruction = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (partitions == null)
                 return null;
             
-            List<Partition> redundantPartitions = new List<Partition>();
+            List<IPartition> redundantPartitions = new List<IPartition>();
 
             return MergeCoplanar(partitions?.ToList(), offset, ref redundantPartitions, validateConstruction, minArea, tolerance);
         }
 
-        private static List<Partition> MergeCoplanar(this List<Partition> partitions, double offset, ref List<Partition> redundantPartitions, bool validatePartitionType = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        private static List<IPartition> MergeCoplanar(this List<IPartition> partitions, double offset, ref List<IPartition> redundantPartitions, bool validateHostPartitionType = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (partitions == null)
                 return null;
 
-            List<Partition> partitions_Temp = partitions.ToList();
+            List<IPartition> partitions_Temp = partitions.ToList();
 
             partitions_Temp.Sort((x, y) => y.Face3D.GetArea().CompareTo(x.Face3D.GetArea()));
 
-            List<Partition> result = new List<Partition>(partitions);
+            List<IPartition> result = new List<IPartition>(partitions);
             HashSet<Guid> guids = new HashSet<Guid>();
 
             while (partitions_Temp.Count > 0)
             {
-                Partition partition = partitions_Temp[0];
+                IPartition partition = partitions_Temp[0];
                 partitions_Temp.RemoveAt(0);
 
                 Plane plane = partition.Face3D.GetPlane();
                 if (plane == null)
                     continue;
 
-                List<Partition> partitions_Offset = new List<Partition>();
-                foreach (Partition partition_Temp in partitions_Temp)
+                HostPartitionType hostPartitionType = (partition as HostPartition)?.SAMType as HostPartitionType;
+
+                List<IPartition> partitions_Offset = new List<IPartition>();
+                foreach (IPartition partition_Temp in partitions_Temp)
                 {
                     if(partition.GetType() != partition_Temp?.GetType())
                     {
                         continue;
                     }
-                    
-                    if(validatePartitionType)
-                    {
-                        PartitionType partitionType_Temp = partition_Temp.SAMType as PartitionType;
-                        PartitionType partitionType = partition.SAMType as PartitionType;
 
-                        if (partitionType_Temp != null && partitionType != null)
+                    if(validateHostPartitionType && hostPartitionType != null)
+                    {
+                        HostPartitionType hostPartitionType_Temp = (partition_Temp as HostPartition)?.SAMType as HostPartitionType;
+                        if (hostPartitionType_Temp != null && hostPartitionType != null)
                         {
-                            if (!partitionType_Temp.Name.Equals(partitionType.Name))
+                            if (!hostPartitionType_Temp.Name.Equals(hostPartitionType.Name))
                                 continue;
                         }
-                        else if (!(partitionType_Temp == null && partitionType == null))
+                        else if (!(hostPartitionType_Temp == null && hostPartitionType == null))
                         {
                             continue;
                         }
@@ -84,9 +84,9 @@ namespace SAM.Architectural
 
                 partitions_Offset.Add(partition);
 
-                List<Tuple<Polygon, Partition>> tuples_Polygon = new List<Tuple<Polygon, Partition>>();
+                List<Tuple<Polygon, IPartition>> tuples_Polygon = new List<Tuple<Polygon, IPartition>>();
                 List<Point2D> point2Ds = new List<Point2D>(); //Snap Points
-                foreach (Partition partition_Temp in partitions_Offset)
+                foreach (IPartition partition_Temp in partitions_Offset)
                 {
                     Face3D face3D = partition_Temp.Face3D;
                     foreach (IClosedPlanar3D closedPlanar3D in face3D.GetEdge3Ds())
@@ -101,7 +101,7 @@ namespace SAM.Architectural
                     Face2D face2D = plane.Convert(plane.Project(face3D));
 
                     //tuples_Polygon.Add(new Tuple<Polygon, Panel>(face2D.ToNTS(), panel_Temp));
-                    tuples_Polygon.Add(new Tuple<Polygon, Partition>(face2D.ToNTS(tolerance), partition_Temp));
+                    tuples_Polygon.Add(new Tuple<Polygon, IPartition>(face2D.ToNTS(tolerance), partition_Temp));
                 }
 
                 List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
@@ -113,19 +113,19 @@ namespace SAM.Architectural
                     if (polygon.Area < minArea)
                         continue;
 
-                    List<Tuple<Polygon, Partition>> tuples_Partition = tuples_Polygon.FindAll(x => polygon.Contains(x.Item1.InteriorPoint));
+                    List<Tuple<Polygon, IPartition>> tuples_Partition = tuples_Polygon.FindAll(x => polygon.Contains(x.Item1.InteriorPoint));
                     if (tuples_Partition == null || tuples_Partition.Count == 0)
                         continue;
 
                     tuples_Partition.Sort((x, y) => y.Item1.Area.CompareTo(x.Item1.Area));
 
-                    foreach (Tuple<Polygon, Partition> tuple in tuples_Partition)
+                    foreach (Tuple<Polygon, IPartition> tuple in tuples_Partition)
                     {
                         result.Remove(tuple.Item2);
                         partitions_Temp.Remove(tuple.Item2);
                     }
 
-                    Partition partition_Old = tuples_Partition.First().Item2;
+                    IPartition partition_Old = tuples_Partition.First().Item2;
                     tuples_Partition.RemoveAt(0);
                     redundantPartitions?.AddRange(tuples_Partition.ConvertAll(x => x.Item2));
 
@@ -151,7 +151,7 @@ namespace SAM.Architectural
                     List<Opening> openings = new List<Opening>();
                     if (redundantPartitions != null && redundantPartitions.Count != 0)
                     {
-                        foreach (Partition partition_redundant in redundantPartitions)
+                        foreach (IPartition partition_redundant in redundantPartitions)
                         {
                             HostPartition hostPartition = partition_redundant as HostPartition;
                             if (hostPartition == null)
@@ -165,14 +165,15 @@ namespace SAM.Architectural
                         }
                     }
 
-                    Partition partition_New = null;
+                    IPartition partition_New = null;
                     if(partition_Old is AirPartition)
                     {
                         partition_New = new AirPartition(guid, face3D);
                     }
                     else
                     {
-                        partition_New = Create.HostPartition(guid, face3D, partition_Old.SAMType as HostPartitionType, tolerance);
+                        HostPartitionType hostPartitionType_Old = (partition_Old as HostPartition)?.SAMType as HostPartitionType;
+                        partition_New = Create.HostPartition(guid, face3D, hostPartitionType_Old, tolerance);
                     }
 
                     if(partition_New != null)

@@ -47,8 +47,6 @@
   <ItemGroup>
     <Compile Include="Classes\ArchitecturalModel.cs" />
     <Compile Include="Classes\AirPartition.cs" />
-    <Compile Include="Classes\PartitionType.cs" />
-    <Compile Include="Classes\Partition.cs" />
     <Compile Include="Classes\Terrain.cs" />
     <Compile Include="Classes\PlanarTerrain.cs" />
     <Compile Include="Classes\Room.cs" />
@@ -77,8 +75,9 @@
     <Compile Include="Create\HostPartition.cs" />
     <Compile Include="Create\Level.cs" />
     <Compile Include="Create\HostPartitions.cs" />
-    <Compile Include="Enums\HostBuildingElementCategory.cs" />
+    <Compile Include="Enums\HostPartitionCategory.cs" />
     <Compile Include="Enums\Parameter\RoomParameter.cs" />
+    <Compile Include="Interfaces\IPartition.cs" />
     <Compile Include="Interfaces\ITerrain.cs" />
     <Compile Include="Interfaces\IArchitecturalObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

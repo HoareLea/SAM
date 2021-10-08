@@ -56,7 +56,7 @@ namespace SAM.Architectural
             return result;
         }
 
-        public List<Room> GetRooms(Partition partition)
+        public List<Room> GetRooms(IPartition partition)
         {
             return relationCluster?.GetRelatedObjects<Room>(partition);
         }
@@ -117,7 +117,7 @@ namespace SAM.Architectural
             List<Face3D> face3Ds = new List<Face3D>();
             foreach(object relatedObject in relatedObjects)
             {
-                Partition partition = relatedObject as Partition;
+                IPartition partition = relatedObject as IPartition;
                 if(partition == null)
                 {
                     continue;
@@ -140,7 +140,7 @@ namespace SAM.Architectural
             return new Shell(face3Ds);
         }
 
-        public bool Add(Partition partition)
+        public bool Add(IPartition partition)
         {
             if(partition == null)
             {
@@ -153,7 +153,7 @@ namespace SAM.Architectural
             return relationCluster.AddObject(partition);
         }
 
-        public bool Add(Room room, IEnumerable<Partition> partitions = null)
+        public bool Add(Room room, IEnumerable<IPartition> partitions = null)
         {
             if (room == null)
             {

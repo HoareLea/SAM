@@ -2,7 +2,7 @@
 
 namespace SAM.Architectural
 {
-    public interface ITerrain : IJSAMObject
+    public interface ITerrain : IArchitecturalObject
     {
     }
 }

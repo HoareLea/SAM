@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        public static System.Drawing.Color Color(this Partition partition)
+        public static System.Drawing.Color Color(this IPartition partition)
         {
             System.Drawing.Color result = System.Drawing.Color.Empty;
             if(partition == null)
@@ -33,7 +33,7 @@
             return result;
         }
 
-        public static System.Drawing.Color Color(this Partition partition, bool internalEdges)
+        public static System.Drawing.Color Color(this IPartition partition, bool internalEdges)
         {
             System.Drawing.Color result = System.Drawing.Color.Empty;
             if (partition == null)

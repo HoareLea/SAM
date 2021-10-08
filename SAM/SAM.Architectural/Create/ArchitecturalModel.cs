@@ -223,19 +223,19 @@ namespace SAM.Architectural
             return result;
         }
 
-        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Shell> shells, IEnumerable<Partition> partitions, double groundElevation = 0, bool addMissingPartitions = true, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Shell> shells, IEnumerable<IPartition> partitions, double groundElevation = 0, bool addMissingPartitions = true, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             if(shells == null && partitions == null)
             {
                 return null;
             }
 
-            List<Tuple<Room, List<Partition>>> tuples = new List<Tuple<Room, List<Partition>>>();
+            List<Tuple<Room, List<IPartition>>> tuples = new List<Tuple<Room, List<IPartition>>>();
 
-            List<Tuple<Plane, Face3D, Partition, BoundingBox3D, double>> tuples_Partition = new List<Tuple<Plane, Face3D, Partition, BoundingBox3D, double>>();
-            foreach (HostPartition hostPartition in partitions)
+            List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>> tuples_Partition = new List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>>();
+            foreach (IPartition partition in partitions)
             {
-                Face3D face3D = hostPartition?.Face3D;
+                Face3D face3D = partition?.Face3D;
                 if (face3D == null)
                     continue;
 
@@ -248,14 +248,14 @@ namespace SAM.Architectural
                 if (area < minArea || face3D.ThinnessRatio() < thinnessRatio) // Changed from tolerance_Distance to minArea
                     continue;
 
-                tuples_Partition.Add(new Tuple<Plane, Face3D, Partition, BoundingBox3D, double>(plane, face3D, hostPartition, face3D.GetBoundingBox(tolerance_Distance), area));
+                tuples_Partition.Add(new Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>(plane, face3D, partition, face3D.GetBoundingBox(tolerance_Distance), area));
             }
 
             tuples_Partition.Sort((x, y) => y.Item5.CompareTo(x.Item5));
 
             BoundingBox3D boundingBox3D_All = new BoundingBox3D(tuples_Partition.ConvertAll(x => x.Item4));
 
-            List<Tuple<Point3D, Partition, BoundingBox3D>> tuples_Partition_New = new List<Tuple<Point3D, Partition, BoundingBox3D>>();
+            List<Tuple<Point3D, IPartition, BoundingBox3D>> tuples_Partition_New = new List<Tuple<Point3D, IPartition, BoundingBox3D>>();
 
             List<Shell> shells_Temp = Enumerable.Repeat<Shell>(null, shells.Count()).ToList();
             Parallel.For(0, shells.Count(), (int i) =>
@@ -289,7 +289,7 @@ namespace SAM.Architectural
             });
 
             shells_Temp.RemoveAll(x => x == null);
-            List<Partition> hostPartition_Merged = Query.MergeCoplanar(tuples_Partition.ConvertAll(x => x.Item3), maxDistance, true, minArea, tolerance_Distance);
+            List<IPartition> hostPartition_Merged = Query.MergeCoplanar(tuples_Partition.ConvertAll(x => x.Item3), maxDistance, true, minArea, tolerance_Distance);
             shells_Temp.FillFace3Ds(hostPartition_Merged.ConvertAll(x => x.Face3D), 0.1, maxDistance, maxAngle, silverSpacing, tolerance_Distance);
             shells_Temp.SplitCoplanarFace3Ds(tolerance_Angle, tolerance_Distance);
 
@@ -352,10 +352,10 @@ namespace SAM.Architectural
                 double volume_Shell = shell_Temp.Volume(silverSpacing, tolerance_Distance);
                 double area_Shell = shell_Temp.Area(silverSpacing, tolerance_Angle, tolerance_Distance, silverSpacing);
 
-                Tuple<Room, List<Partition>> tuple = new Tuple<Room, List<Partition>>(room, new List<Partition>());
+                Tuple<Room, List<IPartition>> tuple = new Tuple<Room, List<IPartition>>(room, new List<IPartition>());
                 tuples.Add(tuple);
 
-                List<Tuple<Plane, Face3D, Partition, BoundingBox3D, double>> tuples_hostPartition_Temp = tuples_Partition.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
+                List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>> tuples_hostPartition_Temp = tuples_Partition.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
                 
                 foreach (Face3D face3D in face3Ds)
                 {
@@ -380,16 +380,16 @@ namespace SAM.Architectural
 
                     BoundingBox3D boundingBox3D_Face3D = face3D.GetBoundingBox(maxDistance);
 
-                    Partition partition_New = null;
+                    IPartition partition_New = null;
 
-                    List<Tuple<Point3D, Partition, Face3D>> tuples_Face3D = tuples_Partition_New?.FindAll(x => boundingBox3D_Face3D.InRange(x.Item3, tolerance_Distance)).ConvertAll(x => new Tuple<Point3D, Partition, Face3D>(x.Item1, x.Item2, x.Item2.Face3D));
+                    List<Tuple<Point3D, IPartition, Face3D>> tuples_Face3D = tuples_Partition_New?.FindAll(x => boundingBox3D_Face3D.InRange(x.Item3, tolerance_Distance)).ConvertAll(x => new Tuple<Point3D, IPartition, Face3D>(x.Item1, x.Item2, x.Item2.Face3D));
                     if (tuples_Face3D != null && tuples_Face3D.Count != 0)
                     {
                         double area = face3D.GetArea();
                         tuples_Face3D.RemoveAll(x => !area.AlmostEqual(x.Item3.GetArea(), minArea));
                         if (tuples_Face3D != null && tuples_Face3D.Count != 0)
                         {
-                            List<Tuple<Point3D, Partition, Face3D, double>> tuples_Distance = tuples_Face3D.ConvertAll(x => new Tuple<Point3D, Partition, Face3D, double>(x.Item1, x.Item2, x.Item3, System.Math.Min(x.Item3.Distance(point3D_Internal), face3D.Distance(x.Item1))));
+                            List<Tuple<Point3D, IPartition, Face3D, double>> tuples_Distance = tuples_Face3D.ConvertAll(x => new Tuple<Point3D, IPartition, Face3D, double>(x.Item1, x.Item2, x.Item3, System.Math.Min(x.Item3.Distance(point3D_Internal), face3D.Distance(x.Item1))));
 
                             if (tuples_Distance.Count > 1)
                                 tuples_Distance.Sort((x, y) => x.Item4.CompareTo(y.Item4));
@@ -400,8 +400,8 @@ namespace SAM.Architectural
 
                     if (partition_New == null)
                     {
-                        List<Tuple<Face2D, Partition>> tuples_Face2D_All = new List<Tuple<Face2D, Partition>>();
-                        foreach (Tuple<Plane, Face3D, Partition, BoundingBox3D, double> tuple_Partition in tuples_hostPartition_Temp)
+                        List<Tuple<Face2D, IPartition>> tuples_Face2D_All = new List<Tuple<Face2D, IPartition>>();
+                        foreach (Tuple<Plane, Face3D, IPartition, BoundingBox3D, double> tuple_Partition in tuples_hostPartition_Temp)
                         {
                             if (!boundingBox3D_Face3D.InRange(tuple_Partition.Item4, maxDistance))
                                 continue;
@@ -420,12 +420,12 @@ namespace SAM.Architectural
                             if (face2D == null)
                                 continue;
 
-                            tuples_Face2D_All.Add(new Tuple<Face2D, Partition>(face2D, tuple_Partition.Item3));
+                            tuples_Face2D_All.Add(new Tuple<Face2D, IPartition>(face2D, tuple_Partition.Item3));
                         }
 
                         if (tuples_Face2D_All != null && tuples_Face2D_All.Count != 0)
                         {
-                            List<Tuple<Face2D, Partition, double>> tuples_Face2D = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, Partition, double>(x.Item1, x.Item2, 0));
+                            List<Tuple<Face2D, IPartition, double>> tuples_Face2D = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, IPartition, double>(x.Item1, x.Item2, 0));
 
                             //Find By Face2D Intersection
                             Face2D face2D_Shell = plane.Convert(face3D);
@@ -440,11 +440,11 @@ namespace SAM.Architectural
                                 }
                                 else
                                 {
-                                    tuples_Face2D[j] = new Tuple<Face2D, Partition, double>(tuples_Face2D[j].Item1, tuples_Face2D[j].Item2, face2Ds_Intersection.ConvertAll(x => x.GetArea()).Sum());
+                                    tuples_Face2D[j] = new Tuple<Face2D, IPartition, double>(tuples_Face2D[j].Item1, tuples_Face2D[j].Item2, face2Ds_Intersection.ConvertAll(x => x.GetArea()).Sum());
                                 }
                             }
 
-                            List<Partition> partitions_New_Temp = null;
+                            List<IPartition> partitions_New_Temp = null;
 
                             if (tuples_Face2D != null && tuples_Face2D.Count != 0)
                             {
@@ -452,7 +452,7 @@ namespace SAM.Architectural
 
                                 //Sorting by Face3D Normal
                                 Vector3D normal = plane.Normal;
-                                List<Tuple<Face2D, Partition, double>> tuples_Face2D_Temp = tuples_Face2D.FindAll(x => x.Item2.Normal.SameHalf(normal));
+                                List<Tuple<Face2D, IPartition, double>> tuples_Face2D_Temp = tuples_Face2D.FindAll(x => x.Item2.Face3D.GetPlane().Normal.SameHalf(normal));
                                 tuples_Face2D.RemoveAll(x => tuples_Face2D_Temp.Contains(x));
                                 tuples_Face2D_Temp.AddRange(tuples_Face2D);
                                 tuples_Face2D = tuples_Face2D_Temp;
@@ -464,13 +464,13 @@ namespace SAM.Architectural
                                 //Find the closest hostPartition
 
                                 Point3D point3D = face3D.GetInternalPoint3D(tolerance_Distance);
-                                List<Tuple<Face2D, Partition, double>> tuples_Face2D_Distance = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, Partition, double>(x.Item1, x.Item2, x.Item2.Face3D.Distance(point3D)));
+                                List<Tuple<Face2D, IPartition, double>> tuples_Face2D_Distance = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, IPartition, double>(x.Item1, x.Item2, x.Item2.Face3D.Distance(point3D)));
                                 tuples_Face2D_Distance.RemoveAll(x => x.Item3 > maxDistance);
                                 tuples_Face2D_Distance.Sort((x, y) => x.Item3.CompareTo(y.Item3));
 
                                 //Sorting by Face3D Normal
                                 Vector3D normal = plane.Normal;
-                                List<Tuple<Face2D, Partition, double>> tuples_Face2D_Distance_Temp = tuples_Face2D_Distance.FindAll(x => x.Item2.Normal.SameHalf(normal));
+                                List<Tuple<Face2D, IPartition, double>> tuples_Face2D_Distance_Temp = tuples_Face2D_Distance.FindAll(x => x.Item2.Face3D.GetPlane().Normal.SameHalf(normal));
                                 tuples_Face2D_Distance.RemoveAll(x => tuples_Face2D_Distance_Temp.Contains(x));
                                 tuples_Face2D_Distance_Temp.AddRange(tuples_Face2D_Distance);
                                 tuples_Face2D_Distance = tuples_Face2D_Distance_Temp;
@@ -480,7 +480,7 @@ namespace SAM.Architectural
 
                             if (partitions_New_Temp != null && partitions_New_Temp.Count != 0)
                             {
-                                Partition partition_New_Temp = partitions_New_Temp[0];
+                                IPartition partition_New_Temp = partitions_New_Temp[0];
 
                                 Guid guid = partition_New_Temp.Guid;
                                 while (guids.Contains(guid))
@@ -494,7 +494,9 @@ namespace SAM.Architectural
                                 }
                                 else
                                 {
-                                    partition_New = HostPartition(guid, face3D, partition_New_Temp.SAMType as HostPartitionType);
+                                    HostPartitionType hostPartitionType = (partition_New_Temp as HostPartition)?.SAMType as HostPartitionType;
+
+                                    partition_New = HostPartition(guid, face3D, hostPartitionType, tolerance_Distance);
 
                                     for (int j = 1; j < partitions_New_Temp.Count; j++)
                                     {
@@ -519,7 +521,7 @@ namespace SAM.Architectural
 
                                 tuple.Item2.Add(partition_New);
 
-                                tuples_Partition_New.Add(new Tuple<Point3D, Partition, BoundingBox3D>(point3D_Internal, partition_New, face3D.GetBoundingBox(tolerance_Distance)));
+                                tuples_Partition_New.Add(new Tuple<Point3D, IPartition, BoundingBox3D>(point3D_Internal, partition_New, face3D.GetBoundingBox(tolerance_Distance)));
                             }
                         }
                     }
@@ -536,7 +538,7 @@ namespace SAM.Architectural
             }
 
             ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(groundElevation));
-            foreach (Tuple<Room, List<Partition>> tuple in tuples)
+            foreach (Tuple<Room, List<IPartition>> tuple in tuples)
             {
                 result.Add(tuple.Item1, tuple.Item2);
             }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Architectural
 {
-    public abstract class HostPartitionType : PartitionType
+    public abstract class HostPartitionType : BuildingElementType
     {
         private List<MaterialLayer> materialLayers;
 
