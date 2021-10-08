@@ -50,7 +50,7 @@ namespace SAM.Architectural.Grasshopper
 
             index = layerTable.Add();
             Layer layer_Host = layerTable[index];
-            layer_Host.Name = "Host";
+            layer_Host.Name = "Partition";
             layer_Host.ParentLayerId = layer_SAM.Id;
 
             index = layerTable.Add();

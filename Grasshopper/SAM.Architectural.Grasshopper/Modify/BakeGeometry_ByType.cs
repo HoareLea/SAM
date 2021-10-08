@@ -49,14 +49,14 @@ namespace SAM.Architectural.Grasshopper
             int index = -1;
 
             index = layerTable.Add();
-            Layer layer_Construction = layerTable[index];
-            layer_Construction.Name = "Type";
-            layer_Construction.ParentLayerId = layer_SAM.Id;
+            Layer layer_PartitionType = layerTable[index];
+            layer_PartitionType.Name = "PartitionType";
+            layer_PartitionType.ParentLayerId = layer_SAM.Id;
 
             index = layerTable.Add();
-            Layer layer_ApertureConstruction = layerTable[index];
-            layer_ApertureConstruction.Name = "OpeninigType";
-            layer_ApertureConstruction.ParentLayerId = layer_SAM.Id;
+            Layer layer_OpeningType = layerTable[index];
+            layer_OpeningType.Name = "OpeningType";
+            layer_OpeningType.ParentLayerId = layer_SAM.Id;
 
             //int currentIndex = layerTable.CurrentLayerIndex;
 
@@ -65,56 +65,59 @@ namespace SAM.Architectural.Grasshopper
             Random random = new Random();
 
             List<Guid> guids = new List<Guid>();
-            foreach (IHostPartition hostPartition in partitions)
+            foreach (IPartition partition in partitions)
             {
-                if (hostPartition == null)
+                if (partition == null)
                     continue;
 
                 System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
                 
-                string layerName = hostPartition.Name;
+                string layerName = partition.Name;
                 if (string.IsNullOrWhiteSpace(layerName))
                 {
                     layerName = "???";
                 }
 
-                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Construction.Id, layerName, color);
+                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_PartitionType.Id, layerName, color);
 
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
                 Guid guid = default;
-                if (BakeGeometry(hostPartition, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
+                if (BakeGeometry(partition, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
                     guids.Add(guid);
 
-                List<IOpening> openings = hostPartition.Openings;
-                if (openings == null || openings.Count == 0)
-                    continue;
-
-                foreach (IOpening opening in openings)
+                if(partition is IHostPartition)
                 {
-                    if(opening == null)
+                    List<IOpening> openings = ((IHostPartition)partition).Openings;
+                    if (openings == null || openings.Count == 0)
+                        continue;
+
+                    foreach (IOpening opening in openings)
                     {
-                        continue;
+                        if (opening == null)
+                        {
+                            continue;
+                        }
+
+                        string apertureConstructionName = ((opening as dynamic).SAMType as OpeningType)?.Name;
+                        if (string.IsNullOrWhiteSpace(apertureConstructionName))
+                            apertureConstructionName = opening.Name;
+
+                        if (string.IsNullOrWhiteSpace(apertureConstructionName))
+                            continue;
+
+                        color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+
+                        layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_OpeningType.Id, apertureConstructionName, color);
+
+                        //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                        objectAttributes.LayerIndex = layer.Index;
+
+                        guid = default;
+                        if (BakeGeometry(opening, rhinoDoc, objectAttributes, out guid))
+                            guids.Add(guid);
                     }
-
-                    string apertureConstructionName = ((opening as dynamic).SAMType as OpeningType)?.Name;
-                    if (string.IsNullOrWhiteSpace(apertureConstructionName))
-                        apertureConstructionName = opening.Name;
-                    
-                    if (string.IsNullOrWhiteSpace(apertureConstructionName))
-                        continue;
-
-                    color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
-
-                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureConstruction.Id, apertureConstructionName, color);
-
-                    //layerTable.SetCurrentLayerIndex(layer.Index, true);
-                    objectAttributes.LayerIndex = layer.Index;
-
-                    guid = default;
-                    if (BakeGeometry(opening, rhinoDoc, objectAttributes, out guid))
-                        guids.Add(guid);
                 }
             }
 

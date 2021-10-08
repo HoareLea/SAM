@@ -248,7 +248,7 @@ namespace SAM.Architectural.Grasshopper
         protected override GH_GetterResult Prompt_Plural(ref List<GooPartition> values)
         {
             Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
-            getObject.SetCommandPrompt("Pick Surfaces to create panels");
+            getObject.SetCommandPrompt("Pick Surfaces to create Partitions");
             getObject.GeometryFilter = ObjectType.Brep;
             getObject.SubObjectSelect = true;
             getObject.DeselectAllBeforePostSelect = false;
@@ -308,7 +308,7 @@ namespace SAM.Architectural.Grasshopper
         protected override GH_GetterResult Prompt_Singular(ref GooPartition value)
         {
             Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
-            getObject.SetCommandPrompt("Pick Surface to create panel");
+            getObject.SetCommandPrompt("Pick Surface to create Partition");
             getObject.GeometryFilter = ObjectType.Brep;
             getObject.SubObjectSelect = true;
             getObject.DeselectAllBeforePostSelect = false;
