@@ -325,7 +325,7 @@ namespace SAM.Architectural
 
             HashSet<Guid> guids = new HashSet<Guid>();
 
-            //Creating Rooms and hostPartitions
+            //Creating Rooms and Partitions
             for (int i = 0; i < shells_Temp.Count; i++)
             {
                 Shell shell_Temp = shells_Temp[i];
@@ -542,6 +542,8 @@ namespace SAM.Architectural
             {
                 result.Add(tuple.Item1, tuple.Item2);
             }
+
+            result.UpdateNormals(false, silverSpacing, tolerance_Distance);
 
             return result;
         }

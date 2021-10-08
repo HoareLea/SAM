@@ -105,39 +105,49 @@ namespace SAM.Architectural
             return result;
         }
 
-        public Shell GetShell(Room room)
+        public List<IPartition> GetPartitions(Room room)
         {
             if (relationCluster == null || room == null)
+            {
                 return null;
+            }
 
             List<object> relatedObjects = relationCluster.GetRelatedObjects(room);
             if (relatedObjects == null || relatedObjects.Count == 0)
+            {
                 return null;
+            }
 
-            List<Face3D> face3Ds = new List<Face3D>();
-            foreach(object relatedObject in relatedObjects)
+            List<IPartition> result = new List<IPartition>();
+            foreach (object relatedObject in relatedObjects)
             {
                 IPartition partition = relatedObject as IPartition;
-                if(partition == null)
+                if (partition == null)
                 {
                     continue;
                 }
 
                 Face3D face3D = partition.Face3D;
-                if(face3D == null)
+                if (face3D == null)
                 {
                     continue;
                 }
 
-                face3Ds.Add(face3D);
+                result.Add(partition);
             }
 
-            if(face3Ds == null || face3Ds.Count == 0)
+            return result;
+        }
+
+        public Shell GetShell(Room room)
+        {
+            List<IPartition> partitions = GetPartitions(room);
+            if (partitions == null || partitions.Count == 0)
             {
                 return null;
             }
 
-            return new Shell(face3Ds);
+            return new Shell(partitions.ConvertAll(x => x.Face3D));
         }
 
         public bool Add(IPartition partition)

@@ -80,7 +80,10 @@
     <Compile Include="Interfaces\IPartition.cs" />
     <Compile Include="Interfaces\ITerrain.cs" />
     <Compile Include="Interfaces\IArchitecturalObject.cs" />
+    <Compile Include="Modify\UpdateNormals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\FlipNormal.cs" />
+    <Compile Include="Query\NormalDictionary.cs" />
     <Compile Include="Query\MergeCoplanar.cs" />
     <Compile Include="Query\RoomDictionary.cs" />
     <Compile Include="Query\Face3D.cs" />

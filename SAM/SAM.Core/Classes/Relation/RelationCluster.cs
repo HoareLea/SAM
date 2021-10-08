@@ -266,8 +266,7 @@ namespace SAM.Core
 
             typeName = @object.GetType().FullName;
 
-            Dictionary<Guid, object> dictionary = null;
-            if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
+            if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, object> dictionary))
             {
                 dictionary = new Dictionary<Guid, object>();
                 dictionary_Objects[typeName] = dictionary;
