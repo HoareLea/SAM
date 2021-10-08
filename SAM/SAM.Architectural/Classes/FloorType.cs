@@ -2,7 +2,7 @@
 
 namespace SAM.Architectural
 {
-    public class FloorType : HostBuildingElementType
+    public class FloorType : HostPartitionType
     {
         public FloorType(FloorType floorType)
             : base(floorType)

@@ -10,57 +10,62 @@ namespace SAM.Architectural
 {
     public static partial class Query
     {
-        public static List<HostBuildingElement> MergeCoplanar(this IEnumerable<HostBuildingElement> hostBuildingElements, double offset, bool validateConstruction = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<Partition> MergeCoplanar(this IEnumerable<Partition> partitions, double offset, bool validateConstruction = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if (hostBuildingElements == null)
+            if (partitions == null)
                 return null;
             
-            List<HostBuildingElement> redundantHostBuildingElements = new List<HostBuildingElement>();
+            List<Partition> redundantPartitions = new List<Partition>();
 
-            return MergeCoplanar(hostBuildingElements?.ToList(), offset, ref redundantHostBuildingElements, validateConstruction, minArea, tolerance);
+            return MergeCoplanar(partitions?.ToList(), offset, ref redundantPartitions, validateConstruction, minArea, tolerance);
         }
 
-        private static List<HostBuildingElement> MergeCoplanar(this List<HostBuildingElement> hostBuildingElements, double offset, ref List<HostBuildingElement> redundantHostBuildingElements, bool validateConstruction = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        private static List<Partition> MergeCoplanar(this List<Partition> partitions, double offset, ref List<Partition> redundantPartitions, bool validatePartitionType = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if (hostBuildingElements == null)
+            if (partitions == null)
                 return null;
 
-            List<HostBuildingElement> hostBuildingElements_Temp = hostBuildingElements.ToList();
+            List<Partition> partitions_Temp = partitions.ToList();
 
-            hostBuildingElements_Temp.Sort((x, y) => y.Face3D.GetArea().CompareTo(x.Face3D.GetArea()));
+            partitions_Temp.Sort((x, y) => y.Face3D.GetArea().CompareTo(x.Face3D.GetArea()));
 
-            List<HostBuildingElement> result = new List<HostBuildingElement>(hostBuildingElements);
+            List<Partition> result = new List<Partition>(partitions);
             HashSet<Guid> guids = new HashSet<Guid>();
 
-            while (hostBuildingElements_Temp.Count > 0)
+            while (partitions_Temp.Count > 0)
             {
-                HostBuildingElement hostBuildingElement = hostBuildingElements_Temp[0];
-                hostBuildingElements_Temp.RemoveAt(0);
+                Partition partition = partitions_Temp[0];
+                partitions_Temp.RemoveAt(0);
 
-                Plane plane = hostBuildingElement.Face3D.GetPlane();
+                Plane plane = partition.Face3D.GetPlane();
                 if (plane == null)
                     continue;
 
-                List<HostBuildingElement> hostBuildingElement_Offset = new List<HostBuildingElement>();
-                foreach (HostBuildingElement hostBuildingElement_Temp in hostBuildingElements_Temp)
+                List<Partition> partitions_Offset = new List<Partition>();
+                foreach (Partition partition_Temp in partitions_Temp)
                 {
-                    if(validateConstruction)
+                    if(partition.GetType() != partition_Temp?.GetType())
                     {
-                        BuildingElementType construction_Temp = hostBuildingElement_Temp.SAMType as BuildingElementType;
-                        BuildingElementType construction = hostBuildingElement.SAMType as BuildingElementType;
+                        continue;
+                    }
+                    
+                    if(validatePartitionType)
+                    {
+                        PartitionType partitionType_Temp = partition_Temp.SAMType as PartitionType;
+                        PartitionType partitionType = partition.SAMType as PartitionType;
 
-                        if (construction_Temp != null && construction != null)
+                        if (partitionType_Temp != null && partitionType != null)
                         {
-                            if (!construction_Temp.Name.Equals(construction.Name))
+                            if (!partitionType_Temp.Name.Equals(partitionType.Name))
                                 continue;
                         }
-                        else if (!(construction_Temp == null && construction == null))
+                        else if (!(partitionType_Temp == null && partitionType == null))
                         {
                             continue;
                         }
                     }
 
-                    Plane plane_Temp = hostBuildingElement_Temp?.Face3D.GetPlane();
+                    Plane plane_Temp = partition_Temp?.Face3D.GetPlane();
                     if (plane == null)
                         continue;
 
@@ -71,19 +76,19 @@ namespace SAM.Architectural
                     if (distance > offset)
                         continue;
 
-                    hostBuildingElement_Offset.Add(hostBuildingElement_Temp);
+                    partitions_Offset.Add(partition_Temp);
                 }
 
-                if (hostBuildingElement_Offset == null || hostBuildingElement_Offset.Count == 0)
+                if (partitions_Offset == null || partitions_Offset.Count == 0)
                     continue;
 
-                hostBuildingElement_Offset.Add(hostBuildingElement);
+                partitions_Offset.Add(partition);
 
-                List<Tuple<Polygon, HostBuildingElement>> tuples_Polygon = new List<Tuple<Polygon, HostBuildingElement>>();
+                List<Tuple<Polygon, Partition>> tuples_Polygon = new List<Tuple<Polygon, Partition>>();
                 List<Point2D> point2Ds = new List<Point2D>(); //Snap Points
-                foreach (HostBuildingElement hostBuildingElement_Temp in hostBuildingElement_Offset)
+                foreach (Partition partition_Temp in partitions_Offset)
                 {
-                    Face3D face3D = hostBuildingElement_Temp.Face3D;
+                    Face3D face3D = partition_Temp.Face3D;
                     foreach (IClosedPlanar3D closedPlanar3D in face3D.GetEdge3Ds())
                     {
                         ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
@@ -96,7 +101,7 @@ namespace SAM.Architectural
                     Face2D face2D = plane.Convert(plane.Project(face3D));
 
                     //tuples_Polygon.Add(new Tuple<Polygon, Panel>(face2D.ToNTS(), panel_Temp));
-                    tuples_Polygon.Add(new Tuple<Polygon, HostBuildingElement>(face2D.ToNTS(tolerance), hostBuildingElement_Temp));
+                    tuples_Polygon.Add(new Tuple<Polygon, Partition>(face2D.ToNTS(tolerance), partition_Temp));
                 }
 
                 List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
@@ -108,23 +113,23 @@ namespace SAM.Architectural
                     if (polygon.Area < minArea)
                         continue;
 
-                    List<Tuple<Polygon, HostBuildingElement>> tuples_HostBuildingElement = tuples_Polygon.FindAll(x => polygon.Contains(x.Item1.InteriorPoint));
-                    if (tuples_HostBuildingElement == null || tuples_HostBuildingElement.Count == 0)
+                    List<Tuple<Polygon, Partition>> tuples_Partition = tuples_Polygon.FindAll(x => polygon.Contains(x.Item1.InteriorPoint));
+                    if (tuples_Partition == null || tuples_Partition.Count == 0)
                         continue;
 
-                    tuples_HostBuildingElement.Sort((x, y) => y.Item1.Area.CompareTo(x.Item1.Area));
+                    tuples_Partition.Sort((x, y) => y.Item1.Area.CompareTo(x.Item1.Area));
 
-                    foreach (Tuple<Polygon, HostBuildingElement> tuple in tuples_HostBuildingElement)
+                    foreach (Tuple<Polygon, Partition> tuple in tuples_Partition)
                     {
                         result.Remove(tuple.Item2);
-                        hostBuildingElements_Temp.Remove(tuple.Item2);
+                        partitions_Temp.Remove(tuple.Item2);
                     }
 
-                    HostBuildingElement hostBuildingElement_Old = tuples_HostBuildingElement.First().Item2;
-                    tuples_HostBuildingElement.RemoveAt(0);
-                    redundantHostBuildingElements?.AddRange(tuples_HostBuildingElement.ConvertAll(x => x.Item2));
+                    Partition partition_Old = tuples_Partition.First().Item2;
+                    tuples_Partition.RemoveAt(0);
+                    redundantPartitions?.AddRange(tuples_Partition.ConvertAll(x => x.Item2));
 
-                    if (hostBuildingElement_Old == null)
+                    if (partition_Old == null)
                         continue;
 
                     Polygon polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon, tolerance);
@@ -135,20 +140,24 @@ namespace SAM.Architectural
                         continue;
 
                     Face3D face3D = new Face3D(plane, face2D);
-                    Guid guid = hostBuildingElement_Old.Guid;
+                    Guid guid = partition_Old.Guid;
                     if (guids.Contains(guid))
+                    {
                         guid = Guid.NewGuid();
+                    }
+
 
                     //Adding Openings from redundant Panels
                     List<Opening> openings = new List<Opening>();
-                    if (redundantHostBuildingElements != null && redundantHostBuildingElements.Count != 0)
+                    if (redundantPartitions != null && redundantPartitions.Count != 0)
                     {
-                        foreach (HostBuildingElement hostBuildingElement_redundant in redundantHostBuildingElements)
+                        foreach (Partition partition_redundant in redundantPartitions)
                         {
-                            if (hostBuildingElement_redundant == null)
+                            HostPartition hostPartition = partition_redundant as HostPartition;
+                            if (hostPartition == null)
                                 continue;
 
-                            List<Opening> openings_Temp = hostBuildingElement_redundant.Openings;
+                            List<Opening> openings_Temp = hostPartition.Openings;
                             if (openings_Temp == null || openings_Temp.Count == 0)
                                 continue;
 
@@ -156,9 +165,20 @@ namespace SAM.Architectural
                         }
                     }
 
-                    HostBuildingElement hostBuildingElement_New = Create.HostBuildingElement(guid, face3D, hostBuildingElement_Old.SAMType as HostBuildingElementType, tolerance);
+                    Partition partition_New = null;
+                    if(partition_Old is AirPartition)
+                    {
+                        partition_New = new AirPartition(guid, face3D);
+                    }
+                    else
+                    {
+                        partition_New = Create.HostPartition(guid, face3D, partition_Old.SAMType as HostPartitionType, tolerance);
+                    }
 
-                    result.Add(hostBuildingElement_New);
+                    if(partition_New != null)
+                    {
+                        result.Add(partition_New);
+                    }
                 }
             }
 

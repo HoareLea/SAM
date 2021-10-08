@@ -9,7 +9,7 @@ namespace SAM.Architectural
 {
     public static partial class Query
     {
-        public static Dictionary<Room, List<HostBuildingElement>> RoomDictionary(this Dictionary<double, List<Face2D>> face2Ds, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static Dictionary<Room, List<HostPartition>> RoomDictionary(this Dictionary<double, List<Face2D>> face2Ds, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             if (face2Ds == null)
                 return null;
@@ -91,9 +91,9 @@ namespace SAM.Architectural
 
             Plane plane = Plane.WorldXY;
 
-            Dictionary<Room, List<HostBuildingElement>> result = new Dictionary<Room, List<HostBuildingElement>>();
+            Dictionary<Room, List<HostPartition>> result = new Dictionary<Room, List<HostPartition>>();
 
-            List<Tuple<Point3D, HostBuildingElement, Room>> tuples_Point3D = new List<Tuple<Point3D, HostBuildingElement, Room>>();
+            List<Tuple<Point3D, HostPartition, Room>> tuples_Point3D = new List<Tuple<Point3D, HostPartition, Room>>();
             for (int i = 1; i < tuples.Count; i++)
             {
                 Tuple<double, List<Face2D>> tuple_Top = tuples[i - 1];
@@ -141,7 +141,7 @@ namespace SAM.Architectural
 
                     segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true);
 
-                    HostBuildingElement hostBuilidngElement;
+                    HostPartition hostBuilidngElement;
 
                     foreach (Segment2D segment2D in segment2Ds)
                     {
@@ -152,10 +152,10 @@ namespace SAM.Architectural
                         if (polygon3D == null)
                             continue;
 
-                        hostBuilidngElement = Create.HostBuildingElement(new Face3D(polygon3D), null, tolerance_Angle);
+                        hostBuilidngElement = Create.HostPartition(new Face3D(polygon3D), null, tolerance_Angle);
                         if (hostBuilidngElement != null)
                         {
-                            tuples_Point3D.Add(new Tuple<Point3D, HostBuildingElement, Room>(Geometry.Spatial.Query.Mid(plane_Bottom.Convert(segment2D)), hostBuilidngElement, room));
+                            tuples_Point3D.Add(new Tuple<Point3D, HostPartition, Room>(Geometry.Spatial.Query.Mid(plane_Bottom.Convert(segment2D)), hostBuilidngElement, room));
                         }
                     }
 
@@ -166,10 +166,10 @@ namespace SAM.Architectural
                         if (face3D_Top == null)
                             continue;
 
-                        hostBuilidngElement = Create.HostBuildingElement(face3D_Top, null, tolerance_Angle);
+                        hostBuilidngElement = Create.HostPartition(face3D_Top, null, tolerance_Angle);
                         if (hostBuilidngElement != null)
                         {
-                            tuples_Point3D.Add(new Tuple<Point3D, HostBuildingElement, Room>(face3D_Top.InternalPoint3D(), hostBuilidngElement, room));
+                            tuples_Point3D.Add(new Tuple<Point3D, HostPartition, Room>(face3D_Top.InternalPoint3D(), hostBuilidngElement, room));
                         }
                     }
 
@@ -185,10 +185,10 @@ namespace SAM.Architectural
                             Face2D face2D_Bottom_Flipped = plane_Bottom_Flipped.Convert(face3D_Bottom);
                             face3D_Bottom = plane_Bottom_Flipped.Convert(face2D_Bottom_Flipped);
 
-                            hostBuilidngElement = Create.HostBuildingElement(face3D_Bottom, null, tolerance_Angle);
+                            hostBuilidngElement = Create.HostPartition(face3D_Bottom, null, tolerance_Angle);
                             if (hostBuilidngElement != null)
                             {
-                                tuples_Point3D.Add(new Tuple<Point3D, HostBuildingElement, Room>(face3D_Bottom.InternalPoint3D(), hostBuilidngElement, room));
+                                tuples_Point3D.Add(new Tuple<Point3D, HostPartition, Room>(face3D_Bottom.InternalPoint3D(), hostBuilidngElement, room));
                             }
                         }
                     }
@@ -202,23 +202,23 @@ namespace SAM.Architectural
 
                     room.SetValue(RoomParameter.Area, area);
                     room.SetValue(RoomParameter.Volume, volume);
-                    result[room] = new List<HostBuildingElement>();
+                    result[room] = new List<HostPartition>();
                 }
             }
 
             while (tuples_Point3D.Count > 0)
             {
-                Tuple<Point3D, HostBuildingElement, Room> tuple = tuples_Point3D[0];
+                Tuple<Point3D, HostPartition, Room> tuple = tuples_Point3D[0];
                 Point3D point3D = tuple.Item1;
 
-                List<Tuple<Point3D, HostBuildingElement, Room>> tuples_Temp = tuples_Point3D.FindAll(x => point3D.AlmostEquals(x.Item1));
+                List<Tuple<Point3D, HostPartition, Room>> tuples_Temp = tuples_Point3D.FindAll(x => point3D.AlmostEquals(x.Item1));
                 tuples_Point3D.RemoveAll(x => tuples_Temp.Contains(x));
 
-                HostBuildingElement hostBuildingElement = tuple.Item2;
+                HostPartition hostPartition = tuple.Item2;
 
-                foreach (Tuple<Point3D, HostBuildingElement, Room> tuple_Temp in tuples_Temp)
+                foreach (Tuple<Point3D, HostPartition, Room> tuple_Temp in tuples_Temp)
                 {
-                    result[tuple_Temp.Item3].Add(hostBuildingElement);
+                    result[tuple_Temp.Item3].Add(hostPartition);
                 }
             }
 

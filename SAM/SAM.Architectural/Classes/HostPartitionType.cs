@@ -4,23 +4,23 @@ using System.Collections.Generic;
 
 namespace SAM.Architectural
 {
-    public abstract class HostBuildingElementType : BuildingElementType
+    public abstract class HostPartitionType : PartitionType
     {
         private List<MaterialLayer> materialLayers;
 
-        public HostBuildingElementType(HostBuildingElementType hostBuildingElementType)
-            : base(hostBuildingElementType)
+        public HostPartitionType(HostPartitionType hostPartitionType)
+            : base(hostPartitionType)
         {
 
         }
 
-        public HostBuildingElementType(JObject jObject)
+        public HostPartitionType(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public HostBuildingElementType(string name)
+        public HostPartitionType(string name)
             : base(name)
         {
 

@@ -2,36 +2,41 @@
 {
     public static partial class Query
     {
-        public static System.Drawing.Color Color(this HostBuildingElement hostBuildingElement)
+        public static System.Drawing.Color Color(this Partition partition)
         {
             System.Drawing.Color result = System.Drawing.Color.Empty;
-            if(hostBuildingElement == null)
+            if(partition == null)
             {
                 return result;
             }
 
-            if(hostBuildingElement is Wall)
+            if(partition is Wall)
             {
                 return System.Drawing.ColorTranslator.FromHtml("#FFB400");
             }
 
-            if (hostBuildingElement is Floor)
+            if (partition is Floor)
             {
                 return System.Drawing.ColorTranslator.FromHtml("#804000");
             }
 
-            if (hostBuildingElement is Roof)
+            if (partition is Roof)
             {
                 return System.Drawing.ColorTranslator.FromHtml("#800000");
+            }
+
+            if (partition is AirPartition)
+            {
+                return System.Drawing.ColorTranslator.FromHtml("#FFFF00");
             }
 
             return result;
         }
 
-        public static System.Drawing.Color Color(this HostBuildingElement hostBuildingElement, bool internalEdges)
+        public static System.Drawing.Color Color(this Partition partition, bool internalEdges)
         {
             System.Drawing.Color result = System.Drawing.Color.Empty;
-            if (hostBuildingElement == null)
+            if (partition == null)
             {
                 return result;
             }
@@ -41,7 +46,7 @@
                 return System.Drawing.Color.Gray;
             }
 
-            return Color(hostBuildingElement);
+            return Color(partition);
         }
 
         public static System.Drawing.Color Color(this Opening opening)

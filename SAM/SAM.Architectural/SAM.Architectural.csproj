@@ -46,13 +46,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ArchitecturalModel.cs" />
+    <Compile Include="Classes\AirPartition.cs" />
+    <Compile Include="Classes\PartitionType.cs" />
+    <Compile Include="Classes\Partition.cs" />
     <Compile Include="Classes\Terrain.cs" />
     <Compile Include="Classes\PlanarTerrain.cs" />
     <Compile Include="Classes\Room.cs" />
     <Compile Include="Classes\Roof.cs" />
     <Compile Include="Classes\OpeningType.cs" />
-    <Compile Include="Classes\HostBuildingElementType.cs" />
-    <Compile Include="Classes\HostBuildingElement.cs" />
+    <Compile Include="Classes\HostPartitionType.cs" />
+    <Compile Include="Classes\HostPartition.cs" />
     <Compile Include="Classes\MaterialLayer.cs" />
     <Compile Include="Classes\Opening.cs" />
     <Compile Include="Classes\DoorType.cs" />
@@ -71,9 +74,9 @@
     <Compile Include="Create\PlanarTerrain.cs" />
     <Compile Include="Create\Walls.cs" />
     <Compile Include="Create\Opening.cs" />
-    <Compile Include="Create\HostBuildingElement.cs" />
+    <Compile Include="Create\HostPartition.cs" />
     <Compile Include="Create\Level.cs" />
-    <Compile Include="Create\HostBuildingElements.cs" />
+    <Compile Include="Create\HostPartitions.cs" />
     <Compile Include="Enums\HostBuildingElementCategory.cs" />
     <Compile Include="Enums\Parameter\RoomParameter.cs" />
     <Compile Include="Interfaces\ITerrain.cs" />
@@ -83,8 +86,8 @@
     <Compile Include="Query\RoomDictionary.cs" />
     <Compile Include="Query\Face3D.cs" />
     <Compile Include="Query\Color.cs" />
-    <Compile Include="Query\DefaultHostBuildingElementType.cs" />
-    <Compile Include="Query\HostBuildingElementCategory.cs" />
+    <Compile Include="Query\DefaultHostPartitionType.cs" />
+    <Compile Include="Query\HostPartitionCategory.cs" />
     <Compile Include="Query\IsValid.cs" />
   </ItemGroup>
   <ItemGroup>

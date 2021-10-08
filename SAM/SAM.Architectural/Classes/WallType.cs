@@ -2,7 +2,7 @@
 
 namespace SAM.Architectural
 {
-    public class WallType : HostBuildingElementType
+    public class WallType : HostPartitionType
     {
         public WallType(WallType wallType)
             : base(wallType)

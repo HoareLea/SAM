@@ -2,8 +2,8 @@
 
 namespace SAM.Architectural
 {
-    [Description("HostBuildingElement Category")]
-    public enum HostBuildingElementCategory
+    [Description("hostPartition Category")]
+    public enum HostPartitionCategory
     {
         [Description("Undefined")] Undefined,
         [Description("Wall")] Wall,

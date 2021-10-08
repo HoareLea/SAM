@@ -27,8 +27,8 @@ namespace SAM.Architectural.Grasshopper
                 }
             }
 
-            List<HostBuildingElement> hostBuildingElements = architecturalModel.GetObjects<HostBuildingElement>();
-            if (hostBuildingElements == null)
+            List<HostPartition> hostPartitions = architecturalModel.GetObjects<HostPartition>();
+            if (hostPartitions == null)
             {
                 return false;
             }
@@ -40,9 +40,9 @@ namespace SAM.Architectural.Grasshopper
                 boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { boundingBox.Min.ToSAM(), boundingBox.Max.ToSAM() });
             }
 
-            foreach (HostBuildingElement hostBuildingElement in hostBuildingElements)
+            foreach (HostPartition hostPartition in hostPartitions)
             {
-                Geometry.Spatial.Face3D face3D = hostBuildingElement?.Face3D;
+                Geometry.Spatial.Face3D face3D = hostPartition?.Face3D;
                 if(face3D == null)
                 {
                     continue;
@@ -58,7 +58,7 @@ namespace SAM.Architectural.Grasshopper
                     }
                 }
 
-                List<Room> rooms_HostBuildingElement = architecturalModel.GetRooms(hostBuildingElement);
+                List<Room> rooms_hostPartition = architecturalModel.GetRooms(hostPartition);
                 if (rooms != null && rooms.Count > 1)
                     continue;
 

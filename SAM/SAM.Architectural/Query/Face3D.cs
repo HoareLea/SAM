@@ -6,16 +6,16 @@ namespace SAM.Architectural
 {
     public static partial class Query
     {
-        public static Face3D Face3D(this HostBuildingElement hostBuildingElement, bool cutOpenings, double tolerance = Core.Tolerance.Distance)
+        public static Face3D Face3D(this HostPartition hostPartition, bool cutOpenings, double tolerance = Core.Tolerance.Distance)
         {
-            Face3D result = hostBuildingElement?.Face3D;
+            Face3D result = hostPartition?.Face3D;
 
             if (result == null || !cutOpenings)
             {
                 return result;
             }
 
-            List<Opening> openings = hostBuildingElement.Openings;
+            List<Opening> openings = hostPartition.Openings;
             if(openings == null || openings.Count == 0)
             {
                 return result;

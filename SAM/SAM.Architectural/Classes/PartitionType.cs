@@ -2,21 +2,21 @@
 
 namespace SAM.Architectural
 {
-    public class RoofType : HostPartitionType
+    public abstract class PartitionType : BuildingElementType
     {
-        public RoofType(RoofType roofType)
-            : base(roofType)
+        public PartitionType(PartitionType partitionType)
+            : base(partitionType)
         {
 
         }
 
-        public RoofType(JObject jObject)
+        public PartitionType(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public RoofType(string name)
+        public PartitionType(string name)
             : base(name)
         {
 

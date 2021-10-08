@@ -2,6 +2,7 @@
 using SAM.Core;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Architectural
 {
@@ -55,26 +56,26 @@ namespace SAM.Architectural
             return result;
         }
 
-        public List<Room> GetRooms(HostBuildingElement hostBuildingElement)
+        public List<Room> GetRooms(Partition partition)
         {
-            return relationCluster?.GetRelatedObjects<Room>(hostBuildingElement);
+            return relationCluster?.GetRelatedObjects<Room>(partition);
         }
 
-        public bool Internal(HostBuildingElement hostBuildingElement)
+        public bool Internal(HostPartition hostPartition)
         {
-            List<Room> rooms = GetRooms(hostBuildingElement);
+            List<Room> rooms = GetRooms(hostPartition);
             return rooms != null || rooms.Count > 2;
         }
         
-        public bool External(HostBuildingElement hostBuildingElement)
+        public bool External(HostPartition hostPartition)
         {
-            List<Room> rooms = GetRooms(hostBuildingElement);
+            List<Room> rooms = GetRooms(hostPartition);
             return rooms != null && rooms.Count == 1;
         }
 
-        public bool Shade(HostBuildingElement hostBuildingElement)
+        public bool Shade(HostPartition hostPartition)
         {
-            List<Room> rooms = GetRooms(hostBuildingElement);
+            List<Room> rooms = GetRooms(hostPartition);
             return rooms == null || rooms.Count == 0;
         }
 
@@ -109,16 +110,39 @@ namespace SAM.Architectural
             if (relationCluster == null || room == null)
                 return null;
 
-            List<HostBuildingElement> hostBuildingElements = relationCluster.GetRelatedObjects<HostBuildingElement>(room);
-            if (hostBuildingElements == null || hostBuildingElements.Count == 0)
+            List<object> relatedObjects = relationCluster.GetRelatedObjects(room);
+            if (relatedObjects == null || relatedObjects.Count == 0)
                 return null;
 
-            return new Shell(hostBuildingElements.ConvertAll(x => x.Face3D));
+            List<Face3D> face3Ds = new List<Face3D>();
+            foreach(object relatedObject in relatedObjects)
+            {
+                Partition partition = relatedObject as Partition;
+                if(partition == null)
+                {
+                    continue;
+                }
+
+                Face3D face3D = partition.Face3D;
+                if(face3D == null)
+                {
+                    continue;
+                }
+
+                face3Ds.Add(face3D);
+            }
+
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            return new Shell(face3Ds);
         }
 
-        public bool Add(HostBuildingElement hostBuildingElement)
+        public bool Add(Partition partition)
         {
-            if(hostBuildingElement == null)
+            if(partition == null)
             {
                 return false;
             }
@@ -126,10 +150,10 @@ namespace SAM.Architectural
             if (relationCluster == null)
                 relationCluster = new RelationCluster();
 
-            return relationCluster.AddObject(hostBuildingElement);
+            return relationCluster.AddObject(partition);
         }
 
-        public bool Add(Room room, List<HostBuildingElement> hostBuildingElements = null)
+        public bool Add(Room room, IEnumerable<Partition> partitions = null)
         {
             if (room == null)
             {
@@ -140,13 +164,13 @@ namespace SAM.Architectural
                 relationCluster = new RelationCluster();
 
             bool result = relationCluster.AddObject(room);
-            if(hostBuildingElements != null && hostBuildingElements.Count != 0)
+            if(partitions != null && partitions.Count() != 0)
             {
-                foreach(HostBuildingElement hostBuildingElement in hostBuildingElements)
+                foreach(HostPartition partition in partitions)
                 {
-                    if(relationCluster.AddObject(hostBuildingElement))
+                    if(relationCluster.AddObject(partition))
                     {
-                        relationCluster.AddRelation(room, hostBuildingElement);
+                        relationCluster.AddRelation(room, partition);
                     }
 
                 }

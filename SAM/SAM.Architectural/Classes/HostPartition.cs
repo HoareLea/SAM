@@ -6,30 +6,30 @@ using System.Collections.Generic;
 
 namespace SAM.Architectural
 {
-    public abstract class HostBuildingElement : BuildingElement
+    public abstract class HostPartition : Partition
     {
         private List<Opening> openings;
         
-        public HostBuildingElement(HostBuildingElement hostBuildingElement)
-            : base(hostBuildingElement)
+        public HostPartition(HostPartition hostPartition)
+            : base(hostPartition)
         {
 
         }
 
-        public HostBuildingElement(JObject jObject)
+        public HostPartition(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public HostBuildingElement(HostBuildingElementType hostBuildingElementType, Face3D face3D)
-            : base(hostBuildingElementType, face3D)
+        public HostPartition(HostPartitionType hostPartitionType, Face3D face3D)
+            : base(hostPartitionType, face3D)
         {
 
         }
 
-        public HostBuildingElement(Guid guid, HostBuildingElementType hostBuildingElementType, Face3D face3D)
-            : base(guid, hostBuildingElementType, face3D)
+        public HostPartition(Guid guid, HostPartitionType hostPartitionType, Face3D face3D)
+            : base(guid, hostPartitionType, face3D)
         {
 
         }

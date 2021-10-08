@@ -12,31 +12,31 @@ namespace SAM.Architectural.Grasshopper
             if (rhinoDoc == null)
                 return;
 
-            List<HostBuildingElement> hostBuildingElements = new List<HostBuildingElement>();
+            List<HostPartition> hostPartitions = new List<HostPartition>();
             foreach (var variable in gH_Structure.AllData(true))
             {
-                if (variable is GooHostBuildingElement)
+                if (variable is GoohostPartition)
                 {
-                    hostBuildingElements.Add(((GooHostBuildingElement)variable).Value);
+                    hostPartitions.Add(((GoohostPartition)variable).Value);
                 }
                 else if (variable is GooArchitecturalModel)
                 {
                     ArchitecturalModel architecturalModel = ((GooArchitecturalModel)variable).Value;
                     if (architecturalModel != null)
                     {
-                        List<HostBuildingElement> hostBuildingElements_Temp = architecturalModel.GetObjects<HostBuildingElement>();
-                        if (hostBuildingElements_Temp != null && hostBuildingElements_Temp.Count > 0)
+                        List<HostPartition> hostPartitions_Temp = architecturalModel.GetObjects<HostPartition>();
+                        if (hostPartitions_Temp != null && hostPartitions_Temp.Count > 0)
                         {
-                            hostBuildingElements.AddRange(hostBuildingElements_Temp);
+                            hostPartitions.AddRange(hostPartitions_Temp);
                         }
                     }
                 }
             }
 
-            BakeGeometry_ByCategory(rhinoDoc, hostBuildingElements, cutOpening, tolerance);
+            BakeGeometry_ByCategory(rhinoDoc, hostPartitions, cutOpening, tolerance);
         }
 
-        public static void BakeGeometry_ByCategory(this RhinoDoc rhinoDoc, IEnumerable<HostBuildingElement> hostBuildingElements, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
+        public static void BakeGeometry_ByCategory(this RhinoDoc rhinoDoc, IEnumerable<HostPartition> hostPartitions, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
         {
             Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
             if (layerTable == null)
@@ -63,21 +63,21 @@ namespace SAM.Architectural.Grasshopper
             ObjectAttributes objectAttributes = rhinoDoc.CreateDefaultAttributes();
 
             List<Guid> guids = new List<Guid>();
-            foreach (HostBuildingElement hostBuildingElement in hostBuildingElements)
+            foreach (HostPartition hostPartition in hostPartitions)
             {
-                if (hostBuildingElement == null)
+                if (hostPartition == null)
                     continue;
 
-                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Host.Id, hostBuildingElement.GetType().ToString(), Architectural.Query.Color(hostBuildingElement));
+                Layer layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_Host.Id, hostPartition.GetType().ToString(), Architectural.Query.Color(hostPartition));
 
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
                 Guid guid = default;
-                if (BakeGeometry(hostBuildingElement, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
+                if (BakeGeometry(hostPartition, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
                     guids.Add(guid);
 
-                List<Opening> openings = hostBuildingElement.Openings;
+                List<Opening> openings = hostPartition.Openings;
                 if (openings == null || openings.Count == 0)
                     continue;
 

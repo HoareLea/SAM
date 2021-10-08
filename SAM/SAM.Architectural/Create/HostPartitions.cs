@@ -5,35 +5,35 @@ namespace SAM.Architectural
 {
     public static partial class Create
     {
-        public static List<HostBuildingElement> HostBuildingElements(this List<ISAMGeometry3D> geometry3Ds, double minArea = Core.Tolerance.MacroDistance, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Angle = Core.Tolerance.Angle)
+        public static List<HostPartition> HostPartitions(this List<ISAMGeometry3D> geometry3Ds, double minArea = Core.Tolerance.MacroDistance, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Angle = Core.Tolerance.Angle)
         {
             List<Face3D> face3Ds = Geometry.Spatial.Query.Face3Ds(geometry3Ds, tolerance_Distance);
             if (face3Ds == null)
                 return null;
 
-            List<HostBuildingElement> result = new List<HostBuildingElement>();
+            List<HostPartition> result = new List<HostPartition>();
             foreach (Face3D face3D in face3Ds)
             {
                 if (minArea != 0 && face3D.GetArea() < minArea)
                     continue;
 
-                HostBuildingElement hostBuildingElement = HostBuildingElement(face3D, null, tolerance_Angle);
+                HostPartition hostPartition = HostPartition(face3D, null, tolerance_Angle);
 
-                result.Add(hostBuildingElement);
+                result.Add(hostPartition);
             }
 
             return result;
         }
 
-        public static List<HostBuildingElement> HostBuildingElements(this IEnumerable<HostBuildingElement> hostBuildingElements, Plane plane, bool checkIntersection = true, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Angle = Core.Tolerance.Angle)
+        public static List<HostPartition> HostPartitions(this IEnumerable<HostPartition> hostPartitions, Plane plane, bool checkIntersection = true, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Angle = Core.Tolerance.Angle)
         {
-            if (hostBuildingElements == null || plane == null)
+            if (hostPartitions == null || plane == null)
                 return null;
 
             List<IClosedPlanar3D> closedPlanar3Ds = new List<IClosedPlanar3D>();
-            foreach (HostBuildingElement hostBuildingElement in hostBuildingElements)
+            foreach (HostPartition hostPartition in hostPartitions)
             {
-                Face3D face3D = hostBuildingElement?.Face3D;
+                Face3D face3D = hostPartition?.Face3D;
                 if (face3D == null)
                 {
                     continue;
@@ -48,7 +48,7 @@ namespace SAM.Architectural
                 return null;
             }
 
-            List<HostBuildingElement> result = new List<HostBuildingElement>();
+            List<HostPartition> result = new List<HostPartition>();
             foreach (Polygon3D polygon3D in polygon3Ds)
             {
                 if (polygon3D == null)
@@ -58,19 +58,19 @@ namespace SAM.Architectural
 
                 Face3D face3D = new Face3D(polygon3D);
 
-                HostBuildingElement hostBuildingElement = HostBuildingElement(face3D, null, tolerance_Angle);
-                if(hostBuildingElement == null)
+                HostPartition hostPartition = HostPartition(face3D, null, tolerance_Angle);
+                if(hostPartition == null)
                 {
                     continue;
                 }
 
-                result.Add(hostBuildingElement);
+                result.Add(hostPartition);
             }
 
             return result;
         }
     
-        public static List<HostBuildingElement> HostBuildingElements(this Shell shell, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Angle = Core.Tolerance.Angle)
+        public static List<HostPartition> HostPartitions(this Shell shell, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Angle = Core.Tolerance.Angle)
         {
             if (shell == null)
                 return null;
@@ -82,16 +82,16 @@ namespace SAM.Architectural
             if (face3Ds == null)
                 return null;
 
-            List<HostBuildingElement> result = new List<HostBuildingElement>();
+            List<HostPartition> result = new List<HostPartition>();
             foreach(Face3D face3D in face3Ds)
             {
-                HostBuildingElement hostBuildingElement = HostBuildingElement(face3D, null, tolerance_Angle);
-                if (hostBuildingElement == null)
+                HostPartition hostPartition = HostPartition(face3D, null, tolerance_Angle);
+                if (hostPartition == null)
                 {
                     continue;
                 }
 
-                result.Add(hostBuildingElement);
+                result.Add(hostPartition);
             }
 
             return result;

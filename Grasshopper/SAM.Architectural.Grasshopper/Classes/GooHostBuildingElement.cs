@@ -16,17 +16,17 @@ using System.Windows.Forms;
 
 namespace SAM.Architectural.Grasshopper
 {
-    public class GooHostBuildingElement : GooSAMObject<HostBuildingElement>, IGH_PreviewData, IGH_BakeAwareData
+    public class GoohostPartition : GooSAMObject<HostPartition>, IGH_PreviewData, IGH_BakeAwareData
     {
         public bool ShowAll = true;
         
-        public GooHostBuildingElement()
+        public GoohostPartition()
             : base()
         {
         }
 
-        public GooHostBuildingElement(HostBuildingElement hostBuildingElement)
-            : base(hostBuildingElement)
+        public GoohostPartition(HostPartition hostPartition)
+            : base(hostPartition)
         {
         }
 
@@ -43,7 +43,7 @@ namespace SAM.Architectural.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GooHostBuildingElement(Value);
+            return new GoohostPartition(Value);
         }
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
@@ -142,9 +142,9 @@ namespace SAM.Architectural.Grasshopper
 
         public override bool CastFrom(object source)
         {
-            if (source is HostBuildingElement)
+            if (source is HostPartition)
             {
-                Value = (HostBuildingElement)source;
+                Value = (HostPartition)source;
                 return true;
             }
 
@@ -160,9 +160,9 @@ namespace SAM.Architectural.Grasshopper
                 {
                 }
 
-                if (object_Temp is HostBuildingElement)
+                if (object_Temp is HostPartition)
                 {
-                    Value = (HostBuildingElement)object_Temp;
+                    Value = (HostPartition)object_Temp;
                     return true;
                 }
             }
@@ -190,7 +190,7 @@ namespace SAM.Architectural.Grasshopper
         }
     }
 
-    public class GooHostBuildingElementParam : GH_PersistentParam<GooHostBuildingElement>, IGH_PreviewObject, IGH_BakeAwareObject
+    public class GoohostPartitionParam : GH_PersistentParam<GoohostPartition>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         private bool showAll = true;
         
@@ -210,11 +210,11 @@ namespace SAM.Architectural.Grasshopper
         {
             foreach (var variable in VolatileData.AllData(true))
             {
-                GooHostBuildingElement gooHostBuildingElement = variable as GooHostBuildingElement;
-                if (gooHostBuildingElement == null)
+                GoohostPartition goohostPartition = variable as GoohostPartition;
+                if (goohostPartition == null)
                     continue;
 
-                gooHostBuildingElement.ShowAll = showAll;
+                goohostPartition.ShowAll = showAll;
             }
 
             Preview_DrawMeshes(args);
@@ -224,22 +224,22 @@ namespace SAM.Architectural.Grasshopper
         {
             foreach (var variable in VolatileData.AllData(true))
             {
-                GooHostBuildingElement gooHostBuildingElement = variable as GooHostBuildingElement;
-                if (gooHostBuildingElement == null)
+                GoohostPartition goohostPartition = variable as GoohostPartition;
+                if (goohostPartition == null)
                     continue;
 
-                gooHostBuildingElement.ShowAll = showAll;
+                goohostPartition.ShowAll = showAll;
             }
 
             Preview_DrawWires(args);
         }
 
-        public GooHostBuildingElementParam()
-            : base(typeof(HostBuildingElement).Name, typeof(HostBuildingElement).Name, typeof(HostBuildingElement).FullName.Replace(".", " "), "Params", "SAM")
+        public GoohostPartitionParam()
+            : base(typeof(HostPartition).Name, typeof(HostPartition).Name, typeof(HostPartition).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GooHostBuildingElement> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GoohostPartition> values)
         {
             Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
             getObject.SetCommandPrompt("Pick Surfaces to create panels");
@@ -255,7 +255,7 @@ namespace SAM.Architectural.Grasshopper
             if(getObject.ObjectCount == 0)
                 return GH_GetterResult.cancel;
 
-            values = new List<GooHostBuildingElement>();
+            values = new List<GoohostPartition>();
 
             for (int i =0; i < getObject.ObjectCount; i++)
             {
@@ -269,37 +269,37 @@ namespace SAM.Architectural.Grasshopper
                 if (brep == null)
                     return GH_GetterResult.cancel;
 
-                List<HostBuildingElement> hostBuildingElements = null;
+                List<HostPartition> hostPartitions = null;
 
                 if (brep.HasUserData)
                 {
                     string @string = brep.GetUserString("SAM");
                     if(!string.IsNullOrWhiteSpace(@string))
                     {
-                        hostBuildingElements = Core.Convert.ToSAM<HostBuildingElement>(@string);
+                        hostPartitions = Core.Convert.ToSAM<HostPartition>(@string);
                     }
                 }
                 
-                if(hostBuildingElements == null || hostBuildingElements.Count == 0)
+                if(hostPartitions == null || hostPartitions.Count == 0)
                 {
 
                     List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
                     if (sAMGeometry3Ds == null)
                         continue;
 
-                    hostBuildingElements = Create.HostBuildingElements(sAMGeometry3Ds);
+                    hostPartitions = Create.HostPartitions(sAMGeometry3Ds);
                 }
 
-                if (hostBuildingElements == null || hostBuildingElements.Count == 0)
+                if (hostPartitions == null || hostPartitions.Count == 0)
                     continue;
 
-                values.AddRange(hostBuildingElements.ConvertAll(x => new GooHostBuildingElement(x)));
+                values.AddRange(hostPartitions.ConvertAll(x => new GoohostPartition(x)));
             }
 
             return GH_GetterResult.success;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GooHostBuildingElement value)
+        protected override GH_GetterResult Prompt_Singular(ref GoohostPartition value)
         {
             Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
             getObject.SetCommandPrompt("Pick Surface to create panel");
@@ -327,31 +327,31 @@ namespace SAM.Architectural.Grasshopper
                 if (brep == null)
                     return GH_GetterResult.cancel;
 
-                List<HostBuildingElement> hostBuildingElements = null;
+                List<HostPartition> hostPartitions = null;
 
                 if (brep.HasUserData)
                 {
                     string @string = brep.GetUserString("SAM");
                     if (!string.IsNullOrWhiteSpace(@string))
                     {
-                        hostBuildingElements = Core.Convert.ToSAM<HostBuildingElement>(@string);
+                        hostPartitions = Core.Convert.ToSAM<HostPartition>(@string);
                     }
                 }
 
-                if (hostBuildingElements == null || hostBuildingElements.Count == 0)
+                if (hostPartitions == null || hostPartitions.Count == 0)
                 {
 
                     List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
                     if (sAMGeometry3Ds == null)
                         continue;
 
-                    hostBuildingElements = Create.HostBuildingElements(sAMGeometry3Ds);
+                    hostPartitions = Create.HostPartitions(sAMGeometry3Ds);
                 }
 
-                if (hostBuildingElements == null || hostBuildingElements.Count == 0)
+                if (hostPartitions == null || hostPartitions.Count == 0)
                     continue;
 
-                value = new GooHostBuildingElement(hostBuildingElements[0]);
+                value = new GoohostPartition(hostPartitions[0]);
             }
 
             return GH_GetterResult.success;

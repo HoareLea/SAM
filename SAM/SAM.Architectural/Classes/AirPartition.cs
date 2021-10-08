@@ -1,23 +1,33 @@
 ﻿using Newtonsoft.Json.Linq;
 
+using SAM.Geometry.Spatial;
+using System;
+
 namespace SAM.Architectural
 {
-    public class RoofType : HostPartitionType
+    public class AirPartition : Partition
     {
-        public RoofType(RoofType roofType)
-            : base(roofType)
+        
+        public AirPartition(AirPartition airPartition)
+            : base(airPartition)
         {
 
         }
 
-        public RoofType(JObject jObject)
+        public AirPartition(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public RoofType(string name)
-            : base(name)
+        public AirPartition(Face3D face3D)
+            : base(null, face3D)
+        {
+
+        }
+
+        public AirPartition(Guid guid, Face3D face3D)
+            : base(guid, null, face3D)
         {
 
         }
@@ -25,7 +35,10 @@ namespace SAM.Architectural
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
+            {
                 return false;
+            }
+
 
             return true;
         }
@@ -35,7 +48,9 @@ namespace SAM.Architectural
             JObject jObject = base.ToJObject();
 
             if (jObject == null)
+            {
                 return jObject;
+            }
 
             return jObject;
         }

@@ -8,21 +8,21 @@ namespace SAM.Architectural.Grasshopper
 {
     public static partial class Modify
     {
-        public static bool BakeGeometry(this HostBuildingElement hostBuildingElement, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
+        public static bool BakeGeometry(this HostPartition hostPartition, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
         {
             guid = Guid.Empty;
 
-            if (hostBuildingElement == null || rhinoDoc == null || objectAttributes == null)
+            if (hostPartition == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
             //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
-            objectAttributes.Name = hostBuildingElement.Name;
+            objectAttributes.Name = hostPartition.Name;
 
             bool result = true;
 
-            Brep brep = hostBuildingElement.ToRhino(cutOpenings, tolerance);
+            Brep brep = hostPartition.ToRhino(cutOpenings, tolerance);
             if (brep == null)
-                result = Geometry.Grasshopper.Modify.BakeGeometry(hostBuildingElement.Face3D, rhinoDoc, objectAttributes, out guid);
+                result = Geometry.Grasshopper.Modify.BakeGeometry(hostPartition.Face3D, rhinoDoc, objectAttributes, out guid);
             else
                 guid = rhinoDoc.Objects.AddBrep(brep, objectAttributes);
 
@@ -32,7 +32,7 @@ namespace SAM.Architectural.Grasshopper
             GeometryBase geometryBase = rhinoDoc.Objects.FindGeometry(guid);
             if (geometryBase != null)
             {
-                string @string = hostBuildingElement.ToJObject()?.ToString();
+                string @string = hostPartition.ToJObject()?.ToString();
                 if (!string.IsNullOrWhiteSpace(@string))
                     geometryBase.SetUserString("SAM", @string);
             }
@@ -95,14 +95,14 @@ namespace SAM.Architectural.Grasshopper
             if (architecturalModel == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
-            List<HostBuildingElement> hostBuildingElements = architecturalModel.GetObjects<HostBuildingElement>();
-            if (hostBuildingElements == null || hostBuildingElements.Count == 0)
+            List<HostPartition> hostPartitions = architecturalModel.GetObjects<HostPartition>();
+            if (hostPartitions == null || hostPartitions.Count == 0)
                 return false;
 
             List<Brep> breps = new List<Brep>();
-            foreach (HostBuildingElement hostBuildingElement in hostBuildingElements)
+            foreach (HostPartition hostPartition in hostPartitions)
             {
-                Brep brep = hostBuildingElement.ToRhino();
+                Brep brep = hostPartition.ToRhino();
                 if (brep == null)
                     continue;
 

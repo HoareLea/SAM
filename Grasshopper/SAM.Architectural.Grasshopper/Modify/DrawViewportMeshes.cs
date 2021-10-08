@@ -10,8 +10,8 @@ namespace SAM.Architectural.Grasshopper
     {
         public static void DrawViewportMeshes(this ArchitecturalModel architecturalModel, GH_PreviewMeshArgs previewMeshArgs, Rhino.Display.DisplayMaterial displayMaterial = null)
         {
-            List<HostBuildingElement> hostBuildingElements = architecturalModel?.GetObjects<HostBuildingElement>();
-            if (hostBuildingElements == null)
+            List<HostPartition> hostPartitions = architecturalModel?.GetObjects<HostPartition>();
+            if (hostPartitions == null)
                 return;
 
             Geometry.Spatial.BoundingBox3D boundingBox3D = null;
@@ -22,20 +22,20 @@ namespace SAM.Architectural.Grasshopper
             }
 
             List<Geometry.Spatial.Face3D> face3Ds = new List<Geometry.Spatial.Face3D>();
-            for (int i = 0; i < hostBuildingElements.Count; i++)
+            for (int i = 0; i < hostPartitions.Count; i++)
                 face3Ds.Add(null);
 
-            Parallel.For(0, hostBuildingElements.Count, (int i) =>
+            Parallel.For(0, hostPartitions.Count, (int i) =>
             {
-                HostBuildingElement hostBuildingElement = hostBuildingElements[i];
+                HostPartition hostPartition = hostPartitions[i];
 
-                Geometry.Spatial.Face3D face3D = hostBuildingElement?.Face3D;
+                Geometry.Spatial.Face3D face3D = hostPartition?.Face3D;
                 if(face3D == null)
                 {
                     return;
                 }
 
-                List<Room> rooms = architecturalModel.GetRooms(hostBuildingElement);
+                List<Room> rooms = architecturalModel.GetRooms(hostPartition);
                 if (rooms != null && rooms.Count > 1)
                     return;
 

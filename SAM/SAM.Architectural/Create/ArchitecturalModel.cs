@@ -30,8 +30,8 @@ namespace SAM.Architectural
             List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segmentable2Ds, tolerance_Distance);
             if (polygon2Ds != null && polygon2Ds.Count != 0)
             {
-                List<Tuple<Segment2D, HostBuildingElement, Room>> tuples = new List<Tuple<Segment2D, HostBuildingElement, Room>>();
-                Dictionary<Room, List<HostBuildingElement>> dictionary = new Dictionary<Room, List<HostBuildingElement>>();
+                List<Tuple<Segment2D, HostPartition, Room>> tuples = new List<Tuple<Segment2D, HostPartition, Room>>();
+                Dictionary<Room, List<HostPartition>> dictionary = new Dictionary<Room, List<HostPartition>>();
 
                 for (int i = 0; i < polygon2Ds.Count; i++)
                 {
@@ -47,7 +47,7 @@ namespace SAM.Architectural
                     room.SetValue(RoomParameter.Area, area);
                     room.SetValue(RoomParameter.Volume, area * System.Math.Abs(elevation_Max - elevation_Min));
 
-                    dictionary[room] = new List<HostBuildingElement>();
+                    dictionary[room] = new List<HostPartition>();
 
                     List<Segment2D> segment2Ds = polygon2D.GetSegments();
                     if (segment2Ds == null || segment2Ds.Count < 3)
@@ -61,48 +61,48 @@ namespace SAM.Architectural
                         Segment3D segment3D_Max = plane_Max.Convert(segment2D);
 
                         Polygon3D polygon3D = new Polygon3D(new Point3D[] { segment3D_Max[0], segment3D_Max[1], segment3D_Min[1], segment3D_Min[0] });
-                        HostBuildingElement hostBuildingElement = HostBuildingElement(new Face3D(polygon3D), null, tolerance_Angle);
+                        HostPartition hostPartition = HostPartition(new Face3D(polygon3D), null, tolerance_Angle);
 
-                        tuples.Add(new Tuple<Segment2D, HostBuildingElement, Room>(segment2D, hostBuildingElement, room));
+                        tuples.Add(new Tuple<Segment2D, HostPartition, Room>(segment2D, hostPartition, room));
                     }
 
                     Polygon3D polygon3D_Min = plane_Min.Convert(polygon2D);
                     polygon3D_Min = plane_Min_Flipped.Convert(plane_Min_Flipped.Convert(polygon3D_Min));
                     if (polygon3D_Min != null)
                     {
-                        HostBuildingElement hostBuildingElement = HostBuildingElement(new Face3D(polygon3D_Min), null, tolerance_Angle);
-                        if(hostBuildingElement != null)
+                        HostPartition hostPartition = HostPartition(new Face3D(polygon3D_Min), null, tolerance_Angle);
+                        if(hostPartition != null)
                         {
-                            dictionary[room].Add(hostBuildingElement);
+                            dictionary[room].Add(hostPartition);
                         }
                     }
 
                     Polygon3D polygon3D_Max = plane_Max.Convert(polygon2D);
                     if (polygon3D_Max != null)
                     {
-                        HostBuildingElement hostBuildingElement = HostBuildingElement(new Face3D(polygon3D_Max), null, tolerance_Angle);
-                        if (hostBuildingElement != null)
+                        HostPartition hostPartition = HostPartition(new Face3D(polygon3D_Max), null, tolerance_Angle);
+                        if (hostPartition != null)
                         {
-                            dictionary[room].Add(hostBuildingElement);
+                            dictionary[room].Add(hostPartition);
                         }
                     }
                 }
 
                 while (tuples.Count > 0)
                 {
-                    Tuple<Segment2D, HostBuildingElement, Room> tuple = tuples[0];
+                    Tuple<Segment2D, HostPartition, Room> tuple = tuples[0];
                     Segment2D segment2D = tuple.Item1;
 
-                    List<Tuple<Segment2D, HostBuildingElement, Room>> tuples_Temp = tuples.FindAll(x => segment2D.AlmostSimilar(x.Item1));
+                    List<Tuple<Segment2D, HostPartition, Room>> tuples_Temp = tuples.FindAll(x => segment2D.AlmostSimilar(x.Item1));
                     tuples.RemoveAll(x => tuples_Temp.Contains(x));
 
-                    HostBuildingElement hostBuildingElement = tuple.Item2;
+                    HostPartition hostPartition = tuple.Item2;
 
-                    foreach (Tuple<Segment2D, HostBuildingElement, Room> tuple_Temp in tuples_Temp)
-                        dictionary[ tuple_Temp.Item3].Add(hostBuildingElement);
+                    foreach (Tuple<Segment2D, HostPartition, Room> tuple_Temp in tuples_Temp)
+                        dictionary[ tuple_Temp.Item3].Add(hostPartition);
                 }
 
-                foreach(KeyValuePair<Room, List<HostBuildingElement>> keyValuePair in dictionary)
+                foreach(KeyValuePair<Room, List<HostPartition>> keyValuePair in dictionary)
                 {
                     result.Add(keyValuePair.Key, keyValuePair.Value);
                 }
@@ -162,7 +162,7 @@ namespace SAM.Architectural
                 dictionary_Common[face2D].Add(keyValuePair_Project.Value);
             }
 
-            List<Dictionary<Room, List<HostBuildingElement>>> dictionaries_Room = new List<Dictionary<Room, List<HostBuildingElement>>>();
+            List<Dictionary<Room, List<HostPartition>>> dictionaries_Room = new List<Dictionary<Room, List<HostPartition>>>();
             foreach (List<Face3D> face3Ds_Common in dictionary_Common.Values)
             {
                 Dictionary<double, List<Face2D>> dictionary = new Dictionary<double, List<Face2D>>();
@@ -206,15 +206,15 @@ namespace SAM.Architectural
                         dictionary[elevation_Ground] = dictionary[elevations.Last()];
                 }
 
-                Dictionary<Room, List<HostBuildingElement>> dictionary_Room = Query.RoomDictionary(dictionary, dictionary.Keys.ToList().IndexOf(elevation_Ground), tolerance);
+                Dictionary<Room, List<HostPartition>> dictionary_Room = Query.RoomDictionary(dictionary, dictionary.Keys.ToList().IndexOf(elevation_Ground), tolerance);
                 if (dictionary_Room != null)
                     dictionaries_Room.Add(dictionary_Room);
             }
 
             ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(elevation_Ground));
-            foreach (Dictionary<Room, List<HostBuildingElement>> dictionary_Room in dictionaries_Room)
+            foreach (Dictionary<Room, List<HostPartition>> dictionary_Room in dictionaries_Room)
             {
-                foreach (KeyValuePair<Room, List<HostBuildingElement>> keyValuePair in dictionary_Room)
+                foreach (KeyValuePair<Room, List<HostPartition>> keyValuePair in dictionary_Room)
                 {
                     result.Add(keyValuePair.Key, keyValuePair.Value);
                 }
@@ -223,19 +223,19 @@ namespace SAM.Architectural
             return result;
         }
 
-        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Shell> shells, IEnumerable<HostBuildingElement> hostBuildingElements, double groundElevation = 0, bool addMissingHostBuildingElements, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Shell> shells, IEnumerable<Partition> partitions, double groundElevation = 0, bool addMissingPartitions = true, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
-            if(shells == null && hostBuildingElements == null)
+            if(shells == null && partitions == null)
             {
                 return null;
             }
 
-            List<Tuple<Room, List<HostBuildingElement>>> tuples = new List<Tuple<Room, List<HostBuildingElement>>>();
+            List<Tuple<Room, List<Partition>>> tuples = new List<Tuple<Room, List<Partition>>>();
 
-            List<Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double>> tuples_HostBuildingElement = new List<Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double>>();
-            foreach (HostBuildingElement hostBuildingElement in hostBuildingElements)
+            List<Tuple<Plane, Face3D, Partition, BoundingBox3D, double>> tuples_Partition = new List<Tuple<Plane, Face3D, Partition, BoundingBox3D, double>>();
+            foreach (HostPartition hostPartition in partitions)
             {
-                Face3D face3D = hostBuildingElement?.Face3D;
+                Face3D face3D = hostPartition?.Face3D;
                 if (face3D == null)
                     continue;
 
@@ -248,14 +248,14 @@ namespace SAM.Architectural
                 if (area < minArea || face3D.ThinnessRatio() < thinnessRatio) // Changed from tolerance_Distance to minArea
                     continue;
 
-                tuples_HostBuildingElement.Add(new Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double>(plane, face3D, hostBuildingElement, face3D.GetBoundingBox(tolerance_Distance), area));
+                tuples_Partition.Add(new Tuple<Plane, Face3D, Partition, BoundingBox3D, double>(plane, face3D, hostPartition, face3D.GetBoundingBox(tolerance_Distance), area));
             }
 
-            tuples_HostBuildingElement.Sort((x, y) => y.Item5.CompareTo(x.Item5));
+            tuples_Partition.Sort((x, y) => y.Item5.CompareTo(x.Item5));
 
-            BoundingBox3D boundingBox3D_All = new BoundingBox3D(tuples_HostBuildingElement.ConvertAll(x => x.Item4));
+            BoundingBox3D boundingBox3D_All = new BoundingBox3D(tuples_Partition.ConvertAll(x => x.Item4));
 
-            List<Tuple<Point3D, HostBuildingElement, BoundingBox3D>> tuples_HostBuildingElement_New = new List<Tuple<Point3D, HostBuildingElement, BoundingBox3D>>();
+            List<Tuple<Point3D, Partition, BoundingBox3D>> tuples_Partition_New = new List<Tuple<Point3D, Partition, BoundingBox3D>>();
 
             List<Shell> shells_Temp = Enumerable.Repeat<Shell>(null, shells.Count()).ToList();
             Parallel.For(0, shells.Count(), (int i) =>
@@ -289,8 +289,8 @@ namespace SAM.Architectural
             });
 
             shells_Temp.RemoveAll(x => x == null);
-            List<HostBuildingElement> HostBuildingElement_Merged = Query.MergeCoplanar(tuples_HostBuildingElement.ConvertAll(x => x.Item3), maxDistance, true, minArea, tolerance_Distance);
-            shells_Temp.FillFace3Ds(HostBuildingElement_Merged.ConvertAll(x => x.Face3D), 0.1, maxDistance, maxAngle, silverSpacing, tolerance_Distance);
+            List<Partition> hostPartition_Merged = Query.MergeCoplanar(tuples_Partition.ConvertAll(x => x.Item3), maxDistance, true, minArea, tolerance_Distance);
+            shells_Temp.FillFace3Ds(hostPartition_Merged.ConvertAll(x => x.Face3D), 0.1, maxDistance, maxAngle, silverSpacing, tolerance_Distance);
             shells_Temp.SplitCoplanarFace3Ds(tolerance_Angle, tolerance_Distance);
 
             shells_Temp = shells_Temp.Snap(shells, silverSpacing, tolerance_Distance);
@@ -325,7 +325,7 @@ namespace SAM.Architectural
 
             HashSet<Guid> guids = new HashSet<Guid>();
 
-            //Creating Rooms and HostBuildingElements
+            //Creating Rooms and hostPartitions
             for (int i = 0; i < shells_Temp.Count; i++)
             {
                 Shell shell_Temp = shells_Temp[i];
@@ -352,10 +352,10 @@ namespace SAM.Architectural
                 double volume_Shell = shell_Temp.Volume(silverSpacing, tolerance_Distance);
                 double area_Shell = shell_Temp.Area(silverSpacing, tolerance_Angle, tolerance_Distance, silverSpacing);
 
-                Tuple<Room, List<HostBuildingElement>> tuple = new Tuple<Room, List<HostBuildingElement>>(room, new List<HostBuildingElement>());
+                Tuple<Room, List<Partition>> tuple = new Tuple<Room, List<Partition>>(room, new List<Partition>());
                 tuples.Add(tuple);
 
-                List<Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double>> tuples_HostBuildingElement_Temp = tuples_HostBuildingElement.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
+                List<Tuple<Plane, Face3D, Partition, BoundingBox3D, double>> tuples_hostPartition_Temp = tuples_Partition.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
                 
                 foreach (Face3D face3D in face3Ds)
                 {
@@ -380,52 +380,52 @@ namespace SAM.Architectural
 
                     BoundingBox3D boundingBox3D_Face3D = face3D.GetBoundingBox(maxDistance);
 
-                    HostBuildingElement hostBuildingElement_New = null;
+                    Partition partition_New = null;
 
-                    List<Tuple<Point3D, HostBuildingElement, Face3D>> tuples_Face3D = tuples_HostBuildingElement_New?.FindAll(x => boundingBox3D_Face3D.InRange(x.Item3, tolerance_Distance)).ConvertAll(x => new Tuple<Point3D, HostBuildingElement, Face3D>(x.Item1, x.Item2, x.Item2.Face3D));
+                    List<Tuple<Point3D, Partition, Face3D>> tuples_Face3D = tuples_Partition_New?.FindAll(x => boundingBox3D_Face3D.InRange(x.Item3, tolerance_Distance)).ConvertAll(x => new Tuple<Point3D, Partition, Face3D>(x.Item1, x.Item2, x.Item2.Face3D));
                     if (tuples_Face3D != null && tuples_Face3D.Count != 0)
                     {
                         double area = face3D.GetArea();
                         tuples_Face3D.RemoveAll(x => !area.AlmostEqual(x.Item3.GetArea(), minArea));
                         if (tuples_Face3D != null && tuples_Face3D.Count != 0)
                         {
-                            List<Tuple<Point3D, HostBuildingElement, Face3D, double>> tuples_Distance = tuples_Face3D.ConvertAll(x => new Tuple<Point3D, HostBuildingElement, Face3D, double>(x.Item1, x.Item2, x.Item3, System.Math.Min(x.Item3.Distance(point3D_Internal), face3D.Distance(x.Item1))));
+                            List<Tuple<Point3D, Partition, Face3D, double>> tuples_Distance = tuples_Face3D.ConvertAll(x => new Tuple<Point3D, Partition, Face3D, double>(x.Item1, x.Item2, x.Item3, System.Math.Min(x.Item3.Distance(point3D_Internal), face3D.Distance(x.Item1))));
 
                             if (tuples_Distance.Count > 1)
                                 tuples_Distance.Sort((x, y) => x.Item4.CompareTo(y.Item4));
 
-                            hostBuildingElement_New = tuples_Distance[0].Item4 < silverSpacing ? tuples_Distance[0].Item2 : null;
+                            partition_New = tuples_Distance[0].Item4 < silverSpacing ? tuples_Distance[0].Item2 : null;
                         }
                     }
 
-                    if (hostBuildingElement_New == null)
+                    if (partition_New == null)
                     {
-                        List<Tuple<Face2D, HostBuildingElement>> tuples_Face2D_All = new List<Tuple<Face2D, HostBuildingElement>>();
-                        foreach (Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double> tuple_HostBuildingElement in tuples_HostBuildingElement_Temp)
+                        List<Tuple<Face2D, Partition>> tuples_Face2D_All = new List<Tuple<Face2D, Partition>>();
+                        foreach (Tuple<Plane, Face3D, Partition, BoundingBox3D, double> tuple_Partition in tuples_hostPartition_Temp)
                         {
-                            if (!boundingBox3D_Face3D.InRange(tuple_HostBuildingElement.Item4, maxDistance))
+                            if (!boundingBox3D_Face3D.InRange(tuple_Partition.Item4, maxDistance))
                                 continue;
 
-                            Plane plane_HostBuildingElement = tuple_HostBuildingElement.Item1;
+                            Plane plane_Partition = tuple_Partition.Item1;
 
-                            if (plane_HostBuildingElement.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_HostBuildingElement.Normal.SmallestAngle(plane.Normal) > maxAngle)
+                            if (plane_Partition.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_Partition.Normal.SmallestAngle(plane.Normal) > maxAngle)
                                 continue;
 
-                            double distance = tuple_HostBuildingElement.Item2.Distance(face3D, tolerance_Distance: tolerance_Distance);
+                            double distance = tuple_Partition.Item2.Distance(face3D, tolerance_Distance: tolerance_Distance);
 
                             if (distance > maxDistance)
                                 continue;
 
-                            Face2D face2D = plane.Convert(plane.Project(tuple_HostBuildingElement.Item2));
+                            Face2D face2D = plane.Convert(plane.Project(tuple_Partition.Item2));
                             if (face2D == null)
                                 continue;
 
-                            tuples_Face2D_All.Add(new Tuple<Face2D, HostBuildingElement>(face2D, tuple_HostBuildingElement.Item3));
+                            tuples_Face2D_All.Add(new Tuple<Face2D, Partition>(face2D, tuple_Partition.Item3));
                         }
 
                         if (tuples_Face2D_All != null && tuples_Face2D_All.Count != 0)
                         {
-                            List<Tuple<Face2D, HostBuildingElement, double>> tuples_Face2D = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, HostBuildingElement, double>(x.Item1, x.Item2, 0));
+                            List<Tuple<Face2D, Partition, double>> tuples_Face2D = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, Partition, double>(x.Item1, x.Item2, 0));
 
                             //Find By Face2D Intersection
                             Face2D face2D_Shell = plane.Convert(face3D);
@@ -440,11 +440,11 @@ namespace SAM.Architectural
                                 }
                                 else
                                 {
-                                    tuples_Face2D[j] = new Tuple<Face2D, HostBuildingElement, double>(tuples_Face2D[j].Item1, tuples_Face2D[j].Item2, face2Ds_Intersection.ConvertAll(x => x.GetArea()).Sum());
+                                    tuples_Face2D[j] = new Tuple<Face2D, Partition, double>(tuples_Face2D[j].Item1, tuples_Face2D[j].Item2, face2Ds_Intersection.ConvertAll(x => x.GetArea()).Sum());
                                 }
                             }
 
-                            List<HostBuildingElement> hostBuildingElements_New_Temp = null;
+                            List<Partition> partitions_New_Temp = null;
 
                             if (tuples_Face2D != null && tuples_Face2D.Count != 0)
                             {
@@ -452,82 +452,91 @@ namespace SAM.Architectural
 
                                 //Sorting by Face3D Normal
                                 Vector3D normal = plane.Normal;
-                                List<Tuple<Face2D, HostBuildingElement, double>> tuples_Face2D_Temp = tuples_Face2D.FindAll(x => x.Item2.Normal.SameHalf(normal));
+                                List<Tuple<Face2D, Partition, double>> tuples_Face2D_Temp = tuples_Face2D.FindAll(x => x.Item2.Normal.SameHalf(normal));
                                 tuples_Face2D.RemoveAll(x => tuples_Face2D_Temp.Contains(x));
                                 tuples_Face2D_Temp.AddRange(tuples_Face2D);
                                 tuples_Face2D = tuples_Face2D_Temp;
 
-                                hostBuildingElements_New_Temp = tuples_Face2D_Temp?.ConvertAll(x => x.Item2);
+                                partitions_New_Temp = tuples_Face2D_Temp?.ConvertAll(x => x.Item2);
                             }
                             else
                             {
-                                //Find the closest HostBuildingElement
+                                //Find the closest hostPartition
 
                                 Point3D point3D = face3D.GetInternalPoint3D(tolerance_Distance);
-                                List<Tuple<Face2D, HostBuildingElement, double>> tuples_Face2D_Distance = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, HostBuildingElement, double>(x.Item1, x.Item2, x.Item2.Distance(point3D)));
+                                List<Tuple<Face2D, Partition, double>> tuples_Face2D_Distance = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, Partition, double>(x.Item1, x.Item2, x.Item2.Face3D.Distance(point3D)));
                                 tuples_Face2D_Distance.RemoveAll(x => x.Item3 > maxDistance);
                                 tuples_Face2D_Distance.Sort((x, y) => x.Item3.CompareTo(y.Item3));
 
                                 //Sorting by Face3D Normal
                                 Vector3D normal = plane.Normal;
-                                List<Tuple<Face2D, HostBuildingElement, double>> tuples_Face2D_Distance_Temp = tuples_Face2D_Distance.FindAll(x => x.Item2.Normal.SameHalf(normal));
+                                List<Tuple<Face2D, Partition, double>> tuples_Face2D_Distance_Temp = tuples_Face2D_Distance.FindAll(x => x.Item2.Normal.SameHalf(normal));
                                 tuples_Face2D_Distance.RemoveAll(x => tuples_Face2D_Distance_Temp.Contains(x));
                                 tuples_Face2D_Distance_Temp.AddRange(tuples_Face2D_Distance);
                                 tuples_Face2D_Distance = tuples_Face2D_Distance_Temp;
 
-                                hostBuildingElements_New_Temp = tuples_Face2D_Distance?.ConvertAll(x => x.Item2);
+                                partitions_New_Temp = tuples_Face2D_Distance?.ConvertAll(x => x.Item2);
                             }
 
-                            if (hostBuildingElements_New_Temp != null && hostBuildingElements_New_Temp.Count != 0)
+                            if (partitions_New_Temp != null && partitions_New_Temp.Count != 0)
                             {
-                                HostBuildingElement hostBuildingElement_New_Temp = hostBuildingElements_New_Temp[0];
-                                List<Opening> openings = null;
-                                for (int j = 1; j < hostBuildingElements_New_Temp.Count; j++)
-                                {
-                                    List<Opening> openings_Temp = hostBuildingElements_New_Temp[j]?.Openings;
-                                    if (openings_Temp != null)
-                                    {
-                                        if (openings == null)
-                                        {
-                                            openings = new List<Opening>();
-                                        }
+                                Partition partition_New_Temp = partitions_New_Temp[0];
 
-                                        openings.AddRange(openings_Temp);
-                                    }
-                                }
-
-                                Guid guid = hostBuildingElement_New_Temp.Guid;
+                                Guid guid = partition_New_Temp.Guid;
                                 while (guids.Contains(guid))
                                 {
                                     guid = Guid.NewGuid();
                                 }
 
-                                hostBuildingElement_New = HostBuildingElement(guid, face3D, hostBuildingElement_New_Temp.SAMType as HostBuildingElementType);
-                                if(openings != null)
+                                if(partition_New_Temp is AirPartition)
                                 {
-                                    openings.ForEach(x => hostBuildingElement_New.AddOpening(x));
+                                    partition_New = new AirPartition(guid, face3D);
+                                }
+                                else
+                                {
+                                    partition_New = HostPartition(guid, face3D, partition_New_Temp.SAMType as HostPartitionType);
+
+                                    for (int j = 1; j < partitions_New_Temp.Count; j++)
+                                    {
+                                        HostPartition hostPartition = partitions_New_Temp[j] as HostPartition;
+                                        if(hostPartition == null)
+                                        {
+                                            continue;
+                                        }
+
+                                        List<Opening> openings = hostPartition.Openings;
+                                        if (openings == null)
+                                        {
+                                            continue;
+                                        }
+
+                                        foreach(Opening opening in openings)
+                                        {
+                                            ((HostPartition)partition_New).AddOpening(opening);
+                                        }
+                                    }
                                 }
 
-                                tuple.Item2.Add(hostBuildingElement_New);
+                                tuple.Item2.Add(partition_New);
 
-                                tuples_HostBuildingElement_New.Add(new Tuple<Point3D, HostBuildingElement, BoundingBox3D>(point3D_Internal, hostBuildingElement_New, face3D.GetBoundingBox(tolerance_Distance)));
+                                tuples_Partition_New.Add(new Tuple<Point3D, Partition, BoundingBox3D>(point3D_Internal, partition_New, face3D.GetBoundingBox(tolerance_Distance)));
                             }
                         }
                     }
 
-                    if (hostBuildingElement_New == null)
+                    if (partition_New == null)
                     {
-                        if (!addMissingHostBuildingElements)
+                        if (!addMissingPartitions)
                             continue;
 
-                        hostBuildingElement_New = Panel(Query.DefaultConstruction(PanelType.Air), PanelType.Air, face3D);
-                        tuple.Item2.Add(hostBuildingElement_New);
+                        partition_New = new AirPartition(face3D);
+                        tuple.Item2.Add(partition_New);
                     }
                 }
             }
 
             ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(groundElevation));
-            foreach (Tuple<Room, List<HostBuildingElement>> tuple in tuples)
+            foreach (Tuple<Room, List<Partition>> tuple in tuples)
             {
                 result.Add(tuple.Item1, tuple.Item2);
             }

@@ -7,9 +7,9 @@
         /// </summary>
         /// <param name="panelType"></param>
         /// <returns></returns>
-        public static Rhino.Display.DisplayMaterial DisplayMaterial(this HostBuildingElement hostBuildingElement)
+        public static Rhino.Display.DisplayMaterial DisplayMaterial(this HostPartition hostPartition)
         {
-            System.Drawing.Color color = Architectural.Query.Color(hostBuildingElement);
+            System.Drawing.Color color = Architectural.Query.Color(hostPartition);
 
             if (color == System.Drawing.Color.Empty)
                 return null;
