@@ -223,14 +223,14 @@ namespace SAM.Architectural
             return result;
         }
 
-        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Shell> shells, IEnumerable<HostBuildingElement> hostBuildingElements, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Shell> shells, IEnumerable<HostBuildingElement> hostBuildingElements, double groundElevation = 0, bool addMissingHostBuildingElements, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             if(shells == null && hostBuildingElements == null)
             {
                 return null;
             }
 
-            List<Tuple<Room, HostBuildingElement>> tuples = new List<Tuple<Room, HostBuildingElement>>();
+            List<Tuple<Room, List<HostBuildingElement>>> tuples = new List<Tuple<Room, List<HostBuildingElement>>>();
 
             List<Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double>> tuples_HostBuildingElement = new List<Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double>>();
             foreach (HostBuildingElement hostBuildingElement in hostBuildingElements)
@@ -255,33 +255,27 @@ namespace SAM.Architectural
 
             BoundingBox3D boundingBox3D_All = new BoundingBox3D(tuples_HostBuildingElement.ConvertAll(x => x.Item4));
 
-            int count = 1;
-
             List<Tuple<Point3D, HostBuildingElement, BoundingBox3D>> tuples_HostBuildingElement_New = new List<Tuple<Point3D, HostBuildingElement, BoundingBox3D>>();
 
             List<Shell> shells_Temp = Enumerable.Repeat<Shell>(null, shells.Count()).ToList();
             Parallel.For(0, shells.Count(), (int i) =>
-            //for(int i=0; i < shells.Count(); i++)
             {
                 Shell shell = shells.ElementAt(i);
 
                 BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
                 if (boundingBox3D == null)
                 {
-                    //continue;
                     return;
                 }
 
                 if (!boundingBox3D_All.InRange(boundingBox3D))
                 {
-                    //continue;
                     return;
                 }
 
                 shell = shell.RemoveInvalidFace3Ds(silverSpacing);
                 if (shell == null)
                 {
-                    //continue;
                     return;
                 }
 
@@ -299,7 +293,246 @@ namespace SAM.Architectural
             shells_Temp.FillFace3Ds(HostBuildingElement_Merged.ConvertAll(x => x.Face3D), 0.1, maxDistance, maxAngle, silverSpacing, tolerance_Distance);
             shells_Temp.SplitCoplanarFace3Ds(tolerance_Angle, tolerance_Distance);
 
-            throw new NotImplementedException();
+            shells_Temp = shells_Temp.Snap(shells, silverSpacing, tolerance_Distance);
+
+
+            //Creating Elevations
+            List<double> elevations = new List<double>();
+            foreach (Shell shell_Temp in shells_Temp)
+            {
+                BoundingBox3D boundingBox3D = shell_Temp?.GetBoundingBox();
+                if (boundingBox3D == null)
+                {
+                    continue;
+                }
+
+                double elevation = Core.Query.Round(boundingBox3D.Min.Z, silverSpacing);
+                int index = elevations.FindIndex(x => elevation.AlmostEqual(x, silverSpacing));
+                if (index == -1)
+                {
+                    elevations.Add(elevation);
+                }
+            }
+
+            elevations.Sort();
+
+            //Creating Levels
+            List<Level> levels = new List<Level>();
+            for (int i = 0; i < elevations.Count; i++)
+            {
+                levels.Add(new Level("Level " + i.ToString(), elevations[i]));
+            }
+
+            HashSet<Guid> guids = new HashSet<Guid>();
+
+            //Creating Rooms and HostBuildingElements
+            for (int i = 0; i < shells_Temp.Count; i++)
+            {
+                Shell shell_Temp = shells_Temp[i];
+
+                BoundingBox3D boundingBox3D_Shell = shell_Temp.GetBoundingBox(maxDistance);
+                if (boundingBox3D_Shell == null)
+                {
+                    continue;
+                }
+
+                List<Face3D> face3Ds = shell_Temp?.Face3Ds;
+                if (face3Ds == null || face3Ds.Count == 0)
+                {
+                    continue;
+                }
+
+                Room room = new Room(string.Format("Cell {0}", i), shell_Temp.CalculatedInternalPoint3D(silverSpacing, tolerance_Distance));
+                double elevation = shell_Temp.GetBoundingBox().Min.Z;
+
+                List<Tuple<double, Level>> tuples_Level = levels.ConvertAll(x => new Tuple<double, Level>(System.Math.Abs(x.Elevation - elevation), x));
+                tuples_Level.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+                Level level = tuples_Level.FirstOrDefault()?.Item2;
+
+                double volume_Shell = shell_Temp.Volume(silverSpacing, tolerance_Distance);
+                double area_Shell = shell_Temp.Area(silverSpacing, tolerance_Angle, tolerance_Distance, silverSpacing);
+
+                Tuple<Room, List<HostBuildingElement>> tuple = new Tuple<Room, List<HostBuildingElement>>(room, new List<HostBuildingElement>());
+                tuples.Add(tuple);
+
+                List<Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double>> tuples_HostBuildingElement_Temp = tuples_HostBuildingElement.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
+                
+                foreach (Face3D face3D in face3Ds)
+                {
+                    Plane plane = face3D?.GetPlane();
+                    if (plane == null)
+                        continue;
+
+                    if (face3D.ThinnessRatio() < thinnessRatio)
+                    {
+                        double area = face3D.GetArea();
+                        if (area < minArea)
+                        {
+                            continue;
+                        }
+                    }
+
+                    Point3D point3D_Internal = face3D.InternalPoint3D(tolerance_Distance);
+                    if (point3D_Internal == null)
+                    {
+                        continue;
+                    }
+
+                    BoundingBox3D boundingBox3D_Face3D = face3D.GetBoundingBox(maxDistance);
+
+                    HostBuildingElement hostBuildingElement_New = null;
+
+                    List<Tuple<Point3D, HostBuildingElement, Face3D>> tuples_Face3D = tuples_HostBuildingElement_New?.FindAll(x => boundingBox3D_Face3D.InRange(x.Item3, tolerance_Distance)).ConvertAll(x => new Tuple<Point3D, HostBuildingElement, Face3D>(x.Item1, x.Item2, x.Item2.Face3D));
+                    if (tuples_Face3D != null && tuples_Face3D.Count != 0)
+                    {
+                        double area = face3D.GetArea();
+                        tuples_Face3D.RemoveAll(x => !area.AlmostEqual(x.Item3.GetArea(), minArea));
+                        if (tuples_Face3D != null && tuples_Face3D.Count != 0)
+                        {
+                            List<Tuple<Point3D, HostBuildingElement, Face3D, double>> tuples_Distance = tuples_Face3D.ConvertAll(x => new Tuple<Point3D, HostBuildingElement, Face3D, double>(x.Item1, x.Item2, x.Item3, System.Math.Min(x.Item3.Distance(point3D_Internal), face3D.Distance(x.Item1))));
+
+                            if (tuples_Distance.Count > 1)
+                                tuples_Distance.Sort((x, y) => x.Item4.CompareTo(y.Item4));
+
+                            hostBuildingElement_New = tuples_Distance[0].Item4 < silverSpacing ? tuples_Distance[0].Item2 : null;
+                        }
+                    }
+
+                    if (hostBuildingElement_New == null)
+                    {
+                        List<Tuple<Face2D, HostBuildingElement>> tuples_Face2D_All = new List<Tuple<Face2D, HostBuildingElement>>();
+                        foreach (Tuple<Plane, Face3D, HostBuildingElement, BoundingBox3D, double> tuple_HostBuildingElement in tuples_HostBuildingElement_Temp)
+                        {
+                            if (!boundingBox3D_Face3D.InRange(tuple_HostBuildingElement.Item4, maxDistance))
+                                continue;
+
+                            Plane plane_HostBuildingElement = tuple_HostBuildingElement.Item1;
+
+                            if (plane_HostBuildingElement.Normal.SmallestAngle(plane.Normal.GetNegated()) > maxAngle && plane_HostBuildingElement.Normal.SmallestAngle(plane.Normal) > maxAngle)
+                                continue;
+
+                            double distance = tuple_HostBuildingElement.Item2.Distance(face3D, tolerance_Distance: tolerance_Distance);
+
+                            if (distance > maxDistance)
+                                continue;
+
+                            Face2D face2D = plane.Convert(plane.Project(tuple_HostBuildingElement.Item2));
+                            if (face2D == null)
+                                continue;
+
+                            tuples_Face2D_All.Add(new Tuple<Face2D, HostBuildingElement>(face2D, tuple_HostBuildingElement.Item3));
+                        }
+
+                        if (tuples_Face2D_All != null && tuples_Face2D_All.Count != 0)
+                        {
+                            List<Tuple<Face2D, HostBuildingElement, double>> tuples_Face2D = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, HostBuildingElement, double>(x.Item1, x.Item2, 0));
+
+                            //Find By Face2D Intersection
+                            Face2D face2D_Shell = plane.Convert(face3D);
+                            for (int j = tuples_Face2D.Count - 1; j >= 0; j--)
+                            {
+                                List<Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D_Shell, tuples_Face2D[j].Item1, tolerance_Distance);
+                                face2Ds_Intersection?.RemoveAll(x => x == null || x.GetArea() <= minArea);
+
+                                if (face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
+                                {
+                                    tuples_Face2D.RemoveAt(j);
+                                }
+                                else
+                                {
+                                    tuples_Face2D[j] = new Tuple<Face2D, HostBuildingElement, double>(tuples_Face2D[j].Item1, tuples_Face2D[j].Item2, face2Ds_Intersection.ConvertAll(x => x.GetArea()).Sum());
+                                }
+                            }
+
+                            List<HostBuildingElement> hostBuildingElements_New_Temp = null;
+
+                            if (tuples_Face2D != null && tuples_Face2D.Count != 0)
+                            {
+                                tuples_Face2D.Sort((x, y) => y.Item3.CompareTo(x.Item3));
+
+                                //Sorting by Face3D Normal
+                                Vector3D normal = plane.Normal;
+                                List<Tuple<Face2D, HostBuildingElement, double>> tuples_Face2D_Temp = tuples_Face2D.FindAll(x => x.Item2.Normal.SameHalf(normal));
+                                tuples_Face2D.RemoveAll(x => tuples_Face2D_Temp.Contains(x));
+                                tuples_Face2D_Temp.AddRange(tuples_Face2D);
+                                tuples_Face2D = tuples_Face2D_Temp;
+
+                                hostBuildingElements_New_Temp = tuples_Face2D_Temp?.ConvertAll(x => x.Item2);
+                            }
+                            else
+                            {
+                                //Find the closest HostBuildingElement
+
+                                Point3D point3D = face3D.GetInternalPoint3D(tolerance_Distance);
+                                List<Tuple<Face2D, HostBuildingElement, double>> tuples_Face2D_Distance = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, HostBuildingElement, double>(x.Item1, x.Item2, x.Item2.Distance(point3D)));
+                                tuples_Face2D_Distance.RemoveAll(x => x.Item3 > maxDistance);
+                                tuples_Face2D_Distance.Sort((x, y) => x.Item3.CompareTo(y.Item3));
+
+                                //Sorting by Face3D Normal
+                                Vector3D normal = plane.Normal;
+                                List<Tuple<Face2D, HostBuildingElement, double>> tuples_Face2D_Distance_Temp = tuples_Face2D_Distance.FindAll(x => x.Item2.Normal.SameHalf(normal));
+                                tuples_Face2D_Distance.RemoveAll(x => tuples_Face2D_Distance_Temp.Contains(x));
+                                tuples_Face2D_Distance_Temp.AddRange(tuples_Face2D_Distance);
+                                tuples_Face2D_Distance = tuples_Face2D_Distance_Temp;
+
+                                hostBuildingElements_New_Temp = tuples_Face2D_Distance?.ConvertAll(x => x.Item2);
+                            }
+
+                            if (hostBuildingElements_New_Temp != null && hostBuildingElements_New_Temp.Count != 0)
+                            {
+                                HostBuildingElement hostBuildingElement_New_Temp = hostBuildingElements_New_Temp[0];
+                                List<Opening> openings = null;
+                                for (int j = 1; j < hostBuildingElements_New_Temp.Count; j++)
+                                {
+                                    List<Opening> openings_Temp = hostBuildingElements_New_Temp[j]?.Openings;
+                                    if (openings_Temp != null)
+                                    {
+                                        if (openings == null)
+                                        {
+                                            openings = new List<Opening>();
+                                        }
+
+                                        openings.AddRange(openings_Temp);
+                                    }
+                                }
+
+                                Guid guid = hostBuildingElement_New_Temp.Guid;
+                                while (guids.Contains(guid))
+                                {
+                                    guid = Guid.NewGuid();
+                                }
+
+                                hostBuildingElement_New = HostBuildingElement(guid, face3D, hostBuildingElement_New_Temp.SAMType as HostBuildingElementType);
+                                if(openings != null)
+                                {
+                                    openings.ForEach(x => hostBuildingElement_New.AddOpening(x));
+                                }
+
+                                tuple.Item2.Add(hostBuildingElement_New);
+
+                                tuples_HostBuildingElement_New.Add(new Tuple<Point3D, HostBuildingElement, BoundingBox3D>(point3D_Internal, hostBuildingElement_New, face3D.GetBoundingBox(tolerance_Distance)));
+                            }
+                        }
+                    }
+
+                    if (hostBuildingElement_New == null)
+                    {
+                        if (!addMissingHostBuildingElements)
+                            continue;
+
+                        hostBuildingElement_New = Panel(Query.DefaultConstruction(PanelType.Air), PanelType.Air, face3D);
+                        tuple.Item2.Add(hostBuildingElement_New);
+                    }
+                }
+            }
+
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(groundElevation));
+            foreach (Tuple<Room, List<HostBuildingElement>> tuple in tuples)
+            {
+                result.Add(tuple.Item1, tuple.Item2);
+            }
+
+            return result;
         }
     }
 }

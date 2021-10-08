@@ -93,5 +93,13 @@ namespace SAM.Architectural
             return jObject;
         }
 
+        public Vector3D Normal
+        {
+            get
+            {
+                return face3D?.GetPlane()?.Normal;
+            }
+        }
+
     }
 }
