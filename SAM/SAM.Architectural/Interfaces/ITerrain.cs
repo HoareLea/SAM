@@ -1,6 +1,4 @@
-﻿using SAM.Core;
-
-namespace SAM.Architectural
+﻿namespace SAM.Architectural
 {
     public interface ITerrain : IArchitecturalObject
     {

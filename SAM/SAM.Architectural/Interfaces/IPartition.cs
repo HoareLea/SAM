@@ -1,10 +1,10 @@
-﻿using SAM.Geometry.Spatial;
+﻿using SAM.Core;
+using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public interface IPartition : IArchitecturalObject
+    public interface IPartition : IArchitecturalObject, ISAMObject
     {
-        System.Guid Guid { get; }
         
         Face3D Face3D { get; }
     }
