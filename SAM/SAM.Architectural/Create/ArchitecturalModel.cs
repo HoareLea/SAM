@@ -285,7 +285,13 @@ namespace SAM.Architectural
                     shell_Merge = new Shell(shell);
                 }
 
-                shells_Temp[i] = shell_Merge;
+                Shell shell_FixEdges = shell_Merge.FixEdges(tolerance_Distance);
+                if(shell_FixEdges == null)
+                {
+                    shell_FixEdges = new Shell(shell_Merge);
+                }
+
+                shells_Temp[i] = shell_FixEdges;
             });
 
             shells_Temp.RemoveAll(x => x == null);
