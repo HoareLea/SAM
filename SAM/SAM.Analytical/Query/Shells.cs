@@ -161,7 +161,7 @@ namespace SAM.Analytical
             }
 
             //return Geometry.Spatial.Create.Shells_Depreciated(face3Ds, snapTolerance, tolerance);
-            return Geometry.Spatial.Create.Shells(face3Ds, tolerance);
+            return Geometry.Spatial.Create.Shells_ByTopAndBottom(face3Ds, tolerance);
         }
 
         public static List<Shell> Shells(this IEnumerable<Panel> panels, IEnumerable<double> elevations, IEnumerable<double> offsets, IEnumerable<double> auxiliaryElevations = null, double snapTolerance = Core.Tolerance.MacroDistance, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
@@ -294,7 +294,7 @@ namespace SAM.Analytical
                     face3Ds.AddRange(tuple_Top.Item2);
                 }
 
-                tuples_Shell[i] = new Tuple<double, List<Shell>>(tuple_Bottom.Item1, Geometry.Spatial.Create.Shells(face3Ds, tolerance_Distance));
+                tuples_Shell[i] = new Tuple<double, List<Shell>>(tuple_Bottom.Item1, Geometry.Spatial.Create.Shells_ByTopAndBottom(face3Ds, tolerance_Distance));
             });
 
             for (int i = 0; i < count - 1; i++)

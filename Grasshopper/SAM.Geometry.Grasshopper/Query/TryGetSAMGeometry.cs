@@ -20,13 +20,17 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-
             if (objectWrapper.Value is GooSAMGeometry)
             {
                 ISAMGeometry sAMGeometry = ((GooSAMGeometry)objectWrapper.Value).Value;
-                if(sAMGeometry is T)
+                if (sAMGeometry is T)
                 {
                     sAMGeometries = new List<T>() { (T)sAMGeometry };
+                    return true;
+                }
+                else if (sAMGeometry is Spatial.IFace3DObject && typeof(T) == typeof(Spatial.Face3D))
+                {
+                    sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)sAMGeometry).Face3D };
                     return true;
                 }
             }
@@ -35,6 +39,19 @@ namespace SAM.Geometry.Grasshopper
             if (objectWrapper.Value is IGH_GeometricGoo)
             {
                 object @object = Convert.ToSAM(objectWrapper.Value as dynamic);
+                if(typeof(T) == typeof(Spatial.Face3D))
+                {
+                    if (@object is Spatial.Shell)
+                    {
+                        @object = ((Spatial.Shell)@object).Face3Ds;
+                    }
+                    else if(@object is Spatial.Mesh3D)
+                    {
+                        @object = ((Spatial.Mesh3D)@object).GetTriangles().ConvertAll(x => new Spatial.Face3D(x));
+                    }
+                }
+
+
                 if (@object is IEnumerable)
                 {
                     IEnumerable<ISAMGeometry> sAMGeometries_Temp = ((IEnumerable)@object).Cast<ISAMGeometry>();

@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryCreateSAMShells : GH_SAMVariableOutputParameterComponent
+    public class SAMGeometryCreateShellsByTopAndBottom : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,8 +31,8 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public GeometryCreateSAMShells()
-          : base("Geometry.CreateSAMShells", "Geometry.CreateSAMShells",
+        public SAMGeometryCreateShellsByTopAndBottom()
+          : base("Geometry.CreateShellsByTopAndBottom", "Geometry.CreateShellsByTopAndBottom",
               "Create Shells ",
               "SAM", "Geometry")
         {
@@ -67,7 +67,7 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "Shells", NickName = "Shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "shells", NickName = "shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -231,9 +231,9 @@ namespace SAM.Geometry.Grasshopper
                 face3Ds.AddRange(face2Ds.ConvertAll(x => plane.Convert(x)));
             }
 
-            List<Shell> shells = Spatial.Create.Shells(face3Ds, tolerance);
+            List<Shell> shells = Spatial.Create.Shells_ByTopAndBottom(face3Ds, tolerance);
 
-            index = Params.IndexOfInputParam("Shells");
+            index = Params.IndexOfInputParam("shells");
             if (index != -1)
                 dataAccess.SetDataList(index, shells?.ConvertAll(x => new GooSAMGeometry(x)));
         }
