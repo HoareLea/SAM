@@ -84,10 +84,22 @@ namespace SAM.Core
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
+            {
                 return false;
+            }
 
             if (jObject.ContainsKey("Type"))
+            {
                 type = Create.IJSAMObject<T>(jObject.Value<JObject>("Type"));
+            }
+            else
+            {
+                //TODO: Remove in the future. This is for backward compability only
+                if (jObject.ContainsKey("SAMType"))
+                {
+                    type = Create.IJSAMObject<T>(jObject.Value<JObject>("SAMType"));
+                }
+            }
 
             return true;
         }
@@ -99,7 +111,7 @@ namespace SAM.Core
                 return jObject;
 
             if (type != null)
-                jObject.Add("SAMType", type.ToJObject());
+                jObject.Add("Type", type.ToJObject());
 
             return jObject;
         }
