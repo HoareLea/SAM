@@ -144,7 +144,7 @@ namespace SAM.Geometry.Grasshopper
             }
             List<Shell> shells = Spatial.Create.Shells(face3Ds, elevations, offset, 0.01, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
 
-            index = Params.IndexOfOutputParam("Shells");
+            index = Params.IndexOfOutputParam("shells");
             if (index != -1)
                 dataAccess.SetDataList(index, shells?.ConvertAll(x => new GooSAMGeometry(x)));
         }

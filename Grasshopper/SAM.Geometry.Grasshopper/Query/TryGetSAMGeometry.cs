@@ -54,10 +54,37 @@ namespace SAM.Geometry.Grasshopper
 
                 if (@object is IEnumerable)
                 {
+
                     IEnumerable<ISAMGeometry> sAMGeometries_Temp = ((IEnumerable)@object).Cast<ISAMGeometry>();
                     if(sAMGeometries_Temp != null && sAMGeometries_Temp.Count() > 0)
                     {
-                        sAMGeometries = sAMGeometries_Temp.ToList().FindAll(x => x is T).Cast<T>().ToList();
+                        if (typeof(T) == typeof(Spatial.Face3D))
+                        {
+                            sAMGeometries = new List<T>();
+                            foreach (ISAMGeometry sAMGeometry in sAMGeometries_Temp)
+                            {
+                                if(sAMGeometry is T)
+                                {
+                                    sAMGeometries.Add((T)sAMGeometry);
+                                }
+                                else
+                                {
+                                    if (sAMGeometry is Spatial.Shell)
+                                    {
+                                        sAMGeometries.AddRange(((Spatial.Shell)sAMGeometry).Face3Ds?.Cast<T>());
+                                    }
+                                    else if (sAMGeometry is Spatial.Mesh3D)
+                                    {
+                                        sAMGeometries.AddRange(((Spatial.Mesh3D)sAMGeometry).GetTriangles().ConvertAll(x => new Spatial.Face3D(x)).Cast<T>());
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            sAMGeometries = sAMGeometries_Temp.ToList().FindAll(x => x is T).Cast<T>().ToList();
+                        }
+                        
                         return sAMGeometries.Count > 0;
                     }
 

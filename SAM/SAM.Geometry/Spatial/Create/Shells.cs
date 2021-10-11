@@ -401,9 +401,8 @@ namespace SAM.Geometry.Spatial
             List<Face2D> face2Ds = new List<Face2D>();
             List<Face3D> face3Ds_Temp = new List<Face3D>();
 
-            foreach (IFace3DObject face3DObject in face3Ds)
+            foreach (Face3D face3D_Face3D in face3Ds)
             {
-                Face3D face3D_Face3D = face3DObject?.Face3D;
                 if (face3D_Face3D == null)
                 {
                     continue;
