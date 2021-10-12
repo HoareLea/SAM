@@ -17,7 +17,7 @@ namespace SAM.Core
 
         public static bool IsNumeric(this Type type)
         {
-            switch (Type.GetTypeCode(type))
+            switch (System.Type.GetTypeCode(type))
             {
                 case TypeCode.Byte:
                 case TypeCode.SByte:

@@ -81,8 +81,15 @@
     <Compile Include="Interfaces\IPartition.cs" />
     <Compile Include="Interfaces\ITerrain.cs" />
     <Compile Include="Interfaces\IArchitecturalObject.cs" />
+    <Compile Include="Modify\Type.cs" />
+    <Compile Include="Modify\UpdateHostPartitionType.cs" />
     <Compile Include="Modify\UpdateNormals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\Cut.cs" />
+    <Compile Include="Query\Materials.cs" />
+    <Compile Include="Query\Material.cs" />
+    <Compile Include="Query\MaterialType.cs" />
+    <Compile Include="Query\Transparent.cs" />
     <Compile Include="Query\Type.cs" />
     <Compile Include="Query\FlipNormal.cs" />
     <Compile Include="Query\NormalDictionary.cs" />

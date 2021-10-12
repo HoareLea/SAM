@@ -8,7 +8,7 @@ namespace SAM.Core
     public class SAMObject : ISAMObject
     {
         private Guid guid;
-        private string name;
+        protected string name;
         private List<ParameterSet> parameterSets;
 
         public SAMObject(SAMObject sAMObject)

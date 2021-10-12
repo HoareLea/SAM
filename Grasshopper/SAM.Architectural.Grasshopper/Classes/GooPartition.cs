@@ -196,7 +196,7 @@ namespace SAM.Architectural.Grasshopper
         }
     }
 
-    public class GoohostPartitionParam : GH_PersistentParam<GooPartition>, IGH_PreviewObject, IGH_BakeAwareObject
+    public class GooPartitionParam : GH_PersistentParam<GooPartition>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         private bool showAll = true;
         
@@ -240,7 +240,7 @@ namespace SAM.Architectural.Grasshopper
             Preview_DrawWires(args);
         }
 
-        public GoohostPartitionParam()
+        public GooPartitionParam()
             : base(typeof(IPartition).Name, typeof(IPartition).Name, typeof(IPartition).FullName.Replace(".", " "), "Params", "SAM")
         {
         }

@@ -4,8 +4,8 @@ namespace SAM.Analytical
 {
     public class VentilationSystem : MechanicalSystem
     {
-        public VentilationSystem(string name, VentilationSystemType ventilationSystemType)
-            : base(name, ventilationSystemType)
+        public VentilationSystem(string id, VentilationSystemType ventilationSystemType)
+            : base(id, ventilationSystemType)
         {
 
         }

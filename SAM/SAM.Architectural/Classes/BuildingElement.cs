@@ -22,13 +22,13 @@ namespace SAM.Architectural
         }
 
         public BuildingElement(T buildingElementType, Face3D face3D)
-            : base(buildingElementType?.Name, buildingElementType)
+            : base(buildingElementType)
         {
             this.face3D = face3D;
         }
 
         public BuildingElement(System.Guid guid, T buildingElementType, Face3D face3D)
-            : base(guid, buildingElementType?.Name, buildingElementType)
+            : base(guid, buildingElementType)
         {
             this.face3D = face3D;
         }

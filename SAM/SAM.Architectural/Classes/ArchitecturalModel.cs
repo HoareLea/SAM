@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,14 +14,16 @@ namespace SAM.Architectural
         private Address address;
         private Terrain terrain;
         private RelationCluster relationCluster;
+        private MaterialLibrary materialLibrary;
 
-        public ArchitecturalModel(string description, Location location, Address address, Terrain terrain)
+        public ArchitecturalModel(string description, Location location, Address address, Terrain terrain, MaterialLibrary materialLibrary)
             : base()
         {
             this.description = description;
             this.location = location?.Clone();
             this.address = address?.Clone();
             this.terrain = terrain?.Clone();
+            this.materialLibrary = materialLibrary.Clone();
         }
 
         public string Description
@@ -56,26 +59,154 @@ namespace SAM.Architectural
             return result;
         }
 
+        public List<T> GetObjects<T>(params Func<T, bool>[] functions)
+        {
+            if(functions == null)
+            {
+                return null;
+            }
+
+            List<T> result = GetObjects<T>();
+            if (result == null)
+            {
+                return null;
+            }
+
+            for (int i = result.Count - 1; i >= 0; i--)
+            {
+                bool remove = false;
+                foreach(Func<T, bool> function in functions)
+                {
+                    if(!function(result[i]))
+                    {
+                        remove = true;
+                        break;
+                    }
+                }
+
+                if(remove)
+                {
+                    result.RemoveAt(i);
+                }
+            }
+
+            return result;
+        }
+
+        public List<T> GetRelatedObjects<T>(object @object)
+        {
+            if(@object == null)
+            {
+                return null;
+            }
+
+            return relationCluster?.GetRelatedObjects<T>(@object);
+        }
+
+        public bool RemoveObject(object @object)
+        {
+            if(@object == null || relationCluster == null)
+            {
+                return false;
+            }
+
+            Guid guid = relationCluster.GetGuid(@object);
+            if(guid == Guid.Empty)
+            {
+                return false;
+            }
+
+            return relationCluster.RemoveObject(@object.GetType(), guid);
+        }
+
+        public bool AddRelation(object object_1, object object_2)
+        {
+            if(object_1 == null || object_2 == null || relationCluster == null)
+            {
+                return false;
+            }
+
+            return relationCluster.AddRelation(object_1, object_2);
+        }
+
+        public bool AddMaterial(IMaterial material)
+        {
+            if(material == null)
+            {
+                return false;
+            }
+
+            if(materialLibrary == null)
+            {
+                materialLibrary = new MaterialLibrary(string.Empty);
+            }
+
+            return materialLibrary.Add(material);
+        }
+
+        public IMaterial GetMaterial(string name)
+        {
+            if(materialLibrary == null || string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+
+            return materialLibrary.GetObject<IMaterial>(name);
+        }
+
+        public Terrain Terrain
+        {
+            get
+            {
+                return terrain?.Clone();
+            }
+        }
+
+        public List<IMaterial> GetMaterials(HostPartitionType hostPartitionType)
+        {
+            if(hostPartitionType == null)
+            {
+                return null;
+            }
+
+            return hostPartitionType.Materials(materialLibrary);
+        }
+
+        public MaterialType GetMaterialType(HostPartitionType hostPartitionType)
+        {
+            return Query.MaterialType(hostPartitionType?.MaterialLayers, materialLibrary);
+        }
+
+        public MaterialType GetMaterialType(IHostPartition hostPartition)
+        {
+            if(hostPartition == null)
+            {
+                return MaterialType.Undefined;
+            }
+
+            return GetMaterialType(hostPartition.Type());
+        }
+        
         public List<Room> GetRooms(IPartition partition)
         {
             return relationCluster?.GetRelatedObjects<Room>(partition);
         }
 
-        public bool Internal(IHostPartition hostPartition)
+        public bool Internal(IPartition partition)
         {
-            List<Room> rooms = GetRooms(hostPartition);
+            List<Room> rooms = GetRooms(partition);
             return rooms != null || rooms.Count > 2;
         }
         
-        public bool External(IHostPartition hostPartition)
+        public bool External(IPartition partition)
         {
-            List<Room> rooms = GetRooms(hostPartition);
+            List<Room> rooms = GetRooms(partition);
             return rooms != null && rooms.Count == 1;
         }
 
-        public bool Shade(IHostPartition hostPartition)
+        public bool Shade(IPartition partition)
         {
-            List<Room> rooms = GetRooms(hostPartition);
+            List<Room> rooms = GetRooms(partition);
             return rooms == null || rooms.Count == 0;
         }
 
@@ -139,6 +270,11 @@ namespace SAM.Architectural
             return result;
         }
 
+        public List<IPartition> GetPartitions()
+        {
+            return GetObjects<IPartition>();
+        }
+
         public Shell GetShell(Room room)
         {
             List<IPartition> partitions = GetPartitions(room);
@@ -176,7 +312,7 @@ namespace SAM.Architectural
             bool result = relationCluster.AddObject(room);
             if(partitions != null && partitions.Count() != 0)
             {
-                foreach(IHostPartition partition in partitions)
+                foreach(IPartition partition in partitions)
                 {
                     if(relationCluster.AddObject(partition))
                     {

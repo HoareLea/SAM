@@ -48,7 +48,7 @@ namespace SAM.Analytical
         /// <param name="panel">SAM Analytical Panel</param>
         /// <param name="construction">SAM Analytical Construction</param>
         internal Panel(Panel panel, Construction construction)
-            : base(construction == null ? null : construction.Name, panel, construction)
+            : base(panel, construction)
         {
             planarBoundary3D = new PlanarBoundary3D(panel.planarBoundary3D);
             panelType = panel.panelType;
@@ -58,7 +58,7 @@ namespace SAM.Analytical
         }
 
         internal Panel(string name, Panel panel, Construction construction)
-            : base(name, panel, construction)
+            : base(panel, construction)
         {
             planarBoundary3D = panel == null ? null : new PlanarBoundary3D(panel.planarBoundary3D);
             panelType = panel == null ? PanelType.Undefined : panel.panelType;
@@ -83,14 +83,14 @@ namespace SAM.Analytical
         }
 
         internal Panel(Construction construction, PanelType panelType, Face3D face)
-            : base(construction == null ? null : construction.Name, construction)
+            : base(construction)
         {
             this.panelType = panelType;
             planarBoundary3D = new PlanarBoundary3D(face);
         }
 
         internal Panel(Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
-            : base(construction == null ? null : construction.Name, construction)
+            : base(construction)
         {
             this.panelType = panelType;
             this.planarBoundary3D = planarBoundary3D;
@@ -146,7 +146,7 @@ namespace SAM.Analytical
         }
 
         internal Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
-            : base(guid, name, parameterSets, construction)
+            : base(guid, parameterSets, construction)
         {
             this.panelType = panelType;
             this.planarBoundary3D = new PlanarBoundary3D(planarBoundary3D);

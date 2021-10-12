@@ -828,7 +828,7 @@ namespace SAM.Core
             List<string> result = new List<string>();
             foreach(string typeName in dictionary_Objects.Keys)
             {
-                Type type_Temp = Type.GetType(typeName, false, false);
+                Type type_Temp = Query.Type(typeName);
                 if(type_Temp == null || !type.IsAssignableFrom(type_Temp))
                 {
                     continue;

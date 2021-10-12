@@ -16,13 +16,7 @@ namespace SAM.Core
         }
 
         public SAMInstance(SAMInstance<T> instance, T type)
-            : base(instance)
-        {
-            this.type = type;
-        }
-
-        public SAMInstance(string name, SAMInstance<T> instance, T type)
-            : base(name, instance)
+            : base(type?.Name, instance)
         {
             this.type = type;
         }
@@ -34,25 +28,19 @@ namespace SAM.Core
         }
 
         public SAMInstance(Guid guid, T type)
-            : base(guid)
+            : base(guid, type?.Name)
         {
             this.type = type;
         }
 
-        public SAMInstance(Guid guid, string name, T type)
-        : base(guid, name)
+        public SAMInstance(T type)
+            : base(type?.Name)
         {
             this.type = type;
         }
 
-        public SAMInstance(string name, T type)
-            : base(name)
-        {
-            this.type = type;
-        }
-
-        public SAMInstance(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, T type)
-            : base(guid, name, parameterSets)
+        public SAMInstance(Guid guid, IEnumerable<ParameterSet> parameterSets, T type)
+            : base(guid, type?.Name, parameterSets)
         {
             this.type = type;
         }
@@ -67,6 +55,17 @@ namespace SAM.Core
             get
             {
                 return type?.Clone();
+            }
+
+            set
+            {
+                if(value == null)
+                {
+                    return;
+                }
+
+                name = value.Name;
+                type = value;
             }
         }
 

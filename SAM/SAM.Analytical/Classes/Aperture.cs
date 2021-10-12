@@ -39,35 +39,28 @@ namespace SAM.Analytical
         }
 
         public Aperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D)
-            : base(System.Guid.NewGuid(), apertureConstruction?.Name, apertureConstruction)
+            : base(Guid.NewGuid(), apertureConstruction)
         {
             if (closedPlanar3D != null)
                 planarBoundary3D = new PlanarBoundary3D(closedPlanar3D);
         }
 
-        public Aperture(string name, Aperture aperture, ApertureConstruction apertureConstruction)
-            : base(name, aperture, apertureConstruction)
+        public Aperture(Aperture aperture, ApertureConstruction apertureConstruction)
+            : base(aperture, apertureConstruction)
         {
             if (aperture.planarBoundary3D != null)
                 planarBoundary3D = new PlanarBoundary3D(aperture.planarBoundary3D);
         }
 
         public Aperture(ApertureConstruction apertureConstruction, IClosedPlanar3D closedPlanar3D, Point3D location)
-            : base(System.Guid.NewGuid(), apertureConstruction.Name, null, apertureConstruction)
+            : base(Guid.NewGuid(), null, apertureConstruction)
         {
             if (closedPlanar3D != null)
                 planarBoundary3D = new PlanarBoundary3D(closedPlanar3D, location);
         }
 
-        public Aperture(Aperture aperture, ApertureConstruction apertureConstruction)
-            :base(apertureConstruction.Name, aperture, apertureConstruction)
-        {
-            if (aperture.planarBoundary3D != null)
-                planarBoundary3D = new PlanarBoundary3D(aperture.planarBoundary3D);
-        }
-
         public Aperture(Aperture aperture, PlanarBoundary3D planarBoundary3D)
-            : base(aperture.ApertureConstruction?.Name, aperture, aperture.ApertureConstruction)
+            : base(aperture, aperture.ApertureConstruction)
         {
             if (planarBoundary3D != null)
                 this.planarBoundary3D = new PlanarBoundary3D(planarBoundary3D);

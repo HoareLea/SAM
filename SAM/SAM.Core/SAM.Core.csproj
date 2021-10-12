@@ -165,6 +165,7 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\Type.cs" />
     <Compile Include="Query\TryInvokeDeclaredMethod.cs" />
     <Compile Include="Query\TryInvokeRuntimeMethod.cs" />
     <Compile Include="Query\TryInvokeMethod.cs" />

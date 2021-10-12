@@ -18,5 +18,10 @@ namespace SAM.Architectural
 
             return Architectural.HostPartitionCategory.Roof;
         }
+
+        public static HostPartitionCategory HostPartitionCategory(IPartition partition, double tolerance = Core.Tolerance.Angle)
+        {
+            return HostPartitionCategory(partition?.Face3D?.GetPlane()?.Normal, tolerance);
+        }
     }
 }

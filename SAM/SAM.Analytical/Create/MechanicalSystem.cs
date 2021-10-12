@@ -7,22 +7,19 @@
             if (mechanicalSystemType == null)
                 return null;
 
-            string name = mechanicalSystemType.Name;
+            string id = null;
             if (index != -1)
             {
-                if (string.IsNullOrEmpty(name))
-                    name = index.ToString();
-                else
-                    name += " " + index.ToString();
+                id = index.ToString();
             }
 
             MechanicalSystem result = null;
             if(mechanicalSystemType is VentilationSystemType)
-                result = new VentilationSystem(name, (VentilationSystemType)mechanicalSystemType);
+                result = new VentilationSystem(id, (VentilationSystemType)mechanicalSystemType);
             else if(mechanicalSystemType is HeatingSystemType)
-                result = new HeatingSystem(name, (HeatingSystemType)mechanicalSystemType);
+                result = new HeatingSystem(id, (HeatingSystemType)mechanicalSystemType);
             else if(mechanicalSystemType is CoolingSystemType)
-                result = new CoolingSystem(name, (CoolingSystemType)mechanicalSystemType);
+                result = new CoolingSystem(id, (CoolingSystemType)mechanicalSystemType);
 
             if (result == null)
                 return null;

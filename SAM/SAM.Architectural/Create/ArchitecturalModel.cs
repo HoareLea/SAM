@@ -20,7 +20,7 @@ namespace SAM.Architectural
             Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Min)) as Plane;
             Plane plane_Max = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, new PlanarTerrain(plane_Min));
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, new PlanarTerrain(plane_Min), null);
 
             Plane plane_Min_Flipped = new Plane(plane_Min);
             plane_Min_Flipped.FlipZ();
@@ -211,7 +211,7 @@ namespace SAM.Architectural
                     dictionaries_Room.Add(dictionary_Room);
             }
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(elevation_Ground));
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(elevation_Ground), null);
             foreach (Dictionary<Room, List<IHostPartition>> dictionary_Room in dictionaries_Room)
             {
                 foreach (KeyValuePair<Room, List<IHostPartition>> keyValuePair in dictionary_Room)
@@ -233,23 +233,28 @@ namespace SAM.Architectural
             List<Tuple<Room, List<IPartition>>> tuples = new List<Tuple<Room, List<IPartition>>>();
 
             List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>> tuples_Partition = new List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>>();
-            foreach (IPartition partition in partitions)
+            if(partitions != null)
             {
-                Face3D face3D = partition?.Face3D;
-                if (face3D == null)
-                    continue;
+                foreach (IPartition partition in partitions)
+                {
+                    Face3D face3D = partition?.Face3D;
+                    if (face3D == null)
+                        continue;
 
-                Plane plane = face3D.GetPlane();
-                if (plane == null)
-                    continue;
+                    Plane plane = face3D.GetPlane();
+                    if (plane == null)
+                        continue;
 
-                double area = face3D.GetArea();
+                    double area = face3D.GetArea();
 
-                if (area < minArea || face3D.ThinnessRatio() < thinnessRatio) // Changed from tolerance_Distance to minArea
-                    continue;
+                    if (area < minArea || face3D.ThinnessRatio() < thinnessRatio) // Changed from tolerance_Distance to minArea
+                        continue;
 
-                tuples_Partition.Add(new Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>(plane, face3D, partition, face3D.GetBoundingBox(tolerance_Distance), area));
+                    tuples_Partition.Add(new Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>(plane, face3D, partition, face3D.GetBoundingBox(tolerance_Distance), area));
+                }
             }
+
+            Plane plane_Ground = Geometry.Spatial.Create.Plane(groundElevation);
 
             tuples_Partition.Sort((x, y) => y.Item5.CompareTo(x.Item5));
 
@@ -291,7 +296,13 @@ namespace SAM.Architectural
                     shell_FixEdges = new Shell(shell_Merge);
                 }
 
-                shells_Temp[i] = shell_FixEdges;
+                Shell shell_CutFace3D = shell_FixEdges.CutFace3Ds(plane_Ground);
+                if(shell_CutFace3D == null)
+                {
+                    shell_CutFace3D = new Shell(shell_FixEdges);
+                }
+
+                shells_Temp[i] = shell_CutFace3D;
             });
 
             shells_Temp.RemoveAll(x => x == null);
@@ -556,7 +567,7 @@ namespace SAM.Architectural
                 }
             }
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(groundElevation));
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(groundElevation), null);
             foreach (Tuple<Room, List<IPartition>> tuple in tuples)
             {
                 result.Add(tuple.Item1, tuple.Item2);
