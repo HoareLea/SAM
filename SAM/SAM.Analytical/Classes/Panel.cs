@@ -11,7 +11,7 @@ namespace SAM.Analytical
     /// <summary>
     /// SAM Analytical Panel stores information about shape and properties of building boundary such as Wall, Floor, Roof, Slab etc.
     /// </summary>
-    public class Panel : SAMInstance<Construction>
+    public class Panel : SAMInstance<Construction>, IFace3DObject
     {
         /// <summary>
         /// Type of the Panel such as Wall, Ceiling etc.
@@ -691,6 +691,26 @@ namespace SAM.Analytical
             get
             {
                 return apertures != null && apertures.Count != 0;
+            }
+        }
+
+        public Face3D Face3D
+        {
+            get
+            {
+                Face2D face2D = planarBoundary3D?.GetFace2D();
+                if (face2D == null)
+                {
+                    return null;
+                }
+
+                Plane plane = planarBoundary3D.Plane;
+                if(plane == null)
+                {
+                    return null;
+                }
+
+                return plane.Convert(face2D);
             }
         }
     }
