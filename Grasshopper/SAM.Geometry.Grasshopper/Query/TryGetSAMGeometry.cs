@@ -35,17 +35,18 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
+            object @object = null;
 
             if (objectWrapper.Value is IGH_GeometricGoo)
             {
-                object @object = Convert.ToSAM(objectWrapper.Value as dynamic);
-                if(typeof(T) == typeof(Spatial.Face3D))
+                @object = Convert.ToSAM(objectWrapper.Value as dynamic);
+                if (typeof(T) == typeof(Spatial.Face3D))
                 {
                     if (@object is Spatial.Shell)
                     {
                         @object = ((Spatial.Shell)@object).Face3Ds;
                     }
-                    else if(@object is Spatial.Mesh3D)
+                    else if (@object is Spatial.Mesh3D)
                     {
                         @object = ((Spatial.Mesh3D)@object).GetTriangles().ConvertAll(x => new Spatial.Face3D(x));
                     }
@@ -56,14 +57,14 @@ namespace SAM.Geometry.Grasshopper
                 {
 
                     IEnumerable<ISAMGeometry> sAMGeometries_Temp = ((IEnumerable)@object).Cast<ISAMGeometry>();
-                    if(sAMGeometries_Temp != null && sAMGeometries_Temp.Count() > 0)
+                    if (sAMGeometries_Temp != null && sAMGeometries_Temp.Count() > 0)
                     {
                         if (typeof(T) == typeof(Spatial.Face3D))
                         {
                             sAMGeometries = new List<T>();
                             foreach (ISAMGeometry sAMGeometry in sAMGeometries_Temp)
                             {
-                                if(sAMGeometry is T)
+                                if (sAMGeometry is T)
                                 {
                                     sAMGeometries.Add((T)sAMGeometry);
                                 }
@@ -84,16 +85,28 @@ namespace SAM.Geometry.Grasshopper
                         {
                             sAMGeometries = sAMGeometries_Temp.ToList().FindAll(x => x is T).Cast<T>().ToList();
                         }
-                        
+
                         return sAMGeometries.Count > 0;
                     }
 
                 }
-                else if(@object is T)
+                else if (@object is T)
                 {
                     sAMGeometries = new List<T>() { (T)@object };
                     return true;
                 }
+            }
+
+            @object = objectWrapper.Value;
+            if (@object is IGH_Goo)
+            {
+                @object = (@object as dynamic).Value;
+            }
+
+            if (@object is Spatial.IFace3DObject && typeof(T) == typeof(Spatial.Face3D))
+            {
+                sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)@object).Face3D };
+                return true;
             }
 
             return false;
