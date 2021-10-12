@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace SAM.Architectural.Grasshopper
 {
-    public class GooArchitecturalModel : GooSAMObject<ArchitecturalModel>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooArchitecturalModel : GooJSAMObject<ArchitecturalModel>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooArchitecturalModel()
             : base()

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooAdjacencyCluster : GooSAMObject<AdjacencyCluster>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooAdjacencyCluster : GooJSAMObject<AdjacencyCluster>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooAdjacencyCluster()
             : base()

@@ -138,7 +138,7 @@ namespace SAM.Core.Grasshopper
 
             if (value is SAMObject)
             {
-                value = new GooSAMObject<SAMObject>((SAMObject)value);
+                value = new GooJSAMObject<SAMObject>((SAMObject)value);
             }
 
             if (value is IEnumerable && !(value is string))

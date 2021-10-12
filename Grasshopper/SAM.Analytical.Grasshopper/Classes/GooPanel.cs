@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooPanel : GooSAMObject<Panel>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooPanel : GooJSAMObject<Panel>, IGH_PreviewData, IGH_BakeAwareData
     {
         public bool ShowAll = true;
         

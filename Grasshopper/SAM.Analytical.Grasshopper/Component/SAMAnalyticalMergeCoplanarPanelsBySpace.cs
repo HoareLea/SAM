@@ -42,7 +42,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            index = inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
+            index = inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("_offset", "_offset", "Offset", GH_ParamAccess.item, Tolerance.Distance);
             inputParamManager.AddNumberParameter("_minArea", "_minArea", "Minimal Area", GH_ParamAccess.item, Tolerance.MacroDistance);
             inputParamManager.AddNumberParameter("_tolerance", "_tolerance", "Tolerance", GH_ParamAccess.item, Tolerance.MacroDistance);
@@ -54,7 +54,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "AnalyticalObject", "AnalyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "AnalyticalObject", "AnalyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
             outputParamManager.AddParameter(new GooPanelParam(), "RedundantPanels", "RedundantPanels", "RedundantPanels", GH_ParamAccess.list);
         }
 

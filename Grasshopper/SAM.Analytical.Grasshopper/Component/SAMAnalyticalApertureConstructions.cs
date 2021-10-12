@@ -42,7 +42,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object ie.Panel, AdjacencyCluster", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object ie.Panel, AdjacencyCluster", GH_ParamAccess.item);
             
             index = inputParamManager.AddGenericParameter("panelType_", "panelType_", "PanelType", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;

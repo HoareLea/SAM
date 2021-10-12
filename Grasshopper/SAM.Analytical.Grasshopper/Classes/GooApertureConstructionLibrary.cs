@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooApertureConstructionLibrary : GooSAMObject<ApertureConstructionLibrary>
+    public class GooApertureConstructionLibrary : GooJSAMObject<ApertureConstructionLibrary>
     {
         public GooApertureConstructionLibrary()
             : base()

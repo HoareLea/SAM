@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooPlanarBoundary3D : GooSAMObject<PlanarBoundary3D>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooPlanarBoundary3D : GooJSAMObject<PlanarBoundary3D>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooPlanarBoundary3D()
             : base()

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooTextMap : GooSAMObject<TextMap>
+    public class GooTextMap : GooJSAMObject<TextMap>
     {
         public GooTextMap()
             : base()

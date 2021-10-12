@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooAperture : GooSAMObject<Aperture>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooAperture : GooJSAMObject<Aperture>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooAperture()
             : base()

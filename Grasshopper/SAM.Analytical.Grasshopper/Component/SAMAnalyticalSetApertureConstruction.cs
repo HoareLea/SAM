@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
             inputParamManager.AddParameter(new GooApertureParam(), "_apertures", "_apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
             inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction", "_apertureConstruction", "SAM Analytical ApertureConstruction", GH_ParamAccess.item);
         }
@@ -49,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "AdjacencyCluster", "AdjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "AdjacencyCluster", "AdjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
             outputParamManager.AddParameter(new GooApertureParam(), "Apertures", "Apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
         }
 

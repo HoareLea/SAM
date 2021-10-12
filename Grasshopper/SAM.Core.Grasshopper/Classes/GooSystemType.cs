@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooSystemType : GooSAMObject<ISystemType>
+    public class GooSystemType : GooJSAMObject<ISystemType>
     {
         public GooSystemType()
             : base()

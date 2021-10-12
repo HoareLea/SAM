@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Architectural.Grasshopper
 {
-    public class GooLevel : GooSAMObject<Level>, IGH_PreviewData
+    public class GooLevel : GooJSAMObject<Level>, IGH_PreviewData
     {
         public GooLevel()
             : base()

@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticals", "_analyticals", "SAM Analytical Space or InternalCondition", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analyticals", "_analyticals", "SAM Analytical Space or InternalCondition", GH_ParamAccess.list);
 
             inputParamManager.AddParameter(new GooDegreeOfActivityParam(), "_degreeOfActivity", "_degreeOfActivity", "SAM Analytical DegreeOfActivity", GH_ParamAccess.item);
 
@@ -50,7 +50,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Analyticals", "Analyticals", "SAM Analytical Model, Panels or Adjacency Cluster", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "Analyticals", "Analyticals", "SAM Analytical Model, Panels or Adjacency Cluster", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            dataAccess.SetDataList(0, sAMObjects.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
+            dataAccess.SetDataList(0, sAMObjects.ConvertAll(x => new GooJSAMObject<SAMObject>(x)));
         }
     }
 }

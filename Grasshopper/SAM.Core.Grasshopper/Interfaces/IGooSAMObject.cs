@@ -1,7 +1,7 @@
 ﻿namespace SAM.Core.Grasshopper
 {
-    public interface IGooSAMObject
+    public interface IGooJSAMObject
     {
-        ISAMObject GetSAMObject();
+        IJSAMObject GetJSAMObject();
     }
 }

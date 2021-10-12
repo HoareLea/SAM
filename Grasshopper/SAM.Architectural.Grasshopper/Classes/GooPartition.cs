@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace SAM.Architectural.Grasshopper
 {
-    public class GooPartition : GooSAMObject<IPartition>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooPartition : GooJSAMObject<IPartition>, IGH_PreviewData, IGH_BakeAwareData
     {
         public bool ShowAll = true;
         

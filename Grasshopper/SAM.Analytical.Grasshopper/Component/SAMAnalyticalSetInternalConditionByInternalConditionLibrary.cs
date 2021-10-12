@@ -217,7 +217,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfOutputParam("Analyticals");
             if (index != -1)
-                dataAccess.SetDataList(index, result.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
+                dataAccess.SetDataList(index, result.ConvertAll(x => new GooJSAMObject<SAMObject>(x)));
 
             index = Params.IndexOfOutputParam("Spaces");
             if (index != -1)

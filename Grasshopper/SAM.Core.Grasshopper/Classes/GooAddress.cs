@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooAddress : GooSAMObject<Address>
+    public class GooAddress : GooJSAMObject<Address>
     {
         public GooAddress()
             : base()

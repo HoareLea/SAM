@@ -96,7 +96,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_objects", "_objects", "Objects", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_objects", "_objects", "Objects", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -104,8 +104,8 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "In", "In", "In", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "Out", "Out", "Out", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "In", "In", "In", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "Out", "Out", "Out", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -165,8 +165,8 @@ namespace SAM.Core.Grasshopper
                 result_In.Add(sAMObject);
             }
 
-            dataAccess.SetDataList(0, result_In.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
-            dataAccess.SetDataList(1, result_Out.ConvertAll(x => new GooSAMObject<SAMObject>(x)));
+            dataAccess.SetDataList(0, result_In.ConvertAll(x => new GooJSAMObject<SAMObject>(x)));
+            dataAccess.SetDataList(1, result_Out.ConvertAll(x => new GooJSAMObject<SAMObject>(x)));
         }
     }
 }

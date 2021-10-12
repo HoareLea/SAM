@@ -16,6 +16,43 @@ namespace SAM.Architectural
         private RelationCluster relationCluster;
         private MaterialLibrary materialLibrary;
 
+        public ArchitecturalModel(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
+        public ArchitecturalModel(ArchitecturalModel architecturalModel)
+            : base(architecturalModel)
+        {
+            if (architecturalModel == null)
+            {
+                return;
+            }
+
+            description = architecturalModel.description;
+            location = architecturalModel.location?.Clone();
+            address = architecturalModel.address?.Clone();
+            terrain = architecturalModel.terrain?.Clone();
+            materialLibrary = architecturalModel.materialLibrary?.Clone();
+
+            relationCluster = architecturalModel.relationCluster?.Clone();
+
+            List<object> objects = relationCluster?.GetObjects();
+            if (objects != null)
+            {
+                foreach (object @object in objects)
+                {
+                    if(@object is IJSAMObject)
+                    {
+                        relationCluster.AddObject(((IJSAMObject)@object).Clone());
+                    }
+                }
+            }
+
+
+        }
+
         public ArchitecturalModel(string description, Location location, Address address, Terrain terrain, MaterialLibrary materialLibrary)
             : base()
         {

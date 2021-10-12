@@ -41,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster oor AnalyticalModel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster oor AnalyticalModel", GH_ParamAccess.item);
 
             GooPanelParam gooPanelParam = new GooPanelParam();
             gooPanelParam.Optional = true;

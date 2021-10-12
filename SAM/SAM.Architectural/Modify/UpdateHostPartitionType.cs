@@ -1,12 +1,13 @@
 ﻿using SAM.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Architectural
 {
     public static partial class Modify
     {
-        public static List<IPartition> UpdateHostPartitionType(this ArchitecturalModel architecturalModel, HostPartitionType hostPartitionType, IEnumerable<Func<IPartition, bool>> functions, List<IPartition> partitions = null)
+        public static List<IPartition> UpdateHostPartitionType(this ArchitecturalModel architecturalModel, HostPartitionType hostPartitionType, IEnumerable<Func<IPartition, bool>> functions, IEnumerable<IPartition> partitions = null)
         {
             if (architecturalModel == null || hostPartitionType == null || functions == null)
                 return null;
@@ -95,7 +96,7 @@ namespace SAM.Architectural
             return result;
         }
 
-        public static List<IPartition> UpdateHostPartitionType(this ArchitecturalModel architecturalModel, HostPartitionType hostPartitionType, Func<IPartition, bool> function, List<IPartition> partitions = null)
+        public static List<IPartition> UpdateHostPartitionType(this ArchitecturalModel architecturalModel, HostPartitionType hostPartitionType, Func<IPartition, bool> function, IEnumerable<IPartition> partitions = null)
         {
             if(function == null)
             {
@@ -105,8 +106,8 @@ namespace SAM.Architectural
             return UpdateHostPartitionType(architecturalModel, hostPartitionType, new Func<IPartition, bool>[] { function }, partitions);
         }
 
-        public static void UpdateHostPartitionType(this ArchitecturalModel architecturalModel,
-            List<IPartition> partitions = null,
+        public static List<IPartition> UpdateHostPartitionType(this ArchitecturalModel architecturalModel,
+            IEnumerable<IPartition> partitions = null,
             WallType curtainWallType = null,
             WallType internalWallType = null,
             WallType externalWallType = null,
@@ -122,7 +123,7 @@ namespace SAM.Architectural
         {
             if(architecturalModel == null)
             {
-                return;
+                return null;
             }
 
             Terrain terrain = architecturalModel.Terrain;
@@ -547,6 +548,7 @@ namespace SAM.Architectural
                 }
             }
 
+            return dictionary?.Values?.ToList();
         }
     }
 }
