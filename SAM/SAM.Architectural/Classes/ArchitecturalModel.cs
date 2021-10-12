@@ -103,6 +103,21 @@ namespace SAM.Architectural
             return relationCluster?.GetRelatedObjects<T>(@object);
         }
 
+        public List<object> GetRelatedObjects(object @object, Type type = null)
+        {
+            if (@object == null)
+            {
+                return null;
+            }
+
+            if(type == null)
+            {
+                return relationCluster?.GetRelatedObjects(@object);
+            }
+
+            return relationCluster?.GetRelatedObjects(@object, type);
+        }
+
         public bool RemoveObject(object @object)
         {
             if(@object == null || relationCluster == null)
