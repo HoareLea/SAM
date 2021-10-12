@@ -6,5 +6,10 @@
         {
             return (hostPartition as dynamic)?.Type;
         }
+
+        public static OpeningType Type(this IOpening opening)
+        {
+            return (opening as dynamic)?.Type;
+        }
     }
 }

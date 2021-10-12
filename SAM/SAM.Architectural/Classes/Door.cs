@@ -24,6 +24,12 @@ namespace SAM.Architectural
 
         }
 
+        public Door(System.Guid guid, DoorType doorType, Face3D face3D)
+            : base(guid, doorType, face3D)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

@@ -45,6 +45,19 @@ namespace SAM.Architectural
             }
         }
 
+        public override void Transform(Transform3D transform3D)
+        {
+            base.Transform(transform3D);
+
+            if(openings != null)
+            {
+                foreach(IOpening opening in openings)
+                {
+                    opening.Transform(transform3D);
+                }
+            }
+        }
+
         public bool AddOpening(IOpening opening)
         {
             if (opening == null)

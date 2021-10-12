@@ -42,16 +42,9 @@ namespace SAM.Architectural
 
                 return new Face3D(face3D);
             }
-            set
-            {
-                if(value != null)
-                {
-                    face3D = new Face3D(value);
-                }
-            }
         }
 
-        public void Transform(Transform3D transform3D)
+        public virtual void Transform(Transform3D transform3D)
         {
             face3D = face3D?.Transform(transform3D);
         }

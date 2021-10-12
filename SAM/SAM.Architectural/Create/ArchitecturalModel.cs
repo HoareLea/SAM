@@ -549,9 +549,7 @@ namespace SAM.Architectural
                                     }
                                 }
 
-                                tuple.Item2.Add(partition_New);
 
-                                tuples_Partition_New.Add(new Tuple<Point3D, IPartition, BoundingBox3D>(point3D_Internal, partition_New, face3D.GetBoundingBox(tolerance_Distance)));
                             }
                         }
                     }
@@ -562,7 +560,12 @@ namespace SAM.Architectural
                             continue;
 
                         partition_New = new AirPartition(face3D);
+                    }
+
+                    if(partition_New != null)
+                    {
                         tuple.Item2.Add(partition_New);
+                        tuples_Partition_New.Add(new Tuple<Point3D, IPartition, BoundingBox3D>(point3D_Internal, partition_New, partition_New.Face3D.GetBoundingBox(tolerance_Distance)));
                     }
                 }
             }
