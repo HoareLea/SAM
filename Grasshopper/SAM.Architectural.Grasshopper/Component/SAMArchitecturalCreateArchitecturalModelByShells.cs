@@ -18,7 +18,7 @@ namespace SAM.Architectural.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,15 +50,23 @@ namespace SAM.Architectural.Grasshopper
                 genericObject.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
-                GooPartitionParam panelParam = new GooPartitionParam() { Name = "partitions_", NickName = "partitions_", Description = "SAM Architectural Partitions", Access = GH_ParamAccess.list, Optional = true };
-                panelParam.DataMapping = GH_DataMapping.Flatten;
-                result.Add(new GH_SAMParam(panelParam, ParamVisibility.Voluntary));
+                GooPartitionParam partitionParam = new GooPartitionParam() { Name = "partitions_", NickName = "partitions_", Description = "SAM Architectural Partitions", Access = GH_ParamAccess.list, Optional = true };
+                partitionParam.DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(partitionParam, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_groundElevation_", NickName = "_groundElevation_", Description = "Ground Elevation", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+
+                GooLocationParam locationParam = new GooLocationParam() { Name = "_location_", NickName = "_location_", Description = "SAM Core Location", Access = GH_ParamAccess.item};
+                locationParam.SetPersistentData(Core.Query.DefaultLocation());
+                result.Add(new GH_SAMParam(partitionParam, ParamVisibility.Voluntary));
+
+                GooAddressParam addressParam = new GooAddressParam() { Name = "_address_", NickName = "_address_", Description = "SAM Core Address", Access = GH_ParamAccess.item };
+                addressParam.SetPersistentData(Core.Query.DefaultAddress());
+                result.Add(new GH_SAMParam(addressParam, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(0.01);
@@ -159,22 +167,38 @@ namespace SAM.Architectural.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref tolerance);
 
-            ArchitecturalModel architecturalModel = Create.ArchitecturalModel(shells, partitions, groundElevation, true, 0.01, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
-            if(partitions == null || partitions.Count == 0)
-            {
-                architecturalModel.UpdateHostPartitionType(
-                    curtainWallType: new WallType("Curtain Wall"), 
-                    internalWallType: new WallType("Internal Wall"),
-                    externalWallType: new WallType("External Wall"),
-                    undergroundWallType: new WallType("Underground Wall"),
-                    internalFloorType: new FloorType("Internal Floor"),
-                    externalFloorType: new FloorType("External Floor"),
-                    onGradeFloorType: new FloorType("On Grade Floor"),
-                    undergroundFloorType: new FloorType("Underground Floor"),
-                    undergroundCeilingFloorType: new FloorType("Underground Ceiling Floor"),
-                    roofType: new RoofType("Roof"));
-            }
+            index = Params.IndexOfInputParam("_location_");
+            Core.Location location = Core.Query.DefaultLocation();
+            if (index != -1)
+                dataAccess.GetData(index, ref location);
 
+            index = Params.IndexOfInputParam("_address_");
+            Core.Address address = Core.Query.DefaultAddress();
+            if (index != -1)
+                dataAccess.GetData(index, ref address);
+
+            ArchitecturalModel architecturalModel = Create.ArchitecturalModel(shells, partitions, groundElevation, true, 0.01, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
+            if(architecturalModel != null)
+            {
+                if (partitions == null || partitions.Count == 0)
+                {
+                    architecturalModel.UpdateHostPartitionType(
+                        curtainWallType: Architectural.Query.DefaultHostPartitionType<WallType>(PartitionAnalyticalType.CurtainWall),
+                        internalWallType: Architectural.Query.DefaultHostPartitionType<WallType>(PartitionAnalyticalType.InternalWall),
+                        externalWallType: Architectural.Query.DefaultHostPartitionType<WallType>(PartitionAnalyticalType.ExternalWall),
+                        undergroundWallType: Architectural.Query.DefaultHostPartitionType<WallType>(PartitionAnalyticalType.UndergroundWall),
+                        internalFloorType: Architectural.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.InternalFloor),
+                        externalFloorType: Architectural.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.ExternalFloor),
+                        onGradeFloorType: Architectural.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.OnGradeFloor),
+                        undergroundFloorType: Architectural.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.UndergroundFloor),
+                        undergroundCeilingFloorType: Architectural.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.UndergroundCeiling),
+                        roofType: Architectural.Query.DefaultHostPartitionType<RoofType>(PartitionAnalyticalType.Roof));
+                }
+
+                architecturalModel.Location = location;
+                architecturalModel.Address = address;
+
+            }
 
             index = Params.IndexOfOutputParam("architecturalModel");
             if (index != -1)

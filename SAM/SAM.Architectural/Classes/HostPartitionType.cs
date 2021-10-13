@@ -27,6 +27,12 @@ namespace SAM.Architectural
 
         }
 
+        public HostPartitionType(System.Guid guid, string name)
+            : base(guid, name)
+        {
+
+        }
+
         public HostPartitionType(string name, IEnumerable<MaterialLayer> materialLayers)
             : base(name)
         {

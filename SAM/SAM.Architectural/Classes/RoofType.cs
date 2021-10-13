@@ -23,6 +23,12 @@ namespace SAM.Architectural
 
         }
 
+        public RoofType(System.Guid guid, string name)
+        : base(guid, name)
+        {
+
+        }
+
         public RoofType(string name, IEnumerable<MaterialLayer> materialLayers)
             : base(name, materialLayers)
         {

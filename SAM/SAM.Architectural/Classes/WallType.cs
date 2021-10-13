@@ -23,6 +23,12 @@ namespace SAM.Architectural
 
         }
 
+        public WallType(System.Guid guid, string name)
+            : base(guid, name)
+        {
+
+        }
+
         public WallType(string name, IEnumerable<MaterialLayer> materialLayers)
             : base(name, materialLayers)
         {

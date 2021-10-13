@@ -77,6 +77,7 @@
     <Compile Include="Component\SAMCoreAddMaterials.cs" />
     <Compile Include="Component\SAMCoreCopyMaterials.cs" />
     <Compile Include="Component\SAMCoreCreateDelimitedFileTableBySAMObjects.cs" />
+    <Compile Include="Component\SAMCoreCreateAddress.cs" />
     <Compile Include="Component\SAMCoreCsvToDelimitedFileTable.cs" />
     <Compile Include="Component\SAMCoreConvert.cs" />
     <Compile Include="Component\SAMCoreDelimitedFileTableSort.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Component\SAMCoreCreateOpaqueMaterial_Obsolete.cs" />
     <Compile Include="Component\SAMCoreCreateGasMaterial_Obsolete.cs" />
     <Compile Include="Component\SAMCoreLogToFile.cs" />
+    <Compile Include="Component\SAMCoreCountryCode.cs" />
     <Compile Include="Component\SAMCoreToFile.cs" />
     <Compile Include="Component\SAMVersion.cs" />
     <Compile Include="Component\SAMCoreColorToUint.cs" />

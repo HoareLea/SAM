@@ -67,7 +67,23 @@
                 return System.Drawing.Color.Violet;
             }
 
-            return Color(opening);
+            return Color(OpeningAnalyticalType(opening));
+        }
+
+        public static System.Drawing.Color Color(this OpeningType openingType, bool internalEdges)
+        {
+            System.Drawing.Color result = System.Drawing.Color.Empty;
+            if (openingType == null)
+            {
+                return result;
+            }
+
+            if (internalEdges)
+            {
+                return System.Drawing.Color.Violet;
+            }
+
+            return Color(OpeningAnalyticalType(openingType));
         }
 
         public static System.Drawing.Color Color(this PartitionAnalyticalType partitionAnalyticalType)

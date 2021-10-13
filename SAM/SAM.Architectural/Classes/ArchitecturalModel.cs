@@ -75,6 +75,44 @@ namespace SAM.Architectural
             }
         }
 
+        public Terrain Terrain
+        {
+            get
+            {
+                return terrain?.Clone();
+            }
+        }
+
+        public Location Location
+        {
+            get
+            {
+                return location?.Clone();
+            }
+            set
+            {
+                if(value != null)
+                {
+                    location = value;
+                }
+            }
+        }
+
+        public Address Address
+        {
+            get
+            {
+                return address?.Clone();
+            }
+            set
+            {
+                if (value != null)
+                {
+                    address = value;
+                }
+            }
+        }
+
         public List<T> GetObjects<T>()
         {
             List<string> typeNames = relationCluster?.GetTypeNames(typeof(T));
@@ -204,14 +242,6 @@ namespace SAM.Architectural
             }
 
             return materialLibrary.GetObject<IMaterial>(name);
-        }
-
-        public Terrain Terrain
-        {
-            get
-            {
-                return terrain?.Clone();
-            }
         }
 
         public List<IMaterial> GetMaterials(HostPartitionType hostPartitionType)
