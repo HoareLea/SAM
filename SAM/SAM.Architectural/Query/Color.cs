@@ -51,23 +51,7 @@
 
         public static System.Drawing.Color Color(this IOpening opening)
         {
-            System.Drawing.Color result = System.Drawing.Color.Empty;
-            if(opening == null)
-            {
-                return result;
-            }
-
-            if(opening is Window)
-            {
-                return System.Drawing.Color.Blue;
-            }
-
-            if(opening is Door)
-            {
-                return System.Drawing.Color.Brown;
-            }
-
-            return result;
+            return Color(OpeningAnalyticalType(opening));
         }
 
         public static System.Drawing.Color Color(this IOpening opening, bool internalEdges)
@@ -84,6 +68,70 @@
             }
 
             return Color(opening);
+        }
+
+        public static System.Drawing.Color Color(this PartitionAnalyticalType partitionAnalyticalType)
+        {
+            switch (partitionAnalyticalType)
+            {
+                case Architectural.PartitionAnalyticalType.CurtainWall:
+                    return System.Drawing.Color.BlueViolet;
+
+                case Architectural.PartitionAnalyticalType.ExternalFloor:
+                    return System.Drawing.ColorTranslator.FromHtml("#40B4FF");
+
+                case Architectural.PartitionAnalyticalType.InternalFloor:
+                    return System.Drawing.ColorTranslator.FromHtml("#80FFFF");
+
+                case Architectural.PartitionAnalyticalType.Roof:
+                    return System.Drawing.ColorTranslator.FromHtml("#800000");
+
+                case Architectural.PartitionAnalyticalType.Shade:
+                    return System.Drawing.ColorTranslator.FromHtml("#FFCE9D");
+
+                case Architectural.PartitionAnalyticalType.OnGradeFloor:
+                    return System.Drawing.ColorTranslator.FromHtml("#804000");
+
+                case Architectural.PartitionAnalyticalType.Undefined:
+                    return System.Drawing.ColorTranslator.FromHtml("#FFB400");
+
+                case Architectural.PartitionAnalyticalType.UndergroundCeiling:
+                    return System.Drawing.ColorTranslator.FromHtml("#408080");
+
+                case Architectural.PartitionAnalyticalType.UndergroundFloor:
+                    return System.Drawing.ColorTranslator.FromHtml("#804000");
+
+                case Architectural.PartitionAnalyticalType.UndergroundWall:
+                    return System.Drawing.ColorTranslator.FromHtml("#A55200");
+
+                case Architectural.PartitionAnalyticalType.ExternalWall:
+                    return System.Drawing.ColorTranslator.FromHtml("#FFB400");
+
+                case Architectural.PartitionAnalyticalType.InternalWall:
+                    return System.Drawing.ColorTranslator.FromHtml("#008000");
+
+                case Architectural.PartitionAnalyticalType.Air:
+                    return System.Drawing.ColorTranslator.FromHtml("#FFFF00");
+            }
+
+            return System.Drawing.Color.Empty;
+        }
+
+        public static System.Drawing.Color Color(this OpeningAnalyticalType openingAnalyticalType)
+        {
+            switch(openingAnalyticalType)
+            {
+                case Architectural.OpeningAnalyticalType.Door:
+                    return System.Drawing.Color.Brown;
+
+                case Architectural.OpeningAnalyticalType.Window:
+                    return System.Drawing.Color.Blue;
+
+                case Architectural.OpeningAnalyticalType.Undefined:
+                    return System.Drawing.Color.Empty;
+            }
+
+            return System.Drawing.Color.Empty;
         }
     }
 }

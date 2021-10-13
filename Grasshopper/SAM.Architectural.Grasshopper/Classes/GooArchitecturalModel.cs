@@ -171,10 +171,16 @@ namespace SAM.Architectural.Grasshopper
             Modify.BakeGeometry_ByCategory(doc, VolatileData, true, Core.Tolerance.Distance);
         }
 
+        public void BakeGeometry_ByAnalyticalType(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByAnalyticalType(doc, VolatileData, true, Core.Tolerance.Distance);
+        }
+
         public override void AppendAdditionalMenuItems(System.Windows.Forms.ToolStripDropDown menu)
         {
             Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Category", Menu_BakeByConstruction, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Analytical Type", Menu_BakeByAnalyticalType, VolatileData.AllData(true).Any());
 
             base.AppendAdditionalMenuItems(menu);
         }
@@ -187,6 +193,11 @@ namespace SAM.Architectural.Grasshopper
         private void Menu_BakeByConstruction(object sender, EventArgs e)
         {
             BakeGeometry_ByCategory(RhinoDoc.ActiveDoc);
+        }
+
+        private void Menu_BakeByAnalyticalType(object sender, EventArgs e)
+        {
+            BakeGeometry_ByAnalyticalType(RhinoDoc.ActiveDoc);
         }
     }
 }
