@@ -94,6 +94,7 @@
     <Compile Include="Interfaces\Base\ISystem.cs" />
     <Compile Include="Interfaces\Base\IResult.cs" />
     <Compile Include="Interfaces\Base\ISystemType.cs" />
+    <Compile Include="Interfaces\Library\ISAMLibrary.cs" />
     <Compile Include="Modify\DeleteObject.cs" />
     <Compile Include="Modify\Delete.cs" />
     <Compile Include="Modify\AddRange.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\TryGetObjects.cs" />
     <Compile Include="Query\Type.cs" />
     <Compile Include="Query\TryInvokeDeclaredMethod.cs" />
     <Compile Include="Query\TryInvokeRuntimeMethod.cs" />

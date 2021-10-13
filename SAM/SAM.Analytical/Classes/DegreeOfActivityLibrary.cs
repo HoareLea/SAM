@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class DegreeOfActivityLibrary : SAMLibrary
+    public class DegreeOfActivityLibrary : SAMLibrary<DegreeOfActivity>
     {
         public DegreeOfActivityLibrary(string name)
             : base(name)
@@ -48,21 +48,20 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public override string GetUniqueId(IJSAMObject jSAMObject)
+        public override string GetUniqueId(DegreeOfActivity degreeOfActivity)
         {
-            DegreeOfActivity degreeOfActivity = jSAMObject as DegreeOfActivity;
             if (degreeOfActivity == null)
                 return null;
 
             return degreeOfActivity.Name;
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool IsValid(DegreeOfActivity degreeOfActivity)
         {
-            if (!base.IsValid(jSAMObject))
+            if (!base.IsValid(degreeOfActivity))
                 return false;
 
-            return jSAMObject is DegreeOfActivity;
+            return true;
         }
 
         public List<DegreeOfActivity> GetDegreeOfActivities()

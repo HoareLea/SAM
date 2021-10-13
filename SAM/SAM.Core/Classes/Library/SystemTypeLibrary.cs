@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core
 {
-    public class SystemTypeLibrary : SAMLibrary
+    public class SystemTypeLibrary : SAMLibrary<ISystemType>
     {
         public SystemTypeLibrary(string name)
             : base(name)
@@ -47,21 +47,20 @@ namespace SAM.Core
             return jObject;
         }
 
-        public override string GetUniqueId(IJSAMObject jSAMObject)
+        public override string GetUniqueId(ISystemType systemType)
         {
-            ISystemType systemType = jSAMObject as ISystemType;
             if (systemType == null)
                 return null;
 
             return string.Format("{0}::{1}", systemType.GetType().FullName, systemType.Name);
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool IsValid(ISystemType systemType)
         {
-            if (!base.IsValid(jSAMObject))
+            if (!base.IsValid(systemType))
                 return false;
 
-            return jSAMObject is ISystemType;
+            return true;
         }
 
         public List<T> GetSystemTypes<T>() where T: ISystemType

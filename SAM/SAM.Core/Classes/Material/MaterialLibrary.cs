@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core
 {
-    public class MaterialLibrary : SAMLibrary
+    public class MaterialLibrary : SAMLibrary<IMaterial>
     {
         public MaterialLibrary(string name)
             : base(name)
@@ -48,21 +48,17 @@ namespace SAM.Core
             return jObject;
         }
 
-        public override string GetUniqueId(IJSAMObject jSAMObject)
+        public override string GetUniqueId(IMaterial material)
         {
-            IMaterial material = jSAMObject as IMaterial;
-            if (material == null)
-                return null;
-
-            return material.Name;
+            return material?.Name;
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool IsValid(IMaterial material)
         {
-            if (!base.IsValid(jSAMObject))
+            if (!base.IsValid(material))
                 return false;
 
-            return jSAMObject is IMaterial;
+            return true;
         }
 
         public List<IMaterial> GetMaterials()

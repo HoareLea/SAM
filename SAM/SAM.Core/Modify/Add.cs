@@ -34,5 +34,7 @@ namespace SAM.Core
 
             return log.Add(format, logRecordType, values);
         }
+
+
     }
 }
