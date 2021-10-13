@@ -1,6 +1,5 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Architectural.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace SAM.Architectural.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("0245F90b-C955-4691-A29F-b579B136f072");
+        public override Guid ComponentGuid => new Guid("d57f6a6d-14f3-4b1a-a220-9188e00f4eb5");
 
         /// <summary>
         /// The latest version of this component

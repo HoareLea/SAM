@@ -1,5 +1,4 @@
-﻿using SAM.Geometry.Spatial;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial

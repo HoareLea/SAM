@@ -27,7 +27,7 @@ namespace SAM.Architectural.Grasshopper
 
     public class GooFloorTypeParam : GH_PersistentParam<GooFloorType>
     {
-        public override Guid ComponentGuid => new Guid("0ea7d0fa-2538-461a-96bd-700dedc11e4d");
+        public override Guid ComponentGuid => new Guid("3ace849b-b3f0-463e-88bb-3a1f60803507");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 

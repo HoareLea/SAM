@@ -93,7 +93,7 @@ namespace SAM.Architectural.Grasshopper
 
     public class GooMaterialLayerParam : GH_PersistentParam<GooMaterialLayer>
     {
-        public override Guid ComponentGuid => new Guid("8c54BF4D-f9F3-4a02-93aA-E546fA7ED28C");
+        public override Guid ComponentGuid => new Guid("cb6524ab-7111-454a-b6be-5e23007c794c");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 

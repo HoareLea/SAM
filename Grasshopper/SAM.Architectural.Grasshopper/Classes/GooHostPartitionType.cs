@@ -27,7 +27,7 @@ namespace SAM.Architectural.Grasshopper
 
     public class GooHostPartitionTypeParam : GH_PersistentParam<GooHostPartitionType>
     {
-        public override Guid ComponentGuid => new Guid("061v224A-758A-48e5-9943-8A9A2a622645");
+        public override Guid ComponentGuid => new Guid("efe5c410-fda4-4382-8bcf-a473d043875d5");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 

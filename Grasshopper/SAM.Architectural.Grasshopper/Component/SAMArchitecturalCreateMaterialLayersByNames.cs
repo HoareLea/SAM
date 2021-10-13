@@ -11,7 +11,7 @@ namespace SAM.Architectural.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("e377a8B7-5Bc8-4898-95aA-E1a153532D05");
+        public override Guid ComponentGuid => new Guid("0e781669-2b9d-4a97-9ec2-9ea0a9dbc8d2");
 
         /// <summary>
         /// The latest version of this component
