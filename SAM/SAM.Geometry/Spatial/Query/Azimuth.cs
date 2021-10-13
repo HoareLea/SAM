@@ -32,5 +32,10 @@
 
             return azimuth;
         }
+
+        public static double Azimuth(this IFace3DObject face3DObject, Vector3D referenceDirection)
+        {
+            return Azimuth(face3DObject?.Face3D, referenceDirection);
+        }
     }
 }

@@ -327,6 +327,12 @@ namespace SAM.Architectural
             return GetObjects<IPartition>();
         }
 
+        public List<T> GetPartitions<T>() where T : IHostPartition
+        {
+            return GetObjects<T>();
+        }
+
+
         public Shell GetShell(Room room)
         {
             List<IPartition> partitions = GetPartitions(room);

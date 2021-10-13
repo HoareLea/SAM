@@ -8,6 +8,6 @@ namespace SAM.Architectural
     {
         List<IOpening> Openings { get; }
 
-        bool AddOpening(IOpening opening);
+        bool AddOpening(IOpening opening, double tolerance = Tolerance.Distance);
     }
 }

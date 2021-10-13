@@ -544,7 +544,7 @@ namespace SAM.Architectural
 
                                         foreach(IOpening opening in openings)
                                         {
-                                            ((IHostPartition)partition_New).AddOpening(opening);
+                                            ((IHostPartition)partition_New).AddOpening(opening, tolerance_Distance);
                                         }
                                     }
                                 }

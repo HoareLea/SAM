@@ -81,6 +81,9 @@
     <Compile Include="Interfaces\IPartition.cs" />
     <Compile Include="Interfaces\ITerrain.cs" />
     <Compile Include="Interfaces\IArchitecturalObject.cs" />
+    <Compile Include="Modify\TryAddOpening.cs" />
+    <Compile Include="Modify\AddOpenings.cs" />
+    <Compile Include="Modify\AddOpening.cs" />
     <Compile Include="Modify\Type.cs" />
     <Compile Include="Modify\UpdateHostPartitionType.cs" />
     <Compile Include="Modify\UpdateNormals.cs" />

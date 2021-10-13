@@ -58,12 +58,12 @@ namespace SAM.Architectural
             }
         }
 
-        public bool AddOpening(IOpening opening)
+        public bool AddOpening(IOpening opening, double tolerance = Core.Tolerance.Distance)
         {
             if (opening == null)
                 return false;
 
-            if (!Query.IsValid(this, opening))
+            if (!Query.IsValid(this, opening, tolerance))
                 return false;
 
             if (openings == null)
