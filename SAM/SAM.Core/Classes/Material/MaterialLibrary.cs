@@ -69,5 +69,21 @@ namespace SAM.Core
         {
             return GetObjects<IMaterial>();
         }
+
+        public IMaterial GetMaterial(string name)
+        {
+            if(name == null)
+            {
+                return null;
+            }
+
+            List<IMaterial> materials = GetObjects<IMaterial>();
+            if (materials == null)
+            {
+                return null;
+            }
+
+            return materials.Find(x => x.Name == name);
+        }
     }
 }
