@@ -41,6 +41,7 @@ namespace SAM.Architectural.Grasshopper
             int index = -1;
             
             inputParamManager.AddTextParameter("_names", "_names", "Material Layer Name", GH_ParamAccess.list);
+            
             index = inputParamManager.AddNumberParameter("_thicknesses_", "_thicknesses_", "Contruction Layer Thicknesses", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
 
@@ -73,7 +74,7 @@ namespace SAM.Architectural.Grasshopper
             }
 
             List<double> thicknesses = new List<double>();
-            if (!dataAccess.GetDataList(1, names))
+            if (!dataAccess.GetDataList(1, thicknesses))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

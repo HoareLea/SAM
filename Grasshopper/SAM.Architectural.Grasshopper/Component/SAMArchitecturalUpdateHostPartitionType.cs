@@ -95,7 +95,11 @@ namespace SAM.Architectural.Grasshopper
             index = Params.IndexOfInputParam("partitions_");
             if (index != -1)
             {
-                dataAccess.GetData(index, ref partitions);
+                List<IPartition> partitions_Temp = new List<IPartition>();
+                if(dataAccess.GetDataList(index, partitions_Temp) && partitions_Temp != null && partitions_Temp.Count != 0)
+                {
+                    partitions = partitions_Temp;
+                }
             }
 
             WallType curtainWallType = null;
@@ -170,7 +174,6 @@ namespace SAM.Architectural.Grasshopper
 
             architecturalModel = new ArchitecturalModel(architecturalModel);
 
-
             partitions = architecturalModel.UpdateHostPartitionType(
                 partitions, 
                 curtainWallType, 
@@ -184,6 +187,10 @@ namespace SAM.Architectural.Grasshopper
                 undergroundCeilingFloorType,
                 roofType
                 );
+
+            index = Params.IndexOfOutputParam("architecturalModel");
+            if (index != -1)
+                dataAccess.SetData(index, new GooArchitecturalModel(architecturalModel));
 
             index = Params.IndexOfOutputParam("partitions");
             if (index != -1)

@@ -41,7 +41,7 @@ namespace SAM.Architectural.Grasshopper
         {
             inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item);
             inputParamManager.AddTextParameter("_hostPartitionCategory_", "_hostPartitionCategory_", "SAM Architecture HostPartitionCategory", GH_ParamAccess.item, HostPartitionCategory.Wall.ToString());
-            inputParamManager.AddParameter(new GooMaterialLayerParam(), "_materialLayers", "materialLayers", "SAM Architectural Material Layers", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooMaterialLayerParam(), "_materialLayers", "_materialLayers", "SAM Architectural Material Layers", GH_ParamAccess.list);
         }
 
         /// <summary>

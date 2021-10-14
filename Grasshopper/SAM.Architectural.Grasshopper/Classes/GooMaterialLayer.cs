@@ -87,6 +87,15 @@ namespace SAM.Architectural.Grasshopper
 
         public override bool CastTo<Q>(ref Q target)
         {
+            if (Value == null)
+                return false;
+
+            if (typeof(Q).IsAssignableFrom(typeof(MaterialLayer)))
+            {
+                target = (Q)(object)Value;
+                return true;
+            }
+
             return base.CastTo(ref target);
         }
     }
