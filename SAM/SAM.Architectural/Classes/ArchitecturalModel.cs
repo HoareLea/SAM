@@ -244,6 +244,16 @@ namespace SAM.Architectural
             return materialLibrary.GetObject<IMaterial>(name);
         }
 
+        public IMaterial GetMaterial(MaterialLayer materialLayer)
+        {
+            if(materialLayer == null || materialLibrary == null)
+            {
+                return null;
+            }
+
+            return materialLayer.Material(materialLibrary);
+        }
+
         public List<IMaterial> GetMaterials(HostPartitionType hostPartitionType)
         {
             if(hostPartitionType == null)
@@ -252,6 +262,61 @@ namespace SAM.Architectural
             }
 
             return hostPartitionType.Materials(materialLibrary);
+        }
+
+        public List<T> GetHostPartitionTypes<T>() where T: HostPartitionType
+        {
+            List<IHostPartition> hostPartitions = GetPartitions<IHostPartition>();
+            if(hostPartitions == null || hostPartitions.Count == 0)
+            {
+                return null;
+            }
+
+            Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
+            foreach(IHostPartition hostPartition in hostPartitions)
+            {
+                T hostPartitionType = hostPartition?.Type() as T;
+                if(hostPartitionType == null)
+                {
+                    continue;
+                }
+
+                dictionary[hostPartitionType.Guid] = hostPartitionType;
+            }
+
+            return dictionary.Values.ToList();
+        }
+
+        public List<T> GetOpeningTypes<T>() where T: OpeningType
+        {
+            List<IHostPartition> hostPartitions = GetPartitions<IHostPartition>();
+            if (hostPartitions == null || hostPartitions.Count == 0)
+            {
+                return null;
+            }
+
+            Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
+            foreach (IHostPartition hostPartition in hostPartitions)
+            {
+                List<IOpening> openings = hostPartition?.Openings;
+                if(openings == null || openings.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach(IOpening opening in openings)
+                {
+                    T openingType = opening.Type() as T;
+                    if(openingType == null)
+                    {
+                        continue;
+                    }
+
+                    dictionary[openingType.Guid] = openingType;
+                }
+            }
+
+            return dictionary.Values.ToList();
         }
 
         public MaterialType GetMaterialType(HostPartitionType hostPartitionType)
