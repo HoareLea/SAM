@@ -7,7 +7,7 @@ namespace SAM.Architectural
 {
     public static partial class Modify
     {
-        public static List<IPartition> UpdateHostPartitionType(this ArchitecturalModel architecturalModel, HostPartitionType hostPartitionType, IEnumerable<Func<IPartition, bool>> functions, IEnumerable<IPartition> partitions = null)
+        public static List<IPartition> UpdateHostPartitionType(this ArchitecturalModel architecturalModel, HostPartitionType hostPartitionType, IEnumerable<Func<IPartition, bool>> functions, IEnumerable<IPartition> partitions = null, MaterialLibrary materialLibrary = null)
         {
             if (architecturalModel == null || hostPartitionType == null || functions == null)
                 return null;
@@ -93,17 +93,22 @@ namespace SAM.Architectural
                 }
             }
 
+            if(materialLibrary != null && result != null && result.Count != 0)
+            {
+                architecturalModel.UpdateMaterials(hostPartitionType.MaterialLayers, materialLibrary, out HashSet<string> missingMaterialsNames);
+            }
+
             return result;
         }
 
-        public static List<IPartition> UpdateHostPartitionType(this ArchitecturalModel architecturalModel, HostPartitionType hostPartitionType, Func<IPartition, bool> function, IEnumerable<IPartition> partitions = null)
+        public static List<IPartition> UpdateHostPartitionType(this ArchitecturalModel architecturalModel, HostPartitionType hostPartitionType, Func<IPartition, bool> function, IEnumerable<IPartition> partitions = null, MaterialLibrary materialLibrary = null)
         {
             if(function == null)
             {
                 return null;
             }
 
-            return UpdateHostPartitionType(architecturalModel, hostPartitionType, new Func<IPartition, bool>[] { function }, partitions);
+            return UpdateHostPartitionType(architecturalModel, hostPartitionType, new Func<IPartition, bool>[] { function }, partitions, materialLibrary);
         }
 
         public static List<IPartition> UpdateHostPartitionType(this ArchitecturalModel architecturalModel,
@@ -118,6 +123,7 @@ namespace SAM.Architectural
             FloorType undergroundFloorType = null,
             FloorType undergroundCeilingFloorType = null,
             RoofType roofType = null,
+            MaterialLibrary materialLibrary = null,
             double tolerance_Angle = Tolerance.Angle,
             double tolerance_Distance = Tolerance.Distance)
         {
@@ -152,7 +158,7 @@ namespace SAM.Architectural
                     return false;
                 });
 
-                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(curtainWallType, function, partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(curtainWallType, function, partitions, materialLibrary);
                 if(partitions_Update != null)
                 {
                     foreach(IPartition partition_Update in partitions_Update)
@@ -192,7 +198,7 @@ namespace SAM.Architectural
                     return true;
                 });
 
-                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(internalWallType, function, partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(internalWallType, function, partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)
@@ -242,7 +248,7 @@ namespace SAM.Architectural
                     return true;
                 });
 
-                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(externalWallType, function, partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(externalWallType, function, partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)
@@ -291,7 +297,7 @@ namespace SAM.Architectural
                     return true;
                 });
 
-                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(undergroundWallType, function, partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(undergroundWallType, function, partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)
@@ -327,7 +333,7 @@ namespace SAM.Architectural
                     return true;
                 });
 
-                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(internalFloorType, function, partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(internalFloorType, function, partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)
@@ -372,7 +378,7 @@ namespace SAM.Architectural
                     return true;
                 });
 
-                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(externalFloorType, function, partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(externalFloorType, function, partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)
@@ -417,7 +423,7 @@ namespace SAM.Architectural
                     return true;
                 });
 
-                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(onGradeFloorType, function, partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(onGradeFloorType, function, partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)
@@ -467,7 +473,7 @@ namespace SAM.Architectural
                     return true;
                 });
 
-                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(undergroundFloorType, function, partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(undergroundFloorType, function, partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)
@@ -504,7 +510,7 @@ namespace SAM.Architectural
                     return true;
                 });
 
-                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(undergroundCeilingFloorType, function , partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(undergroundCeilingFloorType, function , partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)
@@ -546,7 +552,7 @@ namespace SAM.Architectural
                     return true;
                 });
 
-                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(roofType, function , partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(roofType, function , partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)

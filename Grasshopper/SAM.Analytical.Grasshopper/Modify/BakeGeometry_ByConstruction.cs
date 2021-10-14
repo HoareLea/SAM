@@ -74,7 +74,7 @@ namespace SAM.Analytical.Grasshopper
 
                 System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
                 
-                string layerName = panel.Name;                    
+                string layerName = panel.Name;
                 if (string.IsNullOrWhiteSpace(layerName))
                 {
                     if (panelType == PanelType.Air)
@@ -93,38 +93,47 @@ namespace SAM.Analytical.Grasshopper
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
-                Guid guid = default;
-                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guid, cutApertures, tolerance))
-                    guids.Add(guid);
-
-                List<Aperture> apertures = panel.Apertures;
-                if (apertures == null || apertures.Count == 0)
-                    continue;
-
-                foreach (Aperture aperture in apertures)
+                List<Panel> panels_FixEdges = panel.FixEdges();
+                if (panels_FixEdges == null || panels_FixEdges.Count == 0)
                 {
-                    if(aperture == null)
-                    {
-                        continue;
-                    }
+                    panels_FixEdges = new List<Panel>() { panel };
+                }
 
-                    string apertureConstructionName = aperture.ApertureConstruction?.Name;
-                    if (string.IsNullOrWhiteSpace(apertureConstructionName))
-                        apertureConstructionName = aperture.Name;
-                    
-                    if (string.IsNullOrWhiteSpace(apertureConstructionName))
-                        continue;
-
-                    color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
-
-                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureConstruction.Id, apertureConstructionName, color);
-
-                    //layerTable.SetCurrentLayerIndex(layer.Index, true);
-                    objectAttributes.LayerIndex = layer.Index;
-
-                    guid = default;
-                    if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
+                foreach (Panel panel_FixEdges in panels_FixEdges)
+                {
+                    Guid guid = default;
+                    if (BakeGeometry(panel_FixEdges, rhinoDoc, objectAttributes, out guid, cutApertures, tolerance))
                         guids.Add(guid);
+
+                    List<Aperture> apertures = panel_FixEdges.Apertures;
+                    if (apertures == null || apertures.Count == 0)
+                        continue;
+
+                    foreach (Aperture aperture in apertures)
+                    {
+                        if (aperture == null)
+                        {
+                            continue;
+                        }
+
+                        string apertureConstructionName = aperture.ApertureConstruction?.Name;
+                        if (string.IsNullOrWhiteSpace(apertureConstructionName))
+                            apertureConstructionName = aperture.Name;
+
+                        if (string.IsNullOrWhiteSpace(apertureConstructionName))
+                            continue;
+
+                        color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+
+                        layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureConstruction.Id, apertureConstructionName, color);
+
+                        //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                        objectAttributes.LayerIndex = layer.Index;
+
+                        guid = default;
+                        if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
+                            guids.Add(guid);
+                    }
                 }
             }
 

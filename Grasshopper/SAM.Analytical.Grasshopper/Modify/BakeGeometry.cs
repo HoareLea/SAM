@@ -2,6 +2,7 @@
 using Rhino.DocObjects;
 using Rhino.Geometry;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -17,13 +18,22 @@ namespace SAM.Analytical.Grasshopper
             //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
             objectAttributes.Name = panel.Name;
 
+            List<Panel> panels_FixEdges = panel.FixEdges();
+            if (panels_FixEdges == null || panels_FixEdges.Count == 0)
+            {
+                panels_FixEdges = new List<Panel>() { panel };
+            }
+
             bool result = true;
 
-            Brep brep = panel.ToRhino(cutApertures, tolerance);
-            if (brep == null)
-                result = Geometry.Grasshopper.Modify.BakeGeometry(panel.GetFace3D(), rhinoDoc, objectAttributes, out guid);
-            else
-                guid = rhinoDoc.Objects.AddBrep(brep, objectAttributes);
+            foreach(Panel panel_FixEdges in panels_FixEdges)
+            {
+                Brep brep = panel.ToRhino(cutApertures, tolerance);
+                if (brep == null)
+                    result = Geometry.Grasshopper.Modify.BakeGeometry(panel.GetFace3D(), rhinoDoc, objectAttributes, out guid);
+                else
+                    guid = rhinoDoc.Objects.AddBrep(brep, objectAttributes);
+            }
 
             if (!result)
                 return false;

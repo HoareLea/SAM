@@ -1,13 +1,14 @@
 ﻿using SAM.Core;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Architectural
 {
     public static partial class Modify
     {
-        public static List<IMaterial> UpdateMaterials(this ArchitecturalModel architecturalModel, MaterialLibrary materialLibrary, out HashSet<string> missingMaterialsNames)
+        public static List<IMaterial> UpdateMaterials(this ArchitecturalModel architecturalModel, MaterialLibrary materialLibrary, out HashSet<string> missingMaterialNames)
         {
-            missingMaterialsNames = null;
+            missingMaterialNames = null;
 
             if (architecturalModel == null || materialLibrary == null)
             {
@@ -62,9 +63,29 @@ namespace SAM.Architectural
                 }
             }
 
+            return UpdateMaterials(architecturalModel, materialNames, materialLibrary, out missingMaterialNames);
+        }
+
+        public static List<IMaterial> UpdateMaterials(this ArchitecturalModel architecturalModel, IEnumerable<string> materialNames, MaterialLibrary materialLibrary, out HashSet<string> missingMaterialsNames)
+        {
+            missingMaterialsNames = null;
+            
+            if(architecturalModel == null || materialNames == null || materialLibrary == null)
+            {
+                return null;
+            }
+
             missingMaterialsNames = new HashSet<string>();
+
+            HashSet<string> materialNames_Unique = new HashSet<string>();
+            foreach(string materialName in materialNames)
+            {
+                materialNames_Unique.Add(materialName);
+            }
+
             List<IMaterial> result = new List<IMaterial>();
-            foreach (string materialName in materialNames)
+
+            foreach (string materialName in materialNames_Unique)
             {
                 if (string.IsNullOrWhiteSpace(materialName))
                 {
@@ -91,6 +112,11 @@ namespace SAM.Architectural
             }
 
             return result;
+        }
+    
+        public static List<IMaterial> UpdateMaterials(this ArchitecturalModel architecturalModel, IEnumerable<MaterialLayer> materialLayers, MaterialLibrary materialLibrary, out HashSet<string> missingMaterialsNames)
+        {
+            return UpdateMaterials(architecturalModel, materialLayers?.ToList().ConvertAll(x => x?.Name), materialLibrary, out missingMaterialsNames);
         }
     }
 }

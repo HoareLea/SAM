@@ -18,7 +18,7 @@ namespace SAM.Architectural.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -67,6 +67,9 @@ namespace SAM.Architectural.Grasshopper
                 GooAddressParam addressParam = new GooAddressParam() { Name = "_address_", NickName = "_address_", Description = "SAM Core Address", Access = GH_ParamAccess.item };
                 addressParam.SetPersistentData(Core.Query.DefaultAddress());
                 result.Add(new GH_SAMParam(addressParam, ParamVisibility.Voluntary));
+
+                GooMaterialLibraryParam materialLibraryParam = new GooMaterialLibraryParam() { Name = "materialLibrary_", NickName = "materialLibrary_", Description = "SAM Core MaterialLibrary", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(materialLibraryParam, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(0.01);
@@ -177,6 +180,11 @@ namespace SAM.Architectural.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref address);
 
+            index = Params.IndexOfInputParam("materialLibrary_");
+            Core.MaterialLibrary materialLibrary = null;
+            if (index != -1)
+                dataAccess.GetData(index, ref materialLibrary);
+
             ArchitecturalModel architecturalModel = Create.ArchitecturalModel(shells, partitions, groundElevation, true, 0.01, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
             if(architecturalModel != null)
             {
@@ -192,7 +200,8 @@ namespace SAM.Architectural.Grasshopper
                         onGradeFloorType: Architectural.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.OnGradeFloor),
                         undergroundFloorType: Architectural.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.UndergroundFloor),
                         undergroundCeilingFloorType: Architectural.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.UndergroundCeiling),
-                        roofType: Architectural.Query.DefaultHostPartitionType<RoofType>(PartitionAnalyticalType.Roof));
+                        roofType: Architectural.Query.DefaultHostPartitionType<RoofType>(PartitionAnalyticalType.Roof),
+                        materialLibrary: materialLibrary);
                 }
 
                 architecturalModel.Location = location;
