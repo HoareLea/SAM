@@ -52,6 +52,21 @@ namespace SAM.Architectural
             return false;
         }
 
+        public static bool TryAddOpening(this IHostPartition hostPartition, IOpening opening, double tolerance = Core.Tolerance.Distance)
+        {
+            if(hostPartition == null || opening == null)
+            {
+                return false;
+            }
+
+            if(!hostPartition.IsValid(opening, tolerance))
+            {
+                return false;
+            }
+
+            return hostPartition.AddOpening(opening, tolerance);
+        }
+
         public static bool TryAddOpening(this ArchitecturalModel architecturalModel, IOpening opening, double tolerance = Core.Tolerance.Distance)
         {
             return TryAddOpening(architecturalModel, opening, out IHostPartition hostPartition, tolerance);

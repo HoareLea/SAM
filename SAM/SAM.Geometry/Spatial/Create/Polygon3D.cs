@@ -20,7 +20,7 @@ namespace SAM.Geometry.Spatial
                 if (point3D != null)
                     point3Ds_Plane.Add(plane.Project(point3D));
 
-            return new Polygon3D(point3Ds_Plane);
+            return new Polygon3D(point3Ds_Plane, tolerace);
         }
 
         public static Polygon3D Polygon3D(this Vector3D normal, IEnumerable<Point3D> point3Ds)

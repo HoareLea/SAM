@@ -65,6 +65,7 @@
     <Compile Include="Classes\GooLevel.cs" />
     <Compile Include="Classes\GooPartition.cs" />
     <Compile Include="Classes\GooArchitecturalObject.cs" />
+    <Compile Include="Component\SAMArchitecturalAddOpenings.cs" />
     <Compile Include="Component\SAMArchitecturalAddOpeningsByAzimuth.cs" />
     <Compile Include="Component\SAMArchitecturalCreateMaterialLayersByNames.cs" />
     <Compile Include="Component\SAMArchitecturalCreateHostPartitionType.cs" />

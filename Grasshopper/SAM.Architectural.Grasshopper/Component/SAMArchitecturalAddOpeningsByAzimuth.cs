@@ -52,7 +52,7 @@ namespace SAM.Architectural.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooArchitecturalObjectParam(), "architecturalObject", "architecturalObject", "SAM Architectural ArchitecturalObject", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooArchitecturalObjectParam(), "architecturalObject", "architecturalObject", "SAM Architectural ArchitecturalObject", GH_ParamAccess.item);
             outputParamManager.AddParameter(new GooOpeningParam(), "openings", "openings", "SAM Architectural Openings", GH_ParamAccess.list);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Successful", GH_ParamAccess.item);
         }
