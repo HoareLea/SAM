@@ -218,6 +218,7 @@
     <Compile Include="Spatial\Query\ElevationDictionary.cs" />
     <Compile Include="Spatial\Query\Intersect.cs" />
     <Compile Include="Spatial\Query\Area.cs" />
+    <Compile Include="Spatial\Query\Face3DObjectsByFace3D.cs" />
     <Compile Include="Spatial\Query\SectionDictionary.cs" />
     <Compile Include="Spatial\Query\SelfIntersectionFace3Ds.cs" />
     <Compile Include="Spatial\Query\Volume.cs" />

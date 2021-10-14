@@ -69,6 +69,7 @@
     <Compile Include="Classes\Level.cs" />
     <Compile Include="Create\ArchitecturalModel.cs" />
     <Compile Include="Create\HostPartitionType.cs" />
+    <Compile Include="Create\Partitions.cs" />
     <Compile Include="Create\Openings.cs" />
     <Compile Include="Create\PlanarTerrain.cs" />
     <Compile Include="Create\Walls.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Interfaces\IPartition.cs" />
     <Compile Include="Interfaces\ITerrain.cs" />
     <Compile Include="Interfaces\IArchitecturalObject.cs" />
+    <Compile Include="Modify\AddAirPartitions.cs" />
     <Compile Include="Modify\TryAddOpening.cs" />
     <Compile Include="Modify\AddOpenings.cs" />
     <Compile Include="Modify\AddOpening.cs" />

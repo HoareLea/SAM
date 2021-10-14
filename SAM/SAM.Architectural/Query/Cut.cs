@@ -98,5 +98,66 @@ namespace SAM.Architectural
 
             return Cut(partition, planes, tolerance);
         }
+
+        public static List<IPartition> Cut(this ArchitecturalModel architecturalModel, Plane plane, IEnumerable<Room> rooms = null, double tolerance = Tolerance.Distance)
+        {
+            if (architecturalModel == null || plane == null)
+            {
+                return null;
+            }
+
+            List<IPartition> partitions = null;
+            if (rooms == null || rooms.Count() == 0)
+            {
+                partitions = architecturalModel.GetPartitions();
+            }
+            else
+            {
+                partitions = new List<IPartition>();
+                foreach (Room room in rooms)
+                {
+                    List<IPartition> partitions_Room = architecturalModel.GetPartitions(room);
+                    if (partitions_Room == null || partitions_Room.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (IPartition partition_Room in partitions_Room)
+                    {
+                        if (partitions.Find(x => x.Guid == partition_Room.Guid) == null)
+                        {
+                            partitions.Add(partition_Room);
+                        }
+                    }
+                }
+            }
+
+            if (partitions == null || partitions.Count == 0)
+            {
+                return null;
+            }
+
+            List<IPartition> result = new List<IPartition>();
+            foreach (IPartition partition in partitions)
+            {
+                List<IPartition> partitions_Cut = partition.Cut(plane, tolerance);
+                if (partitions_Cut != null && partitions_Cut.Count > 1)
+                {
+                    List<object> relatedObjects = architecturalModel.GetRelatedObjects(partition);
+                    if (architecturalModel.RemoveObject(partition))
+                    {
+                        foreach (IPartition partition_Cut in partitions_Cut)
+                        {
+                            architecturalModel.Add(partition_Cut);
+                            relatedObjects?.ForEach(x => architecturalModel.AddRelation(partition_Cut, x));
+                        }
+                    }
+
+                    result.AddRange(partitions_Cut);
+                }
+            }
+
+            return result;
+        }
     }
 }

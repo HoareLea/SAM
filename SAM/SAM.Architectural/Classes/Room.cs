@@ -26,6 +26,12 @@ namespace SAM.Architectural
             this.location = location;
         }
 
+        public Room(System.Guid guid, Room room, string name, Point3D location)
+            : base(name, guid, room)
+        {
+            this.location = location;
+        }
+
         public Point3D Location
         {
             get

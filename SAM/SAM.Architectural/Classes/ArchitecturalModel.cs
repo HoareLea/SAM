@@ -362,7 +362,6 @@ namespace SAM.Architectural
             return GetObjects<T>();
         }
 
-
         public Shell GetShell(Room room)
         {
             List<IPartition> partitions = GetPartitions(room);
@@ -411,6 +410,16 @@ namespace SAM.Architectural
             }
 
             return result;
+        }
+
+        public bool Contains(ISAMObject sAMObject)
+        {
+            if(relationCluster == null)
+            {
+                return false;
+            }
+
+            return relationCluster.Contains(sAMObject);
         }
 
         public BoundingBox3D GetBoundingBox3D()
