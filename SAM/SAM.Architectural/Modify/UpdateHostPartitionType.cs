@@ -184,11 +184,6 @@ namespace SAM.Architectural
                         return false;
                     }
 
-                    if (terrain.Below(partition, tolerance_Distance))
-                    {
-                        return false;
-                    }
-
                     if (terrain.On(partition, tolerance_Distance))
                     {
                         return false;
@@ -197,7 +192,14 @@ namespace SAM.Architectural
                     return true;
                 });
 
-                architecturalModel.UpdateHostPartitionType(internalWallType, function, partitions);
+                List<IPartition> partitions_Update = architecturalModel.UpdateHostPartitionType(internalWallType, function, partitions);
+                if (partitions_Update != null)
+                {
+                    foreach (IPartition partition_Update in partitions_Update)
+                    {
+                        dictionary[partition_Update.Guid] = partition_Update;
+                    }
+                }
             }
 
             if (externalWallType != null)
@@ -310,23 +312,14 @@ namespace SAM.Architectural
 
                     if (partition is AirPartition)
                     {
-                        if (Query.HostPartitionCategory(partition, tolerance_Angle) != HostPartitionCategory.Floor)
+                        HostPartitionCategory hostPartitionCategory = Query.HostPartitionCategory(partition, tolerance_Angle);
+                        if (hostPartitionCategory != HostPartitionCategory.Floor && hostPartitionCategory != HostPartitionCategory.Roof)
                         {
                             return false;
                         }
                     }
 
                     if (architecturalModel.External(partition))
-                    {
-                        return false;
-                    }
-
-                    if (terrain.Below(partition, tolerance_Distance))
-                    {
-                        return false;
-                    }
-
-                    if (terrain.On(partition, tolerance_Distance))
                     {
                         return false;
                     }
@@ -531,6 +524,21 @@ namespace SAM.Architectural
                     }
 
                     if (Query.HostPartitionCategory(partition, tolerance_Angle) != HostPartitionCategory.Roof)
+                    {
+                        return false;
+                    }
+
+                    if (architecturalModel.Internal(partition))
+                    {
+                        return false;
+                    }
+
+                    if (terrain.On(partition, tolerance_Distance))
+                    {
+                        return false;
+                    }
+
+                    if (terrain.Below(partition, tolerance_Distance))
                     {
                         return false;
                     }

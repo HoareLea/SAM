@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-
+using SAM.Core;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace SAM.Architectural
         public HostPartition(HostPartition<T> hostPartition)
             : base(hostPartition)
         {
-
+            openings = hostPartition?.openings?.ConvertAll(x => x.Clone());
         }
 
         public HostPartition(JObject jObject)

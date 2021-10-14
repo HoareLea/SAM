@@ -67,6 +67,9 @@ namespace SAM.Architectural
                 case Architectural.PartitionAnalyticalType.UndergroundFloor:
                     return new FloorType(new System.Guid("99d42f75-2616-4adc-b2ea-ac85e43e2b3c"), "Default Underground Floor") as T;
 
+                case Architectural.PartitionAnalyticalType.OnGradeFloor:
+                    return new FloorType(new System.Guid("7c54d63d-3348-4c25-ad81-bd02dee14ed5"), "Default On Grade Floor") as T;
+
                 case Architectural.PartitionAnalyticalType.UndergroundCeiling:
                     return new FloorType(new System.Guid("93394f3d-daf6-410e-99d1-8caa1d588a9b"), "Default Underground Ceiling") as T;
 

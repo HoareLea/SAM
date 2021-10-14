@@ -277,7 +277,7 @@ namespace SAM.Architectural
         public bool Internal(IPartition partition)
         {
             List<Room> rooms = GetRooms(partition);
-            return rooms != null || rooms.Count > 2;
+            return rooms != null && rooms.Count > 1;
         }
         
         public bool External(IPartition partition)

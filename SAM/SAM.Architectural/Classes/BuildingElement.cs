@@ -12,7 +12,7 @@ namespace SAM.Architectural
         public BuildingElement(BuildingElement<T> buildingElement)
             : base(buildingElement)
         {
-
+            face3D = buildingElement?.Face3D?.Clone() as Face3D;
         }
 
         public BuildingElement(JObject jObject)
