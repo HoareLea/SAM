@@ -126,8 +126,11 @@ namespace SAM.Analytical
 
                         if (construction_Temp != null && construction != null)
                         {
-                            if (!construction_Temp.Name.Equals(construction.Name))
-                                continue;
+                            if(!(string.IsNullOrEmpty(construction_Temp.Name) && string.IsNullOrEmpty(construction.Name)))
+                            {
+                                if (!construction_Temp.Name.Equals(construction.Name))
+                                    continue;
+                            }
                         }
                         else if (!(construction_Temp == null && construction == null))
                         {
