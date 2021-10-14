@@ -31,7 +31,7 @@ namespace SAM.Architectural.Grasshopper
         public SAMArchitecturalUpdateHostPartitionType()
           : base("SAMArchitectural.UpdateHostPartitionType", "SAMArchitectural.UpdateHostPartitionType",
               "Related Objects in ArchitecturalModel",
-              "SAM", "Core")
+              "SAM", "Architectural")
         {
         }
 

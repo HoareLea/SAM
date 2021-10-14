@@ -30,7 +30,7 @@ namespace SAM.Architectural.Grasshopper
         public SAMArchitecturalAddOpeningsByAzimuth()
           : base("SAMArchitectural.AddOpeningsByAzimuth", "SAMArchitectural.AddOpeningsByAzimuth",
               "Add Openings to ",
-              "SAM", "Analytical")
+              "SAM", "Architectural")
         {
         }
 

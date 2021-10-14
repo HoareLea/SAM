@@ -1,17 +1,19 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Architectural.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Architectural.Grasshopper
 {
-    public class SAMArchitecturalUpdateArchitecturalModel : GH_SAMVariableOutputParameterComponent
+    public class SAMArchitecturalAddAirPartitions : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("45587d1b-9161-4daf-adfc-a1c229493e57");
+        public override Guid ComponentGuid => new Guid("31344240-ad1f-48dc-8700-f5df3dd4fb90");
 
         /// <summary>
         /// The latest version of this component
@@ -28,9 +30,9 @@ namespace SAM.Architectural.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMArchitecturalUpdateArchitecturalModel()
-          : base("SAMArchitectural.UpdateArchitecturalModel", "SAMArchitectural.UpdateArchitecturalModel",
-              "Update ArchitecturalModel",
+        public SAMArchitecturalAddAirPartitions()
+          : base("SAMArchitectural.AddAirPartitions", "SAMArchitectural.AddAirPartitions",
+              "Add AirPartitions",
               "SAM", "Architectural")
         {
         }
@@ -44,9 +46,8 @@ namespace SAM.Architectural.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "_architecturalModel", NickName = "_architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooLocationParam() { Name = "location_", NickName = "location_", Description = "SAM Core Location", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new GooAddressParam() { Name = "address_", NickName = "address_", Description = "SAM Core Address", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "description_", NickName = "description_", Description = "Description", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_planes", NickName = "_planes", Description = "SAM Geometry Planes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooRoomParam() { Name = "rooms_", NickName = "rooms_", Description = "SAM Architectural Rooms", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -82,37 +83,69 @@ namespace SAM.Architectural.Grasshopper
                 return;
             }
 
+            index = Params.IndexOfInputParam("_planes");
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null || objectWrappers.Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            List<Plane> planes = new List<Plane>();
+
+            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
+            {
+                Plane plane = null;
+
+                object @object = objectWrapper.Value;
+                if (@object is IGH_Goo)
+                {
+                    @object = (@object as dynamic).Value;
+                }
+
+                if (@object is double)
+                {
+                    plane = Geometry.Spatial.Create.Plane((double)@object);
+                }
+                else if (@object is string)
+                {
+                    if (double.TryParse((string)@object, out double elevation_Temp))
+                    {
+                        plane = Geometry.Spatial.Create.Plane(elevation_Temp);
+                    }
+                }
+                else if (@object is Rhino.Geometry.Plane)
+                {
+                    plane = Geometry.Grasshopper.Convert.ToSAM(((Rhino.Geometry.Plane)@object));
+                }
+                else if (@object is Plane)
+                {
+                    plane = (Plane)@object;
+                }
+
+                if (plane == null)
+                {
+                    continue;
+                }
+
+                planes.Add(plane);
+            }
+
+            List<Room> rooms = null;
+            index = Params.IndexOfInputParam("spaces_");
+            if (index != -1)
+            {
+                List<Room> rooms_Temp = new List<Room>();
+
+                if (dataAccess.GetDataList(index, rooms_Temp) && rooms_Temp != null && rooms_Temp.Count != 0)
+                {
+                    rooms = rooms_Temp;
+                }
+            }
+
             architecturalModel = new ArchitecturalModel(architecturalModel);
 
-            index = Params.IndexOfInputParam("location_");
-            if (index != -1)
-            {
-                Core.Location location = null;
-                if(dataAccess.GetData(index, ref location) && location != null)
-                {
-                    architecturalModel.Location = location;
-                }
-            }
-
-            index = Params.IndexOfInputParam("address_");
-            if (index != -1)
-            {
-                Core.Address address = null;
-                if (dataAccess.GetData(index, ref address) && address != null)
-                {
-                    architecturalModel.Address = address;
-                }
-            }
-
-            index = Params.IndexOfInputParam("description_");
-            if (index != -1)
-            {
-                string description = null;
-                if (dataAccess.GetData(index, ref description) && description != null)
-                {
-                    architecturalModel.Description = description;
-                }
-            }
+            architecturalModel.AddAirPartitions(planes, rooms);
 
             index = Params.IndexOfOutputParam("architecturalModel");
             if (index != -1)

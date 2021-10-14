@@ -52,7 +52,6 @@ namespace SAM.Geometry.Grasshopper
                     }
                 }
 
-
                 if (@object is IEnumerable)
                 {
 

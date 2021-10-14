@@ -32,7 +32,7 @@ namespace SAM.Architectural.Grasshopper
         public SAMArchitecturalRelatedObjects()
           : base("SAMArchitectural.RelatedObjects", "SAMArchitectural.RelatedObjects",
               "Related Objects in ArchitecturalModel",
-              "SAM", "Core")
+              "SAM", "Architectural")
         {
         }
 

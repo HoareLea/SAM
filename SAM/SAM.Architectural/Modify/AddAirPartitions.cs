@@ -9,6 +9,40 @@ namespace SAM.Architectural
 {
     public static partial class Modify
     {
+        public static List<AirPartition> AddAirPartitions(this ArchitecturalModel architecturalModel, IEnumerable<Plane> planes, IEnumerable<Room> rooms = null, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        {
+            if(planes == null)
+            {
+                return null;
+            }
+
+            Dictionary<Guid, AirPartition> result = new Dictionary<Guid, AirPartition>();
+            foreach (Plane plane in planes)
+            {
+                if (plane == null)
+                {
+                    continue;
+                }
+
+                List<AirPartition> airPartitions = AddAirPartitions(architecturalModel, plane, rooms, silverSpacing, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+                if (airPartitions != null && airPartitions.Count > 0)
+                {
+                    foreach(AirPartition airPartition in airPartitions)
+                    {
+                        if(airPartition == null)
+                        {
+                            continue;
+                        }
+
+                        result[airPartition.Guid] = airPartition;
+                    }
+                }
+
+            }
+
+            return result?.Values.ToList();
+        }
+
         public static List<AirPartition> AddAirPartitions(this ArchitecturalModel architecturalModel, Plane plane, IEnumerable<Room> rooms = null, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             if (architecturalModel == null || plane == null)

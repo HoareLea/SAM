@@ -60,6 +60,7 @@
     <Compile Include="Classes\GooRoofType.cs" />
     <Compile Include="Classes\GooFloorType.cs" />
     <Compile Include="Classes\GooHostPartitionType.cs" />
+    <Compile Include="Classes\GooRoom.cs" />
     <Compile Include="Classes\GooWallType.cs" />
     <Compile Include="Classes\GooLevel.cs" />
     <Compile Include="Classes\GooPartition.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Component\SAMArchitecturalHostPartitionCategory.cs" />
     <Compile Include="Component\SAMArchitecturalCreateArchitecturalModelByShells.cs" />
     <Compile Include="Component\SAMArchitecturalCreateLevel.cs" />
+    <Compile Include="Component\SAMArchitecturalAddAirPartitions.cs" />
     <Compile Include="Component\SAMArchitecturalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\SAMArchitecturalUpdateHostPartitionType.cs" />
     <Compile Include="Component\SAMArchitecturalRelatedObjects.cs" />
@@ -78,6 +80,8 @@
     <Compile Include="Convert\ToRhino\Mesh.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Modify\BakeGeometry_ByAnalyticalType.cs" />
+    <Compile Include="Modify\BakeGeometry_ByInternalCondtion.cs" />
+    <Compile Include="Modify\BakeGeometry_ByLevel.cs" />
     <Compile Include="Modify\DrawViewportMeshes.cs" />
     <Compile Include="Modify\DrawViewportWires.cs" />
     <Compile Include="Modify\BakeGeometry.cs" />
