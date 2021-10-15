@@ -134,6 +134,9 @@ namespace SAM.Analytical
         {
             get
             {
+                if (location == null)
+                    return null;
+
                 return new Location(location);
             }
         }
