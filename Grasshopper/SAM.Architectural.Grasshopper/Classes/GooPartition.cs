@@ -16,17 +16,17 @@ using System.Windows.Forms;
 
 namespace SAM.Architectural.Grasshopper
 {
-    public class GoohostPartition : GooSAMObject<HostPartition>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooPartition : GooJSAMObject<IPartition>, IGH_PreviewData, IGH_BakeAwareData
     {
         public bool ShowAll = true;
         
-        public GoohostPartition()
+        public GooPartition()
             : base()
         {
         }
 
-        public GoohostPartition(HostPartition hostPartition)
-            : base(hostPartition)
+        public GooPartition(IPartition partition)
+            : base(partition)
         {
         }
 
@@ -43,7 +43,7 @@ namespace SAM.Architectural.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GoohostPartition(Value);
+            return new GooPartition(Value);
         }
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
@@ -65,21 +65,24 @@ namespace SAM.Architectural.Grasshopper
 
             Geometry.Grasshopper.Modify.DrawViewportWires(face3D, args, color_ExternalEdge, color_InternalEdges);
 
-            List<IOpening> openings = Value.Openings;
-            if (openings != null)
+            if(Value is IHostPartition)
             {
-                foreach (IOpening opening in openings)
+                List<IOpening> openings = ((IHostPartition)Value).Openings;
+                if (openings != null)
                 {
-                    Face3D face3D_Opening = opening?.Face3D;
-                    if(face3D_Opening == null)
+                    foreach (IOpening opening in openings)
                     {
-                        continue;
-                    }
-                    
-                    color_ExternalEdge = Architectural.Query.Color(opening, false);
-                    color_InternalEdges = Architectural.Query.Color(opening, true);
+                        Face3D face3D_Opening = opening?.Face3D;
+                        if (face3D_Opening == null)
+                        {
+                            continue;
+                        }
 
-                    Geometry.Grasshopper.Modify.DrawViewportWires(face3D_Opening, args, color_ExternalEdge, color_InternalEdges);
+                        color_ExternalEdge = Architectural.Query.Color(opening, false);
+                        color_InternalEdges = Architectural.Query.Color(opening, true);
+
+                        Geometry.Grasshopper.Modify.DrawViewportWires(face3D_Opening, args, color_ExternalEdge, color_InternalEdges);
+                    }
                 }
             }
         }
@@ -114,21 +117,24 @@ namespace SAM.Architectural.Grasshopper
 
             args.Pipeline.DrawBrepShaded(brep, displayMaterial);
 
-            List<IOpening> openings = Value.Openings;
-            if (openings != null)
+            if(Value is IHostPartition)
             {
-                foreach (IOpening opening in openings)
+                List<IOpening> openings = ((IHostPartition)Value).Openings;
+                if (openings != null)
                 {
-                    List<IClosedPlanar3D> edge3Ds = opening?.Face3D?.GetEdge3Ds();
-                    if(edge3Ds != null && edge3Ds.Count != 0)
+                    foreach (IOpening opening in openings)
                     {
-                        foreach (IClosedPlanar3D closedPlanar3D in edge3Ds)
+                        List<IClosedPlanar3D> edge3Ds = opening?.Face3D?.GetEdge3Ds();
+                        if (edge3Ds != null && edge3Ds.Count != 0)
                         {
-                            Rhino.Display.DisplayMaterial displayMaterial_Opening = Query.DisplayMaterial(opening);
-                            if (displayMaterial_Opening == null)
-                                displayMaterial_Opening = args.Material;
+                            foreach (IClosedPlanar3D closedPlanar3D in edge3Ds)
+                            {
+                                Rhino.Display.DisplayMaterial displayMaterial_Opening = Query.DisplayMaterial(opening);
+                                if (displayMaterial_Opening == null)
+                                    displayMaterial_Opening = args.Material;
 
-                            Geometry.Grasshopper.Modify.DrawViewportMeshes(closedPlanar3D, args, displayMaterial_Opening);
+                                Geometry.Grasshopper.Modify.DrawViewportMeshes(closedPlanar3D, args, displayMaterial_Opening);
+                            }
                         }
                     }
                 }
@@ -142,9 +148,9 @@ namespace SAM.Architectural.Grasshopper
 
         public override bool CastFrom(object source)
         {
-            if (source is HostPartition)
+            if (source is IPartition)
             {
-                Value = (HostPartition)source;
+                Value = (IPartition)source;
                 return true;
             }
 
@@ -160,9 +166,9 @@ namespace SAM.Architectural.Grasshopper
                 {
                 }
 
-                if (object_Temp is HostPartition)
+                if (object_Temp is IPartition)
                 {
-                    Value = (HostPartition)object_Temp;
+                    Value = (IPartition)object_Temp;
                     return true;
                 }
             }
@@ -190,7 +196,7 @@ namespace SAM.Architectural.Grasshopper
         }
     }
 
-    public class GoohostPartitionParam : GH_PersistentParam<GoohostPartition>, IGH_PreviewObject, IGH_BakeAwareObject
+    public class GooPartitionParam : GH_PersistentParam<GooPartition>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         private bool showAll = true;
         
@@ -210,7 +216,7 @@ namespace SAM.Architectural.Grasshopper
         {
             foreach (var variable in VolatileData.AllData(true))
             {
-                GoohostPartition goohostPartition = variable as GoohostPartition;
+                GooPartition goohostPartition = variable as GooPartition;
                 if (goohostPartition == null)
                     continue;
 
@@ -224,7 +230,7 @@ namespace SAM.Architectural.Grasshopper
         {
             foreach (var variable in VolatileData.AllData(true))
             {
-                GoohostPartition goohostPartition = variable as GoohostPartition;
+                GooPartition goohostPartition = variable as GooPartition;
                 if (goohostPartition == null)
                     continue;
 
@@ -234,15 +240,15 @@ namespace SAM.Architectural.Grasshopper
             Preview_DrawWires(args);
         }
 
-        public GoohostPartitionParam()
-            : base(typeof(HostPartition).Name, typeof(HostPartition).Name, typeof(HostPartition).FullName.Replace(".", " "), "Params", "SAM")
+        public GooPartitionParam()
+            : base(typeof(IPartition).Name, typeof(IPartition).Name, typeof(IPartition).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GoohostPartition> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GooPartition> values)
         {
             Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
-            getObject.SetCommandPrompt("Pick Surfaces to create panels");
+            getObject.SetCommandPrompt("Pick Surfaces to create Partitions");
             getObject.GeometryFilter = ObjectType.Brep;
             getObject.SubObjectSelect = true;
             getObject.DeselectAllBeforePostSelect = false;
@@ -255,7 +261,7 @@ namespace SAM.Architectural.Grasshopper
             if(getObject.ObjectCount == 0)
                 return GH_GetterResult.cancel;
 
-            values = new List<GoohostPartition>();
+            values = new List<GooPartition>();
 
             for (int i =0; i < getObject.ObjectCount; i++)
             {
@@ -269,40 +275,40 @@ namespace SAM.Architectural.Grasshopper
                 if (brep == null)
                     return GH_GetterResult.cancel;
 
-                List<HostPartition> hostPartitions = null;
+                List<IPartition> partitions = null;
 
                 if (brep.HasUserData)
                 {
                     string @string = brep.GetUserString("SAM");
                     if(!string.IsNullOrWhiteSpace(@string))
                     {
-                        hostPartitions = Core.Convert.ToSAM<HostPartition>(@string);
+                        partitions = Core.Convert.ToSAM<IPartition>(@string);
                     }
                 }
                 
-                if(hostPartitions == null || hostPartitions.Count == 0)
+                if(partitions == null || partitions.Count == 0)
                 {
 
                     List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
                     if (sAMGeometry3Ds == null)
                         continue;
 
-                    hostPartitions = Create.HostPartitions(sAMGeometry3Ds);
+                    partitions = Create.HostPartitions(sAMGeometry3Ds)?.Cast<IPartition>().ToList();
                 }
 
-                if (hostPartitions == null || hostPartitions.Count == 0)
+                if (partitions == null || partitions.Count == 0)
                     continue;
 
-                values.AddRange(hostPartitions.ConvertAll(x => new GoohostPartition(x)));
+                values.AddRange(partitions.ConvertAll(x => new GooPartition(x)));
             }
 
             return GH_GetterResult.success;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GoohostPartition value)
+        protected override GH_GetterResult Prompt_Singular(ref GooPartition value)
         {
             Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
-            getObject.SetCommandPrompt("Pick Surface to create panel");
+            getObject.SetCommandPrompt("Pick Surface to create Partition");
             getObject.GeometryFilter = ObjectType.Brep;
             getObject.SubObjectSelect = true;
             getObject.DeselectAllBeforePostSelect = false;
@@ -327,14 +333,14 @@ namespace SAM.Architectural.Grasshopper
                 if (brep == null)
                     return GH_GetterResult.cancel;
 
-                List<HostPartition> hostPartitions = null;
+                List<IHostPartition> hostPartitions = null;
 
                 if (brep.HasUserData)
                 {
                     string @string = brep.GetUserString("SAM");
                     if (!string.IsNullOrWhiteSpace(@string))
                     {
-                        hostPartitions = Core.Convert.ToSAM<HostPartition>(@string);
+                        hostPartitions = Core.Convert.ToSAM<IHostPartition>(@string);
                     }
                 }
 
@@ -351,7 +357,7 @@ namespace SAM.Architectural.Grasshopper
                 if (hostPartitions == null || hostPartitions.Count == 0)
                     continue;
 
-                value = new GoohostPartition(hostPartitions[0]);
+                value = new GooPartition(hostPartitions[0]);
             }
 
             return GH_GetterResult.success;

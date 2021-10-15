@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooSpace : GooSAMObject<Space>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooSpace : GooJSAMObject<Space>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooSpace()
             : base()

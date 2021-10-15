@@ -4,7 +4,7 @@ namespace SAM.Architectural
 {
     public static partial class Query
     {
-        public static bool IsValid(this HostPartition hostPartition, IOpening opening, double tolerance = Core.Tolerance.Distance)
+        public static bool IsValid(this IHostPartition hostPartition, IOpening opening, double tolerance = Core.Tolerance.Distance)
         {
             Face3D face3D_hostPartition = hostPartition?.Face3D;
             if(face3D_hostPartition == null)

@@ -115,8 +115,8 @@ namespace SAM.Core.Grasshopper
             {
                 object @object = null;
 
-                if (gH_ObjectWrapper.Value is IGooSAMObject)
-                    @object = ((IGooSAMObject)gH_ObjectWrapper.Value).GetSAMObject();
+                if (gH_ObjectWrapper.Value is IGooJSAMObject)
+                    @object = ((IGooJSAMObject)gH_ObjectWrapper.Value).GetJSAMObject();
                 else
                     @object = gH_ObjectWrapper.Value;
 

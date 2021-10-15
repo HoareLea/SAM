@@ -5,14 +5,14 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public abstract class BuildingElement : SAMInstance, IArchitecturalObject, IFace3DObject
+    public abstract class BuildingElement<T> : SAMInstance<T>, IArchitecturalObject, IFace3DObject where T: BuildingElementType
     {
         private Face3D face3D;
         
-        public BuildingElement(BuildingElement buildingElement)
+        public BuildingElement(BuildingElement<T> buildingElement)
             : base(buildingElement)
         {
-
+            face3D = buildingElement?.Face3D?.Clone() as Face3D;
         }
 
         public BuildingElement(JObject jObject)
@@ -21,14 +21,14 @@ namespace SAM.Architectural
 
         }
 
-        public BuildingElement(BuildingElementType buildingElementType, Face3D face3D)
-            : base(buildingElementType?.Name, buildingElementType)
+        public BuildingElement(T buildingElementType, Face3D face3D)
+            : base(buildingElementType)
         {
             this.face3D = face3D;
         }
 
-        public BuildingElement(System.Guid guid, BuildingElementType buildingElementType, Face3D face3D)
-            : base(guid, buildingElementType?.Name, buildingElementType)
+        public BuildingElement(System.Guid guid, T buildingElementType, Face3D face3D)
+            : base(guid, buildingElementType)
         {
             this.face3D = face3D;
         }
@@ -42,16 +42,9 @@ namespace SAM.Architectural
 
                 return new Face3D(face3D);
             }
-            set
-            {
-                if(value != null)
-                {
-                    face3D = new Face3D(value);
-                }
-            }
         }
 
-        public void Transform(Transform3D transform3D)
+        public virtual void Transform(Transform3D transform3D)
         {
             face3D = face3D?.Transform(transform3D);
         }
@@ -91,6 +84,11 @@ namespace SAM.Architectural
             }
 
             return jObject;
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return face3D?.GetBoundingBox(offset);
         }
 
         public Vector3D Normal

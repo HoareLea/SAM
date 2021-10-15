@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooInternalCondition : GooSAMObject<InternalCondition>
+    public class GooInternalCondition : GooJSAMObject<InternalCondition>
     {
         public GooInternalCondition()
             : base()

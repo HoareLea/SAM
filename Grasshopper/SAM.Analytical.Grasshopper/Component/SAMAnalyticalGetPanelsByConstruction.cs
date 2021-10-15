@@ -41,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            index = inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.list);
+            index = inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             inputParamManager.AddParameter(new GooConstructionParam(), "_construction", "_construction", "SAM Analytical Construction", GH_ParamAccess.item);
@@ -88,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
             List<AnalyticalModel> analyticalModels = sAMObjects.ConvertAll(x => x as AnalyticalModel);
             analyticalModels.RemoveAll(x => x == null);
 
-            panels = panels?.FindAll(x => x.SAMTypeGuid.Equals(construction.Guid));
+            panels = panels?.FindAll(x => x.TypeGuid.Equals(construction.Guid));
 
             if(analyticalModels != null)
             {

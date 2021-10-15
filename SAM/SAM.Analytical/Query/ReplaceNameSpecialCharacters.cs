@@ -99,7 +99,7 @@
                 return aperture;
 
 
-            return new Aperture(name, aperture, apertureConstruction_New);
+            return new Aperture(aperture, apertureConstruction_New);
         }
     }
 }

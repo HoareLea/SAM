@@ -4,8 +4,8 @@ namespace SAM.Analytical
 {
     public class HeatingSystem : MechanicalSystem
     {
-        public HeatingSystem(string name, HeatingSystemType heatingSystemType)
-            : base(name, heatingSystemType)
+        public HeatingSystem(string id, HeatingSystemType heatingSystemType)
+            : base(id, heatingSystemType)
         {
 
         }

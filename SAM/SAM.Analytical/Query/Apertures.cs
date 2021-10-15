@@ -24,7 +24,7 @@ namespace SAM.Analytical
                     continue;
 
                 foreach (Aperture aperture in apertures)
-                    if (aperture.SAMTypeGuid.Equals(guid))
+                    if (aperture.TypeGuid.Equals(guid))
                         result.Add(aperture);
             }
 

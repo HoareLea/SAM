@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class InternalConditionLibrary : SAMLibrary
+    public class InternalConditionLibrary : SAMLibrary<InternalCondition>
     {
         public InternalConditionLibrary(string name)
             : base(name)
@@ -48,21 +48,20 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public override string GetUniqueId(IJSAMObject jSAMObject)
+        public override string GetUniqueId(InternalCondition internalCondition)
         {
-            InternalCondition internalCondition = jSAMObject as InternalCondition;
             if (internalCondition == null)
                 return null;
 
             return internalCondition.Name;
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool IsValid(InternalCondition internalCondition)
         {
-            if (!base.IsValid(jSAMObject))
+            if (!base.IsValid(internalCondition))
                 return false;
 
-            return jSAMObject is InternalCondition;
+            return true;
         }
 
         public List<InternalCondition> GetInternalConditions()

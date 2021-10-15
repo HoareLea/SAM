@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace SAM.Weather.Grasshopper
 {
-    public class GooWeatherData : GooSAMObject<WeatherData>
+    public class GooWeatherData : GooJSAMObject<WeatherData>
     {
         public GooWeatherData()
             : base()

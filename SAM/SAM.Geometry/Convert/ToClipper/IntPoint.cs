@@ -1,5 +1,4 @@
 ﻿//using ClipperLib;
-using NetTopologySuite.Geometries;
 
 namespace SAM.Geometry
 {

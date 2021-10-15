@@ -20,7 +20,7 @@ namespace SAM.Architectural
             Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Min)) as Plane;
             Plane plane_Max = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, new PlanarTerrain(plane_Min));
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, new PlanarTerrain(plane_Min), null);
 
             Plane plane_Min_Flipped = new Plane(plane_Min);
             plane_Min_Flipped.FlipZ();
@@ -30,8 +30,8 @@ namespace SAM.Architectural
             List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segmentable2Ds, tolerance_Distance);
             if (polygon2Ds != null && polygon2Ds.Count != 0)
             {
-                List<Tuple<Segment2D, HostPartition, Room>> tuples = new List<Tuple<Segment2D, HostPartition, Room>>();
-                Dictionary<Room, List<HostPartition>> dictionary = new Dictionary<Room, List<HostPartition>>();
+                List<Tuple<Segment2D, IHostPartition, Room>> tuples = new List<Tuple<Segment2D, IHostPartition, Room>>();
+                Dictionary<Room, List<IHostPartition>> dictionary = new Dictionary<Room, List<IHostPartition>>();
 
                 for (int i = 0; i < polygon2Ds.Count; i++)
                 {
@@ -47,7 +47,7 @@ namespace SAM.Architectural
                     room.SetValue(RoomParameter.Area, area);
                     room.SetValue(RoomParameter.Volume, area * System.Math.Abs(elevation_Max - elevation_Min));
 
-                    dictionary[room] = new List<HostPartition>();
+                    dictionary[room] = new List<IHostPartition>();
 
                     List<Segment2D> segment2Ds = polygon2D.GetSegments();
                     if (segment2Ds == null || segment2Ds.Count < 3)
@@ -61,16 +61,16 @@ namespace SAM.Architectural
                         Segment3D segment3D_Max = plane_Max.Convert(segment2D);
 
                         Polygon3D polygon3D = new Polygon3D(new Point3D[] { segment3D_Max[0], segment3D_Max[1], segment3D_Min[1], segment3D_Min[0] });
-                        HostPartition hostPartition = HostPartition(new Face3D(polygon3D), null, tolerance_Angle);
+                        IHostPartition hostPartition = HostPartition(new Face3D(polygon3D), null, tolerance_Angle);
 
-                        tuples.Add(new Tuple<Segment2D, HostPartition, Room>(segment2D, hostPartition, room));
+                        tuples.Add(new Tuple<Segment2D, IHostPartition, Room>(segment2D, hostPartition, room));
                     }
 
                     Polygon3D polygon3D_Min = plane_Min.Convert(polygon2D);
                     polygon3D_Min = plane_Min_Flipped.Convert(plane_Min_Flipped.Convert(polygon3D_Min));
                     if (polygon3D_Min != null)
                     {
-                        HostPartition hostPartition = HostPartition(new Face3D(polygon3D_Min), null, tolerance_Angle);
+                        IHostPartition hostPartition = HostPartition(new Face3D(polygon3D_Min), null, tolerance_Angle);
                         if(hostPartition != null)
                         {
                             dictionary[room].Add(hostPartition);
@@ -80,7 +80,7 @@ namespace SAM.Architectural
                     Polygon3D polygon3D_Max = plane_Max.Convert(polygon2D);
                     if (polygon3D_Max != null)
                     {
-                        HostPartition hostPartition = HostPartition(new Face3D(polygon3D_Max), null, tolerance_Angle);
+                        IHostPartition hostPartition = HostPartition(new Face3D(polygon3D_Max), null, tolerance_Angle);
                         if (hostPartition != null)
                         {
                             dictionary[room].Add(hostPartition);
@@ -90,19 +90,19 @@ namespace SAM.Architectural
 
                 while (tuples.Count > 0)
                 {
-                    Tuple<Segment2D, HostPartition, Room> tuple = tuples[0];
+                    Tuple<Segment2D, IHostPartition, Room> tuple = tuples[0];
                     Segment2D segment2D = tuple.Item1;
 
-                    List<Tuple<Segment2D, HostPartition, Room>> tuples_Temp = tuples.FindAll(x => segment2D.AlmostSimilar(x.Item1));
+                    List<Tuple<Segment2D, IHostPartition, Room>> tuples_Temp = tuples.FindAll(x => segment2D.AlmostSimilar(x.Item1));
                     tuples.RemoveAll(x => tuples_Temp.Contains(x));
 
-                    HostPartition hostPartition = tuple.Item2;
+                    IHostPartition hostPartition = tuple.Item2;
 
-                    foreach (Tuple<Segment2D, HostPartition, Room> tuple_Temp in tuples_Temp)
+                    foreach (Tuple<Segment2D, IHostPartition, Room> tuple_Temp in tuples_Temp)
                         dictionary[ tuple_Temp.Item3].Add(hostPartition);
                 }
 
-                foreach(KeyValuePair<Room, List<HostPartition>> keyValuePair in dictionary)
+                foreach(KeyValuePair<Room, List<IHostPartition>> keyValuePair in dictionary)
                 {
                     result.Add(keyValuePair.Key, keyValuePair.Value);
                 }
@@ -162,7 +162,7 @@ namespace SAM.Architectural
                 dictionary_Common[face2D].Add(keyValuePair_Project.Value);
             }
 
-            List<Dictionary<Room, List<HostPartition>>> dictionaries_Room = new List<Dictionary<Room, List<HostPartition>>>();
+            List<Dictionary<Room, List<IHostPartition>>> dictionaries_Room = new List<Dictionary<Room, List<IHostPartition>>>();
             foreach (List<Face3D> face3Ds_Common in dictionary_Common.Values)
             {
                 Dictionary<double, List<Face2D>> dictionary = new Dictionary<double, List<Face2D>>();
@@ -206,15 +206,15 @@ namespace SAM.Architectural
                         dictionary[elevation_Ground] = dictionary[elevations.Last()];
                 }
 
-                Dictionary<Room, List<HostPartition>> dictionary_Room = Query.RoomDictionary(dictionary, dictionary.Keys.ToList().IndexOf(elevation_Ground), tolerance);
+                Dictionary<Room, List<IHostPartition>> dictionary_Room = Query.RoomDictionary(dictionary, dictionary.Keys.ToList().IndexOf(elevation_Ground), tolerance);
                 if (dictionary_Room != null)
                     dictionaries_Room.Add(dictionary_Room);
             }
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(elevation_Ground));
-            foreach (Dictionary<Room, List<HostPartition>> dictionary_Room in dictionaries_Room)
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(elevation_Ground), null);
+            foreach (Dictionary<Room, List<IHostPartition>> dictionary_Room in dictionaries_Room)
             {
-                foreach (KeyValuePair<Room, List<HostPartition>> keyValuePair in dictionary_Room)
+                foreach (KeyValuePair<Room, List<IHostPartition>> keyValuePair in dictionary_Room)
                 {
                     result.Add(keyValuePair.Key, keyValuePair.Value);
                 }
@@ -233,23 +233,28 @@ namespace SAM.Architectural
             List<Tuple<Room, List<IPartition>>> tuples = new List<Tuple<Room, List<IPartition>>>();
 
             List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>> tuples_Partition = new List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>>();
-            foreach (IPartition partition in partitions)
+            if(partitions != null)
             {
-                Face3D face3D = partition?.Face3D;
-                if (face3D == null)
-                    continue;
+                foreach (IPartition partition in partitions)
+                {
+                    Face3D face3D = partition?.Face3D;
+                    if (face3D == null)
+                        continue;
 
-                Plane plane = face3D.GetPlane();
-                if (plane == null)
-                    continue;
+                    Plane plane = face3D.GetPlane();
+                    if (plane == null)
+                        continue;
 
-                double area = face3D.GetArea();
+                    double area = face3D.GetArea();
 
-                if (area < minArea || face3D.ThinnessRatio() < thinnessRatio) // Changed from tolerance_Distance to minArea
-                    continue;
+                    if (area < minArea || face3D.ThinnessRatio() < thinnessRatio) // Changed from tolerance_Distance to minArea
+                        continue;
 
-                tuples_Partition.Add(new Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>(plane, face3D, partition, face3D.GetBoundingBox(tolerance_Distance), area));
+                    tuples_Partition.Add(new Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>(plane, face3D, partition, face3D.GetBoundingBox(tolerance_Distance), area));
+                }
             }
+
+            Plane plane_Ground = Geometry.Spatial.Create.Plane(groundElevation);
 
             tuples_Partition.Sort((x, y) => y.Item5.CompareTo(x.Item5));
 
@@ -291,7 +296,13 @@ namespace SAM.Architectural
                     shell_FixEdges = new Shell(shell_Merge);
                 }
 
-                shells_Temp[i] = shell_FixEdges;
+                Shell shell_CutFace3D = shell_FixEdges.CutFace3Ds(plane_Ground);
+                if(shell_CutFace3D == null)
+                {
+                    shell_CutFace3D = new Shell(shell_FixEdges);
+                }
+
+                shells_Temp[i] = shell_CutFace3D;
             });
 
             shells_Temp.RemoveAll(x => x == null);
@@ -513,13 +524,13 @@ namespace SAM.Architectural
                                 }
                                 else
                                 {
-                                    HostPartitionType hostPartitionType = (partition_New_Temp as HostPartition)?.SAMType as HostPartitionType;
+                                    HostPartitionType hostPartitionType = (partition_New_Temp as IHostPartition)?.Type();
 
                                     partition_New = HostPartition(guid, face3D, hostPartitionType, tolerance_Distance);
 
                                     for (int j = 1; j < partitions_New_Temp.Count; j++)
                                     {
-                                        HostPartition hostPartition = partitions_New_Temp[j] as HostPartition;
+                                        IHostPartition hostPartition = partitions_New_Temp[j] as IHostPartition;
                                         if(hostPartition == null)
                                         {
                                             continue;
@@ -533,14 +544,12 @@ namespace SAM.Architectural
 
                                         foreach(IOpening opening in openings)
                                         {
-                                            ((HostPartition)partition_New).AddOpening(opening);
+                                            ((IHostPartition)partition_New).AddOpening(opening, tolerance_Distance);
                                         }
                                     }
                                 }
 
-                                tuple.Item2.Add(partition_New);
 
-                                tuples_Partition_New.Add(new Tuple<Point3D, IPartition, BoundingBox3D>(point3D_Internal, partition_New, face3D.GetBoundingBox(tolerance_Distance)));
                             }
                         }
                     }
@@ -551,12 +560,17 @@ namespace SAM.Architectural
                             continue;
 
                         partition_New = new AirPartition(face3D);
+                    }
+
+                    if(partition_New != null)
+                    {
                         tuple.Item2.Add(partition_New);
+                        tuples_Partition_New.Add(new Tuple<Point3D, IPartition, BoundingBox3D>(point3D_Internal, partition_New, partition_New.Face3D.GetBoundingBox(tolerance_Distance)));
                     }
                 }
             }
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(groundElevation));
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, PlanarTerrain(groundElevation), null);
             foreach (Tuple<Room, List<IPartition>> tuple in tuples)
             {
                 result.Add(tuple.Item1, tuple.Item2);

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooProfile : GooSAMObject<Profile>
+    public class GooProfile : GooJSAMObject<Profile>
     {
         public GooProfile()
             : base()

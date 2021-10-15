@@ -5,11 +5,11 @@
         /// <summary>
         /// This is used to disply Panels in Rhino depends on PanelType. Here we used default colors. 
         /// </summary>
-        /// <param name="panelType"></param>
+        /// <param name="partition">IPartition</param>
         /// <returns></returns>
-        public static Rhino.Display.DisplayMaterial DisplayMaterial(this HostPartition hostPartition)
+        public static Rhino.Display.DisplayMaterial DisplayMaterial(this IPartition partition)
         {
-            System.Drawing.Color color = Architectural.Query.Color(hostPartition);
+            System.Drawing.Color color = Architectural.Query.Color(partition);
 
             if (color == System.Drawing.Color.Empty)
                 return null;

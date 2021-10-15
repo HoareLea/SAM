@@ -24,6 +24,12 @@ namespace SAM.Architectural
 
         }
 
+        public BuildingElementType(System.Guid guid, string name)
+            : base(guid, name)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

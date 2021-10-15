@@ -176,7 +176,7 @@ namespace SAM.Core
 
                 parameters = new object[parameterInfos.Length];
                 for (int i = 0; i < parameters.Length; i++)
-                    parameters[i] = Type.Missing;
+                    parameters[i] = System.Type.Missing;
             }
 
             value = methodInfo.Invoke(@object, parameters);

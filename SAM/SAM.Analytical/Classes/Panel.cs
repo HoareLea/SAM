@@ -11,7 +11,7 @@ namespace SAM.Analytical
     /// <summary>
     /// SAM Analytical Panel stores information about shape and properties of building boundary such as Wall, Floor, Roof, Slab etc.
     /// </summary>
-    public class Panel : SAMInstance
+    public class Panel : SAMInstance<Construction>, IFace3DObject
     {
         /// <summary>
         /// Type of the Panel such as Wall, Ceiling etc.
@@ -48,7 +48,7 @@ namespace SAM.Analytical
         /// <param name="panel">SAM Analytical Panel</param>
         /// <param name="construction">SAM Analytical Construction</param>
         internal Panel(Panel panel, Construction construction)
-            : base(construction == null ? null : construction.Name, panel, construction)
+            : base(panel, construction)
         {
             planarBoundary3D = new PlanarBoundary3D(panel.planarBoundary3D);
             panelType = panel.panelType;
@@ -58,7 +58,7 @@ namespace SAM.Analytical
         }
 
         internal Panel(string name, Panel panel, Construction construction)
-            : base(name, panel, construction)
+            : base(panel, construction)
         {
             planarBoundary3D = panel == null ? null : new PlanarBoundary3D(panel.planarBoundary3D);
             panelType = panel == null ? PanelType.Undefined : panel.panelType;
@@ -83,14 +83,14 @@ namespace SAM.Analytical
         }
 
         internal Panel(Construction construction, PanelType panelType, Face3D face)
-            : base(construction == null ? null : construction.Name, construction)
+            : base(construction)
         {
             this.panelType = panelType;
             planarBoundary3D = new PlanarBoundary3D(face);
         }
 
         internal Panel(Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
-            : base(construction == null ? null : construction.Name, construction)
+            : base(construction)
         {
             this.panelType = panelType;
             this.planarBoundary3D = planarBoundary3D;
@@ -146,7 +146,7 @@ namespace SAM.Analytical
         }
 
         internal Panel(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, Construction construction, PanelType panelType, PlanarBoundary3D planarBoundary3D)
-            : base(guid, name, parameterSets, construction)
+            : base(guid, parameterSets, construction)
         {
             this.panelType = panelType;
             this.planarBoundary3D = new PlanarBoundary3D(planarBoundary3D);
@@ -259,7 +259,7 @@ namespace SAM.Analytical
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
-        {           
+        {
             return GetFace3D()?.GetBoundingBox(offset);
         }
 
@@ -267,7 +267,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return SAMType as Construction;
+                return Type;
             }
         }
 
@@ -627,7 +627,7 @@ namespace SAM.Analytical
 
             List<Aperture> result = new List<Aperture>();
             foreach (Aperture aperture in apertures)
-                if (aperture != null && aperture.SAMTypeGuid == apertureConstruction.Guid)
+                if (aperture != null && aperture.TypeGuid == apertureConstruction.Guid)
                     result.Add(aperture.Clone());
 
             return result;
@@ -691,6 +691,26 @@ namespace SAM.Analytical
             get
             {
                 return apertures != null && apertures.Count != 0;
+            }
+        }
+
+        public Face3D Face3D
+        {
+            get
+            {
+                Face2D face2D = planarBoundary3D?.GetFace2D();
+                if (face2D == null)
+                {
+                    return null;
+                }
+
+                Plane plane = planarBoundary3D.Plane;
+                if(plane == null)
+                {
+                    return null;
+                }
+
+                return plane.Convert(face2D);
             }
         }
     }

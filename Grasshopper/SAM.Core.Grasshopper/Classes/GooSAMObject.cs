@@ -7,14 +7,14 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooSAMObject<T> : GH_Goo<T>, IGooSAMObject where T : ISAMObject
+    public class GooJSAMObject<T> : GH_Goo<T>, IGooJSAMObject where T : IJSAMObject
     {
-        public GooSAMObject()
+        public GooJSAMObject()
             : base()
         {
         }
 
-        public GooSAMObject(T sAMObject)
+        public GooJSAMObject(T sAMObject)
         {
             Value = sAMObject;
         }
@@ -46,7 +46,7 @@ namespace SAM.Core.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GooSAMObject<T>(Value);
+            return new GooJSAMObject<T>(Value);
         }
 
         public override bool Write(GH_IWriter writer)
@@ -71,7 +71,7 @@ namespace SAM.Core.Grasshopper
             return true;
         }
 
-        public ISAMObject GetSAMObject()
+        public IJSAMObject GetJSAMObject()
         {
             return Value;
         }
@@ -83,8 +83,13 @@ namespace SAM.Core.Grasshopper
 
             string value = Value.GetType().FullName;
 
-            if (!string.IsNullOrWhiteSpace(Value.Name))
-                value += string.Format(" [{0}]", Value.Name);
+            if(Value is SAMObject)
+            {
+                SAMObject sAMObject = (SAMObject)(object)Value;
+                
+                if (!string.IsNullOrWhiteSpace(sAMObject.Name))
+                    value += string.Format(" [{0}]", sAMObject.Name);
+            }
 
             return value;
         }
@@ -103,11 +108,11 @@ namespace SAM.Core.Grasshopper
             Type type_Source = source?.GetType();
             if(type_Source != null)
             {
-                if (typeof(IGooSAMObject).IsAssignableFrom(type_Source))
+                if (typeof(IGooJSAMObject).IsAssignableFrom(type_Source))
                 {
-                    ISAMObject sAMObject = ((IGooSAMObject)source).GetSAMObject();
-                    if (sAMObject is T)
-                        Value = (T)sAMObject;
+                    IJSAMObject jSAMObject = ((IGooJSAMObject)source).GetJSAMObject();
+                    if (jSAMObject is T)
+                        Value = (T)jSAMObject;
 
                     return true;
                 }
@@ -170,22 +175,22 @@ namespace SAM.Core.Grasshopper
         }
     }
 
-    public class GooSAMObjectParam<T> : GH_PersistentParam<GooSAMObject<T>> where T : ISAMObject
+    public class GooJSAMObjectParam<T> : GH_PersistentParam<GooJSAMObject<T>> where T : ISAMObject
     {
         public override Guid ComponentGuid => new Guid("5af7e0dc-8d0c-4d51-8c85-6f2795c2fc37");
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        public GooSAMObjectParam()
+        public GooJSAMObjectParam()
             : base(typeof(T).Name, typeof(T).Name, typeof(T).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GooSAMObject<T>> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GooJSAMObject<T>> values)
         {
             throw new NotImplementedException();
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GooSAMObject<T> value)
+        protected override GH_GetterResult Prompt_Singular(ref GooJSAMObject<T> value)
         {
             throw new NotImplementedException();
         }

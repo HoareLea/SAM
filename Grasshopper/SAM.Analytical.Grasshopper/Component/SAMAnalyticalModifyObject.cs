@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddObject : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalModifyObject : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,9 +29,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAddObject()
-          : base("SAMAnalytical.AddObject", "SAMAnalytical.AddObject",
-              "Add Object to AdjacencyCluster or AnalyticalModel",
+        public SAMAnalyticalModifyObject()
+          : base("SAMAnalytical.ModifyObject", "SAMAnalytical.ModifyObject",
+              "Modify Object to AdjacencyCluster or AnalyticalModel",
               "SAM", "Analytical")
         {
         }
@@ -58,7 +58,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Analytical", NickName = "Analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -125,7 +125,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            index = Params.IndexOfOutputParam("Analytical");
+            index = Params.IndexOfOutputParam("analytical");
             if(index != -1)
                 dataAccess.SetData(index, sAMObject);
         }

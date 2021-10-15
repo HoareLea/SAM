@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SAM.Core;
+using System;
 using System.Collections.Generic;
-using SAM.Core;
 
 namespace SAM.Analytical
 {
@@ -91,7 +91,7 @@ namespace SAM.Analytical
                 return adjacencyCluster.GetApertures()?.Find(x => x != null && x.Guid.Equals(guid));
 
             if (typeof(ApertureConstruction).IsAssignableFrom(type))
-                return adjacencyCluster.GetApertures()?.Find(x => x != null && x.SAMTypeGuid.Equals(guid))?.ApertureConstruction;
+                return adjacencyCluster.GetApertures()?.Find(x => x != null && x.TypeGuid.Equals(guid))?.ApertureConstruction;
 
             if (typeof(Panel).IsAssignableFrom(type))
                 return adjacencyCluster.GetObject<Panel>(guid);
@@ -123,19 +123,17 @@ namespace SAM.Analytical
             if (profileLibrary == null)
                 return null;
 
-            List<IJSAMObject> jSAMObjects = profileLibrary.GetObjects();
-            if (jSAMObjects == null || jSAMObjects.Count == 0)
+            List<Profile> profiles = profileLibrary.GetObjects();
+            if (profiles == null || profiles.Count == 0)
                 return null;
 
-            foreach (IJSAMObject jSAMObject in jSAMObjects)
+            foreach (Profile profile in profiles)
             {
-                if (jSAMObject == null)
+                if (profile == null)
                     continue;
-                
-                ISAMObject sAMObject = jSAMObject as ISAMObject;
 
-                if (sAMObject != null && sAMObject.Guid.Equals(guid))
-                    return sAMObject;
+                if (profile.Guid.Equals(guid))
+                    return profile;
             }
 
             return null;

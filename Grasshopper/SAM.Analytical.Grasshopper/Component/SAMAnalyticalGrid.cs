@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_SAManalytical", "_SAManalytical", "SAM Analytical Object", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_SAManalytical", "_SAManalytical", "SAM Analytical Object", GH_ParamAccess.list);
             index = inputParamManager.AddPlaneParameter("plane_", "plane_", "GH Plane", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 

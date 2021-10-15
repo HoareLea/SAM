@@ -5,38 +5,81 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static Dictionary<N, List<T>> SectionDictionary<N, T>(this IEnumerable<N> face3DObjects, Plane plane, double tolerance = Core.Tolerance.Distance) where T: ISAMGeometry where N: IFace3DObject
+        public static Dictionary<N, List<T>> SectionDictionary<N, T>(this IEnumerable<N> face3DObjects, Plane plane, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance) where T: ISAMGeometry where N: IFace3DObject
         {
             if (plane == null || face3DObjects == null)
-                return null;
-
-            List<Tuple<N, List<T>>> tuples = new List<Tuple<N, List<T>>>();
-            foreach(N face3DObject in face3DObjects)
             {
-                if(face3DObject == null)
+                return null;
+            }
+
+            List<Tuple<N, Face3D>> tuples = new List<Tuple<N, Face3D>>();
+            foreach (N face3DObject in face3DObjects)
+            {
+                Face3D face3D = face3DObject?.Face3D;
+                if(face3D == null)
                 {
                     continue;
                 }
 
-                tuples.Add(new Tuple<N, List<T>>(face3DObject, new List<T>()));
+                tuples.Add(new Tuple<N, Face3D>(face3DObject, face3D));
             }
 
-            if(tuples.Count == 0)
+            Dictionary<Face3D, List<T>> dictionary = SectionDictionary<T>(tuples.ConvertAll(x => x.Item2), plane, tolerance_Angle, tolerance_Distance);
+            if(dictionary ==null)
             {
                 return null;
             }
 
-            System.Threading.Tasks.Parallel.For(0, tuples.Count, (int i) => 
+            Dictionary<N, List<T>> result = new Dictionary<N, List<T>>();
+            foreach(KeyValuePair<Face3D, List<T>> keyValuePair in dictionary)
             {
-                N n = tuples[i].Item1;
-                
-                Face3D face3D = n?.Face3D;
+                if(keyValuePair.Key == null)
+                {
+                    continue;
+                }
+
+                int index = tuples.FindIndex(x => x.Item2 == keyValuePair.Key);
+                if(index == -1)
+                {
+                    continue;
+                }
+
+                result[tuples[index].Item1] = keyValuePair.Value;
+            }
+
+            return result;
+        }
+
+        public static Dictionary<Face3D, List<T>> SectionDictionary<T>(this IEnumerable<Face3D> face3Ds, Plane plane, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance) where T : ISAMGeometry
+        {
+            if (plane == null || face3Ds == null)
+                return null;
+
+            List<Tuple<Face3D, List<T>>> tuples = new List<Tuple<Face3D, List<T>>>();
+            foreach (Face3D face3DObject in face3Ds)
+            {
+                if (face3DObject == null)
+                {
+                    continue;
+                }
+
+                tuples.Add(new Tuple<Face3D, List<T>>(face3DObject, new List<T>()));
+            }
+
+            if (tuples.Count == 0)
+            {
+                return null;
+            }
+
+            System.Threading.Tasks.Parallel.For(0, tuples.Count, (int i) =>
+            {
+                Face3D face3D = tuples[i].Item1;
                 if (face3D == null)
                 {
                     return;
                 }
 
-                PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(plane, face3D, tolerance);
+                PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(plane, face3D, tolerance_Angle, tolerance_Distance);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 {
                     return;
@@ -72,7 +115,7 @@ namespace SAM.Geometry.Spatial
 
                     List<T> sAMGeometries = new List<T>();
 
-                    foreach (Geometry.Planar.ISAMGeometry2D sAMGeometry2D in sAMGeometry2Ds)
+                    foreach (Planar.ISAMGeometry2D sAMGeometry2D in sAMGeometry2Ds)
                     {
                         if (sAMGeometry2D is T)
                         {
@@ -84,10 +127,10 @@ namespace SAM.Geometry.Spatial
                 }
             });
 
-            Dictionary<N, List<T>> result = new Dictionary<N, List<T>>();
-            foreach(Tuple<N, List<T>> tuple in tuples)
+            Dictionary<Face3D, List<T>> result = new Dictionary<Face3D, List<T>>();
+            foreach (Tuple<Face3D, List<T>> tuple in tuples)
             {
-                if(tuple.Item2 == null || tuple.Item2.Count == 0)
+                if (tuple.Item2 == null || tuple.Item2.Count == 0)
                 {
                     continue;
                 }

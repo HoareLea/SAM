@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooDegreeOfActivityLibrary : GooSAMObject<DegreeOfActivityLibrary>
+    public class GooDegreeOfActivityLibrary : GooJSAMObject<DegreeOfActivityLibrary>
     {
         public GooDegreeOfActivityLibrary()
             : base()

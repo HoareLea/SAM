@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class ConstructionLibrary : SAMLibrary
+    public class ConstructionLibrary : SAMLibrary<Construction>
     {
         public ConstructionLibrary(string name)
             : base(name)
@@ -49,21 +49,20 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public override string GetUniqueId(IJSAMObject jSAMObject)
+        public override string GetUniqueId(Construction construction)
         {
-            Construction construction = jSAMObject as Construction;
             if (construction == null)
                 return null;
 
             return construction.Guid.ToString();
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool IsValid(Construction construction)
         {
-            if (!base.IsValid(jSAMObject))
+            if (!base.IsValid(construction))
                 return false;
 
-            return jSAMObject is Construction;
+            return true;
         }
 
         public List<Construction> GetConstructions()

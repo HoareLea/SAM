@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SAM.Architectural
 {
@@ -18,6 +19,18 @@ namespace SAM.Architectural
 
         public WallType(string name)
             : base(name)
+        {
+
+        }
+
+        public WallType(System.Guid guid, string name)
+            : base(guid, name)
+        {
+
+        }
+
+        public WallType(string name, IEnumerable<MaterialLayer> materialLayers)
+            : base(name, materialLayers)
         {
 
         }

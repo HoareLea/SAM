@@ -4,7 +4,7 @@ namespace SAM.Architectural
 {
     public static partial class Create
     {
-        public static HostPartition HostPartition(this Face3D face3D, HostPartitionType hostPartitionType = null, double tolerance = Core.Tolerance.Angle)
+        public static IHostPartition HostPartition(this Face3D face3D, HostPartitionType hostPartitionType = null, double tolerance = Core.Tolerance.Angle)
         {
             if(face3D == null || !face3D.IsValid())
             {
@@ -34,7 +34,7 @@ namespace SAM.Architectural
             return null;
         }
 
-        public static HostPartition HostPartition(System.Guid guid, Face3D face3D, HostPartitionType hostPartitionType = null, double tolerance = Core.Tolerance.Angle)
+        public static IHostPartition HostPartition(System.Guid guid, Face3D face3D, HostPartitionType hostPartitionType = null, double tolerance = Core.Tolerance.Angle)
         {
             if (face3D == null || !face3D.IsValid())
             {

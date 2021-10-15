@@ -37,8 +37,8 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMLibrary>(), "_sAMLibrary", "_sAMLibrary", "SAM Core Library", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooJSAMObjectParam<ISAMLibrary>(), "_sAMLibrary", "_sAMLibrary", "SAM Core Library", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMObjectParam<SAMLibrary>(), "SAMLibrary", "SAMLibrary", "SAM Core Library", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooJSAMObjectParam<ISAMLibrary>(), "SAMLibrary", "SAMLibrary", "SAM Core Library", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            SAMLibrary sAMLibrary = null;
+            ISAMLibrary sAMLibrary = null;
 
             if (!dataAccess.GetData(0, ref sAMLibrary))
             {
@@ -72,10 +72,13 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            SAMLibrary sAMLibrary_Result = sAMLibrary.Clone();
+            ISAMLibrary sAMLibrary_Result = sAMLibrary.Clone();
 
             foreach(SAMObject sAMObject in sAMObjects)
-                sAMLibrary_Result.Add(sAMObject);
+            {
+                //sAMLibrary_Result.Add(sAMObject);
+            }
+                
 
 
             dataAccess.SetData(0, sAMLibrary_Result);

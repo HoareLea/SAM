@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooLocation : GooSAMObject<Location>
+    public class GooLocation : GooJSAMObject<Location>
     {
         public GooLocation()
             : base()

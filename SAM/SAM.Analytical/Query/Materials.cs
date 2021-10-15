@@ -15,7 +15,7 @@ namespace SAM.Analytical
             Dictionary<Guid, ApertureConstruction> dictionary_ApertureConstruction = new Dictionary<Guid, ApertureConstruction>();
             foreach (Panel panel in panels)
             {
-                Guid guid_Construction = panel.SAMTypeGuid;
+                Guid guid_Construction = panel.TypeGuid;
                 if (!dictionary_Construction.ContainsKey(guid_Construction))
                     dictionary_Construction[guid_Construction] = panel.Construction;
 
@@ -24,7 +24,7 @@ namespace SAM.Analytical
                 {
                     foreach (Aperture aperture in apertures)
                     {
-                        Guid guid_ApertureConstruction = aperture.SAMTypeGuid;
+                        Guid guid_ApertureConstruction = aperture.TypeGuid;
                         if (!dictionary_ApertureConstruction.ContainsKey(guid_ApertureConstruction))
                             dictionary_ApertureConstruction[guid_ApertureConstruction] = aperture.ApertureConstruction;
                     }

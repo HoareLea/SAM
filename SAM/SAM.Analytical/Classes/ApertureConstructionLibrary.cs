@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class ApertureConstructionLibrary : SAMLibrary
+    public class ApertureConstructionLibrary : SAMLibrary<ApertureConstruction>
     {
         public ApertureConstructionLibrary(string name)
             : base(name)
@@ -48,21 +48,20 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public override string GetUniqueId(IJSAMObject jSAMObject)
+        public override string GetUniqueId(ApertureConstruction apertureConstruction)
         {
-            ApertureConstruction apertureConstruction = jSAMObject as ApertureConstruction;
             if (apertureConstruction == null)
                 return null;
 
             return apertureConstruction.Guid.ToString();
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool IsValid(ApertureConstruction apertureConstruction)
         {
-            if (!base.IsValid(jSAMObject))
+            if (!base.IsValid(apertureConstruction))
                 return false;
 
-            return jSAMObject is ApertureConstruction;
+            return true;
         }
 
         public List<ApertureConstruction> GetApertureConstructions()

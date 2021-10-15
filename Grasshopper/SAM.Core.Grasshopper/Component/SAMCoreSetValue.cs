@@ -56,7 +56,7 @@ namespace SAM.Core.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             this.outputParamManager = outputParamManager;
-            outputParamManager.AddParameter(new GooSAMObjectParam<SAMObject>(), "SAMObject", "SAMObject", "SAMObject", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "SAMObject", "SAMObject", "SAMObject", GH_ParamAccess.item);
             //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
         }

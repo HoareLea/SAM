@@ -5,56 +5,44 @@ using System.Collections.Generic;
 
 namespace SAM.Core
 {
-    public class SAMInstance : SAMObject
+    public abstract class SAMInstance<T> : SAMObject where T: SAMType
     {
-        private SAMType sAMType;
+        private T type;
 
-        public SAMInstance(SAMInstance sAMInstance)
-            : base(sAMInstance)
+        public SAMInstance(SAMInstance<T> instance)
+            : base(instance)
         {
-            this.sAMType = sAMInstance.sAMType;
+            this.type = instance.Type;
         }
 
-        public SAMInstance(SAMInstance sAMInstance, SAMType sAMType)
-            : base(sAMInstance)
+        public SAMInstance(SAMInstance<T> instance, T type)
+            : base(type?.Name, instance)
         {
-            this.sAMType = sAMType;
+            this.type = type;
         }
 
-        public SAMInstance(string name, SAMInstance sAMInstance, SAMType sAMType)
-            : base(name, sAMInstance)
+        public SAMInstance(Guid guid, SAMInstance<T> instance)
+            : base(guid, instance)
         {
-            this.sAMType = sAMType;
+            this.type = instance.Type;
         }
 
-        public SAMInstance(Guid guid, SAMInstance sAMInstance)
-            : base(guid, sAMInstance)
+        public SAMInstance(Guid guid, T type)
+            : base(guid, type?.Name)
         {
-            this.sAMType = sAMInstance.sAMType;
+            this.type = type;
         }
 
-        public SAMInstance(Guid guid, SAMType SAMType)
-            : base(guid)
+        public SAMInstance(T type)
+            : base(type?.Name)
         {
-            this.sAMType = SAMType;
+            this.type = type;
         }
 
-        public SAMInstance(Guid guid, string name, SAMType SAMType)
-        : base(guid, name)
+        public SAMInstance(Guid guid, IEnumerable<ParameterSet> parameterSets, T type)
+            : base(guid, type?.Name, parameterSets)
         {
-            this.sAMType = SAMType;
-        }
-
-        public SAMInstance(string name, SAMType SAMType)
-            : base(name)
-        {
-            this.sAMType = SAMType;
-        }
-
-        public SAMInstance(Guid guid, string name, IEnumerable<ParameterSet> parameterSets, SAMType SAMType)
-            : base(guid, name, parameterSets)
-        {
-            this.sAMType = SAMType;
+            this.type = type;
         }
 
         public SAMInstance(JObject jObject)
@@ -62,32 +50,55 @@ namespace SAM.Core
         {
         }
 
-        public SAMType SAMType
+        public T Type
         {
             get
             {
-                return sAMType?.Clone();
+                return type?.Clone();
+            }
+
+            set
+            {
+                if(value == null)
+                {
+                    return;
+                }
+
+                name = value.Name;
+                type = value;
             }
         }
 
-        public Guid SAMTypeGuid
+        public Guid TypeGuid
         {
             get
             {
-                if (sAMType == null)
+                if (type == null)
                     return Guid.Empty;
 
-                return sAMType.Guid;
+                return type.Guid;
             }
         }
 
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
+            {
                 return false;
+            }
 
-            if (jObject.ContainsKey("SAMType"))
-                sAMType = Create.IJSAMObject<SAMType>(jObject.Value<JObject>("SAMType"));
+            if (jObject.ContainsKey("Type"))
+            {
+                type = Create.IJSAMObject<T>(jObject.Value<JObject>("Type"));
+            }
+            else
+            {
+                //TODO: Remove in the future. This is for backward compability only
+                if (jObject.ContainsKey("SAMType"))
+                {
+                    type = Create.IJSAMObject<T>(jObject.Value<JObject>("SAMType"));
+                }
+            }
 
             return true;
         }
@@ -98,8 +109,8 @@ namespace SAM.Core
             if (jObject == null)
                 return jObject;
 
-            if (sAMType != null)
-                jObject.Add("SAMType", sAMType.ToJObject());
+            if (type != null)
+                jObject.Add("Type", type.ToJObject());
 
             return jObject;
         }

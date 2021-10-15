@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Architectural
@@ -25,6 +26,13 @@ namespace SAM.Architectural
 
         }
 
+        public abstract bool Below(Face3D face3D, double tolerance = Core.Tolerance.Distance);
+
+        public bool Below(IPartition partition, double tolerance = Core.Tolerance.Distance)
+        {
+            return Below(partition?.Face3D, tolerance);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
@@ -38,6 +46,13 @@ namespace SAM.Architectural
             }
 
             return true;
+        }
+
+        public abstract bool On(Face3D face3D, double tolerance = Core.Tolerance.Distance);
+
+        public bool On(IPartition partition, double tolerance = Core.Tolerance.Distance)
+        {
+            return On(partition?.Face3D, tolerance);
         }
 
         public override JObject ToJObject()

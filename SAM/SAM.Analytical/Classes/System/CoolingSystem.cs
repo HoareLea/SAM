@@ -3,8 +3,8 @@ namespace SAM.Analytical
 {
     public class CoolingSystem : MechanicalSystem
     {
-        public CoolingSystem(string name, CoolingSystemType coolingSystemType)
-            : base(name, coolingSystemType)
+        public CoolingSystem(string id, CoolingSystemType coolingSystemType)
+            : base(id, coolingSystemType)
         {
 
         }

@@ -5,14 +5,13 @@ using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
-using SAM.Geometry.Grasshopper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooAnalyticalModel : GooSAMObject<AnalyticalModel>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooAnalyticalModel : GooJSAMObject<AnalyticalModel>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooAnalyticalModel()
             : base()

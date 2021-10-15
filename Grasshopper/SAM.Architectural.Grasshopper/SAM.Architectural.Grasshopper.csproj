@@ -53,14 +53,36 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GooOpening.cs" />
     <Compile Include="Classes\GooArchitecturalModel.cs" />
+    <Compile Include="Classes\GooMaterialLayer.cs" />
+    <Compile Include="Classes\GooOpeningType.cs" />
+    <Compile Include="Classes\GooRoofType.cs" />
+    <Compile Include="Classes\GooFloorType.cs" />
+    <Compile Include="Classes\GooHostPartitionType.cs" />
+    <Compile Include="Classes\GooRoom.cs" />
+    <Compile Include="Classes\GooWallType.cs" />
     <Compile Include="Classes\GooLevel.cs" />
-    <Compile Include="Classes\GooHostBuildingElement.cs" />
+    <Compile Include="Classes\GooPartition.cs" />
+    <Compile Include="Classes\GooArchitecturalObject.cs" />
+    <Compile Include="Component\SAMArchitecturalAddOpenings.cs" />
+    <Compile Include="Component\SAMArchitecturalAddOpeningsByAzimuth.cs" />
+    <Compile Include="Component\SAMArchitecturalCreateMaterialLayersByNames.cs" />
+    <Compile Include="Component\SAMArchitecturalCreateHostPartitionType.cs" />
+    <Compile Include="Component\SAMArchitecturalHostPartitionCategory.cs" />
+    <Compile Include="Component\SAMArchitecturalCreateArchitecturalModelByShells.cs" />
     <Compile Include="Component\SAMArchitecturalCreateLevel.cs" />
+    <Compile Include="Component\SAMArchitecturalAddAirPartitions.cs" />
+    <Compile Include="Component\SAMArchitecturalUpdateArchitecturalModel.cs" />
+    <Compile Include="Component\SAMArchitecturalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Mesh.cs" />
     <Compile Include="Convert\ToRhino\Brep.cs" />
     <Compile Include="Convert\ToRhino\Mesh.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
+    <Compile Include="Modify\BakeGeometry_ByAnalyticalType.cs" />
+    <Compile Include="Modify\BakeGeometry_ByInternalCondtion.cs" />
+    <Compile Include="Modify\BakeGeometry_ByLevel.cs" />
     <Compile Include="Modify\DrawViewportMeshes.cs" />
     <Compile Include="Modify\DrawViewportWires.cs" />
     <Compile Include="Modify\BakeGeometry.cs" />

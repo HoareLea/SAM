@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Architectural
 {
@@ -24,6 +25,18 @@ namespace SAM.Architectural
             : base(name)
         {
 
+        }
+
+        public HostPartitionType(System.Guid guid, string name)
+            : base(guid, name)
+        {
+
+        }
+
+        public HostPartitionType(string name, IEnumerable<MaterialLayer> materialLayers)
+            : base(name)
+        {
+            this.materialLayers = materialLayers?.ToList().ConvertAll(x => new MaterialLayer(x));
         }
 
         public List<MaterialLayer> MaterialLayers

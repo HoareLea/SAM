@@ -205,6 +205,7 @@
     <Compile Include="Spatial\Create\Segment3Ds.cs" />
     <Compile Include="Spatial\Create\Vector3D.cs" />
     <Compile Include="Spatial\Create\Point3D.cs" />
+    <Compile Include="Spatial\Interfaces\IBoundable3DObject.cs" />
     <Compile Include="Spatial\Interfaces\IFace3DObject.cs" />
     <Compile Include="Spatial\Interfaces\ISAMGeometry3DObject.cs" />
     <Compile Include="Spatial\Modify\SplitFace3Ds.cs" />
@@ -213,12 +214,13 @@
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
     <Compile Include="Spatial\Query\ConnectedFace3Ds.cs" />
+    <Compile Include="Spatial\Query\CutFace3Ds.cs" />
     <Compile Include="Spatial\Query\ElevationDictionary.cs" />
     <Compile Include="Spatial\Query\Intersect.cs" />
     <Compile Include="Spatial\Query\Area.cs" />
+    <Compile Include="Spatial\Query\Face3DObjectsByFace3D.cs" />
     <Compile Include="Spatial\Query\SectionDictionary.cs" />
     <Compile Include="Spatial\Query\SelfIntersectionFace3Ds.cs" />
-    <Compile Include="Spatial\Query\Shells.cs" />
     <Compile Include="Spatial\Query\Volume.cs" />
     <Compile Include="Spatial\Query\SignedVolume.cs" />
     <Compile Include="Spatial\Query\Fill.cs" />

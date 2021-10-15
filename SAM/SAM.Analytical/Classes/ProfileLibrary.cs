@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class ProfileLibrary : SAMLibrary
+    public class ProfileLibrary : SAMLibrary<Profile>
     {
         public ProfileLibrary(string name)
             : base(name)
@@ -59,9 +59,8 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public override string GetUniqueId(IJSAMObject jSAMObject)
+        public override string GetUniqueId(Profile profile)
         {
-            Profile profile = jSAMObject as Profile;
             if (profile == null)
                 return null;
 
@@ -83,12 +82,12 @@ namespace SAM.Analytical
             return string.Format("{0}::{1}", category, name);
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool IsValid(Profile profile)
         {
-            if (!base.IsValid(jSAMObject))
+            if (!base.IsValid(profile))
                 return false;
 
-            return jSAMObject is Profile;
+            return true;
         }
 
         public List<Profile> GetProfiles()

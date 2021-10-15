@@ -518,14 +518,66 @@ namespace SAM.Core
 
         public List<T> GetObjects<T>()
         {
-            List<object> objects = GetObjects(typeof(T));
-            if (objects == null)
+            List<string> typeNames = GetTypeNames(typeof(T));
+            if (typeNames == null || typeNames.Count == 0)
+            {
                 return null;
+            }
 
             List<T> result = new List<T>();
-            foreach (object @object in objects)
-                if (@object is T)
-                    result.Add((T)@object);
+            foreach (string typeName in typeNames)
+            {
+                List<T> objects = GetObjects<T>(typeName);
+                if (objects != null && objects.Count != 0)
+                {
+                    result.AddRange(objects);
+                }
+            }
+
+            return result;
+
+            //List<object> objects = GetObjects(typeof(T));
+            //if (objects == null)
+            //    return null;
+
+            //List<T> result = new List<T>();
+            //foreach (object @object in objects)
+            //    if (@object is T)
+            //        result.Add((T)@object);
+
+            //return result;
+        }
+
+        public List<T> GetObjects<T>(params Func<T, bool>[] functions)
+        {
+            if (functions == null)
+            {
+                return GetObjects<T>();
+            }
+
+            List<T> result = GetObjects<T>();
+            if (result == null)
+            {
+                return null;
+            }
+
+            for (int i = result.Count - 1; i >= 0; i--)
+            {
+                bool remove = false;
+                foreach (Func<T, bool> function in functions)
+                {
+                    if (!function(result[i]))
+                    {
+                        remove = true;
+                        break;
+                    }
+                }
+
+                if (remove)
+                {
+                    result.RemoveAt(i);
+                }
+            }
 
             return result;
         }
@@ -828,7 +880,13 @@ namespace SAM.Core
             List<string> result = new List<string>();
             foreach(string typeName in dictionary_Objects.Keys)
             {
-                Type type_Temp = Type.GetType(typeName, false, false);
+                if(type.FullName.Equals(typeName))
+                {
+                    result.Add(typeName);
+                    continue;
+                }
+                
+                Type type_Temp = Query.Type(typeName);
                 if(type_Temp == null || !type.IsAssignableFrom(type_Temp))
                 {
                     continue;

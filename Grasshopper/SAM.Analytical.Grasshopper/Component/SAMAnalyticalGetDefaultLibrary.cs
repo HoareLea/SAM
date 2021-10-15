@@ -146,7 +146,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
             
-            SAMLibrary sAMLibrary = ActiveSetting.Setting.GetValue<SAMLibrary>((Enum)@object);
+            ISAMLibrary sAMLibrary = ActiveSetting.Setting.GetValue<ISAMLibrary>((Enum)@object);
 
             index = Params.IndexOfOutputParam("Library");
             if (index != -1)
@@ -154,7 +154,13 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfOutputParam("Objects");
             if (index != -1)
-                dataAccess.SetDataList(index, sAMLibrary?.GetObjects());
+            {
+                if(sAMLibrary.TryGetObjects(out List<IJSAMObject> jSAMObjects))
+                {
+                    dataAccess.SetDataList(index, jSAMObjects);
+                }
+            }
+                
         }
     }
 }

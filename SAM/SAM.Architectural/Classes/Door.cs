@@ -4,7 +4,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
-    public class Door : BuildingElement, IOpening
+    public class Door : BuildingElement<DoorType>, IOpening
     {
         public Door(Door door)
             : base(door)
@@ -20,6 +20,12 @@ namespace SAM.Architectural
 
         public Door(DoorType doorType, Face3D face3D)
             : base(doorType, face3D)
+        {
+
+        }
+
+        public Door(System.Guid guid, DoorType doorType, Face3D face3D)
+            : base(guid, doorType, face3D)
         {
 
         }

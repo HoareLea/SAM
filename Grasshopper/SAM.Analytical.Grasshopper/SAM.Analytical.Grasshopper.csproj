@@ -117,14 +117,13 @@
     <Compile Include="Component\SAMAnalyticalFixNames.cs" />
     <Compile Include="Component\SAMAnalyticalGetZonesByName.cs" />
     <Compile Include="Component\SAMAnalyticalGetZonesBySpace.cs" />
-    <Compile Include="Component\SAMAnalyticalGetZone_Obsolete.cs" />
     <Compile Include="Component\SAMAnalyticalAirflow.cs" />
     <Compile Include="Component\SAMAnalyticalCopyApertureConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalCopyConstructionLayers.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelsByPlane.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultConstructionLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalAddObject.cs" />
+    <Compile Include="Component\SAMAnalyticalModifyObject.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelsByShell.cs" />
     <Compile Include="Component\SAMAnalyticalMapAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalAdjustRoofs.cs" />
@@ -208,7 +207,6 @@
     <Compile Include="Component\SAMAnalyticalApertureConstructions.cs" />
     <Compile Include="Component\SAMAnalyticalPanelLocation.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateNormals.cs" />
-    <Compile Include="Component\SAMAnalyticalGetSpace_Obsolete.cs" />
     <Compile Include="Component\SAMAnalyticalSplitByInternalEdges.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalRemove.cs" />

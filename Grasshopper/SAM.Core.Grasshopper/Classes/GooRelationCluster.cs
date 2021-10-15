@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooRelationCluster : GooSAMObject<RelationCluster>
+    public class GooRelationCluster : GooJSAMObject<RelationCluster>
     {
         public GooRelationCluster()
             : base()

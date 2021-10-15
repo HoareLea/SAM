@@ -73,8 +73,61 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            if (result != null)
-                result = result.Unit;
+            if(result == null)
+            {
+                return null;
+            }
+
+            result = result.Unit;
+
+            Plane plane = new Plane(origin, result);
+
+            bool invalid = false;
+            foreach(Point3D point3D in point3Ds)
+            {
+                if(plane.Distance(point3D) > tolerance)
+                {
+                    invalid = true;
+                    break;
+                }
+            }
+
+            if(invalid)
+            {
+                normal = new Vector3D();
+                for (int i = 0; i < count - 1; i++)
+                {
+                    normal += (point3Ds.ElementAt(i) - origin).CrossProduct(point3Ds.ElementAt(i + 1) - origin);
+                }
+
+                normal = normal.Unit;
+
+                Plane plane_Temp = new Plane(origin, normal);
+
+                double max = double.MinValue;
+                double max_Temp = double.MinValue;
+                foreach(Point3D point3D in point3Ds)
+                {
+                    double distance = double.NaN;
+
+                    distance = plane.Distance(point3D);
+                    if(distance > max)
+                    {
+                        max = distance;
+                    }
+
+                    distance = plane_Temp.Distance(point3D);
+                    if (distance > max_Temp)
+                    {
+                        max_Temp = distance;
+                    }
+                }
+
+                if(max_Temp < max)
+                {
+                    result = normal;
+                }
+            }
 
             return result;
         }

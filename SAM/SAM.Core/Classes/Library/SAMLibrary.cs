@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace SAM.Core
 {
-    public abstract class SAMLibrary: SAMObject
+    public abstract class SAMLibrary<T>: SAMObject, ISAMLibrary where T: IJSAMObject
     {
-        private Dictionary<string, IJSAMObject> objects;
+        private Dictionary<string, T> objects;
 
         public SAMLibrary(string name)
             : base(name)
@@ -27,14 +27,14 @@ namespace SAM.Core
         {
         }
 
-        public SAMLibrary(SAMLibrary sAMLibrary)
+        public SAMLibrary(SAMLibrary<T> sAMLibrary)
             : base(sAMLibrary)
         {
             if (sAMLibrary.objects != null)
             {
-                objects = new Dictionary<string, IJSAMObject>();
+                objects = new Dictionary<string, T>();
 
-                foreach (IJSAMObject jSAMObject in sAMLibrary.objects.Values)
+                foreach (T jSAMObject in sAMLibrary.objects.Values)
                     Add(jSAMObject);
             }
         }
@@ -46,7 +46,7 @@ namespace SAM.Core
 
             if (jObject.ContainsKey("Objects"))
             {
-                List<IJSAMObject> jSAMObjects = Create.IJSAMObjects<IJSAMObject>(jObject.Value<JArray>("Objects"));
+                List<T> jSAMObjects = Create.IJSAMObjects<T>(jObject.Value<JArray>("Objects"));
                 if (jSAMObjects != null && jSAMObjects.Count != 0)
                     jSAMObjects.ForEach(x => Add(x));
             }
@@ -66,7 +66,7 @@ namespace SAM.Core
             return jObject;
         }
 
-        public bool Add(IJSAMObject jSAMObject)
+        public bool Add(T jSAMObject)
         {
             if (jSAMObject == null)
                 return false;
@@ -79,13 +79,13 @@ namespace SAM.Core
                 return false;
 
             if (objects == null)
-                objects = new Dictionary<string, IJSAMObject>();
+                objects = new Dictionary<string, T>();
 
             objects[uniqueId] = jSAMObject.Clone();
             return true;
         }
 
-        public bool Contains(IJSAMObject jSAMObject)
+        public bool Contains(T jSAMObject)
         {
             if (jSAMObject == null || objects == null)
                 return false;
@@ -100,7 +100,7 @@ namespace SAM.Core
             return objects.ContainsKey(uniqueId);
         }
 
-        public bool Update(IJSAMObject jSAMObject)
+        public bool Update(T jSAMObject)
         {
             if (jSAMObject == null)
                 return false;
@@ -122,7 +122,7 @@ namespace SAM.Core
             return true;
         }
 
-        public bool Remove(IJSAMObject jSAMObject)
+        public bool Remove(T jSAMObject)
         {
             if (jSAMObject == null)
                 return false;
@@ -140,79 +140,87 @@ namespace SAM.Core
             return objects.Remove(uniqueId);
         }
 
-        public IJSAMObject GetObject(string uniqueId)
+        public T GetObject(string uniqueId)
         {
             if (uniqueId == null || objects == null || objects.Count == 0)
-                return null;
+                return default;
 
-            IJSAMObject result;
+            T result;
 
             objects.TryGetValue(uniqueId, out result);
 
             return result.Clone();
         }
 
-        public T GetObject<T>(string uniqueId) where T: IJSAMObject
+        public W GetObject<W>(string uniqueId) where W: T
         {
-            IJSAMObject result = GetObject(uniqueId);
+            T result = GetObject(uniqueId);
 
-            if (result is T)
-                return (T)result;
+            if (result is W)
+                return (W)result;
 
             return default;
         }
 
-        public List<IJSAMObject> GetObjects()
+        public List<T> GetObjects()
         {
             return objects?.Values?.ToList().ConvertAll(x => x.Clone());
         }
 
-        public List<T> GetObjects<T>() where T: IJSAMObject
+        public List<W> GetObjects<W>() where W: T
         {
             if (objects == null)
                 return null;
 
-            List<T> result = new List<T>();
-            foreach (IJSAMObject jSAMObject in objects.Values)
-                if (jSAMObject is T)
-                    result.Add((T)jSAMObject.Clone());
+            List<W> result = new List<W>();
+            foreach (T jSAMObject in objects.Values)
+                if (jSAMObject is W)
+                    result.Add((W)jSAMObject.Clone());
             
             return result;
         }
+
+        public Type GenericType
+        {
+            get
+            {
+                return typeof(T);
+            }
+        }
         
-        public List<IJSAMObject> GetObjects(string text, TextComparisonType textComparisonType, bool caseSensitive = true)
+        public List<T> GetObjects(string text, TextComparisonType textComparisonType, bool caseSensitive = true)
         {
             if (text == null)
                 return null;
 
-            List<IJSAMObject> result = new List<IJSAMObject>();
-            foreach (KeyValuePair<string, IJSAMObject> keyValuePair in objects)
+            List<T> result = new List<T>();
+            foreach (KeyValuePair<string, T> keyValuePair in objects)
                 if (Query.Compare(keyValuePair.Key, text, textComparisonType, caseSensitive))
                     result.Add(keyValuePair.Value.Clone());
 
             return result;
         }
 
-        public List<T> GetObjects<T>(string text, TextComparisonType textComparisonType, bool caseSensitive = true) where T: IJSAMObject
+        public List<W> GetObjects<W>(string text, TextComparisonType textComparisonType, bool caseSensitive = true) where W: T
         {
-            List<IJSAMObject> jSAMObjects = GetObjects(text, textComparisonType, caseSensitive);
+            List<T> jSAMObjects = GetObjects(text, textComparisonType, caseSensitive);
             if (jSAMObjects == null)
                 return null;
 
-            List<T> result = new List<T>();
-            foreach (IJSAMObject jSAMObject in jSAMObjects)
-                if (jSAMObject is T)
-                    result.Add((T)jSAMObject);
+            List<W> result = new List<W>();
+            foreach (T jSAMObject in jSAMObjects)
+                if (jSAMObject is W)
+                    result.Add((W)jSAMObject);
 
             return result;
         }
 
-        public virtual string GetUniqueId(IJSAMObject jSAMObject)
+        public virtual string GetUniqueId(T jSAMObject)
         {
             return jSAMObject.GetHashCode().ToString();
         }
 
-        public virtual bool IsValid(IJSAMObject jSAMObject)
+        public virtual bool IsValid(T jSAMObject)
         {
             if (jSAMObject == null)
                 return false;
@@ -238,12 +246,12 @@ namespace SAM.Core
 
             if(jToken.Type == JTokenType.Array)
             {
-                List<IJSAMObject> jSAMObjects = Create.IJSAMObjects<IJSAMObject>((JArray)jToken);
+                List<T> jSAMObjects = Create.IJSAMObjects<T>((JArray)jToken);
                 if (jSAMObjects == null)
                     return false;
 
                 if (objects == null)
-                    objects = new Dictionary<string, IJSAMObject>();
+                    objects = new Dictionary<string, T>();
                 jSAMObjects.ForEach(x => Add(x));
                 return true;
             }
@@ -255,18 +263,18 @@ namespace SAM.Core
                 if (IJSAMObject == null)
                     return false;
 
-                if(IJSAMObject is SAMLibrary)
+                if(IJSAMObject is SAMLibrary<T>)
                 {
-                    IEnumerable<IJSAMObject> jSAMObjects = ((SAMLibrary)IJSAMObject).objects?.Values;
+                    IEnumerable<T> jSAMObjects = ((SAMLibrary<T>)IJSAMObject).objects?.Values;
                     if (jSAMObjects != null && jSAMObjects.Count() > 0)
-                        foreach (IJSAMObject jSAMObject in jSAMObjects)
+                        foreach (T jSAMObject in jSAMObjects)
                             Add(jSAMObject);
 
                     return true;
                 }
-                else
+                else if(IJSAMObject is T)
                 {
-                    return Add(IJSAMObject);
+                    return Add((T)IJSAMObject);
                 }
             }
 

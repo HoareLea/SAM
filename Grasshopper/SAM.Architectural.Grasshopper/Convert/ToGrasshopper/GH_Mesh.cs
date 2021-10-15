@@ -16,9 +16,14 @@ namespace SAM.Architectural.Grasshopper
             return new GH_Mesh(mesh);
         }
 
-        public static GH_Mesh ToGrasshopper_Mesh(this HostPartition hostPartition, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
+        public static GH_Mesh ToGrasshopper_Mesh(this IPartition partition, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
         {
-            Mesh mesh = hostPartition?.ToRhino_Mesh(cutOpenings, includeOpenings, tolerance);
+            if(partition == null)
+            {
+                return null;
+            }
+
+            Mesh mesh = mesh = ((IHostPartition)partition).ToRhino_Mesh(cutOpenings, includeOpenings, tolerance);
             if (mesh == null)
             {
                 return null;
