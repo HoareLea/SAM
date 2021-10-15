@@ -115,57 +115,30 @@ namespace SAM.Architectural
 
         public List<T> GetObjects<T>()
         {
-            List<string> typeNames = relationCluster?.GetTypeNames(typeof(T));
-            if(typeNames == null || typeNames.Count == 0)
-            {
-                return null;
-            }
+            return relationCluster.GetObjects<T>();
 
-            List<T> result = new List<T>();
-            foreach(string typeName in typeNames)
-            {
-                List<T> objects = relationCluster.GetObjects<T>(typeName);
-                if (objects != null && objects.Count != 0)
-                {
-                    result.AddRange(objects);
-                }
-            }
+            //List<string> typeNames = relationCluster?.GetTypeNames(typeof(T));
+            //if(typeNames == null || typeNames.Count == 0)
+            //{
+            //    return null;
+            //}
 
-            return result;
+            //List<T> result = new List<T>();
+            //foreach(string typeName in typeNames)
+            //{
+            //    List<T> objects = relationCluster.GetObjects<T>(typeName);
+            //    if (objects != null && objects.Count != 0)
+            //    {
+            //        result.AddRange(objects);
+            //    }
+            //}
+
+            //return result;
         }
 
         public List<T> GetObjects<T>(params Func<T, bool>[] functions)
         {
-            if(functions == null)
-            {
-                return null;
-            }
-
-            List<T> result = GetObjects<T>();
-            if (result == null)
-            {
-                return null;
-            }
-
-            for (int i = result.Count - 1; i >= 0; i--)
-            {
-                bool remove = false;
-                foreach(Func<T, bool> function in functions)
-                {
-                    if(!function(result[i]))
-                    {
-                        remove = true;
-                        break;
-                    }
-                }
-
-                if(remove)
-                {
-                    result.RemoveAt(i);
-                }
-            }
-
-            return result;
+            return relationCluster?.GetObjects(functions);
         }
 
         public List<T> GetRelatedObjects<T>(object @object)
