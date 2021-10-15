@@ -113,7 +113,7 @@ namespace SAM.Architectural
             }
         }
 
-        public List<T> GetObjects<T>()
+        public List<T> GetObjects<T>() where T : IJSAMObject
         {
             return relationCluster.GetObjects<T>();
 
@@ -136,60 +136,81 @@ namespace SAM.Architectural
             //return result;
         }
 
-        public List<T> GetObjects<T>(params Func<T, bool>[] functions)
+        public List<T> GetObjects<T>(params Func<T, bool>[] functions) where T: IJSAMObject
         {
             return relationCluster?.GetObjects(functions);
         }
 
-        public List<T> GetRelatedObjects<T>(object @object)
+        public List<T> GetRelatedObjects<T>(IJSAMObject jSAMObject) where T: IJSAMObject
         {
-            if(@object == null)
+            if(jSAMObject == null)
             {
                 return null;
             }
 
-            return relationCluster?.GetRelatedObjects<T>(@object);
+            return relationCluster?.GetRelatedObjects<T>(jSAMObject);
         }
 
-        public List<object> GetRelatedObjects(object @object, Type type = null)
+        public List<IJSAMObject> GetRelatedObjects(IJSAMObject jSAMObject, Type type = null)
         {
-            if (@object == null)
+            if (jSAMObject == null)
             {
                 return null;
             }
 
+            List<object> objects = null;
             if(type == null)
             {
-                return relationCluster?.GetRelatedObjects(@object);
+                objects = relationCluster?.GetRelatedObjects(jSAMObject);
+            }
+            else
+            {
+                objects = relationCluster?.GetRelatedObjects(jSAMObject, type);
+            }
+            if(objects == null)
+            {
+                return null;
             }
 
-            return relationCluster?.GetRelatedObjects(@object, type);
+            List<IJSAMObject> result = new List<IJSAMObject>();
+            foreach(object @object in objects)
+            {
+                IJSAMObject jSAMObject_Temp = @object as IJSAMObject;
+                if(jSAMObject_Temp == null)
+                {
+                    continue;
+                }
+
+                result.Add(jSAMObject_Temp);
+            }
+
+            return result;
         }
 
-        public bool RemoveObject(object @object)
+        public bool RemoveObject(IJSAMObject jSAMObject)
         {
-            if(@object == null || relationCluster == null)
+            if(jSAMObject == null || relationCluster == null)
             {
                 return false;
             }
 
-            Guid guid = relationCluster.GetGuid(@object);
+            Guid guid = relationCluster.GetGuid(jSAMObject);
             if(guid == Guid.Empty)
             {
                 return false;
             }
 
-            return relationCluster.RemoveObject(@object.GetType(), guid);
+            return relationCluster.RemoveObject(jSAMObject.GetType(), guid);
         }
 
-        public bool AddRelation(object object_1, object object_2)
+        public bool AddRelation(IJSAMObject jSAMObject_1, IJSAMObject jSAMObject_2)
         {
-            if(object_1 == null || object_2 == null || relationCluster == null)
+            if(jSAMObject_1 == null || jSAMObject_2 == null || relationCluster == null)
             {
                 return false;
             }
 
-            return relationCluster.AddRelation(object_1, object_2);
+            return relationCluster.AddRelation(jSAMObject_1, jSAMObject_2);
         }
 
         public IMaterial GetMaterial(string name)

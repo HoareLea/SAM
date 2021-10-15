@@ -108,7 +108,7 @@ namespace SAM.Architectural.Grasshopper
                 }
             }
 
-            List<object> relatedObjects = architecturalModel.GetRelatedObjects(sAMObject, type);
+            List<IJSAMObject> relatedObjects = architecturalModel.GetRelatedObjects(sAMObject, type);
 
             index = Params.IndexOfOutputParam("relatedObjects");
             if (index != -1)

@@ -66,7 +66,7 @@ namespace SAM.Architectural
 
                 if (partition is AirPartition)
                 {
-                    List<object> relatedObjects = architecturalModel.GetRelatedObjects<object>(partition);
+                    List<IJSAMObject> relatedObjects = architecturalModel.GetRelatedObjects<IJSAMObject>(partition);
                     architecturalModel.RemoveObject(partition);
 
                     IHostPartition hostPartition = Create.HostPartition(partition.Guid, partition.Face3D, hostPartitionType);
@@ -75,7 +75,7 @@ namespace SAM.Architectural
 
                     if (relatedObjects != null)
                     {
-                        foreach (object relatedObject in relatedObjects)
+                        foreach (IJSAMObject relatedObject in relatedObjects)
                         {
                             architecturalModel.AddRelation(hostPartition, relatedObject);
                         }

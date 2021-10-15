@@ -143,7 +143,7 @@ namespace SAM.Architectural
                 List<IPartition> partitions_Cut = partition.Cut(plane, tolerance);
                 if (partitions_Cut != null && partitions_Cut.Count > 1)
                 {
-                    List<object> relatedObjects = architecturalModel.GetRelatedObjects(partition);
+                    List<IJSAMObject> relatedObjects = architecturalModel.GetRelatedObjects(partition);
                     if (architecturalModel.RemoveObject(partition))
                     {
                         foreach (IPartition partition_Cut in partitions_Cut)

@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Planar;
+﻿using SAM.Core;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -207,7 +208,7 @@ namespace SAM.Architectural
 
                 Room room_Old = tuple.Item1;
 
-                List<object> relatedObjects = architecturalModel.GetRelatedObjects(room_Old)?.FindAll(x => !(x is IPartition));
+                List<IJSAMObject> relatedObjects = architecturalModel.GetRelatedObjects(room_Old)?.FindAll(x => !(x is IPartition));
                 architecturalModel.RemoveObject(room_Old);
 
                 foreach (Tuple<Room, List<IPartition>> tuple_Room_New in tuple.Item2)
@@ -218,7 +219,7 @@ namespace SAM.Architectural
 
                     if (relatedObjects != null)
                     {
-                        foreach (object relatedObject in relatedObjects)
+                        foreach (IJSAMObject relatedObject in relatedObjects)
                         {
                             architecturalModel.AddRelation(room_New, relatedObject);
                         }
