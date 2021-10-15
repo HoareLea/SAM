@@ -288,7 +288,6 @@ namespace SAM.Architectural.Grasshopper
                 
                 if(partitions == null || partitions.Count == 0)
                 {
-
                     List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
                     if (sAMGeometry3Ds == null)
                         continue;
@@ -299,6 +298,7 @@ namespace SAM.Architectural.Grasshopper
                 if (partitions == null || partitions.Count == 0)
                     continue;
 
+                partitions.RemoveAll(x => x == null || x.Face3D == null);
                 values.AddRange(partitions.ConvertAll(x => new GooPartition(x)));
             }
 
@@ -357,10 +357,15 @@ namespace SAM.Architectural.Grasshopper
                 if (hostPartitions == null || hostPartitions.Count == 0)
                     continue;
 
-                value = new GooPartition(hostPartitions[0]);
+                hostPartitions.RemoveAll(x => x == null);
+                if(hostPartitions.Count != 0)
+                {
+                    value = new GooPartition(hostPartitions[0]);
+                    return GH_GetterResult.success;
+                }
             }
 
-            return GH_GetterResult.success;
+            return GH_GetterResult.cancel;
         }
 
         public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)

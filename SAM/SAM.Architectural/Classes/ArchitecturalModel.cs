@@ -328,6 +328,11 @@ namespace SAM.Architectural
             return GetRelatedObjects<Room>(partition);
         }
 
+        public List<Room> GetRooms()
+        {
+            return GetObjects<Room>();
+        }
+
         public bool Internal(IPartition partition)
         {
             List<Room> rooms = relationCluster?.GetRelatedObjects<Room>(partition);
@@ -344,11 +349,6 @@ namespace SAM.Architectural
         {
             List<Room> rooms = relationCluster?.GetRelatedObjects<Room>(partition);
             return rooms == null || rooms.Count == 0;
-        }
-
-        public List<Room> GetRooms()
-        {
-            return GetObjects<Room>();
         }
 
         public List<Shell> GetShells()

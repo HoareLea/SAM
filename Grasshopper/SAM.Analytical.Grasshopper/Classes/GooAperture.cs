@@ -219,6 +219,8 @@ namespace SAM.Analytical.Grasshopper
                 if (apertures == null || apertures.Count == 0)
                     continue;
 
+                apertures.RemoveAll(x => x == null);
+
                 values.AddRange(apertures.ConvertAll(x => new GooAperture(x)));
             }
 
@@ -277,10 +279,15 @@ namespace SAM.Analytical.Grasshopper
                 if (apertures == null || apertures.Count == 0)
                     continue;
 
-                value = new GooAperture(apertures[0]);
+                apertures.RemoveAll(x => x == null);
+                if(apertures.Count != 0)
+                {
+                    value = new GooAperture(apertures[0]);
+                    return GH_GetterResult.success;
+                }
             }
 
-            return GH_GetterResult.success;
+            return GH_GetterResult.cancel;
         }
 
         public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
