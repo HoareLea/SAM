@@ -281,7 +281,7 @@ namespace SAM.Analytical.Grasshopper
                 if (panels == null || panels.Count == 0)
                     continue;
 
-                values.AddRange(panels.ConvertAll(x => new GooPanel(x)));
+                values.AddRange(panels.FindAll(x => x != null).ConvertAll(x => new GooPanel(x)));
             }
 
             return GH_GetterResult.success;
