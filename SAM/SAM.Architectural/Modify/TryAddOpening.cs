@@ -44,6 +44,7 @@ namespace SAM.Architectural
                     if (hostPartition_Temp.AddOpening(opening, tolerance))
                     {
                         hostPartition = hostPartition_Temp;
+                        architecturalModel.Add(hostPartition);
                         return true;
                     }
                 }

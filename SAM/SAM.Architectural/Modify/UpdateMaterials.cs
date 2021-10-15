@@ -92,13 +92,12 @@ namespace SAM.Architectural
                     continue;
                 }
 
-                IMaterial material = architecturalModel.GetMaterial(materialName);
-                if (material != null)
+                if(architecturalModel.HasMaterial(materialName))
                 {
                     continue;
                 }
 
-                material = materialLibrary.GetMaterial(materialName);
+                IMaterial material = materialLibrary.GetMaterial(materialName);
                 if (material == null)
                 {
                     missingMaterialsNames.Add(materialName);

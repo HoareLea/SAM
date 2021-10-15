@@ -115,7 +115,7 @@ namespace SAM.Architectural
 
         public List<T> GetObjects<T>() where T : IJSAMObject
         {
-            return relationCluster.GetObjects<T>();
+            return relationCluster?.GetObjects<T>()?.ConvertAll(x => Core.Query.Clone(x));
 
             //List<string> typeNames = relationCluster?.GetTypeNames(typeof(T));
             //if(typeNames == null || typeNames.Count == 0)
@@ -138,7 +138,7 @@ namespace SAM.Architectural
 
         public List<T> GetObjects<T>(params Func<T, bool>[] functions) where T: IJSAMObject
         {
-            return relationCluster?.GetObjects(functions);
+            return relationCluster?.GetObjects(functions)?.ConvertAll(x => Core.Query.Clone(x));
         }
 
         public List<T> GetRelatedObjects<T>(IJSAMObject jSAMObject) where T: IJSAMObject
@@ -148,7 +148,7 @@ namespace SAM.Architectural
                 return null;
             }
 
-            return relationCluster?.GetRelatedObjects<T>(jSAMObject);
+            return relationCluster?.GetRelatedObjects<T>(jSAMObject)?.ConvertAll(x => Core.Query.Clone(x));
         }
 
         public List<IJSAMObject> GetRelatedObjects(IJSAMObject jSAMObject, Type type = null)
@@ -175,7 +175,7 @@ namespace SAM.Architectural
             List<IJSAMObject> result = new List<IJSAMObject>();
             foreach(object @object in objects)
             {
-                IJSAMObject jSAMObject_Temp = @object as IJSAMObject;
+                IJSAMObject jSAMObject_Temp = Core.Query.Clone(@object as IJSAMObject);
                 if(jSAMObject_Temp == null)
                 {
                     continue;
@@ -210,7 +210,7 @@ namespace SAM.Architectural
                 return false;
             }
 
-            return relationCluster.AddRelation(jSAMObject_1, jSAMObject_2);
+            return relationCluster.AddRelation(jSAMObject_1.Clone(), jSAMObject_2.Clone());
         }
 
         public IMaterial GetMaterial(string name)
@@ -220,7 +220,17 @@ namespace SAM.Architectural
                 return null;
             }
 
-            return materialLibrary.GetObject<IMaterial>(name);
+            return materialLibrary.GetObject<IMaterial>(name)?.Clone();
+        }
+
+        public bool HasMaterial(string name)
+        {
+            if (materialLibrary == null || string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+
+            return materialLibrary.GetObject<IMaterial>(name) != null;
         }
 
         public IMaterial GetMaterial(MaterialLayer materialLayer)
@@ -230,7 +240,7 @@ namespace SAM.Architectural
                 return null;
             }
 
-            return materialLayer.Material(materialLibrary);
+            return materialLayer.Material(materialLibrary)?.Clone();
         }
 
         public List<IMaterial> GetMaterials(HostPartitionType hostPartitionType)
@@ -240,7 +250,7 @@ namespace SAM.Architectural
                 return null;
             }
 
-            return hostPartitionType.Materials(materialLibrary);
+            return hostPartitionType.Materials(materialLibrary)?.ConvertAll(x => x.Clone());
         }
 
         public List<T> GetHostPartitionTypes<T>() where T: HostPartitionType
@@ -315,35 +325,35 @@ namespace SAM.Architectural
         
         public List<Room> GetRooms(IPartition partition)
         {
-            return relationCluster?.GetRelatedObjects<Room>(partition);
+            return GetRelatedObjects<Room>(partition);
         }
 
         public bool Internal(IPartition partition)
         {
-            List<Room> rooms = GetRooms(partition);
+            List<Room> rooms = relationCluster?.GetRelatedObjects<Room>(partition);
             return rooms != null && rooms.Count > 1;
         }
         
         public bool External(IPartition partition)
         {
-            List<Room> rooms = GetRooms(partition);
+            List<Room> rooms = relationCluster?.GetRelatedObjects<Room>(partition);
             return rooms != null && rooms.Count == 1;
         }
 
         public bool Shade(IPartition partition)
         {
-            List<Room> rooms = GetRooms(partition);
+            List<Room> rooms = relationCluster?.GetRelatedObjects<Room>(partition);
             return rooms == null || rooms.Count == 0;
         }
 
         public List<Room> GetRooms()
         {
-            return relationCluster?.GetObjects<Room>();
+            return GetObjects<Room>();
         }
 
         public List<Shell> GetShells()
         {
-            List<Room> rooms = GetRooms();
+            List<Room> rooms = relationCluster?.GetObjects<Room>();
             if(rooms == null)
             {
                 return null;
@@ -364,36 +374,7 @@ namespace SAM.Architectural
 
         public List<IPartition> GetPartitions(Room room)
         {
-            if (relationCluster == null || room == null)
-            {
-                return null;
-            }
-
-            List<object> relatedObjects = relationCluster.GetRelatedObjects(room);
-            if (relatedObjects == null || relatedObjects.Count == 0)
-            {
-                return null;
-            }
-
-            List<IPartition> result = new List<IPartition>();
-            foreach (object relatedObject in relatedObjects)
-            {
-                IPartition partition = relatedObject as IPartition;
-                if (partition == null)
-                {
-                    continue;
-                }
-
-                Face3D face3D = partition.Face3D;
-                if (face3D == null)
-                {
-                    continue;
-                }
-
-                result.Add(partition);
-            }
-
-            return result;
+            return GetRelatedObjects<IPartition>(room);
         }
 
         public List<IPartition> GetPartitions()
@@ -483,7 +464,7 @@ namespace SAM.Architectural
 
         public BoundingBox3D GetBoundingBox3D()
         {
-            List<IBoundable3DObject> boundable3DObjects = GetObjects<IBoundable3DObject>();
+            List<IBoundable3DObject> boundable3DObjects = relationCluster?.GetObjects<IBoundable3DObject>();
             if(boundable3DObjects == null || boundable3DObjects.Count == 0)
             {
                 return null;
