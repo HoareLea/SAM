@@ -123,7 +123,7 @@
     <Compile Include="Component\SAMAnalyticalCreatePanelsByPlane.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultConstructionLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalAddObject.cs" />
+    <Compile Include="Component\SAMAnalyticalModifyObject.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelsByShell.cs" />
     <Compile Include="Component\SAMAnalyticalMapAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalAdjustRoofs.cs" />

@@ -192,21 +192,6 @@ namespace SAM.Architectural
             return relationCluster.AddRelation(object_1, object_2);
         }
 
-        public bool AddMaterial(IMaterial material)
-        {
-            if(material == null)
-            {
-                return false;
-            }
-
-            if(materialLibrary == null)
-            {
-                materialLibrary = new MaterialLibrary(string.Empty);
-            }
-
-            return materialLibrary.Add(material);
-        }
-
         public IMaterial GetMaterial(string name)
         {
             if(materialLibrary == null || string.IsNullOrEmpty(name))
@@ -448,6 +433,21 @@ namespace SAM.Architectural
             }
 
             return result;
+        }
+
+        public bool Add(IMaterial material)
+        {
+            if (material == null)
+            {
+                return false;
+            }
+
+            if (materialLibrary == null)
+            {
+                materialLibrary = new MaterialLibrary(string.Empty);
+            }
+
+            return materialLibrary.Add(material);
         }
 
         public bool Contains(ISAMObject sAMObject)

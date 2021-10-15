@@ -105,7 +105,7 @@ namespace SAM.Architectural
                     continue;
                 }
 
-                if (architecturalModel.AddMaterial(material))
+                if (architecturalModel.Add(material))
                 {
                     result.Add(material);
                 }

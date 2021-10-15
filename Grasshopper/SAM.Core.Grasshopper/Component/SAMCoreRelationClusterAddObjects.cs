@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
+    [Obsolete("Obsolete since 2021-10-15")]
     public class SAMCoreRelationClusterAddObjects : GH_SAMComponent
     {
         /// <summary>
@@ -16,6 +17,8 @@ namespace SAM.Core.Grasshopper
         /// The latest version of this component
         /// </summary>
         public override string LatestComponentVersion => "1.0.0";
+
+        public override GH_Exposure Exposure => GH_Exposure.tertiary | GH_Exposure.hidden;
 
         /// <summary>
         /// Provides an Icon for the component.
