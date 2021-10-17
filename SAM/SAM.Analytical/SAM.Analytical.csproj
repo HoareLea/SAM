@@ -51,6 +51,24 @@
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
+    <Compile Include="Classes\New\AirPartition.cs" />
+    <Compile Include="Classes\New\ArchitecturalModel.cs" />
+    <Compile Include="Classes\New\BuildingElement.cs" />
+    <Compile Include="Classes\New\BuildingElementType.cs" />
+    <Compile Include="Classes\New\Door.cs" />
+    <Compile Include="Classes\New\DoorType.cs" />
+    <Compile Include="Classes\New\Floor.cs" />
+    <Compile Include="Classes\New\FloorType.cs" />
+    <Compile Include="Classes\New\HostPartition.cs" />
+    <Compile Include="Classes\New\HostPartitionType.cs" />
+    <Compile Include="Classes\New\OpeningType.cs" />
+    <Compile Include="Classes\New\Roof.cs" />
+    <Compile Include="Classes\New\RoofType.cs" />
+    <Compile Include="Classes\New\Room.cs" />
+    <Compile Include="Classes\New\Wall.cs" />
+    <Compile Include="Classes\New\WallType.cs" />
+    <Compile Include="Classes\New\Window.cs" />
+    <Compile Include="Classes\New\WindowType.cs" />
     <Compile Include="Classes\SimulationResult\PanelSimulationResult.cs" />
     <Compile Include="Classes\SimulationResult\AdjacencyClusterSimulationResult.cs" />
     <Compile Include="Classes\SimulationResult\ZoneSimulationResult.cs" />
@@ -79,6 +97,9 @@
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
+    <Compile Include="Create\New\HostPartition.cs" />
+    <Compile Include="Create\New\Opening.cs" />
+    <Compile Include="Create\New\Partitions.cs" />
     <Compile Include="Create\Zone.cs" />
     <Compile Include="Create\SpaceSimulationResult.cs" />
     <Compile Include="Create\HeatingSystemType.cs" />
@@ -102,6 +123,10 @@
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\AirSupplyMethod.cs" />
     <Compile Include="Enums\ApertureType.cs" />
+    <Compile Include="Enums\New\HostPartitionCategory.cs" />
+    <Compile Include="Enums\New\OpeningAnalyticalType.cs" />
+    <Compile Include="Enums\New\Parameter\RoomParameter.cs" />
+    <Compile Include="Enums\New\PartitionAnalyticalType.cs" />
     <Compile Include="Enums\Parameter\AdjacencyClusterSimulationResultParameter.cs" />
     <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
     <Compile Include="Enums\LoadType.cs" />
@@ -140,6 +165,10 @@
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Classes\ProfileLibrary.cs" />
+    <Compile Include="Interfaces\New\IAnalyticalObject.cs" />
+    <Compile Include="Interfaces\New\IHostPartition.cs" />
+    <Compile Include="Interfaces\New\IOpening.cs" />
+    <Compile Include="Interfaces\New\IPartition.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
@@ -147,6 +176,14 @@
     <Compile Include="Modify\Cut.cs" />
     <Compile Include="Modify\Align.cs" />
     <Compile Include="Modify\Merge.cs" />
+    <Compile Include="Modify\New\AddAirPartitions.cs" />
+    <Compile Include="Modify\New\AddOpening.cs" />
+    <Compile Include="Modify\New\AddOpenings.cs" />
+    <Compile Include="Modify\New\TryAddOpening.cs" />
+    <Compile Include="Modify\New\Type.cs" />
+    <Compile Include="Modify\New\UpdateHostPartitionType.cs" />
+    <Compile Include="Modify\New\UpdateMaterials.cs" />
+    <Compile Include="Modify\New\UpdateNormals.cs" />
     <Compile Include="Modify\RemoveInvalidAirPanels.cs" />
     <Compile Include="Modify\RemoveOverlapApertures.cs" />
     <Compile Include="Modify\Trim.cs" />
@@ -180,6 +217,24 @@
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\Intersection.cs" />
     <Compile Include="Query\FixEdges.cs" />
+    <Compile Include="Query\New\Azimuth.cs" />
+    <Compile Include="Query\New\Color.cs" />
+    <Compile Include="Query\New\Cut.cs" />
+    <Compile Include="Query\New\DefaultHostPartitionType.cs" />
+    <Compile Include="Query\New\DefaultOpeningType.cs" />
+    <Compile Include="Query\New\Face3D.cs" />
+    <Compile Include="Query\New\FlipNormal.cs" />
+    <Compile Include="Query\New\HostPartitionCategory.cs" />
+    <Compile Include="Query\New\IsValid.cs" />
+    <Compile Include="Query\New\Material.cs" />
+    <Compile Include="Query\New\Materials.cs" />
+    <Compile Include="Query\New\MaterialType.cs" />
+    <Compile Include="Query\New\MergeCoplanar.cs" />
+    <Compile Include="Query\New\NormalDictionary.cs" />
+    <Compile Include="Query\New\OpeningAnalyticalType.cs" />
+    <Compile Include="Query\New\PartitionAnalyticalType.cs" />
+    <Compile Include="Query\New\Transparent.cs" />
+    <Compile Include="Query\New\Type.cs" />
     <Compile Include="Query\Triangulate.cs" />
     <Compile Include="Query\Transparent.cs" />
     <Compile Include="Query\PanelsByFace3D.cs" />
@@ -369,5 +424,6 @@
       <Version>13.0.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
