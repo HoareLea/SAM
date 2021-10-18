@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core
@@ -26,6 +27,39 @@ namespace SAM.Core
         public static Log Filter(this Log log, LogRecordType logRecordType)
         {
             return Filter(log, new LogRecordType[] { logRecordType });
+        }
+
+        public static void Filter<T>(this IEnumerable<T> ts, out List<T> @in, out List<T> @out, params Func<T, bool>[] functions)
+        {
+            @in = null;
+            @out = null;
+
+            if(ts == null || functions == null)
+            {
+                return;
+            }
+
+            @in = new List<T>(ts);
+            @out = new List<T>();
+
+            for (int i = @in.Count - 1; i >= 0; i--)
+            {
+                bool remove = false;
+                foreach (Func<T, bool> function in functions)
+                {
+                    if (!function(@in[i]))
+                    {
+                        remove = true;
+                        break;
+                    }
+                }
+
+                if (remove)
+                {
+                    @out.Add(@in[i]);
+                    @in.RemoveAt(i);
+                }
+            }
         }
 
         public static List<object> Filter(this RelationCluster relationCluster_In, RelationCluster relationCluster_Out, IEnumerable<object> objects)

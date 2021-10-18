@@ -126,6 +126,46 @@ namespace SAM.Analytical
 
         public List<T> GetObjects<T>() where T : IJSAMObject
         {
+            if(typeof(T).IsAssignableFrom(typeof(IMaterial)))
+            {
+                List<IMaterial> materials = materialLibrary?.GetObjects<IMaterial>();
+                if(materials == null)
+                {
+                    return null;
+                }
+
+                List<T> result = new List<T>();
+                foreach(IMaterial material in materials)
+                {
+                    if(material is T)
+                    {
+                        result.Add((T)material);
+                    }
+                }
+
+                return result;
+            }
+
+            if (typeof(T).IsAssignableFrom(typeof(Profile)))
+            {
+                List<Profile> profiles = profileLibrary?.GetObjects<Profile>();
+                if (profiles == null)
+                {
+                    return null;
+                }
+
+                List<T> result = new List<T>();
+                foreach (Profile profile in profiles)
+                {
+                    if (profile is T)
+                    {
+                        result.Add((T)(object)profile);
+                    }
+                }
+
+                return result;
+            }
+
             return relationCluster?.GetObjects<T>()?.ConvertAll(x => Core.Query.Clone(x));
 
             //List<string> typeNames = relationCluster?.GetTypeNames(typeof(T));
@@ -149,6 +189,50 @@ namespace SAM.Analytical
 
         public List<T> GetObjects<T>(params Func<T, bool>[] functions) where T: IJSAMObject
         {
+            if (typeof(T).IsAssignableFrom(typeof(IMaterial)))
+            {
+                List<IMaterial> materials = materialLibrary?.GetObjects<IMaterial>();
+                if (materials == null)
+                {
+                    return null;
+                }
+
+                List<T> all = new List<T>();
+                foreach (IMaterial material in materials)
+                {
+                    if (material is T)
+                    {
+                        all.Add((T)material);
+                    }
+                }
+
+                all.Filter(out List<T> @in, out List<T> @out, functions);
+
+                return @in;
+            }
+
+            if (typeof(T).IsAssignableFrom(typeof(Profile)))
+            {
+                List<Profile> profiles = profileLibrary?.GetObjects<Profile>();
+                if (profiles == null)
+                {
+                    return null;
+                }
+
+                List<T> all = new List<T>();
+                foreach (Profile profile in profiles)
+                {
+                    if (profile is T)
+                    {
+                        all.Add((T)(object)profile);
+                    }
+                }
+
+                all.Filter(out List<T> @in, out List<T> @out, functions);
+
+                return @in;
+            }
+
             return relationCluster?.GetObjects(functions)?.ConvertAll(x => Core.Query.Clone(x));
         }
 
@@ -398,6 +482,50 @@ namespace SAM.Analytical
             return result;
         }
 
+        public List<Shell> GetShells(Zone zone, bool union = true)
+        {
+            if(zone == null || relationCluster == null)
+            {
+                return null;
+            }
+
+            List<Space> spaces = GetSpaces(zone);
+            if(spaces == null)
+            {
+                return null;
+            }
+
+            List<Shell> shells = new List<Shell>();
+            foreach(Space space in spaces)
+            {
+                Shell shell = GetShell(space);
+                if(shell == null)
+                {
+                    continue;
+                }
+
+                shells.Add(shell);
+            }
+
+            if(!union)
+            {
+                return shells;
+            }
+
+            return shells.Union();
+        }
+
+        public Shell GetShell(Space space)
+        {
+            List<IPartition> partitions = GetPartitions(space);
+            if (partitions == null || partitions.Count == 0)
+            {
+                return null;
+            }
+
+            return new Shell(partitions.ConvertAll(x => x.Face3D));
+        }
+
         public List<IPartition> GetPartitions(Space space)
         {
             return GetRelatedObjects<IPartition>(space);
@@ -491,17 +619,6 @@ namespace SAM.Analytical
             }
 
             return dictionary.Values.ToList();
-        }
-
-        public Shell GetShell(Space space)
-        {
-            List<IPartition> partitions = GetPartitions(space);
-            if (partitions == null || partitions.Count == 0)
-            {
-                return null;
-            }
-
-            return new Shell(partitions.ConvertAll(x => x.Face3D));
         }
 
         public bool Add(IPartition partition)
