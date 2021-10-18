@@ -7,7 +7,7 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static List<IPartition> Partitions(this ArchitecturalModel architecturalModel, Plane plane, out List<IPartition> existingPartitions, IEnumerable<Room> rooms = null, HostPartitionType hostPartitionType = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<IPartition> Partitions(this ArchitecturalModel architecturalModel, Plane plane, out List<IPartition> existingPartitions, IEnumerable<Space> spaces = null, HostPartitionType hostPartitionType = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             existingPartitions = null;
 
@@ -17,16 +17,16 @@ namespace SAM.Analytical
             }
 
             List<IPartition> partitions = null;
-            if (rooms == null || rooms.Count() == 0)
+            if (spaces == null || spaces.Count() == 0)
             {
                 partitions = architecturalModel.GetPartitions();
             }
             else
             {
                 partitions = new List<IPartition>();
-                foreach (Room room in rooms)
+                foreach (Space space in spaces)
                 {
-                    List<IPartition> partitions_Room = architecturalModel.GetPartitions(room);
+                    List<IPartition> partitions_Room = architecturalModel.GetPartitions(space);
                     if (partitions_Room == null || partitions_Room.Count == 0)
                     {
                         continue;

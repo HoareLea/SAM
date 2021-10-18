@@ -30,6 +30,12 @@ namespace SAM.Analytical
             this.location = location;
         }
 
+        public Space(Guid guid, Space space, string name, Point3D location)
+            : base(name, guid, space)
+        {
+            this.location = location;
+        }
+
         public Space(string name)
             : base(name)
         {

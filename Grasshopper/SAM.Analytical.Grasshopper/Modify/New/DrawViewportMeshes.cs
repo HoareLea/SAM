@@ -35,8 +35,8 @@ namespace SAM.Analytical.Grasshopper
                     return;
                 }
 
-                List<Room> rooms = architecturalModel.GetRooms(hostPartition);
-                if (rooms != null && rooms.Count > 1)
+                List<Space> spaces = architecturalModel.GetSpaces(hostPartition);
+                if (spaces != null && spaces.Count > 1)
                     return;
 
                 if (boundingBox3D != null)

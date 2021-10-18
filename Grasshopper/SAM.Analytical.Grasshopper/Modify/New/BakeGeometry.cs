@@ -64,30 +64,6 @@ namespace SAM.Analytical.Grasshopper
             return true;
         }
 
-        public static bool BakeGeometry(this Room room, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid)
-        {
-            guid = Guid.Empty;
-
-            if (room == null || rhinoDoc == null || objectAttributes == null)
-                return false;
-
-            //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, space);
-            objectAttributes.Name = room.Name;
-
-            if (!Geometry.Grasshopper.Modify.BakeGeometry(room.Location, rhinoDoc, objectAttributes, out guid))
-                return false;
-
-            GeometryBase geometryBase = rhinoDoc.Objects.FindGeometry(guid);
-            if (geometryBase != null)
-            {
-                string @string = room.ToJObject()?.ToString();
-                if (!string.IsNullOrWhiteSpace(@string))
-                    geometryBase.SetUserString("SAM", @string);
-            }
-
-            return true;
-        }
-
         public static bool BakeGeometry(this ArchitecturalModel architecturalModel, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid obj_guid)
         {
             obj_guid = Guid.Empty;

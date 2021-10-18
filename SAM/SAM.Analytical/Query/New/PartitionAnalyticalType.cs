@@ -16,8 +16,8 @@ namespace SAM.Analytical
                 return Analytical.PartitionAnalyticalType.Air;
             }
 
-            List<Room> rooms = architecturalModel.GetRooms(partition);
-            if (rooms == null || rooms.Count == 0)
+            List<Space> spaces = architecturalModel.GetSpaces(partition);
+            if (spaces == null || spaces.Count == 0)
             {
                 return Analytical.PartitionAnalyticalType.Shade;
             }
@@ -38,7 +38,7 @@ namespace SAM.Analytical
                     return Analytical.PartitionAnalyticalType.CurtainWall;
                 }
 
-                if (rooms.Count > 1)
+                if (spaces.Count > 1)
                 {
                     return Analytical.PartitionAnalyticalType.InternalWall;
                 }
@@ -60,7 +60,7 @@ namespace SAM.Analytical
             {
                 Floor floor = partition as Floor;
 
-                if (rooms.Count > 1)
+                if (spaces.Count > 1)
                 {
                     return Analytical.PartitionAnalyticalType.InternalFloor;
                 }

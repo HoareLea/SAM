@@ -32,8 +32,8 @@ namespace SAM.Analytical
             List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segmentable2Ds, tolerance_Distance);
             if (polygon2Ds != null && polygon2Ds.Count != 0)
             {
-                List<Tuple<Segment2D, IHostPartition, Room>> tuples = new List<Tuple<Segment2D, IHostPartition, Room>>();
-                Dictionary<Room, List<IHostPartition>> dictionary = new Dictionary<Room, List<IHostPartition>>();
+                List<Tuple<Segment2D, IHostPartition, Space>> tuples = new List<Tuple<Segment2D, IHostPartition, Space>>();
+                Dictionary<Space, List<IHostPartition>> dictionary = new Dictionary<Space, List<IHostPartition>>();
 
                 for (int i = 0; i < polygon2Ds.Count; i++)
                 {
@@ -41,15 +41,15 @@ namespace SAM.Analytical
                     if (polygon2D == null)
                         polygon2D = polygon2Ds[i];
 
-                    Room room = new Room(string.Format("Cell {0}", i + 1), plane_Location.Convert(polygon2D.GetInternalPoint2D()));
-                    room.SetValue(RoomParameter.LevelName, level.Name);
+                    Space space = new Space(string.Format("Cell {0}", i + 1), plane_Location.Convert(polygon2D.GetInternalPoint2D()));
+                    space.SetValue(SpaceParameter.LevelName, level.Name);
 
                     double area = polygon2D.Area();
 
-                    room.SetValue(RoomParameter.Area, area);
-                    room.SetValue(RoomParameter.Volume, area * System.Math.Abs(elevation_Max - elevation_Min));
+                    space.SetValue(SpaceParameter.Area, area);
+                    space.SetValue(SpaceParameter.Volume, area * System.Math.Abs(elevation_Max - elevation_Min));
 
-                    dictionary[room] = new List<IHostPartition>();
+                    dictionary[space] = new List<IHostPartition>();
 
                     List<Segment2D> segment2Ds = polygon2D.GetSegments();
                     if (segment2Ds == null || segment2Ds.Count < 3)
@@ -65,7 +65,7 @@ namespace SAM.Analytical
                         Polygon3D polygon3D = new Polygon3D(new Point3D[] { segment3D_Max[0], segment3D_Max[1], segment3D_Min[1], segment3D_Min[0] });
                         IHostPartition hostPartition = HostPartition(new Face3D(polygon3D), null, tolerance_Angle);
 
-                        tuples.Add(new Tuple<Segment2D, IHostPartition, Room>(segment2D, hostPartition, room));
+                        tuples.Add(new Tuple<Segment2D, IHostPartition, Space>(segment2D, hostPartition, space));
                     }
 
                     Polygon3D polygon3D_Min = plane_Min.Convert(polygon2D);
@@ -75,7 +75,7 @@ namespace SAM.Analytical
                         IHostPartition hostPartition = HostPartition(new Face3D(polygon3D_Min), null, tolerance_Angle);
                         if(hostPartition != null)
                         {
-                            dictionary[room].Add(hostPartition);
+                            dictionary[space].Add(hostPartition);
                         }
                     }
 
@@ -85,26 +85,28 @@ namespace SAM.Analytical
                         IHostPartition hostPartition = HostPartition(new Face3D(polygon3D_Max), null, tolerance_Angle);
                         if (hostPartition != null)
                         {
-                            dictionary[room].Add(hostPartition);
+                            dictionary[space].Add(hostPartition);
                         }
                     }
                 }
 
                 while (tuples.Count > 0)
                 {
-                    Tuple<Segment2D, IHostPartition, Room> tuple = tuples[0];
+                    Tuple<Segment2D, IHostPartition, Space> tuple = tuples[0];
                     Segment2D segment2D = tuple.Item1;
 
-                    List<Tuple<Segment2D, IHostPartition, Room>> tuples_Temp = tuples.FindAll(x => segment2D.AlmostSimilar(x.Item1));
+                    List<Tuple<Segment2D, IHostPartition, Space>> tuples_Temp = tuples.FindAll(x => segment2D.AlmostSimilar(x.Item1));
                     tuples.RemoveAll(x => tuples_Temp.Contains(x));
 
                     IHostPartition hostPartition = tuple.Item2;
 
-                    foreach (Tuple<Segment2D, IHostPartition, Room> tuple_Temp in tuples_Temp)
-                        dictionary[ tuple_Temp.Item3].Add(hostPartition);
+                    foreach (Tuple<Segment2D, IHostPartition, Space> tuple_Temp in tuples_Temp)
+                    {
+                        dictionary[tuple_Temp.Item3].Add(hostPartition);
+                    }
                 }
 
-                foreach(KeyValuePair<Room, List<IHostPartition>> keyValuePair in dictionary)
+                foreach(KeyValuePair<Space, List<IHostPartition>> keyValuePair in dictionary)
                 {
                     result.Add(keyValuePair.Key, keyValuePair.Value);
                 }
@@ -164,7 +166,7 @@ namespace SAM.Analytical
                 dictionary_Common[face2D].Add(keyValuePair_Project.Value);
             }
 
-            List<Dictionary<Room, List<IHostPartition>>> dictionaries_Room = new List<Dictionary<Room, List<IHostPartition>>>();
+            List<Dictionary<Space, List<IHostPartition>>> dictionaries_Room = new List<Dictionary<Space, List<IHostPartition>>>();
             foreach (List<Face3D> face3Ds_Common in dictionary_Common.Values)
             {
                 Dictionary<double, List<Face2D>> dictionary = new Dictionary<double, List<Face2D>>();
@@ -208,15 +210,15 @@ namespace SAM.Analytical
                         dictionary[elevation_Ground] = dictionary[elevations.Last()];
                 }
 
-                Dictionary<Room, List<IHostPartition>> dictionary_Room = Query.RoomDictionary(dictionary, dictionary.Keys.ToList().IndexOf(elevation_Ground), tolerance);
-                if (dictionary_Room != null)
-                    dictionaries_Room.Add(dictionary_Room);
+                Dictionary<Space, List<IHostPartition>> dictionary_Space = Query.SpaceDictionary(dictionary, dictionary.Keys.ToList().IndexOf(elevation_Ground), tolerance);
+                if (dictionary_Space != null)
+                    dictionaries_Room.Add(dictionary_Space);
             }
 
             ArchitecturalModel result = new ArchitecturalModel(null, null, null, Architectural.Create.PlanarTerrain(elevation_Ground), null, null);
-            foreach (Dictionary<Room, List<IHostPartition>> dictionary_Room in dictionaries_Room)
+            foreach (Dictionary<Space, List<IHostPartition>> dictionary_Room in dictionaries_Room)
             {
-                foreach (KeyValuePair<Room, List<IHostPartition>> keyValuePair in dictionary_Room)
+                foreach (KeyValuePair<Space, List<IHostPartition>> keyValuePair in dictionary_Room)
                 {
                     result.Add(keyValuePair.Key, keyValuePair.Value);
                 }
@@ -232,7 +234,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<Tuple<Room, List<IPartition>>> tuples = new List<Tuple<Room, List<IPartition>>>();
+            List<Tuple<Space, List<IPartition>>> tuples = new List<Tuple<Space, List<IPartition>>>();
 
             List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>> tuples_Partition = new List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>>();
             if(partitions != null)
@@ -361,7 +363,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                Room room = new Room(string.Format("Cell {0}", i), shell_Temp.CalculatedInternalPoint3D(silverSpacing, tolerance_Distance));
+                Space space = new Space(string.Format("Cell {0}", i), shell_Temp.CalculatedInternalPoint3D(silverSpacing, tolerance_Distance));
                 double elevation = shell_Temp.GetBoundingBox().Min.Z;
 
                 List<Tuple<double, Level>> tuples_Level = levels.ConvertAll(x => new Tuple<double, Level>(System.Math.Abs(x.Elevation - elevation), x));
@@ -369,22 +371,22 @@ namespace SAM.Analytical
                 Level level = tuples_Level.FirstOrDefault()?.Item2;
                 if (level != null)
                 {
-                    room.SetValue(RoomParameter.LevelName, level.Name);
+                    space.SetValue(SpaceParameter.LevelName, level.Name);
                 }
 
                 double volume_Shell = shell_Temp.Volume(silverSpacing, tolerance_Distance);
                 if (!double.IsNaN(volume_Shell))
                 {
-                    room.SetValue(RoomParameter.Volume, volume_Shell);
+                    space.SetValue(SpaceParameter.Volume, volume_Shell);
                 }
 
                 double area_Shell = shell_Temp.Area(silverSpacing, tolerance_Angle, tolerance_Distance, silverSpacing);
                 if (!double.IsNaN(area_Shell))
                 {
-                    room.SetValue(RoomParameter.Area, area_Shell);
+                    space.SetValue(SpaceParameter.Area, area_Shell);
                 }
 
-                Tuple<Room, List<IPartition>> tuple = new Tuple<Room, List<IPartition>>(room, new List<IPartition>());
+                Tuple<Space, List<IPartition>> tuple = new Tuple<Space, List<IPartition>>(space, new List<IPartition>());
                 tuples.Add(tuple);
 
                 List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>> tuples_hostPartition_Temp = tuples_Partition.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
@@ -573,7 +575,7 @@ namespace SAM.Analytical
             }
 
             ArchitecturalModel result = new ArchitecturalModel(null, null, null, Architectural.Create.PlanarTerrain(groundElevation), null, null);
-            foreach (Tuple<Room, List<IPartition>> tuple in tuples)
+            foreach (Tuple<Space, List<IPartition>> tuple in tuples)
             {
                 result.Add(tuple.Item1, tuple.Item2);
             }

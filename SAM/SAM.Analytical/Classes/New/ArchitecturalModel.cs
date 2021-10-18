@@ -344,51 +344,51 @@ namespace SAM.Analytical
             return GetMaterialType(hostPartition.Type());
         }
         
-        public List<Room> GetRooms(IPartition partition)
+        public List<Space> GetSpaces(IPartition partition)
         {
-            return GetRelatedObjects<Room>(partition);
+            return GetRelatedObjects<Space>(partition);
         }
 
-        public List<Room> GetRooms(Zone zone)
+        public List<Space> GetSpaces(Zone zone)
         {
-            return GetRelatedObjects<Room>(zone);
+            return GetRelatedObjects<Space>(zone);
         }
 
-        public List<Room> GetRooms()
+        public List<Space> GetSpaces()
         {
-            return GetObjects<Room>();
+            return GetObjects<Space>();
         }
 
         public bool Internal(IPartition partition)
         {
-            List<Room> rooms = relationCluster?.GetRelatedObjects<Room>(partition);
-            return rooms != null && rooms.Count > 1;
+            List<Space> spaces = relationCluster?.GetRelatedObjects<Space>(partition);
+            return spaces != null && spaces.Count > 1;
         }
         
         public bool External(IPartition partition)
         {
-            List<Room> rooms = relationCluster?.GetRelatedObjects<Room>(partition);
-            return rooms != null && rooms.Count == 1;
+            List<Space> spaces = relationCluster?.GetRelatedObjects<Space>(partition);
+            return spaces != null && spaces.Count == 1;
         }
 
         public bool Shade(IPartition partition)
         {
-            List<Room> rooms = relationCluster?.GetRelatedObjects<Room>(partition);
-            return rooms == null || rooms.Count == 0;
+            List<Space> spaces = relationCluster?.GetRelatedObjects<Space>(partition);
+            return spaces == null || spaces.Count == 0;
         }
 
         public List<Shell> GetShells()
         {
-            List<Room> rooms = relationCluster?.GetObjects<Room>();
-            if(rooms == null)
+            List<Space> spaces = relationCluster?.GetObjects<Space>();
+            if(spaces == null)
             {
                 return null;
             }
 
             List<Shell> result = new List<Shell>();
-            foreach(Room room in rooms)
+            foreach(Space space in spaces)
             {
-                Shell shell = GetShell(room);
+                Shell shell = GetShell(space);
                 if(shell != null)
                 {
                     result.Add(shell);
@@ -398,9 +398,9 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<IPartition> GetPartitions(Room room)
+        public List<IPartition> GetPartitions(Space space)
         {
-            return GetRelatedObjects<IPartition>(room);
+            return GetRelatedObjects<IPartition>(space);
         }
 
         public List<IPartition> GetPartitions(Zone zone)
@@ -410,16 +410,16 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<Room> rooms = GetRooms(zone);
-            if(rooms == null)
+            List<Space> spaces = GetSpaces(zone);
+            if(spaces == null)
             {
                 return null;
             }
 
             Dictionary<Guid, IPartition> dictionary = new Dictionary<Guid, IPartition>();
-            foreach(Room room in rooms)
+            foreach(Space space in spaces)
             {
-                List<IPartition> partitions = GetPartitions(room);
+                List<IPartition> partitions = GetPartitions(space);
                 if(partitions == null || partitions.Count == 0)
                 {
                     continue;
@@ -470,9 +470,9 @@ namespace SAM.Analytical
             return GetObjects<T>();
         }
 
-        public Shell GetShell(Room room)
+        public Shell GetShell(Space space)
         {
-            List<IPartition> partitions = GetPartitions(room);
+            List<IPartition> partitions = GetPartitions(space);
             if (partitions == null || partitions.Count == 0)
             {
                 return null;
@@ -494,9 +494,9 @@ namespace SAM.Analytical
             return relationCluster.AddObject(partition.Clone());
         }
 
-        public bool Add(Room room, IEnumerable<IPartition> partitions = null)
+        public bool Add(Space space, IEnumerable<IPartition> partitions = null)
         {
-            if (room == null)
+            if (space == null)
             {
                 return false;
             }
@@ -504,9 +504,9 @@ namespace SAM.Analytical
             if (relationCluster == null)
                 relationCluster = new RelationCluster();
 
-            Room room_Temp = room.Clone();
+            Space space_Temp = new Space(space);
 
-            bool result = relationCluster.AddObject(room_Temp);
+            bool result = relationCluster.AddObject(space_Temp);
             if(partitions != null && partitions.Count() != 0)
             {
                 foreach(IPartition partition in partitions)
@@ -514,7 +514,7 @@ namespace SAM.Analytical
                     IPartition partition_Temp = partition.Clone();
                     if (relationCluster.AddObject(partition_Temp))
                     {
-                        relationCluster.AddRelation(room_Temp, partition_Temp);
+                        relationCluster.AddRelation(space_Temp, partition_Temp);
                     }
 
                 }
@@ -553,7 +553,7 @@ namespace SAM.Analytical
             return profileLibrary.Add(profile.Clone());
         }
 
-        public bool Add(Zone zone, IEnumerable<Room> rooms = null)
+        public bool Add(Zone zone, IEnumerable<Space> spaces = null)
         {
             if(zone == null)
             {
@@ -568,14 +568,14 @@ namespace SAM.Analytical
                 return result;
             }
             
-            if(rooms != null && rooms.Count() != 0)
+            if(spaces != null && spaces.Count() != 0)
             {
-                foreach(Room room in rooms)
+                foreach(Space space in spaces)
                 {
-                    Room room_Temp = room.Clone();
-                    if(relationCluster.AddObject(room_Temp))
+                    Space space_Temp = space.Clone();
+                    if(relationCluster.AddObject(space_Temp))
                     {
-                        relationCluster.AddRelation(zone_Temp, room_Temp);
+                        relationCluster.AddRelation(zone_Temp, space_Temp);
                     }
                 }
             }

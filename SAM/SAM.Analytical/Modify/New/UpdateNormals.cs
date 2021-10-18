@@ -17,15 +17,15 @@ namespace SAM.Analytical
             if (architecturalModel == null)
                 return;
 
-            List<Room> rooms = architecturalModel.GetRooms();
-            if (rooms == null || rooms.Count == 0)
+            List<Space> spaces = architecturalModel.GetSpaces();
+            if (spaces == null || spaces.Count == 0)
                 return;
 
             HashSet<System.Guid> guids = new HashSet<System.Guid>();
-            foreach (Room room in rooms)
+            foreach (Space space in spaces)
             {
                 Shell shell = null;
-                Dictionary<IPartition, Vector3D> dictionary = architecturalModel.NormalDictionary(room, out shell, true, silverSpacing, tolerance);
+                Dictionary<IPartition, Vector3D> dictionary = architecturalModel.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
                 if (dictionary == null)
                     continue;
 
@@ -61,18 +61,18 @@ namespace SAM.Analytical
         /// Update Partitions normals in the given room to point out outside direction
         /// </summary>
         /// <param name="architecturalModel">SAM Architectural Model</param>
-        /// <param name="room">Room</param>
+        /// <param name="space">Space</param>
         /// <param name="includeOpenings">Update Normals of Openings<</param>
         /// <param name="silverSpacing">Sliver Spacing Tolerance</param>
         /// <param name="tolerance">Distance Tolerance</param>
-        public static void UpdateNormals(this ArchitecturalModel architecturalModel, Room room, bool includeOpenings, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static void UpdateNormals(this ArchitecturalModel architecturalModel, Space space, bool includeOpenings, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if (architecturalModel == null || room == null)
+            if (architecturalModel == null || space == null)
                 return;
 
             Shell shell = null;
 
-            Dictionary<IPartition, Vector3D> dictionary = architecturalModel.NormalDictionary(room, out shell, true, silverSpacing, tolerance);
+            Dictionary<IPartition, Vector3D> dictionary = architecturalModel.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
             if (dictionary == null)
                 return;
 

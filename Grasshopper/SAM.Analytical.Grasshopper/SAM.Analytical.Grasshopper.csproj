@@ -79,7 +79,6 @@
     <Compile Include="Classes\New\GooOpeningType.cs" />
     <Compile Include="Classes\New\GooPartition.cs" />
     <Compile Include="Classes\New\GooRoofType.cs" />
-    <Compile Include="Classes\New\GooRoom.cs" />
     <Compile Include="Classes\New\GooWallType.cs" />
     <Compile Include="Component\New\SAMAnalyticalAddAirPartitions.cs" />
     <Compile Include="Component\New\SAMAnalyticalAddOpenings.cs" />
@@ -288,8 +287,6 @@
     <Compile Include="Modify\New\BakeGeometry.cs" />
     <Compile Include="Modify\New\BakeGeometry_ByAnalyticalType.cs" />
     <Compile Include="Modify\New\BakeGeometry_ByCategory.cs" />
-    <Compile Include="Modify\New\BakeGeometry_ByInternalCondtion.cs" />
-    <Compile Include="Modify\New\BakeGeometry_ByLevel.cs" />
     <Compile Include="Modify\New\BakeGeometry_ByType.cs" />
     <Compile Include="Modify\New\DrawViewportMeshes.cs" />
     <Compile Include="Modify\New\DrawViewportWires.cs" />

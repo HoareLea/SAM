@@ -47,7 +47,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "_architecturalModel", NickName = "_architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_planes", NickName = "_planes", Description = "SAM Geometry Planes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooRoomParam() { Name = "rooms_", NickName = "rooms_", Description = "SAM Architectural Rooms", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -131,21 +131,21 @@ namespace SAM.Analytical.Grasshopper
                 planes.Add(plane);
             }
 
-            List<Room> rooms = null;
+            List<Space> spaces = null;
             index = Params.IndexOfInputParam("spaces_");
             if (index != -1)
             {
-                List<Room> rooms_Temp = new List<Room>();
+                List<Space> spaces_Temp = new List<Space>();
 
-                if (dataAccess.GetDataList(index, rooms_Temp) && rooms_Temp != null && rooms_Temp.Count != 0)
+                if (dataAccess.GetDataList(index, spaces_Temp) && spaces_Temp != null && spaces_Temp.Count != 0)
                 {
-                    rooms = rooms_Temp;
+                    spaces = spaces_Temp;
                 }
             }
 
             architecturalModel = new ArchitecturalModel(architecturalModel);
 
-            architecturalModel.AddAirPartitions(planes, rooms);
+            architecturalModel.AddAirPartitions(planes, spaces);
 
             index = Params.IndexOfOutputParam("architecturalModel");
             if (index != -1)

@@ -64,7 +64,6 @@
     <Compile Include="Classes\New\OpeningType.cs" />
     <Compile Include="Classes\New\Roof.cs" />
     <Compile Include="Classes\New\RoofType.cs" />
-    <Compile Include="Classes\New\Room.cs" />
     <Compile Include="Classes\New\Wall.cs" />
     <Compile Include="Classes\New\WallType.cs" />
     <Compile Include="Classes\New\Window.cs" />
@@ -130,7 +129,6 @@
     <Compile Include="Enums\ApertureType.cs" />
     <Compile Include="Enums\New\HostPartitionCategory.cs" />
     <Compile Include="Enums\New\OpeningAnalyticalType.cs" />
-    <Compile Include="Enums\New\Parameter\RoomParameter.cs" />
     <Compile Include="Enums\New\PartitionAnalyticalType.cs" />
     <Compile Include="Enums\Parameter\AdjacencyClusterSimulationResultParameter.cs" />
     <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
@@ -236,7 +234,7 @@
     <Compile Include="Query\New\NormalDictionary.cs" />
     <Compile Include="Query\New\OpeningAnalyticalType.cs" />
     <Compile Include="Query\New\PartitionAnalyticalType.cs" />
-    <Compile Include="Query\New\RoomDictionary.cs" />
+    <Compile Include="Query\New\SpaceDictionary.cs" />
     <Compile Include="Query\New\Transparent.cs" />
     <Compile Include="Query\New\Type.cs" />
     <Compile Include="Query\Triangulate.cs" />

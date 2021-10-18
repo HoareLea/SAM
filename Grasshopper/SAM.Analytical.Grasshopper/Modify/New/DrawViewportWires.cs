@@ -14,12 +14,12 @@ namespace SAM.Analytical.Grasshopper
                 return false;
             }
 
-            List<Room> rooms = architecturalModel.GetObjects<Room>();
-            if (rooms != null)
+            List<Space> spaces = architecturalModel.GetObjects<Space>();
+            if (spaces != null)
             {
-                foreach (Room room in rooms)
+                foreach (Space space in spaces)
                 {
-                    Point3d? point3d = Geometry.Grasshopper.Convert.ToRhino(room?.Location);
+                    Point3d? point3d = Geometry.Grasshopper.Convert.ToRhino(space?.Location);
                     if (point3d == null || !point3d.HasValue)
                         continue;
 
@@ -58,8 +58,8 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                List<Room> rooms_hostPartition = architecturalModel.GetRooms(partition);
-                if (rooms != null && rooms.Count > 1)
+                List<Space> spaces_hostPartition = architecturalModel.GetSpaces(partition);
+                if (spaces != null && spaces.Count > 1)
                     continue;
 
                 Geometry.Grasshopper.Modify.DrawViewportWires(face3D, previewWireArgs, System.Drawing.Color.DarkRed, System.Drawing.Color.BlueViolet);
