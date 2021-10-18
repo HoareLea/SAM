@@ -5,7 +5,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class Space : SAMObject
+    public class Space : SAMObject, ISAMGeometry3DObject, IAnalyticalObject
     {
         private Point3D location;
         private InternalCondition internalCondition;
@@ -121,6 +121,11 @@ namespace SAM.Analytical
         {
             if (location != null)
                 location = Location.Transform(transform3D);
+        }
+
+        public void Move(Vector3D vector3D)
+        {
+            location = location?.GetMoved(vector3D) as Point3D;
         }
     }
 }

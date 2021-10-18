@@ -83,6 +83,5 @@ namespace SAM.Analytical
         {
             location = location?.GetMoved(vector3D) as Point3D;
         }
-
     }
 }
