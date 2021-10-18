@@ -586,6 +586,26 @@ namespace SAM.Analytical
 
         public bool Contains(ISAMObject sAMObject)
         {
+            if(sAMObject is Profile)
+            {
+                if(profileLibrary == null)
+                {
+                    return false;
+                }
+
+                return profileLibrary.Contains((Profile)sAMObject);
+            }
+            
+            if(sAMObject is IMaterial)
+            {
+                if(materialLibrary == null)
+                {
+                    return false;
+                }
+
+                return materialLibrary.Contains((IMaterial)sAMObject);
+            }
+
             if(relationCluster == null)
             {
                 return false;
@@ -625,6 +645,12 @@ namespace SAM.Analytical
             if (jObject.ContainsKey("Terrain"))
                 terrain = Core.Create.IJSAMObject<Terrain>(jObject.Value<JObject>("Terrain"));
 
+            if (jObject.ContainsKey("MaterialLibrary"))
+                materialLibrary = Core.Create.IJSAMObject<MaterialLibrary>(jObject.Value<JObject>("MaterialLibrary"));
+
+            if (jObject.ContainsKey("ProfileLibrary"))
+                profileLibrary = Core.Create.IJSAMObject<ProfileLibrary>(jObject.Value<JObject>("ProfileLibrary"));
+
             return true;
         }
 
@@ -648,6 +674,12 @@ namespace SAM.Analytical
 
             if (terrain != null)
                 jObject.Add("Terrain", terrain.ToJObject());
+
+            if (materialLibrary != null)
+                jObject.Add("MaterialLibrary", materialLibrary.ToJObject());
+
+            if (profileLibrary != null)
+                jObject.Add("ProfileLibrary", profileLibrary.ToJObject());
 
             return jObject;
         }
