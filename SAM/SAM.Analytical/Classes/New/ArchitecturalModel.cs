@@ -470,6 +470,29 @@ namespace SAM.Analytical
             return GetObjects<T>();
         }
 
+        public List<InternalCondition> GetInternalConditions()
+        {
+            List<Space> spaces = GetSpaces();
+            if(spaces == null)
+            {
+                return null;
+            }
+
+            Dictionary<Guid, InternalCondition> dictionary = new Dictionary<Guid, InternalCondition>();
+            foreach(Space space in spaces)
+            {
+                InternalCondition internalCondition = space?.InternalCondition;
+                if(internalCondition == null)
+                {
+                    continue;
+                }
+
+                dictionary[space.Guid] = internalCondition;
+            }
+
+            return dictionary.Values.ToList();
+        }
+
         public Shell GetShell(Space space)
         {
             List<IPartition> partitions = GetPartitions(space);
