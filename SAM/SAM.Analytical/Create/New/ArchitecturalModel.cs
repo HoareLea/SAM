@@ -22,7 +22,7 @@ namespace SAM.Analytical
             Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Min)) as Plane;
             Plane plane_Max = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, new PlanarTerrain(plane_Min), null);
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, new PlanarTerrain(plane_Min), null, null);
 
             Plane plane_Min_Flipped = new Plane(plane_Min);
             plane_Min_Flipped.FlipZ();
@@ -213,7 +213,7 @@ namespace SAM.Analytical
                     dictionaries_Room.Add(dictionary_Room);
             }
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, Architectural.Create.PlanarTerrain(elevation_Ground), null);
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, Architectural.Create.PlanarTerrain(elevation_Ground), null, null);
             foreach (Dictionary<Room, List<IHostPartition>> dictionary_Room in dictionaries_Room)
             {
                 foreach (KeyValuePair<Room, List<IHostPartition>> keyValuePair in dictionary_Room)
@@ -572,7 +572,7 @@ namespace SAM.Analytical
                 }
             }
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, Architectural.Create.PlanarTerrain(groundElevation), null);
+            ArchitecturalModel result = new ArchitecturalModel(null, null, null, Architectural.Create.PlanarTerrain(groundElevation), null, null);
             foreach (Tuple<Room, List<IPartition>> tuple in tuples)
             {
                 result.Add(tuple.Item1, tuple.Item2);

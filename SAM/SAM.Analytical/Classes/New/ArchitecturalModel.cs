@@ -17,6 +17,7 @@ namespace SAM.Analytical
         private Terrain terrain;
         private RelationCluster relationCluster;
         private MaterialLibrary materialLibrary;
+        private ProfileLibrary profileLibrary;
 
         public ArchitecturalModel(JObject jObject)
             : base(jObject)
@@ -55,14 +56,22 @@ namespace SAM.Analytical
 
         }
 
-        public ArchitecturalModel(string description, Location location, Address address, Terrain terrain, MaterialLibrary materialLibrary)
+        public ArchitecturalModel(string description, Location location, Address address, Terrain terrain, MaterialLibrary materialLibrary, ProfileLibrary profileLibrary)
             : base()
         {
             this.description = description;
             this.location = location?.Clone();
             this.address = address?.Clone();
             this.terrain = terrain?.Clone();
-            this.materialLibrary = materialLibrary.Clone();
+            if(materialLibrary != null)
+            {
+                this.materialLibrary = new MaterialLibrary(materialLibrary);
+            }
+
+            if (profileLibrary != null)
+            {
+                this.profileLibrary = new ProfileLibrary(profileLibrary);
+            }
         }
 
         public string Description
@@ -225,6 +234,16 @@ namespace SAM.Analytical
             return materialLibrary.GetObject<IMaterial>(name)?.Clone();
         }
 
+        public Profile GetProfile(ProfileType profileType, string name, bool includeProfileGroup = false)
+        {
+            if(profileLibrary == null)
+            {
+                return null;
+            }
+
+            return profileLibrary.GetProfile(name, profileType, includeProfileGroup);
+        }
+
         public bool HasMaterial(string name)
         {
             if (materialLibrary == null || string.IsNullOrEmpty(name))
@@ -330,6 +349,11 @@ namespace SAM.Analytical
             return GetRelatedObjects<Room>(partition);
         }
 
+        public List<Room> GetRooms(Zone zone)
+        {
+            return GetRelatedObjects<Room>(zone);
+        }
+
         public List<Room> GetRooms()
         {
             return GetObjects<Room>();
@@ -379,6 +403,63 @@ namespace SAM.Analytical
             return GetRelatedObjects<IPartition>(room);
         }
 
+        public List<IPartition> GetPartitions(Zone zone)
+        {
+            if(zone == null || relationCluster == null)
+            {
+                return null;
+            }
+
+            List<Room> rooms = GetRooms(zone);
+            if(rooms == null)
+            {
+                return null;
+            }
+
+            Dictionary<Guid, IPartition> dictionary = new Dictionary<Guid, IPartition>();
+            foreach(Room room in rooms)
+            {
+                List<IPartition> partitions = GetPartitions(room);
+                if(partitions == null || partitions.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach(IPartition partition in partitions)
+                {
+                    if(partition == null)
+                    {
+                        continue;
+                    }
+
+                    dictionary[partition.Guid] = partition;
+                }
+            }
+
+            return dictionary.Values.ToList();
+        }
+
+        public List<T> GetPartitions<T>(Zone zone) where T: IPartition
+        {
+            List<IPartition> partitions = GetPartitions(zone);
+            if(partitions == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach(IPartition partition in partitions)
+            {
+                if(partition is T)
+                {
+                    result.Add((T)partition);
+                }
+
+            }
+
+            return result;
+        }
+
         public List<IPartition> GetPartitions()
         {
             return GetObjects<IPartition>();
@@ -410,7 +491,7 @@ namespace SAM.Analytical
             if (relationCluster == null)
                 relationCluster = new RelationCluster();
 
-            return relationCluster.AddObject(partition);
+            return relationCluster.AddObject(partition.Clone());
         }
 
         public bool Add(Room room, IEnumerable<IPartition> partitions = null)
@@ -423,14 +504,17 @@ namespace SAM.Analytical
             if (relationCluster == null)
                 relationCluster = new RelationCluster();
 
-            bool result = relationCluster.AddObject(room);
+            Room room_Temp = room.Clone();
+
+            bool result = relationCluster.AddObject(room_Temp);
             if(partitions != null && partitions.Count() != 0)
             {
                 foreach(IPartition partition in partitions)
                 {
-                    if(relationCluster.AddObject(partition))
+                    IPartition partition_Temp = partition.Clone();
+                    if (relationCluster.AddObject(partition_Temp))
                     {
-                        relationCluster.AddRelation(room, partition);
+                        relationCluster.AddRelation(room_Temp, partition_Temp);
                     }
 
                 }
@@ -451,7 +535,53 @@ namespace SAM.Analytical
                 materialLibrary = new MaterialLibrary(string.Empty);
             }
 
-            return materialLibrary.Add(material);
+            return materialLibrary.Add(material.Clone());
+        }
+
+        public bool Add(Profile profile)
+        {
+            if (profile == null)
+            {
+                return false;
+            }
+
+            if (profileLibrary == null)
+            {
+                profileLibrary = new ProfileLibrary(string.Empty);
+            }
+
+            return profileLibrary.Add(profile.Clone());
+        }
+
+        public bool Add(Zone zone, IEnumerable<Room> rooms = null)
+        {
+            if(zone == null)
+            {
+                return false;
+            }
+
+            Zone zone_Temp = zone.Clone();
+
+            bool result = relationCluster.AddObject(zone_Temp);
+            if(!result)
+            {
+                return result;
+            }
+            
+            if(rooms != null && rooms.Count() != 0)
+            {
+                foreach(Room room in rooms)
+                {
+                    Room room_Temp = room.Clone();
+                    if(relationCluster.AddObject(room_Temp))
+                    {
+                        relationCluster.AddRelation(zone_Temp, room_Temp);
+                    }
+                }
+            }
+
+            return result;
+
         }
 
         public bool Contains(ISAMObject sAMObject)
@@ -520,6 +650,26 @@ namespace SAM.Analytical
                 jObject.Add("Terrain", terrain.ToJObject());
 
             return jObject;
+        }
+
+        public void Transform(Transform3D transform3D)
+        {
+            List<ISAMGeometry3DObject> sAMGeometry3DObjects = relationCluster?.GetObjects<ISAMGeometry3DObject>();
+            if(sAMGeometry3DObjects == null || sAMGeometry3DObjects.Count == 0)
+            {
+                return;
+            }
+
+            foreach(ISAMGeometry3DObject sAMGeometry3DObject in sAMGeometry3DObjects)
+            {
+                if(sAMGeometry3DObject == null)
+                {
+                    continue;
+                }
+
+                sAMGeometry3DObject.Transform(transform3D);
+            }
+            
         }
     }
 }
