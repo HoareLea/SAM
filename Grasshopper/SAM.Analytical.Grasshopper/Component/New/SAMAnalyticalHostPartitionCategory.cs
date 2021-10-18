@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMArchitecturalHostPartitionCategory : GH_SAMEnumComponent<HostPartitionCategory>
+    public class SAMAnalyticalHostPartitionCategory : GH_SAMEnumComponent<HostPartitionCategory>
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -24,10 +24,10 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Panel Type
         /// </summary>
-        public SAMArchitecturalHostPartitionCategory()
-          : base("SAMArchitectural.HostPartitionCategory", "SAMArchitectural.HostPartitionCategory",
+        public SAMAnalyticalHostPartitionCategory()
+          : base("SAMAnalytical.HostPartitionCategory", "SAMAnalytical.HostPartitionCategory",
               "Select HostPartitionCategory",
-              "SAM", "Architectural")
+              "SAM", "Analytical")
         {
         }
     }

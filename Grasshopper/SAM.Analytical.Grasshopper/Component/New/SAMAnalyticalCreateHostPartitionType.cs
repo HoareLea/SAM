@@ -10,7 +10,7 @@ using SAM.Architectural;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMArchitecturalCreateHostPartitionType : GH_SAMComponent
+    public class SAMAnalyticalCreateHostPartitionType : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -30,10 +30,10 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMArchitecturalCreateHostPartitionType()
-          : base("SAMArchitectural.CreateHostPartitionType", "SAMArchitectural.CreateHostPartitionType",
-              "Create SAM Architectural HostPartitionType",
-              "SAM", "Architectural")
+        public SAMAnalyticalCreateHostPartitionType()
+          : base("SAMAnalytical.CreateHostPartitionType", "SAMAnalytical.CreateHostPartitionType",
+              "Create SAM Analytical HostPartitionType",
+              "SAM", "Analytical")
         {
         }
 

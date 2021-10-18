@@ -9,7 +9,7 @@ using SAM.Architectural;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMArchitecturalCreateMaterialLayersByNames : GH_SAMComponent
+    public class SAMAnalyticalCreateMaterialLayersByNames : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -29,10 +29,10 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMArchitecturalCreateMaterialLayersByNames()
-          : base("SAMArchitectural.CreateMaterialLayersByNames", "SAMarchitectural.CreateMaterialLayersByNames",
+        public SAMAnalyticalCreateMaterialLayersByNames()
+          : base("SAMAnalytical.CreateMaterialLayersByNames", "SAMAnalytical.CreateMaterialLayersByNames",
               "Create Material Layers By Material Names",
-              "SAM", "Architectural")
+              "SAM", "Analytical")
         {
         }
 

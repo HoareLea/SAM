@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMArchitecturalAddOpeningsByAzimuth : GH_SAMComponent
+    public class SAMAnalyticalAddOpeningsByAzimuth : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -27,10 +27,10 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMArchitecturalAddOpeningsByAzimuth()
-          : base("SAMArchitectural.AddOpeningsByAzimuth", "SAMArchitectural.AddOpeningsByAzimuth",
+        public SAMAnalyticalAddOpeningsByAzimuth()
+          : base("SAMAnalytical.AddOpeningsByAzimuth", "SAMAnalytical.AddOpeningsByAzimuth",
               "Add Openings to ",
-              "SAM", "Architectural")
+              "SAM", "Analytical")
         {
         }
 

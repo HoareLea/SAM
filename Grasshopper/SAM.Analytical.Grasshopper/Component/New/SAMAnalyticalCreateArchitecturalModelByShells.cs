@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMArchitecturalCreateArchitecturalModelByShells : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalCreateArchitecturalModelByShells : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -30,10 +30,10 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMArchitecturalCreateArchitecturalModelByShells()
-          : base("SAMArchitectural.CreateArchitecturalModelByShells", "SAMArchitectural.CreateArchitecturalModelByShells",
-              "SAMArchitectural Create ArchitecturalModel By Shells",
-              "SAM", "Architectural")
+        public SAMAnalyticalCreateArchitecturalModelByShells()
+          : base("SAMAnalytical.CreateArchitecturalModelByShells", "SAMAnalytical.CreateArchitecturalModelByShells",
+              "Creates ArchitecturalModel By Shells",
+              "SAM", "Analytical")
         {
         }
 
