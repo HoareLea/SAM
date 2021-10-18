@@ -6,7 +6,7 @@ namespace SAM.Analytical
     {
         public static bool Transparent(this HostPartitionType hostPartitionType, MaterialLibrary materialLibrary = null)
         {
-            MaterialType materialType = MaterialType(hostPartitionType?.MaterialLayers, materialLibrary);
+            MaterialType materialType = Architectural.Query.MaterialType(hostPartitionType?.MaterialLayers, materialLibrary);
             return materialType == Core.MaterialType.Transparent;
         }
     }

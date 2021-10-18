@@ -312,7 +312,7 @@ namespace SAM.Analytical
 
         public MaterialType GetMaterialType(HostPartitionType hostPartitionType)
         {
-            return Query.MaterialType(hostPartitionType?.MaterialLayers, materialLibrary);
+            return Architectural.Query.MaterialType(hostPartitionType?.MaterialLayers, materialLibrary);
         }
 
         public MaterialType GetMaterialType(IHostPartition hostPartition)
