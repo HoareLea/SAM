@@ -379,7 +379,7 @@ namespace SAM.Analytical
                 if (materialType == Core.MaterialType.Opaque && defaultGasType == Analytical.DefaultGasType.Air)
                     heatTransferCoefficient = AirspaceConvectiveHeatTransferCoefficient(tilt, thickness);
                 else
-                    heatTransferCoefficient = HeatTransferCoefficient(gasMaterial_Default, 15, thickness, 283, tilt);
+                    heatTransferCoefficient = HeatTransferCoefficient(gasMaterial_Default, thickness, tilt);
 
                 heatTransferCoefficient = System.Math.Round(heatTransferCoefficient, 3);
 
