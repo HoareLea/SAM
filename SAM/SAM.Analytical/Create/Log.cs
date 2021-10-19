@@ -430,7 +430,7 @@ namespace SAM.Analytical
                     result.Add(string.Format("Vapur Diffusion Factor for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
 
                 if (double.IsNaN(gasMaterial.GetValue<double>(GasMaterialParameter.HeatTransferCoefficient)))
-                    result.Add(string.Format("Heat Transfer Coefficient for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+                    result.Add(string.Format("Heat Transfer Coefficient for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
             }
             else if (material is TransparentMaterial)
             {
