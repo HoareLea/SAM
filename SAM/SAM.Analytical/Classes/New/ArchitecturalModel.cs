@@ -328,6 +328,11 @@ namespace SAM.Analytical
             return profileLibrary.GetProfile(name, profileType, includeProfileGroup);
         }
 
+        public Profile GetProfile(InternalCondition internalCondition, ProfileType profileType, bool includeProfileGroup = false)
+        {
+            return internalCondition?.GetProfile(profileType, profileLibrary, includeProfileGroup);
+        }
+
         public bool HasMaterial(string name)
         {
             if (materialLibrary == null || string.IsNullOrEmpty(name))

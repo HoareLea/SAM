@@ -235,7 +235,9 @@
     <Compile Include="Query\New\OpeningAnalyticalType.cs" />
     <Compile Include="Query\New\PartitionAnalyticalType.cs" />
     <Compile Include="Query\New\SpaceDictionary.cs" />
+    <Compile Include="Query\New\Split.cs" />
     <Compile Include="Query\New\Transparent.cs" />
+    <Compile Include="Query\New\Triangulate.cs" />
     <Compile Include="Query\New\Type.cs" />
     <Compile Include="Query\Triangulate.cs" />
     <Compile Include="Query\Transparent.cs" />

@@ -44,14 +44,19 @@ namespace SAM.Analytical
         public Space(string name, Point3D location)
             : base(name)
         {
-            this.location = location;
+
+            
         }
 
         public Space(Space space, string name, Point3D location)
             : base(name, space)
         {
-            this.location = location;
             internalCondition = space.InternalCondition;
+
+            if (location != null)
+            {
+                this.location = new Point3D(location);
+            }
         }
 
         public Space(JObject jObject)
