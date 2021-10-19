@@ -27,13 +27,19 @@ namespace SAM.Analytical
         public Space(Guid guid, string name, Point3D location)
             : base(guid, name)
         {
-            this.location = location;
+            if (location != null)
+            {
+                this.location = new Point3D(location);
+            }
         }
 
         public Space(Guid guid, Space space, string name, Point3D location)
             : base(name, guid, space)
         {
-            this.location = location;
+            if (location != null)
+            {
+                this.location = new Point3D(location);
+            }
         }
 
         public Space(string name)
@@ -44,8 +50,10 @@ namespace SAM.Analytical
         public Space(string name, Point3D location)
             : base(name)
         {
-
-            
+            if (location != null)
+            {
+                this.location = new Point3D(location);
+            }
         }
 
         public Space(Space space, string name, Point3D location)
