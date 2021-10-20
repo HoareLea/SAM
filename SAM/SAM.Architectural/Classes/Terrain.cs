@@ -28,9 +28,9 @@ namespace SAM.Architectural
 
         public abstract bool Below(Face3D face3D, double tolerance = Core.Tolerance.Distance);
 
-        public bool Below(IPartition partition, double tolerance = Core.Tolerance.Distance)
+        public bool Below(IFace3DObject face3DObject, double tolerance = Core.Tolerance.Distance)
         {
-            return Below(partition?.Face3D, tolerance);
+            return Below(face3DObject?.Face3D, tolerance);
         }
 
         public override bool FromJObject(JObject jObject)
@@ -50,9 +50,9 @@ namespace SAM.Architectural
 
         public abstract bool On(Face3D face3D, double tolerance = Core.Tolerance.Distance);
 
-        public bool On(IPartition partition, double tolerance = Core.Tolerance.Distance)
+        public bool On(IFace3DObject face3DObject, double tolerance = Core.Tolerance.Distance)
         {
-            return On(partition?.Face3D, tolerance);
+            return On(face3DObject?.Face3D, tolerance);
         }
 
         public override JObject ToJObject()

@@ -5,7 +5,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class Space : SAMObject
+    public class Space : SAMObject, ISAMGeometry3DObject, IAnalyticalObject
     {
         private Point3D location;
         private InternalCondition internalCondition;
@@ -27,7 +27,19 @@ namespace SAM.Analytical
         public Space(Guid guid, string name, Point3D location)
             : base(guid, name)
         {
-            this.location = location;
+            if (location != null)
+            {
+                this.location = new Point3D(location);
+            }
+        }
+
+        public Space(Guid guid, Space space, string name, Point3D location)
+            : base(name, guid, space)
+        {
+            if (location != null)
+            {
+                this.location = new Point3D(location);
+            }
         }
 
         public Space(string name)
@@ -38,14 +50,21 @@ namespace SAM.Analytical
         public Space(string name, Point3D location)
             : base(name)
         {
-            this.location = location;
+            if (location != null)
+            {
+                this.location = new Point3D(location);
+            }
         }
 
         public Space(Space space, string name, Point3D location)
             : base(name, space)
         {
-            this.location = location;
             internalCondition = space.InternalCondition;
+
+            if (location != null)
+            {
+                this.location = new Point3D(location);
+            }
         }
 
         public Space(JObject jObject)
@@ -121,6 +140,11 @@ namespace SAM.Analytical
         {
             if (location != null)
                 location = Location.Transform(transform3D);
+        }
+
+        public void Move(Vector3D vector3D)
+        {
+            location = location?.GetMoved(vector3D) as Point3D;
         }
     }
 }

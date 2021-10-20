@@ -14,6 +14,14 @@ namespace SAM.Analytical
             return gasMaterial;
         }
 
+        public static GasMaterial GasMaterial(string name, string group, string displayName, string description, double defaultThickness, double vapourDiffusionFactor, double heatTransferCoefficient, DefaultGasType defaultGasType)
+        {
+            GasMaterial gasMaterial = GasMaterial(name, group, displayName, description, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
+            gasMaterial.SetValue(GasMaterialParameter.DefaultGasType, defaultGasType.Description());
+
+            return gasMaterial;
+        }
+
         public static GasMaterial GasMaterial(this GasMaterial gasMaterial, string name, string displayName, string description, double defaultThickness, double heatTransferCoefficient)
         {
             if (gasMaterial == null)
@@ -22,6 +30,11 @@ namespace SAM.Analytical
             GasMaterial result = new GasMaterial(name, System.Guid.NewGuid(), gasMaterial, displayName, description);
             result.SetValue(MaterialParameter.DefaultThickness, defaultThickness);
             result.SetValue(GasMaterialParameter.HeatTransferCoefficient, heatTransferCoefficient);
+
+            if(gasMaterial.TryGetValue(GasMaterialParameter.DefaultGasType, out string defaultGasType) && !string.IsNullOrWhiteSpace(defaultGasType))
+            {
+                gasMaterial.SetValue(GasMaterialParameter.DefaultGasType, defaultGasType);
+            }
 
             return result;
         }

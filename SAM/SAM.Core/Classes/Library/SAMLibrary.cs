@@ -180,6 +180,14 @@ namespace SAM.Core
             return result;
         }
 
+        public List<W> GetObjects<W>(params Func<W, bool>[] functions) where W : T
+        {
+            List<W> objects = GetObjects<W>();
+            objects.Filter(out List<W> @in, out List<W> @out, functions);
+
+            return @in;
+        }
+
         public Type GenericType
         {
             get

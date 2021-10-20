@@ -113,7 +113,7 @@ namespace SAM.Analytical
             if (polygon2D_Temp != null)
                 polygon2D = polygon2D_Temp;
 
-            face3D = Face3D.Create(plane, polygon2D, face3D.InternalEdge2Ds, Geometry.EdgeOrientationMethod.Opposite);
+            face3D = Geometry.Spatial.Face3D.Create(plane, polygon2D, face3D.InternalEdge2Ds, Geometry.EdgeOrientationMethod.Opposite);
             if (face3D == null)
                 return null;
 
