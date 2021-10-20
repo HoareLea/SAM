@@ -636,7 +636,14 @@ namespace SAM.Analytical
             if (relationCluster == null)
                 relationCluster = new RelationCluster();
 
-            return relationCluster.AddObject(partition.Clone());
+            //TODO: Finish implementation of SAMType
+            IPartition partition_Temp = partition.Clone();
+            if(partition_Temp is IHostPartition)
+            {
+
+            }
+
+            return relationCluster.AddObject(partition_Temp);
         }
 
         public bool Add(Space space, IEnumerable<IPartition> partitions = null)
@@ -656,12 +663,10 @@ namespace SAM.Analytical
             {
                 foreach(IPartition partition in partitions)
                 {
-                    IPartition partition_Temp = partition.Clone();
-                    if (relationCluster.AddObject(partition_Temp))
+                    if(Add(partition))
                     {
-                        relationCluster.AddRelation(space_Temp, partition_Temp);
+                        relationCluster.AddRelation(space_Temp, partition);
                     }
-
                 }
             }
 
