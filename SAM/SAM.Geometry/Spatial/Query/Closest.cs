@@ -68,11 +68,6 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static T Closest<T>(this IEnumerable<T> segmentable3Ds, Point3D point3D) where T: ISegmentable3D
-        {
-            return Closest(segmentable3Ds, point3D, out double distance, out Point3D point3D_Closest);
-        }
-
         public static Point3D Closest(this IEnumerable<Point3D> point3Ds, Point3D point3D)
         {
             if (point3Ds == null || point3Ds.Count() == 0 || point3D == null)
@@ -96,5 +91,34 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static T Closest<T>(this IEnumerable<T> face3DObjects, Point3D point3D) where T : IFace3DObject
+        {
+            if(face3DObjects == null)
+            {
+                return default;
+            }
+
+            Dictionary<Face3D, T> dictionary = new Dictionary<Face3D, T>();
+            foreach(T face3DObject in face3DObjects)
+            {
+                Face3D face3D = face3DObject?.Face3D;
+                if(face3D == null)
+                {
+                    continue;
+                }
+
+                dictionary[face3D] = face3DObject;
+            }
+
+            Face3D face3D_Closest = Closest(dictionary.Keys, point3D);
+            if(face3D_Closest == null)
+            {
+                return default;
+            }
+
+            return dictionary[face3D_Closest];
+        }
+
     }
 }

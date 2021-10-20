@@ -207,7 +207,7 @@ namespace SAM.Analytical
                     return;
                 }
 
-                Panel panel = Closest(panels, point3D, tolerance);
+                Panel panel = Geometry.Spatial.Query.Closest(panels, point3D);
                 if (panel == null)
                 {
                     return;

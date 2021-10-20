@@ -500,7 +500,24 @@ namespace SAM.Core
             if (!IsValid(type))
                 return null;
 
-            return GetObjects(type.FullName);
+
+            List<string> typeNames = GetTypeNames(type);
+            if (typeNames == null || typeNames.Count == 0)
+            {
+                return null;
+            }
+
+            List<object> result = new List<object>();
+            foreach (string typeName in typeNames)
+            {
+                List<object> objects = GetObjects<object>(typeName);
+                if (objects != null && objects.Count != 0)
+                {
+                    result.AddRange(objects);
+                }
+            }
+
+            return result;
         }
 
         public List<object> GetObjects()
@@ -518,34 +535,34 @@ namespace SAM.Core
 
         public List<T> GetObjects<T>()
         {
-            List<string> typeNames = GetTypeNames(typeof(T));
-            if (typeNames == null || typeNames.Count == 0)
-            {
-                return null;
-            }
-
-            List<T> result = new List<T>();
-            foreach (string typeName in typeNames)
-            {
-                List<T> objects = GetObjects<T>(typeName);
-                if (objects != null && objects.Count != 0)
-                {
-                    result.AddRange(objects);
-                }
-            }
-
-            return result;
-
-            //List<object> objects = GetObjects(typeof(T));
-            //if (objects == null)
+            //List<string> typeNames = GetTypeNames(typeof(T));
+            //if (typeNames == null || typeNames.Count == 0)
+            //{
             //    return null;
+            //}
 
             //List<T> result = new List<T>();
-            //foreach (object @object in objects)
-            //    if (@object is T)
-            //        result.Add((T)@object);
+            //foreach (string typeName in typeNames)
+            //{
+            //    List<T> objects = GetObjects<T>(typeName);
+            //    if (objects != null && objects.Count != 0)
+            //    {
+            //        result.AddRange(objects);
+            //    }
+            //}
 
             //return result;
+
+            List<object> objects = GetObjects(typeof(T));
+            if (objects == null)
+                return null;
+
+            List<T> result = new List<T>();
+            foreach (object @object in objects)
+                if (@object is T)
+                    result.Add((T)@object);
+
+            return result;
         }
 
         public List<T> GetObjects<T>(params Func<T, bool>[] functions)
@@ -608,22 +625,49 @@ namespace SAM.Core
         public object GetObject(Type type, Guid guid)
         {
             if (!IsValid(type))
+            {
                 return null;
+            }
+
+            if(dictionary_Objects == null)
+            {
+                return null;
+            }
 
             string fullName = type.FullName;
-            if (fullName == null)
-                return null;
+            if (fullName != null)
+            {
+                if (dictionary_Objects.TryGetValue(fullName, out Dictionary<Guid, object> dictionary) && dictionary != null)
+                {
+                    if(dictionary.TryGetValue(guid, out object result) && result != null)
+                    {
+                        if (type.IsAssignableFrom(result.GetType()))
+                        {
+                            return result;
+                        }
+                    }
+                }
+            }
 
-            if (dictionary_Objects == null || !dictionary_Objects.TryGetValue(fullName, out Dictionary<Guid, object> dictionary) || dictionary == null)
-                return null;
+            List<string> typeNames = GetTypeNames(type);
+            if (typeNames != null && typeNames.Count != 0)
+            {
+                foreach (string typeName in typeNames)
+                {
+                    if (dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, object> dictionary) && dictionary != null)
+                    {
+                        if (dictionary.TryGetValue(guid, out object result) && result != null)
+                        {
+                            if (type.IsAssignableFrom(result.GetType()))
+                            {
+                                return result;
+                            }
+                        }
+                    }
+                }
+            }
 
-            if (!dictionary.TryGetValue(guid, out object result) || result == null)
-                return null;
-
-            if (!type.IsAssignableFrom(result.GetType()))
-                return null;
-
-            return result;
+            return null;
         }
 
         public string GetTypeName(Guid guid)

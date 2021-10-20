@@ -45,20 +45,31 @@ namespace SAM.Analytical
             }
         }
 
-        public override void Transform(Transform3D transform3D)
+        public IOpening RemoveOpening(Guid guid)
         {
-            base.Transform(transform3D);
-
-            if(openings != null)
+            if(openings == null || openings.Count == 0)
             {
-                foreach(IOpening opening in openings)
+                return null;
+            }
+
+            foreach(IOpening opening in openings)
+            {
+                if(opening == null)
                 {
-                    opening.Transform(transform3D);
+                    continue;
+                }
+
+                if(opening.Guid == guid)
+                {
+                    openings.Remove(opening);
+                    return opening;
                 }
             }
+
+            return null;
         }
 
-        public bool AddOpening(IOpening opening, double tolerance = Core.Tolerance.Distance)
+        public bool AddOpening(IOpening opening, double tolerance = Tolerance.Distance)
         {
             if (opening == null)
                 return false;
@@ -69,7 +80,16 @@ namespace SAM.Analytical
             if (openings == null)
                 openings = new List<IOpening>();
 
-            openings.Add(opening);
+            int index = openings.FindIndex(x => x.Guid == opening.Guid);
+            if(index == -1)
+            {
+                openings.Add(opening);
+            }
+            else
+            {
+                openings[index] = opening;
+            }
+
             return true;
         }
 
@@ -94,6 +114,19 @@ namespace SAM.Analytical
             }
 
             return jObject;
+        }
+
+        public override void Transform(Transform3D transform3D)
+        {
+            base.Transform(transform3D);
+
+            if (openings != null)
+            {
+                foreach (IOpening opening in openings)
+                {
+                    opening.Transform(transform3D);
+                }
+            }
         }
 
     }

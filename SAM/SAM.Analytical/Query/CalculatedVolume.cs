@@ -11,7 +11,6 @@
                 return double.NaN;
 
             return space.Volume(adjacencyCluster);
-
         }
     }
 }

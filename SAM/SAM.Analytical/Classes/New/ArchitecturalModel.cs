@@ -333,6 +333,11 @@ namespace SAM.Analytical
             return internalCondition?.GetProfile(profileType, profileLibrary, includeProfileGroup);
         }
 
+        public Profile GetProfile(Space space, ProfileType profileType, bool includeProfileGroup = false)
+        {
+            return GetProfile(space?.InternalCondition, profileType, includeProfileGroup);
+        }
+
         public bool HasMaterial(string name)
         {
             if (materialLibrary == null || string.IsNullOrEmpty(name))
@@ -365,57 +370,61 @@ namespace SAM.Analytical
 
         public List<T> GetHostPartitionTypes<T>() where T: HostPartitionType
         {
-            List<IHostPartition> hostPartitions = GetPartitions<IHostPartition>();
-            if(hostPartitions == null || hostPartitions.Count == 0)
-            {
-                return null;
-            }
+            return GetObjects<T>();
 
-            Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
-            foreach(IHostPartition hostPartition in hostPartitions)
-            {
-                T hostPartitionType = hostPartition?.Type() as T;
-                if(hostPartitionType == null)
-                {
-                    continue;
-                }
+            //List<IHostPartition> hostPartitions = GetPartitions<IHostPartition>();
+            //if(hostPartitions == null || hostPartitions.Count == 0)
+            //{
+            //    return null;
+            //}
 
-                dictionary[hostPartitionType.Guid] = hostPartitionType;
-            }
+            //Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
+            //foreach(IHostPartition hostPartition in hostPartitions)
+            //{
+            //    T hostPartitionType = hostPartition?.Type() as T;
+            //    if(hostPartitionType == null)
+            //    {
+            //        continue;
+            //    }
 
-            return dictionary.Values.ToList();
+            //    dictionary[hostPartitionType.Guid] = hostPartitionType;
+            //}
+
+            //return dictionary.Values.ToList();
         }
 
         public List<T> GetOpeningTypes<T>() where T: OpeningType
         {
-            List<IHostPartition> hostPartitions = GetPartitions<IHostPartition>();
-            if (hostPartitions == null || hostPartitions.Count == 0)
-            {
-                return null;
-            }
+            return GetObjects<T>();
 
-            Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
-            foreach (IHostPartition hostPartition in hostPartitions)
-            {
-                List<IOpening> openings = hostPartition?.Openings;
-                if(openings == null || openings.Count == 0)
-                {
-                    continue;
-                }
+            //List<IHostPartition> hostPartitions = GetPartitions<IHostPartition>();
+            //if (hostPartitions == null || hostPartitions.Count == 0)
+            //{
+            //    return null;
+            //}
 
-                foreach(IOpening opening in openings)
-                {
-                    T openingType = opening.Type() as T;
-                    if(openingType == null)
-                    {
-                        continue;
-                    }
+            //Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
+            //foreach (IHostPartition hostPartition in hostPartitions)
+            //{
+            //    List<IOpening> openings = hostPartition?.Openings;
+            //    if(openings == null || openings.Count == 0)
+            //    {
+            //        continue;
+            //    }
 
-                    dictionary[openingType.Guid] = openingType;
-                }
-            }
+            //    foreach(IOpening opening in openings)
+            //    {
+            //        T openingType = opening.Type() as T;
+            //        if(openingType == null)
+            //        {
+            //            continue;
+            //        }
 
-            return dictionary.Values.ToList();
+            //        dictionary[openingType.Guid] = openingType;
+            //    }
+            //}
+
+            //return dictionary.Values.ToList();
         }
 
         public MaterialType GetMaterialType(HostPartitionType hostPartitionType)
@@ -531,6 +540,28 @@ namespace SAM.Analytical
             return new Shell(partitions.ConvertAll(x => x.Face3D));
         }
 
+        public double GetVolume(Space space, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
+        {
+            Shell shell = GetShell(space);
+            if(shell == null)
+            {
+                return double.NaN;
+            }
+
+            return shell.Volume(silverSpacing, tolerance);
+        }
+
+        public double GetArea(Space space, double offset, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
+        {
+            Shell shell = GetShell(space);
+            if (shell == null)
+            {
+                return double.NaN;
+            }
+
+            return shell.Area(offset, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+        }
+
         public List<IPartition> GetPartitions(Space space)
         {
             return GetRelatedObjects<IPartition>(space);
@@ -570,6 +601,11 @@ namespace SAM.Analytical
             }
 
             return dictionary.Values.ToList();
+        }
+
+        public List<IHostPartition> GetHostPartitions(HostPartitionType hostPartitionType)
+        {
+            return GetRelatedObjects<IHostPartition>(hostPartitionType);
         }
 
         public List<T> GetPartitions<T>(Zone zone) where T: IPartition
@@ -636,11 +672,53 @@ namespace SAM.Analytical
             if (relationCluster == null)
                 relationCluster = new RelationCluster();
 
-            //TODO: Finish implementation of SAMType
             IPartition partition_Temp = partition.Clone();
             if(partition_Temp is IHostPartition)
             {
+                IHostPartition hostPartition = (IHostPartition)partition_Temp;
 
+                HostPartitionType hostPartitionType = hostPartition.Type();
+                if(hostPartitionType != null)
+                {
+                    HostPartitionType hostPartitionType_Temp = relationCluster.GetObject<HostPartitionType>(hostPartitionType.Guid);
+                    if(hostPartitionType_Temp == null)
+                    {
+                        relationCluster.AddObject(hostPartitionType);
+                        hostPartitionType_Temp = hostPartitionType;
+                    }
+                    else
+                    {
+                        hostPartition.Type(hostPartitionType_Temp);
+                    }
+
+                    relationCluster.AddRelation(partition_Temp, hostPartitionType_Temp);
+                }
+
+                List<IOpening> openings = hostPartition.Openings;
+                if(openings != null)
+                {
+                    foreach(IOpening opening in openings)
+                    {
+                        OpeningType openingType = opening?.Type();
+                        if(openingType == null)
+                        {
+                            continue;
+                        }
+                        OpeningType openingType_Temp = relationCluster.GetObject<OpeningType>(openingType.Guid);
+                        if(openingType_Temp == null)
+                        {
+                            relationCluster.AddObject(openingType);
+                            openingType_Temp = openingType;
+                        }
+                        else
+                        {
+                            opening.Type(openingType_Temp);
+                            hostPartition.AddOpening(opening);
+                        }
+
+                        relationCluster.AddRelation(opening, openingType_Temp);
+                    }
+                }
             }
 
             return relationCluster.AddObject(partition_Temp);
@@ -657,6 +735,26 @@ namespace SAM.Analytical
                 relationCluster = new RelationCluster();
 
             Space space_Temp = new Space(space);
+
+            InternalCondition internalCondition = space_Temp.InternalCondition;
+            if(internalCondition != null)
+            {
+                List<InternalCondition> internalConditions = GetInternalConditions();
+                if(internalConditions != null)
+                {
+                    List<Guid> guids = internalConditions.ConvertAll(x => x.Guid);
+                    Guid guid = internalCondition.Guid;
+                    while(guids.Contains(guid))
+                    {
+                        guid = Guid.NewGuid();
+                    }
+
+                    if(internalCondition.Guid != guid)
+                    {
+                        space_Temp.InternalCondition = new InternalCondition(guid, internalCondition);
+                    }
+                }
+            }
 
             bool result = relationCluster.AddObject(space_Temp);
             if(partitions != null && partitions.Count() != 0)
@@ -722,11 +820,18 @@ namespace SAM.Analytical
             {
                 foreach(Space space in spaces)
                 {
-                    Space space_Temp = space.Clone();
-                    if(relationCluster.AddObject(space_Temp))
+                    if(space == null)
                     {
-                        relationCluster.AddRelation(zone_Temp, space_Temp);
+                        continue;
                     }
+
+                    Space space_Temp = relationCluster.GetObject<Space>(space.Guid);
+                    if(space_Temp == null)
+                    {
+                        continue;
+                    }
+
+                    relationCluster.AddRelation(zone_Temp, space_Temp);
                 }
             }
 
