@@ -188,7 +188,15 @@ namespace SAM.Analytical
                     double heatTransferCoefficient = double.NaN;
                     delimitedFileTable.TryConvert(i, index_HeatTransferCoefficient, out heatTransferCoefficient);
 
-                    material = GasMaterial(materialName, null, materialName, description, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
+                    DefaultGasType defaultGasType = Query.DefaultGasType(materialName, description);
+                    if (defaultGasType != DefaultGasType.Undefined)
+                    {
+                        material = GasMaterial(materialName, null, materialName, description, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient, defaultGasType);
+                    }
+                    else
+                    {
+                        material = GasMaterial(materialName, null, materialName, description, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
+                    }
                 }
 
                 if (material == null)
