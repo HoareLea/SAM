@@ -93,6 +93,16 @@ namespace SAM.Analytical
             return true;
         }
 
+        public bool HasOpening(Guid guid)
+        {
+            if(openings == null || openings.Count == 0)
+            {
+                return false;
+            }
+
+            return openings.Find(x => x.Guid == guid) != null;
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

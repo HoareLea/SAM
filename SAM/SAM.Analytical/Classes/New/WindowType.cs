@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Architectural;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -26,6 +28,12 @@ namespace SAM.Analytical
             : base(guid, name)
         {
 
+        }
+
+        public WindowType(string name, IEnumerable<MaterialLayer> paneMaterialLayers, IEnumerable<MaterialLayer> frameMaterialLayers = null)
+            : base(name, paneMaterialLayers, frameMaterialLayers)
+        {
+           
         }
 
         public override bool FromJObject(JObject jObject)

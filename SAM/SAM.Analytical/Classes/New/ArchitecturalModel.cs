@@ -406,6 +406,16 @@ namespace SAM.Analytical
             return Query.HasMaterial(hostPartitionType, materialLibrary, materialType);
         }
 
+        public bool HasMaterial(OpeningType openingType, MaterialType materialType)
+        {
+            if (openingType == null || materialLibrary == null)
+            {
+                return false;
+            }
+
+            return Query.HasMaterial(openingType, materialLibrary, materialType);
+        }
+
         public IMaterial GetMaterial(MaterialLayer materialLayer)
         {
             if(materialLayer == null || materialLibrary == null)
@@ -504,6 +514,11 @@ namespace SAM.Analytical
             //}
 
             //return dictionary.Values.ToList();
+        }
+
+        public List<OpeningType> GetOpeningTypes()
+        {
+            return GetObjects<OpeningType>();
         }
 
         public MaterialType GetMaterialType(HostPartitionType hostPartitionType)
@@ -774,6 +789,46 @@ namespace SAM.Analytical
             return GetObjects<T>();
         }
 
+        public List<IOpening> GetOpenings(OpeningType openingType)
+        {
+            if(relationCluster == null || openingType == null)
+            {
+                return null;
+            }
+
+            List<IHostPartition> hostPartitions = relationCluster.GetObjects<IHostPartition>();
+            if(hostPartitions == null)
+            {
+                return null;
+            }
+
+            List<IOpening> result = new List<IOpening>();
+            foreach(IHostPartition hostPartition in hostPartitions)
+            {
+                List<IOpening> openings = hostPartition.Openings;
+                if(openings == null || openings.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach(IOpening opening in openings)
+                {
+                    OpeningType openingType_Temp = opening?.Type();
+                    if(openingType_Temp == null)
+                    {
+                        continue;
+                    }
+
+                    if(openingType_Temp.Guid == openingType.Guid)
+                    {
+                        result.Add(opening);
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public List<InternalCondition> GetInternalConditions()
         {
             List<Space> spaces = GetSpaces();
@@ -936,6 +991,86 @@ namespace SAM.Analytical
             return profileLibrary.Add(profile.Clone());
         }
 
+        public bool Add(IOpening opening, double tolerance = Tolerance.Distance)
+        {
+            if(opening == null)
+            {
+                return false;
+            }
+
+            bool valid = false;
+            IHostPartition hostPartition_Opening = null;
+            List<IHostPartition> hostPartitions_Opening = new List<IHostPartition>();
+
+            List<IHostPartition> hostPartitions = relationCluster?.GetObjects<IHostPartition>();
+            if(hostPartitions != null && hostPartitions.Count == 0)
+            {
+                foreach(IHostPartition hostPartition in hostPartitions)
+                {
+                    List<IOpening> openings = hostPartition.Openings;
+                    if(openings != null && openings.Count != 0)
+                    {
+                        if(openings.Find(x => x.Guid == opening.Guid) != null)
+                        {
+                            hostPartition_Opening = hostPartition;
+                            if (Query.IsValid(hostPartition, opening, tolerance))
+                            {
+                                valid = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (Query.IsValid(hostPartition, opening, tolerance))
+                    {
+                        hostPartitions_Opening.Add(hostPartition);
+                    }
+                }
+            }
+
+            OpeningType openingType = opening.Type();
+            if(openingType != null)
+            {
+                OpeningType openingType_Temp = relationCluster.GetObject<OpeningType>(openingType.Guid);
+                if (openingType_Temp == null)
+                {
+                    relationCluster.AddObject(openingType);
+                    openingType_Temp = openingType;
+                }
+                else
+                {
+                    opening.Type(openingType_Temp);
+                }
+            }
+
+            if (valid)
+            {
+                hostPartition_Opening.AddOpening(opening);
+            }
+
+            if(hostPartitions_Opening == null || hostPartitions_Opening.Count == 0)
+            {
+                relationCluster.AddObject(opening);
+                return true;
+            }
+
+            if(hostPartition_Opening != null)
+            {
+                hostPartition_Opening.RemoveOpening(opening.Guid);
+            }
+
+            if(hostPartitions_Opening.Count > 0 )
+            {
+                Point3D point3D = opening.Face3D.InternalPoint3D();
+                if(point3D != null)
+                {
+                    hostPartitions_Opening.Sort((x, y) => x.Face3D.Distance(point3D, tolerance).CompareTo(y.Face3D.Distance(point3D, tolerance)));
+                }
+            }
+
+            return hostPartitions_Opening[0].AddOpening(opening, tolerance);
+        }
+
         public bool Add(Zone zone, IEnumerable<Space> spaces = null)
         {
             if(zone == null)
@@ -999,6 +1134,39 @@ namespace SAM.Analytical
             if(relationCluster == null)
             {
                 return false;
+            }
+
+            if(sAMObject is IOpening)
+            {
+                List<IHostPartition> hostPartitions = relationCluster.GetObjects<IHostPartition>();
+                if(hostPartitions != null && hostPartitions.Count != 0)
+                {
+                    if(hostPartitions.Find(x => x.HasOpening(sAMObject.Guid)) != null)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if(sAMObject is InternalCondition)
+            {
+                List<Space> spaces = relationCluster.GetObjects<Space>();
+                if (spaces != null && spaces.Count != 0)
+                {
+                    foreach(Space space in spaces)
+                    {
+                        InternalCondition internalCondition = space?.InternalCondition;
+                        if(internalCondition == null)
+                        {
+                            continue;
+                        }
+
+                        if(internalCondition.Guid == sAMObject.Guid)
+                        {
+                            return true; 
+                        }
+                    }
+                }
             }
 
             return relationCluster.Contains(sAMObject);

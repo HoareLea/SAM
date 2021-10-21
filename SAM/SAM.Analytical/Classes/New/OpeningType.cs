@@ -28,6 +28,20 @@ namespace SAM.Analytical
 
         }
 
+        public OpeningType(string name, IEnumerable<MaterialLayer> paneMaterialLayers, IEnumerable<MaterialLayer> frameMaterialLayers = null)
+            : base(name)
+        {
+            if (paneMaterialLayers != null)
+            {
+                this.paneMaterialLayers = new List<MaterialLayer>(paneMaterialLayers).ConvertAll(x => new MaterialLayer(x));
+            }
+
+            if(frameMaterialLayers != null)
+            {
+                this.frameMaterialLayers = new List<MaterialLayer>(frameMaterialLayers).ConvertAll(x => new MaterialLayer(x));
+            }
+        }
+
         public OpeningType(System.Guid guid, string name)
             : base(guid, name)
         {

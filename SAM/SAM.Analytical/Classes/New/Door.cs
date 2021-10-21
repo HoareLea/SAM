@@ -30,6 +30,7 @@ namespace SAM.Analytical
 
         }
 
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

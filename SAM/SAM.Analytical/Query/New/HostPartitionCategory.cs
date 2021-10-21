@@ -23,5 +23,30 @@ namespace SAM.Analytical
         {
             return HostPartitionCategory(partition?.Face3D?.GetPlane()?.Normal, tolerance);
         }
+
+        public static HostPartitionCategory HostPartitionCategory(HostPartitionType hostPartitionType)
+        {
+            if(hostPartitionType == null)
+            {
+                return Analytical.HostPartitionCategory.Undefined;
+            }
+
+            if(hostPartitionType is WallType)
+            {
+                return Analytical.HostPartitionCategory.Wall;
+            }
+
+            if (hostPartitionType is FloorType)
+            {
+                return Analytical.HostPartitionCategory.Floor;
+            }
+
+            if (hostPartitionType is RoofType)
+            {
+                return Analytical.HostPartitionCategory.Roof;
+            }
+
+            return Analytical.HostPartitionCategory.Undefined;
+        }
     }
 }
