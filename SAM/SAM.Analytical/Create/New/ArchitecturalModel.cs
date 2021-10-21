@@ -580,7 +580,7 @@ namespace SAM.Analytical
                 result.Add(tuple.Item1, tuple.Item2);
             }
 
-            result.UpdateNormals(false, silverSpacing, tolerance_Distance);
+            result.OrientPartitions(false, silverSpacing, tolerance_Distance);
 
             return result;
         }

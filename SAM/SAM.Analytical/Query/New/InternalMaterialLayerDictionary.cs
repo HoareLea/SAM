@@ -8,7 +8,7 @@ namespace SAM.Analytical
     {
         public static Dictionary<IPartition, Architectural.MaterialLayer> InternalMaterialLayerDictionary(this ArchitecturalModel architecturalModel, Space space, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
         {
-            Dictionary<IPartition, Vector3D> dictionary = architecturalModel.NormalDictionary(space, out Geometry.Spatial.Shell shell, true, silverSpacing, tolerance);
+            Dictionary<IPartition, Vector3D> dictionary = architecturalModel.NormalDictionary(space, out Shell shell, true, silverSpacing, tolerance);
             if(dictionary == null)
             {
                 return null;

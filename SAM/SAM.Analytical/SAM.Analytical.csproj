@@ -184,12 +184,14 @@
     <Compile Include="Modify\New\AddOpening.cs" />
     <Compile Include="Modify\New\AddOpenings.cs" />
     <Compile Include="Modify\New\FixEdges.cs" />
+    <Compile Include="Modify\OrientedPartitions.cs" />
+    <Compile Include="Modify\New\SplitByInternalEdges.cs" />
     <Compile Include="Modify\New\TryAddOpening.cs" />
     <Compile Include="Modify\New\Type.cs" />
     <Compile Include="Modify\New\UpdateHeatTransferCoefficients.cs" />
     <Compile Include="Modify\New\UpdateHostPartitionType.cs" />
     <Compile Include="Modify\New\UpdateMaterials.cs" />
-    <Compile Include="Modify\New\UpdateNormals.cs" />
+    <Compile Include="Modify\New\OrientPartitions.cs" />
     <Compile Include="Modify\RemoveInvalidAirPanels.cs" />
     <Compile Include="Modify\RemoveOverlapApertures.cs" />
     <Compile Include="Modify\Trim.cs" />
@@ -264,6 +266,7 @@
     <Compile Include="Query\New\PartitionAnalyticalType.cs" />
     <Compile Include="Query\New\SpaceDictionary.cs" />
     <Compile Include="Query\New\Split.cs" />
+    <Compile Include="Query\New\SplitByInternalEdges.cs" />
     <Compile Include="Query\New\Sum.cs" />
     <Compile Include="Query\New\Transparent.cs" />
     <Compile Include="Query\New\Triangulate.cs" />
