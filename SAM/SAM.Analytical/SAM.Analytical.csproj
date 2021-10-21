@@ -183,6 +183,7 @@
     <Compile Include="Modify\New\AddAirPartitions.cs" />
     <Compile Include="Modify\New\AddOpening.cs" />
     <Compile Include="Modify\New\AddOpenings.cs" />
+    <Compile Include="Modify\New\MergeCoplanarPartitionsBySpace.cs" />
     <Compile Include="Modify\New\FixEdges.cs" />
     <Compile Include="Modify\OrientedPartitions.cs" />
     <Compile Include="Modify\New\SplitByInternalEdges.cs" />
