@@ -90,7 +90,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("levels");
             if(index != -1)
             {
-                List<Architectural.Level> levels = Create.Levels(panels, false, tolerance);
+                List<Architectural.Level> levels = Architectural.Create.Levels(panels.FindAll(x => x.PanelType != PanelType.Air && x.PanelType.PanelGroup() != PanelGroup.Other), tolerance);
                 dataAccess.SetDataList(index, levels?.ConvertAll(x => new GooLevel(x)));
             }
 
@@ -100,7 +100,7 @@ namespace SAM.Analytical.Grasshopper
                 double elevation = double.MinValue;
                 foreach(Panel panel in panels)
                 {
-                    double elevation_Panel = panel.MaxElevation();
+                    double elevation_Panel = Geometry.Spatial.Query.MaxElevation(panel);
                     if (double.IsNaN(elevation_Panel))
                     {
                         continue;

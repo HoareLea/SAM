@@ -49,11 +49,14 @@
     <Compile Include="Classes\PlanarTerrain.cs" />
     <Compile Include="Classes\MaterialLayer.cs" />
     <Compile Include="Classes\Level.cs" />
+    <Compile Include="Create\Levels.cs" />
     <Compile Include="Create\PlanarTerrain.cs" />
     <Compile Include="Create\Level.cs" />
     <Compile Include="Interfaces\ITerrain.cs" />
     <Compile Include="Interfaces\IArchitecturalObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\LevelsDictionary.cs" />
+    <Compile Include="Query\Materials.cs" />
     <Compile Include="Query\Material.cs" />
     <Compile Include="Query\MaterialType.cs" />
   </ItemGroup>

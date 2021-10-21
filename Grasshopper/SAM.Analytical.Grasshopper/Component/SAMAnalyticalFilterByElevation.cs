@@ -140,7 +140,7 @@ namespace SAM.Analytical.Grasshopper
             List<Panel> panels_Lower = null;
             List<Panel> panels_Upper = null;
 
-            List<Panel> panels_Temp = panels?.FilterByElevation(elevation, out panels_Lower, out panels_Upper, tolerance);
+            List<Panel> panels_Temp = Geometry.Spatial.Query.FilterByElevation(panels, elevation, out panels_Lower, out panels_Upper, tolerance);
             panels_Temp?.ForEach(x => result.Add(x));
             panels_Lower?.ForEach(x => result_Lower.Add(x));
             panels_Upper?.ForEach(x => result_Upper.Add(x));

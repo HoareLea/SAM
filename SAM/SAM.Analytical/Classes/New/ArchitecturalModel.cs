@@ -475,6 +475,16 @@ namespace SAM.Analytical
             return spaces == null || spaces.Count == 0;
         }
 
+        public bool Underground(IPartition partition)
+        {
+            if(terrain == null || partition == null)
+            {
+                return false;
+            }
+
+            return terrain.Below(partition);
+        }
+
         public List<Shell> GetShells()
         {
             List<Space> spaces = relationCluster?.GetObjects<Space>();

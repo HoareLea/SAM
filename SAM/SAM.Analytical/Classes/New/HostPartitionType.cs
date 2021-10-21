@@ -53,6 +53,28 @@ namespace SAM.Analytical
             }
         }
 
+        public double GetThickness()
+        {
+            if(materialLayers == null)
+            {
+                return double.NaN;
+            }
+
+            double result = 0;
+            foreach(MaterialLayer materialLayer in materialLayers)
+            {
+                double thickness = materialLayer.Thickness;
+                if(double.IsNaN(thickness))
+                {
+                    continue;
+                }
+                
+                result += thickness;
+            }
+
+            return result;
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

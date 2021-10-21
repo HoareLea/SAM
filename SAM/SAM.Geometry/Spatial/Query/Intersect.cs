@@ -29,5 +29,21 @@ namespace SAM.Geometry.Spatial
 
             return false;
         }
+
+        public static bool Intersect(this Plane plane, IFace3DObject face3DObject, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if (plane == null)
+                return false;
+
+            Face3D face3D = face3DObject?.Face3D;
+            if (face3D == null)
+                return false;
+
+            PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(plane, face3D, tolerance_Angle, tolerance_Distance);
+            if (planarIntersectionResult == null)
+                return false;
+
+            return planarIntersectionResult.Intersecting;
+        }
     }
 }

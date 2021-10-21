@@ -60,7 +60,7 @@ namespace SAM.Analytical
                         case PanelType.Wall:
                         case PanelType.WallInternal:
                             
-                            elevation = Query.MaxElevation(panel);
+                            elevation = Geometry.Spatial.Query.MaxElevation(panel);
 
                             if (System.Math.Abs(elevation - elevation_Ground) < Tolerance.MacroDistance)
                                 panelType = PanelType.UndergroundWall;
@@ -71,7 +71,7 @@ namespace SAM.Analytical
 
                         case PanelType.UndergroundWall:
 
-                            elevation = Query.MaxElevation(panel);
+                            elevation = Geometry.Spatial.Query.MaxElevation(panel);
 
                             if (elevation >= elevation_Ground)
                                 panelType = PanelType.WallExternal;
@@ -96,7 +96,7 @@ namespace SAM.Analytical
                             panelType_Normal = Query.PanelType(panel.Normal);
                             if (panelType_Normal == PanelType.Floor)
                             {
-                                elevation = Query.MaxElevation(panel);
+                                elevation = Geometry.Spatial.Query.MaxElevation(panel);
 
                                 if (System.Math.Abs(elevation - elevation_Ground) < Tolerance.MacroDistance)
                                     panelType = PanelType.SlabOnGrade;
@@ -112,7 +112,7 @@ namespace SAM.Analytical
                             break;
 
                         case PanelType.Roof:
-                            elevation = Query.MaxElevation(panel);
+                            elevation = Geometry.Spatial.Query.MaxElevation(panel);
                             panelType_Normal = Query.PanelType(panel.Normal);
                             if(panelType_Normal == PanelType.Floor)
                             {
