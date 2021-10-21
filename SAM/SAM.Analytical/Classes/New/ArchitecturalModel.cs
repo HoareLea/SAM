@@ -289,6 +289,141 @@ namespace SAM.Analytical
                 return false;
             }
 
+            if(jSAMObject is IMaterial)
+            {
+                if(materialLibrary == null)
+                {
+                    return false;
+                }
+
+                return materialLibrary.Remove((IMaterial)jSAMObject);
+            }
+
+            if (jSAMObject is Profile)
+            {
+                if (profileLibrary == null)
+                {
+                    return false;
+                }
+
+                return profileLibrary.Remove((Profile)jSAMObject);
+            }
+
+            if(relationCluster == null)
+            {
+                return false;
+            }
+
+            if(jSAMObject is IOpening)
+            {
+                List<IHostPartition> hostPartitions = relationCluster?.GetObjects<IHostPartition>();
+                if(hostPartitions != null)
+                {
+                    IOpening opening = (IOpening)jSAMObject;
+
+                    foreach(IHostPartition hostPartition in hostPartitions)
+                    {
+                        if(hostPartition.HasOpening(opening.Guid))
+                        {
+                            hostPartition.RemoveOpening(opening.Guid);
+                            List<IOpening> openings = hostPartition.Openings;
+                            if(openings == null || openings.Count == 0)
+                            {
+                                relationCluster.RemoveRelation(hostPartition, opening.Type());
+                                return true;
+                            }
+
+                            bool removeRelation = true;
+                            OpeningType openingType = opening.Type();
+                            foreach(IOpening opening_Temp in openings)
+                            {
+                                OpeningType openingType_Temp = opening_Temp?.Type();
+                                if(openingType_Temp == null)
+                                {
+                                    continue;
+                                }
+
+                                if(openingType.Guid == openingType_Temp.Guid)
+                                {
+                                    removeRelation = false;
+                                    break;
+                                }
+                            }
+
+                            if(removeRelation)
+                            {
+                                relationCluster.RemoveRelation(hostPartition, openingType);
+                            }
+
+                            return true;
+                        }
+                    }
+                }
+            }
+            else if(jSAMObject is InternalCondition)
+            {
+                InternalCondition internalCondition = (InternalCondition)jSAMObject;
+
+                List<Space> spaces = relationCluster?.GetObjects<Space>();
+                if(spaces != null)
+                {
+                    foreach(Space space in spaces)
+                    {
+                        InternalCondition internalCondition_Temp = space?.InternalCondition;
+                        if(internalCondition_Temp == null)
+                        {
+                            continue;
+                        }
+
+                        if(internalCondition_Temp.Guid == internalCondition.Guid)
+                        {
+                            space.InternalCondition = null;
+                        }
+                    }
+                }
+            }
+            else if(jSAMObject is OpeningType)
+            {
+                OpeningType openingType = (OpeningType)jSAMObject;
+
+                List<IHostPartition> hostPartitions = relationCluster?.GetRelatedObjects<IHostPartition>(jSAMObject);
+                if(hostPartitions != null && hostPartitions.Count != 0)
+                {
+                    foreach(IHostPartition hostPartition in hostPartitions)
+                    {
+                        List<IOpening> openings = hostPartition?.Openings;
+                        if(openings != null && openings.Count != 0)
+                        {
+                            foreach(IOpening opening in openings)
+                            {
+                                OpeningType openingType_Temp = opening?.Type();
+                                if(openingType == null)
+                                {
+                                    continue;
+                                }
+
+                                if(openingType.Guid == openingType.Guid)
+                                {
+                                    hostPartition.RemoveOpening(opening.Guid);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (jSAMObject is HostPartitionType)
+            {
+                HostPartitionType hostPartitionType = (HostPartitionType)jSAMObject;
+                List<IHostPartition> hostPartitions = relationCluster?.GetRelatedObjects<IHostPartition>(hostPartitionType);
+                if(hostPartitions != null)
+                {
+                    foreach(IHostPartition hostPartition in hostPartitions)
+                    {
+                        relationCluster.RemoveObject(hostPartition.GetType(), hostPartition.Guid);
+                    }
+                }
+            }
+
             Guid guid = relationCluster.GetGuid(jSAMObject);
             if(guid == Guid.Empty)
             {
@@ -802,10 +937,12 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<IOpening> result = new List<IOpening>();
+            List<IOpening> openings = null;
+
+            List <IOpening> result = new List<IOpening>();
             foreach(IHostPartition hostPartition in hostPartitions)
             {
-                List<IOpening> openings = hostPartition.Openings;
+                openings = hostPartition.Openings;
                 if(openings == null || openings.Count == 0)
                 {
                     continue;
@@ -824,6 +961,12 @@ namespace SAM.Analytical
                         result.Add(opening);
                     }
                 }
+            }
+
+            openings = GetObjects<IOpening>();
+            if (openings != null && openings.Count > 0)
+            {
+                result.AddRange(openings);
             }
 
             return result;
@@ -849,6 +992,12 @@ namespace SAM.Analytical
                 dictionary[space.Guid] = internalCondition;
             }
 
+            List<InternalCondition> internalConditions = GetObjects<InternalCondition>();
+            if(internalConditions != null && internalConditions.Count > 0)
+            {
+                internalConditions.ForEach(x => dictionary[x.Guid] = x);
+            }
+
             return dictionary.Values.ToList();
         }
 
@@ -863,6 +1012,11 @@ namespace SAM.Analytical
                 relationCluster = new RelationCluster();
 
             IPartition partition_Temp = partition.Clone();
+            if(!relationCluster.AddObject(partition_Temp))
+            {
+                return false;
+            }
+
             if(partition_Temp is IHostPartition)
             {
                 IHostPartition hostPartition = (IHostPartition)partition_Temp;
@@ -906,12 +1060,12 @@ namespace SAM.Analytical
                             hostPartition.AddOpening(opening);
                         }
 
-                        relationCluster.AddRelation(opening, openingType_Temp);
+                        relationCluster.AddRelation(partition_Temp, openingType_Temp);
                     }
                 }
             }
 
-            return relationCluster.AddObject(partition_Temp);
+            return true;
         }
 
         public bool Add(Space space, IEnumerable<IPartition> partitions = null)
@@ -1028,6 +1182,8 @@ namespace SAM.Analytical
                 }
             }
 
+            opening = opening.Clone();
+
             OpeningType openingType = opening.Type();
             if(openingType != null)
             {
@@ -1051,12 +1207,14 @@ namespace SAM.Analytical
             if(hostPartitions_Opening == null || hostPartitions_Opening.Count == 0)
             {
                 relationCluster.AddObject(opening);
+                relationCluster.AddRelation(opening, openingType);
                 return true;
             }
 
             if(hostPartition_Opening != null)
             {
                 hostPartition_Opening.RemoveOpening(opening.Guid);
+                relationCluster.RemoveRelation(hostPartition_Opening, openingType);
             }
 
             if(hostPartitions_Opening.Count > 0 )
@@ -1068,7 +1226,13 @@ namespace SAM.Analytical
                 }
             }
 
-            return hostPartitions_Opening[0].AddOpening(opening, tolerance);
+            if(hostPartitions_Opening[0].AddOpening(opening, tolerance))
+            {
+                relationCluster.AddRelation(hostPartitions_Opening[0], openingType);
+                return true;
+            }
+
+            return false;
         }
 
         public bool Add(Zone zone, IEnumerable<Space> spaces = null)
@@ -1107,6 +1271,116 @@ namespace SAM.Analytical
 
             return result;
 
+        }
+
+        public bool Add(InternalCondition internalCondition)
+        {
+            if(internalCondition == null)
+            {
+                return false;
+            }
+
+            InternalCondition internalCondition_Temp = new InternalCondition(internalCondition);
+
+            bool exists = false;
+            List<Space> spaces = relationCluster?.GetObjects<Space>();
+            if(spaces != null && spaces.Count != 0)
+            {
+                foreach(Space space in spaces)
+                {
+                    InternalCondition internalCondition_Space = space?.InternalCondition;
+                    if(internalCondition_Space == null)
+                    {
+                        continue;
+                    }
+
+                    if(internalCondition_Temp.Guid == internalCondition_Space.Guid)
+                    {
+                        space.InternalCondition = internalCondition_Temp;
+                        exists = true;
+                    }
+                }
+            }
+
+            if(exists)
+            {
+                return true;
+            }
+
+            return relationCluster.AddObject(internalCondition_Temp);
+        }
+
+        public bool Add(HostPartitionType hostPartitionType)
+        {
+            if(hostPartitionType != null)
+            {
+                return false;
+            }
+
+            HostPartitionType hostPartitionType_Temp = hostPartitionType.Clone();
+
+            if(relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            relationCluster.AddObject(hostPartitionType_Temp);
+
+            List<IHostPartition> hostPartitions = relationCluster.GetRelatedObjects<IHostPartition>(hostPartitionType_Temp);
+            if(hostPartitions != null)
+            {
+                foreach(IHostPartition hostPartition in hostPartitions)
+                {
+                    hostPartition.Type(hostPartitionType_Temp);
+                }
+            }
+
+            return true;
+        }
+
+        public bool Add(OpeningType openingType)
+        {
+            if (openingType != null)
+            {
+                return false;
+            }
+
+            OpeningType openingType_Temp = openingType.Clone();
+
+            if (relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            relationCluster.AddObject(openingType_Temp);
+
+            List<IHostPartition> hostPartitions = relationCluster.GetRelatedObjects<IHostPartition>(openingType_Temp);
+            if (hostPartitions != null)
+            {
+                foreach (IHostPartition hostPartition in hostPartitions)
+                {
+                    List<IOpening> openings = hostPartition?.Openings;
+                    if(openings != null && openings.Count != 0)
+                    {
+                        foreach(IOpening opening in openings)
+                        {
+                            OpeningType openingType_Opening = opening?.Type();
+                            if(openingType_Opening == null)
+                            {
+                                continue;
+                            }
+
+                            if(openingType_Opening.Guid == openingType_Temp.Guid)
+                            {
+                                opening.Type(openingType_Temp);
+                                hostPartition.AddOpening(opening);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         public bool Contains(ISAMObject sAMObject)
