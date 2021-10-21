@@ -318,6 +318,54 @@ namespace SAM.Analytical
             return materialLibrary.GetObject<IMaterial>(name)?.Clone();
         }
 
+        public T GetMaterial<T>(string name) where T: IMaterial
+        {
+            IMaterial material = GetMaterial(name);
+            if(material == null)
+            {
+                return default;
+            }
+
+            if(material is T)
+            {
+                return (T)material;
+            }
+
+            return default;
+        }
+
+        public Zone GetZone(string name, ZoneType zoneType)
+        {
+            if(string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
+            List<Zone> zones = relationCluster?.GetObjects<Zone>();
+            if(zones == null || zones.Count == 0)
+            {
+                return null;
+            }
+
+            string zoneTypeText = zoneType.Text();
+
+            foreach (Zone zone in zones)
+            {
+                if (!zone.TryGetValue(ZoneParameter.ZoneCategory, out string zoneCategory))
+                    continue;
+
+                if (zoneTypeText.Equals(zoneCategory))
+                    return zone.Clone();
+            }
+
+            return null;
+        }
+
+        public List<Zone> GetZones()
+        {
+            return GetObjects<Zone>();
+        }
+
         public Profile GetProfile(ProfileType profileType, string name, bool includeProfileGroup = false)
         {
             if(profileLibrary == null)
@@ -348,6 +396,16 @@ namespace SAM.Analytical
             return materialLibrary.GetObject<IMaterial>(name) != null;
         }
 
+        public bool HasMaterial(HostPartitionType hostPartitionType, MaterialType materialType)
+        {
+            if(hostPartitionType == null || materialLibrary == null)
+            {
+                return false;
+            }
+
+            return Query.HasMaterial(hostPartitionType, materialLibrary, materialType);
+        }
+
         public IMaterial GetMaterial(MaterialLayer materialLayer)
         {
             if(materialLayer == null || materialLibrary == null)
@@ -356,6 +414,22 @@ namespace SAM.Analytical
             }
 
             return materialLayer.Material(materialLibrary)?.Clone();
+        }
+
+        public T GetMaterial<T>(MaterialLayer materialLayer) where T: IMaterial
+        {
+            IMaterial material = GetMaterial(materialLayer);
+            if(material == null)
+            {
+                return default;
+            }
+
+            if(material is T)
+            {
+                return (T)material;
+            }
+
+            return default;
         }
 
         public List<IMaterial> GetMaterials(HostPartitionType hostPartitionType)
@@ -391,6 +465,11 @@ namespace SAM.Analytical
             //}
 
             //return dictionary.Values.ToList();
+        }
+
+        public List<HostPartitionType> GetHostPartitionTypes()
+        {
+            return GetObjects<HostPartitionType>();
         }
 
         public List<T> GetOpeningTypes<T>() where T: OpeningType
@@ -441,7 +520,28 @@ namespace SAM.Analytical
 
             return GetMaterialType(hostPartition.Type());
         }
-        
+
+        public MaterialType GetMaterialType(MaterialLayer materialLayer)
+        {
+            if(materialLayer == null || materialLibrary == null)
+            {
+                return MaterialType.Undefined;
+            }
+
+            IMaterial material = GetMaterial(materialLayer);
+            if(material == null)
+            {
+                return MaterialType.Undefined;
+            }
+
+            return material.MaterialType();
+        }
+
+        public MaterialType GetMaterialType(IEnumerable<MaterialLayer> materialLayers)
+        {
+            return Architectural.Query.MaterialType(materialLayers, materialLibrary);
+        }
+
         public List<Space> GetSpaces(IPartition partition)
         {
             return GetRelatedObjects<Space>(partition);
@@ -483,6 +583,31 @@ namespace SAM.Analytical
             }
 
             return terrain.Below(partition);
+        }
+
+        public bool ExposedToSun(IPartition partition)
+        {
+            if(partition == null)
+            {
+                return false;
+            }
+
+            if(!External(partition))
+            {
+                return false;
+            }
+
+            if(Underground(partition))
+            {
+                return false;
+            }
+
+            if(terrain.On(partition))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public List<Shell> GetShells()

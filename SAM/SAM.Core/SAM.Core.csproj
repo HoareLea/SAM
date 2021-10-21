@@ -167,6 +167,7 @@
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
     <Compile Include="Query\DefaultAddress.cs" />
+    <Compile Include="Query\MaterialType.cs" />
     <Compile Include="Query\TryGetObjects.cs" />
     <Compile Include="Query\Type.cs" />
     <Compile Include="Query\TryInvokeDeclaredMethod.cs" />

@@ -103,6 +103,7 @@
     <Compile Include="Create\New\Opening.cs" />
     <Compile Include="Create\New\Openings.cs" />
     <Compile Include="Create\New\Partitions.cs" />
+    <Compile Include="Create\New\Rectangle2D.cs" />
     <Compile Include="Create\New\Walls.cs" />
     <Compile Include="Create\Zone.cs" />
     <Compile Include="Create\SpaceSimulationResult.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="Modify\New\FixEdges.cs" />
     <Compile Include="Modify\New\TryAddOpening.cs" />
     <Compile Include="Modify\New\Type.cs" />
+    <Compile Include="Modify\New\UpdateHeatTransferCoefficients.cs" />
     <Compile Include="Modify\New\UpdateHostPartitionType.cs" />
     <Compile Include="Modify\New\UpdateMaterials.cs" />
     <Compile Include="Modify\New\UpdateNormals.cs" />
@@ -266,6 +268,7 @@
     <Compile Include="Query\New\Transparent.cs" />
     <Compile Include="Query\New\Triangulate.cs" />
     <Compile Include="Query\New\Type.cs" />
+    <Compile Include="Query\New\Width.cs" />
     <Compile Include="Query\Triangulate.cs" />
     <Compile Include="Query\Transparent.cs" />
     <Compile Include="Query\PanelsByFace3D.cs" />

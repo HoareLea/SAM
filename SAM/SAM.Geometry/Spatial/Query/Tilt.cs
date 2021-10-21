@@ -31,5 +31,18 @@
             
             return normal.Angle(Plane.WorldXY.Normal) * (180 / System.Math.PI);
         }
+
+        /// <summary>
+        /// Angle between normal taken from given geometry and XY Plane mesured in degrees 
+        /// </summary>
+        /// <param name="face3DObject">SAM Face3D Object</param>
+        /// <returns>Tilt in degrees</returns>
+        public static double Tilt(this IFace3DObject face3DObject)
+        {
+            if (face3DObject == null)
+                return double.NaN;
+
+            return Tilt(face3DObject.Face3D);
+        }
     }
 }
