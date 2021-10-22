@@ -50,7 +50,7 @@ namespace SAM.Analytical.Grasshopper
                 panelParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(panelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevation", NickName = "elevation", Description = "Elevation", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevations", NickName = "elevations", Description = "Elevations", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
@@ -95,34 +95,45 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_elevation");
-            GH_ObjectWrapper objectWrapper_Elevation = null;
-            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper_Elevation) || objectWrapper_Elevation == null)
+            index = Params.IndexOfInputParam("_elevations");
+            List<GH_ObjectWrapper> objectWrapper_Elevations = null;
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrapper_Elevations) || objectWrapper_Elevations == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
-            double elevation = double.NaN;
+            List<double> elevations = new List<double>();
+            foreach(GH_ObjectWrapper objectWrapper_Elevation in objectWrapper_Elevations)
+            {
+                double elevation = double.NaN;
 
-            object @object = objectWrapper_Elevation.Value;
-            if (@object is IGH_Goo)
-            {
-                @object = (@object as dynamic).Value;
-            }
+                object @object = objectWrapper_Elevation.Value;
+                if (@object is IGH_Goo)
+                {
+                    @object = (@object as dynamic).Value;
+                }
 
-            if (@object is double)
-            {
-                elevation = (double)@object;
-            }
-            else if (@object is string)
-            {
-                if (double.TryParse((string)@object, out double elevation_Temp))
-                    elevation = elevation_Temp;
-            }
-            else if (@object is Architectural.Level)
-            {
-                elevation = ((Architectural.Level)@object).Elevation;
+                if (@object is double)
+                {
+                    elevation = (double)@object;
+                }
+                else if (@object is string)
+                {
+                    if (double.TryParse((string)@object, out double elevation_Temp))
+                        elevation = elevation_Temp;
+                }
+                else if (@object is Architectural.Level)
+                {
+                    elevation = ((Architectural.Level)@object).Elevation;
+                }
+
+                if(double.IsNaN(elevation))
+                {
+                    continue;
+                }
+
+                elevations.Add(elevation);
             }
 
             index = Params.IndexOfInputParam("maxDistance_");
