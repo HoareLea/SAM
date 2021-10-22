@@ -34,6 +34,21 @@ namespace SAM.Analytical
 
         }
 
+        public HostPartition(Guid guid, HostPartition<T> hostPartition, Face3D face3D, double tolerance = Tolerance.Distance)
+            : base(guid, hostPartition, face3D)
+        {
+            List<IOpening> openings = hostPartition?.Openings;
+            if(openings != null)
+            {
+                Plane plane = face3D?.GetPlane();
+
+                if (plane != null && plane.Coplanar(hostPartition.Face3D?.GetPlane(), tolerance))
+                {
+                    openings.ForEach(x => AddOpening(x, tolerance));
+                }
+            }
+        }
+
         public List<IOpening> Openings
         {
             get
@@ -69,28 +84,79 @@ namespace SAM.Analytical
             return null;
         }
 
-        public bool AddOpening(IOpening opening, double tolerance = Tolerance.Distance)
+        public List<IOpening> AddOpening(IOpening opening, double tolerance = Tolerance.Distance)
         {
             if (opening == null)
-                return false;
+            {
+                return null;
+            }
 
-            if (!Query.IsValid(this, opening, tolerance))
-                return false;
+            Face3D face3D = Face3D;
+            if(face3D == null)
+            {
+                return null;
+            }
+
+            Plane plane = face3D.GetPlane();
+            if(plane == null)
+            {
+                return null;
+            }
+
+            Face3D face3D_Opening = opening.Face3D;
+            if (face3D == null)
+            {
+                return null;
+            }
+
+            Plane plane_Opening = face3D_Opening.GetPlane();
+            if (plane == null)
+            {
+                return null;
+            }
+
+            if(!plane.Coplanar(plane_Opening, tolerance))
+            {
+                return null;
+            }
+
+            Geometry.Planar.Face2D face2D = plane.Convert(face3D);
+            Geometry.Planar.Face2D face2D_Opening = plane.Convert(face3D_Opening);
+
+            List<Geometry.Planar.Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D, face2D_Opening, tolerance);
+            if(face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
+            {
+                return null;
+            }
+
+            List<Face3D> face3Ds_Intersection = face2Ds_Intersection.ConvertAll(x => plane.Convert(x));
 
             if (openings == null)
+            {
                 openings = new List<IOpening>();
+            }
 
             int index = openings.FindIndex(x => x.Guid == opening.Guid);
-            if(index == -1)
+            if(index != -1)
             {
-                openings.Add(opening);
-            }
-            else
-            {
-                openings[index] = opening;
+                openings.RemoveAt(index);
             }
 
-            return true;
+            List<IOpening> result = new List<IOpening>();
+            for(int i = 0; i < face3Ds_Intersection.Count; i++)
+            {
+                Guid guid = i == 0 ? opening.Guid : Guid.NewGuid();
+
+                IOpening opening_Intersection = Create.Opening(guid, opening, face3Ds_Intersection[i]);
+                if(opening_Intersection == null)
+                {
+                    continue;
+                }
+
+                result.Add(opening_Intersection);
+            }
+
+            return result;
         }
 
         public bool HasOpening(Guid guid)

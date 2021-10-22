@@ -33,6 +33,15 @@ namespace SAM.Analytical
             this.face3D = face3D;
         }
 
+        public BuildingElement(System.Guid guid, BuildingElement<T> buildingElement, Face3D face3D)
+            :base(guid, buildingElement)
+        {
+            if(face3D != null)
+            {
+                this.face3D = new Face3D(face3D);
+            }
+        }
+
         public Face3D Face3D
         {
             get

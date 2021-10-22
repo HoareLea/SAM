@@ -43,5 +43,25 @@ namespace SAM.Analytical
 
             return null;
         }
+
+        public static IOpening Opening(System.Guid guid, IOpening opening, Face3D face3D)
+        {
+            if (opening == null || face3D == null || !face3D.IsValid())
+            {
+                return null;
+            }
+
+            if (opening is Window)
+            {
+                return new Window(guid, (Window)opening, face3D);
+            }
+
+            if (opening is Door)
+            {
+                return new Door(guid, (Door)opening, face3D);
+            }
+
+            return null;
+        }
     }
 }

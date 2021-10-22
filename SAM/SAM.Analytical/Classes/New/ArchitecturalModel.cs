@@ -1260,7 +1260,8 @@ namespace SAM.Analytical
                 }
             }
 
-            if(hostPartitions_Opening[0].AddOpening(opening, tolerance))
+            List<IOpening> openings_Add = hostPartitions_Opening[0].AddOpening(opening, tolerance);
+            if (openings_Add != null && openings_Add.Count != 0)
             {
                 relationCluster.AddRelation(hostPartitions_Opening[0], openingType);
                 return true;

@@ -24,7 +24,7 @@ namespace SAM.Core
         public SAMInstance(Guid guid, SAMInstance<T> instance)
             : base(guid, instance)
         {
-            this.type = instance.Type;
+            this.type = instance?.Type;
         }
 
         public SAMInstance(Guid guid, T type)

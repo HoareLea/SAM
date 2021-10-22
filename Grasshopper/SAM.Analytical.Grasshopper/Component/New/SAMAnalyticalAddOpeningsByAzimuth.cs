@@ -147,8 +147,7 @@ namespace SAM.Analytical.Grasshopper
                             continue;
 
                         IOpening opening = wall.AddOpening(openingType, ratio);
-
-                        if(wall.AddOpening(opening))
+                        if(opening != null)
                         {
                             openings.Add(opening);
                         }

@@ -30,6 +30,12 @@ namespace SAM.Analytical
 
         }
 
+        public Window(System.Guid guid, Window window, Face3D face3D)
+            : base(guid, window, face3D)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

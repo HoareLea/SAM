@@ -30,6 +30,12 @@ namespace SAM.Analytical
 
         }
 
+        public Wall(System.Guid guid, Wall wall, Face3D face3D, double tolerance = Core.Tolerance.Distance)
+            : base(guid, wall, face3D, tolerance)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

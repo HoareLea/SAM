@@ -8,7 +8,7 @@ namespace SAM.Analytical
     {
         List<IOpening> Openings { get; }
 
-        bool AddOpening(IOpening opening, double tolerance = Tolerance.Distance);
+        List<IOpening> AddOpening(IOpening opening, double tolerance = Tolerance.Distance);
 
         IOpening RemoveOpening(System.Guid guid);
 

@@ -30,6 +30,12 @@ namespace SAM.Analytical
 
         }
 
+        public Door(System.Guid guid, Door door, Face3D face3D)
+            : base(guid, door, face3D)
+        {
+
+        }
+
 
         public override bool FromJObject(JObject jObject)
         {
