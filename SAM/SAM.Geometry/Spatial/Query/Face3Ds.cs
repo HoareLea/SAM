@@ -53,9 +53,16 @@ namespace SAM.Geometry.Spatial
                 if (geometry3D is IClosedPlanar3D)
                 {
                     IClosedPlanar3D closedPlanar3D = (IClosedPlanar3D)geometry3D;
-                    Plane plane = closedPlanar3D.GetPlane();
-                    if (plane == null)
+                    if(closedPlanar3D.GetArea() < tolerance)
+                    {
                         continue;
+                    }
+
+                    Plane plane = closedPlanar3D.GetPlane();
+                    if (plane == null || !plane.IsValid())
+                    {
+                        continue;
+                    }
 
                     result.Add(new Face3D(closedPlanar3D));
                     continue;
