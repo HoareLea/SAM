@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -59,6 +59,10 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber.SetPersistentData(1.0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offset_", NickName = "offset_", Description = "Offset from elevation", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0.1);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Tolerance.Distance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
@@ -96,12 +100,20 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("_elevations");
-            List<GH_ObjectWrapper> objectWrapper_Elevations = null;
-            if (index == -1 || !dataAccess.GetDataList(index, objectWrapper_Elevations) || objectWrapper_Elevations == null)
+            List<GH_ObjectWrapper> objectWrapper_Elevations = new List<GH_ObjectWrapper>();
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrapper_Elevations) || objectWrapper_Elevations == null || objectWrapper_Elevations.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
+
+            index = Params.IndexOfInputParam("offset_");
+            double offset = 0.1;
+            if (index != -1)
+                dataAccess.GetData(index, ref offset);
+
+            if (double.IsNaN(offset))
+                offset = 0.1;
 
             List<double> elevations = new List<double>();
             foreach(GH_ObjectWrapper objectWrapper_Elevation in objectWrapper_Elevations)
@@ -133,7 +145,7 @@ namespace SAM.Analytical.Grasshopper
                     continue;
                 }
 
-                elevations.Add(elevation);
+                elevations.Add(elevation + offset);
             }
 
             index = Params.IndexOfInputParam("maxDistance_");
