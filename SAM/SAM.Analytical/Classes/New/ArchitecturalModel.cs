@@ -877,6 +877,11 @@ namespace SAM.Analytical
             return GetRelatedObjects<IPartition>(space);
         }
 
+        public List<T> GetPartitions<T>(Space space) where T : IPartition
+        {
+            return GetRelatedObjects<T>(space);
+        }
+
         public List<IPartition> GetPartitions(Zone zone)
         {
             if(zone == null || relationCluster == null)
@@ -944,7 +949,7 @@ namespace SAM.Analytical
             return GetObjects<IPartition>();
         }
 
-        public List<T> GetPartitions<T>() where T : IHostPartition
+        public List<T> GetPartitions<T>() where T : IPartition
         {
             return GetObjects<T>();
         }

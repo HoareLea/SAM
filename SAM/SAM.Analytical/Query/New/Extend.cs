@@ -115,17 +115,7 @@ namespace SAM.Analytical
             if (face3D == null)
                 return null;
 
-            IPartition result = null;
-            if(partition is AirPartition)
-            {
-                result = new AirPartition(partition.Guid, face3D);
-            }
-            else if(partition is IHostPartition)
-            {
-                result = Create.HostPartition(partition.Guid, face3D, ((IHostPartition)partition).Type());
-            }
-
-            return result;
+            return Create.Partition(partition, partition.Guid, face3D, tolerance);
         }
 
         public static List<IPartition> Extend(this IEnumerable<IPartition> partitions_ToBeExtended, IEnumerable<IPartition> partitions, double tolerance = Core.Tolerance.Distance)
@@ -281,17 +271,7 @@ namespace SAM.Analytical
 
             Face3D face3D = new Face3D(plane_Partition.Convert(polygon2D));
 
-            IPartition result = null;
-            if (partition is AirPartition)
-            {
-                result = new AirPartition(partition.Guid, face3D);
-            }
-            else if (partition is IHostPartition)
-            {
-                result = Create.HostPartition(partition.Guid, face3D, ((IHostPartition)partition).Type());
-            }
-
-            return result;
+            return Create.Partition(partition, partition.Guid, face3D, tolerance);
         }
     }
 }

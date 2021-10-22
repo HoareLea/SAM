@@ -35,16 +35,7 @@ namespace SAM.Analytical
                     guid = System.Guid.NewGuid();
                 }
 
-                IPartition partition_New = null;
-                if(partition is IHostPartition)
-                {
-                    partition_New = Create.HostPartition(guid, face3D, ((IHostPartition)partition).Type());
-                }
-                else
-                {
-                    partition_New = new AirPartition(guid, face3D);
-                }
-
+                IPartition partition_New = Create.Partition(partition, guid, face3D_Temp, tolerance);
                 if(partition_New is T)
                 {
                     result.Add((T)partition_New);

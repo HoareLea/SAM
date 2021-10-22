@@ -18,22 +18,9 @@ namespace SAM.Analytical
             List<IPartition> result = new List<IPartition>();
             for(int i=0; i < face3Ds.Count; i++)
             {
-                Face3D face3D_Temp = face3Ds[i];
+                System.Guid guid = i == 0 ? partition.Guid : System.Guid.NewGuid();
 
-                System.Guid guid = System.Guid.NewGuid();
-                if (i == 0)
-                    guid = partition.Guid;
-
-                IPartition partition_Temp = null;
-                if (partition is IHostPartition)
-                {
-                    partition_Temp = Create.HostPartition(guid, face3D_Temp, ((IHostPartition)partition).Type(), tolerance);
-                }
-                else
-                {
-                    partition_Temp = new AirPartition(guid, face3D_Temp);
-                }
-
+                IPartition partition_Temp = Create.Partition(partition, guid, face3Ds[i], tolerance);
                 if(partition_Temp == null)
                 {
                     continue;

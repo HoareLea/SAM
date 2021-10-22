@@ -522,38 +522,29 @@ namespace SAM.Analytical
                                     guid = Guid.NewGuid();
                                 }
 
-                                if(partition_New_Temp is AirPartition)
+                                partition_New = Partition(partition_New_Temp, guid, face3D, tolerance_Distance);
+                                if(partition_New == null)
                                 {
-                                    partition_New = new AirPartition(guid, face3D);
+                                    continue;
                                 }
-                                else
+
+                                if(partitions_New_Temp.Count > 1 && partition_New is IHostPartition)
                                 {
-                                    HostPartitionType hostPartitionType = (partition_New_Temp as IHostPartition)?.Type();
+                                    partitions_New_Temp.RemoveAt(0);
 
-                                    partition_New = HostPartition(guid, face3D, hostPartitionType, tolerance_Distance);
+                                    IHostPartition hostPartition_New = (IHostPartition)partition_New;
 
-                                    for (int j = 1; j < partitions_New_Temp.Count; j++)
+                                    foreach(IPartition partition in partitions_New_Temp)
                                     {
-                                        IHostPartition hostPartition = partitions_New_Temp[j] as IHostPartition;
-                                        if(hostPartition == null)
+                                        List<IOpening> openings = (partition as IHostPartition)?.Openings;
+                                        if(openings == null || openings.Count == 0)
                                         {
                                             continue;
                                         }
 
-                                        List<IOpening> openings = hostPartition.Openings;
-                                        if (openings == null)
-                                        {
-                                            continue;
-                                        }
-
-                                        foreach(IOpening opening in openings)
-                                        {
-                                            ((IHostPartition)partition_New).AddOpening(opening, tolerance_Distance);
-                                        }
+                                        openings.ForEach(x => hostPartition_New.AddOpening(x, tolerance_Distance));
                                     }
                                 }
-
-
                             }
                         }
                     }

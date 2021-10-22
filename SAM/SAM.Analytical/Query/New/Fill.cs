@@ -85,13 +85,11 @@ namespace SAM.Analytical
                 }
 
                 IPartition partition = tuples_Distance[0].Item1;
-                if(partition is IHostPartition)
+
+                IPartition partition_New = Create.Partition(partition, partition.Guid, face3D_Temp, tolerance_Distance);
+                if(partition_New != null)
                 {
-                    partition = Create.HostPartition(face3D, ((IHostPartition)partition).Type());
-                }
-                else
-                {
-                    partition = new AirPartition(partition.Guid, face3D_Temp);
+                    partition = partition_New;
                 }
 
                 if(partition == null)

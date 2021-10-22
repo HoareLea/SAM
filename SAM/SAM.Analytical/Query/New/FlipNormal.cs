@@ -5,7 +5,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static IPartition FlipNormal(this IPartition partition, bool includeOpenings, bool flipX = true)
+        public static IPartition FlipNormal(this IPartition partition, bool includeOpenings, bool flipX = true, double tolerance = SAM.Core.Tolerance.Distance)
         {
             Face3D face3D = partition?.Face3D;
             if(face3D == null)
@@ -26,19 +26,21 @@ namespace SAM.Analytical
                 throw new System.NotImplementedException();
             }
 
-            List<IOpening> openings = hostPartition.Openings;
-
-            hostPartition = Create.HostPartition(partition.Guid, face3D, hostPartition.Type());
-            if(openings != null)
+            hostPartition = Create.Partition(hostPartition, partition.Guid, face3D, tolerance);
+            if(includeOpenings)
             {
-                for(int i=0; i < openings.Count; i++)
+                List<IOpening> openings = hostPartition.Openings;
+                if (openings != null)
                 {
-                    if(includeOpenings)
+                    for (int i = 0; i < openings.Count; i++)
                     {
-                        openings[i] = openings[i].FlipNormal(flipX);
-                    }
+                        if (includeOpenings)
+                        {
+                            openings[i] = openings[i].FlipNormal(flipX);
+                        }
 
-                    hostPartition.AddOpening(openings[i]);
+                        hostPartition.AddOpening(openings[i]);
+                    }
                 }
             }
 

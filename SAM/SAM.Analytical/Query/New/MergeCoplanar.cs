@@ -148,31 +148,22 @@ namespace SAM.Analytical
                         guid = Guid.NewGuid();
                     }
 
-
-                    //Adding Openings from redundant Panels
-                    List<IOpening> openings = new List<IOpening>();
-                    foreach (IPartition partition_redundant in redundantPartitions)
+                    IPartition partition_New = Create.Partition(partition_Old, guid, face3D, tolerance);
+                    if(partition_New is IHostPartition)
                     {
-                        IHostPartition hostPartition = partition_redundant as IHostPartition;
-                        if (hostPartition == null)
-                            continue;
+                        //Adding Openings from redundant Panels
+                        foreach (IPartition partition_Redundant in tuples_Partition.ConvertAll(x => x.Item2))
+                        {
+                            IHostPartition hostPartition = partition_Redundant as IHostPartition;
+                            if (hostPartition == null)
+                                continue;
 
-                        List<IOpening> openings_Temp = hostPartition.Openings;
-                        if (openings_Temp == null || openings_Temp.Count == 0)
-                            continue;
+                            List<IOpening> openings = hostPartition.Openings;
+                            if (openings == null || openings.Count == 0)
+                                continue;
 
-                        openings.AddRange(openings_Temp);
-                    }
-
-                    IPartition partition_New = null;
-                    if(partition_Old is AirPartition)
-                    {
-                        partition_New = new AirPartition(guid, face3D);
-                    }
-                    else
-                    {
-                        HostPartitionType hostPartitionType_Old = (partition_Old as IHostPartition)?.Type();
-                        partition_New = Create.HostPartition(guid, face3D, hostPartitionType_Old, tolerance);
+                            openings.ForEach(x => ((IHostPartition)partition_New).AddOpening(x, tolerance));
+                        }
                     }
 
                     if(partition_New != null)

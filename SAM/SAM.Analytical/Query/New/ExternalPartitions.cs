@@ -113,14 +113,10 @@ namespace SAM.Analytical
 
                     Face3D face3D = Geometry.Spatial.Create.Face3D(plane_Bottom.Convert(segment2D), boundingBox3D.Max.Z - boundingBox3D.Min.Z);
 
-                    IPartition partition_New = null;
-                    if(partition is IHostPartition)
+                    IPartition partition_New = Create.Partition(partition, guid, face3D, tolerance_Distance);
+                    if(partition_New == null)
                     {
-                        partition_New = Create.HostPartition(face3D, ((IHostPartition)partition).Type());
-                    }
-                    else
-                    {
-                        partition_New = new AirPartition(face3D);
+                        continue;
                     }
 
                     partitions_Temp.Add(partition_New);
