@@ -154,7 +154,7 @@ namespace SAM.Analytical.Grasshopper
 
             panels = panels?.ConvertAll(x => Create.Panel(x));
 
-            Analytical.Modify.ExtendExternal(panels, elevation, maxDistance, out List<Panel> externalPanels_Old, out List<Panel> externalPanels_New, out List<Geometry.Spatial.Polygon3D> externalPolygon3Ds, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
+            Analytical.Modify.ExtendExternal(panels, elevations, maxDistance, out List<Panel> externalPanels_Old, out List<Panel> externalPanels_New, out List<Geometry.Spatial.Polygon3D> externalPolygon3Ds, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
 
             index = Params.IndexOfOutputParam("panels");
             if (index != -1)
