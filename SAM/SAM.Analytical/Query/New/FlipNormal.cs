@@ -29,7 +29,7 @@ namespace SAM.Analytical
             hostPartition = Create.Partition(hostPartition, partition.Guid, face3D, tolerance);
             if(includeOpenings)
             {
-                List<IOpening> openings = hostPartition.Openings;
+                List<IOpening> openings = hostPartition.GetOpenings();
                 if (openings != null)
                 {
                     for (int i = 0; i < openings.Count; i++)

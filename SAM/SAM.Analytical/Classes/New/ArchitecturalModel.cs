@@ -326,7 +326,7 @@ namespace SAM.Analytical
                         if(hostPartition.HasOpening(opening.Guid))
                         {
                             hostPartition.RemoveOpening(opening.Guid);
-                            List<IOpening> openings = hostPartition.Openings;
+                            List<IOpening> openings = hostPartition.GetOpenings();
                             if(openings == null || openings.Count == 0)
                             {
                                 relationCluster.RemoveRelation(hostPartition, opening.Type());
@@ -391,7 +391,7 @@ namespace SAM.Analytical
                 {
                     foreach(IHostPartition hostPartition in hostPartitions)
                     {
-                        List<IOpening> openings = hostPartition?.Openings;
+                        List<IOpening> openings = hostPartition?.GetOpenings();
                         if(openings != null && openings.Count != 0)
                         {
                             foreach(IOpening opening in openings)
@@ -954,6 +954,34 @@ namespace SAM.Analytical
             return GetObjects<T>();
         }
 
+        public List<T> GetOpenings<T>() where T : IOpening
+        {
+            List<IHostPartition> hostPartitions = relationCluster?.GetObjects<IHostPartition>();
+            if(hostPartitions == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach(IHostPartition hostPartition in hostPartitions)
+            {
+                List<T> openings = hostPartition.GetOpenings<T>();
+                if(openings == null || openings.Count == 0)
+                {
+                    continue;
+                }
+
+                openings.ForEach(x => result.Add(x.Clone()));
+            }
+
+           return result;
+        }
+
+        public List<IOpening> GetOpenings()
+        {
+            return GetOpenings<IOpening>();
+        }
+
         public List<IOpening> GetOpenings(OpeningType openingType)
         {
             if(relationCluster == null || openingType == null)
@@ -972,7 +1000,7 @@ namespace SAM.Analytical
             List <IOpening> result = new List<IOpening>();
             foreach(IHostPartition hostPartition in hostPartitions)
             {
-                openings = hostPartition.Openings;
+                openings = hostPartition.GetOpenings();
                 if(openings == null || openings.Count == 0)
                 {
                     continue;
@@ -1075,7 +1103,7 @@ namespace SAM.Analytical
                     relationCluster.AddRelation(partition_Temp, hostPartitionType_Temp);
                 }
 
-                List<IOpening> openings = hostPartition.Openings;
+                List<IOpening> openings = hostPartition.GetOpenings();
                 if(openings != null)
                 {
                     Dictionary<Guid, OpeningType> dictionary = new Dictionary<Guid, OpeningType>();
@@ -1200,7 +1228,7 @@ namespace SAM.Analytical
             {
                 foreach(IHostPartition hostPartition in hostPartitions)
                 {
-                    List<IOpening> openings = hostPartition.Openings;
+                    List<IOpening> openings = hostPartition.GetOpenings();
                     if(openings != null && openings.Count != 0)
                     {
                         if(openings.Find(x => x.Guid == opening.Guid) != null)
@@ -1399,7 +1427,7 @@ namespace SAM.Analytical
             {
                 foreach (IHostPartition hostPartition in hostPartitions)
                 {
-                    List<IOpening> openings = hostPartition?.Openings;
+                    List<IOpening> openings = hostPartition?.GetOpenings();
                     if(openings != null && openings.Count != 0)
                     {
                         foreach(IOpening opening in openings)

@@ -37,7 +37,7 @@ namespace SAM.Analytical
         public HostPartition(Guid guid, HostPartition<T> hostPartition, Face3D face3D, double tolerance = Tolerance.Distance)
             : base(guid, hostPartition, face3D)
         {
-            List<IOpening> openings = hostPartition?.Openings;
+            List<IOpening> openings = hostPartition?.GetOpenings();
             if(openings != null)
             {
                 Plane plane = face3D?.GetPlane();
@@ -49,15 +49,28 @@ namespace SAM.Analytical
             }
         }
 
-        public List<IOpening> Openings
+        public List<IOpening> GetOpenings()
         {
-            get
-            {
-                if (openings == null)
-                    return null;
+            return openings?.ConvertAll(x => Core.Query.Clone(x));
+        }
 
-                return openings.ConvertAll(x => Core.Query.Clone(x));
+        public List<T> GetOpenings<T>() where T : IOpening
+        {
+            if(openings == null)
+            {
+                return null;
             }
+
+            List<T> result = new List<T>();
+            foreach(IOpening opening in openings)
+            {
+                if(opening is T)
+                {
+                    result.Add((T)opening.Clone());
+                }
+            }
+
+            return result;
         }
 
         public IOpening RemoveOpening(Guid guid)
@@ -204,6 +217,5 @@ namespace SAM.Analytical
                 }
             }
         }
-
     }
 }

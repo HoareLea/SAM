@@ -536,7 +536,7 @@ namespace SAM.Analytical
 
                                     foreach(IPartition partition in partitions_New_Temp)
                                     {
-                                        List<IOpening> openings = (partition as IHostPartition)?.Openings;
+                                        List<IOpening> openings = (partition as IHostPartition)?.GetOpenings();
                                         if(openings == null || openings.Count == 0)
                                         {
                                             continue;

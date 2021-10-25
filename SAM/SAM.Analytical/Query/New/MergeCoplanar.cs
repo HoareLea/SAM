@@ -158,7 +158,7 @@ namespace SAM.Analytical
                             if (hostPartition == null)
                                 continue;
 
-                            List<IOpening> openings = hostPartition.Openings;
+                            List<IOpening> openings = hostPartition.GetOpenings();
                             if (openings == null || openings.Count == 0)
                                 continue;
 
