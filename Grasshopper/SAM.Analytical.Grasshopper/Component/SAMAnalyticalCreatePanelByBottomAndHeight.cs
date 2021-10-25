@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -53,6 +53,9 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].Optional = true;
 
             inputParamManager.AddNumberParameter("_height", "_height", "Panel Height", GH_ParamAccess.item);
+
+            index = inputParamManager.AddNumberParameter("_minElevation", "_minElevation", "Min Elevation", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
         }
 
         /// <summary>
@@ -106,6 +109,17 @@ namespace SAM.Analytical.Grasshopper
 
             Construction construction = null;
             dataAccess.GetData(2, ref construction);
+
+            double minElevation = double.NaN;
+            if(dataAccess.GetData(4, ref minElevation))
+            {
+                for(int i =0; i < segmentable3Ds.Count; i++)
+                {
+                    BoundingBox3D boundingBox3D = segmentable3Ds[i].GetBoundingBox();
+
+                    segmentable3Ds[i] = segmentable3Ds[i].GetMoved(new Vector3D(0, 0, minElevation - boundingBox3D.Min.Z)) as ISegmentable3D;
+                }
+            }
 
             List<Panel> panels = Create.Panels(segmentable3Ds, height, panelType, construction);
 
