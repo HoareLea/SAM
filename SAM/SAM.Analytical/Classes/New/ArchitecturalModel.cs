@@ -707,6 +707,31 @@ namespace SAM.Analytical
             return GetObjects<Space>();
         }
 
+        public bool Transparent(IPartition partition)
+        {
+            if (partition == null || materialLibrary == null)
+            {
+                return false;
+            }
+
+            if (partition is AirPartition)
+            {
+                return true;
+            }
+
+            if (partition is IHostPartition)
+            {
+                return Query.Transparent(((IHostPartition)partition).Type(), materialLibrary);
+            }
+
+            return false;
+        }
+
+        public List<IPartition> GetTransparentPartitions()
+        {
+            return GetObjects((IPartition partition) => Transparent(partition));
+        }
+
         public bool Internal(IPartition partition)
         {
             List<Space> spaces = relationCluster?.GetRelatedObjects<Space>(partition);
