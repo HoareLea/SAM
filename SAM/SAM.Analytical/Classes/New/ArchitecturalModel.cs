@@ -713,6 +713,17 @@ namespace SAM.Analytical
             return spaces != null && spaces.Count > 1;
         }
 
+        public bool Internal(IOpening opening)
+        {
+            IHostPartition hostPartition = GetHostPartition<IHostPartition>(opening);
+            if (hostPartition == null)
+            {
+                return false;
+            }
+
+            return Internal(hostPartition);
+        }
+
         public List<IPartition> GetInternalPartitions()
         {
             return GetObjects((IPartition partition) => Internal(partition));
@@ -724,6 +735,17 @@ namespace SAM.Analytical
             return spaces != null && spaces.Count == 1;
         }
 
+        public bool External(IOpening opening)
+        {
+            IHostPartition hostPartition = GetHostPartition<IHostPartition>(opening);
+            if(hostPartition == null)
+            {
+                return false;
+            }
+
+            return External(hostPartition);
+        }
+
         public List<IPartition> GetExternalPartitions()
         {
             return GetObjects((IPartition partition) => External(partition));
@@ -733,6 +755,17 @@ namespace SAM.Analytical
         {
             List<Space> spaces = relationCluster?.GetRelatedObjects<Space>(partition);
             return spaces == null || spaces.Count == 0;
+        }
+
+        public bool Shade(IOpening opening)
+        {
+            IHostPartition hostPartition = GetHostPartition<IHostPartition>(opening);
+            if (hostPartition == null)
+            {
+                return false;
+            }
+
+            return Shade(hostPartition);
         }
 
         public List<IPartition> GetShadePartitions()
@@ -748,6 +781,17 @@ namespace SAM.Analytical
             }
 
             return terrain.Below(partition);
+        }
+
+        public bool Underground(IOpening opening)
+        {
+            IHostPartition hostPartition = GetHostPartition<IHostPartition>(opening);
+            if (hostPartition == null)
+            {
+                return false;
+            }
+
+            return Underground(hostPartition);
         }
 
         public List<IPartition> GetUndergroundPartitions()
@@ -778,6 +822,17 @@ namespace SAM.Analytical
             }
 
             return true;
+        }
+
+        public bool ExposedToSun(IOpening opening)
+        {
+            IHostPartition hostPartition = GetHostPartition<IHostPartition>(opening);
+            if (hostPartition == null)
+            {
+                return false;
+            }
+
+            return ExposedToSun(hostPartition);
         }
 
         public List<IPartition> GetExposedToSunPartitions()
@@ -921,6 +976,51 @@ namespace SAM.Analytical
         public List<IHostPartition> GetHostPartitions(HostPartitionType hostPartitionType)
         {
             return GetRelatedObjects<IHostPartition>(hostPartitionType);
+        }
+
+        public T GetHostPartition<T>(IOpening opening) where T: IHostPartition
+        {
+            if (opening == null || relationCluster == null)
+            {
+                return default;
+            }
+
+            Func<T, bool> function = new Func<T, bool>((T hostPartition) =>
+            {
+                List<IOpening> openings = hostPartition?.GetOpenings();
+                if(openings == null || openings.Count == 0)
+                {
+                    return false;
+                }
+
+                foreach(IOpening opening_Temp in openings)
+                {
+                    if(opening_Temp == null)
+                    {
+                        continue;
+                    }
+
+                    if(opening_Temp.Guid == opening.Guid)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+
+            T result = relationCluster.GetObject(function);
+            if(result == null)
+            {
+                return default;
+            }
+
+            return result.Clone();
+        }
+
+        public IHostPartition GetHostPartition(IOpening opening)
+        {
+            return GetHostPartition<IHostPartition>(opening);
         }
 
         public List<T> GetPartitions<T>(Zone zone) where T: IPartition

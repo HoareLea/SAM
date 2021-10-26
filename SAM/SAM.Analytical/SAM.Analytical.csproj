@@ -186,6 +186,7 @@
     <Compile Include="Modify\New\AddOpenings.cs" />
     <Compile Include="Modify\New\MergeCoplanarPartitionsBySpace.cs" />
     <Compile Include="Modify\New\FixEdges.cs" />
+    <Compile Include="Modify\New\OffsetAperturesOnEdge.cs" />
     <Compile Include="Modify\OrientedPartitions.cs" />
     <Compile Include="Modify\New\SplitByInternalEdges.cs" />
     <Compile Include="Modify\New\TryAddOpening.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
     <Compile Include="Query\FixEdges.cs" />
+    <Compile Include="Query\New\Adiabatic.cs" />
     <Compile Include="Query\New\Azimuth.cs" />
     <Compile Include="Query\New\CalculatedArea.cs" />
     <Compile Include="Query\New\CalculatedExhaustAirflow.cs" />

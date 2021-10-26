@@ -599,6 +599,41 @@ namespace SAM.Core
             return result;
         }
 
+        public T GetObject<T>(params Func<T, bool>[] functions)
+        {
+            List<T> objects = null;
+
+            if (functions == null)
+            {
+                objects = GetObjects<T>();
+                if(objects == null || objects.Count == 0)
+                {
+                    return default;
+                }
+
+                return objects.FirstOrDefault();
+            }
+
+            objects = GetObjects<T>();
+            if (objects == null)
+            {
+                return default;
+            }
+
+            foreach(T @object in objects)
+            {
+                foreach (Func<T, bool> function in functions)
+                {
+                    if (function(@object))
+                    {
+                        return @object;
+                    }
+                }
+            }
+
+            return default;
+        }
+
         public object GetObject(Guid guid)
         {
             if (guid == Guid.Empty)
