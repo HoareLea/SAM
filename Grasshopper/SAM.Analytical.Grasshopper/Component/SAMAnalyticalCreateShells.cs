@@ -92,7 +92,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_panels");
             List<Panel> panels = new List<Panel>();
-            if (index == -1 || !dataAccess.GetDataList(index, panels) || panels == null || panels.Count == 0)
+            if (index == -1 || !dataAccess.GetDataList(index, panels) || panels == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
