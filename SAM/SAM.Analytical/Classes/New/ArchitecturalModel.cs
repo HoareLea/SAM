@@ -236,6 +236,22 @@ namespace SAM.Analytical
             return relationCluster?.GetObjects(functions)?.ConvertAll(x => Core.Query.Clone(x));
         }
 
+        public T GetObject<T>(Guid guid) where T : IJSAMObject
+        {
+            if(relationCluster == null)
+            {
+                return default;
+            }
+
+            T @object = relationCluster.GetObject<T>(guid);
+            if(@object == null)
+            {
+                return default;
+            }
+
+            return @object.Clone();
+        }
+
         public List<T> GetRelatedObjects<T>(IJSAMObject jSAMObject) where T: IJSAMObject
         {
             if(jSAMObject == null)
@@ -725,6 +741,16 @@ namespace SAM.Analytical
             }
 
             return false;
+        }
+
+        public bool Transparent(HostPartitionType hostPartitionType)
+        {
+            if (hostPartitionType == null || materialLibrary == null)
+            {
+                return false;
+            }
+
+            return Query.Transparent(hostPartitionType, materialLibrary);
         }
 
         public List<IPartition> GetTransparentPartitions()

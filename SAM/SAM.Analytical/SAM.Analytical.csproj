@@ -187,6 +187,7 @@
     <Compile Include="Modify\New\MergeCoplanarPartitionsBySpace.cs" />
     <Compile Include="Modify\New\FixEdges.cs" />
     <Compile Include="Modify\New\OffsetAperturesOnEdge.cs" />
+    <Compile Include="Modify\New\ReplaceTransparentPartitions.cs" />
     <Compile Include="Modify\OrientedPartitions.cs" />
     <Compile Include="Modify\New\SplitByInternalEdges.cs" />
     <Compile Include="Modify\New\TryAddOpening.cs" />

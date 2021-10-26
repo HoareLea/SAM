@@ -77,5 +77,10 @@ namespace SAM.Analytical
 
             return null;
         }
+
+        public static HostPartitionType DefaultHostPartitionType(this PartitionAnalyticalType partitionAnalyticalType)
+        {
+            return DefaultHostPartitionType<HostPartitionType>(partitionAnalyticalType);
+        }
     }
 }
