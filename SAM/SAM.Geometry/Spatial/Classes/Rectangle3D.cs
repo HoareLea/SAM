@@ -177,5 +177,15 @@ namespace SAM.Geometry.Spatial
         {
             return plane?.Convert(Planar.Query.Centroid(rectangle2D?.GetPoints()));
         }
+
+        public double GetLength()
+        {
+            if(rectangle2D == null)
+            {
+                return double.NaN;
+            }
+
+            return rectangle2D.GetLength();
+        }
     }
 }

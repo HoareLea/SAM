@@ -186,6 +186,11 @@ namespace SAM.Geometry.Spatial
             return plane?.Convert(Planar.Query.Centroid(points));
         }
 
+        public double GetLength()
+        {
+            return GetPerimiter();
+        }
+
         public static implicit operator Polygon3D(Rectangle3D rectangle3D)
         {
 
