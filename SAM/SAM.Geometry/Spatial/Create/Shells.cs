@@ -1094,14 +1094,15 @@ namespace SAM.Geometry.Spatial
             //return Geometry.Spatial.Create.Shells_Depreciated(face3Ds, snapTolerance, tolerance);
             return Shells_ByTopAndBottom(face3Ds_Temp, tolerance);
         }
-        
+
         /// <summary>
         /// Method creates Shells based on IFace3DObjects and given offset from level.
         /// </summary>
         /// <param name="face3Ds">Face3DObjects</param>
         /// <param name="offset">Offset from Level</param>
         /// <param name="snapTolerance">Snap Tolerance</param>
-        /// <param name="tolerance_Distance">Tolerance</param>
+        /// <param name="tolerance_Angle">Angle Tolerance</param>
+        /// <param name="tolerance_Distance">Distance Tolerance</param>
         /// <returns>List of Shells</returns>
         public static List<Shell> Shells_ByOffset(this IEnumerable<Face3D> face3Ds, double offset, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
