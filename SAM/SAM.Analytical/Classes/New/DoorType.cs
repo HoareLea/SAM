@@ -12,6 +12,12 @@ namespace SAM.Analytical
 
         }
 
+        public DoorType(DoorType doorType, string name)
+            : base(doorType, name)
+        {
+
+        }
+
         public DoorType(JObject jObject)
             : base(jObject)
         {

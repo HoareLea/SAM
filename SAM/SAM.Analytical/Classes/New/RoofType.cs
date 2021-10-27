@@ -31,6 +31,12 @@ namespace SAM.Analytical
 
         }
 
+        public RoofType(RoofType roofType, string name)
+            : base(roofType, name)
+        {
+
+        }
+
         public RoofType(string name, IEnumerable<MaterialLayer> materialLayers)
             : base(name, materialLayers)
         {

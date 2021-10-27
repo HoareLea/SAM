@@ -97,6 +97,7 @@
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
     <Compile Include="Create\New\ArchitecturalModel.cs" />
+    <Compile Include="Create\New\OpeningType.cs" />
     <Compile Include="Create\New\Partition.cs" />
     <Compile Include="Create\New\HostPartition.cs" />
     <Compile Include="Create\New\HostPartitions.cs" />
@@ -188,11 +189,12 @@
     <Compile Include="Modify\New\FixEdges.cs" />
     <Compile Include="Modify\New\OffsetAperturesOnEdge.cs" />
     <Compile Include="Modify\New\ReplaceTransparentPartitions.cs" />
+    <Compile Include="Modify\New\UpdateMaterialsByMaterialLayerThickness.cs" />
     <Compile Include="Modify\OrientedPartitions.cs" />
     <Compile Include="Modify\New\SplitByInternalEdges.cs" />
     <Compile Include="Modify\New\TryAddOpening.cs" />
     <Compile Include="Modify\New\Type.cs" />
-    <Compile Include="Modify\New\UpdateHeatTransferCoefficients.cs" />
+    <Compile Include="Modify\New\UpdateMaterialsByHeatTransferCoefficients.cs" />
     <Compile Include="Modify\New\UpdateHostPartitionType.cs" />
     <Compile Include="Modify\New\UpdateMaterials.cs" />
     <Compile Include="Modify\New\OrientPartitions.cs" />

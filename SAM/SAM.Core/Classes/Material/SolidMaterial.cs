@@ -24,6 +24,12 @@ namespace SAM.Core
 
         }
 
+        public SolidMaterial(string name, Guid guid, SolidMaterial solidMaterial, string displayName, string description)
+            : base(name, guid, solidMaterial, displayName, description)
+        {
+
+        }
+
         public SolidMaterial(Guid guid, string name)
             : base(guid, name)
         {

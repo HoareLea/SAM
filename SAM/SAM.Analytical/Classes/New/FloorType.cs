@@ -31,6 +31,12 @@ namespace SAM.Analytical
 
         }
 
+        public FloorType(FloorType floorType, string name)
+            : base(floorType, name)
+        {
+
+        }
+
         public FloorType(string name, IEnumerable<MaterialLayer> materialLayers)
             : base(name, materialLayers)
         {

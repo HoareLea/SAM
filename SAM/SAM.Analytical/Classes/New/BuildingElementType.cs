@@ -12,6 +12,12 @@ namespace SAM.Analytical
 
         }
 
+        public BuildingElementType(BuildingElementType buildingElementType, string name)
+            : base(buildingElementType, name)
+        {
+
+        }
+
         public BuildingElementType(JObject jObject)
             : base(jObject)
         {

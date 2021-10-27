@@ -13,6 +13,12 @@ namespace SAM.Analytical
 
         }
 
+        public WallType(WallType wallType, string name)
+            : base(wallType, name)
+        {
+
+        }
+
         public WallType(JObject jObject)
             : base(jObject)
         {

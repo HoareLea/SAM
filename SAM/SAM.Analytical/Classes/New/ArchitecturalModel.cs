@@ -633,6 +633,11 @@ namespace SAM.Analytical
             return GetObjects<HostPartitionType>();
         }
 
+        public List<T> GetHostPartitionTypes<T>(string name, TextComparisonType textComparisonType = TextComparisonType.Equals) where T : HostPartitionType
+        {
+            return GetObjects((T hostPartitionType) => !string.IsNullOrWhiteSpace(hostPartitionType?.Name) && Core.Query.Compare(name, hostPartitionType?.Name, textComparisonType));
+        }
+
         public List<T> GetOpeningTypes<T>() where T: OpeningType
         {
             return GetObjects<T>();
@@ -665,6 +670,11 @@ namespace SAM.Analytical
             //}
 
             //return dictionary.Values.ToList();
+        }
+
+        public List<T> GetOpeningTypes<T>(string name, TextComparisonType textComparisonType = TextComparisonType.Equals) where T : OpeningType
+        {
+            return GetObjects((T openingType) => !string.IsNullOrWhiteSpace(openingType?.Name) && Core.Query.Compare(name, openingType?.Name, textComparisonType));
         }
 
         public List<OpeningType> GetOpeningTypes()

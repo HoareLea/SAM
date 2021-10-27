@@ -16,6 +16,12 @@ namespace SAM.Analytical
 
         }
 
+        public OpeningType(OpeningType openingType, string name)
+            : base(openingType, name)
+        {
+
+        }
+
         public OpeningType(JObject jObject)
             : base(jObject)
         {
@@ -77,6 +83,16 @@ namespace SAM.Analytical
 
                 return frameMaterialLayers.ConvertAll(x => new MaterialLayer(x));
             }
+
+            set
+            {
+                if (value == null)
+                {
+                    return;
+                }
+
+                frameMaterialLayers = value?.ConvertAll(x => new MaterialLayer(x));
+            }
         }
 
         public List<MaterialLayer> PaneMaterialLayers
@@ -89,6 +105,16 @@ namespace SAM.Analytical
                 }
 
                 return paneMaterialLayers.ConvertAll(x => new MaterialLayer(x));
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    return;
+                }
+
+                paneMaterialLayers = value?.ConvertAll(x => new MaterialLayer(x));
             }
         }
 

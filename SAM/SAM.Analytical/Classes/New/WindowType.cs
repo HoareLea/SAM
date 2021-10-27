@@ -12,6 +12,12 @@ namespace SAM.Analytical
 
         }
 
+        public WindowType(WindowType windowType, string name)
+            : base(windowType, name)
+        {
+
+        }
+
         public WindowType(JObject jObject)
             : base(jObject)
         {

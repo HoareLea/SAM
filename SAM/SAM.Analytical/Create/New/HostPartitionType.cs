@@ -27,5 +27,30 @@ namespace SAM.Analytical
 
             return null;
         }
+
+        public static HostPartitionType HostPartitionType(this HostPartitionType hostPartitionType, string name)
+        {
+            if (hostPartitionType == null || name == null)
+            {
+                return null;
+            }
+
+            if(hostPartitionType is WallType)
+            {
+                return new WallType((WallType)hostPartitionType, name);
+            }
+
+            if (hostPartitionType is RoofType)
+            {
+                return new RoofType((RoofType)hostPartitionType, name);
+            }
+
+            if (hostPartitionType is FloorType)
+            {
+                return new FloorType((FloorType)hostPartitionType, name);
+            }
+
+            return null;
+        }
     }
 }
