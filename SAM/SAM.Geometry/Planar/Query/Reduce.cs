@@ -24,8 +24,14 @@ namespace SAM.Geometry.Planar
             if (polygon2D == null)
                 return null;
 
-            List<Point2D> point2Ds = Reduce(polygon2D.GetPoints(), minDistance);
-            if (point2Ds == null || point2Ds.Count == 0)
+            List<Point2D> point2Ds = polygon2D.GetPoints();
+            if(point2Ds.Count <= 3)
+            {
+                return new Polygon2D(polygon2D);
+            }
+
+            point2Ds = Reduce(point2Ds, minDistance);
+            if (point2Ds == null || point2Ds.Count < 3)
             {
                 return new Polygon2D(polygon2D);
             }
@@ -63,7 +69,6 @@ namespace SAM.Geometry.Planar
                 return Reduce((Polygon2D)closed2D, minDistance);
             }
             
-
             if(closed2D is Face2D)
             {
                 return Reduce((Face2D)closed2D, minDistance);
