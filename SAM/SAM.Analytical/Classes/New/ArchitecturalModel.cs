@@ -537,6 +537,22 @@ namespace SAM.Analytical
             return GetProfile(space?.InternalCondition, profileType, includeProfileGroup);
         }
 
+        public Dictionary<ProfileType, Profile> GetProfileDictionary(Space space)
+        {
+            if(profileLibrary == null)
+            {
+                return null;
+            }
+
+            InternalCondition internalCondition = space?.InternalCondition;
+            if(internalCondition == null)
+            {
+                return null;
+            }
+
+            return internalCondition.GetProfileDictionary(profileLibrary);
+        }
+
         public bool HasMaterial(string name)
         {
             if (materialLibrary == null || string.IsNullOrEmpty(name))

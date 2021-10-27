@@ -251,6 +251,16 @@ namespace SAM.Analytical
             }
         }
 
+        public static void UpdateMaterialsByMaterialLayerThickness(this ArchitecturalModel architecturalModel, double tolerance = Tolerance.MacroDistance)
+        {
+            if(architecturalModel == null)
+            {
+                return;
+            }
+
+            UpdateMaterialsByMaterialLayerThickness(architecturalModel, out List<HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes, tolerance);
+        }
+
         private static string GetMaterialName(string name, double thickness, double tolerance = Tolerance.MacroDistance)
         {
             if (double.IsNaN(thickness) || string.IsNullOrEmpty(name))

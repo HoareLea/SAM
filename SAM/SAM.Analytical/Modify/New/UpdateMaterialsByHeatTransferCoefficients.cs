@@ -12,6 +12,16 @@ namespace SAM.Analytical
             UpdateMaterialsByHeatTransferCoefficients_OpeningTypes(architecturalModel, duplicateOpeningTypes, out openingTypes);
         }
 
+        public static void UpdateMaterialsByHeatTransferCoefficients(this ArchitecturalModel architecturalModel, bool duplicateHostPartitionTypes, bool duplicateOpeningTypes, double tolerance = Tolerance.MacroDistance)
+        {
+            if (architecturalModel == null)
+            {
+                return;
+            }
+
+            UpdateMaterialsByHeatTransferCoefficients(architecturalModel, duplicateHostPartitionTypes, duplicateOpeningTypes, out List <HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes);
+        }
+
         private static void UpdateMaterialsByHeatTransferCoefficients_HostPartitionTypes(this ArchitecturalModel architecturalModel, bool duplicateHostPartitionTypes, out List<HostPartitionType> hostPartitionTypes)
         {
             hostPartitionTypes = null;
