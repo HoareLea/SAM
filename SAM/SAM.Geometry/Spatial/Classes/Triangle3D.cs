@@ -167,6 +167,18 @@ namespace SAM.Geometry.Spatial
             return Query.Transform(this, transform3D);
         }
 
+        public double GetLength()
+        {
+            List<Segment3D> segment3Ds = GetSegments();
+            if(segment3Ds == null)
+            {
+                return double.NaN;
+            }
+
+            return segment3Ds.ConvertAll(x => x.GetLength()).Sum();
+
+        }
+
         public static bool operator ==(Triangle3D triangle3D_1, Triangle3D triangle3D_2)
         {
             if (ReferenceEquals(triangle3D_1, null) && ReferenceEquals(triangle3D_2, null))

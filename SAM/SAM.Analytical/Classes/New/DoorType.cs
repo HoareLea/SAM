@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Architectural;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -6,6 +8,12 @@ namespace SAM.Analytical
     {
         public DoorType(DoorType doorType)
             : base(doorType)
+        {
+
+        }
+
+        public DoorType(DoorType doorType, string name)
+            : base(doorType, name)
         {
 
         }
@@ -24,6 +32,12 @@ namespace SAM.Analytical
 
         public DoorType(System.Guid guid, string name)
             : base(guid, name)
+        {
+
+        }
+
+        public DoorType(string name, IEnumerable<MaterialLayer> paneMaterialLayers, IEnumerable<MaterialLayer> frameMaterialLayers = null)
+            : base(name, paneMaterialLayers, frameMaterialLayers)
         {
 
         }

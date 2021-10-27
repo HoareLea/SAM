@@ -10,18 +10,18 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<IPartition> MergeCoplanar(this IEnumerable<IPartition> partitions, double offset, bool validateConstruction = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<IPartition> MergeCoplanar(this IEnumerable<IPartition> partitions, double offset, bool validateHostPartitionType = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (partitions == null)
                 return null;
-            
-            List<IPartition> redundantPartitions = new List<IPartition>();
 
-            return MergeCoplanar(partitions?.ToList(), offset, ref redundantPartitions, validateConstruction, minArea, tolerance);
+            return MergeCoplanar(partitions?.ToList(), offset, out List<IPartition> redundantPartitions, validateHostPartitionType, minArea, tolerance);
         }
 
-        private static List<IPartition> MergeCoplanar(this List<IPartition> partitions, double offset, ref List<IPartition> redundantPartitions, bool validateHostPartitionType = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<IPartition> MergeCoplanar(this IEnumerable<IPartition> partitions, double offset, out List<IPartition> redundantPartitions, bool validateHostPartitionType = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
+            redundantPartitions = null;
+
             if (partitions == null)
                 return null;
 
@@ -31,6 +31,8 @@ namespace SAM.Analytical
 
             List<IPartition> result = new List<IPartition>(partitions);
             HashSet<Guid> guids = new HashSet<Guid>();
+
+            redundantPartitions = new List<IPartition>();
 
             while (partitions_Temp.Count > 0)
             {
@@ -127,7 +129,7 @@ namespace SAM.Analytical
 
                     IPartition partition_Old = tuples_Partition.First().Item2;
                     tuples_Partition.RemoveAt(0);
-                    redundantPartitions?.AddRange(tuples_Partition.ConvertAll(x => x.Item2));
+                    redundantPartitions.AddRange(tuples_Partition.ConvertAll(x => x.Item2));
 
                     if (partition_Old == null)
                         continue;
@@ -146,34 +148,22 @@ namespace SAM.Analytical
                         guid = Guid.NewGuid();
                     }
 
-
-                    //Adding Openings from redundant Panels
-                    List<IOpening> openings = new List<IOpening>();
-                    if (redundantPartitions != null && redundantPartitions.Count != 0)
+                    IPartition partition_New = Create.Partition(partition_Old, guid, face3D, tolerance);
+                    if(partition_New is IHostPartition)
                     {
-                        foreach (IPartition partition_redundant in redundantPartitions)
+                        //Adding Openings from redundant Panels
+                        foreach (IPartition partition_Redundant in tuples_Partition.ConvertAll(x => x.Item2))
                         {
-                            IHostPartition hostPartition = partition_redundant as IHostPartition;
+                            IHostPartition hostPartition = partition_Redundant as IHostPartition;
                             if (hostPartition == null)
                                 continue;
 
-                            List<IOpening> openings_Temp = hostPartition.Openings;
-                            if (openings_Temp == null || openings_Temp.Count == 0)
+                            List<IOpening> openings = hostPartition.GetOpenings();
+                            if (openings == null || openings.Count == 0)
                                 continue;
 
-                            openings.AddRange(openings_Temp);
+                            openings.ForEach(x => ((IHostPartition)partition_New).AddOpening(x, tolerance));
                         }
-                    }
-
-                    IPartition partition_New = null;
-                    if(partition_Old is AirPartition)
-                    {
-                        partition_New = new AirPartition(guid, face3D);
-                    }
-                    else
-                    {
-                        HostPartitionType hostPartitionType_Old = (partition_Old as IHostPartition)?.Type();
-                        partition_New = Create.HostPartition(guid, face3D, hostPartitionType_Old, tolerance);
                     }
 
                     if(partition_New != null)

@@ -49,9 +49,9 @@ namespace SAM.Core
         public SAMObject(Guid guid, SAMObject sAMObject)
         {
             this.guid = guid;
-            this.name = sAMObject.Name;
+            name = sAMObject?.Name;
 
-            if (sAMObject.parameterSets != null)
+            if (sAMObject?.parameterSets != null)
             {
                 this.parameterSets = new List<ParameterSet>();
                 foreach (ParameterSet parameterSet in sAMObject.parameterSets)

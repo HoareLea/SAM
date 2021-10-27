@@ -9,17 +9,20 @@ namespace SAM.Analytical
     {
         public static List<Panel> Panels(this List<ISAMGeometry3D> geometry3Ds, PanelType panelType = PanelType.Undefined, Construction construction = null, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            List<Face3D> faces = Geometry.Spatial.Query.Face3Ds(geometry3Ds, tolerance);
-            if (faces == null)
+            List<Face3D> face3Ds = Geometry.Spatial.Query.Face3Ds(geometry3Ds, tolerance);
+            if (face3Ds == null)
                 return null;
 
             List<Panel> result = new List<Panel>();
-            foreach (Face3D face in faces)
+            foreach (Face3D face3D in face3Ds)
             {
-                if (minArea != 0 && face.GetArea() < minArea)
+                if (face3D == null || !face3D.IsValid())
                     continue;
 
-                Panel panel = new Panel(construction, panelType, face);
+                if (minArea != 0 && face3D.GetArea() < minArea)
+                    continue;
+
+                Panel panel = new Panel(construction, panelType, face3D);
 
                 if (panelType == PanelType.Undefined)
                 {

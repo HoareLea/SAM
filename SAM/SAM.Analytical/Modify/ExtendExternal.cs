@@ -2,6 +2,7 @@
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using SAM.Geometry.Planar;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -258,6 +259,38 @@ namespace SAM.Analytical
                     }
                 }
             }
+        }
+    
+        public static void ExtendExternal(this List<Panel> panels, IEnumerable<double> elevations, double maxDistance, out List<Panel> externalPanels, out List<Panel> externalPanels_Extended, out List<Polygon3D> externalPolygon3Ds, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            externalPanels = null;
+            externalPanels_Extended = null;
+            externalPolygon3Ds = null;
+
+            if(panels == null || elevations == null)
+            {
+                return;
+            }
+
+            Dictionary<Guid, Panel> dictionary = new Dictionary<Guid, Panel>();
+            Dictionary<Guid, Panel> dictionary_Extended = new Dictionary<Guid, Panel>();
+            externalPolygon3Ds = new List<Polygon3D>();
+
+            foreach (double elevation in elevations)
+            {
+                ExtendExternal(panels, elevation, maxDistance, out List<Panel> externalPanels_Temp, out List<Panel> externalPanels_Extended_Temp, out List<Polygon3D> externalPolygon3Ds_Temp, snapTolerance, tolerance_Angle, tolerance_Distance);
+
+                externalPanels_Temp?.ForEach(x => dictionary[x.Guid] = x);
+                externalPanels_Extended_Temp?.ForEach(x => dictionary_Extended[x.Guid] = x);
+
+                if(externalPolygon3Ds_Temp != null)
+                {
+                    externalPolygon3Ds.AddRange(externalPolygon3Ds_Temp);
+                }
+            }
+
+            externalPanels = dictionary.Values.ToList();
+            externalPanels_Extended = dictionary_Extended.Values.ToList();
         }
     }
 }

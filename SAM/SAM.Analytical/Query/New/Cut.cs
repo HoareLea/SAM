@@ -7,7 +7,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<IPartition> Cut(this IPartition partition, double elevation, double tolerance = Tolerance.Distance)
+        public static List<T> Cut<T>(this T partition, double elevation, double tolerance = Tolerance.Distance) where T : IPartition
         {
             if (partition == null || double.IsNaN(elevation))
                 return null;
@@ -16,10 +16,10 @@ namespace SAM.Analytical
             if (plane == null)
                 return null;
 
-            return Cut(partition, plane, tolerance);
+            return Cut<T>(partition, plane, tolerance);
         }
         
-        public static List<IPartition> Cut(this IPartition partition, Plane plane, double tolerance = Tolerance.Distance)
+        public static List<T> Cut<T>(this T partition, Plane plane, double tolerance = Tolerance.Distance) where T : IPartition
         {
             if (plane == null)
                 return null;
@@ -28,7 +28,7 @@ namespace SAM.Analytical
             if (face3D == null)
                 return null;
 
-            List<IPartition> result = new List<IPartition>();
+            List<T> result = new List<T>();
             
             List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D, plane, tolerance);
             if (face3Ds == null || face3Ds.Count == 0)
@@ -37,48 +37,40 @@ namespace SAM.Analytical
                 return result;
             }
 
-            foreach(Face3D face3D_New in face3Ds)
+            for(int i =0; i < face3Ds.Count; i++)
             {
-                if (face3D_New == null)
+                System.Guid guid = i == 0 ? partition.Guid : System.Guid.NewGuid();
+                
+                T partition_New = Create.Partition(partition, guid, face3Ds[i], tolerance);
+                if(partition_New == null)
+                {
                     continue;
-
-                IPartition partition_New = null;
-                if(partition is IHostPartition)
-                {
-                    partition_New = Create.HostPartition(face3D_New, ((IHostPartition)partition).Type());
-                }
-                else
-                {
-                    partition_New = new AirPartition(face3D_New);
                 }
 
-                if(partition_New != null)
-                {
-                    result.Add(partition_New);
-                }
+                result.Add(partition_New);
             }
 
             return result;
         }
 
-        public static List<IPartition> Cut(this IPartition partition, IEnumerable<Plane> planes, double tolerance = Tolerance.Distance)
+        public static List<T> Cut<T>(this T partition, IEnumerable<Plane> planes, double tolerance = Tolerance.Distance) where T : IPartition
         {
             if (partition == null || planes == null)
                 return null;
 
-            List<IPartition> result = new List<IPartition>() { partition.Clone() };
+            List<T> result = new List<T>() { partition.Clone() };
 
             if (planes.Count() == 0)
                 return result;
 
             foreach (Plane plane in planes)
             {
-                Dictionary<System.Guid, IPartition> dictionary = new Dictionary<System.Guid, IPartition>();
-                foreach (IPartition partition_Temp in result)
+                Dictionary<System.Guid, T> dictionary = new Dictionary<System.Guid, T>();
+                foreach (T partition_Temp in result)
                 {
-                    List<IPartition> panels_Temp = Cut(partition_Temp, plane, tolerance);
-                    if (panels_Temp != null)
-                        panels_Temp.ForEach(x => dictionary[x.Guid] = x);
+                    List<T> partitions_Temp = Cut(partition_Temp, plane, tolerance);
+                    if (partitions_Temp != null)
+                        partitions_Temp.ForEach(x => dictionary[x.Guid] = x);
                 }
 
                 result = dictionary.Values.ToList();
@@ -87,7 +79,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<IPartition> Cut(this IPartition partition, IEnumerable<double> elevations, double tolerance = Tolerance.Distance)
+        public static List<T> Cut<T>(this T partition, IEnumerable<double> elevations, double tolerance = Tolerance.Distance) where T: IPartition
         {
             if (partition == null || elevations == null)
                 return null;
@@ -99,34 +91,34 @@ namespace SAM.Analytical
             return Cut(partition, planes, tolerance);
         }
 
-        public static List<IPartition> Cut(this ArchitecturalModel architecturalModel, Plane plane, IEnumerable<Space> spaces = null, double tolerance = Tolerance.Distance)
+        public static List<T> Cut<T>(this ArchitecturalModel architecturalModel, Plane plane, IEnumerable<Space> spaces = null, double tolerance = Tolerance.Distance) where T : IPartition
         {
             if (architecturalModel == null || plane == null)
             {
                 return null;
             }
 
-            List<IPartition> partitions = null;
+            List<T> partitions = null;
             if (spaces == null || spaces.Count() == 0)
             {
-                partitions = architecturalModel.GetPartitions();
+                partitions = architecturalModel.GetPartitions<T>();
             }
             else
             {
-                partitions = new List<IPartition>();
+                partitions = new List<T>();
                 foreach (Space space in spaces)
                 {
-                    List<IPartition> partitions_Room = architecturalModel.GetPartitions(space);
-                    if (partitions_Room == null || partitions_Room.Count == 0)
+                    List<T> partitions_Space = architecturalModel.GetPartitions<T>(space);
+                    if (partitions_Space == null || partitions_Space.Count == 0)
                     {
                         continue;
                     }
 
-                    foreach (IPartition partition_Room in partitions_Room)
+                    foreach (T partition_Space in partitions_Space)
                     {
-                        if (partitions.Find(x => x.Guid == partition_Room.Guid) == null)
+                        if (partitions.Find(x => x.Guid == partition_Space.Guid) == null)
                         {
-                            partitions.Add(partition_Room);
+                            partitions.Add(partition_Space);
                         }
                     }
                 }
@@ -137,16 +129,16 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<IPartition> result = new List<IPartition>();
-            foreach (IPartition partition in partitions)
+            List<T> result = new List<T>();
+            foreach (T partition in partitions)
             {
-                List<IPartition> partitions_Cut = partition.Cut(plane, tolerance);
+                List<T> partitions_Cut = partition.Cut(plane, tolerance);
                 if (partitions_Cut != null && partitions_Cut.Count > 1)
                 {
                     List<IJSAMObject> relatedObjects = architecturalModel.GetRelatedObjects(partition);
                     if (architecturalModel.RemoveObject(partition))
                     {
-                        foreach (IPartition partition_Cut in partitions_Cut)
+                        foreach (T partition_Cut in partitions_Cut)
                         {
                             architecturalModel.Add(partition_Cut);
                             relatedObjects?.ForEach(x => architecturalModel.AddRelation(partition_Cut, x));
@@ -158,6 +150,11 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+
+        public static List<IPartition> Cut(this ArchitecturalModel architecturalModel, Plane plane, IEnumerable<Space> spaces = null, double tolerance = Tolerance.Distance)
+        {
+            return Cut<IPartition>(architecturalModel, plane, spaces, tolerance);
         }
     }
 }

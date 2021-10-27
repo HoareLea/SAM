@@ -81,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
 
                 if (partition is IHostPartition)
                 {
-                    List<IOpening> openings = ((IHostPartition)partition).Openings;
+                    List<IOpening> openings = ((IHostPartition)partition).GetOpenings();
                     if (openings == null || openings.Count == 0)
                         continue;
 

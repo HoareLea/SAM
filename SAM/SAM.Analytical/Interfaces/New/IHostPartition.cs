@@ -6,8 +6,14 @@ namespace SAM.Analytical
 {
     public interface IHostPartition : IAnalyticalObject, ISAMObject, IFace3DObject, IPartition
     {
-        List<IOpening> Openings { get; }
+        List<T> GetOpenings<T>() where T : IOpening;
 
-        bool AddOpening(IOpening opening, double tolerance = Tolerance.Distance);
+        List<IOpening> GetOpenings();
+
+        List<IOpening> AddOpening(IOpening opening, double tolerance = Tolerance.Distance);
+
+        IOpening RemoveOpening(System.Guid guid);
+
+        bool HasOpening(System.Guid guid);
     }
 }

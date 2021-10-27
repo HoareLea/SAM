@@ -63,5 +63,30 @@ namespace SAM.Analytical
 
             return null;
         }
+
+        public static IHostPartition HostPartition(System.Guid guid, Face3D face3D, IHostPartition hostPartition, double tolerance = Core.Tolerance.Distance)
+        {
+            if (face3D == null || !face3D.IsValid() || hostPartition == null)
+            {
+                return null;
+            }
+
+            if (hostPartition is Wall)
+            {
+                return new Wall(guid, (Wall)hostPartition, face3D, tolerance);
+            }
+
+            if (hostPartition is Roof)
+            {
+                return new Roof(guid, (Roof)hostPartition, face3D, tolerance);
+            }
+
+            if (hostPartition is Floor)
+            {
+                return new Floor(guid, (Floor)hostPartition, face3D, tolerance);
+            }
+
+            return null;
+        }
     }
 }

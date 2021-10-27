@@ -9,5 +9,7 @@ namespace SAM.Geometry.Spatial
         List<Point3D> GetPoints();
 
         bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance);
+
+        double GetLength();
     }
 }

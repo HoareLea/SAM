@@ -30,6 +30,12 @@ namespace SAM.Analytical
 
         }
 
+        public Roof(System.Guid guid, Roof roof, Face3D face3D, double tolerance = Core.Tolerance.Distance)
+            : base(guid, roof, face3D, tolerance)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

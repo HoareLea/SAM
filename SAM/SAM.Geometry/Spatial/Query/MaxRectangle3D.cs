@@ -35,5 +35,16 @@
 
             return plane.Convert(rectangle2D);
         }
+
+        public static Rectangle3D MaxRectangle3D(this IFace3DObject face3DObject)
+        {
+            Face3D face3D = face3DObject?.Face3D;
+            if (face3D == null)
+            {
+                return null;
+            }
+
+            return MaxRectangle3D(face3D);
+        }
     }
 }

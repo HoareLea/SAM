@@ -141,12 +141,12 @@ namespace SAM.Analytical.Grasshopper
             List<SAMObject> sAMObjects_Result = new List<SAMObject>();
             if (insideOnly)
             {
-                sAMObjects_Result.AddRange(Analytical.Query.Inside(panels, shell, Tolerance.MacroDistance, tolerance));
+                sAMObjects_Result.AddRange(Geometry.Spatial.Query.Inside(shell, panels, Tolerance.MacroDistance, tolerance));
                 sAMObjects_Result.AddRange(Analytical.Query.Inside(spaces, shell, Tolerance.MacroDistance, tolerance));
             }
             else
             {
-                sAMObjects_Result.AddRange(Analytical.Query.InRange(panels, shell, tolerance));
+                sAMObjects_Result.AddRange(Geometry.Spatial.Query.InRange(shell, panels, tolerance));
                 sAMObjects_Result.AddRange(Analytical.Query.InRange(spaces, shell, tolerance));
             }
 

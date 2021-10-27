@@ -15,7 +15,7 @@ namespace SAM.Analytical
                 return result;
             }
 
-            List<IOpening> openings = hostPartition.Openings;
+            List<IOpening> openings = hostPartition.GetOpenings();
             if(openings == null || openings.Count == 0)
             {
                 return result;

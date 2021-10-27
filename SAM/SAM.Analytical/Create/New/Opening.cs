@@ -43,5 +43,44 @@ namespace SAM.Analytical
 
             return null;
         }
+
+        public static IOpening Opening(System.Guid guid, IOpening opening, Face3D face3D)
+        {
+            if (opening == null || face3D == null || !face3D.IsValid())
+            {
+                return null;
+            }
+
+            if (opening is Window)
+            {
+                return new Window(guid, (Window)opening, face3D);
+            }
+
+            if (opening is Door)
+            {
+                return new Door(guid, (Door)opening, face3D);
+            }
+
+            return null;
+        }
+
+        public static IOpening Opening(System.Guid guid, IOpening opening, Face3D face3D, Point3D location)
+        {
+            if(opening == null || face3D == null || location == null)
+            {
+                return null;
+            }
+
+            Plane plane = face3D.GetPlane();
+            plane = new Plane(plane, plane.Project(location));
+
+            Face3D face3D_Temp = plane.Convert(plane.Convert(face3D));
+            if(face3D_Temp == null)
+            {
+                return null;
+            }
+
+            return Opening(guid, opening, face3D);
+        }
     }
 }

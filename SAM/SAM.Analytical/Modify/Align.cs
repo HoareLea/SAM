@@ -192,7 +192,11 @@ namespace SAM.Analytical
 
                 Vector3D vector3D = Plane.WorldXY.Convert(new Vector2D(point2D_1, point2D_2));
 
-                 Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected = panel.IntersectingPanels(panels, tolerance_Angle, tolerance_Distance);
+                List<Panel> panels_Temp;
+
+                panels_Temp = new List<Panel>(panels);
+                panels_Temp.Remove(panel);
+                Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected = Geometry.Spatial.Query.IntersectionDictionary(panel, panels_Temp, tolerance_Angle, tolerance_Distance);
 
                 panel = new Panel(panel); 
                 panel.Move(vector3D);
@@ -203,7 +207,10 @@ namespace SAM.Analytical
                     Face3D face3D_Panel = panel.GetFace3D();
                     Plane plane_Panel = face3D_Panel.GetPlane();
 
-                    Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected_New = panel.IntersectingPanels(panels, tolerance_Angle, tolerance_Distance);
+                    panels_Temp = new List<Panel>(panels);
+                    panels_Temp.Remove(panel);
+
+                    Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected_New = Geometry.Spatial.Query.IntersectionDictionary(panel, panels_Temp, tolerance_Angle, tolerance_Distance);
 
                     foreach (Panel panel_Connected in panels_Connected.Keys)
                     {

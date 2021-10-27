@@ -27,7 +27,13 @@ namespace SAM.Analytical
         }
 
         public AirPartition(Guid guid, Face3D face3D)
-            : base(guid, null, face3D)
+            : base(guid, null as BuildingElementType, face3D)
+        {
+
+        }
+
+        public AirPartition(Guid guid, AirPartition airPartition, Face3D face3D)
+            : base(guid, airPartition, face3D)
         {
 
         }

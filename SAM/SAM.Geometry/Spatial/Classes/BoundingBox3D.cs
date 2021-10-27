@@ -409,6 +409,11 @@ namespace SAM.Geometry.Spatial
             return Query.Transform(this, transform3D);
         }
 
+        public double GetLength()
+        {
+            return Height + Height + Width + Width;
+        }
+
         public static bool operator ==(BoundingBox3D boundingBox3D_1, BoundingBox3D boundingBox3D_2)
         {
             if (ReferenceEquals(boundingBox3D_1, null) && ReferenceEquals(boundingBox3D_2, null))

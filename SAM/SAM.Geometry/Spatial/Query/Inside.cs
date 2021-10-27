@@ -57,5 +57,33 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static List<T> Inside<T>(this Shell shell, IEnumerable<T> face3DObjects, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance) where T : IFace3DObject
+        {
+            if (shell == null || face3DObjects == null)
+            {
+                return null;
+            }
+
+            Dictionary<Face3D, T> dictionary = new Dictionary<Face3D, T>();
+            foreach (T face3DObject in face3DObjects)
+            {
+                Face3D face3D = face3DObject?.Face3D;
+                if (face3D == null)
+                {
+                    continue;
+                }
+                dictionary[face3D] = face3DObject;
+            }
+
+            List<Face3D> face3Ds = Inside(shell, dictionary.Keys, silverSpacing, tolerance);
+            if (face3Ds == null)
+            {
+                return null;
+            }
+
+            return face3Ds.ConvertAll(x => dictionary[x]);
+
+        }
     }
 }

@@ -1,31 +1,31 @@
 ﻿using System.Collections.Generic;
 
-namespace SAM.Analytical
+namespace SAM.Architectural
 {
     public static partial class Query
     {
-        public static Dictionary<Architectural.Level, List<Panel>> LevelsDictionary(this List<Panel> panels, bool includeOtherPanels = false, double tolerance = Core.Tolerance.MacroDistance)
+        public static Dictionary<Level, List<T>> LevelsDictionary<T>(this List<T> face3DObjects, double tolerance = Core.Tolerance.MacroDistance) where T : Geometry.Spatial.IFace3DObject
         {
-            if (panels == null)
+            if (face3DObjects == null)
             {
                 return null;
             }
 
-            List<Architectural.Level> levels = Create.Levels(panels, includeOtherPanels, tolerance);
+            List<Level> levels = Create.Levels(face3DObjects, tolerance);
             if(levels == null)
             {
                 return null;
             }
 
-            Dictionary<Architectural.Level, List<Panel>> result = new Dictionary<Architectural.Level, List<Panel>>();
-            foreach(Panel panel in panels)
+            Dictionary<Level, List<T>> result = new Dictionary<Level, List<T>>();
+            foreach(T face3Dobject in face3DObjects)
             {
-                if(panel == null)
+                if(face3Dobject == null)
                 {
                     continue;
                 }
 
-                double elevation = panel.MinElevation();
+                double elevation = face3Dobject.GetBoundingBox().Min.Z;
                 if (double.IsNaN(elevation))
                 {
                     continue;
@@ -34,8 +34,8 @@ namespace SAM.Analytical
                 elevation = Core.Query.Round(elevation, tolerance);
 
                 double distance = double.MaxValue;
-                Architectural.Level level = null;
-                foreach (Architectural.Level level_Temp in levels)
+                Level level = null;
+                foreach (Level level_Temp in levels)
                 {
                     double distance_Temp = System.Math.Abs(level_Temp.Elevation - elevation);
 
@@ -51,13 +51,13 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                if(!result.TryGetValue(level, out List<Panel> panels_Level))
+                if(!result.TryGetValue(level, out List<T> face3DObjects_Level))
                 {
-                    panels_Level = new List<Panel>();
-                    result[level] = panels_Level;
+                    face3DObjects_Level = new List<T>();
+                    result[level] = face3DObjects_Level;
                 }
 
-                panels_Level.Add(panel);
+                face3DObjects_Level.Add(face3Dobject);
             }
 
             return result;

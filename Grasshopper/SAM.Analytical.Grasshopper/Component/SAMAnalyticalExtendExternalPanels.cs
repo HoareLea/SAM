@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,7 +50,7 @@ namespace SAM.Analytical.Grasshopper
                 panelParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(panelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevation", NickName = "elevation", Description = "Elevation", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevations", NickName = "elevations", Description = "Elevations", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
@@ -58,6 +58,10 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(1.0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offset_", NickName = "offset_", Description = "Offset from elevation", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0.1);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Tolerance.Distance);
@@ -95,34 +99,53 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_elevation");
-            GH_ObjectWrapper objectWrapper_Elevation = null;
-            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper_Elevation) || objectWrapper_Elevation == null)
+            index = Params.IndexOfInputParam("_elevations");
+            List<GH_ObjectWrapper> objectWrapper_Elevations = new List<GH_ObjectWrapper>();
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrapper_Elevations) || objectWrapper_Elevations == null || objectWrapper_Elevations.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
-            double elevation = double.NaN;
+            index = Params.IndexOfInputParam("offset_");
+            double offset = 0.1;
+            if (index != -1)
+                dataAccess.GetData(index, ref offset);
 
-            object @object = objectWrapper_Elevation.Value;
-            if (@object is IGH_Goo)
-            {
-                @object = (@object as dynamic).Value;
-            }
+            if (double.IsNaN(offset))
+                offset = 0.1;
 
-            if (@object is double)
+            List<double> elevations = new List<double>();
+            foreach(GH_ObjectWrapper objectWrapper_Elevation in objectWrapper_Elevations)
             {
-                elevation = (double)@object;
-            }
-            else if (@object is string)
-            {
-                if (double.TryParse((string)@object, out double elevation_Temp))
-                    elevation = elevation_Temp;
-            }
-            else if (@object is Architectural.Level)
-            {
-                elevation = ((Architectural.Level)@object).Elevation;
+                double elevation = double.NaN;
+
+                object @object = objectWrapper_Elevation.Value;
+                if (@object is IGH_Goo)
+                {
+                    @object = (@object as dynamic).Value;
+                }
+
+                if (@object is double)
+                {
+                    elevation = (double)@object;
+                }
+                else if (@object is string)
+                {
+                    if (double.TryParse((string)@object, out double elevation_Temp))
+                        elevation = elevation_Temp;
+                }
+                else if (@object is Architectural.Level)
+                {
+                    elevation = ((Architectural.Level)@object).Elevation;
+                }
+
+                if(double.IsNaN(elevation))
+                {
+                    continue;
+                }
+
+                elevations.Add(elevation + offset);
             }
 
             index = Params.IndexOfInputParam("maxDistance_");
@@ -143,7 +166,7 @@ namespace SAM.Analytical.Grasshopper
 
             panels = panels?.ConvertAll(x => Create.Panel(x));
 
-            Analytical.Modify.ExtendExternal(panels, elevation, maxDistance, out List<Panel> externalPanels_Old, out List<Panel> externalPanels_New, out List<Geometry.Spatial.Polygon3D> externalPolygon3Ds, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
+            Analytical.Modify.ExtendExternal(panels, elevations, maxDistance, out List<Panel> externalPanels_Old, out List<Panel> externalPanels_New, out List<Geometry.Spatial.Polygon3D> externalPolygon3Ds, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
 
             index = Params.IndexOfOutputParam("panels");
             if (index != -1)

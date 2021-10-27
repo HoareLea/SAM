@@ -67,7 +67,7 @@ namespace SAM.Analytical.Grasshopper
 
             if(Value is IHostPartition)
             {
-                List<IOpening> openings = ((IHostPartition)Value).Openings;
+                List<IOpening> openings = ((IHostPartition)Value).GetOpenings();
                 if (openings != null)
                 {
                     foreach (IOpening opening in openings)
@@ -119,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
 
             if(Value is IHostPartition)
             {
-                List<IOpening> openings = ((IHostPartition)Value).Openings;
+                List<IOpening> openings = ((IHostPartition)Value).GetOpenings();
                 if (openings != null)
                 {
                     foreach (IOpening opening in openings)

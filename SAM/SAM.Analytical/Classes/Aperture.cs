@@ -10,7 +10,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Analytical Aperture object which stores information about Winodws and Doors
     /// </summary>
-    public class Aperture : SAMInstance<ApertureConstruction>
+    public class Aperture : SAMInstance<ApertureConstruction>, IFace3DObject
     {
         /// <summary>
         /// Planar Boundary 3D of Aperture
@@ -92,6 +92,17 @@ namespace SAM.Analytical
                 return null;
 
             return planarBoundary3D.GetFace3D();
+        }
+
+        public Face3D Face3D
+        {
+            get
+            {
+                if (planarBoundary3D == null)
+                    return null;
+
+                return planarBoundary3D.GetFace3D();
+            }
         }
 
         public double GetArea()

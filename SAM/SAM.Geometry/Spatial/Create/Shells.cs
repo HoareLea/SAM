@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Geometry.Spatial
 {
@@ -948,6 +949,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+
         /// <summary>
         /// Method creates Shells based on IFace3DObjects and given offset from level.
         /// </summary>
@@ -956,7 +958,7 @@ namespace SAM.Geometry.Spatial
         /// <param name="snapTolerance">Snap Tolerance</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns>List of Shells</returns>
-        public static List<Shell> Shells_ByOffset(this IEnumerable<Face3D> face3Ds, double offset, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<Shell> Shells_ByOffset_Old(this IEnumerable<Face3D> face3Ds, double offset, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (face3Ds == null)
                 return null;
@@ -971,7 +973,6 @@ namespace SAM.Geometry.Spatial
             Dictionary<double, List<Tuple<Face3D, List<Segment2D>>>> dictionary = new Dictionary<double, List<Tuple<Face3D, List<Segment2D>>>>();
             foreach (KeyValuePair<double, List<Face3D>> keyValuePair in elevationDictionary)
             {
-
                 List<Tuple<Face3D, List<Segment2D>>> tuples = new List<Tuple<Face3D, List<Segment2D>>>();
 
                 Plane plane = Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, keyValuePair.Key + offset)) as Plane;
@@ -1093,6 +1094,134 @@ namespace SAM.Geometry.Spatial
 
             //return Geometry.Spatial.Create.Shells_Depreciated(face3Ds, snapTolerance, tolerance);
             return Shells_ByTopAndBottom(face3Ds_Temp, tolerance);
+        }
+
+        /// <summary>
+        /// Method creates Shells based on IFace3DObjects and given offset from level.
+        /// </summary>
+        /// <param name="face3Ds">Face3DObjects</param>
+        /// <param name="offset">Offset from Level</param>
+        /// <param name="snapTolerance">Snap Tolerance</param>
+        /// <param name="tolerance_Angle">Angle Tolerance</param>
+        /// <param name="tolerance_Distance">Distance Tolerance</param>
+        /// <returns>List of Shells</returns>
+        public static List<Shell> Shells_ByOffset(this IEnumerable<Face3D> face3Ds, double offset, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if (face3Ds == null)
+                return null;
+
+            List<Shell> result = new List<Shell>();
+            if (face3Ds.Count() < 2)
+                return result;
+
+            Dictionary<double, List<Face3D>> elevationDictionary = face3Ds.ElevationDictionary(tolerance_Distance);
+
+            List<Tuple<double, List<Face3D>>> tuples = new List<Tuple<double, List<Face3D>>>();
+            foreach (KeyValuePair<double, List<Face3D>> keyValuePair in elevationDictionary)
+            {
+                tuples.Add(new Tuple<double, List<Face3D>>(keyValuePair.Key, keyValuePair.Value));
+            }
+
+            List<List<Shell>> shellsList = Enumerable.Repeat<List<Shell>>(null, tuples.Count).ToList();
+
+            Parallel.For(0, tuples.Count, (int i) =>
+            {
+                Tuple<double, List<Face3D>> tuple = tuples[i];
+
+                Plane plane_Bottom = Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, tuple.Item1 + offset)) as Plane;
+                Dictionary<Face3D, List<Segment2D>> dictionary_Bottom = tuple.Item2.SectionDictionary<Segment2D>(plane_Bottom, tolerance_Angle, tolerance_Distance);
+
+                List<Segment2D> segment2Ds = new List<Segment2D>();
+                foreach (KeyValuePair<Face3D, List<Segment2D>> keyValuePair_Face3D in dictionary_Bottom)
+                {
+                    if (keyValuePair_Face3D.Value == null)
+                    {
+                        continue;
+                    }
+
+                    segment2Ds.AddRange(keyValuePair_Face3D.Value);
+                }
+
+                segment2Ds = Planar.Query.Split(segment2Ds, tolerance_Distance);
+                segment2Ds = Planar.Query.Snap(segment2Ds, true, snapTolerance);
+
+                List<Face2D> face2Ds = Planar.Create.Face2Ds(segment2Ds, tolerance_Distance);
+                if (face2Ds == null || face2Ds.Count == 0)
+                {
+                    return;
+                }
+
+                List<IClosed2D> closed2Ds = Planar.Query.Holes(face2Ds);
+                if (closed2Ds != null && closed2Ds.Count > 0)
+                    closed2Ds.ForEach(x => face2Ds.Add(new Face2D(x)));
+
+                plane_Bottom = Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, tuple.Item1)) as Plane;
+
+                List<Face3D> face3Ds_Bottom = face2Ds.ConvertAll(x => new Face3D(plane_Bottom, x));
+
+                Vector3D vector3D = new Vector3D(0, 0, tuple.Item2.ConvertAll(x => x.GetBoundingBox().Max.Z).Max());
+
+                List<Shell> shells = face3Ds_Bottom.ConvertAll(x => Shell(x, vector3D, tolerance_Distance));
+                if (shells == null || shells.Count == 0)
+                {
+                    return;
+                }
+
+                shellsList[i] = shells;
+            });
+
+            List<List<Shell>> shellsList_Split = Enumerable.Repeat<List<Shell>>(null, shellsList.Count).ToList();
+            Parallel.For(0, shellsList.Count, (int i) => 
+            {
+                List<Shell> shells = shellsList[i];
+                if (shells == null || shells.Count == 0)
+                {
+                    return;
+                }
+
+                List<Shell> shells_Split = new List<Shell>();
+
+                if (i > 0)
+                {
+                    List<Shell> shells_Temp = shellsList[i - 1];
+                    if (shells_Temp != null)
+                    {
+                        shells_Split.AddRange(shells_Temp);
+                    }
+                }
+
+                if (i < shellsList.Count - 1)
+                {
+                    List<Shell> shells_Temp = shellsList[i + 1];
+                    if (shells_Temp != null)
+                    {
+                        shells_Split.AddRange(shells_Temp);
+                    }
+                }
+
+                shellsList_Split[i] = new List<Shell>();
+                for (int j = 0; j < shells.Count; j++)
+                {
+                    Shell shell = new Shell(shells[i]);
+                    foreach (Shell shell_Split in shells_Split)
+                    {
+                        shell.SplitFace3Ds(shell_Split, snapTolerance, tolerance_Angle, tolerance_Distance);
+                    }
+                    shellsList_Split[i].Add(shell);
+                }
+            });
+
+            foreach(List<Shell> shells in shellsList_Split)
+            {
+                if(shells == null || shells.Count == 0)
+                {
+                    continue;
+                }
+
+                result.AddRange(shells);
+            }
+
+            return result;
         }
 
         public static List<Shell> Shells<N>(this IEnumerable<N> face3DObjects, IEnumerable<double> elevations, double offset = 0.1, double thinnessRatio = 0.01, double minArea = Core.Tolerance.MacroDistance, double snapTolerance = Core.Tolerance.MacroDistance, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance) where N: IFace3DObject

@@ -24,6 +24,12 @@ namespace SAM.Core
 
         }
 
+        public OpaqueMaterial(string name, Guid guid, OpaqueMaterial opaqueMaterial, string displayName, string description)
+            : base(name, guid, opaqueMaterial, displayName, description)
+        {
+
+        }
+
         public OpaqueMaterial(JObject jObject)
             : base(jObject)
         {

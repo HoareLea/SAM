@@ -100,9 +100,9 @@ namespace SAM.Analytical
                 return null;
             }
 
-            IOpening opening = Create.Opening(openingType, face3D);
+            List<IOpening> openings = hostPartition.AddOpening(Create.Opening(openingType, face3D), tolerance_Distance);
 
-            return hostPartition.AddOpening(opening, tolerance_Distance) ? opening : null;
+            return openings?.FirstOrDefault();
         }
 
         public static IOpening AddOpening(this ArchitecturalModel architecturalModel, IOpening opening, double tolerance = Core.Tolerance.Distance)

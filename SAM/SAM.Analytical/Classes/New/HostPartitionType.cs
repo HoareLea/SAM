@@ -40,6 +40,12 @@ namespace SAM.Analytical
             this.materialLayers = materialLayers?.ToList().ConvertAll(x => new MaterialLayer(x));
         }
 
+        public HostPartitionType(HostPartitionType hostPartitionType, string name)
+            : base(hostPartitionType, name)
+        {
+            materialLayers = hostPartitionType?.materialLayers?.ToList().ConvertAll(x => new MaterialLayer(x));
+        }
+
         public List<MaterialLayer> MaterialLayers
         {
             get
@@ -51,6 +57,61 @@ namespace SAM.Analytical
 
                 return materialLayers.ConvertAll(x => new MaterialLayer(x));
             }
+
+            set
+            {
+                if(value == null)
+                {
+                    return;
+                }
+
+                materialLayers = value?.ConvertAll(x => new MaterialLayer(x));
+            }
+        }
+
+        public MaterialLayer this[int i]
+        {
+            get
+            {
+                if(materialLayers == null)
+                {
+                    return null;
+                }
+
+                return new MaterialLayer(materialLayers[i]);
+            }
+
+            set
+            {
+                if (materialLayers == null)
+                {
+                    return;
+                }
+
+                materialLayers[i] = new MaterialLayer(value);
+            }
+        }
+
+        public double GetThickness()
+        {
+            if(materialLayers == null)
+            {
+                return double.NaN;
+            }
+
+            double result = 0;
+            foreach(MaterialLayer materialLayer in materialLayers)
+            {
+                double thickness = materialLayer.Thickness;
+                if(double.IsNaN(thickness))
+                {
+                    continue;
+                }
+                
+                result += thickness;
+            }
+
+            return result;
         }
 
         public override bool FromJObject(JObject jObject)
