@@ -220,6 +220,7 @@
     <Compile Include="Spatial\Query\Intersect.cs" />
     <Compile Include="Spatial\Query\Area.cs" />
     <Compile Include="Spatial\Query\Face3DObjectsByFace3D.cs" />
+    <Compile Include="Spatial\Query\MinDimension.cs" />
     <Compile Include="Spatial\Query\MinElevation.cs" />
     <Compile Include="Spatial\Query\MaxElevation.cs" />
     <Compile Include="Spatial\Query\MinElevationDictionary.cs" />
