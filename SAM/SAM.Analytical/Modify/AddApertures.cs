@@ -272,9 +272,7 @@ namespace SAM.Analytical
 
                 Face3D face3D_Aperture_New = plane.Convert(face2D_Aperture_New);
 
-                Point3D point3D_Location = plane.Convert(face2D_Aperture_New.GetCentroid());
-                if (Geometry.Spatial.Query.Vertical(plane, tolerance))
-                    point3D_Location = new Point3D(point3D_Location.X, point3D_Location.Y, face3D_Aperture_New.GetBoundingBox().Min.Z);
+                Point3D point3D_Location = Query.OpeningLocation(face3D_Aperture_New, tolerance);
 
                 Aperture aperture = new Aperture(apertureConstruction, face3D_Aperture_New, point3D_Location);
                 if (!Query.IsValid(panel, aperture))
