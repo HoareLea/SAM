@@ -749,6 +749,31 @@ namespace SAM.Analytical
             return GetObjects<Space>();
         }
 
+        public List<T> GetMaterials<T>() where T: IMaterial
+        {
+            List<IMaterial> materials = materialLibrary?.GetMaterials();
+            if(materials == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach(IMaterial material in materials)
+            {
+                if(material is T)
+                {
+                    result.Add((T)material.Clone());
+                }
+            }
+
+            return result;
+        }
+
+        public List<IMaterial> GetMaterials()
+        {
+            return GetMaterials<IMaterial>();
+        }
+
         public bool Transparent(IPartition partition)
         {
             if (partition == null || materialLibrary == null)

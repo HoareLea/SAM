@@ -82,5 +82,24 @@ namespace SAM.Analytical
 
             return Opening(guid, opening, face3D);
         }
+
+        public static IOpening Opening(System.Guid guid, OpeningType openingType, Face3D face3D, Point3D location)
+        {
+            if (openingType == null || face3D == null || location == null)
+            {
+                return null;
+            }
+
+            Plane plane = face3D.GetPlane();
+            plane = new Plane(plane, plane.Project(location));
+
+            Face3D face3D_Temp = plane.Convert(plane.Convert(face3D));
+            if (face3D_Temp == null)
+            {
+                return null;
+            }
+
+            return Opening(guid, openingType, face3D);
+        }
     }
 }
