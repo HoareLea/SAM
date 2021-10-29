@@ -1,13 +1,13 @@
 ﻿using Grasshopper.Kernel;
-using SAM.Analytical.Grasshopper.Properties;
-using SAM.Architectural.Grasshopper;
+using SAM.Architectural.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using SAM.Geometry.Spatial;
 
-namespace SAM.Analytical.Grasshopper
+namespace SAM.Architectural.Grasshopper
 {
-    public class SAMAnalyticalCreateLevels : GH_SAMVariableOutputParameterComponent
+    public class SAMArchitecturalCreateLevels : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,9 +27,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreateLevels()
-          : base("SAMAnalytical.CreateLevels", "SAMAnalytical.CreateLevels",
-              "Create SAM Architectural Levels from Panels",
+        public SAMArchitecturalCreateLevels()
+          : base("SAMArchitectural.CreateLevels", "SAMArchitectural.CreateLevels",
+              "Create SAM Architectural Levels from Face3DObjects",
               "SAM", "Analytical")
         {
         }
@@ -42,7 +42,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Geometry.Grasshopper.GooSAMGeometryParam() { Name = "_face3DObjects", NickName = "_face3DObjects", Description = "SAM Geometry Face3DObjects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -72,9 +72,9 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            index = Params.IndexOfInputParam("_panels");
-            List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(index, panels) || panels == null)
+            index = Params.IndexOfInputParam("_face3DObjects");
+            List<Geometry.ISAMGeometry> geometries = new List<Geometry.ISAMGeometry>();
+            if (!dataAccess.GetDataList(index, geometries) || geometries == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -87,34 +87,37 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref tolerance);
             }
 
+            List<Face3D> face3Ds = new List<Face3D>();
+            foreach(Geometry.ISAMGeometry sAMGeometry in geometries)
+            {
+                ISAMGeometry3D sAMGeometry3D = sAMGeometry as ISAMGeometry3D;
+                if(sAMGeometry3D == null)
+                {
+                    continue;
+                }
+
+                if(!Geometry.Spatial.Query.TryConvert(sAMGeometry3D, out List<Face3D> face3Ds_Temp) || face3Ds_Temp == null)
+                {
+                    continue;
+                }
+
+                face3Ds.AddRange(face3Ds_Temp);
+            }
+
             index = Params.IndexOfOutputParam("levels");
             if(index != -1)
             {
-                List<Architectural.Level> levels = Architectural.Create.Levels(panels.FindAll(x => x.PanelType != PanelType.Air && x.PanelType.PanelGroup() != PanelGroup.Other), tolerance);
+                List<Level> levels = Create.Levels(face3Ds, tolerance);
                 dataAccess.SetDataList(index, levels?.ConvertAll(x => new GooLevel(x)));
             }
 
             index = Params.IndexOfOutputParam("topLevel");
             if(index != -1)
             {
-                double elevation = double.MinValue;
-                foreach(Panel panel in panels)
-                {
-                    double elevation_Panel = Geometry.Spatial.Query.MaxElevation(panel);
-                    if (double.IsNaN(elevation_Panel))
-                    {
-                        continue;
-                    }
-
-                    if(elevation_Panel > elevation)
-                    {
-                        elevation = elevation_Panel;
-                    }
-                }
-
+                double elevation = Geometry.Spatial.Query.MaxElevation(face3Ds);
                 if(elevation != double.MinValue)
                 {
-                    dataAccess.SetData(index, Architectural.Create.Level(elevation));
+                    dataAccess.SetData(index, Create.Level(elevation));
                 }
             }
 

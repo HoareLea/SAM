@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Classes\GooMaterialLayer.cs" />
     <Compile Include="Classes\GooLevel.cs" />
+    <Compile Include="Component\SAMArchitecturalCreateLevels.cs" />
     <Compile Include="Component\SAMArchitecturalCreateLevel.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

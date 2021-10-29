@@ -264,7 +264,6 @@
     <Compile Include="Component\SAMAnalyticalSnapByPoints.cs" />
     <Compile Include="Component\SAMAnalyticalSnapByOffset.cs" />
     <Compile Include="Component\SAMAnalyticalSnapPoints.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateLevels.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateObjects.cs" />
     <Compile Include="Component\SAMAnalyticalRelatedObjects.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstructionLibrary.cs" />
