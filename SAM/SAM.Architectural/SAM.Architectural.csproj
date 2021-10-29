@@ -49,6 +49,7 @@
     <Compile Include="Classes\PlanarTerrain.cs" />
     <Compile Include="Classes\MaterialLayer.cs" />
     <Compile Include="Classes\Level.cs" />
+    <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Create\PlanarTerrain.cs" />
     <Compile Include="Create\Level.cs" />

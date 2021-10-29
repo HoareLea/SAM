@@ -97,6 +97,7 @@
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
     <Compile Include="Create\New\ArchitecturalModel.cs" />
+    <Compile Include="Create\New\Log.cs" />
     <Compile Include="Create\New\OpeningType.cs" />
     <Compile Include="Create\New\Partition.cs" />
     <Compile Include="Create\New\HostPartition.cs" />
