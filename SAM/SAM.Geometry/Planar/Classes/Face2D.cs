@@ -148,6 +148,20 @@ namespace SAM.Geometry.Planar
                     result.internalEdge2Ds.Add(closed2D_Temp);
                     internalEdges_Excluded.Remove(internalEdge);
                 }
+
+                if(result.internalEdge2Ds != null && result.internalEdge2Ds.Count > 1)
+                {
+                    List<ISegmentable2D> segmentable2Ds = result.internalEdge2Ds.FindAll(x => x is ISegmentable2D).ConvertAll(x => (ISegmentable2D)x);
+                    if(segmentable2Ds != null)
+                    {
+                        List<Polygon2D> polygon2Ds = segmentable2Ds.ConvertAll(x => new Polygon2D(x.GetPoints())).Union(tolerance);
+                        if(polygon2Ds != null && polygon2Ds.Count != 0)
+                        {
+                            segmentable2Ds.ForEach(x => result.internalEdge2Ds.Remove((IClosed2D)x));
+                            result.internalEdge2Ds.AddRange(polygon2Ds);
+                        }
+                    }
+                }
             }
 
             return result;

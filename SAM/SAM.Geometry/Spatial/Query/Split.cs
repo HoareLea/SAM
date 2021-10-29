@@ -231,7 +231,7 @@ namespace SAM.Geometry.Spatial
                         foreach (Shell shell_Difference in shells_Difference)
                         {
                             List<Shell> shells_Difference_Temp_Temp = shell_Difference.Difference(shell_Intersection, silverSpacing, tolerance_Angle, tolerance_Distance);
-                            if(shells_Difference == null || shells_Difference.Count == 0)
+                            if(shells_Difference_Temp_Temp == null || shells_Difference_Temp_Temp.Count == 0)
                             {
                                 continue;
                             }

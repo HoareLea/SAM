@@ -100,32 +100,44 @@ namespace SAM.Geometry.Planar
             if (face2D == null)
                 return null;
 
-            Polygon polygon = face2D.ToNTS(tolerance);
-
-            DelaunayTriangulationBuilder delaunayTriangulationBuilder = new DelaunayTriangulationBuilder();
-            delaunayTriangulationBuilder.SetSites(polygon);
-
-            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
-
-            GeometryCollection geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
-            if (geometryCollection == null)
-                return null;
+            List<Face2D> face2Ds = face2D.FixEdges(tolerance);
+            if(face2Ds == null || face2Ds.Count == 0)
+            {
+                face2Ds = new List<Face2D>() { face2D };
+            }
 
             List<Triangle2D> result = new List<Triangle2D>();
-            foreach (NetTopologySuite.Geometries.Geometry geometry in geometryCollection.Geometries)
+
+            foreach (Face2D face2D_Temp in face2Ds)
             {
-                Polygon polygon_Temp = geometry as Polygon;
-                if (polygon == null)
-                    continue;
+                Polygon polygon = face2D_Temp.ToNTS(tolerance);
 
-                if (!polygon.Contains(polygon_Temp.Centroid))
-                    continue;
+                DelaunayTriangulationBuilder delaunayTriangulationBuilder = new DelaunayTriangulationBuilder();
+                delaunayTriangulationBuilder.SetSites(polygon);
 
-                Coordinate[] coordinates = polygon_Temp.Coordinates;
-                if (coordinates == null || coordinates.Length != 4)
-                    continue;
+                GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
 
-                result.Add(new Triangle2D(coordinates[0].ToSAM(tolerance), coordinates[1].ToSAM(), coordinates[2].ToSAM(tolerance)));
+                GeometryCollection geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
+                if (geometryCollection == null)
+                {
+                    continue;
+                }
+
+                foreach (NetTopologySuite.Geometries.Geometry geometry in geometryCollection.Geometries)
+                {
+                    Polygon polygon_Temp = geometry as Polygon;
+                    if (polygon == null)
+                        continue;
+
+                    if (!polygon.Contains(polygon_Temp.Centroid))
+                        continue;
+
+                    Coordinate[] coordinates = polygon_Temp.Coordinates;
+                    if (coordinates == null || coordinates.Length != 4)
+                        continue;
+
+                    result.Add(new Triangle2D(coordinates[0].ToSAM(tolerance), coordinates[1].ToSAM(), coordinates[2].ToSAM(tolerance)));
+                }
             }
 
             return result;
