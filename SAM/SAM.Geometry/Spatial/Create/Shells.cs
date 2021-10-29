@@ -30,7 +30,7 @@ namespace SAM.Geometry.Spatial
 
             for (int i = 0; i < polygon2Ds.Count; i++)
             {
-                Polygon2D polygon2D = polygon2Ds[i]?.SimplifyBySAM_Angle();
+                Polygon2D polygon2D = polygon2Ds[i]?.SimplifyByAngle();
                 if (polygon2D == null)
                     polygon2D = polygon2Ds[i];
 

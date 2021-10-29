@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static Polygon SimplifyByNTS_Snapper(this Polygon polygon, double tolerance = Tolerance.Distance)
+        public static Polygon SimplifyBySnapper(this Polygon polygon, double tolerance = Tolerance.Distance)
         {
             if (polygon == null)
                 return null;
@@ -18,7 +18,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static Polygon2D SimplifyByNTS_Snapper(this Polygon2D polygon2D, double tolerance = Tolerance.Distance)
+        public static Polygon2D SimplifyBySnapper(this Polygon2D polygon2D, double tolerance = Tolerance.Distance)
         {
             if (polygon2D == null)
                 return null;
@@ -32,7 +32,7 @@ namespace SAM.Geometry.Planar
             return linearRing.ToSAM(tolerance);
         }
 
-        public static Face2D SimplifyByNTS_Snapper(this Face2D face2D, double tolerance = Tolerance.Distance)
+        public static Face2D SimplifyBySnapper(this Face2D face2D, double tolerance = Tolerance.Distance)
         {
             Polygon polygon = Convert.ToNTS(face2D as Face, tolerance);
 

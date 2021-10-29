@@ -18,5 +18,16 @@ namespace SAM.Geometry.Spatial
 
             return false;
         }
+
+        public static bool Add(this List<Point3D> point3Ds, double x, double y, double z)
+        {
+            if(point3Ds == null)
+            {
+                return false;
+            }
+
+            point3Ds.Add(new Point3D(x, y, z));
+            return true;
+        }
     }
 }

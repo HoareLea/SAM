@@ -177,11 +177,11 @@
     <Compile Include="Planar\Query\Snap.cs" />
     <Compile Include="Planar\Query\Extend.cs" />
     <Compile Include="Planar\Modify\RemoveAlmostSimilar.cs" />
-    <Compile Include="Planar\Query\SimplifyByNTS_TopologyPreservingSimplifier.cs" />
-    <Compile Include="Planar\Query\SimplifyByNTS_Snapper.cs" />
-    <Compile Include="Planar\Query\SimplifyByNTS_DouglasPeucker.cs" />
-    <Compile Include="Planar\Query\SimplifyBySAM_Length.cs" />
-    <Compile Include="Planar\Query\SimplifyBySAM_Angle.cs" />
+    <Compile Include="Planar\Query\SimplifyByTopologyPreservingSimplifier.cs" />
+    <Compile Include="Planar\Query\SimplifyBySnapper.cs" />
+    <Compile Include="Planar\Query\SimplifyByDouglasPeucker.cs" />
+    <Compile Include="Planar\Query\SimplifyByLength.cs" />
+    <Compile Include="Planar\Query\SimplifyByAngle.cs" />
     <Compile Include="Planar\Modify\OrientByEnds.cs" />
     <Compile Include="Planar\Query\Cut.cs" />
     <Compile Include="Planar\Query\Triangulate.cs" />
@@ -297,7 +297,6 @@
     <Compile Include="Spatial\Query\On.cs" />
     <Compile Include="Spatial\Query\Parallel.cs" />
     <Compile Include="Planar\Query\ExternalPolygon2Ds.cs" />
-    <Compile Include="Planar\Query\SimplifyByClipper.cs" />
     <Compile Include="Planar\Query\Intersect.cs" />
     <Compile Include="Planar\Query\SelfIntersectionPoint3D.cs" />
     <Compile Include="Planar\Query\SelfIntersectionPoint3Ds.cs" />

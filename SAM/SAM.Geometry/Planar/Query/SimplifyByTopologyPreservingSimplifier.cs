@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static Polygon SimplifyByNTS_TopologyPreservingSimplifier(this Polygon polygon, double tolerance = Tolerance.Distance)
+        public static Polygon SimplifyByTopologyPreservingSimplifier(this Polygon polygon, double tolerance = Tolerance.Distance)
         {
             if (polygon == null)
                 return null;
@@ -18,7 +18,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static Polygon2D SimplifyByNTS_TopologyPreservingSimplifier(this Polygon2D polygon2D, double tolerance = Tolerance.Distance)
+        public static Polygon2D SimplifyByTopologyPreservingSimplifier(this Polygon2D polygon2D, double tolerance = Tolerance.Distance)
         {
             if (polygon2D == null)
                 return null;
@@ -32,7 +32,7 @@ namespace SAM.Geometry.Planar
             return linearRing.ToSAM();
         }
 
-        public static Face2D SimplifyByNTS_TopologyPreservingSimplifier(this Face2D face2D, double tolerance = Tolerance.Distance)
+        public static Face2D SimplifyByTopologyPreservingSimplifier(this Face2D face2D, double tolerance = Tolerance.Distance)
         {
             if (face2D == null)
                 return null;

@@ -65,7 +65,7 @@ namespace SAM.Geometry
                 if (polygon == null)
                     continue;
 
-                polygon = Planar.Query.SimplifyByNTS_Snapper(polygon, tolerance);
+                polygon = Planar.Query.SimplifyBySnapper(polygon, tolerance);
                 if (polygon.Area < tolerance)
                     continue;
 

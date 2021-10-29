@@ -205,8 +205,8 @@ namespace SAM.Analytical
                     if (panel_Old == null)
                         continue;
 
-                    Polygon polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon, tolerance);
-                    polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_TopologyPreservingSimplifier(polygon_Temp, tolerance);
+                    Polygon polygon_Temp = Geometry.Planar.Query.SimplifyBySnapper(polygon, tolerance);
+                    polygon_Temp = Geometry.Planar.Query.SimplifyByTopologyPreservingSimplifier(polygon_Temp, tolerance);
 
                     Face2D face2D = polygon_Temp.ToSAM(minArea, Core.Tolerance.MicroDistance)?.Snap(point2Ds, tolerance);
                     if (face2D == null)

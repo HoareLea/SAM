@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static Polygon SimplifyByNTS_DouglasPeucker(this Polygon polygon, double tolerance = Tolerance.Distance)
+        public static Polygon SimplifyByDouglasPeucker(this Polygon polygon, double tolerance = Tolerance.Distance)
         {
             if (polygon == null)
                 return null;

@@ -6,7 +6,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static Polygon2D SimplifyBySAM_Length(this Polygon2D polygon2D, double maxLength, double tolerance = Core.Tolerance.Distance)
+        public static Polygon2D SimplifyByLength(this Polygon2D polygon2D, double maxLength, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon2D == null || polygon2D.Count < 3 || double.IsNaN(maxLength))
                 return null;
@@ -58,14 +58,14 @@ namespace SAM.Geometry.Planar
             return new Polygon2D(point2Ds);
         }
 
-        public static Polyline2D SimplifyBySAM_Length(this Polyline2D polyline2D, double maxLength, double tolerance = Core.Tolerance.Distance)
+        public static Polyline2D SimplifyByLength(this Polyline2D polyline2D, double maxLength, double tolerance = Core.Tolerance.Distance)
         {
             if (polyline2D == null || double.IsNaN(maxLength))
                 return null;
 
             if (polyline2D.IsClosed())
             {
-                Polygon2D polygon2D = SimplifyBySAM_Length(new Polygon2D(polyline2D.Points), maxLength, tolerance);
+                Polygon2D polygon2D = SimplifyByLength(new Polygon2D(polyline2D.Points), maxLength, tolerance);
                 if (polygon2D == null)
                     return null;
 

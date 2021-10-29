@@ -256,8 +256,8 @@ namespace SAM.Analytical
                         if (panel_Old == null)
                             continue;
 
-                        Polygon polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon);
-                        polygon_Temp = Geometry.Planar.Query.SimplifyByNTS_TopologyPreservingSimplifier(polygon_Temp);
+                        Polygon polygon_Temp = Geometry.Planar.Query.SimplifyBySnapper(polygon);
+                        polygon_Temp = Geometry.Planar.Query.SimplifyByTopologyPreservingSimplifier(polygon_Temp);
                         if (polygon_Temp.IsEmpty || !polygon_Temp.IsValid)
                             continue;
 
@@ -395,8 +395,8 @@ namespace SAM.Analytical
 
                     guids.Add(guid);
 
-                    Polygon polygon_Simplify = Geometry.Planar.Query.SimplifyByNTS_Snapper(polygon_Temp);
-                    polygon_Simplify = Geometry.Planar.Query.SimplifyByNTS_TopologyPreservingSimplifier(polygon_Simplify);
+                    Polygon polygon_Simplify = Geometry.Planar.Query.SimplifyBySnapper(polygon_Temp);
+                    polygon_Simplify = Geometry.Planar.Query.SimplifyByTopologyPreservingSimplifier(polygon_Simplify);
 
                     if (polygon_Old.Shell.IsCCW != polygon_Simplify.Shell.IsCCW)
                         polygon_Simplify = (Polygon)polygon_Simplify.Reverse();

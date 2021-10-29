@@ -181,6 +181,8 @@
     <Compile Include="Modify\AddAirPanels.cs" />
     <Compile Include="Modify\Cut.cs" />
     <Compile Include="Modify\Align.cs" />
+    <Compile Include="Modify\New\SimplifyByAngle.cs" />
+    <Compile Include="Modify\SimplifyByAngle.cs" />
     <Compile Include="Modify\Merge.cs" />
     <Compile Include="Modify\New\AddAirPartitions.cs" />
     <Compile Include="Modify\New\AddOpening.cs" />

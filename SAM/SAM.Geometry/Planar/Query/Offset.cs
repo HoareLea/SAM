@@ -544,8 +544,7 @@ namespace SAM.Geometry.Planar
             {
                 if (simplify)
                 {
-                    List<Point2D> point2Ds_Simplify = polygon2Ds[i].GetPoints();
-                    SimplifyBySAM_Angle(point2Ds_Simplify, true, Tolerance.Angle);
+                    List<Point2D> point2Ds_Simplify = SimplifyByAngle(polygon2Ds[i].GetPoints(), true, Tolerance.Angle);
                     polygon2Ds[i] = new Polygon2D(point2Ds_Simplify);
                 }
 
