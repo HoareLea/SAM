@@ -39,7 +39,7 @@ namespace SAM.Analytical
                                 continue;
                             }
 
-                            face3D_Opening.SimplifyByAngle(tolerance_Angle, tolerance_Distance);
+                            face3D_Opening = face3D_Opening.SimplifyByAngle(tolerance_Angle, tolerance_Distance);
                             IOpening opening_New = Create.Opening(opening.Guid, opening, face3D_Opening);
                             if (opening_New != null)
                             {

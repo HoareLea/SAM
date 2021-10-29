@@ -35,8 +35,8 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        face3D_Aperture.SimplifyByAngle(tolerance_Angle, tolerance_Distance);
-                        Aperture aperture_New = Create.Aperture(aperture, face3D, aperture.Guid);
+                        face3D_Aperture = face3D_Aperture.SimplifyByAngle(tolerance_Angle, tolerance_Distance);
+                        Aperture aperture_New = Create.Aperture(aperture, face3D_Aperture, aperture.Guid);
                         if(aperture_New != null)
                         {
                             panel_New.RemoveAperture(aperture.Guid);
