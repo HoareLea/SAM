@@ -52,6 +52,7 @@
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Classes\New\AirPartition.cs" />
+    <Compile Include="Classes\New\OpeningTypeLibrary.cs" />
     <Compile Include="Classes\New\ArchitecturalModel.cs" />
     <Compile Include="Classes\New\BuildingElement.cs" />
     <Compile Include="Classes\New\BuildingElementType.cs" />
@@ -136,7 +137,8 @@
     <Compile Include="Enums\New\OpeningAnalyticalType.cs" />
     <Compile Include="Enums\New\PartitionAnalyticalType.cs" />
     <Compile Include="Enums\Parameter\AdjacencyClusterSimulationResultParameter.cs" />
-    <Compile Include="Enums\Parameter\HostPartitionTypeParameter.cs" />
+    <Compile Include="Enums\Parameter\New\OpeningTypeParameter.cs" />
+    <Compile Include="Enums\Parameter\New\HostPartitionTypeParameter.cs" />
     <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
     <Compile Include="Enums\LoadType.cs" />
     <Compile Include="Enums\ZoneType.cs" />
