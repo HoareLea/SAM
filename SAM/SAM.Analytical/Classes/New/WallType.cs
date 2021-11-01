@@ -43,6 +43,12 @@ namespace SAM.Analytical
 
         }
 
+        public WallType(System.Guid guid, string name, IEnumerable<MaterialLayer> materialLayers)
+            : base(guid, name, materialLayers)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

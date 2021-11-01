@@ -40,6 +40,12 @@ namespace SAM.Analytical
             this.materialLayers = materialLayers?.ToList().ConvertAll(x => new MaterialLayer(x));
         }
 
+        public HostPartitionType(System.Guid guid, string name, IEnumerable<MaterialLayer> materialLayers)
+            : base(guid, name)
+        {
+            this.materialLayers = materialLayers?.ToList().ConvertAll(x => new MaterialLayer(x));
+        }
+
         public HostPartitionType(HostPartitionType hostPartitionType, string name)
             : base(hostPartitionType, name)
         {
