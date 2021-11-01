@@ -774,6 +774,79 @@ namespace SAM.Analytical
             return GetMaterials<IMaterial>();
         }
 
+        public List<string> GetMissingMaterialNames()
+        {
+            HashSet<string> materialNames = new HashSet<string>();
+
+            if(relationCluster != null)
+            {
+                List<HostPartitionType> hostPartitionTypes = relationCluster.GetObjects<HostPartitionType>();
+                if(hostPartitionTypes != null)
+                {
+                    foreach(HostPartitionType hostPartitionType in hostPartitionTypes)
+                    {
+                        List<MaterialLayer> materialLayers = hostPartitionType?.MaterialLayers;
+                        if(materialLayers == null || materialLayers.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        foreach(MaterialLayer materialLayer in materialLayers)
+                        {
+                            IMaterial material = GetMaterial(materialLayer);
+                            if(material != null)
+                            {
+                                continue;
+                            }
+
+                            materialNames.Add(materialLayer.Name);
+                        }
+                    }
+                }
+
+                List<OpeningType> openingTypes = relationCluster.GetObjects<OpeningType>();
+                if(openingTypes != null)
+                {
+                    foreach(OpeningType openingType in openingTypes)
+                    {
+                        List<MaterialLayer> materialLayers = null;
+
+                        materialLayers = openingType?.PaneMaterialLayers;
+                        if(materialLayers != null)
+                        {
+                            foreach (MaterialLayer materialLayer in materialLayers)
+                            {
+                                IMaterial material = GetMaterial(materialLayer);
+                                if (material != null)
+                                {
+                                    continue;
+                                }
+
+                                materialNames.Add(materialLayer.Name);
+                            }
+                        }
+
+                        materialLayers = openingType?.FrameMaterialLayers;
+                        if (materialLayers != null)
+                        {
+                            foreach (MaterialLayer materialLayer in materialLayers)
+                            {
+                                IMaterial material = GetMaterial(materialLayer);
+                                if (material != null)
+                                {
+                                    continue;
+                                }
+
+                                materialNames.Add(materialLayer.Name);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return materialNames.ToList();
+        }
+
         public bool Transparent(IPartition partition)
         {
             if (partition == null || materialLibrary == null)
