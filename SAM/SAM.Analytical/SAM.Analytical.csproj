@@ -55,6 +55,7 @@
     <Compile Include="Classes\New\ArchitecturalModel.cs" />
     <Compile Include="Classes\New\BuildingElement.cs" />
     <Compile Include="Classes\New\BuildingElementType.cs" />
+    <Compile Include="Classes\New\HostPartitionTypeLibrary.cs" />
     <Compile Include="Classes\New\Door.cs" />
     <Compile Include="Classes\New\DoorType.cs" />
     <Compile Include="Classes\New\Floor.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Enums\New\OpeningAnalyticalType.cs" />
     <Compile Include="Enums\New\PartitionAnalyticalType.cs" />
     <Compile Include="Enums\Parameter\AdjacencyClusterSimulationResultParameter.cs" />
+    <Compile Include="Enums\Parameter\HostPartitionTypeParameter.cs" />
     <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
     <Compile Include="Enums\LoadType.cs" />
     <Compile Include="Enums\ZoneType.cs" />

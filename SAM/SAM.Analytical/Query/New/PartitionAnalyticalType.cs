@@ -91,5 +91,20 @@ namespace SAM.Analytical
 
             return Analytical.PartitionAnalyticalType.Undefined;
         }
+
+        public static PartitionAnalyticalType? PartitionAnalyticalType(this HostPartitionType hostPartitionType)
+        {
+            if(hostPartitionType == null)
+            {
+                return null;
+            }
+
+            if(!hostPartitionType.TryGetValue(HostPartitionTypeParameter.PartitionAnalyticalType, out string value, true))
+            {
+                return null;
+            }
+
+            return Core.Query.Enum<PartitionAnalyticalType>(value);
+        }
     }
 }
