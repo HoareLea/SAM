@@ -185,7 +185,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref materialLibrary);
 
-            ArchitecturalModel architecturalModel = Create.ArchitecturalModel(shells, partitions, groundElevation, true, 0.01, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
+            ArchitecturalModel architecturalModel = Create.ArchitecturalModel(shells, partitions, groundElevation, true, materialLibrary, 0.01, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
             if(architecturalModel != null)
             {
                 if (partitions == null || partitions.Count == 0)

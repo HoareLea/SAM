@@ -112,6 +112,8 @@ namespace SAM.Analytical
                 }
             }
 
+            result.AddMissingMaterials(Query.DefaultMaterialLibrary());
+
             return result;
         }
 
@@ -224,10 +226,12 @@ namespace SAM.Analytical
                 }
             }
 
+            result.AddMissingMaterials(Query.DefaultMaterialLibrary());
+
             return result;
         }
 
-        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Shell> shells, IEnumerable<IPartition> partitions, double groundElevation = 0, bool addMissingPartitions = true, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Shell> shells, IEnumerable<IPartition> partitions, double groundElevation = 0, bool addMissingPartitions = true, MaterialLibrary materialLibrary = null, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             if(shells == null && partitions == null)
             {
@@ -572,6 +576,7 @@ namespace SAM.Analytical
             }
 
             result.OrientPartitions(false, silverSpacing, tolerance_Distance);
+            result.AddMissingMaterials(materialLibrary);
 
             return result;
         }
