@@ -39,6 +39,8 @@ namespace SAM.Analytical
             result.SetValue(AnalyticalSettingParameter.InternaConditionTextMaplFileName, "SAM_InternalConditionTextMap.JSON");
             result.SetValue(AnalyticalSettingParameter.DefaultSystemTypeLibraryFileName, "SAM_SystemTypeLibrary.JSON");
 
+            result.SetValue(AnalyticalSettingParameter.DefaultHostPartitionTypeLibraryFileName, "SAM_HostPartitionTypeLibrary.JSON");
+
             string path = null;
 
             path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultConstructionLibraryFileName);
@@ -76,6 +78,10 @@ namespace SAM.Analytical
             path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultSystemTypeLibraryFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultSystemTypeLibrary, Core.Create.IJSAMObject<SystemTypeLibrary>(System.IO.File.ReadAllText(path)));
+
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultHostPartitionTypeLibraryFileName);
+            if (System.IO.File.Exists(path))
+                result.SetValue(AnalyticalSettingParameter.DefaultHostPartitionTypeLibrary, Core.Create.IJSAMObject<HostPartitionTypeLibrary>(System.IO.File.ReadAllText(path)));
 
             return result;
         }

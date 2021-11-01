@@ -234,6 +234,7 @@
     <Compile Include="Modify\AddSpace.cs" />
     <Compile Include="Modify\SetDefaultConstructionByPanelType.cs" />
     <Compile Include="Modify\UpdatePanelTypes.cs" />
+    <Compile Include="Query\New\DefaultHostPartitionTypeLibrary.cs" />
     <Compile Include="Query\New\External.cs" />
     <Compile Include="Query\OpeningLocation.cs" />
     <Compile Include="Query\FixEdges.cs" />

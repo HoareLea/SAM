@@ -26,5 +26,9 @@ namespace SAM.Analytical
         [ParameterProperties("Default ProfileLibrary File Name", "Default ProfileLibrary File Name"), ParameterValue(ParameterType.String)] DefaultProfileLibraryFileName,
         [ParameterProperties("InternaCondition TextMap File Name", "InternaCondition TextMap File Name"), ParameterValue(ParameterType.String)] InternaConditionTextMaplFileName,
         [ParameterProperties("Default SystemTypeLibrary File Name", "Default SystemTypeLibrary File Name"), ParameterValue(ParameterType.String)] DefaultSystemTypeLibraryFileName,
+
+        [ParameterProperties("Default HostPartitionTypeLibrary File Name", "Default HostPartitionTypeLibrary File Name"), ParameterValue(ParameterType.String)] DefaultHostPartitionTypeLibraryFileName,
+        [ParameterProperties("Default HostPartitionTypeLibrary", "Default HostPartitionTypeLibrary"), SAMObjectParameterValue(typeof(HostPartitionTypeLibrary))] DefaultHostPartitionTypeLibrary,
+
     }
 }
