@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
 
         public static Mesh ToRhino_Mesh(this Panel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
-            Face3D face3D = panel?.GetFace3D(cutApertures, tolerance);
+            Face3D face3D = panel?.GetFace3D(cutApertures);
             if (face3D == null)
             {
                 return null;

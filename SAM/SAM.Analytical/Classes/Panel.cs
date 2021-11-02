@@ -161,7 +161,7 @@ namespace SAM.Analytical
         /// Gets Geometrical Representation of Panel (None Analytical Data)
         /// </summary>
         /// <returns name="face3D">SAM Geometry Face3D</returns>
-        public Face3D GetFace3D(bool cutOpenings = false, double tolerance = Tolerance.Distance)
+        public Face3D GetFace3D(bool cutOpenings = false)
         {
             Face2D face2D = planarBoundary3D?.GetFace2D();
             if (face2D == null)
@@ -171,21 +171,32 @@ namespace SAM.Analytical
 
             if(cutOpenings && apertures != null && apertures.Count != 0)
             {
+                List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
+                if(internalEdges == null)
+                {
+                    internalEdges = new List<IClosed2D>();
+                }
+
                 foreach(Aperture aperture in apertures)
                 {
                     Face3D face3D_Aperture = aperture?.GetFace3D();
                     if (face3D_Aperture == null)
+                    {
                         continue;
+                    }
 
-                    Face2D face2D_Aperture = plane.Convert(face3D_Aperture);
-
-                    List<Face2D> face2Ds = face2D.Difference(face2D_Aperture, tolerance);
-                    if (face2Ds == null || face2Ds.Count == 0)
+                    IClosed2D internalEdge = plane.Convert(face3D_Aperture)?.ExternalEdge2D;
+                    if(internalEdge == null)
+                    {
                         continue;
+                    }
 
-                    face2Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
-                    face2D = face2Ds[0];
-                    
+                    internalEdges.Add(internalEdge);
+                }
+
+                if(internalEdges != null && internalEdges.Count > 0)
+                {
+                    face2D = Geometry.Planar.Create.Face2D(face2D.ExternalEdge2D, internalEdges);
                 }
             }
 

@@ -63,7 +63,7 @@ namespace SAM.Geometry.Planar
 
                     polygon2Ds_ExternalEdge_Temp.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
 
-                    for (int i = polygon2Ds_ExternalEdge_Temp.Count - 1; i > 0; i--)
+                    for (int i = polygon2Ds_ExternalEdge_Temp.Count - 1; i >= 0; i--)
                     {
                         Polygon2D polygon2D_ExternalEdge_Temp = polygon2Ds_ExternalEdge_Temp[i];
 

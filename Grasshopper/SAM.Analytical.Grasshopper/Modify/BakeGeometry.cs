@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
             //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
             objectAttributes.Name = panel.Name;
 
-            List<Panel> panels_FixEdges = panel.FixEdges();
+            List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
             if (panels_FixEdges == null || panels_FixEdges.Count == 0)
             {
                 panels_FixEdges = new List<Panel>() { panel };

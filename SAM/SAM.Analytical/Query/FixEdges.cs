@@ -7,7 +7,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static AdjacencyCluster FixEdges(this AdjacencyCluster adjacencyCluster, double tolerance = Core.Tolerance.Distance)
+        public static AdjacencyCluster FixEdges(this AdjacencyCluster adjacencyCluster, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null)
             {
@@ -26,7 +26,7 @@ namespace SAM.Analytical
 
             Parallel.For(0, panels.Count, (int i) =>
             {
-                panelsList[i] = panels[i].FixEdges(tolerance);
+                panelsList[i] = panels[i].FixEdges(cutApertures, tolerance);
             });
 
             for(int i=0; i < panels.Count; i++)
@@ -61,14 +61,14 @@ namespace SAM.Analytical
             return result;
         }
         
-        public static List<Panel> FixEdges(this Panel panel, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> FixEdges(this Panel panel, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
             if(panel == null)
             {
                 return null;
             }
 
-            Face3D face3D = panel.GetFace3D();
+            Face3D face3D = panel.GetFace3D(cutApertures);
             if(face3D == null)
             {
                 return null;

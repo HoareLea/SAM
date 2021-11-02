@@ -68,7 +68,7 @@ namespace SAM.Analytical.Grasshopper
                 if (panel == null)
                     continue;
 
-                List<Panel> panels_FixEdges = panel.FixEdges();
+                List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
                 if(panels_FixEdges == null || panels_FixEdges.Count == 0)
                 {
                     panels_FixEdges = new List<Panel>() { panel };
@@ -86,27 +86,29 @@ namespace SAM.Analytical.Grasshopper
                     Guid guid = default;
                     if (BakeGeometry(panel_FixEdges, rhinoDoc, objectAttributes, out guid, cutApertures, tolerance))
                         guids.Add(guid);
+                }
 
-                    List<Aperture> apertures = panel_FixEdges.Apertures;
-                    if (apertures == null || apertures.Count == 0)
+                List<Aperture> apertures = panel.Apertures;
+                if (apertures == null || apertures.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach (Aperture aperture in apertures)
+                {
+                    if (aperture == null)
                         continue;
 
-                    foreach (Aperture aperture in apertures)
-                    {
-                        if (aperture == null)
-                            continue;
+                    ApertureType apertureType = aperture.ApertureType;
 
-                        ApertureType apertureType = aperture.ApertureType;
+                    layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Analytical.Query.Color(apertureType));
 
-                        layer = Core.Grasshopper.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Analytical.Query.Color(apertureType));
+                    //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                    objectAttributes.LayerIndex = layer.Index;
 
-                        //layerTable.SetCurrentLayerIndex(layer.Index, true);
-                        objectAttributes.LayerIndex = layer.Index;
-
-                        guid = default;
-                        if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
-                            guids.Add(guid);
-                    }
+                    Guid guid = default;
+                    if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
+                        guids.Add(guid);
                 }
             }
 

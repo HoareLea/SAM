@@ -7,7 +7,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public static GH_Surface ToGrasshopper(this Panel panel, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
         {
-            return panel.GetFace3D(cutApertures, tolerance).ToGrasshopper(tolerance);
+            return panel.GetFace3D(cutApertures).ToGrasshopper(tolerance);
         }
 
         public static GH_Surface ToGrasshopper(this PlanarBoundary3D planarBoundary3D)

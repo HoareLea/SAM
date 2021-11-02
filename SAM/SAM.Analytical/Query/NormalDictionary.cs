@@ -17,7 +17,7 @@ namespace SAM.Analytical
             if (panels == null)
                 return null;
 
-            List<Face3D> face3Ds = panels.ConvertAll(x => x.GetFace3D(false, tolerance));
+            List<Face3D> face3Ds = panels.ConvertAll(x => x.GetFace3D(false));
 
             shell = new Shell(face3Ds);
 

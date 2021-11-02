@@ -9,7 +9,7 @@
 
         public static Rhino.Geometry.Brep ToRhino(this Panel panel, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
         {
-            return Geometry.Grasshopper.Convert.ToRhino_Brep(panel?.GetFace3D(cutApertures, tolerance));
+            return Geometry.Grasshopper.Convert.ToRhino_Brep(panel?.GetFace3D(cutApertures));
         }
     }
 }
