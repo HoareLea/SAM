@@ -185,22 +185,24 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref materialLibrary);
 
-            ArchitecturalModel architecturalModel = Create.ArchitecturalModel(shells, partitions, groundElevation, true, 0.01, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
+            ArchitecturalModel architecturalModel = Create.ArchitecturalModel(shells, partitions, groundElevation, true, materialLibrary, 0.01, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
             if(architecturalModel != null)
             {
                 if (partitions == null || partitions.Count == 0)
                 {
+                    HostPartitionTypeLibrary hostPartitionTypeLibrary = Analytical.Query.DefaultHostPartitionTypeLibrary();
+                    
                     architecturalModel.UpdateHostPartitionType(
-                        curtainWallType: Analytical.Query.DefaultHostPartitionType<WallType>(PartitionAnalyticalType.CurtainWall),
-                        internalWallType: Analytical.Query.DefaultHostPartitionType<WallType>(PartitionAnalyticalType.InternalWall),
-                        externalWallType: Analytical.Query.DefaultHostPartitionType<WallType>(PartitionAnalyticalType.ExternalWall),
-                        undergroundWallType: Analytical.Query.DefaultHostPartitionType<WallType>(PartitionAnalyticalType.UndergroundWall),
-                        internalFloorType: Analytical.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.InternalFloor),
-                        externalFloorType: Analytical.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.ExternalFloor),
-                        onGradeFloorType: Analytical.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.OnGradeFloor),
-                        undergroundFloorType: Analytical.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.UndergroundFloor),
-                        undergroundCeilingFloorType: Analytical.Query.DefaultHostPartitionType<FloorType>(PartitionAnalyticalType.UndergroundCeiling),
-                        roofType: Analytical.Query.DefaultHostPartitionType<RoofType>(PartitionAnalyticalType.Roof),
+                        curtainWallType: hostPartitionTypeLibrary.GetHostPartitionType<WallType>(PartitionAnalyticalType.CurtainWall),
+                        internalWallType: hostPartitionTypeLibrary.GetHostPartitionType<WallType>(PartitionAnalyticalType.InternalWall),
+                        externalWallType: hostPartitionTypeLibrary.GetHostPartitionType<WallType>(PartitionAnalyticalType.ExternalWall),
+                        undergroundWallType: hostPartitionTypeLibrary.GetHostPartitionType<WallType>(PartitionAnalyticalType.UndergroundWall),
+                        internalFloorType: hostPartitionTypeLibrary.GetHostPartitionType<FloorType>(PartitionAnalyticalType.InternalFloor),
+                        externalFloorType: hostPartitionTypeLibrary.GetHostPartitionType<FloorType>(PartitionAnalyticalType.ExternalFloor),
+                        onGradeFloorType: hostPartitionTypeLibrary.GetHostPartitionType<FloorType>(PartitionAnalyticalType.OnGradeFloor),
+                        undergroundFloorType: hostPartitionTypeLibrary.GetHostPartitionType<FloorType>(PartitionAnalyticalType.UndergroundFloor),
+                        undergroundCeilingFloorType: hostPartitionTypeLibrary.GetHostPartitionType<FloorType>(PartitionAnalyticalType.UndergroundCeiling),
+                        roofType: hostPartitionTypeLibrary.GetHostPartitionType<RoofType>(PartitionAnalyticalType.Roof),
                         materialLibrary: materialLibrary);
                 }
 

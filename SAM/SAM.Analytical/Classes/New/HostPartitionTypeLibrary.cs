@@ -74,6 +74,33 @@ namespace SAM.Analytical
             return GetObjects<HostPartitionType>();
         }
 
+        public List<T> GetHostPartitionTypes<T>() where T : HostPartitionType
+        {
+            return GetObjects<T>();
+        }
+
+        public List<T> GetHostPartitionTypes<T>(PartitionAnalyticalType partitionAnalyticalType) where T : HostPartitionType
+        {
+            List<T> hostPartitionTypes = GetHostPartitionTypes<T>();
+            if (hostPartitionTypes == null || hostPartitionTypes.Count == 0)
+            {
+                return null;
+            }
+
+            return hostPartitionTypes.FindAll(x => x.PartitionAnalyticalType() == partitionAnalyticalType);
+        }
+
+        public T GetHostPartitionType<T>(PartitionAnalyticalType partitionAnalyticalType) where T : HostPartitionType
+        {
+            List<T> hostPartitionTypes = GetHostPartitionTypes<T>();
+            if (hostPartitionTypes == null || hostPartitionTypes.Count == 0)
+            {
+                return null;
+            }
+
+            return hostPartitionTypes.FindAll(x => x.PartitionAnalyticalType() == partitionAnalyticalType)?.FirstOrDefault();
+        }
+
         public List<HostPartitionType> GetHostPartitionTypes(PartitionAnalyticalType partitionAnalyticalType)
         {
             List<HostPartitionType> hostPartitionTypes = GetHostPartitionTypes();
