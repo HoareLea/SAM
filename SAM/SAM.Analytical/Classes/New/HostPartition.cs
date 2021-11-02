@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
+using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 
@@ -216,6 +217,67 @@ namespace SAM.Analytical
                     opening.Transform(transform3D);
                 }
             }
+        }
+
+        public List<Face3D> GetFace3Ds(bool cutOpenings = false, double tolerance = Tolerance.Distance)
+        {
+            Face3D face3D = Face3D;
+            if(face3D == null)
+            {
+                return null;
+            }
+
+            List<Face3D> result = face3D.FixEdges(tolerance);
+            if(!cutOpenings || result == null || result.Count == 0)
+            {
+                return result;
+            }
+
+            List<Face3D> face3Ds_Openings = openings?.ConvertAll(x => x?.Face3D);
+            if(face3Ds_Openings == null || face3Ds_Openings.Count == 0)
+            {
+                return result;
+            }
+
+
+            Plane plane = face3D.GetPlane();
+
+            List<Face2D> face2Ds = result.ConvertAll(x => plane.Convert(x));
+
+            foreach (Face3D face3D_Opening in face3Ds_Openings)
+            {
+                List<Face3D> face3Ds_Opening_FixEdges = face3D_Opening?.FixEdges(tolerance);
+                if (face3Ds_Opening_FixEdges == null || face3Ds_Opening_FixEdges.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach (Face3D face3D_Opening_FixEdges in face3Ds_Opening_FixEdges)
+                {
+                    Face2D face2D_Opening = plane.Convert(face3D_Opening_FixEdges);
+
+                    for (int i = face2Ds.Count; i <= 0; i--)
+                    {
+                        Face2D face2D_Partition = face2Ds[i];
+
+                        List<Face2D> face2Ds_Difference = face2D_Partition.Difference(face2D_Opening, tolerance);
+                        if (face2Ds_Difference == null || face2Ds_Difference.Count == 0)
+                        {
+                            face2Ds.RemoveAt(i);
+                        }
+                        else
+                        {
+                            face2Ds.AddRange(face2Ds_Difference);
+                        }
+                    }
+
+                }
+
+            }
+
+            result = face2Ds.ConvertAll(x => plane.Convert(x));
+
+            return result;
         }
     }
 }

@@ -15,5 +15,7 @@ namespace SAM.Analytical
         IOpening RemoveOpening(System.Guid guid);
 
         bool HasOpening(System.Guid guid);
+
+        List<Face3D> GetFace3Ds(bool cutOpenings = false, double tolerance = Tolerance.Distance);
     }
 }
