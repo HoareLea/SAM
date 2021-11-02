@@ -92,8 +92,10 @@
     <Compile Include="Classes\InternalCondition.cs" />
     <Compile Include="Classes\Profile.cs" />
     <Compile Include="Classes\DegreeOfActivity.cs" />
+    <Compile Include="Convert\ToSAM\ApertureConstruction.cs" />
     <Compile Include="Convert\ToSAM\ConstructionLayer.cs" />
     <Compile Include="Convert\ToSAM\Construction.cs" />
+    <Compile Include="Convert\ToSAM\Aperture.cs" />
     <Compile Include="Convert\ToSAM\Panel.cs" />
     <Compile Include="Convert\ToSystem\String.cs" />
     <Compile Include="Convert\ToSystem\DateTime.cs" />

@@ -47,7 +47,7 @@ namespace SAM.Analytical
 
             Panel result = Create.Panel(construction, panelType, partition.Face3D);
             apertures?.ForEach(x => result.AddAperture(x));
-
+            Core.Modify.CopyParameterSets(partition as Core.SAMObject, result);
             return result;
         }
     }

@@ -12,6 +12,7 @@ namespace SAM.Analytical
             }
 
             Construction result = new Construction(hostPartitionType.Guid, hostPartitionType.Name, hostPartitionType?.MaterialLayers?.ConvertAll(x => x.ToSAM()));
+            Core.Modify.CopyParameterSets(hostPartitionType, result);
             return result;
         }
     }

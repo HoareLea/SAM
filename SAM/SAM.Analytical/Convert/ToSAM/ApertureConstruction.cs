@@ -22,6 +22,7 @@ namespace SAM.Analytical
             }
 
             ApertureConstruction result = new ApertureConstruction(openingType.Guid, openingType.Name, apertureType, openingType?.PaneMaterialLayers?.ConvertAll(x => x.ToSAM()), openingType?.FrameMaterialLayers?.ConvertAll(x => x.ToSAM()));
+            Core.Modify.CopyParameterSets(openingType, result);
             return result;
         }
     }
