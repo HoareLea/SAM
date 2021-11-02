@@ -133,7 +133,7 @@ namespace SAM.Analytical.Grasshopper
                 profileLibrary = null;
 
             if (profileLibrary == null)
-                profileLibrary = ActiveSetting.Setting.GetValue<ProfileLibrary>(AnalyticalSettingParameter.DefaultProfileLibrary);
+                profileLibrary = Analytical.Query.DefaultProfileLibrary();
 
 
             bool overrideNotFound = false;

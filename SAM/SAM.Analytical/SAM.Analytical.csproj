@@ -193,6 +193,7 @@
     <Compile Include="Modify\Align.cs" />
     <Compile Include="Modify\New\AddMissingProfiles.cs" />
     <Compile Include="Modify\New\AddMissingMaterials.cs" />
+    <Compile Include="Query\New\DefaultProfileLibrary.cs" />
     <Compile Include="Query\New\Project.cs" />
     <Compile Include="Modify\New\SimplifyByAngle.cs" />
     <Compile Include="Modify\SimplifyByAngle.cs" />

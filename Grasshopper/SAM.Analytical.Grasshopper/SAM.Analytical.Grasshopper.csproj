@@ -80,6 +80,7 @@
     <Compile Include="Classes\New\GooPartition.cs" />
     <Compile Include="Classes\New\GooRoofType.cs" />
     <Compile Include="Classes\New\GooWallType.cs" />
+    <Compile Include="Component\New\SAMAnalyticalAddMissingProfiles.cs" />
     <Compile Include="Component\New\SAMAnalyticalAddMissingMaterials.cs" />
     <Compile Include="Component\New\SAMAnalyticalAddAirPartitions.cs" />
     <Compile Include="Component\New\SAMAnalyticalAddOpenings.cs" />
