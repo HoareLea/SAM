@@ -88,6 +88,7 @@
     <Compile Include="Component\New\SAMAnalyticalCreateArchitecturalModelByShells.cs" />
     <Compile Include="Component\New\SAMAnalyticalCreateHostPartitionType.cs" />
     <Compile Include="Component\New\SAMAnalyticalCreateMaterialLayersByNames.cs" />
+    <Compile Include="Component\New\SAMAnalyticalCreateHostPartitionsBy3DGeometry.cs" />
     <Compile Include="Component\New\SAMAnalyticalHostPartitionCategory.cs" />
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />

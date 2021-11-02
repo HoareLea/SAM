@@ -33,6 +33,21 @@ namespace SAM.Geometry.Grasshopper
                     sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)sAMGeometry).Face3D };
                     return true;
                 }
+                else if (sAMGeometry is Spatial.Shell && typeof(T) == typeof(Spatial.Face3D))
+                {
+                    List<Spatial.Face3D> face3Ds = ((Spatial.Shell)sAMGeometry).Face3Ds;
+                    if(face3Ds != null)
+                    {
+                        sAMGeometries = new List<T>(face3Ds.ConvertAll(x => (T)(object)x));
+                    }
+
+                    return true;
+                }
+                else if (sAMGeometry is Spatial.IClosedPlanar3D && typeof(T) == typeof(Spatial.Face3D))
+                {
+                    sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D((Spatial.IClosedPlanar3D)sAMGeometry)};
+                    return true;
+                }
             }
 
             object @object = null;
