@@ -4,6 +4,7 @@ using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 using SAM.Geometry.Spatial;
+using Grasshopper.Kernel.Types;
 
 namespace SAM.Architectural.Grasshopper
 {
@@ -42,7 +43,7 @@ namespace SAM.Architectural.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new Geometry.Grasshopper.GooSAMGeometryParam() { Name = "_face3DObjects", NickName = "_face3DObjects", Description = "SAM Geometry Face3DObjects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_face3DObjects", NickName = "_face3DObjects", Description = "SAM Geometry Face3DObjects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -73,8 +74,8 @@ namespace SAM.Architectural.Grasshopper
             int index = -1;
 
             index = Params.IndexOfInputParam("_face3DObjects");
-            List<Geometry.ISAMGeometry> geometries = new List<Geometry.ISAMGeometry>();
-            if (!dataAccess.GetDataList(index, geometries) || geometries == null)
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+            if (!dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -88,15 +89,9 @@ namespace SAM.Architectural.Grasshopper
             }
 
             List<Face3D> face3Ds = new List<Face3D>();
-            foreach(Geometry.ISAMGeometry sAMGeometry in geometries)
+            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                ISAMGeometry3D sAMGeometry3D = sAMGeometry as ISAMGeometry3D;
-                if(sAMGeometry3D == null)
-                {
-                    continue;
-                }
-
-                if(!Geometry.Spatial.Query.TryConvert(sAMGeometry3D, out List<Face3D> face3Ds_Temp) || face3Ds_Temp == null)
+                if(!Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds_Temp) || face3Ds_Temp == null)
                 {
                     continue;
                 }
