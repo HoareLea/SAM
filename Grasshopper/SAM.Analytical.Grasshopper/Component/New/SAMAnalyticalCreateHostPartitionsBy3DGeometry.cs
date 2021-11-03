@@ -121,7 +121,15 @@ namespace SAM.Analytical.Grasshopper
                         hostPartitionCategory = HostPartitionCategory.Wall;
                     }
 
-                    hostPartitionType_Temp = hostPartitionTypeLibrary.GetHostPartitionTypes(hostPartitionCategory)?.FirstOrDefault();
+                    if (hostPartitionCategory == HostPartitionCategory.Floor)
+                    {
+                        hostPartitionType_Temp = hostPartitionTypeLibrary.GetHostPartitionType<HostPartitionType>(PartitionAnalyticalType.InternalFloor);
+                    }
+
+                    if (hostPartitionType_Temp == null)
+                    {
+                        hostPartitionType_Temp = hostPartitionTypeLibrary.GetHostPartitionTypes(hostPartitionCategory)?.FirstOrDefault();
+                    }
 
                     if (hostPartitionType_Temp == null)
                     {
