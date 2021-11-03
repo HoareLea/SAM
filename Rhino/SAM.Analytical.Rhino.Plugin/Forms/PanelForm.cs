@@ -38,18 +38,10 @@ namespace SAM.Analytical.Rhino.Plugin
 
         private void Button_Reset_Click(object sender, EventArgs e)
         {
-            if(panels != null)
-            {
-                for(int i=0; i < panels.Count; i++)
-                {
-                    Panel panel = panels[i];
-                    if(panel == null)
-                    {
-                        continue;
-                    }
-                }
-            }
-            
+            panels = panels?.ConvertAll(x => Create.Panel(x));
+
+            Modify.SetWeights(panels);
+
             DialogResult = DialogResult.OK;
             Close();
         }

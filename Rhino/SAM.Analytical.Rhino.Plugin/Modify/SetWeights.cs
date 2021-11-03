@@ -5,7 +5,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Rhino.Plugin
 {
-    public static partial class Query
+    public static partial class Modify
     {
         public static void SetWeights(this List<Panel> panels, double offset = 0.1, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
@@ -14,7 +14,7 @@ namespace SAM.Analytical.Rhino.Plugin
                 return;
             }
 
-            List<Tuple<Panel, double>> tuples = new List<Tuple<Panel, double>>();
+            List<Tuple<int, double>> tuples = new List<Tuple<int, double>>();
             for(int i =0; i < panels.Count; i++)
             {
                 Panel panel = panels[i];
@@ -56,7 +56,7 @@ namespace SAM.Analytical.Rhino.Plugin
 
                     point3Ds.ExtremePoints(out Point3D point3D_1, out Point3D point3D_2);
 
-                    tuples.Add(new Tuple<Panel, double>(panel, point3D_1.Distance(point3D_2)));
+                    tuples.Add(new Tuple<int, double>(i, point3D_1.Distance(point3D_2)));
                 }
                 else
                 {
@@ -72,20 +72,18 @@ namespace SAM.Analytical.Rhino.Plugin
                         continue;
                     }
 
-                    tuples.Add(new Tuple<Panel, double>(panel, System.Math.Max(rectangle2D.Height, rectangle2D.Width)));
+                    tuples.Add(new Tuple<int, double>(i, System.Math.Max(rectangle2D.Height, rectangle2D.Width)));
                 }
             }
 
             double min = tuples.ConvertAll(x => x.Item2).Min();
             double max = tuples.ConvertAll(x => x.Item2).Max();
 
-            foreach(Tuple<Panel, double> tuple in tuples)
+            foreach(Tuple<int, double> tuple in tuples)
             {
-                double weight = (max * tuple.Item2) / min;
-
+                double weight = Math.Query.Remap(tuple.Item2, min, max, 0.2, 1);
+                panels[tuple.Item1].SetValue(PanelParameter.Weight, weight);
             }
-
-
         }
     }
 }
