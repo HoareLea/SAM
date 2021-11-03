@@ -24,10 +24,12 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj" />
   </ItemGroup>
   
   <ItemGroup>
     <Folder Include="Enums\Parameter\" />
+    <Folder Include="Query\" />
   </ItemGroup>
   
   <PropertyGroup Condition="$(Configuration) == 'Debug' AND $([MSBuild]::IsOSPlatform(Windows))">

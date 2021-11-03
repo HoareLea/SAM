@@ -38,6 +38,18 @@ namespace SAM.Analytical.Rhino.Plugin
 
         private void Button_Reset_Click(object sender, EventArgs e)
         {
+            if(panels != null)
+            {
+                for(int i=0; i < panels.Count; i++)
+                {
+                    Panel panel = panels[i];
+                    if(panel == null)
+                    {
+                        continue;
+                    }
+                }
+            }
+            
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -56,19 +68,46 @@ namespace SAM.Analytical.Rhino.Plugin
                         }
 
                         Panel panel = Create.Panel(panels[i]);
+
                         if(double.TryParse(TextBox_BucketSize.Text, out double bucketSize))
                         {
                             panel.SetValue(PanelParameter.BucketSize, bucketSize);
                         }
+                        
+                        if(panel.TryGetValue(PanelParameter.BucketSize, out bucketSize))
+                        {
+                            if(double.TryParse(TextBox_BucketSizeFactor.Text, out double factor))
+                            {
+                                panel.SetValue(PanelParameter.BucketSize, bucketSize * factor);
+                            }
+                        }
+
 
                         if (double.TryParse(TextBox_MaxExtend.Text, out double maxExtend))
                         {
                             panel.SetValue(PanelParameter.MaxExtend, maxExtend);
                         }
 
+                        if (panel.TryGetValue(PanelParameter.MaxExtend, out maxExtend))
+                        {
+                            if (double.TryParse(TextBox_MaxExtendFactor.Text, out double factor))
+                            {
+                                panel.SetValue(PanelParameter.MaxExtend, maxExtend * factor);
+                            }
+                        }
+
+
                         if (double.TryParse(TextBox_Weight.Text, out double weight))
                         {
                             panel.SetValue(PanelParameter.Weight, weight);
+                        }
+
+                        if (panel.TryGetValue(PanelParameter.Weight, out weight))
+                        {
+                            if (double.TryParse(TextBox_WeightFactor.Text, out double factor))
+                            {
+                                panel.SetValue(PanelParameter.Weight, weight * factor);
+                            }
                         }
 
                         panels[i] = panel;
@@ -95,32 +134,48 @@ namespace SAM.Analytical.Rhino.Plugin
                 {
                     bucketSizes.Add(bucketSize);
                 }
+                else
+                {
+                    bucketSizes.Add(double.NaN);
+                }
 
                 if (panel.TryGetValue(PanelParameter.MaxExtend, out double maxExtend))
                 {
                     MaxExtends.Add(maxExtend);
+                }
+                else
+                {
+                    MaxExtends.Add(double.NaN);
                 }
 
                 if (panel.TryGetValue(PanelParameter.Weight, out double weight))
                 {
                     Weights.Add(weight);
                 }
+                else
+                {
+                    Weights.Add(double.NaN);
+                }
             }
 
-            if(bucketSizes.Count == 1)
+            if(bucketSizes.Count == 1 && !double.IsNaN(bucketSizes.First()))
             {
                 TextBox_BucketSize.Text = bucketSizes.First().ToString();
             }
 
-            if (MaxExtends.Count == 1)
+            if (MaxExtends.Count == 1 && !double.IsNaN(MaxExtends.First()))
             {
                 TextBox_MaxExtend.Text = MaxExtends.First().ToString();
             }
 
-            if (Weights.Count == 1)
+            if (Weights.Count == 1 && !double.IsNaN(Weights.First()))
             {
                 TextBox_Weight.Text = Weights.First().ToString();
             }
+
+            TextBox_BucketSizeFactor.Text = (1.0).ToString();
+            TextBox_MaxExtendFactor.Text = (1.0).ToString();
+            TextBox_WeightFactor.Text = (1.0).ToString();
         }
 
         private void TextBox_KeyPress(object sender, KeyPressEventArgs e)
