@@ -439,6 +439,18 @@ namespace SAM.Analytical
                     }
                 }
             }
+            else if (jSAMObject is MechanicalSystemType)
+            {
+                MechanicalSystemType mechanicalSystemType = (MechanicalSystemType)jSAMObject;
+                List<MechanicalSystem> mechanicalSystems = relationCluster?.GetRelatedObjects<MechanicalSystem>(mechanicalSystemType);
+                if (mechanicalSystems != null)
+                {
+                    foreach (MechanicalSystem mechanicalSystem in mechanicalSystems)
+                    {
+                        relationCluster.RemoveObject(mechanicalSystem.GetType(), mechanicalSystem.Guid);
+                    }
+                }
+            }
 
             Guid guid = relationCluster.GetGuid(jSAMObject);
             if(guid == Guid.Empty)
@@ -456,7 +468,8 @@ namespace SAM.Analytical
                 return false;
             }
 
-            return relationCluster.AddRelation(jSAMObject_1.Clone(), jSAMObject_2.Clone());
+            //return relationCluster.AddRelation(jSAMObject_1.Clone(), jSAMObject_2.Clone());
+            return relationCluster.AddRelation(jSAMObject_1, jSAMObject_2);
         }
 
         public IMaterial GetMaterial(string name)
@@ -1257,6 +1270,11 @@ namespace SAM.Analytical
             return GetOpenings<IOpening>();
         }
 
+        public List<T> GetMechanicalSystems<T>() where T : MechanicalSystem
+        {
+            return GetObjects<T>();
+        }
+
         public List<IOpening> GetOpenings(OpeningType openingType)
         {
             if(relationCluster == null || openingType == null)
@@ -1443,6 +1461,11 @@ namespace SAM.Analytical
             }
 
             bool result = relationCluster.AddObject(space_Temp);
+            if(!result)
+            {
+                return result;
+            }
+
             if(partitions != null && partitions.Count() != 0)
             {
                 foreach(IPartition partition in partitions)
@@ -1724,6 +1747,85 @@ namespace SAM.Analytical
             }
 
             return true;
+        }
+
+        public bool Add(MechanicalSystemType mechanicalSystemType)
+        {
+            if (mechanicalSystemType != null)
+            {
+                return false;
+            }
+
+            MechanicalSystemType mechanicalSystemType_Temp = mechanicalSystemType.Clone();
+
+            if (relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            relationCluster.AddObject(mechanicalSystemType_Temp);
+
+            List<MechanicalSystem> mechanicalSystems = relationCluster.GetRelatedObjects<MechanicalSystem>(mechanicalSystemType_Temp);
+            if (mechanicalSystems != null)
+            {
+                foreach (MechanicalSystem mechanicalSystem in mechanicalSystems)
+                {
+                    mechanicalSystem.Type(mechanicalSystemType_Temp);
+                }
+            }
+
+            return true;
+        }
+
+        public bool Add(MechanicalSystem mechanicalSystem, IEnumerable<Space> spaces = null)
+        {
+            if(mechanicalSystem == null)
+            {
+                return false;
+            }
+
+            if(relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            MechanicalSystem machanicalSystem_Temp = mechanicalSystem.Clone();
+
+            MechanicalSystemType mechanicalSystemType = machanicalSystem_Temp.Type;
+            if(mechanicalSystemType != null)
+            {
+                MechanicalSystemType mechanicalSystemType_Temp = relationCluster.GetObject<MechanicalSystemType>(mechanicalSystemType.Guid);
+                if(mechanicalSystemType_Temp == null)
+                {
+                    relationCluster.AddObject(mechanicalSystemType);
+                    mechanicalSystemType_Temp = mechanicalSystemType;
+                }
+                else
+                {
+                    machanicalSystem_Temp.Type(mechanicalSystemType_Temp);
+                }
+
+                relationCluster.AddRelation(machanicalSystem_Temp, machanicalSystem_Temp);
+            }
+
+            bool result = relationCluster.AddObject(machanicalSystem_Temp);
+            if(!result)
+            {
+                return result;
+            }
+
+            if(spaces != null)
+            {
+                foreach(Space space in spaces)
+                {
+                    if (Add(space))
+                    {
+                        relationCluster.AddRelation(machanicalSystem_Temp, space);
+                    }
+                }
+            }
+
+            return result;
         }
 
         public bool Contains(ISAMObject sAMObject)
