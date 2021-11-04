@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="Classes\GooMatrix.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Matrix.cs" />
-    <Compile Include="Convert\ToRhino\Matrix.cs" />
     <Compile Include="Convert\ToSAM\Matrix.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,6 +84,10 @@
     <Folder Include="Component\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Rhino\SAM.Math.Rhino\SAM.Math.Rhino.csproj">
+      <Project>{4cf0f164-3c3b-4f14-ad9c-8267ac379d71}</Project>
+      <Name>SAM.Math.Rhino</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SAM\SAM.Math\SAM.Math.csproj">
       <Project>{255e428d-6969-4542-9846-67b7de87501b}</Project>
       <Name>SAM.Math</Name>

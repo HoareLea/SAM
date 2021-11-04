@@ -74,7 +74,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Geometry.Spatial.Point3D point3D = point3d.ToSAM();
+            Geometry.Spatial.Point3D point3D = Geometry.Rhino.Convert.ToSAM(point3d);
 
             dataAccess.SetData(0, panel.Distance(point3D));
             dataAccess.SetData(1, panel.DistanceToEdges(point3D));

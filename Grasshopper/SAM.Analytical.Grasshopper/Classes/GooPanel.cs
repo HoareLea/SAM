@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
                 if (Value == null)
                     return BoundingBox.Empty;
 
-                return Geometry.Grasshopper.Convert.ToRhino(Value.GetBoundingBox());
+                return Geometry.Rhino.Convert.ToRhino(Value.GetBoundingBox());
             }
         }
 
@@ -88,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
 
             if(!ShowAll)
             {
-                Point3D point3D_CameraLocation = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation.ToSAM();
+                Point3D point3D_CameraLocation = Geometry.Rhino.Convert.ToSAM(RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation);
                 if (point3D_CameraLocation == null)
                     return;
 
@@ -97,11 +97,11 @@ namespace SAM.Analytical.Grasshopper
                     return;
             }
 
-            Rhino.Display.DisplayMaterial displayMaterial = Query.DisplayMaterial(Value.PanelType);
+            global::Rhino.Display.DisplayMaterial displayMaterial = Query.DisplayMaterial(Value.PanelType);
             if (displayMaterial == null)
                 displayMaterial = args.Material;
 
-            Brep brep = Geometry.Grasshopper.Convert.ToRhino_Brep(face3D);
+            Brep brep = Geometry.Rhino.Convert.ToRhino_Brep(face3D);
             if (brep == null)
                 return;
 
@@ -113,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
                 foreach (Aperture aperture in apertures)
                     foreach (IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdge3Ds())
                     {
-                        Rhino.Display.DisplayMaterial displayMaterial_Aperture = Query.DisplayMaterial(aperture.ApertureConstruction.ApertureType);
+                        global::Rhino.Display.DisplayMaterial displayMaterial_Aperture = Query.DisplayMaterial(aperture.ApertureConstruction.ApertureType);
                         if (displayMaterial_Aperture == null)
                             displayMaterial_Aperture = args.Material;
 
@@ -125,7 +125,7 @@ namespace SAM.Analytical.Grasshopper
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            return Modify.BakeGeometry(Value, doc, att, out obj_guid);
+            return Rhino.Modify.BakeGeometry(Value, doc, att, out obj_guid);
         }
 
         public override bool CastFrom(object source)
@@ -229,7 +229,7 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooPanel> values)
         {
-            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
+            global::Rhino.Input.Custom.GetObject getObject = new global::Rhino.Input.Custom.GetObject();
             getObject.SetCommandPrompt("Pick Surfaces to create panels");
             getObject.GeometryFilter = ObjectType.Brep;
             getObject.SubObjectSelect = true;
@@ -271,7 +271,7 @@ namespace SAM.Analytical.Grasshopper
                 if(panels == null || panels.Count == 0)
                 {
 
-                    List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
+                    List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(brep);
                     if (sAMGeometry3Ds == null)
                         continue;
 
@@ -289,7 +289,7 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Singular(ref GooPanel value)
         {
-            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
+            global::Rhino.Input.Custom.GetObject getObject = new global::Rhino.Input.Custom.GetObject();
             getObject.SetCommandPrompt("Pick Surface to create panel");
             getObject.GeometryFilter = ObjectType.Brep;
             getObject.SubObjectSelect = true;
@@ -329,7 +329,7 @@ namespace SAM.Analytical.Grasshopper
                 if (panels == null || panels.Count == 0)
                 {
 
-                    List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
+                    List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(brep);
                     if (sAMGeometry3Ds == null)
                         continue;
 

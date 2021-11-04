@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
                 if (Value == null)
                     return BoundingBox.Empty;
 
-                return Geometry.Grasshopper.Convert.ToRhino(Value.GetBoundingBox());
+                return Geometry.Rhino.Convert.ToRhino(Value.GetBoundingBox());
             }
         }
 
@@ -69,7 +69,7 @@ namespace SAM.Analytical.Grasshopper
                 if (edge3Ds == null || edge3Ds.Count == 0)
                     continue;
 
-                List<Point3d> point3ds = edge3Ds.ConvertAll(x => x.Curve3D.GetStart().ToRhino());
+                List<Point3d> point3ds = edge3Ds.ConvertAll(x => Geometry.Rhino.Convert.ToRhino(x.Curve3D.GetStart()));
                 if (point3ds.Count == 0)
                     continue;
 
@@ -86,14 +86,14 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args, DisplayMaterial displayMaterial)
         {
-            Brep brep = Value.ToRhino();
+            Brep brep = Rhino.Convert.ToRhino(Value);
             if (brep != null)
                 args.Pipeline.DrawBrepShaded(brep, displayMaterial);
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            GeometryBase geometryBase = Value.ToRhino();
+            GeometryBase geometryBase = Rhino.Convert.ToRhino(Value);
             if (geometryBase == null)
             {
                 obj_guid = Guid.Empty;

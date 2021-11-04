@@ -28,7 +28,7 @@ namespace SAM.Architectural.Grasshopper
                 if (Value == null)
                     return BoundingBox.Empty;
 
-                return Geometry.Grasshopper.Convert.ToRhino(Value.GetPlane().Origin.GetBoundingBox(1));
+                return Geometry.Rhino.Convert.ToRhino(Value.GetPlane().Origin.GetBoundingBox(1));
             }
         }
 
@@ -40,7 +40,7 @@ namespace SAM.Architectural.Grasshopper
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
             ConstructionPlane constructionPlane = new ConstructionPlane();
-            constructionPlane.Plane = Geometry.Grasshopper.Convert.ToRhino(Value.GetPlane());
+            constructionPlane.Plane = Geometry.Rhino.Convert.ToRhino(Value.GetPlane());
 
             args.Pipeline.DrawConstructionPlane(constructionPlane);
         }
@@ -48,7 +48,7 @@ namespace SAM.Architectural.Grasshopper
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
             ConstructionPlane constructionPlane = new ConstructionPlane();
-            constructionPlane.Plane = Geometry.Grasshopper.Convert.ToRhino(Value.GetPlane());
+            constructionPlane.Plane = Geometry.Rhino.Convert.ToRhino(Value.GetPlane());
 
             args.Pipeline.DrawConstructionPlane(constructionPlane);
         }

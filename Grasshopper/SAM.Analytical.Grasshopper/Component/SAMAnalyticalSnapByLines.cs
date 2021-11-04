@@ -79,7 +79,7 @@ namespace SAM.Analytical.Grasshopper
             Geometry.Spatial.Plane plane = Geometry.Spatial.Plane.WorldXY;
             List<Geometry.Spatial.Plane> planes = new List<Geometry.Spatial.Plane>();
 
-            foreach (Segment3D segment3D in lines.ConvertAll(x => x.ToSAM()))
+            foreach (Segment3D segment3D in lines.ConvertAll(x => Geometry.Rhino.Convert.ToSAM(x)))
             {
                 Geometry.Spatial.Plane plane_Segment3D = new Geometry.Spatial.Plane(segment3D[0], segment3D[1], (Point3D)segment3D[0].GetMoved(plane.Normal));
                 if (plane_Segment3D != null)

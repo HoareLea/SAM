@@ -83,6 +83,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\Rhino\SAM.Core.Rhino\SAM.Core.Rhino.csproj">
+      <Project>{3d10ac53-e2e3-405a-967b-be00f3ca9bc8}</Project>
+      <Name>SAM.Core.Rhino</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj">
+      <Project>{40ea176a-6c19-4410-a22e-bc87833f9c77}</Project>
+      <Name>SAM.Geometry.Rhino</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SAM\SAM.Architectural\SAM.Architectural.csproj">
       <Project>{752ad1b6-fd09-4008-b7cc-5fd45fd2f9d9}</Project>
       <Name>SAM.Architectural</Name>

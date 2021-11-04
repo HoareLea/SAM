@@ -103,7 +103,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("_brep");
-            Rhino.Geometry.Brep brep = null;
+            global::Rhino.Geometry.Brep brep = null;
             if (index == -1 || !dataAccess.GetData(index, ref brep))
             {
                 if (index_In != -1)
@@ -128,7 +128,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Geometry.Spatial.Shell shell = brep.ToSAM_Shell(true);
+            Geometry.Spatial.Shell shell = Geometry.Rhino.Convert.ToSAM_Shell(brep, true);
             if(shell == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

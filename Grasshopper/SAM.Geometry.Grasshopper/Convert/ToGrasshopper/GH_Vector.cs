@@ -6,12 +6,12 @@ namespace SAM.Geometry.Grasshopper
     {
         public static GH_Vector ToGrasshopper(this Spatial.Vector3D vector3D)
         {
-            return new GH_Vector(vector3D.ToRhino());
+            return new GH_Vector(Rhino.Convert.ToRhino(vector3D));
         }
 
         public static GH_Vector ToGrasshopper(this Planar.Vector2D vector2D)
         {
-            return new GH_Vector(vector2D.ToRhino());
+            return new GH_Vector(Rhino.Convert.ToRhino(vector2D));
         }
     }
 }

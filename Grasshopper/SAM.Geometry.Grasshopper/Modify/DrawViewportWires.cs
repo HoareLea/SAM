@@ -35,25 +35,25 @@ namespace SAM.Geometry.Grasshopper
 
             if (curve3Ds != null && curve3Ds.Count > 0)
             {
-                curve3Ds.ForEach(x => previewWireArgs.Pipeline.DrawCurve(x.ToRhino(), color));
+                curve3Ds.ForEach(x => previewWireArgs.Pipeline.DrawCurve(Rhino.Convert.ToRhino(x), color));
                 //return;
             }
 
             if (sAMGeomery is Spatial.Point3D)
             {
-                previewWireArgs.Pipeline.DrawPoint((sAMGeomery as Spatial.Point3D).ToRhino(), color);
+                previewWireArgs.Pipeline.DrawPoint(Rhino.Convert.ToRhino((sAMGeomery as Spatial.Point3D)), color);
                 return;
             }
 
             if (sAMGeomery is Planar.Point2D)
             {
-                previewWireArgs.Pipeline.DrawPoint((sAMGeomery as Planar.Point2D).ToRhino(), color);
+                previewWireArgs.Pipeline.DrawPoint(Rhino.Convert.ToRhino((sAMGeomery as Planar.Point2D)), color);
                 return;
             }
 
             if (sAMGeomery is Spatial.Face3D)
             {
-                Brep brep = (sAMGeomery as Spatial.Face3D).ToRhino_Brep();
+                Brep brep = Rhino.Convert.ToRhino_Brep((sAMGeomery as Spatial.Face3D));
                 if (brep != null)
                 {
                     previewWireArgs.Pipeline.DrawBrepWires(brep, color);
@@ -63,14 +63,14 @@ namespace SAM.Geometry.Grasshopper
 
             if (sAMGeomery is Spatial.Shell)
             {
-                List<Brep> breps = ((Spatial.Shell)sAMGeomery).Face3Ds?.ConvertAll(x => x.ToRhino_Brep());
+                List<Brep> breps = ((Spatial.Shell)sAMGeomery).Face3Ds?.ConvertAll(x => Rhino.Convert.ToRhino_Brep(x));
                 breps?.FindAll(x => x != null).ForEach(x => previewWireArgs.Pipeline.DrawBrepWires(x, color));
                 return;
             }
 
             if (sAMGeomery is Spatial.Mesh3D)
             {
-                Mesh mesh = ((Spatial.Mesh3D)sAMGeomery).ToRhino();
+                Mesh mesh = Rhino.Convert.ToRhino(((Spatial.Mesh3D)sAMGeomery));
                 if(mesh != null)
                 {
                     previewWireArgs.Pipeline.DrawMeshWires(mesh, color);
