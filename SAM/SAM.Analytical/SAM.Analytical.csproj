@@ -470,9 +470,6 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="com.angusj.Clipper">
-      <Version>6.4.2</Version>
-    </PackageReference>
     <PackageReference Include="NetTopologySuite">
       <Version>2.3.0</Version>
     </PackageReference>

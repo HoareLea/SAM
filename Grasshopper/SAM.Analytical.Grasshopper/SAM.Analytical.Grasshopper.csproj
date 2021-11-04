@@ -355,9 +355,6 @@
     <None Include="Resources\HL_Logo24.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="com.angusj.Clipper">
-      <Version>6.4.2</Version>
-    </PackageReference>
     <PackageReference Include="Grasshopper">
       <Version>6.32.20340.21001</Version>
       <ExcludeAssets>runtime</ExcludeAssets>
