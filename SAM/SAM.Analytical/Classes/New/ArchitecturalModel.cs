@@ -1828,6 +1828,35 @@ namespace SAM.Analytical
             return result;
         }
 
+        public bool Add(SpaceSimulationResult spaceSimulationResult, Space space = null)
+        {
+            if(spaceSimulationResult == null)
+            {
+                return false;
+            }
+
+            if(relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            bool result = relationCluster.AddObject(spaceSimulationResult);
+            if(!result)
+            {
+                return result;
+            }
+
+            if(space != null)
+            {
+                if(Add(space))
+                {
+                    relationCluster.AddRelation(spaceSimulationResult, space);
+                }
+            }
+
+            return result;
+        }
+
         public bool Contains(ISAMObject sAMObject)
         {
             if(sAMObject is Profile)
