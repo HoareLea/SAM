@@ -66,6 +66,8 @@
     <Compile Include="Classes\New\OpeningType.cs" />
     <Compile Include="Classes\New\Roof.cs" />
     <Compile Include="Classes\New\RoofType.cs" />
+    <Compile Include="Classes\New\SimulationResult\ArchitecturalModelSimulationResult.cs" />
+    <Compile Include="Classes\New\SimulationResult\PartitionSimulationResult.cs" />
     <Compile Include="Classes\New\Wall.cs" />
     <Compile Include="Classes\New\WallType.cs" />
     <Compile Include="Classes\New\Window.cs" />
