@@ -8,7 +8,7 @@ namespace SAM.Analytical.Grasshopper
 {
     public static partial class Modify
     {
-        public static void DrawViewportMeshes(this ArchitecturalModel architecturalModel, GH_PreviewMeshArgs previewMeshArgs, global::Rhino.Display.DisplayMaterial displayMaterial = null)
+        public static void DrawViewportMeshes(this ArchitecturalModel architecturalModel, GH_PreviewMeshArgs previewMeshArgs, Rhino.Display.DisplayMaterial displayMaterial = null)
         {
             List<IHostPartition> hostPartitions = architecturalModel?.GetObjects<IHostPartition>();
             if (hostPartitions == null)
@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
             if (previewMeshArgs.Viewport.IsValidFrustum)
             {
                 BoundingBox boundingBox = previewMeshArgs.Viewport.GetFrustumBoundingBox();
-                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { Geometry.Rhino.Convert.ToSAM(boundingBox.Min), Geometry.Rhino.Convert.ToSAM(boundingBox.Max) });
+                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { boundingBox.Min.ToSAM(), boundingBox.Max.ToSAM() });
             }
 
             List<Geometry.Spatial.Face3D> face3Ds = new List<Geometry.Spatial.Face3D>();
@@ -57,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
                 if (face3D == null)
                     continue;
 
-                Brep brep = Geometry.Rhino.Convert.ToRhino_Brep(face3D);
+                Brep brep = face3D.ToRhino_Brep();
                 if (brep == null)
                     continue;
 

@@ -71,7 +71,7 @@ namespace SAM.Analytical.Grasshopper
                 if (boundingBox3Ds.Count == 0)
                     return BoundingBox.Empty;
 
-                return Geometry.Rhino.Convert.ToRhino(new Geometry.Spatial.BoundingBox3D(boundingBox3Ds));
+                return Geometry.Grasshopper.Convert.ToRhino(new Geometry.Spatial.BoundingBox3D(boundingBox3Ds));
             }
         }
 
@@ -87,7 +87,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 foreach(Space space in spaces)
                 {
-                    Point3d? point3d = Geometry.Rhino.Convert.ToRhino(space?.Location);
+                    Point3d? point3d = space?.Location?.ToRhino();
                     if (point3d == null || !point3d.HasValue)
                         continue;
 
@@ -103,7 +103,7 @@ namespace SAM.Analytical.Grasshopper
             if(args.Viewport.IsValidFrustum)
             {
                 BoundingBox boundingBox = args.Viewport.GetFrustumBoundingBox();
-                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { Geometry.Rhino.Convert.ToSAM(boundingBox.Min), Geometry.Rhino.Convert.ToSAM(boundingBox.Max)});
+                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { boundingBox.Min.ToSAM(), boundingBox.Max.ToSAM()});
             }
 
             foreach (Panel panel in panels)
@@ -144,7 +144,7 @@ namespace SAM.Analytical.Grasshopper
                     if (edge3Ds == null || edge3Ds.Count == 0)
                         continue;
 
-                    List<Point3d> point3ds = edge3Ds.ConvertAll(x => Geometry.Rhino.Convert.ToRhino(x.Curve3D.GetStart()));
+                    List<Point3d> point3ds = edge3Ds.ConvertAll(x => x.Curve3D.GetStart().ToRhino());
                     if (point3ds.Count == 0)
                         continue;
 
@@ -165,7 +165,7 @@ namespace SAM.Analytical.Grasshopper
             if (args.Viewport.IsValidFrustum)
             {
                 BoundingBox boundingBox = args.Viewport.GetFrustumBoundingBox();
-                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { Geometry.Rhino.Convert.ToSAM(boundingBox.Min), Geometry.Rhino.Convert.ToSAM(boundingBox.Max) });
+                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { boundingBox.Min.ToSAM(), boundingBox.Max.ToSAM() });
             }
 
             List<PlanarBoundary3D> planarBoundary3Ds = new List<PlanarBoundary3D>();
@@ -202,7 +202,7 @@ namespace SAM.Analytical.Grasshopper
                 if (planarBoundary3D == null)
                     continue;
                 
-                Brep brep = Rhino.Convert.ToRhino(planarBoundary3D);
+                Brep brep = planarBoundary3D.ToRhino();
                 if (brep == null)
                     continue;
 
@@ -221,7 +221,7 @@ namespace SAM.Analytical.Grasshopper
             List<Brep> breps = new List<Brep>();
             foreach(Panel panel in panels)
             {
-                Brep brep = Rhino.Convert.ToRhino(panel);
+                Brep brep = panel.ToRhino();
                 if (brep == null)
                     continue;
 

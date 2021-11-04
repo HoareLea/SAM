@@ -83,10 +83,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj">
-      <Project>{f8058c3a-e1af-43cd-94b1-34379cbb8b8f}</Project>
-      <Name>SAM.Geometry.Rhino</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SAM\SAM.Architectural\SAM.Architectural.csproj">
       <Project>{752ad1b6-fd09-4008-b7cc-5fd45fd2f9d9}</Project>
       <Name>SAM.Architectural</Name>

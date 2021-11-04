@@ -72,7 +72,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Geometry.Spatial.Plane plane = Geometry.Rhino.Convert.ToSAM(plane_Rhino);
+            Geometry.Spatial.Plane plane = plane_Rhino.ToSAM();
 
             double tolerance = Core.Tolerance.Distance;
             if (!dataAccess.GetData(2, ref tolerance))

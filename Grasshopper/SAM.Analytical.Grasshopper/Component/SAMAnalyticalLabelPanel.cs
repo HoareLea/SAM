@@ -160,10 +160,10 @@ namespace SAM.Analytical.Grasshopper
 
                 Point3D point3D = panel.GetInternalPoint3D();
 
-                // point3D = point3D.GetMoved(normal * 0.1) as Point3D; //TEMP SOLUTION FOR TESTING
+               // point3D = point3D.GetMoved(normal * 0.1) as Point3D; //TEMP SOLUTION FOR TESTING
 
-                global::Rhino.Geometry.Plane plane = Geometry.Rhino.Convert.ToRhino(new Geometry.Spatial.Plane(point3D, normal));
-                Vector3d normal_Rhino = Geometry.Rhino.Convert.ToRhino(normal);
+                Rhino.Geometry.Plane plane = new Geometry.Spatial.Plane(point3D, normal).ToRhino();
+                Vector3d normal_Rhino = normal.ToRhino();
                 if (normal.Z >= 0)
                 {
                     if (normal.Z != 1)

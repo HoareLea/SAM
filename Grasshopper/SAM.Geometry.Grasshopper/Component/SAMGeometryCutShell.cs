@@ -135,9 +135,9 @@ namespace SAM.Geometry.Grasshopper
                     plane = Spatial.Create.Plane(elevation_Temp);
                 }
             }
-            else if(@object is global::Rhino.Geometry.Plane)
+            else if(@object is Rhino.Geometry.Plane)
             {
-                plane = Rhino.Convert.ToSAM(((global::Rhino.Geometry.Plane)@object));
+                plane = ((Rhino.Geometry.Plane)@object).ToSAM();
             }
             else if(@object is Plane)
             {

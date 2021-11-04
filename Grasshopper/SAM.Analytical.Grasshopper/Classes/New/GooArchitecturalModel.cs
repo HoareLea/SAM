@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
                 if (Value == null)
                     return BoundingBox.Unset;
 
-                return Geometry.Rhino.Convert.ToRhino(Value.GetBoundingBox3D());
+                return Geometry.Grasshopper.Convert.ToRhino(Value.GetBoundingBox3D());
             }
         }
 
@@ -41,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
             if (Value == null)
                 return false;
 
-            return Rhino.Modify.BakeGeometry( Value, doc, att, out obj_guid);
+            return Value.BakeGeometry(doc, att, out obj_guid);
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)

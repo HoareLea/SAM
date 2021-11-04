@@ -108,9 +108,9 @@ namespace SAM.Analytical.Grasshopper
             {
                 plane = (Plane)@object;
             }
-            else if (@object is global::Rhino.Geometry.Plane)
+            else if (@object is Rhino.Geometry.Plane)
             {
-                plane = Geometry.Rhino.Convert.ToSAM((global::Rhino.Geometry.Plane)@object);
+                plane = ((Rhino.Geometry.Plane)@object).ToSAM();
             }
             else if (@object is GH_Plane)
             {

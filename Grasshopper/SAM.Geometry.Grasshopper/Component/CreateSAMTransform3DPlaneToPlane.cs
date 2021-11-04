@@ -77,8 +77,8 @@ namespace SAM.Geometry.Grasshopper
                 plane_1 = (Plane)value;
             else if (value is GH_Plane)
                 plane_1 = ((GH_Plane)value).ToSAM();
-            else if (value is global::Rhino.Geometry.Plane)
-                plane_1 = Rhino.Convert.ToSAM((global::Rhino.Geometry.Plane)value);
+            else if (value is Rhino.Geometry.Plane)
+                plane_1 = ((Rhino.Geometry.Plane)value).ToSAM();
 
             if (plane_1 == null)
             {
@@ -102,8 +102,8 @@ namespace SAM.Geometry.Grasshopper
                 plane_2 = (Plane)value;
             else if (value is GH_Plane)
                 plane_2 = ((GH_Plane)value).ToSAM();
-            else if (value is global::Rhino.Geometry.Plane)
-                plane_2 = Rhino.Convert.ToSAM((global::Rhino.Geometry.Plane)value);
+            else if (value is Rhino.Geometry.Plane)
+                plane_2 = ((Rhino.Geometry.Plane)value).ToSAM();
 
             if (plane_2 == null)
             {

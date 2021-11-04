@@ -114,13 +114,13 @@ namespace SAM.Geometry.Grasshopper
 
             if (source is Matrix)
             {
-                Value = Rhino.Convert.ToSAM_Transform3D(((Matrix)source));
+                Value = Convert.ToSAM_Transform3D(((Matrix)source));
                 return true;
             }
 
             if (source is Transform)
             {
-                Value = Rhino.Convert.ToSAM(((Transform)source));
+                Value = Convert.ToSAM(((Transform)source));
                 return true;
             }
 
@@ -160,7 +160,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (typeof(Y) == typeof(Matrix))
             {
-                target = (Y)(object)Math.Rhino.Convert.ToRhino(Value.Matrix4D);
+                target = (Y)(object)Value.Matrix4D.ToRhino();
             }
 
             if (typeof(Y).IsAssignableFrom(Value.GetType()))

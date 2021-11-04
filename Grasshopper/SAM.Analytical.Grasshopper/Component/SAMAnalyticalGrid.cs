@@ -104,7 +104,7 @@ namespace SAM.Analytical.Grasshopper
             Plane plane_Rhino = Plane.Unset;
             dataAccess.GetData(1, ref plane_Rhino);
             if (plane_Rhino.IsValid && plane_Rhino != Plane.Unset)
-                plane = Geometry.Rhino.Convert.ToSAM(plane_Rhino);
+                plane = plane_Rhino.ToSAM();
 
 
             Geometry.Spatial.Point3D origin = null;
@@ -112,7 +112,7 @@ namespace SAM.Analytical.Grasshopper
             Point3d origin_Rhino = Point3d.Unset;
             dataAccess.GetData(2, ref origin_Rhino);
             if (origin_Rhino.IsValid && origin_Rhino != Point3d.Unset)
-                origin = Geometry.Rhino.Convert.ToSAM(origin_Rhino);
+                origin = origin_Rhino.ToSAM();
 
             double x = 0.2;
             dataAccess.GetData(3, ref x);
@@ -127,7 +127,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Geometry.Spatial.Segment3D> segment3Ds = Geometry.Spatial.Query.Grid(panels, x, y, plane, origin, Tolerance.Angle, Tolerance.Distance, true);
 
-            dataAccess.SetDataList(0, segment3Ds?.ConvertAll(segment2D => Geometry.Rhino.Convert.ToRhino_Line(segment2D)));
+            dataAccess.SetDataList(0, segment3Ds?.ConvertAll(segment2D => segment2D.ToRhino_Line()));
         }
     }
 }

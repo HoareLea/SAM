@@ -9,14 +9,14 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooText3D : GH_GeometricGoo<global::Rhino.Display.Text3d>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooText3D : GH_GeometricGoo<Rhino.Display.Text3d>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooText3D()
             : base()
         {
         }
 
-        public GooText3D(global::Rhino.Display.Text3d text3D)
+        public GooText3D(Rhino.Display.Text3d text3D)
         {
             Value = text3D;
         }
@@ -34,9 +34,9 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool IsValid => Value != null;
 
-        public override string TypeName => typeof(global::Rhino.Display.Text3d).Name;
+        public override string TypeName => typeof(Rhino.Display.Text3d).Name;
 
-        public override string TypeDescription => typeof(global::Rhino.Display.Text3d).Name;
+        public override string TypeDescription => typeof(Rhino.Display.Text3d).Name;
 
         public override BoundingBox Boundingbox
         {
@@ -116,7 +116,7 @@ namespace SAM.Analytical.Grasshopper
 
         public override IGH_GeometricGoo Transform(Transform xform)
         {
-            global::Rhino.Display.Text3d text3d = Duplicate(Value);
+            Rhino.Display.Text3d text3d = Duplicate(Value);
             if (text3d == null)
                 return new GooText3D(null);
 
@@ -143,12 +143,12 @@ namespace SAM.Analytical.Grasshopper
             return DuplicateGeometry();
         }
 
-        private static global::Rhino.Display.Text3d Duplicate(global::Rhino.Display.Text3d text3d)
+        private static Rhino.Display.Text3d Duplicate(Rhino.Display.Text3d text3d)
         {
             if (text3d == null)
                 return null;
 
-            global::Rhino.Display.Text3d result = new global::Rhino.Display.Text3d(text3d.Text, text3d.TextPlane, text3d.Height);
+            Rhino.Display.Text3d result = new Rhino.Display.Text3d(text3d.Text, text3d.TextPlane, text3d.Height);
             result.Bold = text3d.Bold;
             result.Italic = text3d.Italic;
             result.FontFace = text3d.FontFace;
@@ -166,7 +166,7 @@ namespace SAM.Analytical.Grasshopper
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooText3DParam()
-            : base(typeof(global::Rhino.Display.Text3d).Name, typeof(global::Rhino.Display.Text3d).Name, typeof(global::Rhino.Display.Text3d).FullName.Replace(".", " "), "Params", "SAM")
+            : base(typeof(Rhino.Display.Text3d).Name, typeof(Rhino.Display.Text3d).Name, typeof(Rhino.Display.Text3d).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 

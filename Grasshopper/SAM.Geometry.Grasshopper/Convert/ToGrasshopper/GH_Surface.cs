@@ -11,7 +11,7 @@ namespace SAM.Geometry.Grasshopper
             if (closed3D == null)
                 return null;
 
-            global::Rhino.Geometry.Brep brep = Rhino.Convert.ToRhino_Brep(new IClosed3D[] { closed3D }, tolerance);
+            Rhino.Geometry.Brep brep = ToRhino_Brep(new IClosed3D[] { closed3D }, tolerance);
             if (brep == null)
                 return null;
 
@@ -20,7 +20,7 @@ namespace SAM.Geometry.Grasshopper
 
         public static GH_Surface ToGrasshopper(this Face3D face3D, double tolerance = Core.Tolerance.Distance)
         {
-            return new GH_Surface(Rhino.Convert.ToRhino_Brep(face3D, tolerance));
+            return new GH_Surface(ToRhino_Brep(face3D, tolerance));
         }
     }
 }

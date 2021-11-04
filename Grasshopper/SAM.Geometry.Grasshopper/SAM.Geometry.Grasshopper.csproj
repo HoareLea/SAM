@@ -102,10 +102,14 @@
     <Compile Include="Convert\ToGrasshopper\GH_Brep.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Plane.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Vector.cs" />
+    <Compile Include="Convert\ToRhino\Mesh.cs" />
     <Compile Include="Convert\ToSAM\Mesh3D.cs" />
+    <Compile Include="Convert\ToSAM\Shell.cs" />
     <Compile Include="Convert\ToSAM\Transform3D.cs" />
     <Compile Include="Enum\MeshType.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
+    <Compile Include="Manager\ActiveSetting.cs" />
+    <Compile Include="Modify\BakeGeometry.cs" />
     <Compile Include="Modify\DrawViewportMeshes.cs" />
     <Compile Include="Modify\DrawViewportWires.cs" />
     <Compile Include="Modify\Convert.cs" />
@@ -124,7 +128,20 @@
     <Compile Include="Convert\ToGrasshopper\GH_Line.cs" />
     <Compile Include="Convert\ToGrasshopper\IGH_Goo.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
+    <Compile Include="Convert\ToRhino\BoundingBox.cs" />
+    <Compile Include="Convert\ToRhino\Brep.cs" />
+    <Compile Include="Convert\ToRhino\Plane.cs" />
+    <Compile Include="Convert\ToRhino\Curve.cs" />
+    <Compile Include="Convert\ToRhino\Vector3d.cs" />
+    <Compile Include="Convert\ToRhino\PolylineCurve.cs" />
+    <Compile Include="Convert\ToRhino\Polyline.cs" />
+    <Compile Include="Convert\ToRhino\Line.cs" />
+    <Compile Include="Convert\ToRhino\LineCurve.cs" />
+    <Compile Include="Convert\ToRhino\Point3d.cs" />
+    <Compile Include="Convert\ToSAM\IClosed3D.cs" />
     <Compile Include="Convert\ToSAM\IGeometry3Ds.cs" />
+    <Compile Include="Convert\ToSAM\Polyline3D.cs" />
+    <Compile Include="Convert\ToSAM\Polycurve3D.cs" />
     <Compile Include="Convert\ToSAM\Surface.cs" />
     <Compile Include="Convert\ToSAM\IGeometry3D.cs" />
     <Compile Include="Convert\ToSAM\Circle3D.cs" />
@@ -144,14 +161,6 @@
     <None Include="Resources\SAM_Small.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj">
-      <Project>{f8058c3a-e1af-43cd-94b1-34379cbb8b8f}</Project>
-      <Name>SAM.Geometry.Rhino</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Rhino\SAM.Math.Rhino\SAM.Math.Rhino.csproj">
-      <Project>{229bda59-c59b-47e9-94e0-c2a64b084811}</Project>
-      <Name>SAM.Math.Rhino</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
       <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
       <Name>SAM.Core</Name>
@@ -193,9 +202,6 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Manager\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

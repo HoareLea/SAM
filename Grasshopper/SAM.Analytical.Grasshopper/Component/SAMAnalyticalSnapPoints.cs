@@ -106,7 +106,7 @@ namespace SAM.Analytical.Grasshopper
             Geometry.Spatial.Modify.RemoveAlmostSimilar(point3Ds);
 
             Geometry.Spatial.Plane plane = panel.PlanarBoundary3D.Plane;
-            Geometry.Planar.Point2D point2D_Project_Origin = plane.Convert(plane.Project(Geometry.Rhino.Convert.ToSAM(origin)));
+            Geometry.Planar.Point2D point2D_Project_Origin = plane.Convert(plane.Project(Geometry.Grasshopper.Convert.ToSAM(origin)));
 
             List<Geometry.Planar.Point2D> point2Ds = new List<Geometry.Planar.Point2D>();
             foreach (Point3D point3D in point3Ds)
@@ -129,7 +129,7 @@ namespace SAM.Analytical.Grasshopper
                 point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(-offset, offset)));
             }
 
-            dataAccess.SetDataList(0, point2Ds.ConvertAll(x => Geometry.Rhino.Convert.ToRhino(plane.Convert(x))));
+            dataAccess.SetDataList(0, point2Ds.ConvertAll(x => Geometry.Grasshopper.Convert.ToRhino(plane.Convert(x))));
         }
     }
 }

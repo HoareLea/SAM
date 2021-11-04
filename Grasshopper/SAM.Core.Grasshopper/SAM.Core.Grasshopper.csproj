@@ -127,11 +127,17 @@
     <Compile Include="Component\SAMCoreGetValue.cs" />
     <Compile Include="Convert\ToSAM\GH_SAMParam.cs" />
     <Compile Include="Create\GH_SAMParam.cs" />
+    <Compile Include="Modify\SetUserStrings.cs" />
     <Compile Include="Modify\RunGrasshopperScript.cs" />
     <Compile Include="Modify\AppendSourceCodeAdditionalMenuItem.cs" />
     <Compile Include="Modify\AppendNewComponentAdditionalMenuItem.cs" />
+    <Compile Include="Modify\GetLayer.cs" />
+    <Compile Include="Modify\AddSAMLayer.cs" />
+    <Compile Include="Query\RhinocerosExePath.cs" />
+    <Compile Include="Query\RhinocerosVersions.cs" />
     <Compile Include="Query\Copy.cs" />
     <Compile Include="Query\Objects.cs" />
+    <Compile Include="Query\Layers.cs" />
     <Compile Include="Query\Layer.cs" />
     <Compile Include="Query\HasComponentVersion.cs" />
     <Compile Include="Query\Obsolete.cs" />
@@ -147,8 +153,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Query\RhinocerosExePath.cs" />
-    <Compile Include="Query\RhinocerosVersions.cs" />
     <Compile Include="Query\TryGetValue.cs" />
     <Compile Include="Query\Clone.cs" />
     <Compile Include="Query\GenericSubclassOf.cs" />

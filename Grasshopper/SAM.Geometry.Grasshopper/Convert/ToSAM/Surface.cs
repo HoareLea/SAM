@@ -7,7 +7,7 @@ namespace SAM.Geometry.Grasshopper
     {
         public static List<Spatial.ISAMGeometry3D> ToSAM(this GH_Brep brep, bool simplify = true)
         {
-            return Rhino.Convert.ToSAM(brep.Value, simplify);
+            return brep.Value.ToSAM(simplify);
         }
     }
 }

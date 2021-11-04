@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
                 if (Value == null)
                     return BoundingBox.Empty;
 
-                return Geometry.Rhino.Convert.ToRhino(Value.GetBoundingBox());
+                return Geometry.Grasshopper.Convert.ToRhino(Value.GetBoundingBox());
             }
         }
 
@@ -71,7 +71,7 @@ namespace SAM.Analytical.Grasshopper
             if (displayMaterial == null)
                 displayMaterial = args.Material;
 
-            Brep brep = Geometry.Rhino.Convert.ToRhino_Brep(Value.Face3D);
+            Brep brep = Geometry.Grasshopper.Convert.ToRhino_Brep(Value.Face3D);
             if (brep == null)
                 return;
 
@@ -82,7 +82,7 @@ namespace SAM.Analytical.Grasshopper
         {
             obj_guid = Guid.Empty;
             
-            return Rhino.Modify.BakeGeometry(Value, doc, att, out obj_guid);
+            return Modify.BakeGeometry(Value, doc, att, out obj_guid);
         }
 
         public override bool CastFrom(object source)
@@ -158,7 +158,7 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooOpening> values)
         {
-            global::Rhino.Input.Custom.GetObject getObject = new global::Rhino.Input.Custom.GetObject();
+            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
             getObject.SetCommandPrompt("Pick Surfaces to create Openings");
             getObject.GeometryFilter = ObjectType.Brep;
             getObject.SubObjectSelect = true;
@@ -200,7 +200,7 @@ namespace SAM.Analytical.Grasshopper
                 if (openings == null || openings.Count == 0)
                 {
 
-                    List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(brep);
+                    List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
                     if (sAMGeometry3Ds == null)
                         continue;
 
@@ -220,7 +220,7 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Singular(ref GooOpening value)
         {
-            global::Rhino.Input.Custom.GetObject getObject = new global::Rhino.Input.Custom.GetObject();
+            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
             getObject.SetCommandPrompt("Pick Surface to create Opening");
             getObject.GeometryFilter = ObjectType.Brep;
             getObject.SubObjectSelect = true;
@@ -260,7 +260,7 @@ namespace SAM.Analytical.Grasshopper
                 if (openings == null || openings.Count == 0)
                 {
 
-                    List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(brep);
+                    List<ISAMGeometry3D> sAMGeometry3Ds = brep.ToSAM();
                     if (sAMGeometry3Ds == null)
                         continue;
 

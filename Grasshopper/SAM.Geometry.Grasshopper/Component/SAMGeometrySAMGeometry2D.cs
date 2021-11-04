@@ -44,7 +44,7 @@ namespace SAM.Geometry.Grasshopper
 
             index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
             genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_Plane(new global::Rhino.Geometry.Plane(new global::Rhino.Geometry.Point3d(0, 0, 0), new global::Rhino.Geometry.Vector3d(0, 0, 1))));
+            genericObjectParameter.PersistentData.Append(new GH_Plane(new Rhino.Geometry.Plane(new Rhino.Geometry.Point3d(0, 0, 0), new Rhino.Geometry.Vector3d(0, 0, 1))));
         }
 
         /// <summary>

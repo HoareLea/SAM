@@ -6,7 +6,7 @@ namespace SAM.Geometry.Grasshopper
     {
         public static GH_Plane ToGrasshopper(this Spatial.Plane plane)
         {
-            return new GH_Plane(Rhino.Convert.ToRhino(plane));
+            return new GH_Plane(plane.ToRhino());
         }
     }
 }

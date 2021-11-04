@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 foreach (Space space in spaces)
                 {
-                    Point3d? point3d = Geometry.Rhino.Convert.ToRhino(space?.Location);
+                    Point3d? point3d = Geometry.Grasshopper.Convert.ToRhino(space?.Location);
                     if (point3d == null || !point3d.HasValue)
                         continue;
 
@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
             if (previewWireArgs.Viewport.IsValidFrustum)
             {
                 BoundingBox boundingBox = previewWireArgs.Viewport.GetFrustumBoundingBox();
-                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { Geometry.Rhino.Convert.ToSAM(boundingBox.Min), Geometry.Rhino.Convert.ToSAM(boundingBox.Max) });
+                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { boundingBox.Min.ToSAM(), boundingBox.Max.ToSAM() });
             }
 
             foreach (IPartition partition in partitions)

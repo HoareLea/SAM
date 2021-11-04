@@ -244,9 +244,9 @@ namespace SAM.Analytical.Grasshopper
                     if (point3D != null)
                         tuples.Add(new Tuple<GH_Path, Geometry.Spatial.Point3D>(path, point3D));
                 }
-                else if(@object is global::Rhino.Geometry.Point3d)
+                else if(@object is Rhino.Geometry.Point3d)
                 {
-                    Geometry.Spatial.Point3D point3D = Geometry.Rhino.Convert.ToSAM((global::Rhino.Geometry.Point3d)@object);
+                    Geometry.Spatial.Point3D point3D = Geometry.Grasshopper.Convert.ToSAM((Rhino.Geometry.Point3d)@object);
                     if (point3D != null)
                         tuples.Add(new Tuple<GH_Path, Geometry.Spatial.Point3D>(path, point3D));
                 }

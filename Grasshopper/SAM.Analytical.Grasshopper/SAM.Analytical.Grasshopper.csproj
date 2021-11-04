@@ -275,12 +275,18 @@
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Mesh.cs" />
     <Compile Include="Convert\ToGrasshopper\New\GH_Mesh.cs" />
+    <Compile Include="Convert\ToRhino\Mesh.cs" />
+    <Compile Include="Convert\ToRhino\Breps.cs" />
     <Compile Include="Classes\GooDegreeOfActivity.cs" />
+    <Compile Include="Convert\ToRhino\New\Brep.cs" />
+    <Compile Include="Convert\ToRhino\New\Mesh.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Modify\BakeGeometry_ByConstruction.cs" />
     <Compile Include="Modify\BakeGeometry_ByInternalCondtion.cs" />
     <Compile Include="Modify\BakeGeometry_ByLevel.cs" />
     <Compile Include="Modify\BakeGeometry_ByPanelType.cs" />
+    <Compile Include="Modify\BakeGeometry.cs" />
+    <Compile Include="Modify\New\BakeGeometry.cs" />
     <Compile Include="Modify\New\BakeGeometry_ByAnalyticalType.cs" />
     <Compile Include="Modify\New\BakeGeometry_ByCategory.cs" />
     <Compile Include="Modify\New\BakeGeometry_ByType.cs" />
@@ -294,20 +300,13 @@
     </Compile>
     <Compile Include="Convert\ToGrasshopper\GH_Breps.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
+    <Compile Include="Convert\ToRhino\Brep.cs" />
     <Compile Include="Query\New\DisplayMaterial.cs" />
     <Compile Include="Query\TryConvertToPanelGeometries.cs" />
     <Compile Include="Query\DisplayMaterial.cs" />
     <Compile Include="Component\SAMAnalyticalSplitPanel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Rhino\SAM.Analytical.Rhino\SAM.Analytical.Rhino.csproj">
-      <Project>{2b288c5d-36f5-4f9e-a828-62960bbbcfeb}</Project>
-      <Name>SAM.Analytical.Rhino</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj">
-      <Project>{f8058c3a-e1af-43cd-94b1-34379cbb8b8f}</Project>
-      <Name>SAM.Geometry.Rhino</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">
       <Project>{b47bad06-8523-455e-acf8-4879d0286ec1}</Project>
       <Name>SAM.Analytical</Name>
@@ -369,7 +368,6 @@
       <Version>13.0.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

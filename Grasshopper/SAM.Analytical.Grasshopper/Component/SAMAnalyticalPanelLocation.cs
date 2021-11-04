@@ -75,11 +75,11 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, Geometry.Rhino.Convert.ToRhino(plane.Origin));
+            dataAccess.SetData(0, plane.Origin.ToRhino());
             dataAccess.SetData(1, panel.Tilt());
             dataAccess.SetData(2, panel.Azimuth());
-            dataAccess.SetData(3, Geometry.Rhino.Convert.ToRhino(plane.Normal));
-            dataAccess.SetData(4, Geometry.Rhino.Convert.ToRhino(panel.GetInternalPoint3D()));
+            dataAccess.SetData(3, plane.Normal.ToRhino());
+            dataAccess.SetData(4, panel.GetInternalPoint3D().ToRhino());
         }
     }
 }
