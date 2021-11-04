@@ -1352,6 +1352,41 @@ namespace SAM.Analytical
             return dictionary.Values.ToList();
         }
 
+        public List<Result> GetResults()
+        {
+            return GetObjects<Result>();
+        }
+
+        public List<T> GetResults<T>() where T: Result
+        {
+            return GetObjects<T>();
+        }
+
+        public List<SpaceSimulationResult> GetSpaceSimulationResults(Space space)
+        {
+            if(space == null || relationCluster == null)
+            {
+                return null;
+            }
+
+            return relationCluster.GetRelatedObjects<SpaceSimulationResult>(space)?.ConvertAll(x => new SpaceSimulationResult(x));
+        }
+
+        public List<PartitionSimulationResult> GetPartitionSimulationResults(IPartition partition)
+        {
+            if (partition == null || relationCluster == null)
+            {
+                return null;
+            }
+
+            return relationCluster.GetRelatedObjects<PartitionSimulationResult>(partition)?.ConvertAll(x => new PartitionSimulationResult(x));
+        }
+
+        public List<ArchitecturalModelSimulationResult> GetArchitecturalModelSimulationResults()
+        {
+            return GetObjects<ArchitecturalModelSimulationResult>();
+        }
+
         public bool Add(IPartition partition)
         {
             if(partition == null)
@@ -1855,6 +1890,54 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+
+        public bool Add(PartitionSimulationResult partitionSimulationResult, IPartition partition = null)
+        {
+            if(partitionSimulationResult == null)
+            {
+                return false;
+            }
+
+            if (relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            PartitionSimulationResult partitionSimulationResult_Temp = new PartitionSimulationResult(partitionSimulationResult);
+
+            bool result = relationCluster.AddObject(partitionSimulationResult_Temp);
+            if(!result)
+            {
+                return result;
+            }
+
+            if(partition != null)
+            {
+                if(Add(partition))
+                {
+                    relationCluster.AddRelation(partitionSimulationResult, partition);
+                }
+            }
+
+            return result;
+        }
+
+        public bool Add(ArchitecturalModelSimulationResult architecturalModelSimulationResult)
+        {
+            if(architecturalModelSimulationResult == null)
+            {
+                return false;
+            }
+
+            if(relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            ArchitecturalModelSimulationResult architecturalModelSimulationResult_Temp = new ArchitecturalModelSimulationResult(architecturalModelSimulationResult);
+
+            return relationCluster.AddObject(architecturalModelSimulationResult_Temp);
         }
 
         public bool Contains(ISAMObject sAMObject)
