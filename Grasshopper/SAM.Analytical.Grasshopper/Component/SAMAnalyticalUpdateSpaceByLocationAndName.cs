@@ -83,7 +83,7 @@ namespace SAM.Analytical.Grasshopper
             if (dataAccess.GetData(1, ref objectWrapper))
             {
                 if (objectWrapper.Value is GH_Point)
-                    location = ((GH_Point)objectWrapper.Value).Value.ToSAM();
+                    location = Geometry.Rhino.Convert.ToSAM(((GH_Point)objectWrapper.Value).Value);
                 else if (objectWrapper.Value is GH_Point3D)
                     location = ((GH_Point3D)objectWrapper.Value).ToSAM();
                 else if (objectWrapper.Value is GooSAMGeometry)

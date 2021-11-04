@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="RhinoCommon" Version="6.32.20340.21001" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj" />
+    <ProjectReference Include="..\SAM.Core.Rhino\SAM.Core.Rhino.csproj" />
+    <ProjectReference Include="..\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj" />
+  </ItemGroup>
+
+</Project>

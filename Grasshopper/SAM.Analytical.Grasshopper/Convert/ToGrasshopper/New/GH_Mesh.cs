@@ -7,7 +7,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public static GH_Mesh ToGrasshopper_Mesh(this IOpening opening)
         {
-            Mesh mesh = opening?.ToRhino_Mesh();
+            Mesh mesh = Rhino.Convert.ToRhino_Mesh(opening);
             if (mesh == null)
             {
                 return null;
@@ -23,7 +23,7 @@ namespace SAM.Analytical.Grasshopper
                 return null;
             }
 
-            Mesh mesh = mesh = ((IHostPartition)partition).ToRhino_Mesh(cutOpenings, includeOpenings, tolerance);
+            Mesh mesh = mesh = Rhino.Convert.ToRhino_Mesh((IHostPartition)partition, cutOpenings, includeOpenings, tolerance);
             if (mesh == null)
             {
                 return null;
@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
 
         public static GH_Mesh ToGrasshopper_Mesh(this ArchitecturalModel architecturalModel, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
         {
-            Mesh mesh = architecturalModel?.ToRhino_Mesh(cutOpenings, includeOpenings, tolerance);
+            Mesh mesh = Rhino.Convert.ToRhino_Mesh(architecturalModel, cutOpenings, includeOpenings, tolerance);
             if (mesh == null)
             {
                 return null;

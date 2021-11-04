@@ -83,7 +83,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Rhino.Geometry.Interval> azimuths = new List<Rhino.Geometry.Interval>();
+            List<global::Rhino.Geometry.Interval> azimuths = new List<global::Rhino.Geometry.Interval>();
             if (!dataAccess.GetDataList(2, azimuths) || azimuths == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -96,7 +96,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Dictionary<Rhino.Geometry.Interval, double> dictionary = new Dictionary<Rhino.Geometry.Interval, double>();
+            Dictionary<global::Rhino.Geometry.Interval, double> dictionary = new Dictionary<global::Rhino.Geometry.Interval, double>();
             for (int i = 0; i < ratios.Count; i++)
                 if (azimuths[i] != null)
                     dictionary[azimuths[i]] = ratios[i];

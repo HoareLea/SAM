@@ -116,7 +116,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("points");
             if(index != -1)
             {
-                dataAccess.SetDataList(index, dictionary?.Keys.ToList().ConvertAll(x => x.ToRhino()));
+                dataAccess.SetDataList(index, dictionary?.Keys.ToList().ConvertAll(x => Geometry.Rhino.Convert.ToRhino(x)));
             }
 
             index = Params.IndexOfOutputParam("panels");

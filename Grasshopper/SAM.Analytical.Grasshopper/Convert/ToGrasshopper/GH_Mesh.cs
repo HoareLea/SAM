@@ -7,7 +7,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public static GH_Mesh ToGrasshopper_Mesh(this Aperture aperture)
         {
-            Mesh mesh = aperture?.ToRhino_Mesh();
+            Mesh mesh = Rhino.Convert.ToRhino_Mesh(aperture);
             if (mesh == null)
             {
                 return null;
@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
 
         public static GH_Mesh ToGrasshopper_Mesh(this Panel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
-            Mesh mesh = panel?.ToRhino_Mesh(cutApertures, includeApertures, tolerance);
+            Mesh mesh = Rhino.Convert.ToRhino_Mesh(panel, cutApertures, includeApertures, tolerance);
             if(mesh == null)
             {
                 return null;
@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
 
         public static GH_Mesh ToGrasshopper_Mesh(this AdjacencyCluster adjacencyCluster, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
-            Mesh mesh = adjacencyCluster?.ToRhino_Mesh(cutApertures, includeApertures, tolerance);
+            Mesh mesh = Rhino.Convert.ToRhino_Mesh(adjacencyCluster, cutApertures, includeApertures, tolerance);
             if (mesh == null)
             {
                 return null;
@@ -40,7 +40,7 @@ namespace SAM.Analytical.Grasshopper
 
         public static GH_Mesh ToGrasshopper_Mesh(this AnalyticalModel analyticalModel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
-            Mesh mesh = analyticalModel?.ToRhino_Mesh(cutApertures, includeApertures, tolerance);
+            Mesh mesh = Rhino.Convert.ToRhino_Mesh(analyticalModel, cutApertures, includeApertures, tolerance);
             if (mesh == null)
             {
                 return null;
