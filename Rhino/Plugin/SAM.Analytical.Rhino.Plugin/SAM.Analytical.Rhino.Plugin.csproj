@@ -50,6 +50,7 @@
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\..\build\Rhino Plugins\</OutputPath>
+    <DocumentationFile>..\..\..\build\Rhino Plugins\SAM.Analytical.Rhino.Plugin.xml</DocumentationFile>
   </PropertyGroup>
   
 </Project>
