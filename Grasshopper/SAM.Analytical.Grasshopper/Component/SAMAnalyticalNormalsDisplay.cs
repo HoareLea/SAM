@@ -84,24 +84,24 @@ namespace SAM.Analytical.Grasshopper
             if (planarBoundary3Ds == null || planarBoundary3Ds.Count == 0)
                 return;
 
-            List<Rhino.Geometry.Point3d> internalPoints = new List<Rhino.Geometry.Point3d>();
-            List<Rhino.Geometry.Vector3d> normals = new List<Rhino.Geometry.Vector3d>();
+            List<global::Rhino.Geometry.Point3d> internalPoints = new List<global::Rhino.Geometry.Point3d>();
+            List<global::Rhino.Geometry.Vector3d> normals = new List<global::Rhino.Geometry.Vector3d>();
 
             foreach(PlanarBoundary3D planarBoundary3D in planarBoundary3Ds)
             {
-                Rhino.Geometry.Point3d internalPoint = Rhino.Geometry.Point3d.Unset;
-                Rhino.Geometry.Vector3d normal = Rhino.Geometry.Vector3d.Unset;
+                global::Rhino.Geometry.Point3d internalPoint = global::Rhino.Geometry.Point3d.Unset;
+                global::Rhino.Geometry.Vector3d normal = global::Rhino.Geometry.Vector3d.Unset;
 
                 Face3D face3D = planarBoundary3D.GetFace3D();
                 if(face3D != null)
                 {
                     Point3D point3D = face3D.InternalPoint3D();
                     if (point3D != null)
-                        internalPoint = point3D.ToRhino();
+                        internalPoint = Geometry.Rhino.Convert.ToRhino(point3D);
 
                     Vector3D vector3D = face3D.GetPlane().Normal;
                     if (vector3D != null)
-                        normal = vector3D.ToRhino();
+                        normal = Geometry.Rhino.Convert.ToRhino(vector3D);
                 }
 
                 internalPoints.Add(internalPoint);

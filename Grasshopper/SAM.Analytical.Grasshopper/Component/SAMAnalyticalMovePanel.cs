@@ -73,7 +73,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Geometry.Spatial.Vector3D vector3D = vector3d.ToSAM();
+            Geometry.Spatial.Vector3D vector3D = Geometry.Rhino.Convert.ToSAM(vector3d);
 
             Panel result = Create.Panel(panel);
             result.Move(vector3D);

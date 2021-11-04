@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FDCF91DF-29E7-49A5-B955-2D561C1A95EC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SAM.Analytical.Rhino</RootNamespace>
+    <AssemblyName>SAM.Analytical.Rhino</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\build\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\build\SAM.Analytical.Rhino.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Convert\ToRhino\Brep.cs" />
+    <Compile Include="Convert\ToRhino\Breps.cs" />
+    <Compile Include="Convert\ToRhino\Mesh.cs" />
+    <Compile Include="Convert\ToRhino\New\Brep.cs" />
+    <Compile Include="Convert\ToRhino\New\Mesh.cs" />
+    <Compile Include="Modify\BakeGeometry.cs" />
+    <Compile Include="Modify\BakeGeometry_ByConstruction.cs" />
+    <Compile Include="Modify\BakeGeometry_ByInternalCondtion.cs" />
+    <Compile Include="Modify\BakeGeometry_ByLevel.cs" />
+    <Compile Include="Modify\BakeGeometry_ByPanelType.cs" />
+    <Compile Include="Modify\New\BakeGeometry.cs" />
+    <Compile Include="Modify\New\BakeGeometry_ByAnalyticalType.cs" />
+    <Compile Include="Modify\New\BakeGeometry_ByCategory.cs" />
+    <Compile Include="Modify\New\BakeGeometry_ByType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">
+      <Project>{b47bad06-8523-455e-acf8-4879d0286ec1}</Project>
+      <Name>SAM.Analytical</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
+      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
+      <Name>SAM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj">
+      <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>
+      <Name>SAM.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Core.Rhino\SAM.Core.Rhino.csproj">
+      <Project>{3d10ac53-e2e3-405a-967b-be00f3ca9bc8}</Project>
+      <Name>SAM.Core.Rhino</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj">
+      <Project>{40ea176a-6c19-4410-a22e-bc87833f9c77}</Project>
+      <Name>SAM.Geometry.Rhino</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="RhinoCommon">
+      <Version>6.32.20340.21001</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

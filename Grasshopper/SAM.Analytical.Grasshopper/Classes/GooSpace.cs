@@ -38,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
                 if (location == null || !location.IsValid())
                     return BoundingBox.Empty;
 
-                return Geometry.Grasshopper.Convert.ToRhino(Value.Location.GetBoundingBox(1));
+                return Geometry.Rhino.Convert.ToRhino(Value.Location.GetBoundingBox(1));
             }
         }
 
@@ -53,7 +53,7 @@ namespace SAM.Analytical.Grasshopper
             if (point3D == null)
                 return;
 
-            args.Pipeline.DrawPoint(Geometry.Grasshopper.Convert.ToRhino(point3D));
+            args.Pipeline.DrawPoint(Geometry.Rhino.Convert.ToRhino(point3D));
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
@@ -62,12 +62,12 @@ namespace SAM.Analytical.Grasshopper
             if (point3D == null)
                 return;
 
-            args.Pipeline.DrawPoint(Geometry.Grasshopper.Convert.ToRhino(point3D));
+            args.Pipeline.DrawPoint(Geometry.Rhino.Convert.ToRhino(point3D));
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            return Modify.BakeGeometry(Value, doc, att, out obj_guid);
+            return Rhino.Modify.BakeGeometry(Value, doc, att, out obj_guid);
         }
     }
 
@@ -96,7 +96,7 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooSpace> values)
         {
-            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
+            global::Rhino.Input.Custom.GetObject getObject = new global::Rhino.Input.Custom.GetObject();
             getObject.SetCommandPrompt("Pick Points to create spaces");
             getObject.GeometryFilter = ObjectType.Point;
             getObject.SubObjectSelect = true;
@@ -138,7 +138,7 @@ namespace SAM.Analytical.Grasshopper
                 if (spaces == null || spaces.Count == 0)
                 {
 
-                    Point3D point3D = point.ToSAM();
+                    Point3D point3D = Geometry.Rhino.Convert.ToSAM(point);
                     if (point3D == null)
                         continue;
 
@@ -160,7 +160,7 @@ namespace SAM.Analytical.Grasshopper
 
         protected override GH_GetterResult Prompt_Singular(ref GooSpace value)
         {
-            Rhino.Input.Custom.GetObject getObject = new Rhino.Input.Custom.GetObject();
+            global::Rhino.Input.Custom.GetObject getObject = new global::Rhino.Input.Custom.GetObject();
             getObject.SetCommandPrompt("Pick Point to create space");
             getObject.GeometryFilter = ObjectType.Point;
             getObject.SubObjectSelect = true;
@@ -199,7 +199,7 @@ namespace SAM.Analytical.Grasshopper
 
                 if (spaces == null || spaces.Count == 0)
                 {
-                    Point3D point3D = point.ToSAM();
+                    Point3D point3D = Geometry.Rhino.Convert.ToSAM(point);
                     if (point3D == null)
                         continue;
 

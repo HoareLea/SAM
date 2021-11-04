@@ -88,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
 
             double value = double.NaN;
             if (double.TryParse(text, out value))
-                text = value.Round(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+                text = value.Round(global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
 
             dataAccess.SetData(0, text);
         }
@@ -152,12 +152,12 @@ namespace SAM.Analytical.Grasshopper
 
                 double value = double.NaN;
                 if (double.TryParse(text, out value))
-                    text = value.Round(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+                    text = value.Round(global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
 
                 Point3D point3D = space.Location;
 
-                Rhino.Geometry.Plane plane = new Geometry.Spatial.Plane(point3D, normal).ToRhino();
-                Vector3d normal_Rhino = normal.ToRhino();
+                global::Rhino.Geometry.Plane plane = Geometry.Rhino.Convert.ToRhino(new Geometry.Spatial.Plane(point3D, normal));
+                Vector3d normal_Rhino = Geometry.Rhino.Convert.ToRhino(normal);
 
                 double height_Temp = height;
                 if (double.IsNaN(height_Temp))
@@ -179,8 +179,8 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = Rhino.DocObjects.TextHorizontalAlignment.Center;
-                Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = Rhino.DocObjects.TextVerticalAlignment.MiddleOfTop;
+                global::Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = global::Rhino.DocObjects.TextHorizontalAlignment.Center;
+                global::Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = global::Rhino.DocObjects.TextVerticalAlignment.MiddleOfTop;
                 Text3d text3d = new Text3d(text, plane, height_Temp);
                 text3d.HorizontalAlignment = textHorizontalAlignment;
                 text3d.VerticalAlignment = textVerticalAlignment;
@@ -201,7 +201,7 @@ namespace SAM.Analytical.Grasshopper
             List<Text3d> text3ds = GetText3ds();
             if (text3ds != null)
             {
-                Point3d cameraLocation = Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation;
+                Point3d cameraLocation = global::Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation;
                 foreach (Text3d text3d in text3ds)
                 {
                     if (text3d == null)
@@ -223,7 +223,7 @@ namespace SAM.Analytical.Grasshopper
             List<Text3d> text3ds = GetText3ds();
             if (text3ds != null)
             {
-                Point3d cameraLocation = Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation;
+                Point3d cameraLocation = global::Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation;
                 foreach (Text3d text3d in text3ds)
                 {
                     if (text3d == null)

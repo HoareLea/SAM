@@ -111,7 +111,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Rhino.Geometry.Brep> breps = new List<Rhino.Geometry.Brep>();
+            List<global::Rhino.Geometry.Brep> breps = new List<global::Rhino.Geometry.Brep>();
             foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
             {
                 object @object = objectWrapper?.Value;
@@ -127,21 +127,21 @@ namespace SAM.Analytical.Grasshopper
 
                 if (@object is Mesh3D)
                 {
-                    @object = Geometry.Grasshopper.Convert.ToRhino((Mesh3D)@object);
+                    @object = Geometry.Rhino.Convert.ToRhino((Mesh3D)@object);
                 }
 
-                if (@object is Rhino.Geometry.Brep)
+                if (@object is global::Rhino.Geometry.Brep)
                 {
-                    breps.Add((Rhino.Geometry.Brep)@object);
+                    breps.Add((global::Rhino.Geometry.Brep)@object);
                     continue;
                 }
                
-                if(@object is Rhino.Geometry.Mesh)
+                if(@object is global::Rhino.Geometry.Mesh)
                 {
-                    Rhino.Geometry.Mesh mesh = (Rhino.Geometry.Mesh)@object;
+                    global::Rhino.Geometry.Mesh mesh = (global::Rhino.Geometry.Mesh)@object;
                     if(mesh.IsClosed)
                     {
-                        Rhino.Geometry.Brep brep = Rhino.Geometry.Brep.CreateFromMesh(mesh, true);
+                        global::Rhino.Geometry.Brep brep = global::Rhino.Geometry.Brep.CreateFromMesh(mesh, true);
                         if(brep != null)
                         {
                             breps.Add(brep);
@@ -152,16 +152,16 @@ namespace SAM.Analytical.Grasshopper
 
                 if (@object is Shell)
                 {
-                    breps.Add(Geometry.Grasshopper.Convert.ToRhino((Shell)@object));
+                    breps.Add(Geometry.Rhino.Convert.ToRhino((Shell)@object));
                     continue;
                 }
             }
 
 
             List<Shell> shells = new List<Shell>();
-            foreach (Rhino.Geometry.Brep brep in breps)
+            foreach (global::Rhino.Geometry.Brep brep in breps)
             {
-                Shell shell = Geometry.Grasshopper.Convert.ToSAM_Shell(brep);
+                Shell shell = Geometry.Rhino.Convert.ToSAM_Shell(brep);
                 if(shell != null)
                 {
                     shells.Add(shell);

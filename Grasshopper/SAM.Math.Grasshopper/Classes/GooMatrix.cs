@@ -116,7 +116,7 @@ namespace SAM.Math.Grasshopper
 
             if (source is Matrix)
             {
-                Value = Convert.ToSAM(((Rhino.Geometry.Matrix)source));
+                Value = Rhino.Convert.ToSAM(((global::Rhino.Geometry.Matrix)source));
                 return true;
             }
 
@@ -136,9 +136,9 @@ namespace SAM.Math.Grasshopper
                 target = (Y)(object)Value.ToGrasshopper();
             }
 
-            if (typeof(Y) == typeof(Rhino.Geometry.Matrix))
+            if (typeof(Y) == typeof(global::Rhino.Geometry.Matrix))
             {
-                target = (Y)(object)Value.ToRhino();
+                target = (Y)(object)Rhino.Convert.ToRhino(Value);
             }
 
 

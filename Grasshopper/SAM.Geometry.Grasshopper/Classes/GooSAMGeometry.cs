@@ -66,26 +66,26 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 if (Value is Spatial.IBoundable3D)
-                    return ((Spatial.IBoundable3D)Value).GetBoundingBox().ToRhino();
+                    return Rhino.Convert.ToRhino(((Spatial.IBoundable3D)Value).GetBoundingBox());
 
                 if (Value is Spatial.Point3D)
-                    return ((Spatial.Point3D)(object)Value).GetBoundingBox(1).ToRhino();
+                    return Rhino.Convert.ToRhino(((Spatial.Point3D)(object)Value).GetBoundingBox(1));
 
                 if (Value is Planar.IBoundable2D)
                 {
                     Planar.BoundingBox2D boundingBox2D = ((Planar.IBoundable2D)Value).GetBoundingBox();
-                    return new Spatial.BoundingBox3D(new Spatial.Point3D(boundingBox2D.Min.X, boundingBox2D.Min.Y, -1), new Spatial.Point3D(boundingBox2D.Max.X, boundingBox2D.Max.Y, 1)).ToRhino();
+                    return Rhino.Convert.ToRhino( new Spatial.BoundingBox3D(new Spatial.Point3D(boundingBox2D.Min.X, boundingBox2D.Min.Y, -1), new Spatial.Point3D(boundingBox2D.Max.X, boundingBox2D.Max.Y, 1)));
                 }
 
                 if (Value is Planar.Point2D)
                 {
                     Planar.Point2D point2D = (Planar.Point2D)Value;
-                    return new Spatial.BoundingBox3D(new Spatial.Point3D(point2D.X, point2D.Y, -1), new Spatial.Point3D(point2D.X, point2D.Y, 1)).ToRhino();
+                    return Rhino.Convert.ToRhino(new Spatial.BoundingBox3D(new Spatial.Point3D(point2D.X, point2D.Y, -1), new Spatial.Point3D(point2D.X, point2D.Y, 1)));
                 }
 
                 if (Value is Spatial.Plane)
                 {
-                    return (((Spatial.Plane)Value).Origin).GetBoundingBox(1).ToRhino();
+                    return Rhino.Convert.ToRhino(((Spatial.Plane)Value).Origin.GetBoundingBox(1));
                 }
 
                 return new BoundingBox();
@@ -158,13 +158,13 @@ namespace SAM.Geometry.Grasshopper
 
             if (source is Polyline)
             {
-                Value = Convert.ToSAM(((Polyline)source));
+                Value = Rhino.Convert.ToSAM(((Polyline)source));
                 return true;
             }
 
             if (source is Point3d)
             {
-                Value = Convert.ToSAM(((Point3d)source));
+                Value = Rhino.Convert.ToSAM(((Point3d)source));
                 return true;
             }
 
@@ -188,7 +188,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (source is Vector3d)
             {
-                Value = Convert.ToSAM((Vector3d)source);
+                Value = Rhino.Convert.ToSAM((Vector3d)source);
                 return true;
             }
 
@@ -200,13 +200,13 @@ namespace SAM.Geometry.Grasshopper
 
             if (source is Plane)
             {
-                Value = Convert.ToSAM((Plane)source);
+                Value = Rhino.Convert.ToSAM((Plane)source);
                 return true;
             }
 
             if(source is Mesh)
             {
-                Value = Convert.ToSAM((Mesh)source);
+                Value = Rhino.Convert.ToSAM((Mesh)source);
             }
 
             if (source is GH_Mesh)
@@ -216,7 +216,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (source is Brep)
             {
-                List<Spatial.ISAMGeometry3D> sAMGeometry3Ds = ((Brep)source).ToSAM();
+                List<Spatial.ISAMGeometry3D> sAMGeometry3Ds = Rhino.Convert.ToSAM(((Brep)source));
                 if(sAMGeometry3Ds != null && sAMGeometry3Ds.Count != 0)
                 {
                     Value = sAMGeometry3Ds[0];
@@ -239,7 +239,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.ISegmentable3D)
                 {
-                    target = (Y)(object)(new Polyline(((Spatial.ISegmentable3D)Value).GetPoints().ConvertAll(x => x.ToRhino())));
+                    target = (Y)(object)(new Polyline(((Spatial.ISegmentable3D)Value).GetPoints().ConvertAll(x => Rhino.Convert.ToRhino(x))));
                     return true;
                 }
             }
@@ -248,7 +248,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Point3D)
                 {
-                    target = (Y)(object)(((Spatial.Point3D)Value).ToRhino());
+                    target = (Y)(object)Rhino.Convert.ToRhino((((Spatial.Point3D)Value)));
                     return true;
                 }
             }
@@ -275,7 +275,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Plane)
                 {
-                    target = (Y)(object)(((Spatial.Plane)Value).ToRhino());
+                    target = (Y)(object)Rhino.Convert.ToRhino((Spatial.Plane)Value);
                     return true;
                 }
             }
@@ -284,13 +284,13 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Vector3D)
                 {
-                    target = (Y)(object)(((Spatial.Vector3D)Value).ToRhino());
+                    target = (Y)(object)Rhino.Convert.ToRhino((Spatial.Vector3D)Value);
                     return true;
                 }
 
                 if (Value is Planar.Vector2D)
                 {
-                    target = (Y)(object)(((Planar.Vector2D)Value).ToRhino());
+                    target = (Y)(object)Rhino.Convert.ToRhino((Planar.Vector2D)Value);
                     return true;
                 }
             }
@@ -314,7 +314,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Shell)
                 {
-                    target = (Y)(object)(((Spatial.Shell)Value).ToRhino());
+                    target = (Y)(object)Rhino.Convert.ToRhino((Spatial.Shell)Value);
                     return true;
                 }
             }
@@ -323,7 +323,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Shell)
                 {
-                    target = (Y)(object)new GH_Brep(((Spatial.Shell)Value).ToRhino());
+                    target = (Y)(object)new GH_Brep(Rhino.Convert.ToRhino((Spatial.Shell)Value));
                     return true;
                 }
             }
@@ -332,7 +332,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 if (Value is Spatial.Shell)
                 {
-                    Mesh mesh = ((Spatial.Shell)Value).ToRhino_Mesh();
+                    Mesh mesh = Rhino.Convert.ToRhino_Mesh((Spatial.Shell)Value);
                     if(mesh != null)
                     {
                         target = (Y)(object)new GH_Mesh(mesh);
@@ -342,7 +342,7 @@ namespace SAM.Geometry.Grasshopper
 
                 if(Value is Spatial.Mesh3D)
                 {
-                    target = (Y)(object)new GH_Mesh(((Spatial.Mesh3D)Value).ToRhino());
+                    target = (Y)(object)new GH_Mesh(Rhino.Convert.ToRhino((Spatial.Mesh3D)Value));
                     return true;
                 }
             }
@@ -371,14 +371,14 @@ namespace SAM.Geometry.Grasshopper
             Modify.DrawViewportMeshes(Value, args, args.Material);
         }
 
-        public virtual void DrawViewportMeshes(GH_PreviewMeshArgs args, Rhino.Display.DisplayMaterial displayMaterial)
+        public virtual void DrawViewportMeshes(GH_PreviewMeshArgs args, global::Rhino.Display.DisplayMaterial displayMaterial)
         {
             Modify.DrawViewportMeshes(Value, args, displayMaterial);
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            return Modify.BakeGeometry(Value, doc, att, out obj_guid);
+            return Rhino.Modify.BakeGeometry(Value, doc, att, out obj_guid);
         }
     }
 
