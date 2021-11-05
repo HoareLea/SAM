@@ -69,7 +69,7 @@ namespace SAM.Analytical.Rhino
                     continue;
                 }
 
-                Vector3D vector3D = plane.Normal * bucketSize;
+                Vector3D vector3D = face3D.GetPlane().Normal * bucketSize;
 
                 List<Geometry.Planar.Point2D> point2Ds = new List<Geometry.Planar.Point2D>();
                 point2Ds.Add(plane.Convert((Point3D)segment3D[0].GetMoved(vector3D)));
