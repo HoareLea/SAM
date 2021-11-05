@@ -183,6 +183,16 @@ namespace SAM.Analytical
             return openings.Find(x => x.Guid == guid) != null;
         }
 
+        public IOpening GetOpening(Guid guid)
+        {
+            if (openings == null || openings.Count == 0)
+            {
+                return null;
+            }
+
+            return openings.Find(x => x.Guid == guid)?.Clone();
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
