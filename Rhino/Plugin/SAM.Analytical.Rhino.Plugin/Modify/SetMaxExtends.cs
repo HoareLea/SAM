@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Rhino.Plugin
@@ -14,15 +13,44 @@ namespace SAM.Analytical.Rhino.Plugin
                 return;
             }
 
-            List<Tuple<int, double>> tuples = new List<Tuple<int, double>>();
             for(int i =0; i < panels.Count; i++)
             {
                 Panel panel = panels[i];
-                
-                if (panel.PanelType == PanelType.Air)
+                if(panel == null)
                 {
-                    panels[i].SetValue(PanelParameter.Weight, 0);
+                    continue;
                 }
+                
+                double thickness = double.NaN;
+
+                Construction construction = panel.Construction;
+                if (construction != null)
+                {
+                    thickness = construction.GetThickness();
+                }
+                else
+                {
+                    if (!construction.TryGetValue(ConstructionParameter.DefaultThickness, out thickness))
+                    {
+                        thickness = double.NaN;
+                    }
+                }
+
+                double maxExtend = double.NaN;
+                if(double.IsNaN(thickness))
+                {
+                    maxExtend = 0.33;
+                }
+                else if (thickness > 0.29)
+                {
+                    maxExtend = 0.6;
+                }
+                else
+                {
+                    maxExtend = 0.5;
+                }
+
+                double length = double.NaN;
 
                 Face3D face3D = panel.GetFace3D();
 
@@ -33,30 +61,25 @@ namespace SAM.Analytical.Rhino.Plugin
                     Plane plane = Geometry.Spatial.Create.Plane(boundingBox3D.Min.Z + offset);
 
                     PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, face3D, tolerance_Angle, tolerance_Distance);
-                    if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                    if (planarIntersectionResult != null && planarIntersectionResult.Intersecting)
                     {
-                        continue;
-                    }
-
-                    List<ISegmentable3D> segmentable3Ds = planarIntersectionResult.GetGeometry3Ds<ISegmentable3D>();
-                    if (segmentable3Ds == null)
-                    {
-                        continue;
-                    }
-
-                    List<Point3D> point3Ds = new List<Point3D>();
-                    foreach (ISegmentable3D segmentable3D in segmentable3Ds)
-                    {
-                        List<Point3D> point3Ds_Temp = segmentable3D?.GetPoints();
-                        if (point3Ds_Temp != null)
+                        List<ISegmentable3D> segmentable3Ds = planarIntersectionResult.GetGeometry3Ds<ISegmentable3D>();
+                        if(segmentable3Ds != null)
                         {
-                            point3Ds.AddRange(point3Ds_Temp);
+                            List<Point3D> point3Ds = new List<Point3D>();
+                            foreach (ISegmentable3D segmentable3D in segmentable3Ds)
+                            {
+                                List<Point3D> point3Ds_Temp = segmentable3D?.GetPoints();
+                                if (point3Ds_Temp != null)
+                                {
+                                    point3Ds.AddRange(point3Ds_Temp);
+                                }
+                            }
+
+                            point3Ds.ExtremePoints(out Point3D point3D_1, out Point3D point3D_2);
+                            length = point3D_1.Distance(point3D_2);
                         }
                     }
-
-                    point3Ds.ExtremePoints(out Point3D point3D_1, out Point3D point3D_2);
-
-                    tuples.Add(new Tuple<int, double>(i, point3D_1.Distance(point3D_2)));
                 }
                 else
                 {
@@ -67,22 +90,24 @@ namespace SAM.Analytical.Rhino.Plugin
                     }
 
                     Geometry.Planar.Rectangle2D rectangle2D = Geometry.Planar.Create.Rectangle2D((plane.Convert(face3D).ExternalEdge2D as Geometry.Planar.ISegmentable2D)?.GetPoints());
-                    if(rectangle2D == null)
+                    if (rectangle2D == null)
                     {
                         continue;
                     }
 
-                    tuples.Add(new Tuple<int, double>(i, System.Math.Max(rectangle2D.Height, rectangle2D.Width)));
+                    length = System.Math.Max(rectangle2D.Height, rectangle2D.Width); 
                 }
-            }
 
-            double min = tuples.ConvertAll(x => x.Item2).Min();
-            double max = tuples.ConvertAll(x => x.Item2).Max();
+                if(double.IsNaN(length))
+                {
+                    length = 0;
+                }
 
-            foreach(Tuple<int, double> tuple in tuples)
-            {
-                double weight = Math.Query.Remap(tuple.Item2, min, max, 0.2, 1);
-                panels[tuple.Item1].SetValue(PanelParameter.Weight, weight);
+                length = 0.49 * length;
+
+                maxExtend = System.Math.Min(length, maxExtend);
+
+                panels[i].SetValue(PanelParameter.MaxExtend, maxExtend);
             }
         }
     }
