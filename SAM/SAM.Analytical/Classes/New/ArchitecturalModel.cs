@@ -1166,6 +1166,32 @@ namespace SAM.Analytical
             return GetRelatedObjects<IHostPartition>(hostPartitionType);
         }
 
+        public T GetHostPartition<T>(Guid openingGuid) where T : IHostPartition
+        {
+            if (openingGuid == Guid.Empty || relationCluster == null)
+            {
+                return default;
+            }
+
+            Func<T, bool> function = new Func<T, bool>((T hostPartition) =>
+            {
+                if (hostPartition == null)
+                {
+                    return false;
+                }
+
+                return hostPartition.HasOpening(openingGuid);
+            });
+
+            T result = relationCluster.GetObject(function);
+            if (result == null)
+            {
+                return default;
+            }
+
+            return result.Clone();
+        }
+
         public T GetHostPartition<T>(IOpening opening) where T: IHostPartition
         {
             if (opening == null || relationCluster == null)
@@ -1173,37 +1199,7 @@ namespace SAM.Analytical
                 return default;
             }
 
-            Func<T, bool> function = new Func<T, bool>((T hostPartition) =>
-            {
-                List<IOpening> openings = hostPartition?.GetOpenings();
-                if(openings == null || openings.Count == 0)
-                {
-                    return false;
-                }
-
-                foreach(IOpening opening_Temp in openings)
-                {
-                    if(opening_Temp == null)
-                    {
-                        continue;
-                    }
-
-                    if(opening_Temp.Guid == opening.Guid)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            });
-
-            T result = relationCluster.GetObject(function);
-            if(result == null)
-            {
-                return default;
-            }
-
-            return result.Clone();
+            return GetHostPartition<T>(opening.Guid);
         }
 
         public IHostPartition GetHostPartition(IOpening opening)
@@ -1380,6 +1376,33 @@ namespace SAM.Analytical
             }
 
             return relationCluster.GetRelatedObjects<PartitionSimulationResult>(partition)?.ConvertAll(x => new PartitionSimulationResult(x));
+        }
+
+        public List<OpeningSimulationResult> GetOpeningSimulationResults(IOpening opening)
+        {
+            if (opening == null || relationCluster == null)
+            {
+                return null;
+            }
+
+            List<OpeningSimulationResult> result = relationCluster.GetRelatedObjects<OpeningSimulationResult>(opening)?.ConvertAll(x => new OpeningSimulationResult(x));
+
+            IHostPartition hostPartition = GetHostPartition(opening);
+            if(hostPartition != null)
+            {
+                List<OpeningSimulationResult> openingSimulationResults_HostPartition = relationCluster.GetRelatedObjects<OpeningSimulationResult>(hostPartition)?.ConvertAll(x => new OpeningSimulationResult(x));
+                if(openingSimulationResults_HostPartition != null)
+                {
+                    if (result == null)
+                    {
+                        result = new List<OpeningSimulationResult>();
+                    }
+
+                    result.AddRange(openingSimulationResults_HostPartition);
+                }
+            }
+
+            return result;
         }
 
         public List<ArchitecturalModelSimulationResult> GetArchitecturalModelSimulationResults()
@@ -1905,6 +1928,36 @@ namespace SAM.Analytical
             return result;
         }
 
+        public bool Add(SpaceSimulationResult spaceSimulationResult, Guid spaceGuid)
+        {
+            if (spaceSimulationResult == null)
+            {
+                return false;
+            }
+
+            if (relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            bool result = relationCluster.AddObject(spaceSimulationResult);
+            if (!result)
+            {
+                return result;
+            }
+
+            if (spaceGuid != Guid.Empty)
+            {
+                Space space = relationCluster.GetObject<Space>(spaceGuid);
+                if (space != null)
+                {
+                    relationCluster.AddRelation(spaceSimulationResult, space);
+                }
+            }
+
+            return result;
+        }
+
         public bool Add(PartitionSimulationResult partitionSimulationResult, IPartition partition = null)
         {
             if(partitionSimulationResult == null)
@@ -1935,8 +1988,40 @@ namespace SAM.Analytical
 
             return result;
         }
+       
+        public bool Add(PartitionSimulationResult partitionSimulationResult, Guid partitionGuid)
+        {
+            if (partitionSimulationResult == null)
+            {
+                return false;
+            }
 
-        public bool Add(OpeningSimulationResult openingSimulationResult, IOpening opening = null)
+            if (relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            PartitionSimulationResult partitionSimulationResult_Temp = new PartitionSimulationResult(partitionSimulationResult);
+
+            bool result = relationCluster.AddObject(partitionSimulationResult_Temp);
+            if (!result)
+            {
+                return result;
+            }
+
+            if (partitionGuid != Guid.Empty)
+            {
+                IPartition partition = relationCluster.GetObject<IPartition>(partitionGuid);
+                if (partition != null)
+                {
+                    relationCluster.AddRelation(partitionSimulationResult, partition);
+                }
+            }
+
+            return result;
+        }
+
+        public bool Add(OpeningSimulationResult openingSimulationResult, IOpening opening = null, double tolerance = Tolerance.Distance)
         {
             if (openingSimulationResult == null)
             {
@@ -1958,9 +2043,61 @@ namespace SAM.Analytical
 
             if (opening != null)
             {
-                if (Add(opening))
+                if (Add(opening, tolerance))
                 {
-                    relationCluster.AddRelation(openingSimulationResult, opening);
+                    IOpening opening_Temp = relationCluster.GetObject<IOpening>(opening.Guid);
+                    if(opening_Temp != null)
+                    {
+                        relationCluster.AddRelation(openingSimulationResult, opening_Temp);
+                    }
+                    else
+                    {
+                        IHostPartition hostPartition = GetHostPartition(opening);
+                        if (hostPartition != null)
+                        {
+                            relationCluster.AddRelation(openingSimulationResult, opening);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public bool Add(OpeningSimulationResult openingSimulationResult, Guid openingGuid)
+        {
+            if (openingSimulationResult == null)
+            {
+                return false;
+            }
+
+            if (relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            OpeningSimulationResult openingSimulationResult_Temp = new OpeningSimulationResult(openingSimulationResult);
+
+            bool result = relationCluster.AddObject(openingSimulationResult_Temp);
+            if (!result)
+            {
+                return result;
+            }
+
+            if (openingGuid != Guid.Empty)
+            {
+                IOpening opening_Temp = relationCluster.GetObject<IOpening>(openingGuid);
+                if (opening_Temp != null)
+                {
+                    relationCluster.AddRelation(openingSimulationResult, opening_Temp);
+                }
+                else
+                {
+                    IHostPartition hostPartition = GetHostPartition<IHostPartition>(openingGuid);
+                    if (hostPartition != null)
+                    {
+                        relationCluster.AddRelation(openingSimulationResult, hostPartition);
+                    }
                 }
             }
 
