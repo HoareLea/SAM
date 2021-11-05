@@ -87,6 +87,7 @@
       <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="RhinoCommon">
+      <ExcludeAssets>runtime</ExcludeAssets>
       <Version>6.32.20340.21001</Version>
     </PackageReference>
   </ItemGroup>
