@@ -59,6 +59,9 @@
     <Compile Include="Modify\New\BakeGeometry_ByCategory.cs" />
     <Compile Include="Modify\New\BakeGeometry_ByType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\MaxExtendMeshes.cs" />
+    <Compile Include="Query\WeightsMeshes.cs" />
+    <Compile Include="Query\BucketSizeMeshes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">
@@ -91,5 +94,6 @@
       <Version>6.32.20340.21001</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
