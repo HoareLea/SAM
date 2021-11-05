@@ -29,6 +29,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\..\SAM\SAM.Analytical\SAM.Analytical.csproj" />
+    <ProjectReference Include="..\..\..\SAM\SAM.Core\SAM.Core.csproj" />
     <ProjectReference Include="..\..\..\SAM\SAM.Geometry\SAM.Geometry.csproj" />
   </ItemGroup>
   
