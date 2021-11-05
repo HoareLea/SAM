@@ -1561,17 +1561,13 @@ namespace SAM.Analytical
             {
                 foreach(IHostPartition hostPartition in hostPartitions)
                 {
-                    List<IOpening> openings = hostPartition.GetOpenings();
-                    if(openings != null && openings.Count != 0)
+                    if (hostPartition.HasOpening(opening.Guid))
                     {
-                        if(openings.Find(x => x.Guid == opening.Guid) != null)
+                        hostPartition_Opening = hostPartition;
+                        if (Query.IsValid(hostPartition, opening, tolerance))
                         {
-                            hostPartition_Opening = hostPartition;
-                            if (Query.IsValid(hostPartition, opening, tolerance))
-                            {
-                                valid = true;
-                                break;
-                            }
+                            valid = true;
+                            break;
                         }
                     }
 
@@ -1812,6 +1808,23 @@ namespace SAM.Analytical
             return true;
         }
 
+        public bool Add(ArchitecturalModelSimulationResult architecturalModelSimulationResult)
+        {
+            if (architecturalModelSimulationResult == null)
+            {
+                return false;
+            }
+
+            if (relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            ArchitecturalModelSimulationResult architecturalModelSimulationResult_Temp = new ArchitecturalModelSimulationResult(architecturalModelSimulationResult);
+
+            return relationCluster.AddObject(architecturalModelSimulationResult_Temp);
+        }
+
         public bool Add(MechanicalSystem mechanicalSystem, IEnumerable<Space> spaces = null)
         {
             if(mechanicalSystem == null)
@@ -1923,21 +1936,35 @@ namespace SAM.Analytical
             return result;
         }
 
-        public bool Add(ArchitecturalModelSimulationResult architecturalModelSimulationResult)
+        public bool Add(OpeningSimulationResult openingSimulationResult, IOpening opening = null)
         {
-            if(architecturalModelSimulationResult == null)
+            if (openingSimulationResult == null)
             {
                 return false;
             }
 
-            if(relationCluster == null)
+            if (relationCluster == null)
             {
                 relationCluster = new RelationCluster();
             }
 
-            ArchitecturalModelSimulationResult architecturalModelSimulationResult_Temp = new ArchitecturalModelSimulationResult(architecturalModelSimulationResult);
+            OpeningSimulationResult openingSimulationResult_Temp = new OpeningSimulationResult(openingSimulationResult);
 
-            return relationCluster.AddObject(architecturalModelSimulationResult_Temp);
+            bool result = relationCluster.AddObject(openingSimulationResult_Temp);
+            if (!result)
+            {
+                return result;
+            }
+
+            if (opening != null)
+            {
+                if (Add(opening))
+                {
+                    relationCluster.AddRelation(openingSimulationResult, opening);
+                }
+            }
+
+            return result;
         }
 
         public bool Contains(ISAMObject sAMObject)
