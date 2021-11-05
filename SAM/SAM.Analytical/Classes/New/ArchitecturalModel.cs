@@ -1378,6 +1378,33 @@ namespace SAM.Analytical
             return relationCluster.GetRelatedObjects<PartitionSimulationResult>(partition)?.ConvertAll(x => new PartitionSimulationResult(x));
         }
 
+        public List<OpeningSimulationResult> GetOpeningSimulationResults(IOpening opening)
+        {
+            if (opening == null || relationCluster == null)
+            {
+                return null;
+            }
+
+            List<OpeningSimulationResult> result = relationCluster.GetRelatedObjects<OpeningSimulationResult>(opening)?.ConvertAll(x => new OpeningSimulationResult(x));
+
+            IHostPartition hostPartition = GetHostPartition(opening);
+            if(hostPartition != null)
+            {
+                List<OpeningSimulationResult> openingSimulationResults_HostPartition = relationCluster.GetRelatedObjects<OpeningSimulationResult>(hostPartition)?.ConvertAll(x => new OpeningSimulationResult(x));
+                if(openingSimulationResults_HostPartition != null)
+                {
+                    if (result == null)
+                    {
+                        result = new List<OpeningSimulationResult>();
+                    }
+
+                    result.AddRange(openingSimulationResults_HostPartition);
+                }
+            }
+
+            return result;
+        }
+
         public List<ArchitecturalModelSimulationResult> GetArchitecturalModelSimulationResults()
         {
             return GetObjects<ArchitecturalModelSimulationResult>();
