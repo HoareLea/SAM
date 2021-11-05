@@ -7,7 +7,7 @@ namespace SAM.Analytical.Rhino.Plugin
 {
     public static partial class Modify
     {
-        public static void SetBucketSizes(this List<Panel> panels, double minBucketSize = 0.2)
+        public static void SetBucketSizes(this List<Panel> panels, double factor = 0.6, double minBucketSize = 0.2)
         {
             if (panels == null)
             {
@@ -23,7 +23,7 @@ namespace SAM.Analytical.Rhino.Plugin
                     continue;
                 }
 
-                panels[i].SetValue(PanelParameter.BucketSize, minBucketSize);
+                panels[i].SetValue(PanelParameter.BucketSize, minBucketSize * factor);
 
                 double thickness = double.NaN;
 
@@ -57,7 +57,7 @@ namespace SAM.Analytical.Rhino.Plugin
                 {
                     double backetSize = Math.Query.Remap(tuple.Item2, min, max, minBucketSize, max);
 
-                    panels[tuple.Item1].SetValue(PanelParameter.BucketSize, backetSize);
+                    panels[tuple.Item1].SetValue(PanelParameter.BucketSize, backetSize * factor);
                 }
             }
         }
