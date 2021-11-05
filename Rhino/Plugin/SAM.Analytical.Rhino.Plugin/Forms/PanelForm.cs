@@ -41,6 +41,8 @@ namespace SAM.Analytical.Rhino.Plugin
             panels = panels?.ConvertAll(x => Create.Panel(x));
 
             Modify.SetWeights(panels);
+            Modify.SetBucketSizes(panels);
+            Modify.SetMaxExtends(panels);
 
             DialogResult = DialogResult.OK;
             Close();
