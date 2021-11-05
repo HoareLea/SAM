@@ -55,4 +55,8 @@
     <DocumentationFile>..\..\..\build\Rhino Plugins\SAM.Analytical.Rhino.Plugin.xml</DocumentationFile>
   </PropertyGroup>
   
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="set SAM_DIR=$(APPDATA)\McNeel\Rhinoceros\packages\7.0\SAM\1.0.0\&#xD;&#xA;if not exist &quot;%25SAM_DIR%25&quot; mkdir &quot;%25SAM_DIR%25&quot;&#xD;&#xA;&#xD;&#xA;copy &quot;$(TargetDir)*.dll&quot; &quot;%25SAM_DIR%25&quot;&#xD;&#xA;copy &quot;$(TargetDir)*.rhp&quot; &quot;%25SAM_DIR%25&quot;&#xD;&#xA;copy &quot;$(TargetDir)*.xml&quot; &quot;%25SAM_DIR%25&quot;" />
+  </Target>
+  
 </Project>
