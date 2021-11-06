@@ -50,6 +50,11 @@ namespace SAM.Analytical.Rhino.Plugin
 
                     foreach(Panel panel in panels_Temp)
                     {
+                        if(panel == null)
+                        {
+                            continue;
+                        }
+                        
                         tuples.Add(new Tuple<Panel, Brep>(panel, brep));
                     }
                 }

@@ -69,18 +69,16 @@ namespace SAM.Analytical.Rhino
                     continue;
                 }
 
-                Vector3D vector3D = face3D.GetPlane().Normal * bucketSize;
+                Line line = Geometry.Rhino.Convert.ToRhino_Line(segment3D);
 
-                List<Geometry.Planar.Point2D> point2Ds = new List<Geometry.Planar.Point2D>();
-                point2Ds.Add(plane.Convert((Point3D)segment3D[0].GetMoved(vector3D)));
-                point2Ds.Add(plane.Convert((Point3D)segment3D[1].GetMoved(vector3D)));
+                Vector3d axis_1 = line.UnitTangent;
+                Vector3d axis_2 = Vector3d.CrossProduct(axis_1, Vector3d.ZAxis);
 
-                vector3D.Negate();
+                global::Rhino.Geometry.Plane plane_1 = new global::Rhino.Geometry.Plane(line.PointAt(0.5), axis_2, axis_1);
 
-                point2Ds.Add(plane.Convert((Point3D)segment3D[1].GetMoved(vector3D)));
-                point2Ds.Add(plane.Convert((Point3D)segment3D[0].GetMoved(vector3D)));
+                Rectangle3d rectangle3d = new Rectangle3d(plane_1, new Interval(-bucketSize, bucketSize), new Interval(-line.Length / 2, line.Length / 2));
 
-                Polyline polyline = Geometry.Rhino.Convert.ToRhino(new Polygon3D(plane, point2Ds));
+                Polyline polyline = rectangle3d.ToPolyline();
                 if(polyline == null)
                 {
                     result.Add(null);

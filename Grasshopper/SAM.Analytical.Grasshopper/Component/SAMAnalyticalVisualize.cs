@@ -100,6 +100,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            panels.RemoveAll(x => x == null);
+
             List<Mesh> bucketSizes = Rhino.Query.BucketSizeMeshes(panels);
             List<Tuple<Mesh, Mesh>> maxExtends = Rhino.Query.MaxExtendMeshes(panels);
             List<Mesh> weights = Rhino.Query.WeightsMeshes(panels);
@@ -138,8 +140,20 @@ namespace SAM.Analytical.Grasshopper
                 List<Mesh> meshes = new List<Mesh>();
                 foreach(Tuple<Mesh, Mesh> tuple in maxExtends)
                 {
-                    meshes.Add(tuple.Item1);
-                    meshes.Add(tuple.Item2);
+                    if(tuple == null)
+                    {
+                        continue;
+                    }
+                    
+                    if(tuple.Item1 != null)
+                    {
+                        meshes.Add(tuple.Item1);
+                    }
+
+                    if (tuple.Item2 != null)
+                    {
+                        meshes.Add(tuple.Item2);
+                    }
                 }    
 
                 dataAccess.SetDataList(index, meshes);

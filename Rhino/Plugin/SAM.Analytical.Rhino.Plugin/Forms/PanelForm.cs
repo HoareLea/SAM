@@ -124,6 +124,11 @@ namespace SAM.Analytical.Rhino.Plugin
             HashSet<double> Weights = new HashSet<double>();
             foreach(Panel panel in panels)
             {
+                if(panel == null)
+                {
+                    continue;
+                }
+                
                 if(panel.TryGetValue(PanelParameter.BucketSize, out double bucketSize))
                 {
                     bucketSizes.Add(bucketSize);
