@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -81,9 +81,19 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Line() { Name = "lines", NickName = "lines", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Mesh() { Name = "bucketSizes", NickName = "bucketSizes", Description = "BucketSizes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Mesh() { Name = "maxExtends", NickName = "maxExtends", Description = "maxExtends", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Mesh() { Name = "weights", NickName = "weights", Description = "weights", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Mesh() { Name = "bucketSizeMeshes", NickName = "bucketSizeMeshes", Description = "BucketSize Meshes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "bucketSizePoints", NickName = "bucketSizePoints", Description = "BucketSize Points", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "bucketSizes", NickName = "bucketSizes", Description = "BucketSizes", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Mesh() { Name = "maxExtendMeshes", NickName = "maxExtendMeshes", Description = "maxExtend Meshes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "maxExtendPoints", NickName = "maxExtendPoints", Description = "maxExtend Points", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxExtends", NickName = "maxExtends", Description = "Max Extends", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Mesh() { Name = "weightMeshes", NickName = "weightMeshes", Description = "Weight Meshes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "weightPoints", NickName = "weightPoints", Description = "Weight Points", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "weights", NickName = "weights", Description = "Weights", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                
                 return result.ToArray();
             }
         }
@@ -102,9 +112,9 @@ namespace SAM.Analytical.Grasshopper
 
             panels.RemoveAll(x => x == null);
 
-            List<Mesh> bucketSizes = Rhino.Query.BucketSizeMeshes(panels);
-            List<Tuple<Mesh, Mesh>> maxExtends = Rhino.Query.MaxExtendMeshes(panels);
-            List<Mesh> weights = Rhino.Query.WeightsMeshes(panels);
+            List<Mesh> bucketSizeMeshes = Rhino.Query.BucketSizeMeshes(panels, out List<Point3d> bucketSizePoints, out List<double> bucketSizes);
+            List<Tuple<Mesh, Mesh>> maxExtendMeshes = Rhino.Query.MaxExtendMeshes(panels, out List<Tuple<Point3d, Point3d>> maxExtendPoints, out List<double> maxExtends);
+            List<Mesh> weightMeshes = Rhino.Query.WeightsMeshes(panels, out List<Point3d> weightPoints, out List<double> weights);
 
             index = Params.IndexOfOutputParam("lines");
             if (index != -1)
@@ -128,17 +138,30 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetDataList(index, lines);
             }
 
+            index = Params.IndexOfOutputParam("bucketSizeMeshes");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, bucketSizeMeshes);
+            }
+
+            index = Params.IndexOfOutputParam("bucketSizePoints");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, bucketSizePoints);
+            }
+
             index = Params.IndexOfOutputParam("bucketSizes");
             if (index != -1)
             {
                 dataAccess.SetDataList(index, bucketSizes);
             }
 
-            index = Params.IndexOfOutputParam("maxExtends");
+
+            index = Params.IndexOfOutputParam("maxExtendMeshes");
             if (index != -1)
             {
                 List<Mesh> meshes = new List<Mesh>();
-                foreach(Tuple<Mesh, Mesh> tuple in maxExtends)
+                foreach(Tuple<Mesh, Mesh> tuple in maxExtendMeshes)
                 {
                     if(tuple == null)
                     {
@@ -157,6 +180,50 @@ namespace SAM.Analytical.Grasshopper
                 }    
 
                 dataAccess.SetDataList(index, meshes);
+            }
+
+            index = Params.IndexOfOutputParam("maxExtendPoints");
+            if (index != -1)
+            {
+                List<Point3d> points = new List<Point3d>();
+                foreach (Tuple<Point3d, Point3d> tuple in maxExtendPoints)
+                {
+                    if (tuple == null)
+                    {
+                        continue;
+                    }
+
+                    if (tuple.Item1 != null)
+                    {
+                        points.Add(tuple.Item1);
+                    }
+
+                    if (tuple.Item2 != null)
+                    {
+                        points.Add(tuple.Item2);
+                    }
+                }
+
+                dataAccess.SetDataList(index, points);
+            }
+
+            index = Params.IndexOfOutputParam("maxExtends");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, maxExtends);
+            }
+
+
+            index = Params.IndexOfOutputParam("weightMeshes");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, weightMeshes);
+            }
+
+            index = Params.IndexOfOutputParam("weightPoints");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, weightPoints);
             }
 
             index = Params.IndexOfOutputParam("weights");

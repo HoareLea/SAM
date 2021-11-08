@@ -7,8 +7,11 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Query
     {
-        public static List<Mesh> BucketSizeMeshes(this IEnumerable<Panel> panels, double offset = 0.1)
+        public static List<Mesh> BucketSizeMeshes(this IEnumerable<Panel> panels, out List<Point3d> point3Ds, out List<double> values, double offset = 0.1)
         {
+            point3Ds = null;
+            values = null;
+
             if(panels == null)
             {
                 return null;
@@ -45,6 +48,8 @@ namespace SAM.Analytical.Rhino
             }
 
             List<Mesh> result = new List<Mesh>();
+            point3Ds = new List<Point3d>();
+            values = new List<double>();
             foreach(Panel panel in panels)
             {
                 if(panel == null || !panel.TryGetValue(PanelParameter.BucketSize, out double bucketSize))
@@ -115,6 +120,8 @@ namespace SAM.Analytical.Rhino
                 }
 
                 result.Add(mesh);
+                point3Ds.Add(rectangle3d.Center);
+                values.Add(bucketSize);
             }
 
             return result;

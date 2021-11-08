@@ -1,5 +1,4 @@
 ﻿using Rhino.Geometry;
-using Rhino.Geometry.Collections;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
@@ -7,14 +6,18 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Query
     {
-        public static List<Mesh> WeightsMeshes(this IEnumerable<Panel> panels, double offset = 0.1, double radiusFactor = 0.1)
+        public static List<Mesh> WeightsMeshes(this IEnumerable<Panel> panels, out List<Point3d> point3ds, out List<double> values, double offset = 0.2, double radiusFactor = 0.1)
         {
-            if(panels == null)
+            point3ds = null;
+            values = null;
+            if (panels == null)
             {
                 return null;
             }
 
             List<Mesh> result = new List<Mesh>();
+            point3ds = new List<Point3d>();
+            values = new List<double>();
             foreach(Panel panel in panels)
             {
                 if(panel == null || !panel.TryGetValue(PanelParameter.Weight, out double weight))
@@ -39,7 +42,9 @@ namespace SAM.Analytical.Rhino
                     continue;
                 }
 
-                Circle circle = new Circle(Geometry.Rhino.Convert.ToRhino(segment3D.Mid()), weight + radiusFactor);
+                Point3d point3d = Geometry.Rhino.Convert.ToRhino(segment3D.Mid());
+
+                Circle circle = new Circle(point3d, weight + radiusFactor);
 
                 Mesh mesh = Mesh.CreateFromPlanarBoundary(circle.ToNurbsCurve(), MeshingParameters.Default, Core.Tolerance.MacroDistance);
                 if (mesh == null)
@@ -54,6 +59,8 @@ namespace SAM.Analytical.Rhino
                 }
 
                 result.Add(mesh);
+                point3ds.Add(point3d);
+                values.Add(weight);
             }
 
             return result;
