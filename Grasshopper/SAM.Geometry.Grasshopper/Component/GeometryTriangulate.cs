@@ -96,7 +96,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            if (!Query.TryGetSAMGeometries(objectWrapper, out List<ISAMGeometry> sAMGeometries))
+            if (!Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -127,15 +127,17 @@ namespace SAM.Geometry.Grasshopper
             }
 
             List<Triangle3D> triangle3Ds = new List<Triangle3D>();
-            foreach(ISAMGeometry sAMGeometry in sAMGeometries)
+            foreach(Face3D face3D in face3Ds)
             {
-                if(sAMGeometry is Face3D)
+                if(face3D == null)
                 {
-                    List<Triangle3D> triangle3Ds_Temp = ((Face3D)sAMGeometry).Triangulate(point3Ds, tolerance);
-                    if(triangle3Ds_Temp != null && triangle3Ds_Temp.Count > 0)
-                    {
-                        triangle3Ds.AddRange(triangle3Ds_Temp);
-                    }
+                    continue;
+                }
+
+                List<Triangle3D> triangle3Ds_Temp = face3D.Triangulate(point3Ds, tolerance);
+                if (triangle3Ds_Temp != null && triangle3Ds_Temp.Count > 0)
+                {
+                    triangle3Ds.AddRange(triangle3Ds_Temp);
                 }
             }
 

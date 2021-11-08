@@ -50,6 +50,11 @@ namespace SAM.Geometry.Grasshopper
                         sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D((Spatial.IClosedPlanar3D)sAMGeometry) };
                         return true;
                     }
+                    else if (sAMGeometry is Spatial.IFace3DObject)
+                    {
+                        sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)sAMGeometry).Face3D };
+                        return true;
+                    }
                 }
             }
 
@@ -71,6 +76,11 @@ namespace SAM.Geometry.Grasshopper
                     else if (@object is Spatial.IClosedPlanar3D)
                     {
                         sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D((Spatial.IClosedPlanar3D)@object) };
+                        return true;
+                    }
+                    else if (@object is Spatial.IFace3DObject)
+                    {
+                        sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)@object).Face3D };
                         return true;
                     }
                 }
@@ -99,6 +109,16 @@ namespace SAM.Geometry.Grasshopper
                                     else if (sAMGeometry is Spatial.Mesh3D)
                                     {
                                         sAMGeometries.AddRange(((Spatial.Mesh3D)sAMGeometry).GetTriangles().ConvertAll(x => new Spatial.Face3D(x)).Cast<T>());
+                                    }
+                                    else if (sAMGeometry is Spatial.IClosedPlanar3D)
+                                    {
+                                        sAMGeometries.Add((T)(object)Spatial.Create.Face3D((Spatial.IClosedPlanar3D)sAMGeometry));
+                                        return true;
+                                    }
+                                    else if (sAMGeometry is Spatial.IFace3DObject)
+                                    {
+                                        sAMGeometries.Add((T)(object)((Spatial.IFace3DObject)sAMGeometry).Face3D);
+                                        return true;
                                     }
                                 }
                             }

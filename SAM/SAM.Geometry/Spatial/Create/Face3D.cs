@@ -19,6 +19,11 @@
             if (closedPlanar3D == null)
                 return null;
 
+            if(closedPlanar3D is Face3D)
+            {
+                return new Face3D((Face3D)closedPlanar3D);
+            }
+
             return new Face3D(closedPlanar3D);
         }
 
