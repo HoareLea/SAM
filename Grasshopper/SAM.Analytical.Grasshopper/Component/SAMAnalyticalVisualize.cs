@@ -211,7 +211,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 List<double> maxExtends_Temp = new List<double>();
-                foreach(double maxExtend in maxExtends_Temp)
+                foreach(double maxExtend in maxExtends)
                 {
                     maxExtends_Temp.Add(maxExtend);
                     maxExtends_Temp.Add(maxExtend);
