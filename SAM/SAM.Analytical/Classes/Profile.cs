@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class Profile : SAMObject
+    public class Profile : SAMObject, IAnalyticalObject
     {
         private string category;
         private SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>> values;

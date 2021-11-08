@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SAM.Analytical.AirPartition" Collapsed="true">
+    <Position X="6" Y="2.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\AirPartition.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.BuildingElement&lt;T&gt;" Collapsed="true">
+    <Position X="9" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAIAAAAAAAAAAAAQgAAAIAABAgAAAAIAAAAA=</HashCode>
+      <FileName>Classes\New\BuildingElement.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.BuildingElementType" Collapsed="true">
+    <Position X="17.25" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\BuildingElementType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.HostPartition&lt;T&gt;" Collapsed="true">
+    <Position X="8.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAhAAQAAAAAAAAAAQAAAAAABDAAAAAAEAEAAA=</HashCode>
+      <FileName>Classes\New\HostPartition.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.HostPartitionType" Collapsed="true">
+    <Position X="16.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAFAAAAAAAAACAAAAAAAAgAAAAJAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\HostPartitionType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SAM.Analytical.Door" Collapsed="true">
+    <Position X="13" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\Door.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.DoorType" Collapsed="true">
+    <Position X="18.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\DoorType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SAM.Analytical.OpeningType" Collapsed="true">
+    <Position X="18.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAACAAAAAkAAAAQAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\OpeningType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SAM.Analytical.WindowType" Collapsed="true">
+    <Position X="20" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\WindowType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SAM.Analytical.FloorType" Collapsed="true">
+    <Position X="13" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\FloorType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SAM.Analytical.RoofType" Collapsed="true">
+    <Position X="14.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\RoofType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SAM.Analytical.WallType" Collapsed="true">
+    <Position X="16.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\WallType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SAM.Analytical.Window" Collapsed="true">
+    <Position X="10.75" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\Window.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.Floor" Collapsed="true">
+    <Position X="10.5" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\Floor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SAM.Analytical.Roof" Collapsed="true">
+    <Position X="6.5" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\Roof.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SAM.Analytical.Wall" Collapsed="true">
+    <Position X="8.5" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\Wall.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.ArchitecturalModel">
+    <Position X="0.5" Y="4.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>aYIEAGlFAAAoIAIIIIKgAA2iACIACWBCAkEgGBB0WBg=</HashCode>
+      <FileName>Classes\New\ArchitecturalModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.Space" Collapsed="true">
+    <Position X="6.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAIAAAAAAAAIAAAQCAAAAAABAAAAAAEAAABQ=</HashCode>
+      <FileName>Classes\Space.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.ArchitecturalModelSimulationResult" Collapsed="true">
+    <Position X="5.25" Y="9.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\SimulationResult\ArchitecturalModelSimulationResult.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.OpeningSimulationResult" Collapsed="true">
+    <Position X="5.25" Y="11.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\SimulationResult\OpeningSimulationResult.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.PartitionSimulationResult" Collapsed="true">
+    <Position X="5.25" Y="10.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\New\SimulationResult\PartitionSimulationResult.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.SpaceSimulationResult" Collapsed="true">
+    <Position X="5.25" Y="13.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\SimulationResult\SpaceSimulationResult.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.ZoneSimulationResult" Collapsed="true">
+    <Position X="5.25" Y="12.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\SimulationResult\ZoneSimulationResult.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.InternalCondition" Collapsed="true">
+    <Position X="8" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAJAAAAAAAAAAAAIAAAAAAAAAQBAACAQAgAAABg=</HashCode>
+      <FileName>Classes\InternalCondition.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SAM.Analytical.Profile" Collapsed="true">
+    <Position X="9.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAYAAABIIBBAAAgAGAAAAAQAIgAAgCBAAAAoAgAACAA=</HashCode>
+      <FileName>Classes\Profile.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="SAM.Analytical.IPartition" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\New\IPartition.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SAM.Analytical.IHostPartition" Collapsed="true">
+    <Position X="0.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAQAAAAAAAAAAAAAAAAABCAAAAAAEAEAAA=</HashCode>
+      <FileName>Interfaces\New\IHostPartition.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SAM.Analytical.IOpening" Collapsed="true">
+    <Position X="3.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\New\IOpening.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SAM.Analytical.IAnalyticalObject" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\New\IAnalyticalObject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

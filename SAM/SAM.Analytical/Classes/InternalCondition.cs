@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class InternalCondition : SAMObject
+    public class InternalCondition : SAMObject, IAnalyticalObject
     {
         public InternalCondition(InternalCondition internalCondition)
             : base(internalCondition)

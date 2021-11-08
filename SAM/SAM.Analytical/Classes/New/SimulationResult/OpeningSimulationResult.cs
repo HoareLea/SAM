@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class OpeningSimulationResult : Result
+    public class OpeningSimulationResult : Result, IAnalyticalObject
     {
         public OpeningSimulationResult(string name, string source, string reference)
             : base(name, source, reference)

@@ -471,6 +471,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Diagrams\IAnalyticalObject.cd" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NetTopologySuite">

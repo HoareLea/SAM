@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class PartitionSimulationResult : Result
+    public class PartitionSimulationResult : Result, IAnalyticalObject
     {
         public PartitionSimulationResult(string name, string source, string reference)
             : base(name, source, reference)

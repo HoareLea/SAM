@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class SpaceSimulationResult : Result
+    public class SpaceSimulationResult : Result, IAnalyticalObject
     {
         public SpaceSimulationResult(string name, string source, string reference)
             : base(name, source, reference)

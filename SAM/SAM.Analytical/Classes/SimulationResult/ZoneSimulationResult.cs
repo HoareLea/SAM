@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class ZoneSimulationResult : Result
+    public class ZoneSimulationResult : Result, IAnalyticalObject
     {
         public ZoneSimulationResult(string name, string source, string reference)
             : base(name, source, reference)
