@@ -55,6 +55,11 @@ namespace SAM.Geometry.Grasshopper
                         sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)sAMGeometry).Face3D };
                         return true;
                     }
+                    else if (sAMGeometry is Spatial.Mesh3D)
+                    {
+                        sAMGeometries = ((Spatial.Mesh3D)sAMGeometry).GetTriangles()?.ConvertAll(x => (T)(object)(new Spatial.Face3D(x)));
+                        return true;
+                    }
                 }
             }
 
@@ -81,6 +86,11 @@ namespace SAM.Geometry.Grasshopper
                     else if (@object is Spatial.IFace3DObject)
                     {
                         sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)@object).Face3D };
+                        return true;
+                    }
+                    else if (@object is Spatial.Mesh3D)
+                    {
+                        sAMGeometries = ((Spatial.Mesh3D)@object).GetTriangles()?.ConvertAll(x => (T)(object)(new Spatial.Face3D(x)));
                         return true;
                     }
                 }

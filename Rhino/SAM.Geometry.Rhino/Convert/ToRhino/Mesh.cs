@@ -12,13 +12,31 @@ namespace SAM.Geometry.Rhino
                 return null;
             }
 
-            List<Curve> lines =mesh3D.GetSegments(true).ConvertAll(x => (Curve)x.ToRhino_LineCurve());
-            if(lines == null || lines.Count == 0)
+            Mesh result = new Mesh();
+
+            List<Spatial.Triangle3D> triangle3Ds = mesh3D.GetTriangles();
+            if(triangle3Ds != null)
             {
-                return null;
+                foreach(Spatial.Triangle3D triangle in triangle3Ds)
+                {
+                    if(triangle == null)
+                    {
+                        continue;
+                    }
+
+                    List<Curve> lines = triangle.GetSegments().ConvertAll(x => (Curve)x.ToRhino_LineCurve());
+
+                    Mesh mesh = Mesh.CreateFromLines(lines.ToArray(), 3, Core.Tolerance.Distance);
+                    if(mesh == null)
+                    {
+                        continue;
+                    }
+
+                    result.Append(mesh);
+                }
             }
 
-            return Mesh.CreateFromLines(lines.ToArray(), 1, Core.Tolerance.Distance);
+            return result;
         }
         
         public static Mesh ToRhino_Mesh(this Spatial.Face3D face3D)

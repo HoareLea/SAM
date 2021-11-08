@@ -50,6 +50,9 @@ namespace SAM.Geometry.Grasshopper
             if (geometry is Shell)
                 return ((Shell)geometry).ToGrasshopper();
 
+            if (geometry is Mesh3D)
+                return ((Mesh3D)geometry).ToGrasshopper();
+
             return (geometry as dynamic).ToGrasshopper();
         }
     }
