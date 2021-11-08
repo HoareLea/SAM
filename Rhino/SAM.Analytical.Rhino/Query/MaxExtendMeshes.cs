@@ -77,7 +77,7 @@ namespace SAM.Analytical.Rhino
 
                 Vector3d direction = new Vector3d(vector3d_1);
                 direction.Unitize();
-                direction = direction * size;
+                direction = direction * maxExtend;
 
                 Point3d point3d_1_Temp = new Point3d(point3d_1);
                 point3d_1_Temp.Transform(Transform.Translation(direction));
