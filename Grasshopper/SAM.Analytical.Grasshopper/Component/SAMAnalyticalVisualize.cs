@@ -210,7 +210,14 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("maxExtends");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, maxExtends);
+                List<double> maxExtends_Temp = new List<double>();
+                foreach(double maxExtend in maxExtends_Temp)
+                {
+                    maxExtends_Temp.Add(maxExtend);
+                    maxExtends_Temp.Add(maxExtend);
+                }
+                
+                dataAccess.SetDataList(index, maxExtends_Temp);
             }
 
 

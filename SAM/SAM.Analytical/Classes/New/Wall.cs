@@ -4,7 +4,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
-    public class Wall : HostPartition<WallType>, IHostPartition
+    public class Wall : HostPartition<WallType>
     {
         public Wall(Wall wall)
             : base(wall)

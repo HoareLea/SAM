@@ -75,8 +75,20 @@ namespace SAM.Analytical.Rhino
                     mesh_2.VertexColors.Add(System.Drawing.Color.Black);
                 }
 
+                Vector3d direction = new Vector3d(vector3d_1);
+                direction.Unitize();
+                direction = direction * size;
+
+                Point3d point3d_1_Temp = new Point3d(point3d_1);
+                point3d_1_Temp.Transform(Transform.Translation(direction));
+
+                direction.Reverse();
+
+                Point3d point3d_2_Temp = new Point3d(point3d_2);
+                point3d_2_Temp.Transform(Transform.Translation(direction));
+
                 result.Add(new Tuple<Mesh, Mesh>(mesh_1, mesh_2));
-                point3ds.Add(new Tuple<Point3d, Point3d>(point3d_1, point3d_2));
+                point3ds.Add(new Tuple<Point3d, Point3d>(point3d_1_Temp, point3d_2_Temp));
                 values.Add(maxExtend);
             }
 

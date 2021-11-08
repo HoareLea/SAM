@@ -2104,6 +2104,35 @@ namespace SAM.Analytical
             return result;
         }
 
+        public bool Add(ZoneSimulationResult zoneSimulationResult, Zone zone = null)
+        {
+            if (zoneSimulationResult == null)
+            {
+                return false;
+            }
+
+            if (relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            bool result = relationCluster.AddObject(zoneSimulationResult);
+            if (!result)
+            {
+                return result;
+            }
+
+            if(zone != null)
+            {
+                if(relationCluster.AddObject(zone))
+                {
+                    relationCluster.AddRelation(zoneSimulationResult, zone);
+                }
+            }
+
+            return true;
+        }
+
         public bool Contains(ISAMObject sAMObject)
         {
             if(sAMObject is Profile)

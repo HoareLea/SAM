@@ -76,26 +76,28 @@ namespace SAM.Analytical.Rhino.Plugin
                 panels = panelForm.Panels;
             }
 
-            foreach(Panel panel in panels)
+            for(int i=0; i < panels.Count; i++)
             {
-                if(panel == null)
+                Panel panel = panels[i];
+                if (panel == null)
                 {
                     continue;
                 }
 
-                Tuple<Panel, Brep> tuple = tuples.Find(x => x.Item1.Guid == panel.Guid);
-                if(tuple == null)
+                Tuple<Panel, Brep> tuple = tuples[i];
+                if (tuple == null)
                 {
                     continue;
                 }
 
                 string @string = panel.ToJObject()?.ToString();
-                if(string.IsNullOrWhiteSpace(@string))
+                if (string.IsNullOrWhiteSpace(@string))
                 {
                     continue;
                 }
 
                 tuple.Item2.SetUserString("SAM", @string);
+
             }
 
             return Result.Success;

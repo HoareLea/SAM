@@ -145,6 +145,7 @@
     <Compile Include="Enums\New\OpeningAnalyticalType.cs" />
     <Compile Include="Enums\New\PartitionAnalyticalType.cs" />
     <Compile Include="Enums\Parameter\AdjacencyClusterSimulationResultParameter.cs" />
+    <Compile Include="Enums\Parameter\New\ArchitecturalModelParameter.cs" />
     <Compile Include="Enums\Parameter\New\OpeningTypeParameter.cs" />
     <Compile Include="Enums\Parameter\New\HostPartitionTypeParameter.cs" />
     <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
