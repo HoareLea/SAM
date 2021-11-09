@@ -134,10 +134,10 @@ namespace SAM.Analytical
                 return null;
             }
 
-            Geometry.Planar.Face2D face2D = plane.Convert(face3D);
-            Geometry.Planar.Face2D face2D_Opening = plane.Convert(face3D_Opening);
+            Face2D face2D = plane.Convert(face3D);
+            Face2D face2D_Opening = plane.Convert(face3D_Opening);
 
-            List<Geometry.Planar.Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D, face2D_Opening, tolerance);
+            List<Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D, face2D_Opening, tolerance);
             if(face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
             {
                 return null;

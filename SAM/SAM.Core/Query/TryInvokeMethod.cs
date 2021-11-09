@@ -8,7 +8,7 @@ namespace SAM.Core
     {
         public static bool TryInvokeMethod<T>(this object @object, string methodName, out T result, params object[] parameters)
         {
-            return TryInvokeMethod<T>(@object, @object?.GetType().GetMethods(), methodName, out result, parameters);
+            return TryInvokeMethod(@object, @object?.GetType().GetMethods(), methodName, out result, parameters);
         }
 
         public static bool TryInvokeMethod<T>(this object @object, IEnumerable<MethodInfo> methodInfos, string methodName, out T result, params object[] parameters)

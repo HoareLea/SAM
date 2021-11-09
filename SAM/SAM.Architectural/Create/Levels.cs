@@ -5,7 +5,7 @@ namespace SAM.Architectural
 {
     public static partial class Create
     {
-        public static List<Level> Levels<T>(this List<T> face3DObjects, double tolerance = Core.Tolerance.MacroDistance) where T : Geometry.Spatial.IFace3DObject
+        public static List<Level> Levels<T>(this List<T> face3DObjects, double tolerance = Core.Tolerance.MacroDistance) where T : IFace3DObject
         {
             return Levels(face3DObjects?.ConvertAll(x => x?.Face3D), tolerance);
         }

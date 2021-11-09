@@ -16,7 +16,7 @@ namespace SAM.Analytical
             if (plane == null)
                 return null;
 
-            return Cut<T>(partition, plane, tolerance);
+            return Cut(partition, plane, tolerance);
         }
         
         public static List<T> Cut<T>(this T partition, Plane plane, double tolerance = Tolerance.Distance) where T : IPartition

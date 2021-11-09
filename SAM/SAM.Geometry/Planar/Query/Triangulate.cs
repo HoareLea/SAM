@@ -274,7 +274,7 @@ namespace SAM.Geometry.Planar
             ISegmentable2D segmentable2D = externalEdge as ISegmentable2D;
             if (segmentable2D == null)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             List<Point2D> point2Ds_Triangulate = new List<Point2D>();

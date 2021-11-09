@@ -32,7 +32,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            Geometry.Planar.Face2D face2D = plane.Convert(face3D);
+            Planar.Face2D face2D = plane.Convert(face3D);
 
             double area = face2D.GetArea();
             if(area < tolerance_Distance)

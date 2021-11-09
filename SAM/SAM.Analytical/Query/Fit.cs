@@ -33,7 +33,7 @@ namespace SAM.Analytical
             Geometry.Planar.ISegmentable2D segmentable2D = face2D.ExternalEdge2D as Geometry.Planar.ISegmentable2D;
             if(segmentable2D == null)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             double area = face2D_Aperture.GetArea();

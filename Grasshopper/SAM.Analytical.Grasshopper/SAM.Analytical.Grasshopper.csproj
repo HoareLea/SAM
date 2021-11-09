@@ -93,6 +93,7 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalTriangulateConcavePanels.cs" />
     <Compile Include="Component\SAMAnalyticalVisualize.cs" />
     <Compile Include="Component\SAMAnalyticalMergePanels.cs" />
     <Compile Include="Component\SAMAnalyticalAdjustPanels.cs" />

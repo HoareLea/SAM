@@ -193,6 +193,8 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAirPanels.cs" />
+    <Compile Include="Modify\New\TriangulateConcavePartitions.cs" />
+    <Compile Include="Modify\TriangulateConcavePanels.cs" />
     <Compile Include="Modify\Cut.cs" />
     <Compile Include="Modify\Align.cs" />
     <Compile Include="Modify\New\AddMechanicalSystem.cs" />
