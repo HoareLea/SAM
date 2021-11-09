@@ -51,8 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Face.cs" />
-    <Compile Include="Convert\ToClipper\IntPoint.cs" />
-    <Compile Include="Convert\ToClipper\IntPoints.cs" />
     <Compile Include="Convert\ToNTS\Point.cs" />
     <Compile Include="Convert\ToNTS\Geometry.cs" />
     <Compile Include="Convert\ToNTS\Coordinates.cs" />
@@ -79,6 +77,8 @@
     <Compile Include="Planar\Classes\Mesh2D.cs" />
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
+    <Compile Include="Planar\Query\Convex.cs" />
+    <Compile Include="Planar\Query\Concave.cs" />
     <Compile Include="Planar\Query\Fill.cs" />
     <Compile Include="Planar\Query\Edges.cs" />
     <Compile Include="Planar\Query\Reduce.cs" />
@@ -213,6 +213,8 @@
     <Compile Include="Spatial\Modify\SplitCoplanarFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Convex.cs" />
+    <Compile Include="Spatial\Query\Concave.cs" />
     <Compile Include="Spatial\Query\MaxIntersectionSegment3D.cs" />
     <Compile Include="Spatial\Query\TryConvert.cs" />
     <Compile Include="Spatial\Query\ConnectedFace3Ds.cs" />
