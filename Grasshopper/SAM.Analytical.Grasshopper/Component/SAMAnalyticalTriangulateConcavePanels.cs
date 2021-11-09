@@ -80,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            List<SAMObject> sAMObjects = null;
+            List<SAMObject> sAMObjects = new List<SAMObject>();
             index = Params.IndexOfInputParam("_analyticals");
             if (index == -1 || !dataAccess.GetDataList(index, sAMObjects) || sAMObjects == null)
             {

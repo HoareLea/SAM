@@ -55,9 +55,9 @@ namespace SAM.Geometry.Planar
             if (internalEdges)
             {
                 List<IClosed2D> closed2Ds = face2D.InternalEdge2Ds;
-                if (closed2Ds == null)
+                if (closed2Ds == null || closed2Ds.Count == 0)
                 {
-                    return false;
+                    return true;
                 }
 
                 foreach(IClosed2D closed2D in closed2Ds)
