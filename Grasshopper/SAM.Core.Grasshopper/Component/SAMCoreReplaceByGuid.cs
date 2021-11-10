@@ -106,7 +106,7 @@ namespace SAM.Core.Grasshopper
 
             index = Params.IndexOfOutputParam("sAMObjects");
             if (index != -1)
-                dataAccess.SetData(index, sAMObjects);
+                dataAccess.SetDataList(index, sAMObjects);
         }
     }
 }
