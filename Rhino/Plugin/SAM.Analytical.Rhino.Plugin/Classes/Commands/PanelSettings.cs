@@ -22,123 +22,47 @@ namespace SAM.Analytical.Rhino.Plugin
         public static PanelSettings Instance { get; private set; }
 
         ///<returns>The command name as it appears on the Rhino command line.</returns>
-        public override string EnglishName => "SAM_PanelSettings";
+        public override string EnglishName => "SAM_Test";
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-            Result result = RhinoGet.GetMultipleObjects("Select Panels", false, ObjectType.Brep, out ObjRef[] obj_refs);
-            if (result != Result.Success || obj_refs == null)
-                return result;
+            // TODO: start here modifying the behaviour of your command.
+            // ---
+            RhinoApp.WriteLine("The {0} command will add a line right now.", EnglishName);
 
-            List<Tuple<Panel, Brep>> tuples = new List<Tuple<Panel, Brep>>();
-            foreach (var obj_ref in obj_refs)
+            Point3d pt0;
+            using (GetPoint getPointAction = new GetPoint())
             {
-                Brep brep = obj_ref.Brep();
-                if (brep != null && brep.HasUserData)
+                getPointAction.SetCommandPrompt("Please select the start point");
+                if (getPointAction.Get() != GetResult.Point)
                 {
-                    string @string = brep.GetUserString("SAM");
-                    if (string.IsNullOrWhiteSpace(@string))
-                    {
-                        continue;
-                    }
-                        
-                    List<Panel> panels_Temp = Core.Convert.ToSAM<Panel>(@string);
-                    if(panels_Temp == null)
-                    {
-                        continue;
-                    }
-
-                    foreach(Panel panel in panels_Temp)
-                    {
-                        if(panel == null)
-                        {
-                            continue;
-                        }
-                        
-                        tuples.Add(new Tuple<Panel, Brep>(panel, brep));
-                    }
+                    RhinoApp.WriteLine("No start point was selected.");
+                    return getPointAction.CommandResult();
                 }
+                pt0 = getPointAction.Point();
             }
 
-            if(tuples == null || tuples.Count == 0)
+            Point3d pt1;
+            using (GetPoint getPointAction = new GetPoint())
             {
-                return Result.Nothing;
+                getPointAction.SetCommandPrompt("Please select the end point");
+                getPointAction.SetBasePoint(pt0, true);
+                getPointAction.DynamicDraw +=
+                  (sender, e) => e.Display.DrawLine(pt0, e.CurrentPoint, System.Drawing.Color.DarkRed);
+                if (getPointAction.Get() != GetResult.Point)
+                {
+                    RhinoApp.WriteLine("No end point was selected.");
+                    return getPointAction.CommandResult();
+                }
+                pt1 = getPointAction.Point();
             }
 
-            List<Panel> panels = new List<Panel>();
-            using (PanelForm panelForm = new PanelForm(tuples.ConvertAll(x => x.Item1)))
-            {
-                if(panelForm.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                {
-                    return Result.Cancel;
-                }
+            doc.Objects.AddLine(pt0, pt1);
+            doc.Views.Redraw();
+            RhinoApp.WriteLine("The {0} command added one line to the document.", EnglishName);
 
-                panels = panelForm.Panels;
-            }
-
-            for(int i=0; i < panels.Count; i++)
-            {
-                Panel panel = panels[i];
-                if (panel == null)
-                {
-                    continue;
-                }
-
-                Tuple<Panel, Brep> tuple = tuples[i];
-                if (tuple == null)
-                {
-                    continue;
-                }
-
-                string @string = panel.ToJObject()?.ToString();
-                if (string.IsNullOrWhiteSpace(@string))
-                {
-                    continue;
-                }
-
-                tuple.Item2.SetUserString("SAM", @string);
-
-            }
-
+            // ---
             return Result.Success;
-            
-            //// TODO: start here modifying the behaviour of your command.
-            //// ---
-            //RhinoApp.WriteLine("The {0} command will add a line right now.", EnglishName);
-
-            //Point3d pt0;
-            //using (GetPoint getPointAction = new GetPoint())
-            //{
-            //    getPointAction.SetCommandPrompt("Please select the start point");
-            //    if (getPointAction.Get() != GetResult.Point)
-            //    {
-            //        RhinoApp.WriteLine("No start point was selected.");
-            //        return getPointAction.CommandResult();
-            //    }
-            //    pt0 = getPointAction.Point();
-            //}
-
-            //Point3d pt1;
-            //using (GetPoint getPointAction = new GetPoint())
-            //{
-            //    getPointAction.SetCommandPrompt("Please select the end point");
-            //    getPointAction.SetBasePoint(pt0, true);
-            //    getPointAction.DynamicDraw +=
-            //      (sender, e) => e.Display.DrawLine(pt0, e.CurrentPoint, System.Drawing.Color.DarkRed);
-            //    if (getPointAction.Get() != GetResult.Point)
-            //    {
-            //        RhinoApp.WriteLine("No end point was selected.");
-            //        return getPointAction.CommandResult();
-            //    }
-            //    pt1 = getPointAction.Point();
-            //}
-
-            //doc.Objects.AddLine(pt0, pt1);
-            //doc.Views.Redraw();
-            //RhinoApp.WriteLine("The {0} command added one line to the document.", EnglishName);
-
-            //// ---
-            //return Result.Success;
         }
     }
 }

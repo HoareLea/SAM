@@ -83,6 +83,7 @@
     <Compile Include="Planar\Query\Edges.cs" />
     <Compile Include="Planar\Query\Reduce.cs" />
     <Compile Include="Planar\Query\SelfIntersectionFace2Ds.cs" />
+    <Compile Include="Samples\Query\Sample.cs" />
     <Compile Include="Spatial\Classes\Ellipse3D.cs" />
     <Compile Include="Spatial\Classes\Mesh3D.cs" />
     <Compile Include="Spatial\Create\Mesh3D.cs" />
@@ -434,5 +435,6 @@
       <Name>SAM.Math</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
