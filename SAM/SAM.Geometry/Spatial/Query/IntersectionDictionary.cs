@@ -74,7 +74,7 @@ namespace SAM.Geometry.Spatial
                 if (boundingBox3D_Temp == null || !boundingBox3D.InRange(boundingBox3D_Temp, tolerance_Distance))
                     continue;
 
-                PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(face3D, face3D_Temp, tolerance_Angle, tolerance_Distance);
+                PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(face3D, face3D_Temp, tolerance_Angle, tolerance_Distance);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 

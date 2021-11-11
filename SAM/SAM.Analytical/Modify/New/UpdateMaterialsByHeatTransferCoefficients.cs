@@ -356,7 +356,7 @@ namespace SAM.Analytical
                 return false;
 
             MaterialType materialType = architecturalModel.GetMaterialType(materialLayers_In);
-            if (materialType == Core.MaterialType.Undefined)
+            if (materialType == MaterialType.Undefined)
                 return false;
 
             materialLayers_Out = new List<Architectural.MaterialLayer>();

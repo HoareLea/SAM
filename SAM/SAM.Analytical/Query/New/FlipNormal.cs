@@ -5,7 +5,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static IPartition FlipNormal(this IPartition partition, bool includeOpenings, bool flipX = true, double tolerance = SAM.Core.Tolerance.Distance)
+        public static IPartition FlipNormal(this IPartition partition, bool includeOpenings, bool flipX = true, double tolerance = Core.Tolerance.Distance)
         {
             Face3D face3D = partition?.Face3D;
             if(face3D == null)

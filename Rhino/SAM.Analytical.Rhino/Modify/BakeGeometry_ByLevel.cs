@@ -39,7 +39,7 @@ namespace SAM.Analytical.Rhino
 
                 string levelName = space.GetValue<string>(SpaceParameter.LevelName);
                 if (string.IsNullOrWhiteSpace(levelName))
-                    levelName = "Level " + System.Math.Round(location.Z, 2).ToString();
+                    levelName = "Level " + Math.Round(location.Z, 2).ToString();
 
                 if (string.IsNullOrWhiteSpace(levelName))
                     levelName = "???";

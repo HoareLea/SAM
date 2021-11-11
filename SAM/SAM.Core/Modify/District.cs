@@ -4,7 +4,7 @@ namespace SAM.Core
 {
     public static partial class Modify
     {
-        public static void District(this List<double> values, double tolerance = Core.Tolerance.Distance)
+        public static void District(this List<double> values, double tolerance = Tolerance.Distance)
         {
             if(values == null)
             {

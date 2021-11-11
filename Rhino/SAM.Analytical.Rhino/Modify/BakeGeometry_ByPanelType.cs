@@ -47,7 +47,7 @@ namespace SAM.Analytical.Rhino
 
                 PanelType panelType = panel.PanelType;
 
-                Layer layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Analytical.Query.Color(panelType));
+                Layer layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
 
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
@@ -72,7 +72,7 @@ namespace SAM.Analytical.Rhino
 
                     ApertureType apertureType = aperture.ApertureType;
 
-                    layer = Core.Rhino.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Analytical.Query.Color(apertureType));
+                    layer = Core.Rhino.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Query.Color(apertureType));
 
                     //layerTable.SetCurrentLayerIndex(layer.Index, true);
                     objectAttributes.LayerIndex = layer.Index;

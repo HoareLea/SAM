@@ -98,6 +98,31 @@ namespace SAM.Core
             return !In(value);
         }
 
+        public bool In(Range<T> range)
+        {
+            if(range == null)
+            {
+                return false;
+            }
+
+            return (range.min as dynamic) <= (min as dynamic) && (range.max as dynamic) >= (max as dynamic);
+        }
+
+        public bool Out(Range<T> range)
+        {
+            if (range == null)
+            {
+                return false;
+            }
+
+            return (range.min as dynamic) >= (max as dynamic) || (range.max as dynamic) <= (min as dynamic);
+        }
+
+        public bool Intersect(Range<T> range)
+        {
+            return !Out(range);
+        }
+
         public override bool Equals(object @object)
         {
             if (ReferenceEquals(this, null))

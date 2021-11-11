@@ -10,7 +10,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<AirPartition> AddAirPartitions(this ArchitecturalModel architecturalModel, IEnumerable<Plane> planes, IEnumerable<Space> spaces = null, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<AirPartition> AddAirPartitions(this ArchitecturalModel architecturalModel, IEnumerable<Plane> planes, IEnumerable<Space> spaces = null, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
         {
             if(planes == null)
             {
@@ -44,7 +44,7 @@ namespace SAM.Analytical
             return result?.Values.ToList();
         }
 
-        public static List<AirPartition> AddAirPartitions(this ArchitecturalModel architecturalModel, Plane plane, IEnumerable<Space> spaces = null, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<AirPartition> AddAirPartitions(this ArchitecturalModel architecturalModel, Plane plane, IEnumerable<Space> spaces = null, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
         {
             if (architecturalModel == null || plane == null)
             {

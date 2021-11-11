@@ -93,7 +93,7 @@ namespace SAM.Geometry.Spatial
 
             List<Tuple<double, List<Face3D>>> tuples_Face3D_Bottom = Enumerable.Repeat<Tuple<double, List<Face3D>>>(null, count).ToList();
             List<Tuple<double, List<Face3D>>> tuples_Face3D_Top = Enumerable.Repeat<Tuple<double, List<Face3D>>>(null, count).ToList();
-            System.Threading.Tasks.Parallel.For(0, count, (int i) =>
+            Parallel.For(0, count, (int i) =>
             //for (int i=0; i < count; i++)
             {
                 double elevation = elevations_All[i];
@@ -183,7 +183,7 @@ namespace SAM.Geometry.Spatial
             });
 
             List<Tuple<double, List<Shell>>> tuples_Shell = Enumerable.Repeat<Tuple<double, List<Shell>>>(null, count - 1).ToList();
-            System.Threading.Tasks.Parallel.For(0, count - 1, (int i) =>
+            Parallel.For(0, count - 1, (int i) =>
             //for (int i = 0; i < count - 1; i++)
             {
                 Tuple<double, List<Face3D>> tuple_Bottom = tuples_Face3D_Bottom[i];
@@ -310,7 +310,7 @@ namespace SAM.Geometry.Spatial
 
             List<List<Tuple<Shell, BoundingBox2D, Face2D, Plane>>> tuples_Elevation = Enumerable.Repeat<List<Tuple<Shell, BoundingBox2D, Face2D, Plane>>>(null, elevations.Count()).ToList();
 
-            System.Threading.Tasks.Parallel.For(0, elevations.Count(), (int i) =>
+            Parallel.For(0, elevations.Count(), (int i) =>
             {
                 double sectionElevation = elevations.ElementAt(i) + offset;
 
@@ -614,7 +614,7 @@ namespace SAM.Geometry.Spatial
             List<Tuple<BoundingBox3D, Face3D>> tuples_Face3D = face3Ds_Temp.ConvertAll(x => new Tuple<BoundingBox3D, Face3D>(x.GetBoundingBox(), x));
 
             List<bool> valids = Enumerable.Repeat(true, result.Count).ToList();
-            System.Threading.Tasks.Parallel.For(0, result.Count, (int i) =>
+            Parallel.For(0, result.Count, (int i) =>
             //for(int i =0; i < result.Count; i++)
             {
                 Shell shell = result[i];

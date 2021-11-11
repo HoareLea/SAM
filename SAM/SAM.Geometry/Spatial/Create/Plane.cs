@@ -43,5 +43,20 @@ namespace SAM.Geometry.Spatial
         {
             return Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
         }
+
+        public static Plane Plane(double value, int dimensionIndex)
+        {
+            switch(dimensionIndex)
+            {
+                case 0:
+                    return Spatial.Plane.WorldYZ.GetMoved(new Vector3D(value, 0, 0)) as Plane;
+                case 1:
+                    return Spatial.Plane.WorldXZ.GetMoved(new Vector3D(0, value, 0)) as Plane;
+                case 2:
+                    return Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, value)) as Plane;
+            }
+
+            return null;
+        }
     }
 }

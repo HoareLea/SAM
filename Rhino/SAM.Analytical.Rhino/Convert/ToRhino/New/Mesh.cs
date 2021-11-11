@@ -18,7 +18,7 @@ namespace SAM.Analytical.Rhino
             Mesh mesh = Geometry.Rhino.Convert.ToRhino_Mesh(face3D);
             if(mesh != null)
             {
-                mesh.VertexColors.CreateMonotoneMesh(Analytical.Query.Color(opening));
+                mesh.VertexColors.CreateMonotoneMesh(Query.Color(opening));
             }
 
             return mesh;
@@ -46,7 +46,7 @@ namespace SAM.Analytical.Rhino
             if (result == null)
                 return null;
 
-            result.VertexColors.CreateMonotoneMesh(Analytical.Query.Color(partition));
+            result.VertexColors.CreateMonotoneMesh(Query.Color(partition));
 
             if (includeOpenings && partition is IHostPartition)
             {

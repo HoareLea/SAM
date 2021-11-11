@@ -70,7 +70,7 @@ namespace SAM.Geometry
                 BoundingBox3D boundingBox3D = face3D.GetBoundingBox();
 
                 //You can get intersection geometry using PlanarIntersectionResult
-                PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, face3D, Core.Tolerance.Angle, tolerance_Distance);
+                PlanarIntersectionResult planarIntersectionResult = Spatial.Create.PlanarIntersectionResult(plane, face3D, Core.Tolerance.Angle, tolerance_Distance);
 
                 //Line below is example how to get intersection 2D geometry from PlanarIntersectionResult
                 List<ISegmentable2D> segmentable2Ds_Intersection = planarIntersectionResult.GetGeometry2Ds<ISegmentable2D>();
@@ -106,10 +106,10 @@ namespace SAM.Geometry
             segment2Ds_Temp = segment2Ds_Temp.Split(tolerance_Distance);
 
             //Find all closed loops created by given segment2Ds
-            List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds_Temp, tolerance_Distance);
+            List<Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds_Temp, tolerance_Distance);
 
             //Gets External Polygon2Ds
-            List<Polygon2D> polygon2Ds_External = Geometry.Planar.Query.ExternalPolygon2Ds(polygon2Ds);
+            List<Polygon2D> polygon2Ds_External = Planar.Query.ExternalPolygon2Ds(polygon2Ds);
 
             //Converting 2D geometry to 3D geometry on given plane
             List<Polygon3D> polygon3Ds = polygon2Ds.ConvertAll(x => plane.Convert(x));
@@ -152,10 +152,10 @@ namespace SAM.Geometry
             //
 
             //To receive ray trace data use TraceData Query. Inputs: start point, direction, list of geometry will be check for ray hit. Outputs: tuple with hit point, segment being hit, and hit direction
-            List<Tuple<Point2D, Segment2D, Vector2D>> traceData = Geometry.Planar.Query.TraceData(segment2D_1[0], segment2D_1.Direction, segmentable2Ds);
+            List<Tuple<Point2D, Segment2D, Vector2D>> traceData = Planar.Query.TraceData(segment2D_1[0], segment2D_1.Direction, segmentable2Ds);
 
             //Fast way to receive first hit
-            Vector2D vector2D_RayTrace = Geometry.Planar.Query.TraceFirst(segment2D_1[0], segment2D_1.Direction, segmentable2Ds);
+            Vector2D vector2D_RayTrace = Planar.Query.TraceFirst(segment2D_1[0], segment2D_1.Direction, segmentable2Ds);
 
             //
             //Bool Operations sample. Similar methods for Face2D and Polygon2D

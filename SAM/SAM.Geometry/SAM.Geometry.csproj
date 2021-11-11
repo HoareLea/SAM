@@ -70,6 +70,7 @@
     <Compile Include="Convert\ToSAM\Polygon2D.cs" />
     <Compile Include="Convert\ToSAM\Point2D.cs" />
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />
+    <Compile Include="Enums\Dimension.cs" />
     <Compile Include="Enums\EdgeOrientationMethod.cs" />
     <Compile Include="Enums\Padding.cs" />
     <Compile Include="Interfaces\IMesh.cs" />
@@ -214,6 +215,8 @@
     <Compile Include="Spatial\Modify\SplitCoplanarFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Range.cs" />
+    <Compile Include="Spatial\Query\Ranges.cs" />
     <Compile Include="Spatial\Query\Convex.cs" />
     <Compile Include="Spatial\Query\Concave.cs" />
     <Compile Include="Spatial\Query\MaxIntersectionSegment3D.cs" />
