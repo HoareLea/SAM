@@ -190,10 +190,10 @@ namespace SAM.Analytical.Grasshopper
 
                 TextHorizontalAlignment textHorizontalAlignment = TextHorizontalAlignment.Center;
                 TextVerticalAlignment textVerticalAlignment = TextVerticalAlignment.MiddleOfBottom;
-                Text3d text3d = new Text3d("\n"+ text, plane, height_Temp);  // TODO: add enter in front of Panel Data
+                Text3d text3d = new Text3d("\n" + text, plane, height_Temp);  // TODO: add enter in front of Panel Data
                 text3d.HorizontalAlignment = textHorizontalAlignment;
                 text3d.VerticalAlignment = textVerticalAlignment;
-                text3d.FontFace = "RhSS";
+                //text3d.FontFace = "RhSS"; //this was reason text not to display
                 text3d.Italic = true;
                 text3d.Bold = false;
 

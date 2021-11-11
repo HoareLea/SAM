@@ -184,7 +184,7 @@ namespace SAM.Analytical.Grasshopper
                 Text3d text3d = new Text3d(text, plane, height_Temp);
                 text3d.HorizontalAlignment = textHorizontalAlignment;
                 text3d.VerticalAlignment = textVerticalAlignment;
-                text3d.FontFace = "RhSS";
+                //text3d.FontFace = "RhSS";  //same as per panel comment
                 text3d.Italic = true;
                 text3d.Bold = false;
 
