@@ -354,7 +354,7 @@ namespace SAM.Geometry.Spatial
             return GetSegments().ConvertAll(x => (ICurve3D)x);
         }
 
-        public Point3D GetCenter()
+        public Point3D GetCentroid()
         {
             return Query.Mid(min, max);
         }

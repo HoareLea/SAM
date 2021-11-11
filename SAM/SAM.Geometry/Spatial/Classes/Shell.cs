@@ -478,7 +478,7 @@ namespace SAM.Geometry.Spatial
             if (!IsClosed(silverSpacing))
                 return null;
 
-            Point3D result = boundingBox3D.GetCenter();
+            Point3D result = boundingBox3D.GetCentroid();
             if (Inside(result, silverSpacing, tolerance))
                 return result;
 
