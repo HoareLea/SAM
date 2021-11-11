@@ -73,9 +73,15 @@ namespace SAM.Architectural.Grasshopper
         {
             int index = -1;
 
-            index = Params.IndexOfInputParam("_face3DObjects");
+            IList<IGH_Param> @params = Params.Input[0].Sources;
+            if(@params != null && @params.Count != 0)
+            {
+                Params.Input[0].NickName = Params.Input[0].Sources[0].NickName;
+                Params.Input[0].Name = Params.Input[0].Sources[0].Name;
+            }
+
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            if (!dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
+            if (!dataAccess.GetDataList(0, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

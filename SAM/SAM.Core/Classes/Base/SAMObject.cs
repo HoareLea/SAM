@@ -168,6 +168,11 @@ namespace SAM.Core
             return true;
         }
 
+        public bool HasValue(Enum @enum)
+        {
+            return TryGetValue(@enum, out object value);
+        }
+
         public bool TryGetValue(string name, out object value)
         {
             value = null;

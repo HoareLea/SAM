@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using SAM.Architectural;
+using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
@@ -1104,6 +1105,35 @@ namespace SAM.Analytical
             return shell.Volume(silverSpacing, tolerance);
         }
 
+        public double GetVolume(Zone zone, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
+        {
+            List<Space> spaces = GetSpaces(zone);
+            if (spaces == null || spaces.Count == 0)
+            {
+                return double.NaN;
+            }
+
+            List<double> volumes = Enumerable.Repeat(0.0, spaces.Count).ToList();
+            Parallel.For(0, spaces.Count, (int i) =>
+            {
+                Shell shell = GetShell(spaces[i]);
+                if (shell == null)
+                {
+                    return;
+                }
+
+                double volume = shell.Volume(silverSpacing, tolerance);
+                if (double.IsNaN(volume))
+                {
+                    return;
+                }
+
+                volumes[i] = volume;
+            });
+
+            return volumes.Sum();
+        }
+
         public double GetArea(Space space, double offset, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
         {
             Shell shell = GetShell(space);
@@ -1113,6 +1143,35 @@ namespace SAM.Analytical
             }
 
             return shell.Area(offset, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+        }
+
+        public double GetArea(Zone zone, double offset, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
+        {
+            List<Space> spaces = GetSpaces(zone);
+            if(spaces == null || spaces.Count == 0)
+            {
+                return double.NaN;
+            }
+
+            List<double> areas = Enumerable.Repeat(0.0, spaces.Count).ToList();
+            Parallel.For(0, spaces.Count, (int i) => 
+            {
+                Shell shell = GetShell(spaces[i]);
+                if (shell == null)
+                {
+                    return;
+                }
+
+                double area = shell.Area(offset, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+                if(double.IsNaN(area))
+                {
+                    return;
+                }
+
+                areas[i] = area;
+            });
+
+            return areas.Sum();
         }
 
         public List<IPartition> GetPartitions(Space space)
