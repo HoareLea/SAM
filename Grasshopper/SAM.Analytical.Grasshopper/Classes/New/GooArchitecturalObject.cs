@@ -25,13 +25,13 @@ namespace SAM.Analytical.Grasshopper
         }
     }
 
-    public class GooArchitecturalObjectParam : GH_PersistentParam<GooAnalyticalObject>
+    public class GooAnalyticalObjectParam : GH_PersistentParam<GooAnalyticalObject>
     {
         public override Guid ComponentGuid => new Guid("e06eb117-d4ad-4f3d-9541-b8d121a13a7d");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        public GooArchitecturalObjectParam()
+        public GooAnalyticalObjectParam()
             : base(typeof(IAnalyticalObject).Name, typeof(IAnalyticalObject).Name, typeof(IAnalyticalObject).FullName.Replace(".", " "), "Params", "SAM")
         {
         }

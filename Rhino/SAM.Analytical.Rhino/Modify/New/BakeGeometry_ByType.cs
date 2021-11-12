@@ -54,40 +54,57 @@ namespace SAM.Analytical.Rhino
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
-                Guid guid = default;
-                if (BakeGeometry(partition, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
-                    guids.Add(guid);
-
-                if(partition is IHostPartition)
+                List<IPartition> partitions_FixEdges = partition.FixEdges();
+                if(partitions_FixEdges == null)
                 {
-                    List<IOpening> openings = ((IHostPartition)partition).GetOpenings();
-                    if (openings == null || openings.Count == 0)
-                        continue;
+                    continue;
+                }
 
-                    foreach (IOpening opening in openings)
+                foreach(IPartition partition_FixEdges in partitions_FixEdges)
+                {
+                    if (BakeGeometry(partition, rhinoDoc, objectAttributes, out Guid guid, cutOpenings, tolerance))
+                        guids.Add(guid);
+
+                    if (partition is IHostPartition)
                     {
-                        if (opening == null)
+                        List<IOpening> openings = ((IHostPartition)partition).GetOpenings();
+                        if (openings == null || openings.Count == 0)
+                            continue;
+
+                        foreach (IOpening opening in openings)
                         {
-                            continue;
+                            if (opening == null)
+                            {
+                                continue;
+                            }
+
+                            string openingTypeName = opening.Type()?.Name;
+                            if (string.IsNullOrWhiteSpace(openingTypeName))
+                                openingTypeName = opening.Name;
+
+                            if (string.IsNullOrWhiteSpace(openingTypeName))
+                                continue;
+
+                            color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+
+                            layer = Core.Rhino.Modify.GetLayer(layerTable, layer_OpeningType.Id, openingTypeName, color);
+
+                            //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                            objectAttributes.LayerIndex = layer.Index;
+
+                            List<IOpening> openings_FixEdges = opening.FixEdges();
+                            if(openings_FixEdges == null)
+                            {
+                                continue;
+                            }
+
+                            foreach(IOpening opening_FixEdges in openings_FixEdges)
+                            {
+                                guid = default;
+                                if (BakeGeometry(opening, rhinoDoc, objectAttributes, out guid))
+                                    guids.Add(guid);
+                            }
                         }
-
-                        string apertureConstructionName = ((opening as dynamic).SAMType as OpeningType)?.Name;
-                        if (string.IsNullOrWhiteSpace(apertureConstructionName))
-                            apertureConstructionName = opening.Name;
-
-                        if (string.IsNullOrWhiteSpace(apertureConstructionName))
-                            continue;
-
-                        color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
-
-                        layer = Core.Rhino.Modify.GetLayer(layerTable, layer_OpeningType.Id, apertureConstructionName, color);
-
-                        //layerTable.SetCurrentLayerIndex(layer.Index, true);
-                        objectAttributes.LayerIndex = layer.Index;
-
-                        guid = default;
-                        if (BakeGeometry(opening, rhinoDoc, objectAttributes, out guid))
-                            guids.Add(guid);
                     }
                 }
             }

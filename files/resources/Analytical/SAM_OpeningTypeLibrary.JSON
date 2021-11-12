@@ -1,0 +1,151 @@
+{
+  "_type": "SAM.Analytical.OpeningTypeLibrary,SAM.Analytical",
+  "Name": "Default SAM OpeningType Library ver00",
+  "Guid": "70e64d69-cbea-4782-a961-f3349e82da51",
+  "Objects": [
+    {
+      "_type": "SAM.Analytical.DoorType,SAM.Analytical",
+      "Name": "SIM_EXT_SLD",
+      "Guid": "5ad2e36d-6a2b-4cf1-af02-1ce62e7d2288",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Partition Analytical Type",
+              "Value": "InternalWall"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.DoorType,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "5ad2e36d-6a2b-4cf1-af02-1ce62e7d2289",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Partition Analytical Type",
+              "Value": "ExternalWall"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.DoorType,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "7b522444-6c66-4d2d-8a47-41507854218f",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Partition Analytical Type",
+              "Value": "CurtainWall"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.WindowType,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "f70c4ec7-931b-47ed-a95b-1b3df1b9d885",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Partition Analytical Type",
+              "Value": "ExternalWall"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.WindowType,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "149de16c-e08c-4853-a8ca-664a4ecc0d4f",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Partition Analytical Type",
+              "Value": "CurtainWall"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.WindowType,SAM.Analytical",
+      "Name": "SIM_INT_GLZ",
+      "Guid": "3e43ecb2-638b-4d8b-9046-ba3d8455cd3f",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Partition Analytical Type",
+              "Value": "InternalWall"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.WindowType,SAM.Analytical",
+      "Name": "SIM_EXT_GLZ",
+      "Guid": "6f6dc032-6fa5-43fa-bfef-de5937e95599",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Partition Analytical Type",
+              "Value": "ExternalFloor"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "SAM.Analytical.WindowType,SAM.Analytical",
+      "Name": "SIM_INT_GLZ",
+      "Guid": "c22743a1-83b3-491f-974c-816500b5f304",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Partition Analytical Type",
+              "Value": "InternalFloor"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

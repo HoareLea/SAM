@@ -4,6 +4,7 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -39,11 +40,11 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooArchitecturalObjectParam(), "_architecturalObject", "_architecturalObject", "SAM Architectural Object", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
             inputParamManager.AddNumberParameter("_ratios", "_ratios", "Ratios", GH_ParamAccess.list);
             inputParamManager.AddIntervalParameter("_azimuths", "_azimuths", "Azimuths Domains/Intervals if single number given ie. 90 it will be 0 to 90, so you need to make 90 To 90 in case just signle angle is required", GH_ParamAccess.list);
 
-            int index = inputParamManager.AddParameter(new GooOpeningTypeParam(), "_openingType_", "_openingType_", "SAM Architectural OpeningType", GH_ParamAccess.item);
+            int index = inputParamManager.AddParameter(new GooOpeningTypeParam(), "_openingType_", "_openingType_", "SAM Analytical OpeningType", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
         }
 
@@ -52,8 +53,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooArchitecturalObjectParam(), "architecturalObject", "architecturalObject", "SAM Architectural ArchitecturalObject", GH_ParamAccess.item);
-            outputParamManager.AddParameter(new GooOpeningParam(), "openings", "openings", "SAM Architectural Openings", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "analyticalObject", "analyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooOpeningParam(), "openings", "openings", "SAM Analytical Openings", GH_ParamAccess.list);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Successful", GH_ParamAccess.item);
         }
 
@@ -70,11 +71,7 @@ namespace SAM.Analytical.Grasshopper
             OpeningType openingType = null;
             dataAccess.GetData(3, ref openingType);
 
-            if (openingType == null)
-            {
-                openingType = Analytical.Query.DefaultOpeningType(OpeningAnalyticalType.Window);
-            }
-                
+            OpeningTypeLibrary openingTypeLibrary = Analytical.Query.DefaultOpeningTypeLibrary();
 
             List<double> ratios = new List<double>();
             if (!dataAccess.GetDataList(1, ratios) || ratios == null)
@@ -120,7 +117,22 @@ namespace SAM.Analytical.Grasshopper
                 if (!Core.Grasshopper.Query.TryGetValue(dictionary, azimuth, out ratio))
                     return;
 
-                IOpening opening = hostPartition.AddOpening(openingType, ratio);
+                OpeningType openingType_Temp = openingType;
+                if(openingType_Temp == null)
+                {
+                    openingType_Temp = openingTypeLibrary.GetOpeningTypes(OpeningAnalyticalType.Window, hostPartition.HostPartitionCategory())?.FirstOrDefault();
+                    if (openingType_Temp == null)
+                    {
+                        openingType_Temp = openingTypeLibrary.GetOpeningTypes(OpeningAnalyticalType.Window)?.FirstOrDefault();
+                    }
+                }
+
+                if (openingType_Temp == null)
+                {
+                    return;
+                }
+
+                IOpening opening = hostPartition.AddOpening(openingType_Temp, ratio);
 
                 List<IOpening> openings = opening == null ? null : new List<IOpening>() { opening };
 
@@ -146,7 +158,17 @@ namespace SAM.Analytical.Grasshopper
                         if (!Core.Grasshopper.Query.TryGetValue(dictionary, azimuth, out ratio))
                             continue;
 
-                        IOpening opening = wall.AddOpening(openingType, ratio);
+                        OpeningType openingType_Temp = openingType;
+                        if (openingType_Temp == null)
+                        {
+                            openingType_Temp = openingTypeLibrary.GetOpeningTypes(OpeningAnalyticalType.Window, architecturalModel.PartitionAnalyticalType(wall))?.FirstOrDefault();
+                            if (openingType_Temp == null)
+                            {
+                                openingType_Temp = openingTypeLibrary.GetOpeningTypes(OpeningAnalyticalType.Window)?.FirstOrDefault();
+                            }
+                        }
+
+                        IOpening opening = wall.AddOpening(openingType_Temp, ratio);
                         if(opening != null)
                         {
                             openings.Add(opening);

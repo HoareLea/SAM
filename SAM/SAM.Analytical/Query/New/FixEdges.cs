@@ -1,20 +1,18 @@
 ﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<T> FixEdges<T>(this T partition, double tolerance = Core.Tolerance.Distance) where T : IPartition
+        public static List<T> FixEdges<T>(this T buildingElement, double tolerance = Core.Tolerance.Distance) where T : IBuildingElement
         {
-            if(partition == null)
+            if(buildingElement == null)
             {
                 return null;
             }
 
-            Face3D face3D = partition.Face3D;
+            Face3D face3D = buildingElement.Face3D;
             if(face3D == null)
             {
                 return null;
@@ -29,16 +27,33 @@ namespace SAM.Analytical
             List<T> result = new List<T>();
             foreach(Face3D face3D_Temp in face3Ds)
             {
-                System.Guid guid = partition.Guid;
+                System.Guid guid = buildingElement.Guid;
                 while(result.Find(x => x.Guid == guid) != null)
                 {
                     guid = System.Guid.NewGuid();
                 }
 
-                IPartition partition_New = Create.Partition(partition, guid, face3D_Temp, tolerance);
-                if(partition_New is T)
+                T face3DObject_New = default;
+                if(buildingElement is IPartition)
                 {
-                    result.Add((T)partition_New);
+                    IPartition partition = Create.Partition((IPartition)buildingElement, guid, face3D_Temp, tolerance);
+                    if(partition != null)
+                    {
+                        face3DObject_New = (T)partition;
+                    }
+                }
+                else if(buildingElement is IOpening)
+                {
+                    IOpening opening = Create.Opening(guid, (IOpening)buildingElement, face3D_Temp, OpeningLocation(face3D_Temp, tolerance));
+                    if (opening != null)
+                    {
+                        face3DObject_New = (T)opening;
+                    }
+                }
+
+                if (face3DObject_New != null)
+                {
+                    result.Add(face3DObject_New);
                 }
             }
 

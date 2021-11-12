@@ -40,6 +40,7 @@ namespace SAM.Analytical
             result.SetValue(AnalyticalSettingParameter.DefaultSystemTypeLibraryFileName, "SAM_SystemTypeLibrary.JSON");
 
             result.SetValue(AnalyticalSettingParameter.DefaultHostPartitionTypeLibraryFileName, "SAM_HostPartitionTypeLibrary.JSON");
+            result.SetValue(AnalyticalSettingParameter.DefaultOpeningTypeLibraryFileName, "SAM_OpeningTypeLibrary.JSON");
 
             string path = null;
 
@@ -82,6 +83,10 @@ namespace SAM.Analytical
             path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultHostPartitionTypeLibraryFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultHostPartitionTypeLibrary, Core.Create.IJSAMObject<HostPartitionTypeLibrary>(System.IO.File.ReadAllText(path)));
+
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultOpeningTypeLibraryFileName);
+            if (System.IO.File.Exists(path))
+                result.SetValue(AnalyticalSettingParameter.DefaultOpeningTypeLibrary, Core.Create.IJSAMObject<OpeningTypeLibrary>(System.IO.File.ReadAllText(path)));
 
             return result;
         }

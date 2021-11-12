@@ -9,12 +9,12 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateHostPartitionBy3DGeometry : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalCreateOpeningsBy3DGeometry : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("4b1179d5-66d6-411b-92f6-7137e3cc1e25");
+        public override Guid ComponentGuid => new Guid("e1079084-3a9b-408f-a10d-fa10f3519b89");
 
         /// <summary>
         /// The latest version of this component
@@ -29,9 +29,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreateHostPartitionBy3DGeometry()
-          : base("SAMAnalytical.CreateHostPartitionBy3DGeometry", "SAMAnalytical.CreateHostPartitionBy3DGeometry",
-              "Create SAM Analytical IHostPartition by 3D Geometry",
+        public SAMAnalyticalCreateOpeningsBy3DGeometry()
+          : base("SAMAnalytical.CreateOpeningsBy3DGeometry", "SAMAnalytical.CreateOpeningsBy3DGeometry",
+              "Create SAM Analytical Opening by 3D Geometry",
               "SAM", "Analytical")
         {
         }
@@ -48,8 +48,8 @@ namespace SAM.Analytical.Grasshopper
                 global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_geometry", NickName = "_geometry", Description = "Elevations", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
-                GooHostPartitionTypeParam gooHostPartitionTypeParam = new GooHostPartitionTypeParam() { Name = "hostPartitionType_", NickName = "hostPartitionType_", Description = "SAM Analytical HostPartitionType", Optional = true, Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(gooHostPartitionTypeParam, ParamVisibility.Voluntary));
+                GooOpeningTypeParam gooOpeningTypeParam = new GooOpeningTypeParam() { Name = "openingType_", NickName = "openingType_", Description = "SAM Analytical OpeningType", Optional = true, Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(gooOpeningTypeParam, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -63,7 +63,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooPartitionParam() { Name = "hostPartitions", NickName = "hostPartitions", Description = "SAM Analytical IHostPartition", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooOpeningParam() { Name = "openings", NickName = "openings", Description = "SAM Analytical Openings", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -78,13 +78,13 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            index = Params.IndexOfInputParam("hostPartitionType_");
-            HostPartitionType hostPartitionType = null;
+            index = Params.IndexOfInputParam("openingType_");
+            OpeningType openingType = null;
             if (index != -1)
             {
-                if (!dataAccess.GetData(index, ref hostPartitionType))
+                if (!dataAccess.GetData(index, ref openingType))
                 {
-                    hostPartitionType = null;
+                    openingType = null;
                 }
             }
 
@@ -102,64 +102,56 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<IHostPartition> hostPartitions = new List<IHostPartition>();
+            List<IOpening> openings = new List<IOpening>();
             foreach (Face3D face3D in face3Ds)
             {
-                HostPartitionType hostPartitionType_Temp = hostPartitionType;
-                if (hostPartitionType_Temp == null)
+                OpeningType openingType_Temp = openingType;
+                if (openingType_Temp == null)
                 {
-                    HostPartitionTypeLibrary hostPartitionTypeLibrary = Analytical.Query.DefaultHostPartitionTypeLibrary();
-                    if (hostPartitionTypeLibrary == null)
+                    OpeningTypeLibrary openingTypeLibrary = Analytical.Query.DefaultOpeningTypeLibrary();
+                    if (openingTypeLibrary == null)
                     {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could Not Get Default HostPartitionTypes");
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could Not Get Default OpeningTypes");
                         return;
                     }
 
+                    PartitionAnalyticalType partitionAnalyticalType = PartitionAnalyticalType.Undefined;
+
                     HostPartitionCategory hostPartitionCategory = Analytical.Query.HostPartitionCategory(face3D.GetPlane().Normal);
-                    if (hostPartitionCategory == HostPartitionCategory.Undefined)
+                    if(hostPartitionCategory == HostPartitionCategory.Floor)
                     {
-                        hostPartitionCategory = HostPartitionCategory.Wall;
+                        partitionAnalyticalType = PartitionAnalyticalType.ExternalFloor;
                     }
-
-                    if (hostPartitionCategory == HostPartitionCategory.Floor)
+                    else if(hostPartitionCategory == HostPartitionCategory.Roof)
                     {
-                        hostPartitionType_Temp = hostPartitionTypeLibrary.GetHostPartitionType<HostPartitionType>(PartitionAnalyticalType.InternalFloor);
+                        partitionAnalyticalType = PartitionAnalyticalType.Roof;
                     }
-
-                    if (hostPartitionCategory == HostPartitionCategory.Wall)
+                    else if (hostPartitionCategory == HostPartitionCategory.Wall)
                     {
-                        hostPartitionType_Temp = hostPartitionTypeLibrary.GetHostPartitionType<HostPartitionType>(PartitionAnalyticalType.ExternalWall);
+                        partitionAnalyticalType = PartitionAnalyticalType.ExternalWall;
                     }
-
-                    if (hostPartitionType_Temp == null)
-                    {
-                        hostPartitionType_Temp = hostPartitionTypeLibrary.GetHostPartitionTypes(hostPartitionCategory)?.FirstOrDefault();
-                    }
-
-                    if (hostPartitionType_Temp == null)
-                    {
-                        hostPartitionType_Temp = hostPartitionTypeLibrary.GetHostPartitionType<HostPartitionType>(PartitionAnalyticalType.ExternalWall);
-                    }
+                    
+                    openingType_Temp = openingTypeLibrary.GetOpeningTypes(OpeningAnalyticalType.Window, partitionAnalyticalType)?.FirstOrDefault();
                 }
 
-                if (hostPartitionType_Temp == null)
+                if (openingType_Temp == null)
                 {
                     continue;
                 }
 
-                IHostPartition hostPartition = Create.HostPartition(face3D, hostPartitionType_Temp);
-                if (hostPartition == null)
+                IOpening opening = Create.Opening(openingType_Temp, face3D);
+                if (opening == null)
                 {
                     continue;
                 }
 
-                hostPartitions.Add(hostPartition);
+                openings.Add(opening);
             }
 
-            index = Params.IndexOfOutputParam("hostPartitions");
+            index = Params.IndexOfOutputParam("openings");
             if(index != -1)
             {
-                dataAccess.SetDataList(index, hostPartitions.ConvertAll(x => new GooPartition(x)));
+                dataAccess.SetDataList(index, openings.ConvertAll(x => new GooOpening(x)));
             }
         }
     }

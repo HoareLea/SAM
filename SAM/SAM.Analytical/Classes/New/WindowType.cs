@@ -42,6 +42,12 @@ namespace SAM.Analytical
            
         }
 
+        public WindowType(System.Guid guid, string name, IEnumerable<MaterialLayer> paneMaterialLayers, IEnumerable<MaterialLayer> frameMaterialLayers = null)
+            : base(guid, name, paneMaterialLayers, frameMaterialLayers)
+        {
+
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

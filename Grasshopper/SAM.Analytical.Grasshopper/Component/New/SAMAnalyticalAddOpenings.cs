@@ -39,8 +39,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooArchitecturalObjectParam(), "_architecturalObject", "_architecturalObject", "SAM Architectural Object", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooOpeningParam(), "_openings", "_openings", "SAM Architectural Opening", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooOpeningParam(), "_openings", "_openings", "SAM Analytical Opening", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -48,8 +48,9 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooArchitecturalObjectParam(), "architecturalObject", "architecturalObject", "SAM Architectural ArchitecturalObject", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "analyticalObject", "analyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
             outputParamManager.AddParameter(new GooOpeningParam(), "openings", "openings", "SAM Architectural Openings", GH_ParamAccess.list);
+            outputParamManager.AddBooleanParameter("Successful", "Successful", "Successful", GH_ParamAccess.item);
         }
 
         /// <summary>

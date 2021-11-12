@@ -170,6 +170,11 @@ namespace SAM.Analytical
                 result.Add(opening_Intersection);
             }
 
+            if(result != null && result.Count != 0)
+            {
+                openings.AddRange(result);
+            }
+
             return result;
         }
 

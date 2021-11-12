@@ -86,6 +86,7 @@
     <Compile Include="Component\New\SAMAnalyticalAddOpenings.cs" />
     <Compile Include="Component\New\SAMAnalyticalAddOpeningsByAzimuth.cs" />
     <Compile Include="Component\New\SAMAnalyticalCreateArchitecturalModelByShells.cs" />
+    <Compile Include="Component\New\SAMAnalyticalCreateOpeningsBy3DGeometry.cs" />
     <Compile Include="Component\New\SAMAnalyticalCreateHostPartitionType.cs" />
     <Compile Include="Component\New\SAMAnalyticalCreateMaterialLayersByNames.cs" />
     <Compile Include="Component\New\SAMAnalyticalCreateHostPartitionsBy3DGeometry.cs" />

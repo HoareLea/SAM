@@ -29,6 +29,7 @@ namespace SAM.Analytical
 
         [ParameterProperties("Default HostPartitionTypeLibrary File Name", "Default HostPartitionTypeLibrary File Name"), ParameterValue(ParameterType.String)] DefaultHostPartitionTypeLibraryFileName,
         [ParameterProperties("Default HostPartitionTypeLibrary", "Default HostPartitionTypeLibrary"), SAMObjectParameterValue(typeof(HostPartitionTypeLibrary))] DefaultHostPartitionTypeLibrary,
-
+        [ParameterProperties("Default OpeningTypeLibrary File Name", "Default OpeningTypeLibrary File Name"), ParameterValue(ParameterType.String)] DefaultOpeningTypeLibraryFileName,
+        [ParameterProperties("Default OpeningTypeLibrary", "Default OpeningTypeLibrary"), SAMObjectParameterValue(typeof(OpeningTypeLibrary))] DefaultOpeningTypeLibrary,
     }
 }

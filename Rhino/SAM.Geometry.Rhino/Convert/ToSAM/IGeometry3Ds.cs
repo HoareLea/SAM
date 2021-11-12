@@ -7,7 +7,7 @@ namespace SAM.Geometry.Rhino
     public static partial class Convert
     {
         //In case of Non planar brep we mesh it and then convert to brep then merge cooplanar  and then create ISAMGeometry
-        public static List<ISAMGeometry3D> ToSAM(this Brep brep, bool simplify = true)
+        public static List<ISAMGeometry3D> ToSAM(this Brep brep, bool simplify = true, bool orinetNormals = true)
         {
             //Has to be common for whole method
             double tolerance = Core.Tolerance.Distance;
@@ -57,6 +57,12 @@ namespace SAM.Geometry.Rhino
             List<Face3D> face3Ds = new List<Face3D>();
             foreach (BrepFace brepFace in brepFaces)
             {
+                Spatial.Plane plane = null;
+                if (brepFace.TryGetPlane(out global::Rhino.Geometry.Plane plane_BrepFace))
+                {
+                    plane = plane_BrepFace.ToSAM();
+                }
+                
                 List<IClosedPlanar3D> closedPlanar3Ds = new List<IClosedPlanar3D>();
                 foreach (BrepLoop brepLoop in brepFace.Loops)
                 {
@@ -64,11 +70,16 @@ namespace SAM.Geometry.Rhino
                     if (geometry3D is Polycurve3D)
                     {
                         List<Point3D> point3Ds = ((Polycurve3D)geometry3D).Explode().ConvertAll(x => x.GetStart());
-
-                        PlaneFitResult planeFitResult = global::Rhino.Geometry.Plane.FitPlaneToPoints(point3Ds.ConvertAll(x => x.ToRhino()), out global::Rhino.Geometry.Plane plane_Rhino);
-                        if(planeFitResult != PlaneFitResult.Failure && plane_Rhino != null)
+                        if(plane == null)
                         {
-                            Spatial.Plane plane = plane_Rhino.ToSAM();
+                            PlaneFitResult planeFitResult = global::Rhino.Geometry.Plane.FitPlaneToPoints(point3Ds.ConvertAll(x => x.ToRhino()), out global::Rhino.Geometry.Plane plane_Rhino);
+                            if (planeFitResult != PlaneFitResult.Failure && plane_Rhino != null)
+                            {
+                                geometry3D = new Polygon3D(plane_Rhino.ToSAM(), point3Ds.ConvertAll(x => plane.Convert(plane.Project(x))));
+                            }
+                        }
+                        else
+                        {
                             geometry3D = new Polygon3D(plane, point3Ds.ConvertAll(x => plane.Convert(plane.Project(x))));
                         }
                     }
@@ -92,9 +103,18 @@ namespace SAM.Geometry.Rhino
             List<ISAMGeometry3D> result = new List<ISAMGeometry3D>();
 
             if(brep.IsSolid)
-                result.Add(new Shell(face3Ds));
+            {
+                Shell shell = new Shell(face3Ds);
+                if(orinetNormals)
+                {
+                    shell.OrientNormals();
+                }
+                result.Add(shell);
+            }
             else
+            {
                 result.AddRange(face3Ds);
+            }
 
             return result;
         }
