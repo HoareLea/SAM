@@ -54,7 +54,16 @@ namespace SAM.Analytical.Rhino
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
-                List<IPartition> partitions_FixEdges = partition.FixEdges();
+                List<IPartition> partitions_FixEdges = null;
+                if(partition is IHostPartition)
+                {
+                    partitions_FixEdges = ((IHostPartition)partition).FixEdges(cutOpenings)?.ConvertAll(x => x as IPartition);
+                }
+                else
+                {
+                    partitions_FixEdges = partition.FixEdges();
+                }
+
                 if(partitions_FixEdges == null)
                 {
                     continue;
@@ -62,48 +71,42 @@ namespace SAM.Analytical.Rhino
 
                 foreach(IPartition partition_FixEdges in partitions_FixEdges)
                 {
-                    if (BakeGeometry(partition, rhinoDoc, objectAttributes, out Guid guid, cutOpenings, tolerance))
+                    if (BakeGeometry(partition_FixEdges, rhinoDoc, objectAttributes, out Guid guid, cutOpenings, tolerance))
                         guids.Add(guid);
+                }
 
-                    if (partition is IHostPartition)
+                if (partition is IHostPartition)
+                {
+                    List<IOpening> openings = ((IHostPartition)partition).GetOpenings();
+                    if (openings == null || openings.Count == 0)
+                        continue;
+
+                    foreach (IOpening opening in openings)
                     {
-                        List<IOpening> openings = ((IHostPartition)partition).GetOpenings();
-                        if (openings == null || openings.Count == 0)
+                        if (opening == null)
+                        {
+                            continue;
+                        }
+
+                        string openingTypeName = opening.Type()?.Name;
+                        if (string.IsNullOrWhiteSpace(openingTypeName))
+                            openingTypeName = opening.Name;
+
+                        if (string.IsNullOrWhiteSpace(openingTypeName))
                             continue;
 
-                        foreach (IOpening opening in openings)
+                        color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+
+                        layer = Core.Rhino.Modify.GetLayer(layerTable, layer_OpeningType.Id, openingTypeName, color);
+
+                        //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                        objectAttributes.LayerIndex = layer.Index;
+
+                        List<IOpening> openings_FixEdges = opening.FixEdges();
+                        foreach (IOpening opening_FixEdges in openings_FixEdges)
                         {
-                            if (opening == null)
-                            {
-                                continue;
-                            }
-
-                            string openingTypeName = opening.Type()?.Name;
-                            if (string.IsNullOrWhiteSpace(openingTypeName))
-                                openingTypeName = opening.Name;
-
-                            if (string.IsNullOrWhiteSpace(openingTypeName))
-                                continue;
-
-                            color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
-
-                            layer = Core.Rhino.Modify.GetLayer(layerTable, layer_OpeningType.Id, openingTypeName, color);
-
-                            //layerTable.SetCurrentLayerIndex(layer.Index, true);
-                            objectAttributes.LayerIndex = layer.Index;
-
-                            List<IOpening> openings_FixEdges = opening.FixEdges();
-                            if(openings_FixEdges == null)
-                            {
-                                continue;
-                            }
-
-                            foreach(IOpening opening_FixEdges in openings_FixEdges)
-                            {
-                                guid = default;
-                                if (BakeGeometry(opening, rhinoDoc, objectAttributes, out guid))
-                                    guids.Add(guid);
-                            }
+                            if (BakeGeometry(opening_FixEdges, rhinoDoc, objectAttributes, out Guid guid))
+                                guids.Add(guid);
                         }
                     }
                 }
