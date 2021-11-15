@@ -158,16 +158,19 @@ namespace SAM.Geometry.Planar
         public static List<Face2D> Difference(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             List<Face2D> result = null;
+
+            bool sAM = true;
             try
             {
                 result = Difference_NTS(face2D_1, face2D_2, tolerance);
+                sAM = false;
             }
             catch(System.Exception exception)
             {
-
+                sAM = true;
             }
 
-            if(result == null)
+            if(sAM)
             {
                 result = Difference_SAM(face2D_1, face2D_2, tolerance);
             }
@@ -381,17 +384,8 @@ namespace SAM.Geometry.Planar
 
             result = new List<Face2D>();
 
-            //test to check  NaN when createing shells from adj cluster
-            //Find better way to determine EqualsTopologically for polygons which gives exception
-            try
-            {
-                if (polygon_1.EqualsTopologically(polygon_2))
-                    return result;
-            }
-            catch (System.Exception exception)
-            {
-
-            }
+            if (polygon_1.EqualsTopologically(polygon_2))
+                return result;
 
             List<Polygon> polygons_Snap = Snap(polygon_1, polygon_2, tolerance);
             if (polygons_Snap != null && polygons_Snap.Count == 2)
@@ -400,16 +394,8 @@ namespace SAM.Geometry.Planar
                 polygon_2 = polygons_Snap[1];
             }
 
-            //Find better way to determine EqualsTopologically for polygons which gives exception
-            try
-            {
-                if (polygon_1.EqualsTopologically(polygon_2))
-                    return result;
-            }
-            catch (System.Exception exception)
-            {
-
-            }
+            if (polygon_1.EqualsTopologically(polygon_2))
+                return result;
 
             NetTopologySuite.Geometries.Geometry geometry = polygon_1.Difference(polygon_2);
             if (geometry == null || geometry.IsEmpty)
@@ -515,6 +501,11 @@ namespace SAM.Geometry.Planar
                 }
 
                 if(face2D_2.Inside(point2D, tolerance))
+                {
+                    continue;
+                }
+
+                if (!face2D_1.Inside(point2D, tolerance))
                 {
                     continue;
                 }
