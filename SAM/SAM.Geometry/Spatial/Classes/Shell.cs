@@ -897,14 +897,12 @@ namespace SAM.Geometry.Spatial
 
                     Face3D face3D = null;
 
-                    face3D = boundaries[i].Item2.SplitEdges(boundaries[j].Item2, tolerance);
-                    if(face3D != null)
+                    if(boundaries[i].Item2.TrySplitEdges(boundaries[j].Item2, out face3D, tolerance) && face3D != null)
                     {
                         boundaries[i] = new Tuple<BoundingBox3D, Face3D>(face3D.GetBoundingBox(), face3D);
                     }
 
-                    face3D = boundaries[j].Item2.SplitEdges(boundaries[i].Item2, tolerance);
-                    if (face3D != null)
+                    if (boundaries[j].Item2.TrySplitEdges(boundaries[i].Item2, out face3D, tolerance) && face3D != null)
                     {
                         boundaries[j] = new Tuple<BoundingBox3D, Face3D>(face3D.GetBoundingBox(), face3D);
                     }

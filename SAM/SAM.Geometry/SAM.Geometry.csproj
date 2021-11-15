@@ -222,6 +222,7 @@
     <Compile Include="Spatial\Query\Convex.cs" />
     <Compile Include="Spatial\Query\Concave.cs" />
     <Compile Include="Spatial\Query\MaxIntersectionSegment3D.cs" />
+    <Compile Include="Spatial\Query\TrySplitEdges.cs" />
     <Compile Include="Spatial\Query\SplitEdges.cs" />
     <Compile Include="Spatial\Query\TryConvert.cs" />
     <Compile Include="Spatial\Query\ConnectedFace3Ds.cs" />
