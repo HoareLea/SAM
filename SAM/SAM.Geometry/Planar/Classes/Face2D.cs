@@ -125,6 +125,12 @@ namespace SAM.Geometry.Planar
                         continue;
                     }
 
+                    Point2D point2D = internalEdge.InternalPoint2D();
+                    if(!externalEdge.Inside(point2D, tolerance))
+                    {
+                        continue;
+                    }
+
                     double area_InternalEdge = internalEdge.GetArea();
                     if (System.Math.Abs(area_InternalEdge - area_ExternalEdge) <= tolerance)
                     {
