@@ -67,6 +67,8 @@ namespace SAM.Geometry.Rhino
                 //}
             }
 
+            
+
             List<Face3D> face3Ds = new List<Face3D>();
             foreach (BrepFace brepFace in brepFaces_Planar)
             {
@@ -122,6 +124,17 @@ namespace SAM.Geometry.Rhino
                 {
                     shell.OrientNormals();
                 }
+
+                if(!shell.IsClosed(Core.Tolerance.MacroDistance))
+                {
+                    Brep brep_Shell = shell.ToRhino(Core.Tolerance.MacroDistance);
+                    if(brep_Shell != null &&  brep_Shell.IsSolid)
+                    {
+                        shell = brep_Shell.ToSAM_Shell(simplify);
+                    }
+
+                }
+
                 result.Add(shell);
             }
             else

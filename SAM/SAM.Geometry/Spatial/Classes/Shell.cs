@@ -879,6 +879,41 @@ namespace SAM.Geometry.Spatial
             return true;
         }
 
+        public bool SplitEdges(double tolerance = Core.Tolerance.Distance)
+        {
+            if(boundaries == null || boundaries.Count <= 2)
+            {
+                return false;
+            }
+            
+            for (int i = 0; i < boundaries.Count - 1; i++)
+            {
+                for (int j = i + 1; j < boundaries.Count; j++)
+                {
+                    if (!boundaries[i].Item1.InRange(boundaries[j].Item1, tolerance))
+                    {
+                        continue;
+                    }
+
+                    Face3D face3D = null;
+
+                    face3D = boundaries[i].Item2.SplitEdges(boundaries[j].Item2, tolerance);
+                    if(face3D != null)
+                    {
+                        boundaries[i] = new Tuple<BoundingBox3D, Face3D>(face3D.GetBoundingBox(), face3D);
+                    }
+
+                    face3D = boundaries[j].Item2.SplitEdges(boundaries[i].Item2, tolerance);
+                    if (face3D != null)
+                    {
+                        boundaries[j] = new Tuple<BoundingBox3D, Face3D>(face3D.GetBoundingBox(), face3D);
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public List<IClosedPlanar3D> GetEdge3Ds()
         {
             if(boundaries == null)
