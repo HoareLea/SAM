@@ -3,7 +3,7 @@ using System;
 
 namespace SAM.Core
 {
-    public class JSAMObjectWrapper : ISAMObject
+    public class JSAMObjectWrapper : ISAMBaseObject
     {
         private JObject jObject;
 
