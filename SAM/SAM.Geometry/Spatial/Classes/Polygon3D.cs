@@ -63,6 +63,17 @@ namespace SAM.Geometry.Spatial
             return new Polygon3D(this);
         }
 
+        /// <summary>
+        /// Inserts new point on one of the edges (closest to given point3D)
+        /// </summary>
+        /// <param name="point3D"> Point2D will be use as a reference to insert Point3D on Polygon3D edge</param>
+        /// <param name="tolerance">tolerance</param>
+        /// <returns>Point2D on Polygon2D edge</returns>
+        public Point3D InsertClosest(Point3D point3D, double tolerance = Core.Tolerance.Distance)
+        {
+            return plane.Convert(Planar.Modify.InsertClosest(points, plane.Convert(plane.Project(point3D)), true, tolerance));
+        }
+
         public List<Segment3D> GetSegments()
         {
             List<Point3D> point3Ds = GetPoints();

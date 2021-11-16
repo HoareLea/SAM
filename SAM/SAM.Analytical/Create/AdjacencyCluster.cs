@@ -648,18 +648,18 @@ namespace SAM.Analytical
             //Creating Shade Panels
             List<List<Panel>> tuples = Enumerable.Repeat<List<Panel>>(null, panels.Count()).ToList();
 
-            //for(int i =0; i < panels.Count; i++)
-            Parallel.For(0, panels.Count(), (int i) =>
+            for(int i =0; i < panels.Count(); i++)
+            //Parallel.For(0, panels.Count(), (int i) =>
             {
                 Panel panel = panels.ElementAt(i);
 
                 Face3D face3D = panel?.GetFace3D();
                 if (face3D == null || face3D.GetArea() < minArea || face3D.ThinnessRatio() < thinnessRatio)
-                    return;
+                    continue;
 
                 Plane plane = face3D.GetPlane();
                 if (plane == null)
-                    return;
+                    continue;
 
                 BoundingBox3D boundingBox3D = face3D.GetBoundingBox(maxDistance + tolerance_Distance);
 
@@ -705,7 +705,7 @@ namespace SAM.Analytical
                 }
 
                 if (face2Ds == null || face2Ds.Count == 0)
-                    return;
+                    continue;
 
                 Guid guid = panel.Guid;
                 if (result.GetObject<Panel>(guid) != null)
@@ -729,7 +729,7 @@ namespace SAM.Analytical
 
                     guid = Guid.NewGuid();
                 }
-            });
+            }//);
 
             foreach (List<Panel> panels_New in tuples)
             {

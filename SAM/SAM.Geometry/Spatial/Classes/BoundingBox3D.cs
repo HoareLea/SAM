@@ -126,33 +126,52 @@ namespace SAM.Geometry.Spatial
         public bool Intersect(Segment3D segment3D, double tolerance = Core.Tolerance.Distance)
         {
             if (segment3D == null)
+            {
                 return false;
+            }
 
-            bool inside_1 = Inside(segment3D[0]);
-            bool inside_2 = Inside(segment3D[1]);
+            Point3D point3D_1 = segment3D[0];
+            Point3D point3D_2 = segment3D[1];
+
+            if(!InRange(new BoundingBox3D(point3D_1, point3D_2)))
+            {
+                return false;
+            }
+
+            bool inside_1 = Inside(point3D_1);
+            bool inside_2 = Inside(point3D_2);
 
             if (inside_1 != inside_2)
+            {
                 return true;
+            }
+
 
             if (inside_1 && inside_2)
+            {
                 return false;
+            }
 
             foreach (Plane plane in GetPlanes())
             {
-                PlanarIntersectionResult planarIntersectionResult = plane.PlanarIntersectionResult(segment3D, tolerance);
+                PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(plane, segment3D, tolerance);
                 if (planarIntersectionResult != null && planarIntersectionResult.Intersecting)
                 {
                     ISAMGeometry3D geometry3D = planarIntersectionResult.Geometry3D;
                     if (geometry3D is Point3D)
                     {
                         if (On((Point3D)geometry3D, tolerance))
+                        {
                             return true;
+                        }
                     }
                     else if (geometry3D is Segment3D)
                     {
                         Segment3D segment3D_Temp = (Segment3D)geometry3D;
-                        if (On(segment3D_Temp[0], tolerance) || On(segment3D_Temp[1], tolerance))
+                        if (On(point3D_1, tolerance) || On(point3D_2, tolerance))
+                        {
                             return true;
+                        }
                     }
                 }
                 return true;

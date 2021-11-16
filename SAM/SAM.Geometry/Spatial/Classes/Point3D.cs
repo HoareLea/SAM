@@ -141,6 +141,11 @@ namespace SAM.Geometry.Spatial
             return coordinates[0] == 0 && coordinates[1] == 0 && coordinates[2] == 0;
         }
 
+        public bool IsNaN()
+        {
+            return double.IsNaN(coordinates[0]) || double.IsNaN(coordinates[1]) || double.IsNaN(coordinates[2]);
+        }
+
         public double SmallestAngle(Point3D point3D_1, Point3D point3D_2)
         {
             return System.Math.PI - System.Math.Abs(Angle(point3D_1, point3D_2));

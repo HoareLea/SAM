@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
@@ -249,6 +250,149 @@ namespace SAM.Geometry.Spatial
                     result.AddRange(shells_Difference);
 
                     return Split(result, silverSpacing, tolerance_Angle, tolerance_Distance);
+                }
+            }
+
+            return result;
+        }
+
+        public static List<Segment3D> Split(this IEnumerable<Segment3D> segment3Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segment3Ds == null)
+                return null;
+
+            List<Tuple<BoundingBox3D, Segment3D>> tuples = new List<Tuple<BoundingBox3D, Segment3D>>();
+            List<Point3D> point3Ds = new List<Point3D>();
+            foreach (Segment3D segment3D in segment3Ds)
+            {
+                if (segment3D == null || segment3D.GetLength() < tolerance)
+                {
+                    continue;
+                }
+
+                tuples.Add(new Tuple<BoundingBox3D, Segment3D>(segment3D.GetBoundingBox(), segment3D));
+                Modify.Add(point3Ds, segment3D[0], tolerance);
+                Modify.Add(point3Ds, segment3D[1], tolerance);
+            }
+
+            int count = tuples.Count();
+
+            List<List<Point3D>> point3DsList = Enumerable.Repeat<List<Point3D>>(null, count).ToList();
+            for (int i = 0; i < count - 1; i++)
+            {
+                BoundingBox3D boundingBox3D_1 = tuples[i].Item1;
+                Segment3D segment3D_1 = tuples[i].Item2;
+
+                for (int j = i + 1; j < count; j++)
+                {
+                    BoundingBox3D boundingBox3D_2 = tuples[j].Item1;
+                    if (!boundingBox3D_1.InRange(boundingBox3D_2, tolerance))
+                    {
+                        continue;
+                    }
+
+                    Segment3D segment3D_2 = tuples[j].Item2;
+                    if (segment3D_1.AlmostSimilar(segment3D_2, tolerance))
+                    {
+                        continue;
+                    }
+
+                    Point3D point3D_Closest1;
+                    Point3D point3D_Closest2;
+
+                    List<Point3D> point3Ds_Intersection = new List<Point3D>();
+
+                    if (segment3D_1.On(segment3D_2[0], tolerance))
+                        point3Ds_Intersection.Add(segment3D_2[0]);
+
+                    if (segment3D_2.On(segment3D_1[0], tolerance))
+                        point3Ds_Intersection.Add(segment3D_1[0]);
+
+                    if (segment3D_1.On(segment3D_2[1], tolerance))
+                        point3Ds_Intersection.Add(segment3D_2[1]);
+
+                    if (segment3D_2.On(segment3D_1[1], tolerance))
+                        point3Ds_Intersection.Add(segment3D_1[1]);
+
+                    if (point3Ds_Intersection.Count == 0)
+                    {
+                        Point3D point3D_Intersection = segment3D_1.Intersection(segment3D_2, out point3D_Closest1, out point3D_Closest2, tolerance);
+                        if (point3D_Intersection == null || point3D_Intersection.IsNaN())
+                            continue;
+
+                        if (point3D_Closest1 != null && point3D_Closest2 != null)
+                            if (point3D_Closest1.Distance(point3D_Closest2) > tolerance)
+                                continue;
+
+                        point3Ds_Intersection.Add(point3D_Intersection);
+                    }
+
+                    if (point3Ds_Intersection == null || point3Ds_Intersection.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (Point3D point3D_Intersection in point3Ds_Intersection)
+                    {
+                        Point3D point3D_Intersection_Temp = point3Ds.Find(x => point3D_Intersection.AlmostEquals(x, tolerance));
+                        if (point3D_Intersection_Temp == null)
+                        {
+                            point3D_Intersection_Temp = point3D_Intersection;
+                            Modify.Add(point3Ds, point3D_Intersection_Temp, tolerance);
+                        }
+
+                        if (point3D_Intersection_Temp.Distance(segment3D_1.GetStart()) > tolerance && point3D_Intersection_Temp.Distance(segment3D_1.GetEnd()) > tolerance)
+                        {
+                            if (point3DsList[i] == null)
+                            {
+                                point3DsList[i] = new List<Point3D>();
+                            }
+
+                            Modify.Add(point3DsList[i], point3D_Intersection_Temp, tolerance);
+                        }
+
+                        if (point3D_Intersection_Temp.Distance(segment3D_2.GetStart()) > tolerance && point3D_Intersection_Temp.Distance(segment3D_2.GetEnd()) > tolerance)
+                        {
+                            if (point3DsList[j] == null)
+                            {
+                                point3DsList[j] = new List<Point3D>();
+                            }
+
+                            Modify.Add(point3DsList[j], point3D_Intersection_Temp, tolerance);
+                        }
+                    }
+                }
+            }
+
+            List<Segment3D> result = new List<Segment3D>();
+            for (int i = 0; i < count; i++)
+            {
+                Segment3D segment3D_Temp = tuples[i].Item2;
+                if (result.Find(x => x.AlmostSimilar(segment3D_Temp, tolerance)) != null)
+                    continue;
+
+                List<Point3D> point3Ds_Temp = point3DsList[i];
+                if (point3Ds_Temp == null || point3Ds_Temp.Count == 0)
+                {
+                    result.Add(segment3D_Temp);
+                    continue;
+                }
+
+                Modify.Add(point3Ds_Temp, segment3D_Temp[0], tolerance);
+                Modify.Add(point3Ds_Temp, segment3D_Temp[1], tolerance);
+
+                Modify.SortByDistance(point3Ds_Temp, segment3D_Temp[0]);
+
+                for (int j = 0; j < point3Ds_Temp.Count - 1; j++)
+                {
+                    Point3D point3D_1 = point3Ds_Temp[j];
+                    Point3D point3D_2 = point3Ds_Temp[j + 1];
+
+                    Segment3D segment3D = result.Find(x => (x[0].AlmostEquals(point3D_1, tolerance) && x[1].AlmostEquals(point3D_2, tolerance)) || (x[1].AlmostEquals(point3D_1, tolerance) && x[0].AlmostEquals(point3D_2, tolerance)));
+                    if (segment3D != null)
+                        continue;
+
+                    result.Add(new Segment3D(point3D_1, point3D_2));
                 }
             }
 

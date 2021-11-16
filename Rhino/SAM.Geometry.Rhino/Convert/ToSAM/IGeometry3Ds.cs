@@ -7,11 +7,8 @@ namespace SAM.Geometry.Rhino
     public static partial class Convert
     {
         //In case of Non planar brep we mesh it and then convert to brep then merge cooplanar  and then create ISAMGeometry
-        public static List<ISAMGeometry3D> ToSAM(this Brep brep, bool simplify = true, bool orinetNormals = true)
+        public static List<ISAMGeometry3D> ToSAM(this Brep brep, bool simplify = true, bool orinetNormals = true, double tolerance = Core.Tolerance.Distance)
         {
-            //Has to be common for whole method
-            double tolerance = Core.Tolerance.Distance;
-
             List<BrepFace> brepFaces = new List<BrepFace>();
             List<BrepFace> brepFaces_Planar = new List<BrepFace>();
             foreach (BrepFace brepFace in brep.Faces)
@@ -36,37 +33,9 @@ namespace SAM.Geometry.Rhino
                             brepFaces_Planar.Add(brepFace_Mesh);
                     }
                 }
-                
-                //brepFaces = new List<BrepFace>();
-                
-                //Mesh mesh = new Mesh();
-                //foreach (Brep brep_Temp in breps)
-                //{
-                //    Mesh[] meshes = Mesh.CreateFromBrep(brep_Temp, ActiveSetting.GetMeshingParameters());
-                //    mesh.Append(meshes);
-                //}
-                //Brep brep_Mesh = Brep.CreateFromMesh(mesh, true);
-                //if(brep_Mesh != null)
-                //{
-                //    brep_Mesh.MergeCoplanarFaces(tolerance); //Does not work for all cases
-
-                //    foreach (BrepFace brepFace in brep_Mesh.Faces)
-                //        brepFaces.Add(brepFace);
-                //}
-
-                //foreach (Brep brep_Temp in breps)
-                //{
-                //    Mesh[] meshes = Mesh.CreateFromBrep(brep_Temp, AssemblyInfo.GetMeshingParameters());
-                //    foreach(Mesh mesh in meshes)
-                //    {
-                //        Brep brep_Mesh = Brep.CreateFromMesh(mesh, true);
-
-                //        foreach (BrepFace brepFace in brep_Mesh.Faces)
-                //            brepFaces.Add(brepFace);
-                //    }
-                //}
             }
 
+            
             List<Face3D> face3Ds = new List<Face3D>();
             foreach (BrepFace brepFace in brepFaces_Planar)
             {
@@ -122,6 +91,20 @@ namespace SAM.Geometry.Rhino
                 {
                     shell.OrientNormals();
                 }
+
+                if(brepFaces != null && brepFaces.Count != 0)
+                {
+                    if (!shell.IsClosed(Core.Tolerance.MacroDistance))
+                    {
+                        Brep brep_Shell = shell.ToRhino(Core.Tolerance.MacroDistance);
+                        if (brep_Shell != null && brep_Shell.IsSolid)
+                        {
+                            shell = brep_Shell.ToSAM_Shell(simplify);
+                        }
+
+                    }
+                }
+
                 result.Add(shell);
             }
             else

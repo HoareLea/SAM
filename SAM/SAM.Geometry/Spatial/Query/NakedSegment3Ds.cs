@@ -7,9 +7,19 @@ namespace SAM.Geometry.Spatial
     {
         public static List<Segment3D> NakedSegment3Ds(this Shell shell, int maxCount = int.MaxValue, double tolerance = Core.Tolerance.Distance)
         {
-            List<Face3D> face3Ds = shell?.Face3Ds;
-            if (face3Ds == null)
+            if(shell == null)
+            {
                 return null;
+            }
+
+            Shell shell_Temp = new Shell(shell);
+            shell_Temp.SplitEdges(tolerance);
+
+            List<Face3D> face3Ds = shell_Temp.Face3Ds;
+            if (face3Ds == null)
+            {
+                return null;
+            }
 
             List<Tuple<BoundingBox3D, Segment3D>> tuples = new List<Tuple<BoundingBox3D, Segment3D>>();
             List<Point3D> point3Ds = new List<Point3D>();
@@ -49,23 +59,6 @@ namespace SAM.Geometry.Spatial
 
             foreach (Point3D point3D in point3Ds)
             {
-                //List<Tuple<BoundingBox3D, Segment3D>> tuples_Temp = new List<Tuple<BoundingBox3D, Segment3D>>();
-                //foreach (Tuple<BoundingBox3D, Segment3D> tuple_Temp in tuples)
-                //{
-                //    double distance = Core.Query.Round(tuple_Temp.Item2.Distance(point3D), tolerance);
-                //    if (distance > tolerance)
-                //    {
-                //        continue;
-                //    }
-
-                //    tuples_Temp.Add(tuple_Temp);
-                //}
-
-                //if(tuples_Temp.Count == 1)
-                //{
-                //    result.Add(tuples_Temp[0].Item2);
-                //}
-
                 List<Tuple<BoundingBox3D, Segment3D>> tuples_Temp = tuples.FindAll(x => x.Item1.Inside(point3D, true, tolerance));
                 if (tuples_Temp == null || tuples_Temp.Count == 0)
                     continue;
