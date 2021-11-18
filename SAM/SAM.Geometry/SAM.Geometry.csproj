@@ -70,6 +70,7 @@
     <Compile Include="Convert\ToSAM\Polygon2D.cs" />
     <Compile Include="Convert\ToSAM\Point2D.cs" />
     <Compile Include="Convert\ToSAM\Point2Ds.cs" />
+    <Compile Include="Convert\ToSAM\Shell.cs" />
     <Compile Include="Enums\Dimension.cs" />
     <Compile Include="Enums\EdgeOrientationMethod.cs" />
     <Compile Include="Enums\Padding.cs" />

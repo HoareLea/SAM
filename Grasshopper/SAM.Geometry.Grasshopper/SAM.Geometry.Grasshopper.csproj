@@ -58,6 +58,7 @@
     <Compile Include="Classes\GooTransform3D.cs" />
     <Compile Include="Classes\GooSAMGeometry.cs" />
     <Compile Include="Component\CreateSAMTransform3DOriginToPlane.cs" />
+    <Compile Include="Component\GeometryCreateShell.cs" />
     <Compile Include="Component\SAMGeometrySection.cs" />
     <Compile Include="Component\SAMGeometryCreateShellsByElevations.cs" />
     <Compile Include="Component\SAMGeometryShellIntersection.cs" />
@@ -82,7 +83,7 @@
     <Compile Include="Component\GeometryModifyUnion.cs" />
     <Compile Include="Component\GeometryModifyDifference.cs" />
     <Compile Include="Component\GeometryPolycurveLoop2D.cs" />
-    <Compile Include="Component\GeometryCreateSAMPlane.cs" />
+    <Compile Include="Component\GeometryCreatePlane.cs" />
     <Compile Include="Component\SAMGeometryCreateShellsByTopAndBottom.cs" />
     <Compile Include="Component\GeometrySnapByDistance.cs" />
     <Compile Include="Component\CreateSAMTransform3DPlaneToPlane.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Convert\ToGrasshopper\GH_Vector.cs" />
     <Compile Include="Convert\ToSAM\Mesh3D.cs" />
     <Compile Include="Convert\ToSAM\Transform3D.cs" />
+    <Compile Include="Create\Shell.cs" />
     <Compile Include="Enum\MeshType.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Modify\DrawViewportMeshes.cs" />

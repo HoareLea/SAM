@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryCreateSAMPlane : GH_SAMComponent
+    public class GeometryCreatePlane : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,8 +27,8 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public GeometryCreateSAMPlane()
-          : base("Geometry.CreateSAMPlane", "Geometry.CreateSAMPlane",
+        public GeometryCreatePlane()
+          : base("Geometry.CreatePlane", "Geometry.CreatePlane",
               "Creates SAM Plane by points",
               "SAM", "Geometry")
         {
@@ -48,8 +48,8 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Plane", "Plane", "Plane", GH_ParamAccess.item);
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Normal", "Normal", "Normal", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "plane", "plane", "SAM Geometry Plane", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooSAMGeometryParam(), "normal", "normal", "normal", GH_ParamAccess.item);
         }
 
         /// <summary>

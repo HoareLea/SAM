@@ -67,6 +67,7 @@
     <Compile Include="Convert\ToSAM\Shell.cs" />
     <Compile Include="Convert\ToSAM\Transform3D.cs" />
     <Compile Include="Convert\ToSAM\Vector3D.cs" />
+    <Compile Include="Create\Shell.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Modify\BakeGeometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
