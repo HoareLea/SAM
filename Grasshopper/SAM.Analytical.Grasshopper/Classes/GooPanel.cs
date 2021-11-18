@@ -257,8 +257,13 @@ namespace SAM.Analytical.Grasshopper
                 if (brep == null)
                     return GH_GetterResult.cancel;
 
-                List<Panel> panels = null;
+                List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(brep);
+                if (sAMGeometry3Ds == null)
+                {
+                    continue;
+                }
 
+                List<Panel> panels = null;
                 if (brep.HasUserData)
                 {
                     string @string = brep.GetUserString("SAM");
@@ -267,19 +272,26 @@ namespace SAM.Analytical.Grasshopper
                         panels = Core.Convert.ToSAM<Panel>(@string);
                     }
                 }
-                
-                if(panels == null || panels.Count == 0)
+
+                if (panels == null || panels.Count == 0)
                 {
-
-                    List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(brep);
-                    if (sAMGeometry3Ds == null)
-                        continue;
-
                     panels = Create.Panels(sAMGeometry3Ds);
+                }
+                else if(panels.Count == sAMGeometry3Ds.Count)
+                {
+                    for (int j = 0; j < panels.Count; j++)
+                    {
+                        if(Geometry.Spatial.Query.TryConvert(sAMGeometry3Ds[j], out List<Face3D> face3Ds) && face3Ds != null && face3Ds.Count != 0)
+                        {
+                            panels[j] = Create.Panel(panels[j].Guid, panels[j], face3Ds[0]);
+                        }
+                    }
                 }
 
                 if (panels == null || panels.Count == 0)
+                {
                     continue;
+                }
 
                 values.AddRange(panels.FindAll(x => x != null).ConvertAll(x => new GooPanel(x)));
             }
