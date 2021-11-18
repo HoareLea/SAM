@@ -263,27 +263,30 @@ namespace SAM.Analytical.Grasshopper
                     continue;
                 }
 
-                List<Panel> panels = null;
+                List<Panel> panels = Create.Panels(sAMGeometry3Ds);
                 if (brep.HasUserData)
                 {
+                    List<Panel> panels_Old = null;
                     string @string = brep.GetUserString("SAM");
-                    if(!string.IsNullOrWhiteSpace(@string))
+                    if (!string.IsNullOrWhiteSpace(@string))
                     {
-                        panels = Core.Convert.ToSAM<Panel>(@string);
-                    }
-                }
-
-                if (panels == null || panels.Count == 0)
-                {
-                    panels = Create.Panels(sAMGeometry3Ds);
-                }
-                else if(panels.Count == sAMGeometry3Ds.Count)
-                {
-                    for (int j = 0; j < panels.Count; j++)
-                    {
-                        if(Geometry.Spatial.Query.TryConvert(sAMGeometry3Ds[j], out List<Face3D> face3Ds) && face3Ds != null && face3Ds.Count != 0)
+                        panels_Old = Core.Convert.ToSAM<Panel>(@string);
+                        if (panels_Old != null)
                         {
-                            panels[j] = Create.Panel(panels[j].Guid, panels[j], face3Ds[0]);
+                            panels_Old.RemoveAll(x => x == null);
+                        }
+
+                        if (panels_Old != null && panels_Old.Count != 0)
+                        {
+                            for(int j =0; j < panels.Count; j++)
+                            {
+                                Panel panel_Old = panels_Old.Closest(panels[j].GetInternalPoint3D());
+                                if(panel_Old != null)
+                                {
+                                    panels[j] = Create.Panel(panel_Old.Guid, panel_Old, panels[j].GetFace3D());
+                                }
+
+                            }
                         }
                     }
                 }
@@ -327,29 +330,44 @@ namespace SAM.Analytical.Grasshopper
                 if (brep == null)
                     return GH_GetterResult.cancel;
 
-                List<Panel> panels = null;
+                List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(brep);
+                if (sAMGeometry3Ds == null)
+                {
+                    continue;
+                }
 
+                List<Panel> panels = Create.Panels(sAMGeometry3Ds);
                 if (brep.HasUserData)
                 {
+                    List<Panel> panels_Old = null;
                     string @string = brep.GetUserString("SAM");
                     if (!string.IsNullOrWhiteSpace(@string))
                     {
-                        panels = Core.Convert.ToSAM<Panel>(@string);
+                        panels_Old = Core.Convert.ToSAM<Panel>(@string);
+                        if (panels_Old != null)
+                        {
+                            panels_Old.RemoveAll(x => x == null);
+                        }
+
+                        if (panels_Old != null && panels_Old.Count != 0)
+                        {
+                            for (int j = 0; j < panels.Count; j++)
+                            {
+                                Panel panel_Old = panels_Old.Closest(panels[j].GetInternalPoint3D());
+                                if (panel_Old != null)
+                                {
+                                    panels[j] = Create.Panel(panel_Old.Guid, panel_Old, panels[j].GetFace3D());
+                                }
+
+                            }
+                        }
                     }
                 }
 
                 if (panels == null || panels.Count == 0)
                 {
-
-                    List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(brep);
-                    if (sAMGeometry3Ds == null)
-                        continue;
-
-                    panels = Create.Panels(sAMGeometry3Ds);
-                }
-
-                if (panels == null || panels.Count == 0)
                     continue;
+                }
 
                 value = new GooPanel(panels[0]);
             }
