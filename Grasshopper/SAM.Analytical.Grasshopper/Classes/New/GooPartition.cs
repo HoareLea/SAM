@@ -271,27 +271,49 @@ namespace SAM.Analytical.Grasshopper
                 if (rhinoObject == null)
                     return GH_GetterResult.cancel;
 
-                Brep brep = rhinoObject.Geometry as Brep;
-                if (brep == null)
-                    return GH_GetterResult.cancel;
+                GeometryBase geometryBase = rhinoObject.Geometry;
+
+                List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(geometryBase as Brep);
+                if (sAMGeometry3Ds == null)
+                {
+                    continue;
+                }
+
+                List<Face3D> face3Ds = Geometry.Spatial.Query.Face3Ds(sAMGeometry3Ds);
+                if (face3Ds == null)
+                {
+                    continue;
+                }
 
                 List<IPartition> partitions = null;
-
-                if (brep.HasUserData)
+                if (geometryBase.HasUserData)
                 {
-                    string @string = brep.GetUserString("SAM");
+                    string @string = geometryBase.GetUserString("SAM");
                     if(!string.IsNullOrWhiteSpace(@string))
                     {
                         partitions = Core.Convert.ToSAM<IPartition>(@string);
+                        if(partitions != null)
+                        {
+                            partitions.RemoveAll(x => x == null);
+                        }
+
+                        if (partitions != null && partitions.Count != 0)
+                        {
+                            for (int j = 0; j < face3Ds.Count; j++)
+                            {
+                                IPartition partition_Old = partitions.Closest(face3Ds[j].GetInternalPoint3D());
+                                if (partition_Old != null)
+                                {
+                                    partitions[j] = Create.Partition(partition_Old, partition_Old.Guid, face3Ds[j]);
+                                }
+
+                            }
+                        }
                     }
                 }
                 
                 if(partitions == null || partitions.Count == 0)
                 {
-                    List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(brep);
-                    if (sAMGeometry3Ds == null)
-                        continue;
-
                     partitions = Create.HostPartitions(sAMGeometry3Ds)?.Cast<IPartition>().ToList();
                 }
 
@@ -329,38 +351,59 @@ namespace SAM.Analytical.Grasshopper
                 if (rhinoObject == null)
                     return GH_GetterResult.cancel;
 
-                Brep brep = rhinoObject.Geometry as Brep;
-                if (brep == null)
-                    return GH_GetterResult.cancel;
+                GeometryBase geometryBase = rhinoObject.Geometry;
 
-                List<IHostPartition> hostPartitions = null;
-
-                if (brep.HasUserData)
+                List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(geometryBase as Brep);
+                if (sAMGeometry3Ds == null)
                 {
-                    string @string = brep.GetUserString("SAM");
+                    continue;
+                }
+
+                List<Face3D> face3Ds = Geometry.Spatial.Query.Face3Ds(sAMGeometry3Ds);
+                if (face3Ds == null)
+                {
+                    continue;
+                }
+
+                List<IPartition> partitions = null;
+                if (geometryBase.HasUserData)
+                {
+                    string @string = geometryBase.GetUserString("SAM");
                     if (!string.IsNullOrWhiteSpace(@string))
                     {
-                        hostPartitions = Core.Convert.ToSAM<IHostPartition>(@string);
+                        partitions = Core.Convert.ToSAM<IPartition>(@string);
+                        if (partitions != null)
+                        {
+                            partitions.RemoveAll(x => x == null);
+                        }
+
+                        if (partitions != null && partitions.Count != 0)
+                        {
+                            for (int j = 0; j < face3Ds.Count; j++)
+                            {
+                                IPartition partition_Old = partitions.Closest(face3Ds[j].GetInternalPoint3D());
+                                if (partition_Old != null)
+                                {
+                                    partitions[j] = Create.Partition(partition_Old, partition_Old.Guid, face3Ds[j]);
+                                }
+
+                            }
+                        }
                     }
                 }
 
-                if (hostPartitions == null || hostPartitions.Count == 0)
+                if (partitions == null || partitions.Count == 0)
                 {
-
-                    List<ISAMGeometry3D> sAMGeometry3Ds = Geometry.Rhino.Convert.ToSAM(brep);
-                    if (sAMGeometry3Ds == null)
-                        continue;
-
-                    hostPartitions = Create.HostPartitions(sAMGeometry3Ds);
+                    partitions = Create.HostPartitions(sAMGeometry3Ds)?.Cast<IPartition>().ToList();
                 }
 
-                if (hostPartitions == null || hostPartitions.Count == 0)
+                if (partitions == null || partitions.Count == 0)
                     continue;
 
-                hostPartitions.RemoveAll(x => x == null);
-                if(hostPartitions.Count != 0)
+                partitions.RemoveAll(x => x == null || x.Face3D == null);
+                if(partitions.Count != 0)
                 {
-                    value = new GooPartition(hostPartitions[0]);
+                    value = new GooPartition(partitions[0]);
                     return GH_GetterResult.success;
                 }
             }
