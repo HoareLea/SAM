@@ -1,6 +1,7 @@
 ﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
+using Rhino;
 
 namespace SAM.Geometry.Rhino
 {
@@ -29,7 +30,7 @@ namespace SAM.Geometry.Rhino
                 return null;
 
             //adjsuted to make sure breps are closed in future see if we can close with higher tolerance
-            global::Rhino.Geometry.Brep[] result = global::Rhino.Geometry.Brep.JoinBreps(breps, 0.1);
+            global::Rhino.Geometry.Brep[] result = global::Rhino.Geometry.Brep.JoinBreps(breps, RhinoMath.UnitScale(UnitSystem.Millimeters,RhinoDoc.ActiveDoc.ModelUnitSystem)* 0.1);
             if (result == null || result.Length == 0)
                 return null;
 
