@@ -57,7 +57,8 @@ namespace SAM.Geometry.Rhino
                             PlaneFitResult planeFitResult = global::Rhino.Geometry.Plane.FitPlaneToPoints(point3Ds.ConvertAll(x => x.ToRhino()), out global::Rhino.Geometry.Plane plane_Rhino);
                             if (planeFitResult != PlaneFitResult.Failure && plane_Rhino != null)
                             {
-                                geometry3D = new Polygon3D(plane_Rhino.ToSAM(), point3Ds.ConvertAll(x => plane.Convert(plane.Project(x))));
+                                Spatial.Plane plane_Temp = plane_Rhino.ToSAM();
+                                geometry3D = new Polygon3D(plane_Temp, point3Ds.ConvertAll(x => plane_Temp.Convert(plane_Temp.Project(x))));
                             }
                         }
                         else
