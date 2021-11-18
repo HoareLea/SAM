@@ -16,7 +16,7 @@ namespace SAM.Geometry.Rhino
             Mesh mesh_Temp = mesh.DuplicateMesh();
 
             double unitScale = RhinoMath.UnitScale(UnitSystem.Millimeters, RhinoDoc.ActiveDoc.ModelUnitSystem);
-            mesh_Temp.Faces.ConvertNonPlanarQuadsToTriangles(unitScale * tolerance_Distance, unitScale * tolerance_Angle, 0);
+            mesh_Temp.Faces.ConvertNonPlanarQuadsToTriangles(unitScale * tolerance_Distance, tolerance_Angle, 0);
             mesh_Temp.Faces.ConvertQuadsToTriangles();
 
             mesh_Temp.UnifyNormals(false);
