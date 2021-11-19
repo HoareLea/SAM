@@ -7,7 +7,7 @@ namespace SAM.Geometry.Rhino
 {
     public static partial class Convert
     {       
-        public static Mesh3D ToSAM(this Mesh mesh, double tolerance = Core.Tolerance.MacroDistance)
+        public static Mesh3D ToSAM(this Mesh mesh, double tolerance = Core.Tolerance.MicroDistance)
         {
             if(mesh == null)
             {
