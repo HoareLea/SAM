@@ -71,6 +71,7 @@
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Modify\BakeGeometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\UnitScale.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">

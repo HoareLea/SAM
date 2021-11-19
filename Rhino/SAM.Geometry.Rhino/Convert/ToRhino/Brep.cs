@@ -1,7 +1,6 @@
 ﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
-using Rhino;
 
 namespace SAM.Geometry.Rhino
 {
@@ -29,8 +28,10 @@ namespace SAM.Geometry.Rhino
             if (breps == null || breps.Count == 0)
                 return null;
 
+            double unitScale = Query.UnitScale();
+
             //adjsuted to make sure breps are closed in future see if we can close with higher tolerance
-            global::Rhino.Geometry.Brep[] result = global::Rhino.Geometry.Brep.JoinBreps(breps, RhinoMath.UnitScale(UnitSystem.Millimeters,RhinoDoc.ActiveDoc.ModelUnitSystem)* 0.1);
+            global::Rhino.Geometry.Brep[] result = global::Rhino.Geometry.Brep.JoinBreps(breps, unitScale * tolerance); //previous tolerance 0.1
             if (result == null || result.Length == 0)
                 return null;
 
@@ -115,7 +116,9 @@ namespace SAM.Geometry.Rhino
                 return null;
             }
 
-            global::Rhino.Geometry.Brep[] breps = global::Rhino.Geometry.Brep.CreatePlanarBreps(polylineCurves, tolerance);
+            double unitScale = Query.UnitScale();
+
+            global::Rhino.Geometry.Brep[] breps = global::Rhino.Geometry.Brep.CreatePlanarBreps(polylineCurves, unitScale * tolerance);
             if(breps == null || breps.Length == 0)
             {
                 return null;
@@ -128,6 +131,8 @@ namespace SAM.Geometry.Rhino
         {
             if (closed3Ds == null || closed3Ds.Count() == 0)
                 return null;
+
+            double unitScale = Query.UnitScale();
 
             List<global::Rhino.Geometry.PolylineCurve> polylineCurves = new List<global::Rhino.Geometry.PolylineCurve>();
             foreach (IClosed3D closed3D in closed3Ds)
@@ -157,7 +162,7 @@ namespace SAM.Geometry.Rhino
             if (polylineCurves.Count == 0)
                 return null;
 
-            global::Rhino.Geometry.Brep[] breps = global::Rhino.Geometry.Brep.CreatePlanarBreps(polylineCurves, tolerance);
+            global::Rhino.Geometry.Brep[] breps = global::Rhino.Geometry.Brep.CreatePlanarBreps(polylineCurves, unitScale * tolerance);
 
             if (breps == null || breps.Length == 0)
                 return null;
@@ -171,7 +176,7 @@ namespace SAM.Geometry.Rhino
             global::Rhino.Geometry.Brep brep = brepList.Last();
             brepList.Remove(brep);
 
-            breps = global::Rhino.Geometry.Brep.CreateBooleanIntersection(new List<global::Rhino.Geometry.Brep> { brep }, brepList, tolerance);
+            breps = global::Rhino.Geometry.Brep.CreateBooleanIntersection(new List<global::Rhino.Geometry.Brep> { brep }, brepList, unitScale * tolerance);
             if (breps == null || breps.Length == 0)
                 return null;
 

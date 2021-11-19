@@ -1,6 +1,4 @@
-﻿using Rhino;
-using Rhino.Geometry;
-using Rhino.Geometry.Collections;
+﻿using Rhino.Geometry;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
@@ -8,23 +6,23 @@ namespace SAM.Geometry.Rhino
 {
     public static partial class Create
     {
-        public static Shell Shell(this Mesh mesh, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static Shell Shell(this Mesh mesh, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.MacroDistance)
         {
             if (mesh == null)
                 return null;
 
             Mesh mesh_Temp = mesh.DuplicateMesh();
 
-            double unitScale = RhinoMath.UnitScale(UnitSystem.Millimeters, RhinoDoc.ActiveDoc.ModelUnitSystem);
+            double unitScale = Query.UnitScale();
             mesh_Temp.Faces.ConvertNonPlanarQuadsToTriangles(unitScale * tolerance_Distance, tolerance_Angle, 0);
             mesh_Temp.Faces.ConvertQuadsToTriangles();
 
-            mesh_Temp.UnifyNormals(false);
+            //mesh_Temp.UnifyNormals(false);
 
             List<Face3D> face3Ds = new List<Face3D>();
 
             mesh_Temp.Ngons.Clear();
-            mesh_Temp.Ngons.AddPlanarNgons(unitScale * tolerance_Distance, 3, 1, false);
+            mesh_Temp.Ngons.AddPlanarNgons(unitScale * tolerance_Distance, 3, 1, true);
             foreach(MeshNgon meshNgon in mesh_Temp.Ngons)
             {
                 List<Point3D> point3Ds = new List<Point3D>();
@@ -55,7 +53,10 @@ namespace SAM.Geometry.Rhino
                 return null;
             }
 
-            return new Shell(face3Ds);
+            Shell result = new Shell(face3Ds);
+            result.OrientNormals(tolerance: tolerance_Distance);
+
+            return result;
         }
     }
 }

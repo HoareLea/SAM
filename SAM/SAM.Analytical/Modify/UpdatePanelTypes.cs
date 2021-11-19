@@ -62,7 +62,7 @@ namespace SAM.Analytical
                             
                             elevation = Geometry.Spatial.Query.MaxElevation(panel);
 
-                            if (System.Math.Abs(elevation - elevation_Ground) < Tolerance.MacroDistance)
+                            if (elevation - elevation_Ground < Tolerance.MacroDistance)
                                 panelType = PanelType.UndergroundWall;
                             else
                                 panelType = PanelType.WallExternal;
@@ -131,7 +131,7 @@ namespace SAM.Analytical
                             }
                             else
                             {
-                                if (System.Math.Abs(elevation - elevation_Ground) < Tolerance.MacroDistance)
+                                if (elevation - elevation_Ground < Tolerance.MacroDistance)
                                     panelType = PanelType.UndergroundCeiling;
                             }
 

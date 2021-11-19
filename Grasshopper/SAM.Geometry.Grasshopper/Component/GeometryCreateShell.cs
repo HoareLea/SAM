@@ -17,7 +17,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,7 +40,7 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddMeshParameter("_mesh", "mesh", "Mesh", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
+            inputParamManager.AddNumberParameter("tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            double tolerance = Core.Tolerance.Distance;
+            double tolerance = Core.Tolerance.MacroDistance;
             if (!dataAccess.GetData(1, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
