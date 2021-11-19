@@ -14,14 +14,16 @@ namespace SAM.Geometry.Rhino
                 return null;
             }
 
-            MeshVertexList meshVertexList = mesh.Vertices;
+            Mesh mesh_Temp = mesh.DuplicateMesh();
+            mesh_Temp.Faces.ConvertQuadsToTriangles();
+
+            MeshVertexList meshVertexList = mesh_Temp.Vertices;
             if (meshVertexList == null)
             {
                 return null;
             }
 
-
-            IEnumerable<MeshFace> meshFaces = mesh.Faces;
+            IEnumerable<MeshFace> meshFaces = mesh_Temp.Faces;
             if (meshFaces == null)
             {
                 return null;
@@ -42,7 +44,6 @@ namespace SAM.Geometry.Rhino
             }
 
             return Spatial.Create.Mesh3D(triangle3Ds);
-
         }
     }
 }
