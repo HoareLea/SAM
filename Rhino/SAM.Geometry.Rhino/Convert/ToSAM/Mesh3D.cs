@@ -7,7 +7,7 @@ namespace SAM.Geometry.Rhino
 {
     public static partial class Convert
     {       
-        public static Mesh3D ToSAM(this Mesh mesh)
+        public static Mesh3D ToSAM(this Mesh mesh, double tolerance = Core.Tolerance.MacroDistance)
         {
             if(mesh == null)
             {
@@ -43,7 +43,7 @@ namespace SAM.Geometry.Rhino
                 }
             }
 
-            return Spatial.Create.Mesh3D(triangle3Ds);
+            return Spatial.Create.Mesh3D(triangle3Ds, tolerance);
         }
     }
 }
