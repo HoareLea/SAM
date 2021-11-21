@@ -76,6 +76,7 @@
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Create\Commands.cs" />
     <Compile Include="Create\Directory.cs" />
+    <Compile Include="Create\Array.cs" />
     <Compile Include="Create\Material.cs" />
     <Compile Include="Create\TypeMap.cs" />
     <Compile Include="Create\TextMap.cs" />
