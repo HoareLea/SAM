@@ -17,7 +17,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,7 +40,8 @@ namespace SAM.Geometry.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddMeshParameter("_mesh", "mesh", "Mesh", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
+            inputParamManager.AddBooleanParameter("_simplify_", "_simplify_", "Simplify Geometry", GH_ParamAccess.item, true);
+            inputParamManager.AddNumberParameter("tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
         }
 
         /// <summary>
@@ -66,14 +67,21 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            double tolerance = Core.Tolerance.Distance;
-            if (!dataAccess.GetData(1, ref tolerance))
+            double tolerance = Core.Tolerance.MacroDistance;
+            if (!dataAccess.GetData(2, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            Shell shell = Rhino.Create.Shell(mesh, tolerance_Distance: tolerance);
+            bool simplify = true;
+            if (!dataAccess.GetData(1, ref simplify))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            Shell shell = Rhino.Create.Shell(mesh, simplify, tolerance_Distance: tolerance);
 
             dataAccess.SetData(0, new GooSAMGeometry(shell));
         }

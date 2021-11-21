@@ -9,11 +9,18 @@ namespace SAM.Geometry.Rhino
         //In case of Non planar brep we mesh it and then convert to brep then merge cooplanar  and then create ISAMGeometry
         public static List<ISAMGeometry3D> ToSAM(this Brep brep, bool simplify = true, bool orinetNormals = true, double tolerance = Core.Tolerance.Distance)
         {
+            if(brep == null)
+            {
+                return null;
+            }
+
+            double unitScale = Query.UnitScale();
+
             List<BrepFace> brepFaces = new List<BrepFace>();
             List<BrepFace> brepFaces_Planar = new List<BrepFace>();
             foreach (BrepFace brepFace in brep.Faces)
             {
-                if (!brepFace.IsPlanar(tolerance))
+                if (!brepFace.IsPlanar(unitScale * tolerance))
                     brepFaces.Add(brepFace);
                 else
                     brepFaces_Planar.Add(brepFace);
@@ -27,7 +34,7 @@ namespace SAM.Geometry.Rhino
                     Brep brep_Mesh = Brep.CreateFromMesh(mesh, true);
                     if(brep_Mesh != null)
                     {
-                        brep_Mesh.MergeCoplanarFaces(tolerance);
+                        brep_Mesh.MergeCoplanarFaces(unitScale * tolerance);
 
                         foreach (BrepFace brepFace_Mesh in brep_Mesh.Faces)
                             brepFaces_Planar.Add(brepFace_Mesh);
