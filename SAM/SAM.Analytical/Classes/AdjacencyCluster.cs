@@ -39,7 +39,10 @@ namespace SAM.Analytical
                 typeof(AdjacencyClusterSimulationResult).IsAssignableFrom(type) ||
                 typeof(SpaceSimulationResult).IsAssignableFrom(type) ||
                 typeof(PanelSimulationResult).IsAssignableFrom(type) ||
-                typeof(ZoneSimulationResult).IsAssignableFrom(type);
+                typeof(ZoneSimulationResult).IsAssignableFrom(type) ||
+                typeof(InternalCondition).IsAssignableFrom(type) ||
+                typeof(Construction).IsAssignableFrom(type) ||
+                typeof(ApertureConstruction).IsAssignableFrom(type);
         }
 
         public override Core.RelationCluster Clone()
@@ -210,7 +213,20 @@ namespace SAM.Analytical
                     dictionary[internalCondition.Guid] = internalCondition;
             }
 
-            return dictionary.Values;
+            List<InternalCondition> result = new List<InternalCondition>();
+            if(dictionary?.Values != null)
+            {
+                result.AddRange(dictionary.Values);
+            }
+
+            List<InternalCondition> internalConditions = GetObjects<InternalCondition>();
+            if(internalConditions != null)
+            {
+                result.AddRange(internalConditions);
+            }
+
+
+            return result;
         }
 
         public List<Panel> GetPanels(Space space)
@@ -360,7 +376,19 @@ namespace SAM.Analytical
                 dictionary[guid] = construction;
             }
 
-            return dictionary.Values.ToList();
+            List<Construction> result = new List<Construction>();
+            if(dictionary.Values != null)
+            {
+                result.AddRange(result);
+            }
+
+            List<Construction> constructions = GetObjects<Construction>();
+            if(constructions != null)
+            {
+                result.AddRange(constructions);
+            }
+
+            return result;
         }
 
         public List<ApertureConstruction> GetApertureConstructions()

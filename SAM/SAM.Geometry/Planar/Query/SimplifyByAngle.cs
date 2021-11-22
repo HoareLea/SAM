@@ -19,7 +19,7 @@ namespace SAM.Geometry.Planar
                 Point2D second = result[(start + 1) % result.Count];
                 Point2D third = result[(start + 2) % result.Count];
 
-                if (second.SmallestAngle(first, third) <= tolerane)
+                if (first.SmallestAngle(second, third) <= tolerane)
                 {
                     result.RemoveAt((start + 1) % result.Count);
                     end--;
