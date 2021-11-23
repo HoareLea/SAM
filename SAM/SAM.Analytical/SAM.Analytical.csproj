@@ -194,6 +194,7 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAirPanels.cs" />
+    <Compile Include="Modify\New\MapInternalConditions.cs" />
     <Compile Include="Modify\New\MapZones.cs" />
     <Compile Include="Modify\New\TriangulateConcavePartitions.cs" />
     <Compile Include="Modify\New\UpdateSpace.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="Modify\New\AddMissingMaterials.cs" />
     <Compile Include="Query\New\DefaultOpeningTypeLibrary.cs" />
     <Compile Include="Query\New\DefaultProfileLibrary.cs" />
+    <Compile Include="Query\New\Profiles.cs" />
     <Compile Include="Query\New\Project.cs" />
     <Compile Include="Modify\New\SimplifyByAngle.cs" />
     <Compile Include="Modify\SimplifyByAngle.cs" />

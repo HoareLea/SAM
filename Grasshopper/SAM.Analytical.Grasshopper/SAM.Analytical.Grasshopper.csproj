@@ -122,7 +122,6 @@
     <Compile Include="Component\SAMAnalyticalCreatePanelByBottomAndHeight.cs" />
     <Compile Include="Component\SAMAnalyticalFixAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalAlignPanelsByLowerAndUpperElevation.cs" />
-    <Compile Include="Component\SAMAnalyticalAnalyticalModelMapInternalCondtions.cs" />
     <Compile Include="Component\SAMAnalyticalAlignPanels.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByPanelsAndSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalDefaultColorByPanelType.cs" />

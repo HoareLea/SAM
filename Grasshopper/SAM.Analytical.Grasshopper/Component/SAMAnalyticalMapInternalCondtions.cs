@@ -4,6 +4,7 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -17,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -44,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                
+
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject()
                 {
                     Name = "_analytical",
@@ -60,12 +61,15 @@ namespace SAM.Analytical.Grasshopper
                 GooInternalConditionLibraryParam gooInternalConditionLibraryParam = new GooInternalConditionLibraryParam() { Name = "internalConditionLibrary_", NickName = "internalConditionLibrary_", Description = "SAM Analytical InternalConditionLibrary", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(gooInternalConditionLibraryParam, ParamVisibility.Voluntary));
 
-                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "overrideNotFound_", NickName = "overrideNotFound_", Description = "Override with null if InternalCondition not found", Access = GH_ParamAccess.item};
+                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "overrideNotFound_", NickName = "overrideNotFound_", Description = "Override with null if InternalCondition not found", Access = GH_ParamAccess.item };
                 boolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
 
                 GooInternalConditionParam gooInternalConditionParam = new GooInternalConditionParam() { Name = "defaultInternalCondition_", NickName = "defaultInternalCondition_", Description = "Default InternalCondition applied if override not found", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(gooInternalConditionParam, ParamVisibility.Voluntary));
+
+                GooProfileLibraryParam gooProfileLibraryParam = new GooProfileLibraryParam() { Name = "profileLibrary_", NickName = "profileLibrary_", Description = "SAM Analytical ProfileLibrary", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(gooProfileLibraryParam, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -79,9 +83,10 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Analytical", NickName = "Analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "InternalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "UnassignedSpaces", NickName = "UnassignedSpaces", Description = "SAM Analytical Spaces has not been assigneds", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "internalConditions", NickName = "internalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "unassignedSpaces", NickName = "unassignedSpaces", Description = "SAM Analytical Spaces has not been assigneds", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profiles", NickName = "profiles", Description = "SAM Analytical Profiles", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -97,7 +102,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_analytical");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -140,8 +145,17 @@ namespace SAM.Analytical.Grasshopper
             if (index == -1 || !dataAccess.GetData(index, ref internalCondition_Default))
                 internalCondition_Default = null;
 
+            ProfileLibrary profileLibrary = null;
+            index = Params.IndexOfInputParam("profileLibrary_");
+            if (index == -1 || !dataAccess.GetData(index, ref profileLibrary))
+                profileLibrary = null;
+
+            if (profileLibrary == null)
+                profileLibrary = Analytical.Query.DefaultProfileLibrary();
+
             List<InternalCondition> internalConditions = new List<InternalCondition>();
             List<Space> spaces_Unassigned = new List<Space>();
+            IEnumerable<Profile> profiles = null;
 
             if (sAMObject is Space)
             {
@@ -184,23 +198,53 @@ namespace SAM.Analytical.Grasshopper
                             if (internalConditions[i] == spaces[i].InternalCondition)
                                 spaces_Unassigned.Add(spaces[i]);
 
-                        sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                        profiles = Analytical.Query.Profiles(adjacencyCluster, profileLibrary);
+                        profileLibrary = new ProfileLibrary("Default Material Library", profiles);
+
+                        sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster, analyticalModel.MaterialLibrary, profileLibrary);
                     }
                 }
             }
+            else if (sAMObject is ArchitecturalModel)
+            {
+                ArchitecturalModel architecturalModel = new ArchitecturalModel((ArchitecturalModel)sAMObject);
+                internalConditions = architecturalModel.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
+                if (internalConditions != null)
+                {
+                    List<Space> spaces = architecturalModel.GetSpaces();
+                    for (int i = 0; i < internalConditions.Count; i++)
+                        if (internalConditions[i] == spaces[i].InternalCondition)
+                            spaces_Unassigned.Add(spaces[i]);
 
+                    profiles = Analytical.Query.Profiles(architecturalModel, profileLibrary);
+                    if(profiles != null)
+                    {
+                        foreach(Profile profile in profiles)
+                        {
+                            architecturalModel.Add(profile);
+                        }
+                    }
 
-            index = Params.IndexOfOutputParam("Analytical");
+                    sAMObject = architecturalModel;
+                }
+
+            }
+
+            index = Params.IndexOfOutputParam("analytical");
             if (index != -1)
                 dataAccess.SetData(index, sAMObject);
 
-            index = Params.IndexOfOutputParam("InternalConditions");
+            index = Params.IndexOfOutputParam("internalConditions");
             if (index != -1)
                 dataAccess.SetDataList(index, internalConditions?.ConvertAll(x => new GooInternalCondition(x)));
 
-            index = Params.IndexOfOutputParam("UnassignedSpaces");
+            index = Params.IndexOfOutputParam("unassignedSpaces");
             if (index != -1)
                 dataAccess.SetDataList(index, spaces_Unassigned?.ConvertAll(x => new GooSpace(x)));
+
+            index = Params.IndexOfOutputParam("profiles");
+            if (index != -1)
+                dataAccess.SetDataList(index, profiles?.ToList().ConvertAll(x => new GooProfile(x)));
         }
     }
 }
