@@ -379,7 +379,7 @@ namespace SAM.Analytical
             List<Construction> result = new List<Construction>();
             if(dictionary.Values != null)
             {
-                result.AddRange(result);
+                result.AddRange(dictionary.Values);
             }
 
             List<Construction> constructions = GetObjects<Construction>();
