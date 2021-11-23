@@ -106,6 +106,33 @@ namespace SAM.Math
             return x >= MinX && x <= MaxX;
         }
 
+        public bool Load(double[,] data)
+        {
+            if (data == null || data.GetLength(0) < 2 || data.GetLength(1) == 0)
+            {
+                return false;
+            }
+
+            values = new List<KeyValuePair<double, double>>();
+            for (int i = 0; i < data.GetLength(1); i++)
+            {
+                values.Add(new KeyValuePair<double, double>(data[0, i], data[1, i]));
+            }
+
+            return true;
+        }
+
+        public bool Load(string path, string separator = "\t")
+        {
+            double[,] data = Core.Create.Array(path, separator, true, double.NaN);
+            if (data == null)
+            {
+                return false;
+            }
+
+            return Load(data);
+        }
+
         public double MaxX
         {
             get
