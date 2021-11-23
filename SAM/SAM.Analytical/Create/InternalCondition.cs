@@ -66,5 +66,26 @@
 
             return result;
         }
+
+        public static InternalCondition InternalCondition(string name)
+        {
+            if(string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
+            InternalCondition result = new InternalCondition(name);
+            result.SetValue(InternalConditionParameter.LightingRadiantProportion, 0.3);
+            result.SetValue(InternalConditionParameter.OccupancyRadiantProportion, 0.2);
+            result.SetValue(InternalConditionParameter.EquipmentRadiantProportion, 0.1);
+
+            result.SetValue(InternalConditionParameter.LightingViewCoefficient, 0.49);
+            result.SetValue(InternalConditionParameter.OccupancyViewCoefficient, 0.227);
+            result.SetValue(InternalConditionParameter.OccupancyViewCoefficient, 0.372);
+
+            result.SetValue(InternalConditionParameter.LightingLevel, 0);
+
+            return result;
+        }
     }
 }

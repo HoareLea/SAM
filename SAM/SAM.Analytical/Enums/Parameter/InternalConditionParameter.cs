@@ -47,5 +47,13 @@ namespace SAM.Analytical
         [ParameterProperties("Exhaust Air Flow Per Area", "Exhaust Air Flow Per Area [m3/s/m2]"), ParameterValue(Core.ParameterType.Double)] ExhaustAirFlowPerArea,
         [ParameterProperties("Supply Air Flow", "Supply Air Flow [m3/s]"), ParameterValue(Core.ParameterType.Double)] SupplyAirFlow,
         [ParameterProperties("Exhaust Air Flow", "Exhaust Air Flow [m3/s]"), ParameterValue(Core.ParameterType.Double)] ExhaustAirFlow,
+
+        [ParameterProperties("Lighting Radiant Proportion", "Lighting Radiant Proportion [0-1]"), DoubleParameterValue(0, 1)] LightingRadiantProportion,
+        [ParameterProperties("Occupancy Radiant Proportion", "Occupancy Radiant Proportion [0-1]"), DoubleParameterValue(0, 1)] OccupancyRadiantProportion,
+        [ParameterProperties("Equipment Radiant Proportion", "Equipment Radiant Proportion [0-1]"), DoubleParameterValue(0, 1)] EquipmentRadiantProportion,
+
+        [ParameterProperties("Lighting View Coefficient", "Lighting View Coefficient [0-1]"), DoubleParameterValue(0, 1)] LightingViewCoefficient,
+        [ParameterProperties("Occupancy View Coefficient", "Occupancy View Coefficient [0-1]"), DoubleParameterValue(0, 1)] OccupancyViewCoefficient,
+        [ParameterProperties("Equipment View Coefficient", "Equipment View Coefficient [0-1]"), DoubleParameterValue(0, 1)] EquipmentViewCoefficient,
     }
 }

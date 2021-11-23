@@ -63,7 +63,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, new GooInternalCondition(new InternalCondition(name)));
+            dataAccess.SetData(0, new GooInternalCondition(Create.InternalCondition(name)));
         }
     }
 }
