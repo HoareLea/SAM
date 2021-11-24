@@ -173,6 +173,10 @@
     <Compile Include="Query\Clamp.cs" />
     <Compile Include="Query\DefaultAddress.cs" />
     <Compile Include="Query\MaterialType.cs" />
+    <Compile Include="Query\ParseInt.cs" />
+    <Compile Include="Query\ParseDouble.cs" />
+    <Compile Include="Query\TryParseInt.cs" />
+    <Compile Include="Query\TryParseDouble.cs" />
     <Compile Include="Query\TryGetObjects.cs" />
     <Compile Include="Query\Type.cs" />
     <Compile Include="Query\TryInvokeDeclaredMethod.cs" />
