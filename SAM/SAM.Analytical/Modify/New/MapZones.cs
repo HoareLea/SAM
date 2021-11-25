@@ -6,9 +6,9 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Zone> MapZones(this ArchitecturalModel architecturalModel, TextMap textMap)
+        public static List<Zone> MapZones(this BuildingModel buildingModel, TextMap textMap)
         {
-            if(textMap == null || architecturalModel == null)
+            if(textMap == null || buildingModel == null)
             {
                 return null;
             }
@@ -17,7 +17,7 @@ namespace SAM.Analytical
             if (zoneCategories == null || zoneCategories.Count() == 0)
                 return null;
 
-            List<Space> spaces = architecturalModel.GetSpaces();
+            List<Space> spaces = buildingModel.GetSpaces();
             if (spaces == null || spaces.Count == 0)
                 return null;
 
@@ -36,7 +36,7 @@ namespace SAM.Analytical
 
                     foreach (KeyValuePair<string, List<Space>> keyValuePair in dictionary)
                     {
-                        Zone zone = architecturalModel.UpdateZone(keyValuePair.Key, zoneCategory, keyValuePair.Value?.ToArray());
+                        Zone zone = buildingModel.UpdateZone(keyValuePair.Key, zoneCategory, keyValuePair.Value?.ToArray());
                         if (zone == null)
                             continue;
 

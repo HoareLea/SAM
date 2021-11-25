@@ -5,9 +5,9 @@ namespace SAM.Analytical
     public static partial class Query
     {
 
-        public static double DesignHeatingLoad(this ArchitecturalModel architecturalModel, Zone zone)
+        public static double DesignHeatingLoad(this BuildingModel buildingModel, Zone zone)
         {
-            List<Space> spaces = architecturalModel?.GetSpaces(zone);
+            List<Space> spaces = buildingModel?.GetSpaces(zone);
             if (spaces == null || spaces.Count == 0)
                 return double.NaN;
 

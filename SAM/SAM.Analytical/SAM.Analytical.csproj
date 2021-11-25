@@ -53,7 +53,7 @@
     <Compile Include="Classes\Boundary2D.cs" />
     <Compile Include="Classes\New\AirPartition.cs" />
     <Compile Include="Classes\New\OpeningTypeLibrary.cs" />
-    <Compile Include="Classes\New\ArchitecturalModel.cs" />
+    <Compile Include="Classes\New\BuildingModel.cs" />
     <Compile Include="Classes\New\BuildingElement.cs" />
     <Compile Include="Classes\New\BuildingElementType.cs" />
     <Compile Include="Classes\New\HostPartitionTypeLibrary.cs" />

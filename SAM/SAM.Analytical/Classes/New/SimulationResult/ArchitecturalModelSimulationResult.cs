@@ -4,33 +4,33 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class ArchitecturalModelSimulationResult : Result, IAnalyticalObject
+    public class BuildingModelSimulationResult : Result, IAnalyticalObject
     {
-        public ArchitecturalModelSimulationResult(string name, string source, string reference)
+        public BuildingModelSimulationResult(string name, string source, string reference)
             : base(name, source, reference)
         {
 
         }
 
-        public ArchitecturalModelSimulationResult(Guid guid, string name, string source, string reference)
+        public BuildingModelSimulationResult(Guid guid, string name, string source, string reference)
             : base(guid, name, source, reference)
         {
 
         }
 
-        public ArchitecturalModelSimulationResult(ArchitecturalModelSimulationResult architecturalModelSimulationResult)
-            : base(architecturalModelSimulationResult)
+        public BuildingModelSimulationResult(BuildingModelSimulationResult buildingModelSimulationResult)
+            : base(buildingModelSimulationResult)
         {
 
         }
 
-        public ArchitecturalModelSimulationResult(Guid guid, ArchitecturalModelSimulationResult architecturalModelSimulationResult)
-            : base(guid, architecturalModelSimulationResult)
+        public BuildingModelSimulationResult(Guid guid, BuildingModelSimulationResult buildingModelSimulationResult)
+            : base(guid, buildingModelSimulationResult)
         {
 
         }
 
-        public ArchitecturalModelSimulationResult(JObject jObject)
+        public BuildingModelSimulationResult(JObject jObject)
             : base(jObject)
         {
         }

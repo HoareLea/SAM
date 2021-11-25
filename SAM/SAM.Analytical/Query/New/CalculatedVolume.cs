@@ -2,15 +2,15 @@
 {
     public static partial class Query
     {
-        public static double CalculatedVolume(this Space space, ArchitecturalModel architecturalModel = null, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static double CalculatedVolume(this Space space, BuildingModel buildingModel = null, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (space.TryGetValue(SpaceParameter.Volume, out double result) && !double.IsNaN(result))
                 return result;
 
-            if (architecturalModel == null)
+            if (buildingModel == null)
                 return double.NaN;
 
-            return architecturalModel.GetVolume(space, silverSpacing, tolerance);
+            return buildingModel.GetVolume(space, silverSpacing, tolerance);
 
         }
     }

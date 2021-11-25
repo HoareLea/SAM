@@ -2,9 +2,9 @@
 {
     public static partial class Query
     {
-        public static double HeatingDesignTemperature(this Space space, ArchitecturalModel architecturalModel)
+        public static double HeatingDesignTemperature(this Space space, BuildingModel buildingModel)
         {
-            Profile profile = architecturalModel?.GetProfile(space, ProfileType.Heating, true);
+            Profile profile = buildingModel?.GetProfile(space, ProfileType.Heating, true);
             if (profile == null)
             {
                 return double.NaN;

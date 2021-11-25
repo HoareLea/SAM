@@ -4,9 +4,9 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static PartitionAnalyticalType PartitionAnalyticalType(this ArchitecturalModel architecturalModel, IPartition partition, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static PartitionAnalyticalType PartitionAnalyticalType(this BuildingModel buildingModel, IPartition partition, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if (architecturalModel == null || partition == null)
+            if (buildingModel == null || partition == null)
             {
                 return Analytical.PartitionAnalyticalType.Undefined;
             }
@@ -16,7 +16,7 @@ namespace SAM.Analytical
                 return Analytical.PartitionAnalyticalType.Air;
             }
 
-            List<Space> spaces = architecturalModel.GetSpaces(partition);
+            List<Space> spaces = buildingModel.GetSpaces(partition);
             if (spaces == null || spaces.Count == 0)
             {
                 return Analytical.PartitionAnalyticalType.Shade;
@@ -27,13 +27,13 @@ namespace SAM.Analytical
                 return Analytical.PartitionAnalyticalType.Roof;
             }
 
-            Architectural.Terrain terrain = architecturalModel.Terrain;
+            Architectural.Terrain terrain = buildingModel.Terrain;
 
             if (partition is Wall)
             {
                 Wall wall = partition as Wall;
 
-                if (architecturalModel.GetMaterialType(wall.Type) == Core.MaterialType.Transparent)
+                if (buildingModel.GetMaterialType(wall.Type) == Core.MaterialType.Transparent)
                 {
                     return Analytical.PartitionAnalyticalType.CurtainWall;
                 }

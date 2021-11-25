@@ -6,9 +6,9 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static Dictionary<IPartition, Architectural.MaterialLayer> InternalMaterialLayerDictionary(this ArchitecturalModel architecturalModel, Space space, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
+        public static Dictionary<IPartition, Architectural.MaterialLayer> InternalMaterialLayerDictionary(this BuildingModel buildingModel, Space space, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
         {
-            Dictionary<IPartition, Vector3D> dictionary = architecturalModel.NormalDictionary(space, out Shell shell, true, silverSpacing, tolerance);
+            Dictionary<IPartition, Vector3D> dictionary = buildingModel.NormalDictionary(space, out Shell shell, true, silverSpacing, tolerance);
             if(dictionary == null)
             {
                 return null;

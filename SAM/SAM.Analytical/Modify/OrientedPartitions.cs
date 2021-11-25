@@ -8,22 +8,22 @@ namespace SAM.Analytical
         /// <summary>
         /// Update Partitions normals in the given room to point out outside direction
         /// </summary>
-        /// <param name="architecturalModel">SAM Architectural Model</param>
+        /// <param name="buildingModel">SAM Architectural Model</param>
         /// <param name="space">Space</param>
         /// <param name="includeOpenings">Update Normals of Openings<</param>
         /// <param name="silverSpacing">Sliver Spacing Tolerance</param>
         /// <param name="flippedPartitions">Partitions have been flipped</param>
         /// <param name="tolerance">Distance Tolerance</param>
-        public static List<IPartition> OrientedPartitions(this ArchitecturalModel architecturalModel, Space space, bool includeOpenings, out List<IPartition> flippedPartitions, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<IPartition> OrientedPartitions(this BuildingModel buildingModel, Space space, bool includeOpenings, out List<IPartition> flippedPartitions, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             flippedPartitions = null;
             
-            if (architecturalModel == null || space == null)
+            if (buildingModel == null || space == null)
             {
                 return null;
             }
 
-            Dictionary<IPartition, Vector3D> dictionary = architecturalModel.NormalDictionary(space, out Shell shell, true, silverSpacing, tolerance);
+            Dictionary<IPartition, Vector3D> dictionary = buildingModel.NormalDictionary(space, out Shell shell, true, silverSpacing, tolerance);
             if (dictionary == null)
             {
                 return null;
@@ -60,14 +60,14 @@ namespace SAM.Analytical
         /// <summary>
         /// Update Partitions normals in the given room to point out outside direction
         /// </summary>
-        /// <param name="architecturalModel">SAM Architectural Model</param>
+        /// <param name="buildingModel">SAM Architectural Model</param>
         /// <param name="space">Space</param>
         /// <param name="includeOpenings">Update Normals of Openings<</param>
         /// <param name="silverSpacing">Sliver Spacing Tolerance</param>
         /// <param name="tolerance">Distance Tolerance</param>
-        public static List<IPartition> OrientedPartitions(this ArchitecturalModel architecturalModel, Space space, bool includeOpenings, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<IPartition> OrientedPartitions(this BuildingModel buildingModel, Space space, bool includeOpenings, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            return OrientedPartitions(architecturalModel, space, includeOpenings, out List<IPartition> flippedPartitions, silverSpacing, tolerance);
+            return OrientedPartitions(buildingModel, space, includeOpenings, out List<IPartition> flippedPartitions, silverSpacing, tolerance);
         }
 
     }

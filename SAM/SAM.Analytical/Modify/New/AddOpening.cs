@@ -105,9 +105,9 @@ namespace SAM.Analytical
             return openings?.FirstOrDefault();
         }
 
-        public static IOpening AddOpening(this ArchitecturalModel architecturalModel, IOpening opening, double tolerance = Core.Tolerance.Distance)
+        public static IOpening AddOpening(this BuildingModel buildingModel, IOpening opening, double tolerance = Core.Tolerance.Distance)
         {
-            if(TryAddOpening(architecturalModel, opening, tolerance))
+            if(TryAddOpening(buildingModel, opening, tolerance))
             {
                 return opening;
             }

@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMArchitecturalRelatedObjects()
           : base("SAMArchitectural.RelatedObjects", "SAMArchitectural.RelatedObjects",
-              "Related Objects in ArchitecturalModel",
+              "Related Objects in BuildingModel",
               "SAM", "Architectural")
         {
         }
@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "_architecturalModel", NickName = "_architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "_buildingModel", NickName = "_buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_object", NickName = "_object", Description = "Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "type_", NickName = "type_", Description = "Type", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
@@ -74,9 +74,9 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            ArchitecturalModel architecturalModel = null;
-            index = Params.IndexOfInputParam("_architecturalModel");
-            if (index == -1 || !dataAccess.GetData(index, ref architecturalModel) || architecturalModel == null)
+            BuildingModel buildingModel = null;
+            index = Params.IndexOfInputParam("_buildingModel");
+            if (index == -1 || !dataAccess.GetData(index, ref buildingModel) || buildingModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -108,7 +108,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            List<IJSAMObject> relatedObjects = architecturalModel.GetRelatedObjects(sAMObject, type);
+            List<IJSAMObject> relatedObjects = buildingModel.GetRelatedObjects(sAMObject, type);
 
             index = Params.IndexOfOutputParam("relatedObjects");
             if (index != -1)

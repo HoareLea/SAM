@@ -205,27 +205,27 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
             }
-            else if (sAMObject is ArchitecturalModel)
+            else if (sAMObject is BuildingModel)
             {
-                ArchitecturalModel architecturalModel = new ArchitecturalModel((ArchitecturalModel)sAMObject);
-                internalConditions = architecturalModel.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
+                BuildingModel buildingModel = new BuildingModel((BuildingModel)sAMObject);
+                internalConditions = buildingModel.MapInternalConditions(internalConditionLibrary, textMap, overrideNotFound, internalCondition_Default);
                 if (internalConditions != null)
                 {
-                    List<Space> spaces = architecturalModel.GetSpaces();
+                    List<Space> spaces = buildingModel.GetSpaces();
                     for (int i = 0; i < internalConditions.Count; i++)
                         if (internalConditions[i] == spaces[i].InternalCondition)
                             spaces_Unassigned.Add(spaces[i]);
 
-                    profiles = Analytical.Query.Profiles(architecturalModel, profileLibrary);
+                    profiles = Analytical.Query.Profiles(buildingModel, profileLibrary);
                     if(profiles != null)
                     {
                         foreach(Profile profile in profiles)
                         {
-                            architecturalModel.Add(profile);
+                            buildingModel.Add(profile);
                         }
                     }
 
-                    sAMObject = architecturalModel;
+                    sAMObject = buildingModel;
                 }
 
             }

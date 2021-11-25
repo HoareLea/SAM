@@ -4,22 +4,22 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static Zone UpdateZone(this ArchitecturalModel architecturalModel, string name, ZoneType zoneType, params Space[] spaces)
+        public static Zone UpdateZone(this BuildingModel buildingModel, string name, ZoneType zoneType, params Space[] spaces)
         {
-            if (architecturalModel == null || name == null)
+            if (buildingModel == null || name == null)
                 return null;
 
-            return UpdateZone(architecturalModel, name, zoneType.Text(), spaces);
+            return UpdateZone(buildingModel, name, zoneType.Text(), spaces);
         }
 
-        public static Zone UpdateZone(this ArchitecturalModel architecturalModel, string name, string zoneCategory, params Space[] spaces)
+        public static Zone UpdateZone(this BuildingModel buildingModel, string name, string zoneCategory, params Space[] spaces)
         {
-            if (architecturalModel == null || name == null)
+            if (buildingModel == null || name == null)
                 return null;
 
             Zone result = null;
 
-            List<Zone> zones = architecturalModel.GetObjects<Zone>(x => x.Name == name);
+            List<Zone> zones = buildingModel.GetObjects<Zone>(x => x.Name == name);
 
             if (zoneCategory != null)
             {
@@ -33,14 +33,14 @@ namespace SAM.Analytical
                 {
                     guid = System.Guid.NewGuid();
                 }
-                while (architecturalModel.GetObject<Zone>(guid) != null);
+                while (buildingModel.GetObject<Zone>(guid) != null);
 
                 result = Create.Zone(guid, name, zoneCategory);
                 if (result == null)
                     return null;
             }
 
-            architecturalModel.Add(result, spaces);
+            buildingModel.Add(result, spaces);
 
             return result;
         }

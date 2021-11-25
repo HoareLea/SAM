@@ -7,14 +7,14 @@ namespace SAM.Analytical.Grasshopper
 {
     public static partial class Modify
     {
-        public static bool DrawViewportWires(this ArchitecturalModel architecturalModel, GH_PreviewWireArgs previewWireArgs)
+        public static bool DrawViewportWires(this BuildingModel buildingModel, GH_PreviewWireArgs previewWireArgs)
         {
-            if(architecturalModel == null || previewWireArgs == null)
+            if(buildingModel == null || previewWireArgs == null)
             {
                 return false;
             }
 
-            List<Space> spaces = architecturalModel.GetObjects<Space>();
+            List<Space> spaces = buildingModel.GetObjects<Space>();
             if (spaces != null)
             {
                 foreach (Space space in spaces)
@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            List<IPartition> partitions = architecturalModel.GetObjects<IPartition>();
+            List<IPartition> partitions = buildingModel.GetObjects<IPartition>();
             if (partitions == null)
             {
                 return false;
@@ -58,7 +58,7 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                List<Space> spaces_hostPartition = architecturalModel.GetSpaces(partition);
+                List<Space> spaces_hostPartition = buildingModel.GetSpaces(partition);
                 if (spaces != null && spaces.Count > 1)
                     continue;
 

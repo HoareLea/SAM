@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "_architecturalModel", NickName = "_architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "_buildingModel", NickName = "_buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 GooMaterialLibraryParam gooMaterialLibraryParam = new GooMaterialLibraryParam { Name = "_materialLibrary_", NickName = "_materialLibrary_", Description = "SAM Core Material Library", Access = GH_ParamAccess.item };
                 gooMaterialLibraryParam.PersistentData.Append(new GooMaterialLibrary(Analytical.Query.DefaultMaterialLibrary()));
@@ -62,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "architecturalModel", NickName = "architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "buildingModel", NickName = "buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooMaterialParam() { Name = "materials", NickName = "materials", Description = "SAM Core Materials", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "missingMaterialNames", NickName = "missingMaterialNames", Description = "Missing Material Names. This Materials could not be found in MaterialLibrary and are still missing", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
@@ -79,9 +79,9 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            ArchitecturalModel architecturalModel = null;
-            index = Params.IndexOfInputParam("_architecturalModel");
-            if (index == -1 || !dataAccess.GetData(index, ref architecturalModel) || architecturalModel == null)
+            BuildingModel buildingModel = null;
+            index = Params.IndexOfInputParam("_buildingModel");
+            if (index == -1 || !dataAccess.GetData(index, ref buildingModel) || buildingModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -95,13 +95,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            architecturalModel = new ArchitecturalModel(architecturalModel);
+            buildingModel = new BuildingModel(buildingModel);
 
-            List<Core.IMaterial> materials = architecturalModel.AddMissingMaterials(materialLibrary, out List<string>  missingMaterialNames);
+            List<Core.IMaterial> materials = buildingModel.AddMissingMaterials(materialLibrary, out List<string>  missingMaterialNames);
 
-            index = Params.IndexOfOutputParam("architecturalModel");
+            index = Params.IndexOfOutputParam("buildingModel");
             if (index != -1)
-                dataAccess.SetData(index, new GooArchitecturalModel(architecturalModel));
+                dataAccess.SetData(index, new GooBuildingModel(buildingModel));
 
             index = Params.IndexOfOutputParam("materials");
             if (index != -1)

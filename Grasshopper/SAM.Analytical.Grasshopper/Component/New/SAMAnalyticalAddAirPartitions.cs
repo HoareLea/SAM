@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "_architecturalModel", NickName = "_architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "_buildingModel", NickName = "_buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_planes", NickName = "_planes", Description = "SAM Geometry Planes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
@@ -60,7 +60,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "architecturalModel", NickName = "architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "buildingModel", NickName = "buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -75,9 +75,9 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            ArchitecturalModel architecturalModel = null;
-            index = Params.IndexOfInputParam("_architecturalModel");
-            if (index == -1 || !dataAccess.GetData(index, ref architecturalModel) || architecturalModel == null)
+            BuildingModel buildingModel = null;
+            index = Params.IndexOfInputParam("_buildingModel");
+            if (index == -1 || !dataAccess.GetData(index, ref buildingModel) || buildingModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -143,13 +143,13 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            architecturalModel = new ArchitecturalModel(architecturalModel);
+            buildingModel = new BuildingModel(buildingModel);
 
-            architecturalModel.AddAirPartitions(planes, spaces);
+            buildingModel.AddAirPartitions(planes, spaces);
 
-            index = Params.IndexOfOutputParam("architecturalModel");
+            index = Params.IndexOfOutputParam("buildingModel");
             if (index != -1)
-                dataAccess.SetData(index, new GooArchitecturalModel(architecturalModel));
+                dataAccess.SetData(index, new GooBuildingModel(buildingModel));
         }
     }
 }

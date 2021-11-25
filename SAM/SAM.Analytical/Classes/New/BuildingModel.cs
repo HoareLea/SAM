@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
-    public class ArchitecturalModel : SAMModel, IAnalyticalObject
+    public class BuildingModel : SAMModel, IAnalyticalObject
     {
         private string description;
         private Location location;
@@ -20,27 +20,27 @@ namespace SAM.Analytical
         private MaterialLibrary materialLibrary;
         private ProfileLibrary profileLibrary;
 
-        public ArchitecturalModel(JObject jObject)
+        public BuildingModel(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public ArchitecturalModel(ArchitecturalModel architecturalModel)
-            : base(architecturalModel)
+        public BuildingModel(BuildingModel buildingModel)
+            : base(buildingModel)
         {
-            if (architecturalModel == null)
+            if (buildingModel == null)
             {
                 return;
             }
 
-            description = architecturalModel.description;
-            location = architecturalModel.location?.Clone();
-            address = architecturalModel.address?.Clone();
-            terrain = architecturalModel.terrain?.Clone();
-            materialLibrary = architecturalModel.materialLibrary?.Clone();
+            description = buildingModel.description;
+            location = buildingModel.location?.Clone();
+            address = buildingModel.address?.Clone();
+            terrain = buildingModel.terrain?.Clone();
+            materialLibrary = buildingModel.materialLibrary?.Clone();
 
-            relationCluster = architecturalModel.relationCluster?.Clone();
+            relationCluster = buildingModel.relationCluster?.Clone();
 
             List<object> objects = relationCluster?.GetObjects();
             if (objects != null)
@@ -57,7 +57,7 @@ namespace SAM.Analytical
 
         }
 
-        public ArchitecturalModel(string description, Location location, Address address, Terrain terrain, MaterialLibrary materialLibrary, ProfileLibrary profileLibrary)
+        public BuildingModel(string description, Location location, Address address, Terrain terrain, MaterialLibrary materialLibrary, ProfileLibrary profileLibrary)
             : base()
         {
             this.description = description;
@@ -1480,9 +1480,9 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<ArchitecturalModelSimulationResult> GetArchitecturalModelSimulationResults()
+        public List<BuildingModelSimulationResult> GetBuildingModelSimulationResults()
         {
-            return GetObjects<ArchitecturalModelSimulationResult>();
+            return GetObjects<BuildingModelSimulationResult>();
         }
 
         public bool Add(IPartition partition)
@@ -1906,9 +1906,9 @@ namespace SAM.Analytical
             return true;
         }
 
-        public bool Add(ArchitecturalModelSimulationResult architecturalModelSimulationResult)
+        public bool Add(BuildingModelSimulationResult buildingModelSimulationResult)
         {
-            if (architecturalModelSimulationResult == null)
+            if (buildingModelSimulationResult == null)
             {
                 return false;
             }
@@ -1918,9 +1918,9 @@ namespace SAM.Analytical
                 relationCluster = new RelationCluster();
             }
 
-            ArchitecturalModelSimulationResult architecturalModelSimulationResult_Temp = new ArchitecturalModelSimulationResult(architecturalModelSimulationResult);
+            BuildingModelSimulationResult buildingModelSimulationResult_Temp = new BuildingModelSimulationResult(buildingModelSimulationResult);
 
-            return relationCluster.AddObject(architecturalModelSimulationResult_Temp);
+            return relationCluster.AddObject(buildingModelSimulationResult_Temp);
         }
 
         public bool Add(MechanicalSystem mechanicalSystem, IEnumerable<Space> spaces = null)

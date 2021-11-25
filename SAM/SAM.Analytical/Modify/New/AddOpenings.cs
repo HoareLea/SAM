@@ -4,9 +4,9 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<IOpening> AddOpenings(this ArchitecturalModel architecturalModel, IEnumerable<IOpening> openings, double tolerance = Core.Tolerance.Distance)
+        public static List<IOpening> AddOpenings(this BuildingModel buildingModel, IEnumerable<IOpening> openings, double tolerance = Core.Tolerance.Distance)
         {
-            if(architecturalModel == null || openings == null)
+            if(buildingModel == null || openings == null)
             {
                 return null;
             }
@@ -14,7 +14,7 @@ namespace SAM.Analytical
             List<IOpening> result = new List<IOpening>();
             foreach(IOpening opening in openings)
             {
-                if(architecturalModel.TryAddOpening(opening, tolerance))
+                if(buildingModel.TryAddOpening(opening, tolerance))
                 {
                     result.Add(opening);
                 }

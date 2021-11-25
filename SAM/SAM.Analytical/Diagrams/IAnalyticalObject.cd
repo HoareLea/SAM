@@ -118,11 +118,11 @@
       <FileName>Classes\New\Wall.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="SAM.Analytical.ArchitecturalModel">
+  <Class Name="SAM.Analytical.BuildingModel">
     <Position X="0.5" Y="4.25" Width="3.5" />
     <TypeIdentifier>
       <HashCode>aYIEAGlFAAAoIAIIIIKgAA2iACIACWBCAkEgGBB0WBg=</HashCode>
-      <FileName>Classes\New\ArchitecturalModel.cs</FileName>
+      <FileName>Classes\New\BuildingModel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -134,11 +134,11 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="SAM.Analytical.ArchitecturalModelSimulationResult" Collapsed="true">
+  <Class Name="SAM.Analytical.BuildingModelSimulationResult" Collapsed="true">
     <Position X="5.25" Y="9.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
-      <FileName>Classes\New\SimulationResult\ArchitecturalModelSimulationResult.cs</FileName>
+      <FileName>Classes\New\SimulationResult\BuildingModelSimulationResult.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>

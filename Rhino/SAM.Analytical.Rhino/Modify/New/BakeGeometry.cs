@@ -64,14 +64,14 @@ namespace SAM.Analytical.Rhino
             return true;
         }
 
-        public static bool BakeGeometry(this ArchitecturalModel architecturalModel, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid obj_guid)
+        public static bool BakeGeometry(this BuildingModel buildingModel, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid obj_guid)
         {
             obj_guid = Guid.Empty;
 
-            if (architecturalModel == null || rhinoDoc == null || objectAttributes == null)
+            if (buildingModel == null || rhinoDoc == null || objectAttributes == null)
                 return false;
 
-            List<IPartition> partitions = architecturalModel.GetObjects<IPartition>();
+            List<IPartition> partitions = buildingModel.GetObjects<IPartition>();
             if (partitions == null || partitions.Count == 0)
                 return false;
 

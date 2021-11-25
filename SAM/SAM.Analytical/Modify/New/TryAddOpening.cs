@@ -6,11 +6,11 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static bool TryAddOpening(this ArchitecturalModel architecturalModel, IOpening opening, out IHostPartition hostPartition, double tolerance = Core.Tolerance.Distance)
+        public static bool TryAddOpening(this BuildingModel buildingModel, IOpening opening, out IHostPartition hostPartition, double tolerance = Core.Tolerance.Distance)
         {
             hostPartition = null;
             
-            if (architecturalModel == null || opening == null)
+            if (buildingModel == null || opening == null)
             {
                 return false;
             }
@@ -27,7 +27,7 @@ namespace SAM.Analytical
                 return false;
             }
 
-            List<IHostPartition> hostPartitions = architecturalModel.GetPartitions<IHostPartition>();
+            List<IHostPartition> hostPartitions = buildingModel.GetPartitions<IHostPartition>();
             if (hostPartitions == null)
             {
                 return false;
@@ -59,7 +59,7 @@ namespace SAM.Analytical
                 if (area - area_Temp - tolerance <= 0)
                 {
                     hostPartition = hostPartition_Temp;
-                    architecturalModel.Add(hostPartition);
+                    buildingModel.Add(hostPartition);
                     return true;
                 }
             }
@@ -84,9 +84,9 @@ namespace SAM.Analytical
             return openings != null && openings.Count != 0;
         }
 
-        public static bool TryAddOpening(this ArchitecturalModel architecturalModel, IOpening opening, double tolerance = Core.Tolerance.Distance)
+        public static bool TryAddOpening(this BuildingModel buildingModel, IOpening opening, double tolerance = Core.Tolerance.Distance)
         {
-            return TryAddOpening(architecturalModel, opening, out IHostPartition hostPartition, tolerance);
+            return TryAddOpening(buildingModel, opening, out IHostPartition hostPartition, tolerance);
         }
     }
 }

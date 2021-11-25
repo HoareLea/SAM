@@ -11,15 +11,15 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooArchitecturalModel : GooJSAMObject<ArchitecturalModel>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooBuildingModel : GooJSAMObject<BuildingModel>, IGH_PreviewData, IGH_BakeAwareData
     {
-        public GooArchitecturalModel()
+        public GooBuildingModel()
             : base()
         {
         }
 
-        public GooArchitecturalModel(ArchitecturalModel architecturalModel)
-            : base(architecturalModel)
+        public GooBuildingModel(BuildingModel buildingModel)
+            : base(buildingModel)
         {
         }
 
@@ -62,14 +62,14 @@ namespace SAM.Analytical.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GooArchitecturalModel(Value);
+            return new GooBuildingModel(Value);
         }
 
         public override bool CastFrom(object source)
         {
-            if (source is ArchitecturalModel)
+            if (source is BuildingModel)
             {
-                Value = (ArchitecturalModel)source;
+                Value = (BuildingModel)source;
                 return true;
             }
 
@@ -83,9 +83,9 @@ namespace SAM.Analytical.Grasshopper
                 {
                 }
 
-                if (source is ArchitecturalModel)
+                if (source is BuildingModel)
                 {
-                    Value = (ArchitecturalModel)source;
+                    Value = (BuildingModel)source;
                     return true;
                 }
             }
@@ -113,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
         }
     }
 
-    public class GooArchitecturalModelParam : GH_PersistentParam<GooArchitecturalModel>, IGH_PreviewObject, IGH_BakeAwareObject
+    public class GooBuildingModelParam : GH_PersistentParam<GooBuildingModel>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         public override Guid ComponentGuid => new Guid("F11A6C34-3376-4A5D-8C6C-1D5331A7C96A");
 
@@ -127,17 +127,17 @@ namespace SAM.Analytical.Grasshopper
 
         public bool IsBakeCapable => true;
 
-        public GooArchitecturalModelParam()
-            : base(typeof(ArchitecturalModel).Name, typeof(ArchitecturalModel).Name, typeof(ArchitecturalModel).FullName.Replace(".", " "), "Params", "SAM")
+        public GooBuildingModelParam()
+            : base(typeof(BuildingModel).Name, typeof(BuildingModel).Name, typeof(BuildingModel).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GooArchitecturalModel> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GooBuildingModel> values)
         {
             throw new NotImplementedException();
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GooArchitecturalModel value)
+        protected override GH_GetterResult Prompt_Singular(ref GooBuildingModel value)
         {
             throw new NotImplementedException();
         }

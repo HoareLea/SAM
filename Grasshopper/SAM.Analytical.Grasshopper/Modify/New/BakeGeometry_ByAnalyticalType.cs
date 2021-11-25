@@ -11,12 +11,12 @@ namespace SAM.Analytical.Grasshopper
 
             foreach (var variable in gH_Structure.AllData(true))
             {
-                if (variable is GooArchitecturalModel)
+                if (variable is GooBuildingModel)
                 {
-                    ArchitecturalModel architecturalModel = ((GooArchitecturalModel)variable).Value;
-                    if (architecturalModel != null)
+                    BuildingModel buildingModel = ((GooBuildingModel)variable).Value;
+                    if (buildingModel != null)
                     {
-                        Rhino.Modify.BakeGeometry_ByAnalyticalType(rhinoDoc, architecturalModel, cutOpenings, tolerance);
+                        Rhino.Modify.BakeGeometry_ByAnalyticalType(rhinoDoc, buildingModel, cutOpenings, tolerance);
                     }
                 }
             }

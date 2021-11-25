@@ -91,9 +91,9 @@ namespace SAM.Analytical
             return Cut(partition, planes, tolerance);
         }
 
-        public static List<T> Cut<T>(this ArchitecturalModel architecturalModel, Plane plane, IEnumerable<Space> spaces = null, double tolerance = Tolerance.Distance) where T : IPartition
+        public static List<T> Cut<T>(this BuildingModel buildingModel, Plane plane, IEnumerable<Space> spaces = null, double tolerance = Tolerance.Distance) where T : IPartition
         {
-            if (architecturalModel == null || plane == null)
+            if (buildingModel == null || plane == null)
             {
                 return null;
             }
@@ -101,14 +101,14 @@ namespace SAM.Analytical
             List<T> partitions = null;
             if (spaces == null || spaces.Count() == 0)
             {
-                partitions = architecturalModel.GetPartitions<T>();
+                partitions = buildingModel.GetPartitions<T>();
             }
             else
             {
                 partitions = new List<T>();
                 foreach (Space space in spaces)
                 {
-                    List<T> partitions_Space = architecturalModel.GetPartitions<T>(space);
+                    List<T> partitions_Space = buildingModel.GetPartitions<T>(space);
                     if (partitions_Space == null || partitions_Space.Count == 0)
                     {
                         continue;
@@ -135,13 +135,13 @@ namespace SAM.Analytical
                 List<T> partitions_Cut = partition.Cut(plane, tolerance);
                 if (partitions_Cut != null && partitions_Cut.Count > 1)
                 {
-                    List<IJSAMObject> relatedObjects = architecturalModel.GetRelatedObjects(partition);
-                    if (architecturalModel.RemoveObject(partition))
+                    List<IJSAMObject> relatedObjects = buildingModel.GetRelatedObjects(partition);
+                    if (buildingModel.RemoveObject(partition))
                     {
                         foreach (T partition_Cut in partitions_Cut)
                         {
-                            architecturalModel.Add(partition_Cut);
-                            relatedObjects?.ForEach(x => architecturalModel.AddRelation(partition_Cut, x));
+                            buildingModel.Add(partition_Cut);
+                            relatedObjects?.ForEach(x => buildingModel.AddRelation(partition_Cut, x));
                         }
                     }
 
@@ -152,9 +152,9 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<IPartition> Cut(this ArchitecturalModel architecturalModel, Plane plane, IEnumerable<Space> spaces = null, double tolerance = Tolerance.Distance)
+        public static List<IPartition> Cut(this BuildingModel buildingModel, Plane plane, IEnumerable<Space> spaces = null, double tolerance = Tolerance.Distance)
         {
-            return Cut<IPartition>(architecturalModel, plane, spaces, tolerance);
+            return Cut<IPartition>(buildingModel, plane, spaces, tolerance);
         }
     }
 }

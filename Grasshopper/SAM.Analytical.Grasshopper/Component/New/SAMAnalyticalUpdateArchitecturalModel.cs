@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateArchitecturalModel : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalUpdateBuildingModel : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -28,9 +28,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalUpdateArchitecturalModel()
-          : base("SAMAnalytical.UpdateArchitecturalModel", "SAMAnalytical.UpdateArchitecturalModel",
-              "Update ArchitecturalModel",
+        public SAMAnalyticalUpdateBuildingModel()
+          : base("SAMAnalytical.UpdateBuildingModel", "SAMAnalytical.UpdateBuildingModel",
+              "Update BuildingModel",
               "SAM", "Analytical")
         {
         }
@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "_architecturalModel", NickName = "_architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "_buildingModel", NickName = "_buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooLocationParam() { Name = "location_", NickName = "location_", Description = "SAM Core Location", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new GooAddressParam() { Name = "address_", NickName = "address_", Description = "SAM Core Address", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "description_", NickName = "description_", Description = "Description", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -59,7 +59,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "architecturalModel", NickName = "architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "buildingModel", NickName = "buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -74,15 +74,15 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            ArchitecturalModel architecturalModel = null;
-            index = Params.IndexOfInputParam("_architecturalModel");
-            if (index == -1 || !dataAccess.GetData(index, ref architecturalModel) || architecturalModel == null)
+            BuildingModel buildingModel = null;
+            index = Params.IndexOfInputParam("_buildingModel");
+            if (index == -1 || !dataAccess.GetData(index, ref buildingModel) || buildingModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            architecturalModel = new ArchitecturalModel(architecturalModel);
+            buildingModel = new BuildingModel(buildingModel);
 
             index = Params.IndexOfInputParam("location_");
             if (index != -1)
@@ -90,7 +90,7 @@ namespace SAM.Analytical.Grasshopper
                 Core.Location location = null;
                 if(dataAccess.GetData(index, ref location) && location != null)
                 {
-                    architecturalModel.Location = location;
+                    buildingModel.Location = location;
                 }
             }
 
@@ -100,7 +100,7 @@ namespace SAM.Analytical.Grasshopper
                 Core.Address address = null;
                 if (dataAccess.GetData(index, ref address) && address != null)
                 {
-                    architecturalModel.Address = address;
+                    buildingModel.Address = address;
                 }
             }
 
@@ -110,13 +110,13 @@ namespace SAM.Analytical.Grasshopper
                 string description = null;
                 if (dataAccess.GetData(index, ref description) && description != null)
                 {
-                    architecturalModel.Description = description;
+                    buildingModel.Description = description;
                 }
             }
 
-            index = Params.IndexOfOutputParam("architecturalModel");
+            index = Params.IndexOfOutputParam("buildingModel");
             if (index != -1)
-                dataAccess.SetData(index, new GooArchitecturalModel(architecturalModel));
+                dataAccess.SetData(index, new GooBuildingModel(buildingModel));
         }
     }
 }

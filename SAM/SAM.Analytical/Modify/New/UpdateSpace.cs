@@ -6,20 +6,20 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static bool UpdateSpace(this ArchitecturalModel architecturalModel, Space space, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static bool UpdateSpace(this BuildingModel buildingModel, Space space, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if (architecturalModel == null || space == null)
+            if (buildingModel == null || space == null)
                 return false;
 
             Point3D point3D = space.Location;
-            List<Space> spaces = architecturalModel.GetSpaces();
+            List<Space> spaces = buildingModel.GetSpaces();
             if (spaces == null || spaces.Count == 0)
                 return false;
 
             Dictionary<Space, Shell> dictionary = new Dictionary<Space, Shell>();
             foreach(Space space_Temp in spaces)
             {
-                Shell shell = architecturalModel.GetShell(space_Temp);
+                Shell shell = buildingModel.GetShell(space_Temp);
                 if (shell == null)
                     continue;
 
@@ -54,10 +54,10 @@ namespace SAM.Analytical
             if (space_Result == null)
                 return false;
 
-            List<IPartition> partitions = architecturalModel.GetPartitions(space_Result);
-            architecturalModel.RemoveObject(space_Result);
+            List<IPartition> partitions = buildingModel.GetPartitions(space_Result);
+            buildingModel.RemoveObject(space_Result);
 
-            architecturalModel.Add(space, partitions);
+            buildingModel.Add(space, partitions);
             return true;
         }
     }

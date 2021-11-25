@@ -6,27 +6,27 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static void UpdateMaterialsByHeatTransferCoefficients(this ArchitecturalModel architecturalModel, bool duplicateHostPartitionTypes, bool duplicateOpeningTypes, out List<HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes)
+        public static void UpdateMaterialsByHeatTransferCoefficients(this BuildingModel buildingModel, bool duplicateHostPartitionTypes, bool duplicateOpeningTypes, out List<HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes)
         {
-            UpdateMaterialsByHeatTransferCoefficients_HostPartitionTypes(architecturalModel, duplicateHostPartitionTypes, out hostPartitionTypes);
-            UpdateMaterialsByHeatTransferCoefficients_OpeningTypes(architecturalModel, duplicateOpeningTypes, out openingTypes);
+            UpdateMaterialsByHeatTransferCoefficients_HostPartitionTypes(buildingModel, duplicateHostPartitionTypes, out hostPartitionTypes);
+            UpdateMaterialsByHeatTransferCoefficients_OpeningTypes(buildingModel, duplicateOpeningTypes, out openingTypes);
         }
 
-        public static void UpdateMaterialsByHeatTransferCoefficients(this ArchitecturalModel architecturalModel, bool duplicateHostPartitionTypes, bool duplicateOpeningTypes, double tolerance = Tolerance.MacroDistance)
+        public static void UpdateMaterialsByHeatTransferCoefficients(this BuildingModel buildingModel, bool duplicateHostPartitionTypes, bool duplicateOpeningTypes, double tolerance = Tolerance.MacroDistance)
         {
-            if (architecturalModel == null)
+            if (buildingModel == null)
             {
                 return;
             }
 
-            UpdateMaterialsByHeatTransferCoefficients(architecturalModel, duplicateHostPartitionTypes, duplicateOpeningTypes, out List <HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes);
+            UpdateMaterialsByHeatTransferCoefficients(buildingModel, duplicateHostPartitionTypes, duplicateOpeningTypes, out List <HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes);
         }
 
-        private static void UpdateMaterialsByHeatTransferCoefficients_HostPartitionTypes(this ArchitecturalModel architecturalModel, bool duplicateHostPartitionTypes, out List<HostPartitionType> hostPartitionTypes)
+        private static void UpdateMaterialsByHeatTransferCoefficients_HostPartitionTypes(this BuildingModel buildingModel, bool duplicateHostPartitionTypes, out List<HostPartitionType> hostPartitionTypes)
         {
             hostPartitionTypes = null;
 
-            List<HostPartitionType> hostPartitionTypes_All = architecturalModel?.GetHostPartitionTypes();
+            List<HostPartitionType> hostPartitionTypes_All = buildingModel?.GetHostPartitionTypes();
             if (hostPartitionTypes_All == null)
                 return;
 
@@ -37,10 +37,10 @@ namespace SAM.Analytical
                 if (hostPartitionType == null)
                     continue;
 
-                if (!architecturalModel.HasMaterial(hostPartitionType, MaterialType.Gas))
+                if (!buildingModel.HasMaterial(hostPartitionType, MaterialType.Gas))
                     continue;
 
-                List<IHostPartition> hostPartitions = architecturalModel.GetHostPartitions(hostPartitionType);
+                List<IHostPartition> hostPartitions = buildingModel.GetHostPartitions(hostPartitionType);
                 if (hostPartitions == null || hostPartitions.Count == 0)
                     continue;
 
@@ -73,16 +73,16 @@ namespace SAM.Analytical
                         gasMaterials = null;
                         materialLayers_Out = null;
 
-                        if (!UpdateMaterialsByHeatTransferCoefficients(materialLayers_In, dictionary.Keys.First(), architecturalModel, out gasMaterials, out materialLayers_Out))
+                        if (!UpdateMaterialsByHeatTransferCoefficients(materialLayers_In, dictionary.Keys.First(), buildingModel, out gasMaterials, out materialLayers_Out))
                             continue;
 
-                        gasMaterials?.ForEach(x => architecturalModel.Add(x));
+                        gasMaterials?.ForEach(x => buildingModel.Add(x));
 
                         HostPartitionType hostPartitionType_New = Create.HostPartitionType(Query.HostPartitionCategory(hostPartitionType), hostPartitionType.Name, materialLayers_Out);
                         foreach (IHostPartition hostPartition in hostPartitions)
                         {
                             hostPartition.Type(hostPartitionType_New);
-                            architecturalModel.Add(hostPartition);
+                            buildingModel.Add(hostPartition);
                         }
 
                         hostPartitionTypes.Add(hostPartitionType_New);
@@ -98,17 +98,17 @@ namespace SAM.Analytical
                             gasMaterials = null;
                             materialLayers_Out = null;
 
-                            if (!UpdateMaterialsByHeatTransferCoefficients(materialLayers_In, keyValuePair.Key, architecturalModel, out gasMaterials, out materialLayers_Out))
+                            if (!UpdateMaterialsByHeatTransferCoefficients(materialLayers_In, keyValuePair.Key, buildingModel, out gasMaterials, out materialLayers_Out))
                                 continue;
 
-                            gasMaterials?.ForEach(x => architecturalModel.Add(x));
+                            gasMaterials?.ForEach(x => buildingModel.Add(x));
 
                             HostPartitionType hostPartitionType_New = Create.HostPartitionType(Query.HostPartitionCategory(hostPartitionType), name, materialLayers_Out);
 
                             foreach (IHostPartition hostPartition in keyValuePair.Value)
                             {
                                 hostPartition.Type(hostPartitionType_New);
-                                architecturalModel.Add(hostPartition);
+                                buildingModel.Add(hostPartition);
                             }
 
                             hostPartitionTypes.Add(hostPartitionType_New);
@@ -138,16 +138,16 @@ namespace SAM.Analytical
                     List<Architectural.MaterialLayer> materialLayers_In = hostPartitionType.MaterialLayers;
                     List<GasMaterial> gasMaterials = null;
 
-                    if (!UpdateMaterialsByHeatTransferCoefficients(materialLayers_In, tilt, architecturalModel, out gasMaterials, out materialLayers_Out))
+                    if (!UpdateMaterialsByHeatTransferCoefficients(materialLayers_In, tilt, buildingModel, out gasMaterials, out materialLayers_Out))
                         continue;
 
-                    gasMaterials?.ForEach(x => architecturalModel.Add(x));
+                    gasMaterials?.ForEach(x => buildingModel.Add(x));
 
                     HostPartitionType hostPartitionType_New = Create.HostPartitionType(Query.HostPartitionCategory(hostPartitionType), hostPartitionType.Name, materialLayers_Out);
                     foreach (IHostPartition hostPartition in hostPartitions)
                     {
                         hostPartition.Type(hostPartitionType_New);
-                        architecturalModel.Add(hostPartition);
+                        buildingModel.Add(hostPartition);
                     }
 
                     hostPartitionTypes.Add(hostPartitionType_New);
@@ -155,14 +155,14 @@ namespace SAM.Analytical
             }
         }
 
-        private static void UpdateMaterialsByHeatTransferCoefficients_OpeningTypes(this ArchitecturalModel architecturalModel, bool duplicateOpeningTypes, out List<OpeningType> openingTypes)
+        private static void UpdateMaterialsByHeatTransferCoefficients_OpeningTypes(this BuildingModel buildingModel, bool duplicateOpeningTypes, out List<OpeningType> openingTypes)
         {
             openingTypes = null;
 
-            if (architecturalModel == null)
+            if (buildingModel == null)
                 return;
 
-            List<OpeningType> openingTypes_All = architecturalModel.GetOpeningTypes();
+            List<OpeningType> openingTypes_All = buildingModel.GetOpeningTypes();
             if (openingTypes_All == null)
                 return;
 
@@ -173,10 +173,10 @@ namespace SAM.Analytical
                 if (openingType == null)
                     continue;
 
-                if (!architecturalModel.HasMaterial(openingType, MaterialType.Gas))
+                if (!buildingModel.HasMaterial(openingType, MaterialType.Gas))
                     continue;
 
-                List<IOpening> openings = architecturalModel.GetOpenings(openingType);
+                List<IOpening> openings = buildingModel.GetOpenings(openingType);
                 if (openings == null || openings.Count == 0)
                     continue;
 
@@ -211,16 +211,16 @@ namespace SAM.Analytical
                         paneMaterialLayers = null;
 
                         gasMaterials = null;
-                        paneUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.PaneMaterialLayers, dictionary.Keys.First(), architecturalModel, out gasMaterials, out paneMaterialLayers);
+                        paneUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.PaneMaterialLayers, dictionary.Keys.First(), buildingModel, out gasMaterials, out paneMaterialLayers);
                         if (paneUpdate)
-                            gasMaterials?.ForEach(x => architecturalModel.Add(x));
+                            gasMaterials?.ForEach(x => buildingModel.Add(x));
 
                         frameMaterialLayers = null;
 
                         gasMaterials = null;
-                        frameUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.FrameMaterialLayers, dictionary.Keys.First(), architecturalModel, out gasMaterials, out frameMaterialLayers);
+                        frameUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.FrameMaterialLayers, dictionary.Keys.First(), buildingModel, out gasMaterials, out frameMaterialLayers);
                         if (frameUpdate)
-                            gasMaterials?.ForEach(x => architecturalModel.Add(x));
+                            gasMaterials?.ForEach(x => buildingModel.Add(x));
 
                         if (paneUpdate || frameUpdate)
                         {
@@ -237,7 +237,7 @@ namespace SAM.Analytical
                             foreach(IOpening opening in openings)
                             {
                                 opening.Type(openingType_New);
-                                architecturalModel.Add(opening);
+                                buildingModel.Add(opening);
                             }
 
                             openingTypes.Add(openingType_New);
@@ -254,16 +254,16 @@ namespace SAM.Analytical
                             paneMaterialLayers = null;
 
                             gasMaterials = null;
-                            paneUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.PaneMaterialLayers, keyValuePair.Key, architecturalModel, out gasMaterials, out paneMaterialLayers);
+                            paneUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.PaneMaterialLayers, keyValuePair.Key, buildingModel, out gasMaterials, out paneMaterialLayers);
                             if (paneUpdate)
-                                gasMaterials?.ForEach(x => architecturalModel.Add(x));
+                                gasMaterials?.ForEach(x => buildingModel.Add(x));
 
                             frameMaterialLayers = null;
 
                             gasMaterials = null;
-                            frameUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.FrameMaterialLayers, keyValuePair.Key, architecturalModel, out gasMaterials, out frameMaterialLayers);
+                            frameUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.FrameMaterialLayers, keyValuePair.Key, buildingModel, out gasMaterials, out frameMaterialLayers);
                             if (frameUpdate)
-                                gasMaterials?.ForEach(x => architecturalModel.Add(x));
+                                gasMaterials?.ForEach(x => buildingModel.Add(x));
 
                             if (paneUpdate || frameUpdate)
                             {
@@ -280,7 +280,7 @@ namespace SAM.Analytical
                                 foreach (IOpening opening in openings)
                                 {
                                     opening.Type(openingType_New);
-                                    architecturalModel.Add(opening);
+                                    buildingModel.Add(opening);
                                 }
 
                                 openingTypes.Add(openingType_New);
@@ -314,14 +314,14 @@ namespace SAM.Analytical
                     List<GasMaterial> gasMaterials = null;
 
                     gasMaterials = null;
-                    paneUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.PaneMaterialLayers, tilt, architecturalModel, out gasMaterials, out paneMaterialLayers);
+                    paneUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.PaneMaterialLayers, tilt, buildingModel, out gasMaterials, out paneMaterialLayers);
                     if (paneUpdate)
-                        gasMaterials?.ForEach(x => architecturalModel.Add(x));
+                        gasMaterials?.ForEach(x => buildingModel.Add(x));
 
                     gasMaterials = null;
-                    frameUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.FrameMaterialLayers, tilt, architecturalModel, out gasMaterials, out frameMaterialLayers);
+                    frameUpdate = UpdateMaterialsByHeatTransferCoefficients(openingType.FrameMaterialLayers, tilt, buildingModel, out gasMaterials, out frameMaterialLayers);
                     if (frameUpdate)
-                        gasMaterials?.ForEach(x => architecturalModel.Add(x));
+                        gasMaterials?.ForEach(x => buildingModel.Add(x));
 
                     if (paneUpdate || frameUpdate)
                     {
@@ -338,7 +338,7 @@ namespace SAM.Analytical
                         foreach (IOpening opening in openings)
                         {
                             opening.Type(openingType_New);
-                            architecturalModel.Add(opening);
+                            buildingModel.Add(opening);
                         }
 
                         openingTypes.Add(openingType_New);
@@ -347,15 +347,15 @@ namespace SAM.Analytical
             }
         }
 
-        private static bool UpdateMaterialsByHeatTransferCoefficients(IEnumerable<Architectural.MaterialLayer> materialLayers_In, double tilt, ArchitecturalModel architecturalModel, out List<GasMaterial> gasMaterials, out List<Architectural.MaterialLayer> materialLayers_Out)
+        private static bool UpdateMaterialsByHeatTransferCoefficients(IEnumerable<Architectural.MaterialLayer> materialLayers_In, double tilt, BuildingModel buildingModel, out List<GasMaterial> gasMaterials, out List<Architectural.MaterialLayer> materialLayers_Out)
         {
             gasMaterials = null;
             materialLayers_Out = null;
 
-            if (materialLayers_In == null || architecturalModel == null)
+            if (materialLayers_In == null || buildingModel == null)
                 return false;
 
-            MaterialType materialType = architecturalModel.GetMaterialType(materialLayers_In);
+            MaterialType materialType = buildingModel.GetMaterialType(materialLayers_In);
             if (materialType == MaterialType.Undefined)
                 return false;
 
@@ -371,7 +371,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                GasMaterial gasMaterial = architecturalModel.GetMaterial<GasMaterial>(materialLayer);
+                GasMaterial gasMaterial = buildingModel.GetMaterial<GasMaterial>(materialLayer);
                 if (gasMaterial == null)
                 {
                     materialLayers_Out.Add(new Architectural.MaterialLayer(materialLayer));
@@ -409,7 +409,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                GasMaterial gasMaterial_New = architecturalModel.GetMaterial<GasMaterial>(name);
+                GasMaterial gasMaterial_New = buildingModel.GetMaterial<GasMaterial>(name);
                 if (gasMaterial_New == null)
                 {
                     gasMaterial_New = gasMaterials.Find(x => x.Name.Equals(name));

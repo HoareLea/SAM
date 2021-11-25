@@ -4,14 +4,14 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static int UniqueIndex(this ArchitecturalModel architecturalModel, IPartition partition)
+        public static int UniqueIndex(this BuildingModel buildingModel, IPartition partition)
         {
             if (partition == null)
             {
                 return -1;
             }
 
-            List<IPartition> partitions = architecturalModel?.GetPartitions();
+            List<IPartition> partitions = buildingModel?.GetPartitions();
             if (partitions == null || partitions.Count == 0)
             {
                 return -1;
@@ -28,14 +28,14 @@ namespace SAM.Analytical
             return index;
         }
 
-        public static int UniqueIndex(this ArchitecturalModel architecturalModel, IOpening opening)
+        public static int UniqueIndex(this BuildingModel buildingModel, IOpening opening)
         {
             if (opening == null)
             {
                 return -1;
             }
 
-            List<IOpening> openings = architecturalModel?.GetOpenings();
+            List<IOpening> openings = buildingModel?.GetOpenings();
             if (openings == null || openings.Count == 0)
             {
                 return -1;
@@ -53,14 +53,14 @@ namespace SAM.Analytical
 
         }
 
-        public static int UniqueIndex(this ArchitecturalModel architecturalModel, Space space)
+        public static int UniqueIndex(this BuildingModel buildingModel, Space space)
         {
-            if (architecturalModel == null || space == null)
+            if (buildingModel == null || space == null)
             {
                 return -1;
             }
 
-            List<Space> spaces = architecturalModel.GetSpaces();
+            List<Space> spaces = buildingModel.GetSpaces();
             if (spaces == null || spaces.Count == 0)
             {
                 return -1;
