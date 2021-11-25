@@ -1419,7 +1419,7 @@ namespace SAM.Analytical
 
         public List<T> GetResults<T>(IJSAMObject jSAMObject, string source = null) where T : Result
         {
-            List<T> result = GetRelatedObjects<T>(jSAMObject);
+            List<T> result = relationCluster?.GetRelatedObjects<T>(jSAMObject);
             if (result == null)
             {
                 return result;
@@ -1430,42 +1430,34 @@ namespace SAM.Analytical
                 result.RemoveAll(x => x.Source == null || x.Source != source);
             }
 
+            result?.ConvertAll(x => x.Clone());
+
             return result;
         }
 
-        public List<SpaceSimulationResult> GetSpaceSimulationResults(Space space)
+        public List<SpaceSimulationResult> GetSpaceSimulationResults(Space space, string source = null)
         {
-            if(space == null || relationCluster == null)
-            {
-                return null;
-            }
-
-            return relationCluster.GetRelatedObjects<SpaceSimulationResult>(space)?.ConvertAll(x => new SpaceSimulationResult(x));
+            return GetResults<SpaceSimulationResult>(space, source);
         }
 
-        public List<PartitionSimulationResult> GetPartitionSimulationResults(IPartition partition)
+        public List<PartitionSimulationResult> GetPartitionSimulationResults(IPartition partition, string source = null)
         {
-            if (partition == null || relationCluster == null)
-            {
-                return null;
-            }
-
-            return relationCluster.GetRelatedObjects<PartitionSimulationResult>(partition)?.ConvertAll(x => new PartitionSimulationResult(x));
+            return GetResults<PartitionSimulationResult>(partition, source);
         }
 
-        public List<OpeningSimulationResult> GetOpeningSimulationResults(IOpening opening)
+        public List<OpeningSimulationResult> GetOpeningSimulationResults(IOpening opening, string source = null)
         {
             if (opening == null || relationCluster == null)
             {
                 return null;
             }
 
-            List<OpeningSimulationResult> result = relationCluster.GetRelatedObjects<OpeningSimulationResult>(opening)?.ConvertAll(x => new OpeningSimulationResult(x));
+            List<OpeningSimulationResult> result = GetResults<OpeningSimulationResult>(opening, source);
 
             IHostPartition hostPartition = GetHostPartition(opening);
             if(hostPartition != null)
             {
-                List<OpeningSimulationResult> openingSimulationResults_HostPartition = relationCluster.GetRelatedObjects<OpeningSimulationResult>(hostPartition)?.ConvertAll(x => new OpeningSimulationResult(x));
+                List<OpeningSimulationResult> openingSimulationResults_HostPartition = GetResults<OpeningSimulationResult>(hostPartition, source);
                 if(openingSimulationResults_HostPartition != null)
                 {
                     if (result == null)
@@ -1480,9 +1472,22 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<BuildingModelSimulationResult> GetBuildingModelSimulationResults()
+        public List<BuildingModelSimulationResult> GetBuildingModelSimulationResults(string source = null)
         {
-            return GetObjects<BuildingModelSimulationResult>();
+            List<BuildingModelSimulationResult> result = relationCluster?.GetObjects<BuildingModelSimulationResult>();
+            if(result == null)
+            {
+                return null;
+            }
+
+            if (source != null)
+            {
+                result.RemoveAll(x => x.Source == null || x.Source != source);
+            }
+
+            result?.ConvertAll(x => x.Clone());
+
+            return result;
         }
 
         public bool Add(IPartition partition)
