@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
-    public class AdjacencyCluster : Core.RelationCluster
+    public class AdjacencyCluster : Core.RelationCluster, IAnalyticalObject
     {        
         public AdjacencyCluster()
             : base()
@@ -229,6 +229,22 @@ namespace SAM.Analytical
             return result;
         }
 
+        public List<T> GetResults<T>(Core.IJSAMObject jSAMObject, string source = null) where T: Core.Result
+        {
+            List<T> result = GetRelatedObjects<T>(jSAMObject);
+            if(result == null)
+            {
+                return result;
+            }
+
+            if(source != null)
+            {
+                result.RemoveAll(x => x.Source == null || x.Source != source);
+            }
+
+            return result;
+        }
+        
         public List<Panel> GetPanels(Space space)
         {
             return GetRelatedObjects<Panel>(space);

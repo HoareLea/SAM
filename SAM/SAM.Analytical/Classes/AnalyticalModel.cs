@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class AnalyticalModel : SAMModel
+    public class AnalyticalModel : SAMModel, IAnalyticalObject
     {
         private string description;
         private Location location;

@@ -1417,6 +1417,22 @@ namespace SAM.Analytical
             return GetObjects<T>();
         }
 
+        public List<T> GetResults<T>(IJSAMObject jSAMObject, string source = null) where T : Result
+        {
+            List<T> result = GetRelatedObjects<T>(jSAMObject);
+            if (result == null)
+            {
+                return result;
+            }
+
+            if (source != null)
+            {
+                result.RemoveAll(x => x.Source == null || x.Source != source);
+            }
+
+            return result;
+        }
+
         public List<SpaceSimulationResult> GetSpaceSimulationResults(Space space)
         {
             if(space == null || relationCluster == null)
