@@ -8,23 +8,23 @@ namespace SAM.Analytical
         /// <summary>
         /// Update Partitions normals to point out outside direction
         /// </summary>
-        /// <param name="architecturalModel">SAM Architectural Model</param>
+        /// <param name="buildingModel">SAM Architectural Model</param>
         /// <param name="includeOpenings">Update Normals of Openings</param>
         /// <param name="silverSpacing">Sliver Spacing Tolerance</param>
         /// <param name="tolerance">Distance Tolerance</param>
-        public static void OrientPartitions(this ArchitecturalModel architecturalModel, bool includeOpenings, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static void OrientPartitions(this BuildingModel buildingModel, bool includeOpenings, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if (architecturalModel == null)
+            if (buildingModel == null)
                 return;
 
-            List<Space> spaces = architecturalModel.GetSpaces();
+            List<Space> spaces = buildingModel.GetSpaces();
             if (spaces == null || spaces.Count == 0)
                 return;
 
             HashSet<System.Guid> guids = new HashSet<System.Guid>();
             foreach (Space space in spaces)
             {
-                List<IPartition> partitions = architecturalModel.OrientedPartitions(space, includeOpenings, silverSpacing, tolerance);
+                List<IPartition> partitions = buildingModel.OrientedPartitions(space, includeOpenings, silverSpacing, tolerance);
                 if(partitions == null || partitions.Count == 0)
                 {
                     continue;
@@ -39,7 +39,7 @@ namespace SAM.Analytical
 
                     guids.Add(partition.Guid);
 
-                    architecturalModel.Add(partition);
+                    buildingModel.Add(partition);
                 }
             }
         }
@@ -47,19 +47,19 @@ namespace SAM.Analytical
         /// <summary>
         /// Update Partitions normals in the given room to point out outside direction
         /// </summary>
-        /// <param name="architecturalModel">SAM Architectural Model</param>
+        /// <param name="buildingModel">SAM Architectural Model</param>
         /// <param name="space">Space</param>
         /// <param name="includeOpenings">Update Normals of Openings<</param>
         /// <param name="silverSpacing">Sliver Spacing Tolerance</param>
         /// <param name="tolerance">Distance Tolerance</param>
-        public static void OrientPartitions(this ArchitecturalModel architecturalModel, Space space, bool includeOpenings, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static void OrientPartitions(this BuildingModel buildingModel, Space space, bool includeOpenings, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if (architecturalModel == null || space == null)
+            if (buildingModel == null || space == null)
             {
                 return;
             }
 
-            architecturalModel.OrientedPartitions(space, includeOpenings, out List<IPartition> flippedPartitions, silverSpacing, tolerance);
+            buildingModel.OrientedPartitions(space, includeOpenings, out List<IPartition> flippedPartitions, silverSpacing, tolerance);
 
             if(flippedPartitions == null || flippedPartitions.Count == 0)
             {
@@ -68,7 +68,7 @@ namespace SAM.Analytical
 
             foreach(IPartition partition in flippedPartitions)
             {
-                architecturalModel.Add(partition);
+                buildingModel.Add(partition);
             }
         }
 

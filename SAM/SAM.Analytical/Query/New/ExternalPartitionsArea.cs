@@ -4,12 +4,12 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static double ExternalPartitionsArea(this ArchitecturalModel architecturalModel, Space space)
+        public static double ExternalPartitionsArea(this BuildingModel buildingModel, Space space)
         {
-            if (architecturalModel == null || space == null)
+            if (buildingModel == null || space == null)
                 return double.NaN;
 
-            List<IHostPartition> hostPartitions = architecturalModel.GetObjects((IHostPartition hostPartition) => !architecturalModel.Underground(hostPartition) && architecturalModel.External(hostPartition));
+            List<IHostPartition> hostPartitions = buildingModel.GetObjects((IHostPartition hostPartition) => !buildingModel.Underground(hostPartition) && buildingModel.External(hostPartition));
             if (hostPartitions == null || hostPartitions.Count == 0)
                 return double.NaN;
 

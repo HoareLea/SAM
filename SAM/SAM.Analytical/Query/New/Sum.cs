@@ -4,12 +4,12 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static double Sum(this ArchitecturalModel architecturalModel, Zone zone, string name)
+        public static double Sum(this BuildingModel buildingModel, Zone zone, string name)
         {
-            if (architecturalModel == null || zone == null || string.IsNullOrWhiteSpace(name))
+            if (buildingModel == null || zone == null || string.IsNullOrWhiteSpace(name))
                 return double.NaN;
 
-            List<Space> spaces = architecturalModel.GetSpaces(zone);
+            List<Space> spaces = buildingModel.GetSpaces(zone);
             if (spaces == null)
                 return double.NaN;
 
@@ -30,12 +30,12 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static double Sum(this ArchitecturalModel architecturalModel, Zone zone, SpaceParameter spaceParameter)
+        public static double Sum(this BuildingModel buildingModel, Zone zone, SpaceParameter spaceParameter)
         {
-            if (architecturalModel == null || zone == null)
+            if (buildingModel == null || zone == null)
                 return double.NaN;
 
-            List<Space> spaces = architecturalModel.GetSpaces(zone);
+            List<Space> spaces = buildingModel.GetSpaces(zone);
             if (spaces == null)
                 return double.NaN;
 

@@ -7,7 +7,7 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Modify
     {
-        public static void BakeGeometry_ByAnalyticalType(this RhinoDoc rhinoDoc, ArchitecturalModel architecturalModel, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
+        public static void BakeGeometry_ByAnalyticalType(this RhinoDoc rhinoDoc, BuildingModel buildingModel, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
         {
             global::Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
             if (layerTable == null)
@@ -33,7 +33,7 @@ namespace SAM.Analytical.Rhino
 
             ObjectAttributes objectAttributes = rhinoDoc.CreateDefaultAttributes();
 
-            List<IPartition> partitions = architecturalModel.GetPartitions();
+            List<IPartition> partitions = buildingModel.GetPartitions();
 
             List<Guid> guids = new List<Guid>();
             foreach (IPartition partition in partitions)
@@ -43,7 +43,7 @@ namespace SAM.Analytical.Rhino
                     continue;
                 }
 
-                PartitionAnalyticalType analyticalType = architecturalModel.PartitionAnalyticalType(partition);
+                PartitionAnalyticalType analyticalType = buildingModel.PartitionAnalyticalType(partition);
                 System.Drawing.Color color = analyticalType.Color();
 
                 string layerName = Core.Query.Description(analyticalType);

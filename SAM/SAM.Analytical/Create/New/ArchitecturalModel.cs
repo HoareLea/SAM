@@ -12,7 +12,7 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static BuildingModel BuildingModel(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             if (segmentable2Ds == null || double.IsNaN(elevation_Min) || double.IsNaN(elevation_Max))
                 return null;
@@ -22,7 +22,7 @@ namespace SAM.Analytical
             Plane plane_Min = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Min)) as Plane;
             Plane plane_Max = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Max)) as Plane;
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, new PlanarTerrain(plane_Min), null, null);
+            BuildingModel result = new BuildingModel(null, null, null, new PlanarTerrain(plane_Min), null, null);
 
             Plane plane_Min_Flipped = new Plane(plane_Min);
             plane_Min_Flipped.FlipZ();
@@ -117,7 +117,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Face3D> face3Ds, double elevation_Ground = 0, double tolerance = Tolerance.Distance)
+        public static BuildingModel BuildingModel(this IEnumerable<Face3D> face3Ds, double elevation_Ground = 0, double tolerance = Tolerance.Distance)
         {
             if (face3Ds == null)
                 return null;
@@ -217,7 +217,7 @@ namespace SAM.Analytical
                     dictionaries_Room.Add(dictionary_Space);
             }
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, Architectural.Create.PlanarTerrain(elevation_Ground), null, null);
+            BuildingModel result = new BuildingModel(null, null, null, Architectural.Create.PlanarTerrain(elevation_Ground), null, null);
             foreach (Dictionary<Space, List<IHostPartition>> dictionary_Room in dictionaries_Room)
             {
                 foreach (KeyValuePair<Space, List<IHostPartition>> keyValuePair in dictionary_Room)
@@ -231,7 +231,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static ArchitecturalModel ArchitecturalModel(this IEnumerable<Shell> shells, IEnumerable<IPartition> partitions, double groundElevation = 0, bool addMissingPartitions = true, MaterialLibrary materialLibrary = null, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static BuildingModel BuildingModel(this IEnumerable<Shell> shells, IEnumerable<IPartition> partitions, double groundElevation = 0, bool addMissingPartitions = true, MaterialLibrary materialLibrary = null, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             if(shells == null && partitions == null)
             {
@@ -569,7 +569,7 @@ namespace SAM.Analytical
                 }
             }
 
-            ArchitecturalModel result = new ArchitecturalModel(null, null, null, Architectural.Create.PlanarTerrain(groundElevation), null, null);
+            BuildingModel result = new BuildingModel(null, null, null, Architectural.Create.PlanarTerrain(groundElevation), null, null);
             foreach (Tuple<Space, List<IPartition>> tuple in tuples)
             {
                 result.Add(tuple.Item1, tuple.Item2);

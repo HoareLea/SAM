@@ -6,14 +6,14 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static Dictionary<IPartition, Vector3D> NormalDictionary(this ArchitecturalModel architecturalModel, Space space, out Shell shell, bool external = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static Dictionary<IPartition, Vector3D> NormalDictionary(this BuildingModel buildingModel, Space space, out Shell shell, bool external = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             shell = null;
 
-            if (architecturalModel == null || space == null)
+            if (buildingModel == null || space == null)
                 return null;
 
-            List<IPartition> partitions = architecturalModel.GetPartitions(space);
+            List<IPartition> partitions = buildingModel.GetPartitions(space);
             if (partitions == null)
                 return null;
 

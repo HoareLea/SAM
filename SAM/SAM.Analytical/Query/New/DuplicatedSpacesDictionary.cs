@@ -6,9 +6,9 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static Dictionary<Shell, List<Space>> DuplicatedSpacesDictionary(this ArchitecturalModel architecturalModel)
+        public static Dictionary<Shell, List<Space>> DuplicatedSpacesDictionary(this BuildingModel buildingModel)
         {
-            List<Space> spaces = architecturalModel?.GetSpaces();
+            List<Space> spaces = buildingModel?.GetSpaces();
             if (spaces == null)
                 return null;
 
@@ -20,7 +20,7 @@ namespace SAM.Analytical
 
             foreach(Space space in spaces)
             {
-                Shell shell = architecturalModel.GetShell(space);
+                Shell shell = buildingModel.GetShell(space);
                 if (shell == null)
                     continue;
 

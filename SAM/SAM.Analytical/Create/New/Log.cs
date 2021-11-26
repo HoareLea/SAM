@@ -8,59 +8,59 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static Log Log(this ArchitecturalModel architecturalModel)
+        public static Log Log(this BuildingModel buildingModel)
         {
-            if(architecturalModel == null)
+            if(buildingModel == null)
             {
                 return null;
             }
 
             Log result = new Log();
 
-            List<HostPartitionType> hostPartitionTypes = architecturalModel.GetHostPartitionTypes();
+            List<HostPartitionType> hostPartitionTypes = buildingModel.GetHostPartitionTypes();
             if (hostPartitionTypes != null)
             {
                 foreach (HostPartitionType hostPartitionType in hostPartitionTypes)
-                    Core.Modify.AddRange(result, hostPartitionType?.Log(architecturalModel));
+                    Core.Modify.AddRange(result, hostPartitionType?.Log(buildingModel));
             }
 
-            List<OpeningType> openingTypes = architecturalModel.GetOpeningTypes();
+            List<OpeningType> openingTypes = buildingModel.GetOpeningTypes();
             if (openingTypes != null)
             {
                 foreach (OpeningType openingType in openingTypes)
-                    Core.Modify.AddRange(result, openingType?.Log(architecturalModel));
+                    Core.Modify.AddRange(result, openingType?.Log(buildingModel));
             }
 
-            List<IPartition> partitions = architecturalModel.GetPartitions();
+            List<IPartition> partitions = buildingModel.GetPartitions();
             if (partitions != null && partitions.Count != 0)
             {
                 foreach (IPartition partition in partitions)
-                    Core.Modify.AddRange(result, partition?.Log(architecturalModel));
+                    Core.Modify.AddRange(result, partition?.Log(buildingModel));
             }
 
-            List<Space> spaces = architecturalModel.GetSpaces();
+            List<Space> spaces = buildingModel.GetSpaces();
             if (spaces != null && spaces.Count != 0)
             {
                 foreach (Space space in spaces)
-                    Core.Modify.AddRange(result, space?.Log(architecturalModel));
+                    Core.Modify.AddRange(result, space?.Log(buildingModel));
             }
 
             return result;
         }
 
-        public static Log Log(this Space space, ArchitecturalModel architecturalModel = null)
+        public static Log Log(this Space space, BuildingModel buildingModel = null)
         {
             if (space == null)
                 return null;
 
             Log result = new Log();
 
-            Core.Modify.AddRange(result, space.InternalCondition?.Log(architecturalModel));
+            Core.Modify.AddRange(result, space.InternalCondition?.Log(buildingModel));
 
             return result;
         }
 
-        public static Log Log(this InternalCondition internalCondition, ArchitecturalModel architecturalModel = null)
+        public static Log Log(this InternalCondition internalCondition, BuildingModel buildingModel = null)
         {
             if (internalCondition == null)
                 return null;
@@ -87,7 +87,7 @@ namespace SAM.Analytical
                 Profile profile = null;
                 if (!string.IsNullOrEmpty(profileName))
                 {
-                    profile = architecturalModel.GetProfile(internalCondition, profileType);
+                    profile = buildingModel.GetProfile(internalCondition, profileType);
                     if (profile == null)
                     {
                         result.Add(string.Format("Cannot find valid {0} profile for {1} InternalCondition (Guid: {2})", profileType.Text(), name, internalCondition.Guid));
@@ -195,7 +195,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static Log Log(this HostPartitionType hostPartitionType, ArchitecturalModel architecturalModel = null)
+        public static Log Log(this HostPartitionType hostPartitionType, BuildingModel buildingModel = null)
         {
             if (hostPartitionType == null)
                 return null;
@@ -211,12 +211,12 @@ namespace SAM.Analytical
 
             List<MaterialLayer> materialLayers = hostPartitionType?.MaterialLayers;
             if (materialLayers != null && materialLayers.Count > 0)
-                Core.Modify.AddRange(result, materialLayers?.Log(hostPartitionType.Name, hostPartitionType.Guid, architecturalModel));
+                Core.Modify.AddRange(result, materialLayers?.Log(hostPartitionType.Name, hostPartitionType.Guid, buildingModel));
 
             return result;
         }
 
-        public static Log Log(this IPartition partition, ArchitecturalModel architecturalModel = null)
+        public static Log Log(this IPartition partition, BuildingModel buildingModel = null)
         {
             if (partition == null)
             {
@@ -264,7 +264,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static Log Log(this OpeningType openingType, ArchitecturalModel architecturalModel = null)
+        public static Log Log(this OpeningType openingType, BuildingModel buildingModel = null)
         {
             if (openingType == null)
                 return null;
@@ -275,16 +275,16 @@ namespace SAM.Analytical
 
             materialLayers = openingType?.PaneMaterialLayers;
             if (materialLayers != null && materialLayers.Count > 0)
-                Core.Modify.AddRange(result, materialLayers?.Log(openingType.Name, openingType.Guid, architecturalModel));
+                Core.Modify.AddRange(result, materialLayers?.Log(openingType.Name, openingType.Guid, buildingModel));
 
             materialLayers = openingType?.FrameMaterialLayers;
             if (materialLayers != null && materialLayers.Count > 0)
-                Core.Modify.AddRange(result, materialLayers?.Log(openingType.Name, openingType.Guid, architecturalModel));
+                Core.Modify.AddRange(result, materialLayers?.Log(openingType.Name, openingType.Guid, buildingModel));
 
             return result;
         }
         
-        public static Log Log(this IOpening opening, ArchitecturalModel architecturalModel = null)
+        public static Log Log(this IOpening opening, BuildingModel buildingModel = null)
         {
             if (opening == null)
             {
@@ -318,9 +318,9 @@ namespace SAM.Analytical
                 result.Add(string.Format("{0} opening (Guid: {1}) has no type assigned.", name, opening.Guid), LogRecordType.Error);
             }
 
-            if(architecturalModel != null)
+            if(buildingModel != null)
             {
-                IHostPartition hostPartition = architecturalModel.GetHostPartition(opening);
+                IHostPartition hostPartition = buildingModel.GetHostPartition(opening);
                 if(hostPartition == null)
                 {
                     result.Add(string.Format("{0} opening (Guid: {1}) has no host.", name, opening.Guid), LogRecordType.Warning);
@@ -330,7 +330,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        private static Log Log(this IEnumerable<MaterialLayer> materialLayers, string name, Guid guid, ArchitecturalModel architecturalModel = null)
+        private static Log Log(this IEnumerable<MaterialLayer> materialLayers, string name, Guid guid, BuildingModel buildingModel = null)
         {
             if (materialLayers == null)
                 return null;
@@ -343,14 +343,14 @@ namespace SAM.Analytical
 
             Core.Modify.AddRange(result, Architectural.Create.Log(materialLayers, name, guid));
 
-            if(architecturalModel != null)
+            if(buildingModel != null)
             {
-                MaterialType materialType = architecturalModel.GetMaterialType(materialLayers);
+                MaterialType materialType = buildingModel.GetMaterialType(materialLayers);
 
                 int index = 0;
                 foreach (ConstructionLayer constructionLayer in materialLayers)
                 {
-                    IMaterial material = architecturalModel.GetMaterial(constructionLayer);
+                    IMaterial material = buildingModel.GetMaterial(constructionLayer);
                     if (material == null)
                         result.Add(string.Format("Material Library does not contain Material {0} for {1} (Guid: {2}) (Construction Layer Index: {3})", constructionLayer.Name, name_Temp, guid, index), LogRecordType.Error);
 

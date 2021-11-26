@@ -5,9 +5,9 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static void SimplifyByAngle(this ArchitecturalModel architecturalModel, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static void SimplifyByAngle(this BuildingModel buildingModel, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            List<IPartition> partitions = architecturalModel?.GetPartitions();
+            List<IPartition> partitions = buildingModel?.GetPartitions();
             if(partitions == null)
             {
                 return;
@@ -50,7 +50,7 @@ namespace SAM.Analytical
                 }
 
 
-                architecturalModel.Add(partition_New);
+                buildingModel.Add(partition_New);
             }
         }
     }

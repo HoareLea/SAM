@@ -7,14 +7,14 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<IOpening> OffsetAperturesOnEdge(this ArchitecturalModel architecturalModel, double distance, double tolerance = Core.Tolerance.Distance)
+        public static List<IOpening> OffsetAperturesOnEdge(this BuildingModel buildingModel, double distance, double tolerance = Core.Tolerance.Distance)
         {
-            if (architecturalModel == null)
+            if (buildingModel == null)
             {
                 return null;
             }
 
-            List<IHostPartition> hostPartitions = architecturalModel.GetPartitions<IHostPartition>();
+            List<IHostPartition> hostPartitions = buildingModel.GetPartitions<IHostPartition>();
             if (hostPartitions == null || hostPartitions.Count == 0)
             {
                 return null;
@@ -29,7 +29,7 @@ namespace SAM.Analytical
                     List<IOpening> openings_Offset = hostPartition.OffsetAperturesOnEdge(distance, tolerance);
                     if(openings_Offset != null && openings_Offset.Count != 0)
                     {
-                        architecturalModel.Add(hostPartition);
+                        buildingModel.Add(hostPartition);
                         result.AddRange(openings_Offset);
                     }
                 }

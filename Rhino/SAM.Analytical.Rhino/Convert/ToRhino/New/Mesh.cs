@@ -69,9 +69,9 @@ namespace SAM.Analytical.Rhino
             return result;
         }
 
-        public static Mesh ToRhino_Mesh(this ArchitecturalModel architecturalModel, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
+        public static Mesh ToRhino_Mesh(this BuildingModel buildingModel, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
         {
-            List<IHostPartition> hostPartitions = architecturalModel.GetObjects<IHostPartition>();
+            List<IHostPartition> hostPartitions = buildingModel.GetObjects<IHostPartition>();
             if (hostPartitions == null || hostPartitions.Count == 0)
             {
                 return null;

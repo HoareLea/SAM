@@ -5,11 +5,11 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<IPartition> TriangulateConcavePartitions(this ArchitecturalModel architecturalModel, out List<IPartition> triangulatedPartitions, double tolerance = Tolerance.Distance)
+        public static List<IPartition> TriangulateConcavePartitions(this BuildingModel buildingModel, out List<IPartition> triangulatedPartitions, double tolerance = Tolerance.Distance)
         {
             triangulatedPartitions = null;
 
-            List<IPartition> partitions = architecturalModel?.GetObjects<IPartition>(x => x != null && Geometry.Spatial.Query.Concave(x));
+            List<IPartition> partitions = buildingModel?.GetObjects<IPartition>(x => x != null && Geometry.Spatial.Query.Concave(x));
             if(partitions == null)
             {
                 return null;
@@ -28,7 +28,7 @@ namespace SAM.Analytical
 
                 triangulatedPartitions.Add(partition);
 
-                List<IJSAMObject> relatedObjects = architecturalModel.GetRelatedObjects(partition);
+                List<IJSAMObject> relatedObjects = buildingModel.GetRelatedObjects(partition);
 
                 foreach (IPartition partition_Triangulate in partitions_Triangulate)
                 {
@@ -39,12 +39,12 @@ namespace SAM.Analytical
 
                     result.Add(partition_Triangulate);
 
-                    architecturalModel.Add(partition_Triangulate);
+                    buildingModel.Add(partition_Triangulate);
 
                     if (relatedObjects != null && relatedObjects.Count > 0)
                         foreach (IJSAMObject relatedObject in relatedObjects)
                         {
-                            architecturalModel.AddRelation(partition_Triangulate, relatedObject);
+                            buildingModel.AddRelation(partition_Triangulate, relatedObject);
                         }
                 }
             }

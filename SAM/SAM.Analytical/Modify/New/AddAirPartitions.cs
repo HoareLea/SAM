@@ -10,7 +10,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<AirPartition> AddAirPartitions(this ArchitecturalModel architecturalModel, IEnumerable<Plane> planes, IEnumerable<Space> spaces = null, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
+        public static List<AirPartition> AddAirPartitions(this BuildingModel buildingModel, IEnumerable<Plane> planes, IEnumerable<Space> spaces = null, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
         {
             if(planes == null)
             {
@@ -25,7 +25,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                List<AirPartition> airPartitions = AddAirPartitions(architecturalModel, plane, spaces, silverSpacing, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+                List<AirPartition> airPartitions = AddAirPartitions(buildingModel, plane, spaces, silverSpacing, tolerance_Angle, tolerance_Distance, tolerance_Snap);
                 if (airPartitions != null && airPartitions.Count > 0)
                 {
                     foreach(AirPartition airPartition in airPartitions)
@@ -44,16 +44,16 @@ namespace SAM.Analytical
             return result?.Values.ToList();
         }
 
-        public static List<AirPartition> AddAirPartitions(this ArchitecturalModel architecturalModel, Plane plane, IEnumerable<Space> spaces = null, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
+        public static List<AirPartition> AddAirPartitions(this BuildingModel buildingModel, Plane plane, IEnumerable<Space> spaces = null, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
         {
-            if (architecturalModel == null || plane == null)
+            if (buildingModel == null || plane == null)
             {
                 return null;
             }
 
             List<AirPartition> result = new List<AirPartition>();
 
-            List<Space> spaces_Temp = architecturalModel.GetSpaces();
+            List<Space> spaces_Temp = buildingModel.GetSpaces();
             if (spaces_Temp == null || spaces_Temp.Count == 0)
             {
                 return result;
@@ -84,7 +84,7 @@ namespace SAM.Analytical
                 }
             }
 
-            List<IPartition> partitions = architecturalModel.Partitions(plane, out List<IPartition> partitions_Existing, spaces_Temp, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance, tolerance_Snap: tolerance_Snap);
+            List<IPartition> partitions = buildingModel.Partitions(plane, out List<IPartition> partitions_Existing, spaces_Temp, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance, tolerance_Snap: tolerance_Snap);
             if (partitions == null || partitions.Count == 0)
             {
                 return result;
@@ -96,12 +96,12 @@ namespace SAM.Analytical
                 return result;
             }
 
-            architecturalModel.Cut(plane, spaces_Temp, tolerance_Distance);
+            buildingModel.Cut(plane, spaces_Temp, tolerance_Distance);
 
             List<Tuple<Space, Shell, List<Shell>>> tuples = new List<Tuple<Space, Shell, List<Shell>>>();
             foreach (Space space in spaces_Temp)
             {
-                Shell shell = architecturalModel.GetShell(space);
+                Shell shell = buildingModel.GetShell(space);
 
                 List<Shell> shells_Cut = shell?.Cut(plane, silverSpacing, tolerance_Angle, tolerance_Distance, tolerance_Snap);
                 if (shells_Cut == null || shells_Cut.Count <= 1)
@@ -132,7 +132,7 @@ namespace SAM.Analytical
             {
                 Space space = tuples[i].Item1;
 
-                List<IPartition> partitions_Room = architecturalModel.GetPartitions(space);
+                List<IPartition> partitions_Room = buildingModel.GetPartitions(space);
                 if (partitions_Room == null || partitions_Room.Count == 0)
                 {
                     return;
@@ -208,26 +208,26 @@ namespace SAM.Analytical
 
                 Space space_Old = tuple.Item1;
 
-                List<IJSAMObject> relatedObjects = architecturalModel.GetRelatedObjects(space_Old)?.FindAll(x => !(x is IPartition));
-                architecturalModel.RemoveObject(space_Old);
+                List<IJSAMObject> relatedObjects = buildingModel.GetRelatedObjects(space_Old)?.FindAll(x => !(x is IPartition));
+                buildingModel.RemoveObject(space_Old);
 
                 foreach (Tuple<Space, List<IPartition>> tuple_Room_New in tuple.Item2)
                 {
                     Space space_New = tuple_Room_New.Item1;
 
-                    architecturalModel.Add(space_New, tuple_Room_New.Item2);
+                    buildingModel.Add(space_New, tuple_Room_New.Item2);
 
                     if (relatedObjects != null)
                     {
                         foreach (IJSAMObject relatedObject in relatedObjects)
                         {
-                            architecturalModel.AddRelation(space_New, relatedObject);
+                            buildingModel.AddRelation(space_New, relatedObject);
                         }
                     }
                 }
             }
 
-            return partitions_Air.FindAll(x => architecturalModel.Contains(x));
+            return partitions_Air.FindAll(x => buildingModel.Contains(x));
 
         }
     }

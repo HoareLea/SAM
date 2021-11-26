@@ -4,9 +4,9 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static void MergeCoplanarPartitionsBySpace(this ArchitecturalModel architecturalModel, Space space, bool validateHostPartitionType = true, double tolerance = Core.Tolerance.Distance)
+        public static void MergeCoplanarPartitionsBySpace(this BuildingModel buildingModel, Space space, bool validateHostPartitionType = true, double tolerance = Core.Tolerance.Distance)
         {
-            List<IPartition> partitions = architecturalModel?.GetPartitions(space);
+            List<IPartition> partitions = buildingModel?.GetPartitions(space);
             if(partitions == null || partitions.Count == 0)
             {
                 return;
@@ -22,13 +22,13 @@ namespace SAM.Analytical
             {
                 foreach(IPartition partition in redundantPartitions)
                 {
-                    architecturalModel.RemoveObject(partition);
+                    buildingModel.RemoveObject(partition);
                 }
             }
 
             foreach(IPartition partition in partitions_MergeCoplanar)
             {
-                architecturalModel.Add(partition);
+                buildingModel.Add(partition);
             }
 
         }

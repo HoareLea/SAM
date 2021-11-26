@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "_architecturalModel", NickName = "_architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "_buildingModel", NickName = "_buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 
                 GooProfileLibraryParam gooProfileLibraryParam = new GooProfileLibraryParam { Name = "_profileLibrary_", NickName = "_profileLibrary_", Description = "SAM Analytical Profile Library", Access = GH_ParamAccess.item };
                 gooProfileLibraryParam.PersistentData.Append(new GooProfileLibrary(Analytical.Query.DefaultProfileLibrary()));
@@ -62,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "architecturalModel", NickName = "architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "buildingModel", NickName = "buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profiles", NickName = "profiles", Description = "SAM Analytical Profiles", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "missingProfileNames", NickName = "missingProfileNames", Description = "Missing Profile Names. This Profiles could not be found in ProfileLibrary and are still missing", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
@@ -79,9 +79,9 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            ArchitecturalModel architecturalModel = null;
-            index = Params.IndexOfInputParam("_architecturalModel");
-            if (index == -1 || !dataAccess.GetData(index, ref architecturalModel) || architecturalModel == null)
+            BuildingModel buildingModel = null;
+            index = Params.IndexOfInputParam("_buildingModel");
+            if (index == -1 || !dataAccess.GetData(index, ref buildingModel) || buildingModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -95,13 +95,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            architecturalModel = new ArchitecturalModel(architecturalModel);
+            buildingModel = new BuildingModel(buildingModel);
 
-            List<Profile> profiles = architecturalModel.AddMissingProfiles(profileLibrary, out Dictionary<ProfileType, List<string>>  missingProfileNames);
+            List<Profile> profiles = buildingModel.AddMissingProfiles(profileLibrary, out Dictionary<ProfileType, List<string>>  missingProfileNames);
 
-            index = Params.IndexOfOutputParam("architecturalModel");
+            index = Params.IndexOfOutputParam("buildingModel");
             if (index != -1)
-                dataAccess.SetData(index, new GooArchitecturalModel(architecturalModel));
+                dataAccess.SetData(index, new GooBuildingModel(buildingModel));
 
             index = Params.IndexOfOutputParam("materials");
             if (index != -1)

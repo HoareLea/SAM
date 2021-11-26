@@ -5,12 +5,12 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static Vector3D ExternalVector3D(this ArchitecturalModel architecturalModel, Space space, IPartition partition, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static Vector3D ExternalVector3D(this BuildingModel buildingModel, Space space, IPartition partition, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if (architecturalModel == null || partition == null || space == null)
+            if (buildingModel == null || partition == null || space == null)
                 return null;
             
-            List<IPartition> partitions = architecturalModel.GetPartitions(space);
+            List<IPartition> partitions = buildingModel.GetPartitions(space);
             if(partitions == null || partitions.Count == 0)
             {
                 return null;
@@ -26,7 +26,7 @@ namespace SAM.Analytical
             if (face3D == null)
                 return null;
 
-            Shell shell = architecturalModel.GetShell(space);
+            Shell shell = buildingModel.GetShell(space);
             if (shell == null)
                 return null;
 

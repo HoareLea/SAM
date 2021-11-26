@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateHostPartitionType()
           : base("SAMAnalytical.UpdateHostPartitionType", "SAMAnalytical.UpdateHostPartitionType",
-              "Related Objects in ArchitecturalModel",
+              "Related Objects in BuildingModel",
               "SAM", "Analytical")
         {
         }
@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "_architecturalModel", NickName = "_architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "_buildingModel", NickName = "_buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooPartitionParam() { Name = "partitions_", NickName = "partitions_", Description = "SAM Architectural Partitions", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new GooWallTypeParam() { Name = "curtainWallType_", NickName = "curtainWallType_", Description = "Curtain WallType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new GooWallTypeParam() { Name = "internalWallType_", NickName = "internalWallType_", Description = "Internal WallType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -67,7 +67,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooArchitecturalModelParam() { Name = "architecturalModel", NickName = "architecturalModel", Description = "SAM Architectural ArchitecturalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "buildingModel", NickName = "buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooPartitionParam() { Name = "partitions", NickName = "partitions", Description = "SAM Architectural Partitions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -83,9 +83,9 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            ArchitecturalModel architecturalModel = null;
-            index = Params.IndexOfInputParam("_architecturalModel");
-            if (index == -1 || !dataAccess.GetData(index, ref architecturalModel) || architecturalModel == null)
+            BuildingModel buildingModel = null;
+            index = Params.IndexOfInputParam("_buildingModel");
+            if (index == -1 || !dataAccess.GetData(index, ref buildingModel) || buildingModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -172,9 +172,9 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref roofType);
             }
 
-            architecturalModel = new ArchitecturalModel(architecturalModel);
+            buildingModel = new BuildingModel(buildingModel);
 
-            partitions = architecturalModel.UpdateHostPartitionType(
+            partitions = buildingModel.UpdateHostPartitionType(
                 partitions, 
                 curtainWallType, 
                 internalWallType, 
@@ -188,9 +188,9 @@ namespace SAM.Analytical.Grasshopper
                 roofType
                 );
 
-            index = Params.IndexOfOutputParam("architecturalModel");
+            index = Params.IndexOfOutputParam("buildingModel");
             if (index != -1)
-                dataAccess.SetData(index, new GooArchitecturalModel(architecturalModel));
+                dataAccess.SetData(index, new GooBuildingModel(buildingModel));
 
             index = Params.IndexOfOutputParam("partitions");
             if (index != -1)

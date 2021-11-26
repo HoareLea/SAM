@@ -5,12 +5,12 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<InternalCondition> MapInternalConditions(this ArchitecturalModel architecturalModel, InternalConditionLibrary internalConditionLibrary, TextMap textMap, bool overrideNotFound = false, InternalCondition internalCondition_Default = null)
+        public static List<InternalCondition> MapInternalConditions(this BuildingModel buildingModel, InternalConditionLibrary internalConditionLibrary, TextMap textMap, bool overrideNotFound = false, InternalCondition internalCondition_Default = null)
         {
-            if (architecturalModel == null || internalConditionLibrary == null || textMap == null)
+            if (buildingModel == null || internalConditionLibrary == null || textMap == null)
                 return null;
 
-            List<Space> spaces = architecturalModel.GetSpaces();
+            List<Space> spaces = buildingModel.GetSpaces();
             if (spaces == null)
                 return null;
 
@@ -30,7 +30,7 @@ namespace SAM.Analytical
                 Space space_Temp = new Space(space);
                 space_Temp.InternalCondition = internalCondition;
 
-                architecturalModel.Add(space_Temp);
+                buildingModel.Add(space_Temp);
                 result.Add(internalCondition);
             }
 

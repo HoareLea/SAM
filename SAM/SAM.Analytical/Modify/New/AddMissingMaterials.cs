@@ -7,24 +7,24 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Core.IMaterial> AddMissingMaterials(this ArchitecturalModel architecturalModel, Core.MaterialLibrary materialLibrary)
+        public static List<Core.IMaterial> AddMissingMaterials(this BuildingModel buildingModel, Core.MaterialLibrary materialLibrary)
         {
-            return AddMissingMaterials(architecturalModel, materialLibrary, out List<string> missiingMaterialNames);
+            return AddMissingMaterials(buildingModel, materialLibrary, out List<string> missiingMaterialNames);
         }
 
 
-        public static List<Core.IMaterial> AddMissingMaterials(this ArchitecturalModel architecturalModel, Core.MaterialLibrary materialLibrary, out List<string> missingMaterialNames)
+        public static List<Core.IMaterial> AddMissingMaterials(this BuildingModel buildingModel, Core.MaterialLibrary materialLibrary, out List<string> missingMaterialNames)
         {
             missingMaterialNames = null;
             
-            if(architecturalModel == null || materialLibrary == null)
+            if(buildingModel == null || materialLibrary == null)
             {
                 return null;
             }
 
             List<Core.IMaterial> result = new List<Core.IMaterial>();
 
-            List<string> materialNames = architecturalModel.GetMissingMaterialNames();
+            List<string> materialNames = buildingModel.GetMissingMaterialNames();
             if(materialNames == null || materialNames.Count == 0)
             {
                 return result;
@@ -46,7 +46,7 @@ namespace SAM.Analytical
                 else
                 {
                     result.Add(material);
-                    architecturalModel.Add(material);
+                    buildingModel.Add(material);
                 }
             }
 

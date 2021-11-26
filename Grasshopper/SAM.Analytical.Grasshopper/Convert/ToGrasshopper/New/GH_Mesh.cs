@@ -32,9 +32,9 @@ namespace SAM.Analytical.Grasshopper
             return new GH_Mesh(mesh);
         }
 
-        public static GH_Mesh ToGrasshopper_Mesh(this ArchitecturalModel architecturalModel, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
+        public static GH_Mesh ToGrasshopper_Mesh(this BuildingModel buildingModel, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
         {
-            Mesh mesh = Rhino.Convert.ToRhino_Mesh(architecturalModel, cutOpenings, includeOpenings, tolerance);
+            Mesh mesh = Rhino.Convert.ToRhino_Mesh(buildingModel, cutOpenings, includeOpenings, tolerance);
             if (mesh == null)
             {
                 return null;

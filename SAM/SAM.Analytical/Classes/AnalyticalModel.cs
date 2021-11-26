@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class AnalyticalModel : SAMModel
+    public class AnalyticalModel : SAMModel, IAnalyticalObject
     {
         private string description;
         private Location location;
@@ -198,7 +198,7 @@ namespace SAM.Analytical
             if (type == null || guids == null)
                 return null;
             
-            if (typeof(Space).IsAssignableFrom(type) || typeof(Panel).IsAssignableFrom(type) || typeof(Aperture).IsAssignableFrom(type))
+            if (typeof(Space).IsAssignableFrom(type) || typeof(Panel).IsAssignableFrom(type) || typeof(Aperture).IsAssignableFrom(type) || typeof(Result).IsAssignableFrom(type))
                 return adjacencyCluster.Remove(type, guids);
 
             return null;

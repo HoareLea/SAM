@@ -19,12 +19,12 @@ namespace SAM.Analytical.Grasshopper
                 {
                     partitions.Add(((GooPartition)variable).Value);
                 }
-                else if (variable is GooArchitecturalModel)
+                else if (variable is GooBuildingModel)
                 {
-                    ArchitecturalModel architecturalModel = ((GooArchitecturalModel)variable).Value;
-                    if (architecturalModel != null)
+                    BuildingModel buildingModel = ((GooBuildingModel)variable).Value;
+                    if (buildingModel != null)
                     {
-                        List<IPartition> hostPartitions_Temp = architecturalModel.GetObjects<IPartition>();
+                        List<IPartition> hostPartitions_Temp = buildingModel.GetObjects<IPartition>();
                         if (hostPartitions_Temp != null && hostPartitions_Temp.Count > 0)
                         {
                             partitions.AddRange(hostPartitions_Temp);

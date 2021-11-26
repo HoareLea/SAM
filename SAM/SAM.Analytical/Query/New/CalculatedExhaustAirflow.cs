@@ -2,12 +2,12 @@
 {
     public static partial class Query
     {
-        public static double CalculatedExhaustAirflow(this ArchitecturalModel architecturalModel, Zone zone)
+        public static double CalculatedExhaustAirflow(this BuildingModel buildingModel, Zone zone)
         {
-            if (architecturalModel == null || zone == null)
+            if (buildingModel == null || zone == null)
                 return double.NaN;
 
-            return architecturalModel.Sum(zone, SpaceParameter.ExhaustAirFlow);
+            return buildingModel.Sum(zone, SpaceParameter.ExhaustAirFlow);
         }
     }
 }

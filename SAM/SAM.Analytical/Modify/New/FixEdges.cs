@@ -7,14 +7,14 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static void FixEdges(this ArchitecturalModel architecturalModel, double tolerance = Core.Tolerance.Distance)
+        public static void FixEdges(this BuildingModel buildingModel, double tolerance = Core.Tolerance.Distance)
         {
-            if (architecturalModel == null)
+            if (buildingModel == null)
             {
                 return;
             }
 
-            List<IPartition> partitions = architecturalModel.GetPartitions();
+            List<IPartition> partitions = buildingModel.GetPartitions();
             if (partitions == null || partitions.Count == 0)
             {
                 return ;
@@ -37,20 +37,20 @@ namespace SAM.Analytical
 
                 if (partitions_Temp.Count == 1)
                 {
-                    architecturalModel.Add(partitions_Temp[0]);
+                    buildingModel.Add(partitions_Temp[0]);
                     continue;
                 }
 
-                List<Core.IJSAMObject> relatedObjects = architecturalModel.GetRelatedObjects(partitions[i]);
+                List<Core.IJSAMObject> relatedObjects = buildingModel.GetRelatedObjects(partitions[i]);
 
                 foreach (IPartition partition_FixEdge in partitions_Temp)
                 {
-                    architecturalModel.Add(partition_FixEdge);
+                    buildingModel.Add(partition_FixEdge);
                     if (relatedObjects != null)
                     {
                         foreach (Core.IJSAMObject relatedObject in relatedObjects)
                         {
-                            architecturalModel.AddRelation(partition_FixEdge, relatedObject);
+                            buildingModel.AddRelation(partition_FixEdge, relatedObject);
                         }
                     }
                 }

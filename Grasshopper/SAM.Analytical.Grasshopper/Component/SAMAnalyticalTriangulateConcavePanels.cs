@@ -103,11 +103,11 @@ namespace SAM.Analytical.Grasshopper
             int count = sAMObjects.Count;
             for (int i = count - 1; i >= 0; i--)
             {
-                if (sAMObjects[i] is ArchitecturalModel)
+                if (sAMObjects[i] is BuildingModel)
                 {
                     sAMObjects[i] = sAMObjects[i].Clone();
 
-                    List<IPartition> newPartitions = Analytical.Modify.TriangulateConcavePartitions((ArchitecturalModel)sAMObjects[i], out List<IPartition> oldPartitions, tolerance);
+                    List<IPartition> newPartitions = Analytical.Modify.TriangulateConcavePartitions((BuildingModel)sAMObjects[i], out List<IPartition> oldPartitions, tolerance);
                     if (newPartitions != null)
                     {
                         newPartitions.ForEach(x => newObjects.Add(x as SAMObject));

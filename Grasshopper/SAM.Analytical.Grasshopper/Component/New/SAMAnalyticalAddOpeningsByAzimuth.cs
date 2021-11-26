@@ -141,10 +141,10 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetDataList(1, openings?.ConvertAll(x => new GooOpening(x)));
                 dataAccess.SetData(2, true);
             }
-            else if(sAMObject is ArchitecturalModel)
+            else if(sAMObject is BuildingModel)
             {
-                ArchitecturalModel architecturalModel = new ArchitecturalModel((ArchitecturalModel)sAMObject);
-                List<Wall> walls = architecturalModel.GetObjects(new Func<Wall, bool>((Wall wall) => architecturalModel.External(wall)));
+                BuildingModel buildingModel = new BuildingModel((BuildingModel)sAMObject);
+                List<Wall> walls = buildingModel.GetObjects(new Func<Wall, bool>((Wall wall) => buildingModel.External(wall)));
                 if(walls != null)
                 {
                     List<IOpening> openings = new List<IOpening>();
@@ -161,7 +161,7 @@ namespace SAM.Analytical.Grasshopper
                         OpeningType openingType_Temp = openingType;
                         if (openingType_Temp == null)
                         {
-                            openingType_Temp = openingTypeLibrary.GetOpeningTypes(OpeningAnalyticalType.Window, architecturalModel.PartitionAnalyticalType(wall))?.FirstOrDefault();
+                            openingType_Temp = openingTypeLibrary.GetOpeningTypes(OpeningAnalyticalType.Window, buildingModel.PartitionAnalyticalType(wall))?.FirstOrDefault();
                             if (openingType_Temp == null)
                             {
                                 openingType_Temp = openingTypeLibrary.GetOpeningTypes(OpeningAnalyticalType.Window)?.FirstOrDefault();
@@ -175,7 +175,7 @@ namespace SAM.Analytical.Grasshopper
                         }
                     }
 
-                    dataAccess.SetData(0, new GooArchitecturalModel(architecturalModel));
+                    dataAccess.SetData(0, new GooBuildingModel(buildingModel));
                     dataAccess.SetDataList(1, openings.ConvertAll(x => new GooOpening(x)));
                     dataAccess.SetData(2, true);
                 }

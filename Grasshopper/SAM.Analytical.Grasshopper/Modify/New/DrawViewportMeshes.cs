@@ -8,9 +8,9 @@ namespace SAM.Analytical.Grasshopper
 {
     public static partial class Modify
     {
-        public static void DrawViewportMeshes(this ArchitecturalModel architecturalModel, GH_PreviewMeshArgs previewMeshArgs, global::Rhino.Display.DisplayMaterial displayMaterial = null)
+        public static void DrawViewportMeshes(this BuildingModel buildingModel, GH_PreviewMeshArgs previewMeshArgs, global::Rhino.Display.DisplayMaterial displayMaterial = null)
         {
-            List<IHostPartition> hostPartitions = architecturalModel?.GetObjects<IHostPartition>();
+            List<IHostPartition> hostPartitions = buildingModel?.GetObjects<IHostPartition>();
             if (hostPartitions == null)
                 return;
 
@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
                     return;
                 }
 
-                List<Space> spaces = architecturalModel.GetSpaces(hostPartition);
+                List<Space> spaces = buildingModel.GetSpaces(hostPartition);
                 if (spaces != null && spaces.Count > 1)
                     return;
 

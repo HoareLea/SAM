@@ -3,8 +3,8 @@ using SAM.Core.Attributes;
 
 namespace SAM.Analytical
 {
-    [AssociatedTypes(typeof(ArchitecturalModel)), Description("ArchitecturalModel Parameter")]
-    public enum ArchitecturalModelParameter
+    [AssociatedTypes(typeof(BuildingModel)), Description("BuildingModel Parameter")]
+    public enum BuildingModelParameter
     {
         [ParameterProperties("North Angle", "North Angle"), ParameterValue(Core.ParameterType.Double)] NorthAngle,
         [ParameterProperties("Cooling Sizing Factor", "Cooling Sizing Factor"), DoubleParameterValue(0)] CoolingSizingFactor,

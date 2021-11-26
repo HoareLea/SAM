@@ -5,23 +5,23 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Profile> AddMissingProfiles(this ArchitecturalModel architecturalModel, ProfileLibrary profileLibrary)
+        public static List<Profile> AddMissingProfiles(this BuildingModel buildingModel, ProfileLibrary profileLibrary)
         {
-            return AddMissingProfiles(architecturalModel, profileLibrary, out Dictionary<ProfileType, List<string>> missingProfileNames);
+            return AddMissingProfiles(buildingModel, profileLibrary, out Dictionary<ProfileType, List<string>> missingProfileNames);
         }
 
-        public static List<Profile> AddMissingProfiles(this ArchitecturalModel architecturalModel, ProfileLibrary profileLibrary, out Dictionary<ProfileType, List<string>> missingProfileNames)
+        public static List<Profile> AddMissingProfiles(this BuildingModel buildingModel, ProfileLibrary profileLibrary, out Dictionary<ProfileType, List<string>> missingProfileNames)
         {
             missingProfileNames = null;
 
-            if (architecturalModel == null || profileLibrary == null)
+            if (buildingModel == null || profileLibrary == null)
             {
                 return null;
             }
 
             List<Profile> result = new List<Profile>();
 
-            List<Space> spaces = architecturalModel.GetSpaces();
+            List<Space> spaces = buildingModel.GetSpaces();
             if(spaces == null || spaces.Count == 0)
             {
                 return result;
@@ -44,7 +44,7 @@ namespace SAM.Analytical
 
                 foreach(ProfileType profileType in profileTypes)
                 {
-                    Profile profile = architecturalModel.GetProfile(internalCondition, profileType);
+                    Profile profile = buildingModel.GetProfile(internalCondition, profileType);
                     if(profile == null)
                     {
                         if(!missingProfileNames.TryGetValue(profileType, out List<string> names))
@@ -62,7 +62,7 @@ namespace SAM.Analytical
                     else
                     {
                         result.Add(profile);
-                        architecturalModel.Add(profile);
+                        buildingModel.Add(profile);
                     }
                 }
             }

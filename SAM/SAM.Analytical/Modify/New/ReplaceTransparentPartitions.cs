@@ -5,14 +5,14 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<IHostPartition> ReplaceTransparentPartitions(this ArchitecturalModel architecturalModel, double offset = 0, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
+        public static List<IHostPartition> ReplaceTransparentPartitions(this BuildingModel buildingModel, double offset = 0, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
         {
-            if (architecturalModel == null)
+            if (buildingModel == null)
             {
                 return null;
             }
 
-            List<HostPartitionType> hostPartitionTypes = architecturalModel.GetHostPartitionTypes();
+            List<HostPartitionType> hostPartitionTypes = buildingModel.GetHostPartitionTypes();
             if(hostPartitionTypes == null || hostPartitionTypes.Count == 0)
             {
                 return null;
@@ -26,12 +26,12 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                if(!architecturalModel.Transparent(hostPartitionType))
+                if(!buildingModel.Transparent(hostPartitionType))
                 {
                     continue;
                 }
 
-                List<IHostPartition> hostPartitions = architecturalModel.GetHostPartitions(hostPartitionType);
+                List<IHostPartition> hostPartitions = buildingModel.GetHostPartitions(hostPartitionType);
                 if(hostPartitions == null || hostPartitions.Count == 0)
                 {
                     continue;
@@ -41,7 +41,7 @@ namespace SAM.Analytical
 
                 foreach(IHostPartition hostPartition in hostPartitions)
                 {
-                    PartitionAnalyticalType partitionAnalyticalType = architecturalModel.PartitionAnalyticalType(hostPartition, tolerance_Angle, tolerance_Distance);
+                    PartitionAnalyticalType partitionAnalyticalType = buildingModel.PartitionAnalyticalType(hostPartition, tolerance_Angle, tolerance_Distance);
                     if(partitionAnalyticalType == PartitionAnalyticalType.Undefined)
                     {
                         continue;
@@ -85,8 +85,8 @@ namespace SAM.Analytical
                         hostPartition.AddOpening(window, tolerance_Distance);
                     }
 
-                    architecturalModel.Add(hostPartition);
-                    result.Add(architecturalModel.GetObject<IHostPartition>(hostPartition.Guid));
+                    buildingModel.Add(hostPartition);
+                    result.Add(buildingModel.GetObject<IHostPartition>(hostPartition.Guid));
                 }
             }
 

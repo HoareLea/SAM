@@ -94,13 +94,13 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetDataList(1, openings_Added?.ConvertAll(x => new GooOpening(x)));
                 dataAccess.SetData(2, openings_Added != null && openings_Added.Count != 0);
             }
-            else if(sAMObject is ArchitecturalModel)
+            else if(sAMObject is BuildingModel)
             {
-                ArchitecturalModel architecturalModel = new ArchitecturalModel((ArchitecturalModel)sAMObject);
+                BuildingModel buildingModel = new BuildingModel((BuildingModel)sAMObject);
 
-                openings_Added = architecturalModel.AddOpenings(openings);
+                openings_Added = buildingModel.AddOpenings(openings);
 
-                dataAccess.SetData(0, new GooArchitecturalModel(architecturalModel));
+                dataAccess.SetData(0, new GooBuildingModel(buildingModel));
                 dataAccess.SetDataList(1, openings_Added.ConvertAll(x => new GooOpening(x)));
                 dataAccess.SetData(2, openings_Added != null && openings_Added.Count != 0);
             }

@@ -6,14 +6,14 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static void UpdateMaterialsByMaterialLayerThickness(this ArchitecturalModel architecturalModel, out List<HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes, double tolerance = Tolerance.MacroDistance)
+        public static void UpdateMaterialsByMaterialLayerThickness(this BuildingModel buildingModel, out List<HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes, double tolerance = Tolerance.MacroDistance)
         {
             hostPartitionTypes = null;
             openingTypes = null;
 
             List<Architectural.MaterialLayer> materialLayers = new List<Architectural.MaterialLayer>();
 
-            List<HostPartitionType> hostPartitionTypes_All = architecturalModel?.GetHostPartitionTypes();
+            List<HostPartitionType> hostPartitionTypes_All = buildingModel?.GetHostPartitionTypes();
             if (hostPartitionTypes_All != null)
             {
                 foreach (HostPartitionType hostPartitionType in hostPartitionTypes_All)
@@ -29,7 +29,7 @@ namespace SAM.Analytical
                 }
             }
 
-            List<OpeningType> openingTypes_All = architecturalModel?.GetOpeningTypes();
+            List<OpeningType> openingTypes_All = buildingModel?.GetOpeningTypes();
             if (openingTypes_All != null)
             {
                 foreach (OpeningType openingType in openingTypes_All)
@@ -77,7 +77,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                Material material = architecturalModel.GetMaterial(materialLayer.Name) as Material;
+                Material material = buildingModel.GetMaterial(materialLayer.Name) as Material;
                 if (material == null)
                 {
                     continue;
@@ -136,18 +136,18 @@ namespace SAM.Analytical
 
                     int index = 1;
                     string name = string.Format("{0} {1}", hostPartitionType.Name, index);
-                    List<HostPartitionType> hostPartitionTypes_Temp = architecturalModel.GetHostPartitionTypes<HostPartitionType>(name, TextComparisonType.Equals);
+                    List<HostPartitionType> hostPartitionTypes_Temp = buildingModel.GetHostPartitionTypes<HostPartitionType>(name, TextComparisonType.Equals);
                     while (hostPartitionTypes_Temp != null && hostPartitionTypes_Temp.Count > 0)
                     {
                         index++;
                         name = string.Format("{0} {1}", hostPartitionType.Name, index);
-                        hostPartitionTypes_Temp = architecturalModel.GetHostPartitionTypes<HostPartitionType>(name, TextComparisonType.Equals);
+                        hostPartitionTypes_Temp = buildingModel.GetHostPartitionTypes<HostPartitionType>(name, TextComparisonType.Equals);
                     }
 
                     HostPartitionType hostPartitionType_New = Create.HostPartitionType(hostPartitionType, name);
                     hostPartitionType_New.MaterialLayers = materialLayers_HostPartitionType;
 
-                    List<IHostPartition> hostPartitions = architecturalModel.GetHostPartitions(hostPartitionType);
+                    List<IHostPartition> hostPartitions = buildingModel.GetHostPartitions(hostPartitionType);
                     if(hostPartitions == null || hostPartitions.Count == 0)
                     {
                         continue;
@@ -156,12 +156,12 @@ namespace SAM.Analytical
                     foreach (IHostPartition hostPartition in hostPartitions)
                     {
                         hostPartition.Type(hostPartitionType_New);
-                        architecturalModel.Add(hostPartition);
+                        buildingModel.Add(hostPartition);
                     }
 
                     foreach (Material material in materials)
                     {
-                        architecturalModel.Add(material);
+                        buildingModel.Add(material);
                     }
                 }
             }
@@ -217,19 +217,19 @@ namespace SAM.Analytical
 
                     int index = 1;
                     string name = string.Format("{0} {1}", openingType.Name, index);
-                    List<OpeningType> openingTypes_Temp = architecturalModel.GetOpeningTypes<OpeningType>(name, TextComparisonType.Equals);
+                    List<OpeningType> openingTypes_Temp = buildingModel.GetOpeningTypes<OpeningType>(name, TextComparisonType.Equals);
                     while (openingTypes_Temp != null && openingTypes_Temp.Count > 0)
                     {
                         index++;
                         name = string.Format("{0} {1}", openingType.Name, index);
-                        openingTypes_Temp = architecturalModel.GetOpeningTypes<OpeningType>(name, TextComparisonType.Equals);
+                        openingTypes_Temp = buildingModel.GetOpeningTypes<OpeningType>(name, TextComparisonType.Equals);
                     }
 
                     OpeningType openingType_New = Create.OpeningType(openingType, name);
                     openingType_New.PaneMaterialLayers = materialLayers_Pane;
                     openingType_New.FrameMaterialLayers = materialLayers_Frame;
 
-                    List<IOpening> openings = architecturalModel.GetOpenings(openingType);
+                    List<IOpening> openings = buildingModel.GetOpenings(openingType);
                     if (openings == null || openings.Count == 0)
                     {
                         continue;
@@ -237,28 +237,28 @@ namespace SAM.Analytical
 
                     foreach(IOpening opening in openings)
                     {
-                        IHostPartition hostPartition = architecturalModel.GetHostPartition(opening);
+                        IHostPartition hostPartition = buildingModel.GetHostPartition(opening);
                         if(hostPartition == null)
                         {
                             continue;
                         }
 
                         hostPartition.AddOpening(opening);
-                        architecturalModel.Add(hostPartition);
+                        buildingModel.Add(hostPartition);
                     }
 
                 }
             }
         }
 
-        public static void UpdateMaterialsByMaterialLayerThickness(this ArchitecturalModel architecturalModel, double tolerance = Tolerance.MacroDistance)
+        public static void UpdateMaterialsByMaterialLayerThickness(this BuildingModel buildingModel, double tolerance = Tolerance.MacroDistance)
         {
-            if(architecturalModel == null)
+            if(buildingModel == null)
             {
                 return;
             }
 
-            UpdateMaterialsByMaterialLayerThickness(architecturalModel, out List<HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes, tolerance);
+            UpdateMaterialsByMaterialLayerThickness(buildingModel, out List<HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes, tolerance);
         }
 
         private static string GetMaterialName(string name, double thickness, double tolerance = Tolerance.MacroDistance)

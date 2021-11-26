@@ -3,9 +3,9 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static MechanicalSystem AddMechanicalSystem(this ArchitecturalModel architecturalModel, MechanicalSystemType mechanicalSystemType, int index = -1, IEnumerable<Space> spaces = null)
+        public static MechanicalSystem AddMechanicalSystem(this BuildingModel buildingModel, MechanicalSystemType mechanicalSystemType, int index = -1, IEnumerable<Space> spaces = null)
         {
-            if (architecturalModel == null || mechanicalSystemType == null)
+            if (buildingModel == null || mechanicalSystemType == null)
             {
                 return null;
             }
@@ -16,7 +16,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(!architecturalModel.Add(mechanicalSystem, spaces))
+            if(!buildingModel.Add(mechanicalSystem, spaces))
             {
                 return null;
             }
