@@ -44,11 +44,11 @@ namespace SAM.Math
                 if(bilinearInterpolation.values != null)
                 {
                     values = new double[bilinearInterpolation.values.GetLength(0), bilinearInterpolation.values.GetLength(1)];
-                    for (int i = 1; i < bilinearInterpolation.values.GetLength(0); i++)
+                    for (int i = 0; i < bilinearInterpolation.values.GetLength(0); i++)
                     {
-                        for (int j = 1; j < bilinearInterpolation.values.GetLength(1); j++)
+                        for (int j = 0; j < bilinearInterpolation.values.GetLength(1); j++)
                         {
-                            values[i, j] = bilinearInterpolation.values[i - 1, j - 1];
+                            values[i, j] = bilinearInterpolation.values[i, j];
                         }
                     }
                 }
