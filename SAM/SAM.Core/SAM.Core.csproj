@@ -98,6 +98,7 @@
     <Compile Include="Interfaces\Base\IResult.cs" />
     <Compile Include="Interfaces\Base\ISystemType.cs" />
     <Compile Include="Interfaces\Library\ISAMLibrary.cs" />
+    <Compile Include="Modify\CopyValues.cs" />
     <Compile Include="Modify\CopyParameterSets.cs" />
     <Compile Include="Modify\DeleteObject.cs" />
     <Compile Include="Modify\Delete.cs" />
@@ -170,8 +171,10 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\HourOfYear.cs" />
     <Compile Include="Query\Clamp.cs" />
     <Compile Include="Query\DefaultAddress.cs" />
+    <Compile Include="Query\FindIndexs.cs" />
     <Compile Include="Query\MaterialType.cs" />
     <Compile Include="Query\ParseInt.cs" />
     <Compile Include="Query\ParseDouble.cs" />
