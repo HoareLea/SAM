@@ -91,7 +91,7 @@ namespace SAM.Core
             }
 
             List<int> result = new List<int>();
-            for (int i = 0; i < dataColumnCollection.Count; i++)
+            for (int i = 0; i < dataRowCollection.Count; i++)
             {
                 if (!TryConvert(dataRowCollection[i][index], out T value_Temp))
                 {
