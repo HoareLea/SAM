@@ -178,6 +178,25 @@ namespace SAM.Core
                     return true;
                 }
             }
+            else if (type == typeof(byte))
+            {
+                if (@object == null)
+                    return false;
+
+                if (@object is string)
+                {
+                    if (byte.TryParse((string)@object, out byte @byte))
+                    {
+                        result = @byte;
+                        return true;
+                    }
+                }
+                else if (IsNumeric(@object))
+                {
+                    result = System.Convert.ToByte(@object);
+                    return true;
+                }
+            }
             else if (type == typeof(int))
             {
                 if (@object == null)
