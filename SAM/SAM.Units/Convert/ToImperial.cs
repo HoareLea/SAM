@@ -8,6 +8,18 @@
             {
                 case UnitType.Meter:
                     return ByUnitType(value, from, UnitType.Feet);
+
+                case UnitType.Feet:
+                    return value;
+
+                case UnitType.Fahrenheit:
+                    return value;
+
+                case UnitType.Kelvin:
+                    return ByUnitType(value, from, UnitType.Fahrenheit);
+
+                case UnitType.Celsius:
+                    return ByUnitType(value, from, UnitType.Fahrenheit);
             }
 
             return double.NaN;

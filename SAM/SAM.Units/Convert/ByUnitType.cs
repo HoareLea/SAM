@@ -27,6 +27,48 @@
                             return value;
                     }
                     break;
+
+                case UnitType.Kelvin:
+                    switch(to)
+                    {
+                        case UnitType.Celsius:
+                            return value + Factor.KelvinToCelsius;
+
+                        case UnitType.Fahrenheit:
+                            return ByUnitType(ByUnitType(value, from, UnitType.Celsius), UnitType.Celsius, to);
+
+                        case UnitType.Kelvin:
+                            return value;
+                    }
+                    break;
+
+                case UnitType.Celsius:
+                    switch (to)
+                    {
+                        case UnitType.Kelvin:
+                            return value + Factor.CelsisToKelvin;
+
+                        case UnitType.Fahrenheit:
+                            return (1.8 * value) + 32;
+
+                        case UnitType.Celsius:
+                            return value;
+                    }
+                    break;
+
+                case UnitType.Fahrenheit:
+                    switch(to)
+                    {
+                        case UnitType.Kelvin:
+                            return ByUnitType(ByUnitType(value, from, UnitType.Celsius), UnitType.Celsius, to);
+
+                        case UnitType.Celsius:
+                            return (value - 32) / 18;
+
+                        case UnitType.Fahrenheit:
+                            return value;
+                    }
+                    break;
             }
 
             return double.NaN;

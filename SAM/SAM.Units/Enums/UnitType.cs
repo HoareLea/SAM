@@ -5,5 +5,8 @@
         Unknown,
         Meter,
         Feet,
+        Celsius,
+        Kelvin,
+        Fahrenheit
     }
 }

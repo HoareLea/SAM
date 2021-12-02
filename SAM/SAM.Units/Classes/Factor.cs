@@ -7,6 +7,9 @@
 
         public const double MetersToFeet = 3.280839895;
         public const double FeetToMeters = 1 / MetersToFeet;
+
+        public const double CelsisToKelvin = 273.15;
+        public const double KelvinToCelsius = -CelsisToKelvin;
     }
 
 }
