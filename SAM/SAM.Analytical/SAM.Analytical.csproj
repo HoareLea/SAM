@@ -76,6 +76,7 @@
     <Compile Include="Classes\SimulationResult\PanelSimulationResult.cs" />
     <Compile Include="Classes\SimulationResult\AdjacencyClusterSimulationResult.cs" />
     <Compile Include="Classes\SimulationResult\ZoneSimulationResult.cs" />
+    <Compile Include="Classes\DesignDay.cs" />
     <Compile Include="Classes\Zone.cs" />
     <Compile Include="Classes\SimulationResult\SpaceSimulationResult.cs" />
     <Compile Include="Classes\System\HeatingSystem.cs" />
@@ -477,6 +478,10 @@
     <ProjectReference Include="..\SAM.Math\SAM.Math.csproj">
       <Project>{255e428d-6969-4542-9846-67b7de87501b}</Project>
       <Name>SAM.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Weather\SAM.Weather.csproj">
+      <Project>{be06b786-865a-4316-95c8-970db6e53424}</Project>
+      <Name>SAM.Weather</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
