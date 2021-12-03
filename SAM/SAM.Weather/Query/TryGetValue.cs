@@ -24,5 +24,38 @@
             value = result;
             return true;
         }
+
+        public static bool TryGetValue(this WeatherDay weatherDay, WeatherDataType weatherDataType, int index, out double value)
+        {
+            value = default;
+            if(weatherDay == null || weatherDataType == WeatherDataType.Undefined)
+            {
+                return false;
+            }
+
+            return TryGetValue(weatherDay, weatherDataType.ToString(), index, out value);
+        }
+
+        public static bool TryGetValue(this WeatherDay weatherDay, string name, int index, out double value)
+        {
+            value = default;
+            if (weatherDay == null || string.IsNullOrEmpty(name) || index == -1)
+            {
+                return false;
+            }
+
+            if(!weatherDay.Contains(name))
+            {
+                return false;
+            }
+
+            if(index < 0 || index> 23)
+            {
+                return false;
+            }
+
+            value = weatherDay[name, index];
+            return true;
+        }
     }
 }

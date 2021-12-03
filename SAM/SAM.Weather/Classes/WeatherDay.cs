@@ -121,6 +121,21 @@ namespace SAM.Weather
             }
         }
 
+        public bool Contains(WeatherDataType weatherDataType)
+        {
+            return Contains(weatherDataType.ToString());
+        }
+
+        public bool Contains(string name)
+        {
+            if (dictionary == null || dictionary.Count == 0)
+            {
+                return false;
+            }
+
+            return dictionary.ContainsKey(name);
+        }
+
         public IEnumerable<string> Keys
         {
             get
