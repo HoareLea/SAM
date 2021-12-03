@@ -61,6 +61,7 @@
     <Compile Include="Classes\GH_SAMVariableOutputParameterComponent.cs" />
     <Compile Include="Classes\GH_SAMComponent.cs" />
     <Compile Include="Classes\GooDelimitedFileTable.cs" />
+    <Compile Include="Classes\GooSAMObject.cs" />
     <Compile Include="Classes\GooResult.cs" />
     <Compile Include="Classes\GooSystem.cs" />
     <Compile Include="Classes\GooSystemType.cs" />

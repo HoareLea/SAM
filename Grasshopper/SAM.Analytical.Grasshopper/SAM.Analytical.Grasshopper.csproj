@@ -72,7 +72,7 @@
     <Compile Include="Classes\GooPlanarBoundary3D.cs" />
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Classes\New\GooArchitecturalModel.cs" />
-    <Compile Include="Classes\New\GooArchitecturalObject.cs" />
+    <Compile Include="Classes\New\GooAnalyticalObject.cs" />
     <Compile Include="Classes\New\GooFloorType.cs" />
     <Compile Include="Classes\New\GooHostPartitionType.cs" />
     <Compile Include="Classes\New\GooOpening.cs" />
