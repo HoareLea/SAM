@@ -72,7 +72,7 @@
     <Compile Include="Classes\GooLog.cs" />
     <Compile Include="Classes\GooLocation.cs" />
     <Compile Include="Classes\GooRelationCluster.cs" />
-    <Compile Include="Classes\GooSAMObject.cs" />
+    <Compile Include="Classes\GooJSAMObject.cs" />
     <Compile Include="Classes\GooObject.cs" />
     <Compile Include="Component\SAMCoreAddMaterials.cs" />
     <Compile Include="Component\SAMCoreReplaceByGuid.cs" />

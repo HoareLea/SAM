@@ -1,5 +1,7 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
+using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
 using SAM.Core.Grasshopper.Properties;
@@ -262,17 +264,39 @@ namespace SAM.Core.Grasshopper
 
                 @object.TryGetValue(gooParameterParam.Name, out result, true);
 
+                if(result is IJSAMObject)
+                {
+                    dataAccess.SetData(i, new GooJSAMObject<IJSAMObject>((IJSAMObject)result));
+                }
                 if (result is JToken)
                 {
                     dataAccess.SetData(i, new GooObject(result.ToString()));
                 }
                 else if (result is IEnumerable && !result.GetType().Namespace.StartsWith("SAM.") && !(result is string))
                 {
-                    List<GooObject> gooParameters = new List<GooObject>();
+                    DataTree<GooObject> dataTree = new DataTree<GooObject>();
+                    int index = 0;
                     foreach (object @object_Result in (IEnumerable)result)
-                        gooParameters.Add(new GooObject(@object_Result));
+                    {
+                        if(object_Result is IEnumerable && !object_Result.GetType().Namespace.StartsWith("SAM.") && !(object_Result is string))
+                        {
+                            int index_Temp = 0;
+                            foreach (object @object_Result_Temp in (IEnumerable)object_Result)
+                            {
+                                dataTree.Add(new GooObject(@object_Result_Temp), new GH_Path(index, index_Temp));
+                                index_Temp++;
+                            }
+                        }
+                        else
+                        {
+                            dataTree.Add(new GooObject(object_Result), new GH_Path(index));
+                        }
+                        
 
-                    dataAccess.SetDataList(i, gooParameters);
+                        index++;
+                    }
+
+                    dataAccess.SetDataTree(i, dataTree);
                 }
                 else
                 {
@@ -303,6 +327,10 @@ namespace SAM.Core.Grasshopper
                     else if (result is bool)
                     {
                         dataAccess.SetData(i, new GH_Boolean((bool)result));
+                    }
+                    else if (result is DateTime)
+                    {
+                        dataAccess.SetData(i, new GH_Time((DateTime)result));
                     }
                     else
                     {
