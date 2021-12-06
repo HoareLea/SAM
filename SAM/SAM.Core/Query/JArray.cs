@@ -19,5 +19,26 @@ namespace SAM.Core
 
             return null;
         }
+
+        public static JArray JArray<T>(this T[,] values)
+        {
+            if(values == null)
+            {
+                return null;
+            }
+            
+            JArray result = new JArray();
+            for (int i = 0; i < values.GetLength(0); i++)
+            {
+                JArray jArray_Temp = new JArray();
+                for (int j = 0; j < values.GetLength(1); j++)
+                {
+                    jArray_Temp.Add(values[i, j]);
+                }
+                result.Add(jArray_Temp);
+            }
+
+            return result;
+        }
     }
 }

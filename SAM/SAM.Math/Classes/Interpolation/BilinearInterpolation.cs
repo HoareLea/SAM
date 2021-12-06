@@ -196,38 +196,7 @@ namespace SAM.Math
             if (jObject.ContainsKey("Values"))
             {
                 JArray jArray = jObject.Value<JArray>("Values");
-                List<double[]> values_Temp = new List<double[]>();
-                int maxCount = 0;
-                for (int i = 0; i < jArray.Count; i++)
-                {
-                    JArray jArray_Temp = jArray[i].Value<JArray>();
-                    if(jArray_Temp == null)
-                    {
-                        continue;
-                    }
-
-                    double[] values_Temp_Temp = new double[jArray_Temp.Count];
-                    if(jArray_Temp.Count > maxCount)
-                    {
-                        maxCount = jArray_Temp.Count;
-                    }
-
-                    for(int j=0; j < jArray_Temp.Count; j++)
-                    {
-                        values_Temp_Temp[j] = jArray_Temp[j].Value<double>();
-                    }
-
-                    values_Temp.Add(values_Temp_Temp);
-                }
-
-                values = new double[values_Temp.Count, maxCount];
-                for(int i = 0; i < values_Temp.Count; i++)
-                {
-                    for (int j = 0; j < values_Temp[i].Length; j++)
-                    {
-                        values[i, j] = values_Temp[i][j];
-                    }
-                }
+                values = Core.Query.Array<double>(jArray);
             }
 
             return true;
@@ -250,16 +219,7 @@ namespace SAM.Math
 
             if(values != null)
             {
-                JArray jArray = new JArray();
-                for (int i = 0; i < values.GetLength(0); i++)
-                {
-                    JArray jArray_Temp = new JArray();
-                    for (int j = 0; j < values.GetLength(1); j++)
-                    {
-                        jArray_Temp.Add(values[i, j]);
-                    }
-                    jArray.Add(jArray_Temp);
-                }
+                JArray jArray = Core.Query.JArray(values);
                 jObject.Add("Values", jArray);
             }
 

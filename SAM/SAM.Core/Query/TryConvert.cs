@@ -22,7 +22,12 @@ namespace SAM.Core
             {
                 if (@object != null)
                 {
-                    if(@object is IEnumerable)
+                    if (@object is JValue)
+                    {
+                        @object = ((JValue)@object).Value;
+                    }
+
+                    if (@object is IEnumerable)
                     {
                         JArray jArray = new JArray();
                         foreach(object @object_Temp in (IEnumerable)@object)
@@ -51,6 +56,11 @@ namespace SAM.Core
                 if (@object == null)
                     return false;
 
+                if(@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
+
                 if (@object is string)
                 {
                     bool @bool;
@@ -74,6 +84,11 @@ namespace SAM.Core
             {
                 if (@object == null)
                     return false;
+
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
 
                 if (@object is string)
                 {
@@ -99,6 +114,11 @@ namespace SAM.Core
             {
                 if (@object == null)
                     return false;
+
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
 
                 if (@object is string)
                 {
@@ -138,6 +158,11 @@ namespace SAM.Core
                 if (@object == null)
                     return false;
 
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
+
                 if (@object is string)
                 {
                     uint @uint;
@@ -163,6 +188,11 @@ namespace SAM.Core
                 if (@object == null)
                     return false;
 
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
+
                 if (@object is string)
                 {
                     short @short;
@@ -183,6 +213,11 @@ namespace SAM.Core
                 if (@object == null)
                     return false;
 
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
+
                 if (@object is string)
                 {
                     if (byte.TryParse((string)@object, out byte @byte))
@@ -201,6 +236,11 @@ namespace SAM.Core
             {
                 if (@object == null)
                     return false;
+
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
 
                 if (@object is string)
                 {
@@ -222,6 +262,11 @@ namespace SAM.Core
                 if (@object == null)
                     return false;
 
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
+
                 if (@object is string)
                 {
                     long @long;
@@ -242,6 +287,11 @@ namespace SAM.Core
                 if (@object == null)
                     return false;
 
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
+
                 if (@object is string)
                 {
                     if (System.Guid.TryParse((string)@object, out Guid guid))
@@ -255,6 +305,11 @@ namespace SAM.Core
             {
                 if (@object == null)
                     return false;
+
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
 
                 if (@object is string)
                 {
@@ -279,6 +334,11 @@ namespace SAM.Core
             {
                 if (@object == null)
                     return false;
+
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
 
                 if (@object is string)
                 {
@@ -327,6 +387,11 @@ namespace SAM.Core
             }
             else if (typeof(IJSAMObject).IsAssignableFrom(type))
             {
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
+
                 if (@object is string)
                 {
                     List<IJSAMObject> sAMObjects = Convert.ToSAM((string)@object);
@@ -373,6 +438,11 @@ namespace SAM.Core
             }
             else if (typeof(JObject).IsAssignableFrom(type))
             {
+                if (@object is JValue)
+                {
+                    @object = ((JValue)@object).Value;
+                }
+
                 if (@object is string)
                 {
                     result = JObject.Parse((string)@object);

@@ -207,6 +207,7 @@
     <Compile Include="Query\Texts.cs" />
     <Compile Include="Query\TryCompute.cs" />
     <Compile Include="Query\ValidFileName.cs" />
+    <Compile Include="Query\Array.cs" />
     <Compile Include="Query\Weekday.cs" />
     <Compile Include="Query\Weekend.cs" />
     <Compile Include="Query\RangeDictionary.cs" />
