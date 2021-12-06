@@ -5,7 +5,7 @@ namespace SAM.Core
     public static partial class Query
     {
         /// <summary>
-        /// Compare two numbers using NumberComparisonType (Example: NumberComparisonType.Greater returns true if value_1 greater than value_2)
+        /// Compares two numbers using NumberComparisonType (Example: NumberComparisonType.Greater returns true if value_1 greater than value_2)
         /// </summary>
         /// <param name="value_1">First value </param>
         /// <param name="value_2">Second Value</param>
@@ -51,6 +51,17 @@ namespace SAM.Core
             return false;
         }
 
+        //// value_1 AAA
+        /// Value_2 AA
+
+        /// <summary>
+        /// Compares two numbers using TextComparisonType (Example: TextComparisonType.StartsWith returns true if value_1 starts with value_2)
+        /// </summary>
+        /// <param name="value_1">Base value to be checked, reference text ie.GUID to be found</param>
+        /// <param name="value_2">Text to be checked ie. name containing GUID</param>
+        /// <param name="textComparisonType">Text Comparison Type</param>
+        /// <param name="caseSensitive">Case Sensitive</param>
+        /// <returns>Bool</returns>
         public static bool Compare(this string value_1, string value_2, TextComparisonType textComparisonType, bool caseSensitive = true)
         {
             string value_1_Temp = value_1;

@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -16,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -44,6 +45,11 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_index", NickName = "_index", Description = "Hour Index in Year", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Integer param_Integer = new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_year_", NickName = "_year_", Description = "Year", Access = GH_ParamAccess.item, Optional = true };
+                param_Integer.PersistentData.Append(new GH_Integer(2018));
+                result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
         }
@@ -86,8 +92,14 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-
-            DateTime dateTime = Analytical.Convert.ToDateTime(hourIndex);
+            index = Params.IndexOfInputParam("_year_");
+            int year = 2018;
+            if (index == -1 || !dataAccess.GetData(index, ref year))
+            {
+                year = 2018;
+            }
+ 
+            DateTime dateTime = Analytical.Convert.ToDateTime(hourIndex, year);
 
             index = Params.IndexOfOutputParam("DateTime");
             if (index != -1)
