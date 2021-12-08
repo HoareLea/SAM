@@ -149,6 +149,8 @@
     <Compile Include="Enums\Parameter\New\ArchitecturalModelParameter.cs" />
     <Compile Include="Enums\Parameter\New\OpeningTypeParameter.cs" />
     <Compile Include="Enums\Parameter\New\HostPartitionTypeParameter.cs" />
+    <Compile Include="Enums\Parameter\New\PartitionSimulationResultParameter.cs" />
+    <Compile Include="Enums\Parameter\PanelSimulationResultParameter.cs" />
     <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
     <Compile Include="Enums\LoadType.cs" />
     <Compile Include="Enums\ZoneType.cs" />
