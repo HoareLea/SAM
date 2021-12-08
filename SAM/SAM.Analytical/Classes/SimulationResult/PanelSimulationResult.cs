@@ -18,8 +18,14 @@ namespace SAM.Analytical
 
         }
 
-        public PanelSimulationResult(SpaceSimulationResult spaceSimulationResult)
-            : base(spaceSimulationResult)
+        public PanelSimulationResult(PanelSimulationResult panelSimulationResult)
+            : base(panelSimulationResult)
+        {
+
+        }
+
+        public PanelSimulationResult(Guid guid, PanelSimulationResult panelSimulationResult)
+            : base(guid, panelSimulationResult)
         {
 
         }
