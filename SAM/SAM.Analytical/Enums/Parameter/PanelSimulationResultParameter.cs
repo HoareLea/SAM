@@ -7,7 +7,7 @@ namespace SAM.Analytical
     public enum PanelSimulationResultParameter
     {
         [ParameterProperties("Area", "Area [m2]"), DoubleParameterValue()] Area,
-        [ParameterProperties("Inside Conduction Heat Loss", "Inside Conduction Heat Loss [W]"), DoubleParameterValue()] InsideConductionHeatLoss,
-        [ParameterProperties("Outside Conduction Heat Loss", "Outside Conduction Heat Loss [W]"), DoubleParameterValue()] OutsideConductionHeatLoss,
+        [ParameterProperties("Inside Conduction Heat Transfer", "Inside Conduction Heat Transfer [W]"), DoubleParameterValue()] InsideConductionHeatTransfer,
+        [ParameterProperties("Outside Conduction Heat Transfer", "Outside Conduction Heat Transfer [W]"), DoubleParameterValue()] OutsideConductionHeatTransfer,
     }
 }
