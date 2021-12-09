@@ -89,7 +89,7 @@ namespace SAM.Analytical
                     guid = System.Guid.NewGuid();
                 }
 
-                Panel panel_New = Create.Panel(guid, panel, face3D_Temp, null, true, tolerance, tolerance);
+                Panel panel_New = Create.Panel(guid, panel, face3D_Temp, panel.Apertures, true, tolerance, tolerance);
                 if(panel_New != null)
                 {
                     result.Add(panel_New);
