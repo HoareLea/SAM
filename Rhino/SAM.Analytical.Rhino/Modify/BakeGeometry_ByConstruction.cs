@@ -64,6 +64,8 @@ namespace SAM.Analytical.Rhino
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
+                List<Aperture> apertures = panel.Apertures;
+
                 List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
                 if (panels_FixEdges == null || panels_FixEdges.Count == 0)
                 {
@@ -75,11 +77,10 @@ namespace SAM.Analytical.Rhino
                     Guid guid = default;
                     if (BakeGeometry(panel_FixEdges, rhinoDoc, objectAttributes, out guid, cutApertures, tolerance))
                         guids.Add(guid);
+                }
 
-                    List<Aperture> apertures = panel_FixEdges.Apertures;
-                    if (apertures == null || apertures.Count == 0)
-                        continue;
-
+                if (apertures != null && apertures.Count != 0)
+                {
                     foreach (Aperture aperture in apertures)
                     {
                         if (aperture == null)
@@ -101,7 +102,7 @@ namespace SAM.Analytical.Rhino
                         //layerTable.SetCurrentLayerIndex(layer.Index, true);
                         objectAttributes.LayerIndex = layer.Index;
 
-                        guid = default;
+                        Guid guid = default;
                         if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
                             guids.Add(guid);
                     }
