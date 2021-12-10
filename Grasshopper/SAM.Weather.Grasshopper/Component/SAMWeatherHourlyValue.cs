@@ -38,7 +38,7 @@ namespace SAM.Weather.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooWeatherYearParam(), "_weatherYear", "_weatherYear", "SAM WeatherYear", GH_ParamAccess.item);
-            inputParamManager.AddIntegerParameter("_weatherDataType", "_weatherDataType", "Weather Data Type", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_weatherDataType", "_weatherDataType", "Weather Data Type", GH_ParamAccess.item);
             inputParamManager.AddIntegerParameter("_index", "_index", "Hour Index", GH_ParamAccess.item);
         }
 
@@ -65,15 +65,8 @@ namespace SAM.Weather.Grasshopper
                 return;
             }
 
-            string weatherDataTypeString = null;
-            if (!dataAccess.GetData(1, ref weatherDataTypeString) || string.IsNullOrWhiteSpace(weatherDataTypeString))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            WeatherDataType weatherDataType = Core.Query.Enum<WeatherDataType>(weatherDataTypeString);
-            if(weatherDataType == WeatherDataType.Undefined)
+            WeatherDataType weatherDataType = WeatherDataType.Undefined;
+            if (!dataAccess.GetData(1, ref weatherDataType) || weatherDataType == WeatherDataType.Undefined)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

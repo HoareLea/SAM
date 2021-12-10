@@ -176,8 +176,25 @@ namespace SAM.Core.Grasshopper
 
                 if (Core.Query.IsNumeric(Value))
                 {
-                    target = (Y)(object)(new GH_Number(System.Convert.ToDouble(Value)));
-                    return true;
+                    if (Value != null)
+                    {
+                        object value_Temp = Value;
+                        if(value_Temp.GetType().IsEnum)
+                        {
+                            value_Temp = (int)value_Temp;
+                        }
+
+                        if (typeof(Y) == typeof(GH_Integer))
+                        {
+                            target = (Y)(object)(new GH_Integer(System.Convert.ToInt32(value_Temp)));
+                            return true;
+                        }
+                        else if (typeof(Y) == typeof(GH_Number))
+                        {
+                            target = (Y)(object)(new GH_Number(System.Convert.ToDouble(value_Temp)));
+                            return true;
+                        }
+                    }
                 }
 
             }
