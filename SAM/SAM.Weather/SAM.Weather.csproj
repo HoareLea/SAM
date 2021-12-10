@@ -50,6 +50,7 @@
     <Compile Include="Classes\WeatherYear.cs" />
     <Compile Include="Convert\ToEPW\EPW.cs" />
     <Compile Include="Convert\ToSAM\WeatherData.cs" />
+    <Compile Include="Create\WeatherYear.cs" />
     <Compile Include="Enums\Parameter\WeatherDataParameter.cs" />
     <Compile Include="Enums\WeatherDataType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,9 +76,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Create\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>

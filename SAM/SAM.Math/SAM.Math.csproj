@@ -63,6 +63,7 @@
     <Compile Include="Create\Matrix3D.cs" />
     <Compile Include="Interfaces\ISquareMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\Max.cs" />
     <Compile Include="Query\NeigbourIndices.cs" />
     <Compile Include="Query\Remap.cs" />
     <Compile Include="Query\Arccotan.cs" />

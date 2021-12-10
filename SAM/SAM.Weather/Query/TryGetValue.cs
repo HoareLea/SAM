@@ -49,13 +49,38 @@
                 return false;
             }
 
-            if(index < 0 || index> 23)
+            if (index < 0 || index > 23)
             {
                 return false;
             }
 
             value = weatherDay[name, index];
             return true;
+        }
+
+        public static bool TryGetValue(this WeatherYear weatherYear, string name, int index, out double value)
+        {
+            value = double.NaN;
+
+            if(weatherYear == null || name == null || index == -1)
+            {
+                return false;
+            }
+
+            int day = index / 24;
+
+            WeatherDay weatherDay = weatherYear[day];
+            if(weatherDay == null)
+            {
+                return false;
+            }
+
+            return TryGetValue(weatherDay, name, index % 24, out value);
+        }
+
+        public static bool TryGetValue(this WeatherYear weatherYear, WeatherDataType weatherDataType, int index, out double value)
+        {
+            return TryGetValue(weatherYear, weatherDataType.ToString(), index, out value);
         }
     }
 }
