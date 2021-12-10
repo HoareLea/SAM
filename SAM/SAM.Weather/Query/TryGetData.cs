@@ -10,9 +10,10 @@ namespace SAM.Weather
         /// <param name="text">EPW File line text</param>
         /// <param name="dateTime">Out DateTime where year is read from text or yer parameter (if year input is different than -1)</param>
         /// <param name="dictionary">Extracted Data</param>
+        /// <param name="includeMinutes">Include minutes in DateTime conversion</param>
         /// <param name="year">Year will be used if value different than -1 otherwise year from text will be used</param>
         /// <returns>True if data extracted correctly</returns>
-        public static bool TryGetData(string text, out DateTime dateTime, out Dictionary<string, double> dictionary, int year = -1)
+        public static bool TryGetData(string text, out DateTime dateTime, out Dictionary<string, double> dictionary, bool includeMinutes = true, int year = -1)
         {
             dateTime = default;
             dictionary = null;
@@ -54,9 +55,11 @@ namespace SAM.Weather
                     return false;
             }
 
-            dateTime = new DateTime(year_Temp, month, day);
-            dateTime = dateTime.AddHours(hour);
-            dateTime = dateTime.AddMinutes(minute);
+            dateTime = new DateTime(year_Temp, month, day, hour, 0, 0);
+            if(includeMinutes)
+            {
+                dateTime = dateTime.AddMinutes(minute);
+            }
 
             if (values.Length > 23)
             {
