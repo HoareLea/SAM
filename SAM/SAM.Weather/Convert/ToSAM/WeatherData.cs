@@ -89,7 +89,7 @@ namespace SAM.Weather
             {
                 DateTime dateTime;
                 Dictionary<string, double> dictionary;
-                if (!Query.TryGetData(line, out dateTime, out dictionary))
+                if (!Query.TryGetData(line, out dateTime, out dictionary, 2018))
                     continue;
 
                 result.Add(dateTime, dictionary);

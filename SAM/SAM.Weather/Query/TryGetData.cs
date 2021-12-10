@@ -4,8 +4,15 @@ using System.Collections.Generic;
 namespace SAM.Weather
 {
     public static partial class Query
-    {
-        public static bool TryGetData(string text, out DateTime dateTime, out Dictionary<string, double> dictionary)
+    {   /// <summary>
+        /// Tries to get Data from EPW File text line
+        /// </summary>
+        /// <param name="text">EPW File line text</param>
+        /// <param name="dateTime">Out DateTime where year is read from text or yer parameter (if year input is different than -1)</param>
+        /// <param name="dictionary">Extracted Data</param>
+        /// <param name="year">Year will be used if value different than -1 otherwise year from text will be used</param>
+        /// <returns>True if data extracted correctly</returns>
+        public static bool TryGetData(string text, out DateTime dateTime, out Dictionary<string, double> dictionary, int year = -1)
         {
             dateTime = default;
             dictionary = null;
@@ -17,9 +24,12 @@ namespace SAM.Weather
             if (values.Length < 4)
                 return false;
 
-            int year;
-            if (!int.TryParse(values[0], out year))
-                return false;
+            int year_Temp = year;
+            if(year_Temp == -1)
+            {
+                if (!int.TryParse(values[0], out year_Temp))
+                    return false;
+            }
 
             int month;
             if (!int.TryParse(values[1], out month))
@@ -44,7 +54,7 @@ namespace SAM.Weather
                     return false;
             }
 
-            dateTime = new DateTime(year, month, day);
+            dateTime = new DateTime(year_Temp, month, day);
             dateTime = dateTime.AddHours(hour);
             dateTime = dateTime.AddMinutes(minute);
 
