@@ -162,6 +162,7 @@ namespace SAM.Weather
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
+            jObject.Add("_type", Core.Query.FullTypeName(this));
 
             if (year != int.MinValue)
                 jObject.Add("Year", year);
