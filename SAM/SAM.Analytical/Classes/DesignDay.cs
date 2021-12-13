@@ -92,12 +92,12 @@ namespace SAM.Analytical
 
             if (jObject.ContainsKey("Month"))
             {
-                year = System.Convert.ToByte(jObject.Value<int>("Month"));
+                month = System.Convert.ToByte(jObject.Value<int>("Month"));
             }
 
             if (jObject.ContainsKey("Day"))
             {
-                year = System.Convert.ToByte(jObject.Value<int>("Day"));
+                day = System.Convert.ToByte(jObject.Value<int>("Day"));
             }
 
             return true;
@@ -111,9 +111,9 @@ namespace SAM.Analytical
 
             jObject.Add("Name", name);
 
-            jObject.Add("Year", year);
-            jObject.Add("Month", month);
-            jObject.Add("Day", day);
+            jObject.Add("Year", System.Convert.ToInt32(year));
+            jObject.Add("Month", System.Convert.ToInt32(month));
+            jObject.Add("Day", System.Convert.ToInt32(day));
 
             return jObject;
         }
