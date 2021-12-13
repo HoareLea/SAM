@@ -81,6 +81,9 @@ namespace SAM.Weather
                 if (double.TryParse(values[14], out value))
                     dictionary[WeatherDataType.DirectSolarRadiation.ToString()] = value;
 
+                if (double.TryParse(values[15], out value))
+                    dictionary[WeatherDataType.DiffuseSolarRadiation.ToString()] = value;
+
                 if (double.TryParse(values[20], out value))
                     dictionary[WeatherDataType.WindDirection.ToString()] = value;
 
@@ -88,7 +91,7 @@ namespace SAM.Weather
                     dictionary[WeatherDataType.WindSpeed.ToString()] = value;
 
                 if (double.TryParse(values[22], out value))
-                    dictionary[WeatherDataType.CloudCover.ToString()] = value;
+                    dictionary[WeatherDataType.CloudCover.ToString()] = value / 10;
             }
 
             return true;

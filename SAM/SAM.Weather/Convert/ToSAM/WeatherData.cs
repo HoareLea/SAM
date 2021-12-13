@@ -74,7 +74,7 @@ namespace SAM.Weather
             if (lines.Count() < 1)
                 return null;
 
-            WeatherData result = new WeatherData(latitude, longitude, elevation);
+            WeatherData result = new WeatherData(string.Format("{2}_{1}_{0}, {3}, {4}", city, state, country, wMONumber, dataSource), comments_1, latitude, longitude, elevation);
             result.SetValue(WeatherDataParameter.City, city);
             result.SetValue(WeatherDataParameter.Comments_1, comments_1);
             result.SetValue(WeatherDataParameter.Comments_2, comments_2);

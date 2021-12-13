@@ -46,8 +46,8 @@ namespace SAM.Weather
             if (!double.TryParse(values[6], out longitude))
                 longitude = double.NaN;
 
-            if (!int.TryParse(values[7], out timeZone))
-                timeZone = int.MinValue;
+            if (double.TryParse(values[7], out double timeZoneDouble))
+                timeZone = System.Convert.ToInt32(timeZoneDouble);
 
             if (!double.TryParse(values[8], out elevation))
                 elevation = double.NaN;
