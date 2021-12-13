@@ -78,8 +78,8 @@ namespace SAM.Weather
                 if (double.TryParse(values[9], out value))
                     dictionary[WeatherDataType.AtmosphericPressure.ToString()] = value;
 
-                if (double.TryParse(values[14], out value))
-                    dictionary[WeatherDataType.DirectSolarRadiation.ToString()] = value;
+                if (double.TryParse(values[13], out value))
+                    dictionary[WeatherDataType.GlobalSolarRadiation.ToString()] = value;
 
                 if (double.TryParse(values[15], out value))
                     dictionary[WeatherDataType.DiffuseSolarRadiation.ToString()] = value;
