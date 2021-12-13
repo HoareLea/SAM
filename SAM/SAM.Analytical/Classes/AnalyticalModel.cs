@@ -84,6 +84,30 @@ namespace SAM.Analytical
                 profileLibrary = new ProfileLibrary(analyticalModel.profileLibrary);
         }
 
+        public AnalyticalModel(AnalyticalModel analyticalModel, Location location)
+            : base(analyticalModel)
+        {
+            if (analyticalModel == null)
+                return;
+
+            description = analyticalModel.description;
+
+            if (location != null)
+                this.location = new Location(location);
+
+            if (analyticalModel.address != null)
+                address = new Address(analyticalModel.address);
+
+            if (analyticalModel.adjacencyCluster != null)
+                adjacencyCluster = new AdjacencyCluster(analyticalModel.adjacencyCluster);
+
+            if (analyticalModel.materialLibrary != null)
+                materialLibrary = new MaterialLibrary(analyticalModel.materialLibrary);
+
+            if (analyticalModel.profileLibrary != null)
+                profileLibrary = new ProfileLibrary(analyticalModel.profileLibrary);
+        }
+
         public AnalyticalModel(AnalyticalModel analyticalModel, AdjacencyCluster adjacencyCluster)
             : base(analyticalModel)
         {

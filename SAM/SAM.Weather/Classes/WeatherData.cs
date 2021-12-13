@@ -188,6 +188,14 @@ namespace SAM.Weather
             }
         }
 
+        public Location Location
+        {
+            get
+            {
+                return new Location(Name, longitude, latitude, elevation);
+            }
+        }
+
         public IEnumerable<int> Years
         {
             get
