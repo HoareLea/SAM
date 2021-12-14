@@ -89,6 +89,7 @@
     <Compile Include="Enums\Operator\IncrementAndDecrementOperator.cs" />
     <Compile Include="Enums\Operator\RelationalOperator.cs" />
     <Compile Include="Enums\Operator\LogicalOperator.cs" />
+    <Compile Include="Enums\UTC.cs" />
     <Compile Include="Enums\Week.cs" />
     <Compile Include="Enums\SAMFileType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\UTC.cs" />
     <Compile Include="Query\HourOfYear.cs" />
     <Compile Include="Query\Clamp.cs" />
     <Compile Include="Query\DefaultAddress.cs" />
