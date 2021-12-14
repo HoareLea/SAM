@@ -192,7 +192,13 @@ namespace SAM.Weather
         {
             get
             {
-                return new Location(Name, longitude, latitude, elevation);
+                Location result =  new Location(Name, longitude, latitude, elevation);
+                if(TryGetValue(WeatherDataParameter.TimeZone, out string timeZone))
+                {
+                    result.SetValue(LocationParameter.TimeZone, timeZone);
+                }
+
+                return result;
             }
         }
 
