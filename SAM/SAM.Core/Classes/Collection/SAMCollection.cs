@@ -18,12 +18,17 @@ namespace SAM.Core
 
         public SAMCollection(SAMCollection<T> sAMCollection)
         {
-            name = sAMCollection.name;
-            guid = sAMCollection.guid;
-            parameterSets = sAMCollection.parameterSets?.Clone();
+            if(sAMCollection != null)
+            {
+                name = sAMCollection.name;
+                guid = sAMCollection.guid;
+                parameterSets = sAMCollection.parameterSets?.Clone();
 
-            foreach (T t in sAMCollection)
-                Add(t);
+                foreach (T t in sAMCollection)
+                {
+                    Add(t);
+                }
+            }
         }
         
         public SAMCollection()
@@ -86,6 +91,7 @@ namespace SAM.Core
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Query.FullTypeName(this));
+            
             if (name != null)
                 jObject.Add("Name", name);
 
@@ -96,7 +102,10 @@ namespace SAM.Core
 
             JArray jArray = new JArray();
             foreach (T t in this)
-                jArray.Add(t.ToJObject());
+            {
+                jArray.Add(t?.ToJObject());
+            }
+
 
             jObject.Add("Collection", jArray);
 

@@ -166,6 +166,7 @@ namespace SAM.Weather
         public JObject ToJObject()
         {
             JObject result = new JObject();
+            result.Add("_type", Core.Query.FullTypeName(this));
 
             if (!double.IsNaN(depth))
                 result.Add("Depth", depth);
