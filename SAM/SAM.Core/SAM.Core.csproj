@@ -89,6 +89,7 @@
     <Compile Include="Enums\Operator\IncrementAndDecrementOperator.cs" />
     <Compile Include="Enums\Operator\RelationalOperator.cs" />
     <Compile Include="Enums\Operator\LogicalOperator.cs" />
+    <Compile Include="Enums\Parameter\LocationParameter.cs" />
     <Compile Include="Enums\UTC.cs" />
     <Compile Include="Enums\Week.cs" />
     <Compile Include="Enums\SAMFileType.cs" />
