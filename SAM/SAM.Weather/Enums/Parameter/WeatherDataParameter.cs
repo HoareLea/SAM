@@ -12,7 +12,7 @@ namespace SAM.Weather
         [ParameterProperties("City", "City"), ParameterValue(Core.ParameterType.String)] City,
         [ParameterProperties("Data Source", "Data Source"), ParameterValue(Core.ParameterType.String)] DataSource,
         [ParameterProperties("WMO Number", "WMO Number"), ParameterValue(Core.ParameterType.String)] WMONumber,
-        [ParameterProperties("Time Zone", "TimeZone [h] minimum -12, maximum +14"), ParameterValue(Core.ParameterType.Integer)] TimeZone,
+        [ParameterProperties("Time Zone", "UTC TimeZone"), ParameterValue(Core.ParameterType.String)] TimeZone,
         [ParameterProperties("Comments 1", "Comments 1"), ParameterValue(Core.ParameterType.String)] Comments_1,
         [ParameterProperties("Comments 2", "Comments 2"), ParameterValue(Core.ParameterType.String)] Comments_2,
     }

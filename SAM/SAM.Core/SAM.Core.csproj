@@ -172,6 +172,7 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\Double.cs" />
     <Compile Include="Query\UTC.cs" />
     <Compile Include="Query\HourOfYear.cs" />
     <Compile Include="Query\Clamp.cs" />

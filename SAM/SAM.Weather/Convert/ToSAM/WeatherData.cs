@@ -27,7 +27,7 @@ namespace SAM.Weather
             string wMONumber = null;
             double latitude = double.NaN;
             double longitude = double.NaN;
-            int timeZone = int.MinValue;
+            double timeZone = int.MinValue;
             double elevation = double.NaN;
 
             bool @break = true;
@@ -82,7 +82,7 @@ namespace SAM.Weather
             result.SetValue(WeatherDataParameter.DataSource, dataSource);
             result.SetValue(WeatherDataParameter.GroundTemperatures, groundTemperatures);
             result.SetValue(WeatherDataParameter.State, state);
-            result.SetValue(WeatherDataParameter.TimeZone, timeZone);
+            result.SetValue(WeatherDataParameter.TimeZone, Core.Query.Description(Core.Query.UTC(timeZone)));
             result.SetValue(WeatherDataParameter.WMONumber, wMONumber);
 
             foreach (string line in lines)

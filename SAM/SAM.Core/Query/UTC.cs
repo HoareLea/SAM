@@ -2,6 +2,11 @@
 {
     public static partial class Query
     {
+        public static UTC UTC(float value)
+        {
+            return UTC(System.Convert.ToDouble(value));
+        }
+        
         public static UTC UTC(double value)
         {
             if(double.IsNaN(value))
@@ -20,34 +25,34 @@
                 case -10.0:
                     return Core.UTC.Minus1000;
 
-                case -09.5:
+                case -9.5:
                     return Core.UTC.Minus0930;
 
-                case -08.0:
+                case -8.0:
                     return Core.UTC.Minus0800;
 
-                case -07.0:
+                case -7.0:
                     return Core.UTC.Minus0700;
 
-                case -06.0:
+                case -6.0:
                     return Core.UTC.Minus0600;
 
-                case -05.0:
+                case -5.0:
                     return Core.UTC.Minus0500;
 
-                case -04.0:
+                case -4.0:
                     return Core.UTC.Minus0400;
 
-                case -03.5:
+                case -3.5:
                     return Core.UTC.Minus0330;
 
-                case -03.0:
+                case -3.0:
                     return Core.UTC.Minus0300;
 
-                case -02.0:
+                case -2.0:
                     return Core.UTC.Minus0200;
 
-                case -01.0:
+                case -1.0:
                     return Core.UTC.Minus0100;
 
                 case 0.0:

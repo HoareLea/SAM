@@ -5,7 +5,7 @@ namespace SAM.Weather
 {
     public static partial class Query
     {
-        public static bool TryGetLocationData(IEnumerable<string> lines, int index, out string city, out string state, out string country, out string dataSource, out string wMONumber, out double latitude, out double longitude, out int timeZone, out double elevation)
+        public static bool TryGetLocationData(IEnumerable<string> lines, int index, out string city, out string state, out string country, out string dataSource, out string wMONumber, out double latitude, out double longitude, out double timeZone, out double elevation)
         {
             city = null;
             state = null;
@@ -14,7 +14,7 @@ namespace SAM.Weather
             wMONumber = null;
             latitude = double.NaN;
             longitude = double.NaN;
-            timeZone = int.MinValue;
+            timeZone = double.NaN;
             elevation = double.NaN;
 
             if (lines == null)
@@ -46,8 +46,8 @@ namespace SAM.Weather
             if (!double.TryParse(values[6], out longitude))
                 longitude = double.NaN;
 
-            if (double.TryParse(values[7], out double timeZoneDouble))
-                timeZone = System.Convert.ToInt32(timeZoneDouble);
+            if (!double.TryParse(values[7], out timeZone))
+                timeZone = double.NaN;
 
             if (!double.TryParse(values[8], out elevation))
                 elevation = double.NaN;

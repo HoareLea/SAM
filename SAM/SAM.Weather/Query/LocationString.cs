@@ -26,7 +26,7 @@
             string wMONumber = null;
             weatherData.TryGetValue(WeatherDataParameter.WMONumber, out wMONumber);
 
-            int timeZone = int.MinValue;
+            string timeZone = null;
             weatherData.TryGetValue(WeatherDataParameter.TimeZone, out timeZone);
 
             string[] values = new string[]
@@ -39,7 +39,7 @@
                 wMONumber == null ? string.Empty : wMONumber,
                 double.IsNaN(latitude) ? string.Empty : latitude.ToString(),
                 double.IsNaN(longitude) ? string.Empty : longitude.ToString(),
-                timeZone == int.MinValue ? string.Empty : timeZone.ToString(),
+                string.IsNullOrWhiteSpace(timeZone) ? string.Empty : Core.Query.Double(Core.Query.UTC(timeZone)).ToString(),
                 double.IsNaN(elevation) ? string.Empty : elevation.ToString(),
                 string.Empty
                 };
