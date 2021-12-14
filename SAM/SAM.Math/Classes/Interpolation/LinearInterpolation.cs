@@ -32,7 +32,7 @@ namespace SAM.Math
         {
             if(linearInterpolation.values != null)
             {
-                foreach (KeyValuePair<double, double> keyValuePair in values)
+                foreach (KeyValuePair<double, double> keyValuePair in linearInterpolation.values)
                     Add(keyValuePair);
             }
         }
