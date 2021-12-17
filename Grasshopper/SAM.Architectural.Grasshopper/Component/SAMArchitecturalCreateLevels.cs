@@ -30,7 +30,7 @@ namespace SAM.Architectural.Grasshopper
         /// </summary>
         public SAMArchitecturalCreateLevels()
           : base("SAMArchitectural.CreateLevels", "SAMArchitectural.CreateLevels",
-              "Create SAM Architectural Levels from Face3DObjects",
+              "Create SAM Architectural Levels from \n Panel, Aperture, \n * Partion, Opening ",
               "SAM", "Analytical")
         {
         }
