@@ -4,6 +4,8 @@ using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
@@ -42,7 +44,7 @@ namespace SAM.Core.Grasshopper
         {
             return new GooObject(Value);
         }
-        
+
         public override string ToString()
         {
             if (Value == null)
@@ -74,6 +76,18 @@ namespace SAM.Core.Grasshopper
                 if (!string.IsNullOrWhiteSpace(((ISAMObject)Value).Name))
                     value += string.Format(" [{0}]", ((ISAMObject)Value).Name);
             }
+
+            //if (Value is IEnumerable && !Value.GetType().Namespace.StartsWith("SAM.") && !(Value is string))
+            //{
+            //    List<string> values = new List<string>();
+            //    foreach (object @object in (IEnumerable)Value)
+            //    {
+            //        values.Add(@object?.ToString());
+            //    }
+
+
+            //    value = string.Join("\r\n", values);
+            //}
 
             return value;
         }

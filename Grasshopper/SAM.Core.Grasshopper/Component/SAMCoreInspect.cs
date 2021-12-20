@@ -274,51 +274,65 @@ namespace SAM.Core.Grasshopper
                 }
                 else if (result is IEnumerable && !result.GetType().Namespace.StartsWith("SAM.") && !(result is string))
                 {
-                    bool isDataTree = false;
-                    foreach (object @object_Result in (IEnumerable)result)
+                    List<object> objects = new List<object>();
+                    foreach (object object_Result in (IEnumerable)result)
                     {
-                        if (object_Result is IEnumerable && !object_Result.GetType().Namespace.StartsWith("SAM.") && !(object_Result is string))
-                        {
-                            isDataTree = true;
-                            break;
-                        }
+                        objects.Add(new GooObject(object_Result));
                     }
+                    dataAccess.SetDataList(i, objects);
+                    //List<GooObject> gooObjects = new List<GooObject>();
+                    //foreach (object object_Result in (IEnumerable)result)
+                    //{
+                    //    gooObjects.Add(new GooObject(object_Result));
+                    //}
 
-                    if (isDataTree)
-                    {
-                        DataTree<GooObject> dataTree = new DataTree<GooObject>();
-                        int index = 0;
-                        foreach (object @object_Result in (IEnumerable)result)
-                        {
-                            if (object_Result is IEnumerable && !object_Result.GetType().Namespace.StartsWith("SAM.") && !(object_Result is string))
-                            {
-                                int index_Temp = 0;
-                                foreach (object @object_Result_Temp in (IEnumerable)object_Result)
-                                {
-                                    dataTree.Add(new GooObject(@object_Result_Temp), new GH_Path(index, index_Temp));
-                                    index_Temp++;
-                                }
-                            }
-                            else
-                            {
-                                dataTree.Add(new GooObject(object_Result), new GH_Path(index));
-                            }
-                            index++;
-                        }
+                    //dataAccess.SetDataList(i, gooObjects);
 
-                        dataAccess.SetDataTree(i, dataTree);
+                    //bool isDataTree = false;
+                    //foreach (object @object_Result in (IEnumerable)result)
+                    //{
+                    //    if (object_Result is IEnumerable && !object_Result.GetType().Namespace.StartsWith("SAM.") && !(object_Result is string))
+                    //    {
+                    //        isDataTree = true;
+                    //        break;
+                    //    }
+                    //}
 
-                    }
-                    else
-                    {
-                        List<GooObject> gooObjects = new List<GooObject>();
-                        foreach (object object_Result in (IEnumerable)result)
-                        {
-                            gooObjects.Add(new GooObject(object_Result));
-                        }
+                    //if (isDataTree)
+                    //{
+                    //    DataTree<GooObject> dataTree = new DataTree<GooObject>();
+                    //    int index = 0;
+                    //    foreach (object @object_Result in (IEnumerable)result)
+                    //    {
+                    //        if (object_Result is IEnumerable && !object_Result.GetType().Namespace.StartsWith("SAM.") && !(object_Result is string))
+                    //        {
+                    //            int index_Temp = 0;
+                    //            foreach (object @object_Result_Temp in (IEnumerable)object_Result)
+                    //            {
+                    //                dataTree.Add(new GooObject(@object_Result_Temp), new GH_Path(index));
+                    //                index_Temp++;
+                    //            }
+                    //        }
+                    //        else
+                    //        {
+                    //            dataTree.Add(new GooObject(object_Result), new GH_Path(index));
+                    //        }
+                    //        index++;
+                    //    }
 
-                        dataAccess.SetDataList(i, gooObjects);
-                    }
+                    //    dataAccess.SetDataTree(i, dataTree);
+
+                    //}
+                    //else
+                    //{
+                    //    List<GooObject> gooObjects = new List<GooObject>();
+                    //    foreach (object object_Result in (IEnumerable)result)
+                    //    {
+                    //        gooObjects.Add(new GooObject(object_Result));
+                    //    }
+
+                    //    dataAccess.SetDataList(i, gooObjects);
+                    //}
 
 
 
