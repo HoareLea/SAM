@@ -67,12 +67,38 @@ namespace SAM.Analytical
             }
         }
 
-        public System.DateTime DateTime
+        public System.DateTime GetDateTime()
         {
-            get
+            if (year < 1 && year > 9999)
             {
-                return new System.DateTime(year, month, day);
+                return System.DateTime.MinValue;
             }
+
+            if (month < 1 && month > 12)
+            {
+                return System.DateTime.MinValue;
+            }
+
+            if (day < 1)
+            {
+                return System.DateTime.MinValue;
+            }
+
+            return new System.DateTime(year, month, day);
+        }
+
+        public Weather.WeatherYear GetWeatherYear()
+        {
+            System.DateTime dateTime = GetDateTime();
+            if(dateTime == System.DateTime.MinValue)
+            {
+                return null;
+            }
+
+            Weather.WeatherYear result = new Weather.WeatherYear(dateTime.Year);
+            result[dateTime.DayOfYear] = new Weather.WeatherDay(this);
+
+            return result;
         }
 
         public override bool FromJObject(JObject jObject)

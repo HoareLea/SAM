@@ -95,6 +95,7 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateProfileByWeatherYear.cs" />
     <Compile Include="Component\SAMAnalyticalSetLocation.cs" />
     <Compile Include="Component\SAMAnalyticalTriangulateConcavePanels.cs" />
     <Compile Include="Component\SAMAnalyticalMergePanels.cs" />
@@ -346,6 +347,10 @@
     <ProjectReference Include="..\SAM.Geometry.Grasshopper\SAM.Geometry.Grasshopper.csproj">
       <Project>{b8f0ee34-a776-4518-ada2-e047e468b47b}</Project>
       <Name>SAM.Geometry.Grasshopper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Weather.Grasshopper\SAM.Weather.Grasshopper.csproj">
+      <Project>{14c5e8de-5729-4ca0-baf9-7ca548d12b35}</Project>
+      <Name>SAM.Weather.Grasshopper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

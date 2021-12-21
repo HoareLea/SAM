@@ -113,5 +113,19 @@ namespace SAM.Analytical
 
             //return result;
         }
+
+        public static Profile Profile(Weather.WeatherYear weatherYear, Weather.WeatherDataType weatherDataType)
+        {
+            if(weatherYear == null || weatherDataType == Weather.WeatherDataType.Undefined)
+            {
+                return null;
+            }
+
+            string name = Core.Query.Description(weatherDataType);
+            List<double> values = weatherYear.GetValues(weatherDataType);
+
+            Profile result = new Profile(name, values);
+            return result;
+        }
     }
 }
