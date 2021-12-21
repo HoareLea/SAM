@@ -96,7 +96,7 @@ namespace SAM.Analytical
             }
 
             Weather.WeatherYear result = new Weather.WeatherYear(dateTime.Year);
-            result[dateTime.DayOfYear] = new Weather.WeatherDay(this);
+            result[dateTime.DayOfYear - 1] = new Weather.WeatherDay(this);
 
             return result;
         }
