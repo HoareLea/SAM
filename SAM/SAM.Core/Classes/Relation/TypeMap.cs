@@ -264,6 +264,9 @@ namespace SAM.Core
                 if (!valid)
                     valid = tuple.Item1.Equals(id_1);
 
+                if(!valid)
+                    valid = tuple.Item1.Equals(string.Format("::{0}", id_1));
+
                 if (!valid)
                     continue;
 
@@ -277,6 +280,9 @@ namespace SAM.Core
 
                 if (!valid)
                     valid = tuple.Item2.Equals(id_2);
+
+                if (!valid)
+                    valid = tuple.Item2.Equals(string.Format("::{0}", id_2));
 
                 if (!valid)
                     continue;
