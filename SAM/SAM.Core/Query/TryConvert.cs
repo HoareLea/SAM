@@ -123,7 +123,12 @@ namespace SAM.Core
                 if (@object is string)
                 {
                     double @double;
-                    if (double.TryParse((string)@object, out @double))
+                    //if (double.TryParse((string)@object, out @double))
+                    //{
+                    //    result = @double;
+                    //    return true;
+                    //}
+                    if (TryParseDouble((string)@object, out @double))
                     {
                         result = @double;
                         return true;
