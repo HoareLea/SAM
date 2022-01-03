@@ -13,9 +13,12 @@ namespace SAM.Core
         public Location(Location location)
             : base(location)
         {
-            longitude = location.longitude;
-            latitude = location.latitude;
-            elevation = location.elevation;
+            if(location != null)
+            {
+                longitude = location.longitude;
+                latitude = location.latitude;
+                elevation = location.elevation;
+            }
         }
 
         public Location(string name, double longitude, double latitude, double elevation)

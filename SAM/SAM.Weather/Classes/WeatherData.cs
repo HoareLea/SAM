@@ -266,13 +266,13 @@ namespace SAM.Weather
             if (description != null)
                 jObject.Add("Description", description);
 
-            if (double.IsNaN(latitude))
+            if (!double.IsNaN(latitude))
                 jObject.Add("Latitude", latitude);
 
-            if (double.IsNaN(longitude))
+            if (!double.IsNaN(longitude))
                 jObject.Add("Longitude", longitude);
 
-            if (double.IsNaN(elevation))
+            if (!double.IsNaN(elevation))
                 jObject.Add("Elevation", elevation);
 
             if (weatherYears != null)
