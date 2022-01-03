@@ -219,6 +219,7 @@
     <Compile Include="Spatial\Modify\SplitCoplanarFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\Segment3Ds.cs" />
     <Compile Include="Spatial\Query\Range.cs" />
     <Compile Include="Spatial\Query\ElevationRanges.cs" />
     <Compile Include="Spatial\Query\Ranges.cs" />
