@@ -4,7 +4,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static List<Segment3D> Segment3Ds(this IEnumerable<ISegmentable3D> segmentable3Ds)
+        public static List<Segment3D> Segment3Ds<T>(this IEnumerable<T> segmentable3Ds) where T :ISegmentable3D
         {
             if(segmentable3Ds == null)
             {
