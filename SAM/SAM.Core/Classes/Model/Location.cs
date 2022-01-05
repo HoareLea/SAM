@@ -72,7 +72,7 @@ namespace SAM.Core
                 return false;
 
             longitude = jObject.Value<double>("Longitude");
-            longitude = jObject.Value<double>("Latitude");
+            latitude = jObject.Value<double>("Latitude");
             elevation = jObject.Value<double>("Elevation");
 
             return true;
