@@ -2,6 +2,28 @@
 {
     public static partial class Query
     {
+        public static string UniqueName(this Panel panel, AdjacencyCluster adjacencyCluster)
+        {
+            if(panel == null || adjacencyCluster == null)
+            {
+                return null;
+            }
+
+            int index = adjacencyCluster.UniqueIndex(panel);
+            if(index == -1)
+            {
+                return null;
+            }
+
+            string name = panel.Name;
+            if(string.IsNullOrEmpty(name))
+            {
+                return index.ToString();
+            }
+
+            return string.Format("{0} {1}", name, index);
+        }
+        
         public static string UniqueName(this Panel panel, int id = -1)
         {
             if (panel == null)
