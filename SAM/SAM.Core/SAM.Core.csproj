@@ -173,6 +173,7 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\Locked.cs" />
     <Compile Include="Query\Double.cs" />
     <Compile Include="Query\UTC.cs" />
     <Compile Include="Query\HourOfYear.cs" />
@@ -272,7 +273,6 @@
     <Compile Include="Query\Value.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Classes\Comparison\" />
     <Folder Include="Interfaces\Range\" />
   </ItemGroup>
   <ItemGroup>
