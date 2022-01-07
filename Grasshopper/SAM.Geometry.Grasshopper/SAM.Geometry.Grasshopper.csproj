@@ -105,6 +105,7 @@
     <Compile Include="Convert\ToGrasshopper\GH_Mesh.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Vector.cs" />
     <Compile Include="Convert\ToSAM\Mesh3D.cs" />
+    <Compile Include="Convert\ToSAM\Rectangle3D.cs" />
     <Compile Include="Convert\ToSAM\Transform3D.cs" />
     <Compile Include="Create\Shell.cs" />
     <Compile Include="Enum\MeshType.cs" />

@@ -54,6 +54,7 @@
     <Compile Include="Convert\ToRhino\Polyline.cs" />
     <Compile Include="Convert\ToRhino\PolylineCurve.cs" />
     <Compile Include="Convert\ToRhino\Vector3d.cs" />
+    <Compile Include="Convert\ToSAM\Rectangle3D.cs" />
     <Compile Include="Convert\ToSAM\Circle3D.cs" />
     <Compile Include="Convert\ToSAM\IClosed3D.cs" />
     <Compile Include="Convert\ToSAM\IGeometry3D.cs" />
