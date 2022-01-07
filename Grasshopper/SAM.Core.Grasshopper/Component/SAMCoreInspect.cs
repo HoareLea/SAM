@@ -274,12 +274,29 @@ namespace SAM.Core.Grasshopper
                 }
                 else if (result is IEnumerable && !result.GetType().Namespace.StartsWith("SAM.") && !(result is string))
                 {
-                    List<object> objects = new List<object>();
+                    List<GooObject> objects = new List<GooObject>();
                     foreach (object object_Result in (IEnumerable)result)
                     {
                         objects.Add(new GooObject(object_Result));
                     }
-                    dataAccess.SetDataList(i, objects);
+
+                    if(gooParameterParam.Access == GH_ParamAccess.item)
+                    {
+                        if(objects.Count == 0)
+                        {
+                            dataAccess.SetData(i, null);
+                        }
+                        else
+                        {
+                            dataAccess.SetData(i, objects[0]);
+                        }
+                    }
+                    else if (gooParameterParam.Access == GH_ParamAccess.list)
+                    {
+                        dataAccess.SetDataList(i, objects);
+                    }
+
+                    
                     //List<GooObject> gooObjects = new List<GooObject>();
                     //foreach (object object_Result in (IEnumerable)result)
                     //{
