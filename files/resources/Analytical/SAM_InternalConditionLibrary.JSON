@@ -1,108 +1,28 @@
 {
   "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
   "Name": "Default SAM InternalCondition Library ver00",
-  "Guid": "40547c1c-93f1-4035-a05e-4048d19e200a",
+  "Guid": "1c2568c7-a46d-4021-8ce0-06b21bdb9374",
   "Objects": [
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
-      "Name": "Sxx_External",
-      "Guid": "a0e421a0-56cd-4e11-bfa2-9c4aee51f1ce",
-      "ParameterSets": [
-        {
-          "_type": "SAM.Core.ParameterSet",
-          "Name": "SAM.Analytical",
-          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
-          "Parameters": [
-            {
-              "Name": "Occupancy Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Occupancy Sensible Gain Per Person",
-              "Value": 0.0
-            },
-            {
-              "Name": "Occupancy Latent Gain Per Person",
-              "Value": 0.0
-            },
-            {
-              "Name": "Equipment Sensible Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Equipment Sensible Gain Per Area",
-              "Value": 0.0
-            },
-            {
-              "Name": "Equipment Latent Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Lighting Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Infiltration Air Changes Per Hour",
-              "Value": 0.0
-            },
-            {
-              "Name": "Infiltration Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Pollutant Profile Name",
-              "Value": "OFF"
-            },
-            {
-              "Name": "Heating Profile Name",
-              "Value": "No Heating"
-            },
-            {
-              "Name": "Cooling Profile Name",
-              "Value": "No Cooling"
-            },
-            {
-              "Name": "Humidification Profile Name",
-              "Value": "No Humidification"
-            },
-            {
-              "Name": "Dehumidification Profile Name",
-              "Value": "No Dehumidification"
-            },
-            {
-              "Name": "Ventilation System Type Name",
-              "Value": "UV"
-            },
-            {
-              "Name": "Cooling System Type Name",
-              "Value": "UC"
-            },
-            {
-              "Name": "Heating System Type Name",
-              "Value": "UH"
-            },
-            {
-              "Name": "Supply Air Flow Per Person",
-              "Value": 0.0
-            },
-            {
-              "Name": "Exhaust Air Flow Per Person",
-              "Value": 0.0
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S00_Unconditioned",
-      "Guid": "1ec827a5-6ece-45c3-a152-a758c104bee4",
+      "Guid": "5dc74884-cc5d-46cd-9e7a-fa270c3725f3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 1
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -186,13 +106,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S01_Auditorium",
-      "Guid": "3fa74b8f-666a-46f3-9830-1d11b78cb1d2",
+      "Guid": "46d6e1d6-c909-4aee-85cc-3820ba4ecab5",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 2
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 0.85
@@ -296,13 +226,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S03_Bedroom",
-      "Guid": "618a03a0-b323-4157-a481-2606e8d5c004",
+      "Guid": "56a73bdf-8220-4fdc-9727-53d7c59e4f74",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 3
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 10.0
@@ -406,13 +346,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S04_Breakout",
-      "Guid": "516e1412-ec18-44be-b640-f85433be37e0",
+      "Guid": "ffd24b85-f38b-4026-9e91-a1b9db2f54b6",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 4
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 2.0
@@ -516,13 +466,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S05_CarPark",
-      "Guid": "ad847598-50d7-465e-9dc8-633751862790",
+      "Guid": "e83c8c21-4dfb-41e7-9f42-315ad1aa6c39",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 5
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -610,13 +570,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S06_ChangingDry",
-      "Guid": "074d3bb1-74ad-4ab9-b86e-2b3ab66bace1",
+      "Guid": "4fce1387-3643-41fc-8ca1-2ea2bdd53483",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 6
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 5.0
@@ -728,13 +698,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S07_ChangingWet",
-      "Guid": "58a72347-783f-435b-b4ea-dd1d16fa8599",
+      "Guid": "c9e24a75-2951-43a8-a469-ec2256e7281a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 7
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 5.0
@@ -846,13 +826,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S08_Circulation",
-      "Guid": "e90c1ef7-fd98-4c1d-a63b-cf811352d46e",
+      "Guid": "a0e2fff3-2563-435c-a165-ec926f4aba87",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 8
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -952,13 +942,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S09_ClassHighLoad",
-      "Guid": "ca5a666a-5488-4b33-bc2a-fffe455025f0",
+      "Guid": "df2b905e-54f8-468c-872b-e700703803dc",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 9
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 1.5
@@ -1062,13 +1062,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S10_ClassRoom",
-      "Guid": "5ecb9691-262e-4996-91fe-2237080aa3ea",
+      "Guid": "19377fdc-68b3-4389-a25d-d7c22f0ea889",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 10
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1176,13 +1186,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S11_CommonRoom",
-      "Guid": "2e028122-e9fa-4682-ab26-0d9b94508071",
+      "Guid": "d8c212f9-b449-4ad4-86db-31281c96ef14",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 11
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1290,13 +1310,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S12_Comms",
-      "Guid": "7011e55f-bb36-411a-b36c-c78c9a52709e",
+      "Guid": "e57a96a2-e91f-457f-9cfe-077770bd09a4",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 12
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1396,13 +1426,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S13_Copier",
-      "Guid": "93778fae-d243-4b58-8174-864bdaef172e",
+      "Guid": "742fe19c-71e2-4244-91fa-f7815832cd8d",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 13
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1510,13 +1550,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S14_DataCentre",
-      "Guid": "ea0ad107-37bd-4a6e-b445-4f2c001188e2",
+      "Guid": "6217a069-54bf-4bd2-9c14-dc99b3ffe905",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 14
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -1624,13 +1674,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S15_DomBath",
-      "Guid": "e0131182-5348-4547-a932-819333551b43",
+      "Guid": "b2624663-632a-4a99-abfc-f860be32fdc8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 15
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1738,13 +1798,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S16_DomBed",
-      "Guid": "dfc4f756-7f0e-4807-bdf4-62747c34a66b",
+      "Guid": "3717c79e-0005-46dd-b4cc-0e3be1fe6375",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 16
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 10.0
@@ -1848,13 +1918,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S17_DomCirculation",
-      "Guid": "4ff00d5b-586c-4ede-af0f-cc62f18ac3ba",
+      "Guid": "d1a91310-7368-469c-98d3-0d7dd7744838",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 17
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -1954,13 +2034,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S18_DomDining",
-      "Guid": "0f5c9a2a-e000-4806-8744-6ae2661f1699",
+      "Guid": "5d012e94-7b5b-4b96-b293-944f43050640",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 18
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 10.0
@@ -2072,13 +2162,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S19_DomKitchen",
-      "Guid": "bb592f9e-c898-4325-89a8-11193671e45e",
+      "Guid": "34281218-4bcd-4901-904a-80bc958ebd62",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 19
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -2186,13 +2286,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S20_DomLiving",
-      "Guid": "c98d427f-ae4a-406d-9d69-189d17b38428",
+      "Guid": "34e8875e-c1e7-403c-aea5-668c38dedde6",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 20
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 2.0
@@ -2296,13 +2406,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S21_DomStore",
-      "Guid": "39127a19-bfe5-426c-b946-07385c6cfcb9",
+      "Guid": "7e6996f0-2c63-419f-a65f-1b9c605aac34",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 21
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 13.3
@@ -2406,13 +2526,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S22_DomToilet",
-      "Guid": "6cec3d17-dee2-4444-bae4-b530ce1405b4",
+      "Guid": "9ec0316f-df54-4db3-b541-ee2b7c3ee415",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 22
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 7.5
@@ -2516,13 +2646,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S23_DrySptHall",
-      "Guid": "b9e49f8a-8fd6-48d1-ac0f-675b0e8011b0",
+      "Guid": "9645ed05-8c46-4689-9e48-cd0ed898700a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 23
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 7.5
@@ -2626,13 +2766,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S24_EatingDrinking",
-      "Guid": "a5355db8-573d-41a2-a22e-ae4d11d0b5b7",
+      "Guid": "70f40bbc-973a-4a8a-a98f-769dcdc3a434",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 24
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 10.0
@@ -2736,13 +2886,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S25_ElecPlant",
-      "Guid": "d5d71655-fdb0-45e5-add7-e89e63d5c09b",
+      "Guid": "0649226b-50d0-4142-a659-4ab4d9ca7e88",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 25
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -2850,13 +3010,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S26_Exhibition",
-      "Guid": "7fcda216-a47e-4056-985e-7a1e725bd922",
+      "Guid": "0e8366ba-f31e-402a-b5c0-1bdadb2fb67b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 26
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -2956,13 +3126,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S27_FirstAid",
-      "Guid": "19f9b22d-0623-43fc-b965-7706b1339721",
+      "Guid": "97e7cc8d-be88-4cd1-b22c-1884790b441e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 27
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 10.0
@@ -3066,13 +3246,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S28_FitGym",
-      "Guid": "bb7600e3-ebee-439e-aab2-a41c099d674b",
+      "Guid": "8cbeb003-2621-4614-baaf-94d68ba74caf",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 28
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -3180,13 +3370,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S29_Foyer",
-      "Guid": "f1c3c1b5-99f2-43e4-8fe9-beff070371fa",
+      "Guid": "d1fb7cbc-2776-4f23-abc4-4d069edbfda3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 29
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 10.0
@@ -3290,13 +3490,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S30_IndustProcess",
-      "Guid": "1843da28-9218-43eb-bd13-96cf00a56772",
+      "Guid": "1e7b385a-6ddd-4dc3-84ef-a8a633c50049",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 30
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 7.0
@@ -3400,13 +3610,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S31_Kitchen",
-      "Guid": "03f7b786-7604-4513-a7c9-ffab8595215d",
+      "Guid": "b00b9c4a-b963-4eed-928a-5514d72d89ba",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 31
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 10.0
@@ -3518,13 +3738,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S32_Kitchenette",
-      "Guid": "dd8f7f1a-9df7-4b40-92dd-27e9d8a56ec2",
+      "Guid": "2f4dc861-07c2-41af-90c4-c79cbce58e7a",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 32
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 10.0
@@ -3636,13 +3866,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S33_Lab",
-      "Guid": "fe4c60ff-1075-4418-bff8-4756264e9292",
+      "Guid": "5eff7afb-18c0-48ba-9337-ddf0359aab3c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 33
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -3726,13 +3966,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S34_Laundry",
-      "Guid": "2c2e61f1-029b-480f-85e3-7fd77e3fa23d",
+      "Guid": "bc6df96d-296e-4487-a78c-d50e748fbdf2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 34
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -3824,13 +4074,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S35_MechPlant",
-      "Guid": "51559adc-b9fa-4df0-bc69-2df59ad21b87",
+      "Guid": "b4f97955-2373-49d7-a73f-aa4054a7e190",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 35
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -3938,13 +4198,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S36_Meeting",
-      "Guid": "053bf9c9-9971-4f63-b4da-0d85047c8219",
+      "Guid": "68a031a4-661c-4368-bb6f-b983d523e0ce",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 36
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 2.0
@@ -4048,13 +4318,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S37_OfficeCell",
-      "Guid": "0f64aac9-a44b-4b31-9644-41c8bdcb410d",
+      "Guid": "190d5d1b-fe05-4ae6-a3c5-b7a65f390a07",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 37
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 7.5
@@ -4158,13 +4438,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S38_OfficeHighLoad",
-      "Guid": "f14e63da-81d4-48e5-8900-4b087acbc563",
+      "Guid": "f42aced6-3995-4f94-88c4-b536a840b4c8",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 38
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -4248,13 +4538,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S39_OfficeOpen",
-      "Guid": "b17bd31b-1ddd-4735-be04-6366458209f8",
+      "Guid": "baf61eb8-6b32-4321-950a-46a33eccfa2b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 39
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 13.3
@@ -4358,13 +4658,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S40_Prayer",
-      "Guid": "bbdbca31-164b-477c-95b0-77a299b5d0b5",
+      "Guid": "f59f2e3d-5b29-4f62-a913-7be7c672fd7e",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 40
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -4448,13 +4758,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S41_Reception",
-      "Guid": "6459d7e5-775c-47e5-8c32-3747011291e2",
+      "Guid": "5d74974e-6372-47ad-9efb-5adf73173c11",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 41
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -4538,13 +4858,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S42_Retail",
-      "Guid": "e7b818e3-1747-4a41-8a4e-435297ec8f9b",
+      "Guid": "d69fd5d6-d9b1-473a-9997-93887e558bd3",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 42
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -4628,13 +4958,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S43_RetailChill",
-      "Guid": "1aabe9dd-24b6-4d7a-9f3f-fc0a764ab96f",
+      "Guid": "73746395-b2e0-429a-9adf-9c6e19167be7",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 43
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -4718,13 +5058,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S44_RetailElectric",
-      "Guid": "46a38c85-9211-4e49-b0a8-d8f73b31ecb7",
+      "Guid": "b6885476-a8e8-4e51-be63-afb87626881b",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 44
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -4808,13 +5158,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S45_RetailWarehouse",
-      "Guid": "e6b79ecc-7281-4a19-915e-af6eb2e64769",
+      "Guid": "a078e936-b585-4d8b-b239-b5ca3f2c6a4c",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 45
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -4898,13 +5258,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S46_Servery",
-      "Guid": "358f2cf5-ab75-49b7-a051-f662f28f4803",
+      "Guid": "edad9556-341d-40da-b3b9-a65c15f36817",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 46
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 10.0
@@ -5016,13 +5386,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S47_StairsEscape",
-      "Guid": "66e9ab52-8bd9-44b2-b736-9f0966b95dad",
+      "Guid": "f861f32e-8b7f-4486-b2c4-d916282ee5f9",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 47
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -5122,13 +5502,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S48_Store",
-      "Guid": "fa191698-9880-4b30-b8f9-0be9944fb6c1",
+      "Guid": "e80d19f6-120a-45af-9048-4602c577a8ef",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 48
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -5228,13 +5618,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S49_Swim",
-      "Guid": "62001c2e-a891-4ec3-ad8b-0c7f61b2a4ba",
+      "Guid": "3e4b0f77-5c5e-43dd-8652-c5e10a551430",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 49
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -5318,13 +5718,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S50_Toilet",
-      "Guid": "73d26cd9-481c-4a99-9d5b-0f8767d9b1ea",
+      "Guid": "9fdadbf2-4d30-4611-aa2d-5290d65b4bd2",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 50
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "8to19"
@@ -5432,13 +5842,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S51_Waiting",
-      "Guid": "51b80939-a856-4015-ae5e-e3fdbd03db2b",
+      "Guid": "6b5a92e5-f69d-4690-a0fa-1fcebf184630",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 51
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -5522,13 +5942,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S52_Waste",
-      "Guid": "8bb75eba-6919-4a8d-abda-d5aa37a202e2",
+      "Guid": "b091bdcd-ae65-480d-997b-4a32aeb1f6e9",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 52
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -5636,13 +6066,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S53_Workshop",
-      "Guid": "07d3d38d-1ca1-4825-96c7-6422e04d46a9",
+      "Guid": "86f4bffa-bd26-46a0-9fbb-0e34ca319247",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 53
+              }
+            },
             {
               "Name": "Occupancy Profile Name",
               "Value": "OFF"
@@ -5726,13 +6166,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S54_Rehearsal",
-      "Guid": "52494981-8f7a-45c9-8c3c-55867c5e1374",
+      "Guid": "6225477c-6cb8-438f-9365-60f36a129919",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 54
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 5.0
@@ -5836,13 +6286,23 @@
     {
       "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
       "Name": "S56_AcademicStudio",
-      "Guid": "d85070a2-cc4f-4d75-a16c-e202c0025061",
+      "Guid": "f32868af-098c-439e-b614-f95b18126cfb",
       "ParameterSets": [
         {
           "_type": "SAM.Core.ParameterSet",
           "Name": "SAM.Analytical",
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
+            {
+              "Name": "Color",
+              "Value": {
+                "_type": "SAM.Core.SAMColor,SAM.Core",
+                "Alpha": 255,
+                "Red": 255,
+                "Green": 0,
+                "Blue": 55
+              }
+            },
             {
               "Name": "Area Per Person",
               "Value": 7.0
