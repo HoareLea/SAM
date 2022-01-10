@@ -77,6 +77,7 @@
     <Compile Include="Create\Commands.cs" />
     <Compile Include="Create\Directory.cs" />
     <Compile Include="Create\Array.cs" />
+    <Compile Include="Create\Colors.cs" />
     <Compile Include="Create\Material.cs" />
     <Compile Include="Create\TypeMap.cs" />
     <Compile Include="Create\TextMap.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\Brighten.cs" />
     <Compile Include="Query\Lerps.cs" />
     <Compile Include="Query\Lerp.cs" />
     <Compile Include="Query\WaitToUnlock.cs" />
