@@ -195,6 +195,7 @@
     <Compile Include="Interfaces\New\IPartition.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Modify\AssignSpaceColors.cs" />
     <Compile Include="Modify\AddApertures.cs" />
     <Compile Include="Modify\AddAirPanels.cs" />
     <Compile Include="Modify\New\MapInternalConditions.cs" />

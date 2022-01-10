@@ -6,6 +6,8 @@ namespace SAM.Analytical
     [AssociatedTypes(typeof(Space)), Description("Space Parameter")]
     public enum SpaceParameter
     {
+        [ParameterProperties("Color", "Color"), ParameterValue(Core.ParameterType.Color)] Color,
+
         [ParameterProperties("Design Heating Load", "Design Heating Load [W]"), DoubleParameterValue(0)] DesignHeatingLoad,
         [ParameterProperties("Design Cooling Load", "Design Cooling Load [W]"), DoubleParameterValue(0)] DesignCoolingLoad,
         //[ParameterProperties("Specified Exhaust Airflow", "Extract Airflow"), DoubleParameterValue(0)] ExtractAirflow,

@@ -179,6 +179,8 @@ namespace SAM.Analytical.Grasshopper
                         if (internalCondition == spaces[i].InternalCondition)
                             spaces_Unassigned.Add(spaces[i]);
                     }
+                    adjacencyCluster.AssignSpaceColors();
+
                     sAMObject = adjacencyCluster;
                 }
             }
@@ -200,6 +202,8 @@ namespace SAM.Analytical.Grasshopper
 
                         profiles = Analytical.Query.Profiles(adjacencyCluster, profileLibrary);
                         profileLibrary = new ProfileLibrary("Default Material Library", profiles);
+
+                        adjacencyCluster.AssignSpaceColors();
 
                         sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster, analyticalModel.MaterialLibrary, profileLibrary);
                     }
