@@ -173,6 +173,8 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\Lerps.cs" />
+    <Compile Include="Query\Lerp.cs" />
     <Compile Include="Query\WaitToUnlock.cs" />
     <Compile Include="Query\Locked.cs" />
     <Compile Include="Query\Double.cs" />
