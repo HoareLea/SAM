@@ -19,7 +19,7 @@ namespace SAM.Core
                 return new JSAMObjectWrapper(jObject);
             }
 
-            Type type = System.Type.GetType(fullTypeName);
+            Type type = Type(fullTypeName);
             if (type == null)
             {
                 return new JSAMObjectWrapper(jObject);
