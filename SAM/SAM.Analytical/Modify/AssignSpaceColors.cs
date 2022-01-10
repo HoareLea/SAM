@@ -49,6 +49,8 @@ namespace SAM.Analytical
                 List<Space> spaces_Color = keyValuePair.Value.Item2;
 
                 List<Color> colors = Core.Create.Colors(color, spaces_Color.Count, 0, 0.8);
+                //MD to control order of colors first raw and than variations
+                colors.Reverse();
                 if(colors == null || colors.Count != spaces_Color.Count)
                 {
                     continue;

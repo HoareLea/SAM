@@ -166,6 +166,8 @@ namespace SAM.Analytical.Grasshopper
                         IEnumerable<Profile> profiles = Analytical.Query.Profiles(adjacencyCluster, profileLibrary);
                         profileLibrary = new ProfileLibrary("Default Material Library", profiles);
 
+                        adjacencyCluster.AssignSpaceColors();
+
                         analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster, analyticalModel.MaterialLibrary, profileLibrary);
                     }
                 }

@@ -238,9 +238,9 @@
               "Value": {
                 "_type": "SAM.Core.SAMColor,SAM.Core",
                 "Alpha": 255,
-                "Red": 255,
-                "Green": 0,
-                "Blue": 3
+                "Red": 0,
+                "Green": 255,
+                "Blue": 0
               }
             },
             {

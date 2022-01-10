@@ -169,7 +169,7 @@ namespace SAM.Analytical.Grasshopper
                             adjacencyCluster.AddObject(space_New);
                         }
                     }
-
+                    adjacencyCluster.AssignSpaceColors();
                     result.Add(adjacencyCluster);
                 }
                 else if (sAMObject is AnalyticalModel)
@@ -193,6 +193,7 @@ namespace SAM.Analytical.Grasshopper
                             spaces_Output.Add(space_New);
                             adjacencyCluster.AddObject(space_New);
                         }
+                        adjacencyCluster.AssignSpaceColors();
                     }
 
                     result.Add(new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster));

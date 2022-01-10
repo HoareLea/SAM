@@ -288,7 +288,7 @@ namespace SAM.Core.Grasshopper
                         }
                         else
                         {
-                            dataAccess.SetData(i, objects[0]);
+                            dataAccess.SetDataList(i, objects);
                         }
                     }
                     else if (gooParameterParam.Access == GH_ParamAccess.list)
