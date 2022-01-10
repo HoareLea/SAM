@@ -416,6 +416,30 @@ namespace SAM.Core
                             result = new SAMColor(Convert.ToColor(int_color));
                             return true;
                         }
+                        else
+                        {
+                            string value = (string)@object;
+                            if(!string.IsNullOrWhiteSpace(value) && value.Contains(","))
+                            {
+                                string[] values = value.Split(',');
+                                if(values.Length ==3)
+                                {
+                                    if(int.TryParse(values[0], out int r) && int.TryParse(values[1], out int g) && int.TryParse(values[2], out int b))
+                                    {
+                                        result = new SAMColor(System.Drawing.Color.FromArgb(r, g, b));
+                                        return true;
+                                    }
+                                }
+                                else if(values.Length == 4)
+                                {
+                                    if (int.TryParse(values[0], out int a) && int.TryParse(values[1], out int r) && int.TryParse(values[2], out int g) && int.TryParse(values[3], out int b))
+                                    {
+                                        result = new SAMColor(System.Drawing.Color.FromArgb(a, r, g, b));
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 

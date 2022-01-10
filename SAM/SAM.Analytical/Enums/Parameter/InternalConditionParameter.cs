@@ -6,6 +6,8 @@ namespace SAM.Analytical
     [AssociatedTypes(typeof(InternalCondition)), Description("Internal Condition Parameter")]
     public enum InternalConditionParameter
     {
+        [ParameterProperties("Color", "Color"), ParameterValue(Core.ParameterType.Color)] Color,
+
         [ParameterProperties("Area Per Person", "Area Per Person [m2/p]"), DoubleParameterValue(0)] AreaPerPerson,
         [ParameterProperties("Occupancy Profile Name", "Occupancy Profile Name"), ParameterValue(Core.ParameterType.String)] OccupancyProfileName,
         [ParameterProperties("Occupancy Sensible Gain Per Person", "Occupancy Sensible Gain Per Person [W/p]"), ParameterValue(Core.ParameterType.Double)] OccupancySensibleGainPerPerson,
