@@ -430,7 +430,7 @@ namespace SAM.Geometry.Spatial
 
         public double GetLength()
         {
-            return Height + Height + Width + Width;
+            return (4 * Height) + (4 * Width) + (4 * Depth);
         }
 
         public static bool operator ==(BoundingBox3D boundingBox3D_1, BoundingBox3D boundingBox3D_2)

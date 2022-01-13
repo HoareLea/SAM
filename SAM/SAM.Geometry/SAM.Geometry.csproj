@@ -90,6 +90,7 @@
     <Compile Include="Samples\Query\Sample.cs" />
     <Compile Include="Spatial\Classes\Ellipse3D.cs" />
     <Compile Include="Spatial\Classes\Mesh3D.cs" />
+    <Compile Include="Spatial\Create\BoundingBox3D.cs" />
     <Compile Include="Spatial\Create\Mesh3D.cs" />
     <Compile Include="Spatial\Create\IClosedPlanar3D.cs" />
     <Compile Include="Create\UndirectedGraph.cs" />
