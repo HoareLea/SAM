@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -44,6 +45,29 @@ namespace SAM.Geometry.Spatial
                 return false;
 
             return planarIntersectionResult.Intersecting;
+        }
+
+        public static bool Intersect(this Face3D face3D, Point3D point3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(face3D == null || point3D == null || vector3D == null)
+            {
+                return false;
+            }
+
+            PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(face3D, point3D, vector3D, tolerance);
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+            {
+                return false;
+            }
+
+            Point3D point3D_Intersection = planarIntersectionResult.GetGeometry3Ds<Point3D>()?.FirstOrDefault();
+
+            return point3D_Intersection != null && point3D_Intersection.IsValid();
+        }
+
+        public static bool Intersect(this IFace3DObject face3DObject, Point3D point3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
+        {
+            return Intersect(face3DObject?.Face3D, point3D, vector3D, tolerance);
         }
     }
 }
