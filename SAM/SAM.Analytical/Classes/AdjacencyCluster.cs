@@ -42,7 +42,8 @@ namespace SAM.Analytical
                 typeof(ZoneSimulationResult).IsAssignableFrom(type) ||
                 typeof(InternalCondition).IsAssignableFrom(type) ||
                 typeof(Construction).IsAssignableFrom(type) ||
-                typeof(ApertureConstruction).IsAssignableFrom(type);
+                typeof(ApertureConstruction).IsAssignableFrom(type) ||
+                typeof(Core.Result).IsAssignableFrom(type);
         }
 
         public override Core.RelationCluster Clone()
