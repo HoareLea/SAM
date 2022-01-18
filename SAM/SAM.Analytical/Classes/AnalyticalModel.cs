@@ -292,6 +292,37 @@ namespace SAM.Analytical
             return adjacencyCluster.AddObject(panel);
         }
 
+        public bool AddResult<T>(IResult result, Guid guid)where T: SAMObject
+        {
+            IResult result_Temp = result?.Clone();
+            if (result_Temp == null)
+            {
+                return false;
+            }
+
+            if (adjacencyCluster == null)
+            {
+                adjacencyCluster = new AdjacencyCluster();
+            }
+
+            bool added = adjacencyCluster.AddObject(result_Temp);
+            if (!added)
+            {
+                return false;
+            }
+
+            if (guid != Guid.Empty)
+            {
+                T @object = adjacencyCluster.GetObject<T>(guid);
+                if (@object != null)
+                {
+                    adjacencyCluster.AddRelation(result_Temp, @object);
+                }
+            }
+
+            return true;
+        }
+
         public List<Space> GetSpaces()
         {
             return adjacencyCluster?.GetSpaces()?.ConvertAll(x => new Space(x));
@@ -305,6 +336,16 @@ namespace SAM.Analytical
         public List<Zone> GetZones()
         {
             return adjacencyCluster?.GetZones();
+        }
+
+        public List<T> GetResults<T>(IJSAMObject jSAMObject) where T : Result
+        {
+            if (jSAMObject == null)
+            {
+                return null;
+            }
+
+            return adjacencyCluster.GetRelatedObjects<T>(jSAMObject)?.ConvertAll(x => x?.Clone());
         }
 
         public List<Geometry.Spatial.Shell> GetShells()

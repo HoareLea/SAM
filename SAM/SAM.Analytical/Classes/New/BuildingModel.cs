@@ -2213,6 +2213,37 @@ namespace SAM.Analytical
             return true;
         }
 
+        public bool Add<T>(IResult result, Guid guid) where T : IJSAMObject
+        {
+            IResult result_Temp = result?.Clone();
+            if(result_Temp == null)
+            {
+                return false;
+            }
+
+            if (relationCluster == null)
+            {
+                relationCluster = new RelationCluster();
+            }
+
+            bool added = relationCluster.AddObject(result_Temp);
+            if (!added)
+            {
+                return false;
+            }
+
+            if (guid != Guid.Empty)
+            {
+                T @object = relationCluster.GetObject<T>(guid);
+                if (@object != null)
+                {
+                    relationCluster.AddRelation(result_Temp, @object);
+                }
+            }
+
+            return true;
+        }
+
         public bool Contains(ISAMObject sAMObject)
         {
             if(sAMObject is Profile)
