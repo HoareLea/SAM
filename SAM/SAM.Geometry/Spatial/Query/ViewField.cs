@@ -7,12 +7,12 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static void ViewField(this IEnumerable<LinkedFace3D> linkedFace3Ds, Vector3D viewDirection, out List<LinkedFace3D> linkedFace3Ds_Hidden, out List<LinkedFace3D> linkedFace3Ds_Visible, bool hidden = true, bool visible = true, double tolerance_Area = Tolerance.MacroDistance, double tolerance_Snap = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance)
+        public static void ViewField<T>(this IEnumerable<T> face3DObjects, Vector3D viewDirection, out List<LinkedFace3D> linkedFace3Ds_Hidden, out List<LinkedFace3D> linkedFace3Ds_Visible, bool hidden = true, bool visible = true, double tolerance_Area = Tolerance.MacroDistance, double tolerance_Snap = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance) where T: IFace3DObject
         {
             linkedFace3Ds_Hidden = null;
             linkedFace3Ds_Visible = null;
 
-            if (linkedFace3Ds == null || viewDirection == null || !viewDirection.IsValid())
+            if (face3DObjects == null || viewDirection == null || !viewDirection.IsValid())
             {
                 return;
             }
@@ -25,6 +25,27 @@ namespace SAM.Geometry.Spatial
             if (hidden)
             {
                 linkedFace3Ds_Hidden = new List<LinkedFace3D>();
+            }
+
+            List<LinkedFace3D> linkedFace3Ds = new List<LinkedFace3D>();
+            foreach(T face3DObject in face3DObjects)
+            {
+                if(face3DObject == null)
+                {
+                    continue;
+                }
+
+                if(face3DObject is LinkedFace3D)
+                {
+                    linkedFace3Ds.Add((LinkedFace3D)(object)face3DObject);
+                    continue;
+                }
+
+                LinkedFace3D linkedFace3D = Create.LinkedFace3D(face3DObject);
+                if(linkedFace3D != null)
+                {
+                    linkedFace3Ds.Add(linkedFace3D);
+                }
             }
 
             if (linkedFace3Ds.Count() < 2)
@@ -210,12 +231,12 @@ namespace SAM.Geometry.Spatial
 
         }
 
-        public static void ViewField_Obsolete1(this IEnumerable<LinkedFace3D> linkedFace3Ds, Vector3D viewDirection, out List<LinkedFace3D> linkedFace3Ds_Hidden, out List<LinkedFace3D> linkedFace3Ds_Visible, bool hidden = true, bool visible = true, double tolerance_Area = Tolerance.MacroDistance, double tolerance_Snap = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance)
+        public static void ViewField_Obsolete1<T>(this IEnumerable<T> face3DObjects, Vector3D viewDirection, out List<LinkedFace3D> linkedFace3Ds_Hidden, out List<LinkedFace3D> linkedFace3Ds_Visible, bool hidden = true, bool visible = true, double tolerance_Area = Tolerance.MacroDistance, double tolerance_Snap = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance) where T : IFace3DObject
         {
             linkedFace3Ds_Hidden = null;
             linkedFace3Ds_Visible = null;
 
-            if (linkedFace3Ds == null || viewDirection == null || !viewDirection.IsValid())
+            if (face3DObjects == null || viewDirection == null || !viewDirection.IsValid())
             {
                 return;
             }
@@ -228,6 +249,27 @@ namespace SAM.Geometry.Spatial
             if (hidden)
             {
                 linkedFace3Ds_Hidden = new List<LinkedFace3D>();
+            }
+
+            List<LinkedFace3D> linkedFace3Ds = new List<LinkedFace3D>();
+            foreach (T face3DObject in face3DObjects)
+            {
+                if (face3DObject == null)
+                {
+                    continue;
+                }
+
+                if (face3DObject is LinkedFace3D)
+                {
+                    linkedFace3Ds.Add((LinkedFace3D)(object)face3DObject);
+                    continue;
+                }
+
+                LinkedFace3D linkedFace3D = Create.LinkedFace3D(face3DObject);
+                if (linkedFace3D != null)
+                {
+                    linkedFace3Ds.Add(linkedFace3D);
+                }
             }
 
             if (linkedFace3Ds.Count() < 2)
@@ -494,12 +536,12 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public static void ViewField_Obselete2(this IEnumerable<LinkedFace3D> linkedFace3Ds, Vector3D viewDirection, out List<LinkedFace3D> linkedFace3Ds_Hidden, out List<LinkedFace3D> linkedFace3Ds_Visible, bool hidden = true, bool visible = true, double tolerance_Area = Tolerance.MacroDistance, double tolerance_Snap = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance)
+        public static void ViewField_Obselete2<T>(this IEnumerable<T> face3DObjects, Vector3D viewDirection, out List<LinkedFace3D> linkedFace3Ds_Hidden, out List<LinkedFace3D> linkedFace3Ds_Visible, bool hidden = true, bool visible = true, double tolerance_Area = Tolerance.MacroDistance, double tolerance_Snap = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance) where T : IFace3DObject
         {
             linkedFace3Ds_Hidden = null;
             linkedFace3Ds_Visible = null;
 
-            if (linkedFace3Ds == null || viewDirection == null || !viewDirection.IsValid())
+            if (face3DObjects == null || viewDirection == null || !viewDirection.IsValid())
             {
                 return;
             }
@@ -512,6 +554,27 @@ namespace SAM.Geometry.Spatial
             if (hidden)
             {
                 linkedFace3Ds_Hidden = new List<LinkedFace3D>();
+            }
+
+            List<LinkedFace3D> linkedFace3Ds = new List<LinkedFace3D>();
+            foreach (T face3DObject in face3DObjects)
+            {
+                if (face3DObject == null)
+                {
+                    continue;
+                }
+
+                if (face3DObject is LinkedFace3D)
+                {
+                    linkedFace3Ds.Add((LinkedFace3D)(object)face3DObject);
+                    continue;
+                }
+
+                LinkedFace3D linkedFace3D = Create.LinkedFace3D(face3DObject);
+                if (linkedFace3D != null)
+                {
+                    linkedFace3Ds.Add(linkedFace3D);
+                }
             }
 
             if (linkedFace3Ds.Count() < 2)
