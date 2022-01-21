@@ -91,6 +91,7 @@
     <Compile Include="Spatial\Classes\Ellipse3D.cs" />
     <Compile Include="Spatial\Classes\LinkedFace3D.cs" />
     <Compile Include="Spatial\Classes\Mesh3D.cs" />
+    <Compile Include="Spatial\Create\LinkedFace3D.cs" />
     <Compile Include="Spatial\Create\LinkedFace3Ds.cs" />
     <Compile Include="Spatial\Create\BoundingBox3D.cs" />
     <Compile Include="Spatial\Create\Mesh3D.cs" />
