@@ -89,7 +89,9 @@
     <Compile Include="Planar\Query\SelfIntersectionFace2Ds.cs" />
     <Compile Include="Samples\Query\Sample.cs" />
     <Compile Include="Spatial\Classes\Ellipse3D.cs" />
+    <Compile Include="Spatial\Classes\LinkedFace3D.cs" />
     <Compile Include="Spatial\Classes\Mesh3D.cs" />
+    <Compile Include="Spatial\Create\LinkedFace3Ds.cs" />
     <Compile Include="Spatial\Create\BoundingBox3D.cs" />
     <Compile Include="Spatial\Create\Mesh3D.cs" />
     <Compile Include="Spatial\Create\IClosedPlanar3D.cs" />
@@ -220,6 +222,7 @@
     <Compile Include="Spatial\Modify\SplitCoplanarFace3Ds.cs" />
     <Compile Include="Spatial\Modify\RemoveAlmostSimilar.cs" />
     <Compile Include="Spatial\Modify\Add.cs" />
+    <Compile Include="Spatial\Query\MaxProjectedDistance.cs" />
     <Compile Include="Spatial\Query\Segment3Ds.cs" />
     <Compile Include="Spatial\Query\Range.cs" />
     <Compile Include="Spatial\Query\ElevationRanges.cs" />
@@ -242,6 +245,7 @@
     <Compile Include="Spatial\Query\MaxElevation.cs" />
     <Compile Include="Spatial\Query\SectionDictionary.cs" />
     <Compile Include="Spatial\Query\SelfIntersectionFace3Ds.cs" />
+    <Compile Include="Spatial\Query\ViewField.cs" />
     <Compile Include="Spatial\Query\Volume.cs" />
     <Compile Include="Spatial\Query\SignedVolume.cs" />
     <Compile Include="Spatial\Query\Fill.cs" />
