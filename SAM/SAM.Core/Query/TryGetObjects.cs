@@ -15,7 +15,7 @@ namespace SAM.Core
 
             System.Type type = sAMLibrary?.GenericType;
 
-            if(!type.IsAssignableFrom(typeof(T)))
+            if(!typeof(IJSAMObject).IsAssignableFrom(type))
             {
                 return false;
             }
