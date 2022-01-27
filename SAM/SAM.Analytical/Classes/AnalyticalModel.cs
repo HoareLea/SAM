@@ -323,6 +323,22 @@ namespace SAM.Analytical
             return true;
         }
 
+        public bool AddResult(AnalyticalModelSimulationResult analyticalModelSimulationResult)
+        {
+            AnalyticalModelSimulationResult analyticalModelSimulationResult_Temp = analyticalModelSimulationResult?.Clone();
+            if (analyticalModelSimulationResult_Temp == null)
+            {
+                return false;
+            }
+
+            if (adjacencyCluster == null)
+            {
+                adjacencyCluster = new AdjacencyCluster();
+            }
+
+            return  adjacencyCluster.AddObject(analyticalModelSimulationResult_Temp);
+        }
+
         public List<Space> GetSpaces()
         {
             return adjacencyCluster?.GetSpaces()?.ConvertAll(x => new Space(x));
@@ -347,6 +363,12 @@ namespace SAM.Analytical
 
             return adjacencyCluster.GetRelatedObjects<T>(jSAMObject)?.ConvertAll(x => x?.Clone());
         }
+
+        public List<AnalyticalModelSimulationResult> GetAnalyticalModelSimulationResults()
+        {
+            return adjacencyCluster?.GetObjects<AnalyticalModelSimulationResult>()?.ConvertAll(x => x?.Clone());
+        }
+
         public List<T> GetRelatedObjects<T>(IJSAMObject jSAMObject) where T : IJSAMObject
         {
             if (jSAMObject == null)

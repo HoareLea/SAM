@@ -73,6 +73,7 @@
     <Compile Include="Classes\New\WallType.cs" />
     <Compile Include="Classes\New\Window.cs" />
     <Compile Include="Classes\New\WindowType.cs" />
+    <Compile Include="Classes\SimulationResult\AnalyticalModelSimulationResult.cs" />
     <Compile Include="Classes\SimulationResult\PanelSimulationResult.cs" />
     <Compile Include="Classes\SimulationResult\AdjacencyClusterSimulationResult.cs" />
     <Compile Include="Classes\SimulationResult\ZoneSimulationResult.cs" />
