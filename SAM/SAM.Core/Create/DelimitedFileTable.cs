@@ -17,6 +17,18 @@ namespace SAM.Core
             return result;
         }
 
+        public static DelimitedFileTable DelimitedFileTable(DelimitedFileType delimitedFileType, string path, int namesIndex, int headerCount)
+        {
+            if (delimitedFileType == DelimitedFileType.Undefined || string.IsNullOrEmpty(path) || !System.IO.File.Exists(path))
+                return null;
+
+            DelimitedFileTable result = null;
+            using (DelimitedFileReader delimitedFileReader = new DelimitedFileReader(delimitedFileType, path))
+                result = new DelimitedFileTable(delimitedFileReader, namesIndex, headerCount);
+
+            return result;
+        }
+
         public static DelimitedFileTable DelimitedFileTable(IEnumerable<SAMObject> sAMObjects, IEnumerable<string> parameters)
         {
             if (parameters == null || sAMObjects == null)

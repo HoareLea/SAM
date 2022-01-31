@@ -723,6 +723,45 @@ namespace SAM.Core
             return ((IEnumerable<object[]>)values).GetEnumerator();
         }
 
+        public bool ConvertValues<T>(int columnIndex, T @default = default)
+        {
+            if(names == null || values == null)
+            {
+                return false;
+            }
+
+            if(columnIndex < 0)
+            {
+                return false;
+            }
+
+            if(columnIndex >= names.Length)
+            {
+                return false;
+            }
+
+            for(int i = 0; i < values.Count; i++)
+            {
+                object[] objects = values[i];
+
+                if(objects == null || objects.Length <= columnIndex)
+                {
+                    continue;
+                }
+
+                if(Query.TryConvert(objects[columnIndex], out T value))
+                {
+                    objects[columnIndex] = value;
+                }
+                else
+                {
+                    objects[columnIndex] = @default;
+                }
+            }
+
+            return true;
+        }
+
         private static string[] Extract<T>(T[] values)
         {
             if (values == null)
