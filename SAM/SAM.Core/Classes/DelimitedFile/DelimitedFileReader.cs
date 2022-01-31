@@ -137,14 +137,14 @@ namespace SAM.Core
         /// <returns>List of the rows</returns>
         public List<DelimitedFileRow> Read()
         {
-            List<DelimitedFileRow> aCsvRowList = new List<DelimitedFileRow>();
-            DelimitedFileRow aCsvRow = new DelimitedFileRow();
-            while (Read(aCsvRow))
+            List<DelimitedFileRow> delimitedFileRows = new List<DelimitedFileRow>();
+            DelimitedFileRow delimitedFileRow = new DelimitedFileRow();
+            while (Read(delimitedFileRow))
             {
-                aCsvRowList.Add(aCsvRow);
-                aCsvRow = new DelimitedFileRow();
+                delimitedFileRows.Add(delimitedFileRow);
+                delimitedFileRow = new DelimitedFileRow();
             }
-            return aCsvRowList;
+            return delimitedFileRows;
         }
     }
 }
