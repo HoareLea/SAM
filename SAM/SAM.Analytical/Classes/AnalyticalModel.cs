@@ -379,7 +379,6 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetRelatedObjects<T>(jSAMObject)?.ConvertAll(x => Core.Query.Clone(x));
         }
 
-
         public List<Geometry.Spatial.Shell> GetShells()
         {
             return adjacencyCluster?.GetShells();

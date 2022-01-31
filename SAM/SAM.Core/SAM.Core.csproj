@@ -101,6 +101,7 @@
     <Compile Include="Interfaces\Base\IResult.cs" />
     <Compile Include="Interfaces\Base\ISystemType.cs" />
     <Compile Include="Interfaces\Library\ISAMLibrary.cs" />
+    <Compile Include="Modify\Add.cs" />
     <Compile Include="Modify\CopyValues.cs" />
     <Compile Include="Modify\CopyParameterSets.cs" />
     <Compile Include="Modify\DeleteObject.cs" />
@@ -254,7 +255,7 @@
     <Compile Include="Query\Text.cs" />
     <Compile Include="Query\Round.cs" />
     <Compile Include="Modify\Reorder.cs" />
-    <Compile Include="Modify\Add.cs" />
+    <Compile Include="Modify\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Base\SAMInstance.cs" />
     <Compile Include="Classes\Base\SAMObject.cs" />

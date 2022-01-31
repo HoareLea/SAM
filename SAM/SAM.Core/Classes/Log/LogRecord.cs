@@ -126,5 +126,22 @@ namespace SAM.Core
 
             return jObject;
         }
+
+        public bool Write(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
+            try
+            {
+                System.IO.File.AppendAllText(path, ToString() + Environment.NewLine);
+            }
+            catch (Exception exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
