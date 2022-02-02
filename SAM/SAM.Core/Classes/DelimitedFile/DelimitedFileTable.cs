@@ -740,22 +740,20 @@ namespace SAM.Core
                 return false;
             }
 
-            for(int i = 0; i < values.Count; i++)
+            foreach(object[] row in values)
             {
-                object[] objects = values[i];
-
-                if(objects == null || objects.Length <= columnIndex)
+                if (row == null || row.Length <= columnIndex)
                 {
                     continue;
                 }
 
-                if(Query.TryConvert(objects[columnIndex], out T value))
+                if (Query.TryConvert(row[columnIndex], out T value))
                 {
-                    objects[columnIndex] = value;
+                    row[columnIndex] = value;
                 }
                 else
                 {
-                    objects[columnIndex] = @default;
+                    row[columnIndex] = @default;
                 }
             }
 

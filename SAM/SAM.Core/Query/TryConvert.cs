@@ -18,7 +18,13 @@ namespace SAM.Core
                 return true;
             }
 
-            if (type == typeof(string))
+            Type type_Temp = Nullable.GetUnderlyingType(type);
+            if(type_Temp == null)
+            {
+                type_Temp = type;
+            }
+
+            if (type_Temp == typeof(string))
             {
                 if (@object != null)
                 {
@@ -51,7 +57,7 @@ namespace SAM.Core
                     
                 return true;
             }
-            else if (type == typeof(bool))
+            else if (type_Temp == typeof(bool))
             {
                 if (@object == null)
                     return false;
@@ -80,7 +86,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (type == typeof(int))
+            else if (type_Temp == typeof(int))
             {
                 if (@object == null)
                     return false;
@@ -110,7 +116,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (type == typeof(double))
+            else if (type_Temp == typeof(double))
             {
                 if (@object == null)
                     return false;
@@ -158,7 +164,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (type == typeof(uint))
+            else if (type_Temp == typeof(uint))
             {
                 if (@object == null)
                     return false;
@@ -188,7 +194,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (type == typeof(short))
+            else if (type_Temp == typeof(short))
             {
                 if (@object == null)
                     return false;
@@ -213,7 +219,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (type == typeof(byte))
+            else if (type_Temp == typeof(byte))
             {
                 if (@object == null)
                     return false;
@@ -237,7 +243,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (type == typeof(int))
+            else if (type_Temp == typeof(int))
             {
                 if (@object == null)
                     return false;
@@ -262,7 +268,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (type == typeof(long))
+            else if (type_Temp == typeof(long))
             {
                 if (@object == null)
                     return false;
@@ -287,7 +293,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (type == typeof(Guid))
+            else if (type_Temp == typeof(Guid))
             {
                 if (@object == null)
                     return false;
@@ -306,7 +312,7 @@ namespace SAM.Core
                     }
                 }
             }
-            else if (type == typeof(DateTime))
+            else if (type_Temp == typeof(DateTime))
             {
                 if (@object == null)
                     return false;
@@ -335,7 +341,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (type == typeof(System.Drawing.Color))
+            else if (type_Temp == typeof(System.Drawing.Color))
             {
                 if (@object == null)
                     return false;
@@ -390,7 +396,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (typeof(IJSAMObject).IsAssignableFrom(type))
+            else if (typeof(IJSAMObject).IsAssignableFrom(type_Temp))
             {
                 if (@object is JValue)
                 {
@@ -402,14 +408,14 @@ namespace SAM.Core
                     List<IJSAMObject> sAMObjects = Convert.ToSAM((string)@object);
                     if (sAMObjects != null && sAMObjects.Count != 0)
                     {
-                        IJSAMObject jSAMObject = sAMObjects.Find(x => x != null && type.IsAssignableFrom(x.GetType()));
+                        IJSAMObject jSAMObject = sAMObjects.Find(x => x != null && type_Temp.IsAssignableFrom(x.GetType()));
                         if (jSAMObject != null)
                         {
                             result = jSAMObject;
                             return true;
                         }
                     }
-                    else if(typeof(SAMColor).IsAssignableFrom(type))
+                    else if(typeof(SAMColor).IsAssignableFrom(type_Temp))
                     {
                         if(int.TryParse((string)@object, out int int_color))
                         {
@@ -465,7 +471,7 @@ namespace SAM.Core
                     return true;
                 }
             }
-            else if (typeof(JObject).IsAssignableFrom(type))
+            else if (typeof(JObject).IsAssignableFrom(type_Temp))
             {
                 if (@object is JValue)
                 {
@@ -514,7 +520,7 @@ namespace SAM.Core
                     int @int;
                     if (int.TryParse(@string, out @int))
                     {
-                        if (System.Enum.IsDefined(type, @int))
+                        if (System.Enum.IsDefined(type_Temp, @int))
                         {
                             result = @int;
                             return true;
@@ -540,7 +546,7 @@ namespace SAM.Core
                     }
                 }
             }
-            else if(type.IsEnum)
+            else if(type_Temp.IsEnum)
             {
                 if(@object == null)
                 {
@@ -555,7 +561,7 @@ namespace SAM.Core
                         return false;
                     }
 
-                    foreach (Enum @enum in System.Enum.GetValues(type))
+                    foreach (Enum @enum in System.Enum.GetValues(type_Temp))
                     {
                         string name = @enum.ToString().ToUpper();
                         if (@string.Equals(name))
