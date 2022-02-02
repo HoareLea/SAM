@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -7,8 +8,8 @@ namespace SAM.Core
         /// <summary>
         /// Compares two numbers using NumberComparisonType (Example: NumberComparisonType.Greater returns true if value_1 greater than value_2)
         /// </summary>
-        /// <param name="value_1">First value </param>
-        /// <param name="value_2">Second Value</param>
+        /// <param name="value_1">First value</param>
+        /// <param name="value_2">Second value</param>
         /// <param name="numberComparisonType">Number Comparison Type example Equals etc.</param>
         /// <returns>Comparison Type Result</returns>
         public static bool Compare(this double value_1, double value_2, NumberComparisonType numberComparisonType)
@@ -51,8 +52,38 @@ namespace SAM.Core
             return false;
         }
 
-        //// value_1 AAA
-        /// Value_2 AA
+        /// <summary>
+        /// Compares two DateTimes using NumberComparisonType (Example: NumberComparisonType.Greater returns true if value_1 greater than value_2)
+        /// </summary>
+        /// <param name="value_1">First value</param>
+        /// <param name="value_2">Second value</param>
+        /// <param name="numberComparisonType">Number Comparison Type example Equals etc.</param>
+        /// <returns>Comparison Type Result</returns>
+        public static bool Compare(this DateTime value_1, DateTime value_2, NumberComparisonType numberComparisonType)
+        {
+            switch (numberComparisonType)
+            {
+                case NumberComparisonType.Equals:
+                    return value_1.Equals(value_2);
+
+                case NumberComparisonType.Greater:
+                    return value_1 > value_2;
+
+                case NumberComparisonType.GreaterOrEquals:
+                    return value_1 >= value_2;
+
+                case NumberComparisonType.Less:
+                    return value_1 < value_2;
+
+                case NumberComparisonType.LessOrEquals:
+                    return value_1 <= value_2;
+
+                case NumberComparisonType.NotEquals:
+                    return value_1 != value_2;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Compares two numbers using TextComparisonType (Example: TextComparisonType.StartsWith returns true if value_1 starts with value_2)
