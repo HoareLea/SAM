@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -47,23 +47,23 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                GooAnalyticalModelParam analyticalModelParam = new GooAnalyticalModelParam() { Name = "analyticalModel_", NickName = "analyticalModel_", Description = "SAM Analytical Model", Access = GH_ParamAccess.item };
+                GooAnalyticalModelParam analyticalModelParam = new GooAnalyticalModelParam() { Name = "analyticalModel_", NickName = "analyticalModel_", Description = "SAM Analytical Model", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                GooSpaceParam spaceParam = new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list };
+                GooSpaceParam spaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list };
                 spaceParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(spaceParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String paramString;
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject paramGenericObject;
 
-                paramString = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "ventilationSystemTypeName_", NickName = "ventilationSystemTypeName_", Description = "Ventilation System Type Name", Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(paramString, ParamVisibility.Binding));
+                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "ventilationSystemTypeName_", NickName = "ventilationSystemTypeName_", Description = "Ventilation System Type Name", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(paramGenericObject, ParamVisibility.Binding));
 
-                paramString = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "heatingSystemTypeName_", NickName = "heatingSystemTypeName_", Description = "Heating System Type Name", Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(paramString, ParamVisibility.Binding));
+                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "heatingSystemTypeName_", NickName = "heatingSystemTypeName_", Description = "Heating System Type Name", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(paramGenericObject, ParamVisibility.Binding));
 
-                paramString = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "coolingSystemTypeName_", NickName = "coolingSystemTypeName_", Description = "Cooling System Type Name", Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(paramString, ParamVisibility.Binding));
+                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "coolingSystemTypeName_", NickName = "coolingSystemTypeName_", Description = "Cooling System Type Name", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(paramGenericObject, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -86,7 +86,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            index = Params.IndexOfInputParam("_spaces");
+            index = Params.IndexOfInputParam("_spaces_");
             List<Space> spaces = new List<Space>();
             if(index == -1 || !dataAccess.GetDataList(index, spaces) || spaces == null)
             {
@@ -102,25 +102,52 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref analyticalModel);
             }
 
+            if(analyticalModel == null && (spaces == null || spaces.Count == 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
+                return;
+            }
+
             string ventilationSystemTypeName = null;
             index = Params.IndexOfInputParam("ventilationSystemTypeName_");
             if (index != -1)
             {
-                dataAccess.GetData(index, ref ventilationSystemTypeName);
+                if (!dataAccess.GetData(index, ref ventilationSystemTypeName))
+                {
+                    SAMObject sAMObject = null;
+                    if (dataAccess.GetData(index, ref sAMObject))
+                    {
+                        ventilationSystemTypeName = sAMObject.Name;
+                    }
+                }
             }
 
             string heatingSystemTypeName = null;
             index = Params.IndexOfInputParam("heatingSystemTypeName_");
             if (index != -1)
             {
-                dataAccess.GetData(index, ref heatingSystemTypeName);
+                if(!dataAccess.GetData(index, ref heatingSystemTypeName))
+                {
+                    SAMObject sAMObject = null;
+                    if(dataAccess.GetData(index, ref sAMObject))
+                    {
+                        heatingSystemTypeName = sAMObject.Name;
+                    }
+                }
             }
 
             string coolingSystemTypeName = null;
             index = Params.IndexOfInputParam("coolingSystemTypeName_");
             if (index != -1)
             {
-                dataAccess.GetData(index, ref coolingSystemTypeName);
+                if (!dataAccess.GetData(index, ref coolingSystemTypeName))
+                {
+                    SAMObject sAMObject = null;
+                    if (dataAccess.GetData(index, ref sAMObject))
+                    {
+                        coolingSystemTypeName = sAMObject.Name;
+                    }
+                }
             }
 
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
