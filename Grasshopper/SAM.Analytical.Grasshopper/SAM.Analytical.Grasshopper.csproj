@@ -95,6 +95,7 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalSetSystemTypeNames.cs" />
     <Compile Include="Component\SAMAnalyticalCreateProfileByWeatherYear.cs" />
     <Compile Include="Component\SAMAnalyticalSetLocation.cs" />
     <Compile Include="Component\SAMAnalyticalTriangulateConcavePanels.cs" />
