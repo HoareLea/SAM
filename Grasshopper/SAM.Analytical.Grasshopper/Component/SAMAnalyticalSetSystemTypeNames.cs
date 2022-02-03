@@ -51,8 +51,8 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 GooSpaceParam spaceParam = new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list };
-                analyticalModelParam.DataMapping = GH_DataMapping.Flatten;
-                result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
+                spaceParam.DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(spaceParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_String paramString;
 
