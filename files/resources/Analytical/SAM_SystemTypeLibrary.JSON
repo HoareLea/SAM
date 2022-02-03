@@ -367,6 +367,41 @@
       "Description": "Unheated"
     },
     {
+      "_type": "SAM.Analytical.HeatingSystemType,SAM.Analytical",
+      "Name": "VRV",
+      "Guid": "57e37dd7-bf05-4a1e-bf61-8c3d4291c05e",
+      "ParameterSets": [
+        {
+          "_type": "SAM.Core.ParameterSet",
+          "Name": "SAM.Analytical",
+          "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+          "Parameters": [
+            {
+              "Name": "Radiant Proportion",
+              "Value": 0.0
+            },
+            {
+              "Name": "View Coefficient",
+              "Value": 0.0
+            },
+            {
+              "Name": "Supply Circuit Temperature",
+              "Value": 30.0
+            },
+            {
+              "Name": "Return Circuit Temperature",
+              "Value": 25.0
+            },
+            {
+              "Name": "Temperature Difference",
+              "Value": 5.0
+            }
+          ]
+        }
+      ],
+      "Description": "variable Refrigerant Volume"
+    },
+    {
       "_type": "SAM.Analytical.CoolingSystemType,SAM.Analytical",
       "Name": "AHU",
       "Guid": "34566f82-efad-498b-bd56-421cad00187a",
