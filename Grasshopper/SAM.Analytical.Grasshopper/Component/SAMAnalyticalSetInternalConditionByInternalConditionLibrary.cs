@@ -48,12 +48,12 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Objects such as AdjacencyCluster or AnalyticalModel or Space", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_name_", NickName = "_name_", Description = "Zone Name or SAM Analytical Zone", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_name_", NickName = "_ICname_", Description = "InternalCondition Name or SAM InternalCondition Object \n*use .GetDefaultLibrary and SelectByName \n to select requred IC ", Access = GH_ParamAccess.item };
                 genericObject.SetPersistentData("S39_OfficeOpen");
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
                 
-                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooInternalConditionLibraryParam { Name = "internalConditionLibrary_", NickName = "internalConditionLibrary_", Description = "SAM Analytical InternalConditionLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces \n*if none all spaces from model will be included", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooInternalConditionLibraryParam { Name = "internalConditionLibrary_", NickName = "internalConditionLibrary_", Description = "SAM Analytical InternalConditionLibrary \n*optional", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
