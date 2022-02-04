@@ -16,7 +16,7 @@ namespace SAM.Analytical
         public MechanicalSystem(MechanicalSystem mechanicalSystem)
             : base(mechanicalSystem)
         {
-
+            id = mechanicalSystem?.id;
         }
 
         public MechanicalSystem(JObject jObject)
