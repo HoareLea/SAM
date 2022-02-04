@@ -2621,7 +2621,7 @@
             },
             {
               "Name": "Ventilation System Type Name",
-              "Value": "VAV"
+              "Value": "EOL"
             },
             {
               "Name": "Cooling System Type Name",
@@ -2629,7 +2629,7 @@
             },
             {
               "Name": "Heating System Type Name",
-              "Value": "UFH"
+              "Value": "RAD"
             },
             {
               "Name": "Supply Air Flow Per Person",
