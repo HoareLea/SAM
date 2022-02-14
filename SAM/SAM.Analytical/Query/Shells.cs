@@ -208,6 +208,11 @@ namespace SAM.Analytical
 
                 Dictionary<Panel, List<ISegmentable2D>> dictionary = panels_Bottom.SectionDictionary<ISegmentable2D>(plane, tolerance_Distance);
 
+                if(dictionary == null)
+                {
+                    return;
+                }
+
                 List<Segment2D> segment2Ds = new List<Segment2D>();
                 foreach (KeyValuePair<Panel, List<ISegmentable2D>> keyValuePair in dictionary)
                 {
