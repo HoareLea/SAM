@@ -1158,7 +1158,7 @@ namespace SAM.Geometry.Spatial
 
                 List<Face3D> face3Ds_Bottom = face2Ds.ConvertAll(x => new Face3D(plane_Bottom, x));
 
-                Vector3D vector3D = new Vector3D(0, 0, tuple.Item2.ConvertAll(x => x.GetBoundingBox().Max.Z).Max());
+                Vector3D vector3D = new Vector3D(0, 0, tuple.Item2.ConvertAll(x => x.GetBoundingBox().Max.Z - tuple.Item1 ).Max());
 
                 List<Shell> shells = face3Ds_Bottom.ConvertAll(x => Shell(x, vector3D, tolerance_Distance));
                 if (shells == null || shells.Count == 0)
