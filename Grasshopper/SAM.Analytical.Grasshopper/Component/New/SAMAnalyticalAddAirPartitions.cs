@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalAddAirPartitions()
           : base("SAMAnalytical.AddAirPartitions", "SAMAnalytical.AddAirPartitions",
               "Add AirPartitions",
-              "SAM", "Analytical")
+              "SAM WIP", "Analytical")
         {
         }
 

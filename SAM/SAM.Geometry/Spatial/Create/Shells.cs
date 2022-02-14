@@ -949,7 +949,6 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-
         /// <summary>
         /// Method creates Shells based on IFace3DObjects and given offset from level.
         /// </summary>

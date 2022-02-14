@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateHostPartitionBy3DGeometry()
           : base("SAMAnalytical.CreateHostPartitionBy3DGeometry", "SAMAnalytical.CreateHostPartitionBy3DGeometry",
               "Create SAM Analytical IHostPartition by 3D Geometry",
-              "SAM", "Analytical")
+              "SAM WIP", "Analytical")
         {
         }
 

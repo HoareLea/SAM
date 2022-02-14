@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateBuildingModel()
           : base("SAMAnalytical.UpdateBuildingModel", "SAMAnalytical.UpdateBuildingModel",
               "Update BuildingModel",
-              "SAM", "Analytical")
+              "SAM WIP", "Analytical")
         {
         }
 

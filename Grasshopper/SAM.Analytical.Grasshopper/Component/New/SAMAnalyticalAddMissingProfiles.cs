@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAddMissingProfiles()
           : base("SAMAnalytical.AddMissingProfiles", "SAMAnalytical.AddMissingProfiles",
               "Add Missing Profiles",
-              "SAM", "Analytical")
+              "SAM WIP", "Analytical")
         {
         }
 

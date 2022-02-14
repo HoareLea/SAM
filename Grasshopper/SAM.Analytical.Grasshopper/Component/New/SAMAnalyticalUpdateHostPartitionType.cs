@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateHostPartitionType()
           : base("SAMAnalytical.UpdateHostPartitionType", "SAMAnalytical.UpdateHostPartitionType",
               "Related Objects in BuildingModel",
-              "SAM", "Analytical")
+              "SAM WIP", "Analytical")
         {
         }
 

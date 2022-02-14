@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAddMissingMaterials()
           : base("SAMAnalytical.AddMissingMaterials", "SAMAnalytical.AddMissingMaterials",
               "Add Missing Materials",
-              "SAM", "Analytical")
+              "SAM WIP", "Analytical")
         {
         }
 

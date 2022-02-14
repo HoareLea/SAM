@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateBuildingModelByShells()
           : base("SAMAnalytical.CreateBuildingModelByShells", "SAMAnalytical.CreateBuildingModelByShells",
               "Creates BuildingModel By Shells",
-              "SAM", "Analytical")
+              "SAM WIP", "Analytical")
         {
         }
 
