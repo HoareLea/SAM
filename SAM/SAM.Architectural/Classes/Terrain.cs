@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Architectural
 {
-    public abstract class Terrain : Core.SAMObject, ITerrain
+    public abstract class Terrain : Core.SAMObject, ITerrain, IArchitecturalObject
     {
         private List<MaterialLayer> materialLayers;
 

@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Architectural
 {
-    public class MaterialLayer : IJSAMObject
+    public class MaterialLayer : IJSAMObject, IArchitecturalObject
     {
         private string name;
         private double thickness;

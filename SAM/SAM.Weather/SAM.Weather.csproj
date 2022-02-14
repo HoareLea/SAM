@@ -53,6 +53,7 @@
     <Compile Include="Create\WeatherYear.cs" />
     <Compile Include="Enums\Parameter\WeatherDataParameter.cs" />
     <Compile Include="Enums\WeatherDataType.cs" />
+    <Compile Include="Interfaces\IWeatherObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\DataString.cs" />
     <Compile Include="Query\CommentsString.cs" />

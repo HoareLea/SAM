@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Weather
 {
-    public class WeatherData : SAMObject
+    public class WeatherData : SAMObject, IWeatherObject
     {
         private string description;
         private double latitude;

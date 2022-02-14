@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SAM.Weather
 {
-    public class WeatherDay : IJSAMObject
+    public class WeatherDay : IWeatherObject
     {
         private Dictionary<string, double[]> dictionary;
 

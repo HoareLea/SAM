@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SAM.Weather
 {
-    public class GroundTemperature: IJSAMObject
+    public class GroundTemperature: IWeatherObject
     {
         private double depth;
         private double conductivity;

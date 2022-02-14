@@ -4,7 +4,7 @@ using SAM.Core;
 
 namespace SAM.Architectural
 {
-    public class Level : SAMObject
+    public class Level : SAMObject, IArchitecturalObject
     {
         private double elevation;
 

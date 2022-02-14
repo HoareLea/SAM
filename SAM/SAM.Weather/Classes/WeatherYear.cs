@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SAM.Weather
 {
-    public class WeatherYear : IJSAMObject
+    public class WeatherYear : IWeatherObject
     {
         private int year;
         private WeatherDay[] weatherDays;
