@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class InternalConditionLibrary : SAMLibrary<InternalCondition>
+    public class InternalConditionLibrary : SAMLibrary<InternalCondition>, IAnalyticalObject
     {
         public InternalConditionLibrary(string name)
             : base(name)

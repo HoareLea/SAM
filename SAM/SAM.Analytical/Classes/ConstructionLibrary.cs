@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class ConstructionLibrary : SAMLibrary<Construction>
+    public class ConstructionLibrary : SAMLibrary<Construction>, IAnalyticalObject
     {
         public ConstructionLibrary(string name)
             : base(name)

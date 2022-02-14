@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class PlanarBoundary3D : SAMObject
+    public class PlanarBoundary3D : SAMObject, IAnalyticalObject
     {
         private Plane plane;
         private BoundaryEdge2DLoop externalEdge2DLoop;

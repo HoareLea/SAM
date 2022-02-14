@@ -11,7 +11,7 @@ namespace SAM.Analytical
     /// <summary>
     /// SAM Analytical Panel stores information about shape and properties of building boundary such as Wall, Floor, Roof, Slab etc.
     /// </summary>
-    public class Panel : SAMInstance<Construction>, IFace3DObject
+    public class Panel : SAMInstance<Construction>, IFace3DObject, IAnalyticalObject
     {
         /// <summary>
         /// Type of the Panel such as Wall, Ceiling etc.

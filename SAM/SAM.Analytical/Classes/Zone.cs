@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class Zone : Group
+    public class Zone : Group, IAnalyticalObject
     {
         public Zone(string name)
             : base(name)

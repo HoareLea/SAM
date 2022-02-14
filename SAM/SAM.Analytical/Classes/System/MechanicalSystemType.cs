@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public abstract class MechanicalSystemType : SAMType, ISystemType
+    public abstract class MechanicalSystemType : SAMType, ISystemType, IAnalyticalObject
     {
         private string description;
 

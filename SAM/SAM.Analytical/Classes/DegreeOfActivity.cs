@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class DegreeOfActivity : SAMObject
+    public class DegreeOfActivity : SAMObject, IAnalyticalObject
     {
         private double sensible;
         private double latent;

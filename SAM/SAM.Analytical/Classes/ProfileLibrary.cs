@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class ProfileLibrary : SAMLibrary<Profile>
+    public class ProfileLibrary : SAMLibrary<Profile>, IAnalyticalObject
     {
         public ProfileLibrary(string name)
             : base(name)

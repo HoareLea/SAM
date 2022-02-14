@@ -10,7 +10,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Analytical Aperture object which stores information about Winodws and Doors
     /// </summary>
-    public class Aperture : SAMInstance<ApertureConstruction>, IFace3DObject
+    public class Aperture : SAMInstance<ApertureConstruction>, IFace3DObject, IAnalyticalObject
     {
         /// <summary>
         /// Planar Boundary 3D of Aperture

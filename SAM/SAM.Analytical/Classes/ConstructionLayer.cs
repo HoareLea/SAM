@@ -3,7 +3,7 @@ using SAM.Architectural;
 
 namespace SAM.Analytical
 {
-    public class ConstructionLayer : MaterialLayer
+    public class ConstructionLayer : MaterialLayer, IAnalyticalObject
     {
         public ConstructionLayer(string name, double thickness)
             : base(name, thickness)

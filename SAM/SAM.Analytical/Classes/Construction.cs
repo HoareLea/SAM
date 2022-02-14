@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class Construction : SAMType
+    public class Construction : SAMType, IAnalyticalObject
     {
         private List<ConstructionLayer> constructionLayers;
 

@@ -10,7 +10,7 @@ namespace SAM.Analytical
     /// Boundary2D - list of BoundaryEdges2DLoops on a given plane and may include internal edges (as list of Edges2DLoops)
     /// </summary>
     /// <seealso cref="SAMObject" />
-    public class Boundary2D : SAMObject
+    public class Boundary2D : SAMObject, IAnalyticalObject
     {
         /// <summary>
         /// The external edge2d loop

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class BoundaryEdge3D : SAMObject
+    public class BoundaryEdge3D : SAMObject, IAnalyticalObject
     {
         private ICurve3D curve3D;
 

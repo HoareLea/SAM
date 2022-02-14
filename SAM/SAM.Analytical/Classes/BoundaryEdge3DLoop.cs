@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class BoundaryEdge3DLoop : SAMObject
+    public class BoundaryEdge3DLoop : SAMObject, IAnalyticalObject
     {
         private List<BoundaryEdge3D> boundaryEdge3Ds;
 

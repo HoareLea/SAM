@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class BoundaryEdge2D : SAMObject
+    public class BoundaryEdge2D : SAMObject, IAnalyticalObject
     {
         private ICurve2D curve2D;
 

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class ApertureConstruction : SAMType
+    public class ApertureConstruction : SAMType, IAnalyticalObject
     {
         private ApertureType apertureType;
         private List<ConstructionLayer> frameConstructionLayers;

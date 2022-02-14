@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class DegreeOfActivityLibrary : SAMLibrary<DegreeOfActivity>
+    public class DegreeOfActivityLibrary : SAMLibrary<DegreeOfActivity>, IAnalyticalObject
     {
         public DegreeOfActivityLibrary(string name)
             : base(name)

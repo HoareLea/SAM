@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class BoundaryEdge2DLoop : SAMObject
+    public class BoundaryEdge2DLoop : SAMObject, IAnalyticalObject
     {
         private List<BoundaryEdge2D> boundaryEdge2Ds;
 

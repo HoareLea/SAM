@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class Emitter : SAMObject
+    public class Emitter : SAMObject, IAnalyticalObject
     {
         private EmitterCategory emitterCategory;
         private double radiantProportion;

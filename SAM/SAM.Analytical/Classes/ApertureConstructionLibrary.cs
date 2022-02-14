@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public class ApertureConstructionLibrary : SAMLibrary<ApertureConstruction>
+    public class ApertureConstructionLibrary : SAMLibrary<ApertureConstruction>, IAnalyticalObject
     {
         public ApertureConstructionLibrary(string name)
             : base(name)
