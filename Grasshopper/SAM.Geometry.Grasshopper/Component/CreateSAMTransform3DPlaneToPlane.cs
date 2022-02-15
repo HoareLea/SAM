@@ -4,6 +4,7 @@ using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -66,20 +67,13 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            object value = null;
+            if (!Query.TryGetSAMGeometries(objectWrapper, out List<Plane> planes_1) || planes_1 == null || planes_1.Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            value = objectWrapper.Value;
-            if (value is IGH_Goo)
-                value = (value as dynamic).Value;
-
-            Plane plane_1 = null;
-            if (value is Plane)
-                plane_1 = (Plane)value;
-            else if (value is GH_Plane)
-                plane_1 = ((GH_Plane)value).ToSAM();
-            else if (value is global::Rhino.Geometry.Plane)
-                plane_1 = Rhino.Convert.ToSAM((global::Rhino.Geometry.Plane)value);
-
+            Plane plane_1 = planes_1[0];
             if (plane_1 == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -93,18 +87,13 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            value = objectWrapper.Value;
-            if (value is IGH_Goo)
-                value = (value as dynamic).Value;
+            if (!Query.TryGetSAMGeometries(objectWrapper, out List<Plane> planes_2) || planes_2 == null || planes_2.Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            Plane plane_2 = null;
-            if (value is Plane)
-                plane_2 = (Plane)value;
-            else if (value is GH_Plane)
-                plane_2 = ((GH_Plane)value).ToSAM();
-            else if (value is global::Rhino.Geometry.Plane)
-                plane_2 = Rhino.Convert.ToSAM((global::Rhino.Geometry.Plane)value);
-
+            Plane plane_2 = planes_2[0];
             if (plane_2 == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");

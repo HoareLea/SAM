@@ -4,6 +4,7 @@ using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -66,25 +67,13 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            object value = objectWrapper.Value;
-            if (value is IGH_Goo)
-                value = (value as dynamic).Value;
-
-            Plane plane = null;
-            if (value is Plane)
-                plane = (Plane)value;
-            else if (value is GH_Plane)
-                plane = ((GH_Plane)value).ToSAM();
-            else if (value is global::Rhino.Geometry.Plane)
-                plane = Rhino.Convert.ToSAM(((global::Rhino.Geometry.Plane)value));
-
-            if (plane == null)
+            if(!Query.TryGetSAMGeometries(objectWrapper, out List<Plane> planes) || planes == null || planes.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, new GooTransform3D(Transform3D.GetOriginToPlane(plane)));
+            dataAccess.SetData(0, new GooTransform3D(Transform3D.GetOriginToPlane(planes[0])));
         }
     }
 }

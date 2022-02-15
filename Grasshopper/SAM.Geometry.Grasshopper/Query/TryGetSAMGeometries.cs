@@ -61,6 +61,22 @@ namespace SAM.Geometry.Grasshopper
                         return true;
                     }
                 }
+                else if (typeof(T) == typeof(Spatial.Point3D))
+                {
+                    if (sAMGeometry is Spatial.Point3D)
+                    {
+                        sAMGeometries = new List<T>() { (T)(object)((Spatial.Point3D)sAMGeometry) };
+                        return true;
+                    }
+                }
+                else if (typeof(T) == typeof(Spatial.Plane))
+                {
+                    if (sAMGeometry is Spatial.Plane)
+                    {
+                        sAMGeometries = new List<T>() { (T)(object)((Spatial.Plane)sAMGeometry) };
+                        return true;
+                    }
+                }
             }
 
             object @object = null;
@@ -91,6 +107,22 @@ namespace SAM.Geometry.Grasshopper
                     else if (@object is Spatial.Mesh3D)
                     {
                         sAMGeometries = ((Spatial.Mesh3D)@object).GetTriangles()?.ConvertAll(x => (T)(object)(new Spatial.Face3D(x)));
+                        return true;
+                    }
+                }
+                else if(typeof(T) == typeof(Spatial.Point3D))
+                {
+                    if (@object is Spatial.Point3D)
+                    {
+                        sAMGeometries = new List<T>() { (T)(object)(Spatial.Point3D)@object };
+                        return true;
+                    }
+                }
+                else if (typeof(T) == typeof(Spatial.Plane))
+                {
+                    if (@object is Spatial.Plane)
+                    {
+                        sAMGeometries = new List<T>() { (T)(object)(Spatial.Plane)@object };
                         return true;
                     }
                 }
@@ -140,7 +172,6 @@ namespace SAM.Geometry.Grasshopper
 
                         return sAMGeometries.Count > 0;
                     }
-
                 }
                 else if (@object is T)
                 {
@@ -163,6 +194,32 @@ namespace SAM.Geometry.Grasshopper
 
             return false;
 
+        }
+
+        public static bool TryGetSAMGeometries<T>(this IEnumerable<GH_ObjectWrapper> objectWrappers, out List<T> sAMGeometries) where T : ISAMGeometry
+        {
+            sAMGeometries = null;
+
+            if(objectWrappers == null)
+            {
+                return false;
+            }
+
+            sAMGeometries = new List<T>();
+            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            {
+                if(!TryGetSAMGeometries(objectWrapper, out List<T> sAMGeometries_Temp) || sAMGeometries_Temp == null || sAMGeometries_Temp.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach(T sAMGeometry in sAMGeometries_Temp)
+                {
+                    sAMGeometries.Add(sAMGeometry);
+                }
+            }
+
+            return sAMGeometries != null && sAMGeometries.Count > 0;
         }
     }
 }

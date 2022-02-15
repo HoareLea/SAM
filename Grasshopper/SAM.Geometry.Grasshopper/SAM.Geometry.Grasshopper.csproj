@@ -114,7 +114,7 @@
     <Compile Include="Modify\DrawViewportWires.cs" />
     <Compile Include="Modify\Convert.cs" />
     <Compile Include="Modify\Reduce.cs" />
-    <Compile Include="Query\TryGetSAMGeometry.cs" />
+    <Compile Include="Query\TryGetSAMGeometries.cs" />
     <Compile Include="Query\Close.cs" />
     <Compile Include="Template\TemplateComponent.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

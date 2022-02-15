@@ -60,9 +60,9 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
 
-            if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
+            if (!dataAccess.GetDataList(0, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -75,29 +75,16 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
-            foreach (GH_ObjectWrapper gHObjectWrapper in objectWrapperList)
+            if (!Query.TryGetSAMGeometries(objectWrappers, out List<Spatial.Point3D> point3Ds) || point3Ds == null || point3Ds.Count < 3)
             {
-                Spatial.Point3D point3D = gHObjectWrapper.Value as Spatial.Point3D;
-                if (point3D != null)
-                {
-                    point3Ds.Add(point3D);
-                    continue;
-                }
-
-                GH_Point gHPoint = gHObjectWrapper.Value as GH_Point;
-                if (gHPoint == null)
-                    continue;
-
-                point3Ds.Add(Convert.ToSAM(gHPoint));
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
             }
 
             Spatial.Plane plane = Spatial.Create.Plane(point3Ds, tolerance);
 
             dataAccess.SetData(0, new GooSAMGeometry(plane));
-            dataAccess.SetData(1, new GooSAMGeometry(plane.Normal));
-
-            //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
+            dataAccess.SetData(1, new GooSAMGeometry(plane?.Normal));
         }
     }
 }
