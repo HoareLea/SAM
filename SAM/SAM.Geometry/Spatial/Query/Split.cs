@@ -219,7 +219,7 @@ namespace SAM.Geometry.Spatial
                         continue;
                     }
 
-                    shells_Intersection.RemoveAll(x => x.Volume(silverSpacing, tolerance_Distance) < silverSpacing);
+                    shells_Intersection.RemoveAll(x => x == null || x.Volume(silverSpacing, tolerance_Distance) < silverSpacing || !x.IsClosed(silverSpacing));
                     if(shells_Intersection.Count == 0)
                     {
                         continue;
