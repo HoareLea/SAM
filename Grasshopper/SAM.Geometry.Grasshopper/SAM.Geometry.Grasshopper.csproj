@@ -61,6 +61,7 @@
     <Compile Include="Component\GeometryCreateShell.cs" />
     <Compile Include="Component\SAMGeometrySection.cs" />
     <Compile Include="Component\SAMGeometryCreateShellsByElevations.cs" />
+    <Compile Include="Component\SAMGeometryIsClosed.cs" />
     <Compile Include="Component\SAMGeometryShellIntersection.cs" />
     <Compile Include="Component\SAMGeometryShellDifference.cs" />
     <Compile Include="Component\SAMGeometryShellsSplit.cs" />
