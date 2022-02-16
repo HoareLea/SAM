@@ -72,9 +72,9 @@ namespace SAM.Geometry.Grasshopper
             if (!run)
                 return;
 
-            List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
 
-            if (!dataAccess.GetDataList(1, objectWrapperList) || objectWrapperList == null)
+            if (!dataAccess.GetDataList(1, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(1, false);
@@ -82,20 +82,20 @@ namespace SAM.Geometry.Grasshopper
             }
 
             List<Spatial.Point3D> point3Ds = new List<Spatial.Point3D>();
-            foreach (GH_ObjectWrapper gHObjectWrapper in objectWrapperList)
+            foreach (GH_ObjectWrapper objectWrapper_Temp in objectWrappers)
             {
-                Spatial.Point3D point3D = gHObjectWrapper.Value as Spatial.Point3D;
+                Spatial.Point3D point3D = objectWrapper_Temp.Value as Spatial.Point3D;
                 if (point3D != null)
                 {
                     point3Ds.Add(point3D);
                     continue;
                 }
 
-                GH_Point gHPoint = gHObjectWrapper.Value as GH_Point;
-                if (gHPoint == null)
+                GH_Point point = objectWrapper_Temp.Value as GH_Point;
+                if (point == null)
                     continue;
 
-                point3Ds.Add(Convert.ToSAM(gHPoint));
+                point3Ds.Add(Convert.ToSAM(point));
             }
 
             GH_ObjectWrapper objectWrapper = null;
@@ -109,9 +109,9 @@ namespace SAM.Geometry.Grasshopper
 
             double maxDistance = double.NaN;
 
-            GH_Number gHNumber = objectWrapper.Value as GH_Number;
-            if (gHNumber != null)
-                maxDistance = gHNumber.Value;
+            GH_Number number = objectWrapper.Value as GH_Number;
+            if (number != null)
+                maxDistance = number.Value;
 
             objectWrapper = null;
             if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
@@ -121,8 +121,8 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            object obj = objectWrapper.Value;
-            if (obj == null)
+            object @object = objectWrapper.Value;
+            if (@object == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetData(1, false);
@@ -131,10 +131,10 @@ namespace SAM.Geometry.Grasshopper
 
             List<Spatial.ISAMGeometry3D> geometry3Ds = null;
 
-            if (obj is IGH_GeometricGoo)
-                geometry3Ds = Convert.ToSAM((IGH_GeometricGoo)obj);
-            else if (obj is Spatial.ISAMGeometry3D)
-                geometry3Ds = new List<Spatial.ISAMGeometry3D>() { (Spatial.ISAMGeometry3D)obj };
+            if (@object is IGH_GeometricGoo)
+                geometry3Ds = Convert.ToSAM((IGH_GeometricGoo)@object);
+            else if (@object is Spatial.ISAMGeometry3D)
+                geometry3Ds = new List<Spatial.ISAMGeometry3D>() { (Spatial.ISAMGeometry3D)@object };
 
             for (int i = 0; i < geometry3Ds.Count; i++)
             {
