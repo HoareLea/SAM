@@ -100,73 +100,61 @@ namespace SAM.Geometry.Spatial
             List<Tuple<LinkedFace3D, List<Planar.Face2D>>> tuples_Hidden = Enumerable.Repeat<Tuple<LinkedFace3D, List<Planar.Face2D>>>(null, tuples.Count).ToList();
             List<Tuple<LinkedFace3D, List<Planar.Face2D>>> tuples_Visible = Enumerable.Repeat<Tuple<LinkedFace3D, List<Planar.Face2D>>>(null, tuples.Count).ToList();
 
-            System.Threading.Tasks.Parallel.For(0, tuples.Count, (int i) =>
-            //for (int i =0; i < tuples.Count; i++)
+            List<Planar.Segment2D> segment2Ds = new List<Planar.Segment2D>();
+            foreach (Tuple<LinkedFace3D, Planar.BoundingBox2D, Planar.Face2D> tuple_Temp in tuples)
             {
-                Tuple<LinkedFace3D, Planar.BoundingBox2D, Planar.Face2D> tuple = tuples[i];
+                Planar.Face2D face2D = tuple_Temp.Item3;
 
-                List<Tuple<LinkedFace3D, Planar.BoundingBox2D, Planar.Face2D>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(tuple.Item2, tolerance_Distance));
-
-                List<Planar.Segment2D> segment2Ds = new List<Planar.Segment2D>();
-                foreach (Tuple<LinkedFace3D, Planar.BoundingBox2D, Planar.Face2D> tuple_Temp in tuples_Temp)
+                Planar.ISegmentable2D segmentable2D = face2D.ExternalEdge2D as Planar.ISegmentable2D;
+                if (segmentable2D != null)
                 {
-                    Planar.Face2D face2D = tuple_Temp.Item3;
-
-                    Planar.ISegmentable2D segmentable2D = face2D.ExternalEdge2D as Planar.ISegmentable2D;
-                    if (segmentable2D != null)
+                    List<Planar.Segment2D> segment2Ds_Temp = segmentable2D.GetSegments();
+                    if (segment2Ds_Temp != null)
                     {
-                        List<Planar.Segment2D> segment2Ds_Temp = segmentable2D.GetSegments();
+                        segment2Ds.AddRange(segment2Ds_Temp);
+                    }
+                }
+
+                List<Planar.IClosed2D> closed2Ds = face2D.InternalEdge2Ds;
+                if (closed2Ds != null)
+                {
+                    foreach (Planar.IClosed2D closed2D in closed2Ds)
+                    {
+                        List<Planar.Segment2D> segment2Ds_Temp = (closed2D as Planar.ISegmentable2D)?.GetSegments();
                         if (segment2Ds_Temp != null)
                         {
                             segment2Ds.AddRange(segment2Ds_Temp);
                         }
                     }
-
-                    List<Planar.IClosed2D> closed2Ds = face2D.InternalEdge2Ds;
-                    if (closed2Ds != null)
-                    {
-                        foreach (Planar.IClosed2D closed2D in closed2Ds)
-                        {
-                            List<Planar.Segment2D> segment2Ds_Temp = (closed2D as Planar.ISegmentable2D)?.GetSegments();
-                            if (segment2Ds_Temp != null)
-                            {
-                                segment2Ds.AddRange(segment2Ds_Temp);
-                            }
-                        }
-                    }
                 }
+            }
 
-                segment2Ds = Planar.Query.Split(segment2Ds, tolerance_Distance);
+            segment2Ds = Planar.Query.Split(segment2Ds, tolerance_Distance);
 
-                segment2Ds = Planar.Query.Snap(segment2Ds, true, tolerance_Snap);
+            segment2Ds = Planar.Query.Snap(segment2Ds, true, tolerance_Snap);
 
-                List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(segment2Ds, tolerance_Distance);
-                if (face2Ds == null)
+            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(segment2Ds, tolerance_Distance);
+            if (face2Ds == null)
+            {
+                return;
+            }
+
+            List<Planar.IClosed2D> closed2Ds_Holes = Planar.Query.Holes(face2Ds);
+            if (closed2Ds_Holes != null && closed2Ds_Holes.Count > 0)
+            {
+                closed2Ds_Holes.ForEach(x => face2Ds.Add(new Planar.Face2D(x)));
+            }
+
+            List<Tuple<Planar.Face2D, Planar.Point2D>> tuples_2D = face2Ds.ConvertAll(x => new Tuple<Planar.Face2D, Planar.Point2D>(x, x.GetInternalPoint2D(tolerance_Distance)));
+            for (int i = 0; i < tuples.Count; i++)
+            {
+                Tuple<LinkedFace3D, Planar.BoundingBox2D, Planar.Face2D> tuple = tuples[i];
+
+                foreach (Tuple<Planar.Face2D, Planar.Point2D> tuple_2D in tuples_2D)
                 {
-                    return;
-                }
+                    Planar.Point2D point2D = tuple_2D.Item2;
 
-                List<Planar.IClosed2D> closed2Ds_Holes = Planar.Query.Holes(face2Ds);
-                if (closed2Ds_Holes != null && closed2Ds_Holes.Count > 0)
-                {
-                    closed2Ds_Holes.ForEach(x => face2Ds.Add(new Planar.Face2D(x)));
-                }
-
-                //List<Planar.Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds, tolerance_Distance);
-                //if (polygon2Ds == null)
-                //{
-                //    return;
-                //}
-
-                //foreach (Planar.Polygon2D polygon2D in polygon2Ds)
-                foreach (Planar.Face2D face2D in face2Ds)
-                {
-                    //Planar.Point2D point2D = polygon2D?.GetInternalPoint2D(tolerance_Distance);
-                    Planar.Point2D point2D = face2D?.GetInternalPoint2D(tolerance_Distance);
-                    if (point2D == null)
-                    {
-                        continue;
-                    }
+                    List<Tuple<LinkedFace3D, Planar.BoundingBox2D, Planar.Face2D>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(tuple.Item2, tolerance_Distance));
 
                     if (!tuple.Item2.InRange(point2D, tolerance_Distance) || !tuple.Item3.Inside(point2D, tolerance_Distance))
                     {
@@ -205,10 +193,120 @@ namespace SAM.Geometry.Spatial
                         tuples_Result[i] = new Tuple<LinkedFace3D, List<Planar.Face2D>>(tuple.Item1, new List<Planar.Face2D>());
                     }
 
-                    tuples_Result[i].Item2.Add(face2D);
+                    tuples_Result[i].Item2.Add(tuple_2D.Item1);
                 }
+            }
 
-            });
+
+            //System.Threading.Tasks.Parallel.For(0, tuples.Count, (int i) =>
+            ////for (int i =0; i < tuples.Count; i++)
+            //{
+            //    Tuple<LinkedFace3D, Planar.BoundingBox2D, Planar.Face2D> tuple = tuples[i];
+
+            //    List<Tuple<LinkedFace3D, Planar.BoundingBox2D, Planar.Face2D>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(tuple.Item2, tolerance_Distance));
+
+            //    List<Planar.Segment2D> segment2Ds = new List<Planar.Segment2D>();
+            //    foreach (Tuple<LinkedFace3D, Planar.BoundingBox2D, Planar.Face2D> tuple_Temp in tuples_Temp)
+            //    {
+            //        Planar.Face2D face2D = tuple_Temp.Item3;
+
+            //        Planar.ISegmentable2D segmentable2D = face2D.ExternalEdge2D as Planar.ISegmentable2D;
+            //        if (segmentable2D != null)
+            //        {
+            //            List<Planar.Segment2D> segment2Ds_Temp = segmentable2D.GetSegments();
+            //            if (segment2Ds_Temp != null)
+            //            {
+            //                segment2Ds.AddRange(segment2Ds_Temp);
+            //            }
+            //        }
+
+            //        List<Planar.IClosed2D> closed2Ds = face2D.InternalEdge2Ds;
+            //        if (closed2Ds != null)
+            //        {
+            //            foreach (Planar.IClosed2D closed2D in closed2Ds)
+            //            {
+            //                List<Planar.Segment2D> segment2Ds_Temp = (closed2D as Planar.ISegmentable2D)?.GetSegments();
+            //                if (segment2Ds_Temp != null)
+            //                {
+            //                    segment2Ds.AddRange(segment2Ds_Temp);
+            //                }
+            //            }
+            //        }
+            //    }
+
+            //    segment2Ds = Planar.Query.Split(segment2Ds, tolerance_Distance);
+
+            //    segment2Ds = Planar.Query.Snap(segment2Ds, true, tolerance_Snap);
+
+            //    List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(segment2Ds, tolerance_Distance);
+            //    if (face2Ds == null)
+            //    {
+            //        return;
+            //    }
+
+            //    List<Planar.IClosed2D> closed2Ds_Holes = Planar.Query.Holes(face2Ds);
+            //    if (closed2Ds_Holes != null && closed2Ds_Holes.Count > 0)
+            //    {
+            //        closed2Ds_Holes.ForEach(x => face2Ds.Add(new Planar.Face2D(x)));
+            //    }
+
+            //    //List<Planar.Polygon2D> polygon2Ds = Planar.Create.Polygon2Ds(segment2Ds, tolerance_Distance);
+            //    //if (polygon2Ds == null)
+            //    //{
+            //    //    return;
+            //    //}
+
+            //    //foreach (Planar.Polygon2D polygon2D in polygon2Ds)
+            //    foreach (Planar.Face2D face2D in face2Ds)
+            //    {
+            //        //Planar.Point2D point2D = polygon2D?.GetInternalPoint2D(tolerance_Distance);
+            //        Planar.Point2D point2D = face2D?.GetInternalPoint2D(tolerance_Distance);
+            //        if (point2D == null)
+            //        {
+            //            continue;
+            //        }
+
+            //        if (!tuple.Item2.InRange(point2D, tolerance_Distance) || !tuple.Item3.Inside(point2D, tolerance_Distance))
+            //        {
+            //            continue;
+            //        }
+
+            //        Point3D point3D_Start = plane.Convert(point2D);
+            //        Point3D point3D_End = point3D_Start.GetMoved(vector3D_Ray) as Point3D;
+
+            //        Segment3D segment3D = new Segment3D(point3D_Start, point3D_End);
+            //        BoundingBox3D boundingBox3D_Segment3D = segment3D.GetBoundingBox();
+
+            //        Dictionary<LinkedFace3D, Point3D> dictionary_Intersection = IntersectionDictionary(segment3D, tuples_Temp.ConvertAll(x => x.Item1), true, tolerance_Distance);
+            //        if (dictionary_Intersection == null || dictionary_Intersection.Count == 0)
+            //        {
+            //            continue;
+            //        }
+
+            //        List<Tuple<LinkedFace3D, List<Planar.Face2D>>> tuples_Result = null;
+            //        if (dictionary_Intersection.Keys.FirstOrDefault() == tuple.Item1 && visible)
+            //        {
+            //            tuples_Result = tuples_Visible;
+            //        }
+            //        else if (dictionary_Intersection.Keys.FirstOrDefault() != tuple.Item1 && hidden)
+            //        {
+            //            tuples_Result = tuples_Hidden;
+            //        }
+
+            //        if (tuples_Result == null)
+            //        {
+            //            continue;
+            //        }
+
+            //        if (tuples_Result[i] == null)
+            //        {
+            //            tuples_Result[i] = new Tuple<LinkedFace3D, List<Planar.Face2D>>(tuple.Item1, new List<Planar.Face2D>());
+            //        }
+
+            //        tuples_Result[i].Item2.Add(face2D);
+            //    }
+
+            //});
 
             tuples_Hidden.RemoveAll(x => x == null);
             tuples_Visible.RemoveAll(x => x == null);
