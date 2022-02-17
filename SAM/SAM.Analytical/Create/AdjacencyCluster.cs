@@ -629,6 +629,9 @@ namespace SAM.Analytical
 
                         panel_New = Panel(Query.DefaultConstruction(PanelType.Air), PanelType.Air, face3D);
                         result.AddObject(panel_New);
+
+                        //Added 2022.02.17
+                        tuples_Panel_New.Add(new Tuple<Point3D, Panel, BoundingBox3D>(point3D_Internal, panel_New, face3D.GetBoundingBox(tolerance_Distance)));
                     }
 
                     foreach (Space space in spaces_Shell)

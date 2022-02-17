@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateAdjacencyClusterByPanelsAndSpaces()
           : base("SAMAnalytical.CreateAdjacencyClusterByPanelsAndSpaces", "SAMAnalytical.CreateAdjacencyClusterByPanelsAndSpaces",
-              "Create AdjacencyCluster from Panels And Spaces",
+              "Create AdjacencyCluster from Panels And Spaces  \n* use node SAMAdjacencyCluster.UpdatePanelTypes after to fix PanelTypes",
               "SAM", "Analytical")
         {
         }
@@ -62,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
                 paramBoolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Voluntary));
 
-                paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingPanels_", NickName = "addMissingPanels_", Description = "Add Missing Panels", Access = GH_ParamAccess.item };
+                paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingPanels_", NickName = "addMissingPanels_", Description = "Add Missing Panels \n* will generate AirFloor if missing panels", Access = GH_ParamAccess.item };
                 paramBoolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Voluntary));
 
