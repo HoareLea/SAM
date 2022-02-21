@@ -136,8 +136,17 @@ namespace SAM.Core
             min = namesIndex + headerCount + 1;
             values = new List<object[]>();
             for (int i = min; i < count; i++)
+            {
                 if (delimitedFileRows[i] != null)
-                    values.Add(delimitedFileRows[i].ToArray());
+                {
+                    object[] row = new object[delimitedFileRows[i].Count];
+                    for (int j = 0; j < delimitedFileRows[i].Count; j++)
+                    {
+                        row[j] = delimitedFileRows[i][j];
+                    }
+                    values.Add(row);
+                }
+            }
 
             return true;
         }
