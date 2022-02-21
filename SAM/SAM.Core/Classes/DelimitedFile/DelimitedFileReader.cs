@@ -37,6 +37,12 @@ namespace SAM.Core
             separator = Query.Separator(delimitedFileType);
         }
 
+        public DelimitedFileReader(DelimitedFileType delimitedFileType, string path, System.Text.Encoding encoding)
+            : base(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), encoding)
+        {
+            separator = Query.Separator(delimitedFileType);
+        }
+
         public char Separator
         {
             get
