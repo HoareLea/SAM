@@ -116,19 +116,19 @@ namespace SAM.Analytical
                         }
                         break;
                     case PanelType.SlabOnGrade:
-                        update = !construction.Name.StartsWith(slabOnGradeConstructionPrefix);
+                        update = !construction.Name.StartsWith(slabOnGradeConstructionPrefix) || !construction.Name.Contains("_GRD_") || construction.Name.Contains("Roof");
                         break;
                     case PanelType.UndergroundSlab:
-                        update = !construction.Name.StartsWith(slabOnGradeConstructionPrefix);
+                        update = !construction.Name.StartsWith(slabOnGradeConstructionPrefix) || !construction.Name.Contains("_GRD_") || construction.Name.Contains("Roof");
                         break;
                     case PanelType.FloorInternal:
                         update = !construction.Name.StartsWith(floorInternalConstructionPrefix);
                         break;
                     case PanelType.UndergroundCeiling:
-                        update = !construction.Name.StartsWith(floorInternalConstructionPrefix);
+                        update = !construction.Name.StartsWith(floorInternalConstructionPrefix) || !construction.Name.Contains("_GRD_");
                         break;
                     case PanelType.FloorExposed:
-                        update = !construction.Name.StartsWith(floorExposedConstructionPrefix) || panel.Construction.Name.Contains("_GRD_");
+                        update = !construction.Name.StartsWith(floorExposedConstructionPrefix) || construction.Name.Contains("_GRD_") || construction.Name.Contains("Roof");
                         break;
                     case PanelType.FloorRaised:
                         update = !construction.Name.StartsWith(floorInternalConstructionPrefix);
@@ -137,7 +137,7 @@ namespace SAM.Analytical
                         update = !construction.Name.Contains("_SHD_");
                         break;
                     case PanelType.UndergroundWall:
-                        update = !construction.Name.StartsWith(wallExternalConstructionPrefix) || !panel.Construction.Name.Contains("_GRD_");
+                        update = !construction.Name.StartsWith(wallExternalConstructionPrefix) || !construction.Name.Contains("_GRD_");
                         break;
                 }
 
