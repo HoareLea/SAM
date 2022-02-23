@@ -15,7 +15,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,7 +45,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooDesignDayParam(), "designDay", "designDay", "SAM Analytical DesignDay", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooDesignDayParam(), "coolingDesignDay", "coolingDesignDay", "SAM Analytical Cooling DesignDay", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooDesignDayParam(), "heatingDesignDay", "heatingDesignDay", "SAM Analytical Heating DesignDay", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -63,7 +64,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, Create.DesignDay(weatherData));
+            dataAccess.SetData(0, Analytical.Query.CoolingDesignDay(weatherData));
+            dataAccess.SetData(1, Analytical.Query.HeatingDesignDay(weatherData));
         }
     }
 }
