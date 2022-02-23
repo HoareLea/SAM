@@ -136,6 +136,26 @@ namespace SAM.Weather
             return dictionary.ContainsKey(name);
         }
 
+        public bool Remove(string name)
+        {
+            if(dictionary == null || string.IsNullOrWhiteSpace(name))
+            {
+                return false;
+            }
+
+            if(!dictionary.ContainsKey(name))
+            {
+                return false;
+            }
+
+            return dictionary.Remove(name);
+        }
+
+        public bool Remove(WeatherDataType weatherDataType)
+        {
+            return Remove(weatherDataType.ToString());
+        }
+
         public IEnumerable<string> Keys
         {
             get
