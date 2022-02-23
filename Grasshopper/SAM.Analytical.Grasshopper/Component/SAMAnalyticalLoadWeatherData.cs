@@ -111,11 +111,11 @@ namespace SAM.Analytical.Grasshopper
                 DesignDay designDay = weatherData?.HeatingDesignDay();
                 if(designDay != null)
                 {
-                    index = Params.IndexOfOutputParam("heatingDesignDayTemp_");
+                    index = Params.IndexOfInputParam("heatingDesignDayTemp_");
                     if(index != -1)
                     {
                         double temperature = double.NaN;
-                        if(!dataAccess.GetData(index, ref temperature) && !double.IsNaN(temperature))
+                        if(dataAccess.GetData(index, ref temperature) && !double.IsNaN(temperature))
                         {
                             for(int i=0; i < 24; i++)
                             {
@@ -124,11 +124,11 @@ namespace SAM.Analytical.Grasshopper
                         }
                     }
 
-                    index = Params.IndexOfOutputParam("heatingDesignDayWindspeed_");
+                    index = Params.IndexOfInputParam("heatingDesignDayWindspeed_");
                     if (index != -1)
                     {
                         double windSpeed = double.NaN;
-                        if (!dataAccess.GetData(index, ref windSpeed) && !double.IsNaN(windSpeed))
+                        if (dataAccess.GetData(index, ref windSpeed) && !double.IsNaN(windSpeed))
                         {
                             for (int i = 0; i < 24; i++)
                             {
