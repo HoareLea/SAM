@@ -49,7 +49,7 @@ namespace SAM.Weather.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddNumberParameter("designWeatherDay", "designWeatherDay", "Design WeatherDay", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooSAMObjectParam(), "designWeatherDay", "designWeatherDay", "Design WeatherDay", GH_ParamAccess.list);
         }
 
         /// <summary>
