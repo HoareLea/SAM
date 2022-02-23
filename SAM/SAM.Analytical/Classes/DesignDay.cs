@@ -16,6 +16,7 @@ namespace SAM.Analytical
             if(designDay != null)
             {
                 name = designDay.name;
+                description = designDay.description;
                 year = designDay.year;
                 month = designDay.month;
                 day = designDay.day;
