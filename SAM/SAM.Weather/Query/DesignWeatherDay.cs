@@ -15,8 +15,10 @@ namespace SAM.Weather
             return DesignWeatherDay(weatherYear?.WeatherDays);
         }
 
-        public static WeatherDay DesignWeatherDay(this IEnumerable<WeatherDay> weatherDays)
+        public static WeatherDay DesignWeatherDay(this IEnumerable<WeatherDay> weatherDays, out int dayIndex)
         {
+            dayIndex = -1;
+
             if (weatherDays == null || weatherDays.Count() == 0)
             {
                 return null;
@@ -26,17 +28,26 @@ namespace SAM.Weather
             double solarRadiation_Max = double.MinValue;
             WeatherDay weatherDay_DryBulbTemperature = null;
             WeatherDay weatherDay_SolarRadiation = null;
-            foreach (WeatherDay weatherDay in weatherDays)
+
+            for(int i=0; i < weatherDays.Count(); i++)
+            //foreach (WeatherDay weatherDay in weatherDays)
             {
-                for (int i = 0; i < 24; i++)
+                WeatherDay weatherDay = weatherDays.ElementAt(i);
+                if(weatherDay == null)
                 {
-                    if (weatherDay.TryGetValue(WeatherDataType.DryBulbTemperature, i, out double dryBulbTemperature) && dryBulbTemperature > dryBulbTemperature_Max)
+                    continue;
+                }
+                
+                for (int j = 0; j < 24; j++)
+                {
+                    if (weatherDay.TryGetValue(WeatherDataType.DryBulbTemperature, j, out double dryBulbTemperature) && dryBulbTemperature > dryBulbTemperature_Max)
                     {
                         weatherDay_DryBulbTemperature = weatherDay;
                         dryBulbTemperature_Max = dryBulbTemperature;
+                        dayIndex = i;
                     }
 
-                    double solarRadiation = weatherDay.CalculatedGlobalRadiation(i);
+                    double solarRadiation = weatherDay.CalculatedGlobalRadiation(j);
                     if (!double.IsNaN(solarRadiation) && solarRadiation > solarRadiation_Max)
                     {
                         weatherDay_SolarRadiation = weatherDay;
@@ -73,6 +84,11 @@ namespace SAM.Weather
             }
 
             return result;
+        }
+
+        public static WeatherDay DesignWeatherDay(this IEnumerable<WeatherDay> weatherDays)
+        {
+            return DesignWeatherDay(weatherDays, out int dayIndex);
         }
     }
 }

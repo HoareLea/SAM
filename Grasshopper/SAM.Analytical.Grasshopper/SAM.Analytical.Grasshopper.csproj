@@ -277,6 +277,7 @@
     <Compile Include="Component\SAMAnalyticalCreateConstructionLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalCreateOpaqueMaterial.cs" />
     <Compile Include="Component\SAMAnalyticalObjects.cs" />
+    <Compile Include="Component\SAMAnalyticalDesignDay.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Mesh.cs" />
     <Compile Include="Convert\ToGrasshopper\New\GH_Mesh.cs" />

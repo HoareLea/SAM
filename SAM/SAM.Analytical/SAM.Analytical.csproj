@@ -108,6 +108,7 @@
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
+    <Compile Include="Create\DesignDay.cs" />
     <Compile Include="Create\New\ArchitecturalModel.cs" />
     <Compile Include="Create\New\Log.cs" />
     <Compile Include="Create\New\OpeningType.cs" />
