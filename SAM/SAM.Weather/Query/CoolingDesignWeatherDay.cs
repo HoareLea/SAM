@@ -5,17 +5,17 @@ namespace SAM.Weather
 {
     public static partial class Query
     {
-        public static WeatherDay DesignWeatherDay(this WeatherData weatherData)
+        public static WeatherDay CoolingDesignWeatherDay(this WeatherData weatherData)
         {
-            return DesignWeatherDay(weatherData?.WeatherDays());
+            return CoolingDesignWeatherDay(weatherData?.WeatherDays());
         }
 
-        public static WeatherDay DesignWeatherDay(this WeatherYear weatherYear)
+        public static WeatherDay CoolingDesignWeatherDay(this WeatherYear weatherYear)
         {
-            return DesignWeatherDay(weatherYear?.WeatherDays);
+            return CoolingDesignWeatherDay(weatherYear?.WeatherDays);
         }
 
-        public static WeatherDay DesignWeatherDay(this IEnumerable<WeatherDay> weatherDays, out int dayIndex)
+        public static WeatherDay CoolingDesignWeatherDay(this IEnumerable<WeatherDay> weatherDays, out int dayIndex)
         {
             dayIndex = -1;
 
@@ -30,7 +30,6 @@ namespace SAM.Weather
             WeatherDay weatherDay_SolarRadiation = null;
 
             for(int i=0; i < weatherDays.Count(); i++)
-            //foreach (WeatherDay weatherDay in weatherDays)
             {
                 WeatherDay weatherDay = weatherDays.ElementAt(i);
                 if(weatherDay == null)
@@ -86,9 +85,9 @@ namespace SAM.Weather
             return result;
         }
 
-        public static WeatherDay DesignWeatherDay(this IEnumerable<WeatherDay> weatherDays)
+        public static WeatherDay CoolingDesignWeatherDay(this IEnumerable<WeatherDay> weatherDays)
         {
-            return DesignWeatherDay(weatherDays, out int dayIndex);
+            return CoolingDesignWeatherDay(weatherDays, out int dayIndex);
         }
     }
 }

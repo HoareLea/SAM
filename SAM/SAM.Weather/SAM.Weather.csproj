@@ -55,12 +55,13 @@
     <Compile Include="Enums\WeatherDataType.cs" />
     <Compile Include="Interfaces\IWeatherObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\HeatingDesignWeatherDay.cs" />
     <Compile Include="Query\DataString.cs" />
     <Compile Include="Query\CommentsString.cs" />
     <Compile Include="Query\DataPeriodsString.cs" />
     <Compile Include="Query\WeatherDays.cs" />
     <Compile Include="Query\DaylightSavingsString.cs" />
-    <Compile Include="Query\DesignWeatherDay.cs" />
+    <Compile Include="Query\CoolingDesignWeatherDay.cs" />
     <Compile Include="Query\GroundTemperaturesString.cs" />
     <Compile Include="Query\TryGetGroundTemperatures.cs" />
     <Compile Include="Query\TryGetData.cs" />

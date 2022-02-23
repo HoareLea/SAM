@@ -211,6 +211,8 @@
     <Compile Include="Modify\New\AddMechanicalSystem.cs" />
     <Compile Include="Modify\New\AddMissingProfiles.cs" />
     <Compile Include="Modify\New\AddMissingMaterials.cs" />
+    <Compile Include="Query\HeatingDesignDay.cs" />
+    <Compile Include="Query\CoolingDesignDay.cs" />
     <Compile Include="Query\SizingMethod.cs" />
     <Compile Include="Query\New\DefaultOpeningTypeLibrary.cs" />
     <Compile Include="Query\New\DefaultProfileLibrary.cs" />
