@@ -58,13 +58,13 @@ namespace SAM.Weather
 
             for (int i = 0; i < 24; i++)
             {
-                result[WeatherDataType.DryBulbTemperature][i] = dryBulbTemperature_Min;
-                result[WeatherDataType.WindSpeed][i] = windSpeed;
-                result[WeatherDataType.GlobalSolarRadiation][i] = 0;
-                result[WeatherDataType.DiffuseSolarRadiation][i] = 0;
-                result[WeatherDataType.CloudCover][i] = 0;
-                result[WeatherDataType.RelativeHumidity][i] = 0;
-                result[WeatherDataType.WindDirection][i] = 0;
+                result[WeatherDataType.DryBulbTemperature, i] = dryBulbTemperature_Min;
+                result[WeatherDataType.WindSpeed, i] = windSpeed;
+                result[WeatherDataType.GlobalSolarRadiation, i] = 0;
+                result[WeatherDataType.DiffuseSolarRadiation, i] = 0;
+                result[WeatherDataType.CloudCover, i] = 0;
+                result[WeatherDataType.RelativeHumidity, i] = 0;
+                result[WeatherDataType.WindDirection, i] = 0;
             }
 
             return result;
