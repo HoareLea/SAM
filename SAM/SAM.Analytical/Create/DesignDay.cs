@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using SAM.Weather;
+﻿using SAM.Weather;
 
 namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static DesignDay DesignDay(string name, short year, byte month, byte day, WeatherDay weatherDay)
+        public static DesignDay DesignDay(string name, string description, short year, byte month, byte day, WeatherDay weatherDay)
         {
             if(year < 0)
             {
@@ -18,7 +16,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            DesignDay result = new DesignDay(name, year, month, day);
+            DesignDay result = new DesignDay(name, description, year, month, day);
             
             if(weatherDay != null)
             {

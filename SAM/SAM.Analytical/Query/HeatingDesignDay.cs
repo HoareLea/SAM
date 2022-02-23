@@ -1,7 +1,6 @@
 ﻿using SAM.Weather;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -48,7 +47,7 @@ namespace SAM.Analytical
             DateTime dateTime = new DateTime(year, 1, 1);
             dateTime = dateTime.AddDays(dayIndex);
 
-            DesignDay result = Create.DesignDay(name, (short)dateTime.Year, (byte)dateTime.Month, (byte)dateTime.Day, weatherDay);
+            DesignDay result = Create.DesignDay(name, "Heating Design Day", (short)dateTime.Year, (byte)dateTime.Month, (byte)dateTime.Day, weatherDay);
             return result;
         }
     }

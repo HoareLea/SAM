@@ -8,6 +8,7 @@ namespace SAM.Analytical
         private short year;
         private byte month;
         private byte day;
+        private string description;
 
         public DesignDay(DesignDay designDay)
             : base(designDay)
@@ -35,11 +36,29 @@ namespace SAM.Analytical
             this.day = day;
         }
 
+        public DesignDay(string name, string description, short year, byte month, byte day)
+            : base()
+        {
+            this.name = name;
+            this.description = description;
+            this.year = year;
+            this.month = month;
+            this.day = day;
+        }
+
         public string Name
         {
             get
             {
                 return name;
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return description;
             }
         }
 
@@ -111,6 +130,11 @@ namespace SAM.Analytical
                 name = jObject.Value<string>("Name");
             }
 
+            if (jObject.ContainsKey("Description"))
+            {
+                description = jObject.Value<string>("Description");
+            }
+
             if (jObject.ContainsKey("Year"))
             {
                 year = System.Convert.ToInt16(jObject.Value<int>("Year"));
@@ -135,7 +159,15 @@ namespace SAM.Analytical
             if (jObject == null)
                 return null;
 
-            jObject.Add("Name", name);
+            if(name != null)
+            {
+                jObject.Add("Name", name);
+            }
+
+            if(description != null)
+            {
+                jObject.Add("Description", description);
+            }
 
             jObject.Add("Year", System.Convert.ToInt32(year));
             jObject.Add("Month", System.Convert.ToInt32(month));
