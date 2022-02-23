@@ -47,7 +47,7 @@ namespace SAM.Analytical
             DateTime dateTime = new DateTime(year, 1, 1);
             dateTime = dateTime.AddDays(dayIndex);
 
-            DesignDay result = Create.DesignDay(name, "Heating Design Day", (short)dateTime.Year, (byte)dateTime.Month, (byte)dateTime.Day, weatherDay);
+            DesignDay result = Create.DesignDay(name, "Heating Design Day automated :) \n *calculated from weather data as day with min temp - single value  and its wind speed all remaining values are zero", (short)dateTime.Year, (byte)dateTime.Month, (byte)dateTime.Day, weatherDay);
             return result;
         }
     }
