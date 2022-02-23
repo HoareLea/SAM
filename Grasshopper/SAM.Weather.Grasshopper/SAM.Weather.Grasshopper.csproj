@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Classes\GooWeatherYear.cs" />
     <Compile Include="Classes\GooWeatherData.cs" />
+    <Compile Include="Component\SAMWeatherDesignWeatherDay.cs" />
     <Compile Include="Component\SAMWeatherHourlyValue.cs" />
     <Compile Include="Component\SAMWeatherWeatherDataType.cs" />
     <Compile Include="Component\SAMWeatherLoadWeatherData.cs" />
