@@ -48,13 +48,17 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_String number = null;
 
-                string directory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SAM Simulation");
+                string directory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SAMSimulation");
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_directory_", NickName = "_directory_", Description = "Directory", Access = GH_ParamAccess.item };
                 number.SetPersistentData(directory);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Project Name", Access = GH_ParamAccess.item };
+                number = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_projectName_", NickName = "_projectName_", Description = "Project Name", Access = GH_ParamAccess.item };
+                number.SetPersistentData("000000");
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_modelName_", NickName = "_modelName_", Description = "Model Name", Access = GH_ParamAccess.item };
                 number.SetPersistentData("000000_SAM_AnalyticalModel");
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
@@ -92,56 +96,65 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_directory_");
             string directory = null;
-            if (index != -1 || !dataAccess.GetData(index, ref directory) || string.IsNullOrWhiteSpace(directory))
+            if (index == -1 || !dataAccess.GetData(index, ref directory) || string.IsNullOrWhiteSpace(directory))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            index = Params.IndexOfInputParam("_name_");
-            string name = null;
-            if (index != -1 || !dataAccess.GetData(index, ref name) || string.IsNullOrWhiteSpace(name))
+            string name_Temp = null;
+
+            index = Params.IndexOfInputParam("_modelName_");
+            string modelName = "000000_SAM_AnalyticalModel";
+            if (index != -1 && dataAccess.GetData(index, ref name_Temp) && !string.IsNullOrWhiteSpace(name_Temp))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                modelName = name_Temp;
             }
+            index = Params.IndexOfInputParam("_projectName_");
+            string projectName = "000000";
+            if (index != -1 && dataAccess.GetData(index, ref name_Temp) && !string.IsNullOrWhiteSpace(name_Temp))
+            {
+                projectName = name_Temp;
+            }
+
+            directory = System.IO.Path.Combine(directory, projectName);
 
             Core.Create.Directory(directory);
 
             index = Params.IndexOfOutputParam("json");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", name, "json")));
+                dataAccess.SetData(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", modelName, "json")));
             }
 
             index = Params.IndexOfOutputParam("t3d");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", name, "t3d")));
+                dataAccess.SetData(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", modelName, "t3d")));
             }
 
             index = Params.IndexOfOutputParam("tbd");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", name, "tbd")));
+                dataAccess.SetData(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", modelName, "tbd")));
             }
 
             index = Params.IndexOfOutputParam("tsd");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", name, "tsd")));
+                dataAccess.SetData(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", modelName, "tsd")));
             }
 
             index = Params.IndexOfOutputParam("tpd");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", name, "tpd")));
+                dataAccess.SetData(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", modelName, "tpd")));
             }
 
             index = Params.IndexOfOutputParam("gem");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", name, "gem")));
+                dataAccess.SetData(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", modelName, "gem")));
             }
 
         }
