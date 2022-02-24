@@ -180,10 +180,15 @@ namespace SAM.Analytical.Grasshopper
                         double max = System.Math.Sqrt(area);
 
                         int length = text.Length;
+                        if(text.Contains("\r\n"))
+                        {
+                            length = text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(x => x.Length).Max();
+                        }
+
                         if (length < 10)
                             length = 10;
 
-                        height_Temp = max / (length * 2);
+                        height_Temp = max / (length * 1.5);
                     }
                 }
 
