@@ -147,12 +147,20 @@ namespace SAM.Analytical.Grasshopper
                     continue;
 
                 string text;
-                if (!space.TryGetValue(name, out text, true))
-                    text = "???";
+                if (name.StartsWith("="))
+                {
+                    text = name.Substring(1);
+                    text = Core.Query.Label(space, text, global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
+                    text = Core.Query.Label(space.InternalCondition, text, global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
+                }
+                else
+                {
+                    if (!space.TryGetValue(name, out text, true))
+                        text = "???";
 
-                double value = double.NaN;
-                if (double.TryParse(text, out value))
-                    text = value.Round(global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+                    if (double.TryParse(text, out double value))
+                        text = value.Round(global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+                }
 
                 Point3D point3D = space.Location;
 
