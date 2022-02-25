@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -43,10 +44,7 @@ namespace SAM.Analytical.Grasshopper
             base.AppendAdditionalMenuItems(menu);
 
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Go to Directory", Menu_GoToDirectory, true, false);
-
-            base.AppendAdditionalMenuItems(menu);
-            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Go to Directory", Menu_GoToDirectory, Resources.SAM_Small, true, false);
         }
 
         /// <summary>
@@ -68,11 +66,11 @@ namespace SAM.Analytical.Grasshopper
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_projectName_", NickName = "_projectName_", Description = "Project Name", Access = GH_ParamAccess.item };
                 number.SetPersistentData("000000");
-                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_modelName_", NickName = "_modelName_", Description = "Model Name", Access = GH_ParamAccess.item };
                 number.SetPersistentData("000000_SAM_AnalyticalModel");
-                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -192,8 +190,30 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            string directory = Params.Input[index_Directory].VolatileData.AllData(true)?.OfType<string>()?.ElementAt(0);
-            string projectName = Params.Input[index_ProjectName].VolatileData.AllData(true)?.OfType<string>()?.ElementAt(0);
+            string directory = null;
+            string projectName = null;
+
+            object @object = null;
+
+            @object = Params.Input[index_Directory].VolatileData.AllData(true)?.OfType<object>()?.ElementAt(0);
+            if (@object is IGH_Goo)
+            {
+                directory = (@object as dynamic).Value?.ToString();
+            }
+            else
+            {
+                return;
+            }
+
+            @object = Params.Input[index_ProjectName].VolatileData.AllData(true)?.OfType<object>()?.ElementAt(0);
+            if (@object is IGH_Goo)
+            {
+                projectName = (@object as dynamic).Value?.ToString();
+            }
+            else
+            {
+                return;
+            }
 
             directory = System.IO.Path.Combine(directory, projectName);
 
