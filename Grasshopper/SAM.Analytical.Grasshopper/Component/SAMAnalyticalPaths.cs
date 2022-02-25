@@ -1,10 +1,11 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -18,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -35,6 +36,17 @@ namespace SAM.Analytical.Grasshopper
               "Gets Analytical Paths",
               "SAM WIP", "Analytical")
         {
+        }
+
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        {
+            base.AppendAdditionalMenuItems(menu);
+
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Go to Directory", Menu_GoToDirectory, , false);
+
+            base.AppendAdditionalMenuItems(menu);
+            Menu_AppendSeparator(menu);
         }
 
         /// <summary>
@@ -74,6 +86,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "modelName", NickName = "modelName", Description = "Model Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "json", NickName = "json", Description = "SAM Analytical Model Path", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "t3d", NickName = "t3d", Description = "T3D File Path", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "tbd", NickName = "tbd", Description = "TPD File Path", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
@@ -121,6 +134,12 @@ namespace SAM.Analytical.Grasshopper
 
             Core.Create.Directory(directory);
 
+            index = Params.IndexOfOutputParam("modelName");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, modelName);
+            }
+
             index = Params.IndexOfOutputParam("json");
             if (index != -1)
             {
@@ -157,6 +176,35 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetData(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", modelName, "gem")));
             }
 
+        }
+
+        void Menu_GoToDirectory(object sender, EventArgs e)
+        {
+            int index_Directory = Params.IndexOfInputParam("_directory_");
+            if(index_Directory == -1)
+            {
+                return;
+            }
+
+            int index_ProjectName = Params.IndexOfInputParam("_projectName_");
+            if (index_ProjectName == -1)
+            {
+                return;
+            }
+
+            string directory = Params.Input[index_Directory].VolatileData.AllData(true)?.OfType<string>()?.ElementAt(0);
+            string projectName = Params.Input[index_ProjectName].VolatileData.AllData(true)?.OfType<string>()?.ElementAt(0);
+
+            directory = System.IO.Path.Combine(directory, projectName);
+
+            Core.Create.Directory(directory);
+
+            if(!System.IO.Directory.Exists(directory))
+            {
+                return;
+            }
+
+            Process.Start(directory);
         }
     }
 }
