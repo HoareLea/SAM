@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
             base.AppendAdditionalMenuItems(menu);
 
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Go to Directory", Menu_GoToDirectory, , false);
+            Menu_AppendItem(menu, "Go to Directory", Menu_GoToDirectory, true, false);
 
             base.AppendAdditionalMenuItems(menu);
             Menu_AppendSeparator(menu);
