@@ -7,7 +7,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static void ViewField<T>(this IEnumerable<T> face3DObjects, Vector3D viewDirection, out List<LinkedFace3D> linkedFace3Ds_Hidden, out List<LinkedFace3D> linkedFace3Ds_Visible, bool hidden = true, bool visible = true, double tolerance_Area = Tolerance.MacroDistance, double tolerance_Snap = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance) where T : IFace3DObject
+        public static void ViewField<T>(this IEnumerable<T> face3DObjects, Vector3D viewDirection, out List<LinkedFace3D> linkedFace3Ds_Hidden, out List<LinkedFace3D> linkedFace3Ds_Visible, bool hidden = true, bool visible = true, double tolerance_Area = Tolerance.MacroDistance, double tolerance_Snap = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance) where T : IFace3DObject
         {
             linkedFace3Ds_Hidden = null;
             linkedFace3Ds_Visible = null;
@@ -30,22 +30,33 @@ namespace SAM.Geometry.Spatial
             List<LinkedFace3D> linkedFace3Ds = new List<LinkedFace3D>();
             foreach (T face3DObject in face3DObjects)
             {
-                if (face3DObject == null)
+                Plane plane_Face3DObject = face3DObject?.Face3D?.GetPlane();
+                if(plane_Face3DObject == null)
                 {
                     continue;
                 }
 
-                if (face3DObject is LinkedFace3D)
+                LinkedFace3D linkedFace3D = face3DObject is LinkedFace3D ? (LinkedFace3D)(object)face3DObject : Create.LinkedFace3D(face3DObject);
+                if(linkedFace3D == null)
                 {
-                    linkedFace3Ds.Add((LinkedFace3D)(object)face3DObject);
                     continue;
                 }
 
-                LinkedFace3D linkedFace3D = Create.LinkedFace3D(face3DObject);
-                if (linkedFace3D != null)
+                Vector3D vector3D_Project = plane_Face3DObject.Project(viewDirection);
+                if (vector3D_Project != null && vector3D_Project.IsValid() && vector3D_Project.Length > tolerance_Distance)
                 {
-                    linkedFace3Ds.Add(linkedFace3D);
+                    double angle = viewDirection.SmallestAngle(vector3D_Project);
+                    if (angle < tolerance_Angle)
+                    {
+                        if (hidden)
+                        {
+                            linkedFace3Ds_Hidden.Add(linkedFace3D);
+                        }
+                        continue;
+                    }
                 }
+
+                linkedFace3Ds.Add(linkedFace3D);
             }
 
             if (linkedFace3Ds.Count() < 2)
