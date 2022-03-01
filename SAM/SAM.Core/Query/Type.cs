@@ -74,7 +74,7 @@ namespace SAM.Core
                                 foreach (Type type in types)
                                 {
                                     string typeName_Temp_Temp = type?.Name?.Trim();
-                                    if (typeName_Temp_Temp == null)
+                                    if (string.IsNullOrWhiteSpace(typeName_Temp_Temp))
                                     {
                                         continue;
                                     }
@@ -85,6 +85,12 @@ namespace SAM.Core
                                     }
 
                                     if (typeName_Temp.Equals(typeName_Temp_Temp))
+                                    {
+                                        result = type;
+                                        break;
+                                    }
+
+                                    if (typeName_Temp.Equals(string.Format("{0}.{1}", assemblyName, typeName_Temp_Temp)))
                                     {
                                         result = type;
                                         break;
