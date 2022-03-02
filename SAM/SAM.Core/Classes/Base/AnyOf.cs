@@ -41,6 +41,16 @@ namespace SAM.Core
             }
         }
 
+        public T GetValue<T>()
+        {
+            if(value is T)
+            {
+                return (T)(object)value;
+            }
+
+            return default;
+        }
+
         public bool IsValid(object value)
         {
             if (Types == null || Types.Length == 0)

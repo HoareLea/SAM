@@ -31,7 +31,7 @@ namespace SAM.Geometry.Spatial
             foreach (T face3DObject in face3DObjects)
             {
                 Plane plane_Face3DObject = face3DObject?.Face3D?.GetPlane();
-                if(plane_Face3DObject == null)
+                if (plane_Face3DObject == null)
                 {
                     continue;
                 }
@@ -46,7 +46,7 @@ namespace SAM.Geometry.Spatial
                 if (vector3D_Project != null && vector3D_Project.IsValid() && vector3D_Project.Length > tolerance_Distance)
                 {
                     double angle = viewDirection.SmallestAngle(vector3D_Project);
-                    if (angle < tolerance_Angle)
+                    if (angle < tolerance_Distance)
                     {
                         if (hidden)
                         {
@@ -160,6 +160,31 @@ namespace SAM.Geometry.Spatial
             for (int i = 0; i < tuples.Count; i++)
             {
                 Tuple<LinkedFace3D, Planar.BoundingBox2D, Planar.Face2D> tuple = tuples[i];
+
+                Plane plane_LinkedFace3D = tuple?.Item1.Face3D?.GetPlane();
+                if (plane_LinkedFace3D == null)
+                {
+                    continue;
+                }
+
+                Vector3D vector3D_Project = plane_LinkedFace3D.Project(viewDirection);
+                if (vector3D_Project != null && vector3D_Project.IsValid() && vector3D_Project.Length > tolerance_Distance)
+                {
+                    double angle = viewDirection.SmallestAngle(vector3D_Project);
+                    if (angle < tolerance_Angle)
+                    {
+                        if (hidden)
+                        {
+                            if (tuples_Hidden[i] == null)
+                            {
+                                tuples_Hidden[i] = new Tuple<LinkedFace3D, List<Planar.Face2D>>(tuple.Item1, new List<Planar.Face2D>());
+                            }
+
+                            tuples_2D.ForEach(x => tuples_Hidden[i].Item2.Add(x.Item1));
+                        }
+                        continue;
+                    }
+                }
 
                 foreach (Tuple<Planar.Face2D, Planar.Point2D> tuple_2D in tuples_2D)
                 {
