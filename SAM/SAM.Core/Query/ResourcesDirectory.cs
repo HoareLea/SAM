@@ -9,7 +9,13 @@ namespace SAM.Core
             if (setting == null)
                 return null;
 
-            return System.IO.Path.Combine(ExecutingAssemblyDirectory(), setting?.GetValue<string>(CoreSettingParameter.ResourcesDirectoryName));
+            string result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ExecutingAssemblyDirectory()), setting?.GetValue<string>(CoreSettingParameter.ResourcesDirectoryName));
+            if (!System.IO.Directory.Exists(result))
+            {
+                result = System.IO.Path.Combine(ExecutingAssemblyDirectory(), setting?.GetValue<string>(CoreSettingParameter.ResourcesDirectoryName));
+            }
+
+            return result;
         }
 
         public static string ResourcesDirectory()
@@ -32,7 +38,13 @@ namespace SAM.Core
 
             name = name.Replace(".", @"\");
 
-            return System.IO.Path.Combine(ExecutingAssemblyDirectory(), resourcesDirectoryName, name);
+            string result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ExecutingAssemblyDirectory()), resourcesDirectoryName, name);
+            if (!System.IO.Directory.Exists(result))
+            {
+                result = System.IO.Path.Combine(ExecutingAssemblyDirectory(), resourcesDirectoryName, name);
+            }
+
+            return result;
         }
 
         public static string ResourcesDirectory(Assembly assembly)
