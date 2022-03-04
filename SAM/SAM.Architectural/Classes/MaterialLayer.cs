@@ -42,7 +42,7 @@ namespace SAM.Architectural
             }
         }
 
-        public bool FromJObject(JObject jObject)
+        public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)
                 return false;
@@ -56,7 +56,7 @@ namespace SAM.Architectural
             return true;
         }
 
-        public JObject ToJObject()
+        public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
