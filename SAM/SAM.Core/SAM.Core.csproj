@@ -61,6 +61,7 @@
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Classes\Base\AnyOf.cs" />
+    <Compile Include="Classes\Base\SearchWrapper.cs" />
     <Compile Include="Classes\Expression\Command.cs" />
     <Compile Include="Classes\Expression\ExpressionVariable.cs" />
     <Compile Include="Classes\Expression\Expression.cs" />
