@@ -96,12 +96,15 @@ namespace SAM.Core
                 }
             }
 
-            if (values == null || values.Length == 0)
+            List<string> result = values?.ToList();
+            result?.RemoveAll(x => string.IsNullOrEmpty(x));
+
+            if (result == null || result.Count == 0)
             {
                 return null;
             }
 
-            return values.ToList();
+            return result;
         }
 
         public IEnumerable<string> Texts
@@ -164,7 +167,17 @@ namespace SAM.Core
                     continue;
                 }
 
-                result[keyValuePair.Key] = (double)tuples.ConvertAll(x => x.Item1.Length).Sum() / (double)tuples.ConvertAll(x => x.Item2.Length + 1).Sum();
+                tuples.Sort((x, y) => y.Item1.CompareTo(x.Item1));
+
+                string value_Temp = string.Join(string.Empty, values_2);
+                foreach(Tuple<string, string> tuple in tuples)
+                {
+                    value_Temp = value_Temp.Replace(tuple.Item1, string.Empty);
+                }
+
+                result[keyValuePair.Key] = (double)(keyValuePair.Key.Length - value_Temp.Length) / (double)keyValuePair.Key.Length;
+
+                //result[keyValuePair.Key] = (double)tuples.ConvertAll(x => x.Item1.Length).Sum() / (double)tuples.ConvertAll(x => x.Item2.Length + 1).Sum();
             }
 
             return result;
