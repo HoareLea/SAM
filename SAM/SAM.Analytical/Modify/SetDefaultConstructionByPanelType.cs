@@ -17,6 +17,7 @@ namespace SAM.Analytical
             string roofExternalConstructionPrefix = "SIM_EXT_";
             string floorExposedConstructionPrefix = "SIM_EXT_";
             string slabOnGradeConstructionPrefix = "SIM_EXT_";
+            string floorConstructionName = "SIM_EXT_GRD_FLR";
 
             List<Panel> panels = adjacencyCluster.GetObjects<Panel>();
             if (panels == null || panels.Count == 0)
@@ -116,7 +117,7 @@ namespace SAM.Analytical
                         }
                         break;
                     case PanelType.SlabOnGrade:
-                        update = !construction.Name.StartsWith(slabOnGradeConstructionPrefix) || !construction.Name.Contains("_GRD_") || construction.Name.Contains("Roof");
+                        update = construction.Name.Equals(floorConstructionName) || !construction.Name.StartsWith(slabOnGradeConstructionPrefix) || !construction.Name.Contains("_GRD_") || construction.Name.Contains("Roof");
                         break;
                     case PanelType.UndergroundSlab:
                         update = !construction.Name.StartsWith(slabOnGradeConstructionPrefix) || !construction.Name.Contains("_GRD_") || construction.Name.Contains("Roof");
