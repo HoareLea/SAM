@@ -4,6 +4,7 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -42,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
             int index = -1;
             
             inputParamManager.AddTextParameter("_names", "_names", "Contruction Layer Name", GH_ParamAccess.list);
-            index = inputParamManager.AddNumberParameter("_thicknesses_", "_thicknesses_", "Contruction Layer Thicknesses", GH_ParamAccess.list);
+            index = inputParamManager.AddNumberParameter("_thicknesses_", "_thicknesses_", "Contruction Layer Thicknesses [m]", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
 
             GooMaterialLibraryParam gooMaterialLibraryParam = new GooMaterialLibraryParam();
@@ -113,6 +114,16 @@ namespace SAM.Analytical.Grasshopper
                 objects[names.Count + i] = thicknesses[i];
 
             List<ConstructionLayer> constructionLayers = Create.ConstructionLayers(objects);
+
+            if(constructionLayers != null)
+            {
+                double thickness = constructionLayers.ConvertAll(x => x.Thickness).Sum();
+                if(thickness >= 1)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Thickness of construction layers exceed 1m");
+                    return;
+                }
+            }
 
             dataAccess.SetDataList(0, constructionLayers?.ConvertAll(x => new GooConstructionLayer(x)));
         }
