@@ -176,6 +176,7 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\Search.cs" />
     <Compile Include="Query\Brighten.cs" />
     <Compile Include="Query\Paths.cs" />
     <Compile Include="Query\Lerps.cs" />
