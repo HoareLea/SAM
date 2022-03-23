@@ -23,6 +23,16 @@ namespace SAM.Analytical.Grasshopper
         {
             return new GooAnalyticalObject(Value);
         }
+
+        public override bool CastFrom(object source)
+        {
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Y>(ref Y target)
+        {
+            return base.CastTo(ref target);
+        }
     }
 
     public class GooAnalyticalObjectParam : GH_PersistentParam<GooAnalyticalObject>
