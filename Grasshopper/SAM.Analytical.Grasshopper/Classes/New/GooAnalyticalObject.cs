@@ -31,6 +31,35 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool CastTo<Y>(ref Y target)
         {
+            if (Value == null)
+                return false;
+
+            if (typeof(Y).IsAssignableFrom(typeof(GH_Mesh)))
+            {
+                if (Value is AdjacencyCluster)
+                {
+                    target = (Y)(object)((AdjacencyCluster)Value).ToGrasshopper_Mesh();
+                    return true;
+                }
+                else if (Value is AnalyticalModel)
+                {
+                    target = (Y)(object)((AnalyticalModel)Value).ToGrasshopper_Mesh();
+                    return true;
+                }
+                else if (Value is Panel)
+                {
+                    target = (Y)(object)((Panel)Value).ToGrasshopper_Mesh();
+                    return true;
+                }
+            }
+            else if (typeof(Y).IsAssignableFrom(typeof(GH_Brep)))
+            {
+                if (Value is Panel)
+                {
+                    target = (Y)(object)(Geometry.Grasshopper.Convert.ToGrasshopper_Brep(((Panel)Value).GetFace3D()));
+                    return true;
+                }
+            }
             return base.CastTo(ref target);
         }
     }

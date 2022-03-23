@@ -221,7 +221,7 @@ namespace SAM.Analytical.Grasshopper
                         continue;
                     Point3d point = text3d.TextPlane.Origin;
                     
-                    if (point.DistanceTo(cameraLocation) > 40) 
+                    if (point.DistanceTo(cameraLocation) > 80) 
                         continue;
                     
                     args.Display.Draw3dText(text3d, System.Drawing.Color.Black);
