@@ -12,7 +12,7 @@ namespace SAM.Analytical
         /// <search>Default SAM Analytical Construction, PanelType</search> 
         public static Construction DefaultConstruction(this PanelType panelType)
         {
-            return ActiveSetting.Setting.GetValue<ConstructionLibrary>(AnalyticalSettingParameter.DefaultConstructionLibrary)?.GetConstructions(panelType)?.FirstOrDefault();
+            return DefaultConstructionLibrary()?.GetConstructions(panelType)?.FirstOrDefault();
         }
     }
 }

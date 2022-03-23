@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Classes\Commands\PanelSettings.cs" />
+    <EmbeddedResource Include="Classes\Commands\Test.cs" />
     <EmbeddedResource Include="Classes\AnalyticalPlugin.cs" />
   </ItemGroup>
   
@@ -33,6 +33,7 @@
     <ProjectReference Include="..\..\..\SAM\SAM.Core\SAM.Core.csproj" />
     <ProjectReference Include="..\..\..\SAM\SAM.Geometry\SAM.Geometry.csproj" />
     <ProjectReference Include="..\..\..\SAM\SAM.Math\SAM.Math.csproj" />
+    <ProjectReference Include="..\..\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj" />
   </ItemGroup>
   
   <PropertyGroup Condition="$(Configuration) == 'Debug' AND $([MSBuild]::IsOSPlatform(Windows))">

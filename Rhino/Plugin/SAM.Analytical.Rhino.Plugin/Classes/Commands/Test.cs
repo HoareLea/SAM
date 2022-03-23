@@ -9,9 +9,9 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Rhino.Plugin
 {
-    public class PanelSettings : Command
+    public class Test : Command
     {
-        public PanelSettings()
+        public Test()
         {
             // Rhino only creates one instance of each command class defined in a
             // plug-in, so it is safe to store a refence in a static property.
@@ -19,7 +19,7 @@ namespace SAM.Analytical.Rhino.Plugin
         }
 
         ///<summary>The only instance of this command.</summary>
-        public static PanelSettings Instance { get; private set; }
+        public static Test Instance { get; private set; }
 
         ///<returns>The command name as it appears on the Rhino command line.</returns>
         public override string EnglishName => "SAM_Test";
