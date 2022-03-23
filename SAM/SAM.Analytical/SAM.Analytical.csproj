@@ -212,6 +212,7 @@
     <Compile Include="Modify\New\AddMechanicalSystem.cs" />
     <Compile Include="Modify\New\AddMissingProfiles.cs" />
     <Compile Include="Modify\New\AddMissingMaterials.cs" />
+    <Compile Include="Query\DefaultConstructionLibraryPath.cs" />
     <Compile Include="Query\DefaultConstructionLibrary.cs" />
     <Compile Include="Query\DefaultHoursOfYear.cs" />
     <Compile Include="Query\HeatingDesignDay.cs" />

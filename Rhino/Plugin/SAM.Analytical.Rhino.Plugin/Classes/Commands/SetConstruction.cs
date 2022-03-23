@@ -37,15 +37,23 @@
 //            Construction construction = null;
 //            using (Windows.Forms.ConstructionLibraryForm constructionLibraryForm = new Windows.Forms.ConstructionLibraryForm(materialLibrary, constructionLibrary))
 //            {
-//                if(constructionLibraryForm.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+//                if (constructionLibraryForm.ShowDialog() != System.Windows.Forms.DialogResult.OK)
 //                {
 //                    return global::Rhino.Commands.Result.Cancel;
 //                }
 
 //                construction = constructionLibraryForm.GetConstructions()?.FirstOrDefault();
+//                if(construction != null)
+//                {
+//                    ConstructionLibrary constructionLibrary_New = constructionLibraryForm.ConstructionLibrary;
+//                    if(constructionLibrary_New != null)
+//                    {
+//                        Core.Convert.ToFile(new IJSAMObject[] { constructionLibrary_New }, Query.DefaultConstructionLibraryPath());
+//                    }
+//                }
 //            }
 
-//            if(construction == null)
+//            if (construction == null)
 //            {
 //                return global::Rhino.Commands.Result.Failure;
 //            }
@@ -56,7 +64,7 @@
 //                if (brep != null)
 //                {
 //                    string @string = null;
-//                     if(brep.HasUserData)
+//                    if (brep.HasUserData)
 //                    {
 //                        @string = brep.GetUserString("SAM");
 //                        if (!string.IsNullOrWhiteSpace(@string))
@@ -74,25 +82,25 @@
 //                        }
 //                    }
 
-//                    if(string.IsNullOrWhiteSpace(@string))
+//                    if (string.IsNullOrWhiteSpace(@string))
 //                    {
 //                        List<Geometry.Spatial.ISAMGeometry3D> geometries = Geometry.Rhino.Convert.ToSAM(brep);
-//                        if(geometries != null && geometries.Count != 0)
+//                        if (geometries != null && geometries.Count != 0)
 //                        {
-//                            foreach(Geometry.Spatial.ISAMGeometry3D geometry in geometries)
+//                            foreach (Geometry.Spatial.ISAMGeometry3D geometry in geometries)
 //                            {
 //                                List<Geometry.Spatial.Face3D> face3Ds = new List<Geometry.Spatial.Face3D>();
 
-//                                if(geometry is Geometry.Spatial.Face3D)
+//                                if (geometry is Geometry.Spatial.Face3D)
 //                                {
 //                                    face3Ds.Add((Geometry.Spatial.Face3D)geometry);
 //                                }
-//                                else if(geometry is Geometry.Spatial.Shell)
+//                                else if (geometry is Geometry.Spatial.Shell)
 //                                {
 //                                    face3Ds.AddRange(((Geometry.Spatial.Shell)geometry).Face3Ds);
 //                                }
 
-//                                if(face3Ds == null || face3Ds.Count == 0)
+//                                if (face3Ds == null || face3Ds.Count == 0)
 //                                {
 //                                    continue;
 //                                }
@@ -100,13 +108,13 @@
 //                                List<Panel> panels_Temp = new List<Panel>();
 //                                foreach (Geometry.Spatial.Face3D face3D in face3Ds)
 //                                {
-//                                    if(face3D == null)
+//                                    if (face3D == null)
 //                                    {
 //                                        continue;
 //                                    }
 
 //                                    Panel panel = Create.Panel(construction, face3D.GetPlane().Normal.PanelType(), face3D);
-//                                    if(panel == null)
+//                                    if (panel == null)
 //                                    {
 //                                        continue;
 //                                    }
@@ -114,7 +122,7 @@
 //                                    panels_Temp.Add(panel);
 //                                }
 
-//                                if(panels_Temp != null && panels_Temp.Count != 0)
+//                                if (panels_Temp != null && panels_Temp.Count != 0)
 //                                {
 //                                    @string = Core.Convert.ToString(panels_Temp);
 //                                }
