@@ -62,6 +62,7 @@
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Classes\Base\AnyOf.cs" />
     <Compile Include="Classes\Base\SearchWrapper.cs" />
+    <Compile Include="Classes\Base\ParameterData.cs" />
     <Compile Include="Classes\Expression\Command.cs" />
     <Compile Include="Classes\Expression\ExpressionVariable.cs" />
     <Compile Include="Classes\Expression\Expression.cs" />
@@ -74,6 +75,8 @@
     <Compile Include="Classes\Relation\TextMap.cs" />
     <Compile Include="Convert\ToFile\File.cs" />
     <Compile Include="Convert\ToHexadecimal\Hexadecimal.cs" />
+    <Compile Include="Create\ParameterData.cs" />
+    <Compile Include="Create\ParameterDatas.cs" />
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Create\Commands.cs" />
     <Compile Include="Create\Directory.cs" />

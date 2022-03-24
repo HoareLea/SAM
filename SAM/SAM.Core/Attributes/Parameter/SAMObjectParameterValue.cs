@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core.Attributes
 {
@@ -37,6 +39,14 @@ namespace SAM.Core.Attributes
             get
             {
                 return inheritance;
+            }
+        }
+
+        public List<Type> Types
+        {
+            get
+            {
+                return types?.ToList();
             }
         }
 
