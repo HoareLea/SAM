@@ -231,6 +231,73 @@ namespace SAM.Core
             return -1;
         }
 
+        public object[,] GetValues()
+        {
+            int rowCount = 0;
+            int columnCount = 0;
+            if(names != null && names.Length != 0)
+            {
+                rowCount++;
+                columnCount = names.Length;
+            }
+
+            if(header != null && header.Count != 0)
+            {
+                rowCount += header.Count;
+                columnCount = Math.Max(columnCount, header.ConvertAll(x => x == null ? 0 : x.Length).Max());
+            }
+
+            if(values != null && values.Count != 0)
+            {
+                rowCount += values.Count;
+                columnCount = Math.Max(columnCount, values.ConvertAll(x => x == null ? 0 : x.Length).Max());
+            }
+
+            object[,] result = new object[rowCount, columnCount];
+
+            int rowIndex = 0;
+            if(names != null && names.Length != 0)
+            {
+                for(int i=0; i < names.Length; i++)
+                {
+                    result[rowIndex, i] = names[i];
+                }
+                rowIndex++;
+            }
+
+            if (header != null && header.Count != 0)
+            {
+                foreach(object[] row in header)
+                {
+                    if(row != null)
+                    {
+                        for (int i = 0; i < row.Length; i++)
+                        {
+                            result[rowIndex, i] = row[i];
+                        }
+                    }
+                    rowIndex++;
+                }
+            }
+
+            if (values != null && values.Count != 0)
+            {
+                foreach (object[] row in values)
+                {
+                    if (row != null)
+                    {
+                        for (int i = 0; i < row.Length; i++)
+                        {
+                            result[rowIndex, i] = row[i];
+                        }
+                    }
+                    rowIndex++;
+                }
+            }
+
+            return result;
+        }
+
         public void Sort(string columnName)
         {
             Sort(GetColumnIndex(columnName));
