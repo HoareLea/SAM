@@ -6,7 +6,7 @@ namespace SAM.Core
 {
     public static partial class Create
     {
-        public static List<ParameterData> ParameterDatas(params Type[] enumTypes)
+        public static List<EnumParameterData> EnumParameterDatas(params Type[] enumTypes)
         {
             if(enumTypes == null)
             {
@@ -33,28 +33,28 @@ namespace SAM.Core
                 }
             }
 
-            List<ParameterData> result = ParameterDatas(enums.ToArray());
+            List<EnumParameterData> result = EnumParameterDatas(enums.ToArray());
 
             return result;
         }
 
-        public static List<ParameterData> ParameterDatas(params Enum[] enums)
+        public static List<EnumParameterData> EnumParameterDatas(params Enum[] enums)
         {
             if(enums == null)
             {
                 return null;
             }
 
-            List<ParameterData> result = new List<ParameterData>();
+            List<EnumParameterData> result = new List<EnumParameterData>();
             foreach(Enum @enum in enums)
             {
-                ParameterData parameterData = ParameterData(@enum);
-                if(parameterData == null)
+                EnumParameterData enumParameterData = new EnumParameterData(@enum);
+                if(enumParameterData == null || enumParameterData.ParameterProperties == null)
                 {
                     continue;
                 }
 
-                result.Add(parameterData);
+                result.Add(enumParameterData);
             }
 
             return result;

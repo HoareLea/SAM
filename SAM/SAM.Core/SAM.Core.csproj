@@ -61,6 +61,7 @@
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Classes\Base\AnyOf.cs" />
+    <Compile Include="Classes\Base\EnumParameterData.cs" />
     <Compile Include="Classes\Base\SearchWrapper.cs" />
     <Compile Include="Classes\Base\ParameterData.cs" />
     <Compile Include="Classes\Expression\Command.cs" />
@@ -75,8 +76,7 @@
     <Compile Include="Classes\Relation\TextMap.cs" />
     <Compile Include="Convert\ToFile\File.cs" />
     <Compile Include="Convert\ToHexadecimal\Hexadecimal.cs" />
-    <Compile Include="Create\ParameterData.cs" />
-    <Compile Include="Create\ParameterDatas.cs" />
+    <Compile Include="Create\EnumParameterDatas.cs" />
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Create\Commands.cs" />
     <Compile Include="Create\Directory.cs" />
@@ -100,6 +100,7 @@
     <Compile Include="Enums\SAMFileType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
     <Compile Include="Enums\Parameter\CoreSettingParameter.cs" />
+    <Compile Include="Interfaces\Base\IParameterData.cs" />
     <Compile Include="Interfaces\Base\ISAMBaseObject.cs" />
     <Compile Include="Interfaces\Base\ISystem.cs" />
     <Compile Include="Interfaces\Base\IResult.cs" />

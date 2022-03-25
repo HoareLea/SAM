@@ -2,7 +2,7 @@
 
 namespace SAM.Core
 {
-    public class ParameterData
+    public class ParameterData : IParameterData
     {
         private ParameterProperties parameterProperties;
         private ParameterValue parameterValue;
