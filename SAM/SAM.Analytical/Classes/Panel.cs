@@ -217,6 +217,26 @@ namespace SAM.Analytical
             return face3D.GetArea();
         }
 
+        /// <summary>
+        /// Area of Panel without Apertures
+        /// </summary>
+        /// <returns>Net Area</returns>
+        public double GetAreaNet()
+        {
+            if(apertures == null || apertures.Count == 0)
+            {
+                return GetArea();
+            }
+
+            Face3D face3D = GetFace3D(true);
+            if(face3D == null)
+            {
+                return double.NaN;
+            }
+
+            return face3D.GetArea();
+        }
+
         public double GetPerimeter()
         {
             if (planarBoundary3D == null)
