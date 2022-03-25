@@ -215,6 +215,9 @@
     <Compile Include="Query\DefaultConstructionLibraryPath.cs" />
     <Compile Include="Query\DefaultConstructionLibrary.cs" />
     <Compile Include="Query\DefaultHoursOfYear.cs" />
+    <Compile Include="Query\ExternalConstructionLayerDictionary.cs" />
+    <Compile Include="Query\ExternalMaterialDictionary.cs" />
+    <Compile Include="Query\LastConstructionLayer.cs" />
     <Compile Include="Query\HeatingDesignDay.cs" />
     <Compile Include="Query\CoolingDesignDay.cs" />
     <Compile Include="Query\SizingMethod.cs" />
