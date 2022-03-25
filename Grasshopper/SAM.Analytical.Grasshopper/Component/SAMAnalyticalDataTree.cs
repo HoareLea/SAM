@@ -51,6 +51,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             outputParamManager.AddGenericParameter("tree", "tree", "SAM Analytical Apertures", GH_ParamAccess.tree);
+            outputParamManager.AddParameter(new GooSpaceParam(), "spaces", "spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -61,8 +62,6 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(2, false);
-
             IAnalyticalObject analyticalObject = null;
             if (!dataAccess.GetData(0, ref analyticalObject))
             {
@@ -92,24 +91,21 @@ namespace SAM.Analytical.Grasshopper
             List<Space> spaces = adjacencyCluster.GetSpaces();
             for (int i = 0; i < spaces.Count; i++)
             {
-                GH_Path path = new GH_Path(i);
-                dataTree.Add(new GooSpace(spaces[i]), path);
-
                 List<Panel> panels = adjacencyCluster.GetPanels(spaces[i]);
                 if (panels != null)
                 {
+                    GH_Path path_Panel = new GH_Path(i);
                     for (int j = 0; j < panels.Count; j++)
                     {
-                        path = new GH_Path(i, j);
-                        dataTree.Add(new GooPanel(panels[j]), path);
+                        dataTree.Add(new GooPanel(panels[j]), path_Panel);
 
                         List<Aperture> apertures = panels[j].Apertures;
                         if (apertures != null)
                         {
+                            GH_Path path_Aperture = new GH_Path(i, j);
                             for (int k = 0; k < apertures.Count; k++)
                             {
-                                path = new GH_Path(i, j, k);
-                                dataTree.Add(new GooAperture(apertures[k]), path);
+                                dataTree.Add(new GooAperture(apertures[k]), path_Aperture);
                             }
                         }
                     }
@@ -117,6 +113,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             dataAccess.SetDataTree(0, dataTree);
+            dataAccess.SetDataList(1, spaces?.ConvertAll(x => new GooSpace(x)));
         }
     }
 }
