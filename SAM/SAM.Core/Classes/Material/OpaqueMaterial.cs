@@ -30,6 +30,12 @@ namespace SAM.Core
 
         }
 
+        public OpaqueMaterial(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeatCapacity)
+            : base(guid, name, displayName, description, thermalConductivity, density, specificHeatCapacity)
+        {
+
+        }
+
         public OpaqueMaterial(JObject jObject)
             : base(jObject)
         {

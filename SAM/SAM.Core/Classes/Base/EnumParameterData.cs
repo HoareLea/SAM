@@ -12,6 +12,14 @@ namespace SAM.Core
             this.@enum = @enum;
         }
 
+        public Enum Enum
+        {
+            get
+            {
+                return @enum;
+            }
+        }
+
         public ParameterProperties ParameterProperties
         {
             get
