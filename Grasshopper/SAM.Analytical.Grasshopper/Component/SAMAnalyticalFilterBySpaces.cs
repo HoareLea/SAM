@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalFilterBySpaces()
           : base("SAMAnalytical.FilterBySpaces", "SAMAnalytical.FilterBySpaces",
-              "Filters AdjacencyCluster by Spaces",
+              "Filters AdjacencyCluster by Spaces \n*This is used to create AdjCluster from few selected sapces",
               "SAM", "Analytical")
         {
         }
