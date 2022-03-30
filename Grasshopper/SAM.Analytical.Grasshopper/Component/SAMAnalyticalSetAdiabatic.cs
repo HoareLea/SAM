@@ -70,7 +70,7 @@ namespace SAM.Analytical.Grasshopper
             AdjacencyCluster adjacencyCluster = null;
             if(sAMObject is AdjacencyCluster)
             {
-                adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
             }
             else if (sAMObject is AnalyticalModel)
             {
@@ -92,13 +92,6 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            ApertureConstruction apertureConstruction = null;
-            if (!dataAccess.GetData(2, ref apertureConstruction))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             if(panels != null)
             {
                 foreach (Panel panel in panels)
@@ -107,7 +100,7 @@ namespace SAM.Analytical.Grasshopper
                     if(panel_Temp != null)
                     {
                         panel_Temp.SetValue(PanelParameter.Adiabatic, adiabatic);
-                        adjacencyCluster.AddObject(panel_Temp);
+                        adjacencyCluster?.AddObject(panel_Temp);
                     }
                 }
             }
