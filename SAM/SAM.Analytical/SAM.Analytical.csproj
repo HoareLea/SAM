@@ -149,6 +149,7 @@
     <Compile Include="Enums\New\PartitionAnalyticalType.cs" />
     <Compile Include="Enums\Parameter\AdjacencyClusterSimulationResultParameter.cs" />
     <Compile Include="Enums\Parameter\New\ArchitecturalModelParameter.cs" />
+    <Compile Include="Enums\Parameter\New\HostPartitionParameter.cs" />
     <Compile Include="Enums\Parameter\New\OpeningTypeParameter.cs" />
     <Compile Include="Enums\Parameter\New\HostPartitionTypeParameter.cs" />
     <Compile Include="Enums\Parameter\New\PartitionSimulationResultParameter.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Modify\New\AddMechanicalSystem.cs" />
     <Compile Include="Modify\New\AddMissingProfiles.cs" />
     <Compile Include="Modify\New\AddMissingMaterials.cs" />
+    <Compile Include="Query\Adiabatic.cs" />
     <Compile Include="Query\DefaultConstructionLibraryPath.cs" />
     <Compile Include="Query\DefaultConstructionLibrary.cs" />
     <Compile Include="Query\DefaultHoursOfYear.cs" />

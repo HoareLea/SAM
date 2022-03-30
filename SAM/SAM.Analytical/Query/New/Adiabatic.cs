@@ -22,13 +22,22 @@ namespace SAM.Analytical
 
         public static bool Adiabatic(this IHostPartition hostPartition)
         {
-            HostPartitionType hostPartitionType = hostPartition?.Type();
-            if(hostPartitionType == null)
+            if(hostPartition == null)
             {
                 return false;
             }
 
-            return hostPartitionType.Adiabatic();
+            if(Adiabatic(hostPartition.Type()))
+            {
+                return true;
+            }
+
+            if(!hostPartition.TryGetValue(HostPartitionParameter.Adiabatic, out bool result))
+            {
+                return false;
+            }
+
+            return result;
         }
     }
 }
