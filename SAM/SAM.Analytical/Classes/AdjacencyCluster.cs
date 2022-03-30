@@ -521,7 +521,7 @@ namespace SAM.Analytical
             return GetSpaces(new Point3D[] { point3D }, spaceLocation, silverSpacing, tolerance)?.FirstOrDefault();
         }
 
-        public AdjacencyCluster Filter(IEnumerable<Space> spaces)
+        public AdjacencyCluster Filter(IEnumerable<Space> spaces, bool setAdiabatic = true)
         {
             if (spaces == null)
                 return null;
@@ -548,6 +548,16 @@ namespace SAM.Analytical
                         continue;
 
                     result.AddRelation(space, relatedObject);
+
+                    if(setAdiabatic && relatedObject is Panel)
+                    {
+                        Panel panel = (Panel)relatedObject;
+                        if(Internal(panel))
+                        {
+                            panel.SetValue(PanelParameter.Adiabatic, true);
+                            result.AddObject(panel);
+                        }
+                    }
                 }
             }
 
