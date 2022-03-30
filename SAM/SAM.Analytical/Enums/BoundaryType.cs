@@ -9,6 +9,7 @@ namespace SAM.Analytical
         [Description("Ground")] Ground,
         [Description("Exposed")] Exposed,
         [Description("Adiabatic")] Adiabatic,
-        [Description("Linked")] Linked
+        [Description("Linked")] Linked,
+        [Description("Shade")] Shade
     }
 }
