@@ -26,6 +26,11 @@ namespace SAM.Analytical
             {
                 return Analytical.BoundaryType.Adiabatic;
             }
+
+            if(adjacencyCluster.Shade(panel))
+            {
+                return Analytical.BoundaryType.Shade;
+            }
             
             if(adjacencyCluster.Ground(panel))
             {
@@ -41,6 +46,11 @@ namespace SAM.Analytical
             if(spaces != null && spaces.Count >= 2)
             {
                 return Analytical.BoundaryType.Linked;
+            }
+
+            if(panel.PanelType == Analytical.PanelType.Shade || panel.PanelType == Analytical.PanelType.SolarPanel)
+            {
+                return Analytical.BoundaryType.Shade;
             }
 
             return Analytical.BoundaryType.Undefined;

@@ -19,6 +19,11 @@ namespace SAM.Analytical
                 }
             }
 
+            if(buildingModel.Shade(partition))
+            {
+                return Analytical.BoundaryType.Shade;
+            }
+
             ITerrain terrain = buildingModel.Terrain;
             if(terrain != null)
             {

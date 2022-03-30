@@ -149,5 +149,29 @@
 
             return System.Drawing.Color.Empty;
         }
+
+        public static System.Drawing.Color Color(this BoundaryType boundaryType)
+        {
+            switch (boundaryType)
+            {
+                case Analytical.BoundaryType.Adiabatic:
+                    return System.Drawing.Color.FromArgb(192, 128, 255);
+
+                case Analytical.BoundaryType.Exposed:
+                    return System.Drawing.Color.FromArgb(128, 255, 128);
+
+                case Analytical.BoundaryType.Ground:
+                    return System.Drawing.Color.FromArgb(128, 255, 255);
+
+                case Analytical.BoundaryType.Linked:
+                    return System.Drawing.Color.FromArgb(255, 128, 128);
+
+                case Analytical.BoundaryType.Shade:
+                    return System.Drawing.Color.FromArgb(255, 180, 128);
+
+            }
+
+            return System.Drawing.Color.Empty;
+        }
     }
 }
