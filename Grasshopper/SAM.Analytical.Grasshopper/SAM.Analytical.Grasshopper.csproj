@@ -291,6 +291,7 @@
     <Compile Include="Modify\BakeGeometry_ByConstruction.cs" />
     <Compile Include="Modify\BakeGeometry_ByInternalCondtion.cs" />
     <Compile Include="Modify\BakeGeometry_ByLevel.cs" />
+    <Compile Include="Modify\BakeGeometry_ByBoundaryType.cs" />
     <Compile Include="Modify\BakeGeometry_ByPanelType.cs" />
     <Compile Include="Modify\New\BakeGeometry_ByAnalyticalType.cs" />
     <Compile Include="Modify\New\BakeGeometry_ByCategory.cs" />
