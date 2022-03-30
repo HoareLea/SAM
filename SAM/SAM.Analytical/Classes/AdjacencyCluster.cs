@@ -548,15 +548,28 @@ namespace SAM.Analytical
                         continue;
 
                     result.AddRelation(space, relatedObject);
+                }
+            }
 
-                    if(setAdiabatic && relatedObject is Panel)
+            if(setAdiabatic)
+            {
+                List<Panel> panels = result.GetPanels();
+                if(panels != null)
+                {
+                    foreach(Panel panel in panels)
                     {
-                        Panel panel = (Panel)relatedObject;
-                        if(Internal(panel))
+                        if(!result.External(panel))
                         {
-                            panel.SetValue(PanelParameter.Adiabatic, true);
-                            result.AddObject(panel);
+                            continue;
                         }
+
+                        if(!Internal(panel))
+                        {
+                            continue;
+                        }
+
+                        panel.SetValue(PanelParameter.Adiabatic, true);
+                        result.AddObject(panel);
                     }
                 }
             }
