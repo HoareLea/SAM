@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAM.Architectural;
+using System;
 
 namespace SAM.Analytical
 {
@@ -114,6 +115,99 @@ namespace SAM.Analytical
             }
 
             return Analytical.PanelType.Undefined;
+        }
+
+        public static PanelType? PanelType(this BuildingModel buildingModel, IPartition partition)
+        {
+            if (partition is AirPartition)
+            {
+                return Analytical.PanelType.Air;
+            }
+
+            if (buildingModel == null || partition == null)
+            {
+                return null;
+            }
+
+            if (buildingModel.Shade(partition))
+            {
+                return Analytical.PanelType.Shade;
+            }
+
+            if (partition is IHostPartition)
+            {
+                IHostPartition hostPartition = partition as IHostPartition;
+                if(hostPartition is Wall)
+                {
+                    Wall wall = (Wall)hostPartition;
+
+                    if (buildingModel.Transparent(wall))
+                    {
+                        return Analytical.PanelType.CurtainWall;
+                    }
+
+                    if (buildingModel.Internal(wall))
+                    {
+                        return Analytical.PanelType.WallInternal;
+                    }
+
+                    if (buildingModel.External(wall))
+                    {
+                        ITerrain terrain = buildingModel.Terrain;
+                        if (terrain != null)
+                        {
+                            if (terrain.Below(wall) || terrain.On(wall))
+                            {
+                                return Analytical.PanelType.UndergroundWall;
+                            }
+                        }
+
+                        return Analytical.PanelType.WallExternal;
+                    }
+
+                    return Analytical.PanelType.Wall;
+                }
+
+                if(hostPartition is Floor)
+                {
+                    Floor floor = (Floor)hostPartition;
+
+                    ITerrain terrain = buildingModel.Terrain;
+                    if(terrain != null)
+                    {
+                        if(terrain.On(floor))
+                        {
+                            return Analytical.PanelType.SlabOnGrade;
+                        }
+
+                        if (terrain.Below(floor))
+                        {
+                            return Analytical.PanelType.UndergroundSlab;
+                        }
+                    }
+
+                    if (buildingModel.Internal(floor))
+                    {
+                        return Analytical.PanelType.FloorInternal;
+                    }
+
+                    if (buildingModel.External(floor))
+                    {
+                        return Analytical.PanelType.FloorExposed;
+                    }
+
+                    return Analytical.PanelType.Floor;
+                }
+
+                if(hostPartition is Roof)
+                {
+                    Roof roof = (Roof)hostPartition;
+
+                    return Analytical.PanelType.Roof;
+                }
+            }
+
+            return null;
         }
     }
 }

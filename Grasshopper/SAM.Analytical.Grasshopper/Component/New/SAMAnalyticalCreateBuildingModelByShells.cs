@@ -62,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
 
                 GooLocationParam locationParam = new GooLocationParam() { Name = "_location_", NickName = "_location_", Description = "SAM Core Location", Access = GH_ParamAccess.item};
                 locationParam.SetPersistentData(Core.Query.DefaultLocation());
-                result.Add(new GH_SAMParam(partitionParam, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(locationParam, ParamVisibility.Voluntary));
 
                 GooAddressParam addressParam = new GooAddressParam() { Name = "_address_", NickName = "_address_", Description = "SAM Core Address", Access = GH_ParamAccess.item };
                 addressParam.SetPersistentData(Core.Query.DefaultAddress());
