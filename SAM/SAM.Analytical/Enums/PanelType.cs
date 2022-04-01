@@ -22,6 +22,6 @@ namespace SAM.Analytical
         [Description("Wall")] Wall,
         [Description("External Wall")] WallExternal,
         [Description("Internal Wall")] WallInternal,
-        [Description("No Type")] Air
+        [Description("Air")] Air
     }
 }
