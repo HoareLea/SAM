@@ -9,10 +9,17 @@ namespace SAM.Core
             if (setting == null)
                 return null;
 
-            string result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ExecutingAssemblyDirectory()), setting?.GetValue<string>(CoreSettingParameter.ResourcesDirectoryName));
+            string resourcesDirectoryName = setting?.GetValue<string>(CoreSettingParameter.ResourcesDirectoryName);
+
+            string result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(UserSAMDirectory()), resourcesDirectoryName);
+            if(!System.IO.Directory.Exists(result))
+            {
+                result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ExecutingAssemblyDirectory()), resourcesDirectoryName);
+            }
+
             if (!System.IO.Directory.Exists(result))
             {
-                result = System.IO.Path.Combine(ExecutingAssemblyDirectory(), setting?.GetValue<string>(CoreSettingParameter.ResourcesDirectoryName));
+                result = System.IO.Path.Combine(ExecutingAssemblyDirectory(), resourcesDirectoryName);
             }
 
             return result;
@@ -38,7 +45,12 @@ namespace SAM.Core
 
             name = name.Replace(".", @"\");
 
-            string result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ExecutingAssemblyDirectory()), resourcesDirectoryName, name);
+            string result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(UserSAMDirectory()), resourcesDirectoryName, name);
+            if(!System.IO.Directory.Exists(result))
+            {
+                result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ExecutingAssemblyDirectory()), resourcesDirectoryName, name);
+            }
+
             if (!System.IO.Directory.Exists(result))
             {
                 result = System.IO.Path.Combine(ExecutingAssemblyDirectory(), resourcesDirectoryName, name);
