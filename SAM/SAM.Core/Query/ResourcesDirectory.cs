@@ -11,7 +11,7 @@ namespace SAM.Core
 
             string resourcesDirectoryName = setting?.GetValue<string>(CoreSettingParameter.ResourcesDirectoryName);
 
-            string result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(UserSAMDirectory()), resourcesDirectoryName);
+            string result = System.IO.Path.Combine(UserSAMDirectory(), resourcesDirectoryName);
             if(!System.IO.Directory.Exists(result))
             {
                 result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ExecutingAssemblyDirectory()), resourcesDirectoryName);
@@ -45,7 +45,7 @@ namespace SAM.Core
 
             name = name.Replace(".", @"\");
 
-            string result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(UserSAMDirectory()), resourcesDirectoryName, name);
+            string result = System.IO.Path.Combine(UserSAMDirectory(), resourcesDirectoryName, name);
             if(!System.IO.Directory.Exists(result))
             {
                 result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ExecutingAssemblyDirectory()), resourcesDirectoryName, name);
