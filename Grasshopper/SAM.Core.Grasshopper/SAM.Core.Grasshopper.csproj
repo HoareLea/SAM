@@ -225,10 +225,12 @@ echo #Order of files is important or just folder &gt; "$(APPDATA)\Grasshopper\Li
 echo %25SAM_DIR%25 &gt;&gt; "$(APPDATA)\Grasshopper\Libraries\SAM.ghlink"
 
 
-xcopy "$(SolutionDir)\files\resources" "$(APPDATA)\SAM\resources" /Y /I /E/S
+xcopy "$(SolutionDir)\files\resources" "$(APPDATA)\SAM\resources" /Y/I/E/S
+xcopy "$(SolutionDir)\files\resources" "$(USERPROFILE)\Documents\SAM\resources" /D/I/E/S
+
 
 if Exist "$(SolutionDir)\files\Grasshopper\UserObjects" (
-xcopy "$(SolutionDir)\files\Grasshopper\UserObjects" "$(APPDATA)\Grasshopper\UserObjects\SAM" /Y /I /E/S
+xcopy "$(SolutionDir)\files\Grasshopper\UserObjects" "$(APPDATA)\Grasshopper\UserObjects\SAM" /Y/I/E/S
 )
 ::erase "%25SAM_DIR%25$(ProjectName).dll"
 ::erase "$(TargetPath)"</PostBuildEvent>
