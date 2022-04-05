@@ -224,6 +224,7 @@
     <Compile Include="Query\LastConstructionLayer.cs" />
     <Compile Include="Query\HeatingDesignDay.cs" />
     <Compile Include="Query\CoolingDesignDay.cs" />
+    <Compile Include="Query\MaxThickness.cs" />
     <Compile Include="Query\New\BoundaryType.cs" />
     <Compile Include="Query\SizingMethod.cs" />
     <Compile Include="Query\New\DefaultOpeningTypeLibrary.cs" />
