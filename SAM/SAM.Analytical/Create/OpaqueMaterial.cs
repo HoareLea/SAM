@@ -8,7 +8,7 @@ namespace SAM.Analytical
         {
             OpaqueMaterial opaqueMaterial = new OpaqueMaterial(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density);
 
-            opaqueMaterial.SetValue(MaterialParameter.DefaultThickness, defaultThickness);
+            opaqueMaterial.SetValue(Core.MaterialParameter.DefaultThickness, defaultThickness);
             opaqueMaterial.SetValue(MaterialParameter.VapourDiffusionFactor, vapourDiffusionFactor);
             opaqueMaterial.SetValue(OpaqueMaterialParameter.ExternalSolarReflectance, externalSolarReflectance);
             opaqueMaterial.SetValue(OpaqueMaterialParameter.InternalSolarReflectance, internalSolarReflectance);

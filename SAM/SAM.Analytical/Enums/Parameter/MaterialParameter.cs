@@ -8,7 +8,6 @@ namespace SAM.Analytical
     {
         [ParameterProperties("Type Name", "Type Name"), ParameterValue(Core.ParameterType.String)] TypeName,
         [ParameterProperties("Description", "Description"), ParameterValue(Core.ParameterType.String)] Description,
-        [ParameterProperties("Default Thickness", "Default Material Thickness"), DoubleParameterValue(0)] DefaultThickness,
         [ParameterProperties("Vapour Diffusion Factor", "Vapour Diffusion Factor"), DoubleParameterValue(0)] VapourDiffusionFactor,
     }
 }

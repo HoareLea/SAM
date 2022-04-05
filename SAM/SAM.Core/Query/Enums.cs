@@ -81,11 +81,25 @@ namespace SAM.Core
             List<Enum> result = new List<Enum>();
             foreach(Type type in types)
             {
-                if (type == null || !type.IsEnum)
+                if (type == null )
                     continue;
 
-                foreach (Enum @enum in System.Enum.GetValues(type))
-                    result.Add(@enum);
+                if(type.IsEnum)
+                {
+                    foreach (Enum @enum in System.Enum.GetValues(type))
+                    {
+                        result.Add(@enum);
+                    }
+                }
+                else
+                {
+                    List<Enum> enums = Enums(type, false);
+                    if(enums != null)
+                    {
+                        result.AddRange(enums);
+                    }
+                }
+
             }
 
             return result;

@@ -8,7 +8,7 @@ namespace SAM.Analytical
         {
             TransparentMaterial transparentMaterial = new TransparentMaterial(name, group, displayName, description, thermalConductivity, double.NaN, double.NaN);
 
-            transparentMaterial.SetValue(MaterialParameter.DefaultThickness, defaultThickness);
+            transparentMaterial.SetValue(Core.MaterialParameter.DefaultThickness, defaultThickness);
             transparentMaterial.SetValue(MaterialParameter.VapourDiffusionFactor, vapourDiffusionFactor);
             transparentMaterial.SetValue(TransparentMaterialParameter.SolarTransmittance, solarTransmittance);
             transparentMaterial.SetValue(TransparentMaterialParameter.LightTransmittance, lightTransmittance);

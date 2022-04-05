@@ -423,7 +423,7 @@ namespace SAM.Analytical
             {
                 GasMaterial gasMaterial = (GasMaterial)material;
 
-                if (double.IsNaN(gasMaterial.GetValue<double>(MaterialParameter.DefaultThickness)))
+                if (double.IsNaN(gasMaterial.GetValue<double>(Core.MaterialParameter.DefaultThickness)))
                     result.Add(string.Format("Default Thickness for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
 
                 if (double.IsNaN(gasMaterial.GetValue<double>(MaterialParameter.VapourDiffusionFactor)))
@@ -436,7 +436,7 @@ namespace SAM.Analytical
             {
                 TransparentMaterial transparentMaterial = (TransparentMaterial)material;
 
-                if (double.IsNaN(transparentMaterial.GetValue<double>(MaterialParameter.DefaultThickness)))
+                if (double.IsNaN(transparentMaterial.GetValue<double>(Core.MaterialParameter.DefaultThickness)))
                     result.Add(string.Format("Default Thickness for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
 
                 if (double.IsNaN(transparentMaterial.ThermalConductivity))
@@ -473,7 +473,7 @@ namespace SAM.Analytical
             {
                 OpaqueMaterial opaqueMaterial = (OpaqueMaterial)material;
 
-                if (double.IsNaN(opaqueMaterial.GetValue<double>(MaterialParameter.DefaultThickness)))
+                if (double.IsNaN(opaqueMaterial.GetValue<double>(Core.MaterialParameter.DefaultThickness)))
                     result.Add(string.Format("Default Thickness for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
 
                 if (double.IsNaN(opaqueMaterial.ThermalConductivity))
