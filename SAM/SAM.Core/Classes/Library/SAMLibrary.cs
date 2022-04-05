@@ -236,6 +236,39 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Replace(string uniqueId, T jSAMObject)
+        {
+            if(uniqueId == null || jSAMObject == null || objects == null)
+            {
+                return false;
+            }
+
+            if(!IsValid(jSAMObject))
+            {
+                return false;
+            }
+
+            if(!objects.ContainsKey(uniqueId))
+            {
+                return false;
+            }
+
+            string uniqueId_New = GetUniqueId(jSAMObject);
+            if(uniqueId_New == null)
+            {
+                return false;
+            }
+
+            if(uniqueId != uniqueId_New)
+            {
+                objects.Remove(uniqueId);
+                uniqueId = uniqueId_New;
+            }
+
+            objects[uniqueId] = jSAMObject;
+            return true;
+        }
+
         public bool Write(string path)
         {
             return Query.Write(this, path);
