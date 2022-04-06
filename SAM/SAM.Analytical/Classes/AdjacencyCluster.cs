@@ -445,7 +445,19 @@ namespace SAM.Analytical
                 }
             }
 
-            return dictionary.Values.ToList();
+            List<ApertureConstruction> result = new List<ApertureConstruction>();
+            if (dictionary.Values != null)
+            {
+                result.AddRange(dictionary.Values);
+            }
+
+            List<ApertureConstruction> apertureConstructions = GetObjects<ApertureConstruction>();
+            if (apertureConstructions != null)
+            {
+                result.AddRange(apertureConstructions);
+            }
+
+            return result;
         }
 
         /// <summary>
