@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 
 namespace SAM.Core
 {
@@ -19,9 +20,17 @@ namespace SAM.Core
             if (!findAny)
                 return false;
 
-            foreach(ParameterSet parameterSet_Temp in sAMObject.GetParamaterSets())
-                if (parameterSet_Temp.Contains(name))
-                    return parameterSet_Temp.Remove(name);
+            List<ParameterSet> parameterSets = sAMObject.GetParamaterSets();
+            if(parameterSets != null)
+            {
+                foreach (ParameterSet parameterSet_Temp in parameterSets)
+                {
+                    if (parameterSet_Temp.Contains(name))
+                    {
+                        return parameterSet_Temp.Remove(name);
+                    }
+                }
+            }
 
             return false;
         }
