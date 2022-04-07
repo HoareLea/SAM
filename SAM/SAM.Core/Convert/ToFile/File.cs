@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 
 namespace SAM.Core
 {
@@ -10,10 +11,16 @@ namespace SAM.Core
         {
             if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(Path.GetDirectoryName(path)))
                 return false;
-            
-            
 
             return ToFile(jSAMObjects, path, Query.SAMFileType(path));
+        }
+
+        public static bool ToFile<T>(this IEnumerable<T> jSAMObjects, string path) where T : IJSAMObject
+        {
+            if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(Path.GetDirectoryName(path)))
+                return false;
+
+            return ToFile(jSAMObjects?.ToList().ConvertAll(x => x as IJSAMObject), path, Query.SAMFileType(path));
         }
 
         public static bool ToFile(this IEnumerable<IJSAMObject> jSAMObjects, string path, SAMFileType sAMFileType)
