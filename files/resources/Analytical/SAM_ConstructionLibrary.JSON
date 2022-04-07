@@ -14,7 +14,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "Ceiling"
             }
           ]
@@ -69,7 +69,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "CurtainWall"
             },
             {
@@ -114,7 +114,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "Floor"
             },
             {
@@ -164,7 +164,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "FloorExposed"
             },
             {
@@ -214,7 +214,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "FloorInternal"
             },
             {
@@ -279,7 +279,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "FloorRaised"
             }
           ]
@@ -319,7 +319,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "Roof"
             },
             {
@@ -374,7 +374,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "Roof"
             },
             {
@@ -419,7 +419,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "UndergroundCeiling"
             },
             {
@@ -469,7 +469,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "Shade"
             },
             {
@@ -504,7 +504,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "SlabOnGrade"
             }
           ]
@@ -544,7 +544,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "SolarPanel"
             },
             {
@@ -579,7 +579,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "Undefined"
             },
             {
@@ -614,7 +614,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "UndergroundCeiling"
             },
             {
@@ -664,7 +664,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "UndergroundSlab"
             },
             {
@@ -714,7 +714,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "UndergroundWall"
             },
             {
@@ -764,7 +764,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "Wall"
             },
             {
@@ -829,7 +829,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "WallExternal"
             }
           ]
@@ -884,7 +884,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "WallInternal"
             },
             {
@@ -934,7 +934,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "WallInternal"
             },
             {
@@ -984,7 +984,7 @@
           "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
           "Parameters": [
             {
-              "Name": "Dafault Panel Type",
+              "Name": "Default Panel Type",
               "Value": "WallInternal"
             },
             {
