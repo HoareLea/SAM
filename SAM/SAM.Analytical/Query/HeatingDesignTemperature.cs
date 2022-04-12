@@ -12,11 +12,15 @@
             if (space == null || profileLibrary == null)
                 return double.NaN;
 
-            InternalCondition internalCondition = space.InternalCondition;
+            return HeatingDesignTemperature(space.InternalCondition, profileLibrary);
+        }
+
+        public static double HeatingDesignTemperature(this InternalCondition internalCondition, ProfileLibrary profileLibrary)
+        {
             if (internalCondition == null)
                 return double.NaN;
 
-            Profile profile = internalCondition?.GetProfile(ProfileType.Heating, profileLibrary);
+            Profile profile = internalCondition.GetProfile(ProfileType.Heating, profileLibrary);
 
             return profile == null ? double.NaN : profile.MaxValue;
         }

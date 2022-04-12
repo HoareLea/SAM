@@ -226,6 +226,7 @@
     <Compile Include="Query\CoolingDesignDay.cs" />
     <Compile Include="Query\MaxThickness.cs" />
     <Compile Include="Query\New\BoundaryType.cs" />
+    <Compile Include="Query\Profile.cs" />
     <Compile Include="Query\SizingMethod.cs" />
     <Compile Include="Query\New\DefaultOpeningTypeLibrary.cs" />
     <Compile Include="Query\New\DefaultProfileLibrary.cs" />

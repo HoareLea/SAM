@@ -202,30 +202,52 @@ namespace SAM.Analytical
 
         public IEnumerable<InternalCondition> GetInternalConditions()
         {
-            List<Space> spaces = GetSpaces();
-            if (spaces == null)
+            return GetInternalConditions(true, true);
+        }
+
+        public IEnumerable<InternalCondition> GetInternalConditions(bool spaces = true, bool templates = true)
+        {
+            if(!spaces && !templates)
+            {
                 return null;
-
-            Dictionary<Guid, InternalCondition> dictionary = new Dictionary<Guid, InternalCondition>();
-            foreach(Space space in spaces)
-            {
-                InternalCondition internalCondition = space.InternalCondition;
-                if (internalCondition != null)
-                    dictionary[internalCondition.Guid] = internalCondition;
             }
 
-            List<InternalCondition> result = new List<InternalCondition>();
-            if(dictionary?.Values != null)
+
+            List<InternalCondition> result = null;
+
+            if(spaces)
             {
-                result.AddRange(dictionary.Values);
+                List<Space> spaces_Temp = GetSpaces();
+                if (spaces_Temp != null)
+                {
+                    Dictionary<Guid, InternalCondition> dictionary = new Dictionary<Guid, InternalCondition>();
+                    foreach (Space space in spaces_Temp)
+                    {
+                        InternalCondition internalCondition = space.InternalCondition;
+                        if (internalCondition != null)
+                            dictionary[internalCondition.Guid] = internalCondition;
+                    }
+
+                    if (dictionary?.Values != null)
+                    {
+                        result = new List<InternalCondition>(dictionary.Values);
+                    }
+                }
             }
 
-            List<InternalCondition> internalConditions = GetObjects<InternalCondition>();
-            if(internalConditions != null)
+            if(templates)
             {
-                result.AddRange(internalConditions);
-            }
+                List<InternalCondition> internalConditions = GetObjects<InternalCondition>();
+                if (internalConditions != null)
+                {
+                    if(result == null)
+                    {
+                        result = new List<InternalCondition>();
+                    }
 
+                    result.AddRange(internalConditions);
+                }
+            }
 
             return result;
         }
@@ -369,39 +391,52 @@ namespace SAM.Analytical
 
         public List<Construction> GetConstructions()
         {
+            List<Construction> result = null;
+
             List<Panel> panels = GetPanels();
-            if (panels == null)
-                return null;
-
-            Dictionary<Guid, Construction> dictionary = new Dictionary<Guid, Construction>();
-            foreach(Panel panel in panels)
+            if (panels != null)
             {
-                if (panel == null)
-                    continue;
+                Dictionary<Guid, Construction> dictionary = new Dictionary<Guid, Construction>();
+                foreach (Panel panel in panels)
+                {
+                    if (panel == null)
+                        continue;
 
-                Guid guid = panel.TypeGuid;
-                if (guid == Guid.Empty)
-                    continue;
+                    Guid guid = panel.TypeGuid;
+                    if (guid == Guid.Empty)
+                        continue;
 
-                if (dictionary.ContainsKey(guid))
-                    continue;
+                    if (dictionary.ContainsKey(guid))
+                        continue;
 
-                Construction construction = panel.Construction;
-                if (construction == null)
-                    continue;
+                    Construction construction = panel.Construction;
+                    if (construction == null)
+                        continue;
 
-                dictionary[guid] = construction;
+                    dictionary[guid] = construction;
+                }
+
+                if(dictionary != null && dictionary.Count != 0)
+                {
+                    result = new List<Construction>();
+                    if (dictionary.Values != null)
+                    {
+                        result.AddRange(dictionary.Values);
+                    }
+                }
             }
 
-            List<Construction> result = new List<Construction>();
-            if(dictionary.Values != null)
-            {
-                result.AddRange(dictionary.Values);
-            }
+
+
 
             List<Construction> constructions = GetObjects<Construction>();
             if(constructions != null)
             {
+                if(result == null)
+                {
+                    result = new List<Construction>();
+                }
+
                 result.AddRange(constructions);
             }
 
@@ -410,50 +445,59 @@ namespace SAM.Analytical
 
         public List<ApertureConstruction> GetApertureConstructions()
         {
+            List<ApertureConstruction> result = null;
+
             List<Panel> panels = GetPanels();
-            if (panels == null)
-                return null;
-
-            Dictionary<Guid, ApertureConstruction> dictionary = new Dictionary<Guid, ApertureConstruction>();
-            foreach (Panel panel in panels)
+            if (panels != null)
             {
-                if (panel == null)
-                    continue;
-
-                List<Aperture> apertures = panel.Apertures;
-                if (apertures == null || apertures.Count == 0)
-                    continue;
-
-                foreach(Aperture aperture in apertures)
+                Dictionary<Guid, ApertureConstruction> dictionary = new Dictionary<Guid, ApertureConstruction>();
+                foreach (Panel panel in panels)
                 {
-                    if (aperture == null)
+                    if (panel == null)
                         continue;
 
-                    Guid guid = aperture.TypeGuid;
-                    if (guid == Guid.Empty)
+                    List<Aperture> apertures = panel.Apertures;
+                    if (apertures == null || apertures.Count == 0)
                         continue;
 
-                    if (dictionary.ContainsKey(guid))
-                        continue;
+                    foreach (Aperture aperture in apertures)
+                    {
+                        if (aperture == null)
+                            continue;
 
-                    ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
-                    if (apertureConstruction == null)
-                        continue;
+                        Guid guid = aperture.TypeGuid;
+                        if (guid == Guid.Empty)
+                            continue;
 
-                    dictionary[guid] = apertureConstruction;
+                        if (dictionary.ContainsKey(guid))
+                            continue;
 
+                        ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
+                        if (apertureConstruction == null)
+                            continue;
+
+                        dictionary[guid] = apertureConstruction;
+                    }
                 }
-            }
 
-            List<ApertureConstruction> result = new List<ApertureConstruction>();
-            if (dictionary.Values != null)
-            {
-                result.AddRange(dictionary.Values);
+                if(dictionary != null && dictionary.Count != 0)
+                {
+                    result = new List<ApertureConstruction>();
+                    if (dictionary.Values != null)
+                    {
+                        result.AddRange(dictionary.Values);
+                    }
+                }
             }
 
             List<ApertureConstruction> apertureConstructions = GetObjects<ApertureConstruction>();
             if (apertureConstructions != null)
             {
+                if(result == null)
+                {
+                    result = new List<ApertureConstruction>();
+                }
+
                 result.AddRange(apertureConstructions);
             }
 

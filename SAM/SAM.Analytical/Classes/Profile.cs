@@ -116,6 +116,12 @@ namespace SAM.Analytical
                 values[min_Temp] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>(min_Temp, max_Temp), value);
         }
 
+        public Profile(Guid guid, Profile profile, string category)
+            : base(guid, profile)
+        {
+            this.category = category;
+        }
+
         public Profile(JObject jObject)
             : base(jObject)
         {
