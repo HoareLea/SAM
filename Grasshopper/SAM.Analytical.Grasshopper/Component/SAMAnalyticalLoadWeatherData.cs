@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalLoadWeatherData()
           : base("SAMAnalytical.LoadWeatherData", "SAMAnalytical.LoadWeatherData",
-              "Load SAM Weather WeatherData",
+              "Load SAM Weather WeatherData \n*right click over icon to access website with .weatear data \n- OneBuilding\n- LadybugTools",
               "SAM", "Weather")
         {
         }
@@ -151,7 +151,7 @@ namespace SAM.Analytical.Grasshopper
 
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Climate.OneBuilding.Org", Menu_GoTo_OneBuilding, Resources.SAM_Small, true, false);
-            Menu_AppendItem(menu, "Ladybug Tools - EPW Map", Menu_GoTo_LadybugTools, Resources.SAM_Small, true, false);
+            Menu_AppendItem(menu, "Ladybug.Tools - EPW Map", Menu_GoTo_LadybugTools, Resources.SAM_Small, true, false);
         }
 
         void Menu_GoTo_OneBuilding(object sender, EventArgs e)
