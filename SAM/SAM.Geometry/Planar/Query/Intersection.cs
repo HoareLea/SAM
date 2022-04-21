@@ -38,6 +38,14 @@ namespace SAM.Geometry.Planar
         //    return result;
         //}
 
+        /// <summary>
+        /// Intersection of the segment2D_1 and segment2D_2, denoted segment2D_1 ∩ segment2D_2, is the set of all segment2Ds that are members of both segment2D_1 and segment2D_2. The intersection of {1, 2, 3} and {2, 3, 4} is the set {2, 3}
+        /// </summary>
+        /// <typeparam name="T">Result Type Point2D or Segment2D</typeparam>
+        /// <param name="segment2D_1">First Segment2D</param>
+        /// <param name="segment2D_2">Second Segment2D</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Intersection Geometry</returns>
         public static T Intersection<T>(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.MicroDistance) where T: ISAMGeometry2D
         {
             if(segment2D_1 == null || segment2D_2 == null)
@@ -105,6 +113,13 @@ namespace SAM.Geometry.Planar
             //return null;
         }
 
+        /// <summary>
+        /// Intersection of the face2D_1 and face2D_2, denoted face2D_1 ∩ face2D_2, is the set of all face2Ds that are members of both face2D_1 and face2D_2. The intersection of {1, 2, 3} and {2, 3, 4} is the set {2, 3}
+        /// </summary>
+        /// <param name="face2D_1">First Face2D</param>
+        /// <param name="face2D_2">Second Face2D</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Intersection Face2Ds</returns>
         public static List<Face2D> Intersection(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             return Intersection<Face2D>(face2D_1, face2D_2, tolerance);

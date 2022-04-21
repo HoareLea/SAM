@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using SAM.Weather.Grasshopper;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Weather;
+using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -18,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -141,6 +143,25 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+        }
+
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        {
+            base.AppendAdditionalMenuItems(menu);
+
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Climate.OneBuilding.Org", Menu_GoTo_OneBuilding, Resources.SAM_Small, true, false);
+            Menu_AppendItem(menu, "Ladybug Tools - EPW Map", Menu_GoTo_LadybugTools, Resources.SAM_Small, true, false);
+        }
+
+        void Menu_GoTo_OneBuilding(object sender, EventArgs e)
+        {
+            Process.Start(@"https://climate.onebuilding.org/WMO_Region_6_Europe/default.html");
+        }
+
+        void Menu_GoTo_LadybugTools(object sender, EventArgs e)
+        {
+            Process.Start(@"https://www.ladybug.tools/epwmap/");
         }
     }
 }
