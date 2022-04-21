@@ -154,6 +154,97 @@ namespace SAM.Analytical
             return true;
         }
 
+        public bool Update(int index, double value)
+        {
+            if (values == null)
+            {
+                values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
+            }
+
+            Range<int> range = GetRange(index);
+            if(range == null || range.Count() == 1)
+            {
+                values[index] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, value);
+                return true;
+            }
+
+            double[] values_Temp = GetValues(range);
+
+            values.Remove(range.Min);
+
+            for(int i = 0; i < range.Count(); i++)
+            {
+                values[range.Min + i] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, values_Temp[i]);
+            }
+
+            values[index] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, value);
+            return true;
+        }
+
+        public bool Update(int index, Profile profile)
+        {
+            if(profile == null)
+            {
+                return false;
+            }
+
+            if(values == null)
+            {
+                values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
+            }
+
+            int min_Profile = profile.Min;
+            int max_Profile = profile.Max;
+
+            int min = min_Profile + index;
+            int max = max_Profile + index;
+
+            if (min > Max)
+            {
+                values[min] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>(min, max), profile);
+                return true;
+            }
+
+            int count = max - min + 1;
+
+            List<Range<int>> ranges = new List<Range<int>>();
+            HashSet<int> mins = new HashSet<int>();
+            for(int i=0; i < count; i++)
+            {
+                Range<int> range_Temp = GetRange(min + i);
+                if(range_Temp != null)
+                {
+                    ranges.Add(range_Temp);
+                    mins.Add(range_Temp.Min);
+                }
+            }
+
+            int min_ToRemove = ranges == null || ranges.Count == 0 ? min : ranges.Min();
+            int max_ToRemove = ranges == null || ranges.Count == 0 ? max : ranges.Max();
+
+            Range<int> range_ToRemove = new Range<int>(min_ToRemove, max_ToRemove);
+            Range<int> range = new Range<int>(min, max);
+
+            double[] values_Temp = GetValues(range_ToRemove);
+            foreach(int min_Temp in mins)
+            {
+                values.Remove(min_Temp);
+            }
+
+            for (int i = 0; i < range_ToRemove.Count(); i++)
+            {
+                int index_Temp = range_ToRemove.Min + i;
+                if(!range.In(index_Temp))
+                {
+                    values[index_Temp] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, values_Temp[i]);
+                }
+            }
+
+            values[min] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>(min, max), profile);
+            return true;
+
+        }
+
         public bool Add(Profile profile)
         {
             if (profile == null || profile.values == null)
@@ -220,6 +311,33 @@ namespace SAM.Analytical
 
             for (int i = 0; i < result.Length; i++)
                 result[i] = this[min + i];
+
+            return result;
+        }
+
+        public double[] GetValues(Range<int> range)
+        {
+            if(range == null)
+            {
+                return null;
+            }
+
+            return GetValues(range.Min, range.Count());
+        }
+
+        public double[] GetValues(int index, int count)
+        {
+            if(index == -1 || count < 1)
+            {
+                return null;
+            }
+
+            double[] result = new double[count];
+            int max = index + count - 1;
+            for (int i = 0; i < count; i++)
+            {
+                result[i] = this[index + i];
+            }
 
             return result;
         }
@@ -307,6 +425,51 @@ namespace SAM.Analytical
             }
 
             return profiles.ToArray();
+        }
+
+        public Profile GetProfile(int index)
+        {
+            if(!TryGetValue(index, out Profile result, out double value))
+            {
+                return null;
+            }
+
+            return result;
+        }
+
+        public Range<int> GetRange(int index)
+        {
+            if (values == null || values.Count == 0)
+            {
+                return null;
+            }
+
+            foreach (KeyValuePair<int, Tuple<Range<int>, AnyOf<double, Profile>>> keyValuePair in values)
+            {
+                if (keyValuePair.Key > index)
+                {
+                    return null;
+                }
+
+                Tuple<Range<int>, AnyOf<double, Profile>> tuple = keyValuePair.Value;
+
+                Range<int> range = tuple?.Item1;
+                if(range == null)
+                {
+                    if(keyValuePair.Key == index)
+                    {
+                        return new Range<int>(keyValuePair.Key);
+                    }
+                    continue;
+                }
+
+                if(range.In(index))
+                {
+                    return new Range<int>(range);
+                }
+            }
+
+            return null;
         }
 
         public int Count

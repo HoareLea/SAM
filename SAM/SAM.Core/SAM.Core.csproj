@@ -183,6 +183,9 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\Min.cs" />
+    <Compile Include="Query\Max.cs" />
+    <Compile Include="Query\Count.cs" />
     <Compile Include="Query\TemplatesDirectory.cs" />
     <Compile Include="Query\UserSAMDirectory.cs" />
     <Compile Include="Query\UserDocumentsDirectory.cs" />
