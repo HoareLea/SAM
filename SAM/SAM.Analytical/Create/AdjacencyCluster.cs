@@ -427,15 +427,19 @@ namespace SAM.Analytical
                 if (spaces_Shell == null || spaces_Shell.Count == 0)
                     continue;
 
-                double elevation = shell_Temp.GetBoundingBox().Min.Z;
+                BoundingBox3D boundingBox3D = shell_Temp.GetBoundingBox();
+
+                double min = boundingBox3D.Min.Z;
+                double max = boundingBox3D.Max.Z;
+
+                double elevation = min;
 
                 List<Tuple<double, Architectural.Level>> tuples_Level = levels.ConvertAll(x => new Tuple<double, Architectural.Level>(System.Math.Abs(x.Elevation - elevation), x));
                 tuples_Level.Sort((x, y) => x.Item1.CompareTo(y.Item1));
                 Architectural.Level level = tuples_Level.FirstOrDefault()?.Item2;
 
-
                 double volume_Shell = shell_Temp.Volume(silverSpacing, tolerance_Distance);
-                double area_Shell = shell_Temp.Area(silverSpacing, tolerance_Angle, tolerance_Distance, silverSpacing);
+                double area_Shell = shell_Temp.Area((max - min) / 2, tolerance_Angle, tolerance_Distance, silverSpacing);
 
                 foreach (Space space in spaces_Shell)
                 {
