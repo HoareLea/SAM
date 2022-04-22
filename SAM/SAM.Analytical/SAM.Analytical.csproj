@@ -214,6 +214,7 @@
     <Compile Include="Modify\New\AddMechanicalSystem.cs" />
     <Compile Include="Modify\New\AddMissingProfiles.cs" />
     <Compile Include="Modify\New\AddMissingMaterials.cs" />
+    <Compile Include="Query\BuildingHeight.cs" />
     <Compile Include="Query\BoundaryType.cs" />
     <Compile Include="Query\Adiabatic.cs" />
     <Compile Include="Query\DefaultConstructionLibraryPath.cs" />
