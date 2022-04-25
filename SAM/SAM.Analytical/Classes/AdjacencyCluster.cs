@@ -338,6 +338,48 @@ namespace SAM.Analytical
             return null;
         }
 
+        public List<T> GetMechanicalSystems<T>() where T: MechanicalSystem
+        {
+            return GetObjects<T>();
+        }
+
+        public List<T> GetMechanicalSystemTypes<T>() where T: MechanicalSystemType
+        {
+            List<MechanicalSystem> mechanicalSystems = GetMechanicalSystems<MechanicalSystem>();
+            if(mechanicalSystems == null)
+            {
+                return null;
+            }
+
+            Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
+            foreach (MechanicalSystem mechanicalSystem in mechanicalSystems)
+            {
+                T mechanicalSystemType = mechanicalSystem?.Type as T;
+                if(mechanicalSystemType == null)
+                {
+                    continue;
+                }
+
+                dictionary[mechanicalSystemType.Guid] = mechanicalSystemType;
+            }
+
+            List<T> mechanicalSystemTypes = GetObjects<T>();
+            if (mechanicalSystemTypes != null)
+            {
+                foreach(T mechanicalSystemType in mechanicalSystemTypes)
+                {
+                    if(dictionary.ContainsKey(mechanicalSystemType.Guid))
+                    {
+                        continue;
+                    }
+
+                    dictionary[mechanicalSystemType.Guid] = mechanicalSystemType;
+                }
+            }
+
+            return dictionary.Values.ToList();
+        }
+
         public List<Space> GetSpaces()
         {
             return GetObjects<Space>();
@@ -425,9 +467,6 @@ namespace SAM.Analytical
                     }
                 }
             }
-
-
-
 
             List<Construction> constructions = GetObjects<Construction>();
             if(constructions != null)
