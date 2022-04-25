@@ -1956,7 +1956,7 @@ namespace SAM.Analytical
                     machanicalSystem_Temp.Type(mechanicalSystemType_Temp);
                 }
 
-                relationCluster.AddRelation(machanicalSystem_Temp, machanicalSystem_Temp);
+                relationCluster.AddRelation(machanicalSystem_Temp, mechanicalSystemType_Temp);
             }
 
             bool result = relationCluster.AddObject(machanicalSystem_Temp);
