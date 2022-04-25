@@ -135,6 +135,25 @@ namespace SAM.Analytical
             }
         }
 
+        public Profile(Guid guid, Profile profile, string name, string category)
+            : base(name, guid, profile)
+        {
+            this.category = category;
+
+            if (profile.values != null)
+            {
+                values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
+                foreach (KeyValuePair<int, Tuple<Range<int>, AnyOf<double, Profile>>> keyValuePair in profile.values)
+                {
+                    Tuple<Range<int>, AnyOf<double, Profile>> tuple = null;
+                    if (keyValuePair.Value != null)
+                        tuple = new Tuple<Range<int>, AnyOf<double, Profile>>(keyValuePair.Value.Item1?.Clone(), keyValuePair.Value.Item2?.Value as dynamic);
+
+                    values[keyValuePair.Key] = tuple;
+                }
+            }
+        }
+
         public Profile(JObject jObject)
             : base(jObject)
         {
