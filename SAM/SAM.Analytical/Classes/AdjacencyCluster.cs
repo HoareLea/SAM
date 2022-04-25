@@ -43,6 +43,7 @@ namespace SAM.Analytical
                 typeof(InternalCondition).IsAssignableFrom(type) ||
                 typeof(Construction).IsAssignableFrom(type) ||
                 typeof(ApertureConstruction).IsAssignableFrom(type) ||
+                typeof(MechanicalSystemType).IsAssignableFrom(type) ||
                 typeof(Core.Result).IsAssignableFrom(type);
         }
 
@@ -345,22 +346,21 @@ namespace SAM.Analytical
 
         public List<T> GetMechanicalSystemTypes<T>() where T: MechanicalSystemType
         {
-            List<MechanicalSystem> mechanicalSystems = GetMechanicalSystems<MechanicalSystem>();
-            if(mechanicalSystems == null)
-            {
-                return null;
-            }
-
             Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
-            foreach (MechanicalSystem mechanicalSystem in mechanicalSystems)
-            {
-                T mechanicalSystemType = mechanicalSystem?.Type as T;
-                if(mechanicalSystemType == null)
-                {
-                    continue;
-                }
 
-                dictionary[mechanicalSystemType.Guid] = mechanicalSystemType;
+            List<MechanicalSystem> mechanicalSystems = GetMechanicalSystems<MechanicalSystem>();
+            if(mechanicalSystems != null)
+            {
+                foreach (MechanicalSystem mechanicalSystem in mechanicalSystems)
+                {
+                    T mechanicalSystemType = mechanicalSystem?.Type as T;
+                    if (mechanicalSystemType == null)
+                    {
+                        continue;
+                    }
+
+                    dictionary[mechanicalSystemType.Guid] = mechanicalSystemType;
+                }
             }
 
             List<T> mechanicalSystemTypes = GetObjects<T>();

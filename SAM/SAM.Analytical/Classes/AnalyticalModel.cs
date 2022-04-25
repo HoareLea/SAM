@@ -339,6 +339,17 @@ namespace SAM.Analytical
             return  adjacencyCluster.AddObject(analyticalModelSimulationResult_Temp);
         }
 
+        public bool AddMechanicalSystemType(MechanicalSystemType mechanicalSystemType)
+        {
+            if (mechanicalSystemType == null)
+                return false;
+
+            if (adjacencyCluster == null)
+                adjacencyCluster = new AdjacencyCluster();
+
+            return adjacencyCluster.AddObject(mechanicalSystemType);
+        }
+
         public List<Space> GetSpaces()
         {
             return adjacencyCluster?.GetSpaces()?.ConvertAll(x => new Space(x));
