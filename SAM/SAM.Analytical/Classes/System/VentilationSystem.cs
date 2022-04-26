@@ -10,6 +10,12 @@ namespace SAM.Analytical
 
         }
 
+        public VentilationSystem(System.Guid guid, string id, VentilationSystem VentilationSystem)
+            : base(guid, id, VentilationSystem)
+        {
+
+        }
+
         public VentilationSystem(VentilationSystem ventilationSystem)
             : base(ventilationSystem)
         {

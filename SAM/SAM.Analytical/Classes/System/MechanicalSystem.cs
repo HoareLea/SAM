@@ -13,6 +13,12 @@ namespace SAM.Analytical
             this.id = id;
         }
 
+        public MechanicalSystem(System.Guid guid, string id, MechanicalSystem mechanicalSystem)
+            : base(guid, mechanicalSystem)
+        {
+            this.id = id;
+        }
+
         public MechanicalSystem(MechanicalSystem mechanicalSystem)
             : base(mechanicalSystem)
         {

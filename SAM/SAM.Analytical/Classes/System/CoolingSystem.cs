@@ -9,6 +9,12 @@ namespace SAM.Analytical
 
         }
 
+        public CoolingSystem(System.Guid guid, string id, CoolingSystem coolingSystem)
+            : base(guid, id, coolingSystem)
+        {
+
+        }
+
         public CoolingSystem(CoolingSystem coolingSystem)
             : base(coolingSystem)
         {

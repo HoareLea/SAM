@@ -10,6 +10,12 @@ namespace SAM.Analytical
 
         }
 
+        public HeatingSystem(System.Guid guid, string id, HeatingSystem heatingSystem)
+            : base(guid, id, heatingSystem)
+        {
+
+        }
+
         public HeatingSystem(HeatingSystem heatingSystem)
             : base(heatingSystem)
         {
