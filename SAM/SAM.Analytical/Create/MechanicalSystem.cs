@@ -13,12 +13,20 @@
                 id = index.ToString();
             }
 
+            return MechanicalSystem(mechanicalSystemType, id);
+        }
+
+        public static MechanicalSystem MechanicalSystem(MechanicalSystemType mechanicalSystemType, string id = null)
+        {
+            if (mechanicalSystemType == null)
+                return null;
+
             MechanicalSystem result = null;
-            if(mechanicalSystemType is VentilationSystemType)
+            if (mechanicalSystemType is VentilationSystemType)
                 result = new VentilationSystem(id, (VentilationSystemType)mechanicalSystemType);
-            else if(mechanicalSystemType is HeatingSystemType)
+            else if (mechanicalSystemType is HeatingSystemType)
                 result = new HeatingSystem(id, (HeatingSystemType)mechanicalSystemType);
-            else if(mechanicalSystemType is CoolingSystemType)
+            else if (mechanicalSystemType is CoolingSystemType)
                 result = new CoolingSystem(id, (CoolingSystemType)mechanicalSystemType);
 
             if (result == null)

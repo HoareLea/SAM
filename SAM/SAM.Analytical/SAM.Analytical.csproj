@@ -215,6 +215,8 @@
     <Compile Include="Modify\New\AddMechanicalSystem.cs" />
     <Compile Include="Modify\New\AddMissingProfiles.cs" />
     <Compile Include="Modify\New\AddMissingMaterials.cs" />
+    <Compile Include="Create\Id.cs" />
+    <Compile Include="Query\DefaultSystemTypeLibrary.cs" />
     <Compile Include="Query\RiserNameSpaceParameter.cs" />
     <Compile Include="Query\BuildingHeight.cs" />
     <Compile Include="Query\BoundaryType.cs" />
