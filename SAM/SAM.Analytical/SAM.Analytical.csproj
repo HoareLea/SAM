@@ -158,6 +158,7 @@
     <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
     <Compile Include="Enums\LoadType.cs" />
     <Compile Include="Enums\BoundaryType.cs" />
+    <Compile Include="Enums\MechanicalSystemCategory.cs" />
     <Compile Include="Enums\ZoneType.cs" />
     <Compile Include="Enums\EmitterType.cs" />
     <Compile Include="Enums\HeatFlowDirection.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="Modify\New\AddMechanicalSystem.cs" />
     <Compile Include="Modify\New\AddMissingProfiles.cs" />
     <Compile Include="Modify\New\AddMissingMaterials.cs" />
+    <Compile Include="Query\RiserNameSpaceParameter.cs" />
     <Compile Include="Query\BuildingHeight.cs" />
     <Compile Include="Query\BoundaryType.cs" />
     <Compile Include="Query\Adiabatic.cs" />
@@ -442,6 +444,7 @@
     <Compile Include="Query\New\InternalMaterialLayer.cs" />
     <Compile Include="Query\ExternalConstructionLayer.cs" />
     <Compile Include="Query\DefaultGasMaterial.cs" />
+    <Compile Include="Query\MechanicalSystemCategory.cs" />
     <Compile Include="Query\ZoneType.cs" />
     <Compile Include="Query\Zone.cs" />
     <Compile Include="Query\Volume.cs" />
