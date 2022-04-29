@@ -1,4 +1,5 @@
 ﻿using SAM.Core;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
@@ -277,6 +278,41 @@ namespace SAM.Geometry.Spatial
 
             return face3Ds.ConvertAll(x => dictionary[x]);
 
+        }
+
+        public static List<T> InRange<T>(this IEnumerable<T> face3DObjects, Point3D point3D, Range<double> range, bool sort = true, int count = int.MaxValue, double tolerance = Tolerance.Distance) where T : IFace3DObject
+        {
+            if(face3DObjects == null || point3D == null || range == null)
+            {
+                return null;
+            }
+
+            List<Tuple<double, T>> tuple = new List<Tuple<double, T>>();
+            foreach(T face3DObject in face3DObjects)
+            {
+                Face3D face3D = face3DObject?.Face3D;
+
+                if (face3D == null)
+                {
+                    continue;
+                }
+
+                double distance = face3D.Distance(point3D, tolerance);
+
+                if(!range.In(distance))
+                {
+                    continue;
+                }
+
+                tuple.Add(new Tuple<double, T>(distance, face3DObject));
+
+                if(tuple.Count >= count)
+                {
+                    return tuple.ConvertAll(x => x.Item2);
+                }
+            }
+
+            return tuple.ConvertAll(x => x.Item2);
         }
     }
 }
