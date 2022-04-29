@@ -257,6 +257,14 @@ namespace SAM.Analytical
             return adjacencyCluster.AddSpace(space, panels);
         }
 
+        public bool HasMaterial(IMaterial material)
+        {
+            if (material == null || materialLibrary == null)
+                return false;
+
+            return materialLibrary.GetMaterial(material.Name) != null;
+        }
+
         public bool AddMaterial(IMaterial material)
         {
             if (material == null)
