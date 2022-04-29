@@ -45,7 +45,12 @@ namespace SAM.Geometry.Spatial
 
         public List<Point3D> GetPoints()
         {
-            return points.ConvertAll(x => plane.Convert(x));
+            if(plane == null)
+            {
+                return null;
+            }
+
+            return points?.ConvertAll(x => plane.Convert(x));
         }
 
         public Plane GetPlane()
