@@ -297,7 +297,20 @@ namespace SAM.Analytical
             if (adjacencyCluster == null)
                 adjacencyCluster = new AdjacencyCluster();
 
-            return adjacencyCluster.AddObject(panel);
+            return adjacencyCluster.AddObject(new Panel(panel));
+        }
+
+        public bool AddInternalCondition(InternalCondition internalCondition)
+        {
+            if (internalCondition == null)
+            {
+                return false;
+            }
+
+            if (adjacencyCluster == null)
+                adjacencyCluster = new AdjacencyCluster();
+
+            return adjacencyCluster.AddObject(new InternalCondition(internalCondition));
         }
 
         public bool AddResult<T>(IResult result, Guid guid)where T: SAMObject
