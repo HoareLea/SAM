@@ -1233,6 +1233,27 @@ namespace SAM.Core
             return dictionary_Object.Remove(guid);
         }
 
+        public bool RemoveAll<T>()
+        {
+            List<T> ts = GetObjects<T>();
+            if(ts == null || ts.Count == 0)
+            {
+                return false;
+            }
+
+            bool result = false;
+            foreach(T t in ts)
+            {
+                Guid guid = GetGuid(t);
+                if(RemoveObject<T>(guid))
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
         public bool RemoveObject<T>(Guid guid)
         {
             return RemoveObject(typeof(T), guid);

@@ -140,6 +140,17 @@ namespace SAM.Core
             return objects.Remove(uniqueId);
         }
 
+        public bool RemoveAll()
+        {
+            if(objects == null || objects.Count == 0)
+            {
+                return false;
+            }
+
+            objects = new Dictionary<string, T>();
+            return true;
+        }
+
         public T GetObject(string uniqueId)
         {
             if (uniqueId == null || objects == null || objects.Count == 0)
