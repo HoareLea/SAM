@@ -45,6 +45,7 @@ namespace SAM.Analytical.Grasshopper
 
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Go to Directory", Menu_GoToDirectory, Resources.SAM_Small, true, false);
+            Menu_AppendItem(menu, "Set Default Directory", Menu_SetDefaultDirectory, Resources.SAM_Small, true, false);
         }
 
         /// <summary>
@@ -225,6 +226,17 @@ namespace SAM.Analytical.Grasshopper
             }
 
             Process.Start(directory);
+        }
+
+        void Menu_SetDefaultDirectory(object sender, EventArgs e)
+        {
+            int index = Params.IndexOfInputParam("_directory_");
+            if(index != -1)
+            {
+                var param = Params.Input[index] as GH_PersistentParam<GH_String>;
+                param.PersistentData.ClearData();
+                param.PersistentData.Append(new GH_String(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SAMSimulation")));
+            }
         }
     }
 }
