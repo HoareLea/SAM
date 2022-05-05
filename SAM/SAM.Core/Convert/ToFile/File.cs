@@ -23,6 +23,26 @@ namespace SAM.Core
             return ToFile(jSAMObjects?.ToList().ConvertAll(x => x as IJSAMObject), path, Query.SAMFileType(path));
         }
 
+        public static bool ToFile(IJSAMObject jSAMObject, string path)
+        {
+            if(jSAMObject == null)
+            {
+                return false;
+            }
+
+            return ToFile(new IJSAMObject[] { jSAMObject}, path);
+        }
+
+        public static bool ToFile(IJSAMObject jSAMObject, string path, SAMFileType sAMFileType)
+        {
+            if (jSAMObject == null)
+            {
+                return false;
+            }
+
+            return ToFile(new IJSAMObject[] { jSAMObject }, path, sAMFileType);
+        }
+
         public static bool ToFile(this IEnumerable<IJSAMObject> jSAMObjects, string path, SAMFileType sAMFileType)
         {
             if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(Path.GetDirectoryName(path)))
