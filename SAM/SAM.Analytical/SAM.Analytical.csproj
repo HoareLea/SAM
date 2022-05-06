@@ -202,6 +202,9 @@
     <Compile Include="Interfaces\New\IPartition.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Query\MissingMaterialsNames.cs" />
+    <Compile Include="Query\MissingInternalConditionsNames.cs" />
+    <Compile Include="Query\MissingProfileNameDictionary.cs" />
     <Compile Include="Query\ResourcesDirectory.cs" />
     <Compile Include="Query\UpdateConstructionLayersByPanelType.cs" />
     <Compile Include="Modify\AssignSpaceColors.cs" />
