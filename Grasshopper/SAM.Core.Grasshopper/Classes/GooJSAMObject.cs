@@ -175,7 +175,7 @@ namespace SAM.Core.Grasshopper
         }
     }
 
-    public class GooJSAMObjectParam<T> : GH_PersistentParam<GooJSAMObject<T>> where T : ISAMObject
+    public class GooJSAMObjectParam<T> : GH_PersistentParam<GooJSAMObject<T>> where T : IParameterizedSAMObject
     {
         public override Guid ComponentGuid => new Guid("5af7e0dc-8d0c-4d51-8c85-6f2795c2fc37");
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;

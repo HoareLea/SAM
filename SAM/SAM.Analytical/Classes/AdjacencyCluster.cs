@@ -44,6 +44,8 @@ namespace SAM.Analytical
                 typeof(Construction).IsAssignableFrom(type) ||
                 typeof(ApertureConstruction).IsAssignableFrom(type) ||
                 typeof(MechanicalSystemType).IsAssignableFrom(type) ||
+                typeof(Core.ISAMInstance).IsAssignableFrom(type) ||
+                typeof(Core.ISAMType).IsAssignableFrom(type) ||
                 typeof(Core.Result).IsAssignableFrom(type);
         }
 

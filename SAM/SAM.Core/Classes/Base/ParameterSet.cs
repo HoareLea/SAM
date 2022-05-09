@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace SAM.Core
 {
-    public class ParameterSet : ISAMBaseObject
+    public class ParameterSet : ISAMObject
     {
         private string name;
         private Guid guid;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core
 {
-    public abstract class SAMType : SAMObject
+    public abstract class SAMType : SAMObject, ISAMType
     {
         public SAMType(Guid guid, string name)
             : base(guid, name)

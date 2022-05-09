@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core
 {
-    public abstract class SAMInstance<T> : SAMObject where T: SAMType
+    public abstract class SAMInstance<T> : SAMObject, ISAMInstance where T: SAMType
     {
         private T type;
 

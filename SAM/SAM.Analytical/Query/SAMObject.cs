@@ -6,34 +6,34 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static T SAMObject<T>(this AnalyticalModel analyticalModel, Guid guid) where T: ISAMObject
+        public static T SAMObject<T>(this AnalyticalModel analyticalModel, Guid guid) where T: IParameterizedSAMObject
         {
-            ISAMObject jSAMObject = SAMObject(analyticalModel, typeof(T), guid);
+            IParameterizedSAMObject jSAMObject = SAMObject(analyticalModel, typeof(T), guid);
             if (jSAMObject == null)
                 return default;
 
             return (T)jSAMObject;
         }
 
-        public static T SAMObject<T>(this AdjacencyCluster adjacencyCluster, Guid guid) where T : ISAMObject
+        public static T SAMObject<T>(this AdjacencyCluster adjacencyCluster, Guid guid) where T : IParameterizedSAMObject
         {
-            ISAMObject jSAMObject = SAMObject(adjacencyCluster, typeof(T), guid);
+            IParameterizedSAMObject jSAMObject = SAMObject(adjacencyCluster, typeof(T), guid);
             if (jSAMObject == null)
                 return default;
 
             return (T)jSAMObject;
         }
 
-        public static T SAMObject<T>(this ProfileLibrary profileLibrary, Guid guid)where T : ISAMObject
+        public static T SAMObject<T>(this ProfileLibrary profileLibrary, Guid guid)where T : IParameterizedSAMObject
         {
-            ISAMObject jSAMObject = SAMObject(profileLibrary, guid);
+            IParameterizedSAMObject jSAMObject = SAMObject(profileLibrary, guid);
             if (jSAMObject == null)
                 return default;
 
             return (T)jSAMObject;
         }
 
-        public static ISAMObject SAMObject(this AnalyticalModel analyticalModel, Type type, Guid guid)
+        public static IParameterizedSAMObject SAMObject(this AnalyticalModel analyticalModel, Type type, Guid guid)
         {
             if (analyticalModel == null || type == null)
                 return null;
@@ -79,7 +79,7 @@ namespace SAM.Analytical
             return null;
         }
 
-        public static ISAMObject SAMObject(this AdjacencyCluster adjacencyCluster, Type type, Guid guid)
+        public static IParameterizedSAMObject SAMObject(this AdjacencyCluster adjacencyCluster, Type type, Guid guid)
         {
             if (adjacencyCluster == null || type == null)
                 return null;
@@ -118,7 +118,7 @@ namespace SAM.Analytical
             return null;
         }
 
-        public static ISAMObject SAMObject(this ProfileLibrary profileLibrary, Guid guid)
+        public static IParameterizedSAMObject SAMObject(this ProfileLibrary profileLibrary, Guid guid)
         {
             if (profileLibrary == null)
                 return null;

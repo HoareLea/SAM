@@ -5,25 +5,26 @@ using System.Reflection;
 
 namespace SAM.Core
 {
-    public class IntegerId : IJSAMObject
+    public class IntegerId : ParameterizedSAMObject
     {
         private int id;
-        private List<ParameterSet> parameterSets;
 
         public IntegerId(int id)
+            : base()
         {
             this.id = id;
         }
 
         public IntegerId(IntegerId integerId)
+            :base(integerId)
         {
             id = integerId.id;
-            parameterSets = integerId.parameterSets?.Clone();
         }
 
         public IntegerId(JObject jObject)
+            : base(jObject)
         {
-            FromJObject(jObject);
+
         }
 
         public int Id
@@ -34,55 +35,36 @@ namespace SAM.Core
             }
         }
 
-        public ParameterSet GetParameterSet(string name)
-        {
-            return Query.ParameterSet(parameterSets, name);
-        }
-
-        public ParameterSet GetParameterSet(Assembly assembly)
-        {
-            return Query.ParameterSet(parameterSets, assembly);
-        }
-
-        public bool Add(ParameterSet parameterSet)
-        {
-            if (parameterSet == null)
-                return false;
-
-            if (parameterSets == null)
-                parameterSets = new List<ParameterSet>();
-
-            return Modify.Add(parameterSets, parameterSet);
-        }
-
-        public List<ParameterSet> GetParamaterSets()
-        {
-            if (parameterSets == null)
-                return null;
-            else
-                return new List<ParameterSet>(parameterSets);
-        }
-
-        public bool FromJObject(JObject jObject)
+        public override bool FromJObject(JObject jObject)
         {
             if (jObject == null)
                 return false;
 
+            if (!base.FromJObject(jObject))
+            {
+                return false;
+            }
+
             id = jObject.Value<int>("Id");
-            parameterSets = Create.ParameterSets(jObject.Value<JArray>("ParameterSets"));
             return true;
         }
 
-        public JObject ToJObject()
+        public override JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", Query.FullTypeName(this));
-            jObject.Add("Id", id);
+            JObject result = base.ToJObject();
+            if(result == null)
+            {
+                return result;
+            }
 
-            if (parameterSets != null)
-                jObject.Add("ParameterSets", Create.JArray(parameterSets));
+            result.Add("Id", id);
 
-            return jObject;
+            return result;
+        }
+
+        public static implicit operator IntegerId(int id)
+        {
+            return new IntegerId(id);
         }
     }
 }

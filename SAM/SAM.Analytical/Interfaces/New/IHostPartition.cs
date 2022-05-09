@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public interface IHostPartition : IAnalyticalObject, ISAMObject, IFace3DObject, IPartition
+    public interface IHostPartition : IAnalyticalObject, IParameterizedSAMObject, IFace3DObject, IPartition, ISAMObject
     {
         List<T> GetOpenings<T>() where T : IOpening;
 

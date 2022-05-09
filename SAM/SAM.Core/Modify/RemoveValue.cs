@@ -5,12 +5,12 @@ namespace SAM.Core
 {
     public static partial class Modify
     {
-        public static bool RemoveValue(this SAMObject sAMObject, string name, Assembly defaultAssembly, bool findAny = true)
+        public static bool RemoveValue(this ParameterizedSAMObject parameterizedSAMObject, string name, Assembly defaultAssembly, bool findAny = true)
         {
-            if (sAMObject == null)
+            if (parameterizedSAMObject == null)
                 return false;
 
-            ParameterSet parameterSet = sAMObject.GetParameterSet(defaultAssembly);
+            ParameterSet parameterSet = parameterizedSAMObject.GetParameterSet(defaultAssembly);
             if (!findAny && parameterSet == null)
                 return false;
 
@@ -20,7 +20,7 @@ namespace SAM.Core
             if (!findAny)
                 return false;
 
-            List<ParameterSet> parameterSets = sAMObject.GetParamaterSets();
+            List<ParameterSet> parameterSets = parameterizedSAMObject.GetParamaterSets();
             if(parameterSets != null)
             {
                 foreach (ParameterSet parameterSet_Temp in parameterSets)

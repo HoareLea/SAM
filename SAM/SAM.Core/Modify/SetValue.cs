@@ -7,118 +7,118 @@ namespace SAM.Core
 {
     public static partial class Modify
     {
-        public static bool SetValue(this SAMObject sAMObject, string name, string value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, string value)
         {
-            return SetValue(sAMObject, null, name, value as object);
+            return SetValue(parameterizedSAMObject, null, name, value as object);
         }
 
-        public static bool SetValue(this SAMObject sAMObject, string name, Guid value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, Guid value)
         {
-            return SetValue(sAMObject, null, name, value as object);
+            return SetValue(parameterizedSAMObject, null, name, value as object);
         }
 
-        public static bool SetValue(this SAMObject sAMObject, string name, double value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, double value)
         {
-            return SetValue(sAMObject, null, name, value as object);
+            return SetValue(parameterizedSAMObject, null, name, value as object);
         }
 
-        public static bool SetValue(this SAMObject sAMObject, string name, int value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, int value)
         {
-            return SetValue(sAMObject, null, name, value as object);
+            return SetValue(parameterizedSAMObject, null, name, value as object);
         }
 
-        public static bool SetValue(this SAMObject sAMObject, string name, bool value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, bool value)
         {
-            return SetValue(sAMObject, null, name, value as object);
+            return SetValue(parameterizedSAMObject, null, name, value as object);
         }
 
-        public static bool SetValue(this SAMObject sAMObject, string name, IJSAMObject value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, IJSAMObject value)
         {
-            return SetValue(sAMObject, null, name, value as object);
+            return SetValue(parameterizedSAMObject, null, name, value as object);
         }
 
-        public static bool SetValue(this SAMObject sAMObject, string name, JObject value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, JObject value)
         {
-            return SetValue(sAMObject, null, name, value as object);
+            return SetValue(parameterizedSAMObject, null, name, value as object);
         }
 
-        public static bool SetValue(this SAMObject sAMObject, string name, DateTime value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, DateTime value)
         {
-            return SetValue(sAMObject, null, name, value as object);
+            return SetValue(parameterizedSAMObject, null, name, value as object);
         }
 
-        public static bool SetValue(this SAMObject sAMObject, string name, System.Drawing.Color value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, System.Drawing.Color value)
         {
-            return SetValue(sAMObject, null, name, value as object);
+            return SetValue(parameterizedSAMObject, null, name, value as object);
         }
 
-        public static bool SetValue(this SAMObject sAMObject, string name, SAMColor value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, SAMColor value)
         {
-            return SetValue(sAMObject, null, name, value as object);
-        }
-
-
-        public static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, string value)
-        {
-            return SetValue(sAMObject, assembly, name, value as object);
-        }
-
-        public static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, Guid value)
-        {
-            return SetValue(sAMObject, assembly, name, value as object);
-        }
-
-        public static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, double value)
-        {
-            return SetValue(sAMObject, assembly, name, value as object);
-        }
-
-        public static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, int value)
-        {
-            return SetValue(sAMObject, assembly, name, value as object);
-        }
-
-        public static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, bool value)
-        {
-            return SetValue(sAMObject, assembly, name, value as object);
-        }
-
-        public static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, IJSAMObject value)
-        {
-            return SetValue(sAMObject, assembly, name, value as object);
-        }
-
-        public static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, JObject value)
-        {
-            return SetValue(sAMObject, assembly, name, value as object);
-        }
-
-        public static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, DateTime value)
-        {
-            return SetValue(sAMObject, assembly, name, value as object);
-        }
-
-        public static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, System.Drawing.Color value)
-        {
-            return SetValue(sAMObject, assembly, name, value as object);
-        }
-
-        public static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, SAMColor value)
-        {
-            return SetValue(sAMObject, assembly, name, value as object);
+            return SetValue(parameterizedSAMObject, null, name, value as object);
         }
 
 
-        private static bool SetValue(this SAMObject sAMObject, Assembly assembly, string name, object value)
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, string value)
         {
-            if (sAMObject == null || string.IsNullOrWhiteSpace(name))
+            return SetValue(parameterizedSAMObject, assembly, name, value as object);
+        }
+
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, Guid value)
+        {
+            return SetValue(parameterizedSAMObject, assembly, name, value as object);
+        }
+
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, double value)
+        {
+            return SetValue(parameterizedSAMObject, assembly, name, value as object);
+        }
+
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, int value)
+        {
+            return SetValue(parameterizedSAMObject, assembly, name, value as object);
+        }
+
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, bool value)
+        {
+            return SetValue(parameterizedSAMObject, assembly, name, value as object);
+        }
+
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, IJSAMObject value)
+        {
+            return SetValue(parameterizedSAMObject, assembly, name, value as object);
+        }
+
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, JObject value)
+        {
+            return SetValue(parameterizedSAMObject, assembly, name, value as object);
+        }
+
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, DateTime value)
+        {
+            return SetValue(parameterizedSAMObject, assembly, name, value as object);
+        }
+
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, System.Drawing.Color value)
+        {
+            return SetValue(parameterizedSAMObject, assembly, name, value as object);
+        }
+
+        public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, SAMColor value)
+        {
+            return SetValue(parameterizedSAMObject, assembly, name, value as object);
+        }
+
+
+        private static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, object value)
+        {
+            if (parameterizedSAMObject == null || string.IsNullOrWhiteSpace(name))
                 return false;
 
             ParameterSet parameterSet = null;
 
             if (assembly == null)
             {
-                List<ParameterSet> parameterSets = sAMObject.GetParamaterSets();
+                List<ParameterSet> parameterSets = parameterizedSAMObject.GetParamaterSets();
                 if(parameterSets != null)
                 {
                     foreach(ParameterSet parameterSet_Temp in parameterSets)
@@ -133,21 +133,21 @@ namespace SAM.Core
 
                 if (parameterSet == null)
                 {
-                    parameterSet = sAMObject.GetParameterSet(sAMObject.GetType().Assembly);
+                    parameterSet = parameterizedSAMObject.GetParameterSet(parameterizedSAMObject.GetType().Assembly);
                     if(parameterSet == null)
                     {
-                        parameterSet = new ParameterSet(sAMObject.GetType().Assembly);
-                        sAMObject.Add(parameterSet);
+                        parameterSet = new ParameterSet(parameterizedSAMObject.GetType().Assembly);
+                        parameterizedSAMObject.Add(parameterSet);
                     }
                 }
             }
             else
             {
-                parameterSet = sAMObject.GetParameterSet(assembly);
+                parameterSet = parameterizedSAMObject.GetParameterSet(assembly);
                 if (parameterSet == null)
                 {
                     parameterSet = new ParameterSet(assembly);
-                    sAMObject.Add(parameterSet);
+                    parameterizedSAMObject.Add(parameterSet);
                 }
             }
 
