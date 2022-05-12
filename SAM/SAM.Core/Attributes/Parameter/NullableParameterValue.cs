@@ -28,7 +28,7 @@
         {
             object_Out = default;
 
-            if (object_In == null || !nullable)
+            if (object_In == null && !nullable)
                 return false;
 
             return base.TryConvert(object_In, out object_Out);

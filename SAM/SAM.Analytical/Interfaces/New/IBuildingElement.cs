@@ -3,7 +3,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
-    public interface IBuildingElement : IAnalyticalObject, ISAMObject, IFace3DObject
+    public interface IBuildingElement : IAnalyticalObject, IParameterizedSAMObject, IFace3DObject, ISAMObject
     {
 
     }

@@ -62,6 +62,7 @@
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Classes\Base\AnyOf.cs" />
     <Compile Include="Classes\Base\EnumParameterData.cs" />
+    <Compile Include="Classes\Base\ParameterizedSAMObject.cs" />
     <Compile Include="Classes\Search\SearchObjectWrapper.cs" />
     <Compile Include="Classes\Search\SearchWrapper.cs" />
     <Compile Include="Classes\Base\ParameterData.cs" />
@@ -104,7 +105,9 @@
     <Compile Include="Enums\ParameterType.cs" />
     <Compile Include="Enums\Parameter\CoreSettingParameter.cs" />
     <Compile Include="Interfaces\Base\IParameterData.cs" />
-    <Compile Include="Interfaces\Base\ISAMBaseObject.cs" />
+    <Compile Include="Interfaces\Base\ISAMType.cs" />
+    <Compile Include="Interfaces\Base\ISAMInstance.cs" />
+    <Compile Include="Interfaces\Base\ISAMObject.cs" />
     <Compile Include="Interfaces\Base\ISystem.cs" />
     <Compile Include="Interfaces\Base\IResult.cs" />
     <Compile Include="Interfaces\Base\ISystemType.cs" />
@@ -176,7 +179,7 @@
     <Compile Include="Create\ParameterSets.cs" />
     <Compile Include="Enums\NumberComparisonType.cs" />
     <Compile Include="Interfaces\Base\IJSAMObject.cs" />
-    <Compile Include="Interfaces\Base\ISAMObject.cs" />
+    <Compile Include="Interfaces\Base\IParameterizedSAMObject.cs" />
     <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\RemoveValue.cs" />
     <Compile Include="Modify\Copy.cs" />

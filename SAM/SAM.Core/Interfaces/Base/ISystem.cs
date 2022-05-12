@@ -1,6 +1,6 @@
 ﻿namespace SAM.Core
 {
-    public interface ISystem : ISAMObject
+    public interface ISystem : IParameterizedSAMObject
     {
 
     }

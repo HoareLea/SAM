@@ -68,14 +68,14 @@ namespace SAM.Core
             return false;
         }
 
-        public static bool TryGetValue(this SAMObject sAMObject, string name, Assembly defaultAssembly, out object value, bool findAny = true)
+        public static bool TryGetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, Assembly defaultAssembly, out object value, bool findAny = true)
         {
             value = null;
 
-            if (sAMObject == null)
+            if (parameterizedSAMObject == null)
                 return false;
 
-            ParameterSet parameterSet = sAMObject.GetParameterSet(defaultAssembly);
+            ParameterSet parameterSet = parameterizedSAMObject.GetParameterSet(defaultAssembly);
             if (parameterSet == null)
                 return false;
 
@@ -88,7 +88,7 @@ namespace SAM.Core
             if (!findAny)
                 return false;
 
-            return TryGetValue_ParameterSets(sAMObject, name, out value);
+            return TryGetValue_ParameterSets(parameterizedSAMObject, name, out value);
         }
 
         public static bool TryGetValue(this object @object, string name, out object value, bool UserFriendlyName)

@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace SAM.Core
 {
-    public class SAMCollection<T> : Collection<T>, ISAMBaseObject where T : IJSAMObject
+    public class SAMCollection<T> : Collection<T>, ISAMObject where T : IJSAMObject
     {
         private string name;
         private Guid guid;

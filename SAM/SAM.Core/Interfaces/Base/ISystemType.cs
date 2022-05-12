@@ -1,6 +1,6 @@
 ﻿namespace SAM.Core
 {
-    public interface ISystemType : ISAMObject
+    public interface ISystemType : IParameterizedSAMObject, ISAMObject
     {
         string Description { get; }
     }

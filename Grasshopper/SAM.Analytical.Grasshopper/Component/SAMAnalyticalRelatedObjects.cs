@@ -140,13 +140,13 @@ namespace SAM.Analytical.Grasshopper
                 {
                     for(int i = result.Count - 1; i >= 0; i--)
                     {
-                        ISAMBaseObject sAMBaseObject = result[i] as ISAMBaseObject;
+                        ISAMObject sAMBaseObject = result[i] as ISAMObject;
                         if(sAMBaseObject == null)
                         {
                             continue;
                         }
 
-                        object @object = result_Temp.Find(x => x is ISAMBaseObject && ((ISAMBaseObject)x).Guid == sAMBaseObject.Guid);
+                        object @object = result_Temp.Find(x => x is ISAMObject && ((ISAMObject)x).Guid == sAMBaseObject.Guid);
                         if(@object == null)
                         {
                             result.RemoveAt(i);

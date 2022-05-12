@@ -37,9 +37,9 @@ namespace SAM.Core
 
                 string value_Temp = string.Empty;
 
-                if (value is ISAMObject)
+                if (value is IParameterizedSAMObject)
                 {
-                    value_Temp = ToString((ISAMObject)value);
+                    value_Temp = ToString((IParameterizedSAMObject)value);
                 }
                 else
                 {
