@@ -138,6 +138,8 @@ namespace SAM.Analytical
             if (analyticalModel == null)
                 return;
 
+            description = analyticalModel.description;
+
             if (analyticalModel.location != null)
                 location = new Location(analyticalModel.location);
 
