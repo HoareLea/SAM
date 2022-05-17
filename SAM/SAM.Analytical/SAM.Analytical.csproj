@@ -202,6 +202,7 @@
     <Compile Include="Interfaces\New\IPartition.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Query\SpecificHeatTransferGain.cs" />
     <Compile Include="Query\Systems.cs" />
     <Compile Include="Query\MissingMaterialsNames.cs" />
     <Compile Include="Query\MissingInternalConditionsNames.cs" />
