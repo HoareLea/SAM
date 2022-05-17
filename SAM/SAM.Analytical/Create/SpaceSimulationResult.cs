@@ -40,7 +40,7 @@
                 result.SetValue(SpaceSimulationResultParameter.Area, area);
 
             if (sizingMethod != null && sizingMethod.HasValue)
-                result.SetValue(SpaceSimulationResultParameter.SizingMethod, sizingMethod.Text());
+                result.SetValue(SpaceSimulationResultParameter.SizingMethod, sizingMethod?.Text());
 
             if (loadType != null && loadType.HasValue)
                 result.SetValue(SpaceSimulationResultParameter.LoadType, loadType.Text());
