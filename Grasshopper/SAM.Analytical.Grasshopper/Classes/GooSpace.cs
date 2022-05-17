@@ -132,6 +132,17 @@ namespace SAM.Analytical.Grasshopper
                     if (!string.IsNullOrWhiteSpace(@string))
                     {
                         spaces = Core.Convert.ToSAM<Space>(@string);
+                        if(spaces != null)
+                        {
+                            Point3D point3D = Geometry.Rhino.Convert.ToSAM(point);
+                            if (point3D != null)
+                            {
+                                for (int j = 0; j < spaces.Count; j++)
+                                {
+                                    spaces[j] = new Space(spaces[j], rhinoObject.Name, point3D);
+                                }
+                            }
+                        }
                     }
                 }
 
