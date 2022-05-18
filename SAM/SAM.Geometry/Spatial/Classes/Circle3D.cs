@@ -16,8 +16,8 @@ namespace SAM.Geometry.Spatial
 
         public Circle3D(Circle3D circle3D)
         {
-            this.plane = new Plane(circle3D.plane);
-            this.radious = circle3D.radious;
+            plane = new Plane(circle3D.plane);
+            radious = circle3D.radious;
         }
 
         public Circle3D(JObject jObject)

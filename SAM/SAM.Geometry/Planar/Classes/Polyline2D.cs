@@ -11,7 +11,7 @@ namespace SAM.Geometry.Planar
 
         public Polyline2D(IEnumerable<Point2D> point2Ds, bool close = false)
         {
-            this.points = Query.Clone(point2Ds);
+            points = Query.Clone(point2Ds);
             if (close && !IsClosed())
                 points.Add(points.First());
         }
@@ -25,7 +25,7 @@ namespace SAM.Geometry.Planar
 
         public Polyline2D(Polyline2D polyline2D)
         {
-            this.points = Query.Clone(polyline2D.points);
+            points = Query.Clone(polyline2D.points);
         }
 
         public Polyline2D(JObject jObject)
@@ -337,7 +337,7 @@ namespace SAM.Geometry.Planar
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         public override int GetHashCode()

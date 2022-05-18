@@ -18,7 +18,7 @@ namespace SAM.Analytical
         public BoundaryEdge3DLoop(BoundaryEdge3DLoop boundaryEdge3DLoop)
             : base(boundaryEdge3DLoop)
         {
-            this.boundaryEdge3Ds = boundaryEdge3DLoop.boundaryEdge3Ds.ConvertAll(x => new BoundaryEdge3D(x));
+            boundaryEdge3Ds = boundaryEdge3DLoop.boundaryEdge3Ds.ConvertAll(x => new BoundaryEdge3D(x));
         }
 
         public BoundaryEdge3DLoop(JObject jObject)

@@ -46,10 +46,10 @@ namespace SAM.Geometry.Planar
 
         public Rectangle2D(Rectangle2D rectangle2D)
         {
-            this.origin = new Point2D(rectangle2D.origin);
-            this.width = rectangle2D.width;
-            this.height = rectangle2D.height;
-            this.heightDirection = new Vector2D(rectangle2D.heightDirection);
+            origin = new Point2D(rectangle2D.origin);
+            width = rectangle2D.width;
+            height = rectangle2D.height;
+            heightDirection = new Vector2D(rectangle2D.heightDirection);
         }
 
         public Rectangle2D(JObject jObject)

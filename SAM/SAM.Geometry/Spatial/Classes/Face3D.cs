@@ -197,10 +197,10 @@ namespace SAM.Geometry.Spatial
             plane.FlipZ(flipX);
 
             if (externalEdge != null)
-                this.externalEdge2D = plane.Convert(externalEdge);
+                externalEdge2D = plane.Convert(externalEdge);
 
             if (internalEdges != null)
-                this.internalEdge2Ds = internalEdges.ConvertAll(x => plane.Convert(x));
+                internalEdge2Ds = internalEdges.ConvertAll(x => plane.Convert(x));
         }
 
         public override bool FromJObject(JObject jObject)

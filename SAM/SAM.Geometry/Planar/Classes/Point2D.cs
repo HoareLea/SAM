@@ -171,12 +171,12 @@ namespace SAM.Geometry.Planar
 
         public void Mirror(Point2D point2D)
         {
-            this.Move(new Vector2D(point2D, this));
+            Move(new Vector2D(point2D, this));
         }
 
         public void Mirror(Segment2D segment2D)
         {
-            this.Move(new Vector2D(segment2D.Project(this), this));
+            Move(new Vector2D(segment2D.Project(this), this));
         }
 
         public void Scale(Point2D point2D, double factor)

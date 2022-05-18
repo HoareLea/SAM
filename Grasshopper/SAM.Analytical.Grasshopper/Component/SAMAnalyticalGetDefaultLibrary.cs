@@ -90,7 +90,7 @@ namespace SAM.Analytical.Grasshopper
             if (sender is ToolStripMenuItem item && item.Tag is Enum)
             {
                 //Do something with panelType
-                this.value = ((Enum)item.Tag).ToString();
+                value = ((Enum)item.Tag).ToString();
                 ExpireSolution(true);
             }
         }

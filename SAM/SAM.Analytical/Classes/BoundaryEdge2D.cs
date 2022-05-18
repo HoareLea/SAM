@@ -18,7 +18,7 @@ namespace SAM.Analytical
         public BoundaryEdge2D(BoundaryEdge2D boundaryEdge2D)
             : base(boundaryEdge2D)
         {
-            this.curve2D = (ICurve2D)boundaryEdge2D.curve2D.Clone();
+            curve2D = (ICurve2D)boundaryEdge2D.curve2D.Clone();
         }
 
         public BoundaryEdge2D(ICurve2D curve2D)

@@ -101,9 +101,9 @@ namespace SAM.Analytical
             : base(guid, name, parameterSets)
         {
             this.plane = new Plane(plane);
-            this.externalEdge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
+            externalEdge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
             if (internalEdge2DLoop != null)
-                this.internalEdge2DLoops = internalEdge2DLoop.ToList().ConvertAll(x => new BoundaryEdge2DLoop(x));
+                internalEdge2DLoops = internalEdge2DLoop.ToList().ConvertAll(x => new BoundaryEdge2DLoop(x));
         }
 
         public PlanarBoundary3D(JObject jObject)

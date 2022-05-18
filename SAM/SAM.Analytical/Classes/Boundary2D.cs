@@ -24,9 +24,9 @@ namespace SAM.Analytical
         /// <param name="boundary2D">The boundary2d.</param>
         public Boundary2D(Boundary2D boundary2D)
         {
-            this.externalEdge2DLoop = new BoundaryEdge2DLoop(boundary2D.externalEdge2DLoop);
+            externalEdge2DLoop = new BoundaryEdge2DLoop(boundary2D.externalEdge2DLoop);
             if (boundary2D.internalEdge2DLoops != null)
-                this.internalEdge2DLoops = boundary2D.internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
+                internalEdge2DLoops = boundary2D.internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SAM.Analytical
         public Boundary2D(BoundaryEdge2DLoop edge2DLoop)
             : base()
         {
-            this.externalEdge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
+            externalEdge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
         }
    
         /// <summary>

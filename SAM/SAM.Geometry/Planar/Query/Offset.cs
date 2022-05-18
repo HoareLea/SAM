@@ -30,7 +30,7 @@ namespace SAM.Geometry.Planar
             {
                 if(externalEdge is Polygon2D)
                 {
-                    List<Polygon2D> polygon2Ds = Offset((Polygon2D)externalEdge, offset, tolerance);
+                    List<Polygon2D> polygon2Ds = Offset(Create.Polygon2D(externalEdge), offset, tolerance);
                     if (polygon2Ds != null)
                         externalEdges_Offset = new List<IClosed2D>(polygon2Ds);
                 }
@@ -48,7 +48,7 @@ namespace SAM.Geometry.Planar
                     {
                         if(closed2D is Polygon2D)
                         {
-                            List<Polygon2D> polygon2Ds = Offset((Polygon2D)externalEdge, offset, tolerance);
+                            List<Polygon2D> polygon2Ds = Offset(Create.Polygon2D(externalEdge), offset, tolerance);
                             if (polygon2Ds != null)
                                 internalEdges_Offset.AddRange(polygon2Ds);
                         }

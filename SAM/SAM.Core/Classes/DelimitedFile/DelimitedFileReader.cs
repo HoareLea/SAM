@@ -28,7 +28,7 @@ namespace SAM.Core
         public DelimitedFileReader(DelimitedFileType delimitedFileType, IEnumerable<string> lines)
             : base(Query.MemoryStream(lines))
         {
-            this.separator = Query.Separator(delimitedFileType);
+            separator = Query.Separator(delimitedFileType);
         }
 
         public DelimitedFileReader(DelimitedFileType delimitedFileType, string path)

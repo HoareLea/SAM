@@ -51,7 +51,7 @@ namespace SAM.Analytical
         public BoundaryEdge2DLoop(BoundaryEdge2DLoop boundaryEdge2DLoop)
             : base(boundaryEdge2DLoop)
         {
-            this.boundaryEdge2Ds = boundaryEdge2DLoop.boundaryEdge2Ds.ConvertAll(x => new BoundaryEdge2D(x));
+            boundaryEdge2Ds = boundaryEdge2DLoop.boundaryEdge2Ds.ConvertAll(x => new BoundaryEdge2D(x));
         }
 
         public BoundaryEdge2DLoop(JObject jObject)

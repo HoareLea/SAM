@@ -71,7 +71,7 @@ namespace SAM.Analytical.Grasshopper
             if (sender is ToolStripMenuItem item && item.Tag is string)
             {
                 //Do something with panelType
-                this.name = (string)item.Tag;
+                name = (string)item.Tag;
                 ExpireSolution(true);
             }
         }

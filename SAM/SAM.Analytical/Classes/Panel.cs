@@ -545,7 +545,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            Enum.TryParse(jObject.Value<string>("PanelType"), out this.panelType);
+            Enum.TryParse(jObject.Value<string>("PanelType"), out panelType);
 
             if (jObject.ContainsKey("PlanarBoundary3D"))
                 planarBoundary3D = new PlanarBoundary3D(jObject.Value<JObject>("PlanarBoundary3D"));

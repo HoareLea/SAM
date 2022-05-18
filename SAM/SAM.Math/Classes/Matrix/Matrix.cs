@@ -145,7 +145,7 @@ namespace SAM.Math
         {
             // Inspired by BHoM Strongly inspired by https://rosettacode.org/wiki/Reduced_row_echelon_form
 
-            Matrix matrix = this.Clone();
+            Matrix matrix = Clone();
             int lead = 0;
             int rowCount = matrix.RowCount();
             int columnCount = matrix.ColumnCount();

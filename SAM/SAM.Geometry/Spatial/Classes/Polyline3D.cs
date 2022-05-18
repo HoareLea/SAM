@@ -10,7 +10,7 @@ namespace SAM.Geometry.Spatial
 
         public Polyline3D(IEnumerable<Point3D> point3Ds, bool close = false)
         {
-            this.points = Query.Clone(point3Ds);
+            points = Query.Clone(point3Ds);
             if (close && !IsClosed())
                 points.Add(points.First());
         }
@@ -24,7 +24,7 @@ namespace SAM.Geometry.Spatial
 
         public Polyline3D(Polyline3D polyline3D)
         {
-            this.points = Query.Clone(polyline3D.points);
+            points = Query.Clone(polyline3D.points);
         }
 
         public Polyline3D(JObject jObject)

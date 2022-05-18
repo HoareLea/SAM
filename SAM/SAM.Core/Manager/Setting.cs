@@ -63,7 +63,7 @@ namespace SAM.Core
             if (string.IsNullOrEmpty(name))
                 return false;
 
-            ParameterSet parameterSet = GetParameterSet(Assembly.GetAssembly(this.GetType()));
+            ParameterSet parameterSet = GetParameterSet(Assembly.GetAssembly(GetType()));
             if (parameterSet == null)
                 return false;
 
@@ -77,7 +77,7 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(name))
                 return false;
 
-            Assembly assembly = Assembly.GetAssembly(this.GetType());
+            Assembly assembly = Assembly.GetAssembly(GetType());
 
             ParameterSet parameterSet = GetParameterSet(assembly);
             if (parameterSet == null)
@@ -136,7 +136,7 @@ namespace SAM.Core
             if (string.IsNullOrWhiteSpace(name))
                 return false;
 
-            Assembly assembly = Assembly.GetAssembly(this.GetType());
+            Assembly assembly = Assembly.GetAssembly(GetType());
 
             ParameterSet parameterSet = GetParameterSet(assembly);
 

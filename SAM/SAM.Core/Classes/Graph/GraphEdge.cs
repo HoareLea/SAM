@@ -26,8 +26,8 @@
 
         public GraphEdge(GraphEdge graphEdge)
         {
-            this.@object = graphEdge.@object;
-            this.weight = graphEdge.weight;
+            @object = graphEdge.@object;
+            weight = graphEdge.weight;
         }
 
         public T GetObject<T>()

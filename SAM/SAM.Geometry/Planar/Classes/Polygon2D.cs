@@ -19,7 +19,7 @@ namespace SAM.Geometry.Planar
 
         public Polygon2D(Polygon2D polygon2D)
         {
-            this.points = polygon2D.GetPoints();
+            points = polygon2D.GetPoints();
         }
 
         public Polygon2D(JObject jObject)
@@ -245,7 +245,7 @@ namespace SAM.Geometry.Planar
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         public override int GetHashCode()

@@ -11,7 +11,7 @@ namespace SAM.Core.Attributes
 
         public AssociatedTypes(params Type[] values)
         {
-            this.types = values;
+            types = values;
         }
 
         public virtual bool IsValid(Type type)
