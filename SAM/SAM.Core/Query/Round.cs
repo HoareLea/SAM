@@ -14,5 +14,16 @@ namespace SAM.Core
 
             return (double)(Math.Round((decimal)value / (decimal)tolerance) * (decimal)tolerance);
         }
+
+        public static float Round(this float value, float tolerance = (float)Core.Tolerance.Distance)
+        {
+            if (double.IsNaN(value))
+                return float.NaN;
+
+            if (tolerance.Equals(0.0))
+                return value;
+
+            return (float)(Math.Round((decimal)value / (decimal)tolerance) * (decimal)tolerance);
+        }
     }
 }
