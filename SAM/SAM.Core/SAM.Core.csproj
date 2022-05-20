@@ -186,6 +186,8 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\Decompress.cs" />
+    <Compile Include="Query\Compress.cs" />
     <Compile Include="Query\Min.cs" />
     <Compile Include="Query\Max.cs" />
     <Compile Include="Query\Count.cs" />

@@ -69,7 +69,9 @@ namespace SAM.Core.Grasshopper
                 Formatting = Formatting.None
             });
 
-            writer.SetString(typeof(T).FullName, json);
+            string jsonCompressed = Core.Query.Compress(json);
+
+            writer.SetString(typeof(T).FullName, jsonCompressed);
             return true;
         }
 
@@ -81,6 +83,8 @@ namespace SAM.Core.Grasshopper
 
             if (string.IsNullOrWhiteSpace(value))
                 return false;
+
+            value = Core.Query.Decompress(value);
 
             Value = Core.Create.IJSAMObject<T>(value);
             return true;
