@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -10,6 +11,11 @@ namespace SAM.Core
     {
         public static string ToString(this IJSAMObject jSAMObject)
         {
+            return ToString(jSAMObject, Formatting.Indented);
+        }
+
+        public static string ToString(this IJSAMObject jSAMObject, Formatting formatting)
+        {
             if (jSAMObject == null)
                 return null;
 
@@ -17,19 +23,42 @@ namespace SAM.Core
             if (jObject == null)
                 return null;
 
-            return jObject.ToString();
+            string json = JsonConvert.SerializeObject(jObject, new JsonSerializerSettings
+            {
+                Formatting = formatting
+            });
+
+            return json;
         }
 
-        public static string ToString(this IEnumerable<IJSAMObject> jSAMObjects)
+        public static string ToString<T>(this IEnumerable<T> jSAMObjects) where T: IJSAMObject
+        {
+            return ToString(jSAMObjects, Formatting.Indented);
+        }
+
+        public static string ToString<T>(this IEnumerable<T> jSAMObjects, Formatting formatting) where T :IJSAMObject
         {
             if (jSAMObjects == null)
                 return null;
 
             JArray jArray = new JArray();
-            foreach (IJSAMObject jSAMObject in jSAMObjects)
-                jArray.Add(jSAMObject.ToJObject());
+            foreach (T jSAMObject in jSAMObjects)
+            {
+                if(jSAMObject == null)
+                {
+                    continue;
+                }
 
-            return jArray.ToString();
+                jArray.Add(jSAMObject.ToJObject());
+            }
+
+
+            string json = JsonConvert.SerializeObject(jArray, new JsonSerializerSettings
+            {
+                Formatting = formatting
+            });
+
+            return json;
         }
 
         public static string ToString<T>(IEnumerable<T> sAMObjects, string path) where T : IJSAMObject
