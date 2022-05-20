@@ -1,6 +1,8 @@
 ﻿using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -52,9 +54,22 @@ namespace SAM.Core.Grasshopper
         public override bool Write(GH_IWriter writer)
         {
             if (Value == null)
+            {
                 return false;
+            }
 
-            writer.SetString(typeof(T).FullName, Value.ToJObject().ToString());
+            JObject jObject = Value.ToJObject();
+            if(jObject == null)
+            {
+                return false;
+            }
+
+            string json = JsonConvert.SerializeObject(jObject, new JsonSerializerSettings
+            {
+                Formatting = Formatting.None
+            });
+
+            writer.SetString(typeof(T).FullName, json);
             return true;
         }
 
