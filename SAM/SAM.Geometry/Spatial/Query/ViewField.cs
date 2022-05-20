@@ -144,7 +144,7 @@ namespace SAM.Geometry.Spatial
 
             segment2Ds = Planar.Query.Snap(segment2Ds, true, tolerance_Snap);
 
-            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(segment2Ds, tolerance_Distance);
+            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(segment2Ds, EdgeOrientationMethod.Undefined, tolerance_Distance);
             if (face2Ds == null)
             {
                 return;

@@ -52,7 +52,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(segmentable2Ds, tolerance);
+            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(segmentable2Ds, EdgeOrientationMethod.Undefined, tolerance);
             if (face2Ds == null || face2Ds.Count == 0)
                 return result;
 

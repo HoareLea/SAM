@@ -194,12 +194,12 @@ namespace SAM.Analytical.Grasshopper
 
                 segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true);
 
-                List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds);
+                //List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segment2Ds);
                 //List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(keyValuePair.Value);
-                if (polygon2Ds == null)
-                    continue;
+                //if (polygon2Ds == null)
+                //    continue;
 
-                List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, EdgeOrientationMethod.Opposite);
+                List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds, EdgeOrientationMethod.Opposite, tolerance);
                 if (face2Ds == null)
                     continue;
 

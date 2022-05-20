@@ -362,7 +362,7 @@ namespace SAM.Geometry.Spatial
                 segment2Ds = Planar.Query.Split(segment2Ds, tolerance_Distance);
                 segment2Ds = Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
-                List<Face2D> face2Ds_Section = Planar.Create.Face2Ds(segment2Ds, tolerance_Distance);
+                List<Face2D> face2Ds_Section = Planar.Create.Face2Ds(segment2Ds, EdgeOrientationMethod.Undefined, tolerance_Distance);
                 if (face2Ds_Section == null || face2Ds_Section.Count == 0)
                 {
                     return;
@@ -428,7 +428,7 @@ namespace SAM.Geometry.Spatial
             List<ISegmentable2D> segmentable2Ds_Edges = face2Ds.Edges().FindAll(x => x is ISegmentable2D).ConvertAll(x => x as ISegmentable2D);
             List<Segment2D> segment2Ds_Edges = Planar.Query.Split(segmentable2Ds_Edges, tolerance_Distance);
             segment2Ds_Edges = Planar.Query.Snap(segment2Ds_Edges, true, snapTolerance);
-            face2Ds = Planar.Create.Face2Ds(segment2Ds_Edges, tolerance_Distance);
+            face2Ds = Planar.Create.Face2Ds(segment2Ds_Edges, EdgeOrientationMethod.Undefined, tolerance_Distance);
 
             face2Ds.RemoveAll(x => x == null || x.GetArea() <= minArea);
             List<Tuple<Face2D, BoundingBox2D>> tuples_All = face2Ds.ConvertAll(x => new Tuple<Face2D, BoundingBox2D>(x, x.GetBoundingBox()));
@@ -1008,7 +1008,7 @@ namespace SAM.Geometry.Spatial
                 segment2Ds = Planar.Query.Split(segment2Ds, tolerance);
                 segment2Ds = Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
-                List<Face2D> face2Ds = Planar.Create.Face2Ds(segment2Ds, tolerance);
+                List<Face2D> face2Ds = Planar.Create.Face2Ds(segment2Ds, EdgeOrientationMethod.Undefined, tolerance);
                 if (face2Ds == null || face2Ds.Count == 0)
                     continue;
 
@@ -1144,7 +1144,7 @@ namespace SAM.Geometry.Spatial
                 segment2Ds = Planar.Query.Split(segment2Ds, tolerance_Distance);
                 segment2Ds = Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
-                List<Face2D> face2Ds = Planar.Create.Face2Ds(segment2Ds, tolerance_Distance);
+                List<Face2D> face2Ds = Planar.Create.Face2Ds(segment2Ds, EdgeOrientationMethod.Undefined, tolerance_Distance);
                 if (face2Ds == null || face2Ds.Count == 0)
                 {
                     return;

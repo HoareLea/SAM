@@ -5,14 +5,19 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Create
     {
-        public static List<Face3D> Face3Ds(this IEnumerable<Planar.IClosed2D> edges, Plane plane, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
+        public static List<Face3D> Face3Ds(this IEnumerable<Planar.IClosed2D> edges, Plane plane, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance = Core.Tolerance.Distance)
         {
             if (plane == null || edges == null || edges.Count() == 0)
                 return null;
 
-            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(edges, edgeOrientationMethod);
+            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(edges, tolerance);
             if (face2Ds == null)
                 return null;
+
+            if(edgeOrientationMethod != EdgeOrientationMethod.Undefined)
+            {
+                face2Ds = face2Ds.ConvertAll(x => Planar.Create.Face2D(x.ExternalEdge2D, x.InternalEdge2Ds, edgeOrientationMethod));
+            }
 
             List<Face3D> result = new List<Face3D>();
             if (face2Ds.Count == 0)

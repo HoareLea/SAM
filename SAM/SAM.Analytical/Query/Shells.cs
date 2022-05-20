@@ -77,7 +77,7 @@ namespace SAM.Analytical
                 //    continue;
 
                 //List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(polygon2Ds, true);
-                List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds, tolerance);
+                List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds, Geometry.EdgeOrientationMethod.Undefined, tolerance);
                 if (face2Ds == null || face2Ds.Count == 0)
                     continue;
 
@@ -464,7 +464,7 @@ namespace SAM.Analytical
                 segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance_Distance);
                 segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
-                List<Face2D> face2Ds_Section = Geometry.Planar.Create.Face2Ds(segment2Ds, tolerance_Distance);
+                List<Face2D> face2Ds_Section = Geometry.Planar.Create.Face2Ds(segment2Ds, Geometry.EdgeOrientationMethod.Undefined, tolerance_Distance);
                 if (face2Ds_Section == null || face2Ds_Section.Count == 0)
                 {
                     return;
@@ -531,7 +531,7 @@ namespace SAM.Analytical
             List<ISegmentable2D> segmentable2Ds_Edges = face2Ds.Edges().FindAll(x => x is ISegmentable2D).ConvertAll(x => x as ISegmentable2D);
             List<Segment2D> segment2Ds_Edges = Geometry.Planar.Query.Split(segmentable2Ds_Edges, tolerance_Distance);
             segment2Ds_Edges = Geometry.Planar.Query.Snap(segment2Ds_Edges, true, snapTolerance);
-            face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds_Edges, tolerance_Distance);
+            face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds_Edges, Geometry.EdgeOrientationMethod.Undefined, tolerance_Distance);
 
             face2Ds.RemoveAll(x => x == null || x.GetArea() <= minArea);
             List<Tuple<Face2D, BoundingBox2D>> tuples_All = face2Ds.ConvertAll(x => new Tuple<Face2D, BoundingBox2D>(x, x.GetBoundingBox()));

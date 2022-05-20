@@ -73,7 +73,7 @@ namespace SAM.Analytical
                 segment2Ds = Geometry.Planar.Query.Split(segment2Ds, tolerance);
                 segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
-                List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds, tolerance);
+                List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(segment2Ds, Geometry.EdgeOrientationMethod.Undefined, tolerance);
                 if (face2Ds == null || face2Ds.Count == 0)
                 {
                     result.AddRange(tuple_Elevation.Item2);
