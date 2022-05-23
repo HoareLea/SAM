@@ -380,7 +380,7 @@ namespace SAM.Analytical
             List<Architectural.Level> levels = new List<Architectural.Level>();
             for(int i =0; i < elevations.Count; i++)
             {
-                levels.Add(Architectural.Create.Level(elevations[i]));
+                levels.Add(new Architectural.Level("Level " + i.ToString(), elevations[i]));
             }
 
             //Creating Shell Panels
