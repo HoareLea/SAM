@@ -216,6 +216,7 @@
     <Compile Include="Spatial\Create\Vector3D.cs" />
     <Compile Include="Spatial\Create\Point3D.cs" />
     <Compile Include="Spatial\Interfaces\IBoundable3DObject.cs" />
+    <Compile Include="Spatial\Interfaces\IPoint3DObject.cs" />
     <Compile Include="Spatial\Interfaces\IFace3DObject.cs" />
     <Compile Include="Spatial\Interfaces\ISAMGeometry3DObject.cs" />
     <Compile Include="Spatial\Modify\InsertClosest.cs" />
