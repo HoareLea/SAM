@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_", NickName = "_analytical", Description = "SAM Analytical", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -83,8 +83,9 @@ namespace SAM.Analytical.Grasshopper
             //    Params.Input[0].Name = Params.Input[0].Sources[0].Name;
             //}
 
+            index = Params.IndexOfInputParam("_analytical");
             List<IAnalyticalObject> analyticalObjects = new List<IAnalyticalObject>();
-            if (!dataAccess.GetDataList(0, analyticalObjects) || analyticalObjects == null)
+            if (!dataAccess.GetDataList(index, analyticalObjects) || analyticalObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -106,7 +107,7 @@ namespace SAM.Analytical.Grasshopper
                     Panel panel = (Panel)analyticalObject;
 
                     elevations_Min.Add(Core.Query.Round(panel.MinElevation(), tolerance));
-                    elevations_Min.Add(panel.MaxElevation());
+                    elevations_Max.Add(panel.MaxElevation());
 
                     continue;
                 }
@@ -116,7 +117,7 @@ namespace SAM.Analytical.Grasshopper
                     Space space = (Space)analyticalObject;
 
                     elevations_Min.Add(Core.Query.Round(space.Location.Z, tolerance));
-                    elevations_Min.Add(space.Location.Z);
+                    elevations_Max.Add(space.Location.Z);
 
                     continue;
                 }
@@ -131,7 +132,7 @@ namespace SAM.Analytical.Grasshopper
                         foreach(Panel panel in panels)
                         {
                             elevations_Min.Add(Core.Query.Round(panel.MinElevation(), tolerance));
-                            elevations_Min.Add(panel.MaxElevation());
+                            elevations_Max.Add(panel.MaxElevation());
                         }
                     }
                     continue;
@@ -147,7 +148,7 @@ namespace SAM.Analytical.Grasshopper
                         foreach (Panel panel in panels)
                         {
                             elevations_Min.Add(Core.Query.Round(panel.MinElevation(), tolerance));
-                            elevations_Min.Add(panel.MaxElevation());
+                            elevations_Max.Add(panel.MaxElevation());
                         }
                     }
                     continue;
