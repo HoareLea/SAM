@@ -111,7 +111,19 @@ namespace SAM.Analytical.Grasshopper
             {
                 elevation = ((Architectural.Level)@object).Elevation;
             }
-
+            else if(@object is Space)
+            {
+                Space space = (Space)@object;
+                if(space.Location != null)
+                {
+                    elevation = space.Location.Z;
+                }
+            }
+            else if (@object is Panel)
+            {
+                Panel panel = (Panel)@object;
+                elevation = panel.MinElevation();
+            }
 
             double tolerance = double.NaN;
             if (!dataAccess.GetData(2, ref tolerance))
