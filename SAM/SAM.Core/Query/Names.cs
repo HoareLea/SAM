@@ -114,11 +114,11 @@ namespace SAM.Core
 
         private static List<string> Names_PropertySets(this object @object)
         {
-            SAMObject sAMObject = @object as SAMObject;
-            if (sAMObject == null)
+            ParameterizedSAMObject parameterizedSAMObject = @object as ParameterizedSAMObject;
+            if (parameterizedSAMObject == null)
                 return null;
 
-            IEnumerable<ParameterSet> parameterSets = (sAMObject).GetParamaterSets();
+            IEnumerable<ParameterSet> parameterSets = (parameterizedSAMObject).GetParamaterSets();
             if (parameterSets == null || parameterSets.Count() == 0)
                 return null;
 

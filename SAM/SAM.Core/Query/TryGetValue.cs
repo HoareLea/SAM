@@ -210,10 +210,10 @@ namespace SAM.Core
         {
             value = null;
 
-            if (!(@object is SAMObject))
+            if (!(@object is ParameterizedSAMObject))
                 return false;
 
-            IEnumerable<ParameterSet> parameterSets = ((SAMObject)@object).GetParamaterSets();
+            IEnumerable<ParameterSet> parameterSets = ((ParameterizedSAMObject)@object).GetParamaterSets();
             if (parameterSets == null || parameterSets.Count() == 0)
                 return false;
 
