@@ -236,7 +236,7 @@ namespace SAM.Core
             if (parameterSets == null)
                 return null;
             else
-                return new List<ParameterSet>(parameterSets);
+                return parameterSets.ConvertAll(x => x == null ? null : new ParameterSet(x)); //Updated 25.05.2022
         }
 
         public virtual bool FromJObject(JObject jObject)
