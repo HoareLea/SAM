@@ -63,6 +63,7 @@
     <Compile Include="Classes\Base\AnyOf.cs" />
     <Compile Include="Classes\Base\EnumParameterData.cs" />
     <Compile Include="Classes\Base\ParameterizedSAMObject.cs" />
+    <Compile Include="Classes\Message\Message.cs" />
     <Compile Include="Classes\Search\SearchObjectWrapper.cs" />
     <Compile Include="Classes\Search\SearchWrapper.cs" />
     <Compile Include="Classes\Base\ParameterData.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Create\TextMap.cs" />
     <Compile Include="Create\ZipArchiveInfo.cs" />
     <Compile Include="Enums\AccessType.cs" />
+    <Compile Include="Enums\MessageType.cs" />
     <Compile Include="Enums\Operator\ArithmeticOperator.cs" />
     <Compile Include="Enums\Operator\BitwiseOperator.cs" />
     <Compile Include="Enums\Operator\CommandOperator.cs" />
