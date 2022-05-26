@@ -59,6 +59,7 @@
     <Compile Include="Query\DataString.cs" />
     <Compile Include="Query\CommentsString.cs" />
     <Compile Include="Query\DataPeriodsString.cs" />
+    <Compile Include="Query\Values.cs" />
     <Compile Include="Query\WeatherDays.cs" />
     <Compile Include="Query\DaylightSavingsString.cs" />
     <Compile Include="Query\CoolingDesignWeatherDay.cs" />
