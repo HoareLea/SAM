@@ -15,7 +15,7 @@ namespace SAM.Weather
                     return System.Drawing.Color.FromArgb(128, 0, 255);
 
                 case WeatherDataType.DiffuseSolarRadiation:
-                    return System.Drawing.Color.FromArgb(255, 0, 255);
+                    return System.Drawing.Color.FromArgb(255, 255, 0);
 
                 case WeatherDataType.DryBulbTemperature:
                     return System.Drawing.Color.FromArgb(0, 0, 128);
