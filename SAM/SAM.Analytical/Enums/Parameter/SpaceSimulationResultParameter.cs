@@ -10,6 +10,8 @@ namespace SAM.Analytical
         [ParameterProperties("Resultant Temperature", "Resultant Temperature [C]"), DoubleParameterValue()] ResultantTemperature,
         [ParameterProperties("Load", "Load [W]"), DoubleParameterValue()] Load,
         [ParameterProperties("Design Load", "Design Load [W]"), DoubleParameterValue()] DesignLoad,
+        [ParameterProperties("Design Day Temperature", "Design Day Temperature [C]"), DoubleParameterValue()] DesignDayTemperature,
+        [ParameterProperties("Design Day Relative Humidity", "Design Day Relative Humidity [%]"), DoubleParameterValue()] DesignDayRelativeHumidity,
         [ParameterProperties("Solar Gain", "Solar Gain [W]"), DoubleParameterValue()] SolarGain,
         [ParameterProperties("Lighting Gain", "Lighting Gain [W]"), DoubleParameterValue()] LightingGain,
         [ParameterProperties("Infiltration Gain", "Infiltration Gain [W]"), DoubleParameterValue()] InfiltrationGain,
