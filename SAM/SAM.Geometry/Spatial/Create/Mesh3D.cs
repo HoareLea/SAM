@@ -139,5 +139,27 @@ namespace SAM.Geometry.Spatial
 
             return Mesh3D(triangle3Ds, tolerance);
         }
+
+        public static Mesh3D Mesh3D(this Face3D face3D, double tolerance = Core.Tolerance.Distance)
+        {
+            List<Triangle3D> triangle3Ds = face3D?.Triangulate(tolerance);
+            if (triangle3Ds == null || triangle3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            return Mesh3D(triangle3Ds, tolerance);
+        }
+
+        public static Mesh3D Mesh3D(this Polygon3D polygon3D, double tolerance = Core.Tolerance.Distance)
+        {
+            List<Triangle3D> triangle3Ds = polygon3D?.Triangulate(tolerance);
+            if (triangle3Ds == null || triangle3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            return Mesh3D(triangle3Ds, tolerance);
+        }
     }
 }
