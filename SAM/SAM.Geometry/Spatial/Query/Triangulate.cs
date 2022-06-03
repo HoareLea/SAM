@@ -54,9 +54,9 @@ namespace SAM.Geometry.Spatial
             });
 
             List<Triangle3D> result = new List<Triangle3D>();
-            foreach(List<Triangle3D> triangle3Ds_Temp in triangle3Ds)
+            foreach (List<Triangle3D> triangle3Ds_Temp in triangle3Ds)
             {
-                if(triangle3Ds_Temp != null && triangle3Ds_Temp.Count > 0)
+                if (triangle3Ds_Temp != null && triangle3Ds_Temp.Count > 0)
                 {
                     result.AddRange(triangle3Ds_Temp);
                 }
@@ -68,7 +68,7 @@ namespace SAM.Geometry.Spatial
         public static List<Triangle3D> Triangulate(this Extrusion extrusion, double tolerance = Core.Tolerance.MicroDistance)
         {
             Shell shell = Create.Shell(extrusion, tolerance);
-            if(shell == null)
+            if (shell == null)
             {
                 return null;
             }
@@ -79,36 +79,36 @@ namespace SAM.Geometry.Spatial
         public static List<Triangle3D> Triangulate(this Face3D face3D, IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             Plane plane = face3D?.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D = face3D.GetBoundingBox();
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return null;
             }
 
             Planar.Face2D face2D = plane.Convert(face3D);
-            if(face2D == null)
+            if (face2D == null)
             {
                 return null;
             }
 
             List<Tuple<Planar.Point2D, Vector3D>> tuples = null;
-            if(point3Ds != null)
+            if (point3Ds != null)
             {
                 tuples = new List<Tuple<Planar.Point2D, Vector3D>>();
-                foreach(Point3D point3D in point3Ds)
+                foreach (Point3D point3D in point3Ds)
                 {
-                    if(point3D == null)
+                    if (point3D == null)
                     {
                         continue;
                     }
 
                     Point3D point3D_Project = plane.Project(point3D);
-                    if(point3D_Project == null)
+                    if (point3D_Project == null)
                     {
                         continue;
                     }
@@ -119,12 +119,12 @@ namespace SAM.Geometry.Spatial
                     }
 
                     Planar.Point2D point2D = plane.Convert(point3D_Project);
-                    if(point2D == null)
+                    if (point2D == null)
                     {
                         continue;
                     }
 
-                    if(tuples.Find(x => x.Item1.AlmostEquals(point2D, tolerance)) != null)
+                    if (tuples.Find(x => x.Item1.AlmostEquals(point2D, tolerance)) != null)
                     {
                         continue;
                     }
@@ -136,27 +136,27 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Planar.Triangle2D> triangle2Ds = Planar.Query.Triangulate(face2D, tuples?.ConvertAll(x => x.Item1), tolerance);
-            if(triangle2Ds == null)
+            if (triangle2Ds == null)
             {
                 return null;
             }
 
-            if(tuples == null || tuples.Count == 0)
+            if (tuples == null || tuples.Count == 0)
             {
                 return triangle2Ds.ConvertAll(x => plane.Convert(x));
             }
 
             List<Triangle3D> result = new List<Triangle3D>();
-            foreach(Planar.Triangle2D triangle2D in triangle2Ds)
+            foreach (Planar.Triangle2D triangle2D in triangle2Ds)
             {
                 List<Planar.Point2D> point2Ds = triangle2D.GetPoints();
-                if(point2Ds == null || point2Ds.Count < 3)
+                if (point2Ds == null || point2Ds.Count < 3)
                 {
                     continue;
                 }
 
                 List<Point3D> point3Ds_Triangle3D = new List<Point3D>();
-                foreach(Planar.Point2D point2D in point2Ds)
+                foreach (Planar.Point2D point2D in point2Ds)
                 {
                     Point3D point3D = plane.Convert(point2D);
 
@@ -170,6 +170,54 @@ namespace SAM.Geometry.Spatial
                 }
 
                 result.Add(new Triangle3D(point3Ds_Triangle3D[0], point3Ds_Triangle3D[1], point3Ds_Triangle3D[2]));
+            }
+
+            return result;
+        }
+
+        public static List<Triangle3D> Triangulate(this Sphere sphere, int density)
+        {
+            if (sphere == null || density < 1)
+            {
+                return null;
+            }
+
+            double factor = System.Math.PI / density;
+
+            List<List<Point3D>> point3DList = new List<List<Point3D>>();
+            for (int i = 0; i <= density; i++)
+            {
+                double value_1 = i * factor;
+
+                List<Point3D> point3Ds = new List<Point3D>();
+                for (int j = -density; j <= density; j++)
+                {
+                    double value_2 = j * factor;
+
+                    Point3D point3D = new Point3D(
+                        System.Math.Sin(value_1) * System.Math.Cos(value_2),
+                        System.Math.Sin(value_1) * System.Math.Sin(value_2),
+                        System.Math.Cos(value_1));
+
+                    point3Ds.Add(point3D);
+                }
+
+                point3DList.Add(point3Ds);
+            }
+
+            List<Triangle3D> result = new List<Triangle3D>();
+            for (int i = 1; i < point3DList.Count; i++)
+            {
+                for (int j = 0; j < point3DList[i].Count - 1; j++)
+                {
+                    Triangle3D triangle3D = null;
+
+                    triangle3D = new Triangle3D(point3DList[i][j], point3DList[i][j + 1], point3DList[i - 1][j]);
+                    result.Add(triangle3D);
+
+                    triangle3D = new Triangle3D(point3DList[i][j + 1], point3DList[i][j + 1], point3DList[i - 1][j]);
+                    result.Add(triangle3D);
+                }
             }
 
             return result;

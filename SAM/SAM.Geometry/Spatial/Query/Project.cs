@@ -319,5 +319,30 @@ namespace SAM.Geometry.Spatial
             return face3Ds[0];
         }
 
+        public static Point3D Project(this Sphere sphere, Point3D point3D)
+        {
+            if(sphere == null || point3D == null)
+            {
+                return null;
+            }
+
+            Point3D origin = sphere.Origin;
+            if(origin == null || !origin.IsValid())
+            {
+                return null;
+            }
+
+            Vector3D vector3D = new Vector3D(origin, point3D);
+            if(!vector3D.IsValid())
+            {
+                return null;
+            }
+
+            vector3D.Normalize();
+            vector3D.Scale(sphere.Radious);
+
+            return origin.GetMoved(vector3D) as Point3D;
+        }
+
     }
 }
