@@ -203,17 +203,20 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Triangle3D> result = new List<Triangle3D>();
-            for (int i = 1; i < point3DList.Count; i++)
+            for (int i = 0; i < point3DList.Count - 1; i++)
             {
-                for (int j = 0; j < point3DList[i].Count - 1; j++)
+                for (int j = 1; j < point3DList[i].Count; j++)
                 {
                     Triangle3D triangle3D = null;
 
-                    triangle3D = new Triangle3D(point3DList[i][j], point3DList[i][j + 1], point3DList[i - 1][j]);
+                    triangle3D = new Triangle3D(point3DList[i][j - 1], point3DList[i + 1][j - 1], point3DList[i + 1][j]);
                     result.Add(triangle3D);
 
-                    triangle3D = new Triangle3D(point3DList[i][j + 1], point3DList[i][j + 1], point3DList[i - 1][j]);
-                    result.Add(triangle3D);
+                    if(point3DList[i][j - 1] != point3DList[i][j])
+                    {
+                        triangle3D = new Triangle3D(point3DList[i][j - 1], point3DList[i + 1][j], point3DList[i][j]);
+                        result.Add(triangle3D);
+                    }
                 }
             }
 
