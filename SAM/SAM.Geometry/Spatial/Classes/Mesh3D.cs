@@ -21,6 +21,38 @@ namespace SAM.Geometry.Spatial
             indexes = mesh3D?.indexes?.ConvertAll(x => new Tuple<int, int, int>(x.Item1, x.Item2, x.Item3));
         }
 
+        public Mesh3D(IEnumerable<Triangle3D> triangle3Ds)
+        {
+            if(triangle3Ds != null)
+            {
+                points = new List<Point3D>();
+                indexes = new List<Tuple<int, int, int>>();
+                foreach (Triangle3D triangle3D in triangle3Ds)
+                {
+                    if(triangle3D == null)
+                    {
+                        continue;
+                    }
+
+                    int[] array = new int[3];
+                    for (int i=0; i < 3; i++)
+                    {
+                        Point3D point3D = triangle3D[i];
+
+                        int index = points.FindIndex(x => x.Equals(point3D));
+                        if(index == -1)
+                        {
+                            index = points.Count;
+                            points.Add(point3D);
+                        }
+                        array[i] = index;
+                    }
+
+                    indexes.Add(new Tuple<int, int, int>(array[0], array[1], array[2]));
+                }
+            }
+        }
+
         public Mesh3D(IEnumerable<Point3D> points, IEnumerable<Tuple<int, int, int>> indexes)
         {
             this.points = points?.ToList().ConvertAll(x => new Point3D(x));

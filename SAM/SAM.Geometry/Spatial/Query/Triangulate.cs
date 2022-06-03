@@ -194,10 +194,7 @@ namespace SAM.Geometry.Spatial
                 {
                     double value_2 = j * factor;
 
-                    Point3D point3D = new Point3D(
-                        System.Math.Sin(value_1) * System.Math.Cos(value_2),
-                        System.Math.Sin(value_1) * System.Math.Sin(value_2),
-                        System.Math.Cos(value_1));
+                    Point3D point3D = sphere.Convert(new Planar.Point2D(value_1, value_2));
 
                     point3Ds.Add(point3D);
                 }

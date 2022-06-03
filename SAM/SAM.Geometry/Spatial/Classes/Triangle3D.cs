@@ -136,6 +136,15 @@ namespace SAM.Geometry.Spatial
             points.Reverse();
         }
 
+        public Point3D this[int index]
+        {
+            get
+            {
+                return new Point3D(points[index]);
+            }
+        }
+
+
         public override bool FromJObject(JObject jObject)
         {
             points = Geometry.Create.ISAMGeometries<Point3D>(jObject.Value<JArray>("Points")).ToArray();

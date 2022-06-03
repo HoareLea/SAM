@@ -245,7 +245,7 @@ namespace SAM.Geometry.Spatial
         {
             if (plane == null)
                 return null;
-            
+
             IClosedPlanar3D closedPlanar3D_External = face3D?.GetExternalEdge3D();
             if (closedPlanar3D_External == null)
                 return null;
@@ -314,6 +314,16 @@ namespace SAM.Geometry.Spatial
                 point3Ds.Add(Convert(plane, point2D));
 
             return point3Ds;
+        }
+
+        public static Point3D Convert(this Sphere sphere, Planar.Point2D point2D)
+        {
+            if (sphere == null || point2D == null)
+            {
+                return null;
+            }
+
+            return new Point3D(System.Math.Sin(point2D.X) * System.Math.Cos(point2D.Y), System.Math.Sin(point2D.X) * System.Math.Sin(point2D.Y), System.Math.Cos(point2D.X));
         }
     }
 }
