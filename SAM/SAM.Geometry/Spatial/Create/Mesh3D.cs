@@ -162,12 +162,16 @@ namespace SAM.Geometry.Spatial
             return Mesh3D(triangle3Ds, tolerance);
         }
 
-        public static Mesh3D Mesh3D(this Sphere sphere, double factor, int minDensity = 2)
+        public static Mesh3D Mesh3D(this Sphere sphere, double factor, int minDensity = 2, int maxDensity = 10)
         {
             int denisty = System.Convert.ToInt32(System.Math.Ceiling(sphere.Radious / factor));
             if(denisty < minDensity)
             {
                 denisty = minDensity;
+            }
+            else if(denisty > maxDensity)
+            {
+                denisty = maxDensity;
             }
 
             List<Triangle3D> trinagle3Ds = sphere.Triangulate(denisty);

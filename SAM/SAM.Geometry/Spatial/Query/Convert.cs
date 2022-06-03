@@ -323,7 +323,12 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            return new Point3D(System.Math.Sin(point2D.X) * System.Math.Cos(point2D.Y), System.Math.Sin(point2D.X) * System.Math.Sin(point2D.Y), System.Math.Cos(point2D.X));
+            Point3D origin = sphere.Origin;
+
+            Vector3D vector3D = new Vector3D(System.Math.Sin(point2D.X) * System.Math.Cos(point2D.Y), System.Math.Sin(point2D.X) * System.Math.Sin(point2D.Y), System.Math.Cos(point2D.X));
+            vector3D.Scale(sphere.Radious);
+
+            return origin.GetMoved(vector3D) as Point3D;
         }
     }
 }
