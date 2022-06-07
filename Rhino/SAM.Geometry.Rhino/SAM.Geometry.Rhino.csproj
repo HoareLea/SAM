@@ -51,6 +51,7 @@
     <Compile Include="Convert\ToRhino\Mesh.cs" />
     <Compile Include="Convert\ToRhino\Plane.cs" />
     <Compile Include="Convert\ToRhino\Point3d.cs" />
+    <Compile Include="Convert\ToRhino\Rectangle3d.cs" />
     <Compile Include="Convert\ToRhino\Polyline.cs" />
     <Compile Include="Convert\ToRhino\PolylineCurve.cs" />
     <Compile Include="Convert\ToRhino\Vector3d.cs" />

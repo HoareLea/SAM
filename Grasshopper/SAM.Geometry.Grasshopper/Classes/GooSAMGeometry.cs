@@ -158,13 +158,19 @@ namespace SAM.Geometry.Grasshopper
 
             if (source is Polyline)
             {
-                Value = Rhino.Convert.ToSAM(((Polyline)source));
+                Value = Rhino.Convert.ToSAM((Polyline)source);
                 return true;
             }
 
             if (source is Point3d)
             {
-                Value = Rhino.Convert.ToSAM(((Point3d)source));
+                Value = Rhino.Convert.ToSAM((Point3d)source);
+                return true;
+            }
+
+            if(source is Rectangle3d)
+            {
+                Value = Rhino.Convert.ToSAM((Rectangle3d)source);
                 return true;
             }
 
@@ -291,6 +297,21 @@ namespace SAM.Geometry.Grasshopper
                 if (Value is Planar.Vector2D)
                 {
                     target = (Y)(object)Rhino.Convert.ToRhino((Planar.Vector2D)Value);
+                    return true;
+                }
+            }
+
+            if(typeof(Y) == typeof(Rectangle3d))
+            {
+                if(Value is Spatial.Rectangle3D)
+                {
+                    target = (Y)(object)Rhino.Convert.ToRhino((Spatial.Rectangle3D)Value);
+                    return true;
+                }
+
+                if (Value is Planar.Rectangle2D)
+                {
+                    target = (Y)(object)Rhino.Convert.ToRhino((Planar.Rectangle2D)Value);
                     return true;
                 }
             }
