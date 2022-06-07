@@ -58,7 +58,7 @@ namespace SAM.Geometry.Planar
             return new Rectangle2D(point2D_Intersection, aWidth, aHeight, direction_Height);
         }
 
-        public static Rectangle2D Rectangle2D(this IEnumerable<Point2D> point2Ds)
+        public static Rectangle2D Rectangle2D(this IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point2Ds == null || point2Ds.Count() < 2)
                 return null;
@@ -88,10 +88,24 @@ namespace SAM.Geometry.Planar
                         continue;
                     }
 
-                    double aArea_Temp = rectangle_Temp.GetArea();
-                    if (aArea_Temp < area)
+                    double area_Temp = rectangle_Temp.GetArea();
+                    if (Core.Query.AlmostEqual(area_Temp, area, tolerance))
                     {
-                        area = aArea_Temp;
+                        List<Point2D> point2Ds_1 = rectangle.GetPoints();
+                        List<Point2D> point2Ds_2 = rectangle_Temp.GetPoints();
+
+                        int count_1 = point2Ds_1.Count(x => point2Ds_ConvexHull.Find(y => y.AlmostEquals(x, tolerance)) != null);
+                        int count_2 = point2Ds_2.Count(x => point2Ds_ConvexHull.Find(y => y.AlmostEquals(x, tolerance)) != null);
+
+                        if(count_2 > count_1)
+                        {
+                            area = area_Temp;
+                            rectangle = rectangle_Temp;
+                        }
+                    }
+                    else if(area_Temp < area)
+                    {
+                        area = area_Temp;
                         rectangle = rectangle_Temp;
                     }
                 }

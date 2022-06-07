@@ -63,7 +63,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "airPanels", NickName = "airPanels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "airPanels ", NickName = "airPanels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
