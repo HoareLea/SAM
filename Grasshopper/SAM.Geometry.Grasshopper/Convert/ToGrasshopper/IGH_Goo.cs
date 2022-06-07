@@ -53,6 +53,9 @@ namespace SAM.Geometry.Grasshopper
             if (geometry is Mesh3D)
                 return ((Mesh3D)geometry).ToGrasshopper();
 
+            if (geometry is Rectangle3D)
+                return ((Rectangle3D)geometry).ToGrasshopper();
+
             return (geometry as dynamic).ToGrasshopper();
         }
     }
