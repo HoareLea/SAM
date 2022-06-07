@@ -186,6 +186,12 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
+            if (source is GH_Rectangle)
+            {
+                Value = Convert.ToSAM((GH_Rectangle)source);
+                return true;
+            }
+
             if (source is GH_Vector)
             {
                 Value = Convert.ToSAM((GH_Vector)source);
@@ -273,6 +279,15 @@ namespace SAM.Geometry.Grasshopper
                 if (Value is Spatial.Plane)
                 {
                     target = (Y)(object)(((Spatial.Plane)Value).ToGrasshopper());
+                    return true;
+                }
+            }
+
+            if (typeof(Y) == typeof(GH_Rectangle))
+            {
+                if (Value is Spatial.Rectangle3D)
+                {
+                    target = (Y)(object)(((Spatial.Rectangle3D)Value).ToGrasshopper());
                     return true;
                 }
             }
