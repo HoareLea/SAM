@@ -105,6 +105,7 @@
     <Compile Include="Component\SAMAnalyticalSetSystemTypeNames.cs" />
     <Compile Include="Component\SAMAnalyticalCreateProfileByWeatherYear.cs" />
     <Compile Include="Component\SAMAnalyticalSetLocation.cs" />
+    <Compile Include="Component\SAMAnalyticalSplitPanels.cs" />
     <Compile Include="Component\SAMAnalyticalTriangulateConcavePanels.cs" />
     <Compile Include="Component\SAMAnalyticalMergePanels.cs" />
     <Compile Include="Component\SAMAnalyticalAdjustPanels.cs" />

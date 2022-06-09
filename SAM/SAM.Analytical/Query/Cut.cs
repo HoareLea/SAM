@@ -18,6 +18,64 @@ namespace SAM.Analytical
 
             return Cut(panel, plane, tolerance);
         }
+
+        public static List<Panel> Cut(this Panel panel, Plane plane, double threshold, double tolerance = Tolerance.Distance)
+        {
+            List<Panel> panels = Cut(panel, plane, tolerance);
+            if(panels == null || panels.Count <= 1)
+            {
+                return panels;
+            }
+
+            Point3D origin = plane.Origin;
+            Line3D line3D = new Line3D(origin, plane.Normal);
+
+            foreach(Panel panel_Temp in panels)
+            {
+                IClosedPlanar3D closedPlanar3D = panel_Temp?.Face3D?.GetExternalEdge3D();
+                if(closedPlanar3D == null)
+                {
+                    continue;
+                }
+
+                ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+                if(segmentable3D == null)
+                {
+                    throw new System.NotImplementedException();
+                }
+
+                List<Point3D> point3Ds = segmentable3D.GetPoints();
+                if(point3Ds == null || point3Ds.Count == 0)
+                {
+                    continue;
+                }
+
+                double max = double.MinValue;
+                foreach(Point3D point3D in point3Ds)
+                {
+                    Point3D point3D_Project = line3D.Project(point3D);
+                    if(point3D_Project == null || !point3D_Project.IsValid())
+                    {
+                        continue;
+                    }
+
+                    double distance = point3D_Project.Distance(origin);
+                    if(distance > max)
+                    {
+                        max = distance;
+                    }
+                }
+
+                if(max > threshold)
+                {
+                    return new List<Panel>() { Create.Panel(panel) };
+                }
+
+            }
+
+            return panels;
+
+        }
         
         public static List<Panel> Cut(this Panel panel, Plane plane, double tolerance = Tolerance.Distance)
         {
@@ -66,6 +124,32 @@ namespace SAM.Analytical
                 foreach (Panel panel_Temp in result)
                 {
                     List<Panel> panels_Temp = Cut(panel_Temp, plane, tolerance);
+                    if (panels_Temp != null)
+                        panels_Temp.ForEach(x => dictionary[x.Guid] = x);
+                }
+
+                result = dictionary.Values.ToList();
+            }
+
+            return result;
+        }
+
+        public static List<Panel> Cut(this Panel panel, IEnumerable<Plane> planes, double threshold, double tolerance = Tolerance.Distance)
+        {
+            if (panel == null || planes == null)
+                return null;
+
+            List<Panel> result = new List<Panel>() { new Panel(panel) };
+
+            if (planes.Count() == 0)
+                return result;
+
+            foreach (Plane plane in planes)
+            {
+                Dictionary<System.Guid, Panel> dictionary = new Dictionary<System.Guid, Panel>();
+                foreach (Panel panel_Temp in result)
+                {
+                    List<Panel> panels_Temp = Cut(panel_Temp, plane, threshold, tolerance);
                     if (panels_Temp != null)
                         panels_Temp.ForEach(x => dictionary[x.Guid] = x);
                 }
