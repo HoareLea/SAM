@@ -19,7 +19,7 @@ namespace SAM.Analytical
             return Cut(panel, plane, tolerance);
         }
 
-        public static List<Panel> Cut(this Panel panel, Plane plane, double threshold, double tolerance = Tolerance.Distance)
+        public static List<Panel> Cut(this Panel panel, Plane plane, double threshold, double tolerance)
         {
             List<Panel> panels = Cut(panel, plane, tolerance);
             if(panels == null || panels.Count <= 1)
@@ -134,7 +134,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<Panel> Cut(this Panel panel, IEnumerable<Plane> planes, double threshold, double tolerance = Tolerance.Distance)
+        public static List<Panel> Cut(this Panel panel, IEnumerable<Plane> planes, double threshold, double tolerance)
         {
             if (panel == null || planes == null)
                 return null;

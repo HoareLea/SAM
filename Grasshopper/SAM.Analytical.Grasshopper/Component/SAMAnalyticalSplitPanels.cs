@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
             inputParamManager.AddGenericParameter("_elevations", "_elevations", "Elevations or Planes", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("threshold_", "threshold_", "Threshold", GH_ParamAccess.item, double.NaN);
+            inputParamManager.AddNumberParameter("threshold_", "threshold_", "Threshold", GH_ParamAccess.item, 0);
         }
 
         /// <summary>
@@ -140,10 +140,15 @@ namespace SAM.Analytical.Grasshopper
                 threshold = double.NaN;
             }
 
+            if(double.IsNaN(threshold) || threshold == 0)
+            {
+                threshold = double.MaxValue;
+            }
+
             List<Panel> result = new List<Panel>();
             foreach(Panel panel in panels)
             {
-                List<Panel> panels_Temp = Analytical.Query.Cut(panel, planes, threshold);
+                List<Panel> panels_Temp = Analytical.Query.Cut(panel, planes, threshold, Core.Tolerance.Distance);
                 if(panels_Temp != null)
                 {
                     result.AddRange(panels_Temp);
