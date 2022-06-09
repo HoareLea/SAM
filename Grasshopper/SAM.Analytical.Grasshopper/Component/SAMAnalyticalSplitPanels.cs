@@ -140,9 +140,9 @@ namespace SAM.Analytical.Grasshopper
                 threshold = double.NaN;
             }
 
-            if(double.IsNaN(threshold) || threshold == 0)
+            if(double.IsNaN(threshold))
             {
-                threshold = double.MaxValue;
+                threshold = 0;
             }
 
             List<Panel> result = new List<Panel>();

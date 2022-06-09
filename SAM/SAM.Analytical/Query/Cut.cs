@@ -66,7 +66,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(max > threshold)
+                if(max < threshold)
                 {
                     return new List<Panel>() { Create.Panel(panel) };
                 }
