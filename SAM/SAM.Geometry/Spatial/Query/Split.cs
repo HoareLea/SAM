@@ -121,7 +121,7 @@ namespace SAM.Geometry.Spatial
                             Planar.ISegmentable2D segmentable2D = edge2D as Planar.ISegmentable2D;
                             if(segmentable2D == null)
                             {
-                                throw new System.NotImplementedException();
+                                throw new NotImplementedException();
                             }
 
                             segmentable2Ds.Add(segmentable2D);
