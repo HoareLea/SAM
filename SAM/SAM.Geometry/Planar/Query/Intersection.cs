@@ -215,7 +215,18 @@ namespace SAM.Geometry.Planar
                         polygon_2 = polygons_Snap[1];
                     }
 
-                    NetTopologySuite.Geometries.Geometry geometry = polygon_1.Intersection(polygon_2);
+                    NetTopologySuite.Geometries.Geometry geometry = null;
+                    try
+                    {
+                        geometry = polygon_1.Intersection(polygon_2);
+                    }
+                    catch(System.Exception exception)
+                    {
+                        polygon_1 = SimplifyByDouglasPeucker(polygon_1, tolerance);
+                        polygon_2 = SimplifyByDouglasPeucker(polygon_2, tolerance);
+                        geometry = polygon_1.Intersection(polygon_2);
+                    }
+
                     if (geometry == null || geometry.IsEmpty)
                     {
                         continue;
