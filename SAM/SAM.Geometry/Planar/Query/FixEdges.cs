@@ -69,7 +69,7 @@ namespace SAM.Geometry.Planar
                     }
                     else
                     {
-                        face2Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+                        face2Ds.Sort((x, y) => y.ExternalEdge2D.GetArea().CompareTo(x.ExternalEdge2D.GetArea()));
                         IClosed2D externalEdge = face2Ds[0].ExternalEdge2D;
                         face2Ds.RemoveAt(0);
                         List<IClosed2D> internalEdges_Temp = new List<IClosed2D>();
