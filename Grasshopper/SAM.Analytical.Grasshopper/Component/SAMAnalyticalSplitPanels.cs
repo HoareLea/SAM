@@ -176,10 +176,10 @@ namespace SAM.Analytical.Grasshopper
 
                 List<Plane> planes_Temp = null;
 
-                planes_Temp =  planes.FindAll(x => x.Above(point3D_Max) || x.On(point3D_Max));
+                planes_Temp =  planes.FindAll(x => x.Below(point3D_Max) || x.On(point3D_Max));
                 max = planes_Temp == null || planes_Temp.Count == 0 ? boundingBox3D_Max.Max.Z : planes_Temp.First().Origin.Z;
 
-                planes_Temp = planes.FindAll(x => x.Below(point3D_Min) || x.On(point3D_Min));
+                planes_Temp = planes.FindAll(x => x.Above(point3D_Min) || x.On(point3D_Min));
                 min = planes_Temp == null || planes_Temp.Count == 0 ? boundingBox3D_Max.Min.Z : planes_Temp.Last().Origin.Z;
 
                 Tuple<double, double, List<Panel>>  tuple = tuples.Find(x => x.Item1 == max && x.Item2 == min);
