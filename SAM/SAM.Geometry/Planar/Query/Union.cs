@@ -198,7 +198,16 @@ namespace SAM.Geometry.Planar
                 polygons.Add(polygon);
             }
 
-            polygons = Union(polygons);
+            try
+            {
+                polygons = Union(polygons);
+            }
+            catch(Exception exception)
+            {
+                polygons = polygons.ConvertAll(x => SimplifyByDouglasPeucker(x, tolerance));
+                polygons = Union(polygons);
+            }
+
             if (polygons == null)
                 return null;
 
@@ -215,7 +224,17 @@ namespace SAM.Geometry.Planar
             if (polygon_2 == null)
                 return null;
 
-            NetTopologySuite.Geometries.Geometry geometry = polygon_1.Union(polygon_2);
+            NetTopologySuite.Geometries.Geometry geometry = null;
+            try
+            {
+                geometry = polygon_1.Union(polygon_2);
+            }
+            catch (System.Exception exception)
+            {
+                polygon_1 = SimplifyByDouglasPeucker(polygon_1, tolerance);
+                polygon_2 = SimplifyByDouglasPeucker(polygon_2, tolerance);
+                geometry = polygon_1.Union(polygon_2);
+            }
             if (geometry == null)
                 return null;
 

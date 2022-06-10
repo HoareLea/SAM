@@ -397,7 +397,18 @@ namespace SAM.Geometry.Planar
             if (polygon_1.EqualsTopologically(polygon_2))
                 return result;
 
-            NetTopologySuite.Geometries.Geometry geometry = polygon_1.Difference(polygon_2);
+            NetTopologySuite.Geometries.Geometry geometry = null;
+            try
+            {
+                geometry = polygon_1.Difference(polygon_2);
+            }
+            catch (System.Exception exception)
+            {
+                polygon_1 = SimplifyByDouglasPeucker(polygon_1, tolerance);
+                polygon_2 = SimplifyByDouglasPeucker(polygon_2, tolerance);
+                geometry = polygon_1.Difference(polygon_2);
+            }
+
             if (geometry == null || geometry.IsEmpty)
             {
                 return null;
