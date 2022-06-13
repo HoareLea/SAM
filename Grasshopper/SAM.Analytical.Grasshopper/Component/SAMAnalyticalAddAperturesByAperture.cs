@@ -86,13 +86,18 @@ namespace SAM.Analytical.Grasshopper
             }
 
             if (sAMObject is Panel)
-            {              
+            {
                 Panel panel = Create.Panel((Panel)sAMObject);
 
                 List<Aperture> apertures_Result = new List<Aperture>();
                 foreach (Aperture aperture in apertures)
-                    if (panel.AddAperture(aperture))
-                        apertures_Result.Add(aperture);
+                {
+                    List<Aperture> apertures_New = panel.AddApertures(new Aperture[] { aperture }, false, Tolerance.MacroDistance, maxDistance);
+                    if(apertures_New != null)
+                    {
+                        apertures_Result.AddRange(apertures_New);
+                    }
+                }
 
                 dataAccess.SetData(0, panel);
                 dataAccess.SetDataList(1, apertures_Result.ConvertAll(x => new GooAperture(x)));

@@ -17,6 +17,26 @@ namespace SAM.Analytical
             if (panels == null || panels.Count == 0)
                 return null;
 
+            List<Aperture> result = AddApertures(panels, apertureConstruction, closedPlanar3Ds, trimGeometry, minArea, maxDistance, tolerance);
+            if(result != null && result.Count != 0)
+            {
+                foreach(Panel panel in panels)
+                {
+                    adjacencyCluster.AddObject(panel);
+                }
+            }
+
+            return result;
+        }
+
+        public static List<Aperture> AddApertures(this IEnumerable<Panel> panels, ApertureConstruction apertureConstruction, IEnumerable<IClosedPlanar3D> closedPlanar3Ds, bool trimGeometry = true, double minArea = Core.Tolerance.MacroDistance, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (closedPlanar3Ds == null)
+                return null;
+
+            if (panels == null || panels.Count() == 0)
+                return null;
+
             List<Tuple<BoundingBox3D, IClosedPlanar3D>> tuples_ClosedPlanar3D = new List<Tuple<BoundingBox3D, IClosedPlanar3D>>();
             foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
             {
@@ -44,7 +64,7 @@ namespace SAM.Analytical
                 {
                     BoundingBox3D boundingBox3D_Aperture = tuple_ClosedPlanar3D.Item1;
 
-                    if (!boundingBox3D_Aperture.InRange(boundingBox3D_Panel, tolerance))
+                    if (!boundingBox3D_Aperture.InRange(boundingBox3D_Panel, maxDistance))
                         continue;
 
                     List<Aperture> apertures = panel.AddApertures(apertureConstruction, tuple_ClosedPlanar3D.Item2, trimGeometry, minArea, maxDistance, tolerance);
@@ -56,6 +76,26 @@ namespace SAM.Analytical
             }
 
             return tuples_Result.ConvertAll(x => x.Item2);
+        }
+
+        public static List<Aperture> AddApertures(this Panel panel, IEnumerable<Aperture> apertures, bool trimGeometry = true, double minArea = Core.Tolerance.MacroDistance, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (panel == null || apertures == null)
+            {
+                return null;
+            }
+
+            List<Aperture> result = new List<Aperture>();
+            foreach(Aperture aperture in apertures)
+            {
+                List<Aperture> apertures_New = AddApertures(new Panel[] { panel }, aperture.ApertureConstruction, new IClosedPlanar3D[] { aperture.GetFace3D() }, trimGeometry, minArea, maxDistance, tolerance);
+                if(apertures_New != null)
+                {
+                    result.AddRange(apertures_New);
+                }
+            }
+
+            return result;
         }
 
         public static List<Aperture> AddApertures(this AdjacencyCluster adjacencyCluster, IEnumerable<Aperture> apertures, bool trimGeometry = true, double minArea = Core.Tolerance.MacroDistance, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
