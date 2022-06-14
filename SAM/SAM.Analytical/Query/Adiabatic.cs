@@ -9,6 +9,11 @@
                 return false;
             }
 
+            if(panel.PanelType == Analytical.PanelType.Air)
+            {
+                return false;
+            }
+
             if (Adiabatic(panel.Construction))
             {
                 return true;
