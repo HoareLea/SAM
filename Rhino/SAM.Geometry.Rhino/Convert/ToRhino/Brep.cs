@@ -18,7 +18,7 @@ namespace SAM.Geometry.Rhino
             List<global::Rhino.Geometry.Brep> breps = new List<global::Rhino.Geometry.Brep>();
             foreach(Face3D face3D in face3Ds)
             {
-                global::Rhino.Geometry.Brep brep = face3D.ToRhino_Brep(tolerance);
+                global::Rhino.Geometry.Brep brep = face3D.ToRhino_Brep(Core.Tolerance.Distance);
                 if (brep == null)
                     continue;
 
