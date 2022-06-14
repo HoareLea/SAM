@@ -106,7 +106,7 @@ namespace SAM.Geometry.Grasshopper
                     tolerance = tolerance_Temp;
             }
 
-            index = Params.IndexOfOutputParam("shells");
+            index = Params.IndexOfOutputParam("isClosed");
             if (index != -1)
                 dataAccess.SetData(index, shells?.FirstOrDefault()?.IsClosed(tolerance));
         }

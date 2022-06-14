@@ -59,6 +59,7 @@
     <Compile Include="Classes\GooSAMGeometry.cs" />
     <Compile Include="Component\CreateSAMTransform3DOriginToPlane.cs" />
     <Compile Include="Component\GeometryCreateShell.cs" />
+    <Compile Include="Component\GeometryGetShellsByPoint3Ds.cs" />
     <Compile Include="Component\SAMGeometrySection.cs" />
     <Compile Include="Component\SAMGeometryCreateShellsByElevations.cs" />
     <Compile Include="Component\SAMGeometryIsClosed.cs" />
