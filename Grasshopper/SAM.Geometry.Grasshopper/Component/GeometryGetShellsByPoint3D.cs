@@ -19,7 +19,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -76,7 +76,8 @@ namespace SAM.Geometry.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Shells", NickName = "Shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "in", NickName = "in", Description = "SAM Geometry Shells In", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "out", NickName = "out", Description = "SAM Geometry Shells Out", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -148,11 +149,16 @@ namespace SAM.Geometry.Grasshopper
                     silverSpacing = silverSpacing_Temp;
             }
 
-            List<Shell> result = shells.FindAll(x => x.On(point3D, tolerance) || x.Inside(point3D, silverSpacing, tolerance));
+            List<Shell> shells_In = shells.FindAll(x => x.On(point3D, tolerance) || x.Inside(point3D, silverSpacing, tolerance));
+            List<Shell> shells_Out = shells.FindAll(x => !shells_In.Contains(x));
 
-            index = Params.IndexOfOutputParam("Shells");
+            index = Params.IndexOfOutputParam("in");
             if (index != -1)
-                dataAccess.SetDataList(index, result);
+                dataAccess.SetDataList(index, shells_In);
+
+            index = Params.IndexOfOutputParam("out");
+            if (index != -1)
+                dataAccess.SetDataList(index, shells_Out);
         }
     }
 }
