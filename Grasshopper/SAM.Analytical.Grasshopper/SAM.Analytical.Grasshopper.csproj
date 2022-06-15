@@ -102,6 +102,7 @@
     <Compile Include="Component\SAMAnalyticalGetPanels.cs" />
     <Compile Include="Component\SAMAnalyticalPaths.cs" />
     <Compile Include="Component\SAMAnalyticalSetAdiabatic.cs" />
+    <Compile Include="Component\SAMAnalyticalDuplicateConstructionByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalSetSystemTypeNames.cs" />
     <Compile Include="Component\SAMAnalyticalCreateProfileByWeatherYear.cs" />
     <Compile Include="Component\SAMAnalyticalSetLocation.cs" />

@@ -7,7 +7,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Construction> SetConstructionsDefaultPanelType(this AdjacencyCluster adjacencyCluster)
+        public static List<Construction> SetConstructionsDefaultPanelType(this AdjacencyCluster adjacencyCluster, bool updateNames = false)
         {
             if (adjacencyCluster == null)
                 return null;
@@ -40,7 +40,8 @@ namespace SAM.Analytical
                 
                 foreach(PanelType panelType in panelTypes)
                 {
-                    Construction construction_PanelType = new Construction(construction, Guid.NewGuid());
+                    Construction construction_PanelType = updateNames ? new Construction(construction, string.Format("{0} [{1}]", construction.Name, Core.Query.Description(panelType))) : new Construction(construction, Guid.NewGuid());
+
                     construction_PanelType.SetValue(ConstructionParameter.DefaultPanelType, panelType.Text());
                     
                     List<Panel> panels_PanelType = panels.FindAll(x => x.PanelType == panelType);
