@@ -9,7 +9,7 @@
                 return false;
             }
 
-            if(panel.PanelType == Analytical.PanelType.Air)
+            if(panel.PanelType == Analytical.PanelType.Air || panel.PanelType == Analytical.PanelType.Shade)
             {
                 return false;
             }
