@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
                 GooPanelParam panelParam = new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list };
-                panelParam.DataMapping = GH_DataMapping.Flatten;
+                //panelParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(panelParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_points_", NickName = "_points_", Description = "Points", Access = GH_ParamAccess.list, Optional = true };
