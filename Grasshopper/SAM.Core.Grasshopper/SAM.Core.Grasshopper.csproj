@@ -132,6 +132,7 @@
     <Compile Include="Modify\RunGrasshopperScript.cs" />
     <Compile Include="Modify\AppendSourceCodeAdditionalMenuItem.cs" />
     <Compile Include="Modify\AppendNewComponentAdditionalMenuItem.cs" />
+    <Compile Include="Query\SaveAs.cs" />
     <Compile Include="Query\Copy.cs" />
     <Compile Include="Query\Objects.cs" />
     <Compile Include="Query\Layer.cs" />

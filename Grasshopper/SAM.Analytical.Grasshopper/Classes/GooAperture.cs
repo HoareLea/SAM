@@ -11,6 +11,7 @@ using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -165,6 +166,13 @@ namespace SAM.Analytical.Grasshopper
         {
         }
 
+        public override void AppendAdditionalMenuItems(System.Windows.Forms.ToolStripDropDown menu)
+        {
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
+
+            base.AppendAdditionalMenuItems(menu);
+        }
+
         protected override GH_GetterResult Prompt_Plural(ref List<GooAperture> values)
         {
             global::Rhino.Input.Custom.GetObject getObject = new global::Rhino.Input.Custom.GetObject();
@@ -307,6 +315,11 @@ namespace SAM.Analytical.Grasshopper
                 
                 obj_ids.Add(guid);
             }
+        }
+
+        private void Menu_SaveAs(object sender, EventArgs e)
+        {
+            Core.Grasshopper.Query.SaveAs(VolatileData);
         }
     }
 }

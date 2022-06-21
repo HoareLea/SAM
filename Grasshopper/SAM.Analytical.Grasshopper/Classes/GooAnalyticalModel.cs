@@ -196,6 +196,7 @@ namespace SAM.Analytical.Grasshopper
             Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By BoundaryType", Menu_BakeByBoundaryType, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
 
             base.AppendAdditionalMenuItems(menu);
         }
@@ -213,6 +214,11 @@ namespace SAM.Analytical.Grasshopper
         private void Menu_BakeByBoundaryType(object sender, EventArgs e)
         {
             BakeGeometry_ByBoundaryType(RhinoDoc.ActiveDoc);
+        }
+
+        private void Menu_SaveAs(object sender, EventArgs e)
+        {
+            Core.Grasshopper.Query.SaveAs(VolatileData);
         }
     }
 }

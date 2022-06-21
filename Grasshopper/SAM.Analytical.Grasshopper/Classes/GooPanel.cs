@@ -407,10 +407,16 @@ namespace SAM.Analytical.Grasshopper
 
             Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
 
             //Menu_AppendSeparator(menu);
 
             base.AppendAdditionalMenuItems(menu);
+        }
+
+        private void Menu_SaveAs(object sender, EventArgs e)
+        {
+            Core.Grasshopper.Query.SaveAs(VolatileData);
         }
 
         private void Menu_BakeByPanelType(object sender, EventArgs e)
