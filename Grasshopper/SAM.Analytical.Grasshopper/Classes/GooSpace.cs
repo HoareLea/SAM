@@ -249,6 +249,7 @@ namespace SAM.Analytical.Grasshopper
         {
             Menu_AppendItem(menu, "Bake By Internal Condition", Menu_BakeByInternalCondition, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Level", Menu_BakeByLevel, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
 
             //Menu_AppendSeparator(menu);
 
@@ -273,6 +274,11 @@ namespace SAM.Analytical.Grasshopper
         public void BakeGeometry_ByLevel(RhinoDoc doc)
         {
             Modify.BakeGeometry_ByLevel(doc, VolatileData, false, Core.Tolerance.Distance);
+        }
+
+        private void Menu_SaveAs(object sender, EventArgs e)
+        {
+            Core.Grasshopper.Query.SaveAs(VolatileData);
         }
     }
 }
