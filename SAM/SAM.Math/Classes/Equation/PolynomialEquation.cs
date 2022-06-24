@@ -48,8 +48,10 @@ namespace SAM.Math
             int count = coefficients.Length;
 
             double result = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 1; i < count; i++)
                 result += System.Math.Pow(value, count - i) * coefficients[i];
+
+            result += coefficients[0];
 
             return result;
         }
